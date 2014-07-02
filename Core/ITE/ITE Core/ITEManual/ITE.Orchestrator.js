@@ -4,11 +4,11 @@ ITE.Orchestrator = function() {
 
 	var orchestratorState;
 	var trackManager;
-	var playerChangeEvent = new ITE.pubSubStruct();
+	var playerChangeEvent = new ITE.PubSubStruct();
 	var trackManger = {}; 
-	var stateChangeEvent = new ITE.pubSubStruct();
+	var stateChangeEvent = new ITE.PubSubStruct();
 
-	var taskManager  = new ITE.TaskManager(this); 
+	var taskManager  = new ITE.TaskManager(); 
 
 	this.load = function (tourData){
 		var trackData;
@@ -68,32 +68,32 @@ ITE.Orchestrator = function() {
 
 	function areAllTracksReady() {
 		var ready = true;
-		for track in trackManager {
+
+		trackManager.forEach(function(track) {
 			if (track.state !== 2) {  //(2 = paused)
 				ready = false
 			}
-		}
+		});
 	}
 
 	function initializeTracks(){
-		for all tracks in trackManager {
 
-		// Subscribe video and audios to volume changes
-		if (track.providerID === ‘video’ || track.providerID === ‘audio’) {
-			volumeChangedEvent.subscribe(track.changeVolume)
-		}
-
-		// Subscribes everything to other orchestrator events
-		narrativeSeekedEvent.subscribe(track.seek)
-		narrativeLoadedEvent.subscribe(track.load)
-		playEvent.subscribe(track.play);
-
-		//add each keyframe as a scheduled task
-		foreach keyframe in track {
-			this.taskManager.loadTask(keyframe.offset, keyframe, track);
+		trackManager.forEach(function(track) {
+			// Subscribe video and audios to volume changes
+			if (track.providerID === "video" || track.providerID === "audio") {
+				volumeChangedEvent.subscribe(track.changeVolume)
 			}
 
-		}
+			// Subscribes everything to other orchestrator events
+			narrativeSeekedEvent.subscribe(track.seek)
+			narrativeLoadedEvent.subscribe(track.load)
+			playEvent.subscribe(track.play);
+
+			//add each keyframe as a scheduled task
+			track.forEach(function(keyframe) {
+				this.taskManager.loadTask(keyframe.offset, keyframe, track);
+			});
+		});
 	}
 }
 

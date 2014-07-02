@@ -1,6 +1,6 @@
 window.ITE = window.ITE || {};
 
-var ITEPlayer = function (options) { //acts as ITE object that contains the orchestrator, etc
+ITE.Player = function (options) { //acts as ITE object that contains the orchestrator, etc
    // var orchestrator = new Orchestrator(this);
     var playerConfiguration = {
             attachVolume:               true,
@@ -255,4 +255,4 @@ var testOptions =   {
         setEndTime: NaN
     };
 
-var ITEPlayer = new ITE.Player();
+var ITEPlayer = new ITE.Player(testOptions);
