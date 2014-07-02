@@ -1,35 +1,34 @@
 window.ITE = window.ITE || {};
 
 ITE.ImageProvider = function (){
-	//ITE.utils.extend(this, ProviderInterfacePrototype);
-	var	imageAsset	= document.createElement("img") 
-	//_UIControl	= document.createElement("div");
-	var trackInteractionEvent= new ITE.pubSubStruct();
+	ITE.utils.extend(this, ProviderInterfacePrototype);
+	var	imageAsset	= document.createElement("img"),
+		_UIControl	= document.createElement("div")
+			.addClass("UIControl")
 
-	//_UIControl.addClass(“UIControl”)
+	var trackInteractionEvent = new ITE.pubSubStruct();
 
 	var startPos = {
 		position : absolute,
-		left : 0px,
-		top : 0px,
-		height : 100%, 
-		width : 100%, 
+		left : "0px",
+		top : "0px",
+		height : "100%", 
+		width : "100%", 
 		overflow : hidden
 	};
 
-	function loadAsset(imageAsset){
+	function loadTask(imageAsset){
 			_super.loadAsset()
 
 			//Sets the image’s URL source
 			this._image.src = this.TrackData.trackID.URL
 
-			// When image has finished loading, set status to “paused”, and position 
-	  element where it should be for the first keyframe
-	this._image.addEventListener("load", (function (event) {
-				this.setStatus(2);
-				this.setState(keyframes[0]);
-	};
-
+			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
+		this._image.addEventListener("load", (function (event) {
+					this.setStatus(2);
+					this.setState(keyframes[0]);
+		}));
+	}
 		/* 
 		I/P: none
 		Grabs current actual state of image, and sets savedState to it 
@@ -38,17 +37,17 @@ ITE.ImageProvider = function (){
 	*/
 		function getState(){
 			this.savedState = {
-	“displayNumber”:	getLastKeyframe().displayNumber	
-	“time”:			timeManager.getElapsedSeconds()
-	“opacity”:		_image.opacity(),
-	“pos”: {
-		“x”:	_image.position().left,
-		“y”:	_image.position().top
-	},
-	“size”: {
-		“height”:	_image.height(),
-		“width”: 	_image.width()
-	},
+				displayNumber	: getLastKeyframe().displayNumber,
+				time			: timeManager.getElapsedSeconds(),
+				opacity			: _image.opacity(),
+				pos : {
+					x		: _image.position().left,
+					y 		: _image.position().top
+				},
+				size: {
+					height	: _image.height(),
+					width	: _image.width()
+				},
 			};	
 			return savedState;
 		};
@@ -76,28 +75,28 @@ ITE.ImageProvider = function (){
 		interpolates between current state and next keyframe
 	O/P: none
 	*/
-		function animate(){
-			// animate to next keyframe after where we are right now
-			var targetKeyFrame = getNextKeyframe(timeManager.getElapsedSeconds().)
+	// 	function animate(){
+	// 		// animate to next keyframe after where we are right now
+	// 		var targetKeyFrame = getNextKeyframe(timeManager.getElapsedSeconds())
 
-	         media.onload =function(){
-	                        var  mediaobj = new Kinetic.Image(){
-	                //set properties x,y,height, width followed by
-	                image : media
-	                         });
-	            	 layer.add(mediaobj); //add the kinetic image to the stage’s layer
-	            	stage.add(layer); //add layer to the stage
+	//          media.onload =function(){
+	//                         var  mediaobj = new Kinetic.Image(){
+	//                 //set properties x,y,height, width followed by
+	//                 image : media
+	//                          });
+	//             	 layer.add(mediaobj); //add the kinetic image to the stage’s layer
+	//             	stage.add(layer); //add layer to the stage
 	            
-	            	var animation = new Kintetic.Animation(function(frame){
-	               	 //define animation as desired},layer);
-	            	animation.start();
+	//             	var animation = new Kintetic.Animation(function(frame){
+	//                	 //define animation as desired},layer);
+	//             	animation.start();
 
-			// When current animation has finished, begin next animation
-	this.animation.addEventListener("animationFinished", (function (event) {
-		this.animate() //This will start animation to the next keyframe
-			}
+	// 		// When current animation has finished, begin next animation
+	// this.animation.addEventListener("animationFinished", (function (event) {
+	// 	this.animate() //This will start animation to the next keyframe
+	// 		}
 
-	};
+	// };
 
 		/* 
 		I/P: none
@@ -107,63 +106,63 @@ ITE.ImageProvider = function (){
 	O/P: interactionHandlers 	array of interaction handlers to be passed to
 	Orchestrator
 	*/
-		function getInteractionHandlers(){
+	// 	function getInteractionHandlers(){
 
-			return {
-			// Mousedown
-			processDown: function(evt){
-				if (orchestrator.getState() !== 3){
-					orchestrator.pause()
-				};
-			
-	// Drag
-			processDrag: function (evt) {
-				_image.css({
-					top: 	evt.x;
-					left:	evt.y;
-				});
-				this.TrackInteractionEvent.publish(“processDrag”);
-	}
+	// 		return {
+	// 			// Mousedown
+	// 			processDown: function(evt){
+	// 				if (orchestrator.getState() !== 3){
+	// 					orchestrator.pause()
+	// 				};
+				
+	// 			// Drag
+	// 			processDrag: function (evt) {
+	// 				_image.css({
+	// 					top: 	evt.x;
+	// 					left:	evt.y;
+	// 				});
+	// 				this.TrackInteractionEvent.publish(“processDrag”);
+	// 	}
 
-			//Scroll
-			processScroll: function (delta, zoomScale, pivot) {
-				if (orchestrator.getState() !== 3){
-					orchestrator.pause()
-				};
-				_image.zoomSomehow;
-				this.TrackInteractionEvent.publish(“processScroll”);
-		};
-		//Pinch
-		processPinch: function (){
-				if (orchestrator.getState() !== 3){
-					orchestrator.pause()
-				};
-				_image.pinchProcess;
-	this.TrackInteractionEvent.publish(“processPinch”);
+	// 			//Scroll
+	// 			processScroll: function (delta, zoomScale, pivot) {
+	// 				if (orchestrator.getState() !== 3){
+	// 					orchestrator.pause()
+	// 				};
+	// 				_image.zoomSomehow;
+	// 				this.TrackInteractionEvent.publish(“processScroll”);
+	// 		};
+	// 		//Pinch
+	// 		processPinch: function (){
+	// 				if (orchestrator.getState() !== 3){
+	// 					orchestrator.pause()
+	// 				};
+	// 				_image.pinchProcess;
+	// 	this.TrackInteractionEvent.publish(“processPinch”);
 
-		};
+	// 		};
 
-	}
-	};
+	// }
+	// };
 
-	function attachHandlers () {
-		var handlerMethods = this.getInteractionHandlers();
-		foreach method in handlerMethods {
-			//attach to html asset
-	// Initialize everything with Hammer
-		hammer.on('touch', processDown);
-			hammer.on('drag', function(evt){
-				processDrag(evt);
-		});
-			hammer.on('pinch', processPinch);
-		element.onmousewheel = processScroll;
-	}
-	}
-	function play (offset, keyframe) {
-		this.animate();
+	// function attachHandlers () {
+	// 	var handlerMethods = this.getInteractionHandlers();
+	// 	foreach method in handlerMethods {
+	// 		//attach to html asset
+	// // Initialize everything with Hammer
+	// 	hammer.on('touch', processDown);
+	// 		hammer.on('drag', function(evt){
+	// 			processDrag(evt);
+	// 	});
+	// 		hammer.on('pinch', processPinch);
+	// 	element.onmousewheel = processScroll;
+	// }
+	// }
+	// function play (offset, keyframe) {
+	// 	this.animate();
 
-		//need to make sure that the current animation is going through the current 
-	keyframe?
+	// 	//need to make sure that the current animation is going through the current 
+	// keyframe?
 
-	}
+	// }
 };

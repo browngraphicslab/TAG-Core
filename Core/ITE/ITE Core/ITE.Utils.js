@@ -1,10 +1,11 @@
+window.ITE = window.ITE || {};
 
-ITE.utils = function(){ //contains utility functions
-    var extends = function (child, super) { //CHECK IF CORRECT
-        child.prototype = super;
-    }
+ITE.Utils = function(){ //contains utility functions
+    // var extends = function (child, super) { //CHECK IF CORRECT
+    //     child.prototype = super;
+    // }
 
-    var sanitizeConfiguration = function (playerConfiguration, options){
+    this.sanitizeConfiguration = function (playerConfiguration, options){
         if (typeof options.attachVolume === 'boolean'){
             playerConfiguration.attachVolume  = options.attachVolume;
         }
@@ -35,7 +36,7 @@ ITE.utils = function(){ //contains utility functions
         if (typeof options.setMute === 'boolean'){
             playerConfiguration.setMute  = options.setMute;
         }
-        if ((typeof options.setInitVolume === 'number') && (0 < options.setInitVolume) && (100 > options.setInitVolume){
+        if ((typeof options.setInitVolume === 'number') && (0 < options.setInitVolume) && (100 > options.setInitVolume)){
             playerConfiguration.setInitVolume  = options.setInitVolume;
         }
         if (typeof options.allowSeek === 'boolean'){
@@ -44,9 +45,8 @@ ITE.utils = function(){ //contains utility functions
         if (typeof options.setFullScreen === 'boolean'){
             playerConfiguration.setFullScreen  = options.setFullScreen;
         }
-        if ((typeof options.setStartingOffset === 'number'){
+        if (typeof options.setStartingOffset === 'number'){
             playerConfiguration.setStartingOffset  = options.setStartingOffset;
         }
     }
-
 };

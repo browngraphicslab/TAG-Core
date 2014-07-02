@@ -1,31 +1,33 @@
-var ITEPlayer = function () { //acts as ITE object that contains the orchestrator, etc
+var ITEPlayer = function (options) { //acts as ITE object that contains the orchestrator, etc
    // var orchestrator = new Orchestrator(this);
     var playerConfiguration = {
-        attachVolume:           true,
-        attachLoop:             true,
-        attachPlay:             true,
-        attachProgressBar:      true,
-        attachFullScreen:       true,
-        attachProgressIndicator: true,
-        hideControls:           false,
-        autoPlay:               false,
-        autoLoop:               false,
-        setMute:                false,
-        setInitVolume:          100,
-        allowSeek:              true,
-        setFullScreen:          false,
-        setStartingOffset:      0,
-        setEndTime: NaN //defaults to end of tour if NaN
+            attachVolume:               true,
+            attachLoop:                 true,
+            attachPlay:                 true,
+            attachProgressBar:          true,
+            attachFullScreen:           true,
+            attachProgressIndicator:    true,
+            hideControls:               false,
+            autoPlay:                   false,
+            autoLoop:                   false,
+            setMute:                    false,
+            setInitVolume:              100,
+            allowSeek:                  true,
+            setFullScreen:              false,
+            setStartingOffset:          0,
+            setEndTime:                 NaN //defaults to end of tour if NaN
     },    //dictionary of player configuration options; defaults being set
 
     //DOM related
         ITEHolder           = $("#ITEHolder"),
         bottomContainer     = $("#bottomContainer"),
         buttonContainer     = $("#buttonContainer"),
+        playerParent        = null,
 
-        playerParent = null;
+        Utils               = new ITE.Utils();
+
     //Start things up
-    createITEPlayer(ITEHolder, playerConfiguration)
+    createITEPlayer(ITEHolder, options)
 
     /*
     I/P: {html}     playerParent    to attach ITE player to; defaults to document if nothing is specified
@@ -33,17 +35,19 @@ var ITEPlayer = function () { //acts as ITE object that contains the orchestrato
     O/P: {object}   ITEPlayer       a new ITE player object 
     */
     function createITEPlayer(playerParent, options) {
-        //this.playerConfiguration = sanitize(options); //replace ones that are listed
+        this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
         this.playerConfiguration    = playerConfiguration; 
         this.playerParent           = playerParent;
 
         //Attaches all necessary UI details of the player including controls to the parentEle
-        attachVolume();
-        attachPlay();
-        attachLoop();
-        attachProgressBar();
-        attachFullScreen();
-        attachProgressIndicator();
+        if (!options.hideControls){
+            attachVolume();
+            attachPlay();
+            attachLoop();
+            attachProgressBar();
+            attachFullScreen();
+            attachProgressIndicator();
+        };
 
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
@@ -221,4 +225,30 @@ var ITEPlayer = function () { //acts as ITE object that contains the orchestrato
     };
 };
 
-this.ITEPlayer();
+
+
+
+
+
+
+///EXCECUTE
+
+var testOptions =   {
+        attachVolume:           true,
+        attachLoop:             true,
+        attachPlay:             true,
+        attachProgressBar:      true,
+        attachFullScreen:       true,
+        attachProgressIndicator: true,
+        hideControls:           false,
+        autoPlay:               false,
+        autoLoop:               false,
+        setMute:                false,
+        setInitVolume:          100,
+        allowSeek:              true,
+        setFullScreen:          false,
+        setStartingOffset:      0,
+        setEndTime: NaN
+    };
+
+this.ITEPlayer(testOptions);
