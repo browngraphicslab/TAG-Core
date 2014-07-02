@@ -10,8 +10,9 @@ module.exports = function(grunt) {
         src: ['ITE Core/ITEManual/ITE.PubSubStruct.js',
               'ITE Core/ITEManual/ITE.TimeManager.js',
               'ITE Core/ITEManual/ITE.TaskManager.js',
-              'ITE Core/ITE Player/ITE.Player.js',
+              'ITE Core/ITE.Player/ITE.Player.js',
               'ITE Core/ITEManual/ITE.ImageProvider.js',
+              'ITE Core/ITEManual/ITE.ProviderInterfacePrototype.js',
               'ITE Core/ITEManual/ITE.Orchestrator.js'],
         dest: 'ITECore.js'
       }
