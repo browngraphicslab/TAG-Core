@@ -9,12 +9,12 @@ ITE.ImageProvider = function (){
 	var trackInteractionEvent = new ITE.pubSubStruct();
 
 	var startPos = {
-		position : absolute,
-		left : "0px",
-		top : "0px",
-		height : "100%", 
-		width : "100%", 
-		overflow : hidden
+			position : absolute,
+			left 		: "0px",
+			top 		: "0px",
+			height 		: "100%", 
+			width 		: "100%", 
+			overflow 	: hidden
 	};
 
 	function loadTask(imageAsset){
@@ -60,11 +60,11 @@ ITE.ImageProvider = function (){
 	*/
 		function setState(state){
 	_UIControl.css({
-	left:		state.position.left,
-	top:		state.position.top,
-	height:		state.size.height,
-	width:		state.size.width,
-	opacity:	state.opacity
+		"left":			state.position.left,
+		"top":			state.position.top,
+		"height":		state.size.height,
+		"width":		state.size.width,
+		"opacity":		state.opacity
 	});
 
 	savedState = state	

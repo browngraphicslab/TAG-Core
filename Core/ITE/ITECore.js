@@ -458,12 +458,12 @@ ITE.ImageProvider = function (){
 	var trackInteractionEvent = new ITE.pubSubStruct();
 
 	var startPos = {
-		position : absolute,
-		left : "0px",
-		top : "0px",
-		height : "100%", 
-		width : "100%", 
-		overflow : hidden
+			position : absolute,
+			left 		: "0px",
+			top 		: "0px",
+			height 		: "100%", 
+			width 		: "100%", 
+			overflow 	: hidden
 	};
 
 	function loadTask(imageAsset){
@@ -509,11 +509,11 @@ ITE.ImageProvider = function (){
 	*/
 		function setState(state){
 	_UIControl.css({
-	left:		state.position.left,
-	top:		state.position.top,
-	height:		state.size.height,
-	width:		state.size.width,
-	opacity:	state.opacity
+		"left":			state.position.left,
+		"top":			state.position.top,
+		"height":		state.size.height,
+		"width":		state.size.width,
+		"opacity":		state.opacity
 	});
 
 	savedState = state	
@@ -823,9 +823,9 @@ ITE.Orchestrator = function() {
 
 	this.load = function (tourData){
 		var trackData;
-		foreach(trackData in tourData.trackList){
+		tourData.trackList.forEach(function(trackData) {
 			ITE.track.createNew(trackData, context); 
-		}
+		});
 
 		loadedEvent.publish();	
 
@@ -854,11 +854,9 @@ ITE.Orchestrator = function() {
 	function triggerCurrentTracks (tasks) {
 		this.orchestratorState = this.state.playing;
 		//var currentElaspedTime = this.taskManager.getElapsedTime();
-
-		foreach task in tasks {
+		tasks.forEach(function(task) {
 			task.track.play(task.offset, task.keyframe);
-		}
-
+		});
 	}
 
 	function pause(){
@@ -867,11 +865,11 @@ ITE.Orchestrator = function() {
 	}
 
 	function seek(seekTime){
-	    seekedEvent.publish({ ‘seekTime’: seekTime});
+	    seekedEvent.publish({ "seekTime" : seekTime});
 	}
 
 	function setVolume(newVolumeLevel){
-	    this.volumeChangedEvent.publish({ "volume": newVolumeLevel });
+	    this.volumeChangedEvent.publish({ "volume" : newVolumeLevel });
 	}
  
 	function captureKeyframe(trackID) {

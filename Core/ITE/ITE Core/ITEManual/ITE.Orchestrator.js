@@ -12,9 +12,9 @@ ITE.Orchestrator = function() {
 
 	this.load = function (tourData){
 		var trackData;
-		foreach(trackData in tourData.trackList){
+		tourData.trackList.forEach(function(trackData) {
 			ITE.track.createNew(trackData, context); 
-		}
+		});
 
 		loadedEvent.publish();	
 
@@ -43,11 +43,9 @@ ITE.Orchestrator = function() {
 	function triggerCurrentTracks (tasks) {
 		this.orchestratorState = this.state.playing;
 		//var currentElaspedTime = this.taskManager.getElapsedTime();
-
-		foreach task in tasks {
+		tasks.forEach(function(task) {
 			task.track.play(task.offset, task.keyframe);
-		}
-
+		});
 	}
 
 	function pause(){
@@ -56,11 +54,11 @@ ITE.Orchestrator = function() {
 	}
 
 	function seek(seekTime){
-	    seekedEvent.publish({ ‘seekTime’: seekTime});
+	    seekedEvent.publish({ "seekTime" : seekTime});
 	}
 
 	function setVolume(newVolumeLevel){
-	    this.volumeChangedEvent.publish({ "volume": newVolumeLevel });
+	    this.volumeChangedEvent.publish({ "volume" : newVolumeLevel });
 	}
  
 	function captureKeyframe(trackID) {
