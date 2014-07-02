@@ -1,0 +1,121 @@
+﻿body {
+}
+
+#ITEHolder {
+    height: 500px;
+    width: 1000px;
+    position: absolute;
+    background-color: black;
+
+}
+
+#bottomContainer {
+    height: 12.5%;
+    width: 100%;
+    bottom: 0%;
+    position: absolute;
+}
+
+#buttonContainer {
+    height: 57%;
+    width: 100%;
+    top: 0%;
+    position: absolute;
+}
+
+.fullScreenButtonContainer {
+    width: auto;
+    height: 100%;
+    position: absolute;
+    right: 6%
+}
+
+.fullScreenButton {
+    width: 100%;
+    height: 100%;
+}
+
+.loopButtonContainer {
+    width: auto;
+    height: 100%;
+    position: absolute;
+    right: 1%
+}
+
+.loopButton {
+    width: 100%;
+    height: 100%;
+}
+
+.playPauseButtonContainer {
+    width: auto;
+    height: 100%;
+    position: absolute;
+    left: 1%;
+}
+
+.playPauseButton {
+    width: 100%;
+    height: 100%;
+}
+
+.progressBarContainer {
+    width: 100%;
+    height:25%;
+    position: absolute;
+    bottom: 0%;
+}
+
+.progressBar {
+    width: 100%;
+    height: 100%;
+    background-color: #33CCFF;
+}
+
+.progressIndicatorContainer {
+    width: auto;
+    position: absolute;
+    right: 16%;
+    top: 20%;
+    color: white;
+}
+
+.progressIndicator {
+    width: 100%;
+    height: 50%;
+}
+
+.volumeContainer {
+    position: absolute;
+    right: 11%;
+    width: 37px;
+    height: 400%;
+    bottom: 0;
+}
+
+.volumeButtonContainer {
+    width: auto;
+    height: 25%;
+    position: absolute;
+    bottom: 0;
+}
+
+.volumeButton {
+    width: 100%;
+    height: 100%;
+}
+
+.volumeLevelContainer {
+    width: 100%;
+    height: 70%;
+    position: absolute;
+    top: 0%
+}
+
+.volumeLevel {
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    height: 100%;
+    background-color: #33CCFF;
+}
