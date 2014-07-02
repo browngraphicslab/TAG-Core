@@ -6,7 +6,7 @@ ITE.Orchestrator = function() {
 	var trackManager;
 	var playerChangeEvent = new ITE.pubSubStruct();
 	var trackManger = {}; 
-	var playEvent = new ITE.pubSubStruct();
+	var stateChangeEvent = new ITE.pubSubStruct();
 
 	var taskManager  = new ITE.taskManager(this); 
 
@@ -98,3 +98,5 @@ ITE.Orchestrator = function() {
 		}
 	}
 }
+
+

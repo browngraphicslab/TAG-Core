@@ -1,4 +1,6 @@
-var ITEPlayer = function () { //acts as ITE object that contains the orchestrator, etc
+window.ITE = window.ITE || {};
+
+ITE.Player = function () { //acts as ITE object that contains the orchestrator, etc
    // var orchestrator = new Orchestrator(this);
     var playerConfiguration = {
         attachVolume:           true,
@@ -19,14 +21,14 @@ var ITEPlayer = function () { //acts as ITE object that contains the orchestrato
     },    //dictionary of player configuration options; defaults being set
 
     //DOM related
-        ITEHolder           = $("#ITEHolder"),
-        bottomContainer     = $("#bottomContainer"),
-        buttonContainer     = $("#buttonContainer"),
-
-        playerParent = null;
+    var ITEHolder           = $("#ITEHolder"),
+    var bottomContainer     = $("#bottomContainer"),
+    var buttonContainer     = $("#buttonContainer"),
+    var playerParent = null;
     //Start things up
-    createITEPlayer(ITEHolder, playerConfiguration)
+    createITEPlayer(ITEHolder, playerConfiguration);
 
+    var Orchestrator = new ITE.Orchestrator();
     /*
     I/P: {html}     playerParent    to attach ITE player to; defaults to document if nothing is specified
          {object}   options         dictionary including what kinds of control the player should have      
@@ -221,4 +223,4 @@ var ITEPlayer = function () { //acts as ITE object that contains the orchestrato
     };
 };
 
-this.ITEPlayer();
+var ITEPlayer = new ITE.Player();
