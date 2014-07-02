@@ -8,7 +8,7 @@ ITE.Orchestrator = function() {
 	var trackManger = {}; 
 	var stateChangeEvent = new ITE.pubSubStruct();
 
-	var taskManager  = new ITE.taskManager(this); 
+	var taskManager  = new ITE.TaskManager(this); 
 
 	this.load = function (tourData){
 		var trackData;
