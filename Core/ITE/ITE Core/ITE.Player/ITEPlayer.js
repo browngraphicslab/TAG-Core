@@ -1,3 +1,5 @@
+window.ITE = window.ITE || {};
+
 var ITEPlayer = function (options) { //acts as ITE object that contains the orchestrator, etc
    // var orchestrator = new Orchestrator(this);
     var playerConfiguration = {
@@ -28,6 +30,8 @@ var ITEPlayer = function (options) { //acts as ITE object that contains the orch
 
     //Start things up
     createITEPlayer(ITEHolder, options)
+
+    var Orchestrator = new ITE.Orchestrator();
 
     /*
     I/P: {html}     playerParent    to attach ITE player to; defaults to document if nothing is specified
@@ -251,4 +255,4 @@ var testOptions =   {
         setEndTime: NaN
     };
 
-this.ITEPlayer(testOptions);
+var ITEPlayer = new ITE.Player();
