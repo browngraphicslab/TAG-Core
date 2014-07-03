@@ -1,9 +1,12 @@
 window.ITE = window.ITE || {};
 
 ITE.Utils = function(){ //contains utility functions
-    // var extends = function (child, super) { //CHECK IF CORRECT
-    //     child.prototype = super;
-    // }
+
+    this.extendsPrototype = function(newClass, superClass) {
+       for(i in superClass){
+          newClass[i] = superClass[i];        
+       }
+    };
 
     this.sanitizeConfiguration = function (playerConfiguration, options){
         if (typeof options.attachVolume === 'boolean'){
@@ -124,36 +127,215 @@ ITE.TimeManager = function(){
 
 /*************/
 window.ITE = window.ITE || {};
+//creates a wrapper around a keyframe to indicate a task that needs to be scheduled
+ITE.Task = function(timerOffset, duration, nextKeyframeData, asset) {
+	this.offset = timerOffset;
+	nextKeyframeData.ease = Linear.easeNone;
+	this.callback = function(){
+		var animation = TweenLite.to(asset, duration, nextKeyframeData);
+		animation.play();
+	};
+};
 
-ITE.Orchestrator = function() {
+var cat1 = document.getElementById('cat1');
+var cat2 = document.getElementById('cat2');
 
-	var orchestratorState;
-	var trackManager;
-	var playerChangeEvent = new ITE.PubSubStruct();
-	var trackManger = {}; 
-	var stateChangeEvent = new ITE.PubSubStruct();
+//object that is responsible for scheduling different tasks ie. tracks
+ITE.TaskManager = function() {
+	
+	self = this;
+	//list of scheduled tasks to loop through;
+	this.scheduledTasks = []; 
 
-	var taskManager  = new ITE.TaskManager(); 
+	//allow for the scheduling of items within a 0.2sec interval of the timer
+	this.timerPrecision = 0.2; 
 
-	this.load = function (tourData){
-		var trackData;
-		tourData.trackList.forEach(function(trackData) {
-			ITE.track.createNew(trackData, context); 
-		});
+	//tracks which index in the scheduledTasks list the scheduler is currently at
+	this.currentTaskIndex = 0;
 
-		loadedEvent.publish();	
+	//timer of entire tour
+	this.timeManager = new ITE.TimeManager();
 
-		if (this.areAllTracksReady()){
-			this.play();
+	//to keep track of the setInterval of the next scheduled item
+	this.timerId = -1;
+
+	//getElaspedTime
+	this.getElapsedTime = function(){
+		return this.timeManager.getElapsedOffset();
+	};	
+
+	//load tasks to be scheduled
+	this.loadTask = function(timerOffset, duration, nextKeyframeData, asset) {
+		var newTask = new ITE.Task(timerOffset, duration, nextKeyframeData, asset);
+		this.scheduledTasks.push(newTask);
+	};
+
+	//start the scheduler on current tasks
+	this.play = function() {
+		this.triggerCurrentTasks();
+		this.scheduleNextTasks();
+		this.timeManager.startTimer();
+	};
+
+	//pause the scheduler
+	this.pause = function() {
+		clearTimeout(this.timerId);
+		this.timerId = -1;
+		this.timeManager.stopTimer();
+	};
+
+//seek to the correct point in the scheduler
+	this.seek = function(seekedOffset) {
+		this.pause();
+		this.timeManager.addElapsedTime(seekedOffset);
+		this.currentTaskIndex = this.getIndexAt(offset);
+		this.triggerCurrentTasks();
+		this.scheduleNextTasks();
+	};
+
+	this.triggerCurrentTasks = function() {
+		var index = this.currentTaskIndex;
+
+		//interval in which to check for tasks to start
+		var scheduleInterval = this.getElapsedTime() + this.timerPrecision;
+
+		while (index < this.scheduledTasks.length && this.scheduledTasks[index].offset <=scheduleInterval) {
+			this.scheduledTasks[index].callback.call();
+			index++;
+		}
+		//reset the current task index so that we can schedule subsequent tasks
+		this.currentTaskIndex = (index < this.scheduledTasks.length) ? index : -1;
+	}
+
+	this.scheduleNextTasks = function() {
+		if (this.currentTaskIndex < 0){
+			clearInterval(myTimer);
+			return; //there are no more tasks to be started/scheduled
 		}
 
-		this.initializeTracks();
-	};
-		
+		var nextTask = this.scheduledTasks[this.currentTaskIndex];
 
-	function unload(){
-	
+		//get the interval to wait until the next task is to be started
+		var waitInterval = Math.max((nextTask.offset - this.getElapsedTime()), 0);
+
+		clearTimeout(this.timerId);
+			this.timerId = setTimeout(function () {self.nextTick();}, waitInterval * 1000);
+	};
+
+	this.nextTick = function() {
+		this.triggerCurrentTasks();
+		this.scheduleNextTasks();
 	}
+
+};
+
+
+var newPlayer = new ITE.TaskManager();
+
+var myTimer = setInterval(function(){document.getElementById("timer").innerHTML = newPlayer.getElapsedTime();}, 1000);
+
+newPlayer.loadTask(0, 3, {left: "900px", top: "30px"}, cat1);
+newPlayer.loadTask(0, 3, {left: "-100px", top: "400px"}, cat2);
+newPlayer.loadTask(3, 5, {left: "30px", top: "30px", width: "100px", height: "100px"}, cat1);
+newPlayer.loadTask(3, 5, {left: "1200px", top: "400px", width: "100px", height: "100px"}, cat2);
+newPlayer.loadTask(8, 3, {left: "900px", top: "30px"}, cat1);
+newPlayer.loadTask(10, 2, {left: "-100px", top: "400px"}, cat2);
+newPlayer.loadTask(15, 3, {left: "30px", top: "30px", width: "100px", height: "600px"}, cat1);
+newPlayer.loadTask(17, 3, {left: "670px", top: "400px", width: "10px", height: "600px"}, cat2);
+newPlayer.play();
+/*************/
+window.ITE = window.ITE || {};
+
+ITE.Orchestrator = function(player) {
+	var orchestratorState,
+		trackManager = [],	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
+		taskManager  = new ITE.TaskManager(),
+		playerChangeEvent = new ITE.PubSubStruct(),
+		narrativeSeekedEvent = new ITE.PubSubStruct(),
+		narrativeLoadedEvent = new ITE.PubSubStruct(),
+		stateChangeEvent = new ITE.PubSubStruct();
+
+
+    /*
+    I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
+         Loads and parses JSON data using AJAX, then figures out which assetProvider to use to actually load the asset.
+         Once the asset is loaded, the initializeTracks() is called, and when tracks are ready, the tour is played. 
+    O/P: none
+    */
+	function load(dataURL){
+		var tourData;
+	    var AJAXreq = new XMLHttpRequest();
+
+	   	AJAXreq.open( "GET", dataURL, true );
+	    AJAXreq.setRequestHeader("Content-type", "application/json");
+	    AJAXreq.onreadystatechange = function(){
+	        if( AJAXreq.readyState == 4 && AJAXreq.status == 200 ){
+	        	//Once request is ready, parse data and call function that actually loads tracks
+	       		tourData = JSON.parse(AJAXreq.responseText);
+	       		loadHelper();
+	        }
+	    }
+	    AJAXreq.send();
+
+
+	    /*
+	    I/P: none
+	  		Helper function to load tour with AJAX (called below)
+	  		Calls CreatTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
+	    O/P: none
+	    */
+		function loadHelper(){
+			//Creates tracks
+			for (track in tourData.tracks){
+				if (tourData.tracks.hasOwnProperty(track)){
+					track = tourData.tracks[track]
+					createTrackByProvider(track)
+				};
+			};
+
+			//...Initializes them
+			initializeTracks();
+
+			//...Loads them
+	    	for (i = 0; i < trackManager.length; i++){
+	    		trackManager[i].load()
+	    	}
+
+	    	//...And plays them!
+	    	if (areAllTracksReady()){
+				play();
+			}
+		}
+
+
+
+	    /*
+	    I/P: {object}	trackData	object with parsed JSON data about the track
+	  		Creates track based on providerID
+	    O/P: none
+	    */
+		function createTrackByProvider(trackData){
+			switch (trackData.providerID){
+				case "Image" : 
+					trackManager.push(new ITE.ImageProvider(trackData));
+					break;
+				case "Video" : 
+					trackManager.push(new ITE.VideoProvider(trackData));
+					break;
+				case "Audio" : 
+					trackManager.push(new ITE.AudioProvider(trackData));
+					break;
+				case "DeepZoom" : 
+					trackManager.push(new ITE.DeepZoomProvider(trackData));
+					break;
+				case "Ink" : 
+					trackManager.push(new ITE.InkProvider(trackData));
+					break;
+				default:
+					throw new Error("Unexpected providerID; '" + track.providerID + "' is not a valid providerID");
+			}
+		}
+	};
 
 	function unload(track){
 		trackManager.remove(track)
@@ -162,24 +344,24 @@ ITE.Orchestrator = function() {
 
 	function play(){
 		taskManager.start();
-		playEvent.publish(timeManager.getElapsedTime());
 	}
 
 	function triggerCurrentTracks (tasks) {
 		this.orchestratorState = this.state.playing;
 		//var currentElaspedTime = this.taskManager.getElapsedTime();
-		tasks.forEach(function(task) {
-			task.track.play(task.offset, task.keyframe);
-		});
-	}
+
+		for (task in tasks){
+			if (tasks.hasOwnProperty(task)){
+				task.track.play(task.offset, task.keyframe);
+			};
+		};
+	};
 
 	function pause(){
 		taskManager.pause();
-		pauseEvent.publish(timeManager.getElapsedTime());
 	}
 
 	function seek(seekTime){
-	    seekedEvent.publish({ "seekTime" : seekTime});
 	}
 
 	function setVolume(newVolumeLevel){
@@ -193,33 +375,45 @@ ITE.Orchestrator = function() {
 
 	function areAllTracksReady() {
 		var ready = true;
-
-		trackManager.forEach(function(track) {
-			if (track.state !== 2) {  //(2 = paused)
-				ready = false
+		for (track in trackManager){
+			if (trackManager.hasOwnProperty(track)){
+				if (track.state !== 2) {  //(2 = paused)
+					ready = false
+				}
 			}
-		});
+		}
 	}
 
 	function initializeTracks(){
-
-		trackManager.forEach(function(track) {
+		for (i = 0; i < trackManager.length; i++){
+			var track = trackManager[i];
 			// Subscribe video and audios to volume changes
 			if (track.providerID === "video" || track.providerID === "audio") {
 				volumeChangedEvent.subscribe(track.changeVolume)
 			}
-
 			// Subscribes everything to other orchestrator events
 			narrativeSeekedEvent.subscribe(track.seek)
 			narrativeLoadedEvent.subscribe(track.load)
-			playEvent.subscribe(track.play);
 
 			//add each keyframe as a scheduled task
-			track.forEach(function(keyframe) {
-				this.taskManager.loadTask(keyframe.offset, keyframe, track);
-			});
-		});
+			for (keyframe in track.keyframes){
+				if (track.hasOwnProperty(keyframe)){
+					taskManager.loadTask(keyframe.offset, keyframe, track);
+				}
+			}
+			
+		}
 	}
+	this.load = load;
+	this.unload = unload;
+	this.play = play;
+	this.triggerCurrentTracks = triggerCurrentTracks;
+	this.pause = pause;
+	this.seek = seek;
+	this.setVolume = setVolume;
+	this.captureKeyframe = captureKeyframe;
+	this.areAllTracksReady = areAllTracksReady;
+	this.initializeTracks = initializeTracks;
 }
 
 
@@ -228,8 +422,9 @@ ITE.Orchestrator = function() {
 window.ITE = window.ITE || {};
 
 ITE.Player = function (options) { //acts as ITE object that contains the orchestrator, etc
-   // var orchestrator = new Orchestrator(this);
-    var playerConfiguration = {
+   var  orchestrator            = new ITE.Orchestrator(),
+
+    playerConfiguration = {
             attachVolume:               true,
             attachLoop:                 true,
             attachPlay:                 true,
@@ -412,8 +607,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
    //     orchestrator.seek(seekTime);
     };
 
-    function load() {
-   //     orchestrator.load();
+    function load(tourData) {
+        orchestrator.load(tourData);
     };
 
     function unload() {
@@ -454,75 +649,79 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function setLoop(loop) {
     };
+
+    this.togglePlayPause    = togglePlayPause;
+    this.play               = play;
+    this.pause              = pause;
+    this.seek               = seek;
+    this.load               = load;
+    this.unload             = unload;
+    this.captureKeyFrame    = captureKeyframe;
+    this.setVolume          = setVolume;
+    this.toggleMute         = toggleMute;
+    this.setLoop            = setLoop
+
+
 };
 
-
-
-
-
-
-
-///EXCECUTE
-
-var testOptions =   {
-        attachVolume:           true,
-        attachLoop:             true,
-        attachPlay:             true,
-        attachProgressBar:      true,
-        attachFullScreen:       true,
-        attachProgressIndicator: true,
-        hideControls:           false,
-        autoPlay:               false,
-        autoLoop:               false,
-        setMute:                false,
-        setInitVolume:          100,
-        allowSeek:              true,
-        setFullScreen:          false,
-        setStartingOffset:      0,
-        setEndTime: NaN
-    };
-
-var ITEPlayer = new ITE.Player(testOptions);
 
 /*************/
 window.ITE = window.ITE || {};
 
-ITE.ImageProvider = function (){
-	ITE.utils.extend(this, ProviderInterfacePrototype);
-	var	imageAsset	= document.createElement("img"),
-		_UIControl	= document.createElement("div")
+ITE.ImageProvider = function (TrackData){
+
+	//Extend class from ProviderInterfacePrototype
+	var Utils 	= new ITE.Utils(),
+		_super 	= new ITE.ProviderInterfacePrototype()
+
+	Utils.extendsPrototype(this, _super);
+
+    this.keyframes           	= [];   // Data structure to keep track of all displays/keyframes
+	this.trackInteractionEvent 	= new ITE.PubSubStruct();
+
+        //DOM related
+	var	_image		= $(document.createElement("img"))
+			.addClass("assetImage");
+;
+		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
+			.css({
+				"width": "50%",
+				"height":"50%"
+			})
+			.append(_image);
 
-	var trackInteractionEvent = new ITE.pubSubStruct();
+	$("#ITEHolder").append(_UIControl)
 
-	var startPos = {
-			position : absolute,
-			left 		: "0px",
-			top 		: "0px",
-			height 		: "100%", 
-			width 		: "100%", 
-			overflow 	: hidden
-	};
 
-	function loadTask(imageAsset){
+		//Data related
+    this.TrackData   = TrackData;
+
+
+	/* 
+	I/P: none
+		Loads actual image asset, and sets status to paused when complete
+	O/P: none
+	*/
+	this.load = function(){
 			_super.loadAsset()
 
 			//Sets the image’s URL source
-			this._image.src = this.TrackData.trackID.URL
+			_image.attr("src", "../../Assets/TourData/" + this.TrackData.assetID)
 
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-		this._image.addEventListener("load", (function (event) {
+			_image.onload = function (event) {
 					this.setStatus(2);
 					this.setState(keyframes[0]);
-		}));
+			};
 	}
-		/* 
-		I/P: none
+	/* 
+	I/P: none
 		Grabs current actual state of image, and sets savedState to it 
-	returns savedState
+		returns savedState
 	O/P: savedState
 	*/
-		function getState(){
+	this.getState = function(){
 			this.savedState = {
 				displayNumber	: getLastKeyframe().displayNumber,
 				time			: timeManager.getElapsedSeconds(),
@@ -540,12 +739,12 @@ ITE.ImageProvider = function (){
 		};
 
 
-		/*
+	/*
 	I/P: state	state to make actual image reflect
 		Sets properties of the image to reflect the input state
 	O/P: none
 	*/
-		function setState(state){
+	this.setState = function(state){
 	_UIControl.css({
 		"left":			state.position.left,
 		"top":			state.position.top,
@@ -660,21 +859,21 @@ ITE.ImageProvider = function (){
 window.ITE = window.ITE || {};
 
 ITE.ProviderInterfacePrototype = function(TrackData){ 
-	var	currentStatus		= 3		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
+	this.currentStatus			= 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
 
-	savedState				= null 	// Current state of track (last-saved state)
-	duration				= 0,	// Duration of track
-	displayList				= [], 	// Data structure to keep track of all displays/keyframes
+	this.savedState				= null; 	// Current state of track (last-saved state)
+	this.duration				= 0;	// Duration of track
+	this.keyframes				= []; 	// Data structure to keep track of all displays/keyframes
 
-	interactionHandlers 	= [],	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
+	this.interactionHandlers 	= null;	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
 
-	currentAnimation		= null, // Current animation, if any (between two different states of the asset)
-									// Saved as variable to make pausing and playing easier
+	this.currentAnimation		= null; // Current animation, if any (between two different states of the asset)
+										// Saved as variable to make pausing and playing easier
 
-	TrackInteractionEvent	= null, // Raised when track is interacted with.  This is for the inks to subscribe to.
+	this.TrackInteractionEvent	= null; // Raised when track is interacted with.  This is for the inks to subscribe to.
 
-	TrackData				= trackData;
+	this.TrackData				= TrackData;
 
 	/*
 	I/P: none
@@ -683,7 +882,7 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 	O/P: none
 	*/
 	this.loadAsset = function(){
-		this.parseDisplays(trackData);
+		this.parseDisplays(TrackData);
 	}
 
 	/*

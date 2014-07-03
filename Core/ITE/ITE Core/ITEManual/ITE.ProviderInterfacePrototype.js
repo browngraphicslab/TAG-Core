@@ -3,21 +3,21 @@
 window.ITE = window.ITE || {};
 
 ITE.ProviderInterfacePrototype = function(TrackData){ 
-	var	currentStatus		= 3		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
+	this.currentStatus			= 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
 
-	savedState				= null 	// Current state of track (last-saved state)
-	duration				= 0,	// Duration of track
-	displayList				= [], 	// Data structure to keep track of all displays/keyframes
+	this.savedState				= null; 	// Current state of track (last-saved state)
+	this.duration				= 0;	// Duration of track
+	this.keyframes				= []; 	// Data structure to keep track of all displays/keyframes
 
-	interactionHandlers 	= [],	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
+	this.interactionHandlers 	= null;	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
 
-	currentAnimation		= null, // Current animation, if any (between two different states of the asset)
-									// Saved as variable to make pausing and playing easier
+	this.currentAnimation		= null; // Current animation, if any (between two different states of the asset)
+										// Saved as variable to make pausing and playing easier
 
-	TrackInteractionEvent	= null, // Raised when track is interacted with.  This is for the inks to subscribe to.
+	this.TrackInteractionEvent	= null; // Raised when track is interacted with.  This is for the inks to subscribe to.
 
-	TrackData				= trackData;
+	this.TrackData				= TrackData;
 
 	/*
 	I/P: none
@@ -26,7 +26,7 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 	O/P: none
 	*/
 	this.loadAsset = function(){
-		this.parseDisplays(trackData);
+		this.parseDisplays(TrackData);
 	}
 
 	/*

@@ -9,6 +9,12 @@
 
 }
 
+.assetImage {
+    width: auto;
+    height: 100%;
+}
+
+
 #bottomContainer {
     height: 12.5%;
     width: 100%;

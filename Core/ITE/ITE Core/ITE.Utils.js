@@ -1,9 +1,12 @@
 window.ITE = window.ITE || {};
 
 ITE.Utils = function(){ //contains utility functions
-    // var extends = function (child, super) { //CHECK IF CORRECT
-    //     child.prototype = super;
-    // }
+
+    this.extendsPrototype = function(newClass, superClass) {
+       for(i in superClass){
+          newClass[i] = superClass[i];        
+       }
+    };
 
     this.sanitizeConfiguration = function (playerConfiguration, options){
         if (typeof options.attachVolume === 'boolean'){
