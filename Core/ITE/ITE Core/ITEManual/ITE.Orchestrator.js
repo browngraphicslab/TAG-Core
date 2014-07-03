@@ -1,7 +1,8 @@
 window.ITE = window.ITE || {};
 
 ITE.Orchestrator = function(player) {
-	var orchestratorState,
+	var status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
+									// Defaulted to ‘loading’
 		trackManager = [],	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
 		taskManager  = new ITE.TaskManager(),
 		playerChangeEvent = new ITE.PubSubStruct(),
@@ -10,11 +11,11 @@ ITE.Orchestrator = function(player) {
 		stateChangeEvent = new ITE.PubSubStruct();
 
 
-    /*
-    I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
-         Loads and parses JSON data using AJAX, then figures out which assetProvider to use to actually load the asset.
-         Once the asset is loaded, the initializeTracks() is called, and when tracks are ready, the tour is played. 
-    O/P: none
+   /**
+    * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
+    * Loads and parses JSON data using AJAX, then figures out which assetProvider to use to actually load the asset.
+    * Once the asset is loaded, the initializeTracks() is called, and when tracks are ready, the tour is played. 
+    * O/P: none
     */
 	function load(dataURL){
 		var tourData;
@@ -32,11 +33,11 @@ ITE.Orchestrator = function(player) {
 	    AJAXreq.send();
 
 
-	    /*
-	    I/P: none
-	  		Helper function to load tour with AJAX (called below)
-	  		Calls CreatTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
-	    O/P: none
+	  /**
+	    * I/P: none
+	  	* Helper function to load tour with AJAX (called below)
+	  	* Calls CreatTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
+	    * O/P: none
 	    */
 		function loadHelper(){
 			//Creates tracks
@@ -63,10 +64,10 @@ ITE.Orchestrator = function(player) {
 
 
 
-	    /*
-	    I/P: {object}	trackData	object with parsed JSON data about the track
-	  		Creates track based on providerID
-	    O/P: none
+	   /**
+	    * I/P: {object}	trackData	object with parsed JSON data about the track
+	  	* Creates track based on providerID
+	    * O/P: none
 	    */
 		function createTrackByProvider(trackData){
 			switch (trackData.providerID){
@@ -97,11 +98,12 @@ ITE.Orchestrator = function(player) {
 
 
 	function play(){
-		taskManager.start();
+		// taskManager.start();
+		this.status = 1;
 	}
 
 	function triggerCurrentTracks (tasks) {
-		this.orchestratorState = this.state.playing;
+		this.status = this.state.playing;
 		//var currentElaspedTime = this.taskManager.getElapsedTime();
 
 		for (task in tasks){
@@ -112,7 +114,8 @@ ITE.Orchestrator = function(player) {
 	};
 
 	function pause(){
-		taskManager.pause();
+		// taskManager.pause();
+		this.status = 2;
 	}
 
 	function seek(seekTime){
@@ -168,6 +171,7 @@ ITE.Orchestrator = function(player) {
 	this.captureKeyframe = captureKeyframe;
 	this.areAllTracksReady = areAllTracksReady;
 	this.initializeTracks = initializeTracks;
+	this.status = status;
 }
 
 

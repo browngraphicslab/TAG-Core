@@ -10,33 +10,48 @@ ITE.ImageProvider = function (TrackData){
 
     this.keyframes           	= [];   // Data structure to keep track of all displays/keyframes
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
+	this.TrackData   = TrackData;
 
-        //DOM related
-	var	_image		= $(document.createElement("img"))
-			.addClass("assetImage");
-;
+    //DOM related
+    var _image,
+    	_UIControl;
+
+	//Start things up...
+    initialize()
+
+   /** 
+	* I/P: none
+	* Initializes track, creates UI, and attachs handlers
+	* O/P: none
+	*/
+	function initialize(){
+		_super.initialize()
+
+		//Create UI and append to ITEHolder
+		_image		= $(document.createElement("img"))
+				.addClass("assetImage");
 		_UIControl	= $(document.createElement("div"))
-			.addClass("UIControl")
-			.css({
-				"width": "50%",
-				"height":"50%"
-			})
-			.append(_image);
+				.addClass("UIControl")
+				.css({
+					"width": "50%",
+					"height":"50%"
+				})
+				.append(_image);
+		$("#ITEHolder").append(_UIControl);
 
-	$("#ITEHolder").append(_UIControl)
+		//Attach Handlers
+		attachHandlers()
+
+	};
 
 
-		//Data related
-    this.TrackData   = TrackData;
-
-
-	/* 
-	I/P: none
-		Loads actual image asset, and sets status to paused when complete
-	O/P: none
+   /** 
+	* I/P: none
+	* Loads actual image asset, and sets status to paused when complete
+	* O/P: none
 	*/
 	this.load = function(){
-			_super.loadAsset()
+			_super.load()
 
 			//Sets the image’s URL source
 			_image.attr("src", "../../Assets/TourData/" + this.TrackData.assetID)
@@ -47,12 +62,12 @@ ITE.ImageProvider = function (TrackData){
 					this.setState(keyframes[0]);
 			};
 	};
-	
-	/* 
-	I/P: none
-		Grabs current actual state of image, and sets savedState to it 
-		returns savedState
-	O/P: savedState
+
+   /** 
+	* I/P: none
+	* Grabs current actual state of image, and sets savedState to it 
+	* returns savedState
+	* O/P: savedState
 	*/
 	this.getState = function(){
 			this.savedState = {
@@ -72,10 +87,10 @@ ITE.ImageProvider = function (TrackData){
 		};
 
 
-	/*
-	I/P: state	state to make actual image reflect
-		Sets properties of the image to reflect the input state
-	O/P: none
+   /**
+	* I/P: state	state to make actual image reflect
+	* Sets properties of the image to reflect the input state
+	* O/P: none
 	*/
 	this.setState = function(state){
 	_UIControl.css({
@@ -125,23 +140,27 @@ ITE.ImageProvider = function (TrackData){
 	O/P: interactionHandlers 	array of interaction handlers to be passed to
 	Orchestrator
 	*/
-	// 	function getInteractionHandlers(){
-
-	// 		return {
-	// 			// Mousedown
-	// 			processDown: function(evt){
-	// 				if (orchestrator.getState() !== 3){
-	// 					orchestrator.pause()
-	// 				};
-				
-	// 			// Drag
-	// 			processDrag: function (evt) {
-	// 				_image.css({
-	// 					top: 	evt.x;
-	// 					left:	evt.y;
-	// 				});
-	// 				this.TrackInteractionEvent.publish(“processDrag”);
-	// 	}
+	function getInteractionHandlers(){
+			// Mousedown
+			this.processDown = function(e){
+				if (orchestrator.getState() !== 3){
+					orchestrator.pause()
+				};
+			}
+			
+			// Drag
+			this.processDrag = function (e) {
+				_UIControl.css({
+					"top": 	e.clientX,
+					"left":	e.clientY
+				});
+				//this.TrackInteractionEvent.publish(“processDrag”);
+			}
+			return {
+				"processDown" : processDown,
+				"processDrag" : processDrag
+			}
+		}
 
 	// 			//Scroll
 	// 			processScroll: function (delta, zoomScale, pivot) {
@@ -162,10 +181,12 @@ ITE.ImageProvider = function (TrackData){
 	// 		};
 
 	// }
-	// };
 
-	// function attachHandlers () {
-	// 	var handlerMethods = this.getInteractionHandlers();
+	function attachHandlers() {
+		var handlerMethods = getInteractionHandlers();
+
+		_UIControl.on("mouseDown", handlerMethods.processDown);
+		_UIControl.on("mousemove", handlerMethods.processDrag)
 	// 	foreach method in handlerMethods {
 	// 		//attach to html asset
 	// // Initialize everything with Hammer
@@ -183,5 +204,5 @@ ITE.ImageProvider = function (TrackData){
 	// 	//need to make sure that the current animation is going through the current 
 	// keyframe?
 
-	// }
+	}
 };

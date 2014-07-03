@@ -247,7 +247,8 @@ newPlayer.play();
 window.ITE = window.ITE || {};
 
 ITE.Orchestrator = function(player) {
-	var orchestratorState,
+	var status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
+									// Defaulted to ‘loading’
 		trackManager = [],	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
 		taskManager  = new ITE.TaskManager(),
 		playerChangeEvent = new ITE.PubSubStruct(),
@@ -256,11 +257,11 @@ ITE.Orchestrator = function(player) {
 		stateChangeEvent = new ITE.PubSubStruct();
 
 
-    /*
-    I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
-         Loads and parses JSON data using AJAX, then figures out which assetProvider to use to actually load the asset.
-         Once the asset is loaded, the initializeTracks() is called, and when tracks are ready, the tour is played. 
-    O/P: none
+   /**
+    * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
+    * Loads and parses JSON data using AJAX, then figures out which assetProvider to use to actually load the asset.
+    * Once the asset is loaded, the initializeTracks() is called, and when tracks are ready, the tour is played. 
+    * O/P: none
     */
 	function load(dataURL){
 		var tourData;
@@ -278,11 +279,11 @@ ITE.Orchestrator = function(player) {
 	    AJAXreq.send();
 
 
-	    /*
-	    I/P: none
-	  		Helper function to load tour with AJAX (called below)
-	  		Calls CreatTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
-	    O/P: none
+	  /**
+	    * I/P: none
+	  	* Helper function to load tour with AJAX (called below)
+	  	* Calls CreatTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
+	    * O/P: none
 	    */
 		function loadHelper(){
 			//Creates tracks
@@ -309,10 +310,10 @@ ITE.Orchestrator = function(player) {
 
 
 
-	    /*
-	    I/P: {object}	trackData	object with parsed JSON data about the track
-	  		Creates track based on providerID
-	    O/P: none
+	   /**
+	    * I/P: {object}	trackData	object with parsed JSON data about the track
+	  	* Creates track based on providerID
+	    * O/P: none
 	    */
 		function createTrackByProvider(trackData){
 			switch (trackData.providerID){
@@ -343,11 +344,12 @@ ITE.Orchestrator = function(player) {
 
 
 	function play(){
-		taskManager.start();
+		// taskManager.start();
+		this.status = 1;
 	}
 
 	function triggerCurrentTracks (tasks) {
-		this.orchestratorState = this.state.playing;
+		this.status = this.state.playing;
 		//var currentElaspedTime = this.taskManager.getElapsedTime();
 
 		for (task in tasks){
@@ -358,7 +360,8 @@ ITE.Orchestrator = function(player) {
 	};
 
 	function pause(){
-		taskManager.pause();
+		// taskManager.pause();
+		this.status = 2;
 	}
 
 	function seek(seekTime){
@@ -414,6 +417,7 @@ ITE.Orchestrator = function(player) {
 	this.captureKeyframe = captureKeyframe;
 	this.areAllTracksReady = areAllTracksReady;
 	this.initializeTracks = initializeTracks;
+	this.status = status;
 }
 
 
@@ -446,8 +450,25 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         ITEHolder           = $("#ITEHolder"),
         bottomContainer     = $("#bottomContainer"),
         buttonContainer     = $("#buttonContainer"),
-        playerParent        = null,
 
+    //Buttons
+        volumeButton,
+        volumeLevel,
+        playPauseButton,
+        loopButton,
+        progressBar,
+        fullScreenButton,
+        progressIndicator,
+
+    //Other atributes
+        currentVolumeLevel,
+        timeOffset,
+        isMuted,
+        isLooped,
+        isFullScreen,
+
+    //Other miscellaneous variables
+        playerParent        = null,
         Utils               = new ITE.Utils();
 
     //Start things up
@@ -455,10 +476,10 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
     var Orchestrator = new ITE.Orchestrator();
 
-    /*
-    I/P: {html}     playerParent    to attach ITE player to; defaults to document if nothing is specified
-         {object}   options         dictionary including what kinds of control the player should have      
-    O/P: {object}   ITEPlayer       a new ITE player object 
+   /**
+    * I/P: {html}     playerParent    to attach ITE player to; defaults to document if nothing is specified
+    *      {object}   options         dictionary including what kinds of control the player should have      
+    * O/P: {object}   ITEPlayer       a new ITE player object 
     */
     function createITEPlayer(playerParent, options) {
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
@@ -490,17 +511,34 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var volumeButtonContainer = $(document.createElement("div"))
                 .addClass("volumeButtonContainer");
 
-            var volumeButton = $(document.createElement("img"))
+                volumeButton = $(document.createElement("img"))
                 .addClass("volumeButton")
                 .attr("src", "ITEPlayerImages/volume.png")
-                .on("click", toggleMute());
+                .on("click", toggleMute);
 
             var volumeLevelContainer = $(document.createElement("div"))
-                .addClass("volumeLevelContainer");
+                .addClass("volumeLevelContainer")
+                .on({
+                    "click": function(e){
+                        setVolume(e);
+                    },
+                    "mousedown": function(e){
+                        volumeLevelContainer.dragging = true;
+                    },
+                    "mouseup": function(e){
+                        volumeLevelContainer.dragging = false;
+                    },
+                    "mouseleave" : function(e){
+                        volumeLevelContainer.dragging = false;
+                        console.log("left")
+                    },
+                    "mousemove": function(e){
+                        volumeLevelContainer.dragging ? setVolume(e) : null
+                    }
+                });
 
-            var volumeLevel = $(document.createElement("div"))
+                volumeLevel = $(document.createElement("div"))
                 .addClass("volumeLevel")
-                .on("click", toggleMute());
 
             buttonContainer.append(volumeContainer);
             volumeContainer.append(volumeButtonContainer)
@@ -508,6 +546,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             volumeButtonContainer.append(volumeButton);
             volumeLevelContainer.append(volumeLevel);
         }
+
+        playerConfiguration.setMute ? mute(): unMute()
     };
 
     function attachPlay() {
@@ -516,14 +556,16 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var playPauseButtonContainer = $(document.createElement("div"))
                 .addClass("playPauseButtonContainer");
 
-            var playPauseButton = $(document.createElement("img"))
+                playPauseButton = $(document.createElement("img"))
                 .addClass("playPauseButton")
-                .attr("src", "ITEPlayerImages/play.png")
-                .on("click", togglePlayPause());
+                .attr("src", "ITEPlayerImages/pause.png")
+                .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
             playPauseButtonContainer.append(playPauseButton);
         }
+
+        playerConfiguration.autoPlay ? play() : pause()
     };
 
     function attachLoop() {
@@ -532,28 +574,62 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var loopButtonContainer = $(document.createElement("div"))
                 .addClass("loopButtonContainer");
 
-            var loopButton = $(document.createElement("img"))
+                loopButton = $(document.createElement("img"))
                 .addClass("loopButton")
-                .attr("src", "ITEPlayerImages/loop_white.svg")
-                .on("click", togglePlayPause());
+                .attr("src", "ITEPlayerImages/loop.svg")
+                .on("click", toggleLoop);
 
             buttonContainer.append(loopButtonContainer);
             loopButtonContainer.append(loopButton);
         }
+
+        playerConfiguration.autoLoop ? loop() : unLoop()
     };
 
     function attachProgressBar() {
         if (playerConfiguration.attachProgressBar) {
 
             var progressBarContainer = $(document.createElement("div"))
-                .addClass("progressBarContainer");
+                .addClass("progressBarContainer")
+                .on({
+                    "click": function(e){
+                        seek(e);
+                    },
+                    "mousedown": function(e){
+                        progressBarContainer.dragging = true;
+                    },
+                    "mouseup": function(e){
+                        progressBarContainer.dragging = false;
+                    },
+                    "mouseleave" : function(e){
+                        progressBarContainer.dragging = false;
+                    },            
+                    "mousemove": function(e){
+                        progressBarContainer.dragging ? seek(e) : null
+                    }
+                });
 
-            var progressBar = $(document.createElement("div"))
+            progressBar = $(document.createElement("div"))
                 .addClass("progressBar")
-                .on("click", togglePlayPause());
+
 
             bottomContainer.append(progressBarContainer);
             progressBarContainer.append(progressBar);
+        }
+    };
+
+    function attachProgressIndicator() {
+        if (playerConfiguration.attachProgressIndicator) {
+
+            var ProgressIndicatorContainer = $(document.createElement("div"))
+                .addClass("progressIndicatorContainer");
+
+                progressIndicator = $(document.createElement("div"))
+                .addClass("progressIndicator")
+                .innerHTML = "01:04";
+
+            buttonContainer.append(ProgressIndicatorContainer);
+            ProgressIndicatorContainer.append(progressIndicator);
         }
     };
 
@@ -563,49 +639,22 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var fullScreenButtonContainer = $(document.createElement("div"))
                 .addClass("fullScreenButtonContainer");
 
-            var fullScreenButton = $(document.createElement("img"))
+                fullScreenButton = $(document.createElement("img"))
                 .addClass("fullScreenButton")
-                .attr("src", "ITEPlayerImages/FullScreen.png")
-                .on("click", togglePlayPause());
+                .attr("src", "ITEPlayerImages/fullScreen.png")
+                .on("click", toggleFullScreen);
 
             buttonContainer.append(fullScreenButtonContainer);
             fullScreenButtonContainer.append(fullScreenButton);
         }
-    };
-    
-    function attachProgressIndicator() {
-        if (playerConfiguration.attachProgressIndicator) {
 
-            var ProgressIndicatorContainer = $(document.createElement("div"))
-                .addClass("progressIndicatorContainer");
-
-            var ProgressIndicator = $(document.createElement("div"))
-                .addClass("progressIndicator")
-                .innerHTML = "01:04";
-
-            buttonContainer.append(ProgressIndicatorContainer);
-            ProgressIndicatorContainer.append(ProgressIndicator);
+        //If player configuration's default is to full screen, set full screen
+        if (playerConfiguration.setFullScreen){
+            enableFullScreen()
         }
     };
 
-
-    //Public functions used to interface with TAG Authoring and Kiosk
-
-    function togglePlayPause() {
-    //    orchestrator.play ? pause() : play();
-    };
-
-    function play() {
-    //    orchestrator.play();
-    };
-
-    function pause() {
-    //    orchestrator.pause();
-    };
-
-    function seek(seekTime) {
-   //     orchestrator.seek(seekTime);
-    };
+//Public functions used to interface with TAG Authoring and Kiosk
 
     function load(tourData) {
         orchestrator.load(tourData);
@@ -625,30 +674,179 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         return this.orchestrator.captureKeyframe(trackID);
     };
 
+
+
+
+/*
+* PLAYER CONTROLS
+* For manipulation of player controls with which user interacts
+*/
+
+// PLAY & PAUSE & SEEK
+
     /*
-    I/P:    volumeLevel	updated volume level
-    O/P:   none
-    */ 
-    function setVolume(newVolumeLevel) {
-        orchestrator.setVolume(newVolumeLevel);
-        currentVolumeLevel = newVolumeLevel;
+    * I/P:   none
+    * Toggles between play and pause
+    * O/P:   none
+    */
+    function togglePlayPause() {
+        (orchestrator.status !== 2) ? pause() : play()
     };
 
     /*
-    I/P:    muted	bool: is tour muted?
-    O/P:   none
+    * I/P:   none
+    * Starts tour from the beginning or from a resumed spot
+    * O/P:   none
+    */
+    function play() {
+        orchestrator.play();
+        console.log("Tour is playing")
+        playPauseButton.attr("src", "ITEPlayerImages/pause.png")
+    };
+
+
+    /*
+    * I/P:   none
+    * Pauses tour
+    * O/P:   none
+    */
+    function pause() {
+        orchestrator.pause();
+        console.log("Tour is paused")
+        playPauseButton.attr("src", "ITEPlayerImages/play.png")
+    };
+
+    /*
+    * I/P:   none
+    * Seeks tour to a specfied spot
+    * O/P:   none
+    */
+    function seek(e) {
+        if (playerConfiguration.allowSeek){
+            console.log("Tour was seeked")
+            progressBar.css({
+                width : e.pageX - ITEHolder.offset().left
+            })
+            timeOffset = progressBar.width()/(progressBar.parent().width()) //timeOffset is currently a percentage of the total time
+       //     orchestrator.seek(timeOffset);
+        }
+    };
+
+
+//VOLUME & MUTE
+
+    /*
+    * I/P:   volumeLevel	updated volume level
+    * O/P:   none
+    */ 
+    function setVolume(e) {
+        volumeLevel.css({
+            height : Math.abs(e.pageY - volumeLevel.parent().offset().top - volumeLevel.parent().height())
+        });
+        currentVolumeLevel = volumeLevel.height()/(volumeLevel.parent().height());
+        //orchestrator.setVolume(newVolumeLevel);
+
+        console.log("volume set to " + parseInt(currentVolumeLevel*100) +  "%")
+    };
+
+    /*
+    * I/P:   none
+    * Toggles mute
+    * O/P:   none
     */ 
     function toggleMute() {
-  //      Orchestrator.mute ? setVolume(0) : setVolume(currentVolumeLevel)
+        isMuted ? unMute()   : mute()
     };
-
 
     /*
-    I/P:	loop	bool: should play be in loop?
-    O/P:	none
+    * I/P:   none
+    * Sets mute to be true and changes UI accordingly
+    * O/P:   none
     */ 
-    function setLoop(loop) {
+    function mute(){
+        isMuted = true;
+        console.log("tour is muted")
+        volumeButton.css("opacity" , ".5")
+        volumeLevel.css("height" , "0")
+    }
+
+    /*
+    * I/P:   none
+    * Sets mute to be true and changes UI accordingly
+    * O/P:   none
+    */ 
+    function unMute(){
+        isMuted = false;
+        console.log("tour is not muted")
+        volumeButton.css("opacity" , "1")
+        volumeLevel.css("height" , currentVolumeLevel*(volumeLevel.parent().height()))
+    }
+
+//FULL SCREEN
+   /**
+    * I/P:  none
+    * Toggles full screen
+    * O/P:  none
+    */ 
+    function toggleFullScreen() {
+        isFullScreen ? disableFullScreen() : enableFullScreen()
     };
+
+   /**
+    * I/P:    none
+    * Sets fullscreen and changes UI accordingly
+    * O/P:    none
+    */ 
+    function enableFullScreen() {
+        isFullScreen = true;
+        console.log("tour is fullscreen")
+        fullScreenButton.css("opacity" , "1")
+    };
+
+   /**
+    * I/P:    none
+    * Removes fullscreen and changes UI accordingly
+    * O/P:    none
+    */ 
+    function disableFullScreen() {
+        isFullScreen = false;
+        console.log("tour is not fullscreen")
+        fullScreenButton.css("opacity" , ".5")
+    };
+
+
+// LOOP
+   /**
+    * I/P:	none
+    * Toggles whether or not the play is in loop
+    * O/P:	none
+    */ 
+    function toggleLoop() {
+        isLooped ? unLoop() : loop()
+    };
+
+   /**
+    * I/P:    none
+    * Sets tour to loop and changes UI accordingly
+    * O/P:    none
+    */ 
+    function loop() {
+        isLooped = true;
+        console.log("tour is looped")
+        loopButton.css("opacity" , "1")
+    };
+
+   /**
+    * I/P:    none
+    * Sets tour to not be in loop and changes UI accordingly
+    * O/P:    none
+    */ 
+    function unLoop() {
+        isLooped = false;
+        console.log("tour is not looped")
+        loopButton.css("opacity" , ".5")
+    };
+
 
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;
@@ -659,9 +857,13 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.captureKeyFrame    = captureKeyframe;
     this.setVolume          = setVolume;
     this.toggleMute         = toggleMute;
-    this.setLoop            = setLoop
-
-
+    this.toggleLoop         = toggleLoop;
+    this.toggleFullScreen   = toggleFullScreen;
+    this.currentVolumeLevel = currentVolumeLevel;
+    this.timeOffset         = timeOffset;
+    this.isMuted            = isMuted;
+    this.isLooped           = isLooped;
+    this.isFullScreen       = isFullScreen
 };
 
 
@@ -678,33 +880,48 @@ ITE.ImageProvider = function (TrackData){
 
     this.keyframes           	= [];   // Data structure to keep track of all displays/keyframes
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
+	this.TrackData   = TrackData;
 
-        //DOM related
-	var	_image		= $(document.createElement("img"))
-			.addClass("assetImage");
-;
+    //DOM related
+    var _image,
+    	_UIControl;
+
+	//Start things up...
+    initialize()
+
+   /** 
+	* I/P: none
+	* Initializes track, creates UI, and attachs handlers
+	* O/P: none
+	*/
+	function initialize(){
+		_super.initialize()
+
+		//Create UI and append to ITEHolder
+		_image		= $(document.createElement("img"))
+				.addClass("assetImage");
 		_UIControl	= $(document.createElement("div"))
-			.addClass("UIControl")
-			.css({
-				"width": "50%",
-				"height":"50%"
-			})
-			.append(_image);
+				.addClass("UIControl")
+				.css({
+					"width": "50%",
+					"height":"50%"
+				})
+				.append(_image);
+		$("#ITEHolder").append(_UIControl);
 
-	$("#ITEHolder").append(_UIControl)
+		//Attach Handlers
+		attachHandlers()
+
+	};
 
 
-		//Data related
-    this.TrackData   = TrackData;
-
-
-	/* 
-	I/P: none
-		Loads actual image asset, and sets status to paused when complete
-	O/P: none
+   /** 
+	* I/P: none
+	* Loads actual image asset, and sets status to paused when complete
+	* O/P: none
 	*/
 	this.load = function(){
-			_super.loadAsset()
+			_super.load()
 
 			//Sets the image’s URL source
 			_image.attr("src", "../../Assets/TourData/" + this.TrackData.assetID)
@@ -715,12 +932,12 @@ ITE.ImageProvider = function (TrackData){
 					this.setState(keyframes[0]);
 			};
 	};
-	
-	/* 
-	I/P: none
-		Grabs current actual state of image, and sets savedState to it 
-		returns savedState
-	O/P: savedState
+
+   /** 
+	* I/P: none
+	* Grabs current actual state of image, and sets savedState to it 
+	* returns savedState
+	* O/P: savedState
 	*/
 	this.getState = function(){
 			this.savedState = {
@@ -740,10 +957,10 @@ ITE.ImageProvider = function (TrackData){
 		};
 
 
-	/*
-	I/P: state	state to make actual image reflect
-		Sets properties of the image to reflect the input state
-	O/P: none
+   /**
+	* I/P: state	state to make actual image reflect
+	* Sets properties of the image to reflect the input state
+	* O/P: none
 	*/
 	this.setState = function(state){
 	_UIControl.css({
@@ -793,23 +1010,27 @@ ITE.ImageProvider = function (TrackData){
 	O/P: interactionHandlers 	array of interaction handlers to be passed to
 	Orchestrator
 	*/
-	// 	function getInteractionHandlers(){
-
-	// 		return {
-	// 			// Mousedown
-	// 			processDown: function(evt){
-	// 				if (orchestrator.getState() !== 3){
-	// 					orchestrator.pause()
-	// 				};
-				
-	// 			// Drag
-	// 			processDrag: function (evt) {
-	// 				_image.css({
-	// 					top: 	evt.x;
-	// 					left:	evt.y;
-	// 				});
-	// 				this.TrackInteractionEvent.publish(“processDrag”);
-	// 	}
+	function getInteractionHandlers(){
+			// Mousedown
+			this.processDown = function(e){
+				if (orchestrator.getState() !== 3){
+					orchestrator.pause()
+				};
+			}
+			
+			// Drag
+			this.processDrag = function (e) {
+				_UIControl.css({
+					"top": 	e.clientX,
+					"left":	e.clientY
+				});
+				//this.TrackInteractionEvent.publish(“processDrag”);
+			}
+			return {
+				"processDown" : processDown,
+				"processDrag" : processDrag
+			}
+		}
 
 	// 			//Scroll
 	// 			processScroll: function (delta, zoomScale, pivot) {
@@ -830,10 +1051,12 @@ ITE.ImageProvider = function (TrackData){
 	// 		};
 
 	// }
-	// };
 
-	// function attachHandlers () {
-	// 	var handlerMethods = this.getInteractionHandlers();
+	function attachHandlers() {
+		var handlerMethods = getInteractionHandlers();
+
+		_UIControl.on("mouseDown", handlerMethods.processDown);
+		_UIControl.on("mousemove", handlerMethods.processDrag)
 	// 	foreach method in handlerMethods {
 	// 		//attach to html asset
 	// // Initialize everything with Hammer
@@ -851,7 +1074,7 @@ ITE.ImageProvider = function (TrackData){
 	// 	//need to make sure that the current animation is going through the current 
 	// keyframe?
 
-	// }
+	}
 };
 
 /*************/
@@ -876,14 +1099,17 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 
 	this.TrackData				= TrackData;
 
+	//Only parses displays here; function filled out in specific providerInterface classes
+	this.initialize = function(){
+		this.parseDisplays(TrackData);
+	}
+
 	/*
 	I/P: none
-		Only parses displays here; function filled out in specific providerInterface classes
 		Public function
 	O/P: none
 	*/
-	this.loadAsset = function(){
-		this.parseDisplays(TrackData);
+	this.load = function(){
 	}
 
 	/*
@@ -1020,7 +1246,7 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 	*/
 	this.getNextKeyframe = function(time){
 		var 	time		= time || timeManager.getElapsedSeconds()
-			keyFrame 	= keyframes[0];
+				keyFrame 	= keyframes[0];
 	// Loops through keyframes and returns the first that has a time AFTER our inputted time
 	// DEPENDS ON DATASTRUCTURE FOR KEYFRAMES/DISPLAYS
 		while (keyFrame.time <= time){

@@ -19,14 +19,17 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 
 	this.TrackData				= TrackData;
 
+	//Only parses displays here; function filled out in specific providerInterface classes
+	this.initialize = function(){
+		this.parseDisplays(TrackData);
+	}
+
 	/*
 	I/P: none
-		Only parses displays here; function filled out in specific providerInterface classes
 		Public function
 	O/P: none
 	*/
-	this.loadAsset = function(){
-		this.parseDisplays(TrackData);
+	this.load = function(){
 	}
 
 	/*
@@ -163,7 +166,7 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 	*/
 	this.getNextKeyframe = function(time){
 		var 	time		= time || timeManager.getElapsedSeconds()
-			keyFrame 	= keyframes[0];
+				keyFrame 	= keyframes[0];
 	// Loops through keyframes and returns the first that has a time AFTER our inputted time
 	// DEPENDS ON DATASTRUCTURE FOR KEYFRAMES/DISPLAYS
 		while (keyFrame.time <= time){
