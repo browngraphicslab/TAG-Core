@@ -714,7 +714,8 @@ ITE.ImageProvider = function (TrackData){
 					this.setStatus(2);
 					this.setState(keyframes[0]);
 			};
-	}
+	};
+	
 	/* 
 	I/P: none
 		Grabs current actual state of image, and sets savedState to it 
