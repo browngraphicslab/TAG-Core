@@ -1,8 +1,9 @@
 window.ITE = window.ITE || {};
 
 ITE.Player = function (options) { //acts as ITE object that contains the orchestrator, etc
-   // var orchestrator = new Orchestrator(this);
-    var playerConfiguration = {
+   var  orchestrator            = new ITE.Orchestrator(),
+
+    playerConfiguration = {
             attachVolume:               true,
             attachLoop:                 true,
             attachPlay:                 true,
@@ -185,8 +186,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
    //     orchestrator.seek(seekTime);
     };
 
-    function load() {
-   //     orchestrator.load();
+    function load(tourData) {
+        orchestrator.load(tourData);
     };
 
     function unload() {
@@ -227,32 +228,18 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function setLoop(loop) {
     };
+
+    this.togglePlayPause    = togglePlayPause;
+    this.play               = play;
+    this.pause              = pause;
+    this.seek               = seek;
+    this.load               = load;
+    this.unload             = unload;
+    this.captureKeyFrame    = captureKeyframe;
+    this.setVolume          = setVolume;
+    this.toggleMute         = toggleMute;
+    this.setLoop            = setLoop
+
+
 };
 
-
-
-
-
-
-
-///EXCECUTE
-
-var testOptions =   {
-        attachVolume:           true,
-        attachLoop:             true,
-        attachPlay:             true,
-        attachProgressBar:      true,
-        attachFullScreen:       true,
-        attachProgressIndicator: true,
-        hideControls:           false,
-        autoPlay:               false,
-        autoLoop:               false,
-        setMute:                false,
-        setInitVolume:          100,
-        allowSeek:              true,
-        setFullScreen:          false,
-        setStartingOffset:      0,
-        setEndTime: NaN
-    };
-
-var ITEPlayer = new ITE.Player(testOptions);

@@ -1,41 +1,60 @@
 window.ITE = window.ITE || {};
 
-ITE.ImageProvider = function (){
-	ITE.utils.extend(this, ProviderInterfacePrototype);
-	var	imageAsset	= document.createElement("img"),
-		_UIControl	= document.createElement("div")
+ITE.ImageProvider = function (TrackData){
+
+	//Extend class from ProviderInterfacePrototype
+	var Utils 	= new ITE.Utils(),
+		_super 	= new ITE.ProviderInterfacePrototype()
+
+	Utils.extendsPrototype(this, _super);
+
+    this.keyframes           	= [];   // Data structure to keep track of all displays/keyframes
+	this.trackInteractionEvent 	= new ITE.PubSubStruct();
+
+        //DOM related
+	var	_image		= $(document.createElement("img"))
+			.addClass("assetImage");
+;
+		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
+			.css({
+				"width": "50%",
+				"height":"50%"
+			})
+			.append(_image);
 
-	var trackInteractionEvent = new ITE.pubSubStruct();
+	$("#ITEHolder").append(_UIControl)
 
-	var startPos = {
-			position : absolute,
-			left 		: "0px",
-			top 		: "0px",
-			height 		: "100%", 
-			width 		: "100%", 
-			overflow 	: hidden
-	};
 
-	function loadTask(imageAsset){
+		//Data related
+    this.TrackData   = TrackData;
+
+
+	/* 
+	I/P: none
+		Loads actual image asset, and sets status to paused when complete
+	O/P: none
+	*/
+	this.load = function(){
 			_super.loadAsset()
 
 			//Sets the image’s URL source
-			this._image.src = this.TrackData.trackID.URL
+			_image.attr("src", "../../Assets/TourData/" + this.TrackData.assetID)
 
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-		this._image.addEventListener("load", (function (event) {
+			_image.onload = function (event) {
 					this.setStatus(2);
 					this.setState(keyframes[0]);
-		}));
-	}
-		/* 
-		I/P: none
+			};
+	};
+	
+	/* 
+	I/P: none
 		Grabs current actual state of image, and sets savedState to it 
-	returns savedState
+		returns savedState
 	O/P: savedState
 	*/
-		function getState(){
+	this.getState = function(){
 			this.savedState = {
 				displayNumber	: getLastKeyframe().displayNumber,
 				time			: timeManager.getElapsedSeconds(),
@@ -53,12 +72,12 @@ ITE.ImageProvider = function (){
 		};
 
 
-		/*
+	/*
 	I/P: state	state to make actual image reflect
 		Sets properties of the image to reflect the input state
 	O/P: none
 	*/
-		function setState(state){
+	this.setState = function(state){
 	_UIControl.css({
 		"left":			state.position.left,
 		"top":			state.position.top,
