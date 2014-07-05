@@ -216,7 +216,7 @@ var thirtyImageTest = function(){
 
 };
 
-fiveImgTest();
+//fiveImgTest();
 //document.activeElement.blur();
-tenImgTest();
+//tenImgTest();
 thirtyImageTest();
