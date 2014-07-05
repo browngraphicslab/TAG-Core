@@ -1,0 +1,30 @@
+body, html {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: #0000A0;
+}
+.cat1 {
+    height:300px;
+    width: 300px;
+    left: 30px;
+    top: 30px;
+    position: relative;
+}
+
+.cat2 {
+    height: 300px;
+    width: 300px;
+    left: 700px;
+    top: 400px;
+    position: relative;
+}
+
+#timer {
+    width: 100px;
+    height: 100px;
+    top: 30px;
+    left: 30px;
+
+}
