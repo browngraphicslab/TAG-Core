@@ -18,8 +18,9 @@ ITE.Orchestrator = function(player) {
     * O/P: none
     */
 	function load(dataURL){
-		var tourData;
-	    var AJAXreq = new XMLHttpRequest();
+		var tourData,
+			AJAXreq = new XMLHttpRequest(),
+			i;
 
 	   	AJAXreq.open( "GET", dataURL, true );
 	    AJAXreq.setRequestHeader("Content-type", "application/json");
@@ -41,11 +42,9 @@ ITE.Orchestrator = function(player) {
 	    */
 		function loadHelper(){
 			//Creates tracks
-			for (track in tourData.tracks){
-				if (tourData.tracks.hasOwnProperty(track)){
-					track = tourData.tracks[track]
-					createTrackByProvider(track)
-				};
+			for (i = 0; i < tourData.tracks.length; i++){
+				var track = tourData.tracks[i]
+				createTrackByProvider(track)
 			};
 
 			//...Initializes them
@@ -56,7 +55,7 @@ ITE.Orchestrator = function(player) {
 	    		trackManager[i].load()
 	    	}
 
-	    	//...And plays them!
+	    	//...And plays them
 	    	if (areAllTracksReady()){
 				play();
 			}
@@ -103,13 +102,12 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function triggerCurrentTracks (tasks) {
+		var i;
 		this.status = this.state.playing;
 		//var currentElaspedTime = this.taskManager.getElapsedTime();
 
-		for (task in tasks){
-			if (tasks.hasOwnProperty(task)){
-				task.track.play(task.offset, task.keyframe);
-			};
+		for (i = 0; i < tasks; i++){
+			tasks[i].track.play(task.offset, task.keyframe);
 		};
 	};
 
@@ -131,17 +129,18 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function areAllTracksReady() {
-		var ready = true;
-		for (track in trackManager){
-			if (trackManager.hasOwnProperty(track)){
-				if (track.state !== 2) {  //(2 = paused)
-					ready = false
-				}
+		var ready = true,
+			i;
+		for (i = 0; i < trackManager.length; i++){
+			var track = trackManager[i]
+			if (track.state !== 2) {  //(2 = paused)
+				ready = false
 			}
 		}
 	}
 
 	function initializeTracks(){
+		var i;
 		for (i = 0; i < trackManager.length; i++){
 			var track = trackManager[i];
 			// Subscribe video and audios to volume changes
@@ -153,12 +152,10 @@ ITE.Orchestrator = function(player) {
 			narrativeLoadedEvent.subscribe(track.load)
 
 			//add each keyframe as a scheduled task
-			for (keyframe in track.keyframes){
-				if (track.hasOwnProperty(keyframe)){
-					taskManager.loadTask(keyframe.offset, keyframe, track);
-				}
+			for (j = 0; j < track.keyframes.length; j++){
+				var keyframe = track.keyframes[j]
+				taskManager.loadTask(keyframe.offset, keyframe, track);
 			}
-			
 		}
 	}
 	this.load = load;

@@ -181,7 +181,7 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 	O/P: previousKeyframe: previous keyframe 
 	*/
 	this.getPreviousKeyframe = function(time){
-		var 	time		= time || timeManager.getElapsedSeconds()
+		var time 		= time || timeManager.getElapsedSeconds()
 			keyFrame 	= keyframes[0];
 	// Loops through keyframes and returns the last that has a time BEFORE our inputted time
 	// DEPENDS ON DATASTRUCTURE FOR KEYFRAMES/DISPLAYS

@@ -4,13 +4,16 @@ ITE.ImageProvider = function (TrackData){
 
 	//Extend class from ProviderInterfacePrototype
 	var Utils 	= new ITE.Utils(),
+		TAGUtils= ITE.TAGUtils,
 		_super 	= new ITE.ProviderInterfacePrototype()
 
 	Utils.extendsPrototype(this, _super);
 
     this.keyframes           	= [];   // Data structure to keep track of all displays/keyframes
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
-	this.TrackData   = TrackData;
+	interactionHandlers 		= {},
+	movementTimeouts 			= [],
+	this.TrackData   			= TrackData;
 
     //DOM related
     var _image,
@@ -29,14 +32,15 @@ ITE.ImageProvider = function (TrackData){
 
 		//Create UI and append to ITEHolder
 		_image		= $(document.createElement("img"))
-				.addClass("assetImage");
+			.addClass("assetImage");
+
 		_UIControl	= $(document.createElement("div"))
-				.addClass("UIControl")
-				.css({
-					"width": "50%",
-					"height":"50%"
-				})
-				.append(_image);
+			.addClass("UIControl")
+			.css({
+				"width": "20%",
+				"height":"20%"
+			})
+			.append(_image);
 		$("#ITEHolder").append(_UIControl);
 
 		//Attach Handlers
@@ -107,9 +111,12 @@ ITE.ImageProvider = function (TrackData){
 		/* 
 		I/P: none
 		interpolates between current state and next keyframe
-	O/P: none
-	*/
-	// 	function animate(){
+		O/P: none
+		*/
+
+		//******* Intentionally left out because I don't know how animation work... (ereif)
+		function animate(){
+
 	// 		// animate to next keyframe after where we are right now
 	// 		var targetKeyFrame = getNextKeyframe(timeManager.getElapsedSeconds())
 
@@ -130,79 +137,97 @@ ITE.ImageProvider = function (TrackData){
 	// 	this.animate() //This will start animation to the next keyframe
 	// 		}
 
-	// };
+	};
 
-		/* 
-		I/P: none
-		Return a set of interactionHandlers attached to asset from provider
-	We’ll want to make this more robust as we develop it further; currently only simple dragging and scrolling are supported. This is also dependent on the kind of animation library we use for animation.
-	We will also want to implement hammer (look at RIN imageES file for more details)
-	O/P: interactionHandlers 	array of interaction handlers to be passed to
-	Orchestrator
+   /** 
+	* I/P: none
+	* Return a set of interactionHandlers attached to asset from provider
 	*/
 	function getInteractionHandlers(){
-			// Mousedown
-			this.processDown = function(e){
-				if (orchestrator.getState() !== 3){
-					orchestrator.pause()
-				};
-			}
-			
-			// Drag
-			this.processDrag = function (e) {
-				_UIControl.css({
-					"top": 	e.clientX,
-					"left":	e.clientY
-				});
-				//this.TrackInteractionEvent.publish(“processDrag”);
-			}
-			return {
-				"processDown" : processDown,
-				"processDrag" : processDrag
-			}
-		}
-
-	// 			//Scroll
-	// 			processScroll: function (delta, zoomScale, pivot) {
-	// 				if (orchestrator.getState() !== 3){
-	// 					orchestrator.pause()
-	// 				};
-	// 				_image.zoomSomehow;
-	// 				this.TrackInteractionEvent.publish(“processScroll”);
-	// 		};
-	// 		//Pinch
-	// 		processPinch: function (){
-	// 				if (orchestrator.getState() !== 3){
-	// 					orchestrator.pause()
-	// 				};
-	// 				_image.pinchProcess;
-	// 	this.TrackInteractionEvent.publish(“processPinch”);
-
-	// 		};
-
-	// }
-
-	function attachHandlers() {
-		var handlerMethods = getInteractionHandlers();
-
-		_UIControl.on("mouseDown", handlerMethods.processDown);
-		_UIControl.on("mousemove", handlerMethods.processDrag)
-	// 	foreach method in handlerMethods {
-	// 		//attach to html asset
-	// // Initialize everything with Hammer
-	// 	hammer.on('touch', processDown);
-	// 		hammer.on('drag', function(evt){
-	// 			processDrag(evt);
-	// 	});
-	// 		hammer.on('pinch', processPinch);
-	// 	element.onmousewheel = processScroll;
-	// }
-	// }
-	// function play (offset, keyframe) {
-	// 	this.animate();
-
-	// 	//need to make sure that the current animation is going through the current 
-	// keyframe?
-
 	}
+ 
+    /**
+     * I/P {Object} res     object containing hammer event info
+     * Drag/manipulation handler for associated media
+     * Manipulation for touch and drag events
+     */
+    function mediaManip(res) {
+        var top     	= _UIControl.position().top,
+            left     	= _UIControl.position().left,
+            width     	= _UIControl.width(),
+            height     	= _UIControl.height(),
+            finalPosition;
+
+        // If event is initial touch on artwork, save current position of media object to use for animation
+        if (res.eventType === 'start') {
+            startLocation = {
+                x: left,
+                y: top
+            };
+        }	                
+        // Target location (where object should be moved to)
+        finalPosition = {
+            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+        };
+
+        // Animate to target location
+        TweenLite.to(_UIControl, 1, {
+        	y: finalPosition.y,
+        	x: finalPosition.x
+        }, Ease.easeOutExpo);      
+    }
+	
+
+    /**
+     * I/P {Number} scale     scale factor
+     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
+     * Zoom handler for associated media (e.g., for mousewheel scrolling)
+     */
+    function mediaScroll(scale, pivot) {
+    	var t    	= _UIControl.position().top,
+            l    	= _UIControl.position().left,
+            w   	= _UIControl.width(),
+            h  		= _UIControl.height(),
+            newW  	= w * scale,
+            maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
+            minW	= 200,
+            newX,
+            newY;
+
+        // Constrain new width
+        if((newW < minW) || (newW > maxW)) {
+            newW 	= Math.min(maxW, Math.max(minW, newW));
+        };
+
+        // Update scale, new X and new Y according to newly constrained values.
+        scale 	= newW / w;
+        newX 	= l + pivot.x*(1-scale);
+       	newY 	= t + pivot.y*(1-scale);
+
+        // Animate to target zoom
+        TweenLite.to(_UIControl, .1, {
+        	y: newY,
+        	x: newX,
+        	width: newW + "px"
+        }, Ease.easeOutExpo);   
+    }
+    
+
+    /** 
+	* I/P: none
+	* Initializes handlers 
+	*/
+    function attachHandlers() {
+        // Allows asset to be dragged, despite the name
+        TAG.Util.disableDrag(_UIControl);
+
+        // Register handlers
+        TAG.Util.makeManipulatable(_UIControl[0], {
+            onManipulate: mediaManip,
+            onScroll:     mediaScroll
+        }); 
+        interactionHandlers.onManipulate 	= mediaManip;
+        interactionHandlers.onScroll		= mediaScroll;    	
+    }
 };

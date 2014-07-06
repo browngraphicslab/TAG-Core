@@ -1,0 +1,82 @@
+{
+	"tracks":[
+		{
+			"name" : "track1",
+			"providerID" : "Image",
+			"assetID" : "minionWriting.png",
+			"keyframes" : [
+				{
+					"displayNumber" : "1",
+					"offset" : "0",
+					"opacity": "0.5",
+					"position" : {
+						"x" : "0",
+						"y"	: "0"
+					},
+					"size" : {
+						"width" : "100%",
+						"height": "100%"
+					},
+					"data" : {
+					} 
+				},
+				{
+					"displayNumber" : "1",
+					"offset" : "2",
+					"opacity": "1",
+					"position" : {
+						"x" : "50%",
+						"y"	: "50%"
+					},
+					"size" : {
+						"width" : "50%",
+						"height": "50%"
+					},
+					"data" : {
+					} 
+				},
+				{
+					"displayNumber" : "1",
+					"offset" : "5",
+					"opacity": "1",
+					"position" : {
+						"x" : "20%",
+						"y"	: "30%"
+					},
+					"size" : {
+						"width" : "60%",
+						"height": "60%"
+					},
+					"data" : {
+					} 
+				}
+			]
+		},
+		{
+			"name" : "track1",
+			"providerID" : "Image",
+			"assetID" : "minionBananas.png",
+			"keyframes" : [
+				{
+					"displayNumber" : "1",
+					"offset" : "0",
+					"opacity": "1",
+					"position" : {
+						"x" : "0",
+						"y"	: "0"
+					},
+					"size" : {
+						"width" : "100%",
+						"height": "100%"
+					},
+					"data" : {
+					} 
+				}
+			]
+		}
+	]
+}
+
+
+
+

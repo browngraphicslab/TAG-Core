@@ -8,6 +8,8 @@ module.exports = function(grunt) {
       },
       dist: {
         src: ['ITE Core/ITE.Utils.js',
+              'Dependencies/Hammer.js',
+              'ITE Core/TAG.Util.js',
               'ITE Core/ITEManual/ITE.PubSubStruct.js',
               'ITE Core/ITEManual/ITE.TimeManager.js',
               'ITE Core/ITEManual/ITE.TaskManager.js',

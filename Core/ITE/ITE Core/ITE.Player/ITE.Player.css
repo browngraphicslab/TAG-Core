@@ -2,16 +2,17 @@
 }
 
 #ITEHolder {
-    height: 500px;
-    width: 1000px;
+    height: 100%;
+    width: 100%;
     position: absolute;
     background-color: black;
-
+    top: 0;
+    left: 0;
 }
 
 .assetImage {
-    width: auto;
-    height: 100%;
+    width: 100%;
+    height: auto;
 }
 
 
@@ -20,6 +21,7 @@
     width: 100%;
     bottom: 0%;
     position: absolute;
+    z-index: 1000;
 }
 
 #buttonContainer {

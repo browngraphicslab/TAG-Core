@@ -36,7 +36,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         progressIndicator,
 
     //Other atributes
-        currentVolumeLevel,
+        currentVolumeLevel, //Percentage
         timeOffset,
         isMuted,
         isLooped,
@@ -75,11 +75,14 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
         return ITEPlayer
     };
-
-    //Attach volume button container and volume button
+    /*
+    * I/P:   none
+    * Attach volume button container and volume button
+    * O/P:   none
+    */
     function attachVolume() {
         if (playerConfiguration.attachVolume) {
-
+            currentVolumeLevel = playerConfiguration.setInitVolume;
             var volumeContainer = $(document.createElement("div"))
                 .addClass("volumeContainer");
 
@@ -105,7 +108,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                     },
                     "mouseleave" : function(e){
                         volumeLevelContainer.dragging = false;
-                        console.log("left")
                     },
                     "mousemove": function(e){
                         volumeLevelContainer.dragging ? setVolume(e) : null
@@ -113,7 +115,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 });
 
                 volumeLevel = $(document.createElement("div"))
-                .addClass("volumeLevel")
+                    .addClass("volumeLevel");
 
             buttonContainer.append(volumeContainer);
             volumeContainer.append(volumeButtonContainer)
@@ -121,10 +123,14 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             volumeButtonContainer.append(volumeButton);
             volumeLevelContainer.append(volumeLevel);
         }
-
         playerConfiguration.setMute ? mute(): unMute()
     };
 
+    /*
+    * I/P:   none
+    * Attaches play/pause buttons
+    * O/P:   none
+    */
     function attachPlay() {
         if (playerConfiguration.attachPlay) {
 
@@ -143,6 +149,11 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         playerConfiguration.autoPlay ? play() : pause()
     };
 
+    /*
+    * I/P:   none
+    * Attaches loop
+    * O/P:   none
+    */
     function attachLoop() {
         if (playerConfiguration.attachLoop) {
 
@@ -161,6 +172,11 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         playerConfiguration.autoLoop ? loop() : unLoop()
     };
 
+    /*
+    * I/P:   none
+    * Attaches progress bar
+    * O/P:   none
+    */
     function attachProgressBar() {
         if (playerConfiguration.attachProgressBar) {
 
@@ -187,12 +203,16 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             progressBar = $(document.createElement("div"))
                 .addClass("progressBar")
 
-
             bottomContainer.append(progressBarContainer);
             progressBarContainer.append(progressBar);
         }
     };
 
+    /*
+    * I/P:   none
+    * Attaches progress indicator
+    * O/P:   none
+    */
     function attachProgressIndicator() {
         if (playerConfiguration.attachProgressIndicator) {
 
@@ -208,6 +228,11 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         }
     };
 
+    /*
+    * I/P:   none
+    * Attaches full screen
+    * O/P:   none
+    */
     function attachFullScreen() {
         if (playerConfiguration.attachFullScreen) {
 
@@ -224,9 +249,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         }
 
         //If player configuration's default is to full screen, set full screen
-        if (playerConfiguration.setFullScreen){
-            enableFullScreen()
-        }
+        playerConfiguration.setFullScreen ? enableFullScreen() : disableFullScreen()
     };
 
 //Public functions used to interface with TAG Authoring and Kiosk
@@ -240,10 +263,10 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     };
 	
     /*
-    I/P:   trackID		track from which to capture a keyframe
-    Captures and returns a keyframe
-    Used in Authoring
-    O/P:   none
+    * I/P:   trackID		track from which to capture a keyframe
+    * Captures and returns a keyframe
+    * Used in Authoring
+    * O/P:   none
     */ 
     function captureKeyframe(trackID) {
         return this.orchestrator.captureKeyframe(trackID);
@@ -316,10 +339,10 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         volumeLevel.css({
             height : Math.abs(e.pageY - volumeLevel.parent().offset().top - volumeLevel.parent().height())
         });
-        currentVolumeLevel = volumeLevel.height()/(volumeLevel.parent().height());
+        currentVolumeLevel = volumeLevel.height()*100/(volumeLevel.parent().height());
         //orchestrator.setVolume(newVolumeLevel);
 
-        console.log("volume set to " + parseInt(currentVolumeLevel*100) +  "%")
+        console.log("volume set to " + currentVolumeLevel +  "%")
     };
 
     /*
@@ -352,7 +375,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         isMuted = false;
         console.log("tour is not muted")
         volumeButton.css("opacity" , "1")
-        volumeLevel.css("height" , currentVolumeLevel*(volumeLevel.parent().height()))
+        volumeLevel.css("height" , currentVolumeLevel*(volumeLevel.parent().height())/100 + "%")
     }
 
 //FULL SCREEN
@@ -436,6 +459,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.timeOffset         = timeOffset;
     this.isMuted            = isMuted;
     this.isLooped           = isLooped;
-    this.isFullScreen       = isFullScreen
+    this.isFullScreen       = isFullScreen;
 };
 
