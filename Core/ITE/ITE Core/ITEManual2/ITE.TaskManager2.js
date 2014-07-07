@@ -22,6 +22,7 @@ ITE.TaskManager2 = function(){
 	this.loadTask = function(duration,nextKeyframeData,asset,offsetParam){
         this.timeline.add(TweenLite.to(asset,duration,nextKeyframeData,offsetParam));
         this.timeline.pause();
+        nextKeyframeData.ease = Linear.easeNone;
 
 	};
 

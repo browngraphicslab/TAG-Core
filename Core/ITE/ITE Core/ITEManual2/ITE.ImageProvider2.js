@@ -34,7 +34,7 @@ ITE.ImageProvider2 = function (trackData, player, taskManager, orchestrator){
 						  "left": (1000*keyframes[i].pos.x/100 - self._image.height()/2) + "px",
 						  "width": (500*keyframes[i].size.x/100) + "px",
 						  "height": (1000*keyframes[i].size.y/100) + "px"};
-			self.taskManager.loadTask(keyframeData, self._image);
+			self.taskManager.loadTask(keyframes[i].time-keyframes[i-1].time,keyframeData, self._image);
 		}
 		self.state = "ready";
 	}; 
