@@ -14,7 +14,7 @@ ITE.Orchestrator2 = function(player) {
 		var i;
 		for (i=0; i<tracks.length; i++) {
 			if (tracks[i].providerId === "image"){
-					this.trackManager.push(new ITE.ImageProvider(tracks[i], this.player, self.taskManager));
+					this.trackManager.push(new ITE.ImageProvider2(tracks[i], this.player, self.taskManager));
 			}
 		}
 	}

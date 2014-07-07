@@ -11,7 +11,7 @@ ITE.TaskManager2 = function(){
 	});
 
 	//timer of entire tour
-	this.timeManager = new ITE.TimeManager();
+	this.timeManager = new ITE.TimeManager2();
     
     this.state = 'starting';
 
