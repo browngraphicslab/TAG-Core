@@ -1,7 +1,7 @@
 window.ITE = window.ITE || {};
 ITE.PubSubStruct = function() {
 
-	var callbackItems = {};
+    var callbackItems = {};
     this.subscribe = function (callback, id, context) {
         callbackItems[id || callback] = { callback: callback, context: context || this };
     };

@@ -1,19 +1,27 @@
 window.ITE = window.ITE || {};
 
-ITE.ImageProvider = function (TrackData){
+ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 
 	//Extend class from ProviderInterfacePrototype
-	var Utils 	= new ITE.Utils(),
-		TAGUtils= ITE.TAGUtils,
-		_super 	= new ITE.ProviderInterfacePrototype()
+	var Utils 		= new ITE.Utils(),
+		TAGUtils	= ITE.TAGUtils,
+		_super 		= new ITE.ProviderInterfacePrototype(),
+		self 		= this;
+
+	self.player 		= player;
+	self.taskManager 	= taskManager;
+	self.trackData 		= trackData;
+	self.orchestrator	= orchestrator;
+	self.status 		= "loading";
+
 
 	Utils.extendsPrototype(this, _super);
 
-    this.keyframes           	= [];   // Data structure to keep track of all displays/keyframes
+    var keyframes           	= trackData.keyframes;   // Data structure to keep track of all displays/keyframes
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	interactionHandlers 		= {},
 	movementTimeouts 			= [],
-	this.TrackData   			= TrackData;
+	this.trackData   			= trackData;
 
     //DOM related
     var _image,
@@ -36,12 +44,23 @@ ITE.ImageProvider = function (TrackData){
 
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
-			.css({
-				"width": "20%",
-				"height":"20%"
-			})
 			.append(_image);
+
 		$("#ITEHolder").append(_UIControl);
+
+		var i, keyframeData;
+
+		for (i=1; i<keyframes.length; i++) {
+			keyframeData={
+						  "opacity"	: keyframes[i].opacity,
+						  "top"		: (500*keyframes[i].pos.y/100) + "px",
+						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
+						  "width"	: (1000*keyframes[i].size.x/100) + "px",
+						  "height"	: (500*keyframes[i].size.y/100) + "px"};
+			self.taskManager.loadTask(parseFloat(keyframes[i].time - keyframes[i-1].time), keyframeData, _UIControl, keyframes[i].time);
+		}
+		self.status = "ready";
+
 
 		//Attach Handlers
 		attachHandlers()
@@ -58,7 +77,7 @@ ITE.ImageProvider = function (TrackData){
 			_super.load()
 
 			//Sets the image’s URL source
-			_image.attr("src", "../../Assets/TourData/" + this.TrackData.assetID)
+			_image.attr("src", "../../Assets/TourData/" + this.trackData.assetUrl)
 
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {
@@ -74,21 +93,21 @@ ITE.ImageProvider = function (TrackData){
 	* O/P: savedState
 	*/
 	this.getState = function(){
-			this.savedState = {
-				displayNumber	: getLastKeyframe().displayNumber,
-				time			: timeManager.getElapsedSeconds(),
-				opacity			: _image.opacity(),
-				pos : {
-					x		: _image.position().left,
-					y 		: _image.position().top
-				},
-				size: {
-					height	: _image.height(),
-					width	: _image.width()
-				},
-			};	
-			return savedState;
-		};
+		this.savedState = {
+			//displayNumber	: this.getPreviousKeyframe().displayNumber,
+			time			: self.taskManager.timeManager.getElapsedOffset(),
+			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
+			pos : {
+				x		: _UIControl.position().left,
+				y 		: _UIControl.position().top
+			},
+			size: {
+				height	: _UIControl.height(),
+				width	: _UIControl.width()
+			},
+		};	
+		return this.savedState;
+	};
 
 
    /**
@@ -97,15 +116,14 @@ ITE.ImageProvider = function (TrackData){
 	* O/P: none
 	*/
 	this.setState = function(state){
-	_UIControl.css({
-		"left":			state.position.left,
-		"top":			state.position.top,
-		"height":		state.size.height,
-		"width":		state.size.width,
-		"opacity":		state.opacity
-	});
-
-	savedState = state	
+		_UIControl.css({
+			"left":			state.pos.x,
+			"top":			state.pos.y,
+			"height":		state.size.height,
+			"width":		state.size.width,
+			"opacity":		state.opacity
+		});
+		//this.savedState = state	
 	};
 
 		/* 
@@ -158,24 +176,45 @@ ITE.ImageProvider = function (TrackData){
             height     	= _UIControl.height(),
             finalPosition;
 
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+
         // If event is initial touch on artwork, save current position of media object to use for animation
         if (res.eventType === 'start') {
             startLocation = {
                 x: left,
                 y: top
             };
-        }	                
+        }	              
         // Target location (where object should be moved to)
         finalPosition = {
             x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
             y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
         };
 
+        //FOR ANIMATION TESTING PURPOSES (the blue square shows that finalPosition is correct, but with tweenLite, it is somehow impossible to animate there correctly when you have other animations going?) 
+        // var test = $(document.createElement("div")).css({
+        //     	"position" : "absolute",
+        //     	"height": "10px",
+        //     	"width": "10px",
+        //     	"left": finalPosition.x,
+        //     	"top": finalPosition.y,
+        //     	"background-color": "blue"
+        //     })
+        //     $("#ITEHolder").append(test)
+
+        // TweenLite.killTweensOf(_UIControl)
+        // TweenLite.to(_UIControl, 1, {
+        // 	y: finalPosition.y,
+        // 	x: finalPosition.x
+        // }, Ease.easeOutExpo);     
+
         // Animate to target location
-        TweenLite.to(_UIControl, 1, {
-        	y: finalPosition.y,
-        	x: finalPosition.x
-        }, Ease.easeOutExpo);      
+        _UIControl.stop();
+        _UIControl.animate({
+        	top: finalPosition.y,
+        	left: finalPosition.x
+        }, "slow", "linear");
+ 
     }
 	
 
@@ -190,10 +229,13 @@ ITE.ImageProvider = function (TrackData){
             w   	= _UIControl.width(),
             h  		= _UIControl.height(),
             newW  	= w * scale,
+            newH,
             maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
             minW	= 200,
             newX,
             newY;
+
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
 
         // Constrain new width
         if((newW < minW) || (newW > maxW)) {
@@ -202,15 +244,25 @@ ITE.ImageProvider = function (TrackData){
 
         // Update scale, new X and new Y according to newly constrained values.
         scale 	= newW / w;
+        newH	= h * scale;
         newX 	= l + pivot.x*(1-scale);
        	newY 	= t + pivot.y*(1-scale);
 
         // Animate to target zoom
-        TweenLite.to(_UIControl, .1, {
-        	y: newY,
-        	x: newX,
-        	width: newW + "px"
-        }, Ease.easeOutExpo);   
+        // TweenLite.to(_UIControl, .1, {
+        // 	y: newY,
+        // 	x: newX,
+        // 	width: newW + "px"
+        // }, Ease.easeOutExpo);   
+
+        _UIControl.stop();
+        _UIControl.css({
+        	top: newY,
+        	left: newX,
+        	width: newW,
+        	height: newH
+        });
+ 
     }
     
 

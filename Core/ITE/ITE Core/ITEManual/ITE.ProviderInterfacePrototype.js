@@ -2,7 +2,7 @@
 
 window.ITE = window.ITE || {};
 
-ITE.ProviderInterfacePrototype = function(TrackData){ 
+ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orchestrator){ 
 	this.currentStatus			= 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
 
@@ -17,11 +17,14 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 
 	this.TrackInteractionEvent	= null; // Raised when track is interacted with.  This is for the inks to subscribe to.
 
-	this.TrackData				= TrackData;
+	self.player 				= player;
+	self.taskManager 			= taskManager;
+	self.trackData 				= trackData;
+	self.orchestrator			= orchestrator;
 
 	//Only parses displays here; function filled out in specific providerInterface classes
 	this.initialize = function(){
-		this.parseDisplays(TrackData);
+		this.parseDisplays(trackData);
 	}
 
 	/*
@@ -60,13 +63,10 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 	*/
 	this.play = function(){
 	// Resets state to be where it was when track was paused
-		this.setState(savedState);
+		this.savedState && this.setState(this.savedState);
 
-	// Starts animation from saved (and now current) state to the next keyframe
-		this.animate();
-
-	// Set current status to “played”
-		this.setCurrentStatus(1);
+	// // Set current status to “played”
+	// 	this.setCurrentStatus(1);
 	};
 
 	/* 
@@ -77,14 +77,12 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 	O/P: none
 	*/
 	this.pause = function(){
-		// Stops/cancels animation, if there is one
-		currentAnimation && currentAnimation.stop();
-
 		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		this.setState(this.getState());
+		this.getState();
 
-		// Sets currentStatus to paused
-		this.setStatus(2);
+
+		// // Sets currentStatus to paused
+		// this.setStatus(2);
 	};
 
 	/* 
@@ -181,7 +179,7 @@ ITE.ProviderInterfacePrototype = function(TrackData){
 	O/P: previousKeyframe: previous keyframe 
 	*/
 	this.getPreviousKeyframe = function(time){
-		var time 		= time || timeManager.getElapsedSeconds()
+		var time 		= time || self.taskManager.timeManager.getElapsedSeconds()
 			keyFrame 	= keyframes[0];
 	// Loops through keyframes and returns the last that has a time BEFORE our inputted time
 	// DEPENDS ON DATASTRUCTURE FOR KEYFRAMES/DISPLAYS

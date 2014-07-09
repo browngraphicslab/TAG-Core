@@ -1,23 +1,23 @@
 window.ITE = window.ITE || {};
 
 ITE.Orchestrator = function(player) {
-	var status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
+	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
-		trackManager = [],	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
-		taskManager  = new ITE.TaskManager(),
-		playerChangeEvent = new ITE.PubSubStruct(),
-		narrativeSeekedEvent = new ITE.PubSubStruct(),
-		narrativeLoadedEvent = new ITE.PubSubStruct(),
-		stateChangeEvent = new ITE.PubSubStruct();
+	var	self = this,
+		narrativeSeekedEvent 	= new ITE.PubSubStruct(),
+		narrativeLoadedEvent 	= new ITE.PubSubStruct(),
+		stateChangeEvent 		= new ITE.PubSubStruct();
 
-
+		self.player 			= player;
+		trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
+		self.taskManager 		= new ITE.TaskManager();
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
     * Loads and parses JSON data using AJAX, then figures out which assetProvider to use to actually load the asset.
     * Once the asset is loaded, the initializeTracks() is called, and when tracks are ready, the tour is played. 
     * O/P: none
     */
-	function load(dataURL){
+	this.load = function(dataURL){
 		var tourData,
 			AJAXreq = new XMLHttpRequest(),
 			i;
@@ -44,6 +44,7 @@ ITE.Orchestrator = function(player) {
 			//Creates tracks
 			for (i = 0; i < tourData.tracks.length; i++){
 				var track = tourData.tracks[i]
+
 				createTrackByProvider(track)
 			};
 
@@ -69,24 +70,24 @@ ITE.Orchestrator = function(player) {
 	    * O/P: none
 	    */
 		function createTrackByProvider(trackData){
-			switch (trackData.providerID){
-				case "Image" : 
-					trackManager.push(new ITE.ImageProvider(trackData));
+			switch (trackData.providerId){
+				case "image" : 
+					trackManager.push(new ITE.ImageProvider(trackData, self.player, self.taskManager, self));
 					break;
-				case "Video" : 
+				case "video" : 
 					trackManager.push(new ITE.VideoProvider(trackData));
 					break;
-				case "Audio" : 
+				case "audio" : 
 					trackManager.push(new ITE.AudioProvider(trackData));
 					break;
-				case "DeepZoom" : 
-					trackManager.push(new ITE.DeepZoomProvider(trackData));
+				case "deepZoom" : 
+					trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
 					break;
-				case "Ink" : 
-					trackManager.push(new ITE.InkProvider(trackData));
+				case "ink" : 
+					self.trackManager.push(new ITE.InkProvider(trackData));
 					break;
 				default:
-					throw new Error("Unexpected providerID; '" + track.providerID + "' is not a valid providerID");
+					throw new Error("Unexpected providerID; '" + trackData.providerID + "' is not a valid providerID");
 			}
 		}
 	};
@@ -97,22 +98,31 @@ ITE.Orchestrator = function(player) {
 
 
 	function play(){
-		// taskManager.start();
+		var i;
+		for (i=0; i<self.trackManager.length; i++) {
+			if (self.trackManager[i].state === "loading"){
+				setTimeout(self.play, 1000);
+				return;
+			}
+		}
+		// self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
+		self.taskManager.play();
 		this.status = 1;
 	}
 
 	function triggerCurrentTracks (tasks) {
-		var i;
-		this.status = this.state.playing;
+		this.status = 1
 		//var currentElaspedTime = this.taskManager.getElapsedTime();
 
-		for (i = 0; i < tasks; i++){
-			tasks[i].track.play(task.offset, task.keyframe);
+		for (task in tasks){
+			if (tasks.hasOwnProperty(task)){
+				task.track.play(task.offset, task.keyframe);
+			};
 		};
 	};
 
 	function pause(){
-		// taskManager.pause();
+		self.taskManager.pause();
 		this.status = 2;
 	}
 
@@ -154,11 +164,11 @@ ITE.Orchestrator = function(player) {
 			//add each keyframe as a scheduled task
 			for (j = 0; j < track.keyframes.length; j++){
 				var keyframe = track.keyframes[j]
-				taskManager.loadTask(keyframe.offset, keyframe, track);
+				self.taskManager.loadTask(keyframe.offset, keyframe, track);
 			}
 		}
 	}
-	this.load = load;
+	this.trackManager = trackManager;
 	this.unload = unload;
 	this.play = play;
 	this.triggerCurrentTracks = triggerCurrentTracks;

@@ -34,7 +34,7 @@ ITE.TimeManager = function(){
 	//pause the timer
 	this.stopTimer = function(){
 		if (this.isRunning){
-			this.elaspedOffset = this.getElapsedOffset();
+			this.elapsedOffset = this.getElapsedOffset();
 		}
 		this.isRunning = false;
 	};
