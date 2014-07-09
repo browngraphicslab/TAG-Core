@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel =" stylesheet" type =" text/css" href ="ITE.Player.css" />
+        <script src="../../Dependencies/CSSPlugin.min.js"></script>
+        <script src="../../Dependencies/jquery.min.js"></script>
+        <script src="../../Dependencies/TweenLite.min.js"></script>
+        <meta charset="utf-8" />
+        <title>ITEPlayer</title>
+    </head>
+    <body>
+        <script src ="../../ITECore.js"></script>
+        <script>
+        //EXECUTE: this is what will actually be interfaced with TAG somewhere (in Kiosk or TourAuthoring)
+            window.ITE = window.ITE || {};
+            var testOptions =   {
+                    attachVolume:           true,
+                    attachLoop:             true,
+                    attachPlay:             true,
+                    attachProgressBar:      true,
+                    attachFullScreen:       true,
+                    attachProgressIndicator: true,
+                    hideControls:           false,
+                    autoPlay:               false,
+                    autoLoop:               false,
+                    setMute:                false,
+                    setInitVolume:          100,
+                    allowSeek:              true,
+                    setFullScreen:          false,
+                    setStartingOffset:      0,
+                    setEndTime: NaN
+                };
+
+            var ITEPlayer = new ITE.Player(testOptions);
+            ITEPlayer.load("../../Assets/TourData/TourData.JSON")
+
+        </script>
+    </body>
+</html>
