@@ -15,14 +15,26 @@ ITE.TaskManager = function(){
     
     this.state = 'starting';
 
+    this.timerPrecision = 0.2;
+
 	this.getElapsedTime = function(){
 		return this.timeManager.getElapsedOffset();
 	};	
 
-	this.loadTask = function(duration,nextKeyframeData,asset,offsetParam){
-        this.timeline.add(TweenLite.to(asset,duration,nextKeyframeData),offsetParam);
-        this.timeline.pause();
-        nextKeyframeData.ease = Linear.easeNone;
+	this.loadTask = function(duration,nextKeyframeData,asset,offsetParam,track){
+        if (track.trackData.providerId==='deepZoom'){
+        		track.setSeadragonConfiguration(duration,nextKeyframeData); //error here
+        		this.timeline.add(TweenLite.to(asset,duration,{opacity: nextKeyframeData.opacity}));
+        		this.timeline.pause();
+        		nextKeyframeData.ease = Linear.easeNone;
+        		console.log("reaches deepZoom loadtask");
+        }
+
+        else{
+        		this.timeline.add(TweenLite.to(asset,duration,nextKeyframeData),offsetParam);
+        		this.timeline.pause();
+        		nextKeyframeData.ease = Linear.easeNone;	
+        }
 
 	};
 

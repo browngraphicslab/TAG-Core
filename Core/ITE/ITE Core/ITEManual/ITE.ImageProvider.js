@@ -8,16 +8,18 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 		_super 		= new ITE.ProviderInterfacePrototype(),
 		self 		= this;
 
+	Utils.extendsPrototype(this, _super);
+
+    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
+	self.savedState		= keyframes[0];
+	self.animation;
 
-
-	Utils.extendsPrototype(this, _super);
-
-    var keyframes           	= trackData.keyframes;   // Data structure to keep track of all displays/keyframes
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	interactionHandlers 		= {},
 	movementTimeouts 			= [],
@@ -26,6 +28,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
     //DOM related
     var _image,
     	_UIControl;
+
 
 	//Start things up...
     initialize()
@@ -56,12 +59,12 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 						  "top"		: (500*keyframes[i].pos.y/100) + "px",
 						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
 						  "width"	: (1000*keyframes[i].size.x/100) + "px",
-						  "height"	: (500*keyframes[i].size.y/100) + "px"};
-			self.taskManager.loadTask(parseFloat(keyframes[i].time - keyframes[i-1].time), keyframeData, _UIControl, keyframes[i].time);
+						  "height"	: (500*keyframes[i].size.y/100) + "px"
+						};
+			self.taskManager.loadTask(keyframes[i].time- keyframes[i-1].time, keyframeData, _UIControl, keyframes[i].time,self);
 		}
 		self.status = "ready";
-
-
+		self.setState(keyframes[0]);
 		//Attach Handlers
 		attachHandlers()
 
@@ -80,7 +83,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			_image.attr("src", "../../Assets/TourData/" + this.trackData.assetUrl)
 
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-			_image.onload = function (event) {
+			_image.onload = function (event) {//Is this ever getting called?
 					this.setStatus(2);
 					this.setState(keyframes[0]);
 			};
@@ -93,7 +96,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	* O/P: savedState
 	*/
 	this.getState = function(){
-		this.savedState = {
+		self.savedState = {
 			//displayNumber	: this.getPreviousKeyframe().displayNumber,
 			time			: self.taskManager.timeManager.getElapsedOffset(),
 			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
@@ -106,7 +109,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 				width	: _UIControl.width()
 			},
 		};	
-		return this.savedState;
+		return self.savedState;
 	};
 
 
@@ -126,36 +129,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 		//this.savedState = state	
 	};
 
-		/* 
-		I/P: none
-		interpolates between current state and next keyframe
-		O/P: none
-		*/
 
-		//******* Intentionally left out because I don't know how animation work... (ereif)
-		function animate(){
-
-	// 		// animate to next keyframe after where we are right now
-	// 		var targetKeyFrame = getNextKeyframe(timeManager.getElapsedSeconds())
-
-	//          media.onload =function(){
-	//                         var  mediaobj = new Kinetic.Image(){
-	//                 //set properties x,y,height, width followed by
-	//                 image : media
-	//                          });
-	//             	 layer.add(mediaobj); //add the kinetic image to the stage’s layer
-	//             	stage.add(layer); //add layer to the stage
-	            
-	//             	var animation = new Kintetic.Animation(function(frame){
-	//                	 //define animation as desired},layer);
-	//             	animation.start();
-
-	// 		// When current animation has finished, begin next animation
-	// this.animation.addEventListener("animationFinished", (function (event) {
-	// 	this.animate() //This will start animation to the next keyframe
-	// 		}
-
-	};
+	
 
    /** 
 	* I/P: none
