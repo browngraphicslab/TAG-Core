@@ -1,2 +1,7 @@
 .DS_Store
 /**/.DS_Store
+TAG/css/*.css
+TAG/html/*.html
+TAG/TAG.js
+TAG/TAG-min.js
+node_modules

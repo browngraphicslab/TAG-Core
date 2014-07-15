@@ -1,0 +1,101 @@
+@import 'common.styl'
+
+#tagRoot
+	overflow hidden
+	position relative
+	cursor default
+	background-color #111111
+
+#tagRoot *:not(tspan) // fix this -- too general
+	font-family sourceSans, sans-serif
+
+#tagRootContainer
+	display table
+	position absolute
+	wh 100%
+
+#tagRootInnerContainer
+	display table-cell
+	font-size 16px // normalize font size for TAG container
+	max-height 100%
+	max-width 100%
+	vertical-align middle
+
+#tagRoot div,
+#tagRoot span
+	color #eeeeee
+
+#tagRoot a
+	color white
+	cursor pointer
+	text-decoration none
+
+#tagRoot a:hover
+	text-decoration underline
+
+#tagRoot img
+	-moz-user-select -moz-none
+	-khtml-user-select none
+	-webkit-user-select none
+	-o-user-select none
+	user-select none
+
+#tagRoot button
+	cursor pointer
+	background-color black
+	color white
+	padding-left 15px
+	padding-right 15px
+	
+
+#tagRoot #annotatedImageAssetCanvas
+	overflow-x hidden
+	overflow-y hidden
+	pointer-events none
+	position absolute
+	wh 100%
+	z-index 50
+
+#tagRoot .annotatedImageHotspotCircle
+	display inline-block
+	height 60px
+	position absolute
+	visibility hidden
+	width 60px
+	z-index 100000
+
+#tagRoot .annotatedImageMediaControlPanel
+	background-color #3f3735
+	display block
+	height 40px
+	position relative
+    width 100%
+	// height 40px
+	// position relative
+	// display block
+	// left 2.5%
+	// margin-bottom 2.5%
+
+#tagRoot .annotatedImageMediaDescription
+	position relative
+	left 5%
+	width 90%
+	color white
+	word-wrap break-word
+
+#tagRoot .annotatedImageMediaTitle
+	position relative
+	left 5%
+	width 90%
+	color white
+	top 5px
+	margin-bottom 2%
+	overflow hidden
+	text-overflow ellipsis
+	font-weight 700
+
+#tagRoot #annotatedImageViewer
+	height 100%
+	width 100%
+	position absolute
+	z-index 0

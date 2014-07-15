@@ -1,0 +1,80 @@
+// Overlay
+.dialogBoxOverlay {
+	display table
+	position absolute
+	top 0
+	left 0
+	width 100%
+	height 100%
+	background-color rgba(0,0,0,0.6)
+	z-index 1000000000 + 5
+}
+
+
+// Dialog Box Container - required to vertically center dialogBox
+.dialogBoxContainer {
+	display table-cell
+	text-align center
+	vertical-align middle
+	margin auto
+	width 100%
+	height 100%
+}
+
+// Dialog Box
+.dialogBox {
+	display inline-block
+	width 40%
+	border 3px double white
+	text-align center
+	background-color black
+	padding 3%
+}
+
+
+.dialogBoxTitle {
+	color white
+	font-size 1.3em
+	position relative
+	text-align center
+	margin 0.3em auto
+}
+
+
+.dialogBox > p {
+	color white
+	font-size 1em
+	line-height 1.2em
+	margin 0.3em 0
+	padding 0
+	position relative
+	text-align center
+}
+
+.dialogBox > p:first-child {
+	margin-top 0
+}
+
+.dialogBox > p:last-child {
+	margin-bottom 0
+}
+
+// Browser Icons for incompatible browser dialog boxin TAG.Layout.StartPage.js
+
+#browserIcons {
+	display block
+	margin-top 5%
+}
+
+.browserIconLink {
+	opacity 0.9
+}
+
+.browserIconLink:hover {
+	opacity 1.0
+}
+
+.browserIcon {
+	width 15%
+	margin 0% 4.5%
+}
