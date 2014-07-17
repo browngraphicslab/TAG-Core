@@ -1,31 +1,48 @@
 #newCatalogRoot
-	<link href='http://fonts.googleapis.com/css?family=Lobster|Shadows+Into+Light|Open+Sans+Condensed:300|Indie+Flower|Pacifico&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 	#overlay
-	#catalogDivContainer
-		#sortRow.background
-			#artistButton.rowButton(tagName="Artist").secondaryFont
-				|Artist
-			#titleButton.rowButton(tagName="Title").secondaryFont
-				|Title
-			#yearButton.rowButton(tagName="Year").secondaryFont
-				|Year
-			#typeButton.rowButton(tagName="Type").secondaryFont
-				|Type
-			#searchFilter
-				input#searchInput(placeholder="Enter Keyword")
-				#searchTxt
-		#catalogDiv.background
 	#bgimage
-	#leftbar
-		#leftbar-header
-			#backbuttonArea
-				img#catalogBackButton
-			#collection-label
-				#collectionHeader.primaryFont
-					| Collections
-		#collectionArea.background
-	#displayarea.primaryFont
-		#displayareasub
+	#topBar
+		#collectionArea
+			#backArrowArea
+				img#backArrow
+			#nextArrowArea
+				img#nextArrow
+		#timelineArea
+	#bottomContainer
+
+		#catalogDivContainer
+			#sortRow.background
+				#yearButton.rowButton(tagName="Year")
+					|Year
+				#titleButton.rowButton(tagName="Title")
+					|Title
+				#artistButton.rowButton(tagName="Artist")
+					|Artist
+				#typeButton.rowButton(tagName="Type")
+					|Type
+				#searchFilter
+					input#searchInput(placeholder="Enter Keyword")
+					#searchTxt
+			#catalogDiv.background
+		#displayarea
+
+		
+			#infoDiv
+			#tileDiv
+
+		#selectedArtworkContainer
+			#titleSpan
+			#imgDiv
+				#exploreTab
+					img#exploreIcon
+					#exploreText
+				img#currentThumbnail
+				#infoText
+					#artistInfo
+					#yearInfo
+			#descText
+				#descSpan
+
 	#loadingArea			
 	//- #feedbackContainer
 	//- 	img#feedback-icon

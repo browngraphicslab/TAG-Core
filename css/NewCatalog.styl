@@ -6,6 +6,19 @@
 	position absolute
 	wh 100%
 
+#newCatalogRoot .arrow
+	position absolute
+	top 23%
+	left 34%
+	height 20px
+
+#newCatalogRoot .arrowArea
+	display inline-block
+	top 0%
+	height 100% 
+	width 5%
+	position absolute
+
 #newCatalogRoot #artistInfo
 	color white
 	float left
@@ -33,67 +46,108 @@
 	position absolute
 	width 100%
                 
-#newCatalogRoot #backbuttonArea
-	height 5%
-	left 3.5%        
-	position absolute
-	top 2.5%        
-	width 15%
-
 #newCatalogRoot	#bgimage
 	background-position center
 	background-size cover
-	opacity 0.45
+	opacity 0.2
 	position absolute
 	wh 100%
 
-#newCatalogRoot #catalogBackButton
-	display block
-	height auto
-	position relative
-	top 30%
-	width 76.3%
+#newCatalogRoot #bottomContainer
+	width 100%
+	height 70%
+	position absolute
+	bottom 0
 
-#newCatalogRoot #contentdiv
-	height 80%
-	left 2%
-	position relative            
+#newCatalogRoot #catalogDiv
+	height 90%
+	overflow-x auto
+	overflow-y hidden
+	position absolute
+	bottom 0
+	right 0
+	width 100%
+	z-index 49  
+
+#newCatalogRoot #collectionArea
+	height 40%
+	width 100%
+	overflow-x auto
+	overflow-y hidden
+	text-align center
+	position absolute
+
+#newCatalogRoot #collectionDescription
+	width 90%
+	height 90%
+	overflow-y auto
+	margin 5%
+	margin-top 0%
+
+#newCatalogRoot	.collectionDot
+	wh 7px
+	display inline-block
+	background-color rgb(170,170,170)
+	margin 3px
+	border-radius 50%
+	cursor pointer
+
+#newCatalogRoot .collectionDotHolder
+	height 20%
+	width 100%
+	text-align center
+	position absolute
+	top 30%
+
+#newCatalogRoot #collection-label
+	height 7%
+	left 19%
+	margin-left 1.22%
+	padding 0px 0px 0px 10px
+	position absolute
+	top 2.45%
+	text-align center
+	width 45%   
+	font-size 1.7em
+
+#newCatalogRoot #collection-selection
+	border solid transparent
+	border-width 5px 0px 5px 0px
+	display inline-block
+	height 9.6%
+	position relative
+	padding-bottom 0.75%
+	overflow none
+	width 100%
+
+#newCatalogRoot .collection-title
+	display inline-block
+	wh 100%
+	overflow hidden
 	text-overflow ellipsis
-	top 2.25%
-	width 94%
+	white-space nowrap
+	font-size 1.1em
+	color white
 
 #newCatalogRoot #currentThumbnail
-	max-height 100% 
-	max-width 100% 
-	wh 100% 
+	wh 100%
+	border-radius 2%
 
 #newCatalogRoot #descSpan
 	text-overflow ellipsis
 	word-wrap break-word
 
-#newCatalogRoot #description-text
+#newCatalogRoot #descText
 	color white
-	height 90%
-	left 45%
 	overflow-x hidden
 	overflow-y auto
-	padding-right 2%
-	position absolute
-	text-overflow ellipsis
 	white-space normal
-	width 55%
 	word-wrap break-word
-
-#newCatalogRoot #displayarea
-	height 50%
-	left 25%
 	position absolute
-	width 75%
-
-#newCatalogRoot #displayareasub
-	left 0%
-	position absolute
-	wh 100%
+	width 90%
+	height 25%
+	margin 5%
+	bottom 0
 
 #newCatalogRoot #displayHelp
 	background-color rgba(0,0,0,0.5)
@@ -118,62 +172,6 @@
 	text-align center
 	width 60%
 
-#newCatalogRoot #collectionArea
-	background-color rgba(0, 0, 0, 0.7)	
-	height 88%
-	margin-left 4%
-	margin-top 4%
-	overflow auto
-	width 82% 
-
-#newCatalogRoot #collection-label
-	height 7%
-	left 19%
-	margin-left 1.22%
-	padding 0px 0px 0px 10px
-	position absolute
-	top 2.45%
-	text-align center
-	width 45%   
-	font-size 1.7em
-
-#newCatalogRoot #collection-info 
-	height 96%
-	position absolute
-	top 0%
-	width 98%
-
-#newCatalogRoot #collection-name-div          
-	display inline-block
-	overflow hidden
-	text-align center
-	text-overflow ellipsis
-	white-space nowrap
-	width 96%
-	z-index 100
-	margin-top 5px
-
-#newCatalogRoot #collection-selection
-	border solid transparent
-	border-width 5px 0px 5px 0px
-	display inline-block
-	height 9.6%
-	position relative
-	padding-bottom 0.75%
-	overflow none
-	width 100%
-
-#newCatalogRoot .collection-title
-	display inline-block
-	height 100%
-	margin-left 5%
-	overflow hidden
-	text-overflow ellipsis
-	white-space nowrap
-	width 90%
-	font-size 1.1em
-	margin-top 2.15%
-
 #newCatalogRoot #exploreIcon
 	float right
 	height 50%
@@ -182,18 +180,18 @@
 	top 25%
 	width auto
 
-#newCatalogRoot #explore-tab
+#newCatalogRoot #exploreTab
 	background-color rgba(0,0,0,0.4)
 	color white
-	display none
+	//display none
+	display inline-block
 	height 16%
-	left 0% 
 	overflow hidden 
 	position absolute
-	top 84%
+	left 0
 	width 100%  
 
-#newCatalogRoot #explore-text
+#newCatalogRoot #exploreText
 	float right
 	margin-right 3% 
 	position relative
@@ -216,31 +214,30 @@
 	vertical-align middle
 	width auto
 
-#newCatalogRoot #img-container
-	height 91.5%
+#newCatalogRoot #imgDiv
+	width 90%
+	height 50%
 	position absolute
-	top 0%
-	width 40%
+	top 10%
+	left 5%
 
-#newCatalogRoot #info-text
-	display inline-block
-	float left
-	left 0
+#newCatalogRoot #infoDiv
 	position absolute
+	left 0%
+	height 100%
+	width 25%
+
+#newCatalogRoot #infoText
+	display inline-block
+	float top
 	top 100%        
 	width 100% 
 
-#newCatalogRoot #leftbar
-	height 45%
+#newCatalogRoot #infoTilesContainer
 	position absolute
-	width 25%
-	z-index 2
-
-#newCatalogRoot #leftbar-header
-	height 5%
-	margin-bottom 15%
-	overflow hide
-	width 100%
+	right 0
+	height 100%
+	width 75%
 
 #newCatalogRoot #loadingArea
 	background-color rgba(0, 0, 0, 0.7)
@@ -249,24 +246,43 @@
 	width 100% 
 	z-index 1000000
 
+#newCatalogRoot .mainCollection
+	margin auto
+	display inline-block
+	height 100%
+	font-size 200%
+
+#newCatalogRoot .nextPrevCollection
+	display inline-block
+	font-size 150%
+	color rgb(170,170,170)
+	position relative
+	top -35%
+	height 50%
+	overflow hidden
+	text-align center
+	text-overflow ellipsis                
+	white-space nowrap
+	padding-left 2%
+	padding-right 2%
+
 #newCatalogRoot #overlay
-	background-color rgba(0,0,0,0.5)
+	background-color rgba(0, 0, 0, 0.7)
 	position absolute
 	wh 100%
-
-#newCatalogRoot #sortRow
-	background-color rgba(0, 0, 0, 0.5)
-	height 12.5%
-	position relative
-	top 0%
-	width 100%
-	z-index 10000
 
 #newCatalogRoot .rowButton
 	cursor pointer
 	float left
 	font-size 92.5%
 	margin 0.475% 2%
+
+#newCatalogRoot #sortRow
+	height 10%
+	position relative
+	top 0%
+	width 100%
+	z-index 1000
 
 #newCatalogRoot #searchInput
 	background-color white
@@ -281,6 +297,7 @@
 	position relative
 	right 1%
 	z-index 100
+	border-radius 2%
 
 #newCatalogRoot #searchTxt
 	color white
@@ -290,43 +307,94 @@
 	text-align right
 	width 25%
 
+#newCatalogRoot #selectedArtworkContainer
+	background-color rgba(0,0,0,0.65)
+	width 32%
+	top 5%
+	height 90%
+	z-index 10000
+	position absolute
+	display none
+	border-radius 2%
+
 #newCatalogRoot .tile
 	border 1px solid rgba(0,0,0,0.85)
-	height 52%
 	position absolute
-	width 16% 
+	border-radius 3%	
+
+#newCatalogRoot #tileDiv
+	position absolute
+	height 100%
+	width 100%
 
 #newCatalogRoot .tileImage
 	position absolute
 	wh 100%
+	border-radius 3%	
 
-#newCatalogRoot #catalogDiv
-	background-color rgba(0,0,0,0.5)
-	height 100%
-	overflow-x auto
-	overflow-y hidden
-	position relative
-	top 0%
-	width 100%
-	z-index 49 
-	scrollbar-base-color white
-	scrollbar-track-color black
-	scrollbar-arrow-color white
-	scrollbar-base-height 10px
-
-
-
-#newCatalogRoot #catalogDivContainer
-	height 42.5%
+#newCatalogRoot .timeline
 	position absolute
-	top 51%
 	width 100%
+	height 3%
+	top 45%
+
+#newCatalogRoot #timelineArea
+	position absolute
+	width 90%
+	left 5%
+	height 60%
+	bottom 0
+
+#newCatalogRoot .timelineCircleArea
+	position absolute
+	width 100%
+	height 3%
+	top 45%
+
+#newCatalogRoot .timelineDateLabel
+	position absolute
+	height 100%
+	top -100%
+	white-space nowrap
+	color rgb(170,170,170)
+
+#newCatalogRoot .timelineEventCircle
+	position absolute
+	wh 20px
+	background-color rgba(250,250,250, .5)
+	border-radius 10px
+	top -8px
+	cursor pointer
+
+#newCatalogRoot .timelineTick
+	position absolute
+	background-color rgb(170,170,170)
+	width .3%
+	height 100%
+	top 0%
 
 #newCatalogRoot #titleSpan
 	line-height 100%
-	margin-bottom 15px
-	overflow-x none
+	margin 2.5%
+	height 10%
+	text-align center
 	text-overflow ellipsis
+	overflow hidden
+	white-space nowrap
+	width 95%
+
+#newCatalogRoot #topBar
+	height 30%
+	position absolute
+	top 0%
+	width 100%
+	z-index 2
+
+#newCatalogRoot #topBar-header
+	height 5%
+	margin-bottom 15%
+	overflow hide
+	width 100%
 
 #newCatalogRoot .tourLabel
 	bottom 0px
@@ -353,23 +421,16 @@
 	width 10px
 	height 10px
 
+::-webkit-scrollbar:horizontal
+	width 15px
+	height 15px
 
 ::-webkit-scrollbar-track 
-	-webkit-box-shadow inset 0 0 2px rgba(200,200,200,0.5)
-	background transparent
+	-webkit-box-shadow inset 0 0 6px rgba(200,200,200,0.5)
 	border-radius 10px
-
-
 
 ::-webkit-scrollbar-thumb
 	border-radius 10px
-	-webkit-box-shadow inset 0 0 2px rgba(200,200,200,0)
-	background transparent
+	-webkit-box-shadow inset 0 0 6px rgba(200,200,200,1)
+	background-color rgba(0, 0, 0, 0.5)
 
-::-webkit-scrollbar-thumb:hover
-	border-radius 10px
-	-webkit-box-shadow inset 0 0 2px rgba(200,200,200,0.5)
-	background-color rgba(255, 255, 255, 0.5)
-
-
-	
