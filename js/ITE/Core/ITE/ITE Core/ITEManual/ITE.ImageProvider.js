@@ -18,7 +18,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
 	self.savedState		= keyframes[0];
-	self.animation;
+	self.animation,
+	self.interactionAnimation;
 
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	interactionHandlers 		= {},
@@ -61,7 +62,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 						  "width"	: (1000*keyframes[i].size.x/100) + "px",
 						  "height"	: (500*keyframes[i].size.y/100) + "px"
 						};
-			self.taskManager.loadTask(keyframes[i].time- keyframes[i-1].time, keyframeData, _UIControl, keyframes[i].time,self);
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
 		self.setState(keyframes[0]);
@@ -112,7 +113,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 		return self.savedState;
 	};
 
-
    /**
 	* I/P: state	state to make actual image reflect
 	* Sets properties of the image to reflect the input state
@@ -126,11 +126,23 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			"width":		state.size.width,
 			"opacity":		state.opacity
 		});
-		//this.savedState = state	
 	};
 
+	this.pause = function(){
+		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		self.animation.kill()
+	}
 
-	
+	/* 
+	I/P: none
+	interpolates between current state and next keyframe
+	O/P: none
+	*/
+	this.animate = function(duration, state){
+			self.animation = TweenLite.to(_UIControl, duration, state);		
+			self.animation.play();
+	};
 
    /** 
 	* I/P: none
@@ -151,7 +163,11 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
             height     	= _UIControl.height(),
             finalPosition;
 
+        // If the player is playing, pause it
     	(self.orchestrator.status === 1) ? self.player.pause() : null
+
+    	if (!res.eventType){
+return    	}
 
         // If event is initial touch on artwork, save current position of media object to use for animation
         if (res.eventType === 'start') {
@@ -159,37 +175,19 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
                 x: left,
                 y: top
             };
-        }	              
+        }	
         // Target location (where object should be moved to)
         finalPosition = {
             x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
             y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-        };
-
-        //FOR ANIMATION TESTING PURPOSES (the blue square shows that finalPosition is correct, but with tweenLite, it is somehow impossible to animate there correctly when you have other animations going?) 
-        // var test = $(document.createElement("div")).css({
-        //     	"position" : "absolute",
-        //     	"height": "10px",
-        //     	"width": "10px",
-        //     	"left": finalPosition.x,
-        //     	"top": finalPosition.y,
-        //     	"background-color": "blue"
-        //     })
-        //     $("#ITEHolder").append(test)
-
-        // TweenLite.killTweensOf(_UIControl)
-        // TweenLite.to(_UIControl, 1, {
-        // 	y: finalPosition.y,
-        // 	x: finalPosition.x
-        // }, Ease.easeOutExpo);     
+        };   
 
         // Animate to target location
-        _UIControl.stop();
-        _UIControl.animate({
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
         	top: finalPosition.y,
         	left: finalPosition.x
-        }, "slow", "linear");
- 
+        });		
     }
 	
 
@@ -221,23 +219,16 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
         scale 	= newW / w;
         newH	= h * scale;
         newX 	= l + pivot.x*(1-scale);
-       	newY 	= t + pivot.y*(1-scale);
+       	newY 	= t + pivot.y*(1-scale); 
 
-        // Animate to target zoom
-        // TweenLite.to(_UIControl, .1, {
-        // 	y: newY,
-        // 	x: newX,
-        // 	width: newW + "px"
-        // }, Ease.easeOutExpo);   
-
-        _UIControl.stop();
-        _UIControl.css({
+       	//Animate _UIControl to this new position
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .05, {
         	top: newY,
         	left: newX,
         	width: newW,
         	height: newH
-        });
- 
+        });	
     }
     
 
@@ -253,7 +244,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
         TAG.Util.makeManipulatable(_UIControl[0], {
             onManipulate: mediaManip,
             onScroll:     mediaScroll
-        }); 
+        }, null, true); 
+
         interactionHandlers.onManipulate 	= mediaManip;
         interactionHandlers.onScroll		= mediaScroll;    	
     }

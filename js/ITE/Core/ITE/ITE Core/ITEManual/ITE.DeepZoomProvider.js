@@ -10,27 +10,24 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
-	self.player 		= player;
-	self.taskManager 	= taskManager;
-	self.trackData 		= trackData;
-	self.orchestrator	= orchestrator;
-	self.status 		= "loading";
-	self.savedState		= {
-						  time 		: 0,
-						  opacity	: keyframes[0].opacity,
-						  bounds 	: new OpenSeadragon.Rect(parseFloat(keyframes[0].pos.x), parseFloat(keyframes[0].pos.y), parseFloat(keyframes[0].scale), parseFloat(keyframes[0].scale/2))
-						};
-
+    var keyframes       		= trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+	self.player 				= player;
+	self.taskManager 			= taskManager;
+	self.trackData 				= trackData;
+	self.orchestrator			= orchestrator;
+	self.status 				= "loading";
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
-	interactionHandlers 		= {},
-	movementTimeouts 			= [],
-	this.trackData   			= trackData;
+	self.trackData   			= trackData;
+	self.animationCallback;
+
+	var interactionHandlers 		= {},
+		movementTimeouts 			= [];
 
     //DOM related
     var _deepZoom,
     	_UIControl,
-    	_viewer;
+    	_viewer,
+    	_mouseTracker;
 
 	//Start things up...
     initialize()
@@ -62,30 +59,28 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 : "DeepZoomHolder",
 			prefixUrl	 : "../../Dependencies/openseadragon-bin-1.1.1/images/",
-			zoomPerClick : 1,
+			zoomPerClick : 1
 		})
         _viewer.setMouseNavEnabled(false);
         _viewer.clearControls();
-		_viewer.addHandler("animation-finish", onAnimationFinish);
-
-		//if animation was not an interaction handler, taskManager should delete track
-		function onAnimationFinish(track){
-			console.log("delete track that had this animation")
-		};
 
         // _deepZoom is the canvas with the deepZoom image files
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage");
+
+		_mouseTracker = new OpenSeadragon.MouseTracker({
+			"element": "DeepZoomHolder"
+		})
 		
 		var i, keyframeData;
 
+		//Initialize keyframes and load into taskManager
 		for (i=1; i<keyframes.length; i++) {
 			keyframeData={
 						  opacity	: keyframes[i].opacity,
-						  bounds 	: new OpenSeadragon.Rect(parseFloat(keyframes[i].pos.x), parseFloat(keyframes[i].pos.y), keyframes[i].scale, keyframes[i].scale/2),
-						  "left"    : new OpenSeadragon.Rect(parseFloat(keyframes[i].pos.x))
+						  bounds 	: new OpenSeadragon.Rect(parseFloat(keyframes[i].pos.x), parseFloat(keyframes[i].pos.y), keyframes[i].scale, keyframes[i].scale/2)
 						};
-			self.taskManager.loadTask(keyframes[i].time-keyframes[i-1].time, keyframeData, _UIControl, keyframes[i].time,self);
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
 
@@ -112,7 +107,6 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	*/
 	this.getState = function(){
 		self.savedState = {
-			//displayNumber	: this.getPreviousKeyframe().displayNumber,
 			time	: self.taskManager.timeManager.getElapsedOffset(),
 			bounds 	: _viewer.viewport.getBounds(true)
 		};	
@@ -128,39 +122,76 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		_viewer.viewport.fitBounds(state.bounds, true);
 	};
 
-	
+	/* 
+	* I/P: {time, ms}	duration duration of animation
+	* I/P: data 		data of next keyframe to animate to
+	* Starts or resumes tour
+	* Called when tour is played
+	* Starts animation, if needed
+	* O/P: none
+	*/
+	this.play = function(targetTime, data){
+	// Resets state to be where it was when track was paused, then clears the saved state
+		self.animationCallback = function() {
+			self.animate(targetTime - self.savedState.time, data);
+			self.savedState = null;	
+			_viewer.removeHandler("animation-finish", self.animationCallback)
+		}
+
+		// If tour was paused for any reason:
+		if(this.savedState) {
+			// If tour has been manipulated, reset it and continue animating (via the above callback method)
+			if(self.imageHasBeenManipulated){
+				this.setState(this.savedState);
+				_viewer.addHandler("animation-finish", self.animationCallback);	
+			}
+			// If tour was paused simply and has not been manipulated, just start it from where it was before 
+			else {
+				self.animate(targetTime - self.savedState.time, data);
+				self.savedState = null;			
+			}
+		} 
+		// If "play" is being called from taskmanager, just start animating to the next keyframe
+		else {
+			this.animate(targetTime - this.taskManager.timeManager.getElapsedOffset(), data);
+		}
+	};
+
+	this.pause = function(){
+		// Sets savedState to be current state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		this.setState(self.savedState);	// Stops animation
+		self.animation.kill();
+	}
+
 
 	/* 
-	I/P: none
-	interpolates between current state and next keyframe
-	O/P: none
+	* I/P: none
+	* interpolates between current state and next keyframe
+	* O/P: none
 	*/
-	this.setSeadragonConfiguration = function(duration, state){
+	this.animate = function(duration, state){
+		self.imageHasBeenManipulated = false;
 		setSeadragonConfig(duration);
 		_viewer.viewport.fitBounds(state.bounds, false);
+		self.animation = TweenLite.to(_UIControl, duration, {opacity: state.opacity});		
+		self.animation.play(); 
 	};
 
 
 	/* 
-	I/P: duration	duration of track
-	Helper function for animate() that is a bit of a hack
-	Since Seadragon's animation is a bit jenky, and you can't input your own animation time, we're going to do it manually.
-	We're also going to change the "spring stiffness", which is another characteristic of their animation scheme 
-	(they use a physics-based, non-linear approach), so that Seadragon animation looks more linear and 
-	thus more similar to other animation in tours (re: Andy's Law of Least Astonishment)
-	O/P: none
+	* I/P: duration	duration of track
+	* Helper function for animate() that is a bit of a hack
+	* Since Seadragon's animation is a bit jenky, and you can't input your own animation time, we're going to do it manually.
+	* We're also going to change the "spring stiffness", which is another characteristic of their animation scheme 
+	* (they use a physics-based, non-linear approach), so that Seadragon animation looks more linear and 
+	* thus more similar to other animation in tours (re: Andy's Law of Least Astonishment)
+	* O/P: none
 	*/
-	function setSeadragonConfig(duration){
-		//TODO: change this... these values should be {duration}, but aren't becasuse we want the animation-finished 
-		// event to be raised every time one of our tracks ends so that we can delete them from the trackManager's ongoingTasks
-		// (otherwise these tasks are continually called and this messes everything up.
-		// However, this isn't happening because of the way openSeadragon handles events-- if the animation isn't fully complete and another 
-		// one is called, the animation "target" spot (and time) is just reset to the new animation's target
-		// rather than being cancelled and the new animation created. 
-																			
-		_viewer.viewport.centerSpringY.animationTime 	= duration;	
-		_viewer.viewport.centerSpringX.animationTime 	= duration;
-		_viewer.viewport.zoomSpring.animationTime 		= duration;
+	function setSeadragonConfig(duration){									
+		_viewer.viewport.centerSpringY.animationTime 	= duration-.1;	
+		_viewer.viewport.centerSpringX.animationTime 	= duration-.1;
+		_viewer.viewport.zoomSpring.animationTime 		= duration-.1;
 		_viewer.viewport.centerSpringX.springStiffness 	= .0000000001;
 		_viewer.viewport.zoomSpring.springStiffness 	= .0000000001;
 	}
@@ -188,11 +219,12 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
      */
     function mediaManip(res) {
     	(self.orchestrator.status === 1) ? self.player.pause() : null
+    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+
     	resetSeadragonConfig()
         var scale = res.scale,
             trans = res.translation,
             pivot = res.pivot;
-		_viewer.viewport.zoomBy(scale, _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y)), false);
         _viewer.viewport.panBy(_viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y)), false);
     }
     
@@ -204,14 +236,8 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
      */
     function mediaScroll(scale, pivot) {
     	(self.orchestrator.status === 1) ? self.player.pause() : null
-        mediaManip({
-            scale: scale,
-            translation: {
-                x: 0,
-                y: 0
-            },
-            pivot: pivot
-        });
+    	resetSeadragonConfig()
+      	_viewer.viewport.zoomBy(scale, _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y)), false);
     }
    
 
@@ -220,6 +246,38 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	* Initializes handlers 
 	*/
     function attachHandlers() {
+
+        // Allows asset to be dragged, despite the name
+        TAG.Util.disableDrag(_deepZoom);
+
+        _deepZoom.on("mousedown", function() {
+        	console.log("mouse down")
+        })
+        _deepZoom.on("mouseup", function() {
+        	console.log("mouse up")
+        })
+        _deepZoom.on("mousemove", function() {
+        	console.log("mouse move")
+        })
+        _deepZoom.on("click", function() {
+        	console.log("click")
+        })
+
+        _viewer.addHandler("container-release", function() {
+        	console.log("mouseup: " + _deepZoom.mouseup)
+        	console.log("mousedown: " + _deepZoom.mousedown)
+
+        	_deepZoom.mouseup()
+        })
+
+        _mouseTracker.releaseHandler = function(){
+        	console.log("Mouse tracker worked!! release")
+        }
+        _mouseTracker.pressHandler = function(){
+        	console.log("Mouse tracker worked!! press")
+        }
+
+        // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
 
         // Register handlers
         TAG.Util.makeManipulatable(_deepZoom[0], {

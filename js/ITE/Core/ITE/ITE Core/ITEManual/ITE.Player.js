@@ -308,7 +308,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function play() {
         orchestrator.play();
-        console.log("Tour is playing")
+        // console.log("Tour is playing")
         playPauseButton.attr("src", "ITEPlayerImages/pause.png")
     };
 
@@ -320,7 +320,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function pause() {
         orchestrator.pause();
-        console.log("Tour is paused")
+        // console.log("Tour is paused")
         playPauseButton.attr("src", "ITEPlayerImages/play.png")
     };
 
@@ -331,7 +331,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function seek(e) {
         if (playerConfiguration.allowSeek){
-            console.log("Tour was seeked")
+            // console.log("Tour was seeked")
             progressBar.css({
                 width : e.pageX - ITEHolder.offset().left
             })
@@ -354,7 +354,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         currentVolumeLevel = volumeLevel.height()*100/(volumeLevel.parent().height());
         //orchestrator.setVolume(newVolumeLevel);
 
-        console.log("volume set to " + currentVolumeLevel +  "%")
+        // console.log("volume set to " + currentVolumeLevel +  "%")
     };
 
     /*
@@ -373,7 +373,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function mute(){
         isMuted = true;
-        console.log("tour is muted")
+        // console.log("tour is muted")
         volumeButton.css("opacity" , ".5")
         volumeLevel.css("height" , "0")
     }
@@ -385,7 +385,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function unMute(){
         isMuted = false;
-        console.log("tour is not muted")
+        // console.log("tour is not muted")
         volumeButton.css("opacity" , "1")
         volumeLevel.css("height" , currentVolumeLevel*(volumeLevel.parent().height())/100 + "%")
     }
@@ -407,7 +407,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function enableFullScreen() {
         isFullScreen = true;
-        console.log("tour is fullscreen")
+        // console.log("tour is fullscreen")
         fullScreenButton.css("opacity" , "1")
     };
 
@@ -418,7 +418,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function disableFullScreen() {
         isFullScreen = false;
-        console.log("tour is not fullscreen")
+        // console.log("tour is not fullscreen")
         fullScreenButton.css("opacity" , ".5")
     };
 
@@ -440,7 +440,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function loop() {
         isLooped = true;
-        console.log("tour is looped")
+        // console.log("tour is looped")
         loopButton.css("opacity" , "1")
     };
 
@@ -451,7 +451,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function unLoop() {
         isLooped = false;
-        console.log("tour is not looped")
+        // console.log("tour is not looped")
         loopButton.css("opacity" , ".5")
     };
 

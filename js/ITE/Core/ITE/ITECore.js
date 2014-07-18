@@ -1457,6 +1457,7 @@ Hammer.gestures.Release = {
     handler: function releaseGesture(ev, inst) {
         if(ev.eventType ==  Hammer.EVENT_END) {
             inst.trigger(this.name, ev);
+            console.log("release")
         }
     }
 };
@@ -1477,19 +1478,6 @@ else {
     }
 }
 })(this);
-/*************/
-/*!
- * VERSION: 1.12.1
- * DATE: 2014-06-26
- * UPDATES AND DOCS AT: http://www.greensock.com
- *
- * @license Copyright (c) 2008-2014, GreenSock. All rights reserved.
- * This work is subject to the terms at http://www.greensock.com/terms_of_use.html or for
- * Club GreenSock members, the software agreement that was issued with your membership.
- * 
- * @author: Jack Doyle, jack@greensock.com
- */
-(window._gsQueue||(window._gsQueue=[])).push(function(){"use strict";window._gsDefine("TimelineLite",["core.Animation","core.SimpleTimeline","TweenLite"],function(t,e,i){var s=function(t){e.call(this,t),this._labels={},this.autoRemoveChildren=this.vars.autoRemoveChildren===!0,this.smoothChildTiming=this.vars.smoothChildTiming===!0,this._sortChildren=!0,this._onUpdate=this.vars.onUpdate;var i,s,r=this.vars;for(s in r)i=r[s],a(i)&&-1!==i.join("").indexOf("{self}")&&(r[s]=this._swapSelfInParams(i));a(r.tweens)&&this.add(r.tweens,0,r.align,r.stagger)},r=1e-10,n=i._internals.isSelector,a=i._internals.isArray,o=[],h=window._gsDefine.globals,l=function(t){var e,i={};for(e in t)i[e]=t[e];return i},_=function(t,e,i,s){t._timeline.pause(t._startTime),e&&e.apply(s||t._timeline,i||o)},u=o.slice,f=s.prototype=new e;return s.version="1.12.1",f.constructor=s,f.kill()._gc=!1,f.to=function(t,e,s,r){var n=s.repeat&&h.TweenMax||i;return e?this.add(new n(t,e,s),r):this.set(t,s,r)},f.from=function(t,e,s,r){return this.add((s.repeat&&h.TweenMax||i).from(t,e,s),r)},f.fromTo=function(t,e,s,r,n){var a=r.repeat&&h.TweenMax||i;return e?this.add(a.fromTo(t,e,s,r),n):this.set(t,r,n)},f.staggerTo=function(t,e,r,a,o,h,_,f){var p,c=new s({onComplete:h,onCompleteParams:_,onCompleteScope:f,smoothChildTiming:this.smoothChildTiming});for("string"==typeof t&&(t=i.selector(t)||t),n(t)&&(t=u.call(t,0)),a=a||0,p=0;t.length>p;p++)r.startAt&&(r.startAt=l(r.startAt)),c.to(t[p],e,l(r),p*a);return this.add(c,o)},f.staggerFrom=function(t,e,i,s,r,n,a,o){return i.immediateRender=0!=i.immediateRender,i.runBackwards=!0,this.staggerTo(t,e,i,s,r,n,a,o)},f.staggerFromTo=function(t,e,i,s,r,n,a,o,h){return s.startAt=i,s.immediateRender=0!=s.immediateRender&&0!=i.immediateRender,this.staggerTo(t,e,s,r,n,a,o,h)},f.call=function(t,e,s,r){return this.add(i.delayedCall(0,t,e,s),r)},f.set=function(t,e,s){return s=this._parseTimeOrLabel(s,0,!0),null==e.immediateRender&&(e.immediateRender=s===this._time&&!this._paused),this.add(new i(t,0,e),s)},s.exportRoot=function(t,e){t=t||{},null==t.smoothChildTiming&&(t.smoothChildTiming=!0);var r,n,a=new s(t),o=a._timeline;for(null==e&&(e=!0),o._remove(a,!0),a._startTime=0,a._rawPrevTime=a._time=a._totalTime=o._time,r=o._first;r;)n=r._next,e&&r instanceof i&&r.target===r.vars.onComplete||a.add(r,r._startTime-r._delay),r=n;return o.add(a,0),a},f.add=function(r,n,o,h){var l,_,u,f,p,c;if("number"!=typeof n&&(n=this._parseTimeOrLabel(n,0,!0,r)),!(r instanceof t)){if(r instanceof Array||r&&r.push&&a(r)){for(o=o||"normal",h=h||0,l=n,_=r.length,u=0;_>u;u++)a(f=r[u])&&(f=new s({tweens:f})),this.add(f,l),"string"!=typeof f&&"function"!=typeof f&&("sequence"===o?l=f._startTime+f.totalDuration()/f._timeScale:"start"===o&&(f._startTime-=f.delay())),l+=h;return this._uncache(!0)}if("string"==typeof r)return this.addLabel(r,n);if("function"!=typeof r)throw"Cannot add "+r+" into the timeline; it is not a tween, timeline, function, or string.";r=i.delayedCall(0,r)}if(e.prototype.add.call(this,r,n),(this._gc||this._time===this._duration)&&!this._paused&&this._duration<this.duration())for(p=this,c=p.rawTime()>r._startTime;p._timeline;)c&&p._timeline.smoothChildTiming?p.totalTime(p._totalTime,!0):p._gc&&p._enabled(!0,!1),p=p._timeline;return this},f.remove=function(e){if(e instanceof t)return this._remove(e,!1);if(e instanceof Array||e&&e.push&&a(e)){for(var i=e.length;--i>-1;)this.remove(e[i]);return this}return"string"==typeof e?this.removeLabel(e):this.kill(null,e)},f._remove=function(t,i){e.prototype._remove.call(this,t,i);var s=this._last;return s?this._time>s._startTime+s._totalDuration/s._timeScale&&(this._time=this.duration(),this._totalTime=this._totalDuration):this._time=this._totalTime=this._duration=this._totalDuration=0,this},f.append=function(t,e){return this.add(t,this._parseTimeOrLabel(null,e,!0,t))},f.insert=f.insertMultiple=function(t,e,i,s){return this.add(t,e||0,i,s)},f.appendMultiple=function(t,e,i,s){return this.add(t,this._parseTimeOrLabel(null,e,!0,t),i,s)},f.addLabel=function(t,e){return this._labels[t]=this._parseTimeOrLabel(e),this},f.addPause=function(t,e,i,s){return this.call(_,["{self}",e,i,s],this,t)},f.removeLabel=function(t){return delete this._labels[t],this},f.getLabelTime=function(t){return null!=this._labels[t]?this._labels[t]:-1},f._parseTimeOrLabel=function(e,i,s,r){var n;if(r instanceof t&&r.timeline===this)this.remove(r);else if(r&&(r instanceof Array||r.push&&a(r)))for(n=r.length;--n>-1;)r[n]instanceof t&&r[n].timeline===this&&this.remove(r[n]);if("string"==typeof i)return this._parseTimeOrLabel(i,s&&"number"==typeof e&&null==this._labels[i]?e-this.duration():0,s);if(i=i||0,"string"!=typeof e||!isNaN(e)&&null==this._labels[e])null==e&&(e=this.duration());else{if(n=e.indexOf("="),-1===n)return null==this._labels[e]?s?this._labels[e]=this.duration()+i:i:this._labels[e]+i;i=parseInt(e.charAt(n-1)+"1",10)*Number(e.substr(n+1)),e=n>1?this._parseTimeOrLabel(e.substr(0,n-1),0,s):this.duration()}return Number(e)+i},f.seek=function(t,e){return this.totalTime("number"==typeof t?t:this._parseTimeOrLabel(t),e!==!1)},f.stop=function(){return this.paused(!0)},f.gotoAndPlay=function(t,e){return this.play(t,e)},f.gotoAndStop=function(t,e){return this.pause(t,e)},f.render=function(t,e,i){this._gc&&this._enabled(!0,!1);var s,n,a,h,l,_=this._dirty?this.totalDuration():this._totalDuration,u=this._time,f=this._startTime,p=this._timeScale,c=this._paused;if(t>=_?(this._totalTime=this._time=_,this._reversed||this._hasPausedChild()||(n=!0,h="onComplete",0===this._duration&&(0===t||0>this._rawPrevTime||this._rawPrevTime===r)&&this._rawPrevTime!==t&&this._first&&(l=!0,this._rawPrevTime>r&&(h="onReverseComplete"))),this._rawPrevTime=this._duration||!e||t||this._rawPrevTime===t?t:r,t=_+1e-4):1e-7>t?(this._totalTime=this._time=0,(0!==u||0===this._duration&&this._rawPrevTime!==r&&(this._rawPrevTime>0||0>t&&this._rawPrevTime>=0))&&(h="onReverseComplete",n=this._reversed),0>t?(this._active=!1,0===this._duration&&this._rawPrevTime>=0&&this._first&&(l=!0),this._rawPrevTime=t):(this._rawPrevTime=this._duration||!e||t||this._rawPrevTime===t?t:r,t=0,this._initted||(l=!0))):this._totalTime=this._time=this._rawPrevTime=t,this._time!==u&&this._first||i||l){if(this._initted||(this._initted=!0),this._active||!this._paused&&this._time!==u&&t>0&&(this._active=!0),0===u&&this.vars.onStart&&0!==this._time&&(e||this.vars.onStart.apply(this.vars.onStartScope||this,this.vars.onStartParams||o)),this._time>=u)for(s=this._first;s&&(a=s._next,!this._paused||c);)(s._active||s._startTime<=this._time&&!s._paused&&!s._gc)&&(s._reversed?s.render((s._dirty?s.totalDuration():s._totalDuration)-(t-s._startTime)*s._timeScale,e,i):s.render((t-s._startTime)*s._timeScale,e,i)),s=a;else for(s=this._last;s&&(a=s._prev,!this._paused||c);)(s._active||u>=s._startTime&&!s._paused&&!s._gc)&&(s._reversed?s.render((s._dirty?s.totalDuration():s._totalDuration)-(t-s._startTime)*s._timeScale,e,i):s.render((t-s._startTime)*s._timeScale,e,i)),s=a;this._onUpdate&&(e||this._onUpdate.apply(this.vars.onUpdateScope||this,this.vars.onUpdateParams||o)),h&&(this._gc||(f===this._startTime||p!==this._timeScale)&&(0===this._time||_>=this.totalDuration())&&(n&&(this._timeline.autoRemoveChildren&&this._enabled(!1,!1),this._active=!1),!e&&this.vars[h]&&this.vars[h].apply(this.vars[h+"Scope"]||this,this.vars[h+"Params"]||o)))}},f._hasPausedChild=function(){for(var t=this._first;t;){if(t._paused||t instanceof s&&t._hasPausedChild())return!0;t=t._next}return!1},f.getChildren=function(t,e,s,r){r=r||-9999999999;for(var n=[],a=this._first,o=0;a;)r>a._startTime||(a instanceof i?e!==!1&&(n[o++]=a):(s!==!1&&(n[o++]=a),t!==!1&&(n=n.concat(a.getChildren(!0,e,s)),o=n.length))),a=a._next;return n},f.getTweensOf=function(t,e){var s,r,n=this._gc,a=[],o=0;for(n&&this._enabled(!0,!0),s=i.getTweensOf(t),r=s.length;--r>-1;)(s[r].timeline===this||e&&this._contains(s[r]))&&(a[o++]=s[r]);return n&&this._enabled(!1,!0),a},f._contains=function(t){for(var e=t.timeline;e;){if(e===this)return!0;e=e.timeline}return!1},f.shiftChildren=function(t,e,i){i=i||0;for(var s,r=this._first,n=this._labels;r;)r._startTime>=i&&(r._startTime+=t),r=r._next;if(e)for(s in n)n[s]>=i&&(n[s]+=t);return this._uncache(!0)},f._kill=function(t,e){if(!t&&!e)return this._enabled(!1,!1);for(var i=e?this.getTweensOf(e):this.getChildren(!0,!0,!1),s=i.length,r=!1;--s>-1;)i[s]._kill(t,e)&&(r=!0);return r},f.clear=function(t){var e=this.getChildren(!1,!0,!0),i=e.length;for(this._time=this._totalTime=0;--i>-1;)e[i]._enabled(!1,!1);return t!==!1&&(this._labels={}),this._uncache(!0)},f.invalidate=function(){for(var t=this._first;t;)t.invalidate(),t=t._next;return this},f._enabled=function(t,i){if(t===this._gc)for(var s=this._first;s;)s._enabled(t,!0),s=s._next;return e.prototype._enabled.call(this,t,i)},f.duration=function(t){return arguments.length?(0!==this.duration()&&0!==t&&this.timeScale(this._duration/t),this):(this._dirty&&this.totalDuration(),this._duration)},f.totalDuration=function(t){if(!arguments.length){if(this._dirty){for(var e,i,s=0,r=this._last,n=999999999999;r;)e=r._prev,r._dirty&&r.totalDuration(),r._startTime>n&&this._sortChildren&&!r._paused?this.add(r,r._startTime-r._delay):n=r._startTime,0>r._startTime&&!r._paused&&(s-=r._startTime,this._timeline.smoothChildTiming&&(this._startTime+=r._startTime/this._timeScale),this.shiftChildren(-r._startTime,!1,-9999999999),n=0),i=r._startTime+r._totalDuration/r._timeScale,i>s&&(s=i),r=e;this._duration=this._totalDuration=s,this._dirty=!1}return this._totalDuration}return 0!==this.totalDuration()&&0!==t&&this.timeScale(this._totalDuration/t),this},f.usesFrames=function(){for(var e=this._timeline;e._timeline;)e=e._timeline;return e===t._rootFramesTimeline},f.rawTime=function(){return this._paused?this._totalTime:(this._timeline.rawTime()-this._startTime)*this._timeScale},s},!0)}),window._gsDefine&&window._gsQueue.pop()();
 /*************/
 //  This code is distributed under the included license agreement, also
 //  available here: http://go.microsoft.com/fwlink/?LinkId=164943
@@ -2401,7 +2389,7 @@ var SeadragonUtils = function() {
                     src + "', sizingMethod='scale')";
         } else {
             elmt = img;
-            elmt.src = src;
+            //elmt.src = src;
         }
         
         return elmt;
@@ -10588,7 +10576,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
 	self.savedState		= keyframes[0];
-	self.animation;
+	self.animation,
+	self.interactionAnimation;
 
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	interactionHandlers 		= {},
@@ -10631,7 +10620,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 						  "width"	: (1000*keyframes[i].size.x/100) + "px",
 						  "height"	: (500*keyframes[i].size.y/100) + "px"
 						};
-			self.taskManager.loadTask(keyframes[i].time- keyframes[i-1].time, keyframeData, _UIControl, keyframes[i].time,self);
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
 		self.setState(keyframes[0]);
@@ -10682,7 +10671,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 		return self.savedState;
 	};
 
-
    /**
 	* I/P: state	state to make actual image reflect
 	* Sets properties of the image to reflect the input state
@@ -10696,11 +10684,23 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			"width":		state.size.width,
 			"opacity":		state.opacity
 		});
-		//this.savedState = state	
 	};
 
+	this.pause = function(){
+		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		self.animation.kill()
+	}
 
-	
+	/* 
+	I/P: none
+	interpolates between current state and next keyframe
+	O/P: none
+	*/
+	this.animate = function(duration, state){
+			self.animation = TweenLite.to(_UIControl, duration, state);		
+			self.animation.play();
+	};
 
    /** 
 	* I/P: none
@@ -10721,7 +10721,11 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
             height     	= _UIControl.height(),
             finalPosition;
 
+        // If the player is playing, pause it
     	(self.orchestrator.status === 1) ? self.player.pause() : null
+
+    	if (!res.eventType){
+return    	}
 
         // If event is initial touch on artwork, save current position of media object to use for animation
         if (res.eventType === 'start') {
@@ -10729,37 +10733,19 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
                 x: left,
                 y: top
             };
-        }	              
+        }	
         // Target location (where object should be moved to)
         finalPosition = {
             x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
             y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-        };
-
-        //FOR ANIMATION TESTING PURPOSES (the blue square shows that finalPosition is correct, but with tweenLite, it is somehow impossible to animate there correctly when you have other animations going?) 
-        // var test = $(document.createElement("div")).css({
-        //     	"position" : "absolute",
-        //     	"height": "10px",
-        //     	"width": "10px",
-        //     	"left": finalPosition.x,
-        //     	"top": finalPosition.y,
-        //     	"background-color": "blue"
-        //     })
-        //     $("#ITEHolder").append(test)
-
-        // TweenLite.killTweensOf(_UIControl)
-        // TweenLite.to(_UIControl, 1, {
-        // 	y: finalPosition.y,
-        // 	x: finalPosition.x
-        // }, Ease.easeOutExpo);     
+        };   
 
         // Animate to target location
-        _UIControl.stop();
-        _UIControl.animate({
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
         	top: finalPosition.y,
         	left: finalPosition.x
-        }, "slow", "linear");
- 
+        });		
     }
 	
 
@@ -10791,23 +10777,289 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
         scale 	= newW / w;
         newH	= h * scale;
         newX 	= l + pivot.x*(1-scale);
-       	newY 	= t + pivot.y*(1-scale);
+       	newY 	= t + pivot.y*(1-scale); 
 
-        // Animate to target zoom
-        // TweenLite.to(_UIControl, .1, {
-        // 	y: newY,
-        // 	x: newX,
-        // 	width: newW + "px"
-        // }, Ease.easeOutExpo);   
-
-        _UIControl.stop();
-        _UIControl.css({
+       	//Animate _UIControl to this new position
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .05, {
         	top: newY,
         	left: newX,
         	width: newW,
         	height: newH
-        });
+        });	
+    }
+    
+
+    /** 
+	* I/P: none
+	* Initializes handlers 
+	*/
+    function attachHandlers() {
+        // Allows asset to be dragged, despite the name
+        TAG.Util.disableDrag(_UIControl);
+
+        // Register handlers
+        TAG.Util.makeManipulatable(_UIControl[0], {
+            onManipulate: mediaManip,
+            onScroll:     mediaScroll
+        }, null, true); 
+
+        interactionHandlers.onManipulate 	= mediaManip;
+        interactionHandlers.onScroll		= mediaScroll;    	
+    }
+};
+
+/*************/
+window.ITE = window.ITE || {};
+
+ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
+
+	//Extend class from ProviderInterfacePrototype
+	var Utils 		= new ITE.Utils(),
+		TAGUtils	= ITE.TAGUtils,
+		_super 		= new ITE.ProviderInterfacePrototype(),
+		self 		= this;
+
+	Utils.extendsPrototype(this, _super);
+
+    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+
+	self.player 		= player;
+	self.taskManager 	= taskManager;
+	self.trackData 		= trackData;
+	self.orchestrator	= orchestrator;
+	self.status 		= "loading";
+	self.savedState		= keyframes[0];
+	self.animation;
+
+	this.trackInteractionEvent 	= new ITE.PubSubStruct();
+	interactionHandlers 		= {},
+	movementTimeouts 			= [],
+	this.trackData   			= trackData;
+
+    //DOM related
+    var _video,
+    	_UIControl,
+    	_videoControls;
+
+
+	//Start things up...
+    initialize()
+
+   /** 
+	* I/P: none
+	* Initializes track, creates UI, and attachs handlers
+	* O/P: none
+	*/
+	function initialize(){
+		_super.initialize()
+
+		//Create UI and append to ITEHolder
+		_video		= $(document.createElement("video"))
+			.addClass("assetVideo");
+
+		_videoControls = _video[0];
+
+		_UIControl	= $(document.createElement("div"))
+			.addClass("UIControl")
+			.append(_video);
+
+		$("#ITEHolder").append(_UIControl);
+
+		var i, keyframeData;
+
+		for (i=1; i<keyframes.length; i++) {
+			keyframeData={
+						  "opacity"	: keyframes[i].opacity,
+						  "top"		: (500*keyframes[i].pos.y/100) + "px",
+						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
+						  "width"	: (1000*keyframes[i].size.x/100) + "px",
+						  "height"	: (500*keyframes[i].size.y/100) + "px"
+						};
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+		}
+		self.status = "ready";
+
+		//Attach Handlers
+		attachHandlers()
+
+	};
+
+
+   /** 
+	* I/P: none
+	* Loads actual video asset, and sets status to paused when complete
+	* O/P: none
+	*/
+	this.load = function(){
+		_super.load()
+
+		//Sets the image’s URL source
+		_video.attr({
+			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
+			"type" 	: this.trackData.type
+		})
+
+		_videoControls.load()
+		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
+		_video.onload = function (event) {//Is this ever getting called?
+			this.setStatus(2);
+			this.setState(keyframes[0]);
+		};
+	};
+
+   /** 
+	* I/P: none
+	* Grabs current actual state of video, and sets savedState to it 
+	* returns savedState
+	* O/P: savedState
+	*/
+	this.getState = function(){
+		self.savedState = {
+			//displayNumber	: this.getPreviousKeyframe().displayNumber,
+			time			: self.taskManager.timeManager.getElapsedOffset(),
+			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
+			pos : {
+				x		: _UIControl.position().left,
+				y 		: _UIControl.position().top
+			},
+			size: {
+				height	: _UIControl.height(),
+				width	: _UIControl.width()
+			},
+			videoOffset	: _videoControls.currentTime
+		};	
+		return self.savedState;
+	};
+
+   /**
+	* I/P: state	state to make actual video reflect
+	* Sets properties of the image to reflect the input state
+	* O/P: none
+	*/
+	this.setState = function(state){
+		_UIControl.css({
+			"left":			state.pos.x,
+			"top":			state.pos.y,
+			"height":		state.size.height,
+			"width":		state.size.width,
+			"opacity":		state.opacity
+		});
+		state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
+	};
+
+ 	/** 
+	* I/P: none
+	* Plays video asset
+	* O/P: none
+	*/
+	this.play = function(targetTime, data){
+		_super.play.call(self, targetTime, data);
+		_videoControls.play();
+		_videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
+	}
+
+	this.pause = function(){
+		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		self.animation.kill();
+		_videoControls.pause()
+		_videoControls.setAttribute("controls", "controls")
+	}
+
+	/* 
+	I/P: none
+	interpolates between current state and next keyframe
+	O/P: none
+	*/
+	this.animate = function(duration, state){
+		self.animation = TweenLite.to(_UIControl, duration, state);		
+		self.animation.play();
+	};
+
+   /** 
+	* I/P: none
+	* Return a set of interactionHandlers attached to asset from provider
+	*/
+	function getInteractionHandlers(){
+		return interactionHandlers;
+	}
  
+    /**
+     * I/P {Object} res     object containing hammer event info
+     * Drag/manipulation handler for associated media
+     * Manipulation for touch and drag events
+     */
+    function mediaManip(res) {
+        var top     	= _UIControl.position().top,
+            left     	= _UIControl.position().left,
+            width     	= _UIControl.width(),
+            height     	= _UIControl.height(),
+            finalPosition;
+
+        // If the player is playing, pause it
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+
+        // If event is initial touch on artwork, save current position of media object to use for animation
+        if (res.eventType === 'start') {
+            startLocation = {
+                x: left,
+                y: top
+            };
+        }	              
+        // Target location (where object should be moved to)
+        finalPosition = {
+            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+        };   
+
+        // Animate to target location
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
+        	top: finalPosition.y,
+        	left: finalPosition.x
+        });		
+    }
+	
+
+    /**
+     * I/P {Number} scale     scale factor
+     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
+     * Zoom handler for associated media (e.g., for mousewheel scrolling)
+     */
+    function mediaScroll(scale, pivot) {
+    	var t    	= _UIControl.position().top,
+            l    	= _UIControl.position().left,
+            w   	= _UIControl.width(),
+            h  		= _UIControl.height(),
+            newW  	= w * scale,
+            newH,
+            maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
+            minW	= 200,
+            newX,
+            newY;
+
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+
+        // Constrain new width
+        if((newW < minW) || (newW > maxW)) {
+            newW 	= Math.min(maxW, Math.max(minW, newW));
+        };
+
+        // Update scale, new X and new Y according to newly constrained values.
+        scale 	= newW / w;
+        newH	= h * scale;
+        newX 	= l + pivot.x*(1-scale);
+       	newY 	= t + pivot.y*(1-scale); 
+
+       	//Animate _UIControl to this new position
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .05, {
+        	top: newY,
+        	left: newX,
+        	width: newW,
+        	height: newH
+        });	
     }
     
 
@@ -10842,27 +11094,24 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
-	self.player 		= player;
-	self.taskManager 	= taskManager;
-	self.trackData 		= trackData;
-	self.orchestrator	= orchestrator;
-	self.status 		= "loading";
-	self.savedState		= {
-						  time 		: 0,
-						  opacity	: keyframes[0].opacity,
-						  bounds 	: new OpenSeadragon.Rect(parseFloat(keyframes[0].pos.x), parseFloat(keyframes[0].pos.y), parseFloat(keyframes[0].scale), parseFloat(keyframes[0].scale/2))
-						};
-
+    var keyframes       		= trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+	self.player 				= player;
+	self.taskManager 			= taskManager;
+	self.trackData 				= trackData;
+	self.orchestrator			= orchestrator;
+	self.status 				= "loading";
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
-	interactionHandlers 		= {},
-	movementTimeouts 			= [],
-	this.trackData   			= trackData;
+	self.trackData   			= trackData;
+	self.animationCallback;
+
+	var interactionHandlers 		= {},
+		movementTimeouts 			= [];
 
     //DOM related
     var _deepZoom,
     	_UIControl,
-    	_viewer;
+    	_viewer,
+    	_mouseTracker;
 
 	//Start things up...
     initialize()
@@ -10894,30 +11143,28 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 : "DeepZoomHolder",
 			prefixUrl	 : "../../Dependencies/openseadragon-bin-1.1.1/images/",
-			zoomPerClick : 1,
+			zoomPerClick : 1
 		})
         _viewer.setMouseNavEnabled(false);
         _viewer.clearControls();
-		_viewer.addHandler("animation-finish", onAnimationFinish);
-
-		//if animation was not an interaction handler, taskManager should delete track
-		function onAnimationFinish(track){
-			console.log("delete track that had this animation")
-		};
 
         // _deepZoom is the canvas with the deepZoom image files
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage");
+
+		_mouseTracker = new OpenSeadragon.MouseTracker({
+			"element": "DeepZoomHolder"
+		})
 		
 		var i, keyframeData;
 
+		//Initialize keyframes and load into taskManager
 		for (i=1; i<keyframes.length; i++) {
 			keyframeData={
 						  opacity	: keyframes[i].opacity,
-						  bounds 	: new OpenSeadragon.Rect(parseFloat(keyframes[i].pos.x), parseFloat(keyframes[i].pos.y), keyframes[i].scale, keyframes[i].scale/2),
-						  "left"    : new OpenSeadragon.Rect(parseFloat(keyframes[i].pos.x))
+						  bounds 	: new OpenSeadragon.Rect(parseFloat(keyframes[i].pos.x), parseFloat(keyframes[i].pos.y), keyframes[i].scale, keyframes[i].scale/2)
 						};
-			self.taskManager.loadTask(keyframes[i].time-keyframes[i-1].time, keyframeData, _UIControl, keyframes[i].time,self);
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
 
@@ -10944,7 +11191,6 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	*/
 	this.getState = function(){
 		self.savedState = {
-			//displayNumber	: this.getPreviousKeyframe().displayNumber,
 			time	: self.taskManager.timeManager.getElapsedOffset(),
 			bounds 	: _viewer.viewport.getBounds(true)
 		};	
@@ -10960,39 +11206,76 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		_viewer.viewport.fitBounds(state.bounds, true);
 	};
 
-	
+	/* 
+	* I/P: {time, ms}	duration duration of animation
+	* I/P: data 		data of next keyframe to animate to
+	* Starts or resumes tour
+	* Called when tour is played
+	* Starts animation, if needed
+	* O/P: none
+	*/
+	this.play = function(targetTime, data){
+	// Resets state to be where it was when track was paused, then clears the saved state
+		self.animationCallback = function() {
+			self.animate(targetTime - self.savedState.time, data);
+			self.savedState = null;	
+			_viewer.removeHandler("animation-finish", self.animationCallback)
+		}
+
+		// If tour was paused for any reason:
+		if(this.savedState) {
+			// If tour has been manipulated, reset it and continue animating (via the above callback method)
+			if(self.imageHasBeenManipulated){
+				this.setState(this.savedState);
+				_viewer.addHandler("animation-finish", self.animationCallback);	
+			}
+			// If tour was paused simply and has not been manipulated, just start it from where it was before 
+			else {
+				self.animate(targetTime - self.savedState.time, data);
+				self.savedState = null;			
+			}
+		} 
+		// If "play" is being called from taskmanager, just start animating to the next keyframe
+		else {
+			this.animate(targetTime - this.taskManager.timeManager.getElapsedOffset(), data);
+		}
+	};
+
+	this.pause = function(){
+		// Sets savedState to be current state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		this.setState(self.savedState);	// Stops animation
+		self.animation.kill();
+	}
+
 
 	/* 
-	I/P: none
-	interpolates between current state and next keyframe
-	O/P: none
+	* I/P: none
+	* interpolates between current state and next keyframe
+	* O/P: none
 	*/
-	this.setSeadragonConfiguration = function(duration, state){
+	this.animate = function(duration, state){
+		self.imageHasBeenManipulated = false;
 		setSeadragonConfig(duration);
 		_viewer.viewport.fitBounds(state.bounds, false);
+		self.animation = TweenLite.to(_UIControl, duration, {opacity: state.opacity});		
+		self.animation.play(); 
 	};
 
 
 	/* 
-	I/P: duration	duration of track
-	Helper function for animate() that is a bit of a hack
-	Since Seadragon's animation is a bit jenky, and you can't input your own animation time, we're going to do it manually.
-	We're also going to change the "spring stiffness", which is another characteristic of their animation scheme 
-	(they use a physics-based, non-linear approach), so that Seadragon animation looks more linear and 
-	thus more similar to other animation in tours (re: Andy's Law of Least Astonishment)
-	O/P: none
+	* I/P: duration	duration of track
+	* Helper function for animate() that is a bit of a hack
+	* Since Seadragon's animation is a bit jenky, and you can't input your own animation time, we're going to do it manually.
+	* We're also going to change the "spring stiffness", which is another characteristic of their animation scheme 
+	* (they use a physics-based, non-linear approach), so that Seadragon animation looks more linear and 
+	* thus more similar to other animation in tours (re: Andy's Law of Least Astonishment)
+	* O/P: none
 	*/
-	function setSeadragonConfig(duration){
-		//TODO: change this... these values should be {duration}, but aren't becasuse we want the animation-finished 
-		// event to be raised every time one of our tracks ends so that we can delete them from the trackManager's ongoingTasks
-		// (otherwise these tasks are continually called and this messes everything up.
-		// However, this isn't happening because of the way openSeadragon handles events-- if the animation isn't fully complete and another 
-		// one is called, the animation "target" spot (and time) is just reset to the new animation's target
-		// rather than being cancelled and the new animation created. 
-																			
-		_viewer.viewport.centerSpringY.animationTime 	= duration;	
-		_viewer.viewport.centerSpringX.animationTime 	= duration;
-		_viewer.viewport.zoomSpring.animationTime 		= duration;
+	function setSeadragonConfig(duration){									
+		_viewer.viewport.centerSpringY.animationTime 	= duration-.1;	
+		_viewer.viewport.centerSpringX.animationTime 	= duration-.1;
+		_viewer.viewport.zoomSpring.animationTime 		= duration-.1;
 		_viewer.viewport.centerSpringX.springStiffness 	= .0000000001;
 		_viewer.viewport.zoomSpring.springStiffness 	= .0000000001;
 	}
@@ -11020,11 +11303,12 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
      */
     function mediaManip(res) {
     	(self.orchestrator.status === 1) ? self.player.pause() : null
+    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+
     	resetSeadragonConfig()
         var scale = res.scale,
             trans = res.translation,
             pivot = res.pivot;
-		_viewer.viewport.zoomBy(scale, _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y)), false);
         _viewer.viewport.panBy(_viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y)), false);
     }
     
@@ -11036,14 +11320,8 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
      */
     function mediaScroll(scale, pivot) {
     	(self.orchestrator.status === 1) ? self.player.pause() : null
-        mediaManip({
-            scale: scale,
-            translation: {
-                x: 0,
-                y: 0
-            },
-            pivot: pivot
-        });
+    	resetSeadragonConfig()
+      	_viewer.viewport.zoomBy(scale, _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y)), false);
     }
    
 
@@ -11052,6 +11330,38 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	* Initializes handlers 
 	*/
     function attachHandlers() {
+
+        // Allows asset to be dragged, despite the name
+        TAG.Util.disableDrag(_deepZoom);
+
+        _deepZoom.on("mousedown", function() {
+        	console.log("mouse down")
+        })
+        _deepZoom.on("mouseup", function() {
+        	console.log("mouse up")
+        })
+        _deepZoom.on("mousemove", function() {
+        	console.log("mouse move")
+        })
+        _deepZoom.on("click", function() {
+        	console.log("click")
+        })
+
+        _viewer.addHandler("container-release", function() {
+        	console.log("mouseup: " + _deepZoom.mouseup)
+        	console.log("mousedown: " + _deepZoom.mousedown)
+
+        	_deepZoom.mouseup()
+        })
+
+        _mouseTracker.releaseHandler = function(){
+        	console.log("Mouse tracker worked!! release")
+        }
+        _mouseTracker.pressHandler = function(){
+        	console.log("Mouse tracker worked!! press")
+        }
+
+        // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
 
         // Register handlers
         TAG.Util.makeManipulatable(_deepZoom[0], {
@@ -11065,6 +11375,278 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
             }
         }, null, true);
 
+        interactionHandlers.onManipulate 	= mediaManip;
+        interactionHandlers.onScroll		= mediaScroll;    	
+    }
+};
+
+/*************/
+window.ITE = window.ITE || {};
+
+ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
+
+	//Extend class from ProviderInterfacePrototype
+	var Utils 		= new ITE.Utils(),
+		TAGUtils	= ITE.TAGUtils,
+		_super 		= new ITE.ProviderInterfacePrototype(),
+		self 		= this;
+
+	Utils.extendsPrototype(this, _super);
+
+    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+
+	self.player 		= player;
+	self.taskManager 	= taskManager;
+	self.trackData 		= trackData;
+	self.orchestrator	= orchestrator;
+	self.status 		= "loading";
+	self.savedState		= keyframes[0];
+	self.animation;
+
+	this.trackInteractionEvent 	= new ITE.PubSubStruct();
+	interactionHandlers 		= {},
+	movementTimeouts 			= [],
+	this.trackData   			= trackData;
+
+    //DOM related
+    var _video,
+    	_UIControl,
+    	_videoControls;
+
+
+	//Start things up...
+    initialize()
+
+   /** 
+	* I/P: none
+	* Initializes track, creates UI, and attachs handlers
+	* O/P: none
+	*/
+	function initialize(){
+		_super.initialize()
+
+		//Create UI and append to ITEHolder
+		_video		= $(document.createElement("video"))
+			.addClass("assetVideo");
+
+		_videoControls = _video[0];
+
+		_UIControl	= $(document.createElement("div"))
+			.addClass("UIControl")
+			.append(_video);
+
+		$("#ITEHolder").append(_UIControl);
+
+		var i, keyframeData;
+
+		for (i=1; i<keyframes.length; i++) {
+			keyframeData={
+						  "opacity"	: keyframes[i].opacity,
+						  "top"		: (500*keyframes[i].pos.y/100) + "px",
+						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
+						  "width"	: (1000*keyframes[i].size.x/100) + "px",
+						  "height"	: (500*keyframes[i].size.y/100) + "px"
+						};
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+		}
+		self.status = "ready";
+
+		//Attach Handlers
+		attachHandlers()
+
+	};
+
+
+   /** 
+	* I/P: none
+	* Loads actual video asset, and sets status to paused when complete
+	* O/P: none
+	*/
+	this.load = function(){
+		_super.load()
+
+		//Sets the image’s URL source
+		_video.attr({
+			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
+			"type" 	: this.trackData.type
+		})
+
+		_videoControls.load()
+		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
+		_video.onload = function (event) {//Is this ever getting called?
+			this.setStatus(2);
+			this.setState(keyframes[0]);
+		};
+	};
+
+   /** 
+	* I/P: none
+	* Grabs current actual state of video, and sets savedState to it 
+	* returns savedState
+	* O/P: savedState
+	*/
+	this.getState = function(){
+		self.savedState = {
+			//displayNumber	: this.getPreviousKeyframe().displayNumber,
+			time			: self.taskManager.timeManager.getElapsedOffset(),
+			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
+			pos : {
+				x		: _UIControl.position().left,
+				y 		: _UIControl.position().top
+			},
+			size: {
+				height	: _UIControl.height(),
+				width	: _UIControl.width()
+			},
+			videoOffset	: _videoControls.currentTime
+		};	
+		return self.savedState;
+	};
+
+   /**
+	* I/P: state	state to make actual video reflect
+	* Sets properties of the image to reflect the input state
+	* O/P: none
+	*/
+	this.setState = function(state){
+		_UIControl.css({
+			"left":			state.pos.x,
+			"top":			state.pos.y,
+			"height":		state.size.height,
+			"width":		state.size.width,
+			"opacity":		state.opacity
+		});
+		state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
+	};
+
+ 	/** 
+	* I/P: none
+	* Plays video asset
+	* O/P: none
+	*/
+	this.play = function(targetTime, data){
+		_super.play.call(self, targetTime, data);
+		_videoControls.play();
+		_videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
+	}
+
+	this.pause = function(){
+		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		self.animation.kill();
+		_videoControls.pause()
+		_videoControls.setAttribute("controls", "controls")
+	}
+
+	/* 
+	I/P: none
+	interpolates between current state and next keyframe
+	O/P: none
+	*/
+	this.animate = function(duration, state){
+		self.animation = TweenLite.to(_UIControl, duration, state);		
+		self.animation.play();
+	};
+
+   /** 
+	* I/P: none
+	* Return a set of interactionHandlers attached to asset from provider
+	*/
+	function getInteractionHandlers(){
+		return interactionHandlers;
+	}
+ 
+    /**
+     * I/P {Object} res     object containing hammer event info
+     * Drag/manipulation handler for associated media
+     * Manipulation for touch and drag events
+     */
+    function mediaManip(res) {
+        var top     	= _UIControl.position().top,
+            left     	= _UIControl.position().left,
+            width     	= _UIControl.width(),
+            height     	= _UIControl.height(),
+            finalPosition;
+
+        // If the player is playing, pause it
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+
+        // If event is initial touch on artwork, save current position of media object to use for animation
+        if (res.eventType === 'start') {
+            startLocation = {
+                x: left,
+                y: top
+            };
+        }	              
+        // Target location (where object should be moved to)
+        finalPosition = {
+            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+        };   
+
+        // Animate to target location
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
+        	top: finalPosition.y,
+        	left: finalPosition.x
+        });		
+    }
+	
+
+    /**
+     * I/P {Number} scale     scale factor
+     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
+     * Zoom handler for associated media (e.g., for mousewheel scrolling)
+     */
+    function mediaScroll(scale, pivot) {
+    	var t    	= _UIControl.position().top,
+            l    	= _UIControl.position().left,
+            w   	= _UIControl.width(),
+            h  		= _UIControl.height(),
+            newW  	= w * scale,
+            newH,
+            maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
+            minW	= 200,
+            newX,
+            newY;
+
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+
+        // Constrain new width
+        if((newW < minW) || (newW > maxW)) {
+            newW 	= Math.min(maxW, Math.max(minW, newW));
+        };
+
+        // Update scale, new X and new Y according to newly constrained values.
+        scale 	= newW / w;
+        newH	= h * scale;
+        newX 	= l + pivot.x*(1-scale);
+       	newY 	= t + pivot.y*(1-scale); 
+
+       	//Animate _UIControl to this new position
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .05, {
+        	top: newY,
+        	left: newX,
+        	width: newW,
+        	height: newH
+        });	
+    }
+    
+
+    /** 
+	* I/P: none
+	* Initializes handlers 
+	*/
+    function attachHandlers() {
+        // Allows asset to be dragged, despite the name
+        TAG.Util.disableDrag(_UIControl);
+
+        // Register handlers
+        TAG.Util.makeManipulatable(_UIControl[0], {
+            onManipulate: mediaManip,
+            onScroll:     mediaScroll
+        }); 
         interactionHandlers.onManipulate 	= mediaManip;
         interactionHandlers.onScroll		= mediaScroll;    	
     }
@@ -11115,71 +11697,149 @@ ITE.TimeManager = function(){
 
 /*************/
 window.ITE = window.ITE || {};
+//creates a wrapper around a keyframe to indicate a task that needs to be scheduled
+ITE.Task = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, ongoingTasks, track) {
 
+	var self 				= this;
+	self.timerOffset 		= timerOffset;
+	self.nextKeyframeTime 	= nextKeyframeTime;
+	self.nextKeyframeData 	= nextKeyframeData;
+	self.asset 				= asset;
+	self.ongoingTasks 		= ongoingTasks;
+	self.track 				= track
 
-ITE.TaskManager = function(){
+	self.nextKeyframeData.ease = Linear.easeNone;
 
-	self = this;
+	// self.nextKeyframeData.onComplete = function(){
+	// 	self.ongoingTasks.splice(self.ongoingTasks.indexOf(self), 1);
+	// }
+	self.animation;
 
-	this.timeline = new TimelineLite({
-		onUpdate: this.updateFunction
+	this.play = function(){
+		(track.trackData.providerId === 'image') && asset.stop();
+		self.track.play(self.nextKeyframeTime, self.nextKeyframeData);
+	};
 
-	});
+	this.pause = function() {
+		self.track.pause()
+		//self.track.animation.kill()
+	};
+
+};
+
+//object that is responsible for scheduling different tasks ie. tracks
+ITE.TaskManager = function() {
+	
+	var self = this;
+	//list of scheduled tasks to loop through;
+	self.scheduledTasks = []; 
+
+	//allow for the scheduling of items within a 0.2sec interval of the timer
+	this.timerPrecision = 0.2; 
+
+	//tracks which index in the scheduledTasks list the scheduler is currently at
+	this.currentTaskIndex = 0;
 
 	//timer of entire tour
 	this.timeManager = new ITE.TimeManager();
-    
-    this.state = 'starting';
 
-    this.timerPrecision = 0.2;
+	//to keep track of the setInterval of the next scheduled item
+	this.timerId = -1;
 
+	this.ongoingTasks = [];
+	this.status = "starting";
+
+	//getElaspedTime
 	this.getElapsedTime = function(){
 		return this.timeManager.getElapsedOffset();
 	};	
 
-	this.loadTask = function(duration,nextKeyframeData,asset,offsetParam,track){
-        if (track.trackData.providerId==='deepZoom'){
-        		track.setSeadragonConfiguration(duration,nextKeyframeData); //error here
-        		this.timeline.add(TweenLite.to(asset,duration,{opacity: nextKeyframeData.opacity}));
-        		this.timeline.pause();
-        		nextKeyframeData.ease = Linear.easeNone;
-        		console.log("reaches deepZoom loadtask");
-        }
-
-        else{
-        		this.timeline.add(TweenLite.to(asset,duration,nextKeyframeData),offsetParam);
-        		this.timeline.pause();
-        		nextKeyframeData.ease = Linear.easeNone;	
-        }
-
+	//load tasks to be scheduled
+	this.loadTask = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, track) {
+		var newTask = new ITE.Task(timerOffset, nextKeyframeTime, nextKeyframeData, asset, this.ongoingTasks, track);
+		this.scheduledTasks.push(newTask);
 	};
 
-	this.play = function(){ 
-		if (this.state === "paused"){
-			this.state = "playing";
-	    }
-		this.timeline.play();
-		console.log("this.timeline: " + this.timeline._totalDuration)
-		console.log("this.timeline: " + Object.keys(this.timeline))
-		this.timeManager.startTimer();
+	//start the scheduler on current tasks
+	this.play = function() {
+		if (this.status === "paused"){
+
+			this.status = "playing";
+
+			this.scheduleNextTasks();
+			for (var i=0; i<this.ongoingTasks.length; i++){
+				this.ongoingTasks[i].play(true);
+			}
+			this.timeManager.startTimer();
+		} else {
+			this.triggerCurrentTasks();
+			this.scheduleNextTasks();
+			this.timeManager.startTimer();
+		}
 	};
 
-	this.pause = function(){
-		this.state = "paused";
-		this.timeline.pause();
+	//pause the scheduler
+	this.pause = function() {
 		this.timeManager.stopTimer();
+		this.status = "paused"
+		clearTimeout(this.timerId);
+		this.timerId = -1;
+		for (var i=0; i<this.ongoingTasks.length; i++){
+			this.ongoingTasks[i].pause();
+		}
 	};
 
-	this.seek= function(seekedTime){
-		this.timeManager.addElapsedTime(seekedTime);
-		this.timeline.seek(seekedTime);
-
+//seek to the correct point in the scheduler
+	this.seek = function(seekedOffset) {
+		this.pause();
+		this.timeManager.addElapsedTime(seekedOffset);
+		this.currentTaskIndex = this.getIndexAt(offset);
+		this.triggerCurrentTasks();
+		this.scheduleNextTasks();
 	};
 
-	this.updateFunction= function(){};
+	this.triggerCurrentTasks = function() {
+		this.status = "playing";
+		var index 	= this.currentTaskIndex,
+			i 		= 0,
+			task;
+
+		//interval in which to check for tasks to start
+		var curTime = this.getElapsedTime();
+		var scheduleInterval = curTime + this.timerPrecision;
+
+		while (index < this.scheduledTasks.length && this.scheduledTasks[index].timerOffset <= scheduleInterval) {
+			task = this.scheduledTasks[index]
+			this.ongoingTasks.push(task);
+			task.play();
+			task.track.currentAnimationTask && self.ongoingTasks.splice(self.ongoingTasks.indexOf(task.track.currentAnimationTask), 1);
+			task.track.currentAnimationTask = task;
+			index++;
+		}
+		//reset the current task index so that we can schedule subsequent tasks
+		this.currentTaskIndex = (index < this.scheduledTasks.length) ? index : -1;
+		
+	}
+
+	this.scheduleNextTasks = function() {
+		if (this.currentTaskIndex < 0){
+			clearInterval(this.timerId);
+			return; //there are no more tasks to be started/scheduled
+		}
+
+		var nextTask = this.scheduledTasks[this.currentTaskIndex];
+		//get the interval to wait until the next task is to be started
+		var waitInterval = Math.max((nextTask.timerOffset - this.getElapsedTime()), 0);
+		clearTimeout(this.timerId);
+		this.timerId = setTimeout(function () {self.nextTick();}, waitInterval * 1000);
+	};
+
+	this.nextTick = function() {
+		this.triggerCurrentTasks();
+		this.scheduleNextTasks();
+	}
+
 };
-
-
 /*************/
 window.ITE = window.ITE || {};
 
@@ -11258,10 +11918,10 @@ ITE.Orchestrator = function(player) {
 					trackManager.push(new ITE.ImageProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "video" : 
-					trackManager.push(new ITE.VideoProvider(trackData));
+					trackManager.push(new ITE.VideoProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "audio" : 
-					trackManager.push(new ITE.AudioProvider(trackData));
+					trackManager.push(new ITE.AudioProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "deepZoom" : 
 					trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
@@ -11288,7 +11948,7 @@ ITE.Orchestrator = function(player) {
 				return;
 			}
 		}
-		// self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
+		self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
 		self.taskManager.play();
 		this.status = 1;
 	}
@@ -11677,7 +12337,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function play() {
         orchestrator.play();
-        console.log("Tour is playing")
+        // console.log("Tour is playing")
         playPauseButton.attr("src", "ITEPlayerImages/pause.png")
     };
 
@@ -11689,7 +12349,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function pause() {
         orchestrator.pause();
-        console.log("Tour is paused")
+        // console.log("Tour is paused")
         playPauseButton.attr("src", "ITEPlayerImages/play.png")
     };
 
@@ -11700,7 +12360,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function seek(e) {
         if (playerConfiguration.allowSeek){
-            console.log("Tour was seeked")
+            // console.log("Tour was seeked")
             progressBar.css({
                 width : e.pageX - ITEHolder.offset().left
             })
@@ -11723,7 +12383,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         currentVolumeLevel = volumeLevel.height()*100/(volumeLevel.parent().height());
         //orchestrator.setVolume(newVolumeLevel);
 
-        console.log("volume set to " + currentVolumeLevel +  "%")
+        // console.log("volume set to " + currentVolumeLevel +  "%")
     };
 
     /*
@@ -11742,7 +12402,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function mute(){
         isMuted = true;
-        console.log("tour is muted")
+        // console.log("tour is muted")
         volumeButton.css("opacity" , ".5")
         volumeLevel.css("height" , "0")
     }
@@ -11754,7 +12414,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function unMute(){
         isMuted = false;
-        console.log("tour is not muted")
+        // console.log("tour is not muted")
         volumeButton.css("opacity" , "1")
         volumeLevel.css("height" , currentVolumeLevel*(volumeLevel.parent().height())/100 + "%")
     }
@@ -11776,7 +12436,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function enableFullScreen() {
         isFullScreen = true;
-        console.log("tour is fullscreen")
+        // console.log("tour is fullscreen")
         fullScreenButton.css("opacity" , "1")
     };
 
@@ -11787,7 +12447,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function disableFullScreen() {
         isFullScreen = false;
-        console.log("tour is not fullscreen")
+        // console.log("tour is not fullscreen")
         fullScreenButton.css("opacity" , ".5")
     };
 
@@ -11809,7 +12469,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function loop() {
         isLooped = true;
-        console.log("tour is looped")
+        // console.log("tour is looped")
         loopButton.css("opacity" , "1")
     };
 
@@ -11820,7 +12480,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function unLoop() {
         isLooped = false;
-        console.log("tour is not looped")
+        // console.log("tour is not looped")
         loopButton.css("opacity" , ".5")
     };
 
@@ -11858,9 +12518,6 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	this.keyframes				= []; 	// Data structure to keep track of all displays/keyframes
 
 	this.interactionHandlers 	= null;	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
-
-	this.currentAnimation		= null; // Current animation, if any (between two different states of the asset)
-										// Saved as variable to make pausing and playing easier
 
 	this.TrackInteractionEvent	= null; // Raised when track is interacted with.  This is for the inks to subscribe to.
 
@@ -11902,49 +12559,42 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	};
 
 	/* 
-	I/P: none
+	I/P: {time, ms}	duration duration of animation
 		Starts or resumes tour
 		Called when tour is played
 		Starts animation, if needed
 	O/P: none
 	*/
-	this.play = function(){
-	// Resets state to be where it was when track was paused
-		this.savedState && this.setState(this.savedState);
-
+	this.play = function(targetTime, data){
+	// Resets state to be where it was when track was paused, then clears the saved state
+		if(this.savedState) {
+			this.setState(this.savedState);
+			this.animate(targetTime - this.savedState.time, data);
+			this.savedState = null;	
+		} else {
+		//Animates to the next keyframe
+			this.animate(Math.abs(targetTime - this.taskManager.timeManager.getElapsedOffset()), data);
+		}
 	// // Set current status to “played”
 	// 	this.setCurrentStatus(1);
 	};
 
-	/* 
-	I/P: none
-		Pauses animation
-		sets savedState to match state when tour is paused
-		sets status to paused
-	O/P: none
-	*/
-	this.pause = function(){
-		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		this.getState();
-
-
-		// // Sets currentStatus to paused
-		// this.setStatus(2);
-	};
-
+	this.animate = function(){
+	}
+	
 	/* 
 	I/P: none
 		Seeks animation from a given offset state
 	O/P: none
 	*/
 	this.seek = function(seekTime){
-		// Stops/cancels animation, if there is one
-		currentAnimation && currentAnimation.stop();
+		// // Stops/cancels animation, if there is one
+		// currentAnimation && currentAnimation.stop();
 
-		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. I’m not sure exactly what the syntax will be for this, but I know it’s possible in most of the animation libraries we’ve looked at.
-			this.setState(state)
-			this.play()
+		// // Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
+		// var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. I’m not sure exactly what the syntax will be for this, but I know it’s possible in most of the animation libraries we’ve looked at.
+		// 	this.setState(state)
+		// 	this.play()
 	};
 
 	/* 
@@ -11981,7 +12631,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 		Does nothing for now; function filled out in specific providerInterface classes
 	O/P: none
 	*/
-	this.setState = function(state){
+	this.setState = function(state, callback){
 	};
 
 	/* 

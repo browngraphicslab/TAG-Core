@@ -367,7 +367,7 @@ var SeadragonUtils = function() {
                     src + "', sizingMethod='scale')";
         } else {
             elmt = img;
-            elmt.src = src;
+            //elmt.src = src;
         }
         
         return elmt;

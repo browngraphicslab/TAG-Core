@@ -12,9 +12,6 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 
 	this.interactionHandlers 	= null;	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
 
-	this.currentAnimation		= null; // Current animation, if any (between two different states of the asset)
-										// Saved as variable to make pausing and playing easier
-
 	this.TrackInteractionEvent	= null; // Raised when track is interacted with.  This is for the inks to subscribe to.
 
 	self.player 				= player;
@@ -55,49 +52,42 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	};
 
 	/* 
-	I/P: none
+	I/P: {time, ms}	duration duration of animation
 		Starts or resumes tour
 		Called when tour is played
 		Starts animation, if needed
 	O/P: none
 	*/
-	this.play = function(){
-	// Resets state to be where it was when track was paused
-		this.savedState && this.setState(this.savedState);
-
+	this.play = function(targetTime, data){
+	// Resets state to be where it was when track was paused, then clears the saved state
+		if(this.savedState) {
+			this.setState(this.savedState);
+			this.animate(targetTime - this.savedState.time, data);
+			this.savedState = null;	
+		} else {
+		//Animates to the next keyframe
+			this.animate(Math.abs(targetTime - this.taskManager.timeManager.getElapsedOffset()), data);
+		}
 	// // Set current status to “played”
 	// 	this.setCurrentStatus(1);
 	};
 
-	/* 
-	I/P: none
-		Pauses animation
-		sets savedState to match state when tour is paused
-		sets status to paused
-	O/P: none
-	*/
-	this.pause = function(){
-		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		this.getState();
-
-
-		// // Sets currentStatus to paused
-		// this.setStatus(2);
-	};
-
+	this.animate = function(){
+	}
+	
 	/* 
 	I/P: none
 		Seeks animation from a given offset state
 	O/P: none
 	*/
 	this.seek = function(seekTime){
-		// Stops/cancels animation, if there is one
-		currentAnimation && currentAnimation.stop();
+		// // Stops/cancels animation, if there is one
+		// currentAnimation && currentAnimation.stop();
 
-		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. I’m not sure exactly what the syntax will be for this, but I know it’s possible in most of the animation libraries we’ve looked at.
-			this.setState(state)
-			this.play()
+		// // Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
+		// var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. I’m not sure exactly what the syntax will be for this, but I know it’s possible in most of the animation libraries we’ve looked at.
+		// 	this.setState(state)
+		// 	this.play()
 	};
 
 	/* 
@@ -134,7 +124,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 		Does nothing for now; function filled out in specific providerInterface classes
 	O/P: none
 	*/
-	this.setState = function(state){
+	this.setState = function(state, callback){
 	};
 
 	/* 
