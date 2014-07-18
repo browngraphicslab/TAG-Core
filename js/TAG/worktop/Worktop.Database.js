@@ -10,9 +10,9 @@ Worktop.Database = function (mainID) {
     var HTTP_PORT = TAG.Worktop.Database.HTTP_PORT;
     var HTTPS_PORT = TAG.Worktop.Database.HTTPS_PORT;
     var FILE_PORT = TAG.Worktop.Database.FILE_PORT;
-    
+
     if (localStorage.ip === "137.117.37.220") localStorage.ip = "browntagserver.com"; // Switch to new domain for HTTPS
-    var _baseURL = localStorage.ip ? localStorage.ip :  "browntagserver.com" ;  // url of the server
+    var _baseURL = localStorage.ip ? localStorage.ip : "browntagserver.com";  // url of the server
     localStorage.ip = _baseURL; // keep localStorage.ip current
 
     var useServer = true;
@@ -143,7 +143,7 @@ Worktop.Database = function (mainID) {
         getRequest(
             "Main",
             safeCache('main'),
-            safeCache(true, false, 'main', 'Metadata', 'MainCount'), 
+            safeCache(true, false, 'main', 'Metadata', 'MainCount'),
             handlers);
     }
 

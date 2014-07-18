@@ -14,7 +14,7 @@ Test.Worktop.Util = function () {
 
     console.log(xml);
 
-    this.getTagTest = function() {
+    this.getTagTest = function () {
         var $exhibitions = doq.getTags("Name");
         var $blorg = doq.getTags("Blorg");
 
@@ -27,14 +27,14 @@ Test.Worktop.Util = function () {
         console.log("length of jQuery object with no matching tags: ", $blorg.length);
     };
 
-    this.containsTagTest = function() {
+    this.containsTagTest = function () {
         var validTag = doq.contains("Type");
         var invalidTag = doq.contains("BLORG");
         console.log("doq contains 'Type' tag: ", validTag);
         console.log("doq contains 'BLORG' tag: ", invalidTag);
     };
 
-    this.getTagValueTest = function() {
+    this.getTagValueTest = function () {
         var validTags = [];
         for (var i = 0; i < 3; ++i) {
             validTags.push(doq.getTagValue("Name", i, "uh-oh not found"));

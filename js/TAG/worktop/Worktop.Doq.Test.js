@@ -2,7 +2,7 @@
 
 Worktop.Doq.Test = function () {
     //var doq = Worktop.Database.getDoqByGUID("guid");
-    
+
     var doq;
     $.ajax({
         url: 'js/TAG/worktop/main_test.xml',
@@ -14,7 +14,7 @@ Worktop.Doq.Test = function () {
         }
     });
 
-    this.getTagTest = function() {
+    this.getTagTest = function () {
         var $exhibitions = doq.getTags("Name");
         var $blorg = doq.getTags("Blorg");
 
@@ -27,14 +27,14 @@ Worktop.Doq.Test = function () {
         console.log("length of jQuery object with no matching tags: ", $blorg.length);
     };
 
-    this.containsTagTest = function() {
+    this.containsTagTest = function () {
         var validTag = doq.contains("Type");
         var invalidTag = doq.contains("BLORG");
         console.log("doq contains 'Type' tag: ", validTag);
         console.log("doq contains 'BLORG' tag: ", invalidTag);
     };
 
-    this.getTagValueTest = function() {
+    this.getTagValueTest = function () {
         var validTags = [];
         for (var i = 0; i < 3; ++i) {
             validTags.push(doq.getTagValue("Name", i, "uh-oh not found"));

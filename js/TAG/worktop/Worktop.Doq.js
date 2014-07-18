@@ -68,7 +68,7 @@ Worktop.Doq = function (xml) {
             doq.Folders = doq._Folders.FolderData;
         }
     }
-    
+
     /* 
      * The following code figures out whether the given XML contains and Array of DoqDatas or a single DoqData.
      * If there is an array, then an array of javascript objects is created with the individual javascript objects
