@@ -1,0 +1,200 @@
+
+/**
+ * Gridpak Beta LESS
+ *
+ * Generator - http://gridpak.com/
+ * Created by @erskinedesign
+ */
+
+/* Reusable column setup */
+.mixin-col {
+     border:0px solid rgba(0,0,0,0);
+     float:left;
+     -webkit-box-sizing:border-box;
+     -moz-box-sizing:border-box;
+     box-sizing:border-box;
+     -moz-background-clip:padding-box !important;
+     -webkit-background-clip:padding-box !important;
+     background-clip:padding-box !important;
+}
+.col {
+     .mixin-col;
+}
+
+.mixin-span(@num, @gutter_pc, @gutter_px, @padding, @max_columns) {
+    @one_col: (100% - (@gutter_pc * (@max_columns - 1))) / @max_columns;
+    width:(@one_col * @num) + (@gutter_pc * (@num - 1));
+    //border-left-width:@gutter_px;
+    padding:@padding;
+    margin-left:@gutter_pc;
+}
+.mixin-span_first {
+    margin-left:0;
+}
+
+
+    @media screen and (min-width: 0px) and (max-width: 639px) {
+
+        .col {
+            margin-left:3%;
+            padding:0 0px;
+        }
+
+        @max_columns: 1;
+        @padding: 0 0px;
+        @gutter_px: 0;
+        @gutter_pc: 3%;
+
+        .row .col:first-child {
+            .mixin-span_first;
+        }
+        
+        .home .featured,
+        .home .actions,
+        .secondary,
+        .topic-list,
+        .archive-article-host,
+        .home .intro,
+        .taxonomy-description,
+        .primary,
+        .full,
+        .span_1 {
+            .mixin-span_first;
+            width:100%;
+        }
+    }
+
+
+    @media screen and (min-width: 640px) and (max-width: 1023px) {
+
+
+        .col {
+            margin-left:3%;
+            padding:0 0px;
+        }
+        
+        /* --- Gridpak variables ---*/ 
+        @max_columns: 6;
+        @padding: 0 0px;
+        @gutter_px: 0;
+        @gutter_pc: 3%;
+        
+        .row .col:first-child {
+            .mixin-span_first;
+        }
+        
+        
+        .span_1 {
+            .mixin-span(1, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+        
+        .secondary,
+        .topic-list,
+        .span_2 {
+            .mixin-span(2, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+
+        .home .primary,
+        .home .secondary,
+        .home .featured,
+        .home .actions,
+        .archive-article-host,
+        .span_3 {
+            .mixin-span(3, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+        .span_4 {
+            .mixin-span(4, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+        .span_5 {
+            .mixin-span(5, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+
+        .primary,
+        .taxonomy-description,
+        .full,
+        .span_6 {
+            .mixin-span_first;
+            width:100%;
+        }
+        
+        .taxonomy-description,
+        .archive-article-host:nth-child(2n+1),
+        .featured:nth-child(2n+1) {
+            .mixin-span_first;
+        }
+        
+                
+    }
+
+    @media screen and (min-width: 1024px) {
+
+        .col {
+            margin-left:3%;
+            padding:0 0px;
+        }
+
+        /* --- Gridpak variables ---*/ 
+        @max_columns: 6;
+        @padding: 0 0px;
+        @gutter_px: 0;
+        @gutter_pc: 3%;
+
+        .row .col:first-child {
+            .mixin-span_first;
+        }
+
+
+        .span_1 {
+            .mixin-span(1, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+        
+        .home .featured,
+        .home .actions,
+        .secondary,
+        .topic-list,
+        .span_2 {
+            .mixin-span(2, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+        .archive-article-host,
+        .span_3 {
+            .mixin-span(3, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+        .home .intro,
+        .taxonomy-description,
+        .primary,
+        .span_4 {
+            .mixin-span(4, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+        .span_5 {
+            .mixin-span(5, @gutter_pc, @gutter_px, @padding, @max_columns);
+        }
+        .full,
+        .span_6 {
+            .mixin-span_first;
+            width:100%;
+        }
+
+
+        // custom 
+                
+        .wp-caption.alignright,
+        .wp-caption.alignleft {
+            .mixin-span(2, @gutter_pc, @gutter_px, @padding, @max_columns) !important;
+            .mixin-span_first;
+
+        }
+
+        .taxonomy-description,
+        .featured:nth-child(3n+4) {
+            .mixin-span_first;
+        }
+        
+        .archive-article-host:nth-child(2n+1) {
+            .mixin-span_first;
+            clear: both;
+        }
+
+
+    }
+
+

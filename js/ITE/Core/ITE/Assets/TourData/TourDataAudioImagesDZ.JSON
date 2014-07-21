@@ -66,7 +66,7 @@
                {
             "name": "Track0",
             "providerId": "image",
-            "assetUrl": "minionThinking.png",
+            "assetUrl": "minionBananas.png",
             "keyframes": [
                 {
                     "dispNum": "1",
@@ -183,7 +183,7 @@
             ]
         },
         {
-            "name": "Track2",
+            "name": "track3",
             "providerId": "audio",
             "assetUrl": "Happy.mp3",
             "type" : "audio/mpeg",
@@ -193,28 +193,53 @@
                     "time": "0",
                     "volume": "1",
                     "data": {},
-                    "audioOffset": "0"
+                    "audioOffset": "15"
                 },
                 {
                     "dispNum": "1",
-                    "time": "10",
+                    "time": "7",
                     "volume": "1",
-                    "data": {},
-                    "audioOffset": "10"
+                    "data": {}
                 },
                 {
                     "dispNum": "1",
-                    "time": "20",
+                    "time": "8",
+                    "volume": "1",
+                    "data": {}
+                }
+            ]
+        },
+        {
+            "name": "Track2",
+            "providerId": "audio",
+            "assetUrl": "dontcha.mp3",
+            "type" : "audio/mpeg",
+            "keyframes": [
+                {
+                    "dispNum": "1",
+                    "time": "0",
                     "volume": "1",
                     "data": {},
-                    "audioOffset": "20"
+                    "audioOffset": "9"
                 },
+                {
+                    "dispNum": "1",
+                    "time": "5",
+                    "volume": "1",
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "8",
+                    "volume": "1",
+                    "data": {}
+                }
             ]
         },
         {
             "name": "track3",
             "providerId": "image",
-            "assetUrl": "minionBananas.png",
+            "assetUrl": "minionMoreBananas.png",
             "keyframes": [
                 {
                     "dispNum": "1",

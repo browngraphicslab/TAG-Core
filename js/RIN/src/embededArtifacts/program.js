@@ -1,0 +1,2 @@
+// JavaScript
+rin.embeddedArtifactTests.runTests();

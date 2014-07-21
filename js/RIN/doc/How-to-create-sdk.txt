@@ -1,0 +1,14 @@
+# Prerequisites
+1. Install NodeJS from [http://nodejs.org/](http://nodejs.org/)
+2. Open a command prompt and navigate to the project's root directory (where you cloned the repository)
+3. Run the command "npm install" to install grunt and its plugins
+4. Run the command "npm install -g grunt-cli" to install grunt command line globally
+
+# For SDK Creation
+1. Run "grunt sdk-ship" to create SDK Version.
+2. Rename sdk-archives/rin-sdk.zip to rin-sdk-(Version Number).zip
+   Rename sdk-archives/rin-sdk.zip to rin-sdk-(Version Number)-Azure.zip
+
+# Other Modifications
+- For changes in license terms, open gruntfile.js and modify the "jsCoreLicense" and "jsExperiencesLicense" strings
+- Modify the configuration for the required grunt tasks in the gruntfile.js

@@ -1,0 +1,56 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Rich Interactive Narratives</title>
+
+    <!-- local styles -->
+    <style type="text/css">
+        html, body, #rinPlayer
+        {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+            -ms-touch-action: none;
+            -webkit-touch-callout:none;
+            -ms-content-zooming: none;
+        }
+    </style>
+    
+    <script src="lib/rin-core-1.0.js" type="text/javascript"></script>
+    <script src="lib/SampleImageES.js" type="text/javascript"></script>
+
+    <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0" type="text/javascript"></script>
+
+    <script>        
+        function parseDeepState() {
+            var playerElement = document.getElementById("rinPlayer");
+            var playerControl = rin.getPlayerControl(playerElement);
+            var deepstateUrl = playerControl.resolveDeepstateUrlFromAbsoluteUrl(window.location.href);
+            if (deepstateUrl) {
+                playerControl.load(deepstateUrl);
+            }
+        }
+    </script>
+</head>
+
+<body onload="rin.processAll().then(parseDeepState);">
+    <div id="rinPlayer" 
+        class="rinPlayer" 
+        style="width: 100%;height: 100%;margin: 0;padding: 0;overflow: hidden;"
+        data-src="narratives/sample/narrative.js"
+        data-options="autoplay=false&loop=true&systemRootUrl=http://az17600.vo.msecnd.net/rincontent/rinjs/"></div>
+</body>
+
+</html>

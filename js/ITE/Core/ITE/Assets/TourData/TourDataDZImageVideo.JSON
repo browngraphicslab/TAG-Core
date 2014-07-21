@@ -185,7 +185,7 @@
         {
             "name": "Track2",
             "providerId": "video",
-            "assetUrl": "lifegoeson.mp4",
+            "assetUrl": "sailCat.mp4",
             "type" : "video/mp4",
             "keyframes": [
                 {
@@ -193,86 +193,21 @@
                     "time": "0",
                     "opacity": "1",
                     "size": {
-                        "x": "40",
-                        "y": "50"
+                        "x": "70"
                     },
                     "pos": {
-                        "x": "30",
+                        "x": "0",
                         "y": "0"
                     },
                     "data": {},
-                    "videoOffset": "10"
+                    "videoOffset": "0"
                 },
                 {
                     "dispNum": "1",
                     "time": "2",
                     "opacity": "1",
                     "size": {
-                        "x": "40",
-                        "y": "50"
-                    },
-                    "pos": {
-                        "x": "30",
-                        "y": "0"
-                    },
-                    "data": {}
-                },
-                                {
-                    "dispNum": "1",
-                    "time": "4",
-                    "opacity": "1",
-                    "size": {
-                        "x": "90",
-                        "y": "90"
-                    },
-                    "pos": {
-                        "x": "5",
-                        "y": "5"
-                    },
-                    "data": {}
-                }
-            ]
-        },
-        {
-            "name": "track3",
-            "providerId": "image",
-            "assetUrl": "minionBananas.png",
-            "keyframes": [
-                {
-                    "dispNum": "1",
-                    "time": "0",
-                    "opacity": "0",
-                    "size": {
-                        "x": "20",
-                        "y": "40"
-                    },
-                    "pos": {
-                        "x": "100",
-                        "y": "100"
-                    },
-                    "data": {}
-                },
-                {
-                    "dispNum": "1",
-                    "time": "2",
-                    "opacity": "1",
-                    "size": {
-                        "x": "20",
-                        "y": "40"
-                    },
-                    "pos": {
-                        "x": "100",
-                        "y": "100"
-                    },
-                    "data": {}
-                },
-                {
-                    "dispNum": "1",
-                    "time": "4",
-                    "opacity": "1",
-                    "size": {
-                        "x": "30",
-                        "y": "50"
+                        "x": "70"
                     },
                     "pos": {
                         "x": "0",
@@ -282,71 +217,14 @@
                 },
                 {
                     "dispNum": "1",
-                    "time": "4.5",
+                    "time": "4",
                     "opacity": "1",
                     "size": {
-                        "x": "10",
-                        "y": "20"
+                        "x": "40"
                     },
                     "pos": {
                         "x": "30",
-                        "y": "10"
-                    },
-                    "data": {}
-                },
-                {
-                    "dispNum": "1",
-                    "time": "6",
-                    "opacity": "1",
-                    "size": {
-                        "x": "100",
-                        "y": "100"
-                    },
-                    "pos": {
-                        "x": "2",
-                        "y": "10"
-                    },
-                    "data": {}
-                },
-                                {
-                    "dispNum": "1",
-                    "time": "8",
-                    "opacity": "1",
-                    "size": {
-                        "x": "100",
-                        "y": "100"
-                    },
-                    "pos": {
-                        "x": "50",
-                        "y": "50"
-                    },
-                    "data": {}
-                },
-                {
-                    "dispNum": "1",
-                    "time": "10",
-                    "opacity": "1",
-                    "size": {
-                        "x": "30",
-                        "y": "50"
-                    },
-                    "pos": {
-                        "x": "2",
-                        "y": "10"
-                    },
-                    "data": {}
-                },
-                {
-                    "dispNum": "1",
-                    "time": "15",
-                    "opacity": "0",
-                    "size": {
-                        "x": "100",
-                        "y": "100"
-                    },
-                    "pos": {
-                        "x": "2",
-                        "y": "10"
+                        "y": "30"
                     },
                     "data": {}
                 }
