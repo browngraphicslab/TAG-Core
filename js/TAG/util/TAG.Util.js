@@ -1,4 +1,14 @@
 var TAG = TAG || {},
+    LADS = TAG, // backwards compatibility until merge is complete
+    tagPath = '',// backwards compatibility until merge is complete
+    containerId = 'tagContainer',// backwards compatibility until merge is complete
+    ip = 'browntagserver.com',// backwards compatibility until merge is complete
+    allowServerChange = true,// backwards compatibility until merge is complete
+    allowAuthoringMode = true,// backwards compatibility until merge is complete
+    idleDuration = 120000,// backwards compatibility until merge is complete
+    currentPage = {},// backwards compatibility until merge is complete
+    INPUT_TOUR_ID = null,// backwards compatibility until merge is complete
+    idleTimer,// backwards compatibility until merge is complete
     Worktop = Worktop || {};
 
 //TAG Utilities
