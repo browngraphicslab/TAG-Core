@@ -1,3 +1,5 @@
+var TAG = TAG || LADS || {};
+
 TAG.Util.makeNamespace("TAG.Worktop.Database");
 
 /*
@@ -25,7 +27,7 @@ TAG.Worktop.Database = (function () {
     // the appropriate parameters into the body.
     var params = {
         exhibition: {
-            url: ['Name', 'Sub1', 'Sub2', 'Background', 'Img1', 'Img2', 'Private'],
+            url: ['Name', 'Sub1', 'Sub2', 'Background', 'Img1', 'Img2', 'Private', 'Font'],
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
@@ -45,7 +47,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description']
         },
         main: {
-            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'PrimaryFontColor', 'SecondaryFontColor', 'FontFamily'],
+            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'OptionalFeatures'],
             body: ['Info']
         }
     };
@@ -91,6 +93,7 @@ TAG.Worktop.Database = (function () {
 
 
         fixPath: fixPath,
+        fixFontFilePath: fixFontFilePath,
         checkAuth: checkAuth,
         changeServer: changeServer,
         checkSetting: checkSetting,
@@ -104,20 +107,21 @@ TAG.Worktop.Database = (function () {
         getMuseumOverlayColor: getMuseumOverlayColor,
         getMuseumOverlayTransparency: getMuseumOverlayTransparency,
         getLogoBackgroundColor: getLogoBackgroundColor,
-		getBaseFontSize: getBaseFontSize,
-        getBackgroundColor: getBackgroundColor,
-        getBackgroundOpacity: getBackgroundOpacity,
-        getPrimaryFontColor: getPrimaryFontColor,
-        getSecondaryFontColor: getSecondaryFontColor,
-        getFontFamily: getFontFamily,
-        
+        getMuseumBackgroundColor: getMuseumBackgroundColor,
+        getMuseumBackgroundOpacity: getMuseumBackgroundOpacity,
+        getMuseumFontFamily: getMuseumFontFamily,
+        getMuseumPrimaryFontColor: getMuseumPrimaryFontColor,
+        getMuseumSecondaryFontColor: getMuseumSecondaryFontColor,
+        getBaseFontSize: getBaseFontSize,
+        getOptionalFeatures: getOptionalFeatures,
+        getCustomFont: getCustomFont,
 
         // NEW
 
         asyncRequest: asyncRequest,
         convertToDocHandler: convertToDocHandler,
         params: params,
-        convertToTextHandler:convertToTextHandler,
+        convertToTextHandler: convertToTextHandler,
 
         // HEAD
         clearToken: clearToken,
@@ -572,7 +576,6 @@ TAG.Worktop.Database = (function () {
             Img1: Desc image 1 URL
             Img2: Desc image 2 URL (unused)
             Private: Exhibition private state (boolean)
-            Timeline: Timeline shown state (boolean)
             Description: Exhibition description
             AddIDs: Comma separated list of artwork IDs to add to the exhibition
             RemoveIDs: Comma separated list of artwork IDs to remove from the exhibition
@@ -656,6 +659,16 @@ TAG.Worktop.Database = (function () {
             Icon: Icon image URL
             IconColor: Icon color
             Info: Museum info
+            BackgroundColor: Background color
+            BackgroundOpacity: Background Opacity
+            PrimaryFontColor: Primary Font Color
+            SecondaryFontColor: Secondary Font color
+            BaseFontSize: Base Font Size
+
+            surbhi below...
+            
+
+            
         All options are optional.  Providing unspported options in strict mode will throw an exception.
 
         success: Success handler (called if main is successfully changed)
@@ -738,7 +751,7 @@ TAG.Worktop.Database = (function () {
                 util.safeCall(error, jqXHR, ajaxCall);
             }
             if (doq && (doq.Name || doq.Offset)) {
-                util.safeCall(handler, doq , jqXHR);
+                util.safeCall(handler, doq, jqXHR);
             } else if (doq && doq[0]) {
                 util.safeCall(handler, doq, jqXHR);
             } else if (doq) {
@@ -757,7 +770,7 @@ TAG.Worktop.Database = (function () {
             util.safeCall(handler, jqXHR.responseText);
         }
     }
-    
+
     /*
         Converts a function expecting a string from the status text to a handler for asyncRequest
         Returns a functio that is the new handler to be used
@@ -902,7 +915,7 @@ TAG.Worktop.Database = (function () {
     // ANYTHING BELOW MIGHT BE DELETED //
     /////////////////////////////////////
 
-    function load (repo, callback, error) {
+    function load(repo, callback, error) {
         // Load database
         if (!_db)
             _db = new Worktop.Database(repo);
@@ -910,7 +923,8 @@ TAG.Worktop.Database = (function () {
             success: function (main) {
                 _main = main;
                 callback(main)
-            }, error: error});
+            }, error: error
+        });
         //// Populate
         //if (callback) { // not in use right now
         //    var doq;
@@ -921,17 +935,17 @@ TAG.Worktop.Database = (function () {
         //        url = _db.getURL() + "/?Type=Doq&Name=" + name;
         //    else
         //        url = "testXML/" + name + ".xml";
-          
+
         //    var request = $.ajax({
         //        url: url,
         //        cache: false, // forces browser to not cache the data
         //        dataType: "text",
         //        async: true,
         //        success: function (data) {
-                   
+
         //            if (request.responseText) {
         //                _main = new Worktop.Doq(request.responseText);
-                        
+
         //                callback();
         //            }
 
@@ -942,13 +956,12 @@ TAG.Worktop.Database = (function () {
         //    });
         //}
         //else {
-          
+
         //    _main = _db.getDoqByName("Main");
         //}
     }
 
     function reloadMain(callback) {
-        debugger;
         if (callback) {
             var doq;
             var name = "Main";
@@ -1015,24 +1028,42 @@ TAG.Worktop.Database = (function () {
     function getMuseumLoc() {
         return _main.Metadata["MuseumLoc"];
     }
+
     function getMuseumInfo() {
         return _main.Metadata["MuseumInfo"];
     }
-	
-	function getBaseFontSize() {
-		return _main.Metadata["BaseFontSize"] || "1.77";
-	}
 
-    function getBackgroundColor() {
-        return _main.Metadata["BackgroundColor"] || '#000000';
+    /////////
+    function getMuseumBackgroundColor() {
+        return _main.Metadata["BackgroundColor"] || '000000';
     }
 
-    function getPrimaryFontColor() {
-        return _main.Metadata["PrimaryFontColor"] || '#FFFFFF';
+    function getMuseumBackgroundOpacity() {
+        return _main.Metadata["BackgroundOpacity"] || '70'; // '0' is true
     }
 
-    function getSecondaryFontColor() {
-        return _main.Metadata["SecondaryFontColor"] || '#FFFFFF';
+    function getMuseumPrimaryFontColor() {
+        return _main.Metadata["PrimaryFontColor"] || 'FFFFFF';
+    }
+
+    function getMuseumSecondaryFontColor() {
+        return _main.Metadata["SecondaryFontColor"] || 'FFFFFF';
+    }
+
+    function getMuseumFontFamily() {
+        return _main.Metadata["FontFamily"] || 'Segoe UI Light';
+    }
+    //////////
+    function getCustomFont() {
+        return TAG.Worktop.Database.fixFontFilePath(_main.Metadata["Font"]);
+    }
+
+    function getOptionalFeatures() {
+        return _main.Metadata["OptionalFeatures"];
+    }
+
+    function getBaseFontSize() {
+        return _main.Metadata["BaseFontSize"] || "1.77";
     }
 
     function getStartPageBackground() {
@@ -1047,11 +1078,6 @@ TAG.Worktop.Database = (function () {
         return _main.Metadata["IconColor"];
     }
 
-    
-    function getBackgroundOpacity() {
-        return _main.Metadata["BackgroundOpacity"] || "75"
-    }
-
     function getOverlayColor() {
         return _main.Metadata["OverlayColor"];
     }
@@ -1059,18 +1085,14 @@ TAG.Worktop.Database = (function () {
         return _main.Metadata["OverlayTransparency"];
     }
 
-    function getFontFamily() {
-        return _main.Metadata["FontFamily"] || "Source Sans Pro";
-    }
-
     function getMainGuid() {
         return _main.Identifier;
     }
 
     function getExhibitionBackgroundImage() {
-       // return getExhibitions(true)[0].Metadata["BackgroundImage"];
+        // return getExhibitions(true)[0].Metadata["BackgroundImage"];
     }
-    
+
     // 
     function getDoqXML(guid, callback) {
         if (callback) {
@@ -1087,7 +1109,7 @@ TAG.Worktop.Database = (function () {
     function getDoqLinqs(guid, callback) {
         if (callback) {
             _db.getDoqLinqsByGUID(guid, callback);
-        } else 
+        } else
             return _db.getDoqLinqsByGUID(guid);
     }
 
@@ -1204,7 +1226,7 @@ TAG.Worktop.Database = (function () {
     //                        }
     //                    });
     //                }
-                  
+
     //                sortHelper(_exhibitions);
     //            return _exhibitions;
     //        }
@@ -1218,14 +1240,14 @@ TAG.Worktop.Database = (function () {
     //            return _exhibitions;
     //        }
     //    }
-        
+
     //}
 
     /**
      * Soft delete a hotspot by deleting both the hotspot linq and doq files
      */
     function deleteHotspot(linqID, doqID, onSuccess, onFail, onError) {
-       // _db.deleteLinq(linqID);
+        // _db.deleteLinq(linqID);
         var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + linqID + "&token=" + TAG.Auth.getToken();
 
         var request = $.ajax({
@@ -1276,7 +1298,7 @@ TAG.Worktop.Database = (function () {
     function setURL(url) {
         _db.setURL(url);
     }
-    
+
     // create a new exhibition
     function createNewExhibition(onSuccess, onFail, onError) {
         _exhibitionDirty = true;
@@ -1324,7 +1346,7 @@ TAG.Worktop.Database = (function () {
     //        return _db.createTour();
     //    }
     //}
-    
+
     // get all artwork
     function getAllArtworks(callback) {
         _db.getArtworks({ success: callback });
@@ -1345,12 +1367,12 @@ TAG.Worktop.Database = (function () {
                             _artworks = new Worktop.Doq(request.responseText);
                             callback(_artworks);
                         }
-                        
+
                     },
                     error: function (err) {
                     }
                 });
-           }
+            }
 
             if (_artworkDirty) {
                 var doq;
@@ -1439,7 +1461,7 @@ TAG.Worktop.Database = (function () {
                 url = "testXML/" + guid + ".xml";
 
             var request = $.ajax({
-                url:url,
+                url: url,
                 dataType: "text",
                 cache: false, // forces browser to not cache the data
                 async: true,
@@ -1447,11 +1469,11 @@ TAG.Worktop.Database = (function () {
                     if (request.responseText) {
                         //try {
                         var newDoq = new Worktop.Doq(request.responseText);
-                        callback (newDoq, flag);
+                        callback(newDoq, flag);
                         //}
                         //catch (err) {
-                            //console.log("bad xml response in getDoqByGuid: " + err.message);
-                           // getDoqByGuid(guid, flag, callback);
+                        //console.log("bad xml response in getDoqByGuid: " + err.message);
+                        // getDoqByGuid(guid, flag, callback);
                         //}
                     }
                 },
@@ -1475,7 +1497,7 @@ TAG.Worktop.Database = (function () {
     //    if (callback) {
 
     //        var guid = exhibit.Identifier;
-            
+
     //        var doq;
     //        var url;
     //        if (_db.useServer)
@@ -1587,7 +1609,7 @@ TAG.Worktop.Database = (function () {
     //}
 
     function updateCache(guid, xml) {
-        
+
         _cacheXML[guid] = xml;
     }
 
@@ -1602,16 +1624,16 @@ TAG.Worktop.Database = (function () {
      */
     function pushXML(data, guid, type, onSuccess, onFail, onError) {
 
-        setDirty(type);        
-        
+        setDirty(type);
+
         var xmlstr = "";
         if (typeof data == 'string') {
             xmlstr = data;
-        }  else {
+        } else {
             xmlstr = parseXML(data.childNodes[0], xmlstr);
         }
         var url = _db.getSecureURL() + "/?Type=Doq&Guid=" + guid + "&token=" + TAG.Auth.getToken();
-        
+
         var isAsync = !!onSuccess;
 
         $.ajax({
@@ -1636,19 +1658,19 @@ TAG.Worktop.Database = (function () {
         });
     }
 
-        /* 
-     * The pushLinq(...) method takes an XML object and a GUID. It then parses the XML
-     * object, converts it into text, and then sends the text-based XML to the server.
-     * If the XML was valid and accepted by the server, the method success() is called.
-     */
+    /* 
+ * The pushLinq(...) method takes an XML object and a GUID. It then parses the XML
+ * object, converts it into text, and then sends the text-based XML to the server.
+ * If the XML was valid and accepted by the server, the method success() is called.
+ */
     function pushLinq(data, guid, type, onSuccess, onFail, onError) {
 
-        setDirty(type);        
-        
+        setDirty(type);
+
         var xmlstr = "";
         if (typeof data == 'string') {
             xmlstr = data;
-        }  else {
+        } else {
             xmlstr = parseXML(data.childNodes[0], xmlstr);
         }
         var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + guid + "&token=" + TAG.Auth.getToken();
@@ -1707,7 +1729,7 @@ TAG.Worktop.Database = (function () {
     //function createHotspot(creatorID, artworkGUID, onSuccess, onFail, onError) {
     //    if (onSuccess) {
     //        var url = _db.getSecureURL() + "/?Type=CreateHotspot&Guid=" + creatorID + "&Guid2=" + artworkGUID + "&token=" + TAG.Auth.getToken();
-            
+
     //        var request = $.ajax({
     //            url: url,
     //            type: "PUT",
@@ -1723,7 +1745,7 @@ TAG.Worktop.Database = (function () {
     //                    onError && onError();
     //            },
     //        });
-           
+
     //    }
     //    else
     //    return _db.createHotspot(creatorID, artworkGUID, onSuccess, onFail, onError);
@@ -1998,6 +2020,13 @@ TAG.Worktop.Database = (function () {
                 path = '/' + path;
             }
             return _db.getFileURL() + path;
+        }
+    }
+
+    function fixFontFilePath(path) {
+        if (path) {
+            if (path.indexOf('/') !== 0) path = '/' + path;
+            return path;
         }
     }
 

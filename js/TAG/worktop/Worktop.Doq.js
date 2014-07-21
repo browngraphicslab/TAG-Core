@@ -1,4 +1,6 @@
-﻿TAG.Util.makeNamespace("Worktop.Doq");
+﻿var TAG = TAG || LADS || {};
+
+TAG.Util.makeNamespace("Worktop.Doq");
 
 /*
  * The Worktop.Doq class is used to convert the XML retreived from the server to a more usable
@@ -68,7 +70,7 @@ Worktop.Doq = function (xml) {
             doq.Folders = doq._Folders.FolderData;
         }
     }
-    
+
     /* 
      * The following code figures out whether the given XML contains and Array of DoqDatas or a single DoqData.
      * If there is an array, then an array of javascript objects is created with the individual javascript objects
