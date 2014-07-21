@@ -6,7 +6,6 @@
         <script src="../../Dependencies/CSSPlugin.min.js"></script>
         <script src="../../Dependencies/jquery.min.js"></script>
         <script src="../../Dependencies/TweenLite.min.js"></script>
-        <script src="../../Dependencies/TimeLineLite.min.js"></script>
         <script src="../../Dependencies/openseadragon-bin-1.1.1/openseadragon.min.js"></script>
         <meta charset="utf-8" />
         <title>ITEPlayer</title>
@@ -17,25 +16,25 @@
         //EXECUTE: this is what will actually be interfaced with TAG somewhere (in Kiosk or TourAuthoring)
             window.ITE = window.ITE || {};
             var testOptions =   {
-                    attachVolume:           true,
-                    attachLoop:             true,
-                    attachPlay:             true,
-                    attachProgressBar:      true,
-                    attachFullScreen:       true,
-                    attachProgressIndicator: true,
-                    hideControls:           false,
-                    autoPlay:               false,
-                    autoLoop:               false,
-                    setMute:                false,
-                    setInitVolume:          100,
-                    allowSeek:              true,
-                    setFullScreen:          false,
-                    setStartingOffset:      0,
-                    setEndTime: NaN
+                    attachVolume:               true,
+                    attachLoop:                 true,
+                    attachPlay:                 true,
+                    attachProgressBar:          true,
+                    attachFullScreen:           true,
+                    attachProgressIndicator:    true,
+                    hideControls:               false,
+                    autoPlay:                   false,
+                    autoLoop:                   false,
+                    setMute:                    false,
+                    setInitVolume:              100,
+                    allowSeek:                  true,
+                    setFullScreen:              false,
+                    setStartingOffset:          0,
+                    setEndTime:                 NaN
                 };
 
             var ITEPlayer = new ITE.Player(testOptions);
-            ITEPlayer.load("../../Assets/TourData/TourData.JSON")
+            ITEPlayer.load("../../Assets/TourData/TourDataDZImageVideo.JSON")
 
         </script>
     </body>

@@ -75,10 +75,10 @@ ITE.Orchestrator = function(player) {
 					trackManager.push(new ITE.ImageProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "video" : 
-					trackManager.push(new ITE.VideoProvider(trackData));
+					trackManager.push(new ITE.VideoProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "audio" : 
-					trackManager.push(new ITE.AudioProvider(trackData));
+					trackManager.push(new ITE.AudioProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "deepZoom" : 
 					trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
@@ -105,7 +105,7 @@ ITE.Orchestrator = function(player) {
 				return;
 			}
 		}
-		// self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
+		self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
 		self.taskManager.play();
 		this.status = 1;
 	}

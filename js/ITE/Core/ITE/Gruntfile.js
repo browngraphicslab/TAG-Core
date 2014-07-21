@@ -9,7 +9,6 @@ module.exports = function(grunt) {
       dist: {
         src: ['ITE Core/Utils/ITE.Utils.js',
               'Dependencies/Hammer.js',
-              'Dependencies/TimelineLite.min.js',
 
               'Dependencies/seadragon/src/Seadragon.Core.js',
               'Dependencies/seadragon/src/Seadragon.Config.js',
@@ -34,7 +33,9 @@ module.exports = function(grunt) {
               'ITE Core/Utils/TAG.Util.js',
               'ITE Core/ITEManual/ITE.PubSubStruct.js',
               'ITE Core/ITEManual/ITE.ImageProvider.js',
+              'ITE Core/ITEManual/ITE.VideoProvider.js',
               'ITE Core/ITEManual/ITE.DeepZoomProvider.js',
+              'ITE Core/ITEManual/ITE.AudioProvider.js',
               'ITE Core/ITEManual/ITE.TimeManager.js',
               'ITE Core/ITEManual/ITE.TaskManager.js',
               'ITE Core/ITEManual/ITE.Orchestrator.js',
