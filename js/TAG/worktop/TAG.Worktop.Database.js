@@ -17,7 +17,7 @@ TAG.Worktop.Database = (function () {
         HTTPS_PORT = '9001',
         FILE_PORT = '8086';
 
-    var util = TAG.Util;
+    var util = LADS.Util;
 
     // If true an exception will be thrown if a post/put request is made with an invalid parameter
     var strict = true;
@@ -31,7 +31,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
-            url: ['Name', 'Title', 'Artist', 'Year', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration'],
+            url: ['Name', 'Title', 'Artist', 'Year', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
             body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration']
         },
         tour: {
@@ -39,7 +39,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'Content', 'RelatedArtworks']
         },
         hotspot: {
-            url: ['Name', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'LinqType', 'Thumbnail'],
+            url: ['Name', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'LinqType', 'Thumbnail', "Converted"],
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         feedback: {
@@ -144,7 +144,9 @@ TAG.Worktop.Database = (function () {
         getVersion: getVersion,
         getDoq: getDoq,
         changePass: changePass,
-
+        getConvertedCheck: getConvertedCheck, //video conversion
+        getConvertedVideoCheck: getConvertedVideoCheck, //video conversion
+        convertVideo: convertVideo,
         // DELETE
         deleteDoq: deleteDoq,
         deleteLinq: deleteLinq,
@@ -390,7 +392,7 @@ TAG.Worktop.Database = (function () {
         asyncRequest(
             'GET',
             'Auth',
-            { Hash: TAG.Auth.hashPass(password, salt) },
+            { Hash: LADS.Auth.hashPass(password, salt) },
             null,
             { success: convertToTextHandler(success), 401: unauth, error: error },
             true);
@@ -424,10 +426,36 @@ TAG.Worktop.Database = (function () {
         asyncRequest(
             'POST',
             'ChangePassword',
-            { OldHash: TAG.Auth.hashPass(oldpass, salt), NewPass: newpass },
+            { OldHash: LADS.Auth.hashPass(oldpass, salt), NewPass: newpass },
             null,
             { success: convertToTextHandler(success), unauth: unauth, error: error },
             true);
+    }
+    //check for files. 
+    function getConvertedCheck(success, error, fileName) {
+        asyncRequest(
+            'GET',
+            'ConvertedCheck',
+            { "FileName": fileName },
+            null,
+            { success: convertToTextHandler(success), error: error });
+    }
+
+    function getConvertedVideoCheck(success, error, guid) {
+        asyncRequest(
+            'GET',
+            'ConvertedVideoCheck',
+            { "guid": guid },
+            null,
+            { success: convertToTextHandler(success), error: error });
+    }
+    function convertVideo(success, error, newFileName, fileExtension, baseFileName, doq) {
+        asyncRequest(
+            'GET',
+            'ConvertVideo',
+            { "FileName": newFileName, "Extension": fileExtension, "BaseFileName": baseFileName, "Identifier": doq },
+            null,
+            { success: convertToTextHandler(success), error: error });
     }
 
     //////////////////
@@ -692,7 +720,7 @@ TAG.Worktop.Database = (function () {
         asyncRequest(
             'POST',
             'FileUploadDataURL',
-            { Token: TAG.Auth.getToken() },
+            { Token: LADS.Auth.getToken() },
             null,
             { success: convertToTextHandler(success), unauth: unauth, error: error },
             true,
@@ -896,11 +924,11 @@ TAG.Worktop.Database = (function () {
             found = false;
             boundary = boundary + "-";
             $.each(bodyOptions, function (key, val) {
-                if (TAG.Util.contains(key, boundary)) {
+                if (LADS.Util.contains(key, boundary)) {
                     found = true;
                     return false;
                 }
-                if (TAG.Util.contains(val, boundary)) {
+                if (LADS.Util.contains(val, boundary)) {
                     found = true;
                     return false;
                 }
@@ -1055,7 +1083,7 @@ TAG.Worktop.Database = (function () {
     }
     //////////
     function getCustomFont() {
-        return TAG.Worktop.Database.fixFontFilePath(_main.Metadata["Font"]);
+        return LADS.Worktop.Database.fixFontFilePath(_main.Metadata["Font"]);
     }
 
     function getOptionalFeatures() {
@@ -1067,11 +1095,11 @@ TAG.Worktop.Database = (function () {
     }
 
     function getStartPageBackground() {
-        return TAG.Worktop.Database.fixPath(_main.Metadata["BackgroundImage"]);
+        return LADS.Worktop.Database.fixPath(_main.Metadata["BackgroundImage"]);
     }
 
     function getMuseumLogo() {
-        return TAG.Worktop.Database.fixPath(_main.Metadata["Icon"]);
+        return LADS.Worktop.Database.fixPath(_main.Metadata["Icon"]);
     }
 
     function getLogoBackgroundColor() {
@@ -1248,14 +1276,14 @@ TAG.Worktop.Database = (function () {
      */
     function deleteHotspot(linqID, doqID, onSuccess, onFail, onError) {
         // _db.deleteLinq(linqID);
-        var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + linqID + "&token=" + TAG.Auth.getToken();
+        var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + linqID + "&token=" + LADS.Auth.getToken();
 
         var request = $.ajax({
             type: 'DELETE',
             url: url,
             async: true,
             success: function (data) {
-                url = _db.getSecureURL() + "/?Type=Doq&Guid=" + doqID + "&token=" + TAG.Auth.getToken();
+                url = _db.getSecureURL() + "/?Type=Doq&Guid=" + doqID + "&token=" + LADS.Auth.getToken();
 
                 $.ajax({
                     type: 'DELETE',
@@ -1304,7 +1332,7 @@ TAG.Worktop.Database = (function () {
         _exhibitionDirty = true;
         if (onSuccess) {
             var request = $.ajax({
-                url: _db.getSecureURL() + "/?Type=CreateExhibition&Guid=" + TAG.Worktop.Database.getCreatorID() + "&token=" + TAG.Auth.getToken(),
+                url: _db.getSecureURL() + "/?Type=CreateExhibition&Guid=" + LADS.Worktop.Database.getCreatorID() + "&token=" + LADS.Auth.getToken(),
                 type: "PUT",
                 dataType: "text",
                 async: true,
@@ -1632,7 +1660,7 @@ TAG.Worktop.Database = (function () {
         } else {
             xmlstr = parseXML(data.childNodes[0], xmlstr);
         }
-        var url = _db.getSecureURL() + "/?Type=Doq&Guid=" + guid + "&token=" + TAG.Auth.getToken();
+        var url = _db.getSecureURL() + "/?Type=Doq&Guid=" + guid + "&token=" + LADS.Auth.getToken();
 
         var isAsync = !!onSuccess;
 
@@ -1673,7 +1701,7 @@ TAG.Worktop.Database = (function () {
         } else {
             xmlstr = parseXML(data.childNodes[0], xmlstr);
         }
-        var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + guid + "&token=" + TAG.Auth.getToken();
+        var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + guid + "&token=" + LADS.Auth.getToken();
 
         $.ajax({
             type: 'POST',
@@ -1728,7 +1756,7 @@ TAG.Worktop.Database = (function () {
     // create image hotspot
     //function createHotspot(creatorID, artworkGUID, onSuccess, onFail, onError) {
     //    if (onSuccess) {
-    //        var url = _db.getSecureURL() + "/?Type=CreateHotspot&Guid=" + creatorID + "&Guid2=" + artworkGUID + "&token=" + TAG.Auth.getToken();
+    //        var url = _db.getSecureURL() + "/?Type=CreateHotspot&Guid=" + creatorID + "&Guid2=" + artworkGUID + "&token=" + LADS.Auth.getToken();
 
     //        var request = $.ajax({
     //            url: url,
@@ -1785,7 +1813,7 @@ TAG.Worktop.Database = (function () {
     //}
 
     function checkAuth(onSuccess, onCancel) {
-        TAG.Auth.authenticate(onSuccess, onCancel);
+        LADS.Auth.authenticate(onSuccess, onCancel);
     }
 
     // get all tours
@@ -1966,7 +1994,7 @@ TAG.Worktop.Database = (function () {
         but the current page will need to be reloaded
     */
     function changeServer(newAddress, oldPass, onConnect, onFail) {
-        newAddress = TAG.Util.formatAddress(newAddress);
+        newAddress = LADS.Util.formatAddress(newAddress);
         if (oldPass) {
             getSalt(function (salt) {
                 getAuth(oldPass, salt, checkServer, onFail, onFail);
@@ -2038,7 +2066,7 @@ TAG.Worktop.Database = (function () {
             console.log(exception);
         }
         return function () {
-            console.log("Warning: Call to deprecated function " + name + "in TAG.Worktop.Database");
+            console.log("Warning: Call to deprecated function " + name + "in LADS.Worktop.Database");
             var passedArgs = [];
             for (var i = 0; i < arguments.length; i++) {
                 passedArgs[i] = arguments[i];
@@ -2046,5 +2074,4 @@ TAG.Worktop.Database = (function () {
             return fn.apply(null, passedArgs);
         }
     }
-
 })();

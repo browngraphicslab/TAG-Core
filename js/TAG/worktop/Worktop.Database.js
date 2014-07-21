@@ -9,9 +9,9 @@ TAG.Util.makeNamespace("Worktop.Database");
     to be smarted about caching (such as updating the cache and incrementing the count when a doq is posted).
 */
 Worktop.Database = function (mainID) {
-    var HTTP_PORT = TAG.Worktop.Database.HTTP_PORT;
-    var HTTPS_PORT = TAG.Worktop.Database.HTTPS_PORT;
-    var FILE_PORT = TAG.Worktop.Database.FILE_PORT;
+    var HTTP_PORT = LADS.Worktop.Database.HTTP_PORT;
+    var HTTPS_PORT = LADS.Worktop.Database.HTTPS_PORT;
+    var FILE_PORT = LADS.Worktop.Database.FILE_PORT;
 
     if (localStorage.ip === "137.117.37.220") localStorage.ip = "browntagserver.com"; // Switch to new domain for HTTPS
     var _baseURL = localStorage.ip ? localStorage.ip : "browntagserver.com";  // url of the server
@@ -45,8 +45,8 @@ Worktop.Database = function (mainID) {
     }
 
 
-    var _static = TAG.Worktop.Database;
-    var _util = TAG.Util;
+    var _static = LADS.Worktop.Database;
+    var _util = LADS.Util;
 
     // writeCache function debounces calls to write the cache to disk
     var writeCache = $.debounce(250, function () {
@@ -370,7 +370,7 @@ Worktop.Database = function (mainID) {
     function putRequest(type, handlers, urlOptions, bodyOptions, returnDoq, secure) {
         handlers = handlers || {};
         urlOptions = urlOptions || {};
-        urlOptions.Token = TAG.Auth.getToken();
+        urlOptions.Token = LADS.Auth.getToken();
         urlOptions.ReturnDoq = returnDoq;
         var ajaxHandlers = {
             200: (returnDoq && _static.convertToDocHandler(handlers.success, handlers.error)) || handlers.success,
@@ -390,7 +390,7 @@ Worktop.Database = function (mainID) {
     function deleteRequest(type, handlers, urlOptions, secure) {
         handlers = handlers || {};
         urlOptions = urlOptions || {};
-        urlOptions.Token = TAG.Auth.getToken();
+        urlOptions.Token = LADS.Auth.getToken();
         urlOptions.Count = safeCache('doqs', urlOptions.Guid).get().Metadata.Count || 0;
 
         var ajaxHandlers = {
@@ -413,7 +413,7 @@ Worktop.Database = function (mainID) {
     function postRequest(type, handlers, urlOptions, bodyOptions, secure, cacheCount) {
         handlers = handlers || {};
         urlOptions = urlOptions || {};
-        urlOptions.Token = TAG.Auth.getToken();
+        urlOptions.Token = LADS.Auth.getToken();
         var cacheLoc = safeCache('doqs', urlOptions.Guid).get();
         if (cacheCount !== 0) {
             cacheCount = cacheCount || (cacheLoc && cacheLoc.Metadata && safeCache('doqs', urlOptions.Guid).get().Metadata.Count) || 0;
@@ -461,7 +461,7 @@ Worktop.Database = function (mainID) {
     */
     function handleAuth(fail) {
         return function (jqXHR, ajaxCall) {
-            TAG.Auth.authenticate(function () { ajaxCall.setToken(TAG.Auth.getToken()).call() }, fail)
+            LADS.Auth.authenticate(function () { ajaxCall.setToken(LADS.Auth.getToken()).call() }, fail)
         }
     }
 
@@ -560,7 +560,7 @@ Worktop.Database = function (mainID) {
     }
 
     function getSecureURL() {
-        var useHttps = TAG.Worktop.Database.checkSetting('UseHTTPS');
+        var useHttps = LADS.Worktop.Database.checkSetting('UseHTTPS');
         if (useHttps && useHttps.toLowerCase() === 'true') {
             return "https://" + _baseURL + ':' + HTTPS_PORT;
         } else {
@@ -572,4 +572,3 @@ Worktop.Database = function (mainID) {
         return "http://" + _baseURL + ':' + FILE_PORT;
     }
 };
-
