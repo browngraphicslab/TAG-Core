@@ -17,7 +17,7 @@ TAG.Worktop.Database = (function () {
         HTTPS_PORT = '9001',
         FILE_PORT = '8086';
 
-    var util = LADS.Util;
+    var util = TAG.Util;
 
     // If true an exception will be thrown if a post/put request is made with an invalid parameter
     var strict = true;
@@ -397,7 +397,7 @@ TAG.Worktop.Database = (function () {
         asyncRequest(
             'GET',
             'Auth',
-            { Hash: LADS.Auth.hashPass(password, salt) },
+            { Hash: TAG.Auth.hashPass(password, salt) },
             null,
             { success: convertToTextHandler(success), 401: unauth, error: error },
             true);
@@ -431,7 +431,7 @@ TAG.Worktop.Database = (function () {
         asyncRequest(
             'POST',
             'ChangePassword',
-            { OldHash: LADS.Auth.hashPass(oldpass, salt), NewPass: newpass },
+            { OldHash: TAG.Auth.hashPass(oldpass, salt), NewPass: newpass },
             null,
             { success: convertToTextHandler(success), unauth: unauth, error: error },
             true);
@@ -725,7 +725,7 @@ TAG.Worktop.Database = (function () {
         asyncRequest(
             'POST',
             'FileUploadDataURL',
-            { Token: LADS.Auth.getToken() },
+            { Token: TAG.Auth.getToken() },
             null,
             { success: convertToTextHandler(success), unauth: unauth, error: error },
             true,
@@ -929,11 +929,11 @@ TAG.Worktop.Database = (function () {
             found = false;
             boundary = boundary + "-";
             $.each(bodyOptions, function (key, val) {
-                if (LADS.Util.contains(key, boundary)) {
+                if (TAG.Util.contains(key, boundary)) {
                     found = true;
                     return false;
                 }
-                if (LADS.Util.contains(val, boundary)) {
+                if (TAG.Util.contains(val, boundary)) {
                     found = true;
                     return false;
                 }
@@ -1088,7 +1088,7 @@ TAG.Worktop.Database = (function () {
     }
     //////////
     function getCustomFont() {
-        return LADS.Worktop.Database.fixFontFilePath(_main.Metadata["Font"]);
+        return TAG.Worktop.Database.fixFontFilePath(_main.Metadata["Font"]);
     }
 
     function getOptionalFeatures() {
@@ -1100,11 +1100,11 @@ TAG.Worktop.Database = (function () {
     }
 
     function getStartPageBackground() {
-        return LADS.Worktop.Database.fixPath(_main.Metadata["BackgroundImage"]);
+        return TAG.Worktop.Database.fixPath(_main.Metadata["BackgroundImage"]);
     }
 
     function getMuseumLogo() {
-        return LADS.Worktop.Database.fixPath(_main.Metadata["Icon"]);
+        return TAG.Worktop.Database.fixPath(_main.Metadata["Icon"]);
     }
 
     function getLogoBackgroundColor() {
@@ -1281,14 +1281,14 @@ TAG.Worktop.Database = (function () {
      */
     function deleteHotspot(linqID, doqID, onSuccess, onFail, onError) {
         // _db.deleteLinq(linqID);
-        var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + linqID + "&token=" + LADS.Auth.getToken();
+        var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + linqID + "&token=" + TAG.Auth.getToken();
 
         var request = $.ajax({
             type: 'DELETE',
             url: url,
             async: true,
             success: function (data) {
-                url = _db.getSecureURL() + "/?Type=Doq&Guid=" + doqID + "&token=" + LADS.Auth.getToken();
+                url = _db.getSecureURL() + "/?Type=Doq&Guid=" + doqID + "&token=" + TAG.Auth.getToken();
 
                 $.ajax({
                     type: 'DELETE',
@@ -1337,7 +1337,7 @@ TAG.Worktop.Database = (function () {
         _exhibitionDirty = true;
         if (onSuccess) {
             var request = $.ajax({
-                url: _db.getSecureURL() + "/?Type=CreateExhibition&Guid=" + LADS.Worktop.Database.getCreatorID() + "&token=" + LADS.Auth.getToken(),
+                url: _db.getSecureURL() + "/?Type=CreateExhibition&Guid=" + TAG.Worktop.Database.getCreatorID() + "&token=" + TAG.Auth.getToken(),
                 type: "PUT",
                 dataType: "text",
                 async: true,
@@ -1665,7 +1665,7 @@ TAG.Worktop.Database = (function () {
         } else {
             xmlstr = parseXML(data.childNodes[0], xmlstr);
         }
-        var url = _db.getSecureURL() + "/?Type=Doq&Guid=" + guid + "&token=" + LADS.Auth.getToken();
+        var url = _db.getSecureURL() + "/?Type=Doq&Guid=" + guid + "&token=" + TAG.Auth.getToken();
 
         var isAsync = !!onSuccess;
 
@@ -1706,7 +1706,7 @@ TAG.Worktop.Database = (function () {
         } else {
             xmlstr = parseXML(data.childNodes[0], xmlstr);
         }
-        var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + guid + "&token=" + LADS.Auth.getToken();
+        var url = _db.getSecureURL() + "/?Type=Linq&Guid=" + guid + "&token=" + TAG.Auth.getToken();
 
         $.ajax({
             type: 'POST',
@@ -1818,7 +1818,7 @@ TAG.Worktop.Database = (function () {
     //}
 
     function checkAuth(onSuccess, onCancel) {
-        LADS.Auth.authenticate(onSuccess, onCancel);
+        TAG.Auth.authenticate(onSuccess, onCancel);
     }
 
     // get all tours
@@ -1999,7 +1999,7 @@ TAG.Worktop.Database = (function () {
         but the current page will need to be reloaded
     */
     function changeServer(newAddress, oldPass, onConnect, onFail) {
-        newAddress = LADS.Util.formatAddress(newAddress);
+        newAddress = TAG.Util.formatAddress(newAddress);
         if (oldPass) {
             getSalt(function (salt) {
                 getAuth(oldPass, salt, checkServer, onFail, onFail);
@@ -2071,7 +2071,7 @@ TAG.Worktop.Database = (function () {
             console.log(exception);
         }
         return function () {
-            console.log("Warning: Call to deprecated function " + name + "in LADS.Worktop.Database");
+            console.log("Warning: Call to deprecated function " + name + "in TAG.Worktop.Database");
             var passedArgs = [];
             for (var i = 0; i < arguments.length; i++) {
                 passedArgs[i] = arguments[i];
