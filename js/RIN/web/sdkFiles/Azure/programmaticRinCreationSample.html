@@ -1,0 +1,32 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Rich Interactive Narratives - programmactially creating player controls</title>    
+
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
+
+    <script type="text/javascript" src="http:///553d4a03eb844efaaf7915517c979ef4.cloudapp.net/rinjs/lib/rin-core-1.0.js"></script>
+    <script type="text/javascript" src="http:///553d4a03eb844efaaf7915517c979ef4.cloudapp.net/rinjs/lib/rin-experiences-1.0.js"></script>
+    
+    <!-- Custom Experience Stream Scripts -->
+    <script type="text/javascript" src="lib/SampleImageES.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var player = rin.createPlayerControl(document.getElementById('myrin'), { autoplay: true, controls: true, loop: true }, 'http://553d4a03eb844efaaf7915517c979ef4.cloudapp.net/rinjs/');
+	    var deepstateUrl = player.resolveDeepstateUrlFromAbsoluteUrl(window.location.href);
+	    if(deepstateUrl) {
+		player.load(deepstateUrl);
+	    }
+	    else {
+	        player.load("http://553d4a03eb844efaaf7915517c979ef4.cloudapp.net/rinjs/narratives/sample/narrative.js");
+	    }
+        });
+    </script>
+</head>
+<body>
+    <div id='myrin' style='height:100%;width:100%'/>
+</body>
+</html>
