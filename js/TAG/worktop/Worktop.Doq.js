@@ -1,4 +1,6 @@
-﻿TAG.Util.makeNamespace("Worktop.Doq");
+﻿var TAG = TAG || LADS || {};
+
+TAG.Util.makeNamespace("Worktop.Doq");
 
 /*
  * The Worktop.Doq class is used to convert the XML retreived from the server to a more usable

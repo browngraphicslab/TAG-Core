@@ -1,4 +1,6 @@
-﻿TAG.Util.makeNamespace("Worktop.Database");
+﻿var TAG = TAG || LADS || {};
+
+TAG.Util.makeNamespace("Worktop.Database");
 
 /*
     Worktop.Database contains the cache object for all requests and contains mostly private non-static

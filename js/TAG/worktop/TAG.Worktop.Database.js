@@ -1,3 +1,5 @@
+var TAG = TAG || LADS || {};
+
 TAG.Util.makeNamespace("TAG.Worktop.Database");
 
 /*
