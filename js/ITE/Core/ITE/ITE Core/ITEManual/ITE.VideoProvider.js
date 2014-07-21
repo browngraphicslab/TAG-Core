@@ -50,7 +50,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
-			.append(_video);
+			.append(_video)
+			.on("mouseover", function(){
+				_videoControls.setAttribute("controls", "controls")
+			})
+			.on("mouseout", function() {
+				_videoControls.removeAttribute("controls");
+			})
+			.css("background-color", "maroon")
 
 		$("#ITEHolder").append(_UIControl);
 
@@ -62,7 +69,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 						  "top"		: (500*keyframes[i].pos.y/100) + "px",
 						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
 						  "width"	: (1000*keyframes[i].size.x/100) + "px",
-						  "height"	: (500*keyframes[i].size.y/100) + "px"
 						};
 			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
@@ -112,7 +118,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 				y 		: _UIControl.position().top
 			},
 			size: {
-				height	: _UIControl.height(),
 				width	: _UIControl.width()
 			},
 			videoOffset	: _videoControls.currentTime
@@ -129,7 +134,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		_UIControl.css({
 			"left":			state.pos.x,
 			"top":			state.pos.y,
-			"height":		state.size.height,
 			"width":		state.size.width,
 			"opacity":		state.opacity
 		});
@@ -144,16 +148,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	this.play = function(targetTime, data){
 		_super.play.call(self, targetTime, data);
 		_videoControls.play();
-		_videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
-	}
+	};
 
 	this.pause = function(){
 		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
 		this.getState();
 		self.animation.kill();
 		_videoControls.pause()
-		_videoControls.setAttribute("controls", "controls")
-	}
+	};
 
 	/* 
 	I/P: none
@@ -182,7 +184,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
         var top     	= _UIControl.position().top,
             left     	= _UIControl.position().left,
             width     	= _UIControl.width(),
-            height     	= _UIControl.height(),
             finalPosition;
 
         // If the player is playing, pause it

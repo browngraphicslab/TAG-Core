@@ -10862,7 +10862,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
-			.append(_video);
+			.append(_video)
+			.on("mouseover", function(){
+				_videoControls.setAttribute("controls", "controls")
+			})
+			.on("mouseout", function() {
+				_videoControls.removeAttribute("controls");
+			})
+			.css("background-color", "maroon")
 
 		$("#ITEHolder").append(_UIControl);
 
@@ -10874,7 +10881,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 						  "top"		: (500*keyframes[i].pos.y/100) + "px",
 						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
 						  "width"	: (1000*keyframes[i].size.x/100) + "px",
-						  "height"	: (500*keyframes[i].size.y/100) + "px"
 						};
 			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
@@ -10924,7 +10930,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 				y 		: _UIControl.position().top
 			},
 			size: {
-				height	: _UIControl.height(),
 				width	: _UIControl.width()
 			},
 			videoOffset	: _videoControls.currentTime
@@ -10941,7 +10946,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		_UIControl.css({
 			"left":			state.pos.x,
 			"top":			state.pos.y,
-			"height":		state.size.height,
 			"width":		state.size.width,
 			"opacity":		state.opacity
 		});
@@ -10956,16 +10960,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	this.play = function(targetTime, data){
 		_super.play.call(self, targetTime, data);
 		_videoControls.play();
-		_videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
-	}
+	};
 
 	this.pause = function(){
 		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
 		this.getState();
 		self.animation.kill();
 		_videoControls.pause()
-		_videoControls.setAttribute("controls", "controls")
-	}
+	};
 
 	/* 
 	I/P: none
@@ -10994,7 +10996,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
         var top     	= _UIControl.position().top,
             left     	= _UIControl.position().left,
             width     	= _UIControl.width(),
-            height     	= _UIControl.height(),
             finalPosition;
 
         // If the player is playing, pause it
@@ -11334,32 +11335,32 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
         // Allows asset to be dragged, despite the name
         TAG.Util.disableDrag(_deepZoom);
 
-        _deepZoom.on("mousedown", function() {
-        	console.log("mouse down")
-        })
-        _deepZoom.on("mouseup", function() {
-        	console.log("mouse up")
-        })
-        _deepZoom.on("mousemove", function() {
-        	console.log("mouse move")
-        })
-        _deepZoom.on("click", function() {
-        	console.log("click")
-        })
+        // _deepZoom.on("mousedown", function() {
+        // 	console.log("mouse down")
+        // })
+        // _deepZoom.on("mouseup", function() {
+        // 	console.log("mouse up")
+        // })
+        // _deepZoom.on("mousemove", function() {
+        // 	console.log("mouse move")
+        // })
+        // _deepZoom.on("click", function() {
+        // 	console.log("click")
+        // })
 
-        _viewer.addHandler("container-release", function() {
-        	console.log("mouseup: " + _deepZoom.mouseup)
-        	console.log("mousedown: " + _deepZoom.mousedown)
+        // _viewer.addHandler("container-release", function() {
+        // 	console.log("mouseup: " + _deepZoom.mouseup)
+        // 	console.log("mousedown: " + _deepZoom.mousedown)
 
-        	_deepZoom.mouseup()
-        })
+        // 	_deepZoom.mouseup()
+        // })
 
-        _mouseTracker.releaseHandler = function(){
-        	console.log("Mouse tracker worked!! release")
-        }
-        _mouseTracker.pressHandler = function(){
-        	console.log("Mouse tracker worked!! press")
-        }
+        // _mouseTracker.releaseHandler = function(){
+        // 	console.log("Mouse tracker worked!! release")
+        // }
+        // _mouseTracker.pressHandler = function(){
+        // 	console.log("Mouse tracker worked!! press")
+        // }
 
         // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
 
@@ -11381,10 +11382,11 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 };
 
 /*************/
+
 window.ITE = window.ITE || {};
 
 ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
-
+"use strict";
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
@@ -11404,15 +11406,12 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	self.animation;
 
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
-	interactionHandlers 		= {},
-	movementTimeouts 			= [],
 	this.trackData   			= trackData;
 
     //DOM related
-    var _video,
+    var _audio,
     	_UIControl,
-    	_videoControls;
-
+    	_audioControls;
 
 	//Start things up...
     initialize()
@@ -11426,14 +11425,14 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 		_super.initialize()
 
 		//Create UI and append to ITEHolder
-		_video		= $(document.createElement("video"))
-			.addClass("assetVideo");
+		_audio		= $(document.createElement("audio"))
+			.addClass("assetAudio");
 
-		_videoControls = _video[0];
+		_audioControls = _audio[0];
 
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
-			.append(_video);
+			.append(_audio);
 
 		$("#ITEHolder").append(_UIControl);
 
@@ -11441,19 +11440,11 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 		for (i=1; i<keyframes.length; i++) {
 			keyframeData={
-						  "opacity"	: keyframes[i].opacity,
-						  "top"		: (500*keyframes[i].pos.y/100) + "px",
-						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
-						  "width"	: (1000*keyframes[i].size.x/100) + "px",
-						  "height"	: (500*keyframes[i].size.y/100) + "px"
+						  "volume"	: keyframes[i].volume 
 						};
 			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
-
-		//Attach Handlers
-		attachHandlers()
-
 	};
 
 
@@ -11466,14 +11457,12 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 		_super.load()
 
 		//Sets the image’s URL source
-		_video.attr({
+		_audio.attr({
 			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
 			"type" 	: this.trackData.type
 		})
-
-		_videoControls.load()
 		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-		_video.onload = function (event) {//Is this ever getting called?
+		_audio.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
 			this.setState(keyframes[0]);
 		};
@@ -11481,7 +11470,7 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
    /** 
 	* I/P: none
-	* Grabs current actual state of video, and sets savedState to it 
+	* Grabs current actual state of audio, and sets savedState to it 
 	* returns savedState
 	* O/P: savedState
 	*/
@@ -11489,53 +11478,39 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 		self.savedState = {
 			//displayNumber	: this.getPreviousKeyframe().displayNumber,
 			time			: self.taskManager.timeManager.getElapsedOffset(),
-			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
-			pos : {
-				x		: _UIControl.position().left,
-				y 		: _UIControl.position().top
-			},
-			size: {
-				height	: _UIControl.height(),
-				width	: _UIControl.width()
-			},
-			videoOffset	: _videoControls.currentTime
+			volume			: _audioControls.volume,
+			audioOffset		: _audioControls.currentTime
 		};	
 		return self.savedState;
 	};
 
    /**
-	* I/P: state	state to make actual video reflect
+	* I/P: state	state to make actual audio reflect
 	* Sets properties of the image to reflect the input state
 	* O/P: none
 	*/
 	this.setState = function(state){
-		_UIControl.css({
-			"left":			state.pos.x,
-			"top":			state.pos.y,
-			"height":		state.size.height,
-			"width":		state.size.width,
-			"opacity":		state.opacity
-		});
-		state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
+		_audioControls.volume = state.volume;
+		state.audioOffset ? (_audioControls.currentTime = parseFloat(state.audioOffset)) : 0
 	};
 
  	/** 
 	* I/P: none
-	* Plays video asset
+	* Plays audio asset
 	* O/P: none
 	*/
 	this.play = function(targetTime, data){
+		console.log("Audiocontrols: " + _audioControls.currentSrc)
+
 		_super.play.call(self, targetTime, data);
-		_videoControls.play();
-		_videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
+		_audioControls.play();
 	}
 
 	this.pause = function(){
 		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
 		this.getState();
-		self.animation.kill();
-		_videoControls.pause()
-		_videoControls.setAttribute("controls", "controls")
+		self.animation.stop();
+		_audioControls.pause()
 	}
 
 	/* 
@@ -11544,112 +11519,8 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	O/P: none
 	*/
 	this.animate = function(duration, state){
-		self.animation = TweenLite.to(_UIControl, duration, state);		
-		self.animation.play();
+		self.animation =_audio.animate({volume: state.volume}, duration*1000);
 	};
-
-   /** 
-	* I/P: none
-	* Return a set of interactionHandlers attached to asset from provider
-	*/
-	function getInteractionHandlers(){
-		return interactionHandlers;
-	}
- 
-    /**
-     * I/P {Object} res     object containing hammer event info
-     * Drag/manipulation handler for associated media
-     * Manipulation for touch and drag events
-     */
-    function mediaManip(res) {
-        var top     	= _UIControl.position().top,
-            left     	= _UIControl.position().left,
-            width     	= _UIControl.width(),
-            height     	= _UIControl.height(),
-            finalPosition;
-
-        // If the player is playing, pause it
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
-
-        // If event is initial touch on artwork, save current position of media object to use for animation
-        if (res.eventType === 'start') {
-            startLocation = {
-                x: left,
-                y: top
-            };
-        }	              
-        // Target location (where object should be moved to)
-        finalPosition = {
-            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
-            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-        };   
-
-        // Animate to target location
-        self.interactionAnimation && self.interactionAnimation.kill();
-        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
-        	top: finalPosition.y,
-        	left: finalPosition.x
-        });		
-    }
-	
-
-    /**
-     * I/P {Number} scale     scale factor
-     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
-     * Zoom handler for associated media (e.g., for mousewheel scrolling)
-     */
-    function mediaScroll(scale, pivot) {
-    	var t    	= _UIControl.position().top,
-            l    	= _UIControl.position().left,
-            w   	= _UIControl.width(),
-            h  		= _UIControl.height(),
-            newW  	= w * scale,
-            newH,
-            maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
-            minW	= 200,
-            newX,
-            newY;
-
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
-
-        // Constrain new width
-        if((newW < minW) || (newW > maxW)) {
-            newW 	= Math.min(maxW, Math.max(minW, newW));
-        };
-
-        // Update scale, new X and new Y according to newly constrained values.
-        scale 	= newW / w;
-        newH	= h * scale;
-        newX 	= l + pivot.x*(1-scale);
-       	newY 	= t + pivot.y*(1-scale); 
-
-       	//Animate _UIControl to this new position
-        self.interactionAnimation && self.interactionAnimation.kill();
-        self.interactionAnimation = TweenLite.to(_UIControl, .05, {
-        	top: newY,
-        	left: newX,
-        	width: newW,
-        	height: newH
-        });	
-    }
-    
-
-    /** 
-	* I/P: none
-	* Initializes handlers 
-	*/
-    function attachHandlers() {
-        // Allows asset to be dragged, despite the name
-        TAG.Util.disableDrag(_UIControl);
-
-        // Register handlers
-        TAG.Util.makeManipulatable(_UIControl[0], {
-            onManipulate: mediaManip,
-            onScroll:     mediaScroll
-        }); 
-        interactionHandlers.onManipulate 	= mediaManip;
-        interactionHandlers.onScroll		= mediaScroll;    	
-    }
 };
 
 /*************/
@@ -12062,13 +11933,13 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     bottomContainer.append(buttonContainer);
 
     //Buttons
-    var volumeButton,
-        volumeLevel,
-        playPauseButton,
-        loopButton,
-        progressBar,
-        fullScreenButton,
-        progressIndicator,
+    var volumeButton        = $(document.createElement("img")),
+        volumeLevel         = $(document.createElement("img")),
+        playPauseButton     = $(document.createElement("img")),
+        loopButton          = $(document.createElement("img")),
+        progressBar         = $(document.createElement("div")),
+        fullScreenButton    = $(document.createElement("img")),
+        progressIndicator   = $(document.createElement("div")),
 
     //Other atributes
         currentVolumeLevel, //Percentage
@@ -12078,7 +11949,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         isFullScreen,
 
     //Other miscellaneous variables
-        Utils               = new ITE.Utils();
+        Utils = new ITE.Utils();
 
     this.Orchestrator = orchestrator;
 
@@ -12130,10 +12001,9 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var volumeButtonContainer = $(document.createElement("div"))
                 .addClass("volumeButtonContainer");
 
-                volumeButton = $(document.createElement("img"))
-                .addClass("volumeButton")
-                .attr("src", "ITEPlayerImages/volume.png")
-                .on("click", toggleMute);
+            volumeButton.addClass("volumeButton")
+            .attr("src", "ITEPlayerImages/volume.svg")
+            .on("click", toggleMute);
 
             var volumeLevelContainer = $(document.createElement("div"))
                 .addClass("volumeLevelContainer")
@@ -12178,8 +12048,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var playPauseButtonContainer = $(document.createElement("div"))
                 .addClass("playPauseButtonContainer");
 
-                playPauseButton = $(document.createElement("img"))
-                .addClass("playPauseButton")
+                playPauseButton.addClass("playPauseButton")
                 .attr("src", "ITEPlayerImages/pause.png")
                 .on("click", togglePlayPause);
 
@@ -12201,8 +12070,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var loopButtonContainer = $(document.createElement("div"))
                 .addClass("loopButtonContainer");
 
-                loopButton = $(document.createElement("img"))
-                .addClass("loopButton")
+                loopButton.addClass("loopButton")
                 .attr("src", "ITEPlayerImages/loop.svg")
                 .on("click", toggleLoop);
 
@@ -12241,8 +12109,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                     }
                 });
 
-            progressBar = $(document.createElement("div"))
-                .addClass("progressBar")
+            progressBar.addClass("progressBar")
 
             bottomContainer.append(progressBarContainer);
             progressBarContainer.append(progressBar);
@@ -12260,9 +12127,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var ProgressIndicatorContainer = $(document.createElement("div"))
                 .addClass("progressIndicatorContainer");
 
-                progressIndicator = $(document.createElement("div"))
-                .addClass("progressIndicator")
-                .innerHTML = "01:04";
+            progressIndicator.addClass("progressIndicator")
+            .innerHTML = "01:04";
 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
@@ -12280,10 +12146,9 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var fullScreenButtonContainer = $(document.createElement("div"))
                 .addClass("fullScreenButtonContainer");
 
-                fullScreenButton = $(document.createElement("img"))
-                .addClass("fullScreenButton")
-                .attr("src", "ITEPlayerImages/fullScreen.png")
-                .on("click", toggleFullScreen);
+            fullScreenButton.addClass("fullScreenButton")
+            .attr("src", "ITEPlayerImages/fullScreen.svg")
+            .on("click", toggleFullScreen);
 
             buttonContainer.append(fullScreenButtonContainer);
             fullScreenButtonContainer.append(fullScreenButton);
@@ -12338,7 +12203,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function play() {
         orchestrator.play();
         // console.log("Tour is playing")
-        playPauseButton.attr("src", "ITEPlayerImages/pause.png")
+        playPauseButton.attr("src", "ITEPlayerImages/pause.svg")
     };
 
 
@@ -12350,7 +12215,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function pause() {
         orchestrator.pause();
         // console.log("Tour is paused")
-        playPauseButton.attr("src", "ITEPlayerImages/play.png")
+        playPauseButton.attr("src", "ITEPlayerImages/play.svg")
     };
 
     /*
@@ -12403,6 +12268,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function mute(){
         isMuted = true;
         // console.log("tour is muted")
+        volumeButton.attr("src", "ITEPlayerImages/volume0.svg")
         volumeButton.css("opacity" , ".5")
         volumeLevel.css("height" , "0")
     }
@@ -12415,6 +12281,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function unMute(){
         isMuted = false;
         // console.log("tour is not muted")
+        volumeButton.attr("src", "ITEPlayerImages/volume.svg")
         volumeButton.css("opacity" , "1")
         volumeLevel.css("height" , currentVolumeLevel*(volumeLevel.parent().height())/100 + "%")
     }
