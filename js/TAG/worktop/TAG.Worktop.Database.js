@@ -108,10 +108,15 @@ TAG.Worktop.Database = (function () {
         getMuseumOverlayTransparency: getMuseumOverlayTransparency,
         getLogoBackgroundColor: getLogoBackgroundColor,
         getMuseumBackgroundColor: getMuseumBackgroundColor,
+        getBackgroundColor: getMuseumBackgroundColor, // TODO merging
         getMuseumBackgroundOpacity: getMuseumBackgroundOpacity,
+        getBackgroundOpacity: getMuseumBackgroundOpacity, // TODO merging
         getMuseumFontFamily: getMuseumFontFamily,
+        getFontFamily: getMuseumFontFamily, // TODO merging
         getMuseumPrimaryFontColor: getMuseumPrimaryFontColor,
+        getPrimaryFontColor: getMuseumPrimaryFontColor, // TODO merging
         getMuseumSecondaryFontColor: getMuseumSecondaryFontColor,
+        getSecondaryFontColor: getMuseumSecondaryFontColor, // TODO merging
         getBaseFontSize: getBaseFontSize,
         getOptionalFeatures: getOptionalFeatures,
         getCustomFont: getCustomFont,
