@@ -250,32 +250,32 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
         // Allows asset to be dragged, despite the name
         TAG.Util.disableDrag(_deepZoom);
 
-        _deepZoom.on("mousedown", function() {
-        	console.log("mouse down")
-        })
-        _deepZoom.on("mouseup", function() {
-        	console.log("mouse up")
-        })
-        _deepZoom.on("mousemove", function() {
-        	console.log("mouse move")
-        })
-        _deepZoom.on("click", function() {
-        	console.log("click")
-        })
+        // _deepZoom.on("mousedown", function() {
+        // 	console.log("mouse down")
+        // })
+        // _deepZoom.on("mouseup", function() {
+        // 	console.log("mouse up")
+        // })
+        // _deepZoom.on("mousemove", function() {
+        // 	console.log("mouse move")
+        // })
+        // _deepZoom.on("click", function() {
+        // 	console.log("click")
+        // })
 
-        _viewer.addHandler("container-release", function() {
-        	console.log("mouseup: " + _deepZoom.mouseup)
-        	console.log("mousedown: " + _deepZoom.mousedown)
+        // _viewer.addHandler("container-release", function() {
+        // 	console.log("mouseup: " + _deepZoom.mouseup)
+        // 	console.log("mousedown: " + _deepZoom.mousedown)
 
-        	_deepZoom.mouseup()
-        })
+        // 	_deepZoom.mouseup()
+        // })
 
-        _mouseTracker.releaseHandler = function(){
-        	console.log("Mouse tracker worked!! release")
-        }
-        _mouseTracker.pressHandler = function(){
-        	console.log("Mouse tracker worked!! press")
-        }
+        // _mouseTracker.releaseHandler = function(){
+        // 	console.log("Mouse tracker worked!! release")
+        // }
+        // _mouseTracker.pressHandler = function(){
+        // 	console.log("Mouse tracker worked!! press")
+        // }
 
         // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
 
