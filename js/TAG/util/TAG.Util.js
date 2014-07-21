@@ -1522,7 +1522,7 @@ TAG.Util = (function () {
             cache: false,
             url: path.match(/\//) ? path : tagPath+"html/"+path,
             success: function (data) {
-                ret = $(data);
+                ret = data;
             },
             error: function (err) {
                 console.log("url = " + path);
@@ -1531,7 +1531,7 @@ TAG.Util = (function () {
             },
             dataType: 'html'
         });
-        return ret;
+        return ret ? (Windows ? $(toStaticHTML(ret)) : $(ret)) :  '';
     }
 
      /**

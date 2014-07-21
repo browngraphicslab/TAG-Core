@@ -28,7 +28,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         tagContainer;
 
         
-    TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
+    // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
 
     if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
@@ -127,10 +127,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             var collectionsPage;
 
             overlay.off('click');
-            collectionsPage = TAG.Layout.CollectionsPage();
+            collectionsPage = LADS.Layout.NewCatalog(); // TODO merging
             TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
 
-            currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+            currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
             currentPage.obj  = collectionsPage;
         }
 

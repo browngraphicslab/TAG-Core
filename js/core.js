@@ -7,7 +7,11 @@
 (function () {
     "use strict";
 
-    load();
+    if (Windows) {
+        $(document).on('ready', load); // TODO make sure this is consistent with web app
+    } else {
+        load();
+    }
 
     /**
      * The first real TAG function called. Sets up the embedding within iframe and
@@ -31,7 +35,9 @@
             console.log('no containerId specified, or the containerId does not match an element');
             return; // no TAG for you
         }
-        localStorage.ip = ip || localStorage.ip || 'browntagserver.com';
+
+        // if we're in the windows app, localStorage.ip should take precedence, since it's not API-based
+        localStorage.ip = (Windows ? (localStorage.ip || ip) : (ip || localStorage.ip)) || 'browntagserver.com';
 
         positioning = container.css('position');
         if(positioning !== 'relative' && positioning !== 'absolute') {
@@ -68,7 +74,7 @@
         });
 
         /**
-         * In demo.html, we have some testing buttons and sliders. The handlers are
+         * In demo.html (web app), we have some testing buttons and sliders. The handlers are
          * set up here.
          * @method setUpTestingHandlers
          */
@@ -117,7 +123,7 @@
             });
         }
 
-        setUpTestingHandlers();
+        !Windows && setUpTestingHandlers();
         init();
     }
 
@@ -131,33 +137,34 @@
                 'js/raphael.js',
                 'js/tagInk.js',
                 'js/RIN/web/lib/rin-core-1.0.js'
-            ],
+        ],
             i,                                                // index
             oHead,                                            // head element
             oScript,                                          // script element
             oCss,                                             // link element
             tagContainer,                                     // div containing TAG
+            tagPath = tagPath || '';
 
+        if(!Windows) { // TODO MERGING get rid of this conditional, since win8 app should use gruntfile, too
+            if(tagPath.length > 0 && tagPath[tagPath.length - 1] !== '/') {
+                tagPath += '/';
+            }
 
-        tagPath = tagPath || '';
-        if(tagPath.length > 0 && tagPath[tagPath.length - 1] !== '/') {
-            tagPath += '/';
+            // load scripts
+            oHead = document.getElementsByTagName('head').item(0);
+            for (i = 0; i < TAGSCRIPTS.length; i++) {
+                oScript = document.createElement("script");
+                oScript.type = "text/javascript";
+                oScript.src = tagPath + TAGSCRIPTS[i];
+                oHead.appendChild(oScript);
+            }
+
+            // load stylesheet
+            oCss = document.createElement("link");
+            oCss.rel = "stylesheet";
+            oCss.href = tagPath+"css/TAG.css";
+            oHead.appendChild(oCss);
         }
-
-        // load scripts
-        oHead = document.getElementsByTagName('head').item(0);
-        for (i = 0; i < TAGSCRIPTS.length; i++) {
-            oScript = document.createElement("script");
-            oScript.type = "text/javascript";
-            oScript.src = tagPath + TAGSCRIPTS[i];
-            oHead.appendChild(oScript);
-        }
-
-        // load stylesheet
-        oCss = document.createElement("link");
-        oCss.rel = "stylesheet";
-        oCss.href = tagPath+"css/TAG.css";
-        oHead.appendChild(oCss);
 
         tagContainer = $('#tagRoot');
 
@@ -165,7 +172,7 @@
 
         // set up idle timer restarting
         $('body').on('click.idleTimer', function() {
-            TAG.Util.IdleTimer.restartTimer();
+            // TODO merging TAG.Util.IdleTimer.restartTimer();
         });
 
         // if the user specified the tourData API parameter, load into the corresponding tour
@@ -192,7 +199,7 @@
                 });
             });
         } else { // otherwise, load to start page
-            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.name = 1; // TODO merging      TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
 
             TAG.Layout.StartPage(null, function (page) {
