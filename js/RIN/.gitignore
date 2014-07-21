@@ -1,0 +1,112 @@
+#webstorm files
+*.idea
+
+#web build files
+web/js/rin.js
+
+#Sublime files
+*.sublime-*
+
+#OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+#Visual Studio files
+*.[Oo]bj
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.sdf
+*.opensdf
+*.unsuccessfulbuild
+ipch/
+obj/
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+Ankh.NoLoad
+
+#Tooling
+_ReSharper*/
+*.resharper
+[Tt]est[Rr]esult*
+
+#Project files
+[Bb]uild/
+
+#Subversion files
+.svn
+
+# Office Temp Files
+~$*
+
+# VI temp files
+*~
+
+#NuGet
+packages/
+
+#ncrunch
+*ncrunch*
+*crunch*.local.xml
+
+# Sublime project files
+rin.sublime-*
+
+# Mongoose web server
+mongoose-*.exe
+
+# Ignore compiled files
+web/lib/rin-core-*.js
+web/lib/rin-experiences-*.js
+web/lib/pano-viewer.js
+web/systemResources/themeResources/rin.css
+web/systemResources/themeResources/rinTemplates.htm
+
+# Ignore TypeScript files other than .js
+*.js.map
+src/*/*.min.js
+web/tests/*/*.min.js
+
+# Ignore Node.js modules
+node_modules
+
+# Test narratives
+web/narratives/privateTest/*
+
+# Narratives copied from RIN web directory into Everest web
+everest/web/rin/narratives/everest3
+everest/web/rin/narratives/everest3m
+
+# Panoramic viewer
+js3d.js
+js3d.min.js
+jsmath.js
+jsmath.min.js
+jspanoviewer.js
+jsstreetsideviewer.js
+panoviewer/build/style.css
+
+# Blend backup files
+*.blend?
+
+# Production PSD
+everest/psd/*/*.png
+everest/psd/map/*/*.png
+everest/psd/*/*.less
+
+
