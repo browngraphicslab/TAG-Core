@@ -329,7 +329,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         serverSetUpContainer.on('click', function() {
-            serverSaveButton = TAG.Util.UI.ChangeServerDialog();
+            TAG.Util.UI.ChangeServerDialog();
         });
 
         serverTagBuffer.on('click', function (evt) {

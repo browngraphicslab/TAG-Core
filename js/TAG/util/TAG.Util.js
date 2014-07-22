@@ -1879,6 +1879,7 @@ TAG.Util.UI = (function () {
             }
         });
 
+        /* TODO merging
         TAG.Telemetry.register(serverDialogInput, 'keydown', 'change_server', function(tobj, evt) {
             if(evt.which !== 13) {
                 return true;
@@ -1886,6 +1887,7 @@ TAG.Util.UI = (function () {
             tobj.custom_3 = localStorage.ip;
             tobj.custom_4 = serverDialogInput.val();
         });
+        */
 
         var serverDialogContact = $(document.createElement('div'));
         serverDialogContact.css({ 'margin-top': '10%' , 'color':'white','text-align': 'center'  });
@@ -1996,10 +1998,12 @@ TAG.Util.UI = (function () {
 
         serverSaveButton.on('click', saveClick);
 
+        /* TODO merging
         TAG.Telemetry.register(serverSaveButton, 'click', 'change_server', function(tobj, evt) {
             tobj.custom_3 = localStorage.ip;
             tobj.custom_4 = serverDialogInput.val();
         });
+        */
 
         var serverCircle = $(document.createElement('img'));
         serverCircle.css({

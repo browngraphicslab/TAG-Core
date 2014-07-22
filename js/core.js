@@ -4,7 +4,7 @@
  * This file is responsible for performing initial setup. Please see the comments for load
  * and init below.
  */
-(function () {
+(function () { // TODO merging: need anything else in here for win8 app (compare with its core.js)
     "use strict";
 
     if (Windows) {
@@ -57,11 +57,13 @@
         h = container.height();
         l = 0;
 
-        if(w/h > 16/9) { // constrain width or height depending on the embedding dimensions
-            l = (w - 16/9*h)/2;
-            w = 16/9 * h;
-        } else {
-            h = 9/16 * w;
+        if (!Windows) {
+            if (w / h > 16 / 9) { // constrain width or height depending on the embedding dimensions
+                l = (w - 16 / 9 * h) / 2;
+                w = 16 / 9 * h;
+            } else {
+                h = 9 / 16 * w;
+            }
         }
 
         tagRoot.css({
