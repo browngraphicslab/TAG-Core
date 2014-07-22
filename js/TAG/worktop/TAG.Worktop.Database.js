@@ -31,7 +31,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
-            url: ['Name', 'Title', 'Artist', 'Year', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration'],
+            url: ['Name', 'Title', 'Artist', 'Year', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
             body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration']
         },
         tour: {
@@ -39,7 +39,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'Content', 'RelatedArtworks']
         },
         hotspot: {
-            url: ['Name', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'LinqType', 'Thumbnail'],
+            url: ['Name', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'LinqType', 'Thumbnail', "Converted"],
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         feedback: {
@@ -108,10 +108,15 @@ TAG.Worktop.Database = (function () {
         getMuseumOverlayTransparency: getMuseumOverlayTransparency,
         getLogoBackgroundColor: getLogoBackgroundColor,
         getMuseumBackgroundColor: getMuseumBackgroundColor,
+        getBackgroundColor: getMuseumBackgroundColor, // TODO merging
         getMuseumBackgroundOpacity: getMuseumBackgroundOpacity,
+        getBackgroundOpacity: getMuseumBackgroundOpacity, // TODO merging
         getMuseumFontFamily: getMuseumFontFamily,
+        getFontFamily: getMuseumFontFamily, // TODO merging
         getMuseumPrimaryFontColor: getMuseumPrimaryFontColor,
+        getPrimaryFontColor: getMuseumPrimaryFontColor, // TODO merging
         getMuseumSecondaryFontColor: getMuseumSecondaryFontColor,
+        getSecondaryFontColor: getMuseumSecondaryFontColor, // TODO merging
         getBaseFontSize: getBaseFontSize,
         getOptionalFeatures: getOptionalFeatures,
         getCustomFont: getCustomFont,
@@ -144,7 +149,9 @@ TAG.Worktop.Database = (function () {
         getVersion: getVersion,
         getDoq: getDoq,
         changePass: changePass,
-
+        getConvertedCheck: getConvertedCheck, //video conversion
+        getConvertedVideoCheck: getConvertedVideoCheck, //video conversion
+        convertVideo: convertVideo,
         // DELETE
         deleteDoq: deleteDoq,
         deleteLinq: deleteLinq,
@@ -428,6 +435,32 @@ TAG.Worktop.Database = (function () {
             null,
             { success: convertToTextHandler(success), unauth: unauth, error: error },
             true);
+    }
+    //check for files. 
+    function getConvertedCheck(success, error, fileName) {
+        asyncRequest(
+            'GET',
+            'ConvertedCheck',
+            { "FileName": fileName },
+            null,
+            { success: convertToTextHandler(success), error: error });
+    }
+
+    function getConvertedVideoCheck(success, error, guid) {
+        asyncRequest(
+            'GET',
+            'ConvertedVideoCheck',
+            { "guid": guid },
+            null,
+            { success: convertToTextHandler(success), error: error });
+    }
+    function convertVideo(success, error, newFileName, fileExtension, baseFileName, doq) {
+        asyncRequest(
+            'GET',
+            'ConvertVideo',
+            { "FileName": newFileName, "Extension": fileExtension, "BaseFileName": baseFileName, "Identifier": doq },
+            null,
+            { success: convertToTextHandler(success), error: error });
     }
 
     //////////////////
@@ -1728,7 +1761,7 @@ TAG.Worktop.Database = (function () {
     // create image hotspot
     //function createHotspot(creatorID, artworkGUID, onSuccess, onFail, onError) {
     //    if (onSuccess) {
-    //        var url = _db.getSecureURL() + "/?Type=CreateHotspot&Guid=" + creatorID + "&Guid2=" + artworkGUID + "&token=" + TAG.Auth.getToken();
+    //        var url = _db.getSecureURL() + "/?Type=CreateHotspot&Guid=" + creatorID + "&Guid2=" + artworkGUID + "&token=" + LADS.Auth.getToken();
 
     //        var request = $.ajax({
     //            url: url,
@@ -2046,5 +2079,4 @@ TAG.Worktop.Database = (function () {
             return fn.apply(null, passedArgs);
         }
     }
-
 })();
