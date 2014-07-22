@@ -2,7 +2,7 @@ window.ITE = window.ITE || {};
 
 ITE.Player = function (options) { //acts as ITE object that contains the orchestrator, etc
    var  orchestrator            = new ITE.Orchestrator(this),
-
+        self = this,
         playerConfiguration = {
                 attachVolume:               true,
                 attachLoop:                 true,
@@ -14,7 +14,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 autoPlay:                   false,
                 autoLoop:                   false,
                 setMute:                    false,
-                setInitVolume:              100,
+                setInitVolume:              1,
                 allowSeek:                  true,
                 setFullScreen:              false,
                 setStartingOffset:          0,
@@ -33,28 +33,25 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     bottomContainer.append(buttonContainer);
 
     //Buttons
-    var volumeButton,
-        volumeLevel,
-        playPauseButton,
-        loopButton,
-        progressBar,
-        fullScreenButton,
-        progressIndicator,
+    var volumeButton        = $(document.createElement("img")),
+        volumeLevel         = $(document.createElement("img")),
+        playPauseButton     = $(document.createElement("img")),
+        loopButton          = $(document.createElement("img")),
+        progressBar         = $(document.createElement("div")),
+        fullScreenButton    = $(document.createElement("img")),
+        progressIndicator   = $(document.createElement("div")),
 
     //Other atributes
-        currentVolumeLevel, //Percentage
         timeOffset,
         isMuted,
         isLooped,
         isFullScreen,
 
     //Other miscellaneous variables
-        Utils               = new ITE.Utils();
-
+        Utils = new ITE.Utils();
     this.Orchestrator = orchestrator;
 
     var onLoadPlayerEvent = new ITE.PubSubStruct();
-    // onLoadPlayerEvent.subscribe(this.Orchestrator.load, "loadTourObj", this.Orchestrator);
     this.onTourEndEvent = new ITE.PubSubStruct();
 
 
@@ -71,8 +68,13 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
         this.playerConfiguration    = playerConfiguration; 
         this.playerParent           = playerParent;
+        self.currentVolumeLevel     = playerConfiguration.setInitVolume; // Value between 0 and 1
+        self.previousVolumeLevel    = self.currentVolumeLevel;
 
         //Attaches all necessary UI details of the player including controls to the parentEle
+
+        this.playerParent.append(ITEHolder);
+
         if (!options.hideControls){
             attachVolume();
             attachPlay();
@@ -82,7 +84,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             attachProgressIndicator();
         };
 
-        this.playerParent.append(ITEHolder);
         //onLoadPlayerEvent.publish(tourObj);
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
@@ -94,23 +95,22 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function attachVolume() {
         if (playerConfiguration.attachVolume) {
-            currentVolumeLevel = playerConfiguration.setInitVolume;
             var volumeContainer = $(document.createElement("div"))
                 .addClass("volumeContainer");
 
             var volumeButtonContainer = $(document.createElement("div"))
                 .addClass("volumeButtonContainer");
 
-                volumeButton = $(document.createElement("img"))
-                .addClass("volumeButton")
-                .attr("src", "ITEPlayerImages/volume.png")
-                .on("click", toggleMute);
+            volumeButton.addClass("volumeButton")
+            .attr("src", "ITEPlayerImages/volume.svg")
+            .on("click", toggleMute);
 
             var volumeLevelContainer = $(document.createElement("div"))
                 .addClass("volumeLevelContainer")
                 .on({
                     "click": function(e){
-                        setVolume(e);
+                        var height = Math.abs(e.pageY - volumeLevel.parent().offset().top - volumeLevel.parent().height())/100;
+                        setVolume(height);
                     },
                     "mousedown": function(e){
                         volumeLevelContainer.dragging = true;
@@ -128,7 +128,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
                 volumeLevel = $(document.createElement("div"))
                     .addClass("volumeLevel");
-
             buttonContainer.append(volumeContainer);
             volumeContainer.append(volumeButtonContainer)
                            .append(volumeLevelContainer);
@@ -149,9 +148,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var playPauseButtonContainer = $(document.createElement("div"))
                 .addClass("playPauseButtonContainer");
 
-                playPauseButton = $(document.createElement("img"))
-                .addClass("playPauseButton")
-                .attr("src", "ITEPlayerImages/pause.png")
+                playPauseButton.addClass("playPauseButton")
+                .attr("src", "ITEPlayerImages/pause.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
@@ -172,8 +170,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var loopButtonContainer = $(document.createElement("div"))
                 .addClass("loopButtonContainer");
 
-                loopButton = $(document.createElement("img"))
-                .addClass("loopButton")
+                loopButton.addClass("loopButton")
                 .attr("src", "ITEPlayerImages/loop.svg")
                 .on("click", toggleLoop);
 
@@ -212,8 +209,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                     }
                 });
 
-            progressBar = $(document.createElement("div"))
-                .addClass("progressBar")
+            progressBar.addClass("progressBar")
 
             bottomContainer.append(progressBarContainer);
             progressBarContainer.append(progressBar);
@@ -231,9 +227,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var ProgressIndicatorContainer = $(document.createElement("div"))
                 .addClass("progressIndicatorContainer");
 
-                progressIndicator = $(document.createElement("div"))
-                .addClass("progressIndicator")
-                .innerHTML = "01:04";
+            progressIndicator.addClass("progressIndicator")
+            .innerHTML = "01:04";
 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
@@ -251,10 +246,9 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var fullScreenButtonContainer = $(document.createElement("div"))
                 .addClass("fullScreenButtonContainer");
 
-                fullScreenButton = $(document.createElement("img"))
-                .addClass("fullScreenButton")
-                .attr("src", "ITEPlayerImages/fullScreen.png")
-                .on("click", toggleFullScreen);
+            fullScreenButton.addClass("fullScreenButton")
+            .attr("src", "ITEPlayerImages/fullScreen.svg")
+            .on("click", toggleFullScreen);
 
             buttonContainer.append(fullScreenButtonContainer);
             fullScreenButtonContainer.append(fullScreenButton);
@@ -309,7 +303,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function play() {
         orchestrator.play();
         // console.log("Tour is playing")
-        playPauseButton.attr("src", "ITEPlayerImages/pause.png")
+        playPauseButton.attr("src", "ITEPlayerImages/pause.svg")
     };
 
 
@@ -321,7 +315,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function pause() {
         orchestrator.pause();
         // console.log("Tour is paused")
-        playPauseButton.attr("src", "ITEPlayerImages/play.png")
+        playPauseButton.attr("src", "ITEPlayerImages/play.svg")
     };
 
     /*
@@ -347,12 +341,18 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * I/P:   volumeLevel	updated volume level
     * O/P:   none
     */ 
-    function setVolume(e) {
+    function setVolume(newVolume) {
+        newVolume > 1 ? newVolume = 1 : null
+        if (isMuted){
+            unMute();
+        }
         volumeLevel.css({
-            height : Math.abs(e.pageY - volumeLevel.parent().offset().top - volumeLevel.parent().height())
+            height : newVolume * 100 + "%"
         });
-        currentVolumeLevel = volumeLevel.height()*100/(volumeLevel.parent().height());
-        //orchestrator.setVolume(newVolumeLevel);
+        volumeButton.attr("src", "ITEPlayerImages/volume.svg");
+        self.previousVolumeLevel = self.currentVolumeLevel   // Reference to previous volume level for volume control in video/audio tracks
+        self.currentVolumeLevel = newVolume;
+        orchestrator.setVolume(self.currentVolumeLevel);
 
         // console.log("volume set to " + currentVolumeLevel +  "%")
     };
@@ -373,9 +373,10 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function mute(){
         isMuted = true;
-        // console.log("tour is muted")
+        volumeButton.attr("src", "ITEPlayerImages/volume0.svg")
         volumeButton.css("opacity" , ".5")
-        volumeLevel.css("height" , "0")
+        volumeLevel.css("opacity" , "0")
+        orchestrator.toggleMute(true);
     }
 
     /*
@@ -385,9 +386,10 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function unMute(){
         isMuted = false;
-        // console.log("tour is not muted")
-        volumeButton.css("opacity" , "1")
-        volumeLevel.css("height" , currentVolumeLevel*(volumeLevel.parent().height())/100 + "%")
+        volumeButton.attr("src", "ITEPlayerImages/volume.svg");
+        volumeButton.css("opacity" , "1");
+        volumeLevel.css("opacity" , "1")
+        orchestrator.toggleMute(false);
     }
 
 //FULL SCREEN
@@ -467,10 +469,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.toggleMute         = toggleMute;
     this.toggleLoop         = toggleLoop;
     this.toggleFullScreen   = toggleFullScreen;
-    this.currentVolumeLevel = currentVolumeLevel;
     this.timeOffset         = timeOffset;
     this.isMuted            = isMuted;
     this.isLooped           = isLooped;
     this.isFullScreen       = isFullScreen;
 };
-

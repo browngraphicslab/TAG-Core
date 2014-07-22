@@ -8,7 +8,7 @@ ITE.PubSubStruct = function() {
 
     this.unsubscribe = function (id) {
         delete callbackItems[id];
-     };
+    };
 
      this.publish = function (eventArgs, isAsync) {
         for (var id in callbackItems) {

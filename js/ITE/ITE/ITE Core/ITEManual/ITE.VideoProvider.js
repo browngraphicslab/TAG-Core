@@ -19,17 +19,15 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	self.status 		= "loading";
 	self.savedState		= keyframes[0];
 	self.animation;
+	self.audioAnimation;
 
 	this.trackInteractionEvent 	= new ITE.PubSubStruct();
-	interactionHandlers 		= {},
-	movementTimeouts 			= [],
-	this.trackData   			= trackData;
-
+	var interactionHandlers 	= {},
+	movementTimeouts 			= [];
     //DOM related
     var _video,
     	_UIControl,
     	_videoControls;
-
 
 	//Start things up...
     initialize()
@@ -59,18 +57,21 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		for (i=1; i<keyframes.length; i++) {
 			keyframeData={
 						  "opacity"	: keyframes[i].opacity,
-						  "top"		: (500*keyframes[i].pos.y/100) + "px",
-						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
-						  "width"	: (1000*keyframes[i].size.x/100) + "px",
-						  "height"	: (500*keyframes[i].size.y/100) + "px"
+						  "pos" : {
+						  	"top"	: (500*keyframes[i].pos.y/100) + "px",
+						  	"left"	: (1000*keyframes[i].pos.x/100) + "px"
+						  },
+						  "size" : {
+						  	"width"	: (1000*keyframes[i].size.x/100) + "px"
+						  },
+						  "volume"	: keyframes[i].volume
 						};
 			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
 
 		//Attach Handlers
-		attachHandlers()
-
+		attachHandlers() 
 	};
 
 
@@ -84,8 +85,8 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_video.attr({
-			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
-			"type" 	: this.trackData.type
+			"src"	: "../../Assets/TourData/" + self.trackData.assetUrl,
+			"type" 	: self.trackData.type
 		})
 
 		_videoControls.load()
@@ -108,14 +109,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 			time			: self.taskManager.timeManager.getElapsedOffset(),
 			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
 			pos : {
-				x		: _UIControl.position().left,
-				y 		: _UIControl.position().top
+				left		: _UIControl.position().left,
+				top 		: _UIControl.position().top
 			},
 			size: {
-				height	: _UIControl.height(),
 				width	: _UIControl.width()
 			},
-			videoOffset	: _videoControls.currentTime
+			videoOffset	: _videoControls.currentTime,
+			volume		: _videoControls.volume/self.player.currentVolumeLevel
 		};	
 		return self.savedState;
 	};
@@ -127,12 +128,13 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	*/
 	this.setState = function(state){
 		_UIControl.css({
-			"left":			state.pos.x,
-			"top":			state.pos.y,
-			"height":		state.size.height,
+			"left":			state.pos.left,
+			"top":			state.pos.top,
 			"width":		state.size.width,
 			"opacity":		state.opacity
 		});
+		console.log(state.volume)
+		_videoControls.volume = state.volume*self.player.currentVolumeLevel;
 		state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
 	};
 
@@ -151,8 +153,48 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
 		this.getState();
 		self.animation.kill();
+		self.audioAnimation.stop();
 		_videoControls.pause()
 		_videoControls.setAttribute("controls", "controls")
+	}
+
+
+	/* 
+	* I/P: newVolume 	 new volume set by user via UI
+	* Sets the current volume to the newVolume * value from keyframes, and then animates the audio to the next keyframe 
+	* O/P: none
+	*/
+	this.setVolume = function(newVolume){
+		if (newVolume === 0) {
+			this.toggleMute()
+		} else {	
+		//Duration of current time to next keyframe
+			var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();
+	
+			//Set volume to newVolume * value from keyframes
+			_videoControls.volume = _videoControls.volume*newVolume/self.player.previousVolumeLevel;
+	
+			if (self.taskManager.status === "playing"){
+				//Stop current animation
+				self.audioAnimation.stop();
+			
+				//Animate to the next keyframe
+				self.audioAnimation =_video.animate({
+					volume: self.currentAnimationTask.nextKeyframeData.volume*newVolume
+				}, duration*1000);
+			}
+		}
+	};
+
+
+
+	/* 
+	* I/P: isMuted 	 boolean, whether or not tour is now muted
+	* mutes or unmutes tour
+	* O/P: none
+	*/
+	this.toggleMute = function(isMuted){
+		isMuted? _videoControls.muted = true : _videoControls.muted = false;
 	}
 
 	/* 
@@ -161,9 +203,18 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	O/P: none
 	*/
 	this.animate = function(duration, state){
-		self.animation = TweenLite.to(_UIControl, duration, state);		
+		self.animation = TweenLite.to(_UIControl, duration, {
+			"left":			state.pos.left,
+			"top":			state.pos.top,
+			"width":		state.size.width,
+			"opacity":		state.opacity
+		});
 		self.animation.play();
+		self.audioAnimation =_video.animate({
+			volume: state.volume*self.player.currentVolumeLevel
+		}, duration*1000);
 	};
+
 
    /** 
 	* I/P: none

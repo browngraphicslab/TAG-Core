@@ -65,7 +65,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 			this.animate(targetTime - this.savedState.time, data);
 			this.savedState = null;	
 		} else {
-		//Animates to the next keyframe
+			//Animates to the next keyframe
 			this.animate(Math.abs(targetTime - this.taskManager.timeManager.getElapsedOffset()), data);
 		}
 	// // Set current status to “played”

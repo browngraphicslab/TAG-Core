@@ -64,9 +64,9 @@ ITE.TaskManager = function() {
 
 	//start the scheduler on current tasks
 	this.play = function() {
-		if (this.status === "paused"){
+		if (self.status === "paused"){
 
-			this.status = "playing";
+			self.status = "playing";
 
 			this.scheduleNextTasks();
 			for (var i=0; i<this.ongoingTasks.length; i++){
@@ -83,7 +83,7 @@ ITE.TaskManager = function() {
 	//pause the scheduler
 	this.pause = function() {
 		this.timeManager.stopTimer();
-		this.status = "paused"
+		self.status = "paused"
 		clearTimeout(this.timerId);
 		this.timerId = -1;
 		for (var i=0; i<this.ongoingTasks.length; i++){

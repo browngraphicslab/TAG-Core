@@ -57,9 +57,12 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
 		//_viewer is the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
-			id 			 : "DeepZoomHolder",
-			prefixUrl	 : "../../Dependencies/openseadragon-bin-1.1.1/images/",
-			zoomPerClick : 1
+			id 			 		: "DeepZoomHolder",
+			prefixUrl	 		: "../../Dependencies/openseadragon-bin-1.1.1/images/",
+			zoomPerClick 		: 1,
+			minZoomImageRatio	: .5,
+			maxZoomImageRatio	: 2,
+			visibilityRatio		: .2
 		})
         _viewer.setMouseNavEnabled(false);
         _viewer.clearControls();
@@ -148,7 +151,6 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 			// If tour was paused simply and has not been manipulated, just start it from where it was before 
 			else {
 				self.animate(targetTime - self.savedState.time, data);
-				self.savedState = null;			
 			}
 		} 
 		// If "play" is being called from taskmanager, just start animating to the next keyframe
@@ -236,8 +238,10 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
      */
     function mediaScroll(scale, pivot) {
     	(self.orchestrator.status === 1) ? self.player.pause() : null
+     	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
     	resetSeadragonConfig()
       	_viewer.viewport.zoomBy(scale, _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y)), false);
+    	_viewer.viewport.applyConstraints();
     }
    
 
@@ -247,35 +251,35 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	*/
     function attachHandlers() {
 
-        // Allows asset to be dragged, despite the name
-        TAG.Util.disableDrag(_deepZoom);
+        // // Allows asset to be dragged, despite the name
+        // TAG.Util.disableDrag(_deepZoom);
 
-        _deepZoom.on("mousedown", function() {
-        	console.log("mouse down")
-        })
-        _deepZoom.on("mouseup", function() {
-        	console.log("mouse up")
-        })
-        _deepZoom.on("mousemove", function() {
-        	console.log("mouse move")
-        })
-        _deepZoom.on("click", function() {
-        	console.log("click")
-        })
+        // _deepZoom.on("mousedown", function() {
+        // 	console.log("mouse down")
+        // })
+        // _deepZoom.on("mouseup", function() {
+        // 	console.log("mouse up")
+        // })
+        // _deepZoom.on("mousemove", function() {
+        // 	console.log("mouse move")
+        // })
+        // _deepZoom.on("click", function() {
+        // 	console.log("click")
+        // })
 
-        _viewer.addHandler("container-release", function() {
-        	console.log("mouseup: " + _deepZoom.mouseup)
-        	console.log("mousedown: " + _deepZoom.mousedown)
+        // _viewer.addHandler("container-release", function() {
+        // 	console.log("mouseup: " + _deepZoom.mouseup)
+        // 	console.log("mousedown: " + _deepZoom.mousedown)
 
-        	_deepZoom.mouseup()
-        })
+        // 	_deepZoom.mouseup()
+        // })
 
-        _mouseTracker.releaseHandler = function(){
-        	console.log("Mouse tracker worked!! release")
-        }
-        _mouseTracker.pressHandler = function(){
-        	console.log("Mouse tracker worked!! press")
-        }
+        // _mouseTracker.releaseHandler = function(){
+        // 	console.log("Mouse tracker worked!! release")
+        // }
+        // _mouseTracker.pressHandler = function(){
+        // 	console.log("Mouse tracker worked!! press")
+        // }
 
         // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
 
