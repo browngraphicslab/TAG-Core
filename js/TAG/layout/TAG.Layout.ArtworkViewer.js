@@ -142,6 +142,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }   
         });
         
+        TAG.Telemetry.register(slideButton,'click','seadragon_button_panel_toggled',function(tobj){
+            tobj.custom_1 = doq.Name;
+            tobj.custom_2 = doq.Identifier;
+        });
         container.append(slideButton);
         container.append(createButton('leftControl',  tagPath+'images/icons/zoom_left.svg',  D_PAD_LEFT,    D_PAD_TOP+14));
         container.append(createButton('upControl',    tagPath+'images/icons/zoom_up.svg',    D_PAD_LEFT+12, D_PAD_TOP+2));
@@ -202,7 +206,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             return img;
         }
-    
+        
+        TAG.Telemetry.register($("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"),'click','seadragon_control_clicked',function(tobj){
+            tobj.custom_1 = doq.Name;
+            tobj.custom_2 = doq.Identifier;
+        });
         
         /**
          * Keydown handler for artwork manipulation; wrapper around doManip that first
@@ -280,6 +288,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
 
 
+        
+
         $(document).on('keydown', function(evt) {
             if(containerFocused) {
                 switch(evt.which) {
@@ -346,6 +356,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         $('.seadragonManipButtoninout').on('mouseup mouseleave', function() {
             clearInterval(interval);
+        });
+
+        TAG.Telemetry.register($("[tabindex='-1']"),'keydown','seadragon_key_pressed',function(tobj){
+            if (containerFocused===false){
+                return true;
+            }
+             tobj.custom_1 = doq.Name;
+             tobj.custom_2 = doq.Identifier;
         });
     }
 
