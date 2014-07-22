@@ -1,0 +1,27 @@
+﻿.rin_LabelArtifactContainer
+{
+    background-color: rgba(0, 0, 0, 0.80);
+    color:white;
+    font-size:90%;
+    overflow-y:hidden;
+    line-height: 130%;
+    position:relative;
+    width:auto;
+    padding: 5px;
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none;
+    user-select:none;
+    cursor:default;
+    pointer-events:auto;
+}
+
+.rin_LabelArtifactLink
+{
+    background-color: rgba(0, 0, 255, 0.80);
+}
+
+.rin_LabelArtifactPopup
+{
+    background-color: rgba(0, 255, 0, 0.80);
+}
