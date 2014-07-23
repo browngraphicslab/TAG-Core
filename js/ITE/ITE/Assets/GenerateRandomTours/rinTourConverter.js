@@ -33,7 +33,7 @@ function rinTourConvertor(rintour){
                                 	
                                 		newkeyframe.time = json.experiences[key].experienceStreams[i].keyframes[k].offset;
                                 		if (typeof json.experiences[key].experienceStreams[i].keyframes[k].state.viewport !== "undefined"){
-		                                	newkeyframe.size = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.region.span;
+		                                	newkeyframe.size = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.span;
 		                                	newkeyframe.pos = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.region.center;
 	                                }
 	                                
