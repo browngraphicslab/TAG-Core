@@ -11,6 +11,7 @@
 	top 23%
 	left 34%
 	height 20px
+	cursor pointer
 
 #newCatalogRoot .arrowArea
 	display inline-block
@@ -19,7 +20,7 @@
 	width 5%
 	position absolute
 
-#newCatalogRoot #artistInfo
+#newCatalogRoot .artistInfo
 	color white
 	float left
 	position relative
@@ -129,15 +130,15 @@
 	font-size 1.1em
 	color white
 
-#newCatalogRoot #currentThumbnail
+#newCatalogRoot .currentThumbnail
 	wh 100%
 	border-radius 2%
 
-#newCatalogRoot #descSpan
+#newCatalogRoot .descSpan
 	text-overflow ellipsis
 	word-wrap break-word
 
-#newCatalogRoot #descText
+#newCatalogRoot .descText
 	color white
 	overflow-x hidden
 	overflow-y auto
@@ -172,7 +173,7 @@
 	text-align center
 	width 60%
 
-#newCatalogRoot #exploreIcon
+#newCatalogRoot .exploreIcon
 	float right
 	height 50%
 	margin-right 32%
@@ -180,7 +181,7 @@
 	top 25%
 	width auto
 
-#newCatalogRoot #exploreTab
+#newCatalogRoot .exploreTab
 	background-color rgba(0,0,0,0.4)
 	color white
 	//display none
@@ -191,7 +192,7 @@
 	left 0
 	width 100%  
 
-#newCatalogRoot #exploreText
+#newCatalogRoot .exploreText
 	float right
 	margin-right 3% 
 	position relative
@@ -214,7 +215,7 @@
 	vertical-align middle
 	width auto
 
-#newCatalogRoot #imgDiv
+#newCatalogRoot .imgDiv
 	width 90%
 	height 50%
 	position absolute
@@ -227,7 +228,7 @@
 	height 100%
 	width 25%
 
-#newCatalogRoot #infoText
+#newCatalogRoot .infoText
 	display inline-block
 	float top
 	top 100%        
@@ -256,8 +257,8 @@
 	display inline-block
 	font-size 150%
 	color rgb(170,170,170)
-	position relative
-	top -35%
+	position absolute
+	top 15%
 	height 50%
 	overflow hidden
 	text-align center
@@ -265,11 +266,22 @@
 	white-space nowrap
 	padding-left 2%
 	padding-right 2%
+	cursor pointer
 
 #newCatalogRoot #overlay
 	background-color rgba(0, 0, 0, 0.7)
 	position absolute
 	wh 100%
+
+#newCatalogRoot .previewTile
+	background-color rgba(0,0,0,0.9)
+	width 274px
+	top 0%
+	//display inline-block
+	height 100%
+	z-index 10001
+	position absolute
+	border-radius 2%
 
 #newCatalogRoot .rowButton
 	cursor pointer
@@ -308,8 +320,8 @@
 	width 25%
 
 #newCatalogRoot #selectedArtworkContainer
-	background-color rgba(0,0,0,0.65)
-	width 32%
+	background-color rgba(0,0,0,0.9)
+	overflow-x scroll
 	top 5%
 	height 90%
 	z-index 10000
@@ -334,6 +346,7 @@
 
 #newCatalogRoot .timeline
 	position absolute
+	overflow visible !important
 	width 100%
 	height 3%
 	top 45%
@@ -350,6 +363,7 @@
 	width 100%
 	height 3%
 	top 45%
+	overflow visible !important
 
 #newCatalogRoot .timelineDateLabel
 	position absolute
@@ -369,11 +383,12 @@
 #newCatalogRoot .timelineTick
 	position absolute
 	background-color rgb(170,170,170)
-	width .3%
+	width 2px
+	max-width 2px
 	height 100%
 	top 0%
 
-#newCatalogRoot #titleSpan
+#newCatalogRoot .titleSpan
 	line-height 100%
 	margin 2.5%
 	height 10%
@@ -410,12 +425,26 @@
 	right 5px
 	width 20%
 
-#newCatalogRoot #yearInfo
+#newCatalogRoot .yearInfo
 	color white
 	float right
 	position relative
 	text-align right
 	width 30%
+
+#newCatalogRoot .yearTextBox
+	visibility hidden
+	color white
+	border-top-left-radius 20%
+	background-color rgba(0,0,0,0.6)
+	padding-left 5%
+	padding-right 2%
+	text-align center
+	min-width 20%
+	right 0%
+	bottom 0%
+	height 15%
+	position absolute
 
 ::-webkit-scrollbar
 	width 10px

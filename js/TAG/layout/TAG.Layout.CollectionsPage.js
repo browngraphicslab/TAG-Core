@@ -13,7 +13,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     options = options || {}; // cut down on null checks later
 
     var // DOM-related
-        root                     = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
+        root                     = TAG.Util.getHtmlAjax('../tagcore/html/NewCatalog.html'), // use AJAX to load html from .html file
         infoDiv                  = root.find('#infoDiv'),
         tileDiv                  = root.find('#tileDiv'),
         collectionArea           = root.find('#collectionArea'),
@@ -49,6 +49,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         scrollPos        = options.backScroll || 0,     // horizontal position within collection's catalog
         currCollection   = options.backCollection,      // the currently selected collection
         currentArtwork   = options.backArtwork,         // the currently selected artwork
+        currentTag       = options.backTag,             // current sort tag for collection
+        multipleShown    = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
         
         // misc initialized vars
         loadQueue            = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
@@ -62,6 +64,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         infoSource           = [],                               // array to hold sorting/searching information
         timelineEventCircles = [],                               // circles for timeline
         timelineTicks        = [],                               // timeline ticks
+        scaleTicks           = [],                               // timeline scale ticks
+        artworkYears         = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
+        scaleTicksAppended   = false,                            // if scale ticks have been appended
         tileDivHeight        = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
         artworkShown         = false,                            // whether an artwork pop-up is currently displayed
         timelineShown        = true,                            // whether current collection has a timeline
@@ -80,6 +85,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
         fullMaxDisplayDate,             // maximum display date of full timeline
+        initTimelineWidth,              // initial width of timeline
+        initTimelineLeft,               // initial left position of timeline
+        currentTimeline,                // currently displayed timeline
+        currTimelineCircleArea,         // current timeline circle area
         toShowFirst,                    // first collection to be shown (by default)
         toursIn,                        // tours in current collection
         currentThumbnail,               // img tag for current thumbnail image
@@ -90,8 +99,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         artistInfo,                     // artist tombstone info div
         yearInfo,                       // year tombstone info div
         justShowedArtwork,              // for telemetry; helps keep track of artwork tile clicks
-        defaultTag,                     // default sort tag
-        currentTag;                     // current sort tag
+        defaultTag;                    // default sort tag
 
     // get things rolling
     init();
@@ -212,7 +220,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // Load collection
         if (currCollection) {
-            loadCollection(currCollection, scrollPos)();
+            loadCollection(currCollection, scrollPos, currentArtwork)();
         } else if (toShowFirst) {
             loadFirstCollection();
         }
@@ -282,7 +290,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
                 backArrowArea.addClass('arrowArea');
                 backArrowArea.css('left', '0%')
-                             .on('click',loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk));
+                             .on('click',function(){
+                                            return function(){
+                                                loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk)();
+                                                currentTag = null;
+                                            }
+                                        }());
                 collectionArea.append(backArrowArea);
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 backArrow.addClass('arrow');
@@ -290,8 +303,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                               .attr({
                                 'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
                                })
+                              .css('left','3%')
                               .html(prevTitle)
-                              .on('click', loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk));
+                              .on('click', function(){
+                                            return function(){
+                                                loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk)();
+                                                currentTag = null;
+                                            }
+                                        }());
                 TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
                     tobj.custom_1 = prevTitle;
                     tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
@@ -311,7 +330,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
                 nextArrowArea.addClass('arrowArea');
                 nextArrowArea.css('right', '0%')
-                             .on('click', loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk));
+                             .on('click', function(){
+                                            return function(){
+                                                loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
+                                                currentTag = null;
+                                            }
+                                        }());
                 collectionArea.append(nextArrowArea);
                 nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
                 nextArrow.addClass('arrow');
@@ -323,7 +347,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                               .css({
                                 'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
                               })
-                              .on('click', loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk));
+                              .on('click', function(){
+                                            return function(){
+                                                loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
+                                                currentTag = null;
+                                            }
+                                        }());
                 TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
                     tobj.custom_1 = nextTitle;
                     tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
@@ -364,7 +393,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             currentArtwork = artwrk || null;
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             scrollPos = sPos || 0;
-            getCollectionContents(currCollection, showArtwork(currentArtwork));
+            getCollectionContents(currCollection);
         }
     }
 
@@ -391,14 +420,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @param {Array} contents     array of doq objects for each of the contents of this collection
          */
         function contentsHelper(contents) {
-            var makeNoArtworksOptionBox;
-
-            if (!contents || !contents[0]) { // pops up box warning user there is no artwork in selected collection
-                noArtworksOptionBox = TAG.Util.UI.makeNoArtworksOptionBox();
-                root.append(noArtworksOptionBox);
-                $(noArtworksOptionBox).fadeIn(500);
-            }
-
             createArtTiles(contents);
             initSearch(contents);
             callback && callback();
@@ -468,7 +489,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function createArtTiles(artworks) {
         currentArtworks = artworks;
-        timelineShown ? currentTag = "Year" : currentTag = "Title";
+        if (!currentTag){
+            //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
+            timelineShown ? currentTag = "Year" : currentTag = "Title";
+        } 
         colorSortTags(currentTag);
         drawCatalog(currentArtworks, currentTag, 0);
     }
@@ -514,27 +538,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             h = catalogDiv.height() * 0.48;
             w = h * 1.4;
 
-            timelineEventCircles = [];
-            timelineTicks = [];
-            if (timelineShown){   
-                initTimeline(artworks);
-            } else {
-                bottomContainer.css('height', '85%');
-            }  
             tileDiv.empty();
             tileDivHeight = tileDiv.height();
 
             works = sortedArtworks.getContents();
             for (j = 0; j < works.length; j++) {
                 loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j));
-                loadQueue.add(function () {
-                    if(tileDiv.width() <= scrollPos) {
-                        tileDiv.animate({
-                            scrollLeft: scrollPos
-                        }, 0);
-                    }
-                });
             }
+            loadQueue.add(function(){
+                showArtwork(currentArtwork,1000,multipleShown && multipleShown)();
+            });
             tileDiv.css({'left': infoDiv.width()});
             if (infoDiv.width()===0){
                 tileDiv.css({'margin-left':'2%'});
@@ -542,7 +555,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileDiv.css({'margin-left':'0%'});
             }
             catalogDiv.append(tileDiv);
+    
+            timelineEventCircles = [];
+            timelineTicks = [];
+            scaleTicks = [];
+            artworkYears = {};
+            timelineArea.empty();
+            if (currentTimeline){
+                currentTimeline.stop(true, true);
+                currentArtwork = null;
+            }
+            if (currTimelineCircleArea){
+                currTimelineCircleArea.stop(true,true);
+            }
+            if (timelineShown){   
+                    initTimeline(artworks);
+            } else {
+                bottomContainer.css('height', '85%');
+            } 
         }
+
     }
 
     /**
@@ -559,6 +591,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artTitle  = $(document.createElement('div')),
                 artText   = $(document.createElement('div')),
                 tileImage = $(document.createElement('img')),
+                yearTextBox  = $(document.createElement('div')),
+                yearText,
                 tourLabel,
                 videoLabel;
 
@@ -567,6 +601,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tileImage.addClass('tileImage');
             artTitle.addClass('artTitle');
             artText.addClass('artText');
+            yearTextBox.addClass('yearTextBox');
 
             main.on('click', function () {
                 // if the idle timer hasn't started already, start it
@@ -575,8 +610,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     idleTimer.start();
                 }
                 //TO-DO add panning here 
-                showArtwork(currentWork)();
-                zoomTimeline(parseYear(currentWork), fullMinDisplayDate, fullMaxDisplayDate, 400);
+                showArtwork(currentWork,400,false)();
+                zoomTimeline(TAG.Util.parseDateToYear(currentWork.Metadata.Year), fullMinDisplayDate, fullMaxDisplayDate, 400);
                 justShowedArtwork = true;
             });
 
@@ -607,6 +642,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else if (tag === 'Artist') {
                 artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' : currentWork.Metadata.Artist);
             } else if (tag === 'Year') {
+                yearTextBox.css('visibility','visible');
+                yearText = TAG.Util.parseDateToYear(currentWork.Metadata.Year);
+                if (yearText<0){
+                    yearText = -yearText + ' BCE';
+                }
+                yearTextBox.text(currentWork.Type === 'Empty' ? '' :  yearText);
                 artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' :  TAG.Util.htmlEntityDecode(currentWork.Name));
             } else if (tag === 'Type') {
                 artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
@@ -622,7 +663,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 main.css('border', '1px solid rgba(255, 255, 255, 0.5)');
             }
             main.append(tileImage)
-                .append(artTitle);
+                .append(artTitle)
+                .append(yearTextBox);
 
             if (currentWork.Type === "Empty") {
                 tourLabel = $(document.createElement('img'))
@@ -645,7 +687,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             main.css({
                 'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER), 
                 'top' : Math.floor(i % 2) * (main.height() + TILE_BUFFER)
-            });
+            });       
         };
     }
 
@@ -681,10 +723,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         fullMinDisplayDate = minDate;
 
         //TO-DO: calculate and pass in numTicks based on number of years
-        
-        prepTimelineArea(minDate, maxDate);
-        prepTimelineCircles(avlTree, minDate, maxDate);
-
+        currentTimeline = prepTimelineArea(minDate, maxDate);
+        currTimelineCircleArea = prepTimelineCircles(avlTree, minDate, maxDate);
+        currentArtwork && zoomTimeline(TAG.Util.parseDateToYear(currentArtwork.Metadata.Year), fullMinDisplayDate, fullMaxDisplayDate, 400);
+  
         /**Helper function to prepare timeline area including 'ticks'
         * @method prepTimelineArea
         * @param  {Integer} minDate          minimum artwork date
@@ -695,7 +737,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         function prepTimelineArea(minDate, maxDate, numTicks){
             var timeline = $(document.createElement('div')),
                 i,
-                //TO-DO: constrain so numTicks can never be greater than 101
                 numTicks = numTicks ? numTicks : 101,
                 tick;
 
@@ -709,11 +750,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tick.css({
                     'left' : i/(numTicks-1)*100 + '%'
                 });
-                //Save ticks left position for zooming 
-                tick.leftPosition = tick.position().left;
                 timeline.append(tick);
                 timelineTicks.push(tick);
             }
+
+            initTimelineWidth = timeline.width();
+            initTimelineLeft = timeline.position().left;
             return timeline;
         }
 
@@ -746,7 +788,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
        
             while (curr&& curr.yearKey!==Number.POSITIVE_INFINITY){
                 if (!isNaN(curr.yearKey)){
-                    positionOnTimeline = parseInt(100*(curr.yearKey - minDate)/timeRange);
+                    positionOnTimeline = 100*(curr.yearKey - minDate)/timeRange;
 
                     //Create and append event circle
                     eventCircle = $(document.createElement('div'));                
@@ -761,7 +803,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                         //TO-DO: make panning happen at first too if it makes sense 
                                         //panTimeline(art.circle, minDate, maxDate);
                                         zoomTimeline(artworkCircles[art.Identifier].yearKey, fullMinDisplayDate, fullMaxDisplayDate, 400);
-                                        showArtwork(art)();
+                                        showArtwork(art,400,true)();
                                         artworkShown  = true;
                                         } 
                                     }      
@@ -769,7 +811,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     timelineCircleArea.append(eventCircle);
 
                     //Shift circles left by half their width so they are centered on ticks
-                    eventCircle.css('left', eventCircle.position().left - LEFT_SHIFT + 'px');
+                    //TO-DO: add this back in so that it works with new animations (all relative positioning)
+                    //eventCircle.css('left', eventCircle.position().left - LEFT_SHIFT + 'px');
 
                     //Artworks before year 0 are automatically given the 'BCE' tag
                     if (curr.yearKey<0){
@@ -784,17 +827,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             .addClass('timelineDateLabel');
                     eventCircle.append(timelineDateLabel);
 
-                    //Information for zooming:
-                    //TO-DO: make sure eventCircle isn't given any unneccessary pieces of info
-                    eventCircle.leftPosition = eventCircle.position().left;
                     eventCircle.yearKey = curr.yearKey;
-                    eventCircle.originalPosition = eventCircle.position().left;
                     eventCircle.timelineDateLabel = timelineDateLabel;
                     eventCircle.labelwidth = timelineDateLabel.width();
-                    eventCircle.artwork = art;
-                
+                    eventCircle.artwork = art;                    
                     timelineEventCircles.push(eventCircle);
                     artworkCircles[curr.artwork.Identifier] = eventCircle;
+                    
+                    if (!artworkYears[yearText]){
+                        artworkYears[yearText] = [curr.artwork];
+                    } else {
+                        artworkYears[yearText].push(curr.artwork);
+                    }
 
                     //Decide whether to display labels:
                     if (avlTree.findPrevious(curr) && artworkCircles[avlTree.findPrevious(curr).artwork.Identifier]){
@@ -812,55 +856,53 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             timelineDateLabel.css('visibility', 'visible');
                         } else{
                             timelineDateLabel.css('visibility', 'hidden');
-                        }
-                        if (curr.yearKey === fullMaxDisplayDate){
-                            timelineDateLabel.css('visibility','visible');
-                            if (circleOverlap){
-                                artworkCircles[prevNode.artwork.Identifier].timelineDateLabel.css('visibility','hidden');
-                            }
+                            if (curr.yearKey === fullMaxDisplayDate){
+                                timelineDateLabel.css('visibility','visible');
+                                if (circleOverlap){
+                                    artworkCircles[prevNode.artwork.Identifier].timelineDateLabel.css('visibility','hidden');
+                                }
+                            }               
                         } 
                     }
                 }
-            curr = avlTree.findNext(curr);
-            if(curr) { 
-                art = curr.artwork; 
+                curr = avlTree.findNext(curr);
+                if(curr) { art = curr.artwork; }
             }
-        }
-    };
+            return timelineCircleArea;
+        };
     };
 
 
     /** Zooms timeline to center on particular yearKey
      * @methdd zoomTimeline
-     * @param  {Number} yearKey          yearKey of clicked artwork to zoom in on.
+     * @param  {Number} yearKey          yearKey of clicked artwork to zoom in on. (if null, zooms back out to initial state)
      * @param  {Number} minDisplayDate   minimum date on timeline before (additional) zoom 
      * @param  {Number} maxDisplayDate   maximum date on timeline before (additional) zoom
      * @param  {Number} duration         duration of zoom animation
      */
     function zoomTimeline(yearKey, minDisplayDate, maxDisplayDate, duration){
         var initTimeRange,
-            initPercentOnTimeline,
+            width,
+            left,
+            originalScale,
+            newScale,
+            initTickSpacing,
+            newTickSpacing,
+            lastTickSpacing,
+            leftOffset,
+            shift,
+            minDatePos,
             beforeDiff,
             afterDiff,
             buffer,
-            minDisplayDate,
-            maxDisplayDate,
+            lastTimeRange,
             timeRange,
-            tickPercent,
-            yearKeyTickIndex = 0,
-            minPositionDistance = Number.MAX_VALUE,
-            firstTickIndex = 0,
-            positionDifference,
             numTicks=101,
             i,
             k,
             j,
-            timeline,
-            finalTickPositions,
             scaleTick,
-            fractionOnTimeline,
             positionOnTimeline,
-            timelineCircleArea,
             first = true,
             fullOverlap,
             position1,
@@ -870,10 +912,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         if (yearKey===0||yearKey){
 
-            initTimeRange = maxDisplayDate - minDisplayDate;
-            //TO-DO: add condition for if initTimeRange is 0. 
-            initPercentOnTimeline = parseInt(100*(yearKey - minDisplayDate)/initTimeRange);
+            lastTimeRange = maxDisplayDate - minDisplayDate;
 
+            //Calculate new min and max display date. 
             beforeDiff = Math.round(yearKey - minDisplayDate);
             afterDiff = Math.round(maxDisplayDate - yearKey);
             //Scale correctly if already zoomed in and clicking on first dot
@@ -896,174 +937,148 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         }
 
-        //TO-DO: sync up animation (have it occur for both ticks and circles in one call), try css3 annimations for comparison
+        //Info for zooming calculations
+        initTimeRange = fullMaxDisplayDate - fullMinDisplayDate;
+        originalScale = initTimeRange/100;
+        initTickSpacing = initTimelineWidth/100;
+        lastTickSpacing = currentTimeline.width()/(numTicks-1);
         
-        timelineArea.empty();
-        timeline = $(document.createElement('div'));
-        timeline.addClass('timeline');
-        timelineArea.append(timeline);
+        //Caculate new left position and width of timeline and timelineCircleArea (may be a better way to do some of these calculations)
+        if (yearKey===null){
+            width = initTimelineWidth;
+            left = initTimelineLeft;
+        } else {
+            if (timeRange<100){
+                newTickSpacing = lastTickSpacing*(lastTimeRange/timeRange);
+            } else {
+                newScale = timeRange/100;
+                newTickSpacing = initTickSpacing*(originalScale/newScale);
+            }   
+                width = newTickSpacing*100;
+                positionOnTimeline = ((yearKey - fullMinDisplayDate)/initTimeRange)*width;
+                minDatePos = ((minDisplayDate- fullMinDisplayDate)/initTimeRange)*width;
+                leftOffset = positionOnTimeline - minDatePos;
+                shift = leftOffset - timelineArea.width()/2;               
+                if (timeRange<100){
+                    //TO-Do: there is an issue with the left position calcuation for this situation, probably a better way to do this
+                    left = initTimelineLeft - minDatePos - shift - EVENT_CIRCLE_WIDTH/2;
+                } else {
+                    left = initTimelineLeft - minDatePos;
+                }
+        }
 
-        //Figure out tick index of first tick displayed and yearKey's tick
-        if (initTimeRange>=100){
-            yearKeyTickIndex = initPercentOnTimeline;
-        }else {
-            //TO-DO: put in print lines here and check for calculation erros
-            for (i=0; i<timelineTicks.length; i++){
-                if (timelineTicks[i].css('visibility')!=='hidden'){
-                    tickPercent = Math.round(100*timelineTicks[i].leftPosition/$(timeline).width());
-                    positionDifference = Math.abs(tickPercent - initPercentOnTimeline);
-                    if (positionDifference<minPositionDistance){
-                        minPositionDistance = positionDifference;
-                        yearKeyTickIndex = i;
+
+        if (scaleTicksAppended&&newTickSpacing<initTickSpacing*20||!yearKey){
+            for (k=0;k<scaleTicks.length;k++){
+                scaleTicks[k].remove();
+            }
+            scaleTicks = [];
+            scaleTicksAppended = false;
+        }
+
+        currentTimeline.stop(true,false);
+        currentTimeline.animate({
+            left: left + 'px',
+            width: width + 'px'},
+            duration, function(){
+                if (newTickSpacing>initTickSpacing*20&&yearKey){
+                    for (k=0; k<timelineTicks.length; k++){
+                        //TO-DO add more scale ticks once zoomed in far 
+                        scaleTick = $(document.createElement('div'));
+                        scaleTick.addClass('timelineTick');
+                        var scaleTickPercent = (timelineTicks[k].position().left + newTickSpacing/2)/width*100;
+                        scaleTick.css({
+                            left: scaleTickPercent + '%',
+                            // For testing: 
+                            //'background-color' : 'red'
+                        });
+                        currentTimeline.append(scaleTick);
+                        scaleTicks.push(scaleTick);
                     }
-                }
-            }
-            firstTickIndex = yearKeyTickIndex - timeRange/2;   
-        }
-
-        finalTickPositions = [];
-        
-        //Calculate final positions for timeline ticks:
-        i=0;
-        for (k=0; k<timelineTicks.length;k++){
-            timelineTicks[k].css({'visibility': 'visible'});
-            if (yearKey===null){
-                finalTickPositions[k] = parseInt((k/100)*$(timeline).width());
-            }
-            else { //if (k>=firstTickIndex && k<= firstTickIndex+timeRange){
-                fractionOnTimeline = i/(numTicks-1);
-                positionOnTimeline = parseInt(fractionOnTimeline*$(timeline).width());
-                finalTickPositions[k] = positionOnTimeline;
-                i++;
-            //}
-            //else {
-            //if (k<firstTickIndex || k> firstTickIndex+timeRange+1){
-                //timelineTicks[k].css({'visibility': "hidden"});
-            //}
-            }
-        }
-
-        //Append and move the ticks that we are using- others should zoom off accordingly
-        for (k=0; k<timelineTicks.length; k++){
-            timelineTicks[k].css({left:timelineTicks[k].leftPosition});
-            timeline.append(timelineTicks[k]);
-            $(timelineTicks[k]).animate({
-                left: finalTickPositions[k] + 'px'},
-                duration, function(){
-                timeline.append(timelineTicks[k]);
-            });
-            timelineTicks[k].leftPosition = finalTickPositions[k];
-        }
-
-        //Add in extra ticks for scaling at small time ranges
-        if (timeRange<5){
-            for (k=0;k<timelineTicks.length; k++){
-                if (k>=firstTickIndex&&k<=firstTickIndex+timeRange){
-                    scaleTick = $(document.createElement('div'));
-                    scaleTick.addClass('timelineTick');
-                    scaleTick.css({left: timelineTicks[k].leftPosition + $(timeline).width()/timeRange/2});
-                    timeline.append(scaleTick);
-                }
-            }
-        }
-
-        timelineCircleArea = $(document.createElement('div'));
-        timelineCircleArea.addClass('timelineCircleArea');
-        timelineArea.append(timelineCircleArea);
-        timelineCircleArea.overlapping = false;
-
-        
-        var finalCirclePositions = [];
-
-        //Calculate final positions for timeline circles:
-        for (k=0; k<timelineEventCircles.length; k++){
-            //zooming back out:
-            if (yearKey===null){
-                finalCirclePositions[k] = timelineEventCircles[k].originalPosition;
-            } else{
-                fractionOnTimeline = (timelineEventCircles[k].yearKey - minDisplayDate)/timeRange;
-                positionOnTimeline = parseInt(fractionOnTimeline*$(timeline).width());
-                positionOnTimeline = positionOnTimeline - LEFT_SHIFT;
-                finalCirclePositions[k] = positionOnTimeline;
-            } 
-        }
-        
-        for (i=0; i<timelineEventCircles.length; i++){
-                timelineEventCircles[i].css('left', timelineEventCircles[i].leftPosition);
-                timelineCircleArea.append(timelineEventCircles[i]);
-                $(timelineEventCircles[i]).animate({
-                    left: finalCirclePositions[i] + 'px'},
-                    duration, function(){
-                    timelineCircleArea.append(timelineEventCircles[i]);
-                });
-                timelineEventCircles[i].leftPosition = finalCirclePositions[i];
-                //First label displayed is always visible:
+                    scaleTicksAppended = true;
+                } 
+        });
+    
+        currTimelineCircleArea.overlapping = false;
+        currTimelineCircleArea.stop(true, false);
+        currTimelineCircleArea.animate({
+            left: left + 'px',
+            width: width + 'px'},
+            duration, function(){
+                for (i=0; i<timelineEventCircles.length; i++){
                 if (first){
                     timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
                 }
                 if (timelineEventCircles[i].yearKey>=minDisplayDate && timelineEventCircles[i].yearKey<=maxDisplayDate){
                     first = false;
                 }
+
                 //Check for any overlaps:
                 j = i-1;
-                if (j>=0 && timelineEventCircles[j].yearKey>=minDisplayDate){
-                    position1 = timelineEventCircles[j].leftPosition;
-                    position2 = timelineEventCircles[i]. leftPosition;
-                    labelwidth = timelineEventCircles[j].labelwidth;
+                if (j>=0 && timelineEventCircles[j].yearKey>=minDisplayDate && timelineEventCircles[i].yearKey<=maxDisplayDate){
+                    position1 = timelineEventCircles[j].position().left;
+                    position2 = timelineEventCircles[i].position().left;
+                    labelwidth = timelineEventCircles[j].timelineDateLabel.width();
                     fullOverlap = position1 === position2; 
                     if (!fullOverlap && (areOverlapping(position1, position2)||labelsAreOverlapping(position1,position2,labelwidth))){
-                        timelineCircleArea.overlapping = true;
+                        currTimelineCircleArea.overlapping = true;
                     } 
                 }
+                
                 //Decide whether to display labels:
                 while (j>0 && timelineEventCircles[j].timelineDateLabel.css('visibility')!=='visible' && timelineEventCircles[j].yearKey>= minDisplayDate){
                     j = j-1;
                 }
                 if (j>=0 && !first && timelineEventCircles[j].yearKey>= minDisplayDate){
-                    position1 = timelineEventCircles[j].leftPosition;
-                    position2 = timelineEventCircles[i]. leftPosition;
-                    labelwidth = timelineEventCircles[j].labelwidth;
+                    position1 = timelineEventCircles[j].position().left;
+                    position2 = timelineEventCircles[i].position().left;
+                    labelwidth = timelineEventCircles[j].timelineDateLabel.width();
+                    fullOverlap = position1 === position2;
                     if (!areOverlapping(position1, position2)&&!labelsAreOverlapping(position1, position2, labelwidth)){
                         timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
                     } else{
                         timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
-                        if (timelineEventCircles[i].yearKey=== yearKey && !fullOverlap){
+                        if (timelineEventCircles[i].yearKey === yearKey){
                             timelineEventCircles[i].timelineDateLabel.css('visibility','visible');
+                            if (fullOverlap){
+                                timelineEventCircles[j].timelineDateLabel.css('visibility','hidden');
+                            }
                         }
                         if (timelineEventCircles[i].yearKey === fullMaxDisplayDate){
                             timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
-                            timelineEventCircles[j].timelineDateLabel.css('visibility', 'hidden');
+                            if (labelsAreOverlapping(position1,position2)){
+                                timelineEventCircles[j].timelineDateLabel.css('visibility', 'hidden');
+                            }
                         }
                     }
-                    
                 }
-                timelineEventCircles[i].append(timelineEventCircles[i].timelineDateLabel);
-        }
-        
-        //Re-add on-click functions (they don't seem to stick around) TO-DO: define this somewhere else or pass in (factor out)
-        for (k=0; k<timelineEventCircles.length; k++){
-            art = timelineEventCircles[k].artwork;
-            timelineEventCircles[k].on('click', (function(art) {
+
+                //Re-add on-click functions. TO-DO: factor out. 
+                timelineEventCircles[i].unbind();
+                art = timelineEventCircles[i].artwork;
+                timelineEventCircles[i].on('click', (function(art) {
                                             return function() {
                                                 if (artworkShown === true && currentArtwork === art) {
+                                                    zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate);
                                                     hideArtwork(art)();
                                                     artworkShown = false;
                                                 } else {
-                                                    if (timelineCircleArea.overlapping){
-                                                        zoomTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate, 400);
+                                                    if (currTimelineCircleArea.overlapping){
+                                                        zoomTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate);
                                                     } else {
                                                         panTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate);
                                                     }
-                                                    showArtwork(art)();
+                                                    showArtwork(art,400,true)();
                                                     artworkShown  = true;
                                                 } 
                                             }      
                                         })(art));
-        }
-
+         
+                };
+        }); 
     }; 
 
-    /* Pans timeline to specific yearKey while maintaining current zoom level
+    /* Pans timeline to specific yearKey while maintaining current zoom level.
      * @param  {Number} yearKey         yearKey of circle/artwork to pan to
      * @param  {Number} minDisplayDate  minimum display date of timeline before panning
      * @param  {Number} maxDisplayDate  maximum display date of timeline before panning
@@ -1075,6 +1090,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         half = Math.round(timeRange/2);
         yearKey - half < fullMinDisplayDate ? minDisplayDate = minDisplayDate : minDisplayDate = yearKey - half;
         yearKey + half > fullMaxDisplayDate ? maxDisplayDate = maxDisplayDate : maxDisplayDate = yearKey + half;
+        //force zoomTimeline() to maintain same zoom level by passing in desired min and max date. 
         zoomTimeline(yearKey, minDisplayDate, maxDisplayDate, 400);
     }
 
@@ -1110,16 +1126,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         return function() {
             var sub = $('#selectedArtworkContainer');
             sub.css('display', 'none');
-            artworkCircles[artwork.Identifier] && artworkCircles[artwork.Identifier].css({
-                'height'           : '20px',
-                'width'            : '20px',
-                'background-color' : 'rgba(255, 255, 255, .5)',
-                'border-radius'    : '10px',
-                'top'              : '-8px'
-            });
-            artworkCircles[artwork.Identifier].timelineDateLabel && artworkCircles[artwork.Identifier].timelineDateLabel.css({
-                'color' : 'rgb(170,170,170)'  
-            });
+            if (artworkCircles[artwork.Identifier]){
+                artworkCircles[artwork.Identifier].css({
+                    'height'           : '20px',
+                    'width'            : '20px',
+                    'background-color' : 'rgba(255, 255, 255, .5)',
+                    'border-radius'    : '10px',
+                    'top'              : '-8px'
+                });
+                artworkCircles[artwork.Identifier].timelineDateLabel && artworkCircles[artwork.Identifier].timelineDateLabel.css({
+                    'color' : 'rgb(170,170,170)'  
+                });
+            }
             zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate, 800);
             catalogDiv.stop(true,false);
             catalogDiv.animate({scrollLeft: 0}, 1000);
@@ -1131,16 +1149,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * Shows an artwork as an outset box and shows name, description, etc
      * @method showArtwork
      * @param {doq} artwork     the artwork doq to be shown
-     *
+     * @param {Number} duration     duration of catalogDiv animations
+     * @param {showAllAtYear}       whether all of the artworks at a specific year should be shown
      */
-    function showArtwork(artwork) {
-      
+    function showArtwork(artwork, duration, showAllAtYear) {
         return function () {
             var rootWidth,
                 infoWidth,
                 tileWidth,
                 shift,
                 leftOffset,
+                previewWidth,
+                containerWidth,
+                newTile,
+                previewTile,
                 progressCircCSS,
                 timelineDateLabel,
                 circle,
@@ -1149,10 +1171,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if(!artwork) {
                 return;
             }
-
+            
             currentArtwork = artwork;
             artworkSelected = true;
             artworkShown = true;
+            multipleShown = showAllAtYear;
 
             //scroll catalogDiv to center the current artwork
             catalogDiv.stop(true,false);
@@ -1160,9 +1183,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             infoWidth = infoDiv.width();
             tileWidth = artworkTiles[artwork.Identifier].width();
             catalogDiv.animate({
-                //scrollLeft: artworkTiles[artwork.Identifier].position().left - root.width()/2 + $(infoDiv).width() + artworkTiles[artwork.Identifier].width()/2 - TILE_BUFFER
                 scrollLeft: artworkTiles[artwork.Identifier].position().left - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER
-                },400, function(){
+                },duration, function(){
                     //center selectedArtworkContainer over current artwork thumbnail
                     shift = (selectedArtworkContainer.width()-tileWidth)/2;
                     leftOffset = artworkTiles[artwork.Identifier].position().left + infoWidth - catalogDiv.scrollLeft();
@@ -1178,53 +1200,111 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         'display': 'inline',
                         'left' : leftOffset - shift
                     });
+                    if (!artwork.Metadata.Year){
+                        zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate, 800);
+                    }
             });
     
             // Set selected artwork to hide when anything else is clicked
             $(document).mouseup(function(e) {
                 var subject = selectedArtworkContainer;
                 if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length) {
-                    console.log("mouseupfn");
-                    console.log(e.target);
-                        hideArtwork(artwork)();
+                    if (artworkShown){
+                        hideArtwork(currentArtwork)();
+                    }
                 }
             });
 
             //Set up elements of selectedArtworkContainer
 
-            titleSpan.text(TAG.Util.htmlEntityDecode(artwork.Name));
-            currentThumbnail.attr('src', artwork.Metadata.Thumbnail ? FIX_PATH(artwork.Metadata.Thumbnail) : (tagPath+'images/no_thumbnail.svg'))
-                            .on('click', switchPage);
+            previewWidth = (0.32)*bottomContainer.width();
 
-            // Telemetry on artworks
-            TAG.Telemetry.register(currentThumbnail, 'click', '', function(tobj) {
-                if (!currentArtwork || !artworkSelected) {
-                    return true; // abort
+            selectedArtworkContainer.empty();
+            if (showAllAtYear && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()]){
+                for (i=0; i<artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length;i++){
+                    newTile = createPreviewTile(artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()][i]);
+                    newTile.css('left', (i*previewWidth)+'px');
                 }
-                //tobj.work_name = currentArtwork.Name;
-                //tobj.work_guid = currentArtwork.Identifier;
-                tobj.custom_1 = currentArtwork.Name;
-                tobj.custom_2 = currentArtwork.Identifier;
-                tobj.ttype     = 'collection_to_' + getWorkType(currentArtwork); 
+                containerWidth = Math.min((previewWidth*3),(artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length)*274);
+            } else {
+                newTile = createPreviewTile(artwork);
+                newTile.css('left', '0%');
+                containerWidth = previewWidth;
+            }
+            
+            selectedArtworkContainer.css({
+                width : containerWidth
             });
 
-            
-            exploreText.css("font-size", 20 * BASE_FONT_SIZE / 30 + 'em')
-                       .text("Explore");
-            exploreIcon.attr('src', tagPath+'images/icons/ExploreIcon.svg');
-            exploreTab.on('click', switchPage)
-            artistInfo.css('font-size', 11 * BASE_FONT_SIZE / 30 + 'em');
-            yearInfo.css('font-size', 11 * BASE_FONT_SIZE / 30 + 'em');
-
-            if (artwork.Type !== "Empty") {
-                artistInfo.text("Artist: " + (artwork.Metadata.Artist || "Unknown"));
-                yearInfo.text(artwork.Metadata.Year || " ");
-            } else {
-                artistInfo.text("(Interactive Tour)" );
-                yearInfo.text(" " );
+            /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
+             * @method createPreviewTile
+             * @param {Object} artwork       //artwork to create preview tile for
+             * @return {Object} previewTile    //preview tile just created
+             */
+            function createPreviewTile(artwork){
+                previewTile = $(document.createElement('div'));
+                previewTile.addClass('previewTile');
+                titleSpan = $(document.createElement('div'));
+                titleSpan.addClass('titleSpan')
+                         .text(TAG.Util.htmlEntityDecode(artwork.Name));
+                imgDiv = $(document.createElement('div'));
+                imgDiv.addClass('imgDiv');
+                exploreTab = $(document.createElement('div'));
+                exploreTab.addClass('exploreTab')
+                          .on('click', switchPage(artwork));
+                exploreIcon = $(document.createElement('img'));
+                exploreIcon.addClass('exploreIcon')
+                           .attr('src', tagPath+'images/icons/ExploreIcon.svg');
+                exploreText = $(document.createElement('div'));
+                exploreText.addClass('exploreText')
+                           .css("font-size", 20 * BASE_FONT_SIZE / 30 + 'em')
+                           .text("Explore");
+                exploreTab.append(exploreIcon)
+                          .append(exploreText);
+                currentThumbnail = $(document.createElement('img'));
+                currentThumbnail.addClass('currentThumbnail')
+                                .attr('src', artwork.Metadata.Thumbnail ? FIX_PATH(artwork.Metadata.Thumbnail) : (tagPath+'images/no_thumbnail.svg'))
+                                .on('click', switchPage(artwork));
+                TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'click', '', function(tobj) {
+                    if (!artwork || !artworkSelected) {
+                        return true; // abort
+                    }
+                    tobj.custom_1 = artwork.Name;
+                    tobj.custom_2 = artwork.Identifier;
+                    tobj.ttype     = 'collection_to_' + getWorkType(artwork); 
+                });
+                infoText = $(document.createElement('div'));
+                infoText.addClass('infoText');
+                artistInfo = $(document.createElement('div'));
+                artistInfo.addClass('artistInfo')
+                          .css('font-size', 11 * BASE_FONT_SIZE / 30 + 'em');
+                yearInfo = $(document.createElement('div'));
+                yearInfo.addClass('yearInfo')
+                        .css('font-size', 11 * BASE_FONT_SIZE / 30 + 'em');
+                if (artwork.Type !== "Empty") {
+                    artistInfo.text("Artist: " + (artwork.Metadata.Artist || "Unknown"));
+                    yearInfo.text(artwork.Metadata.Year || " ");
+                } else {
+                    artistInfo.text("(Interactive Tour)" );
+                    yearInfo.text(" " );
+                }
+                infoText.append(artistInfo)
+                        .append(yearInfo);
+                imgDiv.append(exploreTab)
+                      .append(currentThumbnail)
+                      .append(infoText);
+                descText = $(document.createElement('div'));
+                descText.addClass('descText');
+                descSpan = $(document.createElement('div'));
+                descSpan.addClass('descSpan')
+                        .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}));
+                descText.append(descSpan);
+                previewTile.append(titleSpan)
+                           .append(imgDiv)
+                           .append(descText);
+                selectedArtworkContainer.append(previewTile);
+                return previewTile;
             }
-            descSpan.html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}));
-
 
             //Circle (with date) on timeline
             for (i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
@@ -1238,10 +1318,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineEventCircles[i].timelineDateLabel.css({
                     'color' : 'rgb(170,170,170)'
                 });
-
-                if (timelineEventCircles[i].timelineDateLabel.text()===artworkCircles[artwork.Identifier].timelineDateLabel.text()){
-                    timelineEventCircles[i].timelineDateLabel.css('visibility','hidden');
-                }
             };
 
             // Make current circle larger and white
@@ -1279,6 +1355,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
         };
     }
+
+
+
 
     /**
      * Generates a comparator function for catalog sorting
@@ -1411,21 +1490,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         valuation  = sortValuation('yearKey');
         avlTree = new AVLTree(comparator, valuation);
         for (i = 0; i < artworks.length; i++) {
-            yearKey = parseYear(artworks[i]);
-            /**
-            if (artworks[i].Metadata.Year) {
-                yearKey = artworks[i].Metadata.Year
-                //Catches 'ad', 'bc', 'bce' case, spacing, and order insensitive
-                yearKey = yearKey.replace(/ad/gi,'')
-                                 .replace(/( |\d)ce/gi,'')
-                                 .replace(/\s/g,'');
-                if (yearKey.search(/bce?/gi)>=0){
-                    yearKey = yearKey.replace(/bce?/gi,'');
-                    yearKey = "-" + yearKey;
-                }
-                yearKey = parseInt(yearKey);
-            }
-            **/
+            yearKey = TAG.Util.parseDateToYear(artworks[i].Metadata.Year);
             if (!isNaN(yearKey)){
                 artNode = {
                     artwork: artworks[i],
@@ -1442,22 +1507,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         return avlTree;
     }
 
-    function parseYear(artwork){
-        var yearKey;
-        if (artwork.Metadata.Year) {
-            yearKey = artwork.Metadata.Year
-            //Catches 'ad', 'bc', 'bce' case, spacing, and order insensitive
-            yearKey = yearKey.replace(/ad/gi,'')
-                             .replace(/( |\d)ce/gi,'')
-                             .replace(/\s/g,'');
-            if (yearKey.search(/bce?/gi)>=0){
-                yearKey = yearKey.replace(/bce?/gi,'');
-                yearKey = "-" + yearKey;
-            }
-            yearKey = parseInt(yearKey);
-        }
-        return yearKey
-    }
     /** 
      * Set the colors of the sort tags
      * @method colorSortTags
@@ -1537,7 +1586,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         collectionOptions = {
             backScroll: scrollPos,
             backCollection: currCollection,
-            backArtwork: currentArtwork
+            prevTag : currentTag,
+            backArtwork: tour,
+            prevMult : multipleShown
         }
 
         rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour);
@@ -1556,8 +1607,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     /**
      * Switch to the artwork viewer or tour player
      * @method switchPage
+     * @param {Object} artwork      artwork to return to after switching
      */
-    function switchPage() {
+    function switchPage(artwork) {
+        return function(){
         var curOpts,
             artworkViewer,
             splitopts = 'L',
@@ -1566,23 +1619,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevInfo,
             videoPlayer;
 
-        if (!currentArtwork || !artworkSelected) {
+        if (!artwork|| !artworkSelected) {
             return;
         }
 
         idleTimer && idleTimer.kill();
         idleTimer = null;
 
+        //Don't actually use this?
         curOpts = {
             catalogState: opts,
             doq: currentArtwork,
             split: splitopts
         };
 
-        if (currentArtwork.Type === "Empty") { // tour
+        if (artwork.Type === "Empty") { // tour
             if (TAG.Util.Splitscreen.on()) {
                 confirmationBox = TAG.Util.UI.PopUpConfirmation(function(){
-                    switchPageTour(currentArtwork);
+                    switchPageTour(artwork);
                 }, "By opening this tour, you will exit split screen mode. Would you like to continue?", "Continue", false, function () {
                     $(confirmationBox).remove();
                 }, root);
@@ -1590,15 +1644,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 root.append($(confirmationBox));
                 $(confirmationBox).show();
             } else {
-                switchPageTour(currentArtwork);
+                switchPageTour(artwork);
             }
-        } else if (currentArtwork.Metadata.Type === "VideoArtwork") { // video
+        } else if (artwork.Metadata.Type === "VideoArtwork") { // video
             scrollPos = catalogDiv.scrollLeft();
             prevInfo = {
                 artworkPrev: null,
-                prevScroll: scrollPos
+                prevScroll: scrollPos,
+                prevTag : currentTag,
+                prevMult : multipleShown
             };
-            videoPlayer = TAG.Layout.VideoPlayer(currentArtwork, currCollection, prevInfo);
+            videoPlayer = TAG.Layout.VideoPlayer(artwork, currCollection, prevInfo);
             TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
 
             currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
@@ -1606,10 +1662,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         } else { // artwork
             scrollPos = catalogDiv.scrollLeft();
             artworkViewer = TAG.Layout.ArtworkViewer({
-                doq: currentArtwork,
-                prevScroll: scrollPos,
+                doq: artwork,
+                prevTag : currentTag,
+                prevScroll: catalogDiv.scrollLeft(),
                 prevCollection: currCollection,
-                prevPage: 'catalog'
+                prevPage: 'catalog',
+                prevMult: multipleShown
             });
             TAG.Util.UI.slidePageLeftSplit(root, artworkViewer.getRoot());
 
@@ -1617,6 +1675,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             currentPage.obj  = artworkViewer;
         }
         root.css({ 'overflow-x': 'hidden' });
+        }
     }
 
     /**
