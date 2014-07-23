@@ -16,11 +16,13 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     var artworkPrev;
     var prevScroll = 0;
 	var prevExhib = exhibition;
+    var prevTag = prevInfo.prevTag;
+    var prevMult = prevInfo.prevMult;
 
     var tagContainer = $('#tagRoot');
 
     var player,
-        root = TAG.Util.getHtmlAjax('TourPlayer.html'),
+        root = TAG.Util.getHtmlAjax('../tagcore/html/TourPlayer.html'),
         rinPlayer = root.find('#rinPlayer'),
         backButtonContainer = root.find('#backButtonContainer'),
         backButton = root.find('#backButton'),
@@ -105,19 +107,15 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             collectionsPage = new TAG.Layout.CollectionsPage({
                 backScroll: prevScroll,
                 backArtwork: tourObj,
-                backCollection: exhibition
+                backCollection: exhibition,
+                backTag : prevTag,
+                backMult : prevMult
             });
-
+            console.log("collectionsPage" + collectionsPage);
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
 				artworkPrev = "catalog";
-				var selectedExhib = $('#collection-' + prevExhib.Identifier);
-				selectedExhib.attr('flagClicked', 'true');
-				selectedExhib.css({ 'background-color': 'white', 'color': 'black' });
-                if(selectedExhib[0].firstChild) {
-    				$(selectedExhib[0].firstChild).css({'color': 'black'});
-                }
 			});
-
+        
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
             currentPage.obj  = collectionsPage;         
         }
@@ -130,8 +128,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             return root;
         },
         startPlayback: function () { // need to call this to ensure the tour will play when you exit and re-enter a tour, since sliding functionality and audio playback don't cooperate
-            rin.processAll(null, tagPath+'js/RIN/web').then(function () {
-                var options = 'systemRootUrl='+tagPath+'js/RIN/web/&autoplay='+(INPUT_TOUR_ID ? 'false' : 'true')+'&loop=false';
+            rin.processAll(null, tagPath+'../tagcore/js/RIN/web').then(function () {
+                var options = 'systemRootUrl='+tagPath+'../tagcore/js/RIN/web/&autoplay='+(INPUT_TOUR_ID ? 'false' : 'true')+'&loop=false';
                 // create player
                 player = rin.createPlayerControl(rinPlayer[0], options);
                 for (var key in tour.resources) {

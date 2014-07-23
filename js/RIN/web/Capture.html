@@ -1,0 +1,117 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Rich Interactive Narratives</title>
+
+    <!-- local styles -->
+    <style type="text/css">
+        html, body, #rinPlayer
+        {
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+            -ms-touch-action: none;
+            -webkit-touch-callout:none;
+            -ms-content-zooming: none;
+            width: 80%;
+            height: 80%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+    </style>
+    
+    <script src="lib/rin-core-1.0.js"></script>
+    <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0" type="text/javascript"></script>
+    <script src="lib/pano-viewer.js"></script>
+    <script src="lib/seadragon-0.8.9-rin.js" type="text/javascript"></script>
+    <script src="lib/RegionCaptureControl.js"></script>
+    <script>
+
+        rin.processAll().then(function () {
+            var narrativeId = document.location.search || "narratives/everest3/narrative.js";
+            if (narrativeId && narrativeId.length > 0 && narrativeId[0] == "?") {
+                narrativeId = narrativeId.substr(1);
+            }
+
+            var playerElement = document.getElementById("rinPlayer");
+            var configuration = new rin.PlayerConfiguration();
+            configuration.hideAllControllers = false; //true;
+
+            var playerControl = rin.createPlayerControl(playerElement, configuration)
+            var deepstateUrl = playerControl.resolveDeepstateUrlFromAbsoluteUrl(window.location.href);
+            if (deepstateUrl) narrativeId = deepstateUrl;
+            var regionCaptureControl;
+
+            playerControl.seeked.subscribe(function (eventArgs) {
+                console.log(">>> Seeked to {0}:{1}".rinFormat(eventArgs.screenplayId, eventArgs.offset));
+            });
+
+            playerControl.screenplayEnded.subscribe(function (eventArgs) {
+                console.log(">>> Screenplay ended for: " + eventArgs.screenplayId);
+            });
+
+            playerControl.load(narrativeId, function (isInDeepState) {
+                if (!isInDeepState) playerControl.play(); // play only if we are not in deep state. For deepstate restoration, keep it in paused state.
+                regionCaptureControl = new RegionCapture(document.getElementById("rinPlayer"), playerControl.orchestrator);
+            });
+            playerElement.rinPlayer = playerControl;
+
+                $("#btnCaptureKeyframe").click(function () {
+                    var kf = playerControl.captureKeyframe();
+                    var kfstring = JSON.stringify(kf);
+                    $("#captureDataText").val(kfstring);
+                    clipboardData.setData("Text", kfstring);
+                });
+                $("#applyKeyframeButton").click(function () {
+                    var kfString = $("#captureDataText").val();
+                    var kf = JSON.parse(kfString);
+                    playerControl.orchestrator.debugApplyKeyframe(kf);
+                });
+                $("#CaptureToggleButton").click(function () {
+                    $("#captureControls").toggle();
+                });
+                $("#CaptureRegionToggleButton").click(function () {
+                    regionCaptureControl.toggleVisibility();
+                    $("#captureRegionButton").toggle();
+                    $("#applyKeyframeButton").toggle();
+                    $("#btnCaptureKeyframe").toggle();
+                });
+                $("#captureRegionButton").click(function () {
+                    var result = regionCaptureControl.capture();
+                    if (result != null) {
+                        result = JSON.stringify(result);
+                        $("#captureDataText").val(result);
+                        clipboardData.setData("Text", result);
+                    }
+                });
+        });
+
+        
+    </script>
+    
+   
+       
+</head>
+
+<body>
+    <div>
+        <p>RIN Testing Page</p>
+        <input type="button" id="CaptureToggleButton" value="Toggle capture" />
+        <div id="captureControls" style="display:none;">
+            <input type="button" id="CaptureRegionToggleButton" value="Toggle Region capture" />
+            <input type="button" id="captureRegionButton" value="Capture region" style="display:none;" />
+            <input type="button" id="btnCaptureKeyframe" value="Capture Keyframe" />
+            <input type="button" id="applyKeyframeButton" value="Apply keyframe" />
+            <textarea cols="80" rows="3" id="captureDataText" ></textarea>
+        </div>
+    </div>
+    <div id="rinPlayer" class="rinPlayer"></div>
+</body>
+
+</html>

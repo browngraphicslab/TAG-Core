@@ -1,0 +1,20 @@
+{
+  "name": "TAG-Core",
+  "title": "Touch Art Gallery (web app)",
+  "description": "A museum application",
+  "version": "1.0.0",
+  "homepage": "http://www.cs.brown.edu/research/ptc/tag",
+  "author": {
+    "name": "Brown University Graphics Lab",
+    "url": "http://www.cs.brown.edu/research/ptc/tag"
+  },
+  "dependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jade": "~0.8.0",
+    "grunt-contrib-stylus": "~0.8.0",
+    "jade": "~1.1.5",
+    "stylus": "~0.42.2"
+  },
+  "devDependencies": {},
+  "keywords": []
+}

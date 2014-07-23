@@ -1,0 +1,183 @@
+@import "reset.less";
+@import "var.less";
+@import "icons.less";
+//@import "../everest/css/mixins.less";
+@import "mixins.less";
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: @sans;
+	color: rgba(255,255,255,0.65);
+	font-size: 16px;
+	line-height: 1.5;    
+    overflow: hidden;
+}
+
+@slidetime: 30s;
+@-webkit-keyframes scaleIn {
+    0% {
+        .scale(1);
+    }
+    100% {
+        .scale(1.5);
+    }
+}
+
+#bg {
+    .animation(scaleIn, 25s);
+    .absolute();
+    .transform-origin(50%, 10%);
+    overflow: hidden;
+    background-size: 100% 100%;
+    background-size: cover;
+    background-image: url('img/pumori.jpg');
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -ms-animation-fill-mode: both;
+    animation-fill-mode: both;
+
+}
+
+#sidebar {
+    .absolute(0,auto,0,0);
+    overflow:scroll;
+    width: 100%;
+    height: 100%;
+    max-width: 360px;
+    background: rgba(8,19,30,0.85);
+    text-align: center;
+    display: table;
+    
+    a {
+        color: @brightblue;
+        text-decoration: none;
+        .transition(color 150ms);
+        &:hover {
+            color: white;
+        }
+    }
+}
+ 
+#content-host {
+    padding: 24px;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    position: relative;
+    top: -40px;
+    
+    #menu {
+        width: 100%;
+        font-size: 13px;
+        display: block;
+        
+        margin-top: 1em;
+        margin-bottom: 3em;
+        
+        a {
+            color: white;
+            text-transform: uppercase;
+            .transition(color 150ms);
+            &:hover {
+                color: white;
+            }
+            &:after {
+                content:'';
+                display: inline-block;
+                width: 1px;
+                height: 20px;
+                background: fade(white, 45%);
+                margin-left: 8px;
+                margin-right: 8px;
+                position: relative;
+                top: 5px;
+                
+            }
+            &:last-child:after {
+                display: none;
+            }
+        }
+    }
+    
+    #actions {
+        display: block;
+        
+        .action-link {
+            display: block;
+            margin: 1em 0 2em 0;
+            color: inherit;
+            &:hover {
+                color: white;
+            }
+        }
+        
+        h2 {
+            color: @brightblue;
+            font-weight: 600;
+            font-size: 1.25em;
+        }
+    
+    }
+}
+
+#content {
+
+}
+
+#gwlogo {
+    display: inline-block;
+    background-image: url('img/gwlogo.png');
+    width: 227px;
+    height: 29px;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    
+}
+
+#ielogo {
+    .leftbottom(50%,0px);
+    background-image: url('img/ielogo.png');
+    margin-left: round(148px / -2);
+    width: 148px;
+    height: 31px;
+    display: block;
+}
+
+#social {
+    margin-top: 3em;
+    display: block;
+    text-align: center;
+}
+
+.social-link {
+    display: inline-block;
+    width: 32px;
+    height: 40px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.65;
+    .transition(opacity 150ms);
+    
+    &:hover {
+        opacity: 1;
+    }
+}
+
+#facebook {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAVCAMAAABFcv+GAAAAXVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9RKvvlAAAAHnRSTlMAChIUFx4iNjxIUWR1eH6Wmaq0ub3DxcvM6/L3+f1DYwbFAAAAWElEQVQYV7WMNxKAMAwERTIZS0ST9P9nIuxC0NBxze3ejATgk3aDc23gamOJ9ZwfrDKySnQy72U4gEzWGR4yeTLGFCKLdAKssR9CRL3AKl2/v/0rMSI2N1zQug2TgMrGmwAAAABJRU5ErkJggg==);
+}
+
+#twitter {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAQCAQAAABezYzpAAAA0UlEQVQYGX3BPyuEARwA4N8rpUQMTkRRlA9A6Saj2QewsVopC7uMkj9l5kiyKQvFZMDoA9yglCw493Cdl/fOneeJZnTqiixDkqhhzLkyrkwYsaQtIhxZl8QPOUWpkg9zBiPCDQp64psVWc9uDUSEHRWPFuXiiwNZRX1RYdiTqpJrm+5kXUaVaYeaK0SVSf9ZjpQTzY1HSrcNrxq5l0RKXlljM5Flwbu/9qKeUbtqXeiILK3ytrzJOtYev/Rb86LWg1lJ1NNr3rZTZ/atmtISdT4BTItrBRw3L/sAAAAASUVORK5CIIA=);
+}
+
+#tumblr {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAATCAMAAACTKxybAAAAflBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////vroaSAAAAKXRSTlMAAgYICQsMGhwiJSosLjxBRktPYGd5fICHl5mqucPR1tvh5OXy9Pb6/VPswu4AAABqSURBVAhblc3JEsFQAETRawrPHGPEEDzC/f8ftPFSWanSu7PoboBFWRak7PTW4NjCuG4w3UQ1hjDJ4GzK/BeG4aDGEEIPoLA1/QfuCVv1NaKznAEr1ee1Ngf6l+9rDpDtq7eP03qQil2ADx5qEMldD0yJAAAAAElFTkSuQmCC);
+}
+
+#googleplus {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAASCAQAAAATBS3iAAABJklEQVQokXXQMUjUYRgH4BdCSRdFCFTo0M20RDgMHFs73J1EBIUGUWwJFzfBzUBEB7vFJShq0E0RFJzETcFoiUBQRAXtTESelu/wuPv3+5b39/Lw8fFFpGj3zqKVdMajNp6Yc2vdhjvs6chAEeYwHRGhVwlTWeipEtpSW8b3LPYCPEttFBtp7pPXVGY5MJzaBBbTfIXC431H+O15hHoH7vVlswHnuLDm0J2hCK9U5kMZthgz7wIfI/7LEv6KM/0RGuTlXWNSXmsZdHmvaB/ceJvxNs2+4FLRjAW/8MfLiAgjxuXKbBPbWlJrsIXV6s/tBO0VmzfYrWZduNdYsSngczWrc4IV9an3OMZgVEfBX5z65pMdDx7M1qCICN2W/HCr5Kei17XiH37kIbLs//OUAAAAAElFTkSuQmCC);    
+}
+

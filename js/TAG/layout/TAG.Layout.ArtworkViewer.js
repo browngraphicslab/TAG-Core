@@ -15,7 +15,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     options = options || {}; // cut down on null checks later
 
     var // DOM-related
-        root                = TAG.Util.getHtmlAjax('Artmode.html'),
+        root                = TAG.Util.getHtmlAjax('../tagcore/html/Artmode.html'),
         sideBar             = root.find('#sideBar'),
         toggler             = root.find('#toggler'),
         togglerImage        = root.find('#togglerImage'),
@@ -34,6 +34,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevPage       = options.prevPage,         // the page we came from (string)
         prevScroll     = options.prevScroll || 0,  // scroll position where we came from
         prevCollection = options.prevCollection,   // collection we came from, if any
+        prevTag        = options.prevTag,          // sort tag of collection we came from, if any
+        prevMult       = options.prevMult,
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -142,6 +144,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }   
         });
         
+        TAG.Telemetry.register(slideButton,'click','seadragon_button_panel_toggled',function(tobj){
+            tobj.custom_1 = doq.Name;
+            tobj.custom_2 = doq.Identifier;
+        });
         container.append(slideButton);
         container.append(createButton('leftControl',  tagPath+'images/icons/zoom_left.svg',  D_PAD_LEFT,    D_PAD_TOP+14));
         container.append(createButton('upControl',    tagPath+'images/icons/zoom_up.svg',    D_PAD_LEFT+12, D_PAD_TOP+2));
@@ -202,7 +208,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             return img;
         }
-    
+        
+        TAG.Telemetry.register($("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"),'click','seadragon_control_clicked',function(tobj){
+            tobj.custom_1 = doq.Name;
+            tobj.custom_2 = doq.Identifier;
+        });
         
         /**
          * Keydown handler for artwork manipulation; wrapper around doManip that first
@@ -280,6 +290,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
 
 
+        
+
         $(document).on('keydown', function(evt) {
             if(containerFocused) {
                 switch(evt.which) {
@@ -347,6 +359,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         $('.seadragonManipButtoninout').on('mouseup mouseleave', function() {
             clearInterval(interval);
         });
+
+        TAG.Telemetry.register($("[tabindex='-1']"),'keydown','seadragon_key_pressed',function(tobj){
+            if (containerFocused===false){
+                return true;
+            }
+             tobj.custom_1 = doq.Name;
+             tobj.custom_2 = doq.Identifier;
+        });
     }
 
     /**
@@ -412,7 +432,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             collectionsPage = new TAG.Layout.CollectionsPage({
                 backScroll:     prevScroll,
                 backArtwork:    doq,
-                backCollection: prevCollection
+                backCollection: prevCollection,
+                backTag : prevTag,
+                backMult : prevMult
             });
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {});
 
@@ -584,7 +606,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 idleTimer = null;
 
                 annotatedImage.unload();
-                prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll };
+                prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll, prevTag : prevTag};
                 rinData = JSON.parse(unescape(tour.Metadata.Content));
                 rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options);
             
