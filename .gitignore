@@ -5,3 +5,4 @@ html/*.html
 TAG.js
 TAG-min.js
 node_modules
+js/ITE/Core/ITE/ITECore.js
