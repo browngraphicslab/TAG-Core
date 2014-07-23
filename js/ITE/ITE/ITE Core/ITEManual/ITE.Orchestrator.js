@@ -13,6 +13,7 @@ ITE.Orchestrator = function(player) {
 	self.player 			= player;
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
 	self.taskManager 		= new ITE.TaskManager();
+	self.status 			= 3;
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -119,10 +120,12 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function seek(seekTime){
+
 	}
 
 	function setVolume(newVolumeLevel){
-	    self.volumeChangedEvent.publish(newVolumeLevel);
+		self.volumeChangedEvent.publish(newVolumeLevel)
+	    // parseInt(this.status) !== 3 ? self.volumeChangedEvent.publish(newVolumeLevel) : console.log("don't do anything");
 	}
 
 	function toggleMute(isMuted){
