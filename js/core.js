@@ -136,7 +136,7 @@
             oHead,                                            // head element
             oScript,                                          // script element
             oCss,                                             // link element
-            tagContainer,                                     // div containing TAG
+            tagContainer;                                     // div containing TAG
 
 
         tagPath = tagPath || '';
