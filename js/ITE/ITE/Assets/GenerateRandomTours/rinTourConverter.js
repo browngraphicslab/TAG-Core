@@ -1,5 +1,5 @@
 function rinTourConvertor(rintour){
-	var rawFile = new XMLHttpRequest();
+    var rawFile = new XMLHttpRequest();
     rawFile.open("GET", rintour, false);
     rawFile.onreadystatechange = function ()
     {
@@ -16,25 +16,25 @@ function rinTourConvertor(rintour){
                 newjson.tracks = [];
                 for (var key in json.experiences){
                 	if(json.experiences.hasOwnProperty(key)){
-                		var newobj = {};
-                		var subprop = key + "-0";
-                		for (var i in json.experiences[key].experienceStreams){
-                			if (i === subprop){
-	                			newobj.name = key;
-	                			newobj.providerId = json.experiences[key].providerId;
-	                			//newobj.keyframes = json.experiences[key].experienceStreams[i].keyframes;
-                                newobj.keyframes = [];
+                	    var newobj = {};
+        		    var subprop = key + "-0";
+                	    for (var i in json.experiences[key].experienceStreams){
+                		if (i === subprop){
+	                	    newobj.name = key;
+	                	    newobj.providerId = json.experiences[key].providerId;
+	                	    //newobj.keyframes = json.experiences[key].experienceStreams[i].keyframes;
+                                    newobj.keyframes = [];
                                 for (var k in json.experiences[key].experienceStreams[i].keyframes){
-                                	var newkeyframe = {};
-                                	// if (newobj.providerId===deepzoom){
-	                                // 	newkeyframe.time = k.offset;
-	                                // 	newkeyframe.pos = k.state.viewport.region.center;	
-                                	// }
+                                    var newkeyframe = {};
+                                    // if (newobj.providerId===deepzoom){
+	                            // 	newkeyframe.time = k.offset;
+	                            // 	newkeyframe.pos = k.state.viewport.region.center;	
+                                    // }
                                 	
-                                		newkeyframe.time = json.experiences[key].experienceStreams[i].keyframes[k].offset;
-                                		if (typeof json.experiences[key].experienceStreams[i].keyframes[k].state.viewport !== "undefined"){
-		                                	newkeyframe.size = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.span;
-		                                	newkeyframe.pos = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.region.center;
+                                    newkeyframe.time = json.experiences[key].experienceStreams[i].keyframes[k].offset;
+                                    if (typeof json.experiences[key].experienceStreams[i].keyframes[k].state.viewport !== "undefined"){
+		                        newkeyframe.size = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.span;
+		                        newkeyframe.pos = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.region.center;
 	                                }
 	                                
 	                                newobj.keyframes.push(newkeyframe);
