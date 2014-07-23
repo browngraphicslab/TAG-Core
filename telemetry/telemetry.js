@@ -27,7 +27,7 @@ TAG.Telemetry = (function() {
 	/**
 	 * Register an element with the telemetry module
 	 * @method registerTelemetry
-	 * @param {jQuery Obj} element      the element to which we'll attach a telemetry event handler
+	 * @param {jQuery Obj} element      the element or the jQuery selector to which we'll attach a telemetry event handler
 	 * @param {String} etype            the type of event (e.g., 'mousedown') for which we'll create the handler
 	 * @param {String} ttype            the type of telemetry request to log
 	 * @param {Function} preHandler     do any pre-handling based on current state of TAG, add any additional
@@ -44,7 +44,12 @@ TAG.Telemetry = (function() {
 					browser:    bversion,
 					platform:   platform,
 					time_stamp: date.getTime(),
-					time_human: date.toString()
+					time_human: date.toString(),
+					custom_1: null,
+					custom_2: null,
+					custom_3: null,
+					custom_4: null,
+					custom_5: null
 				},
 				ret = true;
 

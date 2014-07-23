@@ -48,42 +48,11 @@
 		password: 'telemetrydb',
 		server : '127.0.0.1',
 
-		options: {}
+		options: {database : "telemetrydb"}
 	};
-
-    // var connection = new Connection(config);
-    // connection.on("connect", function(err){
-    //     if (err){
-    //     	console.log(err);
-    //     }
-    //     else {
-    //     	executeStatement();
-    //     }
-    // });
 
     var Request = require('tedious').Request;
 
-    // function executeStatement(){
-    // 	request = new Request("CREATE DATABASE telemetrydb", function(err, rowCount){
-    // 		if (err){
-    // 			console.log(err);
-    // 		}
-    // 		else {
-    // 			console.log(rowCount + ' rows');
-    // 		}
-    // 	});
-
-    // 	request.on('row', function(columns){
-    // 		columns.forEach(function(column){
-    // 			console.log(column.value);
-
-    // 		});
-    // 	});
-    // 	connection.execSql(request);
-    // }
-
-    
-    
 	function handlePost(request, response) {
 		var requestBody = '',
 			parsedBody,
@@ -112,14 +81,15 @@
 		
 			for(i=0; i<parsedBody.length; i++) {
 				tobj = parsedBody[i];
-                var connection = new Connection(config);
+                var connection = new Connection(config); //create a new tedious connection to connect to the database mentioned in config
 			    connection.on("connect", function(err){
 			        if (err){
 			        	console.log(err);
 			        }
 			        else {
-			        	var request = new Request("INSERT INTO tmetrytable1 VALUES (12,123,878)",function(err, rowCount){
-			    		if (err){
+                        var type = tobj.ttype;
+			        	var req = new Request("INSERT INTO tmetrytesttable (ttype,tagserver,browser,platform,time_stamp,time_human,custom_1,custom_2,custom_3,custom_4,custom_5) VALUES ('"+tobj.ttype+"','"+tobj.tagserver+"','"+tobj.browser+"','"+tobj.platform+"','"+tobj.time_stamp+"','"+tobj.time_human+"','"+tobj.custom_1+"','"+tobj.custom_2+"','"+tobj.custom_3+"','"+tobj.custom_4+"','"+tobj.custom_5+"')",function(err, rowCount){
+			    		if (err){              //insert each tobj into each row of the table
 			    			console.log(err);
 			    		}
 			    		else {
@@ -127,13 +97,13 @@
 			    		}
 			    	    });
 
-				    	request.on('row', function(columns){
+				    	req.on('row', function(columns){
 				    		columns.forEach(function(column){
 				    			console.log(column.value);
 
 				    		});
 				    	});
-				    	connection.execSql(request);
+				    	connection.execSql(req);
 			        }
 			    });
                 
@@ -149,7 +119,7 @@
 				// 	additional: tobj.additional ? JSON.stringify(tobj.additional) : NOT_AVAIL // any additional info
 				// };
 
-				WRITE_DATA(tdata);
+				//WRITE_DATA(tdata);
 			}
 
 			response.writeHead(200, {
