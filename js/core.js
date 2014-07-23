@@ -128,7 +128,7 @@
      */
     function init() {
         var TAGSCRIPTS = [                                    // scripts to load
-                'js/raphael.js',
+                'js/raphael.js', // TODO merging
                 'js/tagInk.js',
                 'js/RIN/web/lib/rin-core-1.0.js'
             ],
@@ -156,7 +156,7 @@
         // load stylesheet
         oCss = document.createElement("link");
         oCss.rel = "stylesheet";
-        oCss.href = tagPath+"css/TAG.css";
+        oCss.href = tagPath+"css/TAG.css"; // TODO merging
         oHead.appendChild(oCss);
 
         tagContainer = $('#tagRoot');

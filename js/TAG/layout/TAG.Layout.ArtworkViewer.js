@@ -15,7 +15,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     options = options || {}; // cut down on null checks later
 
     var // DOM-related
-        root                = TAG.Util.getHtmlAjax('Artmode.html'),
+        root                = TAG.Util.getHtmlAjax('../tagcore/html/Artmode.html'),
         sideBar             = root.find('#sideBar'),
         toggler             = root.find('#toggler'),
         togglerImage        = root.find('#togglerImage'),
@@ -34,6 +34,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevPage       = options.prevPage,         // the page we came from (string)
         prevScroll     = options.prevScroll || 0,  // scroll position where we came from
         prevCollection = options.prevCollection,   // collection we came from, if any
+        prevTag        = options.prevTag,          // sort tag of collection we came from, if any
+        prevMult       = options.prevMult,
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -430,7 +432,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             collectionsPage = new TAG.Layout.CollectionsPage({
                 backScroll:     prevScroll,
                 backArtwork:    doq,
-                backCollection: prevCollection
+                backCollection: prevCollection,
+                backTag : prevTag,
+                backMult : prevMult
             });
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {});
 
@@ -602,7 +606,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 idleTimer = null;
 
                 annotatedImage.unload();
-                prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll };
+                prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll, prevTag : prevTag};
                 rinData = JSON.parse(unescape(tour.Metadata.Content));
                 rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options);
             
