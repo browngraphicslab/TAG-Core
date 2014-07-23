@@ -22,7 +22,23 @@ function rinTourConvertor(rintour){
                 			if (i === subprop){
 	                			newobj.name = key;
 	                			newobj.providerId = json.experiences[key].providerId;
-	                			newobj.keyframes = json.experiences[key].experienceStreams[i].keyframes;
+	                			//newobj.keyframes = json.experiences[key].experienceStreams[i].keyframes;
+                                newobj.keyframes = [];
+                                for (var k in json.experiences[key].experienceStreams[i].keyframes){
+                                	var newkeyframe = {};
+                                	// if (newobj.providerId===deepzoom){
+	                                // 	newkeyframe.time = k.offset;
+	                                // 	newkeyframe.pos = k.state.viewport.region.center;	
+                                	// }
+                                	
+                                		newkeyframe.time = json.experiences[key].experienceStreams[i].keyframes[k].offset;
+                                		if (typeof json.experiences[key].experienceStreams[i].keyframes[k].state.viewport !== "undefined"){
+		                                	newkeyframe.size = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.region.span;
+		                                	newkeyframe.pos = json.experiences[key].experienceStreams[i].keyframes[k].state.viewport.region.center;
+	                                }
+	                                
+	                                newobj.keyframes.push(newkeyframe);
+                                }
                 			if (typeof json.experiences[key].resourceReferences[0] !== "undefined" ){
                 				var resourceid = json.experiences[key].resourceReferences[0].resourceId;
                             }
@@ -41,7 +57,7 @@ function rinTourConvertor(rintour){
                 };
 
                 console.log(newjson);
-                document.write(newjson);
+                document.write(JSON.stringify(newjson));
                 
 
             }
