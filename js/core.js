@@ -136,7 +136,7 @@
      */
     function init() {
         var TAGSCRIPTS = [                                    // scripts to load
-                'js/raphael.js',
+                'js/raphael.js', // TODO merging
                 'js/tagInk.js',
                 'js/RIN/web/lib/rin-core-1.0.js'
         ],
@@ -144,6 +144,7 @@
             oHead,                                            // head element
             oScript,                                          // script element
             oCss,                                             // link element
+<<<<<<< HEAD
             tagContainer,                                     // div containing TAG
             tagPath = tagPath || '';
 
@@ -168,6 +169,31 @@
             oHead.appendChild(oCss);
         }
 
+=======
+            tagContainer;                                     // div containing TAG
+
+
+        tagPath = tagPath || '';
+        if(tagPath.length > 0 && tagPath[tagPath.length - 1] !== '/') {
+            tagPath += '/';
+        }
+
+        // load scripts
+        oHead = document.getElementsByTagName('head').item(0);
+        for (i = 0; i < TAGSCRIPTS.length; i++) {
+            oScript = document.createElement("script");
+            oScript.type = "text/javascript";
+            oScript.src = tagPath + TAGSCRIPTS[i];
+            oHead.appendChild(oScript);
+        }
+
+        // load stylesheet
+        oCss = document.createElement("link");
+        oCss.rel = "stylesheet";
+        oCss.href = tagPath+"css/TAG.css"; // TODO merging
+        oHead.appendChild(oCss);
+
+>>>>>>> 135c52a3c72d7e866196e8b91c7b56d6292c501d
         tagContainer = $('#tagRoot');
 
         $("body").css("-ms-touch-action","none");

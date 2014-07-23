@@ -17,16 +17,20 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
 
     var artworkPrev,
         prevScroll = 0,
+        prevTag,
+        prevMult,
 	    prevExhib = collection;
 
     if (prevInfo) {
         artworkPrev = prevInfo.artworkPrev,
-        prevScroll = prevInfo.prevScroll || 0;
+        prevScroll = prevInfo.prevScroll || 0,
+        prevMult = prevInfo.prevMult,
+        prevTag = prevInfo.prevTag;
     }
 
     var that = {};
 
-    var root = TAG.Util.getHtmlAjax('VideoPlayer.html'),
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/VideoPlayer.html'),
         video = root.find('#video'),
         sourceMP4,
         sourceWEBM,
@@ -69,16 +73,20 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         var collectionsPage = TAG.Layout.CollectionsPage({
             backScroll: prevScroll,
             backArtwork: videoSrc,
-            backCollection: collection
+            backCollection: collection,
+            backTag : prevTag,
+            backMult : prevMult
         });
 
         // collectionsPage.getRoot().css({ 'overflow-x': 'hidden' }); // TODO should be default in .styl file
         TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
             artworkPrev = "catalog";
+            /**
             var selectedExhib = $('#collection-' + prevExhib.Identifier);
             selectedExhib.attr('flagClicked', 'true');
             selectedExhib.css({ 'background-color': 'white', 'color': 'black' });
             $(selectedExhib[0].firstChild).css({'color': 'black'});
+            **/
         });
 
         currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
