@@ -1,3 +1,881 @@
+/**
+ * Library for tour annotation drawing. Instance created in InkES.
+ * Uses the RaphaelJS library for svg manipulation.
+ * @class tagInk
+ * @constructor
+ * @param {String} canvId            the id of the div to which we'll assign the Raphael canvas.
+ * @param {HTML element} html_elt    in the case that the div above is not in the dom yet, send in a variable for its html element.
+ */
+
+var tagInk = function (canvId, html_elt) {
+    "use strict";
+
+    // set up the Raphael paper/canvas
+    var that = {},
+        canvid = canvId,
+        html_elt = (html_elt) ? html_elt : $("#" + canvid)[0],
+        domelement = $(html_elt),
+        textElt,
+        paper = Raphael(html_elt, "100%", "100%");
+    
+    // Enum defining ink modes
+    var InkMode = {
+        shapes: 0, //shape manipulation
+        draw: 1,
+        erase: 2,
+        text: 5
+    };
+
+    // brush variables
+    var penColor = "#000000", // a comment here
+        penOpacity = 1.0,
+        penWidth = 4,
+        eraserWidth = 5,
+        ml = [], //path M/L values (see svg path format)
+        xy = [], //path coordinates; each entry has an x and y property
+        pa = [], //path attributes
+        pathObjects = [],
+        currpaths = ""; //this will be the string representing all of our paths; to get the paths individually, split at 'M'
+
+
+
+    // ellipse/rectangle variables
+    var shapeStrokeColor = "#ffffff",
+        shapeStrokeOpacity = 0.7,
+        shapeStrokeWidth = 5,
+        shapeFillColor = "#000000",
+        shapeFillOpacity = 0;
+
+    // block/isolate variables
+    var marqueeFillColor = "#000000",
+        marqueeFillOpacity = 0.8,
+        trans_mode = 'isolate',
+        transCoords = [],
+        transLetters = [],
+        trans_currpath = "",
+        bounding_shapes = "";
+
+    // text variables
+    var fontFamily = "'Times New Roman', serif",
+        fontColor = "#ffffff",
+        fontSize = '12px',
+        fontOpacity = 1.0,
+        textboxid = "textbox",
+        outerdivid = "outerdiv",
+        lastText = "",
+        svgText,
+        magX = domelement.width(),
+        magY = domelement.height();
+
+    // misc variables
+    var inktrack = null,
+        calling_file = 'inkes',
+        marquees = [], // old marquees
+        click = false, // has the mouse been clicked?
+        datastring = "",
+        mode = InkMode.draw,
+        enabled = true, //attached ink tracks by default
+        initKeyframe = {},
+        artName = "",
+        EID = "", // rin experience id (name of the ink track)
+        oldScale = 1,
+        firstTimeThrough = 2,
+        inkPannedX,
+        inkPannedY;
+
+    // set up the coordinates for adjustViewBox
+    var viewerElt = ($("#rinplayer").length) ? $("#rinplayer") : $("#rinPlayer"),
+        origPaperX = 0, // original coordinates of the paper (match with rinContainer)
+        origPaperY = 0,
+        origPaperW = viewerElt.width(),
+        origPaperH = viewerElt.height(),
+        origpx = 0, // original coordinates of the artwork
+        origpy = 0,
+        origpw = 0,
+        origph = 0,
+        lastpx = 0, // most recent coordinates of the artwork
+        lastpy = 0,
+        lastpw = 0,
+        lastph = 0,
+        lastcx = 0, // most recent coordinates of the "virtual canvas" which helps us place inks correctly
+        lastcy = 0, // the virtual canvas is where the Raphael canvas would be if it were moving with the artwork
+        lastcw = origPaperW,
+        lastch = origPaperH,
+        oldOpac = 0; // keeps track of whether an ink is on screen or not
+
+    that.canvid = canvId;
+    $("#" + canvid + " svg").css("position", "absolute");
+
+    // methods //
+
+    /** KEEP
+     * Pans and resizes all inks to move with the artwork. Uses the initial keyframe of the artwork (converted here to absolute coordinates) and the
+     * inputted dimensions to compute deltas and scale factors. Once we have these, first pan to (0,0), then scale, then pan to pos+deltas.
+     * @param dims   the current dimensions of our artwork in absolute coordinates
+     */
+    function adjustViewBox(dims, no_opac_check) {
+        var new_px = dims.x,
+            new_py = dims.y,
+            new_pw = dims.width,
+            new_ph = dims.height,
+            real_kfw, real_kfh, real_kfx, real_kfy,
+            lambda_w, lambda_h, nvw, nvh, nvx, nvy,
+            SW, newwid, newhei, cw, ch;
+        // convert weird deeepzoom keyframe coordinates to absolute coordinates
+        real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
+        real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
+        real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
+        real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -initKeyframe.y * real_kfh)
+
+        // if the new position is not trivially different from the old position, pan and zoom
+        if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
+            //var eid_elt = $("[ES_ID='" + EID + "']");
+            lambda_w = origPaperW / real_kfw;
+            lambda_h = origPaperH / real_kfh;
+            nvw = new_pw * lambda_w; // nv*: dimensions of the new virtual canvas (where the ink canvas would be if we were panning and zooming it with the artwork)
+            nvh = new_ph * lambda_h;
+            nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
+            nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
+
+            SW = nvw / lastcw; // scale factor in x direction
+            // var SH = nvh / lastch; // scale factor in y direction (in case we ever have non-aspect-ratio-preserving scaling)
+
+            oldScale = new_pw / origpw;
+            // oldScaleH = new_ph / origph; // in case we ever have non-aspect-ratio-preserving scaling
+
+            if (!transCoords.length || trans_mode === 'block') { // for all ink types except isolates (can't just resize the window for them)
+                newwid = origPaperW / oldScale;
+                newhei = origPaperH / oldScale;
+                paper.setViewBox(-nvx / oldScale, -nvy / oldScale, newwid, newhei); // see raphael documentation
+            }
+            else {
+                cw = domelement.width();
+                ch = domelement.height();
+                magX = cw;
+                magY = ch;
+                panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }, 0); // no need to draw updated ink yet
+                resizeObjects(SW, SW); // still no need, since we still have to pan
+                panObjects(nvx / origPaperW, nvy / origPaperH, { cw: cw, ch: ch }, 1);
+            }
+
+            // reset coordinates
+            lastcx = nvx;
+            lastcy = nvy;
+            lastcw = nvw;
+            lastch = nvh;
+            lastpx = new_px;
+            lastpy = new_py;
+            lastpw = new_pw;
+            lastph = new_ph;
+        }
+    }
+    that.adjustViewBox = adjustViewBox;
+
+    /** KEEP
+     * Convert a string representing a block transparency to one representing an isolate transparency.
+     * Block/isolate is determined by the fill property of the svg element. If we draw the path counterclockwise (rather than clockwise)
+     * and also draw a path around the whole canvas, the in-between space will be filled and we will get an isolate transparency. This
+     * method reverses the given path and adds the aforementioned outer path.
+     * @param pth    the path to reverse
+     * @return    reversed path (with outer path)
+     */
+    function block_to_isol(pth) {
+        var new_pth = "";
+        var segs = [""];
+        var parsed_pth = Raphael.parsePathString(pth);
+        var num_array = [];
+        var mstart = 0;
+        var ctr = 0;
+        var cw = viewerElt.width();
+        var ch = viewerElt.height();
+
+        // iterate through in reverse order
+        for (var i = parsed_pth.length - 2; i >= 0; i--) {
+            if (parsed_pth[i][0] == "z") {
+                new_pth += "M" + num_array[0] + "," + num_array[1];
+                for (var j = 2; j < num_array.length; j++) {
+                    new_pth += ((j % 6 == 2) ? ("C" + num_array[j]) : (num_array[j]));
+                    new_pth += ((j % 6 != 1) ? (",") : "");
+                }
+                new_pth += "z";
+                num_array.length = 0;
+                num_array = []; // every time we hit a close-path command ('z'), restart num_array for new path
+            }
+            else if (parsed_pth[i][0] == "M") {
+                num_array.push(parsed_pth[i][1]);
+                num_array.push(parsed_pth[i][2]);
+            }
+            else {
+                num_array.push(parsed_pth[i][5]);
+                num_array.push(parsed_pth[i][6]);
+                num_array.push(parsed_pth[i][3]);
+                num_array.push(parsed_pth[i][4]);
+                num_array.push(parsed_pth[i][1]);
+                num_array.push(parsed_pth[i][2]);
+            }
+        }
+
+        // manually add the last path, since there is no 'z' at the start of our pathstring
+        new_pth += "M" + num_array[0] + "," + num_array[1];
+        for (var j = 2; j < num_array.length; j++) {
+            new_pth += ((j % 6 == 2) ? ("C" + num_array[j]) : (num_array[j]));
+            new_pth += ((j % 6 != 1) ? (",") : "");
+        }
+        new_pth += "z";
+        new_pth += "M-5,-5L" + (cw + 5) + ",-5L" + (cw + 5) + "," + (ch + 5) + "L-5," + (ch + 5) + "L-5,-5z"; // outer path
+        return new_pth;
+    }
+    that.block_to_isol = block_to_isol;
+
+    /** KEEP
+     * Uses the arrays ml, xy, and pa to draw paths with the correct properties.
+     * First clears the canvas of existing paths, then draws new ones.
+     */
+    function drawPaths() {
+        var cw = viewerElt.width();
+        var ch = viewerElt.height();
+        var paths = "";
+        var cpaths = "";
+        var len = pathObjects.length;
+        for (var i = 0; i < len; i++) { //removes paths from canvas
+            pathObjects[i].remove();
+        }
+        pathObjects.length = 0;
+        for (var i = 0; i < ml.length; i++) { //construct the paths
+            if (ml[i] === 'M') {
+                paths += "PATH::[pathstring]"; // the paths to be drawn now
+                cpaths += "PATH::[pathstring]"; // the paths we will save for our datastring (in relative coordinates)
+            }
+            paths += ml[i] + (cw * xy[i][0]) + ',' + (ch * xy[i][1]); // absolute coords
+            cpaths += ml[i] + (xy[i][0]) + ',' + (xy[i][1]); // relative coords
+            if (ml[i + 1] != 'L') {
+                // if we're here, we've reached the end of a path, so add style information to the path strings
+                paths += "[stroke]" + pa[i].color + "[strokeo]" + pa[i].opacity + "[strokew]" + (ch * pa[i].width) + "[]|";
+                cpaths += "[stroke]" + pa[i].color + "[strokeo]" + pa[i].opacity + "[strokew]" + pa[i].width + "[]|";
+            }
+        }
+        var path = [];
+        if (paths.length > 0) {
+            path = paths.split('PATH::');
+        }
+        for (var i = 1; i < path.length; i++) {
+            var pstring = get_attr(path[i], "pathstring", "s");
+            var strokec = get_attr(path[i], "stroke", "s");
+            var strokeo = get_attr(path[i], "strokeo", "f");
+            var strokew = get_attr(path[i], "strokew", "f");
+            var drawing = paper.path(pstring); // draw the path to the canvas
+            drawing.data("type", "path");
+            drawing.attr({
+                "stroke-width": strokew,
+                "stroke-opacity": strokeo,
+                "stroke": strokec,
+                "stroke-linejoin": "round",
+                "stroke-linecap": "round"
+            });
+            pathObjects.push(drawing);
+        }
+        currpaths = cpaths; // currpaths is used in update_datastring as the string representing all paths on the canvas
+        //update_datastring();
+    }
+    that.drawPaths = drawPaths;
+
+    /** KEEP
+     * A helper function to draw transparencies. Takes the arrays transLetters (representing the
+     * svg path commands in the transparency string) and transCoords (corresponding locations on the
+     * canvas in relative coordinates) and draws the appropriate type of transparency to the canvas.
+     * If the type is 'isolate,' calls block_to_isol, which reverses the path and adds an outer path
+     * around the canvas to fill the in-between space.
+     */
+    function drawTrans() {
+        remove_all(); // be careful that this method isn't called unless the type of the ink is 'trans'!
+        var cw = domelement.width();
+        var ch = domelement.height();
+        var path = "";
+        var ind = 0;
+        // iterate through the transLetters array and create our svg path accordingly
+        for (var i = 0; i < transLetters.length; i++) {
+            if (transLetters[i] == "M" || transLetters[i] == "L") { // if M or L, add next two coords to the path
+                path += transLetters[i] + (transCoords[ind] * cw) + "," + (transCoords[ind + 1] * ch);
+                ind += 2;
+            }
+            else if (transLetters[i] == "C") {
+                path += "C" + (transCoords[ind] * cw);
+                for (var k = 1; k < 6; k++) { // if C, add next six coords to the path (coords represent bezier curve)
+                    path += "," + ((k % 2) ? (transCoords[ind + k] * ch) : (transCoords[ind + k] * cw));
+                }
+                ind += 6;
+            }
+            else if (transLetters[i] == "z") // if z, close the path
+                path += "z"
+            else
+                console.log("ELSE: " + transLetters[i]);
+        }
+        var final_path = path;
+        if (trans_mode == 'isolate') // if the mode is 'isolate,' reverse the path and add an outer path
+            final_path = block_to_isol(path);
+        var trans = paper.path(final_path).attr({ "fill": marqueeFillColor, "fill-opacity": marqueeFillOpacity, "stroke-width": 0 }).data("type", "trans");
+        trans_currpath = "TRANS::[path]" + path + "[color]" + marqueeFillColor + "[opac]" + marqueeFillOpacity + "[mode]" + trans_mode + "[]";
+        update_datastring(); // this call might be unnecessary
+    }
+    that.drawTrans = drawTrans;
+
+    /** KEEP
+     * Takes in a datastring and parses for a certain attribute by splitting at "[" and "]" (these surround
+     * attribute names).
+     * NOTE if errors are coming from this function, could be that the datastring is empty...
+     * @param str        the datastring
+     * @param attr       the attribute we'll parse for
+     * @param parsetype  'i' (int), 's' (string), or 'f' (float)
+     * @return  the value of the attribute in the correct format
+     */
+    function get_attr(str, attr, parsetype) {
+        if (parsetype === "f") {
+            return parseFloat(str.split("[" + attr + "]")[1].split("[")[0]);
+        } else if (parsetype === "s") {
+            return str.split("[" + attr + "]")[1].split("[")[0];
+        } else {
+            return parseInt(str.split("[" + attr + "]")[1].split("[")[0]);
+        }
+    }
+    that.get_attr = get_attr;
+
+    /** KEEP
+     * Loads an ink onto the ink canvas using its datastring (e.g. from track data).
+     * @param   the datastring to be loaded (see update_datastring for datastring format)
+     */
+    function loadInk(datastr) {
+        var shapes = datastr.split("|");
+        var i;
+        var cw = domelement.width();
+        var ch = domelement.height();
+        magX = cw;
+        magY = ch;
+        var shapes_len = shapes.length;
+        for (i = 0; i < shapes_len; i++) {
+            var shape = shapes[i];
+            if (shape && (shape != "")) {
+                var type = shape.split("::")[0];
+                switch (type.toLowerCase()) {
+                    case "text":
+                        // format: [str]<text>[font]<font>[fontsize]<fontsize>[color]<font color>[x]<x>[y]<y>[]
+                        var size = get_attr(shape, "fontsize", "f") * ch;
+                        fontSize = size;
+                        var x = get_attr(shape, "x", "f") * cw;
+                        var y = get_attr(shape, "y", "f") * ch;
+                        var w, h;
+                        try {
+                            w = get_attr(shape, 'w', 'f');
+                            h = get_attr(shape, 'h', 'f');
+                        } catch (err) {
+                            w = null;
+                            h = null;
+                        }
+                        var text_color = get_attr(shape, "color", "s");
+                        var text_font = get_attr(shape, "font", "s");
+                        var text_text = get_attr(shape, "str", "s");
+                        var text = paper.text(x, y, text_text);
+                        text.attr({
+                            "font-family": text_font,
+                            "font-size": size + "px",
+                            "fill": text_color,
+                            "text-anchor": "start",
+                        });
+                        text.data({
+                            "x": x,
+                            "y": y,
+                            'w': w,
+                            'h': h,
+                            "fontsize": size,
+                            "color": text_color,
+                            "font": text_font,
+                            "type": "text",
+                            "str": text_text,
+                        });
+                        textElt = text;
+                        break;
+                    case "path":
+                        // format: [pathstring]M284,193L284,193[stroke]000000[strokeo]1[strokew]10[]
+                        if (!currpaths) {
+                            currpaths = "";
+                        }
+                        currpaths += shape + "|";
+                        update_ml_xy_pa(shape + "|");
+                        break;
+                    case "bezier":
+                        if (!pathstring)
+                            pathstring = "";
+                        pathstring += get_attr(shape, "pathstring", 's');
+                        pa.push({ color: get_attr(shape, "stroke", 's'), opacity: get_attr(shape, "strokeo", "f"), width: get_attr(shape, "strokew", "f") });
+                        break;
+                    case "trans":
+                        // format: [path]<path>[color]<color>[opac]<opac>[mode]<block or isolate>[]
+                        if (!trans_currpath) {
+                            trans_currpath = "";
+                        }
+                        trans_currpath += shape + "|";
+                        var pathstringt = get_attr(shape, "path", 's');
+                        marqueeFillColor = get_attr(shape, "color", 's');
+                        marqueeFillOpacity = get_attr(shape, "opac", "f");
+                        trans_mode = get_attr(shape, "mode", 's');
+                        transCoords = pathstringt.match(/[0-9.\-]+/g);
+                        transLetters = pathstringt.match(/[CMLz]/g);
+                        drawTrans();
+                        break;
+                    default:
+                        console.log("Using deprecated ink types: " + type.toLowerCase() + ".");
+                        break;
+                }
+            }
+        }
+        drawPaths();
+        if (pathstring) {
+            drawBezierPath();
+        }
+
+        // force adjustViewBox to run so viewbox is always set 
+        //lastpx = origpx + 10000;
+        if (enabled) {
+            paper.setViewBox(0, 0, cw, ch);
+            //adjustViewBox({ x: origpx, y: origpy, width: origpw, height: origph });
+        }
+    }
+    that.loadInk = loadInk;
+
+    /** KEEP
+     * Helper function to determine whether p1 and p2 are effectively the same point. Returns true if so.
+     */
+    function nontrivial(p1, p2) {
+        return ((Math.abs(p1.x - p2.x) > 0.00000001) || (Math.abs(p1.y - p2.y) > 0.00000001) || (Math.abs(p1.w - p2.w) > 0.00000001) || (Math.abs(p1.h - p2.h) > 0.00000001));
+    }
+    that.nontrivial = nontrivial;
+
+    /** KEEP
+     * Pans all objects in the canvas by dx, dy.
+     * @param dx, dy    the deltas
+     * @param draw      should we take time to draw the objects?
+     */
+    function panObjects(dx, dy, canv_dims, draw) {
+        var cw = canv_dims.cw;
+        var ch = canv_dims.ch;
+        paper.forEach(function (elt) { // first take care of panning rects, ellipses, and texts by changing their attributes
+            var type = elt.data("type");
+            if (type === "text") {
+                elt.attr({
+                    'x': parseFloat(elt.attr("x")) + dx * cw,
+                    'y': parseFloat(elt.attr("y")) + dy * ch,
+                });
+                elt.data('x', parseFloat(elt.data("x")) + dx * cw);
+                elt.data('y', parseFloat(elt.data("y")) + dy * ch);
+                inkPannedX = elt.attr('x');
+                inkPannedY = elt.attr('y');
+            }
+        });
+
+        // pan paths by modifying xy
+        var xylen = xy.length;
+        for (var i = 0; i < xylen; i++) {
+            xy[i][0] = xy[i][0] + dx;
+            xy[i][1] = xy[i][1] + dy;
+        }
+
+        // pan transparencies by modifying transCoords
+        var tclen = transCoords.length;
+        for (var i = 0; i < tclen; i++) {
+            transCoords[i] += ((i % 2) ? dy : dx);
+        }
+
+        // if type is drawing, call drawPaths if necessary
+        if (xylen && draw) {
+            drawPaths();
+        }
+
+        // if type is transparency, call drawTrans if ncecessary
+        if (tclen && draw) {
+            drawTrans();
+        }
+
+        // if the type of our ink is a text, redraw (if necessary) by just removing all and loading the datastring back in
+        if (!xylen && !tclen && draw) {
+            var dstring = update_datastring();
+            remove_all();
+            datastring = dstring;
+            loadInk(datastring);
+        }
+    }
+    that.panObjects = panObjects;
+
+    /** KEEP
+     * Helper function to convert to relative coordinates.
+     * @param abs_coord   the absolute coordinate
+     * @param canv_dim    the relevant canvas dimension to scale by
+     */
+    function rel_dims(abs_coord, canv_dim) {
+        return parseFloat(abs_coord) / parseFloat(canv_dim);
+    }
+    that.rel_dims = rel_dims;
+
+    /** KEEP
+     * Removes all Raphael elements from the canvas and clears arrays
+     */
+    function remove_all() {
+        paper.clear();
+        ml.length = 0;
+        xy.length = 0;
+        pa.length = 0;
+        pathObjects.length = 0;
+        marquees.length = 0;
+        currpaths = "";
+        datastring = '';
+    }
+    that.remove_all = remove_all;
+
+    /** KEEP
+     * Resizes all elements in the ink canvas.
+     * @param scale_x, scale_y   the scale factors to resize by
+     * @param draw               should we take the time to draw the result?
+     */
+    function resizeObjects(scale_x, scale_y, draw) {
+        paper.forEach(function (elt) { // resize ellipses, rects, and texts by scaling attributes
+            var type = elt.data("type");
+            if (type === "text") {
+                elt.attr({
+                    'font-size': parseFloat(elt.attr("font-size")) * scale_y,
+                    'x': elt.attr("x") * scale_x,
+                    'y': elt.attr("y") * scale_y,
+                });
+                elt.data({
+                    'fontsize': elt.data("fontsize") * scale_y,
+                    'x': elt.data("x") * scale_x,
+                    'y': elt.data("y") * scale_y,
+                });
+            }
+        });
+
+        // resize paths by scaling elements of xy
+        var xylen = xy.length;
+        for (var i = 0; i < xylen; i++) {
+            xy[i][0] = xy[i][0] * scale_x;
+            xy[i][1] = xy[i][1] * scale_y;
+            pa[i].width = pa[i].width * scale_x;
+        }
+
+        // resize transparencies by scaling elements of transCoords
+        var tclen = transCoords.length;
+        for (var i = 0; i < tclen; i++) {
+            transCoords[i] *= ((i % 2) ? scale_y : scale_x);
+        }
+
+        // call drawPaths or drawTrans to update paths and transparencies, respectively, if need be
+        if (xylen && draw)
+            drawPaths();
+        if (tclen && draw)
+            drawTrans();
+
+        // update texts if need by by calling remove_all and then loading in the datastring
+        if (!xylen && !tclen && draw) {
+            var dstring = update_datastring();
+            remove_all();
+            datastring = dstring;
+            loadInk(datastring);
+        }
+    }
+    that.resizeObjects = resizeObjects;
+
+    /** KEEP
+     * Set the variables related to adjustViewBox (original artwork location) using the art proxy,
+     * which keeps track of its dimensions
+     */
+    function retrieveOrigDims() {
+        var proxy = $("[data-proxy='" + escape(artName) + "']");
+        var kfx = initKeyframe.x;
+        var kfy = initKeyframe.y;
+        var kfw = initKeyframe.w;
+        var real_kfw = origPaperW / kfw;
+        var real_kfh = real_kfw * (proxy.data("h") / proxy.data("w"));
+        var real_kfx = -kfx * real_kfw;
+        var real_kfy = -kfy * real_kfh;
+        origpx = real_kfx;
+        origpy = real_kfy;
+        origpw = real_kfw;
+        origph = real_kfh;
+        lastpx = origpx;
+        lastpy = origpy;
+        lastpw = origpw;
+        lastph = origph;
+    }
+    that.retrieveOrigDims = retrieveOrigDims;
+
+    /** KEEP
+     * Setter for the artname of a linked ink's associated artwork
+     */
+    function setArtName(name) {
+        artName = name;
+    }
+    that.setArtName = setArtName;
+
+    /** KEEP
+     * Setter (sets experience id of ink)
+     */
+    function setEID(inEID) {
+        EID = inEID;
+    }
+    that.setEID = setEID;
+
+    /** KEEP
+     * Sets the initial artwork keyframe
+     */
+    function setInitKeyframeData(kf) {
+        initKeyframe = kf;
+    }
+    that.setInitKeyframeData = setInitKeyframeData;
+
+    /** KEEP
+     * Sets the ink mode
+     */
+    function set_mode(i) {
+        i = parseInt(i);
+        mode = i;
+    }
+    that.set_mode = set_mode;
+
+    /** KEEP
+     * Returns a string giving all necessary information to recreate the current scene.
+     * The result is stored in ink tracks as the 'datastring.' Also used throughout
+     * InkAuthoring to make sure we have an up to date datastring. The formats for each
+     * type of ink is given below (note that the trailing '[]' makes it easier to parse).
+     * Note that the MARQUEE type is deprecated -- it has been replaced by TRANS type
+     * transparencies represented by paths rather than collections of rectangles. The
+     * BOUNDRECT and BOUNDELLIPSE types are for reloading rectangles and ellipses when we
+     * edit transparencies (their formats are identical to RECT/ELLIPSE). All coordinates are relative.
+     *
+     *   PATH::[pathstring]<svg path string>[stroke]<color>[strokeo]<opacity>[strokew]<width>[]
+     *   RECT::[x]<x>[y]<y>[w]<width>[h]<height>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
+     *   ELLIPSE::[cx]<center x>[cy]<center y>[rx]<x radius>[ry]<y radius>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
+     *   MARQUEE::[x]<x>[y]<y>[w]<width>[h]<height>[surrfillc]<fill color>[surrfillo]<fill opac>[]
+     *   TEXT::[str]<text>[font]<font>[fontsize]<fontsize>[color]<font color>[x]<x>[y]<y>[w]<width>[h]<height>[]
+     *   TRANS::[path]<path>[color]<color>[opac]<opac>[mode]<block or isolate>[]
+     *   BOUNDRECT::[x]<x>[y]<y>[w]<width>[h]<height>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
+     *   BOUNDELLIPSE::[cx]<center x>[cy]<center y>[rx]<x radius>[ry]<y radius>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
+     *
+     * @return    up to date datastring
+     */
+    function update_datastring() {
+        var data_string = "";
+        var canv_width = domelement.width();
+        var canv_height = domelement.height();
+        if (currpaths && currpaths != "") { // add pen paths to datastring
+            if (currpaths.split("Mundefined").length > 1)
+                currpaths = currpaths.split("Mundefined").join("");
+            data_string += currpaths;
+        }
+        if (trans_currpath && trans_currpath != "") { // add transparency paths to datastring
+            data_string += trans_currpath;
+        }
+        if (cpathstring) {
+            data_string += cpathstring.replace(/undefined/g, '');
+        }
+
+        paper.forEach(function (elt) { // now check the canvas for text
+            if (elt.data("type") === "text") {
+                var pth = "TEXT::[str]" + elt.data("str")
+                    + "[font]" + elt.data("font")
+                    + "[fontsize]" + rel_dims(elt.data("fontsize"), canv_height) //scale font-size
+                    + "[color]" + elt.data("color")
+                    + "[x]" + rel_dims(elt.data("x"), canv_width)
+                    + "[y]" + rel_dims(elt.data("y"), canv_height)
+                    + "[w]" + elt.data('w')
+                    + "[h]" + elt.data('h')
+                    + "[]";
+                data_string += pth + "|";
+            }
+            else {
+                console.log("type = " + elt.data("type"));
+            }
+        });
+        datastring = data_string;
+        return data_string;
+    }
+    that.update_datastring = update_datastring;
+
+    /** KEEP
+     * When we load in a path datastring, update ml, xy, and pa to reflect the new data.
+     * @param str   the datastring loaded
+     */
+    function update_ml_xy_pa(str) {
+        var i, j;
+
+        // add info to ml and pa
+        for (i = 0; i < str.length; i++) {
+            if ((str[i] == "L") || (str[i] == "M")) {
+                var cpth = str.substring(i).split("|")[0];
+                var strokec = get_attr(cpth, "stroke", "s");
+                var strokeo = get_attr(cpth, "strokeo", "f");
+                var strokew = get_attr(cpth, "strokew", "f");
+                ml.push(str[i]);
+                pa.push({ "color": strokec, "opacity": strokeo, "width": strokew });
+            }
+        }
+
+        // add info to xy (probably easier with regular expressions)
+        var arr1 = str.split("L");
+        for (i = 0; i < arr1.length; i++) {
+            if (arr1[i].length > 0) {
+                var arr2 = arr1[i].split("M");
+                for (j = 0; j < arr2.length; j++) {
+                    if (arr2[j].length > 0 && arr2[j].charAt(0) != 'P') {
+                        var arr3 = arr2[j].split(",");
+                        xy.push([parseFloat(arr3[0]), parseFloat(arr3[1])]);
+                    }
+                }
+            }
+        }
+        click = false;
+    }
+    that.update_ml_xy_pa = update_ml_xy_pa;
+
+    //////// NEW PATH SMOOTHING CODE //////////
+    var points = [],
+        roughPoints = [],
+        paper,
+        thresh = 8,
+        closeThresh = 5,
+        canBeClosed = false,
+        pathstring = "",
+        cpathstring = "",
+        closeCircle,
+        old_points = [],
+        old_pa = [],
+        //old_pathstring = '',
+        canvW, canvH;
+
+    function distance(pt1, pt2, cw, ch) {
+        var dx = (pt1[0] - pt2[0]) * (cw || 1);
+        var dy = (pt1[1] - pt2[1]) * (ch || 1);
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // get array of coordinates from a pathstring (x, y, x, y, ...)
+    function extractCoords(pthstr) {
+        return pthstr.match(/[0-9.\-]+/g);
+    }
+
+    // get array of letters from a pathstring ('M', 'R', ' ', ' ', 'M', 'L', ...)
+    function extractLetters(pthstr) {
+        return pthstr.match(/[MLR ]/g);
+    }
+
+    // draws either the given path or pathstring if none is provided
+    function drawBezierPath(str) {
+        var cw = viewerElt.width();
+        var ch = viewerElt.height();
+        var pathsToDraw = [], pathsToSave = '', pathToDraw = '';
+        var raphaelpath = '',
+            roughpath = '',
+            i, path, circle;
+
+        paper.clear();
+
+        str = str || pathstring;
+        if (!str) return;
+
+        var MRL = extractLetters(str);
+        var coords = extractCoords(str);
+
+        var paCount = 0;
+        for (i = 0; i < MRL.length; i++) { //construct the paths
+            if (MRL[i] === 'M') {
+                pathsToSave += "BEZIER::[pathstring]";
+            }
+            //console.log("ch*coords["+(2*i+1)+"] = "+ch*coords[2*i+1]);
+            pathToDraw += MRL[i] + (cw * coords[2 * i]) + ',' + (ch * coords[2 * i + 1]); // absolute coords
+            pathsToSave += MRL[i] + coords[2 * i] + ',' + coords[2 * i + 1]; // relative coords
+            if (MRL[i + 1] === 'M' || i === MRL.length - 1) {
+                pathsToDraw.push(pathToDraw);
+                pathToDraw = '';
+                pathsToSave += "[stroke]" + pa[paCount].color + "[strokeo]" + pa[paCount].opacity + "[strokew]" + pa[paCount].width + "[]|";
+                paCount++;
+            }
+        }
+        console.log("to save: " + pathsToSave);
+        for (i = 0; i < pathsToDraw.length; i++) { // need to split up the paths so we can style each separately
+            console.log("to draw: " + pathsToDraw[i]);
+            var drawing = paper.path(pathsToDraw[i]); // draw the path to the canvas
+            drawing.data("type", "bezier");
+            drawing.attr({
+                "stroke-width": pa[i].width * ch,
+                "stroke-opacity": pa[i].opacity,
+                "stroke": pa[i].color,
+                "stroke-linejoin": "round",
+                "stroke-linecap": "round"
+            });
+        }
+        cpathstring = pathsToSave; // currpaths is used in update_datastring as the string representing all paths on the canvas
+    }
+    that.drawBezierPath = drawBezierPath;
+
+    // constructs bezier path to draw
+    function constructBezierPath(clip) {
+        var raphaelpath = '',
+            roughpath = '',
+            i, path, circle, len = points.length, rlen = roughPoints.length,
+            p1x = points[0][0], p1y = points[0][1],
+            rp1x, rp1y;
+
+        if (len === 1) {
+            raphaelpath = "M" + p1x + "," + p1y + "L" + p1x + "," + p1y;
+        } else if (len === 2) {
+            raphaelpath = "M" + p1x + "," + p1y + "R" + points[1][0] + "," + points[1][1] + " " + points[1][0] + "," + points[1][1];
+        } else if (len > 2) {
+            raphaelpath = "M" + p1x + "," + p1y + "R";
+            for (i = 1; i < len; i++) {
+                raphaelpath += ((i === 1) ? "" : " ") + points[i][0] + "," + points[i][1];
+            }
+        }
+        if (rlen > 0) {
+            rp1x = roughPoints[0][0];
+            rp1y = roughPoints[0][1];
+            if (len > 0) {
+                for (i = 0; i < rlen; i++) {
+                    roughpath += " " + roughPoints[i][0] + "," + roughPoints[i][1];
+                }
+            } else {
+                if (rlen === 1) {
+                    roughpath = "M" + rp1x + "," + rp1y + "L" + rp1x + "," + rp1y;
+                    if (rlen === 2) {
+                        roughpath = "M" + rp1x + "," + rp1y + "L" + roughPoints[1][0] + "," + roughPoints[1][1];
+                    } else {
+                        roughpath = "M" + rp1x + "," + rp1y + "R";
+                        for (i = 1; i < rlen; i++) {
+                            roughpath += ((i === 1) ? "" : " ") + roughPoints[i][0] + "," + roughPoints[i][1];
+                        }
+                    }
+                }
+            }
+        }
+        if (clip) {
+            pathstring += raphaelpath;
+            pathstring += (rlen === 0) ? "" : " " + roughPoints[rlen - 1][0] + "," + roughPoints[rlen - 1][1];
+            drawBezierPath();
+        } else {
+            drawBezierPath(pathstring + raphaelpath + roughpath);
+        }
+    }
+
+    // setter for distance between bezier points
+    function setThresh(val) {
+        thresh = parseInt(val, 10);
+    }
+
+    // setter for close path threshold
+    function setCloseThresh(val) {
+        closeThresh = parseInt(val, 10);
+    }
+    //////////////////////////////////////////
+
+    return that;
+};
+
+/*************/
 window.ITE = window.ITE || {};
 
 ITE.Utils = function(){ //contains utility functions
@@ -3749,7 +4627,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	Utils.extendsPrototype(this, _super);
 
     var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
-
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
@@ -3759,7 +4636,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	self.animation,
 	self.interactionAnimation;
 
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	interactionHandlers 		= {},
 	movementTimeouts 			= [],
 	this.trackData   			= trackData;
@@ -3881,6 +4757,20 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			self.animation = TweenLite.to(_UIControl, duration, state);		
 			self.animation.play();
 	};
+
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	//TODO: implement
+	this.addInk = function(inkTrack){
+		console.log("position().top: " + _UIControl.position().top)
+		console.log("offset().top: " + _UIControl.offset().top)
+
+	}
+
+
 
    /** 
 	* I/P: none
@@ -4013,7 +4903,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	self.animation;
 	self.audioAnimation;
 
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	var interactionHandlers 	= {},
 	movementTimeouts 			= [];
     //DOM related
@@ -4125,7 +5014,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 			"width":		state.size.width,
 			"opacity":		state.opacity
 		});
-		console.log(state.volume)
 		_videoControls.volume = state.volume*self.player.currentVolumeLevel;
 		state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
 	};
@@ -4160,13 +5048,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		if (newVolume === 0) {
 			this.toggleMute()
 		} else {	
-		//Duration of current time to next keyframe
-			var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();
-	
 			//Set volume to newVolume * value from keyframes
 			_videoControls.volume = _videoControls.volume*newVolume/self.player.previousVolumeLevel;
+			
+			if (this.orchestrator.status === 1){
+
+				//Duration of current time to next keyframe
+				var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();
 	
-			if (self.taskManager.status === "playing"){
 				//Stop current animation
 				self.audioAnimation.stop();
 			
@@ -4207,6 +5096,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		}, duration*1000);
 	};
 
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	this.addInk = function(inkTrack){
+		console.log("adding "+ inkTrack.trackData.name + " as an overlay in a video")
+	};
 
    /** 
 	* I/P: none
@@ -4331,7 +5228,6 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	self.trackData 				= trackData;
 	self.orchestrator			= orchestrator;
 	self.status 				= "loading";
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	self.trackData   			= trackData;
 	self.animationCallback;
 
@@ -4495,7 +5391,23 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		self.animation.play(); 
 	};
 
-
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	function addInk(inkTrack){
+		if (!_viewer.viewport){
+			console.log("failed to load ink as DZ is not ready" )
+			setTimeout(function(){
+				addInk(inkTrack) } , 100)
+		} else {
+			var point = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(50, 50))
+			console.log("point: " + point)
+			_viewer.addOverlay(inkTrack._UIControl[0], point);	
+		}
+	};
+	this.addInk = addInk;
 	/* 
 	* I/P: duration	duration of track
 	* Helper function for animate() that is a bit of a hack
@@ -4619,7 +5531,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 window.ITE = window.ITE || {};
 
 ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
-
+"use strict";
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
@@ -4638,16 +5550,12 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	self.savedState		= keyframes[0];
 	self.animation;
 
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
-	interactionHandlers 		= {},
-	movementTimeouts 			= [],
 	this.trackData   			= trackData;
 
     //DOM related
-    var _video,
+    var _audio,
     	_UIControl,
-    	_videoControls;
-
+    	_audioControls;
 
 	//Start things up...
     initialize()
@@ -4661,14 +5569,14 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 		_super.initialize()
 
 		//Create UI and append to ITEHolder
-		_video		= $(document.createElement("video"))
-			.addClass("assetVideo");
+		_audio		= $(document.createElement("audio"))
+			.addClass("assetAudio");
 
-		_videoControls = _video[0];
+		_audioControls = _audio[0];
 
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
-			.append(_video);
+			.append(_audio);
 
 		$("#ITEHolder").append(_UIControl);
 
@@ -4676,39 +5584,29 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 		for (i=1; i<keyframes.length; i++) {
 			keyframeData={
-						  "opacity"	: keyframes[i].opacity,
-						  "top"		: (500*keyframes[i].pos.y/100) + "px",
-						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
-						  "width"	: (1000*keyframes[i].size.x/100) + "px",
-						  "height"	: (500*keyframes[i].size.y/100) + "px"
+						  "volume"	: keyframes[i].volume 
 						};
 			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
-
-		//Attach Handlers
-		attachHandlers()
-
 	};
 
 
    /** 
 	* I/P: none
-	* Loads actual video asset, and sets status to paused when complete
+	* Loads actual audio asset, and sets status to paused when complete
 	* O/P: none
 	*/
 	this.load = function(){
 		_super.load()
 
 		//Sets the image’s URL source
-		_video.attr({
+		_audio.attr({
 			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
 			"type" 	: this.trackData.type
 		})
-
-		_videoControls.load()
 		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-		_video.onload = function (event) {//Is this ever getting called?
+		_audio.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
 			this.setState(keyframes[0]);
 		};
@@ -4716,7 +5614,212 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
    /** 
 	* I/P: none
-	* Grabs current actual state of video, and sets savedState to it 
+	* Grabs current actual state of audio, and sets savedState to it 
+	* returns savedState
+	* O/P: savedState
+	*/
+	this.getState = function(){
+		self.savedState = {
+			//displayNumber	: this.getPreviousKeyframe().displayNumber,
+			time			: self.taskManager.timeManager.getElapsedOffset(),
+			volume			: _audioControls.volume,
+			audioOffset		: _audioControls.currentTime
+		};	
+		return self.savedState;
+	};
+
+   /**
+	* I/P: state	state to make actual audio reflect
+	* Sets properties of the image to reflect the input state
+	* O/P: none
+	*/
+	this.setState = function(state){
+		_audioControls.volume = state.volume;
+		state.audioOffset ? (_audioControls.currentTime = parseFloat(state.audioOffset)) : 0
+	};
+
+ 	/** 
+	* I/P: none
+	* Plays audio asset
+	* O/P: none
+	*/
+	this.play = function(targetTime, data){
+		_super.play.call(self, targetTime, data);
+		_audioControls.play();
+	}
+
+	this.pause = function(){
+		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		self.animation.stop();
+		_audioControls.pause()
+	}
+
+
+	/* 
+	* I/P: newVolume 	 new volume set by user via UI
+	* Sets the current volume to the newVolume * value from keyframes, and then animates the audio to the next keyframe 
+	* O/P: none
+	*/
+	this.setVolume = function(newVolume){
+		if (newVolume === 0) {
+			this.toggleMute()
+		} else {	
+			//Set volume to newVolume * value from keyframes
+			_audioControls.volume = _audioControls.volume*newVolume/self.player.previousVolumeLevel;
+			
+			if (this.orchestrator.status === 1){
+
+				//Duration of current time to next keyframe
+				var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();
+	
+				//Stop current animation
+				self.animation.stop();
+			
+				//Animate to the next keyframe
+				self.animation =_audio.animate({
+					volume: self.currentAnimationTask.nextKeyframeData.volume*newVolume
+				}, duration*1000);
+			}
+		}
+	};
+
+
+
+	/* 
+	* I/P: isMuted 	 boolean, whether or not tour is now muted
+	* mutes or unmutes tour
+	* O/P: none
+	*/
+	this.toggleMute = function(isMuted){
+		isMuted? _audioControls.muted = true : _audioControls.muted = false;
+	}
+
+
+
+
+	/* 
+	I/P: none
+	interpolates between current state and next keyframe
+	O/P: none
+	*/
+	this.animate = function(duration, state){
+		self.animation =_audio.animate({
+			volume: state.volume*self.player.currentVolumeLevel
+		}, duration*1000);	};
+};
+/*************/
+window.ITE = window.ITE || {};
+//ATTACHED INKS MUST ALWAYS BE AT THE END OF THE JSON FILE
+
+ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
+	//Extend class from ProviderInterfacePrototype
+	var Utils 		= new ITE.Utils(),
+		TAGUtils	= ITE.TAGUtils,
+		_super 		= new ITE.ProviderInterfacePrototype(),
+		self 		= this;
+
+	Utils.extendsPrototype(this, _super);
+
+    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+
+	self.player 		= player;
+	self.taskManager 	= taskManager;
+	self.trackData 		= trackData;
+	self.orchestrator	= orchestrator;
+	self.status 		= "loading";
+	//self.savedState		= keyframes[0];
+	self.interactionAnimation;
+	this.trackData   			= trackData;
+
+    //DOM related
+    var _ink,
+    	_UIControl,
+   		_attachedAsset;
+	//Start things up...
+    initialize()
+
+   /** 
+	* I/P: none
+	* Initializes track, creates UI
+	*/
+	function initialize(){
+		_super.initialize()
+
+		if (trackData.experienceReference !== "null"){
+			_attachedAsset = findAttachedAsset(trackData.experienceReference);
+			attachToAsset(_attachedAsset);
+		};
+
+		//Create UI and append to ITEHolder
+		_UIControl	= $(document.createElement("div"))
+			.addClass("UIControl")
+			.css({
+				"width": "100%",
+				"height": "100%",
+				"background":"transparent",
+				"pointer-events":"none",
+			})
+	        .attr("id", trackData.assetUrl);
+		$("#ITEHolder").append(_UIControl);
+
+		_ink = new tagInk(trackData.assetUrl, _UIControl[0]);
+
+		var i, keyframeData;
+		for (i=1; i<keyframes.length; i++) {
+			keyframeData={
+						  "opacity"	: keyframes[i].opacity,
+						  "inkData" : trackData.string
+						};
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+		}
+		
+		self.status = "ready";
+		self.setState(keyframes[0]);
+	};
+
+
+   /** 
+	* I/P: experienceReference name of asset to attach from Ink
+	* Finds the attached asset for the ink track (the track to attach the ink to)
+	* O/P: _attachedAsset Actual reference to the track that holds this asset
+	*/
+	function findAttachedAsset(experienceReference){
+		var j,
+			track;
+		//Loop through trackManager to find the asset whose name matches the Ink's experienceReference
+		for (j=0; j<self.orchestrator.trackManager.length; j++) {
+			track = self.orchestrator.trackManager[j];
+			if (track.trackData.name === experienceReference){
+				_attachedAsset = track;
+			};
+		};
+		//If it exists, return it, and if now, throw an error
+		if (_attachedAsset) {
+			return _attachedAsset;
+		} else {
+			throw new Error("Failed to find asset '" + experienceReference+ "' for attached ink '" + trackData.name + "'");
+		};
+	};
+
+
+	function attachToAsset(assetName){
+		_attachedAsset.addInk(self);
+	};
+
+   /** 
+	* I/P: none
+	* Loads actual image asset, and sets status to paused when complete
+	* O/P: none
+	*/
+	this.load = function(){
+			_super.load()
+			_ink.loadInk(trackData.string);
+	};
+
+   /** 
+	* I/P: none
+	* Grabs current actual state of image, and sets savedState to it 
 	* returns savedState
 	* O/P: savedState
 	*/
@@ -4725,52 +5828,26 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 			//displayNumber	: this.getPreviousKeyframe().displayNumber,
 			time			: self.taskManager.timeManager.getElapsedOffset(),
 			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
-			pos : {
-				x		: _UIControl.position().left,
-				y 		: _UIControl.position().top
-			},
-			size: {
-				height	: _UIControl.height(),
-				width	: _UIControl.width()
-			},
-			videoOffset	: _videoControls.currentTime
+			inkData			: trackData.string
 		};	
 		return self.savedState;
 	};
 
    /**
-	* I/P: state	state to make actual video reflect
+	* I/P: state	state to make actual image reflect
 	* Sets properties of the image to reflect the input state
 	* O/P: none
 	*/
 	this.setState = function(state){
 		_UIControl.css({
-			"left":			state.pos.x,
-			"top":			state.pos.y,
-			"height":		state.size.height,
-			"width":		state.size.width,
 			"opacity":		state.opacity
 		});
-		state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
 	};
-
- 	/** 
-	* I/P: none
-	* Plays video asset
-	* O/P: none
-	*/
-	this.play = function(targetTime, data){
-		_super.play.call(self, targetTime, data);
-		_videoControls.play();
-		_videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
-	}
 
 	this.pause = function(){
 		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
 		this.getState();
-		self.animation.kill();
-		_videoControls.pause()
-		_videoControls.setAttribute("controls", "controls")
+		self.animation.kill()
 	}
 
 	/* 
@@ -4779,112 +5856,16 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	O/P: none
 	*/
 	this.animate = function(duration, state){
-		self.animation = TweenLite.to(_UIControl, duration, state);		
-		self.animation.play();
+			self.animation = TweenLite.to(_UIControl, duration, state);		
+			self.animation.play();
 	};
 
-   /** 
-	* I/P: none
-	* Return a set of interactionHandlers attached to asset from provider
-	*/
-	function getInteractionHandlers(){
-		return interactionHandlers;
-	}
- 
-    /**
-     * I/P {Object} res     object containing hammer event info
-     * Drag/manipulation handler for associated media
-     * Manipulation for touch and drag events
-     */
-    function mediaManip(res) {
-        var top     	= _UIControl.position().top,
-            left     	= _UIControl.position().left,
-            width     	= _UIControl.width(),
-            height     	= _UIControl.height(),
-            finalPosition;
+	this.findAttachedAsset = findAttachedAsset
+	this.attachToAsset = attachToAsset;
+	this._UIControl = _UIControl;
 
-        // If the player is playing, pause it
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
 
-        // If event is initial touch on artwork, save current position of media object to use for animation
-        if (res.eventType === 'start') {
-            startLocation = {
-                x: left,
-                y: top
-            };
-        }	              
-        // Target location (where object should be moved to)
-        finalPosition = {
-            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
-            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-        };   
 
-        // Animate to target location
-        self.interactionAnimation && self.interactionAnimation.kill();
-        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
-        	top: finalPosition.y,
-        	left: finalPosition.x
-        });		
-    }
-	
-
-    /**
-     * I/P {Number} scale     scale factor
-     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
-     * Zoom handler for associated media (e.g., for mousewheel scrolling)
-     */
-    function mediaScroll(scale, pivot) {
-    	var t    	= _UIControl.position().top,
-            l    	= _UIControl.position().left,
-            w   	= _UIControl.width(),
-            h  		= _UIControl.height(),
-            newW  	= w * scale,
-            newH,
-            maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
-            minW	= 200,
-            newX,
-            newY;
-
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
-
-        // Constrain new width
-        if((newW < minW) || (newW > maxW)) {
-            newW 	= Math.min(maxW, Math.max(minW, newW));
-        };
-
-        // Update scale, new X and new Y according to newly constrained values.
-        scale 	= newW / w;
-        newH	= h * scale;
-        newX 	= l + pivot.x*(1-scale);
-       	newY 	= t + pivot.y*(1-scale); 
-
-       	//Animate _UIControl to this new position
-        self.interactionAnimation && self.interactionAnimation.kill();
-        self.interactionAnimation = TweenLite.to(_UIControl, .05, {
-        	top: newY,
-        	left: newX,
-        	width: newW,
-        	height: newH
-        });	
-    }
-    
-
-    /** 
-	* I/P: none
-	* Initializes handlers 
-	*/
-    function attachHandlers() {
-        // Allows asset to be dragged, despite the name
-        TAG.Util.disableDrag(_UIControl);
-
-        // Register handlers
-        TAG.Util.makeManipulatable(_UIControl[0], {
-            onManipulate: mediaManip,
-            onScroll:     mediaScroll
-        }); 
-        interactionHandlers.onManipulate 	= mediaManip;
-        interactionHandlers.onScroll		= mediaScroll;    	
-    }
 };
 
 /*************/
@@ -5091,6 +6072,7 @@ ITE.Orchestrator = function(player) {
 	self.player 			= player;
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
 	self.taskManager 		= new ITE.TaskManager();
+	self.status 			= 3;
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -5162,10 +6144,10 @@ ITE.Orchestrator = function(player) {
 					self.trackManager.push(new ITE.AudioProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "deepZoom" : 
-					trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "ink" : 
-					self.trackManager.push(new ITE.InkProvider(trackData));
+					self.trackManager.push(new ITE.InkProvider(trackData, self.player, self.taskManager, self));
 					break;
 				default:
 					throw new Error("Unexpected providerID; '" + trackData.providerID + "' is not a valid providerID");
@@ -5197,10 +6179,12 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function seek(seekTime){
+
 	}
 
 	function setVolume(newVolumeLevel){
-	    self.volumeChangedEvent.publish(newVolumeLevel);
+		self.volumeChangedEvent.publish(newVolumeLevel)
+	    // parseInt(this.status) !== 3 ? self.volumeChangedEvent.publish(newVolumeLevel) : console.log("don't do anything");
 	}
 
 	function toggleMute(isMuted){
@@ -5404,14 +6388,14 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("playPauseButtonContainer");
 
                 playPauseButton.addClass("playPauseButton")
-                .attr("src", "ITEPlayerImages/pause.svg")
+                .attr("src", "ITEPlayerImages/play.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
             playPauseButtonContainer.append(playPauseButton);
         }
 
-        playerConfiguration.autoPlay ? play() : pause()
+        playerConfiguration.autoPlay ? play() : null
     };
 
     /*
@@ -5547,7 +6531,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * O/P:   none
     */
     function togglePlayPause() {
-        (orchestrator.status !== 2) ? pause() : play()
+        (orchestrator.status === 1) ? pause() : play()
     };
 
     /*
@@ -5743,8 +6727,6 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	this.keyframes				= []; 	// Data structure to keep track of all displays/keyframes
 
 	this.interactionHandlers 	= null;	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
-
-	this.TrackInteractionEvent	= null; // Raised when track is interacted with.  This is for the inks to subscribe to.
 
 	self.player 				= player;
 	self.taskManager 			= taskManager;

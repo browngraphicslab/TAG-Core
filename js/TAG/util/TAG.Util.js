@@ -1,4 +1,14 @@
-var TAG = TAG || {},
+var TAG = TAG || {}, // TODO merge fix these
+    LADS = LADS || TAG, // backwards compatibility until merge is complete
+    tagPath = tagPath || '',// backwards compatibility until merge is complete
+    containerId = containerId || 'tagContainer',// backwards compatibility until merge is complete
+    ip = ip || 'browntagserver.com',// backwards compatibility until merge is complete
+    allowServerChange = true,// backwards compatibility until merge is complete
+    allowAuthoringMode = true,// backwards compatibility until merge is complete
+    idleDuration = 120000,// backwards compatibility until merge is complete
+    currentPage = {},// backwards compatibility until merge is complete
+    INPUT_TOUR_ID = null,// backwards compatibility until merge is complete
+    idleTimer,// backwards compatibility until merge is complete
     Worktop = Worktop || {};
 
 //TAG Utilities
@@ -1512,7 +1522,7 @@ TAG.Util = (function () {
             cache: false,
             url: path.match(/\//) ? path : tagPath+"html/"+path,
             success: function (data) {
-                ret = $(data);
+                ret = data;
             },
             error: function (err) {
                 console.log("url = " + path);
@@ -1521,7 +1531,7 @@ TAG.Util = (function () {
             },
             dataType: 'html'
         });
-        return ret;
+        return ret ? ((typeof Windows !== 'undefined') ? $(toStaticHTML(ret)) : $(ret)) :  '';
     }
 
      /**
@@ -1869,6 +1879,7 @@ TAG.Util.UI = (function () {
             }
         });
 
+        /* TODO merging
         TAG.Telemetry.register(serverDialogInput, 'keydown', 'change_server', function(tobj, evt) {
             if(evt.which !== 13) {
                 return true;
@@ -1876,6 +1887,7 @@ TAG.Util.UI = (function () {
             tobj.custom_3 = localStorage.ip;
             tobj.custom_4 = serverDialogInput.val();
         });
+        */
 
         var serverDialogContact = $(document.createElement('div'));
         serverDialogContact.css({ 'margin-top': '10%' , 'color':'white','text-align': 'center'  });
@@ -1986,10 +1998,12 @@ TAG.Util.UI = (function () {
 
         serverSaveButton.on('click', saveClick);
 
+        /* TODO merging
         TAG.Telemetry.register(serverSaveButton, 'click', 'change_server', function(tobj, evt) {
             tobj.custom_3 = localStorage.ip;
             tobj.custom_4 = serverDialogInput.val();
         });
+        */
 
         var serverCircle = $(document.createElement('img'));
         serverCircle.css({

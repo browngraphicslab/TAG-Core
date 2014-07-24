@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "grunt": "~0.4.1",
+    "grunt-contrib-concat": "~0.1.2",
     "grunt-contrib-jade": "~0.8.0",
     "grunt-contrib-stylus": "~0.8.0",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt-contrib-yuidoc": "^0.5.2",
     "jade": "~1.1.5",
     "stylus": "~0.42.2"
   },

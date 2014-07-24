@@ -1,0 +1,233 @@
+{
+    "tourTitle": "TempTour",
+    "tracks": [
+
+            {
+            "name": "deepzoomsky",
+            "providerId": "deepZoom",
+            "assetUrl": "deepzoomsky/GeneratedImages/dzc_output.xml",
+            "keyframes": [
+                {
+                    "dispNum": "1",
+                    "time": "0",
+                    "opacity": "1",
+                    "scale":"1",
+                    "pos": {
+                        "x": ".5",
+                        "y": "0"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "1",
+                    "opacity": "1",
+                    "scale":"1",
+                    "pos": {
+                        "x": ".5",
+                        "y": "0"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "15",
+                    "opacity": "1",
+                    "scale":"1",
+                    "pos": {
+                        "x": ".5",
+                        "y": "0"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "20",
+                    "opacity": "0",
+                    "scale":"1",
+                    "pos": {
+                        "x": ".5",
+                        "y": "0"
+                    },
+                    "data": {}
+                }
+            ]
+        },
+        {
+            "name": "minionBananas",
+            "providerId": "image",
+            "assetUrl": "minionMoreBananas.png",
+            "keyframes": [
+                {
+                    "dispNum": "1",
+                    "time": "0",
+                    "opacity": "0",
+                    "size": {
+                        "x": "20",
+                        "y": "40"
+                    },
+                    "pos": {
+                        "x": "0",
+                        "y": "0"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "0",
+                    "opacity": "0",
+                    "size": {
+                        "x": "20",
+                        "y": "40"
+                    },
+                    "pos": {
+                        "x": "0",
+                        "y": "0"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "1",
+                    "opacity": "1",
+                    "size": {
+                        "x": "20",
+                        "y": "40"
+                    },
+                    "pos": {
+                        "x": "0",
+                        "y": "0"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "2",
+                    "opacity": "1",
+                    "size": {
+                        "x": "10",
+                        "y": "20"
+                    },
+                    "pos": {
+                        "x": "30",
+                        "y": "10"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "3",
+                    "opacity": "1",
+                    "size": {
+                        "x": "30",
+                        "y": "50"
+                    },
+                    "pos": {
+                        "x": "2",
+                        "y": "10"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "4",
+                    "opacity": "1",
+                    "size": {
+                        "x": "100",
+                        "y": "100"
+                    },
+                    "pos": {
+                        "x": "2",
+                        "y": "10"
+                    },
+                    "data": {}
+                },                {
+                    "dispNum": "1",
+                    "time": "10",
+                    "opacity": "1",
+                    "size": {
+                        "x": "100",
+                        "y": "100"
+                    },
+                    "pos": {
+                        "x": "-10",
+                        "y": "10"
+                    },
+                    "data": {}
+                },
+                {
+                    "dispNum": "1",
+                    "time": "11",
+                    "opacity": "0",
+                    "size": {
+                        "x": "100",
+                        "y": "100"
+                    },
+                    "pos": {
+                        "x": "-10",
+                        "y": "10"
+                    },
+                    "data": {}
+                }
+            ]
+        },
+        {
+            "name": "UnattachedInk",
+            "providerId": "ink",
+            "experienceReference": "null",
+            "assetUrl": "noAssetUrl",
+            "string" : "TEXT::[str]Hellllooooo World! [font]Verdana, Geneva, sans-serif[fontsize]0.1[color]orange[x]0.21297602256699577[y]0.16541353383458646[w]undefined[h]undefined[]|",
+            "keyframes": [
+                {
+                    "dispNum": "1",
+                    "time": "0",
+                    "opacity": "0"
+                },                
+                {
+                    "dispNum": "1",
+                    "time": "1",
+                    "opacity": "1"
+                },
+                {
+                    "dispNum": "1",
+                    "time": "3",
+                    "opacity": "1"
+                },                
+                {
+                    "dispNum": "1",
+                    "time": "5",
+                    "opacity": "0"
+                }
+            ]
+        },
+        {
+            "name": "AttachedInk",
+            "providerId": "ink",
+            "experienceReference": "deepzoomsky",
+            "assetUrl": "noAssetUrl",
+            "string" : "TEXT::[str]Another Ink [font]Verdana, Geneva, sans-serif[fontsize]0.03[color]#33CCFF[x]0.21297602256699577[y]0.26541353383458646[w]undefined[h]undefined[]|",
+            "keyframes": [
+                {
+                    "dispNum": "1",
+                    "time": "0",
+                    "opacity": "0"
+                },                
+                {
+                    "dispNum": "1",
+                    "time": "2",
+                    "opacity": "1"
+                },
+                {
+                    "dispNum": "1",
+                    "time": "5",
+                    "opacity": "1"
+                },                
+                {
+                    "dispNum": "1",
+                    "time": "7",
+                    "opacity": "0"
+                }
+            ]
+        }
+    ]
+}

@@ -11,7 +11,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	Utils.extendsPrototype(this, _super);
 
     var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
-
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
@@ -21,7 +20,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	self.animation,
 	self.interactionAnimation;
 
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	interactionHandlers 		= {},
 	movementTimeouts 			= [],
 	this.trackData   			= trackData;
@@ -143,6 +141,20 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			self.animation = TweenLite.to(_UIControl, duration, state);		
 			self.animation.play();
 	};
+
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	//TODO: implement
+	this.addInk = function(inkTrack){
+		console.log("position().top: " + _UIControl.position().top)
+		console.log("offset().top: " + _UIControl.offset().top)
+
+	}
+
+
 
    /** 
 	* I/P: none

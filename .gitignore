@@ -5,4 +5,5 @@ html/*.html
 TAG.js
 TAG-min.js
 node_modules
+npm-debug.log
 js/ITE/Core/ITE/ITECore.js

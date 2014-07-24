@@ -88,7 +88,7 @@
 			        }
 			        else {
                         var type = tobj.ttype;
-			        	var req = new Request("INSERT INTO tmetrytesttable (ttype,tagserver,browser,platform,time_stamp,time_human,custom_1,custom_2,custom_3,custom_4,custom_5) VALUES ('"+tobj.ttype+"','"+tobj.tagserver+"','"+tobj.browser+"','"+tobj.platform+"','"+tobj.time_stamp+"','"+tobj.time_human+"','"+tobj.custom_1+"','"+tobj.custom_2+"','"+tobj.custom_3+"','"+tobj.custom_4+"','"+tobj.custom_5+"')",function(err, rowCount){
+			        	var req = new Request("INSERT INTO tmetrytesttable (ttype,tagserver,browser,platform,time_stamp,time_human,session_id,custom_1,custom_2,custom_3,custom_4,custom_5) VALUES ('"+tobj.ttype+"','"+tobj.tagserver+"','"+tobj.browser+"','"+tobj.platform+"','"+tobj.time_stamp+"','"+tobj.time_human+"','"+tobj.session_id+"','"+tobj.custom_1+"','"+tobj.custom_2+"','"+tobj.custom_3+"','"+tobj.custom_4+"','"+tobj.custom_5+"')",function(err, rowCount){
 			    		if (err){              //insert each tobj into each row of the table
 			    			console.log(err);
 			    		}
