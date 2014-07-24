@@ -21,7 +21,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	self.animation;
 	self.audioAnimation;
 
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	var interactionHandlers 	= {},
 	movementTimeouts 			= [];
     //DOM related
