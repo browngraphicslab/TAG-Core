@@ -554,7 +554,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 TAG.Util.IdleTimer.restartTimer();
                 media.mediaManipPreprocessing();                    //Set the newly opened media as active for manipulation
                 media.pauseReset();
-                toggleLocationPanel();
+                // toggleLocationPanel();
             };
         }
 

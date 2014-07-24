@@ -18,6 +18,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 	var prevExhib = exhibition;
     var prevTag = prevInfo.prevTag;
     var prevMult = prevInfo.prevMult;
+    var rinPath = Windows ? tagPath+'../tagcore/js/WIN8_RIN/web' : tagPath+'../tagcore/js/RIN/web'; // TODO merging (get rid of ../tagcore)
 
     var tagContainer = $('#tagRoot');
 
@@ -128,8 +129,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             return root;
         },
         startPlayback: function () { // need to call this to ensure the tour will play when you exit and re-enter a tour, since sliding functionality and audio playback don't cooperate
-            rin.processAll(null, tagPath+'../tagcore/js/RIN/web').then(function () {
-                var options = 'systemRootUrl='+tagPath+'../tagcore/js/RIN/web/&autoplay='+(INPUT_TOUR_ID ? 'false' : 'true')+'&loop=false';
+            rin.processAll(null, rinPath).then(function () {
+                var options = 'systemRootUrl='+rinPath+'/&autoplay='+(INPUT_TOUR_ID ? 'false' : 'true')+'&loop=false';
                 // create player
                 player = rin.createPlayerControl(rinPlayer[0], options);
                 for (var key in tour.resources) {

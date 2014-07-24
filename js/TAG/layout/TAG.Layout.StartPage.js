@@ -127,7 +127,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             var collectionsPage;
 
             overlay.off('click');
-            collectionsPage = LADS.Layout.NewCatalog(); // TODO merging
+            collectionsPage = TAG.Layout.CollectionsPage(); // TODO merging
             TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
 
             currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
