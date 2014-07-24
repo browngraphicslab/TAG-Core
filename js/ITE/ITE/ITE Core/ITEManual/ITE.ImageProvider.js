@@ -11,7 +11,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	Utils.extendsPrototype(this, _super);
 
     var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
-
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
@@ -21,7 +20,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	self.animation,
 	self.interactionAnimation;
 
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	interactionHandlers 		= {},
 	movementTimeouts 			= [],
 	this.trackData   			= trackData;

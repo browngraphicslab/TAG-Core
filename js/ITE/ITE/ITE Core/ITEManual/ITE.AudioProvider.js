@@ -20,7 +20,6 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	self.savedState		= keyframes[0];
 	self.animation;
 
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	this.trackData   			= trackData;
 
     //DOM related

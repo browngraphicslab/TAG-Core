@@ -16,7 +16,6 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	self.trackData 				= trackData;
 	self.orchestrator			= orchestrator;
 	self.status 				= "loading";
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	self.trackData   			= trackData;
 	self.animationCallback;
 
