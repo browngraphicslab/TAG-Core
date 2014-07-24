@@ -31,7 +31,7 @@
                 {
                     "dispNum": "1",
                     "time": "3",
-                    "opacity": "1",
+                    "opacity": "1", 
                     "scale":"1",
                     "pos": {
                         "x": ".3",
