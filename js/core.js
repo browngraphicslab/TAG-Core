@@ -146,8 +146,6 @@
             oCss,                                             // link element
             tagContainer;                                     // div containing TAG
 
-        debugger;
-
         tagPath = tagPath || '';
         if(tagPath.length > 0 && tagPath[tagPath.length - 1] !== '/') {
             tagPath += '/';
