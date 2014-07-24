@@ -214,6 +214,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		}, duration*1000);
 	};
 
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	this.addInk = function(inkTrack){
+		console.log("adding "+ inkTrack.trackData.name + " as an overlay in a video")
+	};
 
    /** 
 	* I/P: none

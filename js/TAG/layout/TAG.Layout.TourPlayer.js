@@ -11,8 +11,9 @@ TAG.Util.makeNamespace("TAG.Layout.TourPlayer");
  * @param tourObj      the tour doq object, so we can return to the proper tour in the collections screen
  */
 TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj) {
-    "use strict";
+    console.log("******************************************************************************")
 
+    "use strict";
     var artworkPrev;
     var prevScroll = 0;
 	var prevExhib = exhibition;

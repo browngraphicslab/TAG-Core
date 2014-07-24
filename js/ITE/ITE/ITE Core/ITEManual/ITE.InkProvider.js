@@ -1,4 +1,5 @@
 window.ITE = window.ITE || {};
+//ATTACHED INKS MUST ALWAYS BE AT THE END OF THE JSON FILE
 
 ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 	//Extend class from ProviderInterfacePrototype
@@ -22,8 +23,8 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 
     //DOM related
     var _ink,
-    	_UIControl;
-
+    	_UIControl,
+   		_attachedAsset;
 	//Start things up...
     initialize()
 
@@ -33,6 +34,11 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 	*/
 	function initialize(){
 		_super.initialize()
+
+		if (trackData.experienceReference !== "null"){
+			_attachedAsset = findAttachedAsset(trackData.experienceReference);
+			attachToAsset(_attachedAsset);
+		};
 
 		//Create UI and append to ITEHolder
 		_UIControl	= $(document.createElement("div"))
@@ -44,13 +50,11 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 				"pointer-events":"none",
 			})
 	        .attr("id", trackData.assetUrl);
-
 		$("#ITEHolder").append(_UIControl);
 
 		_ink = new tagInk(trackData.assetUrl, _UIControl[0]);
 
 		var i, keyframeData;
-
 		for (i=1; i<keyframes.length; i++) {
 			keyframeData={
 						  "opacity"	: keyframes[i].opacity,
@@ -63,6 +67,34 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 		self.setState(keyframes[0]);
 	};
 
+
+   /** 
+	* I/P: experienceReference name of asset to attach from Ink
+	* Finds the attached asset for the ink track (the track to attach the ink to)
+	* O/P: _attachedAsset Actual reference to the track that holds this asset
+	*/
+	function findAttachedAsset(experienceReference){
+		var j,
+			track;
+		//Loop through trackManager to find the asset whose name matches the Ink's experienceReference
+		for (j=0; j<self.orchestrator.trackManager.length; j++) {
+			track = self.orchestrator.trackManager[j];
+			if (track.trackData.name === experienceReference){
+				_attachedAsset = track;
+			};
+		};
+		//If it exists, return it, and if now, throw an error
+		if (_attachedAsset) {
+			return _attachedAsset;
+		} else {
+			throw new Error("Failed to find asset '" + experienceReference+ "' for attached ink '" + trackData.name + "'");
+		};
+	};
+
+
+	function attachToAsset(assetName){
+		_attachedAsset.addInk(self);
+	};
 
    /** 
 	* I/P: none
@@ -116,4 +148,11 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 			self.animation = TweenLite.to(_UIControl, duration, state);		
 			self.animation.play();
 	};
+
+	this.findAttachedAsset = findAttachedAsset
+	this.attachToAsset = attachToAsset;
+	this._UIControl = _UIControl;
+
+
+
 };

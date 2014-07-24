@@ -142,6 +142,20 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			self.animation.play();
 	};
 
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	//TODO: implement
+	this.addInk = function(inkTrack){
+		console.log("position().top: " + _UIControl.position().top)
+		console.log("offset().top: " + _UIControl.offset().top)
+
+	}
+
+
+
    /** 
 	* I/P: none
 	* Return a set of interactionHandlers attached to asset from provider

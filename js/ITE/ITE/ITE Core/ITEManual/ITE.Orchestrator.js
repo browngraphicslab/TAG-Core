@@ -85,10 +85,10 @@ ITE.Orchestrator = function(player) {
 					self.trackManager.push(new ITE.AudioProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "deepZoom" : 
-					trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "ink" : 
-					trackManager.push(new ITE.InkProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.InkProvider(trackData, self.player, self.taskManager, self));
 					break;
 				default:
 					throw new Error("Unexpected providerID; '" + trackData.providerID + "' is not a valid providerID");
