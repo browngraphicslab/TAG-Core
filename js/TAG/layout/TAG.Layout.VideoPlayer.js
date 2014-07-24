@@ -269,9 +269,9 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         sourceOGG  = sourceWithoutExtension + ".ogg";
         
         //video[0] converts the jQuery object 'video' into an HTML object, allowing us to use innerHTML on it
-        videoElt.innerHTML  = '<source src="' + sourceMP4  + '" type="video/mp4; codecs="avc1.42E01E, mp4a.40.2"">';
-        videoElt.innerHTML += '<source src="' + sourceWEBM + '" type="video/webm; codecs="vorbis, vp8"">';
-        videoElt.innerHTML += '<source src="' + sourceOGG  + '" type="video/ogg; codecs="theora, vorbis"">';
+        videoElt.innerHTML  = '<source src="' + sourceMP4  + '" type='+"'"+'video/mp4; codecs="avc1.42E01E, mp4a.40.2"'+"'"+'>';
+        videoElt.innerHTML += '<source src="' + sourceWEBM + '" type='+"'"+'video/webm; codecs="vorbis, vp8"'+"'"+'>';
+        videoElt.innerHTML += '<source src="' + sourceOGG  + '" type='+"'"+'video/ogg; codecs="theora, vorbis"'+"'"+'>';
 
         // set text of time display
         currentTimeDisplay.text("00:00");
