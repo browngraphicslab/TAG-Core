@@ -909,6 +909,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             position2, 
             labelwidth,
             art;
+            duration = duration*2
 
         if (yearKey===0||yearKey){
 
@@ -980,7 +981,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentTimeline.animate({
             left: left + 'px',
             width: width + 'px'},
-            duration, function(){
+            duration, "easeInOutQuint",function(){
                 if (newTickSpacing>initTickSpacing*20&&yearKey){
                     for (k=0; k<timelineTicks.length; k++){
                         //TO-DO add more scale ticks once zoomed in far 
@@ -1004,7 +1005,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currTimelineCircleArea.animate({
             left: left + 'px',
             width: width + 'px'},
-            duration, function(){
+            duration, "easeInOutQuint", function(){
                 for (i=0; i<timelineEventCircles.length; i++){
                 if (first){
                     timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
