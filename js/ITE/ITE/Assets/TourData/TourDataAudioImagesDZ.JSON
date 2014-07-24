@@ -193,7 +193,7 @@
                     "time": "0",
                     "volume": "1",
                     "data": {},
-                    "audioOffset": "0"
+                    "audioOffset": "10"
                 },
                 {
                     "dispNum": "1",
@@ -208,7 +208,7 @@
                     "volume": "1",
                     "data": {},
                     "audioOffset": "20"
-                },
+                }
             ]
         },
         {

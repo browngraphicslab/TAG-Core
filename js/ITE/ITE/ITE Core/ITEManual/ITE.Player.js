@@ -149,14 +149,14 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("playPauseButtonContainer");
 
                 playPauseButton.addClass("playPauseButton")
-                .attr("src", "ITEPlayerImages/pause.svg")
+                .attr("src", "ITEPlayerImages/play.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
             playPauseButtonContainer.append(playPauseButton);
         }
 
-        playerConfiguration.autoPlay ? play() : pause()
+        playerConfiguration.autoPlay ? play() : null
     };
 
     /*
@@ -292,7 +292,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * O/P:   none
     */
     function togglePlayPause() {
-        (orchestrator.status !== 2) ? pause() : play()
+        (orchestrator.status === 1) ? pause() : play()
     };
 
     /*

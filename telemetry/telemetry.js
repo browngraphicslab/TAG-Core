@@ -60,7 +60,7 @@ TAG.Telemetry = (function() {
 
 			requests.push(tobj);
 
-			if(requests.length % sendFreq === sendFreq - 1) { // tweak this later
+			if(requests.length >= sendFreq - 1) { // tweak this later
 				postTelemetryRequests();
 			} 
 		});

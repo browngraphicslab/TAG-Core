@@ -1400,7 +1400,6 @@ Hammer.gestures.Release = {
     handler: function releaseGesture(ev, inst) {
         if(ev.eventType ==  Hammer.EVENT_END) {
             inst.trigger(this.name, ev);
-            console.log("release")
         }
     }
 };
