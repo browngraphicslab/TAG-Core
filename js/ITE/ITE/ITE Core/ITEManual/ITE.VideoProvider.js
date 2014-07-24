@@ -133,7 +133,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 			"width":		state.size.width,
 			"opacity":		state.opacity
 		});
-		console.log(state.volume)
 		_videoControls.volume = state.volume*self.player.currentVolumeLevel;
 		state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
 	};
@@ -168,13 +167,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		if (newVolume === 0) {
 			this.toggleMute()
 		} else {	
-		//Duration of current time to next keyframe
-			var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();
-	
 			//Set volume to newVolume * value from keyframes
 			_videoControls.volume = _videoControls.volume*newVolume/self.player.previousVolumeLevel;
+			
+			if (this.orchestrator.status === 1){
+
+				//Duration of current time to next keyframe
+				var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();
 	
-			if (self.taskManager.status === "playing"){
 				//Stop current animation
 				self.audioAnimation.stop();
 			
