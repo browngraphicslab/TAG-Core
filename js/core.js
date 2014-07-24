@@ -7,7 +7,7 @@
 (function () { // TODO merging: need anything else in here for win8 app (compare with its core.js)
     "use strict";
 
-    if (Windows) {
+    if (typeof Windows !== 'undefined') {
         $(document).on('ready', load); // TODO make sure this is consistent with web app
     } else {
         load();
@@ -37,7 +37,7 @@
         }
 
         // if we're in the windows app, localStorage.ip should take precedence, since it's not API-based
-        localStorage.ip = (Windows ? (localStorage.ip || ip) : (ip || localStorage.ip)) || 'browntagserver.com';
+        localStorage.ip = ((typeof Windows !== 'undefined') ? (localStorage.ip || ip) : (ip || localStorage.ip)) || 'browntagserver.com';
 
         positioning = container.css('position');
         if(positioning !== 'relative' && positioning !== 'absolute') {
@@ -57,7 +57,7 @@
         h = container.height();
         l = 0;
 
-        if (!Windows) {
+        if (typeof Windows === 'undefined') {
             if (w / h > 16 / 9) { // constrain width or height depending on the embedding dimensions
                 l = (w - 16 / 9 * h) / 2;
                 w = 16 / 9 * h;
@@ -125,7 +125,7 @@
             });
         }
 
-        !Windows && setUpTestingHandlers();
+        (typeof Windows === 'undefined') && setUpTestingHandlers();
         init();
     }
 
@@ -139,13 +139,14 @@
                 'js/raphael.js', // TODO merging
                 'js/tagInk.js',
                 'js/RIN/web/lib/rin-core-1.0.js'
-        ],
+            ],
             i,                                                // index
             oHead,                                            // head element
             oScript,                                          // script element
             oCss,                                             // link element
             tagContainer;                                     // div containing TAG
 
+        debugger;
 
         tagPath = tagPath || '';
         if(tagPath.length > 0 && tagPath[tagPath.length - 1] !== '/') {
