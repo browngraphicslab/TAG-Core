@@ -159,14 +159,15 @@ module.exports = function(grunt) {
 			options: {
 				separator: '\n;\n',
 				banner: 'var TAG_GLOBAL = function(tagInput) { \
-					        \n    var tagPath            = tagInput.path, \
-					        \n        containerId        = tagInput.containerId, \
-					        \n        ip                 = tagInput.serverIp, \
-					        \n        allowServerChange  = tagInput.allowServerChange, \
-					        \n 		  allowAuthoringMode = tagInput.allowAuthoringMode, \
-					        \n        idleDuration       = tagInput.idleDuration, \
-					        \n        currentPage        = {}, // name and obj properties \
-					        \n        INPUT_TOUR_ID      = tagInput.tourId, // to load to a tour \
+					        \n    var tagPath              = tagInput.path, \
+					        \n        containerId          = tagInput.containerId, \
+					        \n        ip                   = tagInput.serverIp, \
+					        \n        allowServerChange    = tagInput.allowServerChange, \
+					        \n 		  allowAuthoringMode   = tagInput.allowAuthoringMode, \
+					        \n        idleDuration         = tagInput.idleDuration, \
+					        \n        currentPage          = {}, // name and obj properties \
+					        \n        INPUT_TOUR_ID        = tagInput.tourId, // to load to a tour \
+					        \n        TELEMETRY_SESSION_ID = null, \
 					        \n        idleTimer; \n\n',
 				footer: '};'
 			},

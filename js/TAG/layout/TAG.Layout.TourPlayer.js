@@ -11,14 +11,15 @@ TAG.Util.makeNamespace("TAG.Layout.TourPlayer");
  * @param tourObj      the tour doq object, so we can return to the proper tour in the collections screen
  */
 TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj) {
-    "use strict";
+    console.log("******************************************************************************")
 
+    "use strict";
     var artworkPrev;
     var prevScroll = 0;
 	var prevExhib = exhibition;
     var prevTag = prevInfo.prevTag;
     var prevMult = prevInfo.prevMult;
-    var rinPath = Windows ? tagPath+'../tagcore/js/WIN8_RIN/web' : tagPath+'../tagcore/js/RIN/web'; // TODO merging (get rid of ../tagcore)
+    var rinPath = (typeof Windows !== 'undefined') ? tagPath+'../tagcore/js/WIN8_RIN/web' : tagPath+'../tagcore/js/RIN/web'; // TODO merging (get rid of ../tagcore)
 
     var tagContainer = $('#tagRoot');
 

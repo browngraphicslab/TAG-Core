@@ -4,14 +4,10 @@
  * This file is responsible for performing initial setup. Please see the comments for load
  * and init below.
  */
-(function () { // TODO merging: need anything else in here for win8 app (compare with its core.js)
+(function () {
     "use strict";
 
-    if (Windows) {
-        $(document).on('ready', load); // TODO make sure this is consistent with web app
-    } else {
-        load();
-    }
+    load();
 
     /**
      * The first real TAG function called. Sets up the embedding within iframe and
@@ -28,6 +24,11 @@
             w,                      // width of embedding
             h,                      // height of embedding
             l;                      // left of tagRoot
+        
+        TELEMETRY_SESSION_ID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+            return v.toString(16);
+        });
 
         if(containerId && $('#'+containerId).length > 0) {
             container = $('#'+containerId);
@@ -35,9 +36,7 @@
             console.log('no containerId specified, or the containerId does not match an element');
             return; // no TAG for you
         }
-
-        // if we're in the windows app, localStorage.ip should take precedence, since it's not API-based
-        localStorage.ip = (Windows ? (localStorage.ip || ip) : (ip || localStorage.ip)) || 'browntagserver.com';
+        localStorage.ip = ip || localStorage.ip || 'browntagserver.com';
 
         positioning = container.css('position');
         if(positioning !== 'relative' && positioning !== 'absolute') {
@@ -57,13 +56,11 @@
         h = container.height();
         l = 0;
 
-        if (!Windows) {
-            if (w / h > 16 / 9) { // constrain width or height depending on the embedding dimensions
-                l = (w - 16 / 9 * h) / 2;
-                w = 16 / 9 * h;
-            } else {
-                h = 9 / 16 * w;
-            }
+        if(w/h > 16/9) { // constrain width or height depending on the embedding dimensions
+            l = (w - 16/9*h)/2;
+            w = 16/9 * h;
+        } else {
+            h = 9/16 * w;
         }
 
         tagRoot.css({
@@ -76,7 +73,7 @@
         });
 
         /**
-         * In demo.html (web app), we have some testing buttons and sliders. The handlers are
+         * In demo.html, we have some testing buttons and sliders. The handlers are
          * set up here.
          * @method setUpTestingHandlers
          */
@@ -125,7 +122,7 @@
             });
         }
 
-        !Windows && setUpTestingHandlers();
+        setUpTestingHandlers();
         init();
     }
 
@@ -139,13 +136,12 @@
                 'js/raphael.js', // TODO merging
                 'js/tagInk.js',
                 'js/RIN/web/lib/rin-core-1.0.js'
-        ],
+            ],
             i,                                                // index
             oHead,                                            // head element
             oScript,                                          // script element
             oCss,                                             // link element
             tagContainer;                                     // div containing TAG
-
 
         tagPath = tagPath || '';
         if(tagPath.length > 0 && tagPath[tagPath.length - 1] !== '/') {
@@ -173,7 +169,7 @@
 
         // set up idle timer restarting
         $('body').on('click.idleTimer', function() {
-            // TODO merging TAG.Util.IdleTimer.restartTimer();
+            TAG.Util.IdleTimer.restartTimer();
         });
 
         // if the user specified the tourData API parameter, load into the corresponding tour
@@ -200,7 +196,7 @@
                 });
             });
         } else { // otherwise, load to start page
-            currentPage.name = 1; // TODO merging      TAG.Util.Constants.pages.START_PAGE;
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
 
             TAG.Layout.StartPage(null, function (page) {

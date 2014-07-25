@@ -1,8 +1,8 @@
-var TAG = TAG || {},
-    LADS = TAG, // backwards compatibility until merge is complete
-    tagPath = '',// backwards compatibility until merge is complete
-    containerId = 'tagContainer',// backwards compatibility until merge is complete
-    ip = 'browntagserver.com',// backwards compatibility until merge is complete
+var TAG = TAG || {}, // TODO merge fix these
+    LADS = LADS || TAG, // backwards compatibility until merge is complete
+    tagPath = tagPath || '',// backwards compatibility until merge is complete
+    containerId = containerId || 'tagContainer',// backwards compatibility until merge is complete
+    ip = ip || 'browntagserver.com',// backwards compatibility until merge is complete
     allowServerChange = true,// backwards compatibility until merge is complete
     allowAuthoringMode = true,// backwards compatibility until merge is complete
     idleDuration = 120000,// backwards compatibility until merge is complete
@@ -1531,7 +1531,7 @@ TAG.Util = (function () {
             },
             dataType: 'html'
         });
-        return ret ? (Windows ? $(toStaticHTML(ret)) : $(ret)) :  '';
+        return ret ? ((typeof Windows !== 'undefined') ? $(toStaticHTML(ret)) : $(ret)) :  '';
     }
 
      /**

@@ -45,6 +45,7 @@ TAG.Telemetry = (function() {
 					platform:   platform,
 					time_stamp: date.getTime(),
 					time_human: date.toString(),
+					session_id : TELEMETRY_SESSION_ID,
 					custom_1: null,
 					custom_2: null,
 					custom_3: null,
