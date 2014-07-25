@@ -20,6 +20,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         toggler             = root.find('#toggler'),
         togglerImage        = root.find('#togglerImage'),
         backButton          = root.find('#backButton'),
+        linkButton          = root.find('#linkButton'),
+        linkButtonContainer = root.find('#linkContainer'),
         locHistoryDiv       = root.find('#locationHistoryDiv'),
         info                = root.find('#info'),
         locHistoryToggle    = root.find('#locationHistoryToggle'),
@@ -397,7 +399,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
 
         
-        backButton.attr('src',tagPath+'images/icons/Back.svg');
+        backButton.attr('src', tagPath+'images/icons/Back.svg');
         togglerImage.attr("src", tagPath+'images/icons/Close.svg');
         infoTitle.text(doq.Name);
         infoArtist.text(doq.Metadata.Artist);
@@ -420,8 +422,22 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             tobj.custom_2 = doq.Identifier;
         });
         
+        if(IS_WEBAPP) {
+            linkButton.attr('src', tagPath+'images/link.svg');
+            linkButton.on('click', function() {
+                var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
+                    tagpagename: 'artwork',
+                    tagguid: doq.Identifier
+                });
 
-       
+                root.append(linkOverlay);
+                linkOverlay.fadeIn(500, function() {
+                    linkOverlay.find('.linkDialogInput').select();
+                });
+            });
+        } else {
+            linkButtonContainer.remove();
+        }
 
         function goBack() {
             var collectionsPage;

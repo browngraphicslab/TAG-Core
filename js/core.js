@@ -41,10 +41,14 @@
             return; // no TAG for you
         }
 
+        if(urlToParse) {
+            pageToLoad = parseQueryParams();
+        }
+
         // if we're in the windows app, localStorage.ip should take precedence (starting on the last server
         // running makes more sense than in the web app, where TAG should start to whichever server is specified
         // by the museum/institution)
-        localStorage.ip = (IS_WINDOWS ? (localStorage.ip || ip) : (ip || localStorage.ip)) || 'browntagserver.com';
+        localStorage.ip = (IS_WINDOWS ? (localStorage.ip || ip) : (pageToLoad.tagserver || ip || localStorage.ip)) || 'browntagserver.com';
 
         positioning = container.css('position');
         if(positioning !== 'relative' && positioning !== 'absolute') {
@@ -86,6 +90,59 @@
 
         init();
     }
+
+    /**
+     * Parses page url for a specific TAG page to load
+     * @method parseQueryParams
+     * @return {Object}              the tag params found
+     */
+    function parseQueryParams() {
+        var url     = urlToParse,                 // url of host site
+            param,                                // param
+            ret     = {};                         // will return this
+
+        param = url.match(/tagserver=[^\&]*/);
+        if(param && param.length > 0) {
+            ret.tagserver = param[0].split(/=/)[1];
+        }
+
+        param = url.match(/tagpagename=[a-zA-Z]+/);
+
+        if(param && param.length > 0) {
+            ret.pagename = param[0].split(/=/)[1];
+            switch(ret.pagename) {
+                case 'collections':
+                    param = url.match(/tagcollectionid=[a-f0-9\-]+/);
+                    if(param && param.length > 0) {
+                        ret.collectionid = param[0].split(/=/)[1];
+                        param = url.match(/tagartworkid=[a-f0-9\-]+/);
+                        if(param && param.length > 0) {
+                            ret.artworkid = param[0].split(/=/)[1];
+                        }
+                        return ret;
+                    }
+                    break;
+                case 'artwork':
+                case 'video':
+                    param = url.match(/tagguid=[a-f0-9\-]+/);
+                    if(param && param.length > 0) {
+                        ret.guid = param[0].split(/=/)[1];
+                        return ret;
+                    }
+                    break;
+                case 'tour':
+                    param = url.match(/tagguid=[a-f0-9\-]+/);
+                    if(param && param.length > 0) {
+                        ret.guid = param[0].split(/=/)[1];
+                        ret.onlytour = url.match(/tagonlytour=true/) ? true : false;
+                        return ret;
+                    }
+                    break;
+            }
+        }
+        return ret;
+    }
+
 
     /**
      * Initialize TAG; load some scripts into the <head> element,
@@ -138,13 +195,44 @@
             TAG.Util.IdleTimer.restartTimer();
         });
 
+        // // if the user specified the tourData API parameter, load into the corresponding tour
+        // if(INPUT_TOUR_ID) {
+        //     currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+        //     currentPage.obj  = null;
+
+        //     TAG.Layout.StartPage(null, function (page) {
+        //         TAG.Worktop.Database.getDoq(INPUT_TOUR_ID, function(tour) {
+        //             var tourData = JSON.parse(unescape(tour.Metadata.Content)),
+        //                 rinPlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
+
+        //             tagContainer.css('overflow', 'hidden');
+
+        //             tagContainer.append(rinPlayer.getRoot());
+        //             rinPlayer.startPlayback();
+
+        //             currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
+        //             currentPage.obj  = rinPlayer;
+        //         }, function() {
+        //             // TODO error handling
+        //         }, function() {
+        //             // TODO cache error handling
+        //         });
+        //     });
+        // } else { // otherwise, load to start page
+        //     currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+        //     currentPage.obj  = null;
+
+        //     TAG.Layout.StartPage(null, function (page) {
+        //         tagContainer.append(page);
+        //     });
+        // }
         // if the user specified the tourData API parameter, load into the corresponding tour
-        if(INPUT_TOUR_ID) {
+        if(pageToLoad && pageToLoad.pagename === 'tour') {
             currentPage.name = TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
 
             TAG.Layout.StartPage(null, function (page) {
-                TAG.Worktop.Database.getDoq(INPUT_TOUR_ID, function(tour) {
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(tour) {
                     var tourData = JSON.parse(unescape(tour.Metadata.Content)),
                         rinPlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
 
@@ -161,6 +249,86 @@
                     // TODO cache error handling
                 });
             });
+        } else if (pageToLoad && pageToLoad.pagename === 'collections') {
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.obj  = null;
+
+            TAG.Layout.StartPage(null, function (page) {
+                var collectionsPage;
+                if(pageToLoad.collectionid) {
+                    TAG.Worktop.Database.getDoq(pageToLoad.collectionid, function(collection) {
+                        if(pageToLoad.artworkid) {
+                            TAG.Worktop.Database.getDoq(pageToLoad.artworkid, function(artwork) {
+                                collectionsPage = new TAG.Layout.CollectionsPage({
+                                    backScroll: 0,
+                                    backArtwork: artwork,
+                                    backCollection: collection
+                                });
+                                tagContainer.append(collectionsPage.getRoot());
+                            });
+                        } else {
+                            collectionsPage = new TAG.Layout.CollectionsPage({
+                                backScroll: 0,
+                                backArtwork: null,
+                                backCollection: collection
+                            });
+                            tagContainer.append(collectionsPage.getRoot());
+                        }
+                    });
+                } else {
+                    collectionsPage = TAG.Layout.CollectionsPage();
+                    tagContainer.append(collectionsPage.getRoot());
+                }
+                currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+                currentPage.obj  = collectionsPage;
+            }, function() {
+                // TODO error handling
+            }, function() {
+                // TODO cache error handling
+            });
+        } else if (pageToLoad && pageToLoad.pagename === 'artwork') {
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.obj  = null;
+
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(artwork) {
+                    var artworkViewer = TAG.Layout.ArtworkViewer({
+                        doq: artwork,
+                        prevScroll: 0,
+                        prevCollection: null,
+                        prevPage: 'catalog'
+                    });
+                    tagContainer.append(artworkViewer.getRoot());
+
+                    currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                    currentPage.obj  = artworkViewer;
+                });
+            }, function() {
+                // TODO error handling
+            }, function() {
+                // TODO cache error handling
+            });
+        } else if (pageToLoad && pageToLoad.pagename === 'video') {
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.obj  = null;
+
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(video) {
+                    var videoPlayer = TAG.Layout.VideoPlayer(video, null, null);
+                    tagContainer.append(videoPlayer.getRoot());
+
+                    currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+                    currentPage.obj  = videoPlayer;
+                });
+            }, function() {
+                // TODO error handling
+            }, function() {
+                // TODO cache error handling
+            });
+
+
+
+            
         } else { // otherwise, load to start page
             currentPage.name = TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
