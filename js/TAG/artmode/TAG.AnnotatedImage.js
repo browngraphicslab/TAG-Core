@@ -802,8 +802,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     return;
                 }
             } else{ // zoom from touch point: change width and height of outerContainer
-                outerContainer.css("top", (t + trans.y + (1 - scale) * (pivot.y - isWinFactor*t)) + "px");
-                outerContainer.css("left", (l + trans.x + (1 - scale) * (pivot.x - isWinFactor*l)) + "px");
+                outerContainer.css("top", (t + trans.y + (1 - scale) * (pivot.y + isWinFactor*t)) + "px");
+                outerContainer.css("left", (l + trans.x + (1 - scale) * (pivot.x + isWinFactor*l)) + "px");
                 outerContainer.css("width", newW + "px");
                 outerContainer.css("height", "auto"); 
             }
