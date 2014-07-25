@@ -1,5 +1,5 @@
-﻿/// <reference path="TAG.TourAuthoring.InkTrack.js" />
-TAG.Util.makeNamespace('TAG.TourAuthoring.ComponentControls');
+﻿/// <reference path="LADS.TourAuthoring.InkTrack.js" />
+LADS.Util.makeNamespace('LADS.TourAuthoring.ComponentControls');
 
 
 
@@ -8,7 +8,7 @@ TAG.Util.makeNamespace('TAG.TourAuthoring.ComponentControls');
  * @param spec  root, timeline, timeManager attr
  * @param my    not used
  */
-TAG.TourAuthoring.ComponentControls = function (spec, my) {
+LADS.TourAuthoring.ComponentControls = function (spec, my) {
     "use strict";
 
     var functionsPanel = $(document.createElement('div')),
@@ -24,34 +24,43 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         tourobj = spec.tourobj,
         undoManager = spec.undoManager,
         inkAuthoring,
-        inkTransparencyControls, inkTextControls, inkDrawControls, inkEditTransparency, inkEditText, inkEditDraw,
+        inkTransparencyControls,
+        inkTextControls,
+        inkDrawControls,
+        inkEditTransparency,
+        inkEditText,
+        inkEditDraw,
         addCompButtonHeight,
         myPicker, resizableHeight,
-        artQueue = TAG.Util.createQueue(),
-        mediaQueue = TAG.Util.createQueue(),
+        artQueue = LADS.Util.createQueue(),
+        mediaQueue = LADS.Util.createQueue(),
         PICKER_SEARCH_TEXT = 'Search by Name, Artist, or Year...',
         IGNORE_IN_SEARCH = ['visible', 'exhibits', 'selected'],
         rinContainer = viewer.getContainer(),
         isUploading = false,
         allArtworks;
 
+    var dropMain = $(document.createElement('div'));
+    var dropFile = $(document.createElement('div'));
+    var dropInk = $(document.createElement('div'));
+
     functionsPanelDocfrag.appendChild(functionsPanel[0]);
     timeline.setCompControl(that);
-    var catalogPickerOverlay = TAG.Util.UI.blockInteractionOverlay();
+    var catalogPickerOverlay = LADS.Util.UI.blockInteractionOverlay();
     $(catalogPickerOverlay).addClass('catalogPickerOverlay');
-    $(catalogPickerOverlay).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
+    $(catalogPickerOverlay).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex);
 
-    var associatedMediaPickerOverlay = TAG.Util.UI.blockInteractionOverlay();
+    var associatedMediaPickerOverlay = LADS.Util.UI.blockInteractionOverlay();
     $(associatedMediaPickerOverlay).addClass('associatedMediaPickerOverlay');
-    $(associatedMediaPickerOverlay).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);    
+    $(associatedMediaPickerOverlay).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex);    
     
     /**
      * Display warning message if ink cannot be loaded
      * @param displayString     String describing error (to be displayed)
      */
     function creationError(displayString) {
-        var messageBox = TAG.Util.UI.popUpMessage(null, displayString, null);
-        $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+        var messageBox = LADS.Util.UI.popUpMessage(null, displayString, null);
+        $(messageBox).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
         $('body').append(messageBox);
         $(messageBox).fadeIn(500);
 
@@ -61,131 +70,247 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     (function _createHTML() {
 
         function ctrlZHandler(evt) {
-            if (evt.keyCode === 90 && evt.ctrlKey) {
+            if (evt.keyCode === 90 && evt.ctrlKey) {                                        // keyCode 90 is 'z'
                 if (!onCtrlZCalled) {
                     onCtrlZCalled = true;
                     root.on('keyup.z', function (evt) {
                         onCtrlZCalled = false;
                         root.off('keyup.z');
-                        if (timeline.getEditInkOn()) {//in ink authoring mode
+                        if (timeline.getEditInkOn()) {                                      //in ink authoring mode
                             if (evt.shiftKey) {
                                 inkAuthoring.getInkUndoManager().redo();
-                            }
-
-                            else {
+                            } else {
                                 inkAuthoring.getInkUndoManager().undo();
                             }
 
-                        }
-                        else {
+                        } else {
                             if (evt.shiftKey) {
                                 undoManager.redo();
-                            }
-                            else {
+                            } else {
                                 undoManager.undo();
                             }
                         }
                     });
                 }
-            }
-
-            else if (evt.keyCode === 89 && evt.ctrlKey) {
+            } else if (evt.keyCode === 89 && evt.ctrlKey) {                                   // keyCode 89 is 'y'
                 root.on('keyup.y', function (evt) {
                     root.off('keyup.y');
 
-                    if ((inkAuthoring !== null) && (inkAuthoring.getInkUndoManager())) {//in ink authoring mode
+                    if ((inkAuthoring !== null) && (inkAuthoring.getInkUndoManager())) {    // in ink authoring mode
                         inkAuthoring.getInkUndoManager().redo();
-                    }
-                    else {
+                    } else {
                         undoManager.redo();
 
                     }
                 });
             }
         }
+
         //code to handle undo-redo using ctrl-z
         var onCtrlZCalled = false;
         root.on('keydown', ctrlZHandler);
 
         var maxFontSize = 48;
         var currentFontSize;
-        /**
-         * Method called when "Edit Ink" is clicked on a draw-type ink track.
-         * Creates a new InkController and loads in the datastring of the track.
-         * Shows the edit draw controls.
-         * If the ink is linked, need to position it correctly using keyframes and size of artwork.
-         * @param track        the ink track in question
-         * @param datastring   the track's ink datastring (see InkController.js for format)
+
+
+        /**checks what kind of track the ink is linked to and adjusts the viewer
+         * @method checkLinkType
+         * @param linkedTrack       parent track of ink
+         * @param track             this ink track
+         * @param keyframe          display part where the ink should be attached
          */
-        var myEditDrawPicker = null;
-        function showEditDraw(track, datastring) {
-            playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
-            var cw, ch, initKeyframe, artname, proxy,
-                linked = track.getInkEnabled(),
-                linkedTrack = track.getInkLink();
+        function checkLinkType(linkedTrack, track, keyframe) {
+            var kfvx,
+                kfvy,
+                kfvw,
+                kfvh,
+                linkType = linkedTrack.getType();
 
-            // gotta do this up here to do creation check
-            if (linked) {
-                artname = linkedTrack.getTitle();
-
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
-                proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
-                };
-
-                var keyframe = viewer.captureKeyframe(artname);
-                if (!keyframe) {
-                    track.setIsVisible(true);
-                    creationError("The track this ink is attached to must be fully on screen in order to edit this ink. Please seek to a location where the track is visible.");
-                    return false;
-                }
-                var kfvx, kfvy, kfvw, kfvh,
-                    linkType = linkedTrack.getType();
-                if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                    kfvx = keyframe.state.viewport.region.center.x;
-                    kfvy = keyframe.state.viewport.region.center.y;
-                    kfvw = keyframe.state.viewport.region.span.x;
-                    kfvh = keyframe.state.viewport.region.span.y;
-                }
-                else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
-                    kfvh = keyframe.state.viewport.region.span.y; // not used
-                    kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
-                }
+            if (!keyframe) {
+                track.setIsVisible(true);
+                creationError("The track this ink is attached to must be fully on screen in order to edit this ink. Please seek to a location where the track is visible.");
+                return false;
             }
-            //hide any open component controls, show inkEditDraw
-            hideInkControls();
-            //var newHeight = functionsPanel.parent().height() - addComponentLabel.offset().top - 10;
-            inkEditDraw.css({ 'display': 'block' });
+            
+            if (linkType === LADS.TourAuthoring.TrackType.artwork) {
+                kfvx = keyframe.state.viewport.region.center.x;
+                kfvy = keyframe.state.viewport.region.center.y;
+                kfvw = keyframe.state.viewport.region.span.x;
+                kfvh = keyframe.state.viewport.region.span.y;
+            } else if (linkType === LADS.TourAuthoring.TrackType.image) {
+                kfvw = 1.0 / keyframe.state.viewport.region.span.x;
+                var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
+                kfvh = keyframe.state.viewport.region.span.y; // not used
+                kfvx = -keyframe.state.viewport.region.center.x * kfvw;
+                kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
+            }
+        }
 
-            //make sure the initial size of the panel is the full height of the resizable area
-            var raTop = $("#resizableArea").offset().top;
-            var raHeight = $("#resizableArea").height();
-            inkEditDraw.css("height", raTop + raHeight - inkEditDraw.offset().top - 10);
+        /**Updates the ink track in the viewer when edits are saved
+         * @method updateInks
+         * @param {String} artname      name of parent artwork track
+         * @param linkedTrack
+         * @param track
+         */
+        function updateInks(artname, linkedTrack, track) {
+            var currcanv = $('#inkCanv');
+            var new_proxy_div = $("[data-proxy='" + escape(artname) + "']");                                //proxy for the artwork -- keeps track of dimensions
+            var new_proxy = {
+                x: new_proxy_div.data("x"),
+                y: new_proxy_div.data("y"),
+                w: new_proxy_div.data("w"),
+                h: new_proxy_div.data("h")
+            };
 
-            drawEditLabel.css({ 'color': 'black' });
-            eraseEditLabel.css({ 'color': 'gray' });
-            drawEditMode = 'draw';
-            drawEditModeLabel1.text("Draw");
-            brushEditLabel.text("Width: ");
-            brushEditLabel1.text("7px");
-            brushEditLabel.append(brushEditLabel1);
-            brushEditSliderPoint.css("left", "0px");
-            //eraserEditLabel.text("Eraser: ");
-            //eraserEditLabel1.text("7px");
-            //eraserEditLabel.append(eraserEditLabel1);
-            //eraserEditSliderPoint.css("left", "0px");
-            opacityEditLabel.text("Opacity: ");
-            opacityEditLabel1.text("100%");
-            opacityEditLabel.append(opacityEditLabel1);
-            opacityEditSliderPoint.css("left", (0.87 * opacityEditSlider.width()) + "px");
+            var new_keyframe = viewer.captureKeyframe(artname);
+            var new_kfvx,
+                new_kfvy,
+                new_kfvw,
+                new_kfvh,
+                rw,
+                linkType = linkedTrack.getType();
 
-            //reset click and save handlers to deal with current datastring
+            if (!new_keyframe) {
+                creationError("The track this ink is attached to must be fully on screen in order to save this ink. Please seek to a location where the track is visible.");
+                return false;
+            }
+            
+            if (linkType === LADS.TourAuthoring.TrackType.artwork) {
+                new_kfvx = new_keyframe.state.viewport.region.center.x;
+                new_kfvy = new_keyframe.state.viewport.region.center.y;
+                new_kfvw = new_keyframe.state.viewport.region.span.x;
+                new_kfvh = new_keyframe.state.viewport.region.span.y;
+            } else if (linkType === LADS.TourAuthoring.TrackType.image) {
+                new_kfvw = 1.0 / new_keyframe.state.viewport.region.span.x;
+                rw = new_keyframe.state.viewport.region.span.x * currcanv.width();
+                new_kfvh = new_keyframe.state.viewport.region.span.y; // not used
+                new_kfvx = -new_keyframe.state.viewport.region.center.x * new_kfvw;
+                new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
+            }
+            track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
+            track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
+        }
+
+        /**Deletes an ink track and all associated stuff
+         * @method deleteInkTrack
+         * @param track
+         */
+        function deleteInkTrack(track) {
+            var command = LADS.TourAuthoring.Command({
+                execute: function () {
+                    timeline.removeTrack(track);
+                },
+                unexecute: function () {
+                    track.reloadTrack();
+                }
+            });
+            track.setIsVisible(true);
+            undoManager.logCommand(command);
+            command.execute();
+            //hide ink controls and removeinkcanv
+            inkEditTransparency.hide();
+            removeInkCanv();
+
+            //change the undomanager back fron ink only
+            playbackControls.undoButton.off('click'); //reset undo/redo buttons to global undo/redo functionality
+            playbackControls.redoButton.off('click');
+            playbackControls.undoButton.on('click', function () {
+                undoManager.undo();
+            });
+            playbackControls.redoButton.on('click', function () {
+                undoManager.redo();
+            });
+            playbackControls.undoRedoInkOnly.css('display', 'none');
+        }
+
+        /**Update inks
+         * @method editInks
+         * @param track
+         * @param {String} datastr      updates to the ink
+         */
+        function editInks(track, datastr) {
+            var oldDataStr = track.getInkPath();
+            var command = LADS.TourAuthoring.Command({
+                execute: function () {
+                    track.setInkPath(datastr);
+                    timeline.onUpdate(true);
+                },
+                unexecute: function () {
+                    track.setInkPath(oldDataStr);
+                    timeline.onUpdate(true);
+                }
+            });
+
+            track.setIsVisible(true);
+            undoManager.logCommand(command);
+            command.execute();
+            currentInkController.remove_all();
+
+            //hide ink controls and removeinkcanv
+            removeInkCanv();
+           
+            //change the undomanager back fron ink only
+            playbackControls.undoButton.off('click'); //reset undo/redo buttons to global undo/redo functionality
+            playbackControls.redoButton.off('click');
+            playbackControls.undoButton.on('click', function () {
+                undoManager.undo();
+            });
+            playbackControls.redoButton.on('click', function () {
+                undoManager.redo();
+            });
+            playbackControls.undoRedoInkOnly.css('display', 'none');
+            //hide ink controls and removeinkcanv
+
+            if (inkAuthoring) {
+                inkAuthoring.getInkUndoManager().clear();
+                undoManager.greyOutBtn();
+            }
+        }
+
+        /**Saves the edits made to 'Draw' type ink annotation
+         * @method saveDraw
+         * @param {Boolean}             checks if ink is attached/unattached
+         * @param linkedTrack
+         * @param {String} artname
+         * @param track
+         */
+        function saveDraw(linked, linkedTrack, artname, track) {
+            //first, check if the ink is empty
+            var datastr = currentInkController.update_datastring();
+            var oldDataStr = track.getInkPath();
+            var confirmationBox;
+
+            if (currentInkController.isDatastringEmpty(currentInkController.update_datastring())) {
+                confirmationBox = LADS.Util.UI.PopUpConfirmation(function () {
+                    deleteInkTrack(track);
+                    inkEditDraw.hide();
+                    
+
+                }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
+                root.append(confirmationBox);
+                $(confirmationBox).show();
+                return;
+            }
+
+            //reset the initial keyframe and relative artwork positioning in the track data
+            if (linked) {
+                updateInks(artname, linkedTrack, track);
+            }
+            currentInkController.remove_all();
+            editInks(track, datastr);
+            inkEditDraw.hide();
+        }
+        that.saveDraw = saveDraw;
+
+        /**Reset click and save handlers to deal with current datastring
+         * @method resetDrawHandlers
+         * @param {Boolean} linked
+         * @param linkedTrack
+         * @param {String} artname
+         * @param track
+         */
+        function resetDrawHandlers(linked, linkedTrack, artname, track) {
             cancelEditDrawButton.off('click');
             cancelEditDrawButton.on('click', function () {
                 track.setIsVisible(true);
@@ -199,8 +324,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 currentInkController.remove_all();
                 removeInkCanv();
                 inkEditDraw.hide();
-                
-                playbackControls.undoButton.off('click'); //reset undo/redo buttons to global undo/redo functionality
+
+                playbackControls.undoButton.off('click');                                           //reset undo/redo buttons to global undo/redo functionality
                 playbackControls.redoButton.off('click');
                 playbackControls.undoButton.on('click', function () {
                     undoManager.undo();
@@ -213,140 +338,79 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             saveDrawButton.off('click');
             saveDrawButton.on('click', function () {
-                saveDraw();
+                saveDraw(linked, linkedTrack, artname, track);
                 timeline.hideEditorOverlay();
                 timeline.setEditInkOn(false);
                 timeline.setModifyingInk(false);
             });
+        }
 
-            function saveDraw() {
-                //first, check if the ink is empty
-                if (currentInkController.isDatastringEmpty(currentInkController.update_datastring())) {
-                    var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-                        //delete track
-                        track.setIsVisible(true);
+        /**Method called when "Edit Ink" is clicked on a draw-type ink track.
+         * Creates a new InkController and loads in the datastring of the track.
+         * Shows the edit draw controls.
+         * If the ink is linked, need to position it correctly using keyframes and size of artwork.
+         * @method showEditDraw
+         * @param track        the ink track in question
+         * @param datastring   the track's ink datastring (see InkController.js for format)
+         */
+        var myEditDrawPicker = null;                    // move up - surbhi
+        function showEditDraw(track, datastring) {
+            var cw,
+                ch,
+                initKeyframe,
+                artname,
+                proxy,
+                linked = track.getInkEnabled(),
+                linkedTrack = track.getInkLink(),
+                proxy_div,
+                keyframe,
+                raTop = $("#resizableArea").offset().top,
+                raHeight = $("#resizableArea").height(),
+                inkdiv = createInkCanvas(),
+                p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
 
-                        var command = TAG.TourAuthoring.Command({
-                            execute: function () {
-                                timeline.removeTrack(track);
-                            },
-                            unexecute: function () {
-                                track.reloadTrack();
-                            }
-                        });
-                        undoManager.logCommand(command);
-                        command.execute();
-                        //hide ink controls and removeinkcanv
-                        inkEditDraw.hide();
-                        removeInkCanv();
-                        //change the undomanager back fron ink only
-                        playbackControls.undoButton.off('click'); //reset undo/redo buttons to global undo/redo functionality
-                        playbackControls.redoButton.off('click');
-                        playbackControls.undoButton.on('click', function () {
-                            undoManager.undo();
-                        });
-                        playbackControls.redoButton.on('click', function () {
-                            undoManager.redo();
-                        });
-                        playbackControls.undoRedoInkOnly.css('display', 'none');
+            playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
+            
+            if (linked) {                   // needs creation check up here
+                artname = linkedTrack.getTitle();
 
-                    }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
-                    root.append(confirmationBox);
-                    $(confirmationBox).show();
-                    return;
-                }
-                //reset the initial keyframe and relative artwork positioning in the track data
-                if (linked) {
-                    var currcanv = $('#inkCanv');
-
-                    var new_proxy_div = $("[data-proxy='" + escape(artname) + "']"); //proxy for the artwork -- keeps track of dimensions
-                    var new_proxy = {
-                        x: new_proxy_div.data("x"),
-                        y: new_proxy_div.data("y"),
-                        w: new_proxy_div.data("w"),
-                        h: new_proxy_div.data("h")
-                    };
-
-                    var new_keyframe = viewer.captureKeyframe(artname);
-
-                    if (!new_keyframe) {
-                        creationError("The track this ink is attached to must be fully on screen in order to save this ink. Please seek to a location where the track is visible.");
-                        return false;
-                    }
-                    var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
-                        linkType = linkedTrack.getType();
-                    if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                        new_kfvx = new_keyframe.state.viewport.region.center.x;
-                        new_kfvy = new_keyframe.state.viewport.region.center.y;
-                        new_kfvw = new_keyframe.state.viewport.region.span.x;
-                        new_kfvh = new_keyframe.state.viewport.region.span.y;
-                    }
-                    else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.state.viewport.region.span.x;
-                        var rw = new_keyframe.state.viewport.region.span.x * currcanv.width();
-                        new_kfvh = new_keyframe.state.viewport.region.span.y; // not used
-                        new_kfvx = -new_keyframe.state.viewport.region.center.x * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
-                    }
-                    track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
-                    track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
-                }
-                var datastr = currentInkController.update_datastring();
-                var oldDataStr = track.getInkPath();
-
-                var command = TAG.TourAuthoring.Command({
-                    execute: function () {
-                        track.setInkPath(datastr);
-                        timeline.onUpdate(true);
-                    },
-                    unexecute: function () {
-                        track.setInkPath(oldDataStr);
-                        timeline.onUpdate(true);
-                    },
-                });
-
-                currentInkController.remove_all();
-                removeInkCanv();
-                inkEditDraw.hide();
-
-                track.setIsVisible(true);
-
-                undoManager.logCommand(command);
-                command.execute();
-
-                //timeline.onUpdate(true);
-
-                playbackControls.undoButton.off("click");
-                playbackControls.redoButton.off("click");
-
-                playbackControls.undoButton.on('click', function () {
-                    undoManager.undo();
-                });
-                playbackControls.redoButton.on('click', function () {
-                    undoManager.redo();
-                });
-                playbackControls.undoRedoInkOnly.css('display', 'none');
-
-
-                if (inkAuthoring) {
-                    inkAuthoring.getInkUndoManager().clear();
-                    undoManager.greyOutBtn();
-                }
+                proxy_div = $("[data-proxy='" + escape(artname) + "']");
+                proxy = {
+                    x: proxy_div.data("x"),
+                    y: proxy_div.data("y"),
+                    w: proxy_div.data("w"),
+                    h: proxy_div.data("h")
+                };
+                keyframe = viewer.captureKeyframe(artname);
+                checkLinkType(linkedTrack, track, keyframe);
             }
-            that.saveDraw = saveDraw;
+            //hide any open component controls, show inkEditDraw
+            hideInkControls();
+            //var newHeight = functionsPanel.parent().height() - addComponentLabel.offset().top - 10;
+            inkEditDraw.css({ 'display': 'block' });
+            inkEditDraw.css("height", raTop + raHeight - inkEditDraw.offset().top - 10);                                            //make sure the initial size of the panel is the full height of the resizable area
+
+            drawEditLabel.css({ 'color': 'black' });
+            eraseEditLabel.css({ 'color': 'gray' });
+            drawEditMode = 'draw';
+            drawEditModeLabel1.text("Draw");
+            brushEditLabel.text("Width: ");
+            brushEditLabel1.text("7px");
+            brushEditLabel.append(brushEditLabel1);
+            brushEditSliderPoint.css("left", "0px");
+            opacityEditLabel.text("Opacity: ");
+            opacityEditLabel1.text("100%");
+            opacityEditLabel.append(opacityEditLabel1);
+            opacityEditSliderPoint.css("left", (0.87 * opacityEditSlider.width()) + "px");
+
+            resetDrawHandlers(linked, linkedTrack, artname, track);
             hideAll(drawEditArray);
 
-            //create a div on which we'll draw inks
-
-            var inkdiv = createInkCanv();
-            var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
             $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
             inkAuthoring = p1;
             p1.set_editable();
-            p1.set_mode(TAG.TourAuthoring.InkMode.draw);
-            //p1.updatePenWidth("brushSlider"); // reset to defaults
-            //p1.updatePenOpacity("opacitySlider");
-
+            p1.set_mode(LADS.TourAuthoring.InkMode.draw);
+            
             if (linked) {
                 //if the ink is linked, need to figure out where to place it beyond loading in the original datastring
                 initKeyframe = track.getInkInitKeyframe();
@@ -369,17 +433,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             currentInkController = p1;
 
-
-            //call onUpdate to remove the existing ink before reloading it in edit mode
+             // call onUpdate to remove the existing ink before reloading it in edit mode
             timeline.onUpdate(true);
             timeline.showEditorOverlay();
             timeline.setEditInkOn(true);
         }
         that.showEditDraw = showEditDraw;
 
-        /**
-         * Method called when "Edit Ink" is clicked on a block/isolate-type ink track.
+        /**Method called when "Edit Ink" is clicked on a block/isolate-type ink track.
          * See comments for showEditDraw.
+         * @method getUndoManager
          * @param track        the ink track in question
          * @param datastring   the track's ink datastring
          * @param trans_type   'isolate' or 'block'
@@ -390,68 +453,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         }
         that.getInkUndoManager = getInkUndoManager;
 
-        function showEditTransparency(track, datastring, trans_type) {
-            playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
-            var cw, ch, initKeyframe, artname, proxy, proxy_h, proxy_w,
-                kfvx, kfvy, kfvw, kfvh,
-                linked = track.getInkEnabled(),
-                linkedTrack = track.getInkLink();
-
-            if (linked) {
-                initKeyframe = track.getInkInitKeyframe();
-                artname = linkedTrack.getTitle();
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
-                proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
-                };
-
-                var keyframe = viewer.captureKeyframe(artname);
-
-                if (!keyframe) {
-                    track.setIsVisible(true);
-                    creationError("The track this ink is attached to must be fully on screen in order to edit this ink. Please seek to a location where the track is visible.");
-                    return false;
-                }
-
-                if (track.getInkLink().getType() === TAG.TourAuthoring.TrackType.artwork) {
-                    kfvx = keyframe.state.viewport.region.center.x;
-                    kfvy = keyframe.state.viewport.region.center.y;
-                    kfvw = keyframe.state.viewport.region.span.x;
-                    kfvh = keyframe.state.viewport.region.span.y;
-                }
-                else if (track.getInkLink().getType() === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
-                    kfvh = keyframe.state.viewport.region.span.y; // not used
-                    kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
-                }
-            }
-            
-
-            inkTransparencyControls.css({ 'display': 'none' });
-            inkTextControls.css({ 'display': 'none' });
-            inkDrawControls.css({ 'display': 'none' });
-            inkEditDraw.css('display', 'none');
-            inkEditText.css('display', 'none');
-            inkEditTransparency.show();
-
-            //var newHeight = functionsPanel.parent().height() - addComponentLabel.offset().top - 10;
-            var raTop = $("#resizableArea").offset().top;
-            var raHeight = $("#resizableArea").height();
-            inkEditTransparency.css({
-                "height": raTop + raHeight - inkEditTransparency.offset().top - 10
-            });
-            
-
-            opacityEditTransparencyLabel.text("Opacity: ");
-            opacityEditTransparencyLabel1.text("80%");
-            opacityEditTransparencyLabel.append(opacityEditTransparencyLabel1);    
-            opacityEditTransparencySliderPoint.css("left", 0.8 * (opacityEditTransparencySlider.offset().left + opacityEditTransparencySlider.width()) / 1.28 + 'px');
-
+        /**Resets handlers for 'Highlighting' ink annotations to reflect current data
+         * @method resetTransHandlers
+         * @param {Boolean} linked
+         * @param linkedTrack
+         * @param {String} artname
+         * @param track
+         */
+        function resetTransHandlers(linked, linkedTrack, artname, track) {
             cancelEditTransButton.off('click');
             cancelEditTransButton.on('click', function () {
                 track.setIsVisible(true);
@@ -478,137 +487,118 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             saveTransButton.off("click");
             saveTransButton.on('click', function () {
-                saveTrans();
+                saveTrans(linked, linkedTrack, artname, track);
                 timeline.hideEditorOverlay();
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
             });
+        }
 
-            function saveTrans() {
-                var datastr;
+        /**Saves the edits made to 'Highlighting' inks
+         * @method saveTrans
+         * @param {boolean} linked
+         * @param linkedTrack
+         * @param {String} artname
+         * @param track
+         */
+        function saveTrans(linked, linkedTrack, artname, track) {
+            var datastr,
+                confirmationBox;
 
-                //first, check if the ink is empty
-                if (currentInkController.isDatastringEmpty(currentInkController.update_datastring())) {
-                    var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-                        //delete track
-                        track.setIsVisible(true);
+            if (currentInkController.isDatastringEmpty(currentInkController.update_datastring())) {         //first, check if the ink is empty
+                confirmationBox = LADS.Util.UI.PopUpConfirmation(function () {
+                    deleteInkTracks(track);
+                    inkEditTransparency.hide();
 
-                        var command = TAG.TourAuthoring.Command({
-                            execute: function () {
-                                timeline.removeTrack(track);
-                            },
-                            unexecute: function () {
-                                track.reloadTrack();
-                            }
-                        });
-                        undoManager.logCommand(command);
-                        command.execute();
-                        //hide ink controls and removeinkcanv
-                        inkEditTransparency.hide();
-                        removeInkCanv();
-                        //change the undomanager back fron ink only
-                        playbackControls.undoButton.off('click'); //reset undo/redo buttons to global undo/redo functionality
-                        playbackControls.redoButton.off('click');
-                        playbackControls.undoButton.on('click', function () {
-                            undoManager.undo();
-                        });
-                        playbackControls.redoButton.on('click', function () {
-                            undoManager.redo();
-                        });
-                        playbackControls.undoRedoInkOnly.css('display', 'none');
 
-                    }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
-                    root.append(confirmationBox);
-                    $(confirmationBox).show();
-                    return;
-                }
-                if (linked) {
-                    var currcanv = $('#inkCanv');
-
-                    var new_proxy_div = $("[data-proxy='" + escape(artname) + "']"); //proxy for the artwork -- keeps track of dimensions
-                    var new_proxy = {
-                        x: new_proxy_div.data("x"),
-                        y: new_proxy_div.data("y"),
-                        w: new_proxy_div.data("w"),
-                        h: new_proxy_div.data("h")
-                    };
-
-                    var new_keyframe = viewer.captureKeyframe(artname);
-
-                    if (!new_keyframe) {
-                        creationError("The track this ink is attached to must be fully on screen in order to save this ink. Please seek to a location where the track is visible.");
-                        return false;
-                    }
-                    var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
-                        linkType = linkedTrack.getType();
-                    if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                        new_kfvx = new_keyframe.state.viewport.region.center.x;
-                        new_kfvy = new_keyframe.state.viewport.region.center.y;
-                        new_kfvw = new_keyframe.state.viewport.region.span.x;
-                        new_kfvh = new_keyframe.state.viewport.region.span.y;
-                    }
-                    else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.state.viewport.region.span.x;
-                        var rw = new_keyframe.state.viewport.region.span.x * currcanv.width();
-                        new_kfvh = new_keyframe.state.viewport.region.span.y; // not used
-                        new_kfvx = -new_keyframe.state.viewport.region.center.x * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
-                    }
-                    track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
-                    track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
-                }
-
-                //need to convert rectangles/ellipses to paths before updating datastring
-                currentInkController.get_trans_shape_data();
-                datastr = currentInkController.update_datastring();
-                datastr += currentInkController.getBoundingShapes(); //save the rect/ellipse data in case we need to edit again
-
-                var oldDataStr = track.getInkPath();
-
-                var command = TAG.TourAuthoring.Command({
-                    execute: function () {
-                        track.setInkPath(datastr);
-                        timeline.onUpdate(true);
-                    },
-                    unexecute: function () {
-                        track.setInkPath(oldDataStr);
-                        timeline.onUpdate(true);
-                    },
-                });
-
-                track.setIsVisible(true);
-
-                undoManager.logCommand(command);
-                command.execute();
-
-                currentInkController.remove_all();
-                removeInkCanv();
-                inkEditTransparency.hide();
-
-                playbackControls.undoButton.off("click");
-                playbackControls.redoButton.off("click");
-                playbackControls.undoButton.on("click", function () {
-                    undoManager.undo();
-                });
-                playbackControls.redoButton.on("click", function () {
-                    undoManager.redo();
-                });
-                playbackControls.undoRedoInkOnly.css('display', 'none');
-
-                if (inkAuthoring){
-                    inkAuthoring.getInkUndoManager().clear();
-                    undoManager.greyOutBtn();
-                }
+                }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
+                root.append(confirmationBox);
+                $(confirmationBox).show();
+                return;
             }
-            that.saveTrans = saveTrans;
+            if (linked) {
+                updateInks(artname, linkedTrack, track);
+            }
 
+            //need to convert rectangles/ellipses to paths before updating datastring
+            currentInkController.get_trans_shape_data();
+            datastr = currentInkController.update_datastring();
+            datastr += currentInkController.getBoundingShapes(); //save the rect/ellipse data in case we need to edit again
+            editInks(track, datastr);
+            inkEditTransparency.hide();
+        }
+        that.saveTrans = saveTrans;
+
+        /**Method called when "Edit Ink" is clicked on a highlight-type ink track.
+        * Creates a new InkController and loads in the datastring of the track.
+        * Shows the edit highlighting controls.
+        * If the ink is linked, need to position it correctly using keyframes and size of artwork.
+        * @method showEditTransparency
+        * @param track        the ink track in question
+        * @param datastring   the track's ink datastring (see InkController.js for format)
+        * @param trans_type   block/isolate 
+        */
+        function showEditTransparency(track, datastring, trans_type) {
+            playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
+            var cw,
+                ch,
+                initKeyframe,
+                artname,
+                proxy,
+                proxy_h,
+                proxy_w,
+                kfvx,
+                kfvy,
+                kfvw,
+                kfvh,
+                linked = track.getInkEnabled(),
+                linkedTrack = track.getInkLink(),
+                proxy_div,
+                keyframe,
+                raTop = $("#resizableArea").offset().top,
+                raHeight = $("#resizableArea").height(),
+                inkdiv = createInkCanv(),
+                p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
+                currentMode,
+                currOpacity,
+                real_kfw,
+                real_kfh,
+                real_kfx,
+                real_kfy;
+
+            if (linked) {
+                initKeyframe = track.getInkInitKeyframe();
+                artname = linkedTrack.getTitle();
+                proxy_div = $("[data-proxy='" + escape(artname) + "']");
+                proxy = {
+                    x: proxy_div.data("x"),
+                    y: proxy_div.data("y"),
+                    w: proxy_div.data("w"),
+                    h: proxy_div.data("h")
+                };
+                keyframe = viewer.captureKeyframe(artname);
+                checkLinkType(linkedTrack, track, keyframe);
+            }
+            inkTransparencyControls.css({ 'display': 'none' });
+            inkTextControls.css({ 'display': 'none' });
+            inkDrawControls.css({ 'display': 'none' });
+            inkEditDraw.css('display', 'none');
+            inkEditText.css('display', 'none');
+            inkEditTransparency.show();
+            inkEditTransparency.css({
+                "height": raTop + raHeight - inkEditTransparency.offset().top - 10
+            });
+            
+            opacityEditTransparencyLabel.text("Opacity: ");
+            opacityEditTransparencyLabel1.text("80%");
+            opacityEditTransparencyLabel.append(opacityEditTransparencyLabel1);    
+            opacityEditTransparencySliderPoint.css("left", 0.8 * (opacityEditTransparencySlider.offset().left + opacityEditTransparencySlider.width()) / 1.28 + 'px');
+            resetTransHandlers(linked, linkedTrack, artname, track);
             hideAll(transEditArray);
 
-            var inkdiv = createInkCanv();
-            var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
             $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
             inkAuthoring = p1;
-            p1.set_mode(TAG.TourAuthoring.InkMode.shapes); //shape manipulation mode
+            p1.set_mode(LADS.TourAuthoring.InkMode.shapes); //shape manipulation mode
             p1.set_editable();
             p1.setMarqueeFillOpacity(p1.get_attr(datastring, 'opac', 'f'));
             if (linked) {
@@ -620,7 +610,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 p1.retrieveOrigDims();
                 p1.setEID(track.getTitle());
             }
-            var currentMode =datastring.split("mode")[1].split("[")[0].replace("]", "");
+            currentMode =datastring.split("mode")[1].split("[")[0].replace("]", "");
             p1.setTransMode(trans_type);
             p1.load_transparency_bounding_shapes(datastring);
             if (currentMode === 'isolate') {
@@ -639,16 +629,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
             if (linked) {
                 //now adjust viewbox so art is at the proper coordinates
-                var real_kfw = p1.origPaperW / kfvw;
-                var real_kfh = real_kfw * proxy_h / proxy_w;
-                var real_kfx = -kfvx * real_kfw;
-                var real_kfy = -kfvy * real_kfw;
+                real_kfw = p1.origPaperW / kfvw;
+                real_kfh = real_kfw * proxy_h / proxy_w;
+                real_kfx = -kfvx * real_kfw;
+                real_kfy = -kfvy * real_kfw;
                 p1.update_datastring();
                 p1.setOldOpac(1);
                 p1.adjustViewBoxDiv({ x: proxy.x, y: proxy.y, width: proxy.w, height: proxy.h });
             }
             currentInkController = p1;
-            var currOpacity = currentInkController.getMarqueeFillOpacity();
+            currOpacity = currentInkController.getMarqueeFillOpacity();
             opacityEditTransparencyLabel1.text(Math.round(100 * currOpacity) + "%");
             opacityEditTransparencyLabel.append(opacityEditTransparencyLabel1);
             opacityEditTransparencySliderPoint.css("left", currOpacity * (opacityEditTransparencySlider.offset().left + opacityEditTransparencySlider.width()) / 1.28 + 'px');
@@ -659,73 +649,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         }
         that.showEditTransparency = showEditTransparency;
 
-        /**
-         * Method called when "Edit Ink" is clicked on a text-type ink track.
-         * See comments for showEditDraw.
-         * @param track        the ink track in question
-         * @param datastring   the track's ink datastring
+        /**Resets handlers for text-type ink annotations to reflect current data
+         * @method resetTextHandlers
+         * @param {Boolean} linked
+         * @param linkedTrack
+         * @param {String} artname
+         * @param track
          */
-        var myEditTextPicker = null;
-        function showEditText(track, datastring, dims) {
-            playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
-            var cw, ch, initKeyframe, rap, artname, proxy,
-                linked = track.getInkEnabled(),
-                linkedTrack = track.getInkLink();
-
-            if (linked) {
-                initKeyframe = track.getInkInitKeyframe();
-                artname = linkedTrack.getTitle();
-
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
-                proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
-                };
-
-                var keyframe = viewer.captureKeyframe(artname);
-                if (!keyframe) {
-                    track.setIsVisible(true);
-                    creationError("The track this ink is attached to must be fully on screen in order to edit this ink. Please seek to a location where the track is visible.");
-                    return false;
-                }
-
-                var kfvx, kfvy, kfvw, kfvh,
-                    linkType = linkedTrack.getType();
-                if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                    kfvx = keyframe.state.viewport.region.center.x;
-                    kfvy = keyframe.state.viewport.region.center.y;
-                    kfvw = keyframe.state.viewport.region.span.x;
-                    kfvh = keyframe.state.viewport.region.span.y;
-                }
-                else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
-                    kfvh = keyframe.state.viewport.region.span.y; // not used
-                    kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
-                }
-            }
-            
-            hideInkControls();
-            inkEditText.show();
-
-            //var newHeight = functionsPanel.parent().height() - addComponentLabel.offset().top - 10;
-            var raTop = $("#resizableArea").offset().top;
-            var raHeight = $("#resizableArea").height();
-            inkEditText.css({
-                "height": raTop + raHeight - inkEditText.offset().top - 10
-            });
-            
-
-            fontEditLabel.text("Font: ");
-            fontEditLabel1.text("Times New Roman");
-            fontEditLabel.append(fontEditLabel1);
-            textEditSliderPoint.css("left", "0px");
-            textEditSizeLabel.text("Text Size: ");
-            hideAll(textEditArray);
-
+        function resetTextHandlers(linked, linkedTrack, artname, track) {
             cancelEditTextButton.off("click");
             cancelEditTextButton.on("click", function () {
                 track.setIsVisible(true);
@@ -752,135 +683,148 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             saveTextButton.off("click");
             saveTextButton.on("click", function () {
-                saveText();
+                saveText(linked, linkedTrack, artname, track);
                 textEditArea.val("");
                 textEditBodyLabel1.text("");
                 timeline.hideEditorOverlay();
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
             });
+        }
 
-            function saveText() {
-                //first, check if the ink is empty
-                if (currentInkController.isTextboxEmpty()) {
-                    var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-                        //delete track
-                        track.setIsVisible(true);
-                        var command = TAG.TourAuthoring.Command({
-                            execute: function () {
-                                timeline.removeTrack(track);
-                            },
-                            unexecute: function () {
-                                track.reloadTrack();
-                            }
-                        });
-                        undoManager.logCommand(command);
-                        command.execute();
+        /**Saves edits made to text-inks
+         * @method saveText
+         * @param {Boolean} linked
+         * @param linkedTrack
+         * @param {String} artname
+         * @param track
+         */
+        function saveText(linked, linkedTrack, artname, track) {
+            var confirmationBox;
+            //first, check if the ink is empty
+            if (currentInkController.isTextboxEmpty()) {
+                confirmationBox = LADS.Util.UI.PopUpConfirmation(function () {
+                    deleteInkTracks(track);
+                    inkEditText.hide();
 
-                        //hide ink controls and removeinkcanv
-                        inkEditText.hide();
-                        removeInkCanv();
 
-                        //change the undomanager back fron ink only
-                        playbackControls.undoButton.off('click'); //reset undo/redo buttons to global undo/redo functionality
-                        playbackControls.redoButton.off('click');
-                        playbackControls.undoButton.on('click', function () {
-                            undoManager.undo();
-                        });
-                        playbackControls.redoButton.on('click', function () {
-                            undoManager.redo();
-                        });
-                        playbackControls.undoRedoInkOnly.css('display', 'none');
-
-                    }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
-                    root.append(confirmationBox);
-                    $(confirmationBox).show();
-                    return;
-                }
-                if (linked) {
-                    var currcanv = $('#inkCanv');
-
-                    var new_proxy_div = $("[data-proxy='" + escape(artname) + "']"); //proxy for the artwork -- keeps track of dimensions
-                    var new_proxy = {
-                        x: new_proxy_div.data("x"),
-                        y: new_proxy_div.data("y"),
-                        w: new_proxy_div.data("w"),
-                        h: new_proxy_div.data("h")
-                    };
-
-                    var new_keyframe = viewer.captureKeyframe(artname);
-
-                    if (!new_keyframe) {
-                        creationError("The track this ink is attached to must be fully on screen in order to save this ink. Please seek to a location where the track is visible.");
-                        return false;
-                    }
-                    var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
-                        linkType = linkedTrack.getType();
-                    if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                        new_kfvx = new_keyframe.state.viewport.region.center.x;
-                        new_kfvy = new_keyframe.state.viewport.region.center.y;
-                        new_kfvw = new_keyframe.state.viewport.region.span.x;
-                        new_kfvh = new_keyframe.state.viewport.region.span.y;
-                    }
-                    else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.state.viewport.region.span.x;
-                        var rw = new_keyframe.state.viewport.region.span.x * currcanv.width();
-                        new_kfvh = new_keyframe.state.viewport.region.span.y; // not used
-                        new_kfvx = -new_keyframe.state.viewport.region.center.x * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
-                    }
-                    track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
-                    track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
-                }
-
-                track.setInkPath(currentInkController.update_datastring()); //======== can call currentInkController.update_datastring here to get the most recent ink path (getDatastring assumes it's already been called)
-                removeInkCanv();
-                inkEditText.hide();
-
-                track.setIsVisible(true);
-
-                playbackControls.undoButton.off("click");
-                playbackControls.redoButton.off("click");
-
-                playbackControls.undoButton.on("click", function () {
-                    undoManager.undo();
-                });
-                playbackControls.redoButton.on("click", function () {
-                    undoManager.redo();
-                });
-                playbackControls.undoRedoInkOnly.css('display', 'none');
-
-                colorTextLabel1.text("#FFFFFF");
-                $('#textColorToggle').attr('value', "FFFFFF");
-
-                if (inkAuthoring) {
-                    inkAuthoring.getInkUndoManager().clear();
-                    undoManager.greyOutBtn();
-                }
-                timeline.onUpdate();
+                }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
+                root.append(confirmationBox);
+                $(confirmationBox).show();
+                return;
             }
-            that.saveText = saveText;
+            if (linked) {
+                updateInks(artname, linkedTrack, track);
+            }
 
-            var inkdiv = createInkCanv();
-            var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+            track.setInkPath(currentInkController.update_datastring()); //======== can call currentInkController.update_datastring here to get the most recent ink path (getDatastring assumes it's already been called)
+            removeInkCanv();
+            inkEditText.hide();
+            track.setIsVisible(true);
+
+            playbackControls.undoButton.off("click");
+            playbackControls.redoButton.off("click");
+
+            playbackControls.undoButton.on("click", function () {
+                undoManager.undo();
+            });
+            playbackControls.redoButton.on("click", function () {
+                undoManager.redo();
+            });
+            playbackControls.undoRedoInkOnly.css('display', 'none');
+
+            colorTextLabel1.text("#FFFFFF");
+            $('#textColorToggle').attr('value', "FFFFFF");
+
+            if (inkAuthoring) {
+                inkAuthoring.getInkUndoManager().clear();
+                undoManager.greyOutBtn();
+            }
+            timeline.onUpdate();
+        }
+        that.saveText = saveText;
+
+        /**Method called when "Edit Ink" is clicked on a text-type ink track.
+         * See comments for showEditDraw.
+         * @method showEditText
+         * @param track        the ink track in question
+         * @param datastring   the track's ink datastring
+         * @param dims
+         */
+        var myEditTextPicker = null;    // move up - surbhi
+        function showEditText(track, datastring, dims) {
+            var cw,
+                ch,
+                initKeyframe,
+                rap,
+                artname,
+                proxy,
+                linked = track.getInkEnabled(),
+                linkedTrack = track.getInkLink(),
+                proxy_div,
+                keyframe,
+                raTop = $("#resizableArea").offset().top,
+                raHeight = $("#resizableArea").height(),
+                inkdiv = createInkCanv(),
+                p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
+                fontsize,
+                line_breaks,
+                num_lines,
+                w,
+                h,
+                str,
+                scaleFactor,
+                textX,
+                textY,
+                svgText,
+                pointvalue,
+                currentcolor;
+
+            playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
+            if (linked) {
+                initKeyframe = track.getInkInitKeyframe();
+                artname = linkedTrack.getTitle();
+                proxy_div = $("[data-proxy='" + escape(artname) + "']");
+                proxy = {
+                    x: proxy_div.data("x"),
+                    y: proxy_div.data("y"),
+                    w: proxy_div.data("w"),
+                    h: proxy_div.data("h")
+                };
+
+                keyframe = viewer.captureKeyframe(artname);
+                checkLinkType(linkedTrack, track, keyframe);
+            }
+            
+            hideInkControls();
+            inkEditText.show();
+            inkEditText.css({
+                "height": raTop + raHeight - inkEditText.offset().top - 10
+            });
+            
+            fontEditLabel.text("Font: ");
+            fontEditLabel1.text("Times New Roman");
+            fontEditLabel.append(fontEditLabel1);
+            textEditSliderPoint.css("left", "0px");
+            textEditSizeLabel.text("Text Size: ");
+            hideAll(textEditArray);
+            resetTextHandlers(linked, linkedTrack, artname, track);
+            
             $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
             inkAuthoring = p1;
             cw = $("#inkCanv").width();
             ch = $("#inkCanv").height();
-            p1.set_mode(TAG.TourAuthoring.InkMode.text);
+            p1.set_mode(LADS.TourAuthoring.InkMode.text);
             p1.set_editable();
-
-            var fontsize, line_breaks, num_lines;
+ 
             fontsize = p1.get_attr(datastring, "fontsize", 'f') * ch;
             p1.setFontSize(fontsize);
             maxFontSize = Math.max(48, fontsize);
-            var str = p1.get_attr(datastring, 'str', 's');
+            str = p1.get_attr(datastring, 'str', 's');
             textEditArea.val(str);
             textEditBodyLabel1.text(str);
-            
-            var scaleFactor = dims.fontsize / fontsize;
+            scaleFactor = dims.fontsize / fontsize;
 
-            var w, h;
             try {
                 w = p1.get_attr(datastring, 'w', 'f');
                 w = linked ? w * scaleFactor : w;
@@ -899,134 +843,235 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 p1.loadInk(datastring);
                 p1.adjustViewBoxDiv({ x: proxy.x, y: proxy.y, width: proxy.w, height: proxy.h });
             }
-            var textX = p1.getPannedPos().x || p1.get_attr(datastring, "x", "f") * cw;
-            var textY = p1.getPannedPos().y || p1.get_attr(datastring, "y", "f") * ch;
+            textX = p1.getPannedPos().x || p1.get_attr(datastring, "x", "f") * cw;
+            textY = p1.getPannedPos().y || p1.get_attr(datastring, "y", "f") * ch;
             p1.setFontFamily(p1.get_attr(datastring, "font", 's'));
             p1.setFontColor(p1.get_attr(datastring, "color", 's'));
-            p1.add_text_box(textX, textY, w, h, str); // 5px seems to be standard textarea padding
-            var svgText = p1.getSVGText();
+            p1.add_text_box(textX, textY, w, h, str);               // 5px seems to be standard textarea padding
+            svgText = p1.getSVGText();
             
             currentFontSize = fontsize;
             textEditSizeLabel1.text(Math.round(fontsize) + "px");
             textEditSizeLabel.append(textEditSizeLabel1);
-            var pointvalue = (fontsize - 8) / (maxFontSize - 8);
+            pointvalue = (fontsize - 8) / (maxFontSize - 8);
             textEditSizeSlider.attr("value", Math.round(fontsize) + "px");
-            //console.log(pointleft);
-            var currentcolor = p1.get_attr(datastring, "color", 's'); //update the current color
+            currentcolor = p1.get_attr(datastring, "color", 's'); //update the current color
             colorEditTextLabel1.text(currentcolor);
             
-            //myPicker = new jscolor.color(itemEditText, {});
             myEditTextPicker.fromString(currentcolor);
             currentInkController = p1;
             firstUpdate();
             updateToggle(textEditArray, textEditArea);
-
             timeline.onUpdate(true);
             timeline.showEditorOverlay();
-
         }
         that.showEditText = showEditText;
 
-        functionsPanel.attr('id', 'component-controls');
-        functionsPanel.css({
-            "background-color": "rgb(219,218,199)", "height": "48px", "width": "20%", 'top': '15px',
-            'left': '0%', 'position': 'relative', 'float': 'left',
-        }); // Had to do tops and heights as CSS to prevent overlap on small screens
+        /***********************************************************************************************************************************************************************************/
+        /***********************************************************************************************************************************************************************************/
 
-        /** Drop Down icon
-         *  Modified By: Hak
+        /**Creates the function panel to edit tours
+         * @method createFunctionsPanel
          */
-        var addDropDownIconComponent = $(document.createElement('img'));
-        addDropDownIconComponent.attr('id', 'addDropDownIconComponent');
-        addDropDownIconComponent.attr('src', 'images/icons/Down.png');
-        addDropDownIconComponent.css({ 'width': '10%', 'margin-left': '35%', 'height': '10%' });
+        (function createFunctionsPanel() {
+            // creating components for functions panel
+            var addDropDownIconComponent = $(document.createElement('img'));
+            var menuOffsetL = '13%';
+            var addComponentLabel = $(document.createElement('label'));
+            var fade = $(document.createElement('div'));
+            
+            // create the buttons to add various components
+            var artButton = _createAddComponentButton("Artwork", dropMain);
+            var assetButton = _createAddComponentButton("Associated Media", dropMain);
+            var fileButton = _createAddComponentButton("From File", dropMain);
+            var inkButton = _createAddComponentButton("Annotate", dropMain);
 
-        /**
-         * Add parts of function panel
-         */
-        // Add Component menu - main button
-        var menuOffsetL = '13%';
-        var addComponentLabel = $(document.createElement('label'));
-        addComponentLabel.text("Add Track");
-        addComponentLabel.attr('id', 'addComponentLabel');
-        addComponentLabel.css({
-            "left": menuOffsetL, "top": "5%", "position": "relative",
-            "font-size": TAG.Util.getFontSize(200), "color": "rgb(256, 256, 256)",
-            //Using the current background color value multiplied by the ( 1- alpha value )
-            'background-color': "rgb(63, 55, 53)",
-            'padding': '3% 2% 4% 2%',
-            'width': '70%',
-            'float': 'left',
-        });
-        addComponentLabel.append(addDropDownIconComponent);
-        functionsPanel.append(addComponentLabel);
+            var audioButton = _createAddComponentButton("Audio (MP3)", dropFile);
+            var videoButton = _createAddComponentButton("Video (MP4)", dropFile);
+            var imageButton = _createAddComponentButton("Image", dropFile);
 
-        //fade overlay appears when AddComponent is opened -- allows addComponent to be closed when clicking away
-        var fade = $(document.createElement('div'));
-        fade.css({
-            width: "100%",
-            height: "100%",
-            position: "fixed",
-            top: '0px',
-            left: '0px',
-            //'background-color': 'rgba(0,0,0,.5)',
-            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 18
-        });
-        fade.attr("class", "fade");
-        functionsPanel.append(fade);
-        fade.hide();
+            artButton.attr('id', 'artButton');
+            assetButton.attr('id', 'assetButton');
+            fileButton.attr('id', 'fileButton');
+            inkButton.attr('id', 'inkButton');
+            audioButton.attr('id', 'audioButton');
+            videoButton.attr('id', 'videoButton');
+            imageButton.attr('id', 'imageButton');
 
-        //fades "Add Component" menus away when click happens outside the menus
-        fade.on('mousedown', function (evt) {
+            functionsPanel.attr('id', 'component-controls');
+            functionsPanel.css({
+                "background-color": "rgb(219,218,199)",
+                "height": "48px",
+                "width": "20%",
+                'top': '15px',
+                'left': '0%',
+                'position': 'relative',
+                'float': 'left'
+            });
+
+            // setting attributes/CSS of the components
+            addDropDownIconComponent.attr('id', 'addDropDownIconComponent');
+            addDropDownIconComponent.attr('src', 'images/icons/Down.png');
+            addDropDownIconComponent.css({
+                'width': '10%',
+                'margin-left': '35%',
+                'height': '10%'
+            });
+
+            addComponentLabel.text("Add Track");
+            addComponentLabel.attr('id', 'addComponentLabel');
+            addComponentLabel.css({
+                "left": menuOffsetL, "top": "5%", "position": "relative",
+                "font-size": LADS.Util.getFontSize(200), "color": "rgb(256, 256, 256)",
+                //Using the current background color value multiplied by the ( 1- alpha value )
+                'background-color': "rgb(63, 55, 53)",
+                'padding': '3% 2% 4% 2%',
+                'width': '70%',
+                'float': 'left',
+            });
+            addComponentLabel.on('mousedown', function (evt) {
+                evt.stopImmediatePropagation();
+            });
+            addComponentLabel.click(function (evt) {
+                var i,
+                    prev,
+                    closeFunc = timeline.getCloseMenu();
+                if (timeline.getEditInkOn() === true) { return; }
+                if (closeFunc && closeFunc !== closeComponentMenu) { closeFunc(); }
+                evt.stopImmediatePropagation();
+
+                // flip state
+                componentDropDown = !componentDropDown;
+
+                // hide submenus
+                dropInk.hide();
+                dropFile.hide();
+
+                if (componentDropDown) {    // close --> open
+                    dropMain.show();
+                    root.on('mousedown.componentMenu', closeComponentMenu);
+                    timeline.setisMenuOpen(true);
+                    timeline.setCloseMenu(closeComponentMenu);
+                    timeManager.stop();
+                    addDropDownIconComponent.css({
+                        'transform': 'scaleY(-1)',
+                        'margin-bottom': '2%'
+                    });
+
+                    //reseting all menu items to normal font thickness
+                    $(".thicknessLabel").css({ 'font-weight': 'normal' });
+
+                    // Reset any selected menu items to regular CSS
+                    // and unselected state
+                    for (i = 0; i < prevSelected.length; i++) {
+                        prev = $(prevSelected[i]);
+                        prev.css({
+                            'background-color': 'transparent',
+                            'color': 'white'
+                        });
+                        prev.data('selected', false);
+                    }
+
+                    // check to see if ink can be added
+                    // (only allow ink if there are artworks or images)
+                    if (!timeline.checkForArtworks(0)) {
+                        allowInk = false;
+                        inkButton.css({
+                            'background-color': 'transparent',
+                            'color': 'gray'
+                        });
+                    } else {
+                        allowInk = true;
+                        inkButton.css({
+                            'background-color': 'transparent',
+                            'color': 'white'
+                        });
+                    }
+                } else {          // open --> close
+                    dropMain.hide();
+                    root.off('mousedown.componentMenu');
+                    timeline.setCloseMenu(null);
+                    timeline.setisMenuOpen(false);
+                    addDropDownIconComponent.css({
+                        'transform': 'scaleY(1)',
+                        'margin-bottom': '0%'
+                    });
+                }
+            });
+
+            fade.css({
+                width: "100%",
+                height: "100%",
+                position: "fixed",
+                top: '0px',
+                left: '0px',
+                'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 18
+            });
+            fade.attr("class", "fade");
+            fade.on('mousedown', function (evt) {
+                fade.hide();
+                componentDropDown = false;
+                addDropDownIconComponent.css({ 'transform': 'scaleY(1)', 'margin-bottom': '2%' });
+                dropInk.hide();
+                dropFile.hide();
+                dropMain.hide();
+            });
+
+            dropMain.css({
+                "left": menuOffsetL,
+                "position": "relative",
+                "color": "rgb(256, 256, 256)",
+                'width': '74%',
+                'background-color': 'rgba(0,0,0,0.95)',
+                'float': 'left',
+                'clear': 'left',
+                'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 19
+            });
+
+            dropFile.css({
+                "left": '87%',
+                'margin-top': '-33%',
+                "position": "relative",
+                "color": "rgb(256, 256, 256)",
+                'width': '74%',
+                'background-color': 'rgba(0,0,0,0.95)',
+                'float': 'left',
+                'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 19
+            });
+
+            dropInk.css({
+                "left": '87%',
+                'margin-top': '-16.5%',
+                "position": "relative",
+                "color": "rgb(256, 256, 256)",
+                'width': '74%',
+                'background-color': 'rgba(0,0,0,0.95)',
+                'float': 'left',
+                'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 19
+            });
+
+
+            // create ink buttons
+            _createAddComponentButton("Write", dropInk).attr('id', 'write');
+            _createAddComponentButton("Draw", dropInk).attr('id', 'draw');
+            _createAddComponentButton("Highlight", dropInk).attr('id', 'highlight');
+
+            // append components on the panel
+            addComponentLabel.append(addDropDownIconComponent);
+            functionsPanel.append(addComponentLabel);
+            functionsPanel.append(fade);			//fade overlay appears when AddComponent is opened -- allows addComponent to be closed when clicking away
             fade.hide();
-            componentDropDown = false;
-            addDropDownIconComponent.css({ 'transform': 'scaleY(1)', 'margin-bottom': '2%' });
-            dropInk.hide();
-            dropFile.hide();
+            functionsPanel.append(dropMain);
             dropMain.hide();
-        });
+            functionsPanel.append(dropFile);
+            dropFile.hide();
+            functionsPanel.append(dropInk);
+            dropInk.hide();
+        })();
 
-        // Dropdown menus:
-        // Main section
-        var dropMain = $(document.createElement('div'));
-        dropMain.css({
-            "left": menuOffsetL,
-            "position": "relative",
-            "color": "rgb(256, 256, 256)",
-            'width': '74%',
-            'background-color': 'rgba(0,0,0,0.95)',
-            'float': 'left',
-            'clear': 'left',
-            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
-        });
-        functionsPanel.append(dropMain);
-        dropMain.hide();
-
-        // create the buttons to add various components
-        var artButton = _createAddComponentButton("Artwork", dropMain);
-        var assetButton = _createAddComponentButton("Associated Media", dropMain);
-        var fileButton = _createAddComponentButton("From File", dropMain);
-        var inkButton = _createAddComponentButton("Annotate", dropMain);
-
-        //File uploading subsection -Xiaoyi
-        var dropFile = $(document.createElement('div'));
-        dropFile.css({
-            "left": '87%',
-            'margin-top': '-33%',
-            "position": "relative",
-            "color": "rgb(256, 256, 256)",
-            'width': '74%',
-            'background-color': 'rgba(0,0,0,0.95)',
-            'float': 'left',
-            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
-        }); 
-        functionsPanel.append(dropFile);
-        dropFile.hide();
-
-        var audioButton = _createAddComponentButton("Audio (MP3)", dropFile);
-        var videoButton = _createAddComponentButton("Video (MP4)", dropFile);
-        var imageButton = _createAddComponentButton("Image", dropFile);
-
+        /**Disables functionality on exiting ink track
+         * @method exitInk
+         */
         function exitInk() {
             removeInkCanv();
             hideInkControls();
@@ -1042,175 +1087,222 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             playbackControls.undoRedoInkOnly.css({ 'display': 'none' });
         }
 
-        /**
-         * Opens the correct file picker based on the file type
+        /**Opens the correct file picker based on the file type
+         * @method pickFile
          */
-        function pickFile() {
-            var type, names = [],
+        function pickFile()  {
+            var type,
+                names = [],
                 title = $(this).text(),
                 initLoc = timeManager.getCurrentPx(),
-                mediaLengths = [], i, upldr;
+                mediaLengths = [],
+                i,
+                upldr,
+                mediaFiles;
 
             isUploading = true;
-            // Get music properties
-            function getMusicPropertiesHelper(file) {
-                file.properties.getMusicPropertiesAsync().done(function (musicProperties) {
-                    mediaLengths.push(musicProperties.duration / 1000); // get duration in seconds
-                },
 
-                  // Handle errors with an error function
-                function (error) {
-                    console.log(error);
-                });
+            /**Get music properties helper function for audio files
+             * @method getMusicPropertiesHelper
+             * @param files
+             * @param i
+             * @param callback
+             */
+            function getMusicPropertiesHelper(files, i, callback) {
+                var file = files[i];
+                try {
+                    file.properties.getMusicPropertiesAsync().done(function (musicProperties) {
+                        mediaLengths.push(musicProperties.duration / 1000); // get duration in seconds
+                        if (i < files.length - 1) {
+                            getMusicPropertiesHelper(files, i + 1, callback);
+                        } else {
+                            callback && callback();
+                        }
+                    }, function (error) {
+                        console.log(error);
+                    });
+                } catch (err) {
+                    console.log(err.message);
+                    mediaLengths.push(LADS.TourAuthoring.Constants.maxTourLength);
+                    if (i < files.length - 1) {
+                        getMusicPropertiesHelper(files, i + 1, callback);
+                    } else {
+                        callback && callback();
+                    }
+                }
             }
 
             if (title === "Audio (MP3)") {
-                upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
+                upldr = LADS.Authoring.FileUploader(root, LADS.Authoring.FileUploadTypes.Standard,
                 function (files) {
                     var file;
                     for (i = 0; i < files.length; i++) {
                         file = files[i];
                         names.push(file.displayName);
-                        if (file.fileType === '.mp3') {
-                            type = TAG.TourAuthoring.TrackType.audio;
-                            getMusicPropertiesHelper(file);
-                        }
-                    }
-
-                   
+                     }
+                    type = LADS.TourAuthoring.TrackType.audio;
+                    mediaFiles = files;
                 },
                 function (urls) {
-                    var url, name, mediaLength;
-                    for (i = 0; i < urls.length; i++) {
-                        url = urls[i];
-                        name = names[i];
-                        mediaLength = mediaLengths[i];
-                        var track = timeline.addAudioTrack(url, name, null, mediaLength);
+                    getMusicPropertiesHelper(mediaFiles, 0, urlsCallback);
+                    function urlsCallback() {
+                        var url,
+                            name,
+                            mediaLength,
+                            track,
+                            positionX,
+                            displayLength,
+                            diff,
+                            newDisplay;
+                        for (i = 0; i < urls.length; i++) {
+                            url = urls[i];
+                            name = names[i];
+                            mediaLength = mediaLengths[i];
+                            track = timeline.addAudioTrack(url, name, null, mediaLength);
+                            positionX = initLoc;
+                            displayLength = mediaLength;
+                            if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
+                                timeManager.setEnd(Math.min(LADS.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+                            }
+                            diff = LADS.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
+                            newDisplay = (diff < LADS.TourAuthoring.Constants.displayEpsilon) ?
+                                                 track.addDisplay(timeManager.timeToPx(LADS.TourAuthoring.Constants.maxTourLength - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) :
+                                                 track.addDisplay(positionX, Math.min(diff, displayLength));
 
-                        // update tour length if necessary
-                        //if (timeManager.getDuration().end < mediaLength + timeManager.pxToTime(initLoc)) {
-                        //    timeManager.setEnd(mediaLength + timeManager.pxToTime(initLoc));
-                        //}
-
-                        //// add a display to the track
-                        //track.addDisplay(initLoc, mediaLength);
-
-                        var positionX = initLoc;
-                        var displayLength = mediaLength;
-                        //track.addDisplay(positionX, displayLength);
-                        if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                            timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+                            if (timeline.getTracks().length > 0) {
+                                timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
+                            }
                         }
-                        var diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                        var newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
-                                             track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
-                                             track.addDisplay(positionX, Math.min(diff, displayLength));
-                        
-                        if (timeline.getTracks().length > 0) {
-                            timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
-                        }
+                        undoManager.combineLast(2 * urls.length);
+                        isUploading = false;
+                        timeline.getDataHolder().mapTracks(function (container, i) {
+                            container.track.updatePos(i);
+                        });
                     }
-                    undoManager.combineLast(2 * urls.length);
-                    isUploading = false;
-                    timeline.getDataHolder().mapTracks(function (container, i) {
-                        container.track.updatePos(i);
-                    });
                 },
                 ['.mp3'],
                 false,
                 function () {
-                    root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file. Please try again later."));
+                    root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file. Please try again later."));
                 },
                 true);
-                upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
-                upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
+                upldr.setMaxDuration(LADS.TourAuthoring.Constants.maxTourLength);
+                upldr.setMinDuration(LADS.TourAuthoring.Constants.minMediaLength);
             }
 
-            function getAudioPropertiesHelper(file) {
-                file.properties.getVideoPropertiesAsync().done(function (VideoProperties) {
-                    mediaLengths.push(VideoProperties.duration / 1000); // get duration in seconds
-                },
-                function (error) {
-                    console.log(error);
-                });
+            /**Helper function to get properties of video files
+             * @method getVideoPropertiesHelper
+             * @param files
+             * @param i
+             * @param callback
+             */
+            function getVideoPropertiesHelper(files, i, callback) {
+                var file = files[i];
+                try {
+                    file.properties.getVideoPropertiesAsync().done(function (VideoProperties) {
+                        mediaLengths.push(VideoProperties.duration / 1000); // get duration in seconds
+                        if (i < files.length - 1) {
+                            getVideoPropertiesHelper(files, i + 1, callback);
+                        } else {
+                            callback && callback();
+                        }
+                    },
+                    function (error) {
+                        console.log(error);
+                    });
+                } catch (err) {
+                    mediaLengths.push(LADS.TourAuthoring.Constants.maxTourLength);
+                    if (i < files.length - 1) {
+                        getVideoPropertiesHelper(files, i + 1, callback);
+                    } else {
+                        callback && callback();
+                    }
+                }
             }
 
             if (title === "Video (MP4)") {
-                upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
+                upldr = LADS.Authoring.FileUploader(root, LADS.Authoring.FileUploadTypes.Standard,
                 function (files) {
                     var file;
                     for (i = 0; i < files.length; i++) {
                         file = files[i];
                         names.push(file.displayName);
-                        if (file.fileType === '.mp4' || file.type === '.ogg') {
-                            type = TAG.TourAuthoring.TrackType.video;
-                            getAudioPropertiesHelper(file);
-                        }
+                        //if (file.fileType === '.mp4' || file.type === '.ogg') {
+                        //    type = LADS.TourAuthoring.TrackType.video;
+                        //    getVideoPropertiesHelper(file);
+                        //}
                     }
+                    type = LADS.TourAuthoring.TrackType.video;
+                    mediaFiles = files;
                 },
                 function (urls) {
-                    var url, name, mediaLength;
-                    for (i = 0; i < urls.length; i++) {
-                        url = urls[i];
-                        name = names[i];
-                        mediaLength = mediaLengths[i];
-                        var track = timeline.addVideoTrack(url, name, null, mediaLength);
-                        //console.log("mediaLength = "+mediaLength);
-                        //if (timeManager.getDuration().end < mediaLength + timeManager.pxToTime(initLoc)) {
-                        //    timeManager.setEnd(mediaLength + timeManager.pxToTime(initLoc));
-                        //}
+                    getVideoPropertiesHelper(mediaFiles, 0, urlsCallback);
+                    function urlsCallback() {
+                        var url,
+                            name,
+                            mediaLength,
+                            track,
+                            positionX,
+                            displayLength,
+                            diff,
+                            newDisplay;
+                        for (i = 0; i < urls.length; i++) {
+                            url = urls[i];
+                            name = names[i];
+                            mediaLength = mediaLengths[i];
+                            track = timeline.addVideoTrack(url, name, null, mediaLength);
+                            positionX = initLoc;
+                            displayLength = mediaLength;
+                            if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
+                                timeManager.setEnd(Math.min(LADS.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+                            }
+                            diff = LADS.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
+                            newDisplay = (diff < LADS.TourAuthoring.Constants.displayEpsilon) ?
+                                                 track.addDisplay(timeManager.timeToPx(LADS.TourAuthoring.Constants.maxTourLength - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) :
+                                                 track.addDisplay(positionX, Math.min(diff, displayLength));
 
-                        //track.addDisplay(initLoc, mediaLength);
-
-                        var positionX = initLoc;
-                        var displayLength = mediaLength;
-                        //track.addDisplay(positionX, displayLength);
-                        if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                            timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+                            if (timeline.getTracks().length > 0) {
+                                timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
+                            }
                         }
-                        var diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                        var newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
-                                             track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
-                                             track.addDisplay(positionX, Math.min(diff, displayLength));
-                        
-                        if (timeline.getTracks().length > 0) {
-                            timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
-                        }
+                        undoManager.combineLast(2 * urls.length);
+                        isUploading = false;
+                        timeline.getDataHolder().mapTracks(function (container, i) {
+                            container.track.updatePos(i);
+                        });
                     }
-                    undoManager.combineLast(2 * urls.length);
-                    isUploading = false;
-                    timeline.getDataHolder().mapTracks(function (container, i) {
-                        container.track.updatePos(i);
-                    });
                 },
                 ['.mp4'],
                 false,
                 function () {
-                    root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                    root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
                 },
                 true);
-                upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
-                upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
+                upldr.setMaxDuration(LADS.TourAuthoring.Constants.maxTourLength);
+                upldr.setMinDuration(LADS.TourAuthoring.Constants.minMediaLength);
             }
             if (title === "Image") {
-                TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
+                LADS.Authoring.FileUploader(root, LADS.Authoring.FileUploadTypes.Standard,
                 function (files) {
                     for (i = 0; i < files.length; i++) {
                         names.push(files[i].displayName);
                     }
                 },
                 function (urls) {
+                    var track,
+                        dispLen,
+                        newDisplay;
                     for (i = 0; i < urls.length; i++) {
-                        var track = timeline.addImageTrack(urls[i], names[i].replace(/\'/, '').replace(/\"/, ''));
-                        var dispLen = Math.min(5, timeManager.getDuration().end - timeManager.pxToTime(initLoc));
-                        var newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(initLoc, dispLen);
-                        if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
+                        track = timeline.addImageTrack(urls[i], names[i].replace(/\'/, '').replace(/\"/, ''));
+                        dispLen = Math.min(5, timeManager.getDuration().end - timeManager.pxToTime(initLoc));
+                        newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(initLoc, dispLen);
+                        if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
                             newDisplay.setIn(0);
                             newDisplay.setOut(0);
                             newDisplay.setMain(dispLen);
                         }
                         
-                        if (timeline.getTracks().length > 0) { // reload tour?
+                        if (timeline.getTracks().length > 0) { 
                             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                         }
                     }
@@ -1220,125 +1312,114 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         container.track.updatePos(i);
                     });
                 },
-                ['.jpg', '.png', '.gif'],
+                ['.jpg', '.png', '.gif', '.tif', '.tiff'],
                 false,
                 function () {
-                    root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                    root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
                 },
                 true);
             }
 
         }
 
-        // Ink subsection
-        var dropInk = $(document.createElement('div'));
-        dropInk.css({
-            "left": '87%',
-            'margin-top': '-16.5%',
-            "position": "relative",
-            "color": "rgb(256, 256, 256)",
-            'width': '74%',
-            'background-color': 'rgba(0,0,0,0.95)',
-            'float': 'left',
-            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
-        });
-        functionsPanel.append(dropInk);
-        dropInk.hide();
-
-        // create ink buttons
-        _createAddComponentButton("Write", dropInk);
-        _createAddComponentButton("Draw", dropInk);
-        _createAddComponentButton("Highlight", dropInk);
-
-        /**
-         * Creates component menu buttons
-         * @param title         Name of button
-         * @param component     DOM element to add button to
-         *@return addComponentButton     the button created.
+       
+        /**Creates component menu buttons
+         * @method _createComponentButton
+         * @param {String} title                         Name of button
+         * @param {HTML Element} component               DOM element to add button to
+         * @return {HTML Element} addComponentButton     the button created.
          */
         function _createAddComponentButton(title, component) {
             var addComponentButton = $(document.createElement('label'));
-            if (title === "From File")
+            if (title === "From File") {
                 addComponentButton.addClass('clickable ' + 'files');
-            else
+            } else {
                 addComponentButton.addClass('clickable ' + title);
+            }
             addComponentButton.text(title);
             addComponentButton.css({
                 "left": "0%",
                 "position": "relative",
-                "font-size": TAG.Util.getFontSize(190),
+                "font-size": LADS.Util.getFontSize(190),
                 "color": "rgb(256, 256, 256)",
                 "display": "block",
                 'padding': '4% 0 5% 0',
                 'text-indent': '4%',
-                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
+                'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 19
             });
 
+            // mouseenter function
             addComponentButton.on('mouseenter', function () {
                 var self = $(this);
-                self.css({ 'background-color': 'white', 'color': 'black' });
+                var id = this.id;
+                self.css({
+                    'background-color': 'white',
+                    'color': 'black'
+                });
 
-                switch (self.text()) {
-                    case "Artwork":
-                    case "Associated Media":
+                switch (id) {
+                    case "artButtom":
+                    case "assetButton":
                         dropInk.hide();
                         dropFile.hide();
                         break;
-                    case "From File":
+                    case "fileButton":
                         dropFile.show();
                         dropInk.hide();
                         break;
-                    case "Audio (MP3)":
-                    case "Video (MP4)":
-                    case "Image":
+                    case "audioButton":
+                    case "videoButton":
+                    case "imageButton":
                         isInFileSubMenu = true;
                         break;
-                    case "Annotate":
+                    case "inkButton":
                         if (allowInk) {
                             dropInk.show();
                             dropFile.hide();
-                            //$(assetButton).data('selected', false);
-                        }
-                        else {
+                        } else {
                             self.css({
                                 'background-color': 'transparent',
                                 'color': 'gray'
                             });
                         }
                         break;
-                    case "Write":
-                    case "Draw":
-                    case "Highlight":
+                    case "write":
+                    case "draw":
+                    case "highlight":
                         isInInkSubMenu = true;
                         break;
                 }
             });
 
+            // mouseleave function
             addComponentButton.on('mouseleave', function () {
                 var self = $(this);
-
-                self.css({ 'background-color': 'transparent', 'color': 'white' });
-
+                self.css({
+                    'background-color': 'transparent',
+                    'color': 'white'
+                });
                 if (self.text() === "Annotate" && !allowInk) {
-                    self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                    self.css({
+                        'background-color': 'transparent',
+                        'color': 'gray'
+                    });
                 }
-
-                if (fileClick || inkClick || isInFileSubMenu || isInInkSubMenu) {
-                    return;
-                }
-
+                if (fileClick || inkClick || isInFileSubMenu || isInInkSubMenu) { return; }
                 dropFile.hide();
                 dropInk.hide();
             });
 
+            // mousedown function
             addComponentButton.on('mousedown', function (evt) {
                 evt.stopImmediatePropagation();
             });
 
+            // click handler
             addComponentButton.on('click', function (evt) {
+                var messageBox;
                 if (timeline.getEditInkOn() === true) {
-                    var messageBox = TAG.Util.UI.popUpMessage(null, "An ink is already being edited.", null);
-                    $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 2000000);
+                    messageBox = LADS.Util.UI.popUpMessage(null, "An ink is already being edited.", null);
+                    $(messageBox).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 2000000);
                     $("#resizableArea").parent().parent().append(messageBox);
                     closeComponentMenu();
                     $(messageBox).fadeIn(500);
@@ -1348,17 +1429,21 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 evt.stopImmediatePropagation();
 
                 var self = $(this);
+                var id = this.id;
                 // reset css of any previously selected menu items
                 for (var i = 0; i < prevSelected.length; i++) {
                     if (self !== $(prevSelected[i])) {
-                        ($(prevSelected[i])).css({ 'background-color': 'transparent', 'color': 'white' });
+                        ($(prevSelected[i])).css({
+                            'background-color': 'transparent',
+                            'color': 'white'
+                        });
                     }
                 }
                 prevSelected[prevSelected.length] = this;
 
-                //for being able to close addComponent by clicking away (only the following two have submenus)
-                switch (self.text()) {
-                    case "Artwork": // change these to not check by title of the button! changing the button title will break this
+                //Tto close addComponent by clicking away (only the following two have submenus)
+                switch (id) {
+                    case "artButton": 
                         exitInk();
                         self.css({
                             'background-color': 'white',
@@ -1368,45 +1453,44 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         removeInkCanv();
                         closeComponentMenu();
                         _catalogPick();
-                    break;
+                        break;
 
-                    case "Associated Media":
+                    case "assetButton":
                         exitInk();
                         self.css({
                             'background-color': 'white',
                             'color': 'black'
                         });
-                        inkButton.data('selected', false);
+                        $('#inkButton').data('selected', false);
                         hideInkControls();
                         removeInkCanv();
                         closeComponentMenu();
                         _associatedMediaPick();
                         break;
 
-                    case "From File":
+                    case "fileButton":
                         self.css({
                             'background-color': 'white',
                             'color': 'black'
                         });
                         dropFile.show();
                         dropInk.hide();
-                        assetButton.data('selected', false);
+                        $('#assetButton').data('selected', false);
                         fileClick = true;
                         break;
 
-                    case "Audio (MP3)":
-                    case "Video (MP4)":
-                    case "Image":
+                    case "audioButton":
+                    case "videoButton":
+                    case "imageButton":
                         closeComponentMenu();
                         exitInk();
                         hideInkControls();
                         removeInkCanv();
                         isInFileSubMenu = true;
-                        // use call b/c this needs to be set in pickFile
                         pickFile.call(addComponentButton);
                         break;
 
-                    case "Annotate":
+                    case "inkButton":
                         if (allowInk) {
                             self.css({
                                 'background-color': 'white',
@@ -1419,25 +1503,25 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         }
                         break;
 
-                    case "Write":
+                    case "write":
+                        //create an ink canvas and inkController
+                        var inkdiv = createInkCanv();
+                        var p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                        var newHeight;
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({
                             'background-color': 'white',
                             'color': 'black'
                         });
-                        inkButton.data('selected', false);
+                        $('inkButton').data('selected', false);
                         playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
                         closeComponentMenu();
                         hideInkControls();
                         inkTextControls.show();
-                        var newHeight = $("#resizableArea").offset().top + $("#resizableArea").height() - inkTextControls.offset().top - 10;
-                        inkTextControls.css({ 'height': newHeight});
+                        newHeight = $("#resizableArea").offset().top + $("#resizableArea").height() - inkTextControls.offset().top - 10;
+                        inkTextControls.css({ 'height': newHeight });
                         initText();
-
-                        //create an ink canvas and inkController
-                        var inkdiv = createInkCanv();
-                        var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
                         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                         inkAuthoring = p1;
                         p1.resetText();
@@ -1445,8 +1529,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         p1.setFontColor("FFFFFF");
                         p1.setFontFamily("Times New Roman, serif");
                         p1.setFontSize("12");
-                        p1.set_mode(TAG.TourAuthoring.InkMode.text);
-                        p1.set_editable(); //in this case, we're just making sure that the artwork can't be manipulated
+                        p1.set_mode(LADS.TourAuthoring.InkMode.text);
+                        p1.set_editable(); 
                         currentInkController = p1;
                         textArea.val("");
                         textBodyLabel1.text("");
@@ -1458,73 +1542,77 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         timeline.setEditInkOn(true);
                         break;
 
-                    case "Draw":
+                    case "draw":
+                        // here, we set the initial height of the ink draw controls, so they can be resized appropriately
+                        var raTop = $("#resizableArea").offset().top;
+                        var raHeight = $("#resizableArea").height();
+
+                        //create ink canvas and inkController
+                        var inkdiv = createInkCanv();
+                        var p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({ 'background-color': 'white', 'color': 'black' });
                         playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
-                        inkButton.data('selected', false);
+                        $('#inkButton').data('selected', false);
                         closeComponentMenu();
                         hideInkControls();
                         inkDrawControls.css({ 'display': 'block' });
-
-                        // here, we set the initial height of the ink draw controls, so they can be resized appropriately
-                        var raTop = $("#resizableArea").offset().top;
-                        var raHeight = $("#resizableArea").height();
                         inkDrawControls.css("height", raTop + raHeight - inkDrawControls.offset().top - 10);
-
                         initDraw();
                         colorLabel1.text("#000000");
                         myPicker.fromString("000000"); //jscolor picker
-
-                        //create ink canvas and inkController
-                        var inkdiv = createInkCanv();
-                        var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
                         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                         inkAuthoring = p1;
-                        p1.set_mode(TAG.TourAuthoring.InkMode.draw);
+                        p1.set_mode(LADS.TourAuthoring.InkMode.draw);
                         p1.set_editable(); // give the canvas pointer events
                         p1.updatePenWidth("brushSlider");
                         p1.updatePenColor("brushColorToggle");
                         p1.updatePenOpacity("opacitySlider");
                         currentInkController = p1;
                         timeline.setEditInkOn(true);
-
                         break;
 
-                    case "Highlight":
+                    case "highlight":
+                        //create an ink canvas and inkController
+                        var inkdiv = createInkCanv();
+                        var p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                        var newHeight;
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({ 'background-color': 'white', 'color': 'black' });
                         playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
-                        inkButton.data('selected', false);
+                        $('#inkButton').data('selected', false);
                         closeComponentMenu();
                         hideInkControls();
                         inkTransparencyControls.show();
-                        var newHeight = $("#resizableArea").offset().top + $("#resizableArea").height() - inkTransparencyControls.offset().top - 10;
+                        newHeight = $("#resizableArea").offset().top + $("#resizableArea").height() - inkTransparencyControls.offset().top - 10;
                         inkTransparencyControls.css({ 'height': newHeight });
                         initTrans();
-
-                        //create an ink canvas and inkController
-                        var inkdiv = createInkCanv();
-                        var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
                         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                         inkAuthoring = p1;
-                        p1.set_mode(TAG.TourAuthoring.InkMode.shapes);
+                        p1.set_mode(LADS.TourAuthoring.InkMode.shapes);
                         p1.set_editable(); //in this case, we're just making sure that the artwork can't be manipulated
                         currentInkController = p1;
                         timeline.setEditInkOn(true);
                         break;
                 }
 
-                // if this is already selected, unselect it -- this 'selected' stuff might be unnecessary
+                // if this is already selected, unselect it
                 var selected = self.data('selected');
                 if (selected) {
-                    self.css({ 'background-color': 'transparent', 'color': 'white' });
+                    self.css({
+                        'background-color': 'transparent',
+                        'color': 'white'
+                    });
                 }
                 self.data('selected', !selected);
                 if (!allowInk) {
-                    inkButton.css({ 'background-color': 'transparent', 'color': 'gray' });
+                    $('#inkButton').css({
+                        'background-color': 'transparent',
+                        'color': 'gray'
+                    });
                 }
             });
 
@@ -1532,16 +1620,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             return addComponentButton;
         }
 
-        var prevSelected = [];
+        var prevSelected = [];              // move up - surbhi
         var allowInk = false;
         var componentDropDown = false;
         var currentInkController;
-        /**
-         * Called when all artworks/images are deleted; disables ink functionality by graying out "Ink" button
+
+        /**Called when all artworks/images are deleted; disables ink functionality by graying out "Ink" button
+         * @method disableInk
          */
         function disableInk() {
             allowInk = false;
-            inkButton.css({ 'background-color': 'transparent', 'color': 'gray' });
+            $('#inkButton').css({ 'background-color': 'transparent', 'color': 'gray' });
             dropInk.hide();
             inkTransparencyControls.css({ 'display': 'none' });
             inkTextControls.css({ 'display': 'none' });
@@ -1556,115 +1645,23 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         }
         that.disableInk = disableInk;
 
+        /**Set componentDropDown state to true to force close
+         * @method closeComponentMenu
+         */
         function closeComponentMenu() {
-            // set componentDropDown state to true
-            // to force close
             componentDropDown = true;
             addComponentLabel.click();
         }
 
-        addComponentLabel.on('mousedown', function (evt) {
-            evt.stopImmediatePropagation();
-        });
-
-        /**
-         * "Add Component" button click handler.
-         * Allows user to drop menus and exit out of menus by clicking elsewhere.
+      
+        /**Hover colors for "Add Component" menu items
          */
-        addComponentLabel.click(function (evt) {
-            if (timeline.getEditInkOn() === true) {
-                return;
-            }
-            var i, prev,
-                closeFunc = timeline.getCloseMenu();
-            if (closeFunc && closeFunc !== closeComponentMenu) {
-                closeFunc();
-            }
-
-            //console.log('addcomponent click');
-
-            evt.stopImmediatePropagation();
-
-            // flip state
-            componentDropDown = !componentDropDown;
-
-            // hide submenus
-            dropInk.hide();
-            dropFile.hide();
-
-            // close --> open
-            if (componentDropDown) {
-                dropMain.show();
-
-                root.on('mousedown.componentMenu', closeComponentMenu);
-
-                timeline.setisMenuOpen(true);
-                timeline.setCloseMenu(closeComponentMenu);
-
-                timeManager.stop();
-
-                addDropDownIconComponent.css({
-                    'transform': 'scaleY(-1)',
-                    'margin-bottom': '2%'
-                });
-
-                //reseting all menu items to normal font thickness
-                $(".thicknessLabel").css({ 'font-weight': 'normal' });
-
-                // Reset any selected menu items to regular CSS
-                // and unselected state
-                for (i = 0; i < prevSelected.length; i++) {
-                    prev = $(prevSelected[i]);
-                    prev.css({
-                        'background-color': 'transparent',
-                        'color': 'white'
-                    });
-                    prev.data('selected', false);
-                }
-
-                // check to see if ink can be added
-                // (only allow ink if there are artworks or images)
-                if (!timeline.checkForArtworks(0)) {
-                    allowInk = false;
-                    inkButton.css({
-                        'background-color': 'transparent',
-                        'color': 'gray'
-                    });
-                }
-                else {
-                    allowInk = true;
-                    inkButton.css({
-                        'background-color': 'transparent',
-                        'color': 'white'
-                    });
-                }
-            }
-
-            // open --> close
-            else {
-                dropMain.hide();
-
-                root.off('mousedown.componentMenu');
-                timeline.setCloseMenu(null);
-                timeline.setisMenuOpen(false);
-
-                addDropDownIconComponent.css({
-                    'transform': 'scaleY(1)',
-                    'margin-bottom': '0%'
-                });
-            }
-        });
-
-        /**
-         * Hover colors for "Add Component" menu items
-         */
-        var isInFileSubMenu = false;
+        var isInFileSubMenu = false;                    // move up - surbhi
         var isInInkSubMenu = false;
         var fileClick = true;
         var inkClick = true;
 
-        /**
-         * Creates catalog picker for associated media related to the artwork already imported into the tour (Jessica Fu)
+        /**Creates catalog picker for associated media related to the artwork already imported into the tour (Jessica Fu)
          */
         // picker
         associatedMediaPicker.addClass("associatedMediaPicker");
@@ -1700,12 +1697,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
         associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
         associatedsearchbar.val("");
-        //TAG.Util.defaultVal(PICKER_SEARCH_TEXT, associatedsearchbar, true, IGNORE_IN_SEARCH);
         associatedsearchbar.keyup(function () {
-            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            LADS.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
         associatedsearchbar.change(function () {
-            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            LADS.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
         $(associatedMediaPickerHeader).append(associatedsearchbar);
 
@@ -1747,15 +1743,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var artworkIndicesViaURL = [];
         var selectedArtworksUrls = {};
         function _associatedMediaPick() {
-            selectedArtworks = [];
-            artworkIndicesViaURL = [];
-            selectedArtworksUrls = {};
+            var loading = $(document.createElement('div'));
+            var circle = $(document.createElement('img'));
+            var myArtwork = timeline.getRelatedArtworks();
+            var allAssociatedMediaHolder = document.createElement('div');                // draw "All Associated Media" Label
+            var mediaCache = {};
+            var myFilteredArtwork = [];
+            var unique;
+
             isUploading = true;
             $(associatedMediaPickerOverlay).fadeIn();
             mediaQueue.clear();
 
-            //create a loading circle(to be displayed while artworks are loading)
-            var loading = $(document.createElement('div'));
             loading.css({
                 'display': 'inline-block',
                 'position': 'absolute',
@@ -1765,7 +1764,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             loading.text('Loading...');
             loading.attr('id', 'associatedLoadingLabel');
 
-            var circle = $(document.createElement('img'));
             circle.attr('src', 'images/icons/progress-circle.gif');
             circle.css({
                 'height': '12px',
@@ -1773,16 +1771,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 'margin-left': '20px',
                 'float': 'right',
             });
-            loading.append(circle);
+            
 
-            associatedMediaPicker.append(loading);
-
-
-            var myArtwork = timeline.getRelatedArtworks();
-
-
-            // draw "All Associated Media" Label
-            var allAssociatedMediaHolder = document.createElement('div');
             $(allAssociatedMediaHolder).addClass('allAssociatedMediaHolder');
             $(allAssociatedMediaHolder).css({
                 width: '100%',
@@ -1793,13 +1783,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 'padding-top': '3%',
             });
             $(allAssociatedMediaHolder).text('All Associated Media');
+
+            loading.append(circle);
+            associatedMediaPicker.append(loading);
             $(associatedMediaPickerArtwork).append(allAssociatedMediaHolder);
 
-            var mediaCache = {};
-
-            // draw artwork name labels
-            var myFilteredArtwork = [];
-            var unique;
             for (var i = 0; i < myArtwork.length ; i++) {
                 unique = true;
                 for (var j = 0; j < i; j++) {
@@ -1808,7 +1796,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
                     }
                 }
-                //unique ? myFilteredArtwork.push(myArtwork[i]) : {};
                 if (unique) {
                     myFilteredArtwork.push(myArtwork[i]);
                 }
@@ -1819,11 +1806,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             loading.hide(); //hides the loading circle once art is recieved
 
-            //single clicking on associated media selects it, to be imported
+            /**Single clicking on associated media selects it, to be imported
+             * @method mediasingleClick
+             * @param mediaHolder
+             */
             function mediasingleClick(e, mediaHolder) {
+                var index;
                 if (mediaHolder) {
-                    var index;
-                    //$(".mediaHolder").css('background', '#222');
                     if (mediaHolder.data("selected")) {
                         mediaHolder.data("selected", false);
                         mediaHolder.css('background', '#222');
@@ -1832,8 +1821,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         artworkIndicesViaURL.splice(index, 1);
                         selectedArtworksUrls[mediaHolder.data('url')] = false;
                         associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
-                    }
-                    else {
+                    } else {
                         mediaHolder.data({
                             "selected": true
                         });
@@ -1846,10 +1834,39 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
             }
 
-            //double clicking on associated media will import all selected media
-            function mediadoubleClick(e,mediaHolder) {
+            /**Helper function for audio/video associated media double click
+             * @method selectMedia
+             */
+            function selectMedia() {
+                var positionX = timeManager.getCurrentPx();
+                var displayLength = parseFloat(selectedArt.duration);
+                var diff;
+                if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
+                    timeManager.setEnd(Math.min(LADS.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+                }
+                diff = LADS.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
+                newDisplay = (diff < LADS.TourAuthoring.Constants.displayEpsilon) ?
+                                    track.addDisplay(timeManager.timeToPx(LADS.TourAuthoring.Constants.maxTourLength - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) :
+                                    track.addDisplay(positionX, Math.min(diff, displayLength));
+                if (timeline.getTracks().length > 0) {
+                    timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
+                }
+            }
+
+            /**Double clicking on associated media will import all selected media
+             * @method mediadoubleClick
+             * @param mediaHolder
+             */
+            function mediadoubleClick(e, mediaHolder) {
                 if (mediaHolder) {
-                    var i, selectedArt, track, positionX, displayLength, newDisplay, diff;
+                    var i,
+                        selectedArt,
+                        track,
+                        positionX,
+                        displayLength,
+                        newDisplay,
+                        diff,
+                        dispLen;
                     mediaHolder.css('background', '#999');
                     
                     if (mediaHolder.data('selected') !== true) {
@@ -1857,9 +1874,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         mediaHolder.data({
                         "selected": true
                     });}
-                    _clearAssMedia(); // interesting name....
+                    _clearAssMedia(); 
                     $(associatedMediaPickerOverlay).fadeOut();
-                    //console.log(selectedArt.type);
                     associatedMediaPickerImport.disabled = true;
                     associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
                     if (selectedArtworks && selectedArtworks.length) {
@@ -1867,26 +1883,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             selectedArt = selectedArtworks[i];
                             if (selectedArt.type === "Video") {
                                 track = timeline.addVideoTrack(selectedArt.url, selectedArt.name, null, selectedArt.duration);
-                                positionX = timeManager.getCurrentPx();
-                                displayLength = parseFloat(selectedArt.duration);
-                                // track.addDisplay(positionX, displayLength);
-                                if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                                    timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
-                                }
-                                diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                                newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
-                                                     track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
-                                                     track.addDisplay(positionX, Math.min(diff, displayLength));
-                                if (timeline.getTracks().length > 0) {
-                                    timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
-                                }
+                                selectMedia();
                             } else if (selectedArt.type === "Image") {
                                 track = timeline.addImageTrack(selectedArt.url, selectedArt.name);
                                 positionX = timeManager.getCurrentPx();
                                 displayLength = 5;
-                                var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                                newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                                if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
+                                dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
+                                newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                                if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
                                     newDisplay.setIn(0);
                                     newDisplay.setOut(0);
                                     newDisplay.setMain(dispLen);
@@ -1896,24 +1900,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                 }
                             } else if (selectedArt.type === "Audio") {
                                 track = timeline.addAudioTrack(selectedArt.url, selectedArt.name, null, selectedArt.duration);
-                                positionX = timeManager.getCurrentPx();
-                                displayLength = parseFloat(selectedArt.duration);
-                                //if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                                //    timeManager.setEnd(displayLength + timeManager.pxToTime(positionX));
-                                //}
-                                //track.addDisplay(positionX, displayLength);
-                                if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                                    timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
-                                }
-                                diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                                newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
-                                                     track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
-                                                     track.addDisplay(positionX, Math.min(diff, displayLength));
-                                if (timeline.getTracks().length > 0) {
-                                    timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
-                                }
+                                selectMedia();
                             } else {
-                                console.log('Unrecognized file type imported!!!???');
+                                console.log('Unrecognized file type imported');
                             }
                         }
                         undoManager.combineLast(2 * selectedArtworks.length);
@@ -1946,38 +1935,47 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 });
             }
             
+            /**Get associated media and cache them in array associated with the guid of each artwork
+             * @method getArt
+             * @param {Number} i
+             */
             function getArt(i) {
-                // get associated media and cache them in array associated with the guid of each artwork
-                TAG.Worktop.Database.getAssocMediaTo(myFilteredArtwork[i], function (doqs) {
+                LADS.Worktop.Database.getAssocMediaTo(myFilteredArtwork[i], function (doqs) {
+                    var mediaArray = [];
+                    var k = 0;
+                    var doq;
+                    var c1,
+                        c2,
+                        c3;
+                    var mediaHolderDocfrag = document.createDocumentFragment();
+
                     doqs.sort(function (a, b) {
                         return a.Name.toLowerCase() < b.Name.toLowerCase() ? -1 : 1;
                     });
-                    var mediaArray = [];
+
                     if (doqs) {
-                        var k = 0;
-                        var doq;
                         for (var j = 0; j < doqs.length; j++) {
-                            //var hotspotDoqID = linqs[j].Targets.BubbleRef[1].BubbleContentID;
                             k++;
                             doq = doqs[j];
-                            var c1 = (doq.Metadata.ContentType === 'Video' || doq.Metadata.ContentType === 'Audio');
-                            var c2 = (doq.Metadata.Duration <= TAG.TourAuthoring.Constants.maxTourLength && doq.Metadata.Duration >= TAG.TourAuthoring.Constants.minMediaLength);
-                            var c3 = (c2 || doq.Metadata.Duration === undefined);
-                            if ((c1 && c3) || doq.Metadata.ContentType === 'Image') {//make sure no text associated media for now
+                            c1 = (doq.Metadata.ContentType === 'Video' || doq.Metadata.ContentType === 'Audio');
+                            c2 = (doq.Metadata.Duration <= LADS.TourAuthoring.Constants.maxTourLength && doq.Metadata.Duration >= LADS.TourAuthoring.Constants.minMediaLength);
+                            c3 = (c2 || doq.Metadata.Duration === undefined);
+                            if ((c1 && c3) || doq.Metadata.ContentType === 'Image') {           //make sure no text associated media for now
                                 mediaArray.push(doq);
                             }
                             if (k === doqs.length) { // just put this outside loop
                                 mediaCache[myFilteredArtwork[i]] = mediaArray;
                                 if (mediaArray.length > 0) { //only shows artworks with at least one associated media
-                                    var mediaHolderDocfrag = document.createDocumentFragment();
                                     drawAssociatedMedia(mediaCache[myFilteredArtwork[i]], assMediasingleDoubleclick, mediaHolderDocfrag);// create dom elements for this artwork's associated media
                                     // retrieve titles of artworks that have at least one associated media, create divs for them in the artwork list
-                                    TAG.Worktop.Database.getDoq(myFilteredArtwork[i], function (nextArt) {
+                                    LADS.Worktop.Database.getDoq(myFilteredArtwork[i], function (nextArt) {
                                         var name;
-   
+                                        var hasSpace = false;
+                                        var scanLength;
+                                        var artworkHolder = document.createElement('div');
+
                                         if (nextArt.Name.length > 15) {
-                                            var hasSpace = false;
-                                            var scanLength = Math.min(nextArt.Name.length, 25);
+                                            scanLength = Math.min(nextArt.Name.length, 25);
                                             for (var j = 14; j < scanLength ; j++) {
                                                 if (nextArt.Name[j] === " " && !hasSpace) {
                                                     name = nextArt.Name.substr(0, j) + "...";
@@ -1996,7 +1994,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                             name = nextArt.Name;
                                         }
 
-                                        var artworkHolder = document.createElement('div');
                                         $(artworkHolder).addClass('artworkHolder');
                                         $(artworkHolder).attr('id', nextArt.Identifier);
                                         $(artworkHolder).css({
@@ -2028,24 +2025,26 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     drawAssociatedMedia(mediaCache[myFilteredArtwork[i]], assMediasingleDoubleclick, allAMDocfrag);
                 }
                 associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
-                TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+                LADS.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
             });
 
-            // click handlers for all artwork name buttons
+            /**Click handlers for all artwork name buttons
+             * @method artworkHolderClick
+             * @param artworkHolder
+             */
             function artworkHolderClick(artworkHolder) {
-                
                 artworkHolder.off('click');
                 artworkHolder.on('click', function () {
+                    var selected = artworkHolder.attr('id');
+                    var artworkAMDocfrag = document.createDocumentFragment();
                     mediaQueue.clear();
                     $(".allAssociatedMediaHolder").css('background', 'black');
                     $(".artworkHolder").css('background', 'black');
                     artworkHolder.css('background', '#999');
-                    var selected = artworkHolder.attr('id');
                     $(".mediaHolder").detach();
-                    var artworkAMDocfrag = document.createDocumentFragment();
                     drawAssociatedMedia(mediaCache[selected], assMediasingleDoubleclick, artworkAMDocfrag);
                     associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
-                    TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+                    LADS.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
                 });
             }
 
@@ -2061,10 +2060,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             // click handler for import button -- perform the import using selectedArtworks.*
             $(associatedMediaPickerImport).click(function () {
-                var selectedArt, i, track, positionX, newDisplay, dispLen, displayLength, diff;
-                _clearAssMedia(); // interesting name....
+                var selectedArt,
+                    i,
+                    track,
+                    positionX,
+                    newDisplay,
+                    dispLen,
+                    displayLength,
+                    diff;
+                _clearAssMedia(); 
                 $(associatedMediaPickerOverlay).fadeOut();
-                //console.log(selectedArt.type);
                 associatedMediaPickerImport.disabled = true;
                 associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
                 if (selectedArtworks && selectedArtworks.length) {
@@ -2072,30 +2077,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         selectedArt = selectedArtworks[i];
                         if (selectedArt.type === "Video") {
                             track = timeline.addVideoTrack(selectedArt.url, selectedArt.name,null,selectedArt.duration);
-                            positionX = timeManager.getCurrentPx();
-                            displayLength = parseFloat(selectedArt.duration);
-                            //if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                            //    timeManager.setEnd(displayLength + timeManager.pxToTime(positionX));
-                            //}
-                            //track.addDisplay(positionX, displayLength);
-                            //track.addDisplay(positionX, displayLength);
-                            if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                                timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
-                            }
-                            diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                            newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
-                                                 track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
-                                                 track.addDisplay(positionX, Math.min(diff, displayLength));
-                            if (timeline.getTracks().length > 0) {
-                                timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
-                            }
+                            selectMedia();
                         } else if (selectedArt.type === "Image") {
                             track = timeline.addImageTrack(selectedArt.url, selectedArt.name);
                             positionX = timeManager.getCurrentPx();
                             displayLength = 5;
                             dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                            newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                            if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
+                            newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                            if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
                                 newDisplay.setIn(0);
                                 newDisplay.setOut(0);
                                 newDisplay.setMain(dispLen);
@@ -2105,23 +2094,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             }
                         } else if (selectedArt.type === "Audio") {
                             track = timeline.addAudioTrack(selectedArt.url, selectedArt.name,null,selectedArt.duration);
-                            positionX = timeManager.getCurrentPx();
-                            displayLength = parseFloat(selectedArt.duration);
-                            //if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                            //    timeManager.setEnd(displayLength + timeManager.pxToTime(positionX));
-                            //}
-                            //track.addDisplay(positionX, displayLength);
-                            //track.addDisplay(positionX, displayLength);
-                            if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                                timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
-                            }
-                            diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                            newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
-                                                 track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
-                                                 track.addDisplay(positionX, Math.min(diff, displayLength));
-                            if (timeline.getTracks().length > 0) {
-                                timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
-                            }
+                            selectMedia();
                         } else {
                             console.log('Unrecognized file type imported!!!???');
                         }
@@ -2144,7 +2117,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(associatedMediaPickerCancel).css({
                 position: 'absolute',
                 bottom: '1%',
-                right: '5%'//$('button').width() + 15,
+                right: '5%'
             });
 
             // cancel button click handler
@@ -2158,7 +2131,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             });
             associatedMediaPicker.append(associatedMediaPickerCancel);
 
-            // detach picker elements
+            /**Detach picker elements
+             * @method _clearAssMedia
+             */
             function _clearAssMedia() {
                 $(".mediaHolder").detach();
                 $(".artworkHolder").detach();
@@ -2167,30 +2142,39 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
         }
 
-        /** 
-         * Creates the media panel for the media associated to a given artwork. Each is given a .mediaHolder-class container.
+        /**Creates the media panel for the media associated to a given artwork. Each is given a .mediaHolder-class container.
+         * @method drawAssociatedMedia
          * @param mediaArray   the list of media to appear in the panel
+         * @param applyClick
+         * @param docfrag
          */
         function drawAssociatedMedia(mediaArray, applyClick, docfrag) {
-            //mediaQueue.clear();
             if (mediaArray) {
                 for (var i = 0; i < mediaArray.length; i++) {
                     mediaQueue.add(createMediaHolder(mediaArray[i], applyClick));
                 }
             }
-            //$(associatedMediaPickerMedia).append(docfrag);
         }
+
 
         function createMediaHolder(media, applyClick) {
             return function () {
                 var mediaHolder = $(document.createElement('div'));
+                var mediaHolderImageHolder = $(document.createElement('div'));
+                var mediaHolderImage = $(document.createElement('img'));
+                var mediaHolderText = $(document.createElement('div'));
+                var isSelected;
+                var name = media.Name;
+                var hasSpace = false;
+                var scanLength = Math.min(name.length, 24);
+
                 mediaHolder.addClass("mediaHolder");
-                mediaHolder.attr('id', media.Identifier); // unique identifier for this media
+                mediaHolder.attr('id', media.Identifier);                                   // unique identifier for this media
                 mediaHolder.data('type', media.Metadata.ContentType);
-                mediaHolder.data('url', media.Metadata.Source); // store url as data
+                mediaHolder.data('url', media.Metadata.Source);                             // store url as data
                 mediaHolder.data('name', media.Name);
                 mediaHolder.data('duration', media.Metadata.Duration);
-                var isSelected = selectedArtworksUrls[media.Metadata.Source] ? true : false;
+                isSelected = selectedArtworksUrls[media.Metadata.Source] ? true : false;
                 mediaHolder.data('selected', isSelected);
                 mediaHolder.css({
                     float: 'left',
@@ -2200,55 +2184,45 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     padding: '2px',
                     margin: '1px',
                 });
-                $(associatedMediaPickerMedia).append(mediaHolder);
-                //docfrag.appendChild(mediaHolder);
-                //create holder for thumbnails
-                var mediaHolderImageHolder = $(document.createElement('div'));
+
                 mediaHolderImageHolder.addClass('mediaHolderImageHolder');
                 mediaHolderImageHolder.css({
                     float: 'left',
+                    position: 'relative',
                     width: '40%',
                     margin: '3.5%',
                     height: '80%',
                     'overflow': 'hidden'
                 });
-                mediaHolder.append(mediaHolderImageHolder);
 
-
-                // create the thumbnail to show in the media holder
-                var mediaHolderImage = $(document.createElement('img'));
-                mediaHolderImage.addClass('mediaHolderImage');
+                mediaHolderImage.addClass('mediaHolderImage');                              // create the thumbnail to show in the media holder
                 if (media.Metadata.ContentType === 'Audio') {
                     mediaHolderImage.attr('src', 'images/audio_icon.svg');
-                }
-                else if (media.Metadata.ContentType === 'Video') {
-                    mediaHolderImage.attr('src', (media.Metadata.Thumbnail && !media.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(media.Metadata.Thumbnail) : 'images/video_icon.svg');
-                }
-                else if (media.Metadata.ContentType === 'Image') {
-                    mediaHolderImage.attr('src', media.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(media.Metadata.Thumbnail) : 'images/image_icon.svg');
-                }
-                else {//text associated media without any media...
+                } else if (media.Metadata.ContentType === 'Video') {
+                    mediaHolderImage.attr('src', (media.Metadata.Thumbnail && !media.Metadata.Thumbnail.match(/.mp4/)) ? LADS.Worktop.Database.fixPath(media.Metadata.Thumbnail) : 'images/video_icon.svg');
+                } else if (media.Metadata.ContentType === 'Image') {
+                    mediaHolderImage.attr('src', media.Metadata.Thumbnail ? LADS.Worktop.Database.fixPath(media.Metadata.Thumbnail) : 'images/image_icon.svg');
+                } else {                                                                    //text associated media without any media...
                     mediaHolderImage.attr('src', 'images/text_icon.svg');
                 }
                 mediaHolderImage.css({
-                    float: 'left',
-                    'height': '100%',
+                    position: 'absolute',
+                    'width': 'auto',
+                    'height': 'auto',
+                    'max-width': '100%',
                     'max-height': '100%',
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    margin: 'auto',
                     'text-align': 'center'
                 });
                 mediaHolderImage.removeAttr('width');
-                mediaHolderImageHolder.append(mediaHolderImage);
+                mediaHolderText.addClass('mediaHolderText');                                // create the text to show in the media holder
 
-                // create the text to show in the media holder
-                var mediaHolderText = $(document.createElement('div'));
-                mediaHolderText.addClass('mediaHolderText');
                 //trims off long names
-                var name;
-
-                var name = media.Name;
                 if (name.length > 15) {
-                    var hasSpace = false;
-                    var scanLength = Math.min(name.length, 24);
                     for (var i = 14; i < scanLength ; i++) {
                         if (name[i] === " " && !hasSpace) {
                             name = name.substr(0, i) + "...";
@@ -2274,102 +2248,106 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     'overflow': 'hidden',
                     'word-wrap': 'break-word',
                 });
+
+                $(associatedMediaPickerMedia).append(mediaHolder);
+                mediaHolder.append(mediaHolderImageHolder);
+                mediaHolderImageHolder.append(mediaHolderImage);
                 mediaHolder.append(mediaHolderText);
                 applyClick(mediaHolder);
             }
         }
 
-        // creates catalogPicker for artwork import
-        catalogPicker.addClass("catalogPicker");
-        catalogPicker.css({
-            position: 'absolute',
-            width: '49%',
-            height: '49%',
-            padding: '1%',
-            'background-color': 'black',
-            'border': '3px double white',
-            top: '25%',
-            left: '25%',
-        });
-        $(catalogPickerOverlay).append(catalogPicker);
+        /**Creates picker for importing artworks as tour tracks
+         * @method createCatalogPicker
+         */
+        (function createCatalogPicker() {
+            var catalogPickerHeader = document.createElement('div');							// creates the header for the artwork catalog picker
+            var searchbar = $(document.createElement('input'));
+            var catalogPickerExhibitions = document.createElement('div');						// creates the exhibitions panel in the artwork catalog picker
+            var catalogPickerArtworks = document.createElement('div');							// creates the artwork panel in the artwork catalog picker
 
+            catalogPicker.addClass("catalogPicker");
+            catalogPicker.css({
+                position: 'absolute',
+                width: '49%',
+                height: '49%',
+                padding: '1%',
+                'background-color': 'black',
+                'border': '3px double white',
+                top: '25%',
+                left: '25%',
+            });
+            $(catalogPickerHeader).addClass('catalogPickerInfo');
+            $(catalogPickerHeader).text("Select artwork to import");
+            $(catalogPickerHeader).css({
+                'font-size': '200%',
+                'float': 'left',
+            });
 
-        // creates the header for the artwork catalog picker
-        var catalogPickerHeader = document.createElement('div');
-        $(catalogPickerHeader).addClass('catalogPickerInfo');
-        $(catalogPickerHeader).text("Select artwork to import");
-        $(catalogPickerHeader).css({
-            'font-size': '200%',
-            'float': 'left',
-        });
-        catalogPicker.append(catalogPickerHeader);
+            $(searchbar).css({
+                'float': 'right',
+                'margin-right': '3%',
+                'margin-top': '0.75%',
+                'width': '38%'
+            });
+            $(searchbar).on('keyup', function (event) {
+                event.stopPropagation();
+            });
+            searchbar.attr('type', 'text');
+            searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
+            searchbar.keyup(function () {
+                LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+            });
+            searchbar.change(function () {
+                LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+            });
 
-        var searchbar = $(document.createElement('input'));
-        searchbar.attr('type', 'text');
-        $(searchbar).css({
-            'float': 'right',
-            'margin-right': '3%',
-            'margin-top': '0.75%',
-            'width': '38%'
-        });
-        $(searchbar).on('keyup', function (event) {
-            event.stopPropagation();
-        });
+            $(catalogPickerExhibitions).addClass('catalogPickerExhibitions');
+            $(catalogPickerExhibitions).css({
+                position: 'absolute',
+                'border-right': '1px solid white',
+                top: '13%',
+                padding: '1%',
+                height: '73%',
+                width: '28%',
+                overflow: 'auto',
+            });
 
-        searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
-        //TAG.Util.defaultVal(PICKER_SEARCH_TEXT, searchbar, true, IGNORE_IN_SEARCH);
-        searchbar.keyup(function () {
-            TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
-        });
-        searchbar.change(function () {
-            TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
-        });
-        catalogPicker.append(searchbar);
+            $(catalogPickerArtworks).addClass('catalogPickerArtworks');
+            $(catalogPickerArtworks).css({
+                position: 'absolute',
+                left: '33%',
+                top: '13%',
+                padding: '1%',
+                height: '73%',
+                width: '62%',
+                overflow: 'auto',
+            });
 
-        // creates the exhibitions panel in the artwork catalog picker
-        var catalogPickerExhibitions = document.createElement('div');
-        $(catalogPickerExhibitions).addClass('catalogPickerExhibitions');
-        $(catalogPickerExhibitions).css({
-            position: 'absolute',
-            'border-right': '1px solid white',
-            top: '13%',
-            padding: '1%',
-            height: '73%',
-            width: '28%',
-            overflow: 'auto',
-        });
-        catalogPicker.append(catalogPickerExhibitions);
+            $(catalogPickerOverlay).append(catalogPicker);
+            catalogPicker.append(catalogPickerHeader);
+            catalogPicker.append(searchbar);
+            catalogPicker.append(catalogPickerExhibitions);
+            catalogPicker.append(catalogPickerArtworks);
+        })();
 
-        // creates the artwork panel in the artwork catalog picker
-        var catalogPickerArtworks = document.createElement('div');
-        $(catalogPickerArtworks).addClass('catalogPickerArtworks');
-        $(catalogPickerArtworks).css({
-            position: 'absolute',
-            left: '33%',
-            top: '13%',
-            padding: '1%',
-            height: '73%',
-            width: '62%',
-            overflow: 'auto',
-        });
-        catalogPicker.append(catalogPickerArtworks);
-
-        /**
-         * Gets artwork from server, displays catalogPicker
+        /**Gets artwork from server, displays catalogPicker
+         * @method _catalogPick
          * @return artwork id
          */
         function _catalogPick() {
+            var selectedExhib;
+            var allArtworksHolder = document.createElement('div');
+            var loading = $(document.createElement('div'));
+            var circle = $(document.createElement('img'));
+            var catalogPickerCancel = document.createElement('button');
+
             selectedArtworks = [];
             selectedArtworksUrls = {};
             artworkIndicesViaURL = [];
             isUploading = true;
-            var selectedExhib;
             artQueue.clear();
-            //var artworks = [];//TAG.Worktop.Database.getAllArtworks(); // there is a try/catch in Worktop.Database.js to help with xml errors
-            //var exhibitions = [];//TAG.Worktop.Database.getExhibitions(); // check Worktop.Database.js if any server response problems come up
 
-            // draw "All Artworks" exhibition container
-            var allArtworksHolder = document.createElement('div');
             $(allArtworksHolder).addClass('allArtworksHolder');
             $(allArtworksHolder).css({
                 width: '100%',
@@ -2382,7 +2360,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(allArtworksHolder).text('All Artworks');
             $(catalogPickerExhibitions).append(allArtworksHolder);
 
-            var loading = $(document.createElement('div'));
             loading.css({
                 'display': 'inline-block',
                 'position': 'absolute',
@@ -2392,7 +2369,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             loading.text('Loading...');
             loading.attr('id', 'loadingLabel');
 
-            var circle = $(document.createElement('img'));
             circle.attr('src', 'images/icons/progress-circle.gif');
             circle.css({
                 'height': '12px',
@@ -2402,16 +2378,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             });
             loading.append(circle);
 
-            TAG.Worktop.Database.getExhibitions(function (exhibitions) {
+            LADS.Worktop.Database.getExhibitions(function (exhibitions) {
+                var origName;
+                var name;
+                var hasSpace = false;
+                var scanLength;
+                var exhibHolder = $(document.createElement('div'));
+
                 // draw exhibition holders for each exhibition
                 for (var i = 0; i < exhibitions.length; i++) {
-                    
-                    var origName = exhibitions[i].Name;
-                    var name;
-
+                    origName = exhibitions[i].Name;
                     if (origName.length > 15) {
-                        var hasSpace = false;
-                        var scanLength = Math.min(origName.length, 25);
+                        scanLength = Math.min(origName.length, 25);
                         for (var j = 14; j < scanLength ; j++) {
                             if (origName[j] === " " && !hasSpace) {
                                 name = origName.substr(0, j) + "...";
@@ -2430,9 +2408,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         name = exhibitions[i].Name;
                     }
 
-
-
-                    var exhibHolder = $(document.createElement('div'));
                     exhibHolder.addClass('exhibHolder');
                     exhibHolder.attr('id', exhibitions[i].Identifier);
                     exhibHolder.css({
@@ -2450,29 +2425,31 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     makeExhibClickable(exhibHolder);
                 }
 
+                /**Click handler for artwork labels
+                * @method makeExhibClickable
+                * @param exhibHolder
+                */
                 function makeExhibClickable(exhibHolder) {
                     exhibHolder.click(function () {
+                        var selected = exhibHolder.attr('id');
                         $(".allArtworksHolder").css('background', 'black');
                         $(".exhibHolder").css('background', 'black');
                         exhibHolder.css('background', '#999');
-                        var selected = exhibHolder.attr('id');
                         selectedExhib = selected;
                         $('.catalogPickerArtworks').empty();
                         catalogPickerImport.disabled = selectedArtworks.length ? false : true;
                         $('.artButton').hide().data('visible', false);
                         $('.' + selected).show().data('visible', true);
-                        TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
-                        TAG.Worktop.Database.getArtworksIn(exhibHolder.attr('id'),loadInArtworks, function () {
+                        LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+                        LADS.Worktop.Database.getArtworksIn(exhibHolder.attr('id'), loadInArtworks, function () {
                             console.log("error");
                         }, function () {
                             console.log("error2");
                         });
-
-
                     });
                 }
 
-                TAG.Worktop.Database.getArtworks(loadInArtworks, function () {
+                LADS.Worktop.Database.getArtworks(loadInArtworks, function () {
                     console.log("error");
                 }, function () {
                     console.log("error2");
@@ -2482,26 +2459,29 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             function loadInArtworks(artworks) {
                 var i;
+                var artHolderImageHolder = document.createElement('div');
+                var artHolderImage = document.createElement('img');
+
                 for (i = 0; i < artworks.length; i++) {
                     if (artworks[i].Type === 'Empty') {
                         artworks.splice(i, 1);
                         i--;
                     }
                 }
-                //allArtworks = artworks;
-                // sort all artworks alphabetically
                 artworks.sort(function (a, b) {
                     return a.Name.toLowerCase() < b.Name.toLowerCase() ? -1 : 1;
                 });
 
-                // using docfrag
-                //var artworkListDocfrag = document.createDocumentFragment();
-                // create holders for all artworks (since we start in the "all artworks" exhibition)
                 $.each(artworks, function (i, artwork) {
                     artQueue.add(function () {
                         var artHolder = document.createElement('div');
                         var exhibits = [];
                         var ids = "";
+                        var artHolderText = document.createElement('div');
+                        var name = artwork.Name;
+                        var hasSpace = false;
+                        var scanLength;
+
                         if (selectedExhib)
                             $(artHolder).hide().data('visible', false);
                         for (var j = 0; j < artwork._Folders.FolderData.length; j++) {
@@ -2519,7 +2499,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         $(artHolder).data('exhibits', exhibits);
                         $(artHolder).addClass("artHolder");
                         $(artHolder).attr('id', artwork.Identifier); // unique artwork identifier
-                        //$(artHolder).data('url', artwork.Metadata.DeepZoom); // store url as data
                         $(artHolder).data('name', artwork.Name);
                         $(artHolder).data('type', artwork.Metadata.Type);
 
@@ -2538,14 +2517,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             margin: '1px',
                         });
                         $(catalogPickerArtworks).append(artHolder);
-                        //artworkListDocfrag.appendChild(artHolder);
-                        TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+                        LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
 
-                        //create holder for image
-                        var artHolderImageHolder = document.createElement('div');
                         $(artHolderImageHolder).addClass('artHolderImageHolder');
                         $(artHolderImageHolder).css({
                             float: 'left',
+                            position: 'relative',
                             width: '40%',
                             margin: '3.5%',
                             height: '80%',
@@ -2554,33 +2531,26 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         $(artHolder).append(artHolderImageHolder);
 
                         // create image for artwork holder
-                        var artHolderImage = document.createElement('img');
                         $(artHolderImage).addClass('artHolderImage');
-                        $(artHolderImage).attr('src', TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
+                        $(artHolderImage).attr('src', LADS.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
                         $(artHolderImage).css({
-                            width: '100%',
-                            height: '100%',
+                            position: 'absolute',
+                            'width': 'auto',
+                            'height': 'auto',
                             'max-height': '100%',
+                            'max-width': '100%',
+                            'top': '0',
+                            'bottom': '0',
+                            'left': '0',
+                            'right': '0',
+                            'margin': 'auto'
                         });
                         $(artHolderImageHolder).append(artHolderImage);
-                            
+
                         // create text for artwork holder
-                        var artHolderText = document.createElement('div');
                         $(artHolderText).addClass('artHolderText');
-                        /*
-                        var maxlength = 33; // trim off long names
-                        var name;
-                        if (artwork.Name.length > maxlength) {
-                            name = artwork.Name.slice(0, maxlength) + "...";
-                        } else {
-                            name = artwork.Name;
-                        }
-                        */
-                        // intelligent truncate + ellipses insertion (bleveque: use text-overflow:ellipsis instead... TODO)
-                        var name = artwork.Name;
                         if (name.length > 23) {
-                            var hasSpace = false;
-                            var scanLength = Math.min(name.length, 35);
+                            scanLength = Math.min(name.length, 35);
                             for (var i = 20; i < scanLength ; i++) {
                                 if (name[i] === " " && !hasSpace) {
                                     name = name.substr(0, i) + "...";
@@ -2596,7 +2566,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                 name = name.substr(0, 24) + "...";
                             }
                         }
-                             
+
                         $(artHolderText).text(name);
                         $(artHolderText).css({
                             floar: 'left',
@@ -2614,29 +2584,25 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 artQueue.add(function () {
                     loading.hide();
                 });
-                // append docfrag at end
-                //artQueue.add(function () { $(catalogPickerArtworks).append(artworkListDocfrag); });
             }
 
             //single clicking selects/deselects artworks to be imported
-            function singleClick(e,artHolder) {
-                var index, urlindex;
+            function singleClick(e, artHolder) {
+                var index,
+                    urlindex;
                 if (artHolder.data('selected')) {
                     artHolder.css('background', '#222');
                     artHolder.data('selected', false);
                     urlindex = artworkIndicesViaURL.indexOf(artHolder.data('url'));
-                    //index = selectedArtworks.indexOf(artHolder.data('url'));
                     selectedArtworks.splice(urlindex, 1);
                     artworkIndicesViaURL.splice(urlindex, 1);
                     selectedArtworksUrls[artHolder.data('url')] = false;
                     catalogPickerImport.disabled = selectedArtworks.length ? false : true;
-                    //console.log(selectedArtworks.length);
-                }
-                else {
+                } else {
                     artHolder.css('background', '#999');
                     artHolder.data({
                         'selected': true
-                    }); // else, artHolder.removeClass('selected')
+                    });
                     if (artworkIndicesViaURL.indexOf(artHolder.data('url')) === -1) {
                         selectedArtworks.push({ 'url': artHolder.data('url'), 'name': artHolder.data('name'), 'id': artHolder.attr('id'), 'type': artHolder.data('type'), 'duration': artHolder.data('duration') });
                         artworkIndicesViaURL.push(artHolder.data('url'));
@@ -2647,14 +2613,20 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
 
             //double clicking will import all selected artworks
-            function doubleClick(e,artHolder) {
-                var i, selectedArt;
+            function doubleClick(e, artHolder) {
+                var i,
+                    selectedArt,
+                    track,
+                    positionX,
+                    displayLength,
+                    dispLen,
+                    newDisplay;
+
                 // get artwork selected
                 catalogPickerImport.disabled = false;
-                //$(".artHolder .unSelected").css('background', '#222'); /// noooooo
                 artHolder.css('background', '#999');
                 if (!selectedArtworksUrls[artHolder.data('url')] && artHolder.data('selected') !== true) {
-                    selectedArtworks.push({ 'url': artHolder.data('url'), 'name': artHolder.data('name'), 'id': artHolder.attr('id'),'type': artHolder.data('type'), 'duration': artHolder.data('duration') });
+                    selectedArtworks.push({ 'url': artHolder.data('url'), 'name': artHolder.data('name'), 'id': artHolder.attr('id'), 'type': artHolder.data('type'), 'duration': artHolder.data('duration') });
                     selectedArtworksUrls[artHolder.data('url')] = true;
                     artHolder.data({
                         'selected': true
@@ -2667,51 +2639,30 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 // add the artwork track to the timeline
                 for (i = 0; i < selectedArtworks.length; i++) {
                     selectedArt = selectedArtworks[i];
-                    var track;
                     if (selectedArt.type === "VideoArtwork") {
-                        track = timeline.addVideoTrack(selectedArt.url, selectedArt.name,null,selectedArt.duration);
-                        var positionX = timeManager.getCurrentPx();
-                        var displayLength = parseFloat(selectedArt.duration);
-                        //if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                        //    timeManager.setEnd(displayLength + timeManager.pxToTime(positionX));
-                        //}
-                        //track.addDisplay(positionX, displayLength);
-                        //track.addDisplay(positionX, displayLength);
-                        if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                            timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+                        track = timeline.addVideoTrack(selectedArt.url, selectedArt.name, null, selectedArt.duration);
+                        selectMedia();
+                    } else {
+                        track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id, selectedArt.type);
+                        positionX = timeManager.getCurrentPx();
+                        displayLength = 5;
+                        dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
+                        newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                        if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
+                            newDisplay.setIn(0);
+                            newDisplay.setOut(0);
+                            newDisplay.setMain(dispLen);
                         }
-                        var diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                        var newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
-                                             track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
-                                             track.addDisplay(positionX, Math.min(diff, displayLength));
                         if (timeline.getTracks().length > 0) {
                             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                         }
-                     } else {
-                            track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id, selectedArt.type);
-                                       
-                            var positionX = timeManager.getCurrentPx();
-                            var displayLength = 5;
-                            var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                            var newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                            if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
-                                newDisplay.setIn(0);
-                                newDisplay.setOut(0);
-                                newDisplay.setMain(dispLen);
-                            }
-
-                            // forcing a tour reload? probably easiest to use timeline.onUpdate()
-                            if (timeline.getTracks().length > 0) {
-                                timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
-                            }
-                        }
+                    }
                 }
-                undoManager.combineLast(2 * selectedArtworks.length); // allow undo/redo to perform both actions (addTrack, addDisplay) at once
+                undoManager.combineLast(2 * selectedArtworks.length); 							// allow undo/redo to perform both actions (addTrack, addDisplay) at once
                 isUploading = false;
                 timeline.getDataHolder().mapTracks(function (container, i) {
                     container.track.updatePos(i);
                 });
-                
             }
 
             //this handles discriminating between the double and single clicks for importing artworks
@@ -2724,7 +2675,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         if (dblclick > 0) {
                             $(that).data('double', dblclick - 1);
                         } else {
-                            singleClick.call(that, e,artHolder);
+                            singleClick.call(that, e, artHolder);
                         }
                     }, 300);
                 }).dblclick(function (e) {
@@ -2741,12 +2692,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 catalogPickerImport.disabled = selectedArtworks.length ? false : true;
                 $('.catalogPickerArtworks').empty();
                 $('.artButton').show().data('visible', true);
-                TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+                LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
                 selectedExhib = null;
                 if (allArtworks) {
                     loadInArtworks(allArtworks);
                 } else {
-                    TAG.Worktop.Database.getArtworks(loadInArtworks, function () {
+                    LADS.Worktop.Database.getArtworks(loadInArtworks, function () {
                         console.log("error");
                     }, function () {
                         console.log("error2");
@@ -2778,29 +2729,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 catalogPickerImport.disabled = true;
                 function importHelper(j) {
                     var selectedArt = selectedArtworks[j];
-                    //artQueue.add(function () {
                     var track;
                     var positionX = timeManager.getCurrentPx();
                     var displayLength;
                     if (selectedArt.type === "VideoArtwork") {
                         track = timeline.addVideoTrack(selectedArt.url, selectedArt.name, null, selectedArt.duration);
-                        displayLength = parseFloat(selectedArt.duration);
-                        if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                            timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
-                        }
-                        var diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                        var newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
-                                             track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
-                                             track.addDisplay(positionX, Math.min(diff, displayLength));
-                        if (timeline.getTracks().length > 0) {
-                            timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
-                        }
+                        selectMedia();
                     } else {
                         track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id);
                         displayLength = 5;
                         var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                        var newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                        if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
+                        var newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                        if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
                             newDisplay.setIn(0);
                             newDisplay.setOut(0);
                             newDisplay.setMain(dispLen);
@@ -2821,13 +2761,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         importHelper(i);
                     }
                     undoManager.combineLast(2 * selectedArtworks.length);
-                    //artQueue.add(function () {
-                        //allow ink annotations
-                    $(inkButton).css({ 'background-color': 'transparent', 'color': 'white' });
+                    $('#inkButton').css({ 'background-color': 'transparent', 'color': 'white' });
                     allowInk = true;
                     _clearCatalog();
                     $(catalogPickerOverlay).fadeOut();
-                    //});
                 } else {
                     _clearCatalog();
                     $(catalogPickerOverlay).fadeOut();
@@ -2842,7 +2779,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             catalogPicker.append(catalogPickerImport);
 
             // cancel button
-            var catalogPickerCancel = document.createElement('button');
+
             $(catalogPickerCancel).text("Cancel");
             $(catalogPickerCancel).css({
                 position: 'absolute',
@@ -2862,16 +2799,21 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             catalogPicker.append(catalogPickerCancel);
         }
 
-        // Checks if a string 'val' contains 'str
-        // If 'val' is the default search text it will always return true
-        // Case insensitive
+        /**Checks if a string 'val' contains 'str
+         * If 'val' is the default search text it will always return true
+         * Case insensitive
+         * @method searchString
+         * @ param {String} str
+         * @param {String} val
+         * @return {Boolean}
+         */
         function searchString(str, val) { // could use regex instead...
             if (val === PICKER_SEARCH_TEXT) val = '';
             return str.toLowerCase().indexOf(val.toLowerCase()) !== -1;
         }
 
-        /**
-         * Detach catalog dom elements
+        /**Detaches elements
+         * @method _clearCatalog
          */
         function _clearCatalog() {
             $(".artHolder").detach();
@@ -2971,7 +2913,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'position': 'relative',
         });
         textArray.push(textArea);
-        textArea.autoSize();
+        textArea.attr('id', 'writeAnnotation');
+        $('#writeAnnotation').autoSize({
+            onResize: function () {
+                $(this).css({ 'opacity': '0.8' });
+            },
+            animateCallback: function () {
+                $(this).css({ 'opacity': '1' });
+            },
+            animateDuration: 300,
+            extraSpace: 40
+        });
+        //textArea.autoSize();
         inkTextControls.append(textArea);
 
         function updateAreaText() {
@@ -3004,7 +2957,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     return;
                 }
                 var undoMgr = currentInkController.getInkUndoManager();
-                var command = TAG.TourAuthoring.Command({
+                var command = LADS.TourAuthoring.Command({
                     execute: function () {
                         textArea.val(currText);
                         updateAreaText();
@@ -3324,7 +3277,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     return;
                 }
                 var undoMgr = currentInkController.getInkUndoManager();
-                var command = TAG.TourAuthoring.Command({
+                var command = LADS.TourAuthoring.Command({
                     execute: function () {
                         textEditArea.val(currEditText);
                         updateEditAreaText();
@@ -3512,7 +3465,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         functionsPanel.append(textEditDocfrag);
 
-
+        // surbhi - start here 16/7/2014 //
         /**
          * Ink draw UI controls (for initial draw authoring, not editing mode)
          */
@@ -3653,7 +3606,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             brushLabel.css({ 'font-weight': 'bold' });
             updateToggle(drawArray, brushSlider);
-            //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            //currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
         });
         
         // brush width slider drag handler
@@ -3667,7 +3620,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 currentInkController.updatePenWidth("brushSlider");
                 currentInkController.setEraserWidth(brushSliderPoint.attr('value'));
-                //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                //currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
                 brushLabel1.text(Math.round(brushSliderPoint.attr('value')) + "px");
             },
             appendTo: 'body'
@@ -3696,7 +3649,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             colorLabel.css({ 'font-weight': 'bold' });
             updateToggle(drawArray, colorDiv);
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
             drawLabel.css({ 'color': 'black' });
             eraseLabel.css({ 'color': 'gray' });
             drawMode = 'draw';
@@ -3709,7 +3662,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(item).attr('readonly', 'readonly');
         $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%'});
         item.onfocus = function () {
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
         };
         $(item).on('keyup', function (event) {
             event.stopPropagation();
@@ -3721,63 +3674,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 myPicker.fromString("000000");
                 myPicker.onImmediateChange = function () {
                     currentInkController.updatePenColor("brushColorToggle");
-                    currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                    currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
                     $('.changeColor1')[0].innerHTML = "#"+$("#brushColorToggle").attr("value");
                 };
             }, false);
         }
         colorDiv.append(item);
 
-        //// eraser width label
-        //var eraserLabel = $(document.createElement('div'));
-        //eraserLabel.addClass('thicknessLabel');
-        //var eraserLabel1 = $(document.createElement('div'));
-        //eraserLabel.text("Eraser: ");
-        //eraserLabel1.text("7px");
-        //eraserLabel.append(eraserLabel1);
-        //inkDrawControls.append(eraserLabel);
-        //eraserLabel1.css({ 'color': 'green', 'display': 'inline', 'padding-left': '2%' });
-        //eraserLabel.css({ 'font-size': '130%', 'color': 'black', 'margin-left': '8%', 'font-weight': 'normal', 'margin-top': '3%', 'margin-right': '12%', 'margin-bottom': '1%', 'float': 'left', 'clear': 'both', 'display': 'inline', 'border-bottom-width': ' 2px', 'border-bottom-style': 'solid', 'border-bottom-color': 'white', 'width': '80%', });
-
-        //// eraser width slider
-        //var eraserSlider = $(document.createElement('div'));
-        //eraserSlider.css({
-        //    'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-        //    'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
-        //});
-        //inkDrawControls.append(eraserSlider);
-        //drawArray.push(eraserSlider);
-
-        //// eraser label click handler
-        //eraserLabel.on('click', function () {
-        //    $(".thicknessLabel").css({ 'font-weight': 'normal' });
-        //    eraserLabel.css({ 'font-weight': 'bold' });
-        //    updateToggle(drawArray, eraserSlider);
-        //    currentInkController.set_mode(TAG.TourAuthoring.InkMode.erase);
-        //});
-        //var eraserSliderPoint = $(document.createElement('div'));
-        //eraserSliderPoint.attr('id', 'eraserSlider');
-        //eraserSliderPoint.css({
-        //    'background-color': 'white', 'height': '115%', 'width': '9.25%', 'position': 'relative',
-        //    'border': '1px', 'border-style': 'solid', 'border-color': 'gray', "border-radius": "50%", "top": "-5%"
-        //});
-        //eraserSliderPoint.attr('value', 7.0);
-        //eraserSlider.append(eraserSliderPoint);
-
-        //// eraser width slider drag handler
-        //eraserSliderPoint.draggable({
-        //    axis: "x", containment: "parent",
-        //    scroll: false,
-        //    drag: function (event) {
-        //        eraserSliderPoint.attr('value', (parseFloat(eraserSliderPoint.css("left").replace('px', '')) / parseFloat(eraserSlider.offset().left + eraserSlider.width()) * 60 + 1) + 6);// * 24.33 + 1;
-        //        if (eraserSliderPoint.value < 7) {
-        //            eraserSliderPoint.attr('value', 7.0);
-        //        }
-        //        currentInkController.setEraserWidth(eraserSliderPoint.attr('value'));
-        //        eraserLabel1.text(Math.round(eraserSliderPoint.attr('value')) + "px");
-        //    },
-        //    appendTo: 'body'
-        //});
+        
 
         // draw opacity label
         var opacityLabel = $(document.createElement('div'));
@@ -3812,7 +3716,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             opacityLabel.css({ 'font-weight': 'bold' });
             updateToggle(drawArray, opacitySlider);
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
             drawLabel.css({ 'color': 'black' });
             eraseLabel.css({ 'color': 'gray' });
             drawMode = 'draw';
@@ -3959,7 +3863,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             brushEditLabel.css({ 'font-weight': 'bold' });
             updateToggle(drawEditArray, brushEditSlider);
-            //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            //currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
         });
 
         // brush width slider drag handler
@@ -3972,7 +3876,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     brushEditSliderPoint.attr('value', 7.0);
                 }
                 currentInkController.updatePenWidth("brushEditSlider");
-                //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                //currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
                 brushEditLabel1.text(Math.round(brushEditSliderPoint.attr('value')) + "px");
             },
             appendTo: 'body'
@@ -4001,7 +3905,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             colorEditLabel.css({ 'font-weight': 'bold' });
             updateToggle(drawEditArray, colorEditDiv);
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
             drawEditLabel.css({ 'color': 'black' });
             eraseEditLabel.css({ 'color': 'gray' });
             drawEditMode = 'draw';
@@ -4014,7 +3918,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(itemEdit).attr('readonly', 'readonly');
         $(itemEdit).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%' });
         itemEdit.onfocus = function () {
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
             drawEditLabel.css({ 'color': 'black' });
             eraseEditLabel.css({ 'color': 'gray' });
             drawEditMode = 'draw';
@@ -4030,7 +3934,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 myEditDrawPicker.fromString("000000");
                 myEditDrawPicker.onImmediateChange = function () {
                     currentInkController.updatePenColor("brushEditColorToggle");
-                    currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                    currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
                     drawEditLabel.css({ 'color': 'black' });
                     eraseEditLabel.css({ 'color': 'gray' });
                     drawEditMode = 'draw';
@@ -4041,56 +3945,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         }
         colorEditDiv.append(itemEdit);
         
-        //// eraser width label
-        //var eraserEditLabel = $(document.createElement('div'));
-        //eraserEditLabel.addClass('thicknessLabel');
-        //var eraserEditLabel1 = $(document.createElement('div'));
-        //eraserEditLabel.text("eraser: ");
-        //eraserEditLabel1.text("7px");
-        //eraserEditLabel.append(eraserEditLabel1);
-        //inkEditDraw.append(eraserEditLabel);
-        //eraserEditLabel1.css({ 'color': 'green', 'display': 'inline', 'padding-left': '2%' });
-        //eraserEditLabel.css({ 'font-size': '130%', 'color': 'black', 'margin-left': '8%', 'font-weight': 'normal', 'margin-top': '3%', 'margin-right': '12%', 'margin-bottom': '1%', 'float': 'left', 'clear': 'both', 'display': 'inline', 'border-bottom-width': ' 2px', 'border-bottom-style': 'solid', 'border-bottom-color': 'white', 'width': '80%', });
-
-        //// eraser width slider
-        //var eraserEditSlider = $(document.createElement('div'));
-        //eraserEditSlider.css({
-        //    'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-        //    'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
-        //});
-        //inkEditDraw.append(eraserEditSlider);
-        //drawEditArray.push(eraserEditSlider);
-
-        //// eraser width label click handler
-        //eraserEditLabel.on('click', function () {
-        //    $(".thicknessLabel").css({ 'font-weight': 'normal' });
-        //    eraserEditLabel.css({ 'font-weight': 'bold' });
-        //    updateToggle(drawEditArray, eraserEditSlider);
-        //    currentInkController.set_mode(TAG.TourAuthoring.InkMode.erase);
-        //});
-        //var eraserEditSliderPoint = $(document.createElement('div'));
-        //eraserEditSliderPoint.attr('id', 'eraserEditSlider');
-        //eraserEditSliderPoint.css({
-        //    'background-color': 'white', 'height': '115%', 'width': '9.25%', 'position': 'relative',
-        //    'border': '1px', 'border-style': 'solid', 'border-color': 'gray', "border-radius": "50%", "top": "-5%"
-        //});
-        //eraserEditSliderPoint.attr('value', 7.0);
-        //eraserEditSlider.append(eraserEditSliderPoint);
-
-        //// eraser width slider drag handler
-        //eraserEditSliderPoint.draggable({
-        //    axis: "x", containment: "parent",
-        //    scroll: false,
-        //    drag: function (event) {
-        //        eraserEditSliderPoint.attr('value', (eraserEditSliderPoint.css("left").replace('px', '') / (eraserEditSlider.offset().left + eraserEditSlider.width()) * 60 + 1) + 6);// * 24.33 + 1;
-        //        if (eraserEditSliderPoint.value < 7) {
-        //            eraserEditSliderPoint.attr('value', 7.0);
-        //        }
-        //        currentInkController.updateEraserWidth("eraserEditSlider");
-        //        eraserEditLabel1.text(Math.round(eraserEditSliderPoint.attr('value')) + "px");
-        //    },
-        //    appendTo: 'body'
-        //});
+        
 
         // draw opacity label
         var opacityEditLabel = $(document.createElement('div'));
@@ -4515,8 +4370,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         else { this.css("display", "none"); }
                     }
                 });
-            }
-            else {
+            } else {
                 $.each(array, function () {
                     if (this === show)
                         this.css("display", "block");
@@ -4627,7 +4481,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 myPicker.fromString("000000");
                 myPicker.onImmediateChange = function () {
                     currentInkController.updatePenColor("brushColorToggle");
-                    currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                    currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
                     $('.changeColor1')[0].innerHTML = "#" + $("#brushColorToggle").attr("value");
                 };
                 var check = true; // if check becomes false, then a warning message appeared, do not proceed after trying to attach

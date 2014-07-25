@@ -1,12 +1,13 @@
-﻿TAG.Util.makeNamespace('TAG.TourAuthoring.PlaybackControl');
+﻿LADS.Util.makeNamespace('LADS.TourAuthoring.PlaybackControl');
 
-/**
- * Component menu at the bottom of the screen
+/**Component menu at the bottom of the screen
  * Contains controls for playing and seeking tour
+ * @class LADS.TourAuthoring.PlaybackControl
+ * @constructor
  * @param spec      timeManager attr undoManager
  * @param my        not used
  */
-TAG.TourAuthoring.PlaybackControl = function (spec, my) {
+LADS.TourAuthoring.PlaybackControl = function (spec, my) {
     "use strict";
 
     var that = {},
@@ -92,7 +93,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         locationLabel.attr('id', 'playLabel');
         locationLabel.text('Timeline Overview');
         locationLabel.css({
-            'font-weight': '600', 'font-size': TAG.Util.getFontSize(150)
+            'font-weight': '600', 'font-size': LADS.Util.getFontSize(150)
         });
         playheadLocContainer.append(locationLabel);
 
@@ -167,8 +168,8 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         // Fader
         var fader = createPlayhead();
         fader.css({
-            'height': '155%', 'width': '0%', 'margin-top': '-4%',
-            'position': 'absolute', 'left': '0%'
+            'height': '400%', 'width': '25%', 'margin-top': '-4%',
+            'position': 'absolute', 'left': '-12.5%', 'bottom': '-75%'
         });
         fader.attr('id', 'fader');
         fader.draggable({
@@ -178,9 +179,9 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
                     return false;
                 }
                 var sliderWidth = slider.width();
-                ui.position.left = Math.constrain(ui.position.left, 0, sliderWidth);
+                ui.position.left = Math.constrain(ui.position.left, sliderWidth*-0.125, sliderWidth - sliderWidth*0.125);
 
-                var percent = Math.constrain(ui.position.left / (sliderWidth - fader.width()), 0, 1);
+                var percent = Math.constrain((ui.position.left + sliderWidth * 0.125) / (sliderWidth + sliderWidth * 0.25 - fader.width()), 0, 1);
                 timeManager.seekToPercent(percent);
             },
             stop: function () {
@@ -190,7 +191,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             }
         });
         var faderUpdate = function (ev) {
-            fader.css('left', ((fader.offsetParent().width() - fader.width()) * ev.percent) + 'px');
+            fader.css('left', ((fader.offsetParent().width()) * ev.percent) - fader.width() / 2 + 'px');
         };
         that.faderUpdate = faderUpdate;
 
@@ -211,7 +212,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             'color': 'black',
             'display': 'inline-block',
             'font-weight': '600',
-            'font-size': TAG.Util.getFontSize(150)
+            'font-size': LADS.Util.getFontSize(150)
         });
         sliderLabel.text('0:00/1:00');
         var labelUpdate = function (ev) {
@@ -302,7 +303,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         var currScale = timeManager.getDuration().scale;
         // Hardcoded the zoomPoint left
         var minScale = 1581 / timeManager.getDuration().end;
-        var zoomFaderLeftInit = (currScale - minScale) / (TAG.TourAuthoring.Constants.maxZoom - minScale) * 100;
+        var zoomFaderLeftInit = (currScale - minScale) / (LADS.TourAuthoring.Constants.maxZoom - minScale) * 100;
         zoomfader.css({
             'background-color': 'white', 'height': '110%', 'width': '10%',
             'position': 'absolute', 'top': '-10%', 'left': zoomFaderLeftInit + '%',
@@ -343,9 +344,9 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
                 oldScale = dur.scale,
                 totalTime = dur.end,
                 minScale = trackBody.width() / totalTime,
-                newScale = minScale + percent * (TAG.TourAuthoring.Constants.maxZoom - minScale);
+                newScale = minScale + percent * (LADS.TourAuthoring.Constants.maxZoom - minScale);
 
-            newScale = Math.min(Math.max(newScale, minScale), TAG.TourAuthoring.Constants.maxZoom);
+            newScale = Math.min(Math.max(newScale, minScale), LADS.TourAuthoring.Constants.maxZoom);
             lastScale = oldScale;
 
             // zoom is getting called on onSizing now to appropriately adjust to timeline
@@ -382,7 +383,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
                     if (newTrackLength >= trackBody.width()) {
                         timeManager.setScale(newScale);
                     }
-                } else if (newScale <= TAG.TourAuthoring.Constants.maxZoom) { // max zoom
+                } else if (newScale <= LADS.TourAuthoring.Constants.maxZoom) { // max zoom
                     timeManager.setScale(newScale);
                 }
                 // end checking zoom boundaries
@@ -410,7 +411,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
                         if (newTrackLength >= trackBody.width()) {
                             timeManager.setScale(newScale);
                         }
-                    } else if (newScale <= TAG.TourAuthoring.Constants.maxZoom) { // max zoom
+                    } else if (newScale <= LADS.TourAuthoring.Constants.maxZoom) { // max zoom
                         timeManager.setScale(newScale);
                     }
                     // end scale check
@@ -449,7 +450,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
                         if (newTrackLength >= trackBody.width()) {
                             timeManager.setScale(newScale);
                         }
-                    } else if (newScale <= TAG.TourAuthoring.Constants.maxZoom) { // max zoom
+                    } else if (newScale <= LADS.TourAuthoring.Constants.maxZoom) { // max zoom
                         timeManager.setScale(newScale);
                     }
                     // end scale check
@@ -683,7 +684,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             "margin-top": "-1%",
             "position": "relative",
             'display': 'none',
-            'margin-left': '15%', 'font-weight': '600', 'font-size': TAG.Util.getFontSize(150)
+            'margin-left': '15%', 'font-weight': '600', 'font-size': LADS.Util.getFontSize(150)
         });
 
         undoRedoButtonArea.css({
@@ -726,10 +727,11 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             var playHeadDiv = $(document.createElement('div'));
             var playheadSVG = d3.select(playHeadDiv[0])
                                         .append("svg")
-                                        .style('position', 'absolute')
-                                        .style('left', '0px').style('top', '-110%')
+                                        .style('position', 'absolute') 
+                                        .style('left', '50%')
+                                        .style('top', '-2%')
                                         .attr("width", '0%')
-                                        .attr("height", '100%'); // div to be transformed into an svg group
+                                        .attr("height", '40%'); // div to be transformed into an svg group
 
             playHeadGroup = playheadSVG.append("g");
 

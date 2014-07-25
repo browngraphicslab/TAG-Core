@@ -1,6 +1,6 @@
-﻿TAG.Util.makeNamespace("TAG.TourAuthoring.InkController");
+﻿LADS.Util.makeNamespace("LADS.TourAuthoring.InkController");
 
-TAG.TourAuthoring.InkController = (function (canvasid) {
+LADS.TourAuthoring.InkController = (function (canvasid) {
     "use strict";
 
     var that = {};

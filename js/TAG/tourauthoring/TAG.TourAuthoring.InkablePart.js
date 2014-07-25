@@ -1,4 +1,4 @@
-﻿TAG.Util.makeNamespace('TAG.TourAuthoring.InkablePart');
+﻿LADS.Util.makeNamespace('LADS.TourAuthoring.InkablePart');
 
 /**
  * Mix-in / part adding Inkability to tracks - currently not used
@@ -6,7 +6,7 @@
  * @param my        shared & protected variables
  *                  'assets' parameter (array) will be added
  */
-TAG.TourAuthoring.InkablePart = function (that, my) {
+LADS.TourAuthoring.InkablePart = function (that, my) {
     "use strict";
 
     my.assets = [];

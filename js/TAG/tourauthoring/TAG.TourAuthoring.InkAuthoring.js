@@ -1,14 +1,14 @@
-﻿TAG.Util.makeNamespace("TAG.TourAuthoring.InkAuthoring");
+﻿LADS.Util.makeNamespace("LADS.TourAuthoring.InkAuthoring");
 
 // Enum defining ink modes
-TAG.TourAuthoring.InkMode = {
+LADS.TourAuthoring.InkMode = {
     shapes: 0, //shape manipulation
     draw: 1,
     erase: 2,
     text: 5,
 };
 
-TAG.TourAuthoring.InkCallers = {
+LADS.TourAuthoring.InkCallers = {
     inkes: 1,
     componentcontrols: 2
 };
@@ -25,7 +25,7 @@ TAG.TourAuthoring.InkCallers = {
  *                      in the spec variable from ComponentControls.
  */
 
-TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec) {
+LADS.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec) {
     "use strict";
 
     // set up the Raphael paper/canvas
@@ -85,7 +85,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     var marquees = []; // old marquees
     var click = false; // has the mouse been clicked?
     var datastring = "";
-    var mode = TAG.TourAuthoring.InkMode.draw;
+    var mode = LADS.TourAuthoring.InkMode.draw;
     var enabled = true; //attached ink tracks by default
     var initKeyframe = {};
     var artName = "";
@@ -132,7 +132,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         timeManager = spec.timeManager;
         viewer = spec.viewer;
         // set up the ink undo manager using existing undo/redo buttons
-        inkUndoManager = new TAG.TourAuthoring.UndoManager();
+        inkUndoManager = new LADS.TourAuthoring.UndoManager();
         inkUndoManager.setInitialized(true);
         playbackControls.undoButton.off("click");
         playbackControls.redoButton.off("click");
@@ -226,7 +226,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
 
         var C1, C2; // drag handles
         var DC; // deletion circle
-        var rds = TAG.TourAuthoring.Constants.inkDragHandleRadius;
+        var rds = LADS.TourAuthoring.Constants.inkDragHandleRadius;
 
         if (elt.data("type") == "ellipse") {
             var rx = elt.data("curr_rx");
@@ -256,7 +256,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         DC.data("curr_cy", DC.attr("cy"));
 
         //log in the undo manager; show and hide elements
-        var command = TAG.TourAuthoring.Command({
+        var command = LADS.TourAuthoring.Command({
             execute: function () {
                 elt.show();
                 C1.show();
@@ -432,7 +432,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             var odcw = dcorigposition.w;
             var odch = dcorigposition.h;
 
-            var command = TAG.TourAuthoring.Command({
+            var command = LADS.TourAuthoring.Command({
                 execute: function () {
                     //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
                     elt.data("currx", bboxx);
@@ -538,7 +538,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             var ypos = curry + dy;
             var x0 = C1.attr("cx");
             var y0 = C1.attr("cy");
-            var handlerad = TAG.TourAuthoring.Constants.inkDragHandleRadius;
+            var handlerad = LADS.TourAuthoring.Constants.inkDragHandleRadius;
 
             if (xpos - x0 > 2 * handlerad) {
                 C2.attr({ cx: xpos });
@@ -649,7 +649,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             var odch = dcorigposition.h;
 
             // log command
-            var command = TAG.TourAuthoring.Command({
+            var command = LADS.TourAuthoring.Command({
                 execute: function () {
                     //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
                     elt.data("currx", bboxx);
@@ -893,7 +893,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             var odch = dcorigposition.h;
 
             // log command
-            var command = TAG.TourAuthoring.Command({
+            var command = LADS.TourAuthoring.Command({
                 execute: function () {
                     //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
                     elt.data("currx", bboxx);
@@ -986,7 +986,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
 
         //shape deletion functionality
         DC.mousedown(function () {
-            var dccommand = TAG.TourAuthoring.Command({
+            var dccommand = LADS.TourAuthoring.Command({
                 execute: function () {
                     elt.hide();
                     C1.hide();
@@ -1023,7 +1023,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function add_ellipse(cx, cy, rx, ry) {
         var ellipse;
-        set_mode(TAG.TourAuthoring.InkMode.shapes);
+        set_mode(LADS.TourAuthoring.InkMode.shapes);
         //console.log("setting cx and cy for the ellipse");
         if (cx === undefined)
             cx = 100 + Math.random() * 10;
@@ -1191,7 +1191,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function add_rectangle(x, y) {
         var rect;
-        set_mode(TAG.TourAuthoring.InkMode.shapes);
+        set_mode(LADS.TourAuthoring.InkMode.shapes);
         if (x === undefined)
             x = 200 + Math.random() * 10;
         if (y === undefined)
@@ -1231,7 +1231,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             'alignment-baseline': 'before-edge',
             "text-anchor": "start",
         });
-        set_mode(TAG.TourAuthoring.InkMode.text);
+        set_mode(LADS.TourAuthoring.InkMode.text);
 
         //// style the textbox
         //textbox.attr('wrap', 'off'); //force people to do their own line breaks
@@ -1268,7 +1268,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         //    if (code != 37 && code != 38 && code != 39 && code != 40) { // exclude arrow keys
         //        var currText = $("#" + textboxid).attr('value');
         //        var oldText = lastText;
-        //        var command = TAG.TourAuthoring.Command({
+        //        var command = LADS.TourAuthoring.Command({
         //            execute: function () {
         //                $("#" + textboxid).attr('value', currText);
         //            },
@@ -2021,8 +2021,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function creationError(displayString) {
         timeline.hideEditorOverlay();
-        var messageBox = TAG.Util.UI.popUpMessage(null, displayString, null);
-        $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+        var messageBox = LADS.Util.UI.popUpMessage(null, displayString, null);
+        $(messageBox).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
         $('body').append(messageBox);
         $(messageBox).fadeIn(500);
     }
@@ -2057,7 +2057,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             dataHolder = timeline.dataHolder;
         }
         var track = dataHolder.getSelectedTrack();
-        if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
+        if (!track || (track.getType() !== LADS.TourAuthoring.TrackType.artwork && track.getType() !== LADS.TourAuthoring.TrackType.image)) {
             creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
             return false;
         }
@@ -2111,7 +2111,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         }
         var track = dataHolder.getSelectedTrack();
         
-        if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
+        if (!track || (track.getType() !== LADS.TourAuthoring.TrackType.artwork && track.getType() !== LADS.TourAuthoring.TrackType.image)) {
             creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
             return false;
         }
@@ -2160,7 +2160,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         }
         var track = dataHolder.getSelectedTrack();
 
-        if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
+        if (!track || (track.getType() !== LADS.TourAuthoring.TrackType.artwork && track.getType() !== LADS.TourAuthoring.TrackType.image)) {
             creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
             return false;
         }
@@ -2200,13 +2200,13 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         var kfvx, kfvy, kfvw, kfvh,
             linkType = track.getType();
         // get initial keyframe for the artwork/image we're attaching to
-        if (linkType === TAG.TourAuthoring.TrackType.artwork) {
+        if (linkType === LADS.TourAuthoring.TrackType.artwork) {
             kfvx = keyframe.state.viewport.region.center.x;
             kfvy = keyframe.state.viewport.region.center.y;
             kfvw = keyframe.state.viewport.region.span.x;
             kfvh = keyframe.state.viewport.region.span.y;
         }
-        else if (linkType === TAG.TourAuthoring.TrackType.image) {
+        else if (linkType === LADS.TourAuthoring.TrackType.image) {
             kfvw = 1.0 / keyframe.state.viewport.region.span.x;//$("#" + canvid).width() / (keyframe.state.viewport.region.span.x * cw);
             var rw = keyframe.state.viewport.region.span.x * domelement.width();
             kfvh = keyframe.state.viewport.region.span.y; /////bogus entry, not used
@@ -2221,7 +2221,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         if (inkType === "trans")
             datastr += bounding_shapes; // if we're attaching a transparency, also include the bounding ellipse/rects in the datastring so we can edit later
         inktrack.setInkPath(datastr);
-        inktrack.setInkProps({}); // not used
+        //inktrack.setInkProps({}); // not used
         inktrack.setInkInitKeyframe({ "x": kfvx, "y": kfvy, "w": kfvw, "h": kfvh });
         inktrack.setInkEnabled(true); // set linked
         inktrack.setInkType(inkType);
@@ -2262,7 +2262,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * return     true if creation was successful, false if warnings
      */
     function linkUnattached() {
-        var inkEmptyOverlay = $(TAG.Util.UI.blockInteractionOverlay());
+        var inkEmptyOverlay = $(LADS.Util.UI.blockInteractionOverlay());
         var inkEmptyDialog = $(document.createElement("div"));
 
         function okTapInkAttach(evt) {
@@ -2278,7 +2278,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                 width: 'auto',
                 'background-color': 'black',
                 'border': '3px double white',
-                'z-index': TAG.TourAuthoring.aboveRinZIndex + 5,
+                'z-index': LADS.TourAuthoring.aboveRinZIndex + 5,
                 'text-align': 'center',
                 'padding': '1.5% 1.5% 2% 2%',
             });
@@ -2308,7 +2308,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             inkEmptyDialog.append(buttonDiv);
             inkEmptyDialog.show();
 
-            TAG.Util.makeManipulatable(ok[0], {
+            LADS.Util.makeManipulatable(ok[0], {
                 onTapped: okTapInkAttach
             }, false);
             return false;
@@ -3087,13 +3087,13 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function setTextAttributes(textbox) {
         var C1; //drag handles
-        var rds = TAG.TourAuthoring.Constants.inkDragHandleRadius;
+        var rds = LADS.TourAuthoring.Constants.inkDragHandleRadius;
         var x = textbox.attrs.x,
             y = textbox.attrs.y,
             origposition = { x: 0, y: 0, },
             c1origposition = { x: 0, y: 0, },
             boundingBox = textbox.getBBox();
-        var handlerad = TAG.TourAuthoring.Constants.inkDragHandleRadius;
+        var handlerad = LADS.TourAuthoring.Constants.inkDragHandleRadius;
 
         // set the positions of C1 and C2 using the styling of textbox
         C1 = paper.ellipse(x, y, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#ffffff", "fill": "#296B2F", "fill-opacity": 0.8 }).data("type", "grabHandle");
@@ -3177,7 +3177,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             var o1w = c1origposition.w;
             var o1h = c1origposition.h;
 
-            var command = TAG.TourAuthoring.Command({
+            var command = LADS.TourAuthoring.Command({
                 execute: function () {
                     svgText.attr({ x: bboxx });
                     svgText.attr({ y: bboxy });
@@ -3745,7 +3745,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         domelement.off('mouseleave');
         var new_data = { pathstring: pathstring, pa: pa };
         var old_data = { pathstring: old_pathstring, pa: old_pa };
-        var command = TAG.TourAuthoring.Command({
+        var command = LADS.TourAuthoring.Command({
             execute: function () {
                 pathstring = new_data.pathstring;
                 pa = new_data.pa.slice(0);
