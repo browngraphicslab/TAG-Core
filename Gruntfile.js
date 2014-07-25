@@ -168,7 +168,7 @@ module.exports = function(grunt) {
 					        \n        currentPage          = {}, // name and obj properties \
 					        \n        INPUT_TOUR_ID        = tagInput.tourId, // to load to a tour \
 					        \n        TELEMETRY_SESSION_ID = null, \
-                            \n        IS_WINDOWS           = (typeof Windows !== undefined) \
+                            \n        IS_WINDOWS           = (typeof Windows !== "undefined") \
                             \n        IS_WEBAPP            = !IS_WINDOWS // perhaps more intuitive than writing !IS_WINDOWS \
 					        \n        idleTimer; \n\n',
 				footer: '};'
