@@ -19,7 +19,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 	var prevExhib = exhibition;
     var prevTag = prevInfo.prevTag;
     var prevMult = prevInfo.prevMult;
-    var rinPath = (typeof Windows !== 'undefined') ? tagPath+'../tagcore/js/WIN8_RIN/web' : tagPath+'../tagcore/js/RIN/web'; // TODO merging (get rid of ../tagcore)
+    var rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
 
     var tagContainer = $('#tagRoot');
 

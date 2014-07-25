@@ -1,4 +1,4 @@
-﻿LADS.Util.makeNamespace('LADS.Layout.TourAuthoringNew');
+﻿TAG.Util.makeNamespace('TAG.Layout.TourAuthoringNew');
 
 /**
  * Final layout for Tour Authoring
@@ -7,7 +7,7 @@
  * @param tourobj           Doq containing tour info
  * @param onLoadCallback    Callback to run once tour has loaded (loadRin runs async)
  */
-LADS.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
+TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     "use strict";
 
     var root = $(document.createElement('div')),
@@ -185,12 +185,12 @@ LADS.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     */
     (function initBackend() {
         // Start by initializing all the parts
-        timeManager = LADS.TourAuthoring.TimeManager();
-        undoManager = LADS.TourAuthoring.UndoManager();
-        viewer = LADS.TourAuthoring.Viewer({
+        timeManager = TAG.TourAuthoring.TimeManager();
+        undoManager = TAG.TourAuthoring.UndoManager();
+        viewer = TAG.TourAuthoring.Viewer({
             timeManager: timeManager
         });
-        timeline = LADS.TourAuthoring.Timeline({
+        timeline = TAG.TourAuthoring.Timeline({
             timeManager: timeManager,
             undoManager: undoManager,
             dataHolder: dataHolder,
@@ -198,14 +198,14 @@ LADS.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             root: root
         });
         viewer.setTimeline(timeline);
-        playbackControls = LADS.TourAuthoring.PlaybackControl({
+        playbackControls = TAG.TourAuthoring.PlaybackControl({
             timeManager: timeManager,
             undoManager: undoManager,
             viewer: viewer,
             timeline: timeline,
             root : root
         });
-        componentControls = LADS.TourAuthoring.ComponentControls({
+        componentControls = TAG.TourAuthoring.ComponentControls({
             root: root,
             undoManager: undoManager,
             playbackControls: playbackControls,
@@ -214,7 +214,7 @@ LADS.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             viewer: viewer,
             timeManager: timeManager
         });
-        topbar = LADS.TourAuthoring.TopMenu({
+        topbar = TAG.TourAuthoring.TopMenu({
             viewer: viewer,
             timeline: timeline,
             tourobj: tourobj,

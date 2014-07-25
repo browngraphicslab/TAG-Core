@@ -531,11 +531,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             tempInfo = "";
         }
 
-        if (typeof Windows != "undefined") {
-            // running in Win8 app
+        if (IS_WINDOWS) {
             museumInfoSpan.html(tempInfo);
-        } else {  
-            // running in browser
+        } else {
             museumInfoSpan.html(Autolinker.link(tempInfo , {email: false, twitter: false}));
         }
         

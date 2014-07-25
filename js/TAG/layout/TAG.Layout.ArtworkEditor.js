@@ -1,4 +1,4 @@
-﻿LADS.Util.makeNamespace("LADS.Layout.ArtworkEditor");
+﻿TAG.Util.makeNamespace("TAG.Layout.ArtworkEditor");
 
 /**
  * The layout definition for the artwork editor. 
@@ -10,7 +10,7 @@
  * @return {Object}              any public methods or properties
  */
 
-LADS.Layout.ArtworkEditor = function (artwork) {
+TAG.Layout.ArtworkEditor = function (artwork) {
     "use strict";
 
     var // DOM-related
@@ -29,13 +29,13 @@ LADS.Layout.ArtworkEditor = function (artwork) {
         locationList = [],                                                                // list of locations in location history
         artworkMetadata = {},                                                             // will be populated by HTML elements whose values have artwork metadata
         textMetadata = {},                                                                // deprecated -- for text metadata
-        loadQueue = LADS.Util.createQueue(),                                              // async queue for loading UI elements                                                  
+        loadQueue = TAG.Util.createQueue(),                                              // async queue for loading UI elements                                                  
         topbarHeight = 8,                                                                 // % height of top bar
         METADATA_EDITOR = MetadataEditor(),                                               // MetadataEditor object to deal with metadata-related business
         THUMBNAIL_EDITOR = ThumbnailEditor(),                                             // ThumbnailEditor object to deal with setting up thumbnail editing
         LOCATION_HISTORY = RichLocationHistory(),                                         // RichLocationHistory object ................................
         MEDIA_EDITOR = AssocMediaEditor(),                                                // AssocMediaEditor object ................................
-       // currentKeyHandler = LADS.Util.UI.getStack()[0],
+       // currentKeyHandler = TAG.Util.UI.getStack()[0],
 
         // misc uninitialized variables
         zoomimage,                    // AnnotatedImage object
@@ -74,11 +74,11 @@ LADS.Layout.ArtworkEditor = function (artwork) {
 
         //creates deep zoom image
         if (artwork) {
-            zoomimage = new LADS.AnnotatedImage(root, artwork, false, function () { // TODO UPDATE TO MATCH NEW ANNOTATEDIMAGE IN WEBAPP
+            zoomimage = new TAG.AnnotatedImage(root, artwork, false, function () { // TODO UPDATE TO MATCH NEW ANNOTATEDIMAGE IN WEBAPP
                 if (!(zoomimage.loadDoq(artwork))) { // if artwork load is unsuccessful...
-                    var popup = LADS.Util.UI.popUpMessage(function () {
-                        LADS.Authoring.NewSettingsView("Artworks", function (settingsView) {
-                            LADS.Util.UI.slidePageRight(settingsView.getRoot());
+                    var popup = TAG.Util.UI.popUpMessage(function () {
+                        TAG.Authoring.NewSettingsView("Artworks", function (settingsView) {
+                            TAG.Util.UI.slidePageRight(settingsView.getRoot());
                         }, null, artwork.Identifier);
                     }, "There was an error loading the image.", "Go Back", true);
                     root.append(popup);
@@ -112,7 +112,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
     function createTopBar() { // TODO most of this can be factored to J/S
         var backButton = $(document.createElement('img')), // TODO JADE
             topBarLabel = $(document.createElement('div')), // TODO JADE
-            topBarLabelSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08, { // TODO should be able to do this in STYL file
+            topBarLabelSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08, { // TODO should be able to do this in STYL file
                 width: 0.4,
                 height: 0.9,
             }),
@@ -140,21 +140,21 @@ LADS.Layout.ArtworkEditor = function (artwork) {
 
         // TODO use TAG.Util.setUpBackButton in web app to combine mousedown/mouseleave/click
         backButton.on('mousedown', function () {
-            LADS.Util.UI.cgBackColor("backButton", backButton, false);
+            TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
         backButton.on('click', function () {
-           // LADS.Util.UI.getStack()[0] = currentKeyHandler;
+           // TAG.Util.UI.getStack()[0] = currentKeyHandler;
             var authoringHub,
                 editingMediamsg;
             if (MEDIA_EDITOR.isOpen()) {
-                editingMediamsg = $(LADS.Util.UI.popUpMessage(null, "You are currently editing a Hotspot or Media", "OK", false));
+                editingMediamsg = $(TAG.Util.UI.popUpMessage(null, "You are currently editing a Hotspot or Media", "OK", false));
                 root.append(editingMediamsg);
                 editingMediamsg.show();
-                LADS.Util.UI.cgBackColor("backButton", backButton, true);
+                TAG.Util.UI.cgBackColor("backButton", backButton, true);
             } else {
                 backButton.off('click');
-                authoringHub = new LADS.Authoring.NewSettingsView("Artworks", null, null, artwork.Identifier);
-                LADS.Util.UI.slidePageRight(authoringHub.getRoot());
+                authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             }
         });
  
@@ -171,13 +171,13 @@ LADS.Layout.ArtworkEditor = function (artwork) {
         });
 
         // TODO see if you can do this in STYL file as well
-        aefontsize = LADS.Util.getMaxFontSizeEM('Artwork Editor', 0.5, topBarLabelSpecs.width, topBarLabelSpecs.height * 0.8);
+        aefontsize = TAG.Util.getMaxFontSizeEM('Artwork Editor', 0.5, topBarLabelSpecs.width, topBarLabelSpecs.height * 0.8);
         topBarLabel.css({ 'font-size': aefontsize });
 
         topBarLabel.text('Artwork Editor'); // TODO JADE
 
         // TODO STYL
-        titleAreaSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08, {
+        titleAreaSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08, {
             center_v: true,
             width: 0.55,
             height: 0.5,
@@ -219,7 +219,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
         container = container || $('.assetContainer');
         container.empty();
         zoomimage.loadHotspots(); // TODO this is different in the web app -- see what's done in ArtworkViewer.js
-        LADS.Worktop.Database.getAssocMediaTo(artwork.Identifier, mediaSuccess, function () {
+        TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, mediaSuccess, function () {
             console.log("error 1 in createMediaList");
         }, function () {
             console.log("error 2 in createMediaList");
@@ -285,10 +285,10 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                     $mediaHolderImage.attr('src', 'images/audio_icon.svg');
                     break;
                 case 'Video':
-                    $mediaHolderImage.attr('src', (asset.Metadata.Thumbnail && !asset.Metadata.Thumbnail.match(/.mp4/)) ? LADS.Worktop.Database.fixPath(asset.Metadata.Thumbnail) : 'images/video_icon.svg');
+                    $mediaHolderImage.attr('src', (asset.Metadata.Thumbnail && !asset.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(asset.Metadata.Thumbnail) : 'images/video_icon.svg');
                     break;
                 case 'Image':
-                    $mediaHolderImage.attr('src', asset.Metadata.Thumbnail ? LADS.Worktop.Database.fixPath(asset.Metadata.Thumbnail) : 'images/image_icon.svg');
+                    $mediaHolderImage.attr('src', asset.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(asset.Metadata.Thumbnail) : 'images/image_icon.svg');
                     break;
                 default:
                     $mediaHolderImage.attr('src', 'images/text_icon.svg');
@@ -303,7 +303,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             $mediaHolderDiv.append($mediaHolderImage);
 
             var $title = $(document.createElement('div'));
-            $title.text(LADS.Util.htmlEntityDecode(asset.Name));
+            $title.text(TAG.Util.htmlEntityDecode(asset.Name));
             $title.css({
                 'top': '80%',
                 'height': '20%',
@@ -372,8 +372,8 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             'position': 'relative'
         };
 
-        sidePanelFontSize = LADS.Util.getMaxFontSizeEM("Edit Location History", 1, root.width() * 0.1, 0.65 * newButtonCSS.height); // TODO can probably do this in STYL
-        titleFontSize = LADS.Util.getMaxFontSizeEM("Artwork Information", 1, root.width() * 0.15, 0.8 * newButtonCSS.height); // TODO can probably do this in STYL
+        sidePanelFontSize = TAG.Util.getMaxFontSizeEM("Edit Location History", 1, root.width() * 0.1, 0.65 * newButtonCSS.height); // TODO can probably do this in STYL
+        titleFontSize = TAG.Util.getMaxFontSizeEM("Artwork Information", 1, root.width() * 0.15, 0.8 * newButtonCSS.height); // TODO can probably do this in STYL
 
         sidebar = $(document.createElement('div')); // TODO JADE/STYL
         sidebar.addClass("sidebar");
@@ -507,22 +507,22 @@ LADS.Layout.ArtworkEditor = function (artwork) {
          * @method createMediaPicker
          */
         function createMediaPicker() {
-            LADS.Util.UI.createAssociationPicker(root,
+            TAG.Util.UI.createAssociationPicker(root,
                 "Choose the media you wish to associate with this artwork",
                 {comp: artwork, type: 'artwork'},
                 "artwork",
                 [{
                     name: "all media",
-                    getObjs: LADS.Worktop.Database.getAssocMedia,
+                    getObjs: TAG.Worktop.Database.getAssocMedia,
                 }, {
                     name: "currently associated",
-                    getObjs: LADS.Worktop.Database.getAssocMediaTo,
+                    getObjs: TAG.Worktop.Database.getAssocMediaTo,
                     args: [artwork.Identifier]
                 }, {
                     name: "recently associated",
-                    getObjs: LADS.Util.UI.getRecentlyAssociated
+                    getObjs: TAG.Util.UI.getRecentlyAssociated
                 }], {
-                    getObjs: LADS.Worktop.Database.getAssocMediaTo,
+                    getObjs: TAG.Worktop.Database.getAssocMediaTo,
                     args: [artwork.Identifier]
                 }, function () { // TODO (low priority) -- shouldn't need to reload entire list here
                     $('.assetContainer').empty();
@@ -597,7 +597,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
      * a well-defined solution, please rewrite this function!
      * @method conflict
      * @param {jqXHR} jqXHR         async request object (see http://api.jquery.com/Types/#jqXHR)
-     * @param {Object} ajaxCall     see documentation in LADS.Worktop.Database (and the code in asyncRequest in that file)
+     * @param {Object} ajaxCall     see documentation in TAG.Worktop.Database (and the code in asyncRequest in that file)
      */
     function conflict(jqXHR, ajaxCall) {
         ajaxCall && ajaxCall.force && ajaxCall.force();
@@ -837,7 +837,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 'height': 'auto',
                 'width': '40px'
             };
-            var progressCircle = LADS.Util.showProgressCircle($('.tnHelp'), progressCircleCSS, '0px', '0px', false);
+            var progressCircle = TAG.Util.showProgressCircle($('.tnHelp'), progressCircleCSS, '0px', '0px', false);
 
             var canvas = $("canvas"),
                 ctx = canvas[0].getContext("2d"),
@@ -861,21 +861,21 @@ LADS.Layout.ArtworkEditor = function (artwork) {
 
             dataurl = tmpCanvas.toDataURL(); // gets dataurl from tmpcanvas, ready to send to server!
 
-            LADS.Worktop.Database.uploadImage(dataurl, function (imageURL) {
-                LADS.Worktop.Database.changeArtwork(artwork.Identifier, { Thumbnail: imageURL }, thumbnailSuccess, thumbnailUnauth, conflict);
+            TAG.Worktop.Database.uploadImage(dataurl, function (imageURL) {
+                TAG.Worktop.Database.changeArtwork(artwork.Identifier, { Thumbnail: imageURL }, thumbnailSuccess, thumbnailUnauth, conflict);
             }, thumbnailUnauth, thumbnailError);
 
             // success handler for saving
             function thumbnailSuccess() {
-                LADS.Util.removeProgressCircle(progressCircle);
+                TAG.Util.removeProgressCircle(progressCircle);
                 tnSave[0].removeAttribute('disabled');
                 close();
             }
 
             // unauthorized handler
             function thumbnailUnauth() {
-                LADS.Util.removeProgressCircle(progressCircle);
-                var popup = LADS.Util.UI.popUpMessage(null, "Thumbnail not saved.  You must log in to save changes.");
+                TAG.Util.removeProgressCircle(progressCircle);
+                var popup = TAG.Util.UI.popUpMessage(null, "Thumbnail not saved.  You must log in to save changes.");
                 $('body').append(popup);
                 $(popup).show();
                 tnSave[0].removeAttribute('disabled');
@@ -883,8 +883,8 @@ LADS.Layout.ArtworkEditor = function (artwork) {
 
             // general error handler
             function thumbnailError() {
-                LADS.Util.removeProgressCircle(progressCircle);
-                var popup = LADS.Util.UI.popUpMessage(null, "Thumbnail not saved.  There was an error contacting the server.");
+                TAG.Util.removeProgressCircle(progressCircle);
+                var popup = TAG.Util.UI.popUpMessage(null, "Thumbnail not saved.  There was an error contacting the server.");
                 $('body').append(popup);
                 $(popup).show();
                 tnSave[0].removeAttribute('disabled');
@@ -959,7 +959,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             function removeButtonClicked(e) {
                 e.data.div.slideUp(function () { e.data.div.detach(); });
                 var removed = e.data.locationList.remove(e.data.obj);
-                LADS.Util.UI.drawPushpins(locationList, map);
+                TAG.Util.UI.drawPushpins(locationList, map);
                 drawLocationList();
                 if (e.data.obj === currentLocation)
                     customInfobox.hide();
@@ -972,7 +972,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             }
 
             function newDivClicked(e) {
-                LADS.Util.UI.drawPushpins(locationList, map);
+                TAG.Util.UI.drawPushpins(locationList, map);
                 customInfobox.hide();
                 $('div.locations').css(unselectedCSS);
                 $('img.removeButton').attr('src', 'images/icons/minus.svg');
@@ -1042,7 +1042,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 }
                 var newDiv = $(document.createElement('div'));
                 newDiv.addClass('locations');
-                var entryConstraints = LADS.Util.constrainAndPosition(locationsDiv.width(), locationsDiv.height(), {
+                var entryConstraints = TAG.Util.constrainAndPosition(locationsDiv.width(), locationsDiv.height(), {
                     width: 1,
                     height: 0.16625,
                     max_height: 45,
@@ -1052,7 +1052,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 if (calibrationLength > 30) {
                     calibrationLength = 30;
                 }
-                var locationFontSize = LADS.Util.getMaxFontSizeEM(infoString.substring(0, calibrationLength), 0.5, 1000, entryConstraints.height * 0.65, 0.01);
+                var locationFontSize = TAG.Util.getMaxFontSizeEM(infoString.substring(0, calibrationLength), 0.5, 1000, entryConstraints.height * 0.65, 0.01);
                 newDiv.css({
                     'color': 'white',
                     'display': 'none',
@@ -1105,7 +1105,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                     'float': 'right',
                 });
                 newDiv.append(editButton);
-                LADS.Util.UI.drawPushpins(locationList, map);
+                TAG.Util.UI.drawPushpins(locationList, map);
                 newDiv.on('click', null, locationList[i], newDivClicked);
                 newDiv.on('mouseenter', null, newDiv, newDivHoverIn).on('mouseleave', null, newDiv, newDivHoverOut);
                 locationsDiv.append(newDiv);
@@ -1262,7 +1262,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 });
 
                 map.setView(viewOptions);
-                locationList = LADS.Util.UI.getLocationList(artwork.Metadata);
+                locationList = TAG.Util.UI.getLocationList(artwork.Metadata);
                 drawLocationList();
             }
         }
@@ -1388,12 +1388,12 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 'color': 'black',
             };
             result.addClass('results');
-            var resultConstraints = LADS.Util.constrainAndPosition(resultsBox.width(), resultsBox.height(), {
+            var resultConstraints = TAG.Util.constrainAndPosition(resultsBox.width(), resultsBox.height(), {
                 width: 1,
                 height: 0.14,
                 max_height: 40,
             });
-            var resultFontSize = LADS.Util.getMaxFontSizeEM(text, 0.5, resultConstraints.width * 0.95, resultConstraints.height * 0.95, 0.01);
+            var resultFontSize = TAG.Util.getMaxFontSizeEM(text, 0.5, resultConstraints.width * 0.95, resultConstraints.height * 0.95, 0.01);
             result.css({
                 'color': 'white',
                 width: resultConstraints.width + 'px',
@@ -1462,12 +1462,12 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             };
             customResult.addClass('results');
 
-            var customResultConstraints = LADS.Util.constrainAndPosition(resultsBox.width(), resultsBox.height(), {
+            var customResultConstraints = TAG.Util.constrainAndPosition(resultsBox.width(), resultsBox.height(), {
                 width: 1,
                 height: 0.14,
                 max_height: 40,
             });
-            var customResultFontSize = LADS.Util.getMaxFontSizeEM(text.text(), 0.5, customResultConstraints.width * 0.95, customResultConstraints.height * 0.95, 0.01);
+            var customResultFontSize = TAG.Util.getMaxFontSizeEM(text.text(), 0.5, customResultConstraints.width * 0.95, customResultConstraints.height * 0.95, 0.01);
             customResult.css({
                 'color': 'white',
                 width: customResultConstraints.width + 'px',
@@ -1580,14 +1580,14 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             }
             var locs = new LocObject(selectedLocResource, selectedAddress, selectedDate, unsavedDescription);
             locationList.push(locs);
-            var newLocation = LADS.Util.UI.addPushpinToLoc(locs, locationList.length);
+            var newLocation = TAG.Util.UI.addPushpinToLoc(locs, locationList.length);
             drawLocationList();
             selectedDate = undefined;
             selectedLocResource = undefined;
             selectedAddress = undefined;
             unsavedDescription = undefined;
 
-            LADS.Worktop.Database.changeArtwork(artwork.Identifier, {
+            TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
                 Location: JSON.stringify(locationList)
             }, saveSuccess, saveFail, conflict, saveError);
 
@@ -1599,7 +1599,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
 
             // general failure callback for save button
             function saveFail() {
-                popup = $(LADS.Util.UI.popUpMessage(null, "Changes have not been saved.  You must log in to save changes."));
+                popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  You must log in to save changes."));
                 $('body').append(popup);
                 popup.show();
                 confirmNewLocation.text('Confirm');
@@ -1610,7 +1610,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             // error handler for save button
             function saveError() {
                 var popup;
-                popup = $(LADS.Util.UI.popUpMessage(null, "Changes have not been saved.  There was an error contacting the server."));
+                popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  There was an error contacting the server."));
                 $('body').append(popup); // TODO ('body' might not be quite right in web app)
                 popup.show();
                 confirmNewLocation.text('Confirm');
@@ -2121,7 +2121,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             // when the search button is clicked; show help message or run search
             searchButton.on('click', function () {
                 if (searchBox[0].value === '') {
-                    LADS.Util.UI.drawPushpins(locationList, map);
+                    TAG.Util.UI.drawPushpins(locationList, map);
                     clearResults();
                     //helpboxAlert('Please type in the search bar');
                 } else {
@@ -2186,7 +2186,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                     descriptionTextConstraints;
                 editingDescription = !editingDescription;
                 if (editingDescription) {
-                    descrBoxConstraints = LADS.Util.constrainAndPosition(locationPanel.width(), locationPanel.height(), {
+                    descrBoxConstraints = TAG.Util.constrainAndPosition(locationPanel.width(), locationPanel.height(), {
                         width: 0.5,
                         height: 0.35,
                         max_width: 768,
@@ -2198,7 +2198,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                         'height': descrBoxConstraints.height + 'px'
                     });
 
-                    descriptionTextConstraints = LADS.Util.constrainAndPosition(editDescriptionBox.width(), editDescriptionBox.height(), {
+                    descriptionTextConstraints = TAG.Util.constrainAndPosition(editDescriptionBox.width(), editDescriptionBox.height(), {
                         center_h: true,
                         width: 0.9,
                         x_offset: 0.05,
@@ -2237,7 +2237,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 selectedDate = undefined;
                 addLocationDiv.hide('blind');
                 addLocButton.show();
-                LADS.Util.UI.drawPushpins(locationList, map);
+                TAG.Util.UI.drawPushpins(locationList, map);
                 Microsoft.Maps.Events.removeHandler(mapAttachClick);
                 clearDatePicker(datePicker);
             });
@@ -2264,7 +2264,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 editDescriptionBox.hide();
                 addLocationDiv.hide('blind');
                 addLocButton.show();
-                LADS.Util.UI.drawPushpins(locationList, map);
+                TAG.Util.UI.drawPushpins(locationList, map);
                 Microsoft.Maps.Events.removeHandler(mapAttachClick);
                 clearDatePicker(datePicker);
             });
@@ -2318,7 +2318,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 searchBox.val('');
                 clearResults();
                 helpBox.fadeIn();
-                LADS.Util.fitText(helpBox, 3.5); ///////////////////
+                TAG.Util.fitText(helpBox, 3.5); ///////////////////
                 addLocationDiv.show('blind');
                 mapAttachClick = Microsoft.Maps.Events.addHandler(map, 'rightclick', addPushpinOntouch);
                 addLocButton.hide();
@@ -2352,7 +2352,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
         function open() {
             localStorage.locationHistory = true;
             var connectivityCheck = navigator.onLine; //check if there is internet
-            var msgDiv = LADS.Util.UI.popUpMessage(null, "No internet connection was detected. Bing Maps requires internet connectivity. Please ensure that you are connected to the internet and try again.", null, true);
+            var msgDiv = TAG.Util.UI.popUpMessage(null, "No internet connection was detected. Bing Maps requires internet connectivity. Please ensure that you are connected to the internet and try again.", null, true);
             if (connectivityCheck === false) {
                 root.append(msgDiv);
                 $(msgDiv).show();
@@ -2477,10 +2477,10 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 'background-color': 'rgba(0,0,0,.85)'
             }).appendTo(hotspotAnchor);
 
-            LADS.Util.disableDrag(root);
+            TAG.Util.disableDrag(root);
 
             // TODO use makeManipulatable here for web app (and for win8 app... some dragging issues right now, though)
-            LADS.Util.makeManipulatableWin(hotspotCircle.get(0), {
+            TAG.Util.makeManipulatableWin(hotspotCircle.get(0), {
                 onManipulate: function (res) {
                     var t = hotspotAnchor.css('top'),
                         l = hotspotAnchor.css('left');
@@ -2579,14 +2579,14 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 audio,
                 src = media.Metadata.Source,
                 type = media.Metadata.ContentType,
-                thumbnail = (media.Metadata.Thumbnail && !media.Metadata.Thumbnail.match(/.mp4/)) ? LADS.Worktop.Database.fixPath(media.Metadata.Thumbnail) : '',
+                thumbnail = (media.Metadata.Thumbnail && !media.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(media.Metadata.Thumbnail) : '',
                 src_webm,
                 src_ogg,
                 src_mp4,
                 src_mp3,
                 errText,
                 msgdiv,
-                fixedSrc = LADS.Worktop.Database.fixPath(src);
+                fixedSrc = TAG.Worktop.Database.fixPath(src);
 
             if (type === 'Image') {
                 return $(document.createElement('div'))
@@ -2724,7 +2724,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             });
             mainPanel.append(rightbarLoadingSave);
 
-            LADS.Util.showLoading(rightbarLoadingSave, '20%');
+            TAG.Util.showLoading(rightbarLoadingSave, '20%');
             rightbarLoadingSave.attr('class', 'rightbarLoadingSave');
 
             options = {
@@ -2739,7 +2739,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 Description: desc
             };
 
-            LADS.Worktop.Database.changeHotspot(worktopInfo.assetDoqID, options, updateSuccess, no_op, conflict, no_op);
+            TAG.Worktop.Database.changeHotspot(worktopInfo.assetDoqID, options, updateSuccess, no_op, conflict, no_op);
 
             /**
              * Success callback for call to changeHotspot in updateAssocMedia;
@@ -2752,7 +2752,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 rightbarLoadingSave.fadeOut();
             }
 
-            function no_op() { // TODO I think LADS.Worktop.Database functions can just accept null callbacks, since they use the safeCall util function. if so, use null
+            function no_op() { // TODO I think TAG.Worktop.Database functions can just accept null callbacks, since they use the safeCall util function. if so, use null
 
             }
         }
@@ -2928,11 +2928,11 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                     'z-index': 100
                 });
                 mainPanel.append(rightbarLoadingDelete);
-                LADS.Util.showLoading(rightbarLoadingDelete, '20%');
+                TAG.Util.showLoading(rightbarLoadingDelete, '20%');
 
                 // remove the associated media's linq to this artwork
                 if (assetDoqID) {
-                    LADS.Worktop.Database.changeArtwork(artwork.Identifier, { RemoveIDs: assetDoqID }, function () {
+                    TAG.Worktop.Database.changeArtwork(artwork.Identifier, { RemoveIDs: assetDoqID }, function () {
                         createMediaList();
                         MEDIA_EDITOR.close();
                         rightbarLoadingDelete.fadeOut();
@@ -2967,11 +2967,11 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 assetType = isHotspot ? 'Hotspot' : 'Asset';
 
                 updateAssocMedia({
-                    title: LADS.Util.encodeXML(titleTextVal),
-                    desc: LADS.Util.encodeXML($descArea.val()),
+                    title: TAG.Util.encodeXML(titleTextVal),
+                    desc: TAG.Util.encodeXML($descArea.val()),
                     pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
                     contentType: activeAssocMedia.Metadata.ContentType,
-                    contentUrl: LADS.Worktop.Database.fixPath(activeAssocMedia.Metadata.Source),
+                    contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.Metadata.Source),
                     assetType: assetType,
                     metadata: {
                         assetDoqID: activeAssocMedia.Identifier
@@ -3002,14 +3002,14 @@ LADS.Layout.ArtworkEditor = function (artwork) {
         function open(asset, content, callback) {
             var editingMediamsg;
             if (editingMedia) {
-                editingMediamsg = $(LADS.Util.UI.popUpMessage(null, "You are currently making changes. Please save or cancel before opening another media for editing.", "OK", false));
+                editingMediamsg = $(TAG.Util.UI.popUpMessage(null, "You are currently making changes. Please save or cancel before opening another media for editing.", "OK", false));
                 root.append(editingMediamsg);
                 editingMediamsg.show();
                 return;
             }
             editingMedia = false;
 
-            LADS.Worktop.Database.getLinq(artwork.Identifier, asset.Identifier, linqCallback, function () { }, function () { });
+            TAG.Worktop.Database.getLinq(artwork.Identifier, asset.Identifier, linqCallback, function () { }, function () { });
 
             /**
              * Helper function for showEditMedia, called when the linq between the
@@ -3020,8 +3020,8 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             function linqCallback(linq) {
                 var x = parseFloat(linq.Offset._x),
                     y = parseFloat(linq.Offset._y),
-                    title = LADS.Util.htmlEntityDecode(asset.Name),
-                    description = asset.Metadata.Description ? LADS.Util.htmlEntityDecode(asset.Metadata.Description).replace(/<br>/g, '\n') : '',
+                    title = TAG.Util.htmlEntityDecode(asset.Name),
+                    description = asset.Metadata.Description ? TAG.Util.htmlEntityDecode(asset.Metadata.Description).replace(/<br>/g, '\n') : '',
                     point,
                     oldtitle,
                     key,
@@ -3338,7 +3338,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
                 infoFields[$(additionalFields[i]).attr("value")] = $(additionalFields[i]).attr('entry');
             }
 
-            LADS.Worktop.Database.changeArtwork(artwork.Identifier, {
+            TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
                 Name: $(artworkMetadata.Title).val(),
                 Artist: $(artworkMetadata.Artist).val(),
                 Year: $(artworkMetadata.Year).val(),
@@ -3356,7 +3356,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
 
             // general failure callback for save button
             function saveFail() {
-                popup = $(LADS.Util.UI.popUpMessage(null, "Changes have not been saved.  You must log in to save changes."));
+                popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  You must log in to save changes."));
                 $('body').append(popup);
                 popup.show();
                 saveMetadataButton.text('Save Changes');
@@ -3366,7 +3366,7 @@ LADS.Layout.ArtworkEditor = function (artwork) {
             // error handler for save button
             function saveError() {
                 var popup;
-                popup = $(LADS.Util.UI.popUpMessage(null, "Changes have not been saved.  There was an error contacting the server."));
+                popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  There was an error contacting the server."));
                 $('body').append(popup); // TODO ('body' might not be quite right in web app)
                 popup.show();
                 saveMetadataButton.text('Save Changes');
