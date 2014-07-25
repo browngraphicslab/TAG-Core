@@ -1,4 +1,4 @@
-﻿TAG.Util.makeNamespace('TAG.Layout.TourAuthoringNew');
+﻿LADS.Util.makeNamespace('LADS.Layout.TourAuthoringNew');
 
 /**
  * Final layout for Tour Authoring
@@ -7,7 +7,7 @@
  * @param tourobj           Doq containing tour info
  * @param onLoadCallback    Callback to run once tour has loaded (loadRin runs async)
  */
-TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
+LADS.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     "use strict";
 
     var root = $(document.createElement('div')),
@@ -119,31 +119,49 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 resizableArea.css({
                     "height": originalHeightSize + distance + 'px'
                 });
-                if (!$mainScrollHider) $mainScrollHider = $('.mainScrollHider');
+                if (!$mainScrollHider) {
+                    $mainScrollHider = $('.mainScrollHider');
+                }
                 $mainScrollHider.css({
                     'height': $mainScrollHider.height() - distance + 'px',
                 });
-                if (!$trackBody) $trackBody = $('#trackBody');
+                if (!$trackBody) {
+                    $trackBody = $('#trackBody');
+                }
                 $trackBody.css({
                     'height': $trackBody.height() - distance + 'px',
                 });
-                if (!$trackVeil) $trackVeil = $('#trackScrollVeil');
+                
+               
+
+                if (!$trackVeil) {
+                    $trackVeil = $('#trackScrollVeil');
+                }
                 $trackVeil.css({
                     'height': $trackVeil.height() - distance + 'px',
                 });
 
+               
+                $('#verticalSliderPane').css({
+                    'height': $trackBody.height() + 'px',
+                });
+
+                $('#trackScrollVeil').css({
+                    'height': $trackBody.height() + 'px',
+                });
+                
                 //update the height
                 originalHeightSize = originalHeightSize + distance;
 
                 var raTop = resizableArea.offset().top;
                 var raHeight = resizableArea.height();
                 //resize the component control stuff
-                if (!$inkTextControls) $inkTextControls = $('#inkTextControls');
-                if (!$inkDrawControls) $inkDrawControls = $('#inkDrawControls');
-                if (!$inkTransControls) $inkTransControls = $('#inkTransControls');
-                if (!$inkEditText) $inkEditText = $('#inkEditText');
-                if (!$inkEditDraw) $inkEditDraw = $('#inkEditDraw');
-                if (!$inkEditTransparency) $inkEditTransparency = $('#inkEditTransparency');
+                if (!$inkTextControls) { $inkTextControls = $('#inkTextControls'); }
+                if (!$inkDrawControls) { $inkDrawControls = $('#inkDrawControls'); }
+                if (!$inkTransControls) { $inkTransControls = $('#inkTransControls'); }
+                if (!$inkEditText) { $inkEditText = $('#inkEditText'); }
+                if (!$inkEditDraw) { $inkEditDraw = $('#inkEditDraw'); }
+                if (!$inkEditTransparency) { $inkEditTransparency = $('#inkEditTransparency'); }
                 $("#inkTextControls").css("height", raTop + raHeight - $("#inkTextControls").offset().top - 10);
                 $("#inkDrawControls").css("height", raTop + raHeight - $("#inkDrawControls").offset().top - 10);
                 $("#inkTransControls").css("height", raTop + raHeight - $("#inkTransControls").offset().top - 10);
@@ -159,6 +177,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         resizeButtonArea.append(resizeButton);
 
         root.append(resizeButtonDocfrag);
+       
     })();
  
     /**
@@ -166,13 +185,12 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     */
     (function initBackend() {
         // Start by initializing all the parts
-
-        timeManager = TAG.TourAuthoring.TimeManager();
-        undoManager = TAG.TourAuthoring.UndoManager();
-        viewer = TAG.TourAuthoring.Viewer({
+        timeManager = LADS.TourAuthoring.TimeManager();
+        undoManager = LADS.TourAuthoring.UndoManager();
+        viewer = LADS.TourAuthoring.Viewer({
             timeManager: timeManager
         });
-        timeline = TAG.TourAuthoring.Timeline({
+        timeline = LADS.TourAuthoring.Timeline({
             timeManager: timeManager,
             undoManager: undoManager,
             dataHolder: dataHolder,
@@ -180,14 +198,14 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             root: root
         });
         viewer.setTimeline(timeline);
-        playbackControls = TAG.TourAuthoring.PlaybackControl({
+        playbackControls = LADS.TourAuthoring.PlaybackControl({
             timeManager: timeManager,
             undoManager: undoManager,
             viewer: viewer,
             timeline: timeline,
             root : root
         });
-        componentControls = TAG.TourAuthoring.ComponentControls({
+        componentControls = LADS.TourAuthoring.ComponentControls({
             root: root,
             undoManager: undoManager,
             playbackControls: playbackControls,
@@ -196,7 +214,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             viewer: viewer,
             timeManager: timeManager
         });
-        topbar = TAG.TourAuthoring.TopMenu({
+        topbar = LADS.TourAuthoring.TopMenu({
             viewer: viewer,
             timeline: timeline,
             tourobj: tourobj,

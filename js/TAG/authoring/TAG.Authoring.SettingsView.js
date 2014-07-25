@@ -20,7 +20,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     "use strict";
    
      
-    var root = TAG.Util.getHtmlAjax('SettingsView.html'), //Get html from html file
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
 
         //get all of the ui elements from the root and save them in variables
         middleLoading = root.find('#setViewLoadingCircle'),
