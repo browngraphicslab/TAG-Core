@@ -13,7 +13,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     options = options || {}; // cut down on null checks later
 
     var // DOM-related
-        root                     = TAG.Util.getHtmlAjax('../tagcore/html/NewCatalog.html'), // use AJAX to load html from .html file
+        root                     = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
         infoDiv                  = root.find('#infoDiv'),
         tileDiv                  = root.find('#tileDiv'),
         collectionArea           = root.find('#collectionArea'),

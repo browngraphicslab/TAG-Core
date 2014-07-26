@@ -15,7 +15,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     options = options || {}; // cut down on null checks later
 
     var // DOM-related
-        root                = TAG.Util.getHtmlAjax('../tagcore/html/Artmode.html'),
+        root                = TAG.Util.getHtmlAjax('Artmode.html'),
         sideBar             = root.find('#sideBar'),
         toggler             = root.find('#toggler'),
         togglerImage        = root.find('#togglerImage'),

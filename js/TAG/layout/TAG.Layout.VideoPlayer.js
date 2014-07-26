@@ -30,7 +30,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
 
     var that = {};
 
-    var root = TAG.Util.getHtmlAjax('../tagcore/html/VideoPlayer.html'),
+    var root = TAG.Util.getHtmlAjax('VideoPlayer.html'),
         video = root.find('#video'),
         sourceMP4,
         sourceWEBM,

@@ -25,7 +25,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     var tagContainer = $('#tagRoot');
 
     var player,
-        root = TAG.Util.getHtmlAjax('../tagcore/html/TourPlayer.html'),
+        root = TAG.Util.getHtmlAjax('TourPlayer.html'),
         rinPlayer = root.find('#rinPlayer'),
         backButtonContainer = root.find('#backButtonContainer'),
         backButton = root.find('#backButton'),
