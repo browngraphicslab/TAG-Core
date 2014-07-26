@@ -44,6 +44,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         timelineArea             = root.find('#timelineArea'),
         topBar                   = root.find('#topBar'),
         loadingArea              = root.find('#loadingArea'),
+        infoButton               = root.find('#infoButton'),
+        linkButton               = root.find('#linkButton'),
 
         // input options
         scrollPos        = options.backScroll || 0,     // horizontal position within collection's catalog
@@ -150,6 +152,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         searchInput.on('keyup', function (e) {
             doSearch();
         });
+
+        infoButton.attr('src', tagPath+'images/icons/info.svg');
+
+        if(IS_WEBAPP) {
+            linkButton.attr('src', tagPath+'images/link.svg');
+            linkButton.on('click', function() {
+                var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
+                    tagpagename: 'collections',
+                    tagcollectionid: currCollection.Identifier,
+                    tagartworkid: currentArtwork ? currentArtwork.Identifier : ''
+                });
+
+                root.append(linkOverlay);
+                linkOverlay.fadeIn(500, function() {
+                    linkOverlay.find('.linkDialogInput').select();
+                });
+            });
+        }
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
     }
