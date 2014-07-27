@@ -155,13 +155,13 @@ WATCH.push(
 
 module.exports = function(grunt) {
 	grunt.initConfig({
-		concat: {
-			options: {
-				separator: '\n;\n',
-				banner: 'var TAG_GLOBAL = function(tagInput) { \
-					        \n    var tagPath              = tagInput.path, \
-					        \n        containerId          = tagInput.containerId, \
-					        \n        ip                   = tagInput.serverIp, \
+	    concat: {
+	        options: {
+	            separator: '\n;\n',
+	            banner: 'var TAG_GLOBAL = function(tagInput) { \
+					        \n    var tagPath              = tagInput.path || "", \
+					        \n        containerId          = tagInput.containerId || "tagContainer", \
+					        \n        ip                   = tagInput.serverIp || "browntagserver.com", \
 					        \n        allowServerChange    = tagInput.allowServerChange, \
 					        \n 		  allowAuthoringMode   = tagInput.allowAuthoringMode, \
 					        \n        idleDuration         = tagInput.idleDuration, \
@@ -169,9 +169,11 @@ module.exports = function(grunt) {
 					        \n        urlToParse           = tagInput.urlToParse, \
 					        \n        pageToLoad           = {}, // a specific page to load \
 					        \n        TELEMETRY_SESSION_ID = null, \
-                            \n        IS_WINDOWS           = (typeof Windows !== "undefined") \
-                            \n        IS_WEBAPP            = !IS_WINDOWS // perhaps more intuitive than writing !IS_WINDOWS \
-					        \n        idleTimer; \n\n',
+                            \n        IS_WINDOWS           = (typeof Windows !== "undefined"), \
+                            \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
+					        \n        idleTimer, \
+                            \n        Worktop = {}, \
+			                \n        TAG                  = {}; \n\n',
 				footer: '};'
 			},
 			dist: {

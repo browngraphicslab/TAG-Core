@@ -115,8 +115,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             circle,
             oldSearchTerm;
 
-        idleTimer = null;
-
         progressCircCSS = {
             'position': 'absolute',
             'z-index': '50',
@@ -155,9 +153,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         infoButton.attr('src', tagPath+'images/icons/info.svg');
 
-        if(IS_WEBAPP) {
-            linkButton.attr('src', tagPath+'images/link.svg');
-            linkButton.on('click', function() {
+        if (IS_WEBAPP) {
+            linkButton.attr('src', tagPath + 'images/link.svg');
+            linkButton.on('click', function () {
                 var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
                     tagpagename: 'collections',
                     tagcollectionid: currCollection.Identifier,
@@ -165,10 +163,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
 
                 root.append(linkOverlay);
-                linkOverlay.fadeIn(500, function() {
+                linkOverlay.fadeIn(500, function () {
                     linkOverlay.find('.linkDialogInput').select();
                 });
             });
+        } else {
+            linkButton.remove();
         }
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
@@ -1144,7 +1144,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
       * @param {doq} artwork        the artwork doq to be hidden
       */
     function hideArtwork(artwork) {
-        return function() {
+        return function () {
+            if (!artwork) {
+                return;
+            }
+
             var sub = $('#selectedArtworkContainer');
             sub.css('display', 'none');
             if (artworkCircles[artwork.Identifier]){
@@ -1227,7 +1231,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
     
             // Set selected artwork to hide when anything else is clicked
-            $(document).mouseup(function(e) {
+            root.on('mouseup', function(e) {
                 var subject = selectedArtworkContainer;
                 if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length) {
                     if (artworkShown){
@@ -1614,15 +1618,33 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour);
 
-        if (TAG.Util.Splitscreen.on()) { // if splitscreen is on, exit it
-            parentid = root.parent().attr('id');
-            TAG.Util.Splitscreen.exit(parentid[parentid.length - 1]);
-        }
-
         TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
 
         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
         currentPage.obj  = rinPlayer;
+    }
+
+    /**
+     * Switch to the video player
+     * @method switchPageVideo
+     * @param {doq} video         the video to which we'll switch
+     */
+    function switchPageVideo(video) {
+        var prevInfo,
+            videoPlayer;
+
+        scrollPos = catalogDiv.scrollLeft();
+        prevInfo = {
+            artworkPrev: null,
+            prevScroll: scrollPos,
+            prevTag: currentTag,
+            prevMult: multipleShown
+        };
+        videoPlayer = TAG.Layout.VideoPlayer(video, currCollection, prevInfo);
+        TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
+
+        currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+        currentPage.obj = videoPlayer;
     }
 
     /**
@@ -1631,71 +1653,77 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Object} artwork      artwork to return to after switching
      */
     function switchPage(artwork) {
-        return function(){
-        var curOpts,
-            artworkViewer,
-            splitopts = 'L',
-            opts = getState(),
-            confirmationBox,
-            prevInfo,
-            videoPlayer;
+        return function() {
+            var artworkViewer,
+                newPageRoot,
+                splitopts = 'L',
+                opts = getState(),
+                confirmationBox,
+                prevInfo;
 
-        if (!artwork|| !artworkSelected) {
-            return;
-        }
-
-        idleTimer && idleTimer.kill();
-        idleTimer = null;
-
-        //Don't actually use this?
-        curOpts = {
-            catalogState: opts,
-            doq: currentArtwork,
-            split: splitopts
-        };
-
-        if (artwork.Type === "Empty") { // tour
-            if (TAG.Util.Splitscreen.on()) {
-                confirmationBox = TAG.Util.UI.PopUpConfirmation(function(){
-                    switchPageTour(artwork);
-                }, "By opening this tour, you will exit split screen mode. Would you like to continue?", "Continue", false, function () {
-                    $(confirmationBox).remove();
-                }, root);
-                $(confirmationBox).css('z-index', 10001);
-                root.append($(confirmationBox));
-                $(confirmationBox).show();
-            } else {
-                switchPageTour(artwork);
+            if (!artwork|| !artworkSelected) {
+                return;
             }
-        } else if (artwork.Metadata.Type === "VideoArtwork") { // video
-            scrollPos = catalogDiv.scrollLeft();
-            prevInfo = {
-                artworkPrev: null,
-                prevScroll: scrollPos,
-                prevTag : currentTag,
-                prevMult : multipleShown
-            };
-            videoPlayer = TAG.Layout.VideoPlayer(artwork, currCollection, prevInfo);
-            TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
 
-            currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
-            currentPage.obj  = videoPlayer;
-        } else { // artwork
-            scrollPos = catalogDiv.scrollLeft();
-            artworkViewer = TAG.Layout.ArtworkViewer({
-                doq: artwork,
-                prevTag : currentTag,
-                prevScroll: catalogDiv.scrollLeft(),
-                prevCollection: currCollection,
-                prevPage: 'catalog',
-                prevMult: multipleShown
-            });
-            TAG.Util.UI.slidePageLeftSplit(root, artworkViewer.getRoot());
+            if (artwork.Type === "Empty") { // tour
+                if (TAG.Util.Splitscreen.isOn()) {
+                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
+                            TAG.Util.Splitscreen.exit(root.data('split') || 'L');
+                            switchPageTour(artwork);
+                        },
+                        "By opening this tour, you will exit split screen mode. Would you like to continue?",
+                        "Continue",
+                        false,
+                        function () {
+                            confirmationBox.remove();
+                        },
+                        root
+                    ));
+                    confirmationBox.css('z-index', 10001);
+                    root.append(confirmationBox);
+                    confirmationBox.show();
+                } else {
+                    switchPageTour(artwork);
+                }
+            } else if (artwork.Metadata.Type === "VideoArtwork") { // video
+                if (TAG.Util.Splitscreen.isOn()) {
+                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
+                            TAG.Util.Splitscreen.exit(root.data('split') || 'L');
+                            switchPageVideo(artwork);
+                        },
+                        "By opening this video, you will exit split screen mode. Would you like to continue?",
+                        "Continue",
+                        false,
+                        function () {
+                            confirmationBox.remove();
+                        },
+                        root
+                    ));
+                    confirmationBox.css('z-index', 10001);
+                    root.append(confirmationBox);
+                    confirmationBox.show();
+                } else {
+                    switchPageVideo(artwork);
+                }
+            } else { // deepzoom artwork
+                scrollPos = catalogDiv.scrollLeft();
+                artworkViewer = TAG.Layout.ArtworkViewer({
+                    doq: artwork,
+                    prevTag : currentTag,
+                    prevScroll: catalogDiv.scrollLeft(),
+                    prevCollection: currCollection,
+                    prevPage: 'catalog',
+                    prevMult: multipleShown
+                });
+                newPageRoot = artworkViewer.getRoot();
+                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
 
-            currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-            currentPage.obj  = artworkViewer;
-        }
-        root.css({ 'overflow-x': 'hidden' });
+                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+
+                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                currentPage.obj  = artworkViewer;
+            }
+            root.css({ 'overflow-x': 'hidden' });
         }
     }
 

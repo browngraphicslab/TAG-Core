@@ -37,7 +37,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevScroll     = options.prevScroll || 0,  // scroll position where we came from
         prevCollection = options.prevCollection,   // collection we came from, if any
         prevTag        = options.prevTag,          // sort tag of collection we came from, if any
-        prevMult       = options.prevMult,
+        prevMult       = options.prevMult,      
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -45,7 +45,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locOpening       = false,                   // whether location history is opening
         drawers          = [],                      // the expandable sections for assoc media, tours, description, etc...
         mediaHolders     = [],                      // array of thumbnail buttons
-        loadQueue        = TAG.Util.createQueue(), // async queue for thumbnail button creation, etc
+        loadQueue        = TAG.Util.createQueue(),  // async queue for thumbnail button creation, etc
 
 
         // misc uninitialized vars
@@ -71,8 +71,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             script,
             meta;
 
-        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-        idleTimer.start();
+        if (!idleTimer) {
+            idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+            idleTimer.start();
+        }
 
         // add script for displaying bing maps
         head = document.getElementsByTagName('head').item(0);
@@ -103,12 +105,76 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     debugger;
                     console.log(err); // TODO if we hit a network error, show an error message
                 }
-                TAG.Util.Splitscreen.setViewers(root, annotatedImage); // TODO should we get rid of all splitscreen stuff?
+                root.applyConstraints = annotatedImage.viewer && annotatedImage.viewer.viewport && annotatedImage.viewer.viewport.applyConstraints; // allow splitscreen code to call applyConstraints
+                TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+                initSplitscreen();
                 makeSidebar();
                 createSeadragonControls();
             },
             noMedia: false
         });
+    }
+
+    /**
+     * Initializes splitscreen functionality
+     * @method initSplitscreen
+     */
+    function initSplitscreen() {
+        var splitscreenContainer = $(document.createElement('div')),
+            splitscreenIcon = $(document.createElement('img'));
+
+        splitscreenContainer.attr('id', 'splitscreenContainer');
+        splitscreenContainer.css({
+            'background-color': 'rgba(0,0,0,0.6)',
+            'border-top-left-radius': '10px',
+            'height': '5%',
+            'position': 'absolute',
+            'right': '0%',
+            'text-align': 'center',
+            'top': '95%',
+            'vertical-align': 'center',
+            'width': '5%',
+            'z-index': '500'
+        });
+
+        splitscreenIcon.attr({
+            id: 'splitscreen-icon',
+            src: tagPath+'images/SplitWhite_dotted.svg'
+        });
+        splitscreenIcon.css({
+            height: '60%',
+            left: '2%',
+            opacity: '0.6',
+            position: 'absolute',
+            top: '10%',
+            width: '75%'
+        });
+
+        splitscreenContainer.on('click', function () {
+            var collectionsPage,
+                collectionsPageRoot;
+            // TODO merge deal with location history container being open (it should be closed upon entering splitscreen)
+            if (!TAG.Util.Splitscreen.isOn()) {
+                // TODO merge:
+                //   - dim out location history text in sidebar and disable it
+                //   - 
+                collectionsPage = TAG.Layout.CollectionsPage();
+
+                collectionsPageRoot = collectionsPage.getRoot();
+                collectionsPageRoot.data('split', 'R');
+
+                splitscreenContainer.css('display', 'none');
+                TAG.Util.Splitscreen.init(root, collectionsPageRoot);
+                annotatedImage.viewer.scheduleUpdate();
+                TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+            }
+        });
+
+        splitscreenContainer.append(splitscreenIcon);
+        root.append(splitscreenContainer);
+        if (TAG.Util.Splitscreen.isOn()) {
+            splitscreenContainer.css('display', 'none');
+        }
     }
 
     /**
@@ -119,8 +185,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         var container        = root.find('#seadragonManipContainer'),
             slideButton      = root.find('#seadragonManipSlideButton'),
             tagRoot          = $('#tagRoot'),
-            CENTER_X         = tagRoot.width()/2,
-            CENTER_Y         = tagRoot.height()/2,
+            CENTER_X         = root.width()/2,
+            CENTER_Y         = root.height()/2,
             D_PAD_TOP        = 26,
             D_PAD_LEFT       = 60,
             top              = 0,
@@ -130,7 +196,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             containerFocused = true,
             interval;
 
-        container.css('left', ($('#tagRoot').width() - 160) + "px"); // do this with 'right' instead
+        // splitscreen
+        if (root.data('split') === 'R') {
+            container.css({
+                'right': 'auto',
+                'left': '0%'
+            });
+        }
 
         slideButton.on('click', function () {
             count = 1 - count;
@@ -197,7 +269,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             
             img.css({
                 left: left + "px",
-                top:  top  + "px"
+                top: top + "px"
             });
 
             if (id === 'leftControl' || id === 'rightControl'){
@@ -211,7 +283,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             return img;
         }
         
-        TAG.Telemetry.register($("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"),'click','seadragon_control_clicked',function(tobj){
+        TAG.Telemetry.register(root.find("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"), 'click', 'seadragon_control_clicked', function (tobj) {
             tobj.custom_1 = doq.Name;
             tobj.custom_2 = doq.Identifier;
         });
@@ -290,7 +362,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             containerFocused = false;
         });
 
-
+        // TODO merge: need to fix the $(...) calls above for splitscreen
 
         
 
@@ -325,40 +397,40 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             clearInterval(interval);
         });
 
-        $('#seadragonManipContainer').on('click', function(evt) {
+        root.find('#seadragonManipContainer').on('click', function(evt) {
             evt.stopPropagation(); //Prevent the click going through to the main container
             evt.preventDefault();
             TAG.Util.IdleTimer.restartTimer();
         });
 
-        $('#leftControl').on('mousedown', function(evt) {
+        root.find('#leftControl').on('mousedown', function(evt) {
             buttonHandler(evt, 'left');
         });
-        $('#upControl').on('mousedown', function(evt) {
+        root.find('#upControl').on('mousedown', function(evt) {
             buttonHandler(evt, 'up');
         });
-        $('#rightControl').on('mousedown', function(evt) {
+        root.find('#rightControl').on('mousedown', function (evt) {
             buttonHandler(evt, 'right');
         });
-        $('#downControl').on('mousedown', function(evt) {
+        root.find('#downControl').on('mousedown', function (evt) {
             buttonHandler(evt, 'down');
         });
-        $('#zinControl').on('mousedown', function(evt) {
+        root.find('#zinControl').on('mousedown', function (evt) {
             buttonHandler(evt, 'in');
         });
-        $('#zoutControl').on('mousedown', function(evt) {
+        root.find('#zoutControl').on('mousedown', function (evt) {
             buttonHandler(evt, 'out');
         });
 
-        $('.seadragonManipButtonLR').on('mouseup mouseleave', function() {
+        root.find('.seadragonManipButtonLR').on('mouseup mouseleave', function () {
             clearInterval(interval);
         });
 
-        $('.seadragonManipButtonUD').on('mouseup mouseleave', function() {
+        root.find('.seadragonManipButtonUD').on('mouseup mouseleave', function () {
             clearInterval(interval);
         });
 
-        $('.seadragonManipButtoninout').on('mouseup mouseleave', function() {
+        root.find('.seadragonManipButtoninout').on('mouseup mouseleave', function () {
             clearInterval(interval);
         });
 
@@ -397,22 +469,44 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             locHistoryButton,
             mediaDrawer;
 
-
-        
         backButton.attr('src', tagPath+'images/icons/Back.svg');
         togglerImage.attr("src", tagPath+'images/icons/Close.svg');
         infoTitle.text(doq.Name);
         infoArtist.text(doq.Metadata.Artist);
         infoYear.text(doq.Metadata.Year);
+
+        // splitscreen
+        if (root.data('split') === 'R') {
+            sideBar.css({
+                'left': 'auto',
+                'right': '0px'
+            });
+            toggler.css({
+                left: '-12%',
+                'border-top-left-radius': '10px',
+                'border-top-right-radius': '0px',
+                'border-bottom-right-radius': '0px',
+                'border-bottom-left-radius': '10px'
+            });
+            togglerImage.attr('src', tagPath + 'images/icons/Open.svg');
+        }
         
 
         // toggler to hide/show sidebar
         toggler.on('click', function () {
-            var opts = {};
-            opts.left = isBarOpen ? '-22%' : '0%'
+            var opts = {},
+                isLeft = root.data('split') === 'L';
+
+            if(isLeft) {
+                opts.left = isBarOpen ? '-22%' : '0%';
+            } else {
+                opts.right = isBarOpen ? '-22%' : '0%'
+            }
+
             isBarOpen = !isBarOpen;
+
             sideBar.animate(opts, 1000, function () {
-                togglerImage.attr('src', tagPath + 'images/icons/' + (isBarOpen ? 'Close.svg' : 'Open.svg'));
+                togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen)^(!isLeft) ? 'Close.svg' : 'Open.svg'));
             });
         });
 
@@ -440,19 +534,26 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         function goBack() {
-            var collectionsPage;
+            var collectionsPage,
+                collectionsPageRoot;
             backButton.off('click');
-            idleTimer && idleTimer.kill();
-            idleTimer = null;
+
+            //idleTimer && idleTimer.kill();
+            //idleTimer = null;
+
             annotatedImage && annotatedImage.unload();
-            collectionsPage = new TAG.Layout.CollectionsPage({
+            collectionsPage = TAG.Layout.CollectionsPage({
                 backScroll:     prevScroll,
                 backArtwork:    doq,
                 backCollection: prevCollection,
                 backTag : prevTag,
                 backMult : prevMult
             });
-            TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {});
+
+            collectionsPageRoot = collectionsPage.getRoot();
+            collectionsPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+            TAG.Util.UI.slidePageRightSplit(root, collectionsPageRoot, function () {});
 
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
             currentPage.obj  = collectionsPage;
@@ -487,7 +588,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             assetContainer.append(locHistoryButton);
             currBottom += locHistoryButton.height();
         } else {
-            $('#locationHistoryContainer').remove();
+            root.find('#locationHistoryContainer').remove();
         }
 
         if (associatedMedia.guids.length > 0) {
@@ -616,17 +717,34 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 var rinData,
                     parentid,
                     prevInfo,
-                    rinPlayer;
-                
-                idleTimer && idleTimer.kill();
-                idleTimer = null;
+                    rinPlayer,
+                    confirmationBox;
 
-                annotatedImage.unload();
-                prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll, prevTag : prevTag};
-                rinData = JSON.parse(unescape(tour.Metadata.Content));
-                rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options);
-            
-                TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
+                if (TAG.Util.Splitscreen.isOn()) {
+                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
+                            TAG.Util.Splitscreen.exit(root.data('split') || 'L');
+                            tourClicked(tour)();
+                        },
+                        "By opening this tour, you will exit splitscreen mode. Would you like to continue?",
+                        "Continue",
+                        false,
+                        function () {
+                            confirmationBox.remove();
+                        },
+                        root
+                    ));
+
+                    confirmationBox.css('z-index', 10001);
+                    root.append(confirmationBox);
+                    confirmationBox.show();
+                } else {
+                    annotatedImage.unload();
+                    prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll, prevTag: prevTag };
+                    rinData = JSON.parse(unescape(tour.Metadata.Content));
+                    rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options);
+
+                    TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
+                }
             };
         }
 
@@ -705,8 +823,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
 
             //make the image manipulatable. 
-            var gr = TAG.Util.makeManipulatable(minimap[0],
-            {
+            var gr = TAG.Util.makeManipulatable(minimap[0], {
                 onManipulate: onMinimapManip,
                 onScroll: onMinimapScroll,
                 onTapped: onMinimapTapped
@@ -739,8 +856,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var minimapl = parseFloat(minimap.css('marginLeft'));
 
             //find pivot and translation of manipulation event
-            var px = evt.pivot.x;
-            var py = evt.pivot.y;
+            var px = evt.pivot.x + (minimap.offset().left - minimapContainer.offset().left);
+            var py = evt.pivot.y + (minimap.offset().top - minimapContainer.offset().top);
             var tx = evt.translation.x;
             var ty = evt.translation.y;
 
@@ -782,8 +899,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var minimapt = minimap.position().top;
             var minimapl = parseFloat(minimap.css('marginLeft'));
 
-            var xPos = evt.position.x;
-            var yPos = evt.position.y;
+            var xPos = evt.position.x + minimap.offset().left;
+            var yPos = evt.position.y + minimap.offset().top;
             var x =(xPos-minimapl)/ minimapw;
             var y = (yPos-minimapt)/minimaph;
             y = y / AR;
@@ -1081,12 +1198,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         //have the toggler icon minus when is is expanded, plus otherwise.
         drawerHeader.on('click', function (evt) {
             if (toggle.attr('expanded') !== 'true') {
-                $(".drawerPlusToggle").attr({
+                root.find(".drawerPlusToggle").attr({
                    src: tagPath+'images/icons/plus.svg',
                     expanded: false
                 });
 
-                $(".drawerContents").slideUp();
+                root.find(".drawerContents").slideUp();
 
                 toggle.attr({
                     src: tagPath+'images/icons/minus.svg',

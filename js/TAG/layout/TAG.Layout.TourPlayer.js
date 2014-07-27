@@ -39,6 +39,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
     // idleTimer.start();
+    idleTimer && idleTimer.kill();
+    idleTimer = null;
 
     backButton.attr('src', tagPath+'images/icons/Back.svg');
 

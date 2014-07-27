@@ -28,12 +28,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
                                            //   also contains an array of GUIDs for cleaner iteration
         toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
-        rootHeight     = $('#tagRoot').height(),
-        rootWidth      = $('#tagRoot').width(),
+        rootHeight = $('#tagRoot').height(),
+        rootWidth = $('#tagRoot').width(),
         outerContainerDimensions = {height: rootHeight, width: rootWidth},  //dimensions of active media to manipulate
-
+        
         // misc uninitialized variables
-        outerContainerDimensions,
         viewer,
         assetCanvas;
 
@@ -165,7 +164,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @method dzManipPreprocessing
      */
     function dzManipPreprocessing() {
-        outerContainerDimensions = {height: rootHeight, width: rootWidth};
+        outerContainerDimensions = {height: root.height(), width: root.width()};
         toManip = dzManip;
         TAG.Util.IdleTimer.restartTimer();
     }
@@ -200,7 +199,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 x: 0,
                 y: 0
             },
-            pivot: pivot
+            pivot: {
+                x: pivot.x + root.offset().left,
+                y: pivot.y + root.offset().top
+            }
         });
     }
 
@@ -605,19 +607,20 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function createMediaElements() {
             var $mediaElt,
                 img,
-                closeButton = createCloseButton();
-
-            mediaContainer.append(closeButton[0]);
-            closeButton.on('click', function(evt) {
-                evt.stopPropagation();
-                hideMediaObject();
-            });
+                closeButton;
 
             if(!mediaLoaded) {
                 mediaLoaded = true;
             } else {
                 return;
             }
+
+            closeButton = createCloseButton()
+            mediaContainer.append(closeButton[0]);
+            closeButton.on('click', function (evt) {
+                evt.stopPropagation();
+                hideMediaObject();
+            });
 
             if (CONTENT_TYPE === 'Image') {
                 img = document.createElement('img');
@@ -831,6 +834,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var currentPosition,
                 newVelocity,
                 timer;
+
+            if (mediaHidden) {
+                return;
+            }
+
             //If object is not on screen, reset and hide it
             if (!(
                 (0 < outerContainer.position().top+ outerContainer.height()) 
@@ -887,7 +895,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     x: 0,
                     y: 0
                 },
-                pivot: pivot
+                pivot: {
+                    x: pivot.x + (outerContainer.offset().left - root.offset().left),
+                    y: pivot.y + (outerContainer.offset().top - root.offset().top)
+                }
             });
         }
         

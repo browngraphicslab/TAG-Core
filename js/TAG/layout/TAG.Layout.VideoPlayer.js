@@ -258,6 +258,9 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      * @method initPage
      */
     function initPage() {
+        idleTimer && idleTimer.kill();
+        idleTimer = null;
+
         // set attributes of video element
         video.attr({
             poster: poster,
