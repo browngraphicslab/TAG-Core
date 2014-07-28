@@ -37,6 +37,7 @@ Worktop.Database = function (mainID) {
             media: null,
             doqs: {},
             doqMedia: {},
+            doqMaps: {},
             linqs: {}
         };
     }
@@ -72,11 +73,13 @@ Worktop.Database = function (mainID) {
         getArtworksAssocTo: getArtworksAssocTo,
         getLinq: getLinq,
         getArtworksIn: getArtworksIn,
+        getMaps: getMaps,
 
         putTour: putTour,
         putExhibition: putExhibition,
         putFeedback: putFeedback,
         putArtwork: putArtwork,
+        putMap: putMap,
         putHotspot: putHotspot,
 
         postTour: postTour,
@@ -84,6 +87,7 @@ Worktop.Database = function (mainID) {
         postArtwork: postArtwork,
         postHotspot: postHotspot,
         postIframeAssocMedia: postIframeAssocMedia,
+        postMap: postMap,
         postMain: postMain,
 
         deleteDoq: deleteDoq,
@@ -178,6 +182,16 @@ Worktop.Database = function (mainID) {
             { "Guid1": guid1, "Guid2": guid2 });
     }
 
+    function getMaps(guid, handlers) {//given an artwork guid and get all the maps for the artwork
+        getRequest(
+            "Maps",
+            safeCache('doqMaps', guid, 'doqs'),
+            safeCache('doqMaps', guid, 'MapCount'),
+            handlers,
+            { "Guid": guid });
+
+    }
+
     function getArtworksIn(guid, handlers) {
         getRequest(
             "ArtworksIn",
@@ -218,6 +232,18 @@ Worktop.Database = function (mainID) {
         sortedOptions.urlOptions.Guid = guid;
         postRequest(
             'ChangeArtwork',
+            handlers,
+            sortedOptions.urlOptions,
+            sortedOptions.bodyOptions,
+            true);
+    }
+
+    function postMap(guid, options, handlers, throwOnWarn) {
+        options = options || {};
+        var sortedOptions = checkKeys(options, _static.params.map, "ChangeMap", throwOnWarn);
+        sortedOptions.urlOptions.Guid = guid;
+        postRequest(
+            'ChangeMap',
             handlers,
             sortedOptions.urlOptions,
             sortedOptions.bodyOptions,
@@ -300,6 +326,18 @@ Worktop.Database = function (mainID) {
         var sortedOptions = checkKeys(options, _static.params.artwork, "CreateArtwork", throwOnWarn);
         putRequest(
             'CreateArtwork',
+            handlers,
+            sortedOptions.urlOptions,
+            sortedOptions.bodyOptions,
+            returnDoq,
+            true);
+    }
+
+    function putMap(options, handlers, returnDoq, throwOnWarn) {
+        options = options || {};
+        var sortedOptions = checkKeys(options, _static.params.artwork, "CreateArtwork", throwOnWarn);
+        putRequest(
+            'CreateMap',
             handlers,
             sortedOptions.urlOptions,
             sortedOptions.bodyOptions,
