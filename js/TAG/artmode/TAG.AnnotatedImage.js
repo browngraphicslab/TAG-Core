@@ -30,7 +30,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
         rootHeight = $('#tagRoot').height(),
         rootWidth = $('#tagRoot').width(),
-        outerContainerDimensions = {height: rootHeight, width: rootWidth},  //dimensions of active media to manipulate
+        outerContainerPivot = {
+            x: rootHeight/2,
+            y: rootWidth/2
+        },
         
         // misc uninitialized variables
         viewer,
@@ -47,7 +50,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         openArtwork: openArtwork,
         addAnimateHandler: addAnimateHandler,
         getToManip: getToManip,
-        getMediaDimensions: getMediaDimensions,
+        getMediaPivot: getMediaPivot,
         dzManipPreprocessing: dzManipPreprocessing,
         viewer: viewer
     };
@@ -65,11 +68,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
     /**
      * Return the dimensions of the active associated media or artwork
-     * @method getMediaDimensions
+     * @method getMediaPivot
      * @return {Object}     object with dimensions
      */
-    function getMediaDimensions() {
-        return outerContainerDimensions;   
+    function getMediaPivot() {
+        return outerContainerPivot;   
     }
 
 
@@ -164,7 +167,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @method dzManipPreprocessing
      */
     function dzManipPreprocessing() {
-        outerContainerDimensions = {height: root.height(), width: root.width()};
+        outerContainerPivot = {
+            x: root.width() / 2,// + root.offset().left,
+            y: root.height() / 2// + root.offset().top
+        };
         toManip = dzManip;
         TAG.Util.IdleTimer.restartTimer();
     }
@@ -680,7 +686,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function mediaManipPreprocessing() {
             var w = outerContainer.width(),
                 h = outerContainer.height();
-            outerContainerDimensions = {height: h, width: w};
+            outerContainerPivot = {
+                x: w / 2 - (outerContainer.offset().left - root.offset().left),
+                y: h / 2 - (outerContainer.offset().top - root.offset().top)
+            };
             toManip = mediaManip;
             $('.mediaOuterContainer').css('z-index', 1000);
             outerContainer.css('z-index', 1001);
@@ -896,8 +905,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     y: 0
                 },
                 pivot: {
-                    x: pivot.x + (outerContainer.offset().left - root.offset().left),
-                    y: pivot.y + (outerContainer.offset().top - root.offset().top)
+                    x: pivot.x + root.offset().left,// + (outerContainer.offset().left - root.offset().left),
+                    y: pivot.y + root.offset().top// + (outerContainer.offset().top - root.offset().top)
                 }
             });
         }

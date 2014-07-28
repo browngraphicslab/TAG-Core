@@ -266,6 +266,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 src: imgPath,
                 id:  id
             });
+
+            img.removeAttr('width');
+            img.removeAttr('height');
             
             img.css({
                 left: left + "px",
@@ -323,12 +326,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          * @param {String} direction   the direction in which to move the artwork
          */
         function doManip(evt, direction) {
+            var pivot = annotatedImage.getMediaPivot();
             manipulate = annotatedImage.getToManip();
-
-             var pivot = {
-                    x: annotatedImage.getMediaDimensions().width / 2,
-                    y: annotatedImage.getMediaDimensions().height / 2
-                };
 
             if (direction === 'left') {
                 manipulate({pivot: pivot, translation: {x: -panDelta, y: 0}, scale: 1});
