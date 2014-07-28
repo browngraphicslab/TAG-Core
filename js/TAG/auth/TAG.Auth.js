@@ -254,9 +254,9 @@ TAG.Auth = (function () {
         loginDialog.css({
             position: 'absolute',
             top: loginDialogSpecs.y + 'px',
-            width: loginDialogSpecs.width-50 + 'px',
-            height: loginDialogSpecs.height - 20+ 'px',
-            left: loginDialogSpecs.x - 60 + 'px',
+            width: loginDialogSpecs.width-200 + 'px',
+            height: loginDialogSpecs.height - 75+ 'px',
+            left: loginDialogSpecs.x + 'px',
             border: '3px double white',
             'background-color': 'black',
         });
@@ -301,8 +301,8 @@ TAG.Auth = (function () {
             display: 'block',
             'position':'relative',
             margin: 'auto',
-            'margin-top': '5%',
-            'margin-bottom': '5%'
+            'margin-top': '6%',
+            'margin-bottom': '6%'
         });
 
 
@@ -329,7 +329,7 @@ TAG.Auth = (function () {
             'display': 'block',
             'width': '70%',
             'left': '10%',
-            'bottom': '0%'
+            'bottom': '5%'
         });
         var submitButton = $(document.createElement('button'));
         submitButton.css({
