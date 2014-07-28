@@ -1168,14 +1168,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bg = inputs.bgInput.val();
         var preview = inputs.previewInput.val();
         var priv = inputs.privateInput;
-        var timeline = inputs.timelineShown;
+        var timeline = inputs.timelineInput;
+
+        console.log(timeline);
 
         var options = {
             Name: name,
             Private: priv,
             Description: desc,
             //TO-DO: add in once valid request parameter
-            //Timeline: timeline,
+            Timeline: timeline
         }
 
         if (bg)
@@ -1783,12 +1785,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var title = createSetting('Title', titleInput);
         var desc = createSetting('Description', descInput);
-        var yearMetadataDiv = createYearMetadataDiv(media);
-        console.log("!!!!!" + yearMetadataDiv);
+        var yearMetadataDivSpecs = createYearMetadataDiv(media);
 
         settingsContainer.append(title);
         settingsContainer.append(desc);
-        settingsContainer.append(yearMetadataDiv);
+        settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
 
         // Create buttons
         var assocButton = createButton('Associate to Artworks',
@@ -1858,7 +1859,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }
                 saveAssocMedia(media, {
                     titleInput: titleInput,
-                    descInput: descInput
+                    descInput: descInput,
+                    yearInput: yearMetadataDivSpecs.yearInput,                     
+                    monthInput: yearMetadataDivSpecs.monthInput,                  
+                    dayInput: yearMetadataDivSpecs.dayInput,                       
+                    timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     
+                    timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,  
+                    timelineDayInput: yearMetadataDivSpecs.timelineDayInput   
+
                 });
             }, {
                 'margin-right': '3%',
@@ -1896,8 +1904,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} inputs   keys for media title and description
      */
     function saveAssocMedia(media, inputs) {
-        var name = inputs.titleInput.val();
-        var desc = inputs.descInput.val();
+        var name = inputs.titleInput.val(),
+            year = inputs.yearInput.val(),
+            month = inputs.monthInput.val(),
+            day = inputs.dayInput.val(),
+            timelineYear = inputs.timelineYearInput.val(),
+            timelineMonth = inputs.timelineMonthInput.val(),
+            timelineDay = inputs.timelineDayInput.val(),
+            desc = inputs.descInput.val();
 
         prepareNextView(false, null, null, "Saving...");
         clearRight();
@@ -1906,6 +1920,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Worktop.Database.changeHotspot(media, {
             Name: name,
             Description: desc,
+            Year: year,
+            Month: month,
+            Day: day,
+            TimelineYear: timelineYear,
+            TimelineMonth: timelineMonth,
+            TimelineDay: timelineDay,
         }, function () {
             if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.media.text]) {
                 return;
@@ -2380,7 +2400,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var customInputs = {};
         var customSettings = {};
         var desc = createSetting('Description', descInput);
-        var yearMetadataDiv = createYearMetadataDiv(artwork);
+        var yearMetadataDivSpecs = createYearMetadataDiv(artwork);
 
         titleInput.focus(function () {
             if (titleInput.val() === 'Title')
@@ -2407,9 +2427,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         settingsContainer.append(title);
         settingsContainer.append(artist);
-        //settingsContainer.append(yearDiv);
-        //settingsContainer.append(timelineYearDiv);
-        settingsContainer.append(yearMetadataDiv);
+        settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
         settingsContainer.append(desc);
 
         $.each(customSettings, function (key, val) {
@@ -2440,11 +2458,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     titleInput.val("Untitled Artwork");
                 }
                 saveArtwork(artwork, {
-                    artistInput: artistInput,   //Artwork artist
-                    nameInput: titleInput,      //Artwork title
-                    yearInput: yearInput,       //Artwork year
-                    descInput: descInput,       //Artwork description
-                    customInputs: customInputs, //Artwork custom info fields
+                    artistInput: artistInput,                                      //Artwork artist
+                    nameInput: titleInput,                                         //Artwork title
+                    yearInput: yearMetadataDivSpecs.yearInput,                     //Artwork year or era
+                    monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
+                    dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
+                    timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
+                    timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
+                    timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
+                    descInput: descInput,                                          //Artwork description
+                    customInputs: customInputs,                                    //Artwork custom info fields
                 });
             }, {
                 'margin-right': '3%',
@@ -2617,10 +2640,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} inputs       keys for artwork info from input fields
      */
     function saveArtwork(artwork, inputs) {
-        var name = inputs.nameInput.val();
-        var artist = inputs.artistInput.val();
-        var year = inputs.yearInput.val();
-        var description = inputs.descInput.val();
+        var name = inputs.nameInput.val(),
+            artist = inputs.artistInput.val(),
+            year = inputs.yearInput.val(),
+            month = inputs.monthInput.val(),
+            day = inputs.dayInput.val(),
+            timelineYear = inputs.timelineYearInput.val(),
+            timelineMonth = inputs.timelineMonthInput.val(),
+            timelineDay = inputs.timelineDayInput.val(),
+            description = inputs.descInput.val();
 
         var infoFields = {};
         $.each(inputs.customInputs, function (key, val) {
@@ -2635,6 +2663,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             Name: name,
             Artist: artist,
             Year: year,
+            Month: month,
+            Day: day,
+            TimelineYear: timelineYear,
+            TimelineMonth: timelineMonth,
+            TimelineDay: timelineDay,
             Description: description,
             InfoFields: JSON.stringify(infoFields),
         }, function () {
@@ -3197,10 +3230,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     /* Create a linked year metadata input div 
     * @method createYearMetadataDiv
-    * @param {Object} artwork       artwork to get metadata from
-    * @return {Object} yearMetadataDiv     div with year and timeline year options
+    * @param {Object} work                      artwork or media you are editting
+    * @return {Object} yearMetadataDivSpecs     div with year and timeline year options, list of input fields
     */
-    function createYearMetadataDiv(artwork){
+    function createYearMetadataDiv(work){
         
         var yearInput,
             monthInput,
@@ -3220,28 +3253,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay,
             timelineYearAutofilled = false,
             timelineYearAllowed = true,
-            yearMetadataDiv= $(document.createElement('div'));
+            yearMetadataDiv= $(document.createElement('div')),
+            yearMetadataDivSpecs;
 
         //Create input boxes: 
         //TO-DO : change selected day and month and timeline data to initialize as those saved on server.
-        if (artwork.Metadata.Year){
-            yearInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Year), true, 20);
-        } else {
+       // if (artwork.Metadata.Year){
+            yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 20);
+       // } //else {
              //Temporary fix to handle media that dont have year stored on server yet:
-            yearInput = createTextInput('',true,20);
-        }
-        monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')),'');
+            //yearInput = createTextInput('',true,20);
+        //}
+        monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month);
         monthInput.css('margin-right', '0%');
-        dayInput = createSelectInput(getDayOptions(monthInput.attr('value')),'');
+        dayInput = createSelectInput(getDayOptions(monthInput.attr('value')),work.Metadata.Day);
         dayInput.css('margin-right', '0%');
-        timelineInputText = TAG.Util.parseDateToYear(yearInput.attr('value')) || '--Type valid year--';
-        timelineYearInput = createTextInput(getTimelineInputText(yearInput), true, 20);
+        //TO-DO: test this with input year saved as empty string- should come up as suggested year...
+        timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
+        timelineYearInput = createTextInput(timelineInputText, true, 20);
         if (timelineYearInput.val()===''){
             timelineYearInput.attr('placeholder', 'Type valid year');
         }
-        timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),'');
+        timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),work.Metadata.TimelineMonth);
         timelineMonthInput.css('margin-right','0%');
-        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value')),'');
+        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value')),work.Metadata.TimelineDay);
         timelineDayInput.css('margin-right', '0%');
 
         //Add focus to inputs:
@@ -3407,7 +3442,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearMetadataDiv.append(yearDiv)
                        .append(timelineYearDiv); 
 
-        return yearMetadataDiv;
+        yearMetadataDivSpecs = {
+            yearMetadataDiv : yearMetadataDiv,
+            yearInput : yearInput,
+            monthInput: monthInput,
+            dayInput: dayInput,
+            timelineYearInput: timelineYearInput,
+            timelineMonthInput: timelineMonthInput,
+            timelineDayInput: timelineDayInput
+        }
+
+        return yearMetadataDivSpecs;
 
         //Helper functions:
 
