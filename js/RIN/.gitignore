@@ -73,7 +73,7 @@ mongoose-*.exe
 # Ignore compiled files # bleveque: commented some out, since they're helpful to have
 # web/lib/rin-core-*.js
 # web/lib/rin-experiences-*.js
-web/lib/pano-viewer.js
+# web/lib/pano-viewer.js
 # web/systemResources/themeResources/rin.css
 # web/systemResources/themeResources/rinTemplates.htm
 
