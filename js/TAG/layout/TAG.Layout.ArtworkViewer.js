@@ -185,10 +185,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         var container        = root.find('#seadragonManipContainer'),
             slideButton      = root.find('#seadragonManipSlideButton'),
             tagRoot          = $('#tagRoot'),
-            CENTER_X         = root.width()/2,
-            CENTER_Y         = root.height()/2,
-            D_PAD_TOP        = 26,
-            D_PAD_LEFT       = 60,
             top              = 0,
             count            = 0,
             panDelta         = 20,
@@ -210,10 +206,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 top: top
             });
             if (count === 0){
-                top = 0;
+                top = '0%';
                 slideButton.html("Show Controls");
             } else {
-                top = -100;
+                top = '-23%';
                 slideButton.html('Hide Controls');
             }   
         });
@@ -223,12 +219,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             tobj.custom_2 = doq.Identifier;
         });
         container.append(slideButton);
-        container.append(createButton('leftControl',  tagPath+'images/icons/zoom_left.svg',  D_PAD_LEFT,    D_PAD_TOP+14));
-        container.append(createButton('upControl',    tagPath+'images/icons/zoom_up.svg',    D_PAD_LEFT+12, D_PAD_TOP+2));
-        container.append(createButton('rightControl', tagPath+'images/icons/zoom_right.svg', D_PAD_LEFT+41, D_PAD_TOP+14));
-        container.append(createButton('downControl',  tagPath+'images/icons/zoom_down.svg',  D_PAD_LEFT+12, D_PAD_TOP+43));
-        container.append(createButton('zinControl',   tagPath+'images/icons/zoom_plus.svg',  D_PAD_LEFT-40, D_PAD_TOP-6));
-        container.append(createButton('zoutControl',  tagPath+'images/icons/zoom_minus.svg', D_PAD_LEFT-40, D_PAD_TOP+34));
+        container.append(createButton('leftControl',  tagPath+'images/icons/zoom_left.svg'));
+        container.append(createButton('upControl',    tagPath+'images/icons/zoom_up.svg'));
+        container.append(createButton('rightControl', tagPath+'images/icons/zoom_right.svg'));
+        container.append(createButton('downControl',  tagPath+'images/icons/zoom_down.svg'));
+        container.append(createButton('zinControl',   tagPath+'images/icons/zoom_plus.svg'));
+        container.append(createButton('zoutControl',  tagPath+'images/icons/zoom_minus.svg'));
 
         /////////////////////////// RAPID PROTOTYPING /////////////////////////////
 
