@@ -20,7 +20,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     "use strict";
    
      
-    var root = TAG.Util.getHtmlAjax('SettingsView.html'), //Get html from html file
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
 
         //get all of the ui elements from the root and save them in variables
         middleLoading = root.find('#setViewLoadingCircle'),
@@ -513,7 +513,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacityInput = createTextInput(backgroundOpacity, true);
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
-        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Lobster', 'Pacifico', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana']);
+        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Lobster', 'Pacifico', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
         
 
         // Handle changes
@@ -1783,9 +1783,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var title = createSetting('Title', titleInput);
         var desc = createSetting('Description', descInput);
+        var yearMetadataDiv = createYearMetadataDiv(media);
+        console.log("!!!!!" + yearMetadataDiv);
 
         settingsContainer.append(title);
         settingsContainer.append(desc);
+        settingsContainer.append(yearMetadataDiv);
 
         // Create buttons
         var assocButton = createButton('Associate to Artworks',
@@ -2370,19 +2373,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             viewer.append(mediaElement);
         }
+
         var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), true, 55);
         var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), true, 55);
-        var yearInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Year), true, 20);
         var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Description).replace(/\n/g, '<br />') || "", "", false);
         var customInputs = {};
         var customSettings = {};
-
-        if (artwork.Metadata.InfoFields) {
-            $.each(artwork.Metadata.InfoFields, function (key, val) {
-                customInputs[key] = createTextInput(TAG.Util.htmlEntityDecode(val), true);
-                customSettings[key] = createSetting(key, customInputs[key]);
-            });
-        }
+        var desc = createSetting('Description', descInput);
+        var yearMetadataDiv = createYearMetadataDiv(artwork);
 
         titleInput.focus(function () {
             if (titleInput.val() === 'Title')
@@ -2392,10 +2390,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (artistInput.val() === 'Artist')
                 artistInput.select();
         });
-        yearInput.focus(function () {
-            if (yearInput.val() === 'Year')
-                yearInput.select();
-        });
         descInput.focus(function () {
             if (descInput.val() === 'Description')
                 descInput.select();
@@ -2403,12 +2397,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var title = createSetting('Title', titleInput);
         var artist = createSetting('Artist', artistInput);
-        var year = createSetting('Year', yearInput);
-        var desc = createSetting('Description', descInput);
+
+        if (artwork.Metadata.InfoFields) {
+            $.each(artwork.Metadata.InfoFields, function (key, val) {
+                customInputs[key] = createTextInput(TAG.Util.htmlEntityDecode(val), true);
+                customSettings[key] = createSetting(key, customInputs[key]);
+            });
+        }
 
         settingsContainer.append(title);
         settingsContainer.append(artist);
-        settingsContainer.append(year);
+        //settingsContainer.append(yearDiv);
+        //settingsContainer.append(timelineYearDiv);
+        settingsContainer.append(yearMetadataDiv);
         settingsContainer.append(desc);
 
         $.each(customSettings, function (key, val) {
@@ -3193,6 +3194,337 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     //Helper functions:
 
+
+    /* Create a linked year metadata input div 
+    * @method createYearMetadataDiv
+    * @param {Object} artwork       artwork to get metadata from
+    * @return {Object} yearMetadataDiv     div with year and timeline year options
+    */
+    function createYearMetadataDiv(artwork){
+        
+        var yearInput,
+            monthInput,
+            dayInput,
+            timelineInputText,
+            timelineYearInput,
+            timelineYearJustChanged = false,
+            timelineMonthInput,
+            timelineDayInput,
+            timelineYearDiv = $(document.createElement('div')),
+            yearDiv = $(document.createElement('div')),
+            year,
+            month,
+            day,
+            timelineYear,
+            timelineMonth,
+            timelineDay,
+            timelineYearAutofilled = false,
+            timelineYearAllowed = true,
+            yearMetadataDiv= $(document.createElement('div'));
+
+        //Create input boxes: 
+        //TO-DO : change selected day and month and timeline data to initialize as those saved on server.
+        if (artwork.Metadata.Year){
+            yearInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Year), true, 20);
+        } else {
+             //Temporary fix to handle media that dont have year stored on server yet:
+            yearInput = createTextInput('',true,20);
+        }
+        monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')),'');
+        monthInput.css('margin-right', '0%');
+        dayInput = createSelectInput(getDayOptions(monthInput.attr('value')),'');
+        dayInput.css('margin-right', '0%');
+        timelineInputText = TAG.Util.parseDateToYear(yearInput.attr('value')) || '--Type valid year--';
+        timelineYearInput = createTextInput(getTimelineInputText(yearInput), true, 20);
+        if (timelineYearInput.val()===''){
+            timelineYearInput.attr('placeholder', 'Type valid year');
+        }
+        timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),'');
+        timelineMonthInput.css('margin-right','0%');
+        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value')),'');
+        timelineDayInput.css('margin-right', '0%');
+
+        //Add focus to inputs:
+        yearInput.focus(function () {
+            if (yearInput.val() === 'Year'){
+                yearInput.select();
+            }
+        });
+        monthInput.focus(function(){
+            if (monthInput.val() === 'Month'){
+                monthInput.select();
+            }
+        });
+        dayInput.focus(function(){
+            if (dayInput.val() === 'Day'){
+                dayInput.select();
+            }
+        });
+        timelineYearInput.focus(function(){
+            if (timelineYearInput.val() === 'Date on Timeline'){
+                timelineYearInput.select();
+            }
+        });
+        timelineMonthInput.focus(function(){
+            if (timelineMonthInput.val() === "Month"){
+                timelineMonthInput.select();
+            }
+        });
+        timelineDayInput.focus(function(){
+            if (timelineDayInput.val() === "Day"){
+                timelineDayInput.select();
+            }
+        });
+
+        //Set up year div:
+        //TO-DO: add (?) icon w/ pop-up
+        yearDiv.css({
+            width : '100%',
+            height : '20px',
+            'margin-bottom' : '4%'
+        });
+        year = createSetting('Year', yearInput, '65%');
+        year.css({
+            width :  '45%',
+            display : 'inline-block'
+            });
+        month = createSetting('Month', monthInput, '65%');
+        month.css({
+            width : '32%',
+            'padding-left' : '1%',
+            display : 'inline-block'
+        });
+        toggleAllow(monthInput);
+        day = createSetting('Day', dayInput,'60%');
+        day.css({
+            width : '17%',
+            'padding-left': '2%',
+            display: 'inline-block'
+        });
+        toggleAllow(dayInput);
+        yearDiv.append(year)
+               .append(month)
+               .append(day);
+
+        //Set up timeline year div:
+        //TO-DO add (?) icon w/ pop-up
+        timelineYearDiv.css({
+            width : '100%',
+            height : '20px',
+            'margin-bottom' : '4%'
+        });
+        timelineYear = createSetting('Date on Timeline', timelineYearInput, '47%');
+        timelineYear.css({
+            width :  '47%',
+            display : 'inline-block'
+            });
+        timelineMonth = createSetting('Month', timelineMonthInput, '65%');
+        timelineMonth.css({
+            width : '32%',
+            'padding-left' : '1%',
+            display : 'inline-block'
+        });
+        toggleAllow(timelineMonthInput);
+        timelineDay = createSetting('Day', timelineDayInput,'60%');
+        timelineDay.css({
+            width : '17%',
+            'padding-left': '2%',
+            display: 'inline-block'
+        });
+        toggleAllow(timelineDayInput);
+        timelineYearDiv.append(timelineYear)
+                       .append(timelineMonth)
+                       .append(timelineDay);
+
+        //Link input values of date fields to dynamically change/disable               
+        yearInput.on('input', function(){
+            setOptions(monthInput, getMonthOptions(yearInput.attr('value')),'');
+            toggleAllow(monthInput);
+            setOptions(dayInput, getDayOptions(monthInput.attr('value')));
+            toggleAllow(dayInput);
+            if (!timelineYearJustChanged|| timelineYearInput.val()===''){
+                timelineYearInput.val(getTimelineInputText(yearInput));
+                if (timelineYearInput.val()===''){
+                    timelineYearInput.attr('placeholder','Type valid year');
+                }
+                timelineYearJustChanged = false;
+                setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr("value")));
+                toggleAllow(timelineMonthInput);
+                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value")));
+                toggleAllow(timelineDayInput);
+            }
+            timelineYearAutofilled = false;
+        });
+        monthInput.change(function(){
+            setOptions(dayInput,getDayOptions(monthInput.attr("value")),'');
+            toggleAllow(dayInput);
+            if (timelineMonthInput.attr("value") === "") {
+                timelineMonthInput.attr("value",monthInput.attr("value"));
+                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value")));
+                toggleAllow(timelineDayInput);
+            }
+        });
+        dayInput.change(function(){
+            if (timelineDayInput.attr("value")=== "" && timelineDayInput.dropDownOptions.length>1){
+                timelineDayInput.attr("value", dayInput.attr("value"));
+            };
+        });
+        timelineYearInput.on('input', function(){
+            if (timelineYearInput.attr('value').length===0 && !timelineYearAutofilled){
+                timelineYearInput.val(getTimelineInputText(yearInput));
+                timelineMonthInput.val(monthInput.attr("value"));
+                timelineDayInput.val(dayInput.attr("value"));
+                timelineYearAutofilled = true;
+            } 
+            timelineYearJustChanged = true;
+            if ( timelineYearInput.attr('value').length>0 &&!isSingleYear(timelineYearInput.attr('value'))){
+                timelineYearAllowed = false;
+                timelineYearInput.css({
+                    'background-color': 'gray',
+                    'opacity' : '0.3'
+                });
+            } else {
+                timelineYearAllowed = true;
+                timelineYearInput.css({
+                    'background-color': 'white',
+                    'opacity' : '1'
+                });
+            }
+            setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr('value')),'');
+            toggleAllow(timelineMonthInput, timelineYearAllowed);
+            setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr('value')),'');
+            toggleAllow(timelineDayInput, timelineYearAllowed);
+        });
+        timelineMonthInput.change(function(){
+            setOptions(timelineDayInput,getDayOptions(timelineMonthInput.attr("value")),'');
+            toggleAllow(timelineDayInput);
+        });
+
+        //Set up year metadatadiv
+        yearMetadataDiv.css({
+            'width' : '100%'
+        });
+        yearMetadataDiv.append(yearDiv)
+                       .append(timelineYearDiv); 
+
+        return yearMetadataDiv;
+
+        //Helper functions:
+
+        /*Get month options based on year
+         * @method getMonthOptions
+         * @param {String} year         year used to determine month options
+         * @return {Array}              list of options to use in month drop down
+         */
+        function getMonthOptions(year){
+            if (!isSingleYear(year)){
+                return [''];
+            } else {
+                return ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+            }
+        }
+
+        /*Get input text for timeline year input
+         * @method getTimelineInputText
+         * @param {Object} yearInput        year input field
+         * @return {String} timelineInputText   text to display in timelineYearInput 
+         */
+        function getTimelineInputText(yearInput){
+            var timelineInputText = TAG.Util.parseDateToYear(yearInput.attr('value'));
+            if (timelineInputText){
+                if (timelineInputText<0){
+                    return -timelineInputText + ' BCE';
+                }
+                else {
+                    return timelineInputText;
+                }
+            } else{
+                return '';
+            }
+        }
+
+        /* returns whether a date input is a single year
+         * @method isSingleYear
+         * @param {String} dateString      string to parse
+         * @return {Boolean}               whether input string represents single year
+         */
+        function isSingleYear(dateString){
+            dateString = dateString.replace(/bce?/gi,'')
+                                   .replace(/ce/gi, '')
+                                   .replace(/ad/gi,'')
+                                   .replace(/\s/gi,'');
+            if (dateString.search(/[^0-9||-]/)>=0 || dateString.length===0){
+                return false;
+            } else {
+                return true;
+            }
+        }
+        
+        /*Get day options based on month using test date
+         * @method getDayOptions
+         * @param {String} month
+         * @return {Array} dayArray     array of day drop down options
+         */
+        function getDayOptions(month){
+            var dayArray = [''],
+                testDate,
+                daysInMonth,
+                i;
+            if (month === '') { 
+                return dayArray;
+            }
+            testDate = new Date(TAG.Util.parseDateToYear(yearInput.attr('value')), monthInput.dropDownOptions.indexOf(month), 0);
+            daysInMonth = testDate.getDate();
+            for (i=1;i<daysInMonth+1;i++){
+                dayArray.push(i);
+            }
+            return dayArray;
+        }
+        
+        /*Set drop down options of a select input
+         * @method setOptions()
+         * @param {Object} select       select input
+         * @param {Object} options      options to add to drop down
+         * @param {String} value        selected value
+         */
+        function setOptions(select, options, value){
+            var option,
+                i;
+            select.empty();
+            select.dropDownOptions = options;
+            for (i=0; i<options.length; i++) {
+                option = $(document.createElement('option'));
+                option.text(options[i]);
+                option.attr('value', options[i]);
+                select.append(option);
+                options[i].selected = true;
+            }
+            select.attr('value', value);
+        }
+
+        /*Set styling of a select input based on if its allowed
+        * @param {Object} select        select input to style
+        * @param {Boolean} allowed      whether its allowed (optional)
+        * @return {Boolean}             whether its allowed
+        */
+        function toggleAllow(select, allowed){
+            if (select.dropDownOptions.length === 1 || allowed === "false"){
+                select.css({
+                    'background-color': 'gray',
+                    'opacity' : '0.3',
+                });
+                return false;
+            }
+            else {
+                select.css({
+                    'background-color': 'white',
+                    'opacity' : '1'
+                });
+                return true;
+            } 
+        }
+    }
+
     /** Create a button 
      * @method createButton
      * @param {String} text         button text
@@ -3260,13 +3592,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Create a drop-down input element with a list to add options to
      * @method createSelectInput
      * @param {Array} options               list of options in the drop-down
+     * @param {Object} value                current value of select menu
      * @return {HTML element} selectElt     element of type 'select'
      */
-    function createSelectInput(options) {
+    function createSelectInput(options, value) {
         var selectElt = $(document.createElement('select')),
             option,
             i;
         selectElt.css({ 'overflow': 'scroll' });
+        selectElt.dropDownOptions = options;
         for (i=0; i<options.length; i++) {
             option = $(document.createElement('option'));
             option.text(options[i]);
@@ -3274,7 +3608,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             selectElt.append(option);
             options[i].selected = true;
         }
-        selectElt.attr('value', TAG.Worktop.Database.getFontFamily);
+        selectElt.attr('value', value);
         return selectElt;
     }
 

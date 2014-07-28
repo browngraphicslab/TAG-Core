@@ -16,7 +16,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
-    var root = TAG.Util.getHtmlAjax('../tagcore/html/StartPage.html'), // use AJAX to load html from .html file
+    var root = TAG.Util.getHtmlAjax('StartPage.html'), // use AJAX to load html from .html file
         overlay = root.find('#overlay'),
         primaryFont = root.find('.primaryFont'),
         serverTagBuffer = root.find('#serverTagBuffer'),
@@ -531,11 +531,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             tempInfo = "";
         }
 
-        if (typeof Windows != "undefined") {
-            // running in Win8 app
+        if (IS_WINDOWS) {
             museumInfoSpan.html(tempInfo);
-        } else {  
-            // running in browser
+        } else {
             museumInfoSpan.html(Autolinker.link(tempInfo , {email: false, twitter: false}));
         }
         

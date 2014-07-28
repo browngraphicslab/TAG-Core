@@ -10,6 +10,7 @@ DEFAULT_FONT_FAMILY = '"sans-serif","Times New Roaman", "Segoe UI", "Ebrima", "N
 	wh 100% // we're forcing TAG to be 16:9
 
 #tourRoot #backButton
+	cursor pointer
 	width 3%
 	position absolute
 	z-index aboveRinZIndex
@@ -46,6 +47,20 @@ DEFAULT_FONT_FAMILY = '"sans-serif","Times New Roaman", "Segoe UI", "Ebrima", "N
 	top 0%
 	width 100%
 
+#tourRoot #linkButton
+	cursor pointer
+	position absolute
+	left 4%
+	width 3%
+	z-index aboveRinZIndex
+
+#tourRoot #linkContainer
+	height 8%
+	left 0.88%
+	position absolute
+	top 2.5%  
+	width 100%
+
 #tourRoot #overlayOnRoot
 	background-color rgba(255, 0, 0, 1) // for debugging
 	height auto
@@ -55,6 +70,8 @@ DEFAULT_FONT_FAMILY = '"sans-serif","Times New Roaman", "Segoe UI", "Ebrima", "N
 	width 100%
 
 #tourRoot #rinPlayer
+	margin 0
 	overflow hidden
+	padding 0
 	position absolute
 	wh 100%

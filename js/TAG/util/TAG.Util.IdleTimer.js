@@ -8,7 +8,7 @@
 
 var TAG = TAG || {};
 TAG.Util.IdleTimer = (function() {
-    var overlay ,
+    var overlay,
         stageTwoDuration,
         overlayInterval;
 
@@ -121,10 +121,6 @@ TAG.Util.IdleTimer = (function() {
         function fireS2() {
             s2c();
             started = false;
-            TELEMETRY_SESSION_ID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-                return v.toString(16);
-            });
         }
 
         return {
@@ -225,6 +221,7 @@ TAG.Util.IdleTimer = (function() {
             removeIdleOverlay();
         });
 
+        // create ticking clock
         overlayInterval = setInterval(function() {
             var percentDone,
                 gradString,
@@ -257,6 +254,12 @@ TAG.Util.IdleTimer = (function() {
      * @method returnHome
      */
     function returnHome() {
+        TAG.Util.Splitscreen.setOn(false);
+        TELEMETRY_SESSION_ID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+
         if(currentPage.name !== TAG.Util.Constants.pages.COLLECTIONS_PAGE || !currentPage.obj || !currentPage.obj.loadFirstCollection) {
             catalog = new TAG.Layout.CollectionsPage();
             TAG.Util.UI.slidePageRight(catalog.getRoot());
@@ -275,9 +278,9 @@ TAG.Util.IdleTimer = (function() {
     }
 
     return {
-        TwoStageTimer:     TwoStageTimer,
-        timerPair:         timerPair,
-        restartTimer:      restartTimer,
+        TwoStageTimer: TwoStageTimer,
+        timerPair: timerPair,
+        restartTimer: restartTimer,
         removeIdleOverlay: removeIdleOverlay
-    }
+    };
 })();

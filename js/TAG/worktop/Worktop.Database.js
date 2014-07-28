@@ -83,6 +83,7 @@ Worktop.Database = function (mainID) {
         postExhibition: postExhibition,
         postArtwork: postArtwork,
         postHotspot: postHotspot,
+        postIframeAssocMedia: postIframeAssocMedia,
         postMain: postMain,
 
         deleteDoq: deleteDoq,
@@ -229,6 +230,17 @@ Worktop.Database = function (mainID) {
         sortedOptions.urlOptions.Guid = guid;
         postRequest(
             'ChangeAssociatedMedia',
+            handlers,
+            sortedOptions.urlOptions,
+            sortedOptions.bodyOptions,
+            true);
+    }
+
+    function postIframeAssocMedia(options, handlers, throwOnWarn) {
+        options = options || {};
+        var sortedOptions = checkKeys(options, _static.params.hotspot, "CreateIframeAssocMedia", throwOnWarn);
+        postRequest(
+            'CreateIframeAssocMedia',
             handlers,
             sortedOptions.urlOptions,
             sortedOptions.bodyOptions,

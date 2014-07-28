@@ -162,6 +162,7 @@ TAG.Worktop.Database = (function () {
         createFeedback: createFeedback,
         createArtwork: createArtwork,
         createHotspot: createHotspot,
+        createIframeAssocMedia: createIframeAssocMedia,
 
         // POST
         changeTour: changeTour,
@@ -681,6 +682,10 @@ TAG.Worktop.Database = (function () {
         _db.postHotspot(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
 
+    function createIframeAssocMedia(options, success, unauth, conflict, error) {
+        _db = _db || new Worktop.Database();
+        _db.postIframeAssocMedia(options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
+    }
     /*
     Change the main doq (start page)
         options: New values for main in a dictionary:

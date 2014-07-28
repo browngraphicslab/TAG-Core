@@ -12,8 +12,6 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 
 	this.interactionHandlers 	= null;	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
 
-	this.TrackInteractionEvent	= null; // Raised when track is interacted with.  This is for the inks to subscribe to.
-
 	self.player 				= player;
 	self.taskManager 			= taskManager;
 	self.trackData 				= trackData;

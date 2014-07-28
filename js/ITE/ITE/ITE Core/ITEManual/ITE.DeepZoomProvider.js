@@ -16,7 +16,6 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	self.trackData 				= trackData;
 	self.orchestrator			= orchestrator;
 	self.status 				= "loading";
-	this.trackInteractionEvent 	= new ITE.PubSubStruct();
 	self.trackData   			= trackData;
 	self.animationCallback;
 
@@ -180,7 +179,23 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		self.animation.play(); 
 	};
 
-
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	function addInk(inkTrack){
+		if (!_viewer.viewport){
+			console.log("failed to load ink as DZ is not ready" )
+			setTimeout(function(){
+				addInk(inkTrack) } , 100)
+		} else {
+			var point = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(50, 50))
+			console.log("point: " + point)
+			_viewer.addOverlay(inkTrack._UIControl[0], point);	
+		}
+	};
+	this.addInk = addInk;
 	/* 
 	* I/P: duration	duration of track
 	* Helper function for animate() that is a bit of a hack

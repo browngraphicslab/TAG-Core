@@ -11,22 +11,26 @@ TAG.Util.makeNamespace("TAG.Layout.TourPlayer");
  * @param tourObj      the tour doq object, so we can return to the proper tour in the collections screen
  */
 TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj) {
-    "use strict";
+    console.log("******************************************************************************")
 
+    "use strict";
     var artworkPrev;
     var prevScroll = 0;
 	var prevExhib = exhibition;
     var prevTag = prevInfo.prevTag;
     var prevMult = prevInfo.prevMult;
-    var rinPath = (typeof Windows !== 'undefined') ? tagPath+'../tagcore/js/WIN8_RIN/web' : tagPath+'../tagcore/js/RIN/web'; // TODO merging (get rid of ../tagcore)
+    var rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
+    var ispagetoload = pageToLoad && (pageToLoad.pagename === 'tour');
 
     var tagContainer = $('#tagRoot');
 
     var player,
-        root = TAG.Util.getHtmlAjax('../tagcore/html/TourPlayer.html'),
+        root = TAG.Util.getHtmlAjax('TourPlayer.html'),
         rinPlayer = root.find('#rinPlayer'),
         backButtonContainer = root.find('#backButtonContainer'),
         backButton = root.find('#backButton'),
+        linkButtonContainer = root.find('#linkContainer'),
+        linkButton = root.find('#linkButton'),
         overlayOnRoot = root.find('#overlayOnRoot'),
         bigThumbnailContainer = root.find('#bigThumbnailContainer'),
         bigThumbnail = root.find('#bigThumbnail'),
@@ -35,8 +39,11 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
     // idleTimer.start();
+    idleTimer && idleTimer.kill();
+    idleTimer = null;
 
     backButton.attr('src', tagPath+'images/icons/Back.svg');
+
     //clicked effect for back button
     backButton.on('mousedown', function(){
         TAG.Util.UI.cgBackColor("backButton", backButton, false);
@@ -47,8 +54,33 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 
     backButton.on('click', goBack);
 
-    if(INPUT_TOUR_ID) {
-        backButtonContainer.remove();
+    if(IS_WEBAPP) {
+        linkButton.attr('src', tagPath+'images/link.svg');
+        linkButton.on('click', function() {
+            var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
+                tagpagename: 'tour',
+                tagguid: tourObj.Identifier,
+                tagonlytour: false
+            });
+
+            root.append(linkOverlay);
+            linkOverlay.fadeIn(500, function() {
+                linkOverlay.find('.linkDialogInput').select();
+            });
+        });
+    } else {
+        linkButtonContainer.remove();
+    }
+
+    if(ispagetoload) {
+        pageToLoad.pagename = '';
+        if(pageToLoad.onlytour) {
+            backButtonContainer.remove();
+            linkButtonContainer.remove();
+        } else {
+            backButtonContainer.css('display', 'none');
+            linkButtonContainer.css('display', 'none');
+        }
         if(tourObj && tourObj.Metadata && tourObj.Metadata.Thumbnail) {
             bigThumbnail.attr('src', TAG.Worktop.Database.fixPath(tourObj.Metadata.Thumbnail));
             bigPlayButton.attr('src', tagPath + 'images/icons/Play.svg');
@@ -73,6 +105,10 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     function startTour() {
         bigThumbnailContainer.remove();
         $('.rin_PlayPauseContainer').find('input').trigger('click');
+        if(!pageToLoad.onlytour) {
+            backButtonContainer.css('display', 'block');
+            linkButtonContainer.css('display', 'block');
+        }
     }
 
     function goBack () {
@@ -130,7 +166,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         },
         startPlayback: function () { // need to call this to ensure the tour will play when you exit and re-enter a tour, since sliding functionality and audio playback don't cooperate
             rin.processAll(null, rinPath).then(function () {
-                var options = 'systemRootUrl='+rinPath+'/&autoplay='+(INPUT_TOUR_ID ? 'false' : 'true')+'&loop=false';
+                var options = 'systemRootUrl='+rinPath+'/&autoplay='+(ispagetoload ? 'false' : 'true')+'&loop=false';
                 // create player
                 player = rin.createPlayerControl(rinPlayer[0], options);
                 for (var key in tour.resources) {
@@ -141,7 +177,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     }
                 }
                 player.loadData(tour, function () {});
-                if(!INPUT_TOUR_ID) {
+                if(!ispagetoload) {
                     player.screenplayEnded.subscribe(function() { // at the end of a tour, go back to the collections view
                         setTimeout(goBack, 1000);
                     });

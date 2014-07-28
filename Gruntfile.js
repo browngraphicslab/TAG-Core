@@ -62,7 +62,7 @@ var JSSRC = [
 		'js/seadragon/src/Seadragon.Drawer.js',                // TAGCORE
 		'js/seadragon/src/Seadragon.Viewer.js',      
 
-		'js/RIN/web/lib/knockout-2.2.1.js',                    // TAGCORE
+		
 		'js/utils/CryptoJS/rollups/sha1.js',                   // TAGCORE
 		'js/utils/CryptoJS/rollups/sha224.js',                 // TAGCORE
 		'js/utils/CryptoJS/rollups/sha256.js',                 // TAGCORE
@@ -88,7 +88,7 @@ var JSSRC = [
 		'js/utils/jquery.livequery.js',                        // TAGCORE
 		'js/Autolinker.js-master/dist/Autolinker.js',          // TAGCORE
 
-		'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js', // TAGCORE -- need to move from win8  
+		/* 'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js', // TAGCORE -- need to move from win8  */
 		'js/TAG/util/TAG.Util.Constants.js',                   // TAGCORE
 		'js/TAG/util/TAG.Util.Splitscreen.js',                 // TAGCORE
 		'js/TAG/util/TAG.Util.IdleTimer.js',                   // TAGCORE
@@ -106,7 +106,7 @@ var JSSRC = [
 		'js/TAG/layout/TAG.Layout.VideoPlayer.js',             // TAGCORE
 		'js/TAG/layout/TAG.Layout.ArtworkEditor.js',
 		'js/TAG/layout/TAG.Layout.TourAuthoringNew.js',
-
+        /*
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js',          // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.TimeManager.js',        // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.UndoManager.js',        // TAGCORE -- need to move from win8
@@ -131,7 +131,7 @@ var JSSRC = [
 		'js/TAG/tourauthoring/TAG.TourAuthoring.TourOptions.js',        // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Track.js',              // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.VideoTrack.js',         // TAGCORE -- need to move from win8
-
+        */ // TODO merge commented out until cleaning is done
 		'js/TAG/authoring/TAG.Authoring.SettingsView.js',  // TAGCORE
 		'js/TAG/authoring/TAG.Authoring.FileUploader.js',  // TAGCORE
 		'js/TAG/authoring/jscolor/jscolor.js',             // TAGCORE
@@ -155,19 +155,25 @@ WATCH.push(
 
 module.exports = function(grunt) {
 	grunt.initConfig({
-		concat: {
-			options: {
-				separator: '\n;\n',
-				banner: 'var TAG_GLOBAL = function(tagInput) { \
-					        \n    var tagPath            = tagInput.path, \
-					        \n        containerId        = tagInput.containerId, \
-					        \n        ip                 = tagInput.serverIp, \
-					        \n        allowServerChange  = tagInput.allowServerChange, \
-					        \n 		  allowAuthoringMode = tagInput.allowAuthoringMode, \
-					        \n        idleDuration       = tagInput.idleDuration, \
-					        \n        currentPage        = {}, // name and obj properties \
-					        \n        INPUT_TOUR_ID      = tagInput.tourId, // to load to a tour \
-					        \n        idleTimer; \n\n',
+	    concat: {
+	        options: {
+	            separator: '\n;\n',
+	            banner: 'var TAG_GLOBAL = function(tagInput) { \
+					        \n    var tagPath              = tagInput.path || "", \
+					        \n        containerId          = tagInput.containerId || "tagContainer", \
+					        \n        ip                   = tagInput.serverIp || "browntagserver.com", \
+					        \n        allowServerChange    = tagInput.allowServerChange, \
+					        \n 		  allowAuthoringMode   = tagInput.allowAuthoringMode, \
+					        \n        idleDuration         = tagInput.idleDuration, \
+					        \n        currentPage          = {}, // name and obj properties \
+					        \n        urlToParse           = tagInput.urlToParse, \
+					        \n        pageToLoad           = {}, // a specific page to load \
+					        \n        TELEMETRY_SESSION_ID = null, \
+                            \n        IS_WINDOWS           = (typeof Windows !== "undefined"), \
+                            \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
+					        \n        idleTimer, \
+                            \n        Worktop = {}, \
+			                \n        TAG                  = {}; \n\n',
 				footer: '};'
 			},
 			dist: {

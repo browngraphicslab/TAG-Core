@@ -38,7 +38,7 @@ TAG.Layout.InternetFailurePage = function (errorType, detach) {
      */
 
     function init() {
-        root = TAG.Util.getHtmlAjax('../tagcore/html/InternetFailurePage.html');
+        root = TAG.Util.getHtmlAjax('InternetFailurePage.html');
         root.css("width", $("#tagRoot").width());
         root.css("height", $("#tagRoot").height());
 	mainPanel=root.find("#mainPanel");

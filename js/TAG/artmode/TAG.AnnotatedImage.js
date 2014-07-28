@@ -28,12 +28,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
                                            //   also contains an array of GUIDs for cleaner iteration
         toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
-        rootHeight     = $('#tagRoot').height(),
-        rootWidth      = $('#tagRoot').width(),
-        outerContainerDimensions = {height: rootHeight, width: rootWidth},  //dimensions of active media to manipulate
-
+        rootHeight = $('#tagRoot').height(),
+        rootWidth = $('#tagRoot').width(),
+        outerContainerPivot = {
+            x: rootHeight/2,
+            y: rootWidth/2
+        },
+        
         // misc uninitialized variables
-        outerContainerDimensions,
         viewer,
         assetCanvas;
 
@@ -48,7 +50,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         openArtwork: openArtwork,
         addAnimateHandler: addAnimateHandler,
         getToManip: getToManip,
-        getMediaDimensions: getMediaDimensions,
+        getMediaPivot: getMediaPivot,
         dzManipPreprocessing: dzManipPreprocessing,
         viewer: viewer
     };
@@ -66,11 +68,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
     /**
      * Return the dimensions of the active associated media or artwork
-     * @method getMediaDimensions
+     * @method getMediaPivot
      * @return {Object}     object with dimensions
      */
-    function getMediaDimensions() {
-        return outerContainerDimensions;   
+    function getMediaPivot() {
+        return outerContainerPivot;   
     }
 
 
@@ -165,7 +167,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @method dzManipPreprocessing
      */
     function dzManipPreprocessing() {
-        outerContainerDimensions = {height: rootHeight, width: rootWidth};
+        outerContainerPivot = {
+            x: root.width() / 2,// + root.offset().left,
+            y: root.height() / 2// + root.offset().top
+        };
         toManip = dzManip;
         TAG.Util.IdleTimer.restartTimer();
     }
@@ -200,7 +205,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 x: 0,
                 y: 0
             },
-            pivot: pivot
+            pivot: {
+                x: pivot.x + root.offset().left,
+                y: pivot.y + root.offset().top
+            }
         });
     }
 
@@ -605,19 +613,20 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function createMediaElements() {
             var $mediaElt,
                 img,
-                closeButton = createCloseButton();
-
-            mediaContainer.append(closeButton[0]);
-            closeButton.on('click', function(evt) {
-                evt.stopPropagation();
-                hideMediaObject();
-            });
+                closeButton;
 
             if(!mediaLoaded) {
                 mediaLoaded = true;
             } else {
                 return;
             }
+
+            closeButton = createCloseButton()
+            mediaContainer.append(closeButton[0]);
+            closeButton.on('click', function (evt) {
+                evt.stopPropagation();
+                hideMediaObject();
+            });
 
             if (CONTENT_TYPE === 'Image') {
                 img = document.createElement('img');
@@ -677,7 +686,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function mediaManipPreprocessing() {
             var w = outerContainer.width(),
                 h = outerContainer.height();
-            outerContainerDimensions = {height: h, width: w};
+            outerContainerPivot = {
+                x: w / 2 - (outerContainer.offset().left - root.offset().left),
+                y: h / 2 - (outerContainer.offset().top - root.offset().top)
+            };
             toManip = mediaManip;
             $('.mediaOuterContainer').css('z-index', 1000);
             outerContainer.css('z-index', 1001);
@@ -711,7 +723,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 w     = outerContainer.width(),
                 h     = outerContainer.height(),
                 timestepConstant = 50,
-                newW  = w * scale,
+                newW = w * scale,
+                isWinFactor = IS_WINDOWS ? 1 : 0,
                 maxW,
                 minW,
                 timer,
@@ -801,8 +814,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     return;
                 }
             } else{ // zoom from touch point: change width and height of outerContainer
-                outerContainer.css("top",  (t + trans.y + (1 - scale) * pivot.y) + "px");
-                outerContainer.css("left", (l + trans.x + (1 - scale) * pivot.x) + "px");
+                outerContainer.css("top", (t + trans.y + (1 - scale) * (pivot.y + isWinFactor*t)) + "px");
+                outerContainer.css("left", (l + trans.x + (1 - scale) * (pivot.x + isWinFactor*l)) + "px");
                 outerContainer.css("width", newW + "px");
                 outerContainer.css("height", "auto"); 
             }
@@ -830,6 +843,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var currentPosition,
                 newVelocity,
                 timer;
+
+            if (mediaHidden) {
+                return;
+            }
+
             //If object is not on screen, reset and hide it
             if (!(
                 (0 < outerContainer.position().top+ outerContainer.height()) 
@@ -886,7 +904,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     x: 0,
                     y: 0
                 },
-                pivot: pivot
+                pivot: {
+                    x: pivot.x + root.offset().left,// + (outerContainer.offset().left - root.offset().left),
+                    y: pivot.y + root.offset().top// + (outerContainer.offset().top - root.offset().top)
+                }
             });
         }
         

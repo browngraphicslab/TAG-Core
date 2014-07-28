@@ -70,12 +70,12 @@ rin.sublime-*
 # Mongoose web server
 mongoose-*.exe
 
-# Ignore compiled files
-web/lib/rin-core-*.js
-web/lib/rin-experiences-*.js
+# Ignore compiled files # bleveque: commented some out, since they're helpful to have
+# web/lib/rin-core-*.js
+# web/lib/rin-experiences-*.js
 web/lib/pano-viewer.js
-web/systemResources/themeResources/rin.css
-web/systemResources/themeResources/rinTemplates.htm
+# web/systemResources/themeResources/rin.css
+# web/systemResources/themeResources/rinTemplates.htm
 
 # Ignore TypeScript files other than .js
 *.js.map

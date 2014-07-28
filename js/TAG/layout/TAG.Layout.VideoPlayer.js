@@ -30,7 +30,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
 
     var that = {};
 
-    var root = TAG.Util.getHtmlAjax('../tagcore/html/VideoPlayer.html'),
+    var root = TAG.Util.getHtmlAjax('VideoPlayer.html'),
         video = root.find('#video'),
         sourceMP4,
         sourceWEBM,
@@ -46,7 +46,9 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         source = TAG.Worktop.Database.fixPath(videoSrc.Metadata.Source),
         sourceWithoutExtension = source.substring(0, source.lastIndexOf('.')),
         currentTimeDisplay = root.find('#currentTimeDisplay'),
-        backButton = root.find('#backButton');
+        backButton = root.find('#backButton'),
+        linkButton = root.find('#linkButton'),
+        linkButtonContainer = root.find('#linkContainer');
 
     // UNCOMMENT IF WE WANT IDLE TIMER IN Video PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
@@ -256,6 +258,9 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      * @method initPage
      */
     function initPage() {
+        idleTimer && idleTimer.kill();
+        idleTimer = null;
+
         // set attributes of video element
         video.attr({
             poster: poster,
@@ -286,6 +291,23 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         });
 
         backButton.on('click', goBack);
+
+        if(IS_WEBAPP) {
+            linkButton.attr('src', tagPath + 'images/link.svg');
+            linkButton.on('click', function() {
+                var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
+                    tagpagename: 'video',
+                    tagguid: videoSrc.Identifier
+                });
+
+                root.append(linkOverlay);
+                linkOverlay.fadeIn(500, function() {
+                    linkOverlay.find('.linkDialogInput').select();
+                });
+            });
+        } else {
+            linkButtonContainer.remove();
+        }
     }
 
     /**

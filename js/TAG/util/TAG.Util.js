@@ -1,16 +1,3 @@
-var TAG = TAG || {}, // TODO merge fix these
-    LADS = LADS || TAG, // backwards compatibility until merge is complete
-    tagPath = tagPath || '',// backwards compatibility until merge is complete
-    containerId = containerId || 'tagContainer',// backwards compatibility until merge is complete
-    ip = ip || 'browntagserver.com',// backwards compatibility until merge is complete
-    allowServerChange = true,// backwards compatibility until merge is complete
-    allowAuthoringMode = true,// backwards compatibility until merge is complete
-    idleDuration = 120000,// backwards compatibility until merge is complete
-    currentPage = {},// backwards compatibility until merge is complete
-    INPUT_TOUR_ID = null,// backwards compatibility until merge is complete
-    idleTimer,// backwards compatibility until merge is complete
-    Worktop = Worktop || {};
-
 //TAG Utilities
 TAG.Util = (function () {
     "use strict";
@@ -1531,7 +1518,7 @@ TAG.Util = (function () {
             },
             dataType: 'html'
         });
-        return ret ? ((typeof Windows !== 'undefined') ? $(toStaticHTML(ret)) : $(ret)) :  '';
+        return ret ? (IS_WINDOWS ? $(toStaticHTML(ret)) : $(ret)) :  '';
     }
 
      /**
@@ -1650,7 +1637,8 @@ TAG.Util.UI = (function () {
         createTrack: createTrack,
         getStack: getStack,
         initKeyHandler: initKeyHandler,
-        keyHandler: keyHandler
+        keyHandler: keyHandler,
+        showPageLink: showPageLink
     };
 
     //initKeyHandler();
@@ -3720,6 +3708,115 @@ TAG.Util.UI = (function () {
 
     //    return container;
     //}
+
+    /**
+     * Creates a dialog that displays a link to the current page (for use in web app only).
+     * @method showPageLink
+     * @param {String} baseurl         
+     * @param {Object} params          URL params to include
+     */
+    function showPageLink(baseurl, params) {
+        var overlay      = $(document.createElement('div')),
+            container    = $(document.createElement('div')),
+            linkLabel    = $(document.createElement('label')),
+            linkInput    = $(document.createElement('input')),
+            buttonRow    = $(document.createElement('div')),
+            cancelButton = $(document.createElement('button')),
+            tagContainer = $('#tagRoot'),
+            text         = baseurl.split(/#/)[0] + '#',
+            paramNum     = 0,
+            key;
+
+        params = params || {};
+
+        overlay.attr('id', 'linkDialogOverlay');
+        overlay.css({
+            display: 'none',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            'background-color': 'rgba(0,0,0,0.6)',
+            'z-index': 10000000,
+        });
+
+        container.addClass('linkDialogContainer');
+        container.css({
+            position: 'absolute',
+            left: '20%',
+            top: '25%',
+            width: '62%',
+            border: '3px double white',
+            'background-color': 'black',
+        });
+
+        overlay.append(container);
+        overlay.on('click', closeLinkOverlay);
+        container.on('click', function(evt){
+            evt.stopPropagation();
+        });
+
+        linkInput.addClass('linkDialogInput');
+        linkInput.css({
+            'border-color': 'gray',
+            'color': 'gray',
+            'font-size': '1.3em',
+            'position': 'relative',
+            'margin-top': '20px',
+            'min-width': 0,
+            'left': '10%',
+            'width': '80%'
+        });
+
+        for(key in params) {
+            if(params.hasOwnProperty(key) && (params[key] || params[key] === false)) {
+                text += ((paramNum++) > 0 ? '&' : '') + key + '=' + params[key];
+            }
+        }
+        if(!params.tagserver) {
+            text += ((paramNum++) > 0 ? '&' : '') + 'tagserver=' + localStorage.ip;
+        }
+
+        linkInput.attr({
+            'value':       text,
+            'placeholder': 'No page link available'
+        });
+
+        buttonRow.css({
+            'margin': '20px 0px 20px 0px',
+            'position': 'relative',
+            'width': '80%',
+            'left': '10%',
+            'text-align': 'center',
+            'display': 'inline-block'
+        });
+
+        cancelButton.css({
+            'padding': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'position': 'relative',
+            'margin-top': '1%',
+            'margin-right': '-2%',
+            'display': 'inline-block',
+        });
+        cancelButton.text('Close');
+        cancelButton.on('click', closeLinkOverlay);
+
+        function closeLinkOverlay() {
+            overlay.fadeOut(500, function() {
+                overlay.remove();
+            });
+        }
+
+        container.append(linkInput);
+        
+        container.append(buttonRow);
+        buttonRow.append(cancelButton);
+
+        return overlay;
+    }
 
 })();
 

@@ -7,13 +7,15 @@ module.exports = function(grunt) {
         separator: '\n/*************/\n'
       },
       dist: {
-        src: ['ITE Core/Utils/ITE.Utils.js',
+        src: ['../../tagInk.js',
+              'ITE Core/Utils/ITE.Utils.js',
               'ITE Core/Utils/TAG.Util.js',
               'ITE Core/ITEManual/ITE.PubSubStruct.js',
               'ITE Core/ITEManual/ITE.ImageProvider.js',
               'ITE Core/ITEManual/ITE.VideoProvider.js',
               'ITE Core/ITEManual/ITE.DeepZoomProvider.js',
               'ITE Core/ITEManual/ITE.AudioProvider.js',
+              'ITE Core/ITEManual/ITE.InkProvider.js',
               'ITE Core/ITEManual/ITE.TimeManager.js',
               'ITE Core/ITEManual/ITE.TaskManager.js',
               'ITE Core/ITEManual/ITE.Orchestrator.js',
