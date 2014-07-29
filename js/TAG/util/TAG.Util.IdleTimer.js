@@ -43,8 +43,10 @@ TAG.Util.IdleTimer = (function() {
          * @method start
          */
         function start() {
-            s1TimeoutID = setTimeout(fireS1, s1d);
-            started = true;
+            if(idleDuration !== 0) { // default is no idle timer
+                s1TimeoutID = setTimeout(fireS1, s1d);
+                started = true;
+            }
         }
 
         /**
@@ -77,9 +79,7 @@ TAG.Util.IdleTimer = (function() {
             s2TimeoutID && clearTimeout(s2TimeoutID);
             overlayInterval && clearInterval(overlayInterval);
 
-            s1TimeoutID = setTimeout(fireS1, s1d);
-
-            started = true;
+            start();
         }
 
         /**
