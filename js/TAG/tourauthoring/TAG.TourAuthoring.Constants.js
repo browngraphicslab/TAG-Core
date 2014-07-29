@@ -1,10 +1,10 @@
 ﻿/* global LADS: true, WinJS: false */
-LADS.Util.makeNamespace('LADS.TourAuthoring.Constants');
+TAG.Util.makeNamespace('TAG.TourAuthoring.Constants');
 
 /**
  * List of constants used across multiple files and locations
  */
-LADS.TourAuthoring.Constants = (function () {
+TAG.TourAuthoring.Constants = (function () {
     "use strict";
     return {
         aboveRinZIndex: 100000000,                                                          // ridiculous number to beat out RIN's ridiculous z-indexes so we can put things on top of it

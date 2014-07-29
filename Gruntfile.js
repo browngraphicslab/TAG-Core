@@ -106,8 +106,9 @@ var JSSRC = [
 		'js/TAG/layout/TAG.Layout.VideoPlayer.js',             // TAGCORE
 		'js/TAG/layout/TAG.Layout.ArtworkEditor.js',
 		'js/TAG/layout/TAG.Layout.TourAuthoringNew.js',
-        /*
+        
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js',          // TAGCORE -- need to move from win8
+        /*
 		'js/TAG/tourauthoring/TAG.TourAuthoring.TimeManager.js',        // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.UndoManager.js',        // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.ArtworkTrack.js',       // TAGCORE -- need to move from win8

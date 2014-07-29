@@ -3914,8 +3914,8 @@ TAG.Util.RLH = function (input) {
                         .attr('id', 'locationHistoryOuterContainer')
                         .css({
                             position: 'absolute',
-                            top: '10%',
-                            left: '20%',
+                            top: '12%',
+                            left: input.authoring?'20%':'22%',
                             width: '70%',
                             height: '80%',
                             display: 'none',
@@ -4932,14 +4932,19 @@ TAG.Util.RLH = function (input) {
          */
         function init(input) {
             annotImgs = {};
-            var annotImg = new LADS.AnnotatedImage(input.container, input.mapdoq, false, function () {
-                annotImg.loadDoq(input.mapdoq);
-                annotImgs[input.mapdoq.Identifier] = annotImg;
-
-                if (++input.progress.done >= input.progress.total) {
-                    input.loadCallback && input.loadCallback();
-                }
-            }, true);
+            var annotImg = new TAG.AnnotatedImage({
+                root        :   input.container,
+                doq         :   input.mapdoq,
+                callback    :   function(){
+                    annotImg.openArtwork(input.mapdoq);
+                    annotImgs[input.mapdoq.Identifier] = annotImg;
+                    
+                    if (++input.progress.done >= input.progress.total) {
+                            input.loadCallback && input.loadCallback();
+                    }
+                },
+                noMedia     :   true
+            });
         }
 
         /**
