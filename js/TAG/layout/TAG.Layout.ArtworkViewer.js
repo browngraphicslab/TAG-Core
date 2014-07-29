@@ -754,7 +754,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         //if the #info div exceeds the half the length of the sidebar, the div's max-height is set to its default with an auto scroll property.
         info.css({
             'overflow-y' : 'auto',
-            'max-height' : sideBar.height()/2- (info.offset().top - sideBar.offset().top)+ 'px',
+            'max-height' : sideBar.height()*2/5- (info.offset().top - sideBar.offset().top)+ 'px',
 
         });
 
