@@ -164,6 +164,7 @@ module.exports = function(grunt) {
 					        \n 		  allowAuthoringMode   = tagInput.allowAuthoringMode, \
 					        \n        idleDuration         = tagInput.idleDuration, \
 					        \n        currentPage          = {}, // name and obj properties \
+					        \n        urlToLoad            = tagInput.urlToLoad, \
 					        \n        urlToParse           = tagInput.urlToParse, \
 					        \n        pageToLoad           = {}, // a specific page to load \
 					        \n        TELEMETRY_SESSION_ID = null, \
