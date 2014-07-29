@@ -1,0 +1,13 @@
+{
+    "name": "Touch Art Gallery web application",
+    "description": "An application for compiling, contextualizing, and sharing digital art collections.",
+    "version": "1.0.0",
+    "url": "http://cs.brown.edu/research/ptc/tag",
+    "logo": "../TAG/images/WideLogo.scale-100.png",
+    "options": {
+        "linkNatives": "true",
+        "outdir": "./yuidocs",
+        "paths": "./js",
+        "exclude": "TAG.js,RIN,Dependencies,CryptoJS,utils,WIN8_RIN,seadragon,jQueryUI,html2canvas,d3,default.js,raphael.js"
+    }
+}

@@ -86,7 +86,7 @@ var JSSRC = [
 		'js/TAG/util/TAG.Util.js',                             // TAGCORE
 		'js/html2canvas/html2canvas.js',                       // TAGCORE
 		'js/utils/jquery.livequery.js',                        // TAGCORE
-		'js/Autolinker.js-master/dist/Autolinker.js',          // TAGCORE
+		'js/utils/Autolinker.js-master/dist/Autolinker.js',          // TAGCORE
 
 		/* 'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js', // TAGCORE -- need to move from win8  */
 		'js/TAG/util/TAG.Util.Constants.js',                   // TAGCORE
