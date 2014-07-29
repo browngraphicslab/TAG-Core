@@ -3821,6 +3821,2107 @@ TAG.Util.UI = (function () {
 })();
 
 /**
+ * Some common functionality between the rich location editing and
+ * viewing interfaces
+ * @method LADS.Util.RLH
+ * @param {Object} input           a couple input options
+ *         {Doq}         artwork        artwork doq
+ *         {jQuery obj}  root           root of current page
+ *         {Boolean}     authoring      whether we're in authoring mode
+ */
+TAG.Util.RLH = function (input) {
+    var artwork = input.artwork, // artwork doq
+        root = input.root,       // root of current page
+        bingMapHelper,       // helper object for Bing map
+        customMapHelper,     // helper object for custom maps
+        richLocationData,    // object containing rich location data (e.g., 
+        currentIndex,        // current map being shown
+        mapGuids = [],       // list of map guids, including bing map, the first one is bing Map and null
+        mapDoqs = {},        // dictionary of map doqs, not including bing map, keyed by map guid
+        defaultMapShown,     // whether bing map is shown
+        locations,           // list of locations
+        mapHolders = {},     // dictionary of map holder divs, keyed by mapguid
+        annotImgs = {},      // object of annotated images corresponding to custom map deepzoom images (keyed by map guid)
+        map,                 // bing map
+        disabledOverlay,     // overlay on default (bing) map holder if it's disabled
+        formIsEnabled,       // form is currently being displayed
+        isEditForm,          // edit location form is open (as opposed to add location form)
+        importingMap,        // used to show the correct map after importing 
+
+        locationPanelDiv,    // outer container for whole location history UI
+        locationPanel,       // holds content of location history UI
+
+        topRegion,           // contains map name and dots
+        metadataContainer,   // map name container div
+        nameInput,           // input element for map name
+        additionalInfoInput, // input element for additional map info (e.g., date)
+        //mapDescriptionInput, // input element for a short map description
+        saveMapButton,       // button for saving metadata changes to a map
+
+        mapRegion,           // contains map, arrows
+        leftArrowContainer,  // contains left arrow
+        leftArrowButton,     // shows previous map if any
+        mapContainer,        // map container div (contains all map holders)
+        rightArrowContainer, // contains right arrow
+        rightArrowButton,    // shows next map if any
+
+        buttonsRegion,       // contains buttons
+        addLocationButton,   // button for adding new location
+        sortLocationsByTitleButton, // sorts the locations by title
+        sortLocationsByDateButton, // sorts the locations by date
+        dotsContainer,       // dots container div
+        deleteButton,        // delete/hide/show map button
+        importMapButton,     // import map button
+
+        locationsRegion;     // contains location list
+
+    if (!artwork || !root) {
+        console.log("need to provide input.artwork and input.root");
+        return;
+    }
+
+    return {
+        init: init
+    };
+
+    /**
+     * Initializes rich location history editing (called only once). Grabs
+     * artwork.Metadata.RichLocationHistory (or converts old artwork.Metadata.Location
+     * object to new format), builds UI, and shows the first map.
+     * @method init
+     */
+    function init() {
+        // get data and initialize maps and locations
+        richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(artwork.Metadata.RichLocationHistory) : locationToRichLocation(artwork.Metadata.Location);
+        locations = richLocationData.locations || [];
+        defaultMapShown = richLocationData.defaultMapShown;
+        currentIndex = 0;
+        bingMapHelper = BingMapHelper();
+        customMapHelper = CustomMapHelper();
+        importingMap = false;
+        isEditForm = false;
+
+        // initialize UI (most of this should be done in JADE/STYL in web app)
+        locationPanelDiv = $(document.createElement('div'))
+                        .attr('id', 'locationHistoryOuterContainer')
+                        .css({
+                            'background-color': 'rgba(0,0,0,0.85)',
+                            position: 'absolute',
+                            top: '10%',
+                            left: '20%',
+                            width: '70%',
+                            height: '80%',
+                            display: 'none',
+                            'z-index': '51'
+                        })
+                        .appendTo(root);
+
+        locationPanel = $(document.createElement('div'))
+                        .attr('id', 'locationHistoryContainer')
+                        .css({
+                            position: 'relative',
+                            width: '96%',
+                            height: '96%',
+                            top: '2%',
+                            left: '2%',
+                            'z-indez': 99,
+                            'background-color': 'rgba(0,0,0,0.4);'
+                        })
+                        .appendTo(locationPanelDiv);
+
+        topRegion = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryTopRegion')
+                    .css({
+                        position: 'relative',
+                        width: '100%',
+                        height: '7%'
+                    })
+                    .appendTo(locationPanel);
+
+        metadataContainer = $(document.createElement('div'))
+                        .attr('id', 'locationHistoryMetadataContainer')
+                        .css({
+                            position: 'absolute',
+                            'width': '80%',
+                            'height': '90%',
+                            'top': '5%',
+                            'left': '10%'
+                        })
+                        .appendTo(topRegion);
+
+        if (input.authoring) {
+            nameInput = $(document.createElement('input'))
+                    .attr({
+                        id: 'locationHistoryNameInput',
+                        placeholder: 'Map name'
+                    })
+                    .css({
+                        position: 'relative',
+                        width: '35%',
+                        height: '52%',
+                        top: '8px'
+                    })
+                    .appendTo(metadataContainer);
+
+            additionalInfoInput = $(document.createElement('input'))
+                        .attr({
+                            id: 'locationHistoryAdditionalInfoInput',
+                            placeholder: 'Date'
+                        })
+                        .css({
+                            position: 'relative',
+                            'margin-left': '10px',
+                            width: '20%',
+                            height: '52%',
+                            top: '8px'
+                        })
+                        .appendTo(metadataContainer);
+
+            saveMapButton = $(document.createElement('button'))
+                            .attr({
+                                id: 'locationHistorySaveMapButton',
+                                type: 'button'
+                            })
+                            .css({
+                                position: 'relative',
+                                'margin-left': '10px',
+                                top: '8px'
+                            })
+                            .text('Save')
+                            .appendTo(metadataContainer);
+            saveMapButton.on('click', saveCurrentMapMetadata);
+        } else {
+            nameInput = $(document.createElement('div'))
+                    .attr({
+                        id: 'locationHistoryNameHolder'
+                    })
+                    .css({
+                        'font-size': '2.5em',
+                        position: 'absolute',
+                        top: '0%',
+                        height: '90%'
+                    })
+                    .appendTo(metadataContainer);
+
+            additionalInfoInput = $(document.createElement('div'))
+                        .attr({
+                            id: 'locationHistoryAdditionalInfoHolder'
+                        })
+                        .css({
+                            'font-size': '2.5em',
+                            position: 'absolute',
+                            top: '0%',
+                            right: '0%',
+                            height: '90%'
+                        })
+                        .appendTo(metadataContainer);
+        }
+
+        mapRegion = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryMapRegion')
+                    .css({
+                        position: 'relative',
+                        width: '100%',
+                        height: '50%'
+                    })
+                    .appendTo(locationPanel);
+
+        leftArrowContainer = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryLeftArrowContainer')
+                    .css({
+                        position: 'absolute',
+                        width: '10%',
+                        height: '100%'
+                    })
+                    .appendTo(mapRegion);
+
+        leftArrowButton = $(document.createElement('img'))
+                    .attr('id', 'locationHistoryLeftArrowButton')
+                    .attr('src', '../../../images/icons/Left.png')
+                    .css({
+                        position: 'absolute',
+                        width: '13px',
+                        height: 'auto',
+                        right: '10%',
+                        top: '50%',
+                        cursor: 'pointer'
+                    })
+                    .appendTo(leftArrowContainer)
+
+        mapContainer = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryMapContainer')
+                    .css({
+                        position: 'absolute',
+                        width: '80%',
+                        height: '100%',
+                        left: '10%'
+                    })
+                    .appendTo(mapRegion);
+
+        rightArrowContainer = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryRightArrowContainer')
+                    .css({
+                        position: 'absolute',
+                        width: '10%',
+                        height: '100%',
+                        left: '90%'
+                    })
+                    .appendTo(mapRegion);
+
+        rightArrowButton = $(document.createElement('img'))
+                    .attr('id', 'locationHistoryRightArrowButton')
+                    .attr('src', '../../../images/icons/Right.png')
+                    .css({
+                        position: 'absolute',
+                        width: '13px',
+                        height: 'auto',
+                        left: '10%',
+                        top: '50%',
+                        cursor: 'pointer'
+                    })
+                    .appendTo(rightArrowContainer)
+
+        disabledOverlay = $(document.createElement('div'))
+                    .attr('id', 'defaultMapDisabledOverlay')
+                    .css({
+                        'background-color': 'rgba(0,0,0,0.85)',
+                        'color': 'white',
+                        'font-size': '20px',
+                        'height': '100%',
+                        'position': 'absolute',
+                        'text-align': 'center',
+                        'top': '0%',
+                        'width': '100%'
+                    })
+                    .text('Bing map is disabled.');
+
+        buttonsRegion = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryButtonsRegion')
+                    .css({
+                        position: 'relative',
+                        left: '10%',
+                        width: '80%',
+                        top: '2%',
+                        height: '6%',
+                        'margin-bottom': '1%'
+                    })
+                    .appendTo(locationPanel);
+        if (input.authoring) {
+            addLocationButton = $(document.createElement('button'))
+                        .attr({
+                            'id': 'locationHistoryAddLocationButton',
+                            'type': 'button'
+                        })
+                        .css({
+                            position: 'relative',
+                            float: 'left'
+                        })
+                        .appendTo(buttonsRegion)
+                        .text('Add Location');
+            sortLocationsByTitleButton = $(document.createElement('button'))
+                        .attr({
+                            'id': 'locationHistorySortLocationsButton',
+                            'type': 'button'
+                        })
+                        .css({
+                            position: 'relative',
+                            'margin-left': '10px',
+                            float: 'left'
+                        })
+                        .appendTo(buttonsRegion)
+                        .text('Sort By Title');
+            sortLocationsByDateButton = $(document.createElement('button'))
+                        .attr({
+                            'id': 'locationHistorySortLocationsButton',
+                            'type': 'button'
+                        })
+                        .css({
+                            position: 'relative',
+                            'margin-left': '10px',
+                            float: 'left'
+                        })
+                        .appendTo(buttonsRegion)
+                        .text('Sort By Date');
+            importMapButton = $(document.createElement('button'))
+                    .attr({
+                        'id': 'locationHistoryImportMapButton',
+                        'type': 'button'
+                    })
+                    .css({
+                        position: 'relative',
+                        float: 'right'
+                    })
+                    .appendTo(buttonsRegion)
+                    .text('Import Map');
+
+            deleteButton = $(document.createElement('button'))
+                        .attr({
+                            'id': 'locationHistoryDeleteButton',
+                            'type': 'button'
+                        })
+                        .css({
+                            position: 'relative',
+                            'margin-right': '10px',
+                            float: 'right'
+                        })
+                        .appendTo(buttonsRegion)
+                        .text('Delete/Hide Map'); // TODO have the text change depending on the map
+
+            importMapButton.on('click', importMap);
+            deleteButton.on('click', function (evt) {
+                if (!(currentIndex === 0)) { //if it's not the bing map being displayed, confirm the deletion
+                    var overlay = LADS.Util.UI.PopUpConfirmation(function () {
+                        deleteMap();
+                    }, "Are you sure you want to delete this map and all locations associated with it?", "Yes");
+                    root.append(overlay);
+                    $(overlay).show();
+                    evt.stopPropagation();
+                } else {
+                    deleteMap(); //hides bing map
+                };
+            });
+            addLocationButton.on('click', addLocation);
+            sortLocationsByTitleButton.on('click', sortLocationsByTitle);
+            sortLocationsByDateButton.on('click', sortLocationsByDate);
+        }
+
+        dotsContainer = $(document.createElement('div'))
+                        .attr('id', 'locationHistoryDotsContainer')
+                        .css({
+                            position: 'absolute',
+                            'width': '40%',
+                            'height': '50%',
+                            'top': '0%',
+                            'left': '30%',
+                            'text-align': 'center'
+                        })
+                        .appendTo(buttonsRegion);
+
+        locationsRegion = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryLocationsRegion')
+                    .css({
+                        position: 'relative',
+                        width: '80%',
+                        left: '10%',
+                        height: '33%',
+                        color: 'white',
+                        'font-size': '11',
+                        'font-weight': '300',
+                        'overflow-y': 'auto',
+                        'overflow-x': 'hidden'
+                    })
+                    .appendTo(locationPanel)
+                    .text("No locations to display...");
+
+        // set up click handlers, etc
+        leftArrowButton.on('click', function () {
+            if (currentIndex - 1 >= 0) {
+                showMap(mapGuids[--currentIndex]);
+            } else {
+                currentIndex = mapGuids.length - 1;
+                showMap(mapGuids[currentIndex]);
+            }
+        });
+
+        rightArrowButton.on('click', function () {
+            if (currentIndex + 1 < mapGuids.length) {
+                showMap(mapGuids[++currentIndex]);
+            } else {
+                currentIndex = 0;
+                showMap(mapGuids[0]);
+            }
+        });
+
+        // load in the first map in the list
+        getMaps();
+
+        return locationPanelDiv;
+    }
+
+    /**
+    *Hides the Map Name field, Additional Input (date) field, and save button in the metadata container
+    *Called when the Bing Map is being displayed, displays the name 'Bing Map'
+    *@method hideMetadataEditingFields
+    */
+    function hideMetadataEditingFields() {
+        nameInput.css({ visibility: 'hidden' });
+        additionalInfoInput.css({ visibility: 'hidden' });
+        saveMapButton && saveMapButton.css({ visibility: 'hidden' });
+        $(document.createElement('div'))
+            .attr({
+                id: 'bingMapNameHolder'
+            })
+            .css({
+                'font-size': '2.5em',
+                position: 'absolute',
+                top: '0%',
+                height: '90%',
+                'z-index': '50',
+                color: 'white'
+            })
+            .text('Bing Map')
+            .appendTo(metadataContainer);
+    }
+
+    /**
+    *Shows the Map Name field, Additional Input (date) field, and save button in the metadata container
+    *Reverses the above function, called when any map besides the bing map is displayed
+    *@method showMetadataEditingFields
+    */
+    function showMetadataEditingFields() {
+        $('#bingMapNameHolder').remove();
+        nameInput.css({ visibility: 'visible' });
+        additionalInfoInput.css({ visibility: 'visible' });
+        saveMapButton && saveMapButton.css({ visibility: 'visible' });
+    }
+
+    /**
+     * Get all the maps for the artwork
+     * @method getMaps
+     * @param {Function} callback      function to call when maps have been obtained and loaded
+     */
+    function getMaps(callback) {
+        callback = callback || function () {
+            if (!importingMap) { //don't display the first map if an import has just occured
+                try {
+                    showMap(mapGuids[currentIndex]);
+                } catch (e) {
+                    showMap(mapGuids[0]);
+                }
+            } else { //display the last one instead
+                importingMap = false;
+                showMap(mapGuids[mapGuids.length - 1]);
+            }
+        };
+        mapGuids = (defaultMapShown || input.authoring) ? [null] : [];
+        LADS.Worktop.Database.getMaps(artwork.Identifier, function (mps) {
+            var mapslength = mps.length;
+            if (mapslength > 0) {
+                for (var i = 0; i < mapslength; i++) {
+                    mapDoqs[mps[i].Identifier] = mps[i];
+                    mapGuids.push(mps[i].Identifier);
+                }
+            }
+            loadMaps(callback);
+            createDots();
+        }, function () {
+            loadMaps(callback);
+            createDots();
+        }, function () {
+            loadMaps(callback);
+            createDots();
+        });
+    }
+
+    /**
+     * Loads all maps by creating holders for them within the mapContainer div.
+     * @method loadMaps
+     * @param {Function} callback      function to call when loading is complete
+     */
+    function loadMaps(callback) {
+        var i,
+            holder,
+            m,
+            img,
+            progress = { // allows init functions to keep track of how many maps have loaded (call callback after all have loaded)
+                total: mapGuids.length,
+                done: 0
+            },
+            helper,
+            loadCallback;
+
+        mapHolders = {};
+        mapContainer.empty(); // TODO this is inefficient, just here for rapid prototyping
+
+        loadCallback = function () {
+            callback && callback();
+            createLocationList();
+        };
+
+        for (i = 0; i < mapGuids.length; i++) {
+            holder = $(document.createElement('div'))
+                        .addClass('locationHistoryMapHolder')
+                        .css({
+                            'background-color': 'rgba(0,0,0,0.8)',
+                            'border': '1px solid white',
+                            position: 'absolute',
+                            width: '100%',
+                            height: '100%',
+                            left: '0%',
+                            top: '0%',
+                            'text-align': 'center',
+                            display: 'none'
+                        })
+                        .appendTo(mapContainer);
+            mapHolders[mapGuids[i]] = holder;
+            helper = mapGuids[i] ? customMapHelper : bingMapHelper;
+            helper.init({
+                container: holder,
+                mapdoq: mapDoqs[mapGuids[i]],
+                progress: progress,
+                loadCallback: loadCallback
+            });
+        }
+    }
+
+    /**
+     * Saves any metadata changes to the current map
+     * @method saveCurrentMapMetadata
+     */
+    function saveCurrentMapMetadata() {
+        var progressCSS = {
+            'left': '65%',
+            'top': '10px',
+            'width': 'auto',
+            'height': '50%',
+            'position': 'relative',
+            'z-index': 50,
+            'display': 'inline-block'
+        };
+        var progCirc = LADS.Util.showProgressCircle(topRegion, progressCSS);
+
+        var index = currentIndex;
+        if (mapGuids[index]) {
+            LADS.Worktop.Database.changeMap(mapDoqs[mapGuids[index]], {
+                Name: nameInput.val(),
+                AdditionalInfo: additionalInfoInput.val(),
+                //Description: mapDescriptionInput.val()
+            }, function () {
+                LADS.Util.removeProgressCircle(progCirc);
+                LADS.Worktop.Database.getDoq(mapDoqs[mapGuids[index]].Identifier, function (newMap) {
+                    mapDoqs[mapGuids[index]] = newMap;
+                });
+            }, LADS.Util.UI.errorContactingServerPopup, function () {
+                LADS.Util.removeProgressCircle(progCirc);
+                LADS.Worktop.Database.getDoq(mapDoqs[mapGuids[index]].Identifier, function (newMap) {
+                    mapDoqs[mapGuids[index]] = newMap;
+                });
+            });
+        }
+    }
+
+    /**
+     * Helper function to iterate through location list and call a
+     * helper function for each.
+     * @method iterateThroughLocations
+     * @param {Function} toCall       helper method to call for each map; by
+     *                                default, called with two params (loc and mapdoq)
+     */
+    function iterateThroughLocations(toCall) {
+        var i,
+            helper;
+
+        for (i = 0; i < locations.length; i++) {
+            if (!locations[i].map && !defaultMapShown && !input.authoring) {
+                continue;
+            }
+            helper = locations[i].map ? customMapHelper : bingMapHelper;
+            if (!locations[i].map || mapDoqs[locations[i].map]) { // make sure the custom map exists
+                helper[toCall](locations[i], mapDoqs[locations[i].map]);
+            }
+        }
+    }
+
+    /**
+     * Create list of locations in the bottom panel
+     * @method createLocationList
+     */
+    function createLocationList() {
+        locationsRegion.empty();
+        iterateThroughLocations("createLocationItem");
+    }
+
+    /**
+     * Shows the specified map holder, sets currentIndex, and deals with dot colors
+     * @method showMap
+     * @param {String} guid        key into mapHolders
+     */
+    function showMap(guid) {
+        var i;
+
+        showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
+        currentIndex = mapGuids.indexOf(guid);
+
+        // style map dots
+        $('.locationHistoryMapDot').css('background-color', 'black'); //resets all dots to the unselected state
+        $('#dot-' + guid).css('background-color', 'white'); //selects the correct dot
+
+        // show the correct map holder
+        $('.locationHistoryMapHolder').css('display', 'none');
+        mapHolders[guid].css('display', 'block');
+
+        // add correct content to name and additional info fields
+        if (input.authoring && mapDoqs[guid]) {
+            nameInput.attr('value', mapDoqs[guid].Name || '');
+            additionalInfoInput.attr('value', mapDoqs[guid].Metadata.AdditionalInfo || '');
+        } else {
+            nameInput.text(mapDoqs[guid] ? (mapDoqs[guid].Name || 'Custom Map') : 'Bing Map');
+            additionalInfoInput.text(mapDoqs[guid] ? (mapDoqs[guid].Metadata.AdditionalInfo || '') : '');
+        }
+
+        // deal with additional Bing map styling
+        if (!guid) {
+            hideMetadataEditingFields(); //hide fields for the bing map
+            if (!defaultMapShown) {
+                mapHolders[null].append(disabledOverlay);
+                deleteButton && deleteButton.text('Show Bing Map');
+            } else {
+                deleteButton && deleteButton.text('Hide Bing Map');
+            }
+        } else {
+            deleteButton && deleteButton.text('Delete Map');
+        }
+    }
+
+    /**
+     * Shows a message in the bottom region indicating that saving/loading is
+     * underway.
+     * @method showLoadingMessage
+     * @param {String} message            an optional custom message
+     */
+    function showLoadingMessage(message) {
+        var messageDiv = $(document.createElement('div'));
+
+        messageDiv.css({
+            color: 'white',
+            'font-size': '20px',
+            position: 'relative',
+            'text-align': 'center',
+            width: '100%'
+        });
+        messageDiv.text(message || 'Loading...');
+        var progressCSS = {
+            'left': '5%',
+            'top': '15px',
+            'width': '40px',
+            'height': 'auto',
+            'position': 'relative',
+            'z-index': 50
+        };
+        var progCirc = LADS.Util.showProgressCircle(messageDiv, progressCSS);
+
+        locationsRegion.empty();
+        locationsRegion.append(messageDiv);
+    }
+
+    /**
+     * Creates map dots (below the map)
+     * @method createDots
+     */
+    function createDots() {
+        var i,
+            dot;
+        dotsContainer.empty();
+        for (i = 0; i < mapGuids.length; i++) {
+            dot = $(document.createElement('div'))
+                    .addClass('locationHistoryMapDot')
+                    .attr('id', 'dot-' + mapGuids[i])
+                    .css({
+                        display: 'inline-block',
+                        cursor: 'pointer',
+                        'background-color': 'white',
+                        'border': '3px solid white',
+                        'border-radius': '20px',
+                        'border-color': 'white',
+                        width: '8px',
+                        height: '8px',
+                        'margin-left': '5px'
+                    })
+                    .appendTo(dotsContainer);
+            dot.on('click', dotClickHelper(i));
+        }
+    }
+
+    /**
+     * Click handler helper for map dots (just calls showMap)
+     * @method dotClickHelper
+     * @param {Number} i             the index of the dot clicked
+     * @return {Function}            a click handler for a map dot
+     */
+    function dotClickHelper(i) {
+        return function () {
+            currentIndex = i;
+            showMap(mapGuids[i]);
+        }
+    }
+
+    /**
+     * Click function for addLocation Button. create a pin on the map and create
+     * a location editing form.  Only one form can be displayed at a time.
+     * @method addLocation
+     */
+    function addLocation() {
+        if (!formIsEnabled) {
+            formIsEnabled = true;
+            var mapguid = mapGuids[currentIndex],
+                helper = mapguid ? customMapHelper : bingMapHelper,
+                editingFormElements = helper.createLocationEditor();
+
+            locationsRegion.append(editingFormElements.container);
+            locationsRegion.scrollTop(0);
+            locationsRegion.scrollTop(editingFormElements.container.position().top);
+        }
+    }
+
+    /**
+     * Function to remove the add location form when the cancel button is clicked.
+     * @method removeLocationForm
+     */
+    function removeLocationForm() {
+        formIsEnabled = false;
+        $('.locationEditingContainer').remove();
+    }
+
+    /**
+     * Function to sort the locations in the list by title when the sort button is clicked.
+     * @method sortLocations
+     */
+    function sortLocationsByTitle() {
+        if (!formIsEnabled) {
+
+            //sort
+            locations.sort(function (a, b) {
+                return (a.title.toLowerCase() < b.title.toLowerCase()) ? -1 : 1;
+            });
+
+            //re-creates list (for now)
+            createLocationList();
+
+            //save
+            LADS.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
+            function success() { }
+            function error() { console.log('An error occured while saving.'); }
+        }
+    }
+
+    /**
+     * Function to sort the locations in the list by title when the sort button is clicked.
+     * @method sortLocations
+     */
+    function sortLocationsByDate() {
+        if (!formIsEnabled) {
+
+            //sort
+            locations.sort(function (a, b) {
+                return (a.date < b.date) ? -1 : 1;
+            });
+
+            //re-creates list (for now)
+            createLocationList();
+
+            //save
+            LADS.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
+            function success() { }
+            function error() { console.log('An error occured while saving.'); }
+
+        }
+    }
+
+    /**
+     * For backwards compatibility, translates an artwork.Location property to an
+     * artwork.RichLocationHistory property
+     * @method locationToRichLocation
+     * @param {String} locationData           old location data to transform
+     * @return {Object}                       properly formatted rich location data
+     */
+    function locationToRichLocation(locationData) {
+        var parsedData = (typeof (locationData) === "string") ? JSON.parse(locationData) : locationData,
+            locs = [],
+            loc,
+            i;
+
+        for (i = 0; i < parsedData.length; i++) {
+            loc = parsedData[i];
+            locs.push({
+                map: null,
+                latitude: (loc.resource && loc.resource.point && loc.resource.point.coordinates && loc.resource.point.coordinates[0]) ? loc.resource.point.coordinates[0] : 0,
+                longitude: (loc.resource && loc.resource.point && loc.resource.point.coordinates && loc.resource.point.coordinates[1]) ? loc.resource.point.coordinates[1] : 0,
+                title: loc.address || '',
+                date: (loc.date === "string") ? loc.date : '', // TODO maybe do some parsing here
+                description: loc.info || ''
+            });
+        }
+
+        return {
+            defaultMapShown: true,
+            locations: locs
+        };
+    }
+
+    /**
+     * Some helper functions for the Bing map. The idea is to have BingMapHelper
+     * and CustomMapHelper implement the same interface, so manipulating location data can
+     * be generic
+     * @method BingMapHelper
+     */
+    function BingMapHelper() {
+        var pushpin,
+            credentials = "AkNHkEEn3eGC3msbfyjikl4yNwuy5Qt9oHKEnqh4BSqo5zGiMGOURNJALWUfhbmj"; // bing maps credentials
+
+        /**
+         * Makes the map, creates pushpin, etc
+         * @method init
+         * @method {Object} input        some input options
+         *             container:        container of the bing map
+         *             progress:         an object allowing us to keep track of how many of all maps have loaded 
+         *             loadCallback:     callback function to call if this is the last map to load
+         */
+        function init(input) {
+
+            // load bing map
+            Microsoft.Maps.loadModule('Microsoft.Maps.Map', {
+                callback: initMap
+            });
+
+            /**
+             * Callback function to initiailize bing map
+             * @method initMap
+             */
+            function initMap() {
+                var mapOptions = {
+                    credentials: credentials,
+                    mapTypeID: Microsoft.Maps.MapTypeId.road,
+                    showScalebar: true,
+                    enableClickableLogo: false,
+                    enableSearchLogo: false,
+                    showDashboard: false,
+                    showMapTypeSelector: false,
+                    zoom: 2,
+                    center: new Microsoft.Maps.Location(20, 0)
+                };
+
+                map = new Microsoft.Maps.Map(input.container[0], mapOptions);
+
+                map.setView({
+                    mapTypeId: Microsoft.Maps.MapTypeId.road
+                });
+
+                if (++input.progress.done >= input.progress.total) {
+                    input.loadCallback && input.loadCallback();
+                }
+            }
+        }
+
+        /**
+         * Draws a pushpin using the input location. Note that this is a location object
+         * from artwork.Metdata.RichLocationHistory.locations.
+         * @method drawPushpin
+         * @param {Object} options       some input options
+         *          {Object} location      location data for pushpin
+         *          {Doq} mapdoq           the doq representing our map (not used here)
+         *          {Boolean} editing      whether this pushpin should be manipulatable
+         * @return {Microsoft.Maps.Pushpin}     the pushpin object
+         */
+        function drawPushpin(options) {
+            var location = options.location,
+                editing = options.editing,
+                loc = new Microsoft.Maps.Location(location.latitude, location.longitude),
+                pushpin;
+
+            pushpin = new Microsoft.Maps.Pushpin(loc, {
+                draggable: !!editing,
+                icon: '/images/icons/locationPin.svg', //green icon is the default
+                width: 20,
+                height: 30
+            });
+
+            //ability to select a pushpin
+            Microsoft.Maps.Events.addHandler(pushpin, 'click', selectPushpin);
+            function selectPushpin() {
+                if (!formIsEnabled) { //don't do anything if another form is already open
+                    if (location.descContainer.css('display') === 'block') { //if previously selected - deselect
+                        deselect(location, pushpin, false);
+                    } else {
+                        select(location, pushpin, false);
+                        //scroll to the correct location in the list
+                        locationsRegion.scrollTop(0);
+                        locationsRegion.scrollTop(pushpin.container.position().top);
+                    }
+                }
+            }
+
+            map.entities.push(pushpin);
+
+            return pushpin;
+        }
+
+        /**
+         * Removes the given pushpin from the map
+         * @method removePushpin
+         * @param {Object} options           some input options
+         *          {Microsoft.Maps.Pushpin}   pushpin    the pushpin to remove
+         */
+        function removePushpin(options) {
+            map.entities.remove(options.pushpin);
+        }
+
+        /**
+         * Creates location editing interface (used for adding new and editing existing
+         * locations)
+         * @method createLocationEditor
+         * @param {Object} options       some input options
+         *          {Object} location       location data to be edited (null for new location)
+         *          {Number} index          index of location in location list
+         *          {Function} cancelClick  cancel button click handler
+         * @return {jQuery obj}          editing container div, which can be appended to list
+         */
+        function createLocationEditor(options) {
+            options = options || {};
+
+            var editingFormElements = commonCreateLocationEditor({
+                location: options.location,
+                custom: false,
+                mapguid: null,
+                index: options.index,
+                cancelClick: options.cancelClick
+            });
+
+            // set up search button click handler
+            editingFormElements.searchButton.on('click', function () {
+                editingFormElements.resultsDiv.css({ 'margin-bottom': '2%' }); //set this margin only when the results div will be displayed
+                editingFormElements.resultsDiv.empty();
+                editingFormElements.resultsDiv.text('Searching...'); // TODO better loading UI
+
+                searchBingLocation(editingFormElements.titleInput.val(), function (result) { // success handler
+                    var i;
+
+                    // error checking
+                    if (!result || !result.resourceSets || !result.resourceSets[0] || !result.resourceSets[0].resources || !result.resourceSets[0].resources.length) {
+                        editingFormElements.resultsDiv.text('No results found.'); // TODO could look better
+                        return;
+                    }
+
+                    editingFormElements.resultsDiv.empty();
+
+                    for (i = 0; i < result.resourceSets[0].resources.length; i++) {
+                        editingFormElements.resultsDiv.append(createSearchResultDiv(result.resourceSets[0].resources[i]));
+                    }
+
+                    //Select the first result
+                    $('.bingSearchResultContainer:eq(0)').click();
+
+                }, function () { // error handler
+                    editingFormElements.resultsDiv.text('Error contacting Bing Maps. Please try again.');
+                });
+            });
+
+            /**
+             * Creates a bing map search result div. Called by the callback to searchBingLocation.
+             * @method createSearchResultDiv
+             * @param {Object} result                this is an object derived from the results of a bing map search
+             */
+            function createSearchResultDiv(result) {
+                var container = $(document.createElement('div')).addClass('bingSearchResultContainer');
+
+                container.css({
+                    position: 'relative',
+                    width: '100%',
+                    'padding-left': '10px'
+                });
+
+                container.text(result.address.formattedAddress);
+
+                container.on('click', function () {
+
+                    $('.bingSearchResultContainer').css('background-color', 'rgba(0,0,0,0)');
+                    container.css('background-color', 'rgba(255,255,255,0.2)');
+
+                    // error checking
+                    if (!result.point || !result.point.coordinates || !result.point.coordinates.length) {
+                        return;
+                    }
+
+                    editingFormElements.titleInput.attr('value', result.address.formattedAddress);
+
+                    // reset pushpin location
+                    editingFormElements.pushpin.setLocation({
+                        latitude: result.point.coordinates[0],
+                        longitude: result.point.coordinates[1]
+                    });
+
+                    // error checking
+                    if (!result.bbox || !result.bbox.length) {
+                        return;
+                    }
+
+                    // pan/zoom to specified point
+                    map.setView({
+                        bounds: Microsoft.Maps.LocationRect.fromLocations(
+                                new Microsoft.Maps.Location(result.bbox[0], result.bbox[1]),
+                                new Microsoft.Maps.Location(result.bbox[2], result.bbox[3])
+                            )
+                    });
+                });
+
+                return container;
+            }
+
+            /**
+             * Searches the input string on a bing map.
+             * @method searchBingLocation
+             * @param {String} locString          input string to search
+             * @param {Function} success          function to call when results have been found
+             * @param {Function} error            error callback
+             */
+            function searchBingLocation(locString, success, error) {
+                var requestURL = "http://dev.virtualearth.net/REST/v1/Locations?query=" + encodeURI(locString) + "&output=json&key=" + credentials;
+
+                $.ajax({
+                    url: requestURL,
+                    success: success,
+                    error: error
+                });
+            }
+
+            return editingFormElements
+        }
+
+        /**
+         * Creates a location item in the bottom panel (locationsRegion)
+         * @method  
+         * @param {Object} location      location data for item
+         */
+        function createLocationItem(location) {
+            commonCreateLocationItem({
+                location: location,
+                custom: false
+            });
+        }
+
+        return {
+            init: init,
+            drawPushpin: drawPushpin,
+            removePushpin: removePushpin,
+            createLocationEditor: createLocationEditor,
+            createLocationItem: createLocationItem
+        };
+    };
+
+    /**
+     * Some helper functions for custom maps. The idea is to have BingMapHelper
+     * and CustomMapHelper implement the same interface, so manipulating location data can
+     * be generic
+     * @method CustomMapHelper
+     */
+    function CustomMapHelper() {
+
+        /**
+         * Initialize a custom map
+         * @method init
+         * @param {Object} input        some input options
+         *             container:        container of the bing map
+         *             progress:         an object allowing us to keep track of how many of all maps have loaded
+         *             loadCallback:     callback function to call if this is the last map to load
+         *             mapdoq:           the doq of the custom map
+         */
+        function init(input) {
+            annotImgs = {};
+            var annotImg = new LADS.AnnotatedImage(input.container, input.mapdoq, false, function () {
+                annotImg.loadDoq(input.mapdoq);
+                annotImgs[input.mapdoq.Identifier] = annotImg;
+
+                if (++input.progress.done >= input.progress.total) {
+                    input.loadCallback && input.loadCallback();
+                }
+            }, true);
+        }
+
+        /**
+         * Draw a pushpin on the given map
+         * @method drawPushpin
+         * @param {Object} options       some input options
+         *          {Object} location      location data for pushpin
+         *          {Doq} mapdoq           the doq representing our map
+         *          {Boolean} editing      whether this pushpin should be manipulatable
+         * @return {jQuery obj}          the pushpin element
+         */
+        function drawPushpin(options) {
+            var location = options.location,
+                mapdoq = options.mapdoq,
+                editing = options.editing,
+                annotImg = annotImgs[mapdoq.Identifier],
+                pushpin = $(document.createElement('img')),
+                lastPivot;
+            if (!annotImg) {
+                return;
+            }
+
+            pushpin.attr({
+                src: '/images/icons/locationPin.svg'
+            });
+
+            pushpin.css({
+                width: '20px',
+                height: '30px',
+                'z-index': '1'
+            });
+
+            pushpin.addClass('locationPushpin');
+
+            if (editing) {
+                pushpin.attr({
+                    src: '/images/icons/locationPin2.svg'
+                });
+            }
+
+            pushpin.on('click', function () {
+                if (!editing) {
+                    if (!formIsEnabled) { //don't do anything if another form is already open
+                        if (location.descContainer.css('display') === 'block') { //if previously selected - deselect
+                            deselect(location, pushpin, true);
+                        } else { //if not previously selected - select
+                            select(location, pushpin, true);
+                            //scroll to the correct location in the list
+                            locationsRegion.scrollTop(0);
+                            locationsRegion.scrollTop(pushpin.container.position().top);
+                        }
+                    }
+                }
+            });
+
+            //all pins start off in an overlay
+            annotImg.addOverlay(pushpin[0], new Seadragon.Point(location.x, location.y), Seadragon.OverlayPlacement.BOTTOM);
+
+            var isOverlay = true,
+                x,
+                y,
+                t,
+                l,
+                w = parseFloat(pushpin.css('width')),
+                h = parseFloat(pushpin.css('height'));
+
+            LADS.Util.makeManipulatable(pushpin[0], {
+                onManipulate: function (res) {
+                    if (editing) {
+                        if (isOverlay) {
+                            annotImg.pauseManip(); //prevents the image from moving when the pin is being manipulated
+                            isOverlay = false;
+                            t = pushpin.css('top');
+                            l = pushpin.css('left');
+                            annotImg.removeOverlay(pushpin[0]); //seems like this changes the CSS of the pushpin?
+                            pushpin.appendTo(mapHolders[mapdoq.Identifier]);
+                            pushpin.css({
+                                top: t,
+                                left: l,
+                                position: 'absolute'
+                            });
+                        }
+
+                        //if pushpin is within bounds of viewport
+                        if (annotImg.isInViewportBounds(pushpin)) {
+                            t = parseFloat(pushpin.css('top')),
+                            l = parseFloat(pushpin.css('left'));
+
+                            pushpin.css("top", (t + res.translation.y) + "px");
+                            pushpin.css("left", (l + res.translation.x) + "px");
+
+                            //update the overlay coordinates here - b/c need the translation
+                            x = l + res.translation.x + (0.5 * w);
+                            y = t + res.translation.y + (h);
+
+                            lastPivot = res.pivot;
+
+                        }
+                        //otherwise the location of the pushpin is not updated with manipulation
+                    }
+                },
+                onRelease: function (evt) {
+                    //add the overlay back once mouse is released
+                    isOverlay = true;
+
+                    //if pushpin is not within bounds of image, it snaps back to the edge on release
+                    if (!annotImg.isInImageBounds(pushpin)) {
+                        var coord = annotImg.returnElementToBounds(pushpin);
+                        pushpin.css("top", (coord.y - h) + "px");
+                        pushpin.css("left", (coord.x - 0.5 * w) + "px");
+                        annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
+                    } else {
+                        annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
+                    }
+
+                    annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
+                },
+                onScroll: function (delta, pivot) { //allow scrolling of the map while dragging a pin
+                    annotImg.scroll(delta, { //use the location of the pushpin for the pivot
+                        x: w + parseFloat(pushpin.css('left')),
+                        y: h + parseFloat(pushpin.css('top'))
+                    });
+                }
+            }, false, true);
+
+            return pushpin;
+        }
+
+        /**
+         * Removes the given pushpin from the map
+         * @method removePushpin
+         * @param {Object} options        some input options
+         *          {jQuery obj} pushpin    the pushpin to remove
+         *          {Object} mapguid        corresponding map's guid
+         */
+        function removePushpin(options) {
+            annotImgs[options.mapguid].removeOverlay(options.pushpin[0]);
+            options.pushpin.remove();
+        }
+
+        /**
+         * Creates location editing interface (used for adding new and editing existing
+         * locations)
+         * @method createLocationEditor
+         * @param {Object} options       some input options
+         *          {Object} location       location data to be edited (null for new location)
+         *          {Number} index          index of location in location list
+         *          {Function} cancelClick  cancel button click handler
+         * @return {jQuery obj}          editing container div, which can be appended to list
+         */
+        function createLocationEditor(options) {
+            options = options || {};
+
+            return commonCreateLocationEditor({
+                location: options.location,
+                custom: true,
+                mapguid: mapGuids[currentIndex],
+                index: options.index,
+                cancelClick: options.cancelClick
+            });
+        }
+
+        /**
+         * Creates a location item in the bottom panel (locationsRegion)
+         * @method createLocationItem
+         * @param {Object} location      location data for item
+         * @param {Doq} mapdoq           the doq representing our map
+         */
+        function createLocationItem(location, mapdoq) {
+            var container = commonCreateLocationItem({
+                location: location,
+                custom: true,
+                mapguid: mapdoq.Identifier
+            });
+        }
+
+        return {
+            init: init,
+            drawPushpin: drawPushpin,
+            removePushpin: removePushpin,
+            createLocationEditor: createLocationEditor,
+            createLocationItem: createLocationItem
+        };
+    }
+
+    /**
+     * Common functionality for creating location items
+     * @method commonCreateLocationItem
+     * @param {Object} options        some input options:
+     *          {Object} location        the location in question
+     *          {Boolean} custom         whether this is from a custom map
+     *          {String} mapguid         the guid of the map in question
+     *          
+     * @return {jQuery obj}           the outer container of the list item
+     */
+    function commonCreateLocationItem(options) {
+        var container = $(document.createElement('div')).addClass('locationItemContainer'),
+            deleteButton = $(document.createElement('img')).addClass('locationItemDeleteButton'),
+            editButton = $(document.createElement('img')).addClass('locationItemEditButton'),
+            titleContainer = $(document.createElement('div')).addClass('locationItemTitle'),
+            dateContainer = $(document.createElement('div')).addClass('locationItemDate'),
+            descContainer = $(document.createElement('div')).addClass('locationItemDesc'),
+            location = options.location,
+            custom = options.custom,
+            helper = custom ? customMapHelper : bingMapHelper,
+            mapguid = options.mapguid || null,
+            pushpin;
+
+        location && (location.descContainer = descContainer);
+        location && (location.container = container);
+
+        if (!location) {
+            console.log("please provide all options");
+            return;
+        }
+
+        pushpin = helper.drawPushpin({
+            location: options.location,
+            mapdoq: mapDoqs[mapguid],
+            editing: false
+        });
+
+        pushpin['container'] = container;
+
+        container.css({
+            margin: '10px 0px 20px 0px',
+            position: 'relative',
+            width: '97%',
+        });
+        container.on('click', function () {
+            if (!formIsEnabled) { //don't do anything if another form is already open
+                if (location.descContainer.css('display') === 'block') { //if previously selected
+                    if (custom) {
+                        deselect(location, pushpin, true);
+                    } else {
+                        deselect(location, pushpin, false);
+                    }
+                }
+                else { //if not previously selected
+                    if (custom) {
+                        annotImgs[mapguid].panToPoint(pushpin[0]);
+                        select(location, pushpin, true);
+                    } else {
+                        select(location, pushpin, false);
+                        if (!map.getBounds().contains(pushpin.getLocation())) {
+                            map.setView(new Microsoft.Maps.LocationRect.fromLocations(pushpin.getLocation()));
+                        }
+                    }
+                    showMap(mapguid); //don't show the map if you are deselecting a label from another map
+                }
+            }
+        });
+
+        if (input.authoring) {
+
+            deleteButton.css({
+                display: 'inline-block',
+                cursor: 'pointer',
+                height: '30px',
+                margin: '2px',
+                position: 'relative',
+                'vertical-align': 'middle',
+                width: '30px'
+            });
+
+            deleteButton.attr('src', 'images/icons/delete.svg');
+
+            deleteButton.on('click', function (evt) {
+                var overlay = LADS.Util.UI.PopUpConfirmation(function () {
+                    index = locations.indexOf(location);
+                    if (index >= 0) {
+                        locations.splice(index, 1);
+                        saveRichLocationHistory();
+                    } else {
+                        console.log("error");
+                    }
+                }, "Are you sure you want to delete this location?", "Yes");
+                root.append(overlay);
+                $(overlay).show();
+
+                evt.stopPropagation();
+            });
+
+            editButton.css({
+                display: 'inline-block',
+                cursor: 'pointer',
+                height: '30px',
+                margin: '2px',
+                position: 'relative',
+                'vertical-align': 'middle',
+                width: '30px'
+            });
+
+            editButton.attr('src', 'images/icons/edit.png');
+
+            editButton.on('click', function (evt) {
+                if (!formIsEnabled) {
+                    formIsEnabled = true;
+                    isEditForm = true;
+
+                    //deselect other locations (if necessary)
+                    $('.locationItemDesc').css({ 'display': 'none' });
+                    $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
+                    //reset all pushpins to the green icon
+                    $('.locationPushpin').attr('src', '/images/icons/locationPin.svg');
+                    for (l = 0; l < map.entities.getLength() ; l++) { //iterates through bing map pushpins
+                        map.entities.get(l).setOptions({ icon: '/images/icons/locationPin.svg' });
+                    }
+
+                    if (custom) {
+                        pushpin && pushpin.attr('src', '/images/icons/locationPin2.svg');
+                    }
+                    //if it's a bing map pushpin, it's set to red below
+
+                    var editingFormElements;
+                    showMap(mapguid);
+
+                    //make sure that the pin is visible on the map
+                    if (custom) {
+                        annotImgs[mapguid].panToPoint(pushpin[0]);
+                    } else {
+                        if (!map.getBounds().contains(pushpin.getLocation())) {
+                            map.setView(new Microsoft.Maps.LocationRect.fromLocations(pushpin.getLocation()));
+                        }
+                    }
+
+                    editingFormElements = helper.createLocationEditor({
+                        location: location,
+                        index: locations.indexOf(location),
+                        cancelClick: function () {
+                            commonCreateLocationItem(options).insertAfter($('.locationEditingContainer'));
+                            //editingFormElements.container.after(container);
+                            //editingFormElements.container.remove();
+                            //pushpin = helper.drawPushpin({
+                            //    location: location,
+                            //    mapdoq: mapDoqs[location.map],
+                            //    editing: false
+                            //});
+                        }
+                    });
+                    container.after(editingFormElements.container);
+                    container.detach();
+                    helper.removePushpin({
+                        pushpin: pushpin,
+                        mapguid: location.map
+                    });
+                    (!custom) && map.entities.get(map.entities.getLength() - 1).setOptions({ icon: '/images/icons/locationPin2.svg' }); //set the last pushpin to red
+
+                    //scroll to the correct position
+                    locationsRegion.scrollTop(0);
+                    locationsRegion.scrollTop(editingFormElements.container.position().top);
+                }
+            });
+        }
+
+        titleContainer.css({
+            display: 'inline-block',
+            margin: '0px 20px 0px 10px',
+            position: 'relative',
+            'vertical-align': 'middle',
+            'font-size': '24px'
+        });
+        titleContainer.text((location.title || '(No Title)') + ',');
+
+        dateContainer.css({
+            display: 'inline-block',
+            margin: '0px 0px 0px 10px',
+            position: 'relative',
+            'vertical-align': 'middle',
+            'font-size': '24px'
+        });
+        dateContainer.text(location.date || '(No Date)');
+
+        descContainer.css({
+            display: 'none',
+            margin: '0px 0px 0px 80px',
+            position: 'relative',
+            'vertical-align': 'middle',
+            'font-size': '20px',
+            'padding-right': '20px',
+            'font-style': 'italic'
+        });
+
+        if (!input.authoring) {
+            descContainer.css({ margin: '0px 0px 0px 10px' });
+        }
+
+        descContainer.text(location.description || '');
+        if (descContainer.text() === '') { //don't put padding if it's empty, so that clicking on it won't change the height
+            descContainer.css('padding-bottom', '0px');
+        } else {
+            descContainer.css('padding-bottom', '10px');
+        }
+
+        if (input.authoring) {
+            container.append(deleteButton);
+            container.append(editButton);
+        }
+
+        container.append(titleContainer);
+        container.append(dateContainer);
+        container.append(descContainer);
+
+        locationsRegion.append(container);
+
+        return container;
+    }
+
+    /**
+     * Common functionality for creating location editor UIs. This is here because a lot
+     * of code would be copied between the BingMapHelper and CustomMapHelper otherwise. Some
+     * functionality is specific to one or the other, though, so that's taken care of in their
+     * respective createLocationEditor methods using the returned components here.
+     * @method commonCreateLocationEditor
+     * @param {Object} options       some input options
+     *          {Object} location       the location in question
+     *          {Boolean} custom        whether this is a custom map
+     *          {String} mapguid        the guid of the map in question
+     *          {Number} index          index of loaaction in location list
+     *          {Function} cancelClick  cancel button click event
+     * @return {Object}              the relevant components of the editing form
+     */
+    function commonCreateLocationEditor(options) {
+        options = options || {}; // cut down on null checks later
+
+        //'de-select' any previous locations from the list (only want one red pin at a time)
+        $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
+        $('.locationItemDesc').css({ 'display': 'none' });
+        $('.locationPushpin').attr('src', '/images/icons/locationPin.svg');
+        for (var l = 0; l < map.entities.getLength() ; l++) { //iterates through all of the bing map pushpins
+            map.entities.get(l).setOptions({ icon: '/images/icons/locationPin.svg' });
+        }
+
+        var container = $(document.createElement('div')).addClass('locationEditingContainer'),
+
+            titleContainer = $(document.createElement('div')).addClass('locationOptionsContainer'),
+            titleInput = $(document.createElement('input')).addClass('locationTitleInput'),
+            titleLabel = $(document.createElement('div')).addClass('locationLabel').text('Location Title'),
+
+            dateContainer = $(document.createElement('div')).addClass('locationOptionsContainer'),
+            dateInput = $(document.createElement('input')).addClass('locationDateInput'),
+            dateLabel = $(document.createElement('div')).addClass('locationLabel').text('Date'),
+
+            descContainer = $(document.createElement('div')).addClass('locationOptionsContainer'),
+            descInput = $(document.createElement('textarea')).addClass('locationDescInput'),
+            descLabel = $(document.createElement('div')).addClass('locationLabel').text('Description'),
+
+            bottomButtonsContainer = $(document.createElement('div')).addClass('locationOptionsContainer'),
+            saveButton = $(document.createElement('button')).addClass('locationSaveButton'),
+            deleteButton = $(document.createElement('button')).addClass('locationDeleteButton'),
+            cancelButton = $(document.createElement('button')).addClass('locationCancelButton'),
+
+            searchButton,
+            resultsDiv,
+            location = options.location,
+            index = options.index,
+            custom = options.custom,
+            mapguid = options.mapguid,
+            helper = custom ? customMapHelper : bingMapHelper,
+            pushpin,
+            cancelClick = function () {
+                formIsEnabled = false;
+                options.cancelClick && options.cancelClick();
+                removeLocationForm();
+                helper.removePushpin({
+                    pushpin: pushpin,
+                    mapguid: mapguid
+                });
+            };
+
+        if (!custom) {
+            if (!location || index < 0 || index >= locations.length) {
+                var bounds = map.getBounds();
+                var centerCoord = map.getCenter();
+                location = {
+                    latitude: centerCoord.latitude + (.01 * (bounds.getSouth() - bounds.getNorth())), //1% offset from center is to prevent the new pin from directly 
+                    longitude: centerCoord.longitude + (.01 * (bounds.getEast() - bounds.getWest())) //overlapping one that may have been previously selected
+                };
+                index = locations.length;
+            }
+        } else {
+            if (!location || index < 0 || index >= locations.length) {
+                var startLocation = annotImgs[mapguid].createStartingPoint(); //uses the same 1% offset
+                location = {
+                    x: startLocation.x,
+                    y: startLocation.y
+                }
+                index = locations.length;
+            }
+        }
+
+        pushpin = helper.drawPushpin({
+            location: location,
+            mapdoq: mapDoqs[mapguid],
+            editing: true
+        });
+
+        if (custom) {
+            pushpin.attr('src', '/images/icons/locationPin2.svg');
+        } else {
+            pushpin.setOptions({ icon: '/images/icons/locationPin2.svg' });
+        }
+
+        container.css({
+            'width': '100%',
+            'position': 'relative',
+            'overflow': 'auto',
+            'padding': '0px 4% 0px 0px',
+            'margin-bottom': '4%',
+            'margin-top': '2%'
+        });
+
+        titleLabel.css({
+            'width': '20%',
+            'display': 'inline-block',
+            'vertical-align': 'top',
+            'text-align': 'right'
+        });
+
+        dateLabel.css({
+            'width': '20%',
+            'display': 'inline-block',
+            'vertical-align': 'top',
+            'text-align': 'right'
+        });
+
+        descLabel.css({
+            'width': '20%',
+            'display': 'inline-block',
+            'vertical-align': 'top',
+            'text-align': 'right'
+        });
+
+        titleContainer.css({
+            'margin-bottom': '2%'
+        });
+
+        dateContainer.css({
+            'margin-bottom': '2%'
+        });
+
+        descContainer.css({
+            'margin-bottom': '2%'
+        });
+
+
+        titleInput.css({
+            position: 'relative',
+            width: '52%',
+            left: '2%',
+            display: 'inline-block'
+        });
+        titleInput.attr({
+            placeholder: ' Title',
+            value: location.title ? location.title : ''
+        });
+
+        if (!custom) {
+
+            titleInput.css({ width: '42%' });
+
+            searchButton = $(document.createElement('button')).addClass('locationEditorSearchButton');
+            searchButton.attr({
+                type: 'button'
+            });
+            searchButton.text('Search');
+            searchButton.css({ 'display': 'inline-block', 'float': 'right', 'margin-right': '25.5%' });
+
+            resultsDiv = $(document.createElement('div')).addClass('locationEditorSearchResults');
+            resultsDiv.css({
+                left: '22%',
+                'max-height': '200px',
+                'overflow-x': 'hidden',
+                'overflow-y': 'auto',
+                position: 'relative',
+                width: '52.5%'
+            });
+        }
+
+        dateInput.css({
+            position: 'relative',
+            width: '52%',
+            left: '2%',
+            display: 'inline-block'
+        });
+        dateInput.attr({
+            placeholder: ' Date',
+            value: location.date ? location.date : ''
+        });
+
+        descInput.css({
+            position: 'relative',
+            width: '49.75%',
+            left: '2%',
+            display: 'inline-block'
+        });
+        descInput.attr({
+            placeholder: ' Description',
+            rows: '3',
+            value: location.description ? location.description : ''
+        });
+
+        bottomButtonsContainer.css({
+            'display': 'inline-block',
+            position: 'relative',
+            left: '22%',
+            width: '70%'
+        });
+
+        saveButton.css({
+            position: 'relative',
+            'margin-right': '2%'
+        });
+        saveButton.text('Save Location');
+        saveButton.on('click', function () {
+            // TODO only replace the relevant list item rather than recreating whole list
+            var pushpinLocation,
+                newLoc,
+                currInd = currentIndex;
+
+            if (custom) {
+                pushpinLocation = annotImgs[mapGuids[currInd]].getOverlayCoordinates(pushpin[0]);
+                newLoc = {
+                    map: mapGuids[currInd],
+                    title: titleInput.val(),
+                    date: dateInput.val(),
+                    description: descInput.val(),
+                    x: pushpinLocation.x,
+                    y: pushpinLocation.y
+                };
+            } else {
+                pushpinLocation = pushpin.getLocation();
+                newLoc = {
+                    map: null,
+                    title: titleInput.val(),
+                    date: dateInput.val(),
+                    description: descInput.val(),
+                    latitude: pushpinLocation.latitude,
+                    longitude: pushpinLocation.longitude
+                };
+            }
+            if (index >= 0 && index < locations.length) {
+                locations[index] = newLoc;
+            } else {
+                locations.push(newLoc);
+            }
+
+            saveRichLocationHistory({
+                callback: function () {
+                    showMap(mapGuids[currInd]);
+                }
+            });
+            formIsEnabled = false;
+        });
+
+        if (location) {
+            deleteButton.css({
+                position: 'relative',
+                'margin-right': '2%'
+            });
+            deleteButton.text('Delete');
+            deleteButton.on('click', function (evt) {
+                formIsEnabled = false;
+                var overlay = LADS.Util.UI.PopUpConfirmation(function () {
+                    index = locations.indexOf(location);
+                    if (index >= 0 && index < locations.length) {
+                        locations.splice(index, 1);
+                    }
+                    saveRichLocationHistory();
+                }, "Are you sure you want to delete this location?", "Yes");
+                root.append(overlay);
+                $(overlay).show();
+                evt.stopPropagation();
+            });
+        }
+
+        cancelButton.css({
+            position: 'relative',
+            'margin-right': '2%'
+        });
+        cancelButton.text('Cancel');
+        cancelButton.on('click', cancelClick);
+
+        titleContainer.append(titleLabel);
+        titleContainer.append(titleInput);
+        container.append(titleContainer);
+        if (!custom) {
+            titleContainer.append(searchButton);
+            container.append(resultsDiv);
+        }
+
+        dateContainer.append(dateLabel);
+        dateContainer.append(dateInput);
+        container.append(dateContainer);
+
+        descContainer.append(descLabel);
+        descContainer.append(descInput);
+        container.append(descContainer);
+
+        bottomButtonsContainer.append(saveButton);
+        if (isEditForm) { //new added locations should not have a delete button
+            (location && bottomButtonsContainer.append(deleteButton));
+            isEditForm = false;
+        }
+        bottomButtonsContainer.append(cancelButton);
+        container.append(bottomButtonsContainer);
+
+        if (custom) {
+            return {
+                container: container
+            };
+        }
+        return {
+            container: container,
+            titleInput: titleInput,
+            searchButton: searchButton,
+            resultsDiv: resultsDiv,
+            pushpin: pushpin
+        };
+    }
+
+    /**
+     * Saves latest rich location history data to the artwork doq. Uses the maps and
+     * locations variables, so make sure those are up to date before calling. Reloads
+     * all maps afterwards.
+     * @method saveRichLocationHistory
+     * @param {Object} input       some input options, including:
+     *              toadd          a string of comma-separated GUIDs of maps to add
+     *              toremove       a string of comma-separated GUIDs of maps to remove
+     *              noReload       a boolean telling us whether to reload maps or not
+     *              callback       a callback function to be called after saving and reloading artwork is done
+     */
+    function saveRichLocationHistory(input) {
+        var options = {
+            RichLocationHistory: generateRichLocationData()
+        };
+
+        input = input || {}; // cut down on null checks later
+
+        if (input.toadd) {
+            options.AddMaps = input.toadd;
+        }
+
+        if (input.toremove) {
+            options.RemoveMaps = input.toremove;
+
+        }
+
+        !input.noReload && showLoadingMessage();
+        LADS.Worktop.Database.changeArtwork(artwork.Identifier, options, success, error, error, error);
+
+        function success() {
+            LADS.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
+                artwork = newArtwork;
+                richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(artwork.Metadata.RichLocationHistory) : locationToRichLocation(artwork.Metadata.Location);
+                locations = richLocationData.locations || [];
+                !input.noReload && getMaps(input.callback);
+            }, error, error);
+            //input.sort && input.callback();
+        }
+
+        function error() {
+            console.log('An error occured while saving.');
+        }
+    }
+
+    /**
+     * Generates a RichLocationHistory property (string) from the maps and locations
+     * variables for saving. A helper function for saveRichLocationHistory.
+     * @method generateRichLocationData
+     * @return {String}              a string to be used as a RichLocationHistory property
+     */
+    function generateRichLocationData() {
+        return JSON.stringify({
+            defaultMapShown: defaultMapShown,
+            locations: locations
+        });
+    }
+
+    /**
+     * Toggles the default map overlay to indicate that it is
+     * enabled or disabled. Uses the value of defaultMapShown
+     * to do so.
+     * @method toggleDefaultMap
+     */
+    function toggleDefaultMap() {
+        defaultMapShown = !defaultMapShown;
+        defaultMapShown ? disabledOverlay.remove() : disabledOverlay.appendTo(mapHolders[null]);
+        deleteButton.text(defaultMapShown ? 'Hide Bing Map' : 'Show Bing Map');
+    }
+
+    /**
+     * Delete the selected map, reload maps, set the current map to bing map (for now)
+     * @method deleteMap
+     */
+    function deleteMap() {
+        var mapguid = mapGuids[currentIndex],
+            i,
+            locs;
+        if (mapguid) {
+            removeLocations(mapguid);
+            saveRichLocationHistory({
+                toremove: mapguid
+            });
+        } else {
+            toggleDefaultMap();
+            saveRichLocationHistory({
+                noReload: true
+            });
+        }
+    }
+
+    /**
+     * Remove locations associated with a given map from artwork metadata
+     * @method removeLocations
+     * @param {String} guid       map guid
+     */
+    function removeLocations(guid) {
+        var i;
+
+        for (i = locations.length - 1; i >= 0; i--) {
+            if (locations[i].map === guid) {
+                locations.splice(i, 1);
+            }
+        }
+
+        richLocationData = {
+            defaultMapShown: defaultMapShown,
+            locations: locations
+        };
+    }
+
+    /**
+     * Upload a custom map from user's computer
+     * @method uploadCustomMap
+     */
+    function importMap() {
+        formIsEnabled = false;
+        importingMap = true;
+        var fileArray,
+            i;
+
+        LADS.Authoring.FileUploader(
+            root,
+            LADS.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to LADS.Authoring.FileUploadTypes.Map to test map uploading
+            function (files) {
+                fileArray = files;
+            },
+            function (urls) {
+                var newDoq
+                if (!urls.length && urls.length !== 0) { // check to see whether a single file was returned
+                    urls = [urls];
+                }
+                var newDoq;
+                try {
+                    newDoq = new Worktop.Doq(urls[0]);
+                } catch (error) {
+                    console.log("error in uploading: " + error.message);
+                    return;
+                }
+                mapGuids.push(newDoq.Identifier);
+
+                mapDoqs[newDoq.Identifier] = newDoq;
+                //update changeartwork and linq the map and artwork
+                saveRichLocationHistory({
+                    toadd: newDoq.Identifier,
+                });
+
+                //reload (which will show the map that has just been imported)
+                loadMaps();
+
+                //LADS.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
+                // TODO this is just in here for testing purposes
+                //LADS.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
+                //    console.log('success in changeMap');
+                //}, function () { }, function () { }, function () { }); // TODO RLH TESTING: make sure map doq is updated properly (the next time it's loaded, it should have these metadata)
+            },
+            ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
+            false,
+            function () {
+                root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+            },
+            false // batch upload disabled for now
+        );
+
+    }
+
+    /**
+     * Helper methods for selecting/deselecting pins and locations on maps
+     */
+
+    function deselect(location, pushpin, custom) {
+        location.descContainer.css({ 'display': 'none' });
+        $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
+        if (!custom) {
+            pushpin.setOptions({ icon: '/images/icons/locationPin.svg' });
+        } else {
+            $('.locationPushpin').attr('src', '/images/icons/locationPin.svg');
+        }
+    }
+
+    function select(location, pushpin, custom) {
+        var l;
+
+        //if not previously selected - expand the correct description
+        $('.locationItemDesc').css({ 'display': 'none' });
+        location.descContainer.css({ 'display': 'block' });
+        $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
+        pushpin.container.css('background-color', 'rgba(255,255,255,0.2)');
+
+        //reset all pushpins here to the green icon
+        $('.locationPushpin').attr('src', '/images/icons/locationPin.svg');
+        if (input.authoring || defaultMapShown) { //can't access map if in art mode and bing map is not shown
+            for (l = 0; l < map.entities.getLength() ; l++) { //iterates through all of the bing map pushpins
+                map.entities.get(l).setOptions({ icon: '/images/icons/locationPin.svg' });
+            }
+        }
+
+        if (!custom) {
+            //make the right pushpin red
+            pushpin.setOptions({ icon: '/images/icons/locationPin2.svg' });
+        } else {
+            //make the right pushpin red
+            pushpin && pushpin.attr('src', '/images/icons/locationPin2.svg');
+        }
+    };
+
+    /**
+     * Built-in object extensions
+     */
+
+    // From JS: the good parts
+    // Shortcut for adding a function to an object
+    Function.prototype.method = function (name, func) {
+        if (!this.prototype[name]) {
+            this.prototype[name] = func;
+            return this;
+        }
+    };
+
+    // Curry a function
+    Function.method('curry', function () {
+        var slice = Array.prototype.slice,
+            args = slice.apply(arguments),
+            that = this;
+        return function () {
+            return that.apply(null, args.concat(slice.apply(arguments)));
+        };
+    });
+
+    /**
+     * If specified object is in the array, remove it
+     * @param obj   object to be removed
+     */
+    Array.method('remove', function (obj) {
+        var i = this.indexOf(obj);
+        if (i !== -1) {
+            this.splice(i, 1);
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    /**
+     * Insert object into array based on comparator fn given
+     * Assumes array is already sorted!
+     * @param obj       Object to be inserted
+     * @param comp      Function used to compare objects; obj will be inserted when comp evaluates to true; takes two args, first is current array elt, second is obj
+     * @returns         Index of obj in array after insertion
+     */
+    Array.method('insert', function (obj, comp) {
+        var i;
+        for (i = 0; i < this.length; i++) {
+            if (comp(this[i], obj)) {
+                this.splice(i, 0, obj);
+                return i;
+            }
+        }
+        this.push(obj);
+        return this.length - 1;
+    });
+
+    /**
+     * Constrain a number to given range
+     * @param num   value to constrain
+     * @param min   minimum limit
+     * @param max   maximum limit
+     */
+    if (!Math.constrain) {
+        Math.constrain = function (num, min, max) {
+            return Math.min(max, Math.max(min, num));
+        };
+    }
+}
+
+
+/**
  * Utils for the artwork viewer and the artwork editor
  * @class TAG.Util.Artwork
  */

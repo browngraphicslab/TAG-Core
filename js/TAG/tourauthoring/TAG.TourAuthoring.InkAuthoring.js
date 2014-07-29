@@ -18,11 +18,14 @@ LADS.TourAuthoring.InkCallers = {
  * ComponentControls, we need the ability to author and edit inks. In InkES, we need them to follow
  * artworks.
  * Uses the RaphaelJS library for svg manipulation.
- * @param canvId        the id of the div to which we'll assign the Raphael canvas.
- * @param html_elt      in the case that the div above is not in the dom yet, send in a variable for its html element.
- * @param calling_file  either 'inkes' or not; slightly different functionality is needed in different instances.
- * @param spec          if the calling file is ComponentControls, we make use of the undoManager etc, so just pass
- *                      in the spec variable from ComponentControls.
+ * @class TAG.TourAuthoring.InkAuthoring
+ * @constructor
+ * @param {String}   canvId        the id of the div to which we'll assign the Raphael canvas
+ * @param {HTML elt} html_elt      in the case that the div above is not in the dom yet, send in a variable for its html element
+ * @param {String}   calling_file  either 'inkes' or not; slightly different functionality is needed in different instances
+ * @param {Object}   spec          if the calling file is ComponentControls, we make use of the undoManager etc, so just pass
+ *                                     in the spec variable from ComponentControls
+ * @return {Object}                some public methods
  */
 
 LADS.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec) {

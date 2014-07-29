@@ -34,6 +34,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             x: rootHeight/2,
             y: rootWidth/2
         },
+        doManipulation = true,      //used in RLH to prevent manipulation of image in certain cases
+        aspectRatio = rootWidth/rootHeight,
         
         // misc uninitialized variables
         viewer,
@@ -52,7 +54,22 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         getToManip: getToManip,
         getMediaPivot: getMediaPivot,
         dzManipPreprocessing: dzManipPreprocessing,
-        viewer: viewer
+        viewer: viewer,
+        panToPoint: panToPoint,
+        isInViewportBounds: isInViewportBounds,
+        isInImageBounds: isInImageBounds,
+        returnElementToBounds: returnElementToBounds,
+        locationOf: locationOf,
+        centerElement: centerElement,
+        pointFromPixel: pointFromPixel,
+        createStartingPoint: createStartingPoint,
+        scroll: scroll,
+        pauseManip: pauseManip,
+        restartManip: restartManip,
+        updateOverlay: updateOverlay,
+        addoverlay: addOverlay,
+        removeOverlay: removeOverlay,
+        loadAssociatedMedia: loadAssociatedMedia
     };
 
 
@@ -213,6 +230,173 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     }
 
     /**
+    * Reset the deepzoom image (center, zoom out) if an element is not currently visible in the viewport.
+    * Used in rich location history.
+    * @method panToPoint
+    */
+    function panToPoint(element) {
+        viewer.viewport && function () {
+            var ycoord = parseFloat($(element).css('top')) + parseFloat($(element).css('height'));
+            var xcoord = parseFloat($(element).css('left')) + 0.5 * parseFloat($(element).css('width'));
+            var point = viewer.viewport.pointFromPixel(new Seadragon.Point(xcoord, ycoord));
+            var bounds = viewer.viewport.getBounds();
+            //if the point is not visible in the current bounds
+            if (!((point.x < bounds.getBottomRight().x && point.x > bounds.getTopLeft().x)
+                && (point.y < bounds.getBottomRight().y && point.y > bounds.getTopLeft().y))) {
+                viewer.viewport.panTo(viewer.viewport.getHomeCenter());
+                viewer.viewport.zoomTo(.8 * viewer.viewport.getHomeZoom());
+            }
+        }();
+    };
+
+    /**
+    * Returns whether an element is in the viewport's bounds (including a buffer of 10 pixels)
+    * Used in rich location history.
+    * @method isInViewportBounds
+    */
+    function isInViewportBounds(element) {
+        var bounds = viewer.viewport.getBounds(),
+            val = false,
+            height = parseFloat($(element).css('height')),
+            width = parseFloat($(element).css('width')),
+            top = parseFloat($(element).css('top')),
+            left = parseFloat($(element).css('left'));
+
+        var topY = pointFromPixel(new Seadragon.Point(1, top - 10)).y,
+            bottomY = pointFromPixel(new Seadragon.Point(1, top + height + 10)).y,
+            leftX = pointFromPixel(new Seadragon.Point(left - 10, 1)).x,
+            rightX = pointFromPixel(new Seadragon.Point(left + width + 10, 1)).x;
+
+        if (((rightX < bounds.getBottomRight().x && leftX > bounds.getTopLeft().x)
+            && (bottomY < bounds.getBottomRight().y && topY > bounds.getTopLeft().y))) {
+            val = true;
+        }
+        return val;
+    }
+
+    /**
+    * Returns whether an element is within the bounds of the deepzoom image (with a margin of .05 in Seadragon coordinates)
+    * Used in rich location history.
+    * @method isInImageBounds
+    */
+    function isInImageBounds(element) {
+        var val = false;
+        var point = locationOf(element);
+        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1 / aspectRatio) + .05)) {
+            val = true;
+        }
+        return val;
+    }
+
+    /**
+    * Returns coordinates that an element should be returned to if it is dragged too far from the deepzoom image.
+    * (with a margin of .05 in Seadragon coordinates)
+    * Used in rich location history.
+    * @method returnElementToBounds
+    */
+    function returnElementToBounds(element) {
+        var point = locationOf(element);
+        var bounds = viewer.viewport.getBounds();
+        if (point.x <= 0 && point.y <= 0) { //TOP LEFT
+            return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, 0));
+        }
+        if (point.y <= 0 && point.x >= 1) { //TOP RIGHT
+            return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, 0));
+        }
+        if (point.x <= 0 && point.y >= (1 / aspectRatio) + 0) { //BOTTOM LEFT
+            return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, (1 / aspectRatio)));
+        }
+        if (point.x >= 1 && point.y >= (1 / aspectRatio) + 0) { //BOTTOM RIGHT
+            return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, (1 / aspectRatio)));
+        }
+        if (point.x <= -0.05) { //LEFT
+            return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, point.y));
+        }
+        if (point.x >= 1.05) { //RIGHT
+            return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, point.y));
+        }
+        if (point.y <= -0.05) { //TOP
+            return viewer.viewport.pixelFromPoint(new Seadragon.Point(point.x, 0));
+        }
+        if (point.y >= (1 / aspectRatio) + .05) { //BOTTOM
+            return viewer.viewport.pixelFromPoint(new Seadragon.Point(point.x, (1 / aspectRatio)));
+        }
+    }
+
+    /**
+    * Calculates the location (point) of an element (bottom center)
+    * Used in rich location history.
+    * @method locationOf
+    */
+    function locationOf(element) {
+        var point;
+        (viewer.viewport && element) && function () {
+            var ycoord = parseFloat($(element).css('top')) + parseFloat($(element).css('height'));
+            var xcoord = parseFloat($(element).css('left')) + 0.5 * parseFloat($(element).css('width'));
+            point = viewer.viewport.pointFromPixel(new Seadragon.Point(xcoord, ycoord));
+        }();
+        return point;
+    }
+
+    /**
+    * Puts an element in the center of the viewport
+    * Used in RLH
+    * @method centerElement
+    */
+    function centerElement(element) {
+        var pixel = viewer.viewport.pixelFromPoint(viewer.viewport.getCenter());
+        $(element).css({
+            top: pixel.y,
+            left: pixel.x
+        });
+    }
+
+    /** 
+    * Returns a Seadragon point corresponding to a pixel
+    * Used in RLH
+    * @method pointFromPixel
+    */
+    function pointFromPixel(pixel) {
+        return viewer.viewport.pointFromPixel(pixel);
+    };
+
+    /** 
+    * Returns a Seadragon point in the center of the viewport + a 1% offset (to prevent overlap)
+    * Used in RLH to create new pins
+    * @method createStartingPoint
+    */
+    function createStartingPoint() {
+        var centerPoint = viewer.viewport.getCenter();
+        var bounds = viewer.viewport.getBounds();
+        return new Seadragon.Point(centerPoint.x + .01 * (bounds.getBottomRight().x - bounds.getTopLeft().x),
+            centerPoint.y + .01 * (bounds.getBottomRight().y - bounds.getTopLeft().y));
+    };
+
+    /** 
+    * Used for zooming when simultaneously dragging a pin in RLH
+    * @method scroll
+    */
+    function scroll(delta, pivot) {
+        dzScroll(delta, pivot);
+    }
+
+    /*
+    * functions used to stop panning of image in RLH when pins are being dragged
+    * @method pauseManip
+    */ 
+    function pauseManip() {
+        doManipulation = false;
+    }
+
+    /*
+    * functions used to start panning of image in RLH when pins have been set
+    * @method restartManip
+    */
+    function restartManip() {
+        doManipulation = true;
+    }
+
+    /**
      * Initialize seadragon, set up handlers for the deepzoom image, load assoc media if necessary
      * @method init
      */
@@ -243,9 +427,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 dzScroll(delta, pivot);
             },
             onManipulate: function (res) {
-                res.translation.x = - res.translation.x;        //Flip signs for dragging
-                res.translation.y = - res.translation.y;
-                dzManip(res); 
+                if (doManipulation) {
+                    res.translation.x = -res.translation.x;        //Flip signs for dragging
+                    res.translation.y = -res.translation.y;
+                    dzManip(res);
+                }
             }
         }, null, true); // NO ACCELERATION FOR NOW
 

@@ -32,7 +32,7 @@ TAG.Worktop.Database = (function () {
         },
         artwork: {
             url: ['Name', 'Title', 'Artist', 'Year', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
-            body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration']
+            body: ['Description', 'Location', 'RichLocationHistory', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration', 'AddMaps', 'RemoveMaps']
         },
         tour: {
             url: ['Name', 'Thumbnail', 'Private'],
@@ -41,6 +41,10 @@ TAG.Worktop.Database = (function () {
         hotspot: {
             url: ['Name', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'LinqType', 'Thumbnail', "Converted"],
             body: ['Description', 'AddIDs', 'RemoveIDs']
+        },
+        map: {
+            url: ['Name', 'Thumbnail', 'Source'],
+            body: ['AdditionalInfo', 'Description']
         },
         feedback: {
             url: ['SourceID', 'SourceType'],
@@ -144,6 +148,7 @@ TAG.Worktop.Database = (function () {
         getAssocMediaTo: getAssocMediaTo,
         getArtworksAssocTo: getArtworksAssocTo,
         getArtworksIn: getArtworksIn,
+        getMaps: getMaps,
         getSalt: getSalt,
         getAuth: getAuth,
         getVersion: getVersion,
@@ -169,6 +174,7 @@ TAG.Worktop.Database = (function () {
         changeExhibition: changeExhibition,
         changeArtwork: changeArtwork,
         changeHotspot: changeHotspot,
+        changeMap: changeMap,
         changeMain: changeMain,
         uploadImage: uploadImage,
     }
@@ -369,6 +375,20 @@ TAG.Worktop.Database = (function () {
     function getArtworksIn(guid, success, error, errorCache) {
         _db = _db || new Worktop.Database();
         _db.getArtworksIn(guid, { success: success, error: error, errorCache: errorCache });
+    }
+
+    /*
+        Gets maps related to given artwork
+            guid: artowork guid
+            success: called on success with array of map doqs as argument
+            error: see above
+            errorCache: see above
+    */
+    function getMaps(guid, success, error, errorCache) {
+        // TODO
+        _db = _db || new Worktop.Database();
+        _db.getMaps(guid, { success: success, error: error, errorCache: errorCache });
+        //success([]);
     }
 
     /*
@@ -686,6 +706,25 @@ TAG.Worktop.Database = (function () {
         _db = _db || new Worktop.Database();
         _db.postIframeAssocMedia(options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
+
+    /*
+    Change a map doq
+        guid: guid of map
+        options:
+            Name: name of the map
+            AdditionalInfo: any additional information about the map (e.g., a date string)
+            Description: description of the map
+        success: success handler called if map is changed successfully
+        unauth: see above
+        conflict: see above
+        error: see above
+    */
+    function changeMap(guid, options, success, unauth, conflict, error) {
+        _db = _db || new Worktop.Database();
+        if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
+        _db.postMap(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
+    }
+
     /*
     Change the main doq (start page)
         options: New values for main in a dictionary:

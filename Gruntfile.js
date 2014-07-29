@@ -86,7 +86,7 @@ var JSSRC = [
 		'js/TAG/util/TAG.Util.js',                             // TAGCORE
 		'js/html2canvas/html2canvas.js',                       // TAGCORE
 		'js/utils/jquery.livequery.js',                        // TAGCORE
-		'js/Autolinker.js-master/dist/Autolinker.js',          // TAGCORE
+		'js/utils/Autolinker.js-master/dist/Autolinker.js',          // TAGCORE
 
 		/* 'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js', // TAGCORE -- need to move from win8  */
 		'js/TAG/util/TAG.Util.Constants.js',                   // TAGCORE
@@ -119,9 +119,7 @@ var JSSRC = [
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Display.js',            // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.EditorMenu.js',         // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.ImageTrack.js',         // TAGCORE -- need to move from win8
-		'js/TAG/tourauthoring/TAG.TourAuthoring.InkablePart.js',        // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.InkAuthoring.js',       // TAGCORE -- need to move from win8
-		'js/TAG/tourauthoring/TAG.TourAuthoring.InkController.js',      // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.InkTrack.js',           // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Keyframe.js',           // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.PlaybackControl.js',    // TAGCORE -- need to move from win8
@@ -136,8 +134,8 @@ var JSSRC = [
 		'js/TAG/authoring/TAG.Authoring.FileUploader.js',  // TAGCORE
 		'js/TAG/authoring/jscolor/jscolor.js',             // TAGCORE
 
-		'js/popcorn.min.js',                               // TAGCORE
-		'js/popcorn.capture.js',                           // TAGCORE
+		'js/utils/popcorn.min.js',                         // TAGCORE
+		'js/utils/popcorn.capture.js',                     // TAGCORE
 
 		'telemetry/telemetry.js',                          // TAGCORE
 		
