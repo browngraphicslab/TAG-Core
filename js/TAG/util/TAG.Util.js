@@ -1307,31 +1307,39 @@ TAG.Util = (function () {
                 var rotation = evt.delta.rotation / 180 * Math.PI;
                 var translation = { x: evt.delta.translation.x, y: evt.delta.translation.y };
                 var scale = evt.delta.scale;
-                if (typeof functions.onManipulate === "function")
-                    functions.onManipulate({ 
-
-                        pivot: pivot, 
-                        translation: translation, 
-                        rotation: rotation, 
-                        target: evt.gesture.target,
-                        touches: evt.gesture.touches,
-                        pointerType: evt.gesture.pointerType,
-                        center: evt.gesture.center,
-                        deltaTime: evt.gesture.deltaTime,
-                        deltaX: evt.gesture.deltaX,
-                        deltaY: evt.gesture.deltaY,
-                        velocityX: evt.gesture.velocityX,
-                        velocityY: evt.gesture.velocityY,
-                        angle: evt.gesture.angle,
-                        direction: evt.gesture.direction,
-                        distance: evt.gesture.distance,
-                        eventType: evt.gesture.eventType,
-                        srcEvent: evt.gesture.srcEvent,
-                        startEvent: evt.gesture.startEvent,
-                        scale: scale
-
-                     });
-            }
+                if (typeof functions.onManipulate === "function") {
+                    if (evt.gesture) {
+                        functions.onManipulate({
+                            pivot: pivot,
+                            translation: translation,
+                            rotation: rotation,
+                            target: evt.gesture.target,
+                            touches: evt.gesture.touches,
+                            pointerType: evt.gesture.pointerType,
+                            center: evt.gesture.center,
+                            deltaTime: evt.gesture.deltaTime,
+                            deltaX: evt.gesture.deltaX,
+                            deltaY: evt.gesture.deltaY,
+                            velocityX: evt.gesture.velocityX,
+                            velocityY: evt.gesture.velocityY,
+                            angle: evt.gesture.angle,
+                            direction: evt.gesture.direction,
+                            distance: evt.gesture.distance,
+                            eventType: evt.gesture.eventType,
+                            srcEvent: evt.gesture.srcEvent,
+                            startEvent: evt.gesture.startEvent,
+                            scale: scale
+                        });
+                    } else {
+                        functions.onManipulate({
+                            pivot: pivot,
+                            translation: translation,
+                            rotation: rotation,
+                            scale: scale
+                        });
+                    }
+                }
+             }
         }
 
         function isManipulatingWin() { return manipulating; }
