@@ -800,7 +800,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 return false;
             });
 
-            TAG.Util.disableDrag(minimapContainer);
+            //TAG.Util.disableDrag(minimapContainer);
 
             AR = img.naturalWidth / img.naturalHeight;
             var heightR = img.naturalHeight / $(minimapContainer).height();//the ratio between the height of image and the container.
@@ -818,12 +818,19 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
 
             //make the image manipulatable. 
-            var gr = TAG.Util.makeManipulatable(minimap[0], {
-                onManipulate: onMinimapManip,
-                onScroll: onMinimapScroll,
-                onTapped: onMinimapTapped
-            }, true);
-
+            if (IS_WINDOWS) {
+                var gr = TAG.Util.makeManipulatableWin(minimap[0], {
+                    onManipulate: onMinimapManipWin,
+                    onScroll: onMinimapScrollWin,
+                    onTapped: onMinimapTappedWin
+                }, false);
+            } else {
+                var gr = TAG.Util.makeManipulatable(minimap[0], {
+                    onManipulate: onMinimapManip,
+                    onScroll: onMinimapScroll,
+                    onTapped: onMinimapTapped
+                }, true);
+            }
             /**********************/
             var minimaph = minimap.height();
             var minimapw = minimap.width();
@@ -868,6 +875,33 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
             annotatedImage.viewer.viewport.applyConstraints();
         }
+
+        function onMinimapManipWin(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+            var minimapt = minimap.position().top;
+            var minimapl = parseFloat(minimap.css('marginLeft'));
+
+            var px = evt.pivot.x;
+            var py = evt.pivot.y;
+            var tx = evt.translation.x;
+            var ty = evt.translation.y;
+
+            var x = px + tx;
+            var y = py + ty;
+            x = (x - minimapl) / minimapw;
+            y = (y - minimapt) / minimaph;
+            y = y / AR;
+            x = Math.max(0, Math.min(x, 1));
+            y = Math.max(0, Math.min(y, 1 / AR));
+
+            var s = 1 + (1 - evt.scale);
+            if (s) {
+                annotatedImage.viewer.viewport.zoomBy(s, false);
+            }
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
         /**Implement scroll function from makeManipulatable
          * @method onMinimapScroll
          * @param {Number} scale     scale factor
@@ -884,6 +918,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 pivot: pivot
             });    
         }
+
+        function onMinimapScrollWin(delta, pivot) {
+            annotatedImage.viewer.viewport.zoomBy(delta, annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)));
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
         /**Implement tapped function from makeManipulatable
         * @method onMinimapTapped
         * @param {Object} evt        object containing hammer event info
@@ -903,6 +943,27 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             y = Math.max(0, Math.min(y, 1 / AR));
             var s = 1;
             if (s) annotatedImage.viewer.viewport.zoomBy(s, false);
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
+        function onMinimapTappedWin(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+            var minimapt = minimap.position().top;
+            var minimapl = parseFloat(minimap.css('marginLeft'));
+
+            var xPos = evt.position.x;
+            var yPos = evt.position.y;
+            var x = (xPos - minimapl) / minimapw;
+            var y = (yPos - minimapt) / minimaph;
+            y = y / AR;
+            x = Math.max(0, Math.min(x, 1));
+            y = Math.max(0, Math.min(y, 1 / AR));
+            var s = 1;
+            if (s) {
+                annotatedImage.viewer.viewport.zoomBy(s, false);
+            }
             annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
             annotatedImage.viewer.viewport.applyConstraints();
         }
@@ -971,31 +1032,18 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      */
     function initlocationHistory() {
 
-        var isOpen = false;
-        locHistoryContainer.on('click', function () {toggleLocationOpen();});
+        var RLH,
+            isOpen = false;
 
-
-        //create the div for text
-        locHistory = $(document.createElement('div'));
-        locHistory.addClass('locationHistory');
-        locHistory.addClass('primaryFont');
-        locHistory.text('Location History');
-        locHistory.css({
-            "font-size": "25px",
-            position: "relative",
-            'display': 'inline',
-            'vertical-align': 'middle'
-        });
+        locHistoryContainer.on('click', function () { toggleLocationOpen(); });
 
         //panel that slides out when location history is clicked
-        var RLH = LADS.Util.RLH({
+        RLH = TAG.Util.RLH({
             artwork: doq,
             root: root,
             authoring: false
         });
         locHistoryDiv = RLH.init();
-        //locationHistoryDiv.css('background-color', LADS.Util.hexToRGBA(SIDEBAR_BACKGROUND_COLOR, SIDEBAR_BACKGROUND_OPAC));
-        locHistoryDiv.css('left', sideBar.width() + 'px');
 
         function toggleLocationOpen() {
             isOpen ? locationClose() : locationOpen();
@@ -1003,216 +1051,21 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         function locationOpen() {
             if (!isOpen) {
-                console.log('opening');
                 toggler.css('display', 'none');
-                locHistoryDiv.show("slide", { direction: "left" }, 500); // TODO CSS deal properly with splitscreen mode
-                locHistoryDiv.css({ display: "inline" });
+                locHistoryDiv.show("slide", { direction: 'left' }, 500);
+                locHistoryDiv.css({ display: 'inline' });
                 isOpen = true;
             }
         }
 
         function locationClose() {
             if (isOpen) {
-                console.log('closing');
-                locHistoryDiv.hide("slide", { direction: "left" }, 500, function () {
+                locHistoryDiv.hide("slide", { direction: 'left' }, 500, function () {
                     toggler.css('display', 'block');
                 });
                 isOpen = false;
             }
         }
-
-
-
-        //if(locationList.length === 0) {
-        //    locHistoryContainer.remove();
-        //    return;
-        //}
-
-        //var locHistoryPanel      = root.find('#locationHistoryPanel'),
-        //    locHistoryToggleIcon = root.find('#locationHistoryToggleIcon'),
-        //    mapOverlay           = $(TAG.Util.UI.blockInteractionOverlay()).addClass('mapOverlay'),
-        //    overlayLabel         = $(document.createElement('label')),
-        //    lpContents           = $(document.createElement('div')).addClass('lpContents'),
-        //    lpTitle              = $(document.createElement('div')),
-        //    lpMapDiv             = $(document.createElement('div')).addClass('lpMapDiv'),
-        //    lpTextInfoDiv        = $(document.createElement('div')).addClass('lpTextInfoDiv'),
-        //    lpTextDiv            = $(document.createElement('div')).addClass("lpTextDiv"),
-        //    lpInfoDiv            = $(document.createElement('div')).addClass('lpInfoDiv');
-
-        //overlayLabel.text('Map has no location history to display.');
-        //overlayLabel.attr('id', 'mapOverlayLabel');
-        //mapOverlay.append(overlayLabel);
-
-        //lpContents.append(mapOverlay);
-        //locHistoryPanel.append(lpContents);
-
-        //lpTitle.attr('id', 'lpTitle');
-        //lpTitle.text('Location History');
-        //lpContents.append(lpTitle);
-
-        //lpMapDiv.attr('id', 'lpMapDiv');
-        //lpContents.append(lpMapDiv);
-
-        //lpContents.append(lpTextInfoDiv);
-        //lpTextInfoDiv.append(lpTextDiv);
-        //lpTextInfoDiv.append(lpInfoDiv);
-
-        //locHistoryToggle.css({
-        //    left: '87.5%',
-        //    'border-bottom-right-radius': '10px',
-        //    'border-top-right-radius': '10px'
-        //});
-        //locHistoryToggleIcon.attr('src', tagPath+'images/icons/Close.svg');
-
-
-        //locHistoryToggle.on('click', toggleLocationPanel);
-        //locHistoryContainer.on('click', histOnClick);
-
-        ///**
-        // * A callback function to populate the location history map after it has been created
-        // * @method prepMap
-        // */
-        //function prepMap () {
-        //    var unselectedCSS = {
-        //            'background-color': 'transparent',
-        //            'color': 'white'
-        //        },
-        //        selectedCSS = {
-        //            'background-color': 'white',
-        //            'color': 'black',
-        //        },
-        //        address,
-        //        date,
-        //        year,
-        //        i,
-        //        locBox,
-        //        pushpinOptions;
-
-        //    /**
-        //     * Helper function to draw pushpin on location history map when a location's info
-        //     * box is clicked
-        //     * @method drawPinHelper
-        //     * @param {Object} e    event data related to a location
-        //     */
-        //    function drawPinHelper(e) {
-        //        var $this = $(this),
-        //            latitude,
-        //            longitude,
-        //            location,
-        //            viewOptions;
-
-        //        TAG.Util.UI.drawPushpins(locationList, map);
-
-        //        lpInfoDiv.html($this.html() + "<br/>" + (e.data.info ? e.data.info : ''));
-
-        //        $('img.removeButton').attr('src', tagPath+'images/icons/minus.svg');
-        //        $('img.editButton').attr('src', tagPath+'images/icons/edit.png');
-        //        $('div.locations').css(unselectedCSS);
-
-        //        $this.find('img.removeButton').attr('src', tagPath+'images/icons/minusB.svg');
-        //        $this.find('img.editButton').attr('src', tagPath+'images/icons/editB.png');
-        //        $this.css(selectedCSS);
-
-        //        if (e.data.resource.latitude) {
-        //            location  = e.data.resource;
-        //        } else {
-        //            latitude  = e.data.resource.point.coordinates[0];
-        //            longitude = e.data.resource.point.coordinates[1];
-        //            location  = new Microsoft.Maps.Location(latitude, longitude);
-        //        }
-        //        viewOptions = {
-        //            center: location,
-        //            zoom: 4,
-        //        };
-        //        map.setView(viewOptions);
-        //    }
-
-        //    for (i = 0; i < locationList.length; i++) {
-        //        pushpinOptions = {
-        //            text: '' + (i + 1),
-        //            icon: tagPath+'images/icons/locationPin.png',
-        //            width: 20,
-        //            height: 30
-        //        };
-        //        address = locationList[i].address;
-        //        date = '';
-        //        if (locationList[i].date && locationList[i].date.year) {
-        //            year = locationList[i].date.year;
-        //            if (year < 0) { // add BC to years that are less than 0
-        //                year = Math.abs(year) + ' BC';
-        //            }
-        //            date = year;
-        //        } else {
-        //            date = '<i>Date Unspecified</i>';
-        //        }
-
-        //        // create a box in the lower pane for each location
-        //        locBox = $(document.createElement('div'));
-        //        locBox.addClass('locations');
-        //        locBox.html((i + 1) + '. ' + address + ' - ' + date + '<br>');
-
-        //        lpTextDiv.append(locBox);
-
-        //        // display more information about the location when locBox is clicked
-        //        locBox.click(locationList[i], drawPinHelper);
-        //        locBox.fadeIn();
-        //    }
-
-        //    TAG.Util.UI.drawPushpins(locationList, map);
-        //    toggleLocationPanel();
-        //};
-
-        ///**
-        // * Click handler to expand location history window
-        // * @method histOnClick 
-        // */
-        //function histOnClick() {
-        //    if (locationList.length === 0) {
-        //        mapOverlay.show();
-        //    }
-        //    if (!map) {
-        //        makeMap(prepMap);
-        //    } else {
-        //        toggleLocationPanel();
-        //    }
-        //}
-
-        ///**
-        // * Toggles location panel when locHistoryContainer or toggler is clicked
-        // * @method toggleLocationPanel
-        //*/
-        //function toggleLocationPanel() {
-            
-        //    if (locationList.length === 0) {
-        //        return;
-        //    }
-        //    if (locOpening||locClosing){
-        //        return;
-        //    }
-        //    if (locHistoryActive) {
-        //        locHistory.text('Location History');
-        //        locHistory.css('color', 'white');
-        //        locClosing = true;
-        //        locHistoryToggle.hide();
-        //        locHistoryDiv.hide("slide", { direction: 'left' }, 500, function(){
-        //            toggler.show();
-        //            locClosing = false;
-        //        });
-        //    } else {
-        //        locHistory.text('Location History');
-        //        locHistoryToggle.hide();
-        //        locOpening = true;
-        //        locHistoryDiv.show("slide", { direction: 'left' }, 500, function () {
-        //            locHistoryToggle.show();
-        //            locOpening = false;
-        //        });
-        //        locHistoryDiv.css('display', 'inline');
-        //        toggler.hide();
-        //    }
-        //    locHistoryActive = !locHistoryActive;
-        //}
-
-        //locHistoryContainer.append(locHistory);
 
         return locHistoryContainer;
     }
