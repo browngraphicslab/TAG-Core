@@ -1,14 +1,14 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.TopMenu');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.TopMenu');
 
 /**
  * The top-most menu bar for tour authoring
  * Back button, rename tour controls, save button, tour options
- * @class LADS.TourAuthoring.TopMenu
+ * @class TAG.TourAuthoring.TopMenu
  * @constructor
  * @param {Object} options      relevant options required for the menu
  * @return {Object} that        the topbar as a DOM object        
  */
-LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timeline, timeManager, tourobj, playbackControls, root, componentControls
+TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timeline, timeManager, tourobj, playbackControls, root, componentControls
     "use strict";
 
     var // the parameter object passed in
@@ -23,8 +23,8 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
 
         // the UI stuff
         topbar,                                                               // creates the top-bar holding the menu
-        dialogOverlay = $(LADS.Util.UI.blockInteractionOverlay()),            // the overlay generated when buttons like 'save changes' are clicked, to prevent further interaction with the UI
-        backDialogOverlay = $(LADS.Util.UI.blockInteractionOverlay()),        // the overlay generated when the program takes you back to the main tour-authoring page
+        dialogOverlay = $(TAG.Util.UI.blockInteractionOverlay()),            // the overlay generated when buttons like 'save changes' are clicked, to prevent further interaction with the UI
+        backDialogOverlay = $(TAG.Util.UI.blockInteractionOverlay()),        // the overlay generated when the program takes you back to the main tour-authoring page
         titleTextArea,                                                        // the div where the tour title can be modified
         backButton,                                                           // button to go back to the SettingsView page
 
@@ -88,14 +88,14 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
         timeline.hideEditorOverlay();
         undoManager.setPrevFalse();                             //method sets savedState of top element of undoStack to true to indicate further prompt for saving is not required on leaving page
         
-        LADS.Worktop.Database.changeTour(tourobj, options, function () {
+        TAG.Worktop.Database.changeTour(tourobj, options, function () {
             // success
             dialogOverlay.fadeOut(500);
             !stayOnPage && goBack();
         }, function () {
             // unauth
             dialogOverlay.hide();
-            var popup = LADS.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
+            var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
             $('body').append(popup);
             $(popup).show();
         }, function (jqXHR, ajaxCall) {
@@ -105,7 +105,7 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
         }, function () {
             // error
             dialogOverlay.hide();
-            var popup = LADS.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
+            var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
             $('body').append(popup);
             $(popup).show();
         });
@@ -120,17 +120,17 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
 
         // first, make sure that a tour reload isn't in progress
         if (viewer.getIsReloading()) {
-            messageBox = LADS.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
-            $(messageBox).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
+            messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
+            $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
             $('body').append(messageBox);
             $(messageBox).fadeIn(500);
             return;
         }
 
-        tempSettings = new LADS.Authoring.NewSettingsView('Tours', null, null, tourobj.Identifier);
+        tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);
         backButton.off('click');
         viewer.unload();
-        LADS.Util.UI.slidePageRight(tempSettings.getRoot());
+        TAG.Util.UI.slidePageRight(tempSettings.getRoot());
     }
 
     /**Handles creating the components for the back button and related actions
@@ -145,7 +145,7 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
         var backDialog = $(document.createElement('div'));
         var backDialogTitle = $(document.createElement('div'));
         var buttonHeight = $(window).height() * 0.0504;
-        var backDialogSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height(),
+        var backDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
          {
              center_h: true,
              center_v: true,
@@ -164,15 +164,15 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
             "float": "left"
         });
         backButton = $(document.createElement('img'));
-        backButton.attr('src', 'images/icons/Back.svg');
+        backButton.attr('src', tagPath + 'images/icons/Back.svg');
         backButton.css({ 'width': '100%', 'height': '100%' });
 
         backButton.mousedown(function () {
-            LADS.Util.UI.cgBackColor("backButton", backButton, false);
+            TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
 
         backButton.mouseleave(function () {
-            LADS.Util.UI.cgBackColor("backButton", backButton, true);
+            TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
         backDialogOverlay.attr('id', 'backDialogOverlay');
         backDialogOverlay.css({
@@ -183,7 +183,7 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
             width: '100%',
             height: '100%',
             'background-color': 'rgba(0,0,0,0.6)',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex,
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
         });
 
         backDialog.attr('id', 'backDialog');
@@ -255,8 +255,8 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
             var messageBox;
             $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
             if (viewer.getIsReloading()) {
-                messageBox = $(LADS.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null));
-                messageBox.css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                messageBox = $(TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null));
+                messageBox.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
                 $('body').append(messageBox);
                 messageBox.fadeIn(500);
                 return;
@@ -283,7 +283,7 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
      */
     function createTitleTextArea() {
         var textArea = $(document.createElement('input'));
-        var textAreaSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
+        var textAreaSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
         {
             center_v: true,
             width: 0.2,
@@ -334,14 +334,14 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
         var saveDialog = $(document.createElement('div'));
         var dialogTitle = $(document.createElement('div'));
         var buttonRow = $(document.createElement('div'));
-        var saveButtonSpecs = LADS.Util.constrainAndPosition($(window).width() * 0.8, $(window).height() * 0.08,
+        var saveButtonSpecs = TAG.Util.constrainAndPosition($(window).width() * 0.8, $(window).height() * 0.08,
             {
                 center_v: true,
                 width: 0.1,
                 height: 0.5,
             });
-        var fontsize = LADS.Util.getMaxFontSizeEM('Save Changes', 0.2, 0.75 * saveButtonSpecs.width, 0.75 * saveButtonSpecs.height, 0.01);
-        var saveDialogSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height(),
+        var fontsize = TAG.Util.getMaxFontSizeEM('Save Changes', 0.2, 0.75 * saveButtonSpecs.width, 0.75 * saveButtonSpecs.height, 0.01);
+        var saveDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
            {
                center_h: true,
                center_v: true,
@@ -383,7 +383,7 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
             width: '100%',
             height: '100%',
             'background-color': 'rgba(0,0,0,0.6)',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex,
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
         });
 
         // Actual dialog container
@@ -456,7 +456,7 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
      * @method tourOptionsMenu
      */
     function tourOptionsMenu() {
-        var tourOptions = LADS.TourAuthoring.TourOptions({
+        var tourOptions = TAG.TourAuthoring.TourOptions({
             timeManager: timeManager,
             timeline: timeline,
             root: root,
@@ -464,25 +464,25 @@ LADS.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, time
             playbackControls: playbackControls,
             tour: tourobj
         });
-        var tourOptionsSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
+        var tourOptionsSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
         {
            center_v: true,
            width: 0.13,
            height: 0.8,
         });
-        var tourOptionsFontSize = LADS.Util.getMaxFontSizeEM('Options', 0.5, tourOptionsSpecs.width * 0.8, tourOptionsSpecs.height * 0.7, 0.01);
-        var optionsLabelSpecs = LADS.Util.constrainAndPosition(tourOptionsSpecs.width, tourOptionsSpecs.height, {
+        var tourOptionsFontSize = TAG.Util.getMaxFontSizeEM('Options', 0.5, tourOptionsSpecs.width * 0.8, tourOptionsSpecs.height * 0.7, 0.01);
+        var optionsLabelSpecs = TAG.Util.constrainAndPosition(tourOptionsSpecs.width, tourOptionsSpecs.height, {
             center_v: true,
             width: 0.8,
             height: 0.8,
         });
         var topBarLabel = $(document.createElement('div'));
-        var topBarLabelSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
+        var topBarLabelSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
         {
             width: 0.4,
             height: 0.9,
         });
-        var fontsizeTop = LADS.Util.getMaxFontSizeEM('Tour Authoring', 0.5, topBarLabelSpecs.width, topBarLabelSpecs.height * 0.85);
+        var fontsizeTop = TAG.Util.getMaxFontSizeEM('Tour Authoring', 0.5, topBarLabelSpecs.width, topBarLabelSpecs.height * 0.85);
         tourOptions.addToDOM(topbar);
        
         tourOptions.applyCSS({

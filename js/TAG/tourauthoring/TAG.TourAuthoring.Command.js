@@ -1,14 +1,14 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.Command');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.Command');
 
 /**Interface representing an action taken by the user
  * Stored in the undo/redo stack, used for multi-level undo/redo
- * @class LADS.TourAuthoring.Command
+ * @class TAG.TourAuthoring.Command
  * @constructor
  * @param {Object} spec      An object with the following keys:
  *                      execute: Function to execute the command
  *                      unexecute: Function to undo the command
  */
-LADS.TourAuthoring.Command = function (spec, my) {
+TAG.TourAuthoring.Command = function (spec, my) {
     "use strict";
 
     var that = {};

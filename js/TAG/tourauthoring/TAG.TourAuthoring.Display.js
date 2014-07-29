@@ -1,7 +1,7 @@
-﻿LADS.Util.makeNamespace("LADS.TourAuthoring.Display");
-LADS.Util.makeNamespace("LADS.TourAuthoring.DisplayParts");
+﻿TAG.Util.makeNamespace("TAG.TourAuthoring.Display");
+TAG.Util.makeNamespace("TAG.TourAuthoring.DisplayParts");
 
-LADS.TourAuthoring.DisplayParts = {
+TAG.TourAuthoring.DisplayParts = {
     main: 1,
     'fade-in': 2,
     'fade-out': 3
@@ -11,17 +11,17 @@ LADS.TourAuthoring.DisplayParts = {
  * Represents region of time where media is playing
  * Maps to Keyframe Sequence in RIN
  * Contains and manages keyframes added to sequence
- * @class LADS.TourAuthoring.Display
+ * @class TAG.TourAuthoring.Display
  * @constructor
  * @param {Object}  spec  Params: start, length, fadeIn, fadeOut (all time values in seconds), id
  * @param {Object}  my    Update currentDisplay for touch handling, contains timeManager, undoManager, svg, update
  * @return {Object} that  The object to be added to the DOM with it's properties
  */
 
-LADS.TourAuthoring.Display = function (spec, my) {
+TAG.TourAuthoring.Display = function (spec, my) {
     "use strict";
 
-    if (my.type === LADS.TourAuthoring.TrackType.audio) {
+    if (my.type === TAG.TourAuthoring.TrackType.audio) {
         console.log('audio');
     }                                                                                           // just so we know it's an audio track and we can't add keyframes to it
 
@@ -139,8 +139,8 @@ LADS.TourAuthoring.Display = function (spec, my) {
         getTranslation: getTranslation
     };
 
-   var menu = LADS.TourAuthoring.EditorMenu({
-        type: LADS.TourAuthoring.MenuType.display,
+   var menu = TAG.TourAuthoring.EditorMenu({
+        type: TAG.TourAuthoring.MenuType.display,
         parent: that
     }, my);
 
@@ -159,12 +159,12 @@ LADS.TourAuthoring.Display = function (spec, my) {
      * @method initVisuals
      */
     function initVisuals() {
-        var displayDivs = LADS.Util.UI.createDisplay({
+        var displayDivs = TAG.Util.UI.createDisplay({
             x: T2P(inStart),
             fadeIn: T2P(fadeIn),
             fadeOut: T2P(fadeOut),
             mainLength: T2P(main),
-            mainColor: canKeyframe ? (my.type === LADS.TourAuthoring.TrackType.audio ? 'rgba(129, 173, 98, 0.8)' : LADS.TourAuthoring.Constants.displayColor) : LADS.TourAuthoring.Constants.inkDisplayColor,
+            mainColor: canKeyframe ? (my.type === TAG.TourAuthoring.TrackType.audio ? 'rgba(129, 173, 98, 0.8)' : TAG.TourAuthoring.Constants.displayColor) : TAG.TourAuthoring.Constants.inkDisplayColor,
             fadeColor: null, // FIX THIS TODO
             height: null,
             container: my.track
@@ -178,23 +178,23 @@ LADS.TourAuthoring.Display = function (spec, my) {
 
         fadeInDisplay.on('mousedown', function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['fade-in']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['fade-in']);
         });
         mainDisplay.on("mousedown", function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['main']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['main']);
         });
         fadeOutDisplay.on("mousedown", function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['fade-out']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['fade-out']);
         });
         fadeInHandle.on("mousedown", function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['fade-in']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['fade-in']);
         });
         fadeOutHandle.on("mousedown", function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['fade-out']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['fade-out']);
         });
     }
 
@@ -209,23 +209,23 @@ LADS.TourAuthoring.Display = function (spec, my) {
         fadeOutHandle.off('mousedown');
         fadeInDisplay.on('mousedown', function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['fade-in']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['fade-in']);
         });
         mainDisplay.on("mousedown", function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['main']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['main']);
         });
         fadeOutDisplay.on("mousedown", function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['fade-out']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['fade-out']);
         });
         fadeInHandle.on("mousedown", function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['fade-in']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['fade-in']);
         });
         fadeOutHandle.on("mousedown", function (e) {
             var offsetX = e.offsetX;
-            _displayMousedown(offsetX, LADS.TourAuthoring.DisplayParts['fade-out']);
+            _displayMousedown(offsetX, TAG.TourAuthoring.DisplayParts['fade-out']);
         });
     }
 
@@ -234,7 +234,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
      * Resets currentDisplay on mouseup
      * @method _displayMousedown
      * @param {Number} mouseoffset      offset of mouse on element clicked for accurate dragging (offset from start of the timeline)
-     * @param {Enum type} mouseloc      LADS.TourAuthoring.DisplayParts enum type specifying which part of display was clicked
+     * @param {Enum type} mouseloc      TAG.TourAuthoring.DisplayParts enum type specifying which part of display was clicked
      */
     function _displayMousedown(mouseoffset, mouseloc) {
         var // saves old states of the display
@@ -256,7 +256,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
         offset = mouseoffset;
         loc = mouseloc;
 
-        if (loc === LADS.TourAuthoring.DisplayParts['fade-in'] || loc === LADS.TourAuthoring.DisplayParts['fade-out']) {
+        if (loc === TAG.TourAuthoring.DisplayParts['fade-in'] || loc === TAG.TourAuthoring.DisplayParts['fade-out']) {
             if (my.that.getMinimizedState()) { return; }
         }
         if (my.that.getMinimizedState()) {
@@ -325,15 +325,15 @@ LADS.TourAuthoring.Display = function (spec, my) {
                 my.timeline.updateOldData();
                 my.update();
                 switch (oldLoc) {
-                    case LADS.TourAuthoring.DisplayParts['fade-in']:
+                    case TAG.TourAuthoring.DisplayParts['fade-in']:
                         redo = inStart;                                                 //save new value
                         undo = oldin;                                                   //save old value
                         break;
-                    case LADS.TourAuthoring.DisplayParts['fade-out']:
+                    case TAG.TourAuthoring.DisplayParts['fade-out']:
                         redo = outStart;
                         undo = oldout;
                         break;
-                    case LADS.TourAuthoring.DisplayParts['main']:
+                    case TAG.TourAuthoring.DisplayParts['main']:
                         redo = mainStart;
                         undo = oldmainstart;
                         break;
@@ -372,13 +372,13 @@ LADS.TourAuthoring.Display = function (spec, my) {
                             for (var i = 0; i < multiDisplays.length; i++) {
                                 currdisplay = multiDisplays[i];
                                 switch (oldLoc) {
-                                    case LADS.TourAuthoring.DisplayParts['fade-in']:
+                                    case TAG.TourAuthoring.DisplayParts['fade-in']:
                                         newredo = olddata[i][0];                                                    //save new value
                                         break;
-                                    case LADS.TourAuthoring.DisplayParts['fade-out']:
+                                    case TAG.TourAuthoring.DisplayParts['fade-out']:
                                         newredo = olddata[i][2];
                                         break;
-                                    case LADS.TourAuthoring.DisplayParts['main']:
+                                    case TAG.TourAuthoring.DisplayParts['main']:
                                         newredo = olddata[i][1];
                                         break;
                                 }
@@ -427,13 +427,13 @@ LADS.TourAuthoring.Display = function (spec, my) {
                             for (var i = 0; i < multiDisplays.length; i++) {
                                 currdisplay = multiDisplays[i];
                                 switch (oldLoc) {
-                                    case LADS.TourAuthoring.DisplayParts['fade-in']:
+                                    case TAG.TourAuthoring.DisplayParts['fade-in']:
                                         newundo = msdata[i][0];                                                     //save old value
                                         break;
-                                    case LADS.TourAuthoring.DisplayParts['fade-out']:
+                                    case TAG.TourAuthoring.DisplayParts['fade-out']:
                                         newundo = msdata[i][2];
                                         break;
-                                    case LADS.TourAuthoring.DisplayParts['main']:
+                                    case TAG.TourAuthoring.DisplayParts['main']:
                                         newundo = msdata[i][1];
                                         break;
                                 }
@@ -502,14 +502,14 @@ LADS.TourAuthoring.Display = function (spec, my) {
      * @method initMenu
      */
     (function initMenu() {
-        menu.addInput('Start', LADS.TourAuthoring.MenuInputFormats.minSec,
+        menu.addInput('Start', TAG.TourAuthoring.MenuInputFormats.minSec,
             getStart, setStartFromMenu);
-        menu.addInput('Main Length', LADS.TourAuthoring.MenuInputFormats.minSec,
+        menu.addInput('Main Length', TAG.TourAuthoring.MenuInputFormats.minSec,
             getMain, setMainFromMenu);
         if (canFade) {
-            menu.addInput('Fade-In', LADS.TourAuthoring.MenuInputFormats.sec,
+            menu.addInput('Fade-In', TAG.TourAuthoring.MenuInputFormats.sec,
                 getFadeIn, setFadeInFromMenu);
-            menu.addInput('Fade-Out', LADS.TourAuthoring.MenuInputFormats.sec,
+            menu.addInput('Fade-Out', TAG.TourAuthoring.MenuInputFormats.sec,
                 getFadeOut, setFadeOutFromMenu);
         }
         menu.addButton('Delete', 'left', removeHelper);
@@ -552,23 +552,23 @@ LADS.TourAuthoring.Display = function (spec, my) {
             totalDispLength = 0,
             surrDisp;
 
-        if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {
+        if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
             surrDisp = getParentDisplay();
-            bounds.left = Math.max(bounds.left, surrDisp.getStart() + LADS.TourAuthoring.Constants.inkTrackOffset);
+            bounds.left = Math.max(bounds.left, surrDisp.getStart() + TAG.TourAuthoring.Constants.inkTrackOffset);
             bounds.right = Math.min(bounds.right, surrDisp.getEnd());
-        } else if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image) {
+        } else if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image) {
             attachedDisplays = getChildDisplays();
             totalDispLength = getLongestSubgroup(attachedDisplays);
         }
 
-        inStart = Math.constrain(newstart,     // note this is defined in LADS.Util
+        inStart = Math.constrain(newstart,     // note this is defined in TAG.Util
                             bounds.left, // min
                             bounds.right - fadeIn - fadeOut - main);
 
         translateTo(inStart);
         _moveAllKeyframes(inStart - oldStart);
 
-        if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image) {
+        if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image) {
             for (var i = 0; i < attachedDisplays.length; i++) {
                 clampDisplay(attachedDisplays[i]);
             }
@@ -583,17 +583,17 @@ LADS.TourAuthoring.Display = function (spec, my) {
         var bounds = getLimits(),
             attachedDisplays,
             keyframeBound = !currkeyframes.isEmpty() ?
-                currkeyframes.max().getTime() + LADS.TourAuthoring.Constants.epsilon - mainStart
+                currkeyframes.max().getTime() + TAG.TourAuthoring.Constants.epsilon - mainStart
                 : -Infinity,
             totalDispLength = 0,
             surrDisp;
 
-        if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {
+        if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
             surrDisp = getParentDisplay();
-            bounds.left = Math.max(bounds.left, surrDisp.getStart() + LADS.TourAuthoring.Constants.inkTrackOffset);
+            bounds.left = Math.max(bounds.left, surrDisp.getStart() + TAG.TourAuthoring.Constants.inkTrackOffset);
             bounds.right = Math.min(bounds.right, surrDisp.getEnd());
         }
-        else if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image) {
+        else if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image) {
             attachedDisplays = getChildDisplays();
             totalDispLength = getLongestSubgroup(attachedDisplays);
         }
@@ -606,7 +606,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
             
         setMain((main + fadeIn + fadeOut >= totalDispLength) ? main : totalDispLength - fadeIn - fadeOut);
 
-        if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image) {
+        if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image) {
             for (var i = 0; i < attachedDisplays.length; i++) {
                 clampDisplay(attachedDisplays[i]);
             }
@@ -629,11 +629,11 @@ LADS.TourAuthoring.Display = function (spec, my) {
             newfadeIn,
             totalDispLength = 0;
 
-        if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {
+        if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
             surrDisp = getParentDisplay();
-            bounds.left = Math.max(bounds.left, surrDisp.getStart() + LADS.TourAuthoring.Constants.inkTrackOffset);
+            bounds.left = Math.max(bounds.left, surrDisp.getStart() + TAG.TourAuthoring.Constants.inkTrackOffset);
             bounds.right = Math.min(bounds.right, surrDisp.getEnd());
-        } else if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image) {
+        } else if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image) {
             attachedDisplays = getChildDisplays();
             totalDispLength = getLongestSubgroup(attachedDisplays);
         }
@@ -643,8 +643,8 @@ LADS.TourAuthoring.Display = function (spec, my) {
                             mainStart - bounds.left);
         newInStart = mainStart - fadeIn;
 
-        if (!currkeyframes.isEmpty() && newInStart > currkeyframes.min().getTime() - my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize)) {
-            inStart = currkeyframes.min().getTime() - my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize);
+        if (!currkeyframes.isEmpty() && newInStart > currkeyframes.min().getTime() - my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize)) {
+            inStart = currkeyframes.min().getTime() - my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize);
             fadeIn = mainStart - inStart;
         } else {
             inStart = newInStart;
@@ -658,7 +658,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
 
         setIn(newfadeIn);
 
-        if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image) {
+        if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image) {
             for (i = 0; i < attachedDisplays.length; i++) {
                 clampDisplay(attachedDisplays[i]);
             }
@@ -679,12 +679,12 @@ LADS.TourAuthoring.Display = function (spec, my) {
             newend,
             surrDisp,
             totalDispLength = 0;
-        if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {
+        if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
             surrDisp = getParentDisplay();
-            bounds.left = Math.max(bounds.left, surrDisp.getStart() + LADS.TourAuthoring.Constants.inkTrackOffset);
+            bounds.left = Math.max(bounds.left, surrDisp.getStart() + TAG.TourAuthoring.Constants.inkTrackOffset);
             bounds.right = Math.min(bounds.right, surrDisp.getEnd());
         }
-        else if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image) {
+        else if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image) {
             // in here, construct array of attached ink displays that are inside of the current display (can factor this out eventually to make more efficient -- here now to push)
             attachedDisplays = getChildDisplays();
             totalDispLength = getLongestSubgroup(attachedDisplays);
@@ -694,13 +694,13 @@ LADS.TourAuthoring.Display = function (spec, my) {
                             0,
                             bounds.right - outStart);
         newend = outStart + fadeOut;
-        if (!currkeyframes.isEmpty() && newend < currkeyframes.max().getTime() + my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize)) {
-            fadeOut = currkeyframes.max().getTime() + my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize) - outStart;
+        if (!currkeyframes.isEmpty() && newend < currkeyframes.max().getTime() + my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize)) {
+            fadeOut = currkeyframes.max().getTime() + my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize) - outStart;
         }
 
         setOut((main + fadeIn + fadeOut >= totalDispLength) ? fadeOut : totalDispLength - main - fadeIn);
 
-        if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image) {
+        if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image) {
             for (i = 0; i < attachedDisplays.length; i++) {
                 clampDisplay(attachedDisplays[i]);
             }
@@ -792,7 +792,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
         if (parentDisplay) {
             oldParentDisplay = parentDisplay;
         }
-        command = LADS.TourAuthoring.Command({
+        command = TAG.TourAuthoring.Command({
             execute: function () {
                 dispRemoved = true;
                 dataHolder.removeDisplay(my.that.getPos(), that);
@@ -1273,37 +1273,37 @@ LADS.TourAuthoring.Display = function (spec, my) {
         // error checking
         if (!loc || (offset !== 0 && !offset) || !my.currentDisplay) {                              // need that extra offset = 0 check since 0 and null are equal, arg
             console.log('Move display called when no display is selected!');
-        } else if (loc === LADS.TourAuthoring.DisplayParts['fade-in']) {                            // Drag fade-in section to adjust length
+        } else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) {                            // Drag fade-in section to adjust length
             if (displayIn !== -1) {
                 inStart = displayIn;
             } else {
-                if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled)) { // constrain ink movement
+                if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled)) { // constrain ink movement
                     parentArtDisplay = getParentDisplay();
-                    leftbound = Math.max(leftbound, parentArtDisplay.getStart() + LADS.TourAuthoring.Constants.inkTrackOffset);
-                } else if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image)) {
+                    leftbound = Math.max(leftbound, parentArtDisplay.getStart() + TAG.TourAuthoring.Constants.inkTrackOffset);
+                } else if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) {
                     attachedDisplays = getChildDisplays();
                     totalDispLength = getLongestSubgroup(attachedDisplays);
-                } else if (my.type === LADS.TourAuthoring.TrackType.video || my.type === LADS.TourAuthoring.TrackType.audio) {
+                } else if (my.type === TAG.TourAuthoring.TrackType.video || my.type === TAG.TourAuthoring.TrackType.audio) {
                     if (my.mediaLength) {
                         maxTotalDispLength = parseFloat(my.mediaLength);
                         leftLimit = outStart + fadeOut - maxTotalDispLength;
                         leftbound = Math.max(leftbound, leftLimit);
                     }
                 }
-                diff = my.timeManager.pxToTime(res.pivot.x - offset);                                   // note this is defined in LADS.Util
+                diff = my.timeManager.pxToTime(res.pivot.x - offset);                                   // note this is defined in TAG.Util
                 if (getEnd() - diff >= totalDispLength) {
                     if (fadeIn === 0 && fadeOut === 0) {
                         inStart = Math.constrain(diff,
                                         leftbound, // min
-                                        Math.min(my.timeManager.pxToTime(parseFloat(fadeOutHandle.css('left')) + 20 - 2 * LADS.TourAuthoring.Constants.fadeBtnSize), // max is one of two values
-                                            ((!currkeyframes.isEmpty() && (currkeyframes.min().getTime() - my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.fadeBtnSize))) || Infinity)));
+                                        Math.min(my.timeManager.pxToTime(parseFloat(fadeOutHandle.css('left')) + 20 - 2 * TAG.TourAuthoring.Constants.fadeBtnSize), // max is one of two values
+                                            ((!currkeyframes.isEmpty() && (currkeyframes.min().getTime() - my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.fadeBtnSize))) || Infinity)));
                     } else {
-                        inStart = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offset),         // note this is defined in LADS.Util
+                        inStart = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offset),         // note this is defined in TAG.Util
                                             leftbound, // min
                                             Math.min(outStart - fadeIn - 0.1,                           //make sure the fadein and fadeout handlers are overlapping
-                                                ((!currkeyframes.isEmpty() && (currkeyframes.min().getTime() - my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.fadeBtnSize))) || Infinity)));
+                                                ((!currkeyframes.isEmpty() && (currkeyframes.min().getTime() - my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.fadeBtnSize))) || Infinity)));
                     }
-                    if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image)) {
+                    if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) {
                         for (i = 0; i < attachedDisplays.length; i++) {
                             clampDisplay(attachedDisplays[i]);
                         }
@@ -1311,37 +1311,37 @@ LADS.TourAuthoring.Display = function (spec, my) {
                 }
             }
             setInStart(inStart);
-        } else if (loc === LADS.TourAuthoring.DisplayParts['fade-out']) {                               // Drag fade-out section to adjust length
+        } else if (loc === TAG.TourAuthoring.DisplayParts['fade-out']) {                               // Drag fade-out section to adjust length
             if (displayOut !== -1) {
                 outStart = displayOut;
             } else {
-                if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled)) {   // constrain ink movement
+                if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled)) {   // constrain ink movement
                     parentArtDisplay = getParentDisplay();
                     rightbound = Math.min(rightbound, parentArtDisplay.getOutStart() + parentArtDisplay.getFadeOut());
-                } else if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image)) {
+                } else if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) {
                     attachedDisplays = getChildDisplays();
                     totalDispLength = getLongestSubgroup(attachedDisplays);
-                } else if (my.type === LADS.TourAuthoring.TrackType.video || my.type === LADS.TourAuthoring.TrackType.audio) {
+                } else if (my.type === TAG.TourAuthoring.TrackType.video || my.type === TAG.TourAuthoring.TrackType.audio) {
                     if (my.mediaLength) {
                         maxTotalDispLength = parseFloat(my.mediaLength);
                         rightLimit = inStart + maxTotalDispLength;
                         rightbound = Math.min(rightbound, rightLimit);
                     }
                 }
-                diff = my.timeManager.pxToTime(res.pivot.x - offset);                                   // note this is defined in LADS.Util
+                diff = my.timeManager.pxToTime(res.pivot.x - offset);                                   // note this is defined in TAG.Util
                 if (diff + fadeOut - getStart() >= totalDispLength) {
                     if (fadeIn === 0 && fadeOut === 0) {
                         outStart = Math.constrain(diff,
-                                        Math.max(my.timeManager.pxToTime(parseFloat(fadeInHandle.css('left')) + 20) + my.timeManager.pxToTime(2 * LADS.TourAuthoring.Constants.fadeBtnSize),
-                                            ((!currkeyframes.isEmpty() && (currkeyframes.max().getTime() - fadeOut + my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.fadeBtnSize))) || -Infinity)),
+                                        Math.max(my.timeManager.pxToTime(parseFloat(fadeInHandle.css('left')) + 20) + my.timeManager.pxToTime(2 * TAG.TourAuthoring.Constants.fadeBtnSize),
+                                            ((!currkeyframes.isEmpty() && (currkeyframes.max().getTime() - fadeOut + my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.fadeBtnSize))) || -Infinity)),
                                         rightbound - fadeOut);                                          // max
                     } else {
                         outStart = Math.constrain(diff,
                                         Math.max(inStart + fadeIn + 0.1,
-                                            ((!currkeyframes.isEmpty() && (currkeyframes.max().getTime() - fadeOut + my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.fadeBtnSize))) || -Infinity)),
+                                            ((!currkeyframes.isEmpty() && (currkeyframes.max().getTime() - fadeOut + my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.fadeBtnSize))) || -Infinity)),
                                         rightbound - fadeOut);                                          // max
                     }
-                    if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image)) {
+                    if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) {
                         for (i = 0; i < attachedDisplays.length; i++) {
                             clampDisplay(attachedDisplays[i]);
                         }
@@ -1349,15 +1349,15 @@ LADS.TourAuthoring.Display = function (spec, my) {
                 }
             }       //first term is current position, second is either the end of the fadeIn or the point when the end circle collides with the last keyframe, last term is the end of the tour. First term is constrained between the second two
             setOutStart(outStart);
-        } else if (loc === LADS.TourAuthoring.DisplayParts['main']) {                                   // Drag whole display, preserve length
+        } else if (loc === TAG.TourAuthoring.DisplayParts['main']) {                                   // Drag whole display, preserve length
             // in here, we want to take care of constraining attached ink display dragging to its artwork display (leftbound = max(leftbound, left bound of attached artwork display), rightbound = .... )
             // also, take care of moving ink displays with artwork displays if need be 
             currDisp = null;
-            if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled)) {       // constrain ink movement
+            if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled)) {       // constrain ink movement
                 parentArtDisplay = getParentDisplay();
                 rightbound = Math.min(rightbound, parentArtDisplay.getOutStart() + parentArtDisplay.getFadeOut());
-                leftbound = Math.max(leftbound, parentArtDisplay.getStart() + LADS.TourAuthoring.Constants.inkTrackOffset);
-            } else if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image)) {
+                leftbound = Math.max(leftbound, parentArtDisplay.getStart() + TAG.TourAuthoring.Constants.inkTrackOffset);
+            } else if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) {
                 attachedDisplays = getChildDisplays();
             }
 
@@ -1371,7 +1371,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
             excludeRight = null;                                                                        //parent display's (if it exists) end time
             excludeLeft = null;                                                                         //parent display's (if it exists) start time
 
-            if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {                        //if display is an ink
+            if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {                        //if display is an ink
                 excludeRight = getParentDisplay().getEnd();                                             //get parent display's end time
                 excludeLeft = getParentDisplay().getStart();                                            //get parent display's start time
             }
@@ -1391,7 +1391,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
 
             /********************************************/
 
-            if (!inUndoRedo && (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image)) {
+            if (!inUndoRedo && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) {
                 for (i = 0; i < attachedDisplays.length; i++) {
                     clampDisplay(attachedDisplays[i]);
                 }
@@ -1459,7 +1459,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
             if (lens[title] > currmax)
                 currmax = lens[title];
         }
-        return currmax + LADS.TourAuthoring.Constants.inkTrackOffset; //add for offset
+        return currmax + TAG.TourAuthoring.Constants.inkTrackOffset; //add for offset
     }
 
     /**Gets the attached ink displays residing within the bounds of the current display
@@ -1478,7 +1478,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
         var currDisp;
 
         for (i = 0; i < tracks.length ; i++) {
-            if (tracks[i].track.getType() === LADS.TourAuthoring.TrackType.ink && tracks[i].track.getInkEnabled() && tracks[i].track.getInkLink().getTitle() === my.title)
+            if (tracks[i].track.getType() === TAG.TourAuthoring.TrackType.ink && tracks[i].track.getInkEnabled() && tracks[i].track.getInkLink().getTitle() === my.title)
                 attached.push(tracks[i]);
         }
         for (i = 0; i < attached.length; i++) {
@@ -1505,7 +1505,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
         var excludables = null;                                                                                 //hashtable with all times of attached ink to exclude from the snappable times list
         var snapTree;
 
-        if (!(my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled)) {                                 //if current display is not an ink
+        if (!(my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled)) {                                 //if current display is not an ink
             excludables = buildExcludables(hostPos);
         }
 
@@ -1761,8 +1761,8 @@ LADS.TourAuthoring.Display = function (spec, my) {
             coDisplays = disp.getStorageContainer().displayTree,
             newStart = dInStart, newEnd = dOutEnd, newMain = dMain, delta, dirty = false;
 
-        if (dInStart < inStart + LADS.TourAuthoring.Constants.inkTrackOffset) {                         // first check if the ink display starts too early
-            slideDisplay(disp, coDisplays, 'right', inStart + LADS.TourAuthoring.Constants.inkTrackOffset);
+        if (dInStart < inStart + TAG.TourAuthoring.Constants.inkTrackOffset) {                         // first check if the ink display starts too early
+            slideDisplay(disp, coDisplays, 'right', inStart + TAG.TourAuthoring.Constants.inkTrackOffset);
         }
         if (newEnd > outStart + fadeOut) {                                                              // next check if the ink display finishes too late
             slideDisplay(disp, coDisplays, 'left', outStart + fadeOut);
@@ -1861,17 +1861,17 @@ LADS.TourAuthoring.Display = function (spec, my) {
 
         if (!loc || (offset !== 0 && !offset) || !my.currentDisplay) {                                      // need that extra offset = 0 check since 0 and null are equal, arg
             console.log('Move display called when no display is selected!');
-        } else if (loc === LADS.TourAuthoring.DisplayParts['fade-in']) {
-            newinStart = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offset),                  // note this is defined in LADS.Util
+        } else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) {
+            newinStart = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offset),                  // note this is defined in TAG.Util
                                       leftbound,                                                            // min
                                       inStart + fadeinrightbound);
             translation = newinStart - inStart;
-        } else if (loc === LADS.TourAuthoring.DisplayParts['fade-out']) {                                   // Drag fade-out section to adjust length
+        } else if (loc === TAG.TourAuthoring.DisplayParts['fade-out']) {                                   // Drag fade-out section to adjust length
             newoutStart = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offset),
                               getEnd() - fadeoutleftbound - fadeOut,
                                 rightbound - fadeOut);                                                      // max
             translation = newoutStart - outStart;
-        } else if (loc === LADS.TourAuthoring.DisplayParts['main']) {
+        } else if (loc === TAG.TourAuthoring.DisplayParts['main']) {
             newmainStart = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offset),
                                         leftbound + fadeIn,
                                         rightbound - fadeOut - main);
@@ -1904,10 +1904,10 @@ LADS.TourAuthoring.Display = function (spec, my) {
 
         if (!loc || (offset !== 0 && !offset)) { // need that extra offset = 0 check since 0 and null are equal, arg -- error checking
             console.log('Move display called when no display is selected!');
-        } else if (loc === LADS.TourAuthoring.DisplayParts['fade-in']) { // Drag fade-in section to adjust length -- Actual Editing
+        } else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) { // Drag fade-in section to adjust length -- Actual Editing
             for (i = 0; i < selectDisplays.length; i++) {
                 disp = selectDisplays[i];
-                if (disp.getType() === LADS.TourAuthoring.TrackType.artwork || disp.getType() === LADS.TourAuthoring.TrackType.image) {
+                if (disp.getType() === TAG.TourAuthoring.TrackType.artwork || disp.getType() === TAG.TourAuthoring.TrackType.image) {
                     // in here, construct array of attached ink displays that are inside of the current display (can factor this out eventually to make more efficient -- here now to push)
                     attachedDisplays = disp.getChildDisplays();
                     totalDispLength = disp.getLongestSubgroup(attachedDisplays);
@@ -1920,7 +1920,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
                         msinStart = msinStart + translation;
                     }
                     disp.setInStart(msinStart);
-                    if (disp.getType() === LADS.TourAuthoring.TrackType.artwork || disp.getType() === LADS.TourAuthoring.TrackType.image) {
+                    if (disp.getType() === TAG.TourAuthoring.TrackType.artwork || disp.getType() === TAG.TourAuthoring.TrackType.image) {
                         for (j = 0; j < attachedDisplays.length; j++) {
                             if (selectDisplays.indexOf(attachedDisplays[j]) === -1) {
                                 disp.clampDisplay(attachedDisplays[j]);
@@ -1929,10 +1929,10 @@ LADS.TourAuthoring.Display = function (spec, my) {
                     }
                 }
             }
-        } else if (loc === LADS.TourAuthoring.DisplayParts['fade-out']) { // Drag fade-out section to adjust length
+        } else if (loc === TAG.TourAuthoring.DisplayParts['fade-out']) { // Drag fade-out section to adjust length
             for (i = 0; i < selectDisplays.length; i++) {
                 disp = selectDisplays[i];
-                if (disp.getType() === LADS.TourAuthoring.TrackType.artwork || disp.getType() === LADS.TourAuthoring.TrackType.image) {
+                if (disp.getType() === TAG.TourAuthoring.TrackType.artwork || disp.getType() === TAG.TourAuthoring.TrackType.image) {
                     // in here, construct array of attached ink displays that are inside of the current display (can factor this out eventually to make more efficient -- here now to push)
                     attachedDisplays = disp.getChildDisplays();
                     totalDispLength = disp.getLongestSubgroup(attachedDisplays);
@@ -1945,7 +1945,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
                         msOutStart = msOutStart + translation;
                     }
                     disp.setOutStart(msOutStart);
-                    if (disp.getType() === LADS.TourAuthoring.TrackType.artwork || disp.getType() === LADS.TourAuthoring.TrackType.image) {
+                    if (disp.getType() === TAG.TourAuthoring.TrackType.artwork || disp.getType() === TAG.TourAuthoring.TrackType.image) {
                         for (j = 0; j < attachedDisplays.length; j++) {
                             if (selectDisplays.indexOf(attachedDisplays[j]) === -1) {
                                 disp.clampDisplay(attachedDisplays[j]);
@@ -1954,10 +1954,10 @@ LADS.TourAuthoring.Display = function (spec, my) {
                     }
                 }
             }
-        } else if (loc === LADS.TourAuthoring.DisplayParts['main']) { // Drag whole display, preserve length
+        } else if (loc === TAG.TourAuthoring.DisplayParts['main']) { // Drag whole display, preserve length
             for (i = 0; i < selectDisplays.length; i++) {
                 disp = selectDisplays[i];
-                if (disp.getType() === LADS.TourAuthoring.TrackType.artwork || disp.getType() === LADS.TourAuthoring.TrackType.image) {
+                if (disp.getType() === TAG.TourAuthoring.TrackType.artwork || disp.getType() === TAG.TourAuthoring.TrackType.image) {
                     // in here, construct array of attached ink displays that are inside of the current display (can factor this out eventually to make more efficient -- here now to push)
                     attachedDisplays = disp.getChildDisplays();
                     totalDispLength = disp.getLongestSubgroup(attachedDisplays);
@@ -1965,7 +1965,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
                 msmainStart = disp.getMainStart();
                 newmainStart = translation + msmainStart;
                 disp.setMainStart(newmainStart, translation);
-                if (disp.getType() === LADS.TourAuthoring.TrackType.artwork || disp.getType() === LADS.TourAuthoring.TrackType.image) {
+                if (disp.getType() === TAG.TourAuthoring.TrackType.artwork || disp.getType() === TAG.TourAuthoring.TrackType.image) {
                     for (j = 0; j < attachedDisplays.length; j++) {
                         if (selectDisplays.indexOf(attachedDisplays[j]) === -1) {
                             disp.clampDisplay(attachedDisplays[j]);
@@ -2055,7 +2055,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
      * @method addKeyframe
      * @param {Number} x         x location in px
      * @param {Number} y         y location in px
-     * @returns {LADS.TourAuthoring.Keyframe} keyframe
+     * @returns {TAG.TourAuthoring.Keyframe} keyframe
      */
     function addKeyframe(x, y) {
         if (canKeyframe) {
@@ -2067,7 +2067,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
             var keyspec = {
                 loc: {
                     x: Math.twoDecPlaces(my.timeManager.pxToTime(x)),
-                    y: (my.type === LADS.TourAuthoring.TrackType.audio) ? y : 48
+                    y: (my.type === TAG.TourAuthoring.TrackType.audio) ? y : 48
                 },
                 keyFrameGroup: keyFrameGroup,
                 display: that,
@@ -2083,8 +2083,8 @@ LADS.TourAuthoring.Display = function (spec, my) {
                 return null;
             }
 
-            keyframe = LADS.TourAuthoring.Keyframe(keyspec, my),
-            command = LADS.TourAuthoring.Command({ // NOTE: don't execute command or call update! might screw up user editing
+            keyframe = TAG.TourAuthoring.Keyframe(keyspec, my),
+            command = TAG.TourAuthoring.Command({ // NOTE: don't execute command or call update! might screw up user editing
                 execute: function () {
                     currkeyframes.add(keyframe);
                     keyframe.reactivateKeyframe();
@@ -2205,29 +2205,29 @@ LADS.TourAuthoring.Display = function (spec, my) {
 
         // type specific edits
         switch (my.type) {
-            case LADS.TourAuthoring.TrackType.artwork:
+            case TAG.TourAuthoring.TrackType.artwork:
                 data.experienceStreams[esTitle].data.ContentType = '<SingleDeepZoomImage/>';
                 data.experienceStreams[esTitle].header = {};
                 data.experienceStreams[esTitle].header.defaultKeyframeSequence = esTitle;
                 data.experienceStreams[esTitle].keyframes = _getKeyframesRIN(prevState);
                 break;
-            case LADS.TourAuthoring.TrackType.image:
+            case TAG.TourAuthoring.TrackType.image:
                 data.experienceStreams[esTitle].header = {};
                 data.experienceStreams[esTitle].header.defaultKeyframeSequence = esTitle;
                 data.experienceStreams[esTitle].keyframes = _getKeyframesRIN(prevState);
                 break;
-            case LADS.TourAuthoring.TrackType.audio:
+            case TAG.TourAuthoring.TrackType.audio:
                 data.experienceStreams[esTitle].header = {};
                 data.experienceStreams[esTitle].header.defaultKeyframeSequence = esTitle;
                 data.experienceStreams[esTitle].keyframes = _getKeyframesRIN(prevState);
                 break;
-            case LADS.TourAuthoring.TrackType.video:
+            case TAG.TourAuthoring.TrackType.video:
                 data.experienceStreams[esTitle].data.markers = {
                     'beginAt': 0,
                     'endAt': main
                 };
                 break;
-            case LADS.TourAuthoring.TrackType.ink:
+            case TAG.TourAuthoring.TrackType.ink:
                 break;
             default:
                 console.log('RIN track type not yet implemented');
@@ -2247,7 +2247,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
         var kfarray = dispkfs.getContents();
 
         if (kfarray.length > 0) {
-            if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.audio || my.type === LADS.TourAuthoring.TrackType.image) {
+            if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.audio || my.type === TAG.TourAuthoring.TrackType.image) {
                 // Copy first keyframe that appears in display and place copy at start
                 // This means display will begin w/ state defined by first keyframe instead of jumping to it
                 first = dispkfs.min().toRIN();
@@ -2264,14 +2264,14 @@ LADS.TourAuthoring.Display = function (spec, my) {
             first.offset = 0;
             first.init = true;
             rin.push(first);
-        } else if (my.type === LADS.TourAuthoring.TrackType.audio) {
+        } else if (my.type === TAG.TourAuthoring.TrackType.audio) {
             first = {
                 offset: 0,
                 init: true,
                 holdDuration: 0,
                 state: { // Need to determine where keyframe info is getting stored, also why does it need a media source?
                     'sound': {
-                        'volume': LADS.TourAuthoring.Constants.defaultVolume
+                        'volume': TAG.TourAuthoring.Constants.defaultVolume
                     }
                 }
             };
@@ -2320,7 +2320,7 @@ LADS.TourAuthoring.Display = function (spec, my) {
         spe.duration = (fadeIn + main);
         spe.layer = 'foreground';
         spe.zIndex = dataHolder.numTracks() - my.that.getPos();
-        if (my.type === LADS.TourAuthoring.TrackType.audio) {
+        if (my.type === TAG.TourAuthoring.TrackType.audio) {
             spe.dominantMedia = 'audio';
             spe.volume = 1;
         } else {
