@@ -1840,6 +1840,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var object = createSpec(media, name, pos);
         var newTrack;
         object.mediaLength = mediaLength;
+        //object.converted = converted;
         newTrack = new LADS.TourAuthoring.VideoTrack(object);
         addAnyTrack(newTrack, name, pos);
         return newTrack;
@@ -1986,7 +1987,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
             update: onUpdate,
             timeline: that,
             trackarray: tracks,
-            selectedTrack: selectedTrack
+            selectedTrack: selectedTrack,
         };
         return spec;
     }

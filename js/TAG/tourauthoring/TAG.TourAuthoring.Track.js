@@ -163,7 +163,8 @@ LADS.TourAuthoring.Track = function (spec, my) {
         addES: addES,
         addScreenPlayEntries: addScreenPlayEntries,
         getMinimizedState: getMinimizedState,
-        getCompOps: getCompOps
+        getCompOps: getCompOps,
+        changeTrackColor:changeTrackColor,
      };
 
     my.that = that;                                                                                 // object w/ all public methods of this class
@@ -439,7 +440,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         var dims;
         var currSelection = dataHolder.getSelectedTrack();
 
-        if ($("#inkDrawControls").css("display") == "block" || $("#inkTransparencyControls").css("display") == "block" || $("#inkTextControls").css("display") == "block" || $("#inkEditDraw").css("display") == "block" || $("#inkEditTransparency").css("display") == "block" || $("#inkEditText").css("display") == "block") {
+        if ($("#inkDrawControls").css("display") == "block" || $("#inkTransparencyControls").css("display") == "block" || $("#inkTextControls").css("display") == "block") {
             displayError("An ink is already being edited.");
             return;
         }
@@ -2245,19 +2246,19 @@ LADS.TourAuthoring.Track = function (spec, my) {
         });
         switch (type) {
             case LADS.TourAuthoring.TrackType.audio:
-                iconPath = '../../../images/audio_icon.svg';
+                iconPath = '../../../images/icons/audio_icon_2.svg';
                 break;
             case LADS.TourAuthoring.TrackType.video:
-                iconPath = '../../../images/video_icon.svg';
+                iconPath = '../../../images/icons/video_icon_2.svg';
                 break;
             case LADS.TourAuthoring.TrackType.artwork:
-                iconPath = '../../../images/image_icon.svg';
+                iconPath = '../../../images/icons/image_icon_2.svg';
                 break;
             case LADS.TourAuthoring.TrackType.ink:
-                iconPath = '../../../images/text_icon.svg';
+                iconPath = '../../../images/icons/text_icon_2.svg';
                 break;
             case LADS.TourAuthoring.TrackType.image:
-                iconPath = '../../../images/image_icon.svg';
+                iconPath = '../../../images/icons/image_icon_2.svg';
                 break;
         }
         iconImg = $(document.createElement('img'));
@@ -2586,11 +2587,12 @@ LADS.TourAuthoring.Track = function (spec, my) {
     function removeAttachedInkTrack(tr) {
         my.attachedInks.splice(my.attachedInks.indexOf(tr), 1);
     }
-
     /////////////////////
     // RIN conversions //
     /////////////////////
-
+    function changeTrackColor(color) {
+        my.track.css('background-color', color);
+    }
     /**Add track resource to RIN resource table
      * @method addResource
      * @param table     RIN resource table object to add entry to
