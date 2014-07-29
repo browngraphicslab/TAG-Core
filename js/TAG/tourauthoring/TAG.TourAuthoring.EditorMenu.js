@@ -127,10 +127,10 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
         switch (menuType) {         
             case TAG.TourAuthoring.MenuType.display:
             case TAG.TourAuthoring.MenuType.keyframe:
-                arrowSrc = "images/icons/KeyframeInfo-Opaque.png";
+                arrowSrc = tagPath+"images/icons/KeyframeInfo-Opaque.png";
                 break;
             case TAG.TourAuthoring.MenuType.track:
-                arrowSrc = "images/icons/LeftPoint-Opaque.png";
+                arrowSrc = tagPath + "images/icons/LeftPoint-Opaque.png";
                 break;
         }
 
