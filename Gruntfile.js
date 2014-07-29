@@ -119,9 +119,7 @@ var JSSRC = [
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Display.js',            // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.EditorMenu.js',         // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.ImageTrack.js',         // TAGCORE -- need to move from win8
-		'js/TAG/tourauthoring/TAG.TourAuthoring.InkablePart.js',        // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.InkAuthoring.js',       // TAGCORE -- need to move from win8
-		'js/TAG/tourauthoring/TAG.TourAuthoring.InkController.js',      // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.InkTrack.js',           // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Keyframe.js',           // TAGCORE -- need to move from win8
 		'js/TAG/tourauthoring/TAG.TourAuthoring.PlaybackControl.js',    // TAGCORE -- need to move from win8
