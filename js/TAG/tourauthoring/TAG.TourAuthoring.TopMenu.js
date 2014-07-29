@@ -75,15 +75,15 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         saveClicked = true;
         nameChanged = false;
 
-        if ($("#inkEditText").css('display') !== "none") {
-            componentControls.saveText();
-        }
-        else if ($("#inkEditDraw").css('display') !== "none") {
-            componentControls.saveDraw();
-        }
-        else if ($("#inkEditTransparency").css('display') !== "none") {
-            componentControls.saveTrans();
-        }
+        //if ($("#inkEditText").css('display') !== "none") {
+        //    componentControls.saveText();
+        //}
+        //else if ($("#inkEditDraw").css('display') !== "none") {
+        //    componentControls.saveDraw();
+        //}
+        //else if ($("#inkEditTransparency").css('display') !== "none") {
+        //    componentControls.saveTrans();
+        //}
 
         timeline.hideEditorOverlay();
         undoManager.setPrevFalse();                             //method sets savedState of top element of undoStack to true to indicate further prompt for saving is not required on leaving page

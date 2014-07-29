@@ -331,7 +331,7 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
             width: "95%",
             'margin-left': 'auto',
             'margin-right': 'auto',
-            'font-size': TAG.Util.getFontSize(200),
+            'font-size': TAG.Util.getFontSize(57),
             'padding-top': '3%',
         });
         inputContainer.append(name);
@@ -358,7 +358,7 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
             "left": "auto",
             "top": "auto",
             "position": "relative",
-            "font-size": TAG.Util.getFontSize(250),
+            "font-size": TAG.Util.getFontSize(71.5),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '4%',
@@ -380,7 +380,7 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
             "left": "0%",
             "position": "relative",
             "top": "5%",
-            "font-size": TAG.Util.getFontSize(200),
+            "font-size": TAG.Util.getFontSize(57),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '10px 0',

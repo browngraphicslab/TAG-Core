@@ -1031,7 +1031,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @author jastern
      */
     function initlocationHistory() {
-
         var RLH,
             isOpen = false;
 

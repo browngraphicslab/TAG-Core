@@ -259,7 +259,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec) {
             'color': 'black',
             'display': 'inline-block',
             'font-weight': '600',
-            'font-size': TAG.Util.getFontSize(150)
+            'font-size': TAG.Util.getFontSize(45)
         });
         sliderLabel.text('0:00/1:00');
 

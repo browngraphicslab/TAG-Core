@@ -84,7 +84,7 @@ TAG.TourAuthoring.TourOptions = function (options) {
         item.css({
             "left": "0%",
             "position": "relative",
-            "font-size": TAG.Util.getFontSize(170),
+            "font-size": TAG.Util.getFontSize(48),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '4% 0 5% 0',
@@ -125,7 +125,7 @@ TAG.TourAuthoring.TourOptions = function (options) {
         optionsLabel.attr('id', 'addTourOptionsLabel');
         optionsLabel.text("Options");
         optionsLabel.css({
-            "font-size": TAG.Util.getFontSize(190),
+            "font-size": TAG.Util.getFontSize(55),
             "color": "rgb(255, 255, 255)"
         });
         optionsLabel.click(function (event) {
@@ -344,7 +344,7 @@ TAG.TourAuthoring.TourOptions = function (options) {
                         color: 'white',
                         'width': '80%',
                         'left': '10%',
-                        'font-size': '1.25em',
+                        'font-size': '0.7em',
                         'position': 'absolute',
                         'text-align': 'center',
                         'margin-top': '3%',
@@ -403,7 +403,7 @@ TAG.TourAuthoring.TourOptions = function (options) {
             'width': '80%',
             'height': '15%',
             'left': '10%',
-            'font-size': '1.25em',
+            'font-size': '0.7em',
             'position': 'relative',
             'text-align': 'center',
             'word-wrap': 'break-word'
@@ -432,7 +432,7 @@ TAG.TourAuthoring.TourOptions = function (options) {
             'color': 'white',
             'width': '80%',
             'left': '10%',
-            'font-size': '1.25em',
+            'font-size': '0.7em',
             'position': 'absolute',
             'text-align': 'center',
             'margin-top': '3%'
@@ -515,7 +515,7 @@ TAG.TourAuthoring.TourOptions = function (options) {
         html_content += '                    serverIp: "' + localStorage.ip + '",\n';
         html_content += '                    width: "1000px",\n';
         html_content += '                    height: "500px",\n';
-        html_content += '                    tourId: "' + options.tour.Identifier + '"\n';
+        html_content += '                    pageToLoad: "enter_url_here"\n';
         html_content += '                });\n';
         html_content += '            }\n';
         html_content += '        </script>\n';

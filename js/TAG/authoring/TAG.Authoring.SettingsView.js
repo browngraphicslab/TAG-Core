@@ -3984,7 +3984,5 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
     }
 
-    return {
-        that: that,
-    };
+    return that;
 };

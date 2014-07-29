@@ -1074,7 +1074,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         addComponentLabel.attr('id', 'addComponentLabel');
         addComponentLabel.css({
             "left": menuOffsetL, "top": "5%", "position": "relative",
-            "font-size": TAG.Util.getFontSize(55), "color": "rgb(256, 256, 256)",
+            "font-size": TAG.Util.getFontSize(70), "color": "rgb(256, 256, 256)",
             //Using the current background color value multiplied by the ( 1- alpha value )
             'background-color': "rgb(63, 55, 53)",
             'padding': '3% 2% 4% 2%',
@@ -1544,7 +1544,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         addComponentButton.css({
             "left": "0%",
             "position": "relative",
-            "font-size": TAG.Util.getFontSize(190),
+            "font-size": TAG.Util.getFontSize(55),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '4% 0 5% 0',

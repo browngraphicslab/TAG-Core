@@ -563,7 +563,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         overlay.on('click', function() {;});
         authoringButtonContainer.off('click');
         var authoringMode = new TAG.Authoring.SettingsView();
-        TAG.Util.UI.slidePageLeft(authoringMode.that.getRoot());
+        TAG.Util.UI.slidePageLeft(authoringMode.getRoot());
     }
  
     /**

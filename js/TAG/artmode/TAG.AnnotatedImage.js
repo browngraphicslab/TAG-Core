@@ -67,7 +67,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         pauseManip: pauseManip,
         restartManip: restartManip,
         updateOverlay: updateOverlay,
-        addoverlay: addOverlay,
+        addOverlay: addOverlay,
         removeOverlay: removeOverlay,
         loadAssociatedMedia: loadAssociatedMedia
     };

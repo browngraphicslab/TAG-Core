@@ -75,6 +75,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         //creates deep zoom image
         if (artwork) {
+            
             annotatedImage = new TAG.AnnotatedImage({
                 root: root,
                 doq: artwork,
@@ -134,7 +135,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             'position': 'relative'
         }).addClass("topbar");
 
-        backButton.attr('src', 'images/icons/Back.svg'); // TODO add tagpath in web app
+        backButton.attr('src', tagPath+'images/icons/Back.svg'); // TODO add tagpath in web app
         backButton.css({ // TODO STYL
             'height': '63%',
             'margin-left': '1.2%',
@@ -355,7 +356,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         buttonContainer.append(artworkInfoLabel);
 
         rightArrow = $(document.createElement('img')); // TODO J/S
-        rightArrow.attr('src', '/images/icons/Right.png'); // TODO keep this in js, tack on tagPath in web app
+        rightArrow.attr('src', tagPath+'images/icons/Right.png'); // TODO keep this in js, tack on tagPath in web app
         rightArrow.css({
             "position": "absolute",
             "right": "5%",
@@ -382,7 +383,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         buttonContainer.append(metadataButton);
 
         rightArrowEditLoc = $(document.createElement('img')); // TODO J/S
-        rightArrowEditLoc.attr('src', '/images/icons/Right.png');
+        rightArrowEditLoc.attr('src', tagPath+'images/icons/Right.png');
         rightArrowEditLoc.css({ "position": "absolute", "right": "5%", top: "30%", width: "auto", height: "40%" });
 
         editLocLabel = $(document.createElement('label')); // TODO J/S
@@ -401,7 +402,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         editThumbLabel.css({ "width": "100%", "height": "100%", "line-height": "100%", "text-align": "center" });
 
         rightArrowEditThumb = $(document.createElement('img')); // TODO J/S
-        rightArrowEditThumb.attr('src', '/images/icons/Right.png');
+        rightArrowEditThumb.attr('src', tagPath+'images/icons/Right.png');
         rightArrowEditThumb.css({ "position": "absolute", "right": "5%", top: "30%", width: "auto", height: "40%" });
 
         editThumbnailButton = $(document.createElement('div')); // TODO J/S
@@ -519,15 +520,15 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         });
 
         sidebarHideIcon = $(document.createElement('img')); // TODO J/S
-        sidebarHideIcon.css({ 'top': '39%', 'width': '40%', 'height': 'auto', 'position': 'relative', 'left': '20%' });
-        sidebarHideIcon.attr('src', 'images/icons/Left.png'); // TODO keep this in js, use tagPath + ....
+        sidebarHideIcon.css({ 'top': '30%', 'width': '40%', 'height': 'auto', 'position': 'relative', 'left': '20%' });
+        sidebarHideIcon.attr('src', tagPath+'images/icons/Left.png'); // TODO keep this in js, use tagPath + ....
         sidebarHideButton.append(sidebarHideIcon);
 
         sidebarHideButtonContainer.append(sidebarHideButton);
 
         sidebarHideButtonContainer.on('click', function () {
             var left = expanded ? '-20%' : '0%';
-            sidebarHideIcon.attr('src', expanded ? 'images/icons/Right.png' : 'images/icons/Left.png'); // TODO tagPath + ... in web app
+            sidebarHideIcon.attr('src', expanded ? tagPath+'images/icons/Right.png' : tagPath+'images/icons/Left.png'); // TODO tagPath + ... in web app
             sidebar.animate({ 'left': left }, 600);
             sidebarHideButtonContainer.animate({ 'left': left }, 600);
             expanded = !expanded;
@@ -750,7 +751,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'background-color': 'white',
                     'color': 'black'
                 });
-                rightArrowEditThumb.attr('src', '/images/icons/RightB.png');
+                rightArrowEditThumb.attr('src', tagPath+'images/icons/RightB.png');
                 isOpen = true;
             }
         }
@@ -766,7 +767,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'background-color': 'transparent',
                     'color': 'white'
                 });
-                rightArrowEditThumb.attr('src', '/images/icons/Right.png');
+                rightArrowEditThumb.attr('src', tagPath+'images/icons/Right.png');
                 isOpen = false;
             }
         }
@@ -872,10 +873,11 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 closeAllPanels();
                 MEDIA_EDITOR.close();
                 editLocButton.css({ 'background-color': 'white', 'color': 'black' });
-                rightArrowEditLoc.attr('src', '/images/icons/RightB.png');
+                rightArrowEditLoc.attr('src', tagPath+'images/icons/RightB.png');
                 sidebarHideButtonContainer.hide();
                 locationPanelDiv.show("slide", { direction: 'left' }, 500);
                 locationPanelDiv.css({ display: 'inline' });
+                
                 isOpen = true;
             }
         }
@@ -883,7 +885,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function close() {
             if (isOpen) {
                 editLocButton.css({ 'background-color': 'transparent', 'color': 'white' });
-                rightArrowEditLoc.attr('src', '/images/icons/Right.png');
+                rightArrowEditLoc.attr('src', tagPath+'images/icons/Right.png');
                 locationPanelDiv.hide("slide", { direction: 'left' }, 500, function () {
                     if (!METADATA_EDITOR.isOpen()) {
                         sidebarHideButtonContainer.show();
@@ -1891,7 +1893,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 closeAllPanels();
                 metadataForm.toggle();
                 metadataButton.css({ 'background-color': 'white', 'color': 'black' }); // TODO could do css toggling using classes and static css
-                rightArrow.attr('src', '/images/icons/RightB.png');
+                rightArrow.attr('src', tagPath+'images/icons/RightB.png');
                 sidebarHideButtonContainer.hide();
                 isOpen = true;
             }
@@ -1905,7 +1907,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             if (isOpen) {
                 metadataForm.toggle();
                 metadataButton.css({ 'background-color': 'transparent', 'color': 'white' });
-                rightArrow.attr('src', '/images/icons/Right.png');
+                rightArrow.attr('src', tagPath+'images/icons/Right.png');
                 sidebarHideButtonContainer.show();
                 isOpen = false;
             }
