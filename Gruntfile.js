@@ -136,8 +136,8 @@ var JSSRC = [
 		'js/TAG/authoring/TAG.Authoring.FileUploader.js',  // TAGCORE
 		'js/TAG/authoring/jscolor/jscolor.js',             // TAGCORE
 
-		'js/popcorn.min.js',                               // TAGCORE
-		'js/popcorn.capture.js',                           // TAGCORE
+		'js/utils/popcorn.min.js',                         // TAGCORE
+		'js/utils/popcorn.capture.js',                     // TAGCORE
 
 		'telemetry/telemetry.js',                          // TAGCORE
 		
