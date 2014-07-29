@@ -754,7 +754,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         //if the #info div exceeds the half the length of the sidebar, the div's max-height is set to its default with an auto scroll property.
         info.css({
             'overflow-y' : 'auto',
-            'max-height' : sideBar.height()/2- (info.offset().top - sideBar.offset().top)+ 'px',
+            'max-height' : sideBar.height()*2/5- (info.offset().top - sideBar.offset().top)+ 'px',
 
         });
 
@@ -800,7 +800,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 return false;
             });
 
-            TAG.Util.disableDrag(minimapContainer);
+            //TAG.Util.disableDrag(minimapContainer);
 
             AR = img.naturalWidth / img.naturalHeight;
             var heightR = img.naturalHeight / $(minimapContainer).height();//the ratio between the height of image and the container.
@@ -818,12 +818,19 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
 
             //make the image manipulatable. 
-            var gr = TAG.Util.makeManipulatable(minimap[0], {
-                onManipulate: onMinimapManip,
-                onScroll: onMinimapScroll,
-                onTapped: onMinimapTapped
-            }, true);
-
+            if (IS_WINDOWS) {
+                var gr = TAG.Util.makeManipulatableWin(minimap[0], {
+                    onManipulate: onMinimapManipWin,
+                    onScroll: onMinimapScrollWin,
+                    onTapped: onMinimapTappedWin
+                }, false);
+            } else {
+                var gr = TAG.Util.makeManipulatable(minimap[0], {
+                    onManipulate: onMinimapManip,
+                    onScroll: onMinimapScroll,
+                    onTapped: onMinimapTapped
+                }, true);
+            }
             /**********************/
             var minimaph = minimap.height();
             var minimapw = minimap.width();
@@ -868,6 +875,33 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
             annotatedImage.viewer.viewport.applyConstraints();
         }
+
+        function onMinimapManipWin(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+            var minimapt = minimap.position().top;
+            var minimapl = parseFloat(minimap.css('marginLeft'));
+
+            var px = evt.pivot.x;
+            var py = evt.pivot.y;
+            var tx = evt.translation.x;
+            var ty = evt.translation.y;
+
+            var x = px + tx;
+            var y = py + ty;
+            x = (x - minimapl) / minimapw;
+            y = (y - minimapt) / minimaph;
+            y = y / AR;
+            x = Math.max(0, Math.min(x, 1));
+            y = Math.max(0, Math.min(y, 1 / AR));
+
+            var s = 1 + (1 - evt.scale);
+            if (s) {
+                annotatedImage.viewer.viewport.zoomBy(s, false);
+            }
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
         /**Implement scroll function from makeManipulatable
          * @method onMinimapScroll
          * @param {Number} scale     scale factor
@@ -884,6 +918,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 pivot: pivot
             });    
         }
+
+        function onMinimapScrollWin(delta, pivot) {
+            annotatedImage.viewer.viewport.zoomBy(delta, annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)));
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
         /**Implement tapped function from makeManipulatable
         * @method onMinimapTapped
         * @param {Object} evt        object containing hammer event info
@@ -903,6 +943,27 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             y = Math.max(0, Math.min(y, 1 / AR));
             var s = 1;
             if (s) annotatedImage.viewer.viewport.zoomBy(s, false);
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
+        function onMinimapTappedWin(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+            var minimapt = minimap.position().top;
+            var minimapl = parseFloat(minimap.css('marginLeft'));
+
+            var xPos = evt.position.x;
+            var yPos = evt.position.y;
+            var x = (xPos - minimapl) / minimapw;
+            var y = (yPos - minimapt) / minimaph;
+            y = y / AR;
+            x = Math.max(0, Math.min(x, 1));
+            y = Math.max(0, Math.min(y, 1 / AR));
+            var s = 1;
+            if (s) {
+                annotatedImage.viewer.viewport.zoomBy(s, false);
+            }
             annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
             annotatedImage.viewer.viewport.applyConstraints();
         }
