@@ -39,7 +39,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'Content', 'RelatedArtworks']
         },
         hotspot: {
-            url: ['Name', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'LinqType', 'Thumbnail', "Converted"],
+            url: ['Name', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'W', 'H', 'LinqType', 'Thumbnail', "Converted"],
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         map: {

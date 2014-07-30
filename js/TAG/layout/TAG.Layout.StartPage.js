@@ -553,6 +553,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         if(localStorage.ip === 'tagtestserver.cloudapp.net') {
             $('#password').attr('value', 'Test1234');
+        } else if (localStorage.ip === 'localhost') {
+            $('#password').attr('value', 'admin');
         }
     }
 

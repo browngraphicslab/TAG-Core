@@ -630,7 +630,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         src = tagPath+'images/audio_icon.svg';
                         break;
                     case 'Video':
-                        src = (thumb && !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : 'images/video_icon.svg';
+                        src = (thumb && !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : tagPath + 'images/video_icon.svg';
                         break;
                     case 'Image':
                         src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);

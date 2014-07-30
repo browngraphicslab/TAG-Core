@@ -132,7 +132,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             "color": "rgb(175,200,178)",
             "width": '100%',
             'height': topbarHeight + '%',
-            'position': 'relative'
+            'position': 'relative',
+            'z-index': 1 // above any moving layers
         }).addClass("topbar");
 
         backButton.attr('src', tagPath+'images/icons/Back.svg'); // TODO add tagpath in web app
@@ -162,7 +163,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             } else {
                 backButton.off('click');
                 authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
-                TAG.Util.UI.slidePageRight(authoringHub.that.getRoot());
+                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             }
         });
  
@@ -227,7 +228,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         annotatedImage.loadAssociatedMedia(function (mediaList) {
             container = container || $('.assetContainer');
             container.empty();
-            var mediaList = annotatedImage.getAssociatedMedia();
+            mediaList = annotatedImage.getAssociatedMedia();
             var i,
                 src;
 
@@ -241,26 +242,26 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 var mediadoq = mediaList[mediaList.guids[i]].doq;
                 switch (mediadoq.Metadata.ContentType) {
                     case 'Audio':
-                        src = 'images/audio_icon.svg';
+                        src = tagPath + 'images/audio_icon.svg';
                         break;
                     case 'Video':
-                        src = ((mediadoq.Metadata.Thumbnail && !mediadoq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : 'images/video_icon.svg');
+                        src = ((mediadoq.Metadata.Thumbnail && !mediadoq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg');
                         break;
                     case 'Image':
-                        src = (mediadoq.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : 'images/image_icon.svg');
+                        src = (mediadoq.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg');
                         break;
                     default:
-                        src = 'images/text_icon.svg';
+                        src = tagPath + 'images/text_icon.svg';
                         break;
                 }
-                loadQueue.add(function () {
-                    TAG.Util.Artwork.createThumbnailButton({
+                loadQueue.add((function (j) {
+                    container.append(TAG.Util.Artwork.createThumbnailButton({
                         title: mediadoq.Name,
-                        handler: thumbnailButtonClick(mediaList[i]),
+                        handler: thumbnailButtonClick(mediaList[mediaList.guids[j]]),
                         buttonClass: "assetHolder",
                         src: src
-                    });
-                });
+                    }));
+                })(i));
             }
         });
 
@@ -923,9 +924,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         var isOpen = false,
             editingMedia = false,
             hotspotAnchor,
+            layerContainer,
             toggleHotspotButton,
+            toggleLayerButton,
             activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
-            isHotspot = false; // whether the current media is a hotspot
+            isHotspot = false, // whether the current media is a hotspot
+            isLayer;
 
         /**
          * Initialize a reusible hotspot circle div and store it in the variable hotspotAnchor
@@ -1015,7 +1019,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 pixel_adj = new Seadragon.Point(pixel.x + 50, pixel.y + 50),
                 point_adj = annotatedImage.viewer.viewport.pointFromPixel(pixel_adj);
 
+            isLayer && toggleFromLayer();
+
             toggleHotspotButton.text('Remove Hotspot');
+            toggleLayerButton.attr('disabled', 'disabled');
+            toggleLayerButton.css('opacity', '0.5');
+
             annotatedImage.addOverlay(hotspotAnchor[0], point_adj, Seadragon.OverlayPlacement.TOP_LEFT); // TODO see new AnnotatedImage; also, do we really want to be adding a new overlay each time? we only have one hotspot circle, so maybe just want to update the existing overlay
             annotatedImage.viewer.viewport.panTo(new Seadragon.Point(point.x, point.y), false);
             hotspotAnchor.fadeIn(100);
@@ -1027,11 +1036,157 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @method toggleFromHotspot
          */
         function toggleFromHotspot() {
-            toggleHotspotButton.text('Add Hotspot');
+            toggleHotspotButton.text('Create Hotspot');
+            toggleLayerButton.removeAttr('disabled');
+            toggleLayerButton.css('opacity', '1.0');
+
             annotatedImage.removeOverlay(hotspotAnchor[0]); // TODO check
             hotspotAnchor.fadeOut(100);
             isHotspot = false;
         }
+
+        /**
+         * Returns a Seadragon.Rect bounding the artwork layer on screen
+         * @method getLayerRect
+         * @return {Seadragon.Rect}         the Seadragon.Rect
+         */
+        function getLayerRect() {
+            var offset = layerContainer.offset(),
+                width = layerContainer.width(),
+                height = layerContainer.height(),
+                topLeft = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left, offset.top)),
+                bottomRight = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left + width, offset.top + height));
+
+            return new Seadragon.Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+        }
+
+        /**
+         * Initialize a reusable layer container and store it in the variable layerContainer
+         * @method makeLayerContainer
+         */
+        function makeLayerContainer() {
+            layerContainer = $(document.createElement('img'))
+                                .attr('id', 'layerContainer')
+                                .appendTo(root);
+
+            // add manipulation handlers
+            LADS.Util.makeManipulatable(layerContainer[0], {
+                onManipulate: function (res) {
+                    var l = layerContainer.offset().left, // TODO might need to update this for web app
+                        t = layerContainer.offset().top,
+                        tx = res.translation.x,
+                        ty = res.translation.y;
+
+                    layerContainer.css({
+                        left: (l + tx) + 'px',
+                        top: (t + ty) + 'px'
+                    });
+
+                    annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
+                },
+                onScroll: function (res, pivot) {
+                    var l = layerContainer.offset().left, // TODO might need to update this for web app
+                        t = layerContainer.offset().top,
+                        w = layerContainer.width(),
+                        h = layerContainer.height(),
+                        newW = w * res,
+                        newH = h * res;
+
+                    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]); // remove and re-add to ensure correct positioning if we move artwork
+                    root.append(layerContainer);
+
+                    layerContainer.css({
+                        left: (l + (1 - res) * (pivot.x)) + 'px',
+                        top: (t + (1 - res) * (pivot.y)) + 'px',
+                        width: newW + 'px',
+                        height: newH + 'px',
+                        position: 'absolute'
+                    });
+
+                    annotatedImage.viewer.drawer.addOverlay(layerContainer[0], getLayerRect());
+                }
+            }, false, true);
+
+            //layerContainer.on('mousedown', function () {
+            //    var l = layerContainer.offset().left, // TODO might need to update this for web app
+            //        t = layerContainer.offset().top,
+            //        w = layerContainer.width(),
+            //        h = layerContainer.height();
+
+            //    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]); // remove to ensure correct positioning if artwork is in midst of a move
+            //    root.append(layerContainer);
+            //    layerContainer.css({
+            //        left: l + 'px',
+            //        top: t + 'px',
+            //        width: w + 'px',
+            //        height: h + 'px',
+            //        position: 'absolute'
+            //    });
+            //});
+
+            layerContainer.on('mouseup', function () {
+                annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
+            });
+
+            layerContainer.hover(function () {
+                annotatedImage.freezeArtwork();
+            }, function () {
+                annotatedImage.unfreezeArtwork();
+            });
+        }
+
+        /**
+         * Makes layerContainer visible at the specified location
+         * @method toggleToLayer
+         * @param {Seadragon.Rect} rect      the rect on the artwork on which we'll add the layer container (see Seadragon.Drawer docs)
+         */
+        function toggleToLayer(rect) {
+            isHotspot && toggleFromHotspot();
+
+            toggleLayerButton.text('Remove Layer');
+            toggleHotspotButton.attr('disabled', 'disabled');
+            toggleHotspotButton.css('opacity', '0.5');
+
+            layerContainer.css({
+                'border': '2px solid red',
+                'display': 'block',
+                'opacity': '0.5',
+                'position': 'absolute'
+            }).appendTo(root);
+
+            if (!rect) {
+                layerContainer.css({
+                    'left': '30%',
+                    'top': '20%',
+                    'width': '40%'
+                });
+                rect = getLayerRect();
+            }
+
+            annotatedImage.viewer.drawer.addOverlay(layerContainer[0], rect);
+
+            isLayer = true;
+        }
+
+        /**
+         * Removes layer image from canvas and updates some button text/attributes
+         * @method toggleFromLayer
+         */
+        function toggleFromLayer() {
+            toggleLayerButton.text('Create Layer');
+            toggleHotspotButton.removeAttr('disabled');
+            toggleHotspotButton.css('opacity', '1.0');
+
+            annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
+
+            layerContainer.css('display', 'none');
+            isLayer = false;
+        }
+
+
+
+
+
 
         /** TODO GET RID OF THIS IN WEB APP (just use current assoc media object)
          * Set a metadata value for the active media content.
@@ -1218,9 +1373,25 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 duration = info.duration,
                 assetType = info.assetType,
                 worktopInfo = info.metadata || {},
-                dzPos = info.pos ? annotatedImage.viewer.viewport.pointFromPixel(info.pos) : { x: 0, y: 0 },
+                //dzPos = info.pos ? annotatedImage.viewer.viewport.pointFromPixel(info.pos) : { x: 0, y: 0 },
+                coords,
                 rightbarLoadingSave,
                 options;
+
+            if (info.pos) {
+                coords = annotatedImage.viewer.viewport.pointFromPixel(info.pos);
+                coords.width = 0;
+                coords.height = 0;
+            } else if (info.rect) {
+                coords = info.rect
+            } else {
+                coords = {
+                    x: 0,
+                    y: 0,
+                    width: 0,
+                    height: 0
+                };
+            }
 
             rightbarLoadingSave = $(document.createElement('div'));
             rightbarLoadingSave.css({
@@ -1243,8 +1414,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 Duration: duration,
                 Source: contentUrl,
                 LinqTo: artwork.Identifier,
-                X: dzPos.x,
-                Y: dzPos.y,
+                X: coords.x,
+                Y: coords.y,
+                W: coords.width,
+                H: coords.height,
                 LinqType: assetType,
                 Description: desc
             };
@@ -1318,8 +1491,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'position': 'absolute'
                     })
                     .appendTo($assocMediaContainer),
-                $toggleHotspotContainer = $(document.createElement('div'))
-                    .addClass('toggleHotspotContainer')
+                $toggleModeContainer = $(document.createElement('div'))
+                    .addClass('toggleModeContainer')
                     .css({
                         'width': '60%',
                         'left': '20%',
@@ -1328,14 +1501,25 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .appendTo($rightbar),
                 $toggleHotspot = $(document.createElement('button'))
                     .addClass('toggleHotspot')
-                    .css({
+                    .css({ // css for this and toggleLayer should be defined as a class rule
                         'width': '100%',
                         'height': 'auto',
                         'border': '2px solid white',
                         'position': 'relative'
                     })
                     .attr('type', 'button')
-                    .appendTo($toggleHotspotContainer),
+                    .appendTo($toggleModeContainer),
+                $toggleLayer = $(document.createElement('button'))
+                    .addClass('toggleLayer')
+                    .css({
+                        'width': '100%',
+                        'height': 'auto',
+                        'margin-top': '10px',
+                        'border': '2px solid white',
+                        'position': 'relative'
+                    })
+                    .attr('type', 'button')
+                    .appendTo($toggleModeContainer),
                 $titleContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
                     .css({
@@ -1401,7 +1585,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     })
                     .appendTo($assocMediaButtonContainer),
                 closeButton = $(document.createElement('img'))
-                    .attr('src', 'images/icons/x.svg')
+                    .attr('src', tagPath + 'images/icons/x.svg')
                     .css({
                         'position': 'absolute',
                         'top': ($(window).height() - ($(window).height() * topbarHeight / 100)) * 0.95 - 15 + 'px',
@@ -1412,12 +1596,18 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .appendTo($rightbar);
 
             makeHotspotAnchor();
+            makeLayerContainer();
 
             $toggleHotspot.on('click', function () {
                 isHotspot ? toggleFromHotspot() : toggleToHotspot();
             });
 
-            toggleHotspotButton = $toggleHotspot;
+            $toggleLayer.on('click', function () {
+                isLayer ? toggleFromLayer() : toggleToLayer();
+            });
+
+            toggleHotspotButton = $toggleHotspot; // get rid of these intermediate variables...
+            toggleLayerButton = $toggleLayer;
 
             $deleteAssocMediaButton.on('click', function () {
                 var assetDoqID = getActiveMediaMetadata('assetDoqID'); // TODO see comment below about AnnotatedImage
@@ -1474,12 +1664,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
                 titleTextVal = $titleText.val() || 'Untitled';
 
-                assetType = isHotspot ? 'Hotspot' : 'Asset';
+                assetType = isHotspot ? 'Hotspot' : (isLayer ? 'Layer' : 'Asset');
 
                 updateAssocMedia({
                     title: TAG.Util.encodeXML(titleTextVal),
                     desc: TAG.Util.encodeXML($descArea.val()),
                     pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
+                    rect: isLayer ? getLayerRect() : null,
                     contentType: activeAssocMedia.doq.Metadata.ContentType,
                     contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
                     assetType: assetType,
@@ -1519,7 +1710,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             }
             editingMedia = false;
 
-            TAG.Worktop.Database.getLinq(artwork.Identifier, asset.Identifier, linqCallback, function () { }, function () { });
+            TAG.Worktop.Database.getLinq(artwork.Identifier, asset.doq.Identifier, linqCallback, function () { }, function () { });
 
             /**
              * Helper function for showEditMedia, called when the linq between the
@@ -1530,24 +1721,43 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             function linqCallback(linq) {
                 var x = parseFloat(linq.Offset._x),
                     y = parseFloat(linq.Offset._y),
+                    w = parseFloat(linq.Dimensions ? linq.Dimensions._x : 0), // some backwards compatibility checking
+                    h = parseFloat(linq.Dimensions ? linq.Dimensions._y : 0),
                     title = TAG.Util.htmlEntityDecode(asset.doq.Name),
                     description = asset.doq.Metadata.Description ? TAG.Util.htmlEntityDecode(asset.doq.Metadata.Description).replace(/<br>/g, '\n') : '',
                     point,
+                    enableLayering = asset.doq.Metadata.ContentType === 'Image' && linq.Dimensions,
+                    rect,
                     oldtitle,
                     key,
                     oldDescription,
                     rightbar = $('.rightbar'); // TODO get this from JADE, store as a 'global' variable at top of file
 
                 isHotspot = linq.Metadata.Type === "Hotspot";
+                isLayer = linq.Metadata.Type === "Layer";
 
                 $('.assocMediaContainer').show();
 
                 if (isHotspot) {
                     point = new Seadragon.Point(x, y);
+                } else if (isLayer) {
+                    rect = new Seadragon.Rect(x, y, w, h);
                 }
 
-                toggleHotspotButton.text(isHotspot ? 'Remove Hotspot' : 'Add Hotspot');
+                toggleHotspotButton.text(isHotspot ? 'Remove Hotspot' : 'Create Hotspot');
+                toggleLayerButton.text(isLayer ? 'Remove Layer' : 'Create Layer');
+
                 isHotspot ? toggleToHotspot(point) : toggleFromHotspot();
+                isLayer ? toggleToLayer(rect) : toggleFromLayer();
+
+                // don't show the toggle layer button if we're dealing with audio/video or an older server
+                toggleLayerButton.css({
+                    'display': enableLayering ? 'inline-block' : 'none'
+                });
+
+                if (enableLayering) {
+                    layerContainer.attr('src', LADS.Worktop.Database.fixPath(asset.doq.Metadata.Source));
+                }
 
                 rightbar.find('.assocmedia').html(content);
                 rightbar.find('.title').val(title);
@@ -1588,6 +1798,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             if (isOpen) {
                 rightbar = $('.rightbar');
                 hotspotAnchor.fadeOut(100);
+                annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
+                layerContainer.remove();
                 rightbar.animate({ 'right': '-20%' }, 600);
                 $('.assetHolder').css('background-color', '');
                 editingMedia = false;
@@ -1693,7 +1905,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             deleteFieldIcon.css({ 'margin-left': '15px', display: 'inline-block', width: '30px' });
             if (field !== 'Title' && field !== 'Keywords' && field !== 'Artist' && field !== 'Year' && field !== 'Description') {
                 deleteFieldIcon = $(document.createElement('img'));
-                deleteFieldIcon.attr('src', 'images/icons/minus.svg');
+                deleteFieldIcon.attr('src', tagPath + 'images/icons/minus.svg');
                 deleteFieldIcon.css({
                     'float': 'right',
                     'margin-right': '2%',

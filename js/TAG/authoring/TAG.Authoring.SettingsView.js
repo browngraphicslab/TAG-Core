@@ -237,7 +237,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //Setting up UI:
         var backButton = root.find('#setViewBackButton');
-        backButton.attr('src', 'images/icons/Back.svg');
+        backButton.attr('src', tagPath + 'images/icons/Back.svg');
 
         backButton.mousedown(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
@@ -305,7 +305,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.text('New');
         secondaryButton.text('Video');
         label.text('Loading...');
-        circle.attr('src', 'images/icons/progress-circle.gif');
+        circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
         viewer.css({
             'height': $(window).width() * RIGHT_WIDTH / 100 * 1 / VIEWER_ASPECTRATIO + 'px',
@@ -1609,13 +1609,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var imagesrc;
                         switch (val.Metadata.ContentType.toLowerCase()) {
                             case 'video':
-                                imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : 'images/video_icon.svg';
+                                imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg';
                                 break;
                             case 'audio':
                                 imagesrc = 'images/audio_icon.svg';
                                 break;
                             case 'image':
-                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : 'images/image_icon.svg';
+                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';
                                 break;
                             default:
                                 imagesrc = null;
@@ -2262,7 +2262,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail);
                                 break;
                             case 'VideoArtwork':
-                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : "images/video_icon.svg";
+                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + "images/video_icon.svg";
                                 break
                             default:
                                 imagesrc = null;
@@ -3904,7 +3904,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         root.append(overlay);
 
         var circle = $(document.createElement('img'));
-        circle.attr('src', 'images/icons/progress-circle.gif');
+        circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
         circle.css({
             'height': 'auto',
             'width': '10%',

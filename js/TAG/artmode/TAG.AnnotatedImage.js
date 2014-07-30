@@ -35,7 +35,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             y: rootWidth/2
         },
         doManipulation = true,      //used in RLH to prevent manipulation of image in certain cases
-        aspectRatio = rootWidth/rootHeight,
+        aspectRatio = rootWidth / rootHeight,
+        artworkFrozen = false,
         
         // misc uninitialized variables
         viewer,
@@ -69,7 +70,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         updateOverlay: updateOverlay,
         addOverlay: addOverlay,
         removeOverlay: removeOverlay,
-        loadAssociatedMedia: loadAssociatedMedia
+        loadAssociatedMedia: loadAssociatedMedia,
+        freezeArtwork: freezeArtwork,
+        unfreezeArtwork: unfreezeArtwork
     };
 
 
@@ -105,7 +108,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     /**
      * Open the deepzoom image
      * @method openArtwork
-     * @param {doq} doq           artwork doq to open
+     * @param {doq} doq           artwork doq to open // TODO this shouldn't be necessary -- we know the artwork...
      * @return {Boolean}          whether opening was successful
      */
     function openArtwork(doq) {
@@ -204,9 +207,20 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             pivot = res.pivot;
 
         dzManipPreprocessing();
-        viewer.viewport.zoomBy(scale, viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)), false);
-        viewer.viewport.panBy(viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(trans.x, trans.y)), false);
-        viewer.viewport.applyConstraints();
+        
+        if (!artworkFrozen) {
+            viewer.viewport.zoomBy(scale, viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)), false);
+            viewer.viewport.panBy(viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(trans.x, trans.y)), false);
+            viewer.viewport.applyConstraints();
+        }
+    }
+
+    function freezeArtwork() {
+        artworkFrozen = true;
+    }
+
+    function unfreezeArtwork() {
+        artworkFrozen = false;
     }
     
     /**
@@ -462,6 +476,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     function loadAssociatedMedia(callback) {
         var done = 0,
             total;
+
+        associatedMedia = {
+            guids: []
+        };
 
         TAG.Worktop.Database.getAssocMediaTo(doq.Identifier, mediaSuccess, null, mediaSuccess);
 
@@ -1233,8 +1251,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             toggle:              toggleMediaObject,
             createMediaElements: createMediaElements,
             isVisible:           isVisible,
-            mediaManipPreprocessing: mediaManipPreprocessing,
-            loadAssociatedMedia: loadAssociatedMedia
+            mediaManipPreprocessing: mediaManipPreprocessing
         };
     }
 };
