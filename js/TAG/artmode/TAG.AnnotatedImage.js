@@ -546,7 +546,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             thumbnailButton,
             startLocation,
             play;
-
+        
         // get things rolling
         initMediaObject();
 
@@ -556,7 +556,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function initMediaObject() {
             // set up divs for the associated media
-            outerContainer.css('width', Math.min(Math.max(250, (rootWidth / 5)), 450) + 'px');
+            outerContainer.css('width', '29%')
+                           .css('min-width', 0.29*rootWidth);
             innerContainer.css('backgroundColor', 'rgba(0,0,0,0.65)');
 
             if (TITLE) {
@@ -631,23 +632,26 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             // TODO move this css to styl file
             play.css({
-                'position': 'relative',
-                'height':   '20px',
-                'width':    '20px',
+                'position': 'absolute',
+                'height':   '100%',
+                'width':    '100%',
                 'display':  'inline-block',
             });
 
             playHolder.css({
-                'position': 'relative',
-                'height':   '20px',
-                'width':    '20px',
+                'position': 'absolute',
+                'height': '45%',
+                'width': '10%',
+                'min-height': '20px',
+                'top':    '0%',
                 'display':  'inline-block',
                 'margin':   '2px 1% 0px 1%',
             });
 
             sliderContainer.css({
                 'position': 'absolute',
-                'height':   '15px',
+                'height': '20%',
+                'min-height' :'10px',
                 'width':    '100%',
                 'left':     '0px',
                 'bottom':   '0px'
@@ -662,29 +666,37 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             });
 
             vol.css({
-                'height':   '20px',
-                'width':    '20px',
-                'position': 'relative',
+                'height':   '100%',
+                'width':    '100%',
+                'position': 'absolute',
                 'display':  'inline-block',
             });
 
             volHolder.css({
-                'height':   '20px',
-                'width':    '20px',
+                'height': '45%',
+                'min-height' : '20px',
                 'position': 'absolute',
-                'right':    '5px',
-                'top':      '2px'
+                'width': '8%',
+                'right':    '2%',
+                'top':      '10%'
             });
 
             timeContainer.css({
-                'height':   '20px',
-                'width':    '40px',
-                'right':    volHolder.width() + 25 + 'px',
+                'height': '45%',
+                'top': '0%',
+                'width' : '15%',
+                'right':  volHolder.width() + 10 + 'px',
                 'position': 'absolute',
                 'vertical-align': 'top',
                 'padding':  '0',
                 'display':  'inline-block',
-                'overflow': 'hidden',
+            });
+
+            currentTimeDisplay.css({
+                'height': '100%',
+                'top': '0%',
+                'position': 'absolute',
+                'font-size': '70%'
             });
 
             playHolder.append(play);
@@ -1108,12 +1120,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             closeButton.text('X');
             closeButton.css({
                 'position': 'absolute',
-                'top': '0%',
+                'top': '2%',
                 'width': '4%',
                 'height': '4%',
+                'min-height': '15px',
+                'min-width': '15px',
                 'z-index': '1',
                 'background-color': '',
-                'margin-left': '95%'
+                'right': '2%'
             });
             return closeButton;
         }
