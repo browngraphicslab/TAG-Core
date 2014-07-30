@@ -464,6 +464,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             locHistoryButton,
             mediaDrawer;
 
+        sideBarInfo.css({
+            'height' : sideBarSections.height()-25 + 'px'
+            });
         backButton.attr('src', tagPath+'images/icons/Back.svg');
         togglerImage.attr("src", tagPath+'images/icons/Close.svg');
         infoTitle.text(doq.Name);
@@ -758,9 +761,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         });
 
-        minimapContainer.css({
-            'bottom': '-10%',
-        });
+       
 
     
     //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
@@ -1015,11 +1016,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
         }
         annotatedImage.addAnimateHandler(dzMoveHandler);
-
+         
         /*
          * END MINIMAP CODE
          ******************/
     }
+
+
 
     /**
      * Create a drawer with a disclosure button used to display
@@ -1120,8 +1123,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         associatedMedia[associatedMedia.guids[i]].hide();
                     }
                 }
+
             }
+
             drawerContents.slideToggle();
+            drawerContents.css({'display':'inline-block'});
         });
         
         drawer.contents = drawerContents;
