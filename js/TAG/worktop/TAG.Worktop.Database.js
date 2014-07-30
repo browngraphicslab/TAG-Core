@@ -702,6 +702,7 @@ TAG.Worktop.Database = (function () {
         _db.postHotspot(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
 
+    // TODO document
     function createIframeAssocMedia(options, success, unauth, conflict, error) {
         _db = _db || new Worktop.Database();
         _db.postIframeAssocMedia(options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);

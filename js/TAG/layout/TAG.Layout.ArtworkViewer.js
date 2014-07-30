@@ -462,7 +462,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             descriptionDrawer,
             tourDrawer,
             locHistoryButton,
-            mediaDrawer;
+            mediaDrawer,
+            xfadeDrawer;
 
         backButton.attr('src', tagPath+'images/icons/Back.svg');
         togglerImage.attr("src", tagPath+'images/icons/Close.svg');
@@ -587,13 +588,28 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         if (associatedMedia.guids.length > 0) {
-            mediaDrawer = createDrawer('Associated Media');
-            for(i=0; i<associatedMedia.guids.length; i++) {
+            for (i = 0; i < associatedMedia.guids.length; i++) {
                 curr = associatedMedia[associatedMedia.guids[i]];
-                loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+                if (curr.linq.Metadata.Type === 'Layer') {
+                    if (!xfadeDrawer) {
+                        xfadeDrawer = createDrawer('Crossfades', true);
+                    }
+                    loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
+                } else {
+                    if (!mediaDrawer) {
+                        mediaDrawer = createDrawer('Associated Media');
+                    }
+                    loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+                }
             }
-            assetContainer.append(mediaDrawer);
-            currBottom += mediaDrawer.height();
+            if (mediaDrawer) {
+                assetContainer.append(mediaDrawer);
+                currBottom += mediaDrawer.height();
+            }
+            if (xfadeDrawer) {
+                assetContainer.append(xfadeDrawer);
+                currBottom += mediaDrawer.height();
+            }
         }
 
         /**
@@ -664,7 +680,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 media.create(); // returns if already created
                 media.toggle();
                 TAG.Util.IdleTimer.restartTimer();
-                media.mediaManipPreprocessing();                    //Set the newly opened media as active for manipulation
+                (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
                 media.pauseReset();
                 // toggleLocationPanel();
             };

@@ -929,7 +929,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleLayerButton,
             activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
             isHotspot = false, // whether the current media is a hotspot
-            isLayer;
+            isLayer = false;
 
         /**
          * Initialize a reusible hotspot circle div and store it in the variable hotspotAnchor
@@ -1183,11 +1183,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             isLayer = false;
         }
 
-
-
-
-
-
         /** TODO GET RID OF THIS IN WEB APP (just use current assoc media object)
          * Set a metadata value for the active media content.
          * @param key
@@ -1242,6 +1237,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function createMediaWrapper(media) {
             var video,
                 audio,
+                iframe,
                 src = media.doq.Metadata.Source,
                 type = media.doq.Metadata.ContentType,
                 thumbnail = (media.doq.Metadata.Thumbnail && !media.doq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(media.doq.Metadata.Thumbnail) : '',
@@ -1356,6 +1352,17 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     bottom: '0%'
                 });
                 return audio;
+            } else if (type === 'iframe') {
+                iframe = $(document.createElement('iframe'));
+                iframe.attr({
+                    src: src,
+                    frameborder: '0'
+                });
+                iframe.css({
+                    width: '100%',
+                    height: '100%'
+                });
+                return iframe;
             }
         }
 

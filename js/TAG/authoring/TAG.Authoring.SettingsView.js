@@ -39,6 +39,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         label = root.find('#setViewLoadingLabel'),
         circle = root.find('#setViewLoadingCircle'),
         rootContainer = root.find('#setViewRoot'),
+        iframeAssetCreateButton = root.find('#iframeAssetCreateButton'),
 
         // Constants
         VIEWER_ASPECTRATIO = $(window).width() / $(window).height(),
@@ -52,42 +53,42 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Text for Navagation labels
         NAV_TEXT = {
-        general: {
-            text: 'General Settings',
-            subtext: 'Customize TAG experience'
+            general: {
+                text: 'General Settings',
+                subtext: 'Customize TAG experience'
+            },
+            exhib: {
+                text: 'Collections',
+                subtext: 'Create and edit collections'
+            },
+            art: {
+                text: 'Artworks',
+                subtext: 'Import and manage artworks'
+            },
+            media: {
+                text: 'Associated Media',
+                subtext: 'Manage associated media'
+            },
+            tour: {
+                text: 'Tours',
+                subtext: 'Build interactive tours'
+            },
+            feedback: {
+                text: 'Feedback',
+                subtext: 'View comments and reports'
+            },
         },
-        exhib: {
-            text: 'Collections',
-            subtext: 'Create and edit collections'
-        },
-        art: {
-            text: 'Artworks',
-            subtext: 'Import and manage artworks'
-        },
-        media: {
-            text: 'Associated Media',
-            subtext: 'Manage associated media'
-        },
-        tour: {
-            text: 'Tours',
-            subtext: 'Build interactive tours'
-        },
-        feedback: {
-            text: 'Feedback',
-            subtext: 'View comments and reports'
-        },
-    },
 
-    that = {
-        getRoot: getRoot,
-    },
+        that = {
+            getRoot: getRoot,
+        },
 
-    settingsViewKeyHandler = {
-        13: enterKeyHandlerSettingsView,
-        46: deleteKeyHandlerSettingsView,
-        40: downKeyHandlerSettingsView,
-        38: upKeyHandlerSettingsView,
-    },
+        settingsViewKeyHandler = {
+            13: enterKeyHandlerSettingsView,
+            46: deleteKeyHandlerSettingsView,
+            40: downKeyHandlerSettingsView,
+            38: upKeyHandlerSettingsView,
+        },
     
         prevSelectedSetting,
         prevSelectedMiddleLabel,
@@ -110,9 +111,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         mediaCheckedIDs = [], // artworks checked in associated media uploading
         mediaUncheckedIDs = [], // artworks unchecked in associated media uploading
         editArt, // enter artwork editor button
-        artworkList; // list of all artworks in a collection
+        artworkList, // list of all artworks in a collection
 
-    var // key handling stuff
+        // key handling stuff
         deleteType,
         toDelete,
         currentList,
@@ -129,6 +130,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //window.addEventListener('keydown', keyHandler),
         TAG.Util.UI.initKeyHandler();
         TAG.Util.UI.getStack()[0] = settingsViewKeyHandler;
+
     loadHelper();
     if (callback) {
         callback(that);
@@ -262,6 +264,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             TAG.Util.UI.getStack()[0] = null;
             
+        });
+
+        iframeAssetCreateButton.on('click', function () { // TODO iframe -- change styling and location in styl and jade files
+            createIframeSourceDialog();
         });
 
         var topBarLabel = root.find('#setViewTopBarLabel');
@@ -1612,7 +1618,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg';
                                 break;
                             case 'audio':
-                                imagesrc = 'images/audio_icon.svg';
+                                imagesrc = tagPath + 'images/audio_icon.svg';
+                                break;
+                            case 'iframe':
+                                imagesrc = tagPath + 'images/audio_icon.svg'; // TODO iframe replace icon
                                 break;
                             case 'image':
                                 imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';
@@ -1677,7 +1686,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // Create an img element to load the image
         var type = media.Metadata.ContentType.toLowerCase();
         var holder;
-        var source = TAG.Worktop.Database.fixPath(media.Metadata.Source);
+        var source = (type === 'iframe') ? media.Metadata.Source : TAG.Worktop.Database.fixPath(media.Metadata.Source);
         switch (type) {
             case "image":
                 holder = $(document.createElement('img'));
@@ -1698,6 +1707,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("controls", "");
                 holder.css({ 'width': '80%' });
                 break;
+            case "iframe":
+                holder = $(document.createElement('iframe'));
+                holder.attr({
+                    src: source,
+                    frameborder: '0'
+                });
+                holder.css({
+                    width: '100%',
+                    height: '100%'
+                });
+                break;
             case "text":
             default:
                 holder = $(document.createElement('div'));
@@ -1705,7 +1725,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "font-size": "24px",
                     "top": "20%",
                     "width": "80%",
-                    //"margin-left": "10%",
                     "text-align": "center",
                     "color": "white"
                 });
@@ -1753,6 +1772,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var left = viewer.width() / 2 - holder.width() / 2 + "px";
                 var top = viewer.height() /2 - holder.height() /2 + "px";
                 holder.css({ "position": "absolute", "left": left, "top" : top });
+                break;
+            case "iframe":
+                TAG.Util.removeProgressCircle(circle);
+                viewer.css('background', 'black');
+                viewer.append(holder);
                 break;
             case "text":
                 TAG.Util.removeProgressCircle(circle);
@@ -1977,6 +2001,40 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             console.log('success?');
             loadAssocMediaView(media.Identifier);
         }, unauth, conflict, error);
+    }
+
+    // TODO document
+    function createIframeAsset(src) { //TODO IFRAME ASSOC MEDIA: iframe asset creation would look something like this
+        var options = {
+            Source: src,
+            Name: src
+        };
+        function onSuccess(doqData) {
+            var newDoq = new Worktop.Doq(doqData.responseText);
+            function done() {
+                loadAssocMediaView(newDoq.Identifier);
+            }
+            LADS.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, LADS.Util.multiFnHandler(authError, done), LADS.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
+
+        };
+        LADS.Worktop.Database.createIframeAssocMedia(options, onSuccess);
+    }
+
+    /**
+     * Create a dialog for inputting an iframe source for new associated media
+     * @method createIframeSourceDialog
+     */
+    function createIframeSourceDialog() {
+        var overlay = TAG.Util.UI.popupInputBox({
+            confirmAction: createIframeAsset,
+            container: root,
+            message: 'Enter URL for your embedded web asset',
+            //placeholder: 'E.g., http://www.youtube.com/embed/g794oDdc1l0',
+            confirmText: 'Save'
+        });
+
+        root.append(overlay);
+        overlay.fadeIn(500);
     }
 
     /**

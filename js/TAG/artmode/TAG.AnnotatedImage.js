@@ -817,6 +817,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function createMediaElements() {
             var $mediaElt,
                 img,
+                iframe,
                 closeButton;
 
             if(!mediaLoaded) {
@@ -825,7 +826,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 return;
             }
 
-            closeButton = createCloseButton()
+            closeButton = createCloseButton();
             mediaContainer.append(closeButton[0]);
             closeButton.on('click', function (evt) {
                 evt.stopPropagation();
@@ -841,7 +842,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     height:   'auto'
                 });
                 mediaContainer.append(img);
-                mediaLoaded = true;
             } else if (CONTENT_TYPE === 'Video') {
                 mediaElt = document.createElement('video');
                 $mediaElt = $(mediaElt);
@@ -879,6 +879,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 $mediaElt.on('error', function(){
                     console.log("Here's an error ");
                 });
+            } else if (CONTENT_TYPE === 'iframe') {
+                iframe = $(document.createElement('iframe'));
+                iframe.attr({
+                    src: SOURCE,
+                    frameborder: '0'
+                });
+                iframe.css({
+                    width: '100%',
+                    height: '200px' // TODO iframe -- this is just for testing
+                });
+                mediaContainer.append(iframe);
             }
         }
 
