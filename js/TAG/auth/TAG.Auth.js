@@ -255,7 +255,7 @@ TAG.Auth = (function () {
             position: 'absolute',
             top: loginDialogSpecs.y + 'px',
             width: loginDialogSpecs.width-200 + 'px',
-            height: loginDialogSpecs.height - 75+ 'px',
+            height: loginDialogSpecs.height - 55+ 'px',
             left: loginDialogSpecs.x + 'px',
             border: '3px double white',
             'background-color': 'black',
@@ -316,7 +316,7 @@ TAG.Auth = (function () {
             'left': '10%',
             'width': '80%',
             'text-align': 'center',
-            'bottom': '36%',
+            'bottom': '25%',
             'position': 'absolute',
         });
         errorMessage.html('Invalid Password. Please try again...'); //<br/>Please contact <a href="mailto:brown.touchartgallery@gmail.com">brown.touchartgallery@gmail.com</a> for password.');
@@ -329,7 +329,7 @@ TAG.Auth = (function () {
             'display': 'block',
             'width': '70%',
             'left': '10%',
-            'bottom': '5%'
+            'bottom': '-6%'
         });
         var submitButton = $(document.createElement('button'));
         submitButton.css({
@@ -337,7 +337,7 @@ TAG.Auth = (function () {
             'width': 'auto',
             'position': 'relative',
             'margin-top': '1%',
-            'margin-left': '5%',
+            'margin-left': '-7%',
             'display': 'inline-block',
         });
         var circle = $(document.createElement('img'));
@@ -371,7 +371,7 @@ TAG.Auth = (function () {
             'position': 'relative',
             'margin-top': '1%',
             'float': "right",
-            'margin-right': '-6%',
+            'margin-right': '-21%',
             'display': 'inline-block',
     });
         cancelButton.text('Cancel');
