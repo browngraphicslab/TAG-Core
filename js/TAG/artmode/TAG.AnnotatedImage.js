@@ -69,7 +69,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         updateOverlay: updateOverlay,
         addOverlay: addOverlay,
         removeOverlay: removeOverlay,
-        loadAssociatedMedia: loadAssociatedMedia
+        loadAssociatedMedia: loadAssociatedMedia,
+        getOverlayCoordinates: getOverlayCoordinates
     };
 
 
@@ -199,6 +200,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
 
     function dzManip(res) {
+        console.log('manip');
         var scale = res.scale,
             trans = res.translation,
             pivot = res.pivot;
@@ -351,6 +353,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         });
     }
 
+    /**
+     * Gets a Seadragon point from the given overlay element. Uses BOTTOM as the default OverlayPlacement
+     * @method getCoordinate
+     * @param {HTML elt} element       the overlay element
+     * @return {Seadragon.Point}       the location of the overlay in Seadragon coordinates
+     */
+    function getOverlayCoordinates(element) {
+        var t = parseFloat($(element).css('top')) + $(element).height(),
+            l = parseFloat($(element).css('left')) + $(element).width() / 2;
+
+        return viewer.viewport.pointFromPixel(new Seadragon.Point(l, t));
+    }
+
     /** 
     * Returns a Seadragon point corresponding to a pixel
     * Used in RLH
@@ -377,7 +392,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method scroll
     */
     function scroll(delta, pivot) {
-        dzScroll(delta, pivot);
+        dzManip({
+            scale: delta,
+            translation: {
+                x: 0,
+                y: 0
+            },
+            pivot: {
+                x: pivot.x,
+                y: pivot.y
+            }
+        });
     }
 
     /*

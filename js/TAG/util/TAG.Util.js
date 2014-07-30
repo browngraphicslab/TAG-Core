@@ -4172,15 +4172,25 @@ TAG.Util.RLH = function (input) {
                             'margin-right': '10px',
                             float: 'right'
                         })
-                        .appendTo(buttonsRegion)
-                        .text('Delete/Hide Map'); // TODO have the text change depending on the map
+                        .appendTo(buttonsRegion);
 
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
+                var mapName = function () {
+                    if (mapDoqs[mapGuids[currentIndex]].Name) {
+                        if (mapDoqs[mapGuids[currentIndex]].Name.length > 20) {
+                            return "'" + mapDoqs[mapGuids[currentIndex]].Name.substring(0, 20) + '...' + "'";
+                        } else {
+                            return "'" + mapDoqs[mapGuids[currentIndex]].Name + "'";
+                        }
+                    } else {
+                        return 'Custom Map';
+                    }
+                }();
                 if (!(currentIndex === 0)) { //if it's not the bing map being displayed, confirm the deletion
                     var overlay = LADS.Util.UI.PopUpConfirmation(function () {
                         deleteMap();
-                    }, "Are you sure you want to delete this map and all locations associated with it?", "Yes");
+                    }, "Are you sure you want to delete " + mapName + " and all locations associated with it?", "Yes");
                     root.append(overlay);
                     $(overlay).show();
                     evt.stopPropagation();
@@ -4399,10 +4409,22 @@ TAG.Util.RLH = function (input) {
         var index = currentIndex;
         if (mapGuids[index]) {
             LADS.Worktop.Database.changeMap(mapDoqs[mapGuids[index]], {
-                Name: nameInput.val(),
+                Name: nameInput.val() || 'Custom Map',
                 AdditionalInfo: additionalInfoInput.val(),
                 //Description: mapDescriptionInput.val()
             }, function () {
+                var mapName = function () {
+                    if (nameInput.val()) {
+                        if (nameInput.val().length > 20) {
+                            return "'" + nameInput.val().substring(0, 20) + '...' + "'";
+                        } else {
+                            return "'" + nameInput.val() + "'";
+                        }
+                    } else {
+                        return "'Custom Map'";
+                    }
+                }();
+                deleteButton && deleteButton.text('Delete ' + mapName);
                 LADS.Util.removeProgressCircle(progCirc);
                 LADS.Worktop.Database.getDoq(mapDoqs[mapGuids[index]].Identifier, function (newMap) {
                     mapDoqs[mapGuids[index]] = newMap;
@@ -4485,7 +4507,18 @@ TAG.Util.RLH = function (input) {
                 deleteButton && deleteButton.text('Hide Bing Map');
             }
         } else {
-            deleteButton && deleteButton.text('Delete Map');
+            var mapName = function () {
+                if (mapDoqs[guid].Name) {
+                    if (mapDoqs[guid].Name.length > 20) {
+                        return "'" + mapDoqs[guid].Name.substring(0, 20) + '...' + "'";
+                    } else {
+                        return "'" + mapDoqs[guid].Name + "'";
+                    }
+                } else {
+                    return 'Custom Map';
+                }
+            }();
+            deleteButton && deleteButton.text('Delete ' + mapName);
         }
     }
 
@@ -5011,7 +5044,7 @@ TAG.Util.RLH = function (input) {
                 w = parseFloat(pushpin.css('width')),
                 h = parseFloat(pushpin.css('height'));
 
-            LADS.Util.makeManipulatable(pushpin[0], {
+            TAG.Util.makeManipulatable(pushpin[0], {
                 onManipulate: function (res) {
                     if (editing) {
                         if (isOverlay) {
@@ -5046,23 +5079,24 @@ TAG.Util.RLH = function (input) {
                         //otherwise the location of the pushpin is not updated with manipulation
                     }
                 },
-                onRelease: function (evt) {
-                    //add the overlay back once mouse is released
-                    isOverlay = true;
-
-                    //if pushpin is not within bounds of image, it snaps back to the edge on release
-                    if (!annotImg.isInImageBounds(pushpin)) {
-                        var coord = annotImg.returnElementToBounds(pushpin);
-                        pushpin.css("top", (coord.y - h) + "px");
-                        pushpin.css("left", (coord.x - 0.5 * w) + "px");
-                        annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
-                    } else {
-                        annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
-                    }
-
+                onRelease: function (evt) {//TODO - causing weird things to happen when pushpin is clicked?
                     annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
+                    if (editing) {
+                        //add the overlay back once mouse is released
+                        isOverlay = true;
+
+                        //if pushpin is not within bounds of image, it snaps back to the edge on release
+                        if (!annotImg.isInImageBounds(pushpin)) {
+                            var coord = annotImg.returnElementToBounds(pushpin);
+                            pushpin.css("top", (coord.y - h) + "px");
+                            pushpin.css("left", (coord.x - 0.5 * w) + "px");
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
+                        } else {
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
+                        }
+                    }
                 },
-                onScroll: function (delta, pivot) { //allow scrolling of the map while dragging a pin
+                onScroll: function (delta, pivot) { //allow scrolling of the map while dragging a pin (or when the mouse is on top of a pin)
                     annotImg.scroll(delta, { //use the location of the pushpin for the pivot
                         x: w + parseFloat(pushpin.css('left')),
                         y: h + parseFloat(pushpin.css('top'))
@@ -5832,10 +5866,11 @@ TAG.Util.RLH = function (input) {
 
     }
 
-    /**
-     * Helper methods for selecting/deselecting pins and locations on maps
-     */
 
+    /**
+     * De-select a location pin and the corresponding location list item
+     * @method deselect
+     */
     function deselect(location, pushpin, custom) {
         location.descContainer.css({ 'display': 'none' });
         $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
@@ -5846,6 +5881,10 @@ TAG.Util.RLH = function (input) {
         }
     }
 
+    /**
+     * Select a location pin and the corresponding location list item
+     * @method select
+     */
     function select(location, pushpin, custom) {
         var l;
 
