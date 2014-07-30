@@ -30,7 +30,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
         rootHeight = $('#tagRoot').height(),
         rootWidth = $('#tagRoot').width(),
-        currRootWidth = root.width(),
         outerContainerPivot = {
             x: rootHeight/2,
             y: rootWidth/2
@@ -186,7 +185,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function dzManipPreprocessing() {
         outerContainerPivot = {
-            x: currRootWidth/ 2,// + root.offset().left,
+            x: root.width()/ 2,// + root.offset().left,
             y: root.height() / 2// + root.offset().top
         };
         toManip = dzManip;
@@ -1040,7 +1039,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 (0 < outerContainer.position().top+ outerContainer.height()) 
                 && (outerContainer.position().top < rootHeight) 
                 && (0 < outerContainer.position().left + outerContainer.width()) 
-                && (outerContainer.position().left < currRootWidth))) 
+                && (outerContainer.position().left < rootWidth))) 
                 {
                     hideMediaObject();
                     pauseResetMediaObject();
@@ -1140,7 +1139,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
             } else {
                 t = rootHeight * 1/10 + Math.random() * rootHeight * 2/10;
-                l = currRootWidth  * 3/10 + Math.random() * currRootWidth  * 2/10;
+                l = root.width() * 3 / 10 + Math.random() * root.width() * 2 / 10;
+                console.log("left" + l);
             };
             outerContainer.css({
                 'top':            t + "px",
