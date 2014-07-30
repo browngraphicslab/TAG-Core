@@ -925,6 +925,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             editingMedia = false,
             hotspotAnchor,
             layerContainer,
+            currSource,
             toggleHotspotButton,
             toggleLayerButton,
             activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
@@ -1066,7 +1067,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          */
         function makeLayerContainer() {
             layerContainer = $(document.createElement('img'))
-                                .attr('id', 'layerContainer')
+                                .attr({
+                                    id: 'layerContainer',
+                                    src: currSource
+                                })
                                 .appendTo(root);
 
             // add manipulation handlers
@@ -1143,6 +1147,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function toggleToLayer(rect) {
             isHotspot && toggleFromHotspot();
 
+            makeLayerContainer();
+
             toggleLayerButton.text('Remove Layer');
             toggleHotspotButton.attr('disabled', 'disabled');
             toggleHotspotButton.css('opacity', '0.5');
@@ -1177,9 +1183,11 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleHotspotButton.removeAttr('disabled');
             toggleHotspotButton.css('opacity', '1.0');
 
-            annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
-
-            layerContainer.css('display', 'none');
+            if (layerContainer) {
+                annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
+                layerContainer.remove();
+                layerContainer.css('display', 'none');
+            }
             isLayer = false;
         }
 
@@ -1437,8 +1445,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
              * @method updateSuccess
              */
             function updateSuccess() {
+                close();
                 createMediaList();
-                MEDIA_EDITOR.close();
                 rightbarLoadingSave.fadeOut();
             }
 
@@ -1603,7 +1611,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .appendTo($rightbar);
 
             makeHotspotAnchor();
-            makeLayerContainer();
+            // makeLayerContainer(); -- called in toggleToLayer now
 
             $toggleHotspot.on('click', function () {
                 isHotspot ? toggleFromHotspot() : toggleToHotspot();
@@ -1651,8 +1659,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         console.log("error 3");
                     });
                 } else {
+                    close();
                     createMediaList();
-                    MEDIA_EDITOR.close();
                     rightbarLoadingDelete.fadeOut();
                 }
             });
@@ -1693,7 +1701,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 } else if (getActiveMediaMetadata('contentType') === 'Audio') {
                     $('.rightbar').find('audio')[0].pause();
                 }
-                MEDIA_EDITOR.close();
+                close();
             });
 
             mainPanel.append($rightbar);
@@ -1743,6 +1751,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 isHotspot = linq.Metadata.Type === "Hotspot";
                 isLayer = linq.Metadata.Type === "Layer";
 
+                if (enableLayering) {
+                    currSource = LADS.Worktop.Database.fixPath(asset.doq.Metadata.Source);
+                }
+
                 $('.assocMediaContainer').show();
 
                 if (isHotspot) {
@@ -1761,10 +1773,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 toggleLayerButton.css({
                     'display': enableLayering ? 'inline-block' : 'none'
                 });
-
-                if (enableLayering) {
-                    layerContainer.attr('src', LADS.Worktop.Database.fixPath(asset.doq.Metadata.Source));
-                }
 
                 rightbar.find('.assocmedia').html(content);
                 rightbar.find('.title').val(title);
@@ -1807,6 +1815,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 hotspotAnchor.fadeOut(100);
                 annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
                 layerContainer.remove();
+                annotatedImage.unfreezeArtwork();
                 rightbar.animate({ 'right': '-20%' }, 600);
                 $('.assetHolder').css('background-color', '');
                 editingMedia = false;
