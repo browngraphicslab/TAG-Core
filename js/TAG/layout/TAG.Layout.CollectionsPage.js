@@ -1285,8 +1285,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             selectedArtworkContainer.empty();
             // showAllAtYear is a boolean of of whether or not all artworks of a given year are shown, or just the artowrk selected.
             // The second conditional argument seems to be whether or not the artwork has a year?
-            artworksForYear = artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()] || null;
-            if (showAllAtYear && artworksForYear){
+            //^ The second boolean is whether there is a dictionary entry of artworks at the given year in the artworkYears dictionary, you can't check this before
+            // checking for 'showAllAtYear' or else you will get errors because the timelineDateLabel will be undefined for an artwork without a year,
+            //I just had this throw an error, changing it back for now sorry if it was unclear -LVK
+            if (showAllAtYear && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()] ){
                 for (i = 0; i < artworksForYear.length; i++) {
                     newTile = createPreviewTile(artworksForYear[i]);
                     newTile.css({
