@@ -78,9 +78,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         BASE_FONT_SIZE      = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH            = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
         MAX_YEAR            = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
-        EVENT_CIRCLE_WIDTH  = Math.max(20, $("#tagContainer").width()/60),  // width of the circles for the timeline                                // pixel width of event circles
-        LEFT_SHIFT          = 9,                                            // pixel shift of timeline event circles to center on ticks 
-        TILE_BUFFER         = 10,                                           // number of pixels between artwork tiles
+        EVENT_CIRCLE_WIDTH  = Math.max(20, $("#tagContainer").width()/40),  // width of the circles for the timeline                                // pixel width of event circles
+        COLLECTION_DOT_WIDTH = Math.max(7, $("#tagContainer").width() / 100),  // width of the circles for the timeline                                // pixel width of event circles
+        LEFT_SHIFT = 9,                                            // pixel shift of timeline event circles to center on ticks 
+        TILE_BUFFER         = $("#tagContainer").width() / 100,              // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO   = 200,                                          //ratio between width and height of artwork tiles
         TILE_WIDTH_RATIO    = 255,
         ANIMATION_DURATION  = 800,                                         // duration of timeline zoom animation
@@ -230,7 +231,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
            
             collectionDot  = $(document.createElement('div'))
                         .addClass('collectionDot')
-                        .on('click', loadCollection(visibleCollections[i]));
+                        .css({
+                            "width": COLLECTION_DOT_WIDTH,
+                            "height":  COLLECTION_DOT_WIDTH,
+                            "border-radius": COLLECTION_DOT_WIDTH / 2,
+                            "margin": COLLECTION_DOT_WIDTH/4
+                        })
+                         .on('click', loadCollection(visibleCollections[i]));
 
             collectionDotHolder.append(collectionDot);
             topBar.append(collectionDotHolder);
@@ -349,7 +356,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
                 nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
                 nextArrowArea.addClass('arrowArea');
-                nextArrowArea.css('right', '0%')
+                nextArrowArea.css({
+                    'right': '0%'})
                              .on('click', function(){
                                             return function(){
                                                 loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
@@ -615,7 +623,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 yearText,
                 tourLabel,
                 videoLabel;
-
+  
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
             tileImage.addClass('tileImage');
@@ -624,6 +632,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             yearTextBox.addClass('yearTextBox');
 
             main.on('click', function () {
+
                 // if the idle timer hasn't started already, start it
                 if(!idleTimer) {
                     idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
@@ -845,6 +854,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                         hideArtwork(art)();
                                         artworkShown = false;
                                     } else {
+                                        if (!artworkTiles[art.Identifier]) {
+                                            return;
+                                        }
+
                                         //TO-DO: make panning happen at first too if it makes sense 
                                         //panTimeline(art.circle, minDate, maxDate);
                                         zoomTimeline(artworkCircles[art.Identifier].yearKey, fullMinDisplayDate, fullMaxDisplayDate);
@@ -1116,7 +1129,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                                     hideArtwork(art)();
                                                     artworkShown = false;
                                                 } else {
-                                                    if (currTimelineCircleArea.overlapping){
+                                                    if (currTimelineCircleArea.overlapping || artworkTiles[art.Identifier]) {
                                                         zoomTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate);
                                                     } else {
                                                         panTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate);
@@ -1215,12 +1228,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 progressCircCSS,
                 timelineDateLabel,
                 circle,
+                artworksForYear,
                 i;
 
-            if(!artwork) {
+            if (!artwork) {
                 return;
             }
-            
+
             currentArtwork = artwork;
             artworkSelected = true;
             artworkShown = true;
@@ -1268,17 +1282,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             previewWidth = (0.32) * bottomContainer.width();
 
-
-
             selectedArtworkContainer.empty();
             // showAllAtYear is a boolean of of whether or not all artworks of a given year are shown, or just the artowrk selected.
             // The second conditional argument seems to be whether or not the artwork has a year?
-            if (showAllAtYear && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()]){
-                for (i=0; i<artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length;i++){
-                    newTile = createPreviewTile(artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()][i]);
-                    newTile.css('left', (i*previewWidth)+'px');
+            artworksForYear = artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()] || null;
+            if (showAllAtYear && artworksForYear){
+                for (i = 0; i < artworksForYear.length; i++) {
+                    newTile = createPreviewTile(artworksForYear[i]);
+                    newTile.css({
+                        'left': (i * previewWidth) + 'px',
+                        'width': previewWidth
+                    });
                 }
-                containerWidth = Math.min((previewWidth*3),(artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length)*previewWidth);
+                containerWidth = Math.min((bottomContainer.width()*.80), (artworksForYear.length) * previewWidth);
             } else {
                 newTile = createPreviewTile(artwork);
                 newTile.css('left', '0%');
@@ -1295,8 +1311,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
              * @return {Object} previewTile    //preview tile just created
              */
             function createPreviewTile(artwork){
-                previewTile = $(document.createElement('div'));
-                previewTile.addClass('previewTile');
+                previewTile = $(document.createElement('div'))
+                    .addClass('previewTile');
                 titleSpan = $(document.createElement('div'));
                 titleSpan.addClass('titleSpan')
                          .text(TAG.Util.htmlEntityDecode(artwork.Name));

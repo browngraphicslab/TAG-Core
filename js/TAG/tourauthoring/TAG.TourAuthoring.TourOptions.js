@@ -1,13 +1,13 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.TourOptions');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.TourOptions');
 
 /**
  * Class for the tour authoring 'Options' menu on the top-bar
- * @class LADS.TourAuthoring.TourOptions
+ * @class TAG.TourAuthoring.TourOptions
  * @constructor
  * @param {Object} options          timeManager attr, url (url of tour if loading existing tour for editing)
  * @return {Object} that            TourOptions as a DOM object
  */
-LADS.TourAuthoring.TourOptions = function (options) {
+TAG.TourAuthoring.TourOptions = function (options) {
     "use strict";
 
     var
@@ -26,7 +26,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
         undoManager = options.undoManager,                                  // handles undo changes made by user by keeping track of the order of commands
 
         // misc variables
-        dialogOverlay = $(LADS.Util.UI.blockInteractionOverlay()),          // the overlay that blocks the UI when a pop-up comes up                // NOTE: TODO: figure out how to place dialogOverlay inside of topbar to maintain modularity?   
+        dialogOverlay = $(TAG.Util.UI.blockInteractionOverlay()),          // the overlay that blocks the UI when a pop-up comes up                // NOTE: TODO: figure out how to place dialogOverlay inside of topbar to maintain modularity?   
         timeInput,                                                          // input box to enter time
         messageRow,                                                         // div containing messages to the user when required
         thumbnailcaptured = $(document.createElement('div')),               // used for thumbnail capture in the preview window
@@ -84,12 +84,12 @@ LADS.TourAuthoring.TourOptions = function (options) {
         item.css({
             "left": "0%",
             "position": "relative",
-            "font-size": LADS.Util.getFontSize(170),
+            "font-size": TAG.Util.getFontSize(48),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '4% 0 5% 0',
             'text-indent': '4%',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 5
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 5
         });
         item.on('mousedown', function (evt) {
             evt.stopImmediatePropagation();
@@ -105,7 +105,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
     function createDropDownIcon() {
         var icon = $(document.createElement('img'));
         icon.addClass("tourOptionDropDownIcon");
-        icon.attr('src', 'images/icons/Down.png');
+        icon.attr('src', tagPath + 'images/icons/Down.png');
         icon.css({
             'top': '-5%',
             'width': '7.5%',
@@ -125,7 +125,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
         optionsLabel.attr('id', 'addTourOptionsLabel');
         optionsLabel.text("Options");
         optionsLabel.css({
-            "font-size": LADS.Util.getFontSize(190),
+            "font-size": TAG.Util.getFontSize(55),
             "color": "rgb(255, 255, 255)"
         });
         optionsLabel.click(function (event) {
@@ -175,7 +175,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
             'background-color': 'rgba(0,0,0,0.85)',
             'left': '0',
             'width': '100%',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex
         });
         return menu;
     }
@@ -225,8 +225,8 @@ LADS.TourAuthoring.TourOptions = function (options) {
                     //no need for cropping anymore, since the rinplayer is always 16:9
                     //gets dataurl from tmpcanvas, ready to send to server!
                     var dataurl = canvas.toDataURL();
-                    LADS.Worktop.Database.uploadImage(dataurl, function (imageURL) {
-                        LADS.Worktop.Database.changeTour(tour.Identifier, { Thumbnail: imageURL }, function () {
+                    TAG.Worktop.Database.uploadImage(dataurl, function (imageURL) {
+                        TAG.Worktop.Database.changeTour(tour.Identifier, { Thumbnail: imageURL }, function () {
                             setTimeout(function () {
                                 thumbnailcaptured.fadeOut();//alert msg disappear
                             }, 1000);
@@ -252,7 +252,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
      * @method unauth
      */
     function unauth() {
-        var popup = LADS.Util.UI.popUpMessage(null, "Thumbnail not saved.  You must log in to save changes.");
+        var popup = TAG.Util.UI.popUpMessage(null, "Thumbnail not saved.  You must log in to save changes.");
         dialogOverlay.hide();
         $('body').append(popup);
         $(popup).show();
@@ -266,7 +266,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
      * the call anyway, which will overwrite their changes.
      * @method conflict
      * @param {jqXHR} jqXHR     async request object (see http://api.jquery.com/Types/#jqXHR)
-     * @param {} ajaxCall       see documentation in LADS.Worktop.Database (and the code for asyncRequest in that file)
+     * @param {} ajaxCall       see documentation in TAG.Worktop.Database (and the code for asyncRequest in that file)
      */
     function conflict(jqXHR, ajaxCall) {
         ajaxCall.force();
@@ -276,7 +276,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
      * @method error
      */
     function error() {
-        var popup = LADS.Util.UI.popUpMessage(null, "Thumbnail not saved.  There was an error contacting the server.");
+        var popup = TAG.Util.UI.popUpMessage(null, "Thumbnail not saved.  There was an error contacting the server.");
         dialogOverlay.hide();
         $('body').append(popup);
         $(popup).show();
@@ -292,7 +292,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
         var lengthDialog = $(document.createElement('div'));                                                            // create the pop-up div containing the form components
         var dialogForm = $(document.createElement('form'));                                                             // create a form to capture enter keypress
         var dialogTitle = $(document.createElement('div'));                                                             // the dialog box title text
-        var lengthDialogSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height(),                   
+        var lengthDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),                   
            {
                center_h: true,
                center_v: true,
@@ -338,13 +338,13 @@ LADS.TourAuthoring.TourOptions = function (options) {
             var command;
 
             if (split.length === 1 && (min || min === 0) && min >= 0) { // In this case 'min' is actually seconds
-                if (min > LADS.TourAuthoring.Constants.maxTourLength) {
+                if (min > TAG.TourAuthoring.Constants.maxTourLength) {
                     messageRow.text('Tour length is too long. Maximum length of tour must be 15 minutes.');
                     messageRow.css({
                         color: 'white',
                         'width': '80%',
                         'left': '10%',
-                        'font-size': '1.25em',
+                        'font-size': '0.7em',
                         'position': 'absolute',
                         'text-align': 'center',
                         'margin-top': '3%',
@@ -355,7 +355,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
                         min = timeline.getLastDisplayTime();
                     }
                     oldTime = timeManager.getDuration().end;
-                    command = LADS.TourAuthoring.Command({
+                    command = TAG.TourAuthoring.Command({
                         execute: function () {
                             timeManager.setEnd(min);
                         },
@@ -369,7 +369,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
                 }
             } else if (split.length === 2 && (min || min === 0) && (sec || sec === 0) && min >= 0 && (typeof sec === "number") && sec >= 0 && sec <= 59) { // good format
                 var newTime = min * 60 + sec;
-                if (newTime > LADS.TourAuthoring.Constants.maxTourLength) {
+                if (newTime > TAG.TourAuthoring.Constants.maxTourLength) {
                     messageRow.text('Tour length is too long. Maximum length of tour is 15 minutes.');
                     timeInput.select();
                 } else {
@@ -377,7 +377,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
                         newTime = timeline.getLastDisplayTime();
                     }
                     oldTime = timeManager.getDuration().end;
-                    command = LADS.TourAuthoring.Command({
+                    command = TAG.TourAuthoring.Command({
                         execute: function () {
                             timeManager.setEnd(newTime);
                         },
@@ -403,7 +403,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
             'width': '80%',
             'height': '15%',
             'left': '10%',
-            'font-size': '1.25em',
+            'font-size': '0.7em',
             'position': 'relative',
             'text-align': 'center',
             'word-wrap': 'break-word'
@@ -432,7 +432,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
             'color': 'white',
             'width': '80%',
             'left': '10%',
-            'font-size': '1.25em',
+            'font-size': '0.7em',
             'position': 'absolute',
             'text-align': 'center',
             'margin-top': '3%'
@@ -515,7 +515,7 @@ LADS.TourAuthoring.TourOptions = function (options) {
         html_content += '                    serverIp: "' + localStorage.ip + '",\n';
         html_content += '                    width: "1000px",\n';
         html_content += '                    height: "500px",\n';
-        html_content += '                    tourId: "' + options.tour.Identifier + '"\n';
+        html_content += '                    pageToLoad: "enter_url_here"\n';
         html_content += '                });\n';
         html_content += '            }\n';
         html_content += '        </script>\n';
@@ -541,13 +541,13 @@ LADS.TourAuthoring.TourOptions = function (options) {
      * @return {jQuery obj}             the overlay to be appended to the root
      */
     function popupTextareaDialog(description, text) {
-        var overlay = $(LADS.Util.UI.blockInteractionOverlay()),
+        var overlay = $(TAG.Util.UI.blockInteractionOverlay()),
             messageDiv = $(document.createElement('div')),
             textarea = $(document.createElement('textarea')),
             closeButton = $(document.createElement('button')),
             optionButtonDiv = $(document.createElement('div')),
             confirmBox = $(document.createElement('div')),
-            confirmBoxSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height(), { // TODO is window right for the web app?
+            confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(), { // TODO is window right for the web app?
                 center_h: true,
                 center_v: true,
                 width: 0.5,

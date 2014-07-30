@@ -2841,7 +2841,7 @@ TAG.Util.UI = (function () {
     function addCustomPushpin(locs, currentLocationIndex) {
         var pushpinOptions = {
             text: String(currentLocationIndex),
-            icon: tagPath+'/images/icons/locationPin.png',
+            icon: tagPath+'images/icons/locationPin.png',
             width: 20,
             height: 30
         };
@@ -2866,7 +2866,7 @@ TAG.Util.UI = (function () {
         var location = new Microsoft.Maps.Location(lat, long);
         var pushpinOptions = {
             text: String(currentLocationIndex),
-            icon: tagPath+'/images/icons/locationPin.png',
+            icon: tagPath+'images/icons/locationPin.png',
             width: 20,
             height: 30
         };
@@ -3913,10 +3913,9 @@ TAG.Util.RLH = function (input) {
         locationPanelDiv = $(document.createElement('div'))
                         .attr('id', 'locationHistoryOuterContainer')
                         .css({
-                            'background-color': 'rgba(0,0,0,0.85)',
                             position: 'absolute',
-                            top: '10%',
-                            left: '20%',
+                            top: '12%',
+                            left: input.authoring?'20%':'22%',
                             width: '70%',
                             height: '80%',
                             display: 'none',
@@ -3927,13 +3926,14 @@ TAG.Util.RLH = function (input) {
         locationPanel = $(document.createElement('div'))
                         .attr('id', 'locationHistoryContainer')
                         .css({
+                            display:'inline-block',
                             position: 'relative',
-                            width: '96%',
-                            height: '96%',
-                            top: '2%',
-                            left: '2%',
+                            width: '100%',
+                            height: '100%',
+                            top: '0%',
+                            left: '0%',
                             'z-indez': 99,
-                            'background-color': 'rgba(0,0,0,0.4);'
+                            'background-color': 'rgba(0,0,0,0.75)'
                         })
                         .appendTo(locationPanelDiv);
 
@@ -3942,7 +3942,7 @@ TAG.Util.RLH = function (input) {
                     .css({
                         position: 'relative',
                         width: '100%',
-                        height: '7%'
+                        height: '7%',
                     })
                     .appendTo(locationPanel);
 
@@ -4045,7 +4045,7 @@ TAG.Util.RLH = function (input) {
 
         leftArrowButton = $(document.createElement('img'))
                     .attr('id', 'locationHistoryLeftArrowButton')
-                    .attr('src', '../../../images/icons/Left.png')
+                    .attr('src', tagPath+'images/icons/Left.png')
                     .css({
                         position: 'absolute',
                         width: '13px',
@@ -4078,7 +4078,7 @@ TAG.Util.RLH = function (input) {
 
         rightArrowButton = $(document.createElement('img'))
                     .attr('id', 'locationHistoryRightArrowButton')
-                    .attr('src', '../../../images/icons/Right.png')
+                    .attr('src', tagPath+'images/icons/Right.png')
                     .css({
                         position: 'absolute',
                         width: '13px',
@@ -4197,13 +4197,20 @@ TAG.Util.RLH = function (input) {
                         .attr('id', 'locationHistoryDotsContainer')
                         .css({
                             position: 'absolute',
-                            'width': '40%',
+                            'width': '30%',
                             'height': '50%',
                             'top': '0%',
-                            'left': '30%',
+                            'left': '40%',
                             'text-align': 'center'
                         })
                         .appendTo(buttonsRegion);
+
+        if (!input.authoring) {
+            dotsContainer.css({
+                'width': '40%',
+                'left': '30%'
+            });
+        }
 
         locationsRegion = $(document.createElement('div'))
                     .attr('id', 'locationHistoryLocationsRegion')
@@ -4260,7 +4267,8 @@ TAG.Util.RLH = function (input) {
                 id: 'bingMapNameHolder'
             })
             .css({
-                'font-size': '2.5em',
+                'font-size': '40px',
+                'vertical-align':'middle',
                 position: 'absolute',
                 top: '0%',
                 height: '90%',
@@ -4533,7 +4541,7 @@ TAG.Util.RLH = function (input) {
                         'border-color': 'white',
                         width: '8px',
                         height: '8px',
-                        'margin-left': '5px'
+                        'margin-left': '5px',
                     })
                     .appendTo(dotsContainer);
             dot.on('click', dotClickHelper(i));
@@ -4567,7 +4575,7 @@ TAG.Util.RLH = function (input) {
 
             locationsRegion.append(editingFormElements.container);
             locationsRegion.scrollTop(0);
-            locationsRegion.scrollTop(editingFormElements.container.position().top);
+            locationsRegion.scrollTop(editingFormElements.container.position().top+20);
         }
     }
 
@@ -4728,7 +4736,7 @@ TAG.Util.RLH = function (input) {
 
             pushpin = new Microsoft.Maps.Pushpin(loc, {
                 draggable: !!editing,
-                icon: '/images/icons/locationPin.svg', //green icon is the default
+                icon: tagPath+'images/icons/locationPin.svg', //green icon is the default
                 width: 20,
                 height: 30
             });
@@ -4924,14 +4932,19 @@ TAG.Util.RLH = function (input) {
          */
         function init(input) {
             annotImgs = {};
-            var annotImg = new LADS.AnnotatedImage(input.container, input.mapdoq, false, function () {
-                annotImg.loadDoq(input.mapdoq);
-                annotImgs[input.mapdoq.Identifier] = annotImg;
-
-                if (++input.progress.done >= input.progress.total) {
-                    input.loadCallback && input.loadCallback();
-                }
-            }, true);
+            var annotImg = new TAG.AnnotatedImage({
+                root        :   input.container,
+                doq         :   input.mapdoq,
+                callback    :   function(){
+                    annotImg.openArtwork(input.mapdoq);
+                    annotImgs[input.mapdoq.Identifier] = annotImg;
+                    
+                    if (++input.progress.done >= input.progress.total) {
+                            input.loadCallback && input.loadCallback();
+                    }
+                },
+                noMedia     :   true
+            });
         }
 
         /**
@@ -4955,7 +4968,7 @@ TAG.Util.RLH = function (input) {
             }
 
             pushpin.attr({
-                src: '/images/icons/locationPin.svg'
+                src: tagPath+'images/icons/locationPin.svg'
             });
 
             pushpin.css({
@@ -4968,7 +4981,7 @@ TAG.Util.RLH = function (input) {
 
             if (editing) {
                 pushpin.attr({
-                    src: '/images/icons/locationPin2.svg'
+                    src: tagPath+'images/icons/locationPin2.svg'
                 });
             }
 
@@ -5197,7 +5210,7 @@ TAG.Util.RLH = function (input) {
                 width: '30px'
             });
 
-            deleteButton.attr('src', 'images/icons/delete.svg');
+            deleteButton.attr('src', tagPath+'images/icons/delete.svg');
 
             deleteButton.on('click', function (evt) {
                 var overlay = LADS.Util.UI.PopUpConfirmation(function () {
@@ -5225,7 +5238,7 @@ TAG.Util.RLH = function (input) {
                 width: '30px'
             });
 
-            editButton.attr('src', 'images/icons/edit.png');
+            editButton.attr('src', tagPath+'images/icons/edit.png');
 
             editButton.on('click', function (evt) {
                 if (!formIsEnabled) {
@@ -5236,13 +5249,13 @@ TAG.Util.RLH = function (input) {
                     $('.locationItemDesc').css({ 'display': 'none' });
                     $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
                     //reset all pushpins to the green icon
-                    $('.locationPushpin').attr('src', '/images/icons/locationPin.svg');
+                    $('.locationPushpin').attr('src', tagPath+'images/icons/locationPin.svg');
                     for (l = 0; l < map.entities.getLength() ; l++) { //iterates through bing map pushpins
-                        map.entities.get(l).setOptions({ icon: '/images/icons/locationPin.svg' });
+                        map.entities.get(l).setOptions({ icon: tagPath+'images/icons/locationPin.svg' });
                     }
 
                     if (custom) {
-                        pushpin && pushpin.attr('src', '/images/icons/locationPin2.svg');
+                        pushpin && pushpin.attr('src', tagPath+'images/icons/locationPin2.svg');
                     }
                     //if it's a bing map pushpin, it's set to red below
 
@@ -5278,7 +5291,7 @@ TAG.Util.RLH = function (input) {
                         pushpin: pushpin,
                         mapguid: location.map
                     });
-                    (!custom) && map.entities.get(map.entities.getLength() - 1).setOptions({ icon: '/images/icons/locationPin2.svg' }); //set the last pushpin to red
+                    (!custom) && map.entities.get(map.entities.getLength() - 1).setOptions({ icon: tagPath+'images/icons/locationPin2.svg' }); //set the last pushpin to red
 
                     //scroll to the correct position
                     locationsRegion.scrollTop(0);
@@ -5360,9 +5373,9 @@ TAG.Util.RLH = function (input) {
         //'de-select' any previous locations from the list (only want one red pin at a time)
         $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
         $('.locationItemDesc').css({ 'display': 'none' });
-        $('.locationPushpin').attr('src', '/images/icons/locationPin.svg');
+        $('.locationPushpin').attr('src', tagPath+'images/icons/locationPin.svg');
         for (var l = 0; l < map.entities.getLength() ; l++) { //iterates through all of the bing map pushpins
-            map.entities.get(l).setOptions({ icon: '/images/icons/locationPin.svg' });
+            map.entities.get(l).setOptions({ icon: tagPath+'images/icons/locationPin.svg' });
         }
 
         var container = $(document.createElement('div')).addClass('locationEditingContainer'),
@@ -5430,9 +5443,9 @@ TAG.Util.RLH = function (input) {
         });
 
         if (custom) {
-            pushpin.attr('src', '/images/icons/locationPin2.svg');
+            pushpin.attr('src', tagPath+'images/icons/locationPin2.svg');
         } else {
-            pushpin.setOptions({ icon: '/images/icons/locationPin2.svg' });
+            pushpin.setOptions({ icon: tagPath+'images/icons/locationPin2.svg' });
         }
 
         container.css({
@@ -5498,7 +5511,7 @@ TAG.Util.RLH = function (input) {
                 type: 'button'
             });
             searchButton.text('Search');
-            searchButton.css({ 'display': 'inline-block', 'float': 'right', 'margin-right': '25.5%' });
+            searchButton.css({ 'display': 'inline-block', 'margin-left':'3.5%'});
 
             resultsDiv = $(document.createElement('div')).addClass('locationEditorSearchResults');
             resultsDiv.css({
@@ -5827,9 +5840,9 @@ TAG.Util.RLH = function (input) {
         location.descContainer.css({ 'display': 'none' });
         $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
         if (!custom) {
-            pushpin.setOptions({ icon: '/images/icons/locationPin.svg' });
+            pushpin.setOptions({ icon: tagPath+'images/icons/locationPin.svg' });
         } else {
-            $('.locationPushpin').attr('src', '/images/icons/locationPin.svg');
+            $('.locationPushpin').attr('src', tagPath+'images/icons/locationPin.svg');
         }
     }
 
@@ -5843,19 +5856,19 @@ TAG.Util.RLH = function (input) {
         pushpin.container.css('background-color', 'rgba(255,255,255,0.2)');
 
         //reset all pushpins here to the green icon
-        $('.locationPushpin').attr('src', '/images/icons/locationPin.svg');
+        $('.locationPushpin').attr('src', tagPath+'images/icons/locationPin.svg');
         if (input.authoring || defaultMapShown) { //can't access map if in art mode and bing map is not shown
             for (l = 0; l < map.entities.getLength() ; l++) { //iterates through all of the bing map pushpins
-                map.entities.get(l).setOptions({ icon: '/images/icons/locationPin.svg' });
+                map.entities.get(l).setOptions({ icon: tagPath+'images/icons/locationPin.svg' });
             }
         }
 
         if (!custom) {
             //make the right pushpin red
-            pushpin.setOptions({ icon: '/images/icons/locationPin2.svg' });
+            pushpin.setOptions({ icon: tagPath+'images/icons/locationPin2.svg' });
         } else {
             //make the right pushpin red
-            pushpin && pushpin.attr('src', '/images/icons/locationPin2.svg');
+            pushpin && pushpin.attr('src', tagPath+'images/icons/locationPin2.svg');
         }
     };
 

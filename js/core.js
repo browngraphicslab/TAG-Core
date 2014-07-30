@@ -41,7 +41,7 @@
             return; // no TAG for you
         }
 
-        if(urlToParse) {
+        if(urlToParse || urlToLoad) {
             pageToLoad = parseQueryParams();
         }
 
@@ -139,6 +139,13 @@
                     }
                     break;
             }
+        } else if (urlToLoad) {
+            // if we didn't have any luck parsing urlToParse, try urlToLoad
+            // this makes urlToLoad the "default" loading page, but still
+            // allows users to link to specific pages by specifying url params
+            urlToParse = urlToLoad;
+            urlToLoad = '';
+            return parseQueryParams();
         }
         return ret;
     }
