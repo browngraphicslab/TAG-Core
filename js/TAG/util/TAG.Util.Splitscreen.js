@@ -200,10 +200,11 @@ TAG.Util.Splitscreen = (function () {
             // debugger;
             // Layout specific edits
             if (root.attr('id') === 'artmodeRoot') { // Fix sidebar, toggler, and splitscreen button
-                var sideBar = root.find('.sideBar'),
-                    toggler = root.find('.toggler'),
-                    togglerImage = root.find('.togglerImage'),
+                var sideBar = root.find('#sideBar'),
+                    toggler = root.find('#toggler'),
+                    togglerImage = root.find('#togglerImage'),
                     splitscreenContainer = root.find('#splitscreenContainer'),
+                    seadragonManipContainer = root.find('#seadragonManipContainer'),
                     splitscreenIcon = root.find('.splitscreen-icon');
                     //locationHistoryDiv = root.find('.locationHistoryDiv'),
                     //locationHistoryPanel = root.find('.locationHistoryPanel'),
@@ -215,8 +216,10 @@ TAG.Util.Splitscreen = (function () {
                     //lhmap = root.find('.lpMapDiv'),
                     //sidebarsize = window.innerWidth * 0.2,
                     //locsize = window.innerWidth * 0.8;
-
-                sideBar.css({ left: '0px', });
+                sideBar.css({
+                    'left': '0%',
+                    'right' : 'auto'
+                });
                 toggler.css({
                     'position': 'absolute',
                     'left': 'auto',
@@ -226,7 +229,15 @@ TAG.Util.Splitscreen = (function () {
                     borderTopLeftRadius: "0px",
                     borderBottomLeftRadius: "0px",
                 });
-                togglerImage.attr("src", 'images/icons/Close.svg');
+                togglerImage.attr("src", tagPath + 'images/icons/Close.svg')
+                            .css({
+                                'left': '0%',
+                                'right': 'auto'
+                              });
+                seadragonManipContainer.css({
+                    'right': '0%',
+                    'left': 'auto'
+                });
                 splitscreenContainer.css('display', 'block');
                 root.applyConstraints && root.applyConstraints();
                 //locationHistoryToggle.css({

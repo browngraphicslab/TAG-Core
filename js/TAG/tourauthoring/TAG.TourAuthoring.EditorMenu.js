@@ -1,13 +1,13 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.MenuInputFormats');
-LADS.Util.makeNamespace('LADS.TourAuthoring.EditorMenu');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.MenuInputFormats');
+TAG.Util.makeNamespace('TAG.TourAuthoring.EditorMenu');
 
-LADS.TourAuthoring.MenuInputFormats = {
+TAG.TourAuthoring.MenuInputFormats = {
     minSec: 1,      // 00:00.00 (min:sec.centisecs)
     sec: 2,         // 00 (sec)
     percent: 3      // 0 - 100 (%)
 };
 
-LADS.TourAuthoring.MenuType = {
+TAG.TourAuthoring.MenuType = {
     display: 1,
     keyframe: 2,
     track: 3
@@ -16,13 +16,13 @@ LADS.TourAuthoring.MenuType = {
 
 /**
  * Menu for track, display and keyframe editing
- * @class LADS.Authoring.EditorMenu
+ * @class TAG.Authoring.EditorMenu
  * @constructor
  * @param {Object} spec          value from MenuType enum specifying menu layout
  * @param {Object} my            track's shared my object
  * @return {Object} that         the main DOM object
  */
-LADS.TourAuthoring.EditorMenu = function (spec, my) {
+TAG.TourAuthoring.EditorMenu = function (spec, my) {
     "use strict";
     var that = {
             getMenuCloseable: getMenuCloseable,
@@ -40,7 +40,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
         trackBody = my.timeline.getTrackBody(),                                                                                   // the track on which the editor menu lies
         OPACITY = 0.95,                                                                                                           // opacity of the menu display on screen
         menuCloseable = true,                                                                                                     // boolean specyfying whether or not the menu can be closed
-        power = Math.pow(10, LADS.TourAuthoring.Constants.menuDecimals);                                                          // returns the base exponent of the constant passed in
+        power = Math.pow(10, TAG.TourAuthoring.Constants.menuDecimals);                                                          // returns the base exponent of the constant passed in
 
         /**
          * Contains one object for every input in the menu
@@ -70,30 +70,30 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
             'padding-top': '3px',
             'padding-left': '2px',
             'padding-right': '2px',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 7,
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 7,
             'border-radius': '15px'
         });
 
         // set width according to menu type
         switch (menuType) {     
-            case LADS.TourAuthoring.MenuType.display:
+            case TAG.TourAuthoring.MenuType.display:
                 width = '25%';
                 break;
-            case LADS.TourAuthoring.MenuType.keyframe:
+            case TAG.TourAuthoring.MenuType.keyframe:
                 width = '18%';
                 break;
-            case LADS.TourAuthoring.MenuType.track:
+            case TAG.TourAuthoring.MenuType.track:
                 width = '20%';
                 break;
         }
 
         // change css according to menu type
         switch (menuType) {     
-            case LADS.TourAuthoring.MenuType.display:
+            case TAG.TourAuthoring.MenuType.display:
                 break;
-            case LADS.TourAuthoring.MenuType.keyframe:
+            case TAG.TourAuthoring.MenuType.keyframe:
                 break;
-            case LADS.TourAuthoring.MenuType.track:
+            case TAG.TourAuthoring.MenuType.track:
                 menu.css({
                     'left': '18%',
                     'padding': '.5%',
@@ -125,12 +125,12 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
 
         // set arrow image according to menu type
         switch (menuType) {         
-            case LADS.TourAuthoring.MenuType.display:
-            case LADS.TourAuthoring.MenuType.keyframe:
-                arrowSrc = "images/icons/KeyframeInfo-Opaque.png";
+            case TAG.TourAuthoring.MenuType.display:
+            case TAG.TourAuthoring.MenuType.keyframe:
+                arrowSrc = tagPath+"images/icons/KeyframeInfo-Opaque.png";
                 break;
-            case LADS.TourAuthoring.MenuType.track:
-                arrowSrc = "images/icons/LeftPoint-Opaque.png";
+            case TAG.TourAuthoring.MenuType.track:
+                arrowSrc = tagPath + "images/icons/LeftPoint-Opaque.png";
                 break;
         }
 
@@ -139,13 +139,13 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
             position: 'fixed',
             height: '45px',
             width: '54px',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 5,
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 5,
             'opacity': OPACITY
         });
 
         // set arrow image css according to menu type
         switch (menuType) {
-            case LADS.TourAuthoring.MenuType.track:
+            case TAG.TourAuthoring.MenuType.track:
                 arrow.css({
                     left: '14%',
                     height: '6%',
@@ -316,13 +316,13 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
 
         // change text when for different formats of an input
         switch (format) {
-            case LADS.TourAuthoring.MenuInputFormats.minSec:
+            case TAG.TourAuthoring.MenuInputFormats.minSec:
                 units.text('min:sec');
                 break;
-            case LADS.TourAuthoring.MenuInputFormats.sec:
+            case TAG.TourAuthoring.MenuInputFormats.sec:
                 units.text('secs');
                 break;
-            case LADS.TourAuthoring.MenuInputFormats.percent:
+            case TAG.TourAuthoring.MenuInputFormats.percent:
                 units.text('percent');
         }
 
@@ -331,7 +331,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
             width: "95%",
             'margin-left': 'auto',
             'margin-right': 'auto',
-            'font-size': LADS.Util.getFontSize(200),
+            'font-size': TAG.Util.getFontSize(57),
             'padding-top': '3%',
         });
         inputContainer.append(name);
@@ -358,7 +358,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
             "left": "auto",
             "top": "auto",
             "position": "relative",
-            "font-size": LADS.Util.getFontSize(250),
+            "font-size": TAG.Util.getFontSize(71.5),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '4%',
@@ -380,7 +380,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
             "left": "0%",
             "position": "relative",
             "top": "5%",
-            "font-size": LADS.Util.getFontSize(200),
+            "font-size": TAG.Util.getFontSize(57),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '10px 0',
@@ -392,7 +392,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
 
         // additional css edits:
         switch (menuType) {
-            case LADS.TourAuthoring.MenuType.track:
+            case TAG.TourAuthoring.MenuType.track:
                 buttondiv.css({
                     'width': '93%',
                     'height': '16%',
@@ -408,7 +408,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
         }
 
         menu.append(buttondiv);
-        LADS.Util.makeManipulatable(buttondiv[0], {
+        TAG.Util.makeManipulatable(buttondiv[0], {
             onTapped: callback
         });
     }
@@ -445,7 +445,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
         if (isValidInput(newValue)) {
             // convert text to proper return format
             newValue = convertToUpdateFormat(newValue, inputObj.format);
-            if (Math.abs(oldValue - newValue) > LADS.TourAuthoring.Constants.epsilon) {
+            if (Math.abs(oldValue - newValue) > TAG.TourAuthoring.Constants.epsilon) {
                 my.timeline.getClampedDisplays().length = 0;
                 command = {
                     execute: function () {
@@ -502,15 +502,15 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
         arrow.show();
 
         switch (menuType) {
-            case LADS.TourAuthoring.MenuType.display:
-            case LADS.TourAuthoring.MenuType.keyframe:
+            case TAG.TourAuthoring.MenuType.display:
+            case TAG.TourAuthoring.MenuType.keyframe:
                 menuLeft = my.track.offset().left + evt.position.x - (menu.width() / 2);
                 arrowLeft = menuLeft + (menu.width() / 2) - (arrow.width() / 2);
                 arrowTop = my.track.offset().top;
                 menuTop = arrowTop - menu.height()-3; // 10 is top margin of menu
                 menuLeft = Math.min(menuLeft, $(document).width() - menu.width());
                 break;
-            case LADS.TourAuthoring.MenuType.track:
+            case TAG.TourAuthoring.MenuType.track:
                 menuTop = my.track.offset().top + my.track.height() / 2 - menu.height() / 2;
                 arrowTop = menuTop + menu.height() / 2 - arrow.height() / 2;
                 menuTop = Math.min(menuTop, (trackBody.offset().top + trackBody.height()) / 2 + $(document).height() / 2 - menu.height());
@@ -573,7 +573,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
             sec;
 
         switch (format) {
-            case LADS.TourAuthoring.MenuInputFormats.minSec:
+            case TAG.TourAuthoring.MenuInputFormats.minSec:
                 // 'min:sec': --> secs
                 valuestr = valuestr.split(':');
                 if (valuestr.length === 1) { // no min at all
@@ -585,9 +585,9 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
                     return sec + 60 * min;
                 } break;
 
-            case LADS.TourAuthoring.MenuInputFormats.sec:
+            case TAG.TourAuthoring.MenuInputFormats.sec:
                 // 'secs' --> secs
-            case LADS.TourAuthoring.MenuInputFormats.percent:
+            case TAG.TourAuthoring.MenuInputFormats.percent:
                 // 'percent' --> percent
                 return parseFloat(valuestr);
         }
@@ -604,7 +604,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
         var min,
             sec;
         switch (format) {
-            case LADS.TourAuthoring.MenuInputFormats.minSec:
+            case TAG.TourAuthoring.MenuInputFormats.minSec:
                 // 'min:sec': --> secs
                 min = Math.floor(value / 60);
                 if (min < 10) {
@@ -617,9 +617,9 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
                 }
                 return min + ':' + sec;
 
-            case LADS.TourAuthoring.MenuInputFormats.sec:
+            case TAG.TourAuthoring.MenuInputFormats.sec:
                 // 'secs' --> secs
-            case LADS.TourAuthoring.MenuInputFormats.percent:
+            case TAG.TourAuthoring.MenuInputFormats.percent:
                 // 'percent' --> percent
                 return roundDecimals(value) + '';
         }
@@ -627,7 +627,7 @@ LADS.TourAuthoring.EditorMenu = function (spec, my) {
 
     /**Round number to have only
      * @method roundDecimals
-     * LADS.TourAuthoring.Constants.menuDecimals decimal places
+     * TAG.TourAuthoring.Constants.menuDecimals decimal places
      * @param {Number} num       number to round
      * @return {Number} number   rounded number
      */

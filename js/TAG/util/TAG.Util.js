@@ -1631,6 +1631,7 @@ TAG.Util.UI = (function () {
         getLocationList: getLocationList,
         popUpMessage: popUpMessage,
         PopUpConfirmation: PopUpConfirmation,
+        popupInputBox: popupInputBox,
         cgBackColor: cgBackColor,
         setUpBackButton: setUpBackButton,
         blockInteractionOverlay: blockInteractionOverlay,
@@ -2482,6 +2483,149 @@ TAG.Util.UI = (function () {
         $(confirmBox).append(optionButtonDiv);
 
         $(overlay).append(confirmBox);
+        return overlay;
+    }
+
+    /**
+     * Create an input box popup
+     * @method popupInputBox
+     * @param {Object} options             some input options (callback function for confirm button, etc)
+     *            {Function} cancelAction    action to take on clicking "cancel"
+     *            {Function} confirmAction   action to take on clicking "confirm"
+     *            {jQuery obj} container     container used for styling the popup box
+     *            {String} message           message to show at top of popup
+     *            {String} placeholder       placeholder text inside input field
+     *            {String} confirmText       custom text for the "confirm" button
+     * @return {jQuery obj}                overly of popup box
+     */
+    function popupInputBox(options) {
+        var overlay = $(blockInteractionOverlay()),
+            cancelAction = function () {
+                options.cancelAction && options.cancelAction();
+                removeAll();
+            },
+            confirmAction = function () {
+                options.confirmAction && options.confirmAction(inputField.val()); // TODO iframe sanitize input here?
+                removeAll();
+            },
+            popupHandler = {
+                13: confirmAction
+            },
+            container = options.container || window,
+            currKeyHandler = globalKeyHandler[0],
+            popupBox = $(document.createElement('div')),
+            popupBoxSpecs = TAG.Util.constrainAndPosition($(container).width(), $(container).height(), {
+                center_h: true,
+                center_v: true,
+                width: 0.5,
+                height: 0.35,
+                max_width: 560,
+                max_height: 200,
+            }),
+            messageLabel = $(document.createElement('div')),
+            optionButtonDiv = $(document.createElement('div')),
+            inputField = $(document.createElement('input')),
+            message = options.message || '',
+            confirmButton = $(document.createElement('button')),
+            cancelButton = $(document.createElement('button')),
+            confirmButtonText = options.confirmText || '';
+
+        globalKeyHandler[0] = popupHandler; // TODO KEYHANDLER should we be prepending rather than overwriting first element? same with popupconfirmation above
+
+        popupBox.css({
+            position: 'absolute',
+            left: popupBoxSpecs.x + 'px',
+            top: popupBoxSpecs.y + 'px',
+            width: popupBoxSpecs.width + 'px',
+            height: popupBoxSpecs.height + 'px',
+            border: '3px double white',
+            'background-color': 'black'
+        });
+
+        messageLabel.css({
+            color: 'white',
+            'width': '80%',
+            'height': '30%',
+            'left': '10%',
+            'top': '12.5%',
+            'font-size': '0.6em',
+            'position': 'relative',
+            'text-align': 'center',
+            'word-wrap': 'break-word'
+        });
+
+        messageLabel.text(message);
+
+        inputField.css({
+            width: '60%',
+            left: '20%',
+            position: 'relative'
+        });
+        inputField.attr({
+            type: 'text',
+            placeholder: options.placeholder || 'Paste URL here...'
+        });
+
+        optionButtonDiv.addClass('optionButtonDiv');
+        optionButtonDiv.css({
+            'height': '20%',
+            'width': '100%',
+            'position': 'absolute',
+            'bottom': '10%',
+            'right': '5%'
+        });
+
+        confirmButton.css({
+            'color': 'white',
+            'padding': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'position': 'relative',
+            'float': "left",
+            'margin-left': '12%',
+            'margin-top': '-1%'
+
+        });
+        confirmButtonText = !confirmButtonText ? "Confirm" : confirmButtonText;
+        confirmButton.text(confirmButtonText);
+
+        confirmButton.on('click', confirmAction);
+
+        confirmButton.on('keydown', function (event) { // TODO KEYHANDLER do we need a separate keydown handler for this? should be handled in global key handling
+            switch (event.which) {
+                case 13: // enter key
+                    confirmAction();
+            }
+        });
+
+        cancelButton.css({
+            'color': 'white',
+            'padding': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'position': 'relative',
+            'float': "right",
+            'margin-right': '3%',
+            'margin-top': '-1%'
+        });
+        cancelButton.text('Cancel');
+        cancelButton.on('click', cancelAction);
+
+        function removeAll() {
+            overlay.fadeOut(500, function () {
+                overlay.remove();
+            });
+            globalKeyHandler[0] = currKeyHandler;
+        }
+
+        optionButtonDiv.append(cancelButton);
+        optionButtonDiv.append(confirmButton);
+
+        popupBox.append(messageLabel);
+        popupBox.append(inputField);
+        popupBox.append(optionButtonDiv);
+
+        overlay.append(popupBox);
         return overlay;
     }
 
@@ -3394,22 +3538,20 @@ TAG.Util.UI = (function () {
 
                 if (comp.Metadata.ContentType === 'Audio') {
                     compHolderImage.attr('src', tagPath+'images/audio_icon.svg');
-                }
-                else if (comp.Metadata.ContentType === 'Video' || comp.Type === 'Video' || comp.Metadata.Type === 'VideoArtwork') {
+                } else if (comp.Metadata.ContentType === 'Video' || comp.Type === 'Video' || comp.Metadata.Type === 'VideoArtwork') {
                     compHolderImage.attr('src', (comp.Metadata.Thumbnail && !comp.Metadata.Thumbnail.match(/.mp4/)) ? FIXPATH(comp.Metadata.Thumbnail) : 'images/video_icon.svg');
                     shouldAppendTII = true;
                     typeIndicatorImage.attr('src', tagPath+'images/icons/catalog_video_icon.svg');
-                }
-                else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
+                } else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/image_icon.svg');
-                }
-                else if (comp.Type === 'Empty') { // tours....don't know why the type is 'Empty'
-                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/icons/catalog_tour_icon.svg');
+                } else if (comp.Metadata.ContentType === 'iframe') {
+                    compHolderImage.attr('src', tagPath + 'images/icons/audio_icon.svg'); // TODO iframe fix this with new icon
+                } else if (comp.Type === 'Empty') { // tours....don't know why the type is 'Empty'
+                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;
-                    typeIndicatorImage.attr('src', tagPath+'images/icons/catalog_tour_icon.svg');
-                }
-                else {//text associated media without any media...
-                    compHolderImage.attr('src', tagPath+'images/text_icon.svg');
+                    typeIndicatorImage.attr('src', tagPath + 'images/icons/catalog_tour_icon.svg');
+                } else {//text associated media without any media...
+                    compHolderImage.attr('src', tagPath + 'images/text_icon.svg');
                 }
 
                 // if (compHolderImage.height() / compHolderImage.width() > 1) {

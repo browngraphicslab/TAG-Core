@@ -1,9 +1,9 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.Track');
-LADS.Util.makeNamespace('LADS.TourAuthoring.TrackType');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.Track');
+TAG.Util.makeNamespace('TAG.TourAuthoring.TrackType');
 
 
 // Enum defining track types
-LADS.TourAuthoring.TrackType = {
+TAG.TourAuthoring.TrackType = {
     audio: 1,
     video: 2,
     artwork: 3,
@@ -13,9 +13,9 @@ LADS.TourAuthoring.TrackType = {
 
 /**Represents all the displays and keyframes of a piece of media over the duration of a tour
  * Maps to Experience Stream in RIN
- * @class LADS.TourAuthoring.Track
+ * @class TAG.TourAuthoring.Track
  * @constructor
- * @param spec.type         one of LADS.TourAuthoring.TrackType
+ * @param spec.type         one of TAG.TourAuthoring.TrackType
  * @param spec.media        URI of resource
  * @param spec.title        Name to display
  * @param spec.id           Unique id (number)
@@ -25,7 +25,7 @@ LADS.TourAuthoring.TrackType = {
  *                          Will be returned w/ 'displays', 'resource', 'type', 'timeManager', 'undoManager', 'track', 'svg' parameters
  *                          Also used to track currentDisplay, currentKeyframe on mousedown, selectedKeyframe for keyframe capture (set in displays and keyframes)
  */
-LADS.TourAuthoring.Track = function (spec, my) {
+TAG.TourAuthoring.Track = function (spec, my) {
     "use strict";
 
     var media = spec.media,                                                                         // URI of the resource 
@@ -40,9 +40,9 @@ LADS.TourAuthoring.Track = function (spec, my) {
         prevTrack = {},                                                                             // the previous trackobject
         trackBody,                                                                                  // the trackBody div represnting the track on the timeline
         prevTitleDiv = {},                                                                          // the title div of the previous track
-        renameOverlay = $(LADS.Util.UI.blockInteractionOverlay()),                                  // overlay for when 'rename' component option is selected
-        deleteOverlay = $(LADS.Util.UI.blockInteractionOverlay()),                                  // overlay appears with the 'delete' confirmation box
-        editInkOverlay = $(LADS.Util.UI.blockInteractionOverlay()),                                 // overlay for when 'edit ink' component option is selected while playhead is not over the art track
+        renameOverlay = $(TAG.Util.UI.blockInteractionOverlay()),                                  // overlay for when 'rename' component option is selected
+        deleteOverlay = $(TAG.Util.UI.blockInteractionOverlay()),                                  // overlay appears with the 'delete' confirmation box
+        editInkOverlay = $(TAG.Util.UI.blockInteractionOverlay()),                                 // overlay for when 'edit ink' component option is selected while playhead is not over the art track
         isMinimized = false,                                                                        // checks if the track is minimized
         released = true,                                                                            // event release on the track (mouse/touch)
         mygroup;                                                                                    // group that contains svg lines for audio tracks only - used by track minimization
@@ -52,7 +52,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
     my.title = decodeURI(spec.title);                                                               // track title
     my.resource = 'R-' + arrayPos;                                                                  // track position
     my.root = spec.root;                                                                            // root element
-    my.type = spec.type || LADS.TourAuthoring.TrackType.artwork;                                    // type of track
+    my.type = spec.type || TAG.TourAuthoring.TrackType.artwork;                                    // type of track
     my.timeManager = spec.timeManager;                                                              // takes care of all time related stuff for the track
     my.undoManager = spec.undoManager;                                                              // keeps track of the order of commands for the undo function 
     my.update = spec.update;                                                                        // Call this function every time a change affecting RIN data is made
@@ -179,7 +179,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         titlediv.attr('id', id + '-title');
         titlediv.addClass('titlediv');
         titlediv.css({
-            "height": LADS.TourAuthoring.Constants.trackHeight+'px',
+            "height": TAG.TourAuthoring.Constants.trackHeight+'px',
             "width": 0.127 * $(window).width() + 'px',
             'margin-left': '20px',
             'left': '0%',
@@ -196,7 +196,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         titleText.addClass('track-title');
         titleText.text(my.title);
         titleText.css({
-            'font-size': '1.25em',
+            'font-size': '0.7em',
             'color': 'white',
             'top': '11%', 'left': '3%',
             'position': 'relative',
@@ -223,7 +223,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         my.track.attr('id', id);
         my.track.addClass('track');
         my.track.css({
-            "height": LADS.TourAuthoring.Constants.trackHeight + 'px',                              // changed 25%
+            "height": TAG.TourAuthoring.Constants.trackHeight + 'px',                              // changed 25%
             'position': 'relative',
             'top': '0%',
             'left': '0%',
@@ -245,14 +245,14 @@ LADS.TourAuthoring.Track = function (spec, my) {
             .classed("connectionLines", true);
 
         // HK: Draws the initial line for the audio track to distinguish it as an audio track
-        if (my.type == LADS.TourAuthoring.TrackType.audio) {
+        if (my.type == TAG.TourAuthoring.TrackType.audio) {
             mygroup = my.svgLines.append("svg:g")
                 .attr("id", "keyframeLines");
                 myLine = mygroup.append("svg:line")
                 .attr("x1", 0)
-                .attr("y1", (100 - LADS.TourAuthoring.Constants.defaultVolume * 100) + "%")
+                .attr("y1", (100 - TAG.TourAuthoring.Constants.defaultVolume * 100) + "%")
                 .attr("x2", '100%')
-                .attr("y2", (100 - LADS.TourAuthoring.Constants.defaultVolume * 100) + "%")
+                .attr("y2", (100 - TAG.TourAuthoring.Constants.defaultVolume * 100) + "%")
                 .style('pointer-events', 'none')
                 .style("stroke", "green")
                 .style("stroke-width", 4);
@@ -291,7 +291,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         my.track.attr('id', id);
         my.track.addClass('track');
         my.track.css({
-            "height": LADS.TourAuthoring.Constants.trackHeight + 'px',                              // changed 25%
+            "height": TAG.TourAuthoring.Constants.trackHeight + 'px',                              // changed 25%
             'position': 'relative',
             'top': '0%',
             'left': '0%',
@@ -322,14 +322,14 @@ LADS.TourAuthoring.Track = function (spec, my) {
             .call(
                 function (gradient) {
                     gradient.append('stop').attr('offset', '0%').attr('stop-color', 'rgb(256,256,256)').attr('stop-opacity', '0.75');
-                    gradient.append('stop').attr('offset', '85%').attr('stop-color', LADS.TourAuthoring.Constants.displayColor).attr('stop-opacity', '0.75');
+                    gradient.append('stop').attr('offset', '85%').attr('stop-color', TAG.TourAuthoring.Constants.displayColor).attr('stop-opacity', '0.75');
                 });
         defs.append('linearGradient')
             .attr('id', 'fade-out')
             .attr('x1', '0%').attr('y1', '0%').attr('x2', '100%').attr('y2', '0%')
             .call(
                 function (gradient) {
-                    gradient.append('stop').attr('offset', '15%').attr('stop-color', LADS.TourAuthoring.Constants.displayColor).attr('stop-opacity', '0.75');
+                    gradient.append('stop').attr('offset', '15%').attr('stop-color', TAG.TourAuthoring.Constants.displayColor).attr('stop-opacity', '0.75');
                     gradient.append('stop').attr('offset', '100%').attr('stop-color', 'rgb(256,256,256)').attr('stop-opacity', '0.75');
                 });
         defs.append('linearGradient')
@@ -338,14 +338,14 @@ LADS.TourAuthoring.Track = function (spec, my) {
             .call(
                 function (gradient) {
                     gradient.append('stop').attr('offset', '0%').attr('stop-color', 'rgb(256,256,256)').attr('stop-opacity', '0.75');
-                    gradient.append('stop').attr('offset', '85%').attr('stop-color', LADS.TourAuthoring.Constants.inkDisplayColor).attr('stop-opacity', '0.75');
+                    gradient.append('stop').attr('offset', '85%').attr('stop-color', TAG.TourAuthoring.Constants.inkDisplayColor).attr('stop-opacity', '0.75');
                 });
         defs.append('linearGradient')
             .attr('id', 'fade-out-ink')
             .attr('x1', '0%').attr('y1', '0%').attr('x2', '100%').attr('y2', '0%')
             .call(
                 function (gradient) {
-                    gradient.append('stop').attr('offset', '15%').attr('stop-color', LADS.TourAuthoring.Constants.inkDisplayColor).attr('stop-opacity', '0.75');
+                    gradient.append('stop').attr('offset', '15%').attr('stop-color', TAG.TourAuthoring.Constants.inkDisplayColor).attr('stop-opacity', '0.75');
                     gradient.append('stop').attr('offset', '100%').attr('stop-color', 'rgb(256,256,256)').attr('stop-opacity', '0.75');
                 });
 
@@ -359,22 +359,22 @@ LADS.TourAuthoring.Track = function (spec, my) {
             .classed("connectionLines", true);
 
         // HK: Draws the initial line for the audio track to distinguish it as an audio track
-        if (my.type == LADS.TourAuthoring.TrackType.audio) {
+        if (my.type == TAG.TourAuthoring.TrackType.audio) {
             mygroup = my.svgLines.append("svg:g")
                 .attr("id", "keyframeLines");
                 myLine = mygroup.append("svg:line")
                 .attr("x1", 0)
-                .attr("y1", (100 - LADS.TourAuthoring.Constants.defaultVolume * 100) + "%")
+                .attr("y1", (100 - TAG.TourAuthoring.Constants.defaultVolume * 100) + "%")
                 .attr("x2", '100%')
-                .attr("y2", (100 - LADS.TourAuthoring.Constants.defaultVolume * 100) + "%")
+                .attr("y2", (100 - TAG.TourAuthoring.Constants.defaultVolume * 100) + "%")
                 .style('pointer-events', 'none')
                 .style("stroke", "green")
                 .style("stroke-width", 4);
         }
     }
 
-    menu = LADS.TourAuthoring.EditorMenu({                                                           // creates an instance of the editor menu
-        type: LADS.TourAuthoring.MenuType.track,
+    menu = TAG.TourAuthoring.EditorMenu({                                                           // creates an instance of the editor menu
+        type: TAG.TourAuthoring.MenuType.track,
         parent: that
     }, my);
     /**Creates the track editing menu 
@@ -384,7 +384,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
     (function _initMenu() {
         menu.addTitle('Track Options');
         menu.addButton('Rename', 'left', componentOptionRename);
-        if (my.type === LADS.TourAuthoring.TrackType.ink) {
+        if (my.type === TAG.TourAuthoring.TrackType.ink) {
             menu.addButton('Edit Ink', 'left', componentOptionEditInk);
         }
         menu.addButton('Duplicate', 'left', componentOptionDuplicate);
@@ -407,8 +407,8 @@ LADS.TourAuthoring.Track = function (spec, my) {
         var messageBox,
             currSelection = dataHolder.getSelectedTrack();
         close();
-        messageBox = LADS.Util.UI.popUpMessage(null, displayString, null);
-        $(messageBox).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
+        messageBox = TAG.Util.UI.popUpMessage(null, displayString, null);
+        $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
         $('body').append(messageBox);
         $(messageBox).fadeIn(500);
 
@@ -548,7 +548,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         var form = $(document.createElement("form"));
         var newName = $(document.createElement("input"));
         var currSelection = dataHolder.getSelectedTrack();
-        var renameDialogSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height(),
+        var renameDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
            {
                center_h: true,
                center_v: true,
@@ -679,9 +679,9 @@ LADS.TourAuthoring.Track = function (spec, my) {
             that.setTitle(newName.val().replace(/\'/g, '').replace(/\"/g, ''));
             $(renameOverlay).remove();
             //bleveque: if we change the title of an artwork or image  track, update the links of any attached inks
-            if (my.type == LADS.TourAuthoring.TrackType.artwork || my.type == LADS.TourAuthoring.TrackType.image) {
+            if (my.type == TAG.TourAuthoring.TrackType.artwork || my.type == TAG.TourAuthoring.TrackType.image) {
                 dataHolder.mapTracks(function (currentTrack) {
-                    if (currentTrack.track.getType() == LADS.TourAuthoring.TrackType.ink && currentTrack.track.getInkEnabled() && currentTrack.track.getInkLink().getTitle() == that.getTitle()) {
+                    if (currentTrack.track.getType() == TAG.TourAuthoring.TrackType.ink && currentTrack.track.getInkEnabled() && currentTrack.track.getInkLink().getTitle() == that.getTitle()) {
                         currentTrack.setInkLink(that);
                     }
                 });
@@ -711,22 +711,22 @@ LADS.TourAuthoring.Track = function (spec, my) {
 
         menu.close();
         switch (currTrack.getType()) {
-            case LADS.TourAuthoring.TrackType.audio:
+            case TAG.TourAuthoring.TrackType.audio:
                 e = my.timeline.addAudioTrack(media, name, null, my.mediaLength);
                 addTracksDisplays(e);
                 currTrack.insert(e);
                 break;
-            case LADS.TourAuthoring.TrackType.video:
+            case TAG.TourAuthoring.TrackType.video:
                 e = my.timeline.addVideoTrack(media, name, null, my.mediaLength);
                 addTracksDisplays(e);
                 currTrack.insert(e);
                 break;
-            case LADS.TourAuthoring.TrackType.image:
+            case TAG.TourAuthoring.TrackType.image:
                 e = my.timeline.addImageTrack(media, name, null);
                 addTracksDisplays(e);
                 currTrack.insert(e);
                 break;
-            case LADS.TourAuthoring.TrackType.ink:
+            case TAG.TourAuthoring.TrackType.ink:
                 expID = currTrack.getInkLink();
                 e = my.timeline.addInkTrack(expID, name, currTrack.getMedia(), currTrack.getInkSpec(), null);
                 if (expID) {//if it is an attached ink
@@ -741,7 +741,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
                 e.setInkRelativeArtPos(currTrack.getInkRelativeArtPos());
                 e.addInkTypeToTitle(currTrack.getInkPath().split('::')[0].toLowerCase());
                 break;
-            case LADS.TourAuthoring.TrackType.artwork:
+            case TAG.TourAuthoring.TrackType.artwork:
                 e = my.timeline.addArtworkTrack(media, name, currTrack.getGUID(), null);
                 addTracksDisplays(e);
                 currTrack.insert(e);
@@ -775,9 +775,9 @@ LADS.TourAuthoring.Track = function (spec, my) {
                     j,
                     currkf,
                     newkf;
-                if (currTrack.getType() !== LADS.TourAuthoring.TrackType.audio) {
-                    dispLength = currDisp.getMain() + 2 * LADS.TourAuthoring.Constants.defaultFade;
-                    dispStart = currDisp.getMainStart() - LADS.TourAuthoring.Constants.defaultFade;
+                if (currTrack.getType() !== TAG.TourAuthoring.TrackType.audio) {
+                    dispLength = currDisp.getMain() + 2 * TAG.TourAuthoring.Constants.defaultFade;
+                    dispStart = currDisp.getMainStart() - TAG.TourAuthoring.Constants.defaultFade;
                 } else {
                     dispLength = currDisp.getMain();
                     dispStart = currDisp.getMainStart();
@@ -799,7 +799,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
                 sourcekf = currDisp.getStorageContainer().keyframes.getContents();                                              //reset for current display
                 for (j = 0; j < sourcekf.length; j++) {
                     currkf = sourcekf[j];
-                    if (currTrack.getType() === LADS.TourAuthoring.TrackType.audio) {                                           //need y value for volume keyframes
+                    if (currTrack.getType() === TAG.TourAuthoring.TrackType.audio) {                                           //need y value for volume keyframes
                         newkf = newDisp.addKeyframe(my.timeManager.timeToPx(currkf.getTime()), currkf.getVolumePx());           //adds keyframe and stores it
                         e.addKeyframeToLines(newkf);                                                                            //adds it to audio lines
                         newkf.restoreHandlers();
@@ -832,7 +832,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         var text = "Are you sure you want to delete " + my.title;
         var hasAttachedInks = false;
         var trackArray = dataHolder.getTracks();
-        var deleteDialogSpecs = LADS.Util.constrainAndPosition($(window).width(), $(window).height(),
+        var deleteDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
            {
                center_h: true,
                center_v: true,
@@ -888,13 +888,13 @@ LADS.TourAuthoring.Track = function (spec, my) {
        
         deleteDialog.append(mssge);
         dataHolder.mapTracks(function (i) {
-            if (i.track.getType() === LADS.TourAuthoring.TrackType.ink && i.track.getInkEnabled() && i.track.getInkLink().getTitle() === that.getTitle()) {
+            if (i.track.getType() === TAG.TourAuthoring.TrackType.ink && i.track.getInkEnabled() && i.track.getInkLink().getTitle() === that.getTitle()) {
                 hasAttachedInks = true;
                 return;
             }
         });
 
-        text += ((hasAttachedInks && (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image)) ? " and any attached ink tracks?" : "?");
+        text += ((hasAttachedInks && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) ? " and any attached ink tracks?" : "?");
         mssge.text(text);
 
         buttonRow.css({
@@ -939,11 +939,11 @@ LADS.TourAuthoring.Track = function (spec, my) {
             close();
             var displayData = that.getStorageContainer().displays;
             var counter = 1;                                                //one track removed so far
-            var command = LADS.TourAuthoring.Command({
+            var command = TAG.TourAuthoring.Command({
                 execute: function () {
                     var last = $('#Track-' + (dataHolder.numTracks() - 1) + '-title');
                     var trackBottom = ($(document.getElementById('playback-controls')).offset().top);
-                    var lastDivBottom = ($(last).offset().top + LADS.TourAuthoring.Constants.trackHeight);
+                    var lastDivBottom = ($(last).offset().top + TAG.TourAuthoring.Constants.trackHeight);
                     var first = dataHolder._trackArray[0].track.getTitleDiv();
                     var firstTop = first.offset().top;
                     var trackTop = $(timeline).offset().top;
@@ -957,13 +957,13 @@ LADS.TourAuthoring.Track = function (spec, my) {
                     //code to snap down track list such that the track list is always full if it can be
                     if (dataHolder.numTracks() > 0) {
                         if (firstTop < trackTop) {
-                            if ((lastDivBottom + LADS.TourAuthoring.Constants.trackHeight) < trackBottom) {
+                            if ((lastDivBottom + TAG.TourAuthoring.Constants.trackHeight) < trackBottom) {
                                 //var t = $('.track').css('top');
                                 //$('.track').css({
-                                //   //'top': parseInt(t, 10) + LADS.TourAuthoring.Constants.trackHeight + "px"
+                                //   //'top': parseInt(t, 10) + TAG.TourAuthoring.Constants.trackHeight + "px"
                                 //});
                                 //$('.titlediv').css({
-                                //    //'top': parseInt(t, 10) + LADS.TourAuthoring.Constants.trackHeight + "px"
+                                //    //'top': parseInt(t, 10) + TAG.TourAuthoring.Constants.trackHeight + "px"
                                 //});
                             }
                         }
@@ -994,7 +994,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
                 var track = my.attachedInks[j];
                 var inkDisplayData = track.getStorageContainer().displays;
                 counter++;
-                var command = LADS.TourAuthoring.Command({
+                var command = TAG.TourAuthoring.Command({
                     execute: function () {
                         removeAttachedInkTrack(track);
                         track.remove();
@@ -1289,7 +1289,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         }
         my.update();
         restoreHandlers();
-        if (my.that.getType() === LADS.TourAuthoring.TrackType.ink && my.that.getInkEnabled(my.that)) {
+        if (my.that.getType() === TAG.TourAuthoring.TrackType.ink && my.that.getInkEnabled(my.that)) {
             my.that.getInkLink(my.that).addAttachedInkTrack(my.that);
         }
     }
@@ -1314,7 +1314,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
     
     // Interaction code
     // Track title manipulations
-    LADS.Util.makeManipulatable(titlediv[0], {
+    TAG.Util.makeManipulatable(titlediv[0], {
         onManipulate: onManipTrackTitleWrapper,
         onTapped: tappedTitle,
         onTappedRight: tapRightTitle,
@@ -1430,10 +1430,10 @@ LADS.TourAuthoring.Track = function (spec, my) {
                 });
                 titlediv.before(titledivPlaceholder);
                 prevZIndex = titlediv.css('z-index');
-                titlediv.css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex);
+                titlediv.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
                 titlediv.css('left', '-20px');
                 moveTop = titlediv.offset().top;
-                moveBottom = moveTop + LADS.TourAuthoring.Constants.trackHeight;
+                moveBottom = moveTop + TAG.TourAuthoring.Constants.trackHeight;
             }
             upAndDown(res);
         }
@@ -1550,7 +1550,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
             } else {
                 prev = dataHolder._trackArray[that.getPos()].track;
             }
-            command = LADS.TourAuthoring.Command({
+            command = TAG.TourAuthoring.Command({
                 execute: function () { tr.insert(that); },
                 unexecute: function () {
                     prev.insert(that);
@@ -1566,7 +1566,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
     }
 
     // makes the track manipulatable 
-    grTrack = LADS.Util.makeManipulatable(my.track[0], {
+    grTrack = TAG.Util.makeManipulatable(my.track[0], {
         onManipulate: onManipTrack,
         onTappedRight: tapRight,
         onScroll: scrollTitle,
@@ -1627,7 +1627,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         }
         if (my.currentDisplay) {
             loc = my.currentDisplay.getLoc();
-             if (loc === LADS.TourAuthoring.DisplayParts['fade-out'] || loc === LADS.TourAuthoring.DisplayParts['fade-in']) {
+             if (loc === TAG.TourAuthoring.DisplayParts['fade-out'] || loc === TAG.TourAuthoring.DisplayParts['fade-in']) {
                 return;
             }
         }
@@ -1692,9 +1692,9 @@ LADS.TourAuthoring.Track = function (spec, my) {
         //change it to the selected colors according to their types
         //the grey color (selectedInkDisplayColor) is used on videos and inks
         if (currentDisplay.getType() === 4 || currentDisplay.getType() === 2) {
-            currentDisplay.getMainDisplay().css('background-color', LADS.TourAuthoring.Constants.selectedInkDisplayColor);
+            currentDisplay.getMainDisplay().css('background-color', TAG.TourAuthoring.Constants.selectedInkDisplayColor);
         } else {
-            currentDisplay.getMainDisplay().css('background-color', LADS.TourAuthoring.Constants.selectedDisplayColor);
+            currentDisplay.getMainDisplay().css('background-color', TAG.TourAuthoring.Constants.selectedDisplayColor);
         }
     }
     
@@ -1722,11 +1722,11 @@ LADS.TourAuthoring.Track = function (spec, my) {
 
         //ink/video displays change back to gray, others to green
         if (currentDisplay.getType() === 4 || currentDisplay.getType() === 2) {
-            currentDisplay.getMainDisplay().css('background-color', LADS.TourAuthoring.Constants.inkDisplayColor);
+            currentDisplay.getMainDisplay().css('background-color', TAG.TourAuthoring.Constants.inkDisplayColor);
         } else if (currentDisplay.getType() === 1) {
             currentDisplay.getMainDisplay().css('background-color', 'rgba(129, 173, 98, 0.8)');
         } else {
-            currentDisplay.getMainDisplay().css('background-color', LADS.TourAuthoring.Constants.displayColor);
+            currentDisplay.getMainDisplay().css('background-color', TAG.TourAuthoring.Constants.displayColor);
         }
     }
     
@@ -1780,10 +1780,10 @@ LADS.TourAuthoring.Track = function (spec, my) {
                     // update bounds once current display is located in array
                     if (displays[i].display === my.currentDisplay) {
                         if ((i - 1) >= 0) {
-                            leftbound = displays[i - 1].display.getEnd() + LADS.TourAuthoring.Constants.esOffset;
+                            leftbound = displays[i - 1].display.getEnd() + TAG.TourAuthoring.Constants.esOffset;
                         }
                         if ((i + 1) < displays.length) {
-                            rightbound = displays[i + 1].display.getStart() - LADS.TourAuthoring.Constants.esOffset;
+                            rightbound = displays[i + 1].display.getStart() - TAG.TourAuthoring.Constants.esOffset;
                         }
                     }
                 } 
@@ -1809,10 +1809,10 @@ LADS.TourAuthoring.Track = function (spec, my) {
             prevKF = dataHolder.findPrevKeyframe(keydisplay, my.currentKeyframe);
             nextKF = dataHolder.findNextKeyframe(keydisplay, my.currentKeyframe);
             if (prevKF) {
-                leftbound = prevKF.getTime() + LADS.TourAuthoring.Constants.esOffset;
+                leftbound = prevKF.getTime() + TAG.TourAuthoring.Constants.esOffset;
             }
             if (nextKF) {
-                rightbound = nextKF.getTime() - LADS.TourAuthoring.Constants.esOffset;
+                rightbound = nextKF.getTime() - TAG.TourAuthoring.Constants.esOffset;
             }
             if (!my.timeline.getMultiSelection()) {
                 my.currentKeyframe.move(res, leftbound, rightbound);
@@ -1833,11 +1833,11 @@ LADS.TourAuthoring.Track = function (spec, my) {
             //this is the internal right bound for the fade in
             //it is calculated by taking the smallest time when comparing the time at which the fadeout begins and the start time of the first keyframe (if any)
             fadeInRight = Math.min(currDisplay.getOutStart() - currDisplay.getFadeIn(),
-                                        ((!currkeyframes.isEmpty() && (currkeyframes.min().getTime() - my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.fadeBtnSize))) || Infinity)),
+                                        ((!currkeyframes.isEmpty() && (currkeyframes.min().getTime() - my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.fadeBtnSize))) || Infinity)),
             //this is the internal left bound for the fade out
             //it is calculated by taking the largest time when comparing the time at which the fadein ends and the start time of the last keyframe (if any)
             fadeOutLeft = Math.max(currDisplay.getStart() + currDisplay.getFadeIn(),
-                             ((!currkeyframes.isEmpty() && (currkeyframes.max().getTime() - currDisplay.getFadeOut() + my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.fadeBtnSize))) || -Infinity)),
+                             ((!currkeyframes.isEmpty() && (currkeyframes.max().getTime() - currDisplay.getFadeOut() + my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.fadeBtnSize))) || -Infinity)),
             currLeft = currDisplay.getStart(),
             loc = currDisplay.getLoc(),
             currRight = currDisplay.getEnd(),
@@ -1861,10 +1861,10 @@ LADS.TourAuthoring.Track = function (spec, my) {
         //in the case where both the fadein and fadeout are both (such as with audio tracks), then the fadeinright and the fadeoutleft need to be calculated using either the first/last keyframe 
         //position or the edge of the fadein/fadeout handle, which prevents the display from being compressed so far that it is just a handle with no display at all
         if (currDisplay.getFadeIn() === 0 || currDisplay.getFadeOut() === 0) {
-            fadeInRight = Math.min(my.timeManager.pxToTime(currDisplay.getFadeOutHandle().attr('cx') - 2 * LADS.TourAuthoring.Constants.fadeBtnSize),
-                                            ((!currkeyframes.isEmpty() && (currkeyframes.min().getTime() - my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.fadeBtnSize))) || Infinity));
-            fadeOutLeft = Math.max(my.timeManager.pxToTime(currDisplay.getFadeInHandle().attr('cx')) + my.timeManager.pxToTime(2 * LADS.TourAuthoring.Constants.fadeBtnSize),
-                ((!currkeyframes.isEmpty() && (currkeyframes.max().getTime() - currDisplay.getFadeOut() + my.timeManager.pxToTime(LADS.TourAuthoring.Constants.keyframeSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.fadeBtnSize))) || -Infinity));
+            fadeInRight = Math.min(my.timeManager.pxToTime(currDisplay.getFadeOutHandle().attr('cx') - 2 * TAG.TourAuthoring.Constants.fadeBtnSize),
+                                            ((!currkeyframes.isEmpty() && (currkeyframes.min().getTime() - my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.fadeBtnSize))) || Infinity));
+            fadeOutLeft = Math.max(my.timeManager.pxToTime(currDisplay.getFadeInHandle().attr('cx')) + my.timeManager.pxToTime(2 * TAG.TourAuthoring.Constants.fadeBtnSize),
+                ((!currkeyframes.isEmpty() && (currkeyframes.max().getTime() - currDisplay.getFadeOut() + my.timeManager.pxToTime(TAG.TourAuthoring.Constants.keyframeSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.fadeBtnSize))) || -Infinity));
         }
         
         if (fadeInRight < currDisplay.getStart()) {
@@ -1880,14 +1880,14 @@ LADS.TourAuthoring.Track = function (spec, my) {
 
         //if dragging the main section of the display
         parentArtDisplay;
-        if (loc === LADS.TourAuthoring.DisplayParts.main) {
+        if (loc === TAG.TourAuthoring.DisplayParts.main) {
             if (prevDisp && my.timeline.getMultiSelectionArray().indexOf(prevDisp.display) < 0) {
-                leftbound = prevDisp.display.getEnd() + LADS.TourAuthoring.Constants.esOffset;
+                leftbound = prevDisp.display.getEnd() + TAG.TourAuthoring.Constants.esOffset;
             }
             if (nextDisp && my.timeline.getMultiSelectionArray().indexOf(nextDisp.display) < 0) {
-                rightbound = nextDisp.display.getStart() - LADS.TourAuthoring.Constants.esOffset;
+                rightbound = nextDisp.display.getStart() - TAG.TourAuthoring.Constants.esOffset;
             }
-            if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {
+            if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
                 parentArtDisplay = currDisplay.getParentDisplay();
                 if (my.timeline.getMultiSelectionArray().indexOf(parentArtDisplay) === -1) {
                     leftbound = Math.max(leftbound, parentArtDisplay.getStart());
@@ -1895,27 +1895,27 @@ LADS.TourAuthoring.Track = function (spec, my) {
                 }
             }
 
-        } else if (loc === LADS.TourAuthoring.DisplayParts['fade-out'] || loc === LADS.TourAuthoring.DisplayParts['fade-in']) {
+        } else if (loc === TAG.TourAuthoring.DisplayParts['fade-out'] || loc === TAG.TourAuthoring.DisplayParts['fade-in']) {
             //instead of looping through the array we can use the dataholder to find the previous/next displays
             if (prevDisp) {
-                leftbound = prevDisp.display.getEnd() + LADS.TourAuthoring.Constants.esOffset;
+                leftbound = prevDisp.display.getEnd() + TAG.TourAuthoring.Constants.esOffset;
             }
             if (nextDisp) {
-                rightbound = nextDisp.display.getStart() - LADS.TourAuthoring.Constants.esOffset;
+                rightbound = nextDisp.display.getStart() - TAG.TourAuthoring.Constants.esOffset;
             }
-            if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {
+            if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
                 parentArtDisplay = getParentArtDisplay(currDisplay);
                 if (my.timeline.getMultiSelectionArray().indexOf(parentArtDisplay) === -1) {
                     leftbound = Math.max(leftbound, parentArtDisplay.getStart());
                     rightbound = Math.min(rightbound, parentArtDisplay.getEnd());
                 }
-            } else if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.image || !my.inkEnabled) {
+            } else if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image || !my.inkEnabled) {
                 attachedDisplays = currDisplay.getChildDisplays();
                 totalDispLength = currDisplay.getLongestSubgroup(attachedDisplays);
                 fadeOutLeft = Math.max(fadeOutLeft, currDisplay.getStart() + totalDispLength);
                 fadeInRight = Math.min(fadeInRight, currDisplay.getEnd() - totalDispLength);
             }
-            if (my.type === LADS.TourAuthoring.TrackType.video || my.type === LADS.TourAuthoring.TrackType.audio) {
+            if (my.type === TAG.TourAuthoring.TrackType.video || my.type === TAG.TourAuthoring.TrackType.audio) {
                 if (currDisplay.getMediaLength()) {
                     maxLength = parseFloat(currDisplay.getMediaLength());
                     leftbound = Math.max(leftbound, currDisplay.getEnd() - maxLength);
@@ -2037,7 +2037,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
             smallestSpace;
 
 
-        if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {
+        if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
             artDisplays = getInkLink().getStorageContainer().displays.getContents();
             indisp = false;
             artDisplays = getInkLink().getStorageContainer().displays.nearestNeighbors(newTime);
@@ -2071,7 +2071,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
                     }
                     // check if newTime is w/i displayLength seconds of start of current display
                     else if (newTime + displayLength >= currDisplay.getStart()) {
-                        displayLength = currDisplay.getStart() - newTime - LADS.TourAuthoring.Constants.esOffset;
+                        displayLength = currDisplay.getStart() - newTime - TAG.TourAuthoring.Constants.esOffset;
                     }
                     minSpace = Math.min(minSpace, currDisplay.getStart() - newTime);
                 }
@@ -2079,7 +2079,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
             fromEnd = my.timeManager.getDuration().end - newTime;
             if (enoughSpace) {
                 my.timeline.allDeselected();
-                if (my.type === LADS.TourAuthoring.TrackType.ink && my.inkEnabled) {
+                if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
                     newDisplay = addDisplay(positionX, Math.min(displayLength, artDisplay.getEnd() - newTime));
                     newDisplay.setParentDisplay(artDisplay);
                     artDisplay.addChildDisplay(newDisplay);
@@ -2099,7 +2099,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
                     }
                }
            }
-       } else if (my.type === LADS.TourAuthoring.TrackType.artwork || my.type === LADS.TourAuthoring.TrackType.audio || my.type === LADS.TourAuthoring.TrackType.image) {    // Add keyframe
+       } else if (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.audio || my.type === TAG.TourAuthoring.TrackType.image) {    // Add keyframe
 
             // enabled and disabled via custom event framework - see Viewer's event listener for playerReady event
             if (my.timeline.getViewer().isKeyframingDisabled()) {
@@ -2109,7 +2109,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
             // check to make sure we are adding keyframe to valid position
             if (newTime >= my.currentDisplay.getStart() && newTime <= my.currentDisplay.getEnd()) {
                 // seek before creating new keyframe to unload and update with currently selected keyframe
-                if (my.type !== LADS.TourAuthoring.TrackType.audio) {
+                if (my.type !== TAG.TourAuthoring.TrackType.audio) {
                     my.timeManager.seek(newTime);
                 }
 
@@ -2117,7 +2117,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
                 
                 if (keyframe) {
                     my.timeline.allDeselected();
-                    if (my.type == LADS.TourAuthoring.TrackType.audio) {
+                    if (my.type == TAG.TourAuthoring.TrackType.audio) {
                         my.allKeyframes.push(keyframe);
                         that.drawLines();
                      } else { // initialize keyframe and select it for further movements
@@ -2165,7 +2165,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
         if (isMinimized) {
             return;
         }
-        if (my.type === LADS.TourAuthoring.TrackType.audio) {
+        if (my.type === TAG.TourAuthoring.TrackType.audio) {
             keyframes.sort(function (a, b) {
                 if (a.isRemoved()) {
                     return 1;
@@ -2218,9 +2218,9 @@ LADS.TourAuthoring.Track = function (spec, my) {
             } else {
                 myLine = mygroup.append("svg:line")
                     .attr("x1", 0)
-                    .attr("y1", (100 - LADS.TourAuthoring.Constants.defaultVolume * 100) + "%")
+                    .attr("y1", (100 - TAG.TourAuthoring.Constants.defaultVolume * 100) + "%")
                     .attr("x2", '100%')
-                    .attr("y2", (100 - LADS.TourAuthoring.Constants.defaultVolume * 100) + "%")
+                    .attr("y2", (100 - TAG.TourAuthoring.Constants.defaultVolume * 100) + "%")
                     .style('pointer-events', 'none')
                     .style("stroke", color)
                     .style("stroke-width", 4);
@@ -2245,20 +2245,20 @@ LADS.TourAuthoring.Track = function (spec, my) {
             "width": "30px", "height": '30px',
         });
         switch (type) {
-            case LADS.TourAuthoring.TrackType.audio:
-                iconPath = '../../../images/icons/audio_icon_2.svg';
+            case TAG.TourAuthoring.TrackType.audio:
+                iconPath = tagPath+'images/icons/audio_icon_2.svg';
                 break;
-            case LADS.TourAuthoring.TrackType.video:
-                iconPath = '../../../images/icons/video_icon_2.svg';
+            case TAG.TourAuthoring.TrackType.video:
+                iconPath = tagPath + 'images/icons/video_icon_2.svg';
                 break;
-            case LADS.TourAuthoring.TrackType.artwork:
-                iconPath = '../../../images/icons/image_icon_2.svg';
+            case TAG.TourAuthoring.TrackType.artwork:
+                iconPath = tagPath + 'images/icons/image_icon_2.svg';
                 break;
-            case LADS.TourAuthoring.TrackType.ink:
-                iconPath = '../../../images/icons/text_icon_2.svg';
+            case TAG.TourAuthoring.TrackType.ink:
+                iconPath = tagPath + 'images/icons/text_icon_2.svg';
                 break;
-            case LADS.TourAuthoring.TrackType.image:
-                iconPath = '../../../images/icons/image_icon_2.svg';
+            case TAG.TourAuthoring.TrackType.image:
+                iconPath = tagPath + 'images/icons/image_icon_2.svg';
                 break;
         }
         iconImg = $(document.createElement('img'));
@@ -2357,15 +2357,15 @@ LADS.TourAuthoring.Track = function (spec, my) {
             i,
             parentDisplays,
             parentDisp,
-            newDisplay = LADS.TourAuthoring.Display({
+            newDisplay = TAG.TourAuthoring.Display({
                 start: my.timeManager.pxToTime(x),
                 length: length,
                 dataHolder: dataHolder,
-                canKeyframe: (my.type !== LADS.TourAuthoring.TrackType.ink && my.type !== LADS.TourAuthoring.TrackType.video),
-                canFade: (my.type !== LADS.TourAuthoring.TrackType.audio)
+                canKeyframe: (my.type !== TAG.TourAuthoring.TrackType.ink && my.type !== TAG.TourAuthoring.TrackType.video),
+                canFade: (my.type !== TAG.TourAuthoring.TrackType.audio)
             }, my),
 
-            command = LADS.TourAuthoring.Command({
+            command = TAG.TourAuthoring.Command({
                 execute: function () {
                     newDisplay.reloadDisplay();
                     newDisplay.restoreHandlers();
@@ -2624,26 +2624,26 @@ LADS.TourAuthoring.Track = function (spec, my) {
 
         // type
         switch (my.type) {
-            case LADS.TourAuthoring.TrackType.artwork:
+            case TAG.TourAuthoring.TrackType.artwork:
                 exp.providerId = 'ZMES';
                 exp.data.guid = guid;
                 break;
 
-            case LADS.TourAuthoring.TrackType.image:
+            case TAG.TourAuthoring.TrackType.image:
                 exp.providerId = 'ImageES';
                 break;
 
-            case LADS.TourAuthoring.TrackType.audio:
+            case TAG.TourAuthoring.TrackType.audio:
                 exp.providerId = 'AES';
                 exp.data.mediaLength = my.mediaLength;
                 break;
 
-            case LADS.TourAuthoring.TrackType.video:
+            case TAG.TourAuthoring.TrackType.video:
                 exp.providerId = 'VideoES';
                 exp.data.mediaLength = my.mediaLength;
                 break;
 
-            case LADS.TourAuthoring.TrackType.ink:
+            case TAG.TourAuthoring.TrackType.ink:
                 exp.providerId = 'InkES';
                 exp.data.linkToExperience = {};
                 inkLink = (my.experienceId) ? my.experienceId.getTitle() : '';
@@ -2685,7 +2685,7 @@ LADS.TourAuthoring.Track = function (spec, my) {
             passthrough = true;
         }
         
-        if (my.type !== LADS.TourAuthoring.TrackType.ink) {
+        if (my.type !== TAG.TourAuthoring.TrackType.ink) {
             exp.resourceReferences = [
                 {
                     resourceId: my.resource,
@@ -2740,15 +2740,15 @@ LADS.TourAuthoring.Track = function (spec, my) {
      */
     function toggleMinimized() {
         isMinimized = !isMinimized;
-        if (Math.ceil(titlediv.height()) === LADS.TourAuthoring.Constants.trackHeight) {
-            titlediv.height(LADS.TourAuthoring.Constants.minimizedTrackHeight);
-            my.track.height(LADS.TourAuthoring.Constants.minimizedTrackHeight);
+        if (Math.ceil(titlediv.height()) === TAG.TourAuthoring.Constants.trackHeight) {
+            titlediv.height(TAG.TourAuthoring.Constants.minimizedTrackHeight);
+            my.track.height(TAG.TourAuthoring.Constants.minimizedTrackHeight);
             if (mygroup) {
                 mygroup.style('display', 'none');
             }
         } else {
-            titlediv.height(LADS.TourAuthoring.Constants.trackHeight);
-            my.track.height(LADS.TourAuthoring.Constants.trackHeight);
+            titlediv.height(TAG.TourAuthoring.Constants.trackHeight);
+            my.track.height(TAG.TourAuthoring.Constants.trackHeight);
             if (mygroup) {
                 mygroup.style('display', null);
             }

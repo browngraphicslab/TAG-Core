@@ -46,7 +46,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      *            internetURL     url of alternate site against which we'll test connectivity
      */
     function testConnection(options) {
-        var internetURL = (options && options.internetURL) || "http://www.google.com/";
+        var internetURL = (options && options.internetURL) || "http://www.google.com/",
+            connectionTimeout,
+            timedOut;
+
         console.log("checking server url: " + serverURL);
         $.ajax({
             url: serverURL,
@@ -54,26 +57,44 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             async: true,
             cache: false,
             success: function () {
-                console.log("success checking server url");
-                successConnecting();
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    console.log("success checking server url");
+                    successConnecting();
+                }
             },
             error: function (err) {
-                $.ajax({  // TODO: not a solid way to do this
-                    url: internetURL,
-                    dataType: "text",
-                    async: false,
-                    cache: false,
-                    success: function () {
-                        tagContainer.empty();
-                        tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
-                    },
-                    error: function (err) {
-                        tagContainer.empty();
-                        tagContainer.append((new TAG.Layout.InternetFailurePage("No Internet")).getRoot());
-                    }
-                });
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    $.ajax({  // TODO: not a solid way to do this
+                        url: internetURL,
+                        dataType: "text",
+                        async: false,
+                        cache: false,
+                        success: function () {
+                            if(!timedOut) {
+                                clearTimeout(connectionTimeout);
+                                tagContainer.empty();
+                                tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+                            }
+                        },
+                        error: function (err) {
+                            if(!timedOut) {
+                                clearTimeout(connectionTimeout);
+                                tagContainer.empty();
+                                tagContainer.append((new TAG.Layout.InternetFailurePage("No Internet")).getRoot());
+                            }
+                        }
+                    });
+                }
             }
         });
+
+        connectionTimeout = setTimeout(function() {
+            timedOut = true;
+            tagContainer.empty();
+            tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+        }, 10000); // 10 second timeout to show internet failure page
     }
 
     function successConnecting() {
@@ -553,6 +574,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         if(localStorage.ip === 'tagtestserver.cloudapp.net') {
             $('#password').attr('value', 'Test1234');
+        } else if (localStorage.ip === 'localhost') {
+            $('#password').attr('value', 'admin');
         }
     }
 
@@ -563,7 +586,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         overlay.on('click', function() {;});
         authoringButtonContainer.off('click');
         var authoringMode = new TAG.Authoring.SettingsView();
-        TAG.Util.UI.slidePageLeft(authoringMode.that.getRoot());
+        TAG.Util.UI.slidePageLeft(authoringMode.getRoot());
     }
  
     /**

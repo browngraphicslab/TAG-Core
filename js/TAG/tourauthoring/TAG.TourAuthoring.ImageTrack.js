@@ -1,19 +1,19 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.ImageTrack');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.ImageTrack');
 
 /**Creates an Image track
- * @class LADS.TourAuthoring.ImageTrack
+ * @class TAG.TourAuthoring.ImageTrack
  * @param {Object} spec              Specifications (see Track class for details);
  * @param spec.thumbnail
  * @param {Object} my                After superclass is called, will contain displays and keyframes arrays
  *                                   Don't pass in unless you are subclassing this
  */
-LADS.TourAuthoring.ImageTrack = function (spec, my) {
+TAG.TourAuthoring.ImageTrack = function (spec, my) {
     "use strict";
 
     // Call super-constructor
-    spec.type = LADS.TourAuthoring.TrackType.image;
+    spec.type = TAG.TourAuthoring.TrackType.image;
     my = my || {};
-    var that = LADS.TourAuthoring.Track(spec, my);
+    var that = TAG.TourAuthoring.Track(spec, my);
     my.track.addClass('image');
     return that;
 };

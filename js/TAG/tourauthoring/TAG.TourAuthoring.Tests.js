@@ -1,4 +1,4 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.Tests');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.Tests');
 
 /**
 UI Tests:
@@ -9,7 +9,7 @@ Click "Play" button twice (start and stop)
 /**
  * Automated tests module for TourAuthoring
  */
-LADS.TourAuthoring.Tests = (function () {
+TAG.TourAuthoring.Tests = (function () {
     "use strict";
 
     // Resources to pass to tracks
@@ -168,15 +168,15 @@ LADS.TourAuthoring.Tests = (function () {
     function testServer() {
         var repository = "http://cs.brown.edu/research/lads/LADS2.0Data/repository.xml",
             tourdoq;
-        LADS.Worktop.Database.load(repository);
+        TAG.Worktop.Database.load(repository);
 
         testNewTour();
         //load all tours
-        var alltours = LADS.Worktop.Database.getAllTours();
+        var alltours = TAG.Worktop.Database.getAllTours();
         testModifyTour(alltours[0].Identifier);
-        alltours = LADS.Worktop.Database.getAllTours();
+        alltours = TAG.Worktop.Database.getAllTours();
         testModifyTour(testNewTour().Identifier);
-        alltours = LADS.Worktop.Database.getAllTours();
+        alltours = TAG.Worktop.Database.getAllTours();
     }
 
     /**
@@ -184,7 +184,7 @@ LADS.TourAuthoring.Tests = (function () {
      */
     function testNewTour() {
         //create a new tour
-        tourdoq = LADS.Worktop.Database.createTour();
+        tourdoq = TAG.Worktop.Database.createTour();
         return tourdoq;
     }
 
@@ -194,7 +194,7 @@ LADS.TourAuthoring.Tests = (function () {
      */
     function testModifyTour(id) {
         //modify/update the tour
-        var xml = LADS.Worktop.Database.getDoqXML(id);
+        var xml = TAG.Worktop.Database.getDoqXML(id);
         var parser = new DOMParser();
         var tourXML = $(parser.parseFromString(xml, 'text/xml'));
         //change name
@@ -203,14 +203,14 @@ LADS.TourAuthoring.Tests = (function () {
         tourXML.find("d3p1\\:Key:contains('Content') + d3p1\\:Value").text("[]");
         //change thumbnail
         tourXML.find("d3p1\\:Key:contains('Thumbnail') + d3p1\\:Value").text("http://www.cs.brown.edu/research/lads/images/waterfallzoom.jpg");
-        LADS.Worktop.Database.pushXML(tourXML[0], id, "Tour");
+        TAG.Worktop.Database.pushXML(tourXML[0], id, "Tour");
     }
 
     /**
      * Test deletion
      */
     function testDeleteTour(id) {
-        LADS.Worktop.Database.deleteDoq(id, "Tour");
+        TAG.Worktop.Database.deleteDoq(id, "Tour");
     }
 
     /**

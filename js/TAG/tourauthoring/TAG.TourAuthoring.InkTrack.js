@@ -1,8 +1,8 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.InkTrack');
-LADS.Util.makeNamespace('LADS.TourAuthoring.InkType');
-LADS.Util.makeNamespace('LADS.TourAuthoring.InkShape');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.InkTrack');
+TAG.Util.makeNamespace('TAG.TourAuthoring.InkType');
+TAG.Util.makeNamespace('TAG.TourAuthoring.InkShape');
 
-LADS.TourAuthoring.InkType = {
+TAG.TourAuthoring.InkType = {
     text: 1,
     isolate: 2,
     draw: 3,
@@ -10,13 +10,13 @@ LADS.TourAuthoring.InkType = {
     highlight: 5
 };
 
-LADS.TourAuthoring.InkShape = {
+TAG.TourAuthoring.InkShape = {
     rectangle: 1,
     ellipse: 2
 };
 
 /**Creates an Ink track
- * @class LADS.TourAuthoring.InkTrack
+ * @class TAG.TourAuthoring.InkTrack
  * @constructor
  * @param {Object} spec  Specifications (see Track class for details)"
                         Additional parameters:
@@ -28,17 +28,17 @@ LADS.TourAuthoring.InkShape = {
  * @param {Object} my    After superclass is called, will contain displays and keyframes arrays
  *                       Don't pass in unless you are subclassing this
  */
-LADS.TourAuthoring.InkTrack = function (spec, my) {
+TAG.TourAuthoring.InkTrack = function (spec, my) {
     "use strict";
 
     // Call super-constructor
-    spec.type = LADS.TourAuthoring.TrackType.ink;
+    spec.type = TAG.TourAuthoring.TrackType.ink;
     spec.fadeIn = -0.000001;
     spec.fadeOut = -0.000001;
     my = my || {};
     my.inkSpec = spec.inkSpec;
     my.inkType = spec.media; 
-    var that = LADS.TourAuthoring.Track(spec, my);
+    var that = TAG.TourAuthoring.Track(spec, my);
     my.track.addClass('ink');
     return that;
 };

@@ -1,12 +1,12 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.Timeline');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.Timeline');
 
 /**Manages user editing of tracks and creating the elements of the timeline on the tour authoring screen
- * @class LADS.TourAuthoring.Timeline
+ * @class TAG.TourAuthoring.Timeline
  * @constructor
  * @param {Object} spec      @params - timeManager, undoManager, viewer 
- * @return {Object} that     public methods of LADS.TourAuthoring.Timeline
+ * @return {Object} that     public methods of TAG.TourAuthoring.Timeline
  */
-LADS.TourAuthoring.Timeline = function (spec) {
+TAG.TourAuthoring.Timeline = function (spec) {
     "use strict";
 
     // Divs that need to be held onto
@@ -61,13 +61,13 @@ LADS.TourAuthoring.Timeline = function (spec) {
         editorWidth = $(window).width() * 0.995,                                                                    // width of the editing window
         editorHeight = $(window).height() * 0.4825,                                                                 // height of the editing window
         trackTitleWidth = 0.127 * $(window).width(),                                                                // width of the title of a track
-        trackAreaHeight = editorHeight - 5 - LADS.TourAuthoring.Constants.timeRulerSize,                            // height of the track div
+        trackAreaHeight = editorHeight - 5 - TAG.TourAuthoring.Constants.timeRulerSize,                            // height of the track div
 
-        editInkOverlay = $(LADS.Util.UI.blockInteractionOverlay()),                                                 // overlay for when 'edit ink' component option is selected while playhead is not over the art track
+        editInkOverlay = $(TAG.Util.UI.blockInteractionOverlay()),                                                 // overlay for when 'edit ink' component option is selected while playhead is not over the art track
         overlayLabel = $(document.createElement('div')),                                                            // div to put the text for the 'edit ink' message
         deleteConfirmationOverlay = $(document.createElement('div')),                                               // overlay that covers the screen with the 'delete' pop-up confirmation box
   
-        queue = LADS.Util.createQueue(),                                                                            // creates a queue to update the timeline ruler
+        queue = TAG.Util.createQueue(),                                                                            // creates a queue to update the timeline ruler
         newLabels = $(),                                                                                            // creates a new timeline label to add to the queue
         closeMenuHolder,                                                                                            // function to close the menu
         debounce = $.debounce(200, coreUpdate),                                                                     // used in RIN code <Description>
@@ -216,7 +216,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         timeRuler.attr('id', 'timeRuler');
         timeRuler.css({
             'position': 'relative',
-            'height': (LADS.TourAuthoring.Constants.timeRulerSize + 17) + 'px', // changed 12 %
+            'height': (TAG.TourAuthoring.Constants.timeRulerSize + 17) + 'px', // changed 12 %
             'overflow-x': 'hidden',
             'overflow-y': 'hidden',
         });
@@ -231,7 +231,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
 
         horizBlock.attr('id', 'horizBlock');
         horizBlock.css({
-            'height': LADS.TourAuthoring.Constants.timeRulerSize + 'px',
+            'height': TAG.TourAuthoring.Constants.timeRulerSize + 'px',
             'width': '15.5%',
             "background-color": "rgb(219,218,199)",
             'position': 'absolute',
@@ -249,7 +249,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
 
         rulerScrollVeil.attr('id', 'rulerScrollVeil');
         rulerScrollVeil.css({
-            'height': LADS.TourAuthoring.Constants.timeRulerSize + 'px',
+            'height': TAG.TourAuthoring.Constants.timeRulerSize + 'px',
             'width': '85%',
             'margin-left': '15.4%',
             'overflow-x': 'hidden',
@@ -260,7 +260,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         rulerWrapper.attr('id', 'rulerWrapper');
         rulerWrapper.css({
             'width': '85%',
-            'height': (LADS.TourAuthoring.Constants.timeRulerSize) + 'px',
+            'height': (TAG.TourAuthoring.Constants.timeRulerSize) + 'px',
             'overflow-x': 'hidden',
             'overflow-y': 'hidden',
             'position': 'absolute',
@@ -319,7 +319,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         multiSelButton.fitText(0.8);
 
         editInkOverlay.css({
-            top: LADS.Util.Constants.timeRulerSize,
+            top: TAG.Util.Constants.timeRulerSize,
             width: '100%',
             height: '100%',
             'margin-left': "2%",
@@ -401,7 +401,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
             timeRuler.css('width', timeManager.timeToPx(ev.end) + 'px');
         };
 
-        manipObjects.ruler = (LADS.Util.makeManipulatable(wrap[0], {
+        manipObjects.ruler = (TAG.Util.makeManipulatable(wrap[0], {
             onManipulate: function (res) {
                 wrap.scrollLeft(wrap.scrollLeft() - res.translation.x);
                 manipObjects.track.cancelAccel();
@@ -428,7 +428,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
             }
         }));
 
-        manipObjects.track = (LADS.Util.makeManipulatable(trackBody[0], {
+        manipObjects.track = (TAG.Util.makeManipulatable(trackBody[0], {
             onManipulate: function (res) {
                 var newY;
                 manipObjects.ruler.cancelAccel();
@@ -655,7 +655,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         timeRuler = $(document.createElement('div'));
         timeRuler.css({
             'position': 'relative',
-            'height': (LADS.TourAuthoring.Constants.timeRulerSize + 17) + 'px', // changed 12 %
+            'height': (TAG.TourAuthoring.Constants.timeRulerSize + 17) + 'px', // changed 12 %
             'overflow-x': 'hidden',
             'overflow-y': 'hidden',
         });
@@ -675,7 +675,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var horizBlock = $(document.createElement('div'));
         horizBlock.attr('id', 'horizBlock');
         horizBlock.css({
-            'height': LADS.TourAuthoring.Constants.timeRulerSize + 'px',
+            'height': TAG.TourAuthoring.Constants.timeRulerSize + 'px',
             'width': '15.5%',
             "background-color": "rgb(219,218,199)",
             'position': 'absolute',
@@ -696,7 +696,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var rulerScrollVeil = $(document.createElement('div'));
         rulerScrollVeil.attr('id', 'rulerScrollVeil');
         rulerScrollVeil.css({
-            'height': LADS.TourAuthoring.Constants.timeRulerSize + 'px',
+            'height': TAG.TourAuthoring.Constants.timeRulerSize + 'px',
             'width': '85%',
             'margin-left': '15.4%',
             'overflow-x': 'hidden',
@@ -709,7 +709,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         rulerWrapper.attr('id', 'rulerWrapper');
         rulerWrapper.css({
             'width': '85%',
-            'height': (LADS.TourAuthoring.Constants.timeRulerSize) + 'px',
+            'height': (TAG.TourAuthoring.Constants.timeRulerSize) + 'px',
             'overflow-x': 'hidden',
             'overflow-y': 'hidden',
             'position': 'absolute',
@@ -722,7 +722,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         }
         that.faderUpdate = faderUpdate;
 
-        manipObjects.ruler = (LADS.Util.makeManipulatable(rulerWrapper[0], {
+        manipObjects.ruler = (TAG.Util.makeManipulatable(rulerWrapper[0], {
             onManipulate: function (res) {
                 rulerWrapper.scrollLeft(rulerWrapper.scrollLeft() - res.translation.x);
                 manipObjects.track.cancelAccel();
@@ -753,7 +753,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var throttleLR;
         var toMoveUD = 0;
         var throttleUD;
-        manipObjects.track = (LADS.Util.makeManipulatable(trackBody[0], {
+        manipObjects.track = (TAG.Util.makeManipulatable(trackBody[0], {
             onManipulate: function (res) {
                 manipObjects.ruler.cancelAccel();
                 if (res.translation.x !== 0) {
@@ -886,7 +886,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         });
 
         editInkOverlay.css({
-            top: LADS.Util.Constants.timeRulerSize,
+            top: TAG.Util.Constants.timeRulerSize,
             width: '100%',
             height: '100%',
             'margin-left': "2%",
@@ -1039,7 +1039,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
      * @method showEditorOverlay
      */
     function showEditorOverlay() {
-        var overlayLabelSpec = LADS.Util.constrainAndPosition(editInkOverlay.width(), editInkOverlay.height(),
+        var overlayLabelSpec = TAG.Util.constrainAndPosition(editInkOverlay.width(), editInkOverlay.height(),
             {
                 center_h: true,
                 center_v: true,
@@ -1048,9 +1048,9 @@ LADS.TourAuthoring.Timeline = function (spec) {
                 max_width: 400,
                 max_height: 100,
             });
-        var labelFontSize = LADS.Util.getMaxFontSizeEM("Ink is being edited...", 0, overlayLabelSpec.width - 10, overlayLabelSpec.height, 0.01);
+        var labelFontSize = TAG.Util.getMaxFontSizeEM("Ink is being edited...", 0, overlayLabelSpec.width - 10, overlayLabelSpec.height, 0.01);
 
-        $('#resizeButton').attr('src', 'images/icons/Ellipsis_gray.svg');
+        $('#resizeButton').attr('src', 'images/icons/Ellipsis_gray.svg'); // TODO need a new icon here
         setEditInkOn(true);
         $('#multiSelButton').css({
             'color': 'gray',
@@ -1074,7 +1074,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
      * @method hideEditorOverlay
      */
     function hideEditorOverlay() {
-        $('#resizeButton').attr('src', 'images/icons/Ellipsis_brown.svg');
+        $('#resizeButton').attr('src', tagPath + 'images/icons/dragTourWindow.svg');
         setEditInkOn(false);
         $('#multiSelButton').css({
             'color': 'black',
@@ -1269,9 +1269,9 @@ LADS.TourAuthoring.Timeline = function (spec) {
         for (i = 0; i < dataHolder._trackArray.length; i++) {
             ct = dataHolder._trackArray[i].track;
             if (ct.getMinimizedState()) {
-                total = total + LADS.TourAuthoring.Constants.minimizedTrackHeight;
+                total = total + TAG.TourAuthoring.Constants.minimizedTrackHeight;
             } else {
-                total = total + LADS.TourAuthoring.Constants.trackHeight;
+                total = total + TAG.TourAuthoring.Constants.trackHeight;
             }
         }
         return total + dataHolder._trackArray.length * 2; // 2px border per track
@@ -1355,7 +1355,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         function createTimeLabel(i) {
             var time = Math.min(i, ev.end),
                 timeString = timeManager.formatTime(i),
-                fontsize = LADS.Util.getFontSize(140),
+                fontsize = TAG.Util.getFontSize(40),
                 markLoc = timeManager.timeToPx(i),
                 timeLabel = $(document.createElement('div'))
                             .addClass('time-label')
@@ -1823,7 +1823,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var object = createSpec(media, name, pos);
         var newTrack;
         object.mediaLength = mediaLength;
-        newTrack = new LADS.TourAuthoring.AudioTrack(object);
+        newTrack = new TAG.TourAuthoring.AudioTrack(object);
         addAnyTrack(newTrack, name, pos);
         return newTrack;
     }
@@ -1841,7 +1841,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var newTrack;
         object.mediaLength = mediaLength;
         //object.converted = converted;
-        newTrack = new LADS.TourAuthoring.VideoTrack(object);
+        newTrack = new TAG.TourAuthoring.VideoTrack(object);
         addAnyTrack(newTrack, name, pos);
         return newTrack;
     }
@@ -1858,7 +1858,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var object = createSpec(media, name, pos);
         var newTrack;
         object.guid = guid;
-        newTrack = new LADS.TourAuthoring.ArtworkTrack(object);
+        newTrack = new TAG.TourAuthoring.ArtworkTrack(object);
         addAnyTrack(newTrack, name, pos);
         return newTrack; 
     }
@@ -1873,9 +1873,9 @@ LADS.TourAuthoring.Timeline = function (spec) {
     function addImageTrack(media, name, pos) {
         pos = pos || (dataHolder.getSelectedTrack() ? dataHolder.getSelectedTrack().getPos() : 0);
         var object = createSpec(media, name, pos);
-        var newTrack = new LADS.TourAuthoring.ImageTrack(object);
+        var newTrack = new TAG.TourAuthoring.ImageTrack(object);
         var oldPos;
-        var command = LADS.TourAuthoring.Command({
+        var command = TAG.TourAuthoring.Command({
             execute: function () {
                 _addTrack(newTrack);
                 dataHolder.insertTrack(newTrack, oldPos);
@@ -1941,8 +1941,8 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var oldPos;
 
         // Create the track, wrap command
-        var newTrack = new LADS.TourAuthoring.InkTrack(spec);
-        var command = LADS.TourAuthoring.Command({
+        var newTrack = new TAG.TourAuthoring.InkTrack(spec);
+        var command = TAG.TourAuthoring.Command({
             execute: function () {
                 _addTrack(newTrack);
                 dataHolder.insertTrack(newTrack, oldPos);
@@ -2002,7 +2002,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
     function addAnyTrack(track, name, pos) {
         pos = pos || (dataHolder.getSelectedTrack() ? dataHolder.getSelectedTrack().getPos() : 0);
         var oldPos,
-            command = LADS.TourAuthoring.Command({
+            command = TAG.TourAuthoring.Command({
                 execute: function () {
                     _addTrack(track);
                     dataHolder.insertTrack(track, oldPos);
@@ -2040,7 +2040,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
         var i;
         dataHolder.removeTrack(track);
         track.updatePos(track.getPos());
-        if (track.getType() === LADS.TourAuthoring.TrackType.ink && track.getInkEnabled()) {
+        if (track.getType() === TAG.TourAuthoring.TrackType.ink && track.getInkEnabled()) {
             track.getInkLink().removeAttachedInkTrack(track);
         }
         track.detach();
@@ -2078,7 +2078,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
             related = [];
         dataHolder.mapTracks(function (i) {
             track = i;
-            if (track.track.getType() === LADS.TourAuthoring.TrackType.artwork) {
+            if (track.track.getType() === TAG.TourAuthoring.TrackType.artwork) {
                 related.push(track.track.getGUID());
             }
         });
@@ -2102,7 +2102,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
     function checkForArtworks(numArtworks) {
         for (var i = 0; i < dataHolder._trackArray.length; i++) {
                 var track = dataHolder._trackArray[i].track;
-                if (track.getType() === LADS.TourAuthoring.TrackType.artwork || track.getType() === LADS.TourAuthoring.TrackType.image) {
+                if (track.getType() === TAG.TourAuthoring.TrackType.artwork || track.getType() === TAG.TourAuthoring.TrackType.image) {
                     return true;
                 }
         }
@@ -2331,7 +2331,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
      * @param {Function} callback
      */
     function loadRIN(rin, callback) {
-        var parser = LADS.Util.createQueue(),
+        var parser = TAG.Util.createQueue(),
             r,
             e,
             es,
@@ -2518,7 +2518,7 @@ LADS.TourAuthoring.Timeline = function (spec) {
                 width: '100%',
                 height: '100%',
                 'background-color': 'rgba(0,0,0,0.6)',
-                'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex,
+                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
             });
 
             deleteConfirmation.attr('id', 'deleteConfirmation');
@@ -2667,12 +2667,12 @@ LADS.TourAuthoring.Timeline = function (spec) {
                                         if (currKey.init) { continue; }
                                         keyloc = timeManager.timeToPx(currKey.offset + display.getStart());
                                         if (type === 'ZMES' || type === 'ImageES') {
-                                            key = display.addKeyframe(keyloc, LADS.TourAuthoring.Constants.trackHeight/2);
+                                            key = display.addKeyframe(keyloc, TAG.TourAuthoring.Constants.trackHeight/2);
                                             if (key) key.loadRIN(currKey);
                                         } else if (type === 'AES') {
                                             // get audio to set y location
                                             y = currKey.state.sound.volume;
-                                            y = Math.constrain(LADS.TourAuthoring.Constants.trackHeight - LADS.TourAuthoring.Constants.trackHeight * y, 0, LADS.TourAuthoring.Constants.trackHeight);
+                                            y = Math.constrain(TAG.TourAuthoring.Constants.trackHeight - TAG.TourAuthoring.Constants.trackHeight * y, 0, TAG.TourAuthoring.Constants.trackHeight);
                                             key = display.addKeyframe(keyloc, y);
                                             if (key) track.addKeyframeToLines(key);
                                         } else if (type === 'VideoES') {

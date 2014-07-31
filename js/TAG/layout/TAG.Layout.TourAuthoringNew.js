@@ -62,10 +62,10 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
 
         var resizeButton = $(document.createElement('img'));
         resizeButton.addClass("resizeButton");
-        resizeButton.attr('src', 'images/icons/Ellipsis_brown.svg');
+        resizeButton.attr('src', tagPath + 'images/icons/dragTourWindow.svg');
         resizeButton.attr('id', 'resizeButton');
         resizeButton.css({
-            'height': 'auto', 'width': '30%', 'position': 'absolute', 'top': '33%', 'left': '40%'
+            'cursor': 'pointer', 'height': 'auto', 'width': '30%', 'position': 'absolute', 'top': '2%', 'left': '40%'
         });
 
         var prevLocationY;
@@ -159,15 +159,21 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 if (!$inkTextControls) { $inkTextControls = $('#inkTextControls'); }
                 if (!$inkDrawControls) { $inkDrawControls = $('#inkDrawControls'); }
                 if (!$inkTransControls) { $inkTransControls = $('#inkTransControls'); }
-                if (!$inkEditText) { $inkEditText = $('#inkEditText'); }
-                if (!$inkEditDraw) { $inkEditDraw = $('#inkEditDraw'); }
-                if (!$inkEditTransparency) { $inkEditTransparency = $('#inkEditTransparency'); }
-                $("#inkTextControls").css("height", raTop + raHeight - $("#inkTextControls").offset().top - 10);
-                $("#inkDrawControls").css("height", raTop + raHeight - $("#inkDrawControls").offset().top - 10);
-                $("#inkTransControls").css("height", raTop + raHeight - $("#inkTransControls").offset().top - 10);
-                $("#inkEditText").css("height", raTop + raHeight - $("#inkEditText").offset().top - 10);
-                $("#inkEditDraw").css("height", raTop + raHeight - $("#inkEditDraw").offset().top - 10);
-                $("#inkEditTransparency").css("height", raTop + raHeight - $("#inkEditTransparency").offset().top - 10);
+             //   if (!$inkEditText) { $inkEditText = $('#inkEditText'); }
+             //   if (!$inkEditDraw) { $inkEditDraw = $('#inkEditDraw'); }
+             //   if (!$inkEditTransparency) { $inkEditTransparency = $('#inkEditTransparency'); }
+                if ($('#inkTextControls').length > 0) {
+                    $("#inkTextControls").css("height", raTop + raHeight - $("#inkTextControls").offset().top - 10);
+                }
+                if ($('#inkDrawControls').length > 0) {
+                    $("#inkDrawControls").css("height", raTop + raHeight - $("#inkDrawControls").offset().top - 10);
+                }
+                if ($('#inkTransControls').length > 0) {
+                    $("#inkTransControls").css("height", raTop + raHeight - $("#inkTransControls").offset().top - 10);
+                }
+           //     $("#inkEditText").css("height", raTop + raHeight - $("#inkEditText").offset().top - 10);
+           //     $("#inkEditDraw").css("height", raTop + raHeight - $("#inkEditDraw").offset().top - 10);
+           //     $("#inkEditTransparency").css("height", raTop + raHeight - $("#inkEditTransparency").offset().top - 10);
                 viewer.resize();//resize the viewer.
 
                 prevLocationY = ui.position.top;
