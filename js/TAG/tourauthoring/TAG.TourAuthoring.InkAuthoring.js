@@ -1,6 +1,6 @@
 ﻿TAG.Util.makeNamespace("TAG.TourAuthoring.InkAuthoring");
 
-// Enum defining ink modes
+// enum defining ink modes
 TAG.TourAuthoring.InkMode = {
     shapes: 0, //shape manipulation
     draw: 1,
@@ -8,6 +8,7 @@ TAG.TourAuthoring.InkMode = {
     text: 5,
 };
 
+// enum defining
 TAG.TourAuthoring.InkCallers = {
     inkes: 1,
     componentcontrols: 2
@@ -20,131 +21,207 @@ TAG.TourAuthoring.InkCallers = {
  * Uses the RaphaelJS library for svg manipulation.
  * @class TAG.TourAuthoring.InkAuthoring
  * @constructor
- * @param {String} canvId        the id of the div to which we'll assign the Raphael canvas.
- * @param {HTML elt} html_elt    in the case that the div above is not in the dom yet, send in a variable for its html element.
- * @param {String} calling_file  DEPRECATE!!!! either 'inkes' or not; slightly different functionality is needed in different instances.
- * @param {Object} spec          if the calling file is ComponentControls, we make use of the undoManager etc, so just pass
- *                                   in the spec variable from ComponentControls.
+ * @param {Object} options       input options
+ *         {String} canvId        id of the destination ink canvas (defaults to "inkCanv")
+ *         {Object} spec          spec passed in from ComponentControls
  */
 
-TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec) {
+TAG.TourAuthoring.InkAuthoring = function (options) {
     "use strict";
 
-    // set up the Raphael paper/canvas
-    var that = {};
-    var canvid = canvId;
-    that.canvid = canvId;
-    html_elt = (html_elt) ? html_elt : $("#" + canvid)[0];
-    var domelement = $(html_elt);
-    var textElt;
-    var dataHolder = spec.dataHolder;
+    // TODO clean up vars and get rid of any unnecessary ones
+    var // input options
+        canvId = options.canvId || "inkCanv",    // id of the ink canvas
+        spec = options.spec,               // spec obj passed in from componentcontrols
 
-    var paper = new Raphael(html_elt, "100%", "100%");
+        // DOM-related
+        canvElt = $("#" + canvid),               // ink canvas elt
+        viewerElt = $('#rinContainer'),          // container for player
+
+        // constants
+        TEXTBOX_ID = "textbox",
+
+        // misc initialized vars
+        dataHolder = spec.dataHolder,               // data holder for getting selected track, etc
+        paper = new Raphael(canvElt[0], "100%", "100%"), // raphael obj
+
+        // "draw" ink vars
+        penColor = "#000000",
+        penOpacity = 1.0,
+        penWidth = 7,
+        eraserWidth = 5,
+        pa = [], // path attributes (one object for each path segment)
+
+        // "highlight" ink vars
+        marqueeFillColor = "#000000",
+        marqueeFillOpacity = 0.7,
+        transMode = 'isolate',
+        transCoords = [],
+        transLetters = [],
+        transCurrpath = "",
+        boundingShapes = "",
+
+        // "write" ink vars
+        fontFamily = "'Times New Roman', serif",
+        fontColor = "#ffffff",
+        fontSize = "12px",
+        svgText,
+
+
+        // misc uninitialized vars
+        textElt,
+        inkTrack,
+        hasClicked,
+        datastring = "",
+        mode = TAG.TourAuthoring.InkMode.draw,
+        isAttached = true, // TODO DOC why is this true to start?
+        initKeyframe = {},
+        artworkName = "",
+        expId = "",
+        oldScale = 1,
+
+        // for panning/zooming inks
+        origPaperX = 0, // orig coordinates of the raphael canvas
+        origPaperY = 0,
+        origPaperW = viewerElt.width(),
+        origPaperH = viewerElt.height(),
+        origpx = 0, // orig coordinates of the artwork
+        origpy = 0,
+        origpw = 0,
+        origph = 0,
+        lastpx = 0, // most recent coordinates of the artwork
+        lastpy = 0,
+        lastpw = 0,
+        lastph = 0,
+        lastcx = 0, // most recent coordinates of the "virtual canvas" which helps us place inks correctly
+        lastcy = 0, // the virtual canvas is where the Raphael canvas would be if it were moving with the artwork
+        lastcw = 0,
+        lastch = 0,
+
+        inkUndoManager = new TAG.TourAuthoring.UndoManager(),
+
+        playbackControls = spec.playbackControls,
+        undoManager = spec.undoManager,
+        timeline = spec.timeline,
+        timeManager = spec.timeManager,
+        viewer = spec.viewer;
+
+
+
+    //var that = {};
+    //var canvid = canvId;
+    //that.canvid = canvId;
+    //html_elt = (html_elt) ? html_elt : $("#" + canvid)[0];
+    //var canvElt = $(html_elt);
+    //var textElt;
+    //var dataHolder = spec.dataHolder;
+
+    //var paper = new Raphael(canvElt[0], "100%", "100%");
     $("#" + canvid + " svg").css("position", "absolute");
     
     // brush variables
-    var penColor = "#000000";
-    var penOpacity = 1.0;
-    var penWidth = 7;
-    var eraserWidth = 5;
-    var ml = []; //path M/L values (see svg path format)
-    var xy = []; //path coordinates; each entry has an x and y property
-    var pa = []; //path attributes
-    var pathObjects = [];
-    var currpaths = ""; //this will be the string representing all of our paths; to get the paths individually, split at 'M'
+    //var penColor = "#000000";
+    //var penOpacity = 1.0;
+    //var penWidth = 7;
+    //var eraserWidth = 5;
+    //var ml = []; //path M/L values (see svg path format)
+    //var xy = []; //path coordinates; each entry has an x and y property
+    //var pa = []; //path attributes
+    //var pathObjects = [];
+    //var currpaths = ""; //this will be the string representing all of our paths; to get the paths individually, split at 'M'
     
 
 
-    // ellipse/rectangle variables
-    var shapeStrokeColor = "#ffffff";
-    var shapeStrokeOpacity = 0.7;
-    var shapeStrokeWidth = 5;
-    var shapeFillColor = "#000000";
-    var shapeFillOpacity = 0;
+    //// ellipse/rectangle variables
+    //var shapeStrokeColor = "#ffffff";
+    //var shapeStrokeOpacity = 0.7;
+    //var shapeStrokeWidth = 5;
+    //var shapeFillColor = "#000000";
+    //var shapeFillOpacity = 0;
 
-    // block/isolate variables
-    var marqueeFillColor = "#000000";
-    var marqueeFillOpacity = 0.8;
-    var trans_mode = 'isolate';
-    var transCoords = [];
-    var transLetters = [];
-    var trans_currpath = "";
-    var bounding_shapes = "";
+    //// block/isolate variables
+    //var marqueeFillColor = "#000000";
+    //var marqueeFillOpacity = 0.8;
+    //var trans_mode = 'isolate';
+    //var transCoords = [];
+    //var transLetters = [];
+    //var transCurrpath = "";
+    //var bounding_shapes = "";
 
-    // text variables
-    var fontFamily = "'Times New Roman', serif";
-    var fontColor = "#ffffff";
-    var fontSize = '12px';
-    var fontOpacity = 1.0;
-    var textboxid = "textbox";
-    var outerdivid = "outerdiv";
-    var lastText = "";
-    var svgText;
+    //// text variables
+    //var fontFamily = "'Times New Roman', serif";
+    //var fontColor = "#ffffff";
+    //var fontSize = '12px';
+    //var fontOpacity = 1.0;
+    //var textboxid = "textbox";
+    //var outerdivid = "outerdiv";
+    //var lastText = "";
+    //var svgText;
 
     // misc variables
-    var inktrack = null;
-    calling_file = (calling_file === 'inkes') ? 'inkes' : 'componentcontrols';
-    var marquees = []; // old marquees
-    var click = false; // has the mouse been clicked?
-    var datastring = "";
-    var mode = TAG.TourAuthoring.InkMode.draw;
-    var enabled = true; //attached ink tracks by default
-    var initKeyframe = {};
-    var artName = "";
-    var EID = ""; // rin experience id (name of the ink track)
-    var oldScale = 1;
-    var firstTimeThrough = 2;
+    //var inkTrack = null;
+    //calling_file = (calling_file === 'inkes') ? 'inkes' : 'componentcontrols';
+    //var marquees = []; // old marquees
+    //var click = false; // has the mouse been clicked?
+    //var datastring = "";
+    //var mode = TAG.TourAuthoring.InkMode.draw;
+    //var isAttached = true; //attached ink tracks by default
+    //var initKeyframe = {};
+    //var artName = "";
+    //var expId = ""; // rin experience id (name of the ink track)
+    //var oldScale = 1;
+    //var firstTimeThrough = 2;
     
     // set up the coordinates for adjustViewBox
-    var viewerElt;
-    if (calling_file === 'inkes')
-        viewerElt = ($("#rinplayer").length) ? $("#rinplayer") : $("#rinPlayer");
-    else
-        viewerElt = $("#rinContainer");
-    var origPaperX = 0; // original coordinates of the paper (match with rinContainer)
-    var origPaperY = 0;
-    var origPaperW = viewerElt.width();
-    var origPaperH = viewerElt.height();
-    var origpx = 0; // original coordinates of the artwork
-    var origpy = 0;
-    var origpw = 0;
-    var origph = 0;
-    var lastpx = 0; // most recent coordinates of the artwork
-    var lastpy = 0;
-    var lastpw = 0;
-    var lastph = 0;
-    var lastcx = 0; // most recent coordinates of the "virtual canvas" which helps us place inks correctly
-    var lastcy = 0; // the virtual canvas is where the Raphael canvas would be if it were moving with the artwork
-    var lastcw = origPaperW;
-    var lastch = origPaperH;
-    var oldOpac = 0; // keeps track of whether an ink is on screen or not
+    //var viewerElt;
+    //if (calling_file === 'inkes')
+    //    viewerElt = ($("#rinplayer").length) ? $("#rinplayer") : $("#rinPlayer");
+    //else
+    //    viewerElt = $("#rinContainer");
+    //var origPaperX = 0; // original coordinates of the paper (match with rinContainer)
+    //var origPaperY = 0;
+    //var origPaperW = viewerElt.width();
+    //var origPaperH = viewerElt.height();
+    //var origpx = 0; // original coordinates of the artwork
+    //var origpy = 0;
+    //var origpw = 0;
+    //var origph = 0;
+    //var lastpx = 0; // most recent coordinates of the artwork
+    //var lastpy = 0;
+    //var lastpw = 0;
+    //var lastph = 0;
+    //var lastcx = 0; // most recent coordinates of the "virtual canvas" which helps us place inks correctly
+    //var lastcy = 0; // the virtual canvas is where the Raphael canvas would be if it were moving with the artwork
+    //var lastcw = origPaperW;
+    //var lastch = origPaperH;
+    //var oldOpac = 0; // keeps track of whether an ink is on screen or not
 
     // componentControls-specific variables for creating an ink undo manager, getting keyframes
-    var inkUndoManager;
-    var playbackControls;
-    var undoManager;
-    var timeline;
-    var timeManager;
-    var viewer;
-    var dataHolder;
-    if (calling_file !== 'inkes') {
-        playbackControls = spec.playbackControls;
-        undoManager = spec.undoManager;
-        timeline = spec.timeline;
-        timeManager = spec.timeManager;
-        viewer = spec.viewer;
+    //var inkUndoManager;
+    //var playbackControls;
+    //var undoManager;
+    //var timeline;
+    //var timeManager;
+    //var viewer;
+    //var dataHolder;
+    //if (calling_file !== 'inkes') {
+        //playbackControls = spec.playbackControls;
+        //undoManager = spec.undoManager;
+        //timeline = spec.timeline;
+        //timeManager = spec.timeManager;
+        //viewer = spec.viewer;
         // set up the ink undo manager using existing undo/redo buttons
-        inkUndoManager = new TAG.TourAuthoring.UndoManager();
-        inkUndoManager.setInitialized(true);
-        playbackControls.undoButton.off("click");
-        playbackControls.redoButton.off("click");
-        playbackControls.undoButton.on('click', function () {
-            inkUndoManager.undo();
-        });
-        playbackControls.redoButton.on('click', function () {
-            inkUndoManager.redo();
-        });
-    }
+        //inkUndoManager = new TAG.TourAuthoring.UndoManager();
+    inkUndoManager.setInitialized(true);
+    playbackControls.undoButton.off("click");
+    playbackControls.redoButton.off("click");
+    playbackControls.undoButton.on('click', function () {
+        inkUndoManager.undo();
+    });
+    playbackControls.redoButton.on('click', function () {
+        inkUndoManager.redo();
+    });
+    //}
     
     
     // methods //
@@ -159,13 +236,6 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         penWidth = 7;
         eraserWidth = 5;
 
-        // ellipse/rectangle variables
-        shapeStrokeColor = "#ffffff";
-        shapeStrokeOpacity = 0.7;
-        shapeStrokeWidth = 5;
-        shapeFillColor = "#000000";
-        shapeFillOpacity = 0;
-
         // block/isolate variables
         marqueeFillColor = "#000000";
         marqueeFillOpacity = 0.8;
@@ -175,9 +245,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         fontFamily = "'Times New Roman', serif";
         fontColor = "#ffffff";
         fontSize = '12px';
-        fontOpacity = 1.0;
     }
-    that.resetParams = resetParams;
 
     /**
      * Helper function to parse and multiply dimensions.
@@ -206,23 +274,24 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         var beenMoved;
 
         // if attributes are not passed in, use global variables
-        if (fillColor === undefined)
-            fillColor = shapeFillColor;
-        if (fillOpacity === undefined)
-            fillOpacity = shapeFillOpacity;
-        if (strokeColor === undefined)
-            strokeColor = shapeStrokeColor;
-        if (strokeOpacity === undefined)
-            strokeOpacity = shapeStrokeOpacity;
-        if (strokeWidth === undefined)
-            strokeWidth = shapeStrokeWidth;
+        //if (fillColor === undefined)
+        //    fillColor = shapeFillColor;
+        //if (fillOpacity === undefined)
+        //    fillOpacity = shapeFillOpacity;
+        //if (strokeColor === undefined)
+        //    strokeColor = shapeStrokeColor;
+        //if (strokeOpacity === undefined)
+        //    strokeOpacity = shapeStrokeOpacity;
+        //if (strokeWidth === undefined)
+        //    strokeWidth = shapeStrokeWidth;
+
 
         elt.attr({ // add color attributes
-            "stroke-width": strokeWidth,
-            "stroke": strokeColor,
-            "stroke-opacity": strokeOpacity,
-            "fill": fillColor,
-            "fill-opacity": fillOpacity,
+            "stroke-width": 5,
+            "stroke": "#ffffff",
+            "stroke-opacity": 0.7,
+            "fill": "#000000",
+            "fill-opacity": 0,
             "stroke-dasharray": "-",
         });
 
@@ -1045,147 +1114,147 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     }
     that.add_ellipse = add_ellipse;
 
-    /**
-     * DEPRECATED
-     * Used to give style and drag functionality to old marquees (such as is currently in the Final
-     * Garibaldi Demo). Once all old marquees have been deleted from tours, this method can be tossed.
-     */
-    function add_marq_attributes(marq, marqFillColor, marqFillOpacity) {
-        /**
-            * analogous to add_attributes(...), but for marquees. The difference is that a marquee
-            * is a collection of five rectangles, and the center rectangle is the only one that gets
-            * the drag handler, while the others have the color attributes.
-            */
-        var elt = marq.rc;
-        var gl;
-        var resize = 0; //if 1, we are in zoom mode rather than pan mode
-        var noglow = 0; //if 1, glowing is disabled
-        var origmousex;
-        var origmousey;
-        var w = domelement.width();
-        var h = domelement.height();
-        //console.log("w=" + w + ", h=" + h);
-        if (marqFillColor === undefined)
-            marqFillColor = marqueeFillColor;////////FIX "#" + document.getElementById("marq_color").value;
-        if (marqFillOpacity === undefined)
-            marqFillOpacity = marqueeFillOpacity;/////FIX document.getElementById("marq_opacity").value;
+    ///**
+    // * DEPRECATED
+    // * Used to give style and drag functionality to old marquees (such as is currently in the Final
+    // * Garibaldi Demo). Once all old marquees have been deleted from tours, this method can be tossed.
+    // */
+    //function add_marq_attributes(marq, marqFillColor, marqFillOpacity) {
+    //    /**
+    //        * analogous to add_attributes(...), but for marquees. The difference is that a marquee
+    //        * is a collection of five rectangles, and the center rectangle is the only one that gets
+    //        * the drag handler, while the others have the color attributes.
+    //        */
+    //    var elt = marq.rc;
+    //    var gl;
+    //    var resize = 0; //if 1, we are in zoom mode rather than pan mode
+    //    var noglow = 0; //if 1, glowing is disabled
+    //    var origmousex;
+    //    var origmousey;
+    //    var w = canvElt.width();
+    //    var h = canvElt.height();
+    //    //console.log("w=" + w + ", h=" + h);
+    //    if (marqFillColor === undefined)
+    //        marqFillColor = marqueeFillColor;////////FIX "#" + document.getElementById("marq_color").value;
+    //    if (marqFillOpacity === undefined)
+    //        marqFillOpacity = marqueeFillOpacity;/////FIX document.getElementById("marq_opacity").value;
 
-        elt.mouseover(function () {
-            if (!noglow && (mode == 3)) {
-                gl = elt.glow({ "width": 10, "color": "#33ff00", "opacity": 0.8 });
-            }
-        });
-        elt.mouseout(function () {
-            if (mode == 3)
-                gl.remove();
-        });
-        elt.attr({
-            "stroke-width": 0,
-            "stroke": "#222222",
-            "fill": "#ffffff",
-            "fill-opacity": 0
-        });
-        elt.data("surr-fill", marqFillColor);
-        elt.data("surr-opac", marqFillOpacity);
-        var mset = paper.set();
-        mset.push(marq.rn, marq.re, marq.rs, marq.rw);
-        mset.attr({
-            "stroke-width": 0,
-            "stroke": "#222222",
-            "fill": marqFillColor,
-            "fill-opacity": marqFillOpacity
-        });
+    //    elt.mouseover(function () {
+    //        if (!noglow && (mode == 3)) {
+    //            gl = elt.glow({ "width": 10, "color": "#33ff00", "opacity": 0.8 });
+    //        }
+    //    });
+    //    elt.mouseout(function () {
+    //        if (mode == 3)
+    //            gl.remove();
+    //    });
+    //    elt.attr({
+    //        "stroke-width": 0,
+    //        "stroke": "#222222",
+    //        "fill": "#ffffff",
+    //        "fill-opacity": 0
+    //    });
+    //    elt.data("surr-fill", marqFillColor);
+    //    elt.data("surr-opac", marqFillOpacity);
+    //    var mset = paper.set();
+    //    mset.push(marq.rn, marq.re, marq.rs, marq.rw);
+    //    mset.attr({
+    //        "stroke-width": 0,
+    //        "stroke": "#222222",
+    //        "fill": marqFillColor,
+    //        "fill-opacity": marqFillOpacity
+    //    });
 
-        //drag(move, start, stop,...)
-        elt.drag(function (dx, dy, mousex, mousey) {
-            //onmove
-            if (mode == 3) {
-                this.toFront();
-                var bbox = this.getBBox();
-                if (!resize) {
-                    //drag an marquee -- need to update all relevant rectangles
-                    var currx = parseInt(this.data("currx"),10);//x position at the start of drag
-                    var curry = parseInt(this.data("curry"),10);
-                    var xpos = currx + dx; //to get new x position, just add dx
-                    var ypos = curry + dy;
-                    this.attr({
-                        x: xpos,
-                        y: ypos
-                    });
-                    marq.rn.attr({
-                        height: ypos
-                    });
-                    marq.re.attr({
-                        x: xpos + bbox.width,
-                        y: ypos,
-                        width: w - (xpos + bbox.width),
-                        height: bbox.height
-                    });
-                    marq.rs.attr({
-                        y: ypos + bbox.height,
-                        height: h - (ypos + bbox.height)
-                    });
-                    marq.rw.attr({
-                        y: ypos,
-                        width: xpos,
-                        height: bbox.height
-                    });
+    //    //drag(move, start, stop,...)
+    //    elt.drag(function (dx, dy, mousex, mousey) {
+    //        //onmove
+    //        if (mode == 3) {
+    //            this.toFront();
+    //            var bbox = this.getBBox();
+    //            if (!resize) {
+    //                //drag an marquee -- need to update all relevant rectangles
+    //                var currx = parseInt(this.data("currx"),10);//x position at the start of drag
+    //                var curry = parseInt(this.data("curry"),10);
+    //                var xpos = currx + dx; //to get new x position, just add dx
+    //                var ypos = curry + dy;
+    //                this.attr({
+    //                    x: xpos,
+    //                    y: ypos
+    //                });
+    //                marq.rn.attr({
+    //                    height: ypos
+    //                });
+    //                marq.re.attr({
+    //                    x: xpos + bbox.width,
+    //                    y: ypos,
+    //                    width: w - (xpos + bbox.width),
+    //                    height: bbox.height
+    //                });
+    //                marq.rs.attr({
+    //                    y: ypos + bbox.height,
+    //                    height: h - (ypos + bbox.height)
+    //                });
+    //                marq.rw.attr({
+    //                    y: ypos,
+    //                    width: xpos,
+    //                    height: bbox.height
+    //                });
 
-                }
-                else {
-                    //resize a marquee -- need to update all relevant rectangles
-                    this.attr({
-                        width: bbox.width + mousex - origmousex,
-                        height: bbox.height + mousey - origmousey
-                    });
-                    marq.rs.attr({
-                        y: bbox.y + bbox.height + mousey - origmousey,
-                        height: h - (bbox.y + bbox.height + mousey - origmousey)
-                    });
-                    marq.re.attr({
-                        x: bbox.x + bbox.width + mousex - origmousex,
-                        width: w - (bbox.x + bbox.width + mousex - origmousex),
-                        height: bbox.height + mousey - origmousey
-                    });
-                    marq.rw.attr({
-                        height: bbox.height + mousey - origmousey
-                    });
-                }
-                //console.log("this.attr.x = " + this.attr("x") + ", y = " + this.attr("y"));
-                //console.log(update_datastring());
-                origmousex = mousex;
-                origmousey = mousey;
-            }
-        }, function (x, y) {
-            //onstart
-            if (mode == 3) {
-                origmousex = x;
-                origmousey = y;
-                var bbox = this.getBBox();
-                //console.log("diff = " + (x - bbox.x));
-                var offset_x = parseFloat(domelement.css("left"));
-                var offset_y = parseFloat(domelement.css("top"));
-                if ((arguments[2].offsetX > (bbox.x + bbox.width * 0.5)) && (arguments[2].offsetY > (bbox.y + bbox.height * 0.5))) {
-                    resize = 1;
-                }
-                gl.remove();
-                noglow = 1;
-                this.animate({ opacity: 0.25 }, 500, "<>");
-            }
-        }, function () {
-            //onstop
-            if (mode == 3) {
-                this.data("currx", this.getBBox().x); //reset data using bounding box coords
-                this.data("curry", this.getBBox().y);
-                marq.re.data("currx", this.getBBox().x + this.getBBox().width);
-                marq.rs.data("curry", this.getBBox().y + this.getBBox().height);
-                resize = 0;
-                this.animate({ opacity: 1 }, 500, "<>");
-                noglow = 0;
-            }
-        });
-    }
-    that.add_marq_attributes = add_marq_attributes;
+    //            }
+    //            else {
+    //                //resize a marquee -- need to update all relevant rectangles
+    //                this.attr({
+    //                    width: bbox.width + mousex - origmousex,
+    //                    height: bbox.height + mousey - origmousey
+    //                });
+    //                marq.rs.attr({
+    //                    y: bbox.y + bbox.height + mousey - origmousey,
+    //                    height: h - (bbox.y + bbox.height + mousey - origmousey)
+    //                });
+    //                marq.re.attr({
+    //                    x: bbox.x + bbox.width + mousex - origmousex,
+    //                    width: w - (bbox.x + bbox.width + mousex - origmousex),
+    //                    height: bbox.height + mousey - origmousey
+    //                });
+    //                marq.rw.attr({
+    //                    height: bbox.height + mousey - origmousey
+    //                });
+    //            }
+    //            //console.log("this.attr.x = " + this.attr("x") + ", y = " + this.attr("y"));
+    //            //console.log(update_datastring());
+    //            origmousex = mousex;
+    //            origmousey = mousey;
+    //        }
+    //    }, function (x, y) {
+    //        //onstart
+    //        if (mode == 3) {
+    //            origmousex = x;
+    //            origmousey = y;
+    //            var bbox = this.getBBox();
+    //            //console.log("diff = " + (x - bbox.x));
+    //            var offset_x = parseFloat(canvElt.css("left"));
+    //            var offset_y = parseFloat(canvElt.css("top"));
+    //            if ((arguments[2].offsetX > (bbox.x + bbox.width * 0.5)) && (arguments[2].offsetY > (bbox.y + bbox.height * 0.5))) {
+    //                resize = 1;
+    //            }
+    //            gl.remove();
+    //            noglow = 1;
+    //            this.animate({ opacity: 0.25 }, 500, "<>");
+    //        }
+    //    }, function () {
+    //        //onstop
+    //        if (mode == 3) {
+    //            this.data("currx", this.getBBox().x); //reset data using bounding box coords
+    //            this.data("curry", this.getBBox().y);
+    //            marq.re.data("currx", this.getBBox().x + this.getBBox().width);
+    //            marq.rs.data("curry", this.getBBox().y + this.getBBox().height);
+    //            resize = 0;
+    //            this.animate({ opacity: 1 }, 500, "<>");
+    //            noglow = 0;
+    //        }
+    //    });
+    //}
+    //that.add_marq_attributes = add_marq_attributes;
 
     /**
      * Add a rectangle to the Raphael canvas. Called by the "Add Rectangle" button in isolate/block ink mode
@@ -1253,7 +1322,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             if (size) {
                 newFontSize = size;
             } else {
-                newFontSize = rel_dims(svgText.data("fontsize"), domelement.height()) * domelement.height();
+                newFontSize = rel_dims(svgText.data("fontsize"), canvElt.height()) * canvElt.height();
             }
             svgText.attr({
                 'font-size': newFontSize,
@@ -1309,7 +1378,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         
         // if the new position is not trivially different from the old position, pan and zoom
         if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
-            //var eid_elt = $("[ES_ID='" + EID + "']");
+            //var eid_elt = $("[ES_ID='" + expId + "']");
             var lambda_w = origPaperW / real_kfw;
             var lambda_h = origPaperH / real_kfh;
             var nvw = new_pw * lambda_w; // nv*: dimensions of the new virtual canvas (where the ink canvas would be if we were panning and zooming it with the artwork)
@@ -1329,8 +1398,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                 paper.setViewBox(-nvx / oldScale, -nvy / oldScale, newwid, newhei); // see raphael documentation
             }
             else {
-                var cw = domelement.width();
-                var ch = domelement.height();
+                var cw = canvElt.width();
+                var ch = canvElt.height();
                 magX = cw;
                 magY = ch;
                 panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }, 0); // no need to draw updated ink yet
@@ -1387,7 +1456,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
 
         // if the new position is not trivially different from the old position, pan and zoom
         if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
-            var eid_elt = $("[ES_ID='" + EID + "']");
+            var eid_elt = $("[ES_ID='" + expId + "']");
             var lambda_w = origPaperW / real_kfw;
             var lambda_h = origPaperH / real_kfh;
             var nvw = new_pw * lambda_w; // new dimensions of the virtual canvas
@@ -1398,8 +1467,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             var SW = nvw / lastcw; // scale factor in x direction
             var SH = nvh / lastch; // scale factor in y direction (in case we ever have non-aspect-ratio-preserving scaling)
 
-            var cw = domelement.width();
-            var ch = domelement.height();
+            var cw = canvElt.width();
+            var ch = canvElt.height();
 
             // translate to (0,0), scale by (SW,SH), translate to (nvx,nvy)
             // in panning, we divide by the width of the paper because all coordinates are in [0,1]
@@ -1703,54 +1772,54 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * Uses the arrays ml, xy, and pa to draw paths with the correct properties.
      * First clears the canvas of existing paths, then draws new ones.
      */
-    function drawPaths() {
-        var cw = viewerElt.width();
-        var ch = viewerElt.height();
-        var paths = "";
-        var cpaths = "";
-        var i;
-        var len = pathObjects.length;
-        for (i = 0; i < len; i++) { //removes paths from canvas
-            pathObjects[i].remove();
-        }
-        pathObjects.length = 0;
-        for (i = 0; i < ml.length; i++) { //construct the paths
-            if (ml[i] === 'M') {
-                paths += "PATH::[pathstring]"; // the paths to be drawn now
-                cpaths += "PATH::[pathstring]"; // the paths we will save for our datastring (in relative coordinates)
-            }
-            paths += ml[i] + (cw * xy[i][0]) + ',' + (ch * xy[i][1]); // absolute coords
-            cpaths += ml[i] + (xy[i][0]) + ',' + (xy[i][1]); // relative coords
-            if (ml[i + 1] != 'L') {
-                // if we're here, we've reached the end of a path, so add style information to the path strings
-                paths += "[stroke]" + pa[i].color + "[strokeo]" + pa[i].opacity + "[strokew]" + (ch * pa[i].width) + "[]|";
-                cpaths += "[stroke]" + pa[i].color + "[strokeo]" + pa[i].opacity + "[strokew]" + pa[i].width + "[]|";
-            }
-        }
-        var path = [];
-        if (paths.length > 0) {
-            path = paths.split('PATH::');
-        }
-        for (i = 1; i < path.length; i++) {
-            var pstring = get_attr(path[i], "pathstring", "s");
-            var strokec = get_attr(path[i], "stroke", "s");
-            var strokeo = get_attr(path[i], "strokeo", "f");
-            var strokew = get_attr(path[i], "strokew", "f");
-            var drawing = paper.path(pstring); // draw the path to the canvas
-            drawing.data("type", "path");
-            drawing.attr({
-                "stroke-width": strokew,
-                "stroke-opacity": strokeo,
-                "stroke": strokec,
-                "stroke-linejoin": "round",
-                "stroke-linecap": "round"
-            });
-            pathObjects.push(drawing);
-        }
-        currpaths = cpaths; // currpaths is used in update_datastring as the string representing all paths on the canvas
-        //update_datastring();
-    }
-    that.drawPaths = drawPaths;
+    //function drawPaths() {
+    //    var cw = viewerElt.width();
+    //    var ch = viewerElt.height();
+    //    var paths = "";
+    //    var cpaths = "";
+    //    var i;
+    //    var len = pathObjects.length;
+    //    for (i = 0; i < len; i++) { //removes paths from canvas
+    //        pathObjects[i].remove();
+    //    }
+    //    pathObjects.length = 0;
+    //    for (i = 0; i < ml.length; i++) { //construct the paths
+    //        if (ml[i] === 'M') {
+    //            paths += "PATH::[pathstring]"; // the paths to be drawn now
+    //            cpaths += "PATH::[pathstring]"; // the paths we will save for our datastring (in relative coordinates)
+    //        }
+    //        paths += ml[i] + (cw * xy[i][0]) + ',' + (ch * xy[i][1]); // absolute coords
+    //        cpaths += ml[i] + (xy[i][0]) + ',' + (xy[i][1]); // relative coords
+    //        if (ml[i + 1] != 'L') {
+    //            // if we're here, we've reached the end of a path, so add style information to the path strings
+    //            paths += "[stroke]" + pa[i].color + "[strokeo]" + pa[i].opacity + "[strokew]" + (ch * pa[i].width) + "[]|";
+    //            cpaths += "[stroke]" + pa[i].color + "[strokeo]" + pa[i].opacity + "[strokew]" + pa[i].width + "[]|";
+    //        }
+    //    }
+    //    var path = [];
+    //    if (paths.length > 0) {
+    //        path = paths.split('PATH::');
+    //    }
+    //    for (i = 1; i < path.length; i++) {
+    //        var pstring = get_attr(path[i], "pathstring", "s");
+    //        var strokec = get_attr(path[i], "stroke", "s");
+    //        var strokeo = get_attr(path[i], "strokeo", "f");
+    //        var strokew = get_attr(path[i], "strokew", "f");
+    //        var drawing = paper.path(pstring); // draw the path to the canvas
+    //        drawing.data("type", "path");
+    //        drawing.attr({
+    //            "stroke-width": strokew,
+    //            "stroke-opacity": strokeo,
+    //            "stroke": strokec,
+    //            "stroke-linejoin": "round",
+    //            "stroke-linecap": "round"
+    //        });
+    //        pathObjects.push(drawing);
+    //    }
+    //    currpaths = cpaths; // currpaths is used in update_datastring as the string representing all paths on the canvas
+    //    //update_datastring();
+    //}
+    //that.drawPaths = drawPaths;
 
     /**
      * A helper function to draw transparencies. Takes the arrays transLetters (representing the
@@ -1761,8 +1830,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function drawTrans() {
         remove_all(); // be careful that this method isn't called unless the type of the ink is 'trans'!
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         var path = "";
         var ind = 0;
         // iterate through the transLetters array and create our svg path accordingly
@@ -1798,8 +1867,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * @param location   the locaton of the drag event
      */
     function erase(location) {
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         var range = eraserWidth;
         for (var i = 0; i < xy.length; i++) { // for each coordinate, test for proximity to location
             if (location[0] - range <= (cw * xy[i][0]) && (cw * xy[i][0]) <= location[0] + range) {
@@ -1880,8 +1949,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * @param paths     array of path strings representing ellipses/rects
      */
     function get_outer_path(paths) {
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         var cumulative_path = "";
         for (var i = 0; i < paths.length; i++) {
             paths[i] = transform_pathstring_marq(paths[i], cw, ch); // transform each to absolute coords
@@ -1923,7 +1992,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * Helper function to get the svg element created by Raphael.
      */
     function getSVGElement() {
-        return domelement.find("svg")[0];
+        return canvElt.find("svg")[0];
     }
     that.getSVGElement = getSVGElement;
 
@@ -1935,8 +2004,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     function get_trans_shape_data () {
         var datastr = update_datastring();
         var shapes = [];
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         if (datastr === "") {
             //console.log("no elements to attach");
             return;
@@ -2179,8 +2248,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
 
         // prepare to set track data
         artName = track.getTitle();
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         magX = cw;
         magY = ch;
         var proxy_div = $("[data-proxy='" + escape(artName) + "']");
@@ -2210,42 +2279,42 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         }
         else if (linkType === TAG.TourAuthoring.TrackType.image) {
             kfvw = 1.0 / keyframe.state.viewport.region.span.x;//$("#" + canvid).width() / (keyframe.state.viewport.region.span.x * cw);
-            var rw = keyframe.state.viewport.region.span.x * domelement.width();
+            var rw = keyframe.state.viewport.region.span.x * canvElt.width();
             kfvh = keyframe.state.viewport.region.span.y; /////bogus entry, not used
             kfvx = -keyframe.state.viewport.region.center.x * kfvw;// /
-            kfvy = -(domelement.height() / rw) * keyframe.state.viewport.region.center.y;// / (.5*(keyframe.state.viewport.region.span.x
+            kfvy = -(canvElt.height() / rw) * keyframe.state.viewport.region.center.y;// / (.5*(keyframe.state.viewport.region.span.x
         }
         // set track data
         var inkType = datastr.split("::")[0].toLowerCase();
-        inktrack = timeline.addInkTrack(track, "Ink " + decodeURI(track.getTitle()), inkType);
-        inktrack.setInkLink(track);
+        inkTrack = timeline.addInkTrack(track, "Ink " + decodeURI(track.getTitle()), inkType);
+        inkTrack.setInkLink(track);
 
         if (inkType === "trans")
             datastr += bounding_shapes; // if we're attaching a transparency, also include the bounding ellipse/rects in the datastring so we can edit later
-        inktrack.setInkPath(datastr);
-        //inktrack.setInkProps({}); // not used
-        inktrack.setInkInitKeyframe({ "x": kfvx, "y": kfvy, "w": kfvw, "h": kfvh });
-        inktrack.setInkEnabled(true); // set linked
-        inktrack.setInkType(inkType);
-        inktrack.setInkRelativeArtPos(getArtRelativePos(proxy, cw, ch));
+        inkTrack.setInkPath(datastr);
+        //inkTrack.setInkProps({}); // not used
+        inkTrack.setInkInitKeyframe({ "x": kfvx, "y": kfvy, "w": kfvw, "h": kfvh });
+        inkTrack.setInkEnabled(true); // set linked
+        inkTrack.setInkType(inkType);
+        inkTrack.setInkRelativeArtPos(getArtRelativePos(proxy, cw, ch));
 
-        inktrack.addInkTypeToTitle(inkType);
+        inkTrack.addInkTypeToTitle(inkType);
 
-        enabled = true;
-        domelement.remove();
+        isAttached = true;
+        canvElt.remove();
 
         var inkDisplayTime = timeManager.getCurrentTime();
         var parentDisplay = track.getStorageContainer().displays.nearestNeighbors(inkDisplayTime, 1)[0].display;
         var boundingEdge = parentDisplay.getEnd();
-        var inkDisplay = inktrack.addDisplay(timeManager.getCurrentPx(), Math.min(5, boundingEdge - inkDisplayTime)); //add a display at the playhead location
+        var inkDisplay = inkTrack.addDisplay(timeManager.getCurrentPx(), Math.min(5, boundingEdge - inkDisplayTime)); //add a display at the playhead location
 
         // set parent-child association between displays
         parentDisplay.addChildDisplay(inkDisplay);
         inkDisplay.setParentDisplay(parentDisplay);
 
         // add linking association between tracks
-        track.addAttachedInkTrack(inktrack);
-        inktrack.setInkLink(track);
+        track.addAttachedInkTrack(inkTrack);
+        inkTrack.setInkLink(track);
 
         // add command to undo both track creation and display at once
         undoManager.combineLast(2);
@@ -2317,24 +2386,24 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         }
 
         // add track and set track data
-        inktrack = timeline.addInkTrack(null, "Unattached Ink", 1);
-        inktrack.setInkLink(null);
+        inkTrack = timeline.addInkTrack(null, "Unattached Ink", 1);
+        inkTrack.setInkLink(null);
         var datastr = update_datastring();
         var inkType = datastr.split("::")[0].toLowerCase();
         if (inkType == "trans")
             datastr += bounding_shapes;
-        inktrack.setInkPath(datastr);
-        inktrack.setInkEnabled(false); // unattached
-        inktrack.setInkSize(fontSize);
-        inktrack.setInkInitKeyframe({}); // initial keyframe doesn't matter, since not linked
-        inktrack.setInkRelativeArtPos({}); // initial art position doesn't matter, since not linked
+        inkTrack.setInkPath(datastr);
+        inkTrack.setInkEnabled(false); // unattached
+        inkTrack.setInkSize(fontSize);
+        inkTrack.setInkInitKeyframe({}); // initial keyframe doesn't matter, since not linked
+        inkTrack.setInkRelativeArtPos({}); // initial art position doesn't matter, since not linked
 
-        inktrack.addInkTypeToTitle(inkType);
+        inkTrack.addInkTypeToTitle(inkType);
 
 
-        enabled = false;
-        domelement.remove();
-        inktrack.addDisplay(Math.min(timeManager.timeToPx(timeManager.getDuration().end - 0.5), timeManager.getCurrentPx()), Math.min(5, Math.max(0.5, timeManager.getDuration().end - timeManager.getCurrentTime()))); // add a display at the playhead location
+        isAttached = false;
+        canvElt.remove();
+        inkTrack.addDisplay(Math.min(timeManager.timeToPx(timeManager.getDuration().end - 0.5), timeManager.getCurrentPx()), Math.min(5, Math.max(0.5, timeManager.getDuration().end - timeManager.getCurrentTime()))); // add a display at the playhead location
         undoManager.combineLast(2);
         if (timeline.getTracks().length > 0) {
             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
@@ -2348,7 +2417,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     }
     that.getTextElt = getTextElt;
 
-    var magX = domelement.width(), magY = domelement.height();
+    var magX = canvElt.width(), magY = canvElt.height();
 
     function getTextMagnification() {
         return magY;
@@ -2362,8 +2431,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     function loadInk(datastr) {
         var shapes = datastr.split("|");
         var i;
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         magX = cw;
         magY = ch;
         pathstring = "";
@@ -2413,10 +2482,12 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                         break;
                     case "path":
                         // format: [pathstring]M284,193L284,193[stroke]000000[strokeo]1[strokew]10[]
-                        if (!currpaths)
-                            currpaths = "";
-                        currpaths += shape + "|";
-                        update_ml_xy_pa(shape + "|");
+
+                        // TODO DOC just turn this into a bezier path, so it gets saved as a bezier path for later
+                        //if (!currpaths)
+                        //    currpaths = "";
+                        //currpaths += shape + "|";
+                        //update_ml_xy_pa(shape + "|");
                         break;
                     case "bezier": // bezier paths
                         
@@ -2516,7 +2587,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
 
         // force adjustViewBox to run so viewbox is always set 
         //lastpx = origpx + 10000;
-        if (enabled) {
+        if (isAttached) {
             paper.setViewBox(0, 0, cw, ch);
             //adjustViewBox({ x: origpx, y: origpy, width: origpw, height: origph });
         }
@@ -2528,8 +2599,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * @param pth    the path representing the transparency to be loaded in
      */
     function load_trans_from_path(pth) {
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         var trans = paper.path(pth).attr({ "fill-opacity": marqueeFillOpacity, "fill": marqueeFillColor, "stroke-opacity": 0, "stroke": "#888888", "stroke-width": 0 });
         trans.data("type", "trans");
         trans_currpath = "TRANS::[path]" + transform_pathstring_marq(pth, 1.0 / cw, 1.0 / ch) + "[color]" + marqueeFillColor + "[opac]" + marqueeFillOpacity + "[mode]" + trans_mode + "[]|";
@@ -2544,8 +2615,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     function load_transparency_bounding_shapes(datastr) {
         var shapes = datastr.split("|");
         var i;
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         for (i = 0; i < shapes.length; i++) {
             var shape = shapes[i];
             var fillc, fillo, strokec, strokeo, strokew;
@@ -2846,9 +2917,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         ml.length = 0;
         xy.length = 0;
         pa.length = 0;
-        pathObjects.length = 0;
+        //pathObjects.length = 0;
         marquees.length = 0;
-        currpaths = "";
+        //currpaths = "";
         datastring = '';
     }
     that.remove_all = remove_all;
@@ -3026,10 +3097,10 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     /**
      * Setter (sets experience id of ink)
      */
-    function setEID(inEID) {
-        EID = inEID;
+    function setExpId(inexpId) {
+        expId = inexpId;
     }
-    that.setEID = setEID;
+    that.setexpId = setexpId;
 
     /**
      * Sets the initial artwork keyframe
@@ -3222,8 +3293,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function shapes_to_paths (shapes) {
         //takes in an array of shapes, returns an array of paths
-        var cw = domelement.width();
-        var ch = domelement.height();
+        var cw = canvElt.width();
+        var ch = canvElt.height();
         var paths = [];
         remove_all();/////////////////
         for (var i = 0; i < shapes.length; i++) {
@@ -3259,7 +3330,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function showInkPath() {
         try {
-            console.log("showInkPath gives: " + inktrack.getInkPath());
+            console.log("showInkPath gives: " + inkTrack.getInkPath());
         }
         catch (err) {
             console.log("error in showInkPath: " + err.message);
@@ -3326,14 +3397,14 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function update_datastring () {
         var data_string = "";
-        var canv_width = domelement.width();
-        var canv_height = domelement.height();
+        var canv_width = canvElt.width();
+        var canv_height = canvElt.height();
         var pth;
-        if (currpaths) { // add pen paths to datastring
-            if (currpaths.split("Mundefined").length > 1)
-                currpaths = currpaths.split("Mundefined").join("");
-            data_string += currpaths;
-        }
+        //if (currpaths) { // add pen paths to datastring
+        //    if (currpaths.split("Mundefined").length > 1)
+        //        currpaths = currpaths.split("Mundefined").join("");
+        //    data_string += currpaths;
+        //}
         if (trans_currpath) { // add transparency paths to datastring
             data_string += trans_currpath;
         }
@@ -3385,37 +3456,37 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * When we load in a path datastring, update ml, xy, and pa to reflect the new data.
      * @param str   the datastring loaded
      */
-    function update_ml_xy_pa (str) {
-        var i, j;
+    //function update_ml_xy_pa (str) {
+    //    var i, j;
 
-        // add info to ml and pa
-        for (i = 0; i < str.length; i++) {
-            if ((str[i] === "L") || (str[i] === "M")) {
-                var cpth = str.substring(i).split("|")[0];
-                var strokec = get_attr(cpth, "stroke", "s");
-                var strokeo = get_attr(cpth, "strokeo", "f");
-                var strokew = get_attr(cpth, "strokew", "f");
-                ml.push(str[i]);
-                pa.push({ "color": strokec, "opacity": strokeo, "width": strokew });
-            }
-        }
+    //    // add info to ml and pa
+    //    for (i = 0; i < str.length; i++) {
+    //        if ((str[i] === "L") || (str[i] === "M")) {
+    //            var cpth = str.substring(i).split("|")[0];
+    //            var strokec = get_attr(cpth, "stroke", "s");
+    //            var strokeo = get_attr(cpth, "strokeo", "f");
+    //            var strokew = get_attr(cpth, "strokew", "f");
+    //            ml.push(str[i]);
+    //            pa.push({ "color": strokec, "opacity": strokeo, "width": strokew });
+    //        }
+    //    }
 
-        // add info to xy (probably easier with regular expressions)
-        var arr1 = str.split("L");
-        for (i = 0; i < arr1.length; i++) {
-            if (arr1[i].length > 0) {
-                var arr2 = arr1[i].split("M");
-                for (j = 0; j < arr2.length; j++) {
-                    if (arr2[j].length > 0 && arr2[j].charAt(0) != 'P') {
-                        var arr3 = arr2[j].split(",");
-                        xy.push([parseFloat(arr3[0]), parseFloat(arr3[1])]);
-                    }
-                }
-            }
-        }
-        click = false;
-    }
-    that.update_ml_xy_pa = update_ml_xy_pa;
+    //    // add info to xy (probably easier with regular expressions)
+    //    var arr1 = str.split("L");
+    //    for (i = 0; i < arr1.length; i++) {
+    //        if (arr1[i].length > 0) {
+    //            var arr2 = arr1[i].split("M");
+    //            for (j = 0; j < arr2.length; j++) {
+    //                if (arr2[j].length > 0 && arr2[j].charAt(0) != 'P') {
+    //                    var arr3 = arr2[j].split(",");
+    //                    xy.push([parseFloat(arr3[0]), parseFloat(arr3[1])]);
+    //                }
+    //            }
+    //        }
+    //    }
+    //    click = false;
+    //}
+    //that.update_ml_xy_pa = update_ml_xy_pa;
 
     /**
      * The following are setters for various ink parameters
@@ -3425,12 +3496,12 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     function setPenOpacity(o) { penOpacity = o; }
     function setPenWidth(w) { penWidth = w; }
     function setEraserWidth(w) { eraserWidth = w; }
-    function setShapeStrokeColor(c) { shapeStrokeColor = (c[0] == '#') ? c : ("#" + c); }
-    function setShapeStrokeOpacity(o) { shapeStrokeOpacity = o; }
-    function setShapeStrokeWidth(w) { shapeStrokeWidth = w; }
+    //function setShapeStrokeColor(c) { shapeStrokeColor = (c[0] == '#') ? c : ("#" + c); }
+    //function setShapeStrokeOpacity(o) { shapeStrokeOpacity = o; }
+    //function setShapeStrokeWidth(w) { shapeStrokeWidth = w; }
     function setMarqueeFillColor(c) { marqueeFillColor = (c[0] == '#') ? c : ("#" + c); }
     function setMarqueeFillOpacity(o) { marqueeFillOpacity = o; }
-    function setEnabled(en) { enabled = end; }
+    function setEnabled(en) { isAttached = end; }
     function setFontFamily(f) {
         fontFamily = f;
         if (svgText) {
@@ -3472,9 +3543,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     that.setPenOpacity = setPenOpacity;
     that.setPenWidth = setPenWidth;
     that.setEraserWidth = setEraserWidth;
-    that.setShapeStrokeColor = setShapeStrokeColor;
-    that.setShapeStrokeOpacity = setShapeStrokeOpacity;
-    that.setShapeStrokeWidth = setShapeStrokeWidth;
+    //that.setShapeStrokeColor = setShapeStrokeColor;
+    //that.setShapeStrokeOpacity = setShapeStrokeOpacity;
+    //that.setShapeStrokeWidth = setShapeStrokeWidth;
     that.setMarqueeFillColor = setMarqueeFillColor;
     that.setMarqueeFillOpacity = setMarqueeFillOpacity;
     that.setEnabled = setEnabled;
@@ -3491,12 +3562,12 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     function getPenOpacity() { return penOpacity; }
     function getPenWidth() { return penWidth; }
     function getEraserWidth() { return eraserWidth; }
-    function getShapeStrokeColor() { return shapeStrokeColor; }
-    function getShapeStrokeOpacity() { return shapeStrokeOpacity; }
-    function getShapeStrokeWidth() { return shapeStrokeWidth; }
+    //function getShapeStrokeColor() { return shapeStrokeColor; }
+    //function getShapeStrokeOpacity() { return shapeStrokeOpacity; }
+    //function getShapeStrokeWidth() { return shapeStrokeWidth; }
     function getMarqueeFillColor() { return marqueeFillColor; }
     function getMarqueeFillOpacity() { return marqueeFillOpacity; }
-    function getEnabled() { return enabled; }
+    function getEnabled() { return isAttached; }
     function getFontFamily() { return fontFamily; }
     function getFontSize() { return fontSize; }
     function getFontColor() { return fontColor; }
@@ -3507,9 +3578,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     that.getPenOpacity = getPenOpacity;
     that.getPenWidth = getPenWidth;
     that.getEraserWidth = getEraserWidth;
-    that.getShapeStrokeColor = getShapeStrokeColor;
-    that.getShapeStrokeOpacity = getShapeStrokeOpacity;
-    that.getShapeStrokeWidth = getShapeStrokeWidth;
+    //that.getShapeStrokeColor = getShapeStrokeColor;
+    //that.getShapeStrokeOpacity = getShapeStrokeOpacity;
+    //that.getShapeStrokeWidth = getShapeStrokeWidth;
     that.getMarqueeFillColor = getMarqueeFillColor;
     that.getMarqueeFillOpacity = getMarqueeFillOpacity;
     that.getEnabled = getEnabled;
@@ -3524,109 +3595,109 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * value of the dom element with that id, and set the correct variable accordingly
      * @param id   the id of the dom element whose value we want to use
      */
-    function updatePenColor(id) {
-        var val = document.getElementById(id).value;
-        //console.log("col = " + val);
-        if (val !== undefined) {
-            if (val.indexOf("#") == -1)
-                val = "#" + val;
-            penColor = val;
-        }
-    }
-    function updatePenOpacity(id) {
-        var val = document.getElementById(id).value;
-        //console.log("opac = " + val);
-        if (val !== undefined)
-            penOpacity = val;
-    }
-    function updatePenWidth(id) {
-        var val = document.getElementById(id).value;
-        //console.log("wid = " + val);
-        if (val !== undefined)
-            penWidth = val;
-    }
-    function updateEraserWidth(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined)
-            eraserWidth = val;
-    }
-    function updateShapeStrokeColor(id) {
-        var val = document.getElementById(id).value;
-        if (val.length === 6) {
-            shapeStrokeColor = "#" + val;
-        }
-    }
-    function updateShapeStrokeOpacity(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined)
-            shapeStrokeOpacity = val;
-    }
-    function updateShapeStrokeWidth(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined)
-            shapeStrokeWidth = val;
-    }
-    function updateShapeFillColor(id) {
-        var val = document.getElementById(id).value;
-        if (val.length === 6)
-            shapeFillColor = "#" + val;
-    }
-    function updateShapeFillOpacity(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined)
-            shapeFillOpacity = val;
-    }
-    function updateMarqueeColor(id) {
-        var val = document.getElementById(id).value;
-        if (val.length === 6)
-            marqueeFillColor = val;
-    }
-    function updateMarqueeOpacity(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined)
-            marqueeFillOpacity = val;
-    }
-    function updateFontFamily(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined) {
-            fontFamily = val;
-        }
-    }
-    function updateFontSize(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined) {
-            fontSize = parseFloat(val);
-        }
-    }
-    function updateFontColor(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined) {
-            if (val.indexOf("#") == -1)
-                val = "#" + val;
-            fontColor = val;
-        }
-    }
-    function updateFontOpacity(id) {
-        var val = document.getElementById(id).value;
-        if (val !== undefined) {
-            fontOpacity = val;
-        }
-    }
+    //function updatePenColor(id) {
+    //    var val = document.getElementById(id).value;
+    //    //console.log("col = " + val);
+    //    if (val !== undefined) {
+    //        if (val.indexOf("#") == -1)
+    //            val = "#" + val;
+    //        penColor = val;
+    //    }
+    //}
+    //function updatePenOpacity(id) {
+    //    var val = document.getElementById(id).value;
+    //    //console.log("opac = " + val);
+    //    if (val !== undefined)
+    //        penOpacity = val;
+    //}
+    //function updatePenWidth(id) {
+    //    var val = document.getElementById(id).value;
+    //    //console.log("wid = " + val);
+    //    if (val !== undefined)
+    //        penWidth = val;
+    //}
+    //function updateEraserWidth(id) {
+    //    var val = document.getElementById(id).value;
+    //    if (val !== undefined)
+    //        eraserWidth = val;
+    //}
+    ////function updateShapeStrokeColor(id) {
+    ////    var val = document.getElementById(id).value;
+    ////    if (val.length === 6) {
+    ////        shapeStrokeColor = "#" + val;
+    ////    }
+    ////}
+    ////function updateShapeStrokeOpacity(id) {
+    ////    var val = document.getElementById(id).value;
+    ////    if (val !== undefined)
+    ////        shapeStrokeOpacity = val;
+    ////}
+    ////function updateShapeStrokeWidth(id) {
+    ////    var val = document.getElementById(id).value;
+    ////    if (val !== undefined)
+    ////        shapeStrokeWidth = val;
+    ////}
+    ////function updateShapeFillColor(id) {
+    ////    var val = document.getElementById(id).value;
+    ////    if (val.length === 6)
+    ////        shapeFillColor = "#" + val;
+    ////}
+    ////function updateShapeFillOpacity(id) {
+    ////    var val = document.getElementById(id).value;
+    ////    if (val !== undefined)
+    ////        shapeFillOpacity = val;
+    ////}
+    //function updateMarqueeColor(id) {
+    //    var val = document.getElementById(id).value;
+    //    if (val.length === 6)
+    //        marqueeFillColor = val;
+    //}
+    //function updateMarqueeOpacity(id) {
+    //    var val = document.getElementById(id).value;
+    //    if (val !== undefined)
+    //        marqueeFillOpacity = val;
+    //}
+    //function updateFontFamily(id) {
+    //    var val = document.getElementById(id).value;
+    //    if (val !== undefined) {
+    //        fontFamily = val;
+    //    }
+    //}
+    //function updateFontSize(id) {
+    //    var val = document.getElementById(id).value;
+    //    if (val !== undefined) {
+    //        fontSize = parseFloat(val);
+    //    }
+    //}
+    //function updateFontColor(id) {
+    //    var val = document.getElementById(id).value;
+    //    if (val !== undefined) {
+    //        if (val.indexOf("#") == -1)
+    //            val = "#" + val;
+    //        fontColor = val;
+    //    }
+    //}
+    //function updateFontOpacity(id) {
+    //    var val = document.getElementById(id).value;
+    //    if (val !== undefined) {
+    //        fontOpacity = val;
+    //    }
+    //}
 
-    that.updatePenColor = updatePenColor;
-    that.updatePenOpacity = updatePenOpacity;
-    that.updatePenWidth = updatePenWidth;
-    that.updateEraserWidth = updateEraserWidth;
-    that.updateShapeStrokeColor = updateShapeStrokeColor;
-    that.updateShapeStrokeOpacity = updateShapeStrokeOpacity;
-    that.updateShapeFillColor = updateShapeFillColor;
-    that.updateShapeFillOpacity = updateShapeFillOpacity;
-    that.updateMarqueeColor = updateMarqueeColor;
-    that.updateMarqueeOpacity = updateMarqueeOpacity;
-    that.updateFontFamily = updateFontFamily;
-    that.updateFontSize = updateFontSize;
-    that.updateFontColor = updateFontColor;
-    that.updateFontOpacity = updateFontOpacity;
+    //that.updatePenColor = updatePenColor;
+    //that.updatePenOpacity = updatePenOpacity;
+    //that.updatePenWidth = updatePenWidth;
+    //that.updateEraserWidth = updateEraserWidth;
+    ////that.updateShapeStrokeColor = updateShapeStrokeColor;
+    ////that.updateShapeStrokeOpacity = updateShapeStrokeOpacity;
+    ////that.updateShapeFillColor = updateShapeFillColor;
+    ////that.updateShapeFillOpacity = updateShapeFillOpacity;
+    //that.updateMarqueeColor = updateMarqueeColor;
+    //that.updateMarqueeOpacity = updateMarqueeOpacity;
+    //that.updateFontFamily = updateFontFamily;
+    //that.updateFontSize = updateFontSize;
+    //that.updateFontColor = updateFontColor;
+    //that.updateFontOpacity = updateFontOpacity;
 
     //////// NEW PATH SMOOTHING CODE //////////
     var points = [],
@@ -3642,9 +3713,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         cpathstring = "",
         old_pathstring = '',
         canvW, canvH;
-    domelement.on('mousedown', mstart);
-    domelement.on('mouseenter', function() { // change cursor styling here
-        domelement.css('cursor', ((mode == 1) || (mode == 2)) ? 'crosshair' : 'pointer');
+    canvElt.on('mousedown', mstart);
+    canvElt.on('mouseenter', function() { // change cursor styling here
+        canvElt.css('cursor', ((mode == 1) || (mode == 2)) ? 'crosshair' : 'pointer');
     });
 
     function distance(pt1, pt2, cw, ch) {
@@ -3707,9 +3778,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             drawBezierPath();
         }
         
-        domelement.on('mousemove', mmove);
-        domelement.on('mouseup', mend);
-        domelement.on('mouseleave', mend);
+        canvElt.on('mousemove', mmove);
+        canvElt.on('mouseup', mend);
+        canvElt.on('mouseleave', mend);
     }
 
     // called on mousemove to continue drawing
@@ -3742,9 +3813,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         click = false;
         points.length = 0;
         roughPoints.length = 0;
-        domelement.off('mousemove');
-        domelement.off('mouseup');
-        domelement.off('mouseleave');
+        canvElt.off('mousemove');
+        canvElt.off('mouseup');
+        canvElt.off('mouseleave');
         var new_data = { pathstring: pathstring, pa: pa };
         var old_data = { pathstring: old_pathstring, pa: old_pa };
         var command = TAG.TourAuthoring.Command({
@@ -3865,8 +3936,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     // erase a portion of the bezier path
     function eraseBezier(location) {
         if (!pathstring) return;
-        var cw = domelement.width(),
-            ch = domelement.height(),
+        var cw = canvElt.width(),
+            ch = canvElt.height(),
             coords = extractCoords(pathstring),
             letters = extractLetters(pathstring),
             currentPAIndex = -1;
@@ -3996,7 +4067,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     //////////////////////////////////////////
 
     // allow drawing on the Raphael paper by recording mouse locations on mousemove events, add coordinates to xl (similar with erase) (old code removed)
-    var old_ml = [], old_xy = [], old_pa = [], canvwidth, canvheight;
+    var old_pa = [], canvwidth, canvheight;
     
     return that;
 };

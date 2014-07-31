@@ -470,7 +470,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
             inkdiv = createInkCanv(),
-            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+            p1 = new TAG.TourAuthoring.InkAuthoring({
+                spec: spec
+            });
 
         isEditingDraw = true;
 
@@ -678,7 +680,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
             inkdiv = createInkCanv(),
-            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
+            p1 = new TAG.TourAuthoring.InkAuthoring({
+                spec: spec
+            }),
             currentMode,
             currOpacity,
             real_kfw,
@@ -899,7 +903,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
             inkdiv = createInkCanv(),
-            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
+            p1 = new TAG.TourAuthoring.InkAuthoring({
+                spec: spec
+            }),
             fontsize,
             line_breaks,
             num_lines,
@@ -1712,7 +1718,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     isEditingText = false;
                     //create an ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring({
+                        spec: spec
+                    });
                     currentInkController = p1;
 
                     //  INITIAL_INK_TEXT.createInputs();
@@ -1768,7 +1776,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
                     //create ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring({
+                        spec: spec
+                    });
                     currentInkController = p1;
 
                     INITIAL_DRAW.createModeButton();
@@ -1802,7 +1812,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 case "highlight":
                     //create an ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring({
+                        spec: spec
+                    });
                     var newHeight;
                     currentInkController = p1;
                     isEditingTransparency = false;
