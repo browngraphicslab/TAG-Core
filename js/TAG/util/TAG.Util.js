@@ -2378,7 +2378,7 @@ TAG.Util.UI = (function () {
                 center_h: true,
                 center_v: true,
                 width: 0.5,
-                height: 0.35,
+                height: 0.25,
                 max_width: 560,
                 max_height: 200,
             });

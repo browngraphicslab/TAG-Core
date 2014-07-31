@@ -189,7 +189,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function dzManipPreprocessing() {
         outerContainerPivot = {
-            x: root.width()/ 2,// + root.offset().left,
+            x: root.width()/ 2,//+ root.offset().left,
             y: root.height() / 2// + root.offset().top
         };
         toManip = dzManip;
@@ -981,9 +981,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var w = outerContainer.width(),
                 h = outerContainer.height();
             outerContainerPivot = {
-                x: w / 2 - (outerContainer.offset().left - root.offset().left),
-                y: h / 2 - (outerContainer.offset().top - root.offset().top)
+                //x: w / 2 - (outerContainer.offset().left - root.offset().left),
+                //y: h / 2 - (outerContainer.offset().top - root.offset().top)
+                x: -outerContainer.offset().left + w, //+ root.offset().left,
+                y: -outerContainer.offset().top + h
             };
+            console.log(outerContainerPivot);
             toManip = mediaManip;
             $('.mediaOuterContainer').css('z-index', 1000);
             outerContainer.css('z-index', 1001);
