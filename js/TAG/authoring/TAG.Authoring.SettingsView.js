@@ -3341,21 +3341,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             height : '20px',
             'margin-bottom' : '4%'
         });
-        year = createSetting('Year', yearInput, '65%');
+        year = createSetting('Year', yearInput, 60);
         year.css({
-            width :  '45%',
-            display : 'inline-block'
-            });
-        month = createSetting('Month', monthInput, '65%');
+            width: '32%',
+            display: 'inline-block'
+        });
+        month = createSetting('Month', monthInput, 60);
         month.css({
-            width : '32%',
-            'padding-left' : '1%',
-            display : 'inline-block'
+            width: '32%',
+            'padding-left': '1%',
+            display: 'inline-block'
         });
         toggleAllow(monthInput);
-        day = createSetting('Day', dayInput,'60%');
+        day = createSetting('Day', dayInput, 70);
         day.css({
-            width : '17%',
+            width: '30%',
             'padding-left': '2%',
             display: 'inline-block'
         });
@@ -3367,25 +3367,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Set up timeline year div:
         //TO-DO add (?) icon w/ pop-up
         timelineYearDiv.css({
-            width : '100%',
-            height : '20px',
-            'margin-bottom' : '4%'
+            width: '100%',
+            height: '20px',
+            'margin-bottom': '4%'
         });
-        timelineYear = createSetting('Date on Timeline', timelineYearInput, '47%');
+        timelineYear = createSetting('Date on Timeline', timelineYearInput, 40);
         timelineYear.css({
-            width :  '47%',
-            display : 'inline-block'
-            });
-        timelineMonth = createSetting('Month', timelineMonthInput, '65%');
+            width: '47%',
+            display: 'inline-block'
+        });
+        timelineMonth = createSetting('Month', timelineMonthInput, 50);
         timelineMonth.css({
-            width : '32%',
-            'padding-left' : '1%',
-            display : 'inline-block'
+            width: '27%',
+            'padding-left': '1%',
+            display: 'inline-block'
         });
         toggleAllow(timelineMonthInput);
-        timelineDay = createSetting('Day', timelineDayInput,'60%');
+        timelineDay = createSetting('Day', timelineDayInput, 60);
         timelineDay.css({
-            width : '17%',
+            width : '20%',
             'padding-left': '2%',
             display: 'inline-block'
         });

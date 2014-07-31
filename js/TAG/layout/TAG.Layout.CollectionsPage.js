@@ -85,6 +85,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         TILE_HEIGHT_RATIO   = 200,                                          //ratio between width and height of artwork tiles
         TILE_WIDTH_RATIO    = 255,
         ANIMATION_DURATION  = 800,                                         // duration of timeline zoom animation
+        PRIMARY_FONT_COLOR  = TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        SECONDARY_FONT_COLOR = TAG.Worktop.Database.getMuseumSecondaryFontColor(),
+        FONT                = TAG.Worktop.Database.getMuseumFontFamily(),
 
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
@@ -149,7 +152,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // search on keyup
         searchInput.on('keyup', function (e) {
-            doSearch();
+            if(e.which === 13) {
+                doSearch();
+            }
         });
 
         infoButton.attr('src', tagPath+'images/icons/info.svg');
@@ -171,7 +176,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         } else {
             linkButton.remove();
         }
-
+        applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
     }
 
@@ -256,6 +261,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
 
     /**
+     * Applies customization changes to main divs
+     * @method applyCustomization
+     */
+    function applyCustomization() {
+        var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR);
+        $('.primaryFont').css({
+            'color': dimmedColor,
+            'font-family': FONT
+        });
+        $('.secondaryFont').css({
+            'color': '#' + SECONDARY_FONT_COLOR,
+            'font-family': FONT
+        });
+        $('.collection-title').css({ 
+            'color': '#' + PRIMARY_FONT_COLOR,
+            'font-family': FONT
+        });
+    }
+
+    /**
      * Shows collection and title
      * @method loadCollection
      * @param {jQuery obj} collection     the element currently being clicked
@@ -305,11 +330,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                           .attr({
                             'id': 'collection-' + collection.Identifier,
                            });
-
             titleBox.attr('id' ,'collection-title-'+collection.Identifier)
                     .addClass('collection-title')
                     .html(title);
-
+            titleBox.addClass('primaryFont');
+           // titleBox.css({ 'color': '#'+PRIMARY_FONT_COLOR });
             mainCollection.append(titleBox);
             
             // Add previous and next collection titles
@@ -327,6 +352,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 backArrow.addClass('arrow');
                 prevCollection.addClass('nextPrevCollection')
+                              .addClass('primaryFont')
                               .attr({
                                 'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
                                })
@@ -352,6 +378,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionArea.append(mainCollection);
             if (prevCollection){
                 prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
+               // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
             }
             if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
                 nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
@@ -368,12 +395,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
                 nextArrow.addClass('arrow');
                 nextCollection.addClass('nextPrevCollection')
+                              .addClass('primaryFont')
                               .attr({
                                 'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
                                })
                               .html(nextTitle)
                               .css({
                                 'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
+                                //'color': '#' + PRIMARY_FONT_COLOR
                               })
                               .on('click', function(){
                                             return function(){
@@ -398,6 +427,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             collectionDescription.attr('id', 'collectionDescription');
+            collectionDescription.addClass('secondaryFont');
             str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
             collectionDescription.css({
                 'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
@@ -422,6 +452,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             scrollPos = sPos || 0;
             getCollectionContents(currCollection);
+            applyCustomization();
+    
         }
     }
 
@@ -629,8 +661,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tileImage.addClass('tileImage');
             artTitle.addClass('artTitle');
             artText.addClass('artText');
+            artText.css({
+                'color': '#' + SECONDARY_FONT_COLOR,
+                'font-family': FONT
+            });
             yearTextBox.addClass('yearTextBox');
-
+            yearTextBox.css({
+                'color': '#' + SECONDARY_FONT_COLOR,
+                'font-family': FONT
+            });
             main.on('click', function () {
 
                 // if the idle timer hasn't started already, start it
@@ -1318,6 +1357,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 titleSpan = $(document.createElement('div'));
                 titleSpan.addClass('titleSpan')
                          .text(TAG.Util.htmlEntityDecode(artwork.Name));
+                titleSpan.css({
+                    'color': '#' + SECONDARY_FONT_COLOR,
+                    'font-family': FONT
+                });
                 imgDiv = $(document.createElement('div'));
                 imgDiv.addClass('imgDiv');
                 exploreTab = $(document.createElement('div'));
@@ -1349,9 +1392,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artistInfo = $(document.createElement('div'));
                 artistInfo.addClass('artistInfo')
                           .css('font-size', 11 * BASE_FONT_SIZE / 30 + 'em');
+                artistInfo.css({ 
+                    'color': '#' + SECONDARY_FONT_COLOR,
+                    'font-family': FONT
+                });
                 yearInfo = $(document.createElement('div'));
                 yearInfo.addClass('yearInfo')
                         .css('font-size', 11 * BASE_FONT_SIZE / 30 + 'em');
+                yearInfo.css({ 
+                    'color': '#' + SECONDARY_FONT_COLOR,
+                    'font-family': FONT
+                });
                 if (artwork.Type !== "Empty") {
                     artistInfo.text("Artist: " + (artwork.Metadata.Artist || "Unknown"));
                     yearInfo.text(artwork.Metadata.Year || " ");
@@ -1369,6 +1420,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 descSpan = $(document.createElement('div'));
                 descSpan.addClass('descSpan')
                         .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}));
+                descSpan.css({
+                    'color': '#' + SECONDARY_FONT_COLOR,
+                    'font-family': FONT
+                });
                 descText.append(descSpan);
                 previewTile.append(titleSpan)
                            .append(imgDiv)
@@ -1546,7 +1601,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             artNode,
             yearKey,
             i;
-        comparator = sortComparator('yearKey');
+        comparator = sortComparator('yearKey', 'nameKey');
         valuation  = sortValuation('yearKey');
         avlTree = new AVLTree(comparator, valuation);
         for (i = 0; i < artworks.length; i++) {
@@ -1554,11 +1609,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!isNaN(yearKey)){
                 artNode = {
                     artwork: artworks[i],
+                    nameKey: artworks[i].Name,
                     yearKey: artworks[i].Type === 'Empty' ? Number.POSITIVE_INFINITY : yearKey //Tours set to Infinity to show up at end of 'Year' sort
-                    };
+                };
             } else{                        
                 artNode = {
                     artwork: artworks[i],
+                    nameKey: artworks[i].Name,
                     yearKey: Number.POSITIVE_INFINITY //Set unintelligible dates to Infinity to show up at end of 'Year' sort 
                 };
             }
@@ -1573,8 +1630,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {String} tag    the name of the sort tag
      */
     function colorSortTags(tag) {
-        $('.rowButton').css('color', 'rgb(170,170,170)');
-        $('[tagName="'+tag+'"]').css('color', 'white');
+        //$('.rowButton').css('color', 'rgb(170,170,170)');
+       // $('[tagName="'+tag+'"]').css('color', 'white');
+       var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR);
+       $('.rowButton').css('color', unselectedColor);
+       $('[tagName="'+tag+'"]').css('color', '#' + SECONDARY_FONT_COLOR);
     }
 
     /**

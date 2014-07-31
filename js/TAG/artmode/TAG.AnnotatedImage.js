@@ -35,7 +35,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             y: rootWidth/2
         },
         doManipulation = true,      //used in RLH to prevent manipulation of image in certain cases
-        aspectRatio = rootWidth / rootHeight,
+        aspectRatio = 1, //TODO - how to find this
         artworkFrozen = false,
         
         // misc uninitialized variables
@@ -71,6 +71,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         addOverlay: addOverlay,
         removeOverlay: removeOverlay,
         loadAssociatedMedia: loadAssociatedMedia,
+        getOverlayCoordinates: getOverlayCoordinates,
         freezeArtwork: freezeArtwork,
         unfreezeArtwork: unfreezeArtwork
     };
@@ -294,11 +295,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method isInImageBounds
     */
     function isInImageBounds(element) {
+
         var val = false;
         var point = locationOf(element);
-        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1 / aspectRatio) + .05)) {
+        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1/aspectRatio) + .05)) {
             val = true;
         }
+        //console.log(point.x + ', ' + point.y);
+        //console.log((1 / aspectRatio) + .05);
+        //console.log('inBounds= ' + val);
         return val;
     }
 
@@ -365,6 +370,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         });
     }
 
+    /**
+     * Gets a Seadragon point from the given overlay element. Uses BOTTOM as the default OverlayPlacement
+     * @method getCoordinate
+     * @param {HTML elt} element       the overlay element
+     * @return {Seadragon.Point}       the location of the overlay in Seadragon coordinates
+     */
+    function getOverlayCoordinates(element) {
+        var t = parseFloat($(element).css('top')) + $(element).height(),
+            l = parseFloat($(element).css('left')) + $(element).width() / 2;
+
+        return viewer.viewport.pointFromPixel(new Seadragon.Point(l, t));
+    }
+
     /** 
     * Returns a Seadragon point corresponding to a pixel
     * Used in RLH
@@ -391,7 +409,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method scroll
     */
     function scroll(delta, pivot) {
-        dzScroll(delta, pivot);
+        dzManip({
+            scale: delta,
+            translation: {
+                x: 0,
+                y: 0
+            },
+            pivot: {
+                x: pivot.x,
+                y: pivot.y
+            }
+        });
     }
 
     /*
