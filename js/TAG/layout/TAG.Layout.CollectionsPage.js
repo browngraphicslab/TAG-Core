@@ -149,7 +149,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // search on keyup
         searchInput.on('keyup', function (e) {
-            doSearch();
+            if(e.which === 13) {
+                doSearch();
+            }
         });
 
         infoButton.attr('src', tagPath+'images/icons/info.svg');
