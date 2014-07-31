@@ -3383,7 +3383,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             display: 'inline-block'
         });
         toggleAllow(timelineMonthInput);
-        timelineDay = createSetting('Day', timelineDayInput,'60%');
+        timelineDay = createSetting('Day', timelineDayInput, 60);
         timelineDay.css({
             width : '20%',
             'padding-left': '2%',
