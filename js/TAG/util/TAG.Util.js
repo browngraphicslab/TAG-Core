@@ -585,7 +585,6 @@ TAG.Util = (function () {
         step: Optional.  The step to increment by when testing font size.
     */
     function getMaxFontSizeEM(text, minFontSize, maxWidth, maxHeight, step) {
-        console.log('getting max font size.....');
         if (!text) {
             return;
         }
@@ -655,7 +654,6 @@ TAG.Util = (function () {
 		Gets the maximum font size without em.
 	*/
 	function getMaxFontSize(text, minFontSize, maxWidth, maxHeight, step) {
-        console.log('getting max font size.....');
         if (!text) {
             return;
         }

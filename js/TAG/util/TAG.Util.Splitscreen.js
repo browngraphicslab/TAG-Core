@@ -83,6 +83,10 @@ TAG.Util.Splitscreen = (function () {
             'overflow': 'hidden',
         });
 
+        if(rootL.attr('id') === 'newCatalogRoot') {
+            rootL.find('.bottomButton').css("float", "left");
+        };
+
         // right screen
         Rscreen.attr('id', 'metascreen-R');
         Rscreen.append(rootR);
@@ -262,6 +266,14 @@ TAG.Util.Splitscreen = (function () {
                 //locationHistoryText.css("opacity", "1.0"); // reset location history opacity to 1.0
                 //locationHistoryIcon.css("opacity", "1.0");
                 //lhmap.attr('id', 'lpMapDiv');
+            } else if(root.attr('id') === 'newCatalogRoot') {
+                root.find('.bottomButton').css({
+                    "float": "right",
+                    "display" : "block"
+                });
+                root.find('.nextPrevCollection').css({
+                                'width': (.95 * root.find("#collectionArea").width() - root.find('.mainCollection').width())/2 - root.find(".arrow").width(),
+                              })
             } else if (root.hasClass('videoPlayer')) {
                 root.find('#playPauseButton').attr('src', 'images/icons/PlayWhite.svg');
             } else if (root.hasClass('exhibition')) { // Restore defaults to exhibition
