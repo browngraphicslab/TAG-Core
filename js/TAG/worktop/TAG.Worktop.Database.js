@@ -462,7 +462,10 @@ TAG.Worktop.Database = (function () {
         asyncRequest(
             'GET',
             'ConvertedCheck',
-            { "FileName": fileName },
+            {
+                "FileName": fileName,
+                "BaseFileName": basefilename,
+            },
             null,
             { success: convertToTextHandler(success), error: error });
     }
