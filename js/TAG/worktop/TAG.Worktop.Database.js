@@ -2053,17 +2053,31 @@ TAG.Worktop.Database = (function () {
             checkServer();
         }
         function checkServer() {
+            var connectionTimeout,
+                timedOut;
+
             asyncRequest('GET', 'CheckVersion', null, null, { success: success, error: error }, false, null, 'http://' + newAddress + ':8080');
             function success(jqXHR, ajaxCall) {
-                var version = jqXHR.statusText;
-                var mainID = jqXHR.responseText;
-                localStorage.ip = newAddress;
-                _db = new Worktop.Database(mainID);
-                onConnect && onConnect();
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    var version = jqXHR.statusText;
+                    var mainID = jqXHR.responseText;
+                    localStorage.ip = newAddress;
+                    _db = new Worktop.Database(mainID);
+                    onConnect && onConnect();
+                }
             }
             function error() {
-                onFail && onFail();
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    onFail && onFail();
+                }
             }
+
+            connectionTimeout = setTimeout(function() {
+                timedOut = true;
+                onFail && onFail();
+            }, 10000); // 10 second timeout to show error message
         }
     }
 
