@@ -166,6 +166,15 @@ TAG.Util.Splitscreen = (function () {
             if (viewerL) {
                 $(viewerL.container).css({ 'width': '100%', 'height': '100%' });
                 viewerL.scheduleUpdate();
+                /**
+                var newLContainerSize = {
+                    x: $(viewerL.container).width(),
+                    y: $(viewerL.container).height()
+                };
+                viewerL.viewport.resize(newLContainerSize, false);
+                viewerL.viewport.applyConstraints();
+                viewerL.viewport.update();
+                **/
             }
             viewerR = null;
 
@@ -175,7 +184,10 @@ TAG.Util.Splitscreen = (function () {
             if (viewerR) {
                 $(viewerR.container).css({ 'width': '100%', 'height': '100%' });
                 viewerR.scheduleUpdate();
+               // viewerR.viewport.applyConstraints();
+               // viewerR.viewport.update();
             }
+            //viewerR.viewport.panTo(new Seadragon.Point(outerContainerPivot.x,outerContainerPivot.y));
             viewerL = null;
 
         }
@@ -186,10 +198,12 @@ TAG.Util.Splitscreen = (function () {
         fixLayoutsOnExit();
 
         if (viewerL) {
-            viewerL.scheduleUpdate();
+           // viewerL.scheduleUpdate();
+            //viewerL.viewport.applyConstraints();
         }
         if (viewerR) {
-            viewerR.scheduleUpdate();
+            //viewerR.scheduleUpdate();
+            //viewerR.viewport.applyConstraints();
         }
         viewerL = null;
         viewerR = null;
@@ -204,10 +218,11 @@ TAG.Util.Splitscreen = (function () {
             // debugger;
             // Layout specific edits
             if (root.attr('id') === 'artmodeRoot') { // Fix sidebar, toggler, and splitscreen button
-                var sideBar = root.find('.sideBar'),
-                    toggler = root.find('.toggler'),
-                    togglerImage = root.find('.togglerImage'),
+                var sideBar = root.find('#sideBar'),
+                    toggler = root.find('#toggler'),
+                    togglerImage = root.find('#togglerImage'),
                     splitscreenContainer = root.find('#splitscreenContainer'),
+                    seadragonManipContainer = root.find('#seadragonManipContainer'),
                     splitscreenIcon = root.find('.splitscreen-icon');
                     //locationHistoryDiv = root.find('.locationHistoryDiv'),
                     //locationHistoryPanel = root.find('.locationHistoryPanel'),
@@ -219,8 +234,10 @@ TAG.Util.Splitscreen = (function () {
                     //lhmap = root.find('.lpMapDiv'),
                     //sidebarsize = window.innerWidth * 0.2,
                     //locsize = window.innerWidth * 0.8;
-
-                sideBar.css({ left: '0px', });
+                sideBar.css({
+                    'left': '0%',
+                    'right' : 'auto'
+                });
                 toggler.css({
                     'position': 'absolute',
                     'left': 'auto',
@@ -230,9 +247,16 @@ TAG.Util.Splitscreen = (function () {
                     borderTopLeftRadius: "0px",
                     borderBottomLeftRadius: "0px",
                 });
-                togglerImage.attr("src", 'images/icons/Close.svg');
+                togglerImage.attr("src", tagPath + 'images/icons/Close.svg')
+                            .css({
+                                'left': '0%',
+                                'right': 'auto'
+                              });
+                seadragonManipContainer.css({
+                    'right': '0%',
+                    'left': 'auto'
+                });
                 splitscreenContainer.css('display', 'block');
-                root.applyConstraints && root.applyConstraints();
                 //locationHistoryToggle.css({
                 //    left: '87.5%',
                 //    'border-bottom-right-radius': '10px',

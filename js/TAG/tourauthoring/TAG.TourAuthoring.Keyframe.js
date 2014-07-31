@@ -1,14 +1,14 @@
-﻿ LADS.Util.makeNamespace('LADS.TourAuthoring.Keyframe');
+﻿ TAG.Util.makeNamespace('TAG.TourAuthoring.Keyframe');
 
 /**Makes a keyframe
  * Associated with a display (keyframe sequence)
  * Maps to keyframe in RIN (duh)
- * @class LADS.TourAuthoring.Keyframe
+ * @class TAG.TourAuthoring.Keyframe
  * @constructor
  * @param spec      location (loc - x,y if audio, just x if visual), keyframe svg group (gkey) attrs
  * @param my        Update currentKeyframe param for touch handling, contains timeManager, undoManager, and svg
  */
-LADS.TourAuthoring.Keyframe = function (spec, my) {
+TAG.TourAuthoring.Keyframe = function (spec, my) {
     "use strict";
 
     var that = {                                                                                                    // object holding public methods of the class
@@ -46,8 +46,8 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
         displayDiv = spec.displayDiv,                                                                               // div of containing display (we'll append the keyframe divs to this)
         position = 0,                                                                                               // initial position of the keyframe
         captureData,                                                                                                // stores keyframe RIN data
-        menu = LADS.TourAuthoring.EditorMenu({                                                                      // creates an instance of the EditorMenu for the keyframe
-            type: LADS.TourAuthoring.MenuType.keyframe,
+        menu = TAG.TourAuthoring.EditorMenu({                                                                      // creates an instance of the EditorMenu for the keyframe
+            type: TAG.TourAuthoring.MenuType.keyframe,
             parent: that
         }, my),
 
@@ -64,10 +64,10 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
         needsLogging;
 
     // UI variables
-    var KEYFRAME_COLOR = LADS.TourAuthoring.Constants.keyframeColor,                                                // colour of the keyframe
-        KEYFRAME_LINE_W = LADS.TourAuthoring.Constants.keyframeLineW,                                               // width of the keyframe lines
-        KEYFRAME_STROKE_W = LADS.TourAuthoring.Constants.keyframeStrokeW,                                           // width of < >
-        KEYFRAME_SIZE = LADS.TourAuthoring.Constants.keyframeSize,                                                  // size of the keyframe
+    var KEYFRAME_COLOR = TAG.TourAuthoring.Constants.keyframeColor,                                                // colour of the keyframe
+        KEYFRAME_LINE_W = TAG.TourAuthoring.Constants.keyframeLineW,                                               // width of the keyframe lines
+        KEYFRAME_STROKE_W = TAG.TourAuthoring.Constants.keyframeStrokeW,                                           // width of < >
+        KEYFRAME_SIZE = TAG.TourAuthoring.Constants.keyframeSize,                                                  // size of the keyframe
         T2P = my.timeManager.timeToPx,                                                                              // converts time scale to pixel scale on the screen
         P2T = my.timeManager.pxToTime;                                                                              // converts pixels on screen to time scale in seconds
 
@@ -77,8 +77,8 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
      */
     function initVisuals() {
         var px_x = my.timeManager.timeToPx(loc.x);
-        var px_y = (my.type !== LADS.TourAuthoring.TrackType.audio) ? 48 : loc.y;
-        var keyframeDivs = LADS.Util.UI.createKeyframe({ container: my.track, x: px_x, y: px_y });
+        var px_y = (my.type !== TAG.TourAuthoring.TrackType.audio) ? 48 : loc.y;
+        var keyframeDivs = TAG.Util.UI.createKeyframe({ container: my.track, x: px_x, y: px_y });
        
         line = keyframeDivs.line,
         circle = keyframeDivs.circ,
@@ -162,7 +162,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
                 my.update();
                 newlocx = loc.x;
                 newlocy = loc.y;
-                command = LADS.TourAuthoring.Command({
+                command = TAG.TourAuthoring.Command({
                     execute: function () {
                         loc.x = newlocx;
                         loc.y = newlocy;
@@ -187,11 +187,11 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
         var px_x = T2P(loc.x);
         circle.css({
             "left": px_x - 21 - 5 + "px",
-            "top": ((my.type !== LADS.TourAuthoring.TrackType.audio) ? 48 : loc.y) - 21 - 5 + "px"
+            "top": ((my.type !== TAG.TourAuthoring.TrackType.audio) ? 48 : loc.y) - 21 - 5 + "px"
         });
         innerCircle.css({
             "left": px_x - 17 + "px",
-            "top": ((my.type !== LADS.TourAuthoring.TrackType.audio) ? 48 : loc.y) - 17 + "px"
+            "top": ((my.type !== TAG.TourAuthoring.TrackType.audio) ? 48 : loc.y) - 17 + "px"
         });
         line.css("left", px_x - 3 / 2 + "px");
     }
@@ -203,12 +203,12 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
         line = gkey.append('line')
             .attr('x1', timex).attr('y1', '0%')
             .attr('x2', timex).attr('y2', '100%')
-            .attr('style', 'stroke:' + LADS.TourAuthoring.Constants.keyframeColor + '; stroke-width:' + LADS.TourAuthoring.Constants.keyframeLineW + ';');
+            .attr('style', 'stroke:' + TAG.TourAuthoring.Constants.keyframeColor + '; stroke-width:' + TAG.TourAuthoring.Constants.keyframeLineW + ';');
 
         // keyframe circle
         circle = gkey.append('circle')
-                     .attr('style', 'stroke:' + LADS.TourAuthoring.Constants.keyframeColor
-                     + '; fill:white; stroke-width:' + LADS.TourAuthoring.Constants.keyframeStrokeW + ';');
+                     .attr('style', 'stroke:' + TAG.TourAuthoring.Constants.keyframeColor
+                     + '; fill:white; stroke-width:' + TAG.TourAuthoring.Constants.keyframeStrokeW + ';');
        
         $(circle[0][0]).on('mousedown', function (e) {
             var offsetX = e.offsetX;
@@ -217,18 +217,18 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
             _keyframeMousedown(offsetX - parseInt(circle.attr('cx'), 10), offsetY - parseInt(circle.attr('cy'), 10));
         });
 
-        if (my.type !== LADS.TourAuthoring.TrackType.audio) {                                // set vertical positioning of non-audio keyframes
+        if (my.type !== TAG.TourAuthoring.TrackType.audio) {                                // set vertical positioning of non-audio keyframes
             loc.y = 48;
         }
         circle.attr('cx', timex)
                   .attr('cy', loc.y)                                                         // TODO: convert linear scale to dBFS (logarithmic for even fades)
-                  .attr('r', LADS.TourAuthoring.Constants.keyframeSize);
+                  .attr('r', TAG.TourAuthoring.Constants.keyframeSize);
 
         innerCircle = gkey.append('circle')
                         .attr('cx', timex)
                         .attr('cy', loc.y)
-                        .attr('r', LADS.TourAuthoring.Constants.innerKeyframeSize)
-                        .attr('style', 'display:none; stroke:' + LADS.TourAuthoring.Constants.keyframeColor + '; fill:' + LADS.TourAuthoring.Constants.keyframeColor + '; stroke-width:0;');
+                        .attr('r', TAG.TourAuthoring.Constants.innerKeyframeSize)
+                        .attr('style', 'display:none; stroke:' + TAG.TourAuthoring.Constants.keyframeColor + '; fill:' + TAG.TourAuthoring.Constants.keyframeColor + '; stroke-width:0;');
 
         $(innerCircle[0][0]).on('mousedown', function (e) {
             console.log("using new events");
@@ -275,15 +275,15 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
                     my.update();
                     newlocx = loc.x;
                     newlocy = loc.y;
-                    command = LADS.TourAuthoring.Command({
+                    command = TAG.TourAuthoring.Command({
                         execute: function () {
                             loc.x = newlocx;
-                            loc.y = (my.type === LADS.TourAuthoring.TrackType.audio) ? newlocy : 48;
+                            loc.y = (my.type === TAG.TourAuthoring.TrackType.audio) ? newlocy : 48;
                             scale();
                             my.update();
                         }, unexecute: function () {
                             loc.x = oldlocx;
-                            loc.y = (my.type === LADS.TourAuthoring.TrackType.audio) ? oldlocy : 48;
+                            loc.y = (my.type === TAG.TourAuthoring.TrackType.audio) ? oldlocy : 48;
                             scale();
                             my.update();
                         }
@@ -299,10 +299,10 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
      * @method initMenu
      */
     (function initMenu() {
-        menu.addInput('Time', LADS.TourAuthoring.MenuInputFormats.minSec,
+        menu.addInput('Time', TAG.TourAuthoring.MenuInputFormats.minSec,
             getTime, setTime);
-        if (my.type === LADS.TourAuthoring.TrackType.audio) {
-            menu.addInput('Volume', LADS.TourAuthoring.MenuInputFormats.percent,
+        if (my.type === TAG.TourAuthoring.TrackType.audio) {
+            menu.addInput('Volume', TAG.TourAuthoring.MenuInputFormats.percent,
                 getVolume, setVolume);
         }
         menu.addButton('Delete', 'left', removeHelper);
@@ -324,7 +324,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
     function remove(displayRemoved, preventClose) {
         closeMenu(preventClose);
         var index,
-            command = LADS.TourAuthoring.Command({
+            command = TAG.TourAuthoring.Command({
             execute: function () {
                 index = display.removeKeyframe(that);
                 circle.remove();
@@ -427,7 +427,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
     var setSelectedDebounced = $.debounce(250, function () {
         var currData,
             command;
-        if (my.type !== LADS.TourAuthoring.TrackType.audio) {
+        if (my.type !== TAG.TourAuthoring.TrackType.audio) {
             my.selectedKeyframe = that;
             $('.keyframeInnerCirc').css('background-color', '#ffffff');
             circle.css({ 'background-color': 'white' });
@@ -438,7 +438,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
         }
 
         function createKeyframeCommand() {
-            return LADS.TourAuthoring.Command({
+            return TAG.TourAuthoring.Command({
                 execute: function () { },
                 unexecute: function () {
                     _data = currData;
@@ -463,7 +463,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
      */
     function setSelected(forceInstant) {
         function createKeyframeCommand() {
-            return LADS.TourAuthoring.Command({
+            return TAG.TourAuthoring.Command({
                 execute: function () { },
                 unexecute: function () {
                     _data = currData;
@@ -518,14 +518,14 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
                         : display.getEnd();
 
         loc.x = Math.constrain(newtime,
-                                leftbound + LADS.TourAuthoring.Constants.epsilon,
-                                rightbound + LADS.TourAuthoring.Constants.epsilon);
+                                leftbound + TAG.TourAuthoring.Constants.epsilon,
+                                rightbound + TAG.TourAuthoring.Constants.epsilon);
 
         timex = my.timeManager.timeToPx(loc.x);
         circle.css('left', (timex - 26)+"px");                  
         line.css('left', (timex - 3/2)+"px");
         innerCircle.css('left', (timex - 17)+"px");
-        if (my.type === LADS.TourAuthoring.TrackType.audio) {
+        if (my.type === TAG.TourAuthoring.TrackType.audio) {
             display.getTrack().drawLines();
         }
         setDeselected();
@@ -565,7 +565,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
      */
     function heightToPercent(height) {
         //rounds to 2 decimal places
-        return (Math.round(((LADS.TourAuthoring.Constants.trackHeight - height) * 100 / LADS.TourAuthoring.Constants.trackHeight) * 100) / 100);
+        return (Math.round(((TAG.TourAuthoring.Constants.trackHeight - height) * 100 / TAG.TourAuthoring.Constants.trackHeight) * 100) / 100);
     }
 
     /**Generate raw height value from percentage vertical fader value
@@ -574,7 +574,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
      * @return {Number}
      */
     function percentToHeight(percent) {
-        return LADS.TourAuthoring.Constants.trackHeight - (percent * LADS.TourAuthoring.Constants.trackHeight / 100);
+        return TAG.TourAuthoring.Constants.trackHeight - (percent * TAG.TourAuthoring.Constants.trackHeight / 100);
     }
 
     /**Gets containing display
@@ -614,8 +614,8 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
             console.log('Move keyframe called when no keyframe is selected!');
         } else {                                                                                                                // Editing
             loc.x = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offsetx),
-                                    Math.max(leftbound, display.getStart()) + my.timeManager.pxToTime(LADS.TourAuthoring.Constants.fadeBtnSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.keyframeSize),
-                                    Math.min(rightbound, display.getEnd()) - my.timeManager.pxToTime(LADS.TourAuthoring.Constants.fadeBtnSize + LADS.TourAuthoring.Constants.keyframeStrokeW + LADS.TourAuthoring.Constants.keyframeSize));
+                                    Math.max(leftbound, display.getStart()) + my.timeManager.pxToTime(TAG.TourAuthoring.Constants.fadeBtnSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.keyframeSize),
+                                    Math.min(rightbound, display.getEnd()) - my.timeManager.pxToTime(TAG.TourAuthoring.Constants.fadeBtnSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.keyframeSize));
             if (loc.x < display.getStart() || loc.x > display.getEnd()) {
                 loc.x = (display.getStart() + display.getEnd()) / 2;
             }
@@ -629,8 +629,8 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
             circle.css('left', (timex - 26)+"px"); 
             line.css('left', (timex-3/2)+"px");
             innerCircle.css('left', (timex - 17)+"px");
-            if (my.type === LADS.TourAuthoring.TrackType.audio) {                                                               // Change y loc only if keyframe is audio
-                loc.y = Math.constrain(res.pivot.y - offsety, 0, LADS.TourAuthoring.Constants.trackHeight);                     // bound y movement to svg!
+            if (my.type === TAG.TourAuthoring.TrackType.audio) {                                                               // Change y loc only if keyframe is audio
+                loc.y = Math.constrain(res.pivot.y - offsety, 0, TAG.TourAuthoring.Constants.trackHeight);                     // bound y movement to svg!
                 circle.css('top', (loc.y - 21 - 5) + "px");
                 innerCircle.css('top', (loc.y - 17) + "px");
                 display.getTrack().drawLines();
@@ -691,7 +691,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
         circle.css({'left': (timex - 21 - 5) + "px", 'top': (loc.y-21-5)+"px"});
         line.css('left', (timex - 3/2)+"px");
         innerCircle.css({ 'left': (timex - 17) + "px", 'top': (loc.y - 17) + "px" });
-        if (my.type === LADS.TourAuthoring.TrackType.audio) {
+        if (my.type === TAG.TourAuthoring.TrackType.audio) {
             display.getTrack().drawLines();
         }
     }
@@ -704,7 +704,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
      * @return {Number}
      */
     function ypixToVolume() {
-        return Math.constrain((LADS.TourAuthoring.Constants.trackHeight - loc.y) / LADS.TourAuthoring.Constants.trackHeight, 0, 1);
+        return Math.constrain((TAG.TourAuthoring.Constants.trackHeight - loc.y) / TAG.TourAuthoring.Constants.trackHeight, 0, 1);
     }
 
     /**Maps keyframe to RIN keyframe
@@ -713,7 +713,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
     function toRIN() {
         var keyframe;
         switch (my.type) {
-            case LADS.TourAuthoring.TrackType.artwork:
+            case TAG.TourAuthoring.TrackType.artwork:
                 keyframe = {
                     offset: loc.x - display.getStart(),
                     init: false,
@@ -721,7 +721,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
                     state: _data
                 };
                 break;
-            case LADS.TourAuthoring.TrackType.image:
+            case TAG.TourAuthoring.TrackType.image:
                 keyframe = {
                     offset: loc.x - display.getStart(),
                     init: false,
@@ -729,7 +729,7 @@ LADS.TourAuthoring.Keyframe = function (spec, my) {
                     state: _data
                 };
                 break;
-            case LADS.TourAuthoring.TrackType.audio:
+            case TAG.TourAuthoring.TrackType.audio:
                 keyframe = {
                     offset: loc.x - display.getStart(),
                     init: false,

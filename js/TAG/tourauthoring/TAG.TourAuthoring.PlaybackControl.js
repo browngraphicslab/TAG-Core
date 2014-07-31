@@ -1,12 +1,12 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.PlaybackControl');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.PlaybackControl');
 
 /**Component menu at the bottom of the screen
  * Contains controls for playing and seeking tour
- * @class LADS.TourAuthoring.PlaybackControl
+ * @class TAG.TourAuthoring.PlaybackControl
  * @constructor
  * @param spec      timeManager attr undoManager
  */
-LADS.TourAuthoring.PlaybackControl = function (spec) {
+TAG.TourAuthoring.PlaybackControl = function (spec) {
     "use strict";
 
     var that = {                                                                // public methods of the class
@@ -54,7 +54,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
             "position": "relative",
             'display': 'inline-block'
         });
-        playButton.attr('src', 'images/icons/Play.svg');
+        playButton.attr('src', tagPath + 'images/icons/Play.svg');
         playButton.attr('id', 'playButton');
         playButton.click(function () { // Start and stop playback
             togglePlay();
@@ -83,11 +83,11 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
 
         // on play and stop update the play button image and internal state
         timeManager.onPlayStart(function () {
-            playButton.attr('src', 'images/icons/Pause.svg');
+            playButton.attr('src', tagPath + 'images/icons/Pause.svg');
             playing = true;
         });
         timeManager.onStop(function () {
-            playButton.attr('src', 'images/icons/Play.svg');
+            playButton.attr('src', tagPath + 'images/icons/Play.svg');
             playing = false;
         });
 
@@ -136,7 +136,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
         locationLabel.text('Timeline Overview');
         locationLabel.css({
             'font-weight': '600',
-            'font-size': LADS.Util.getFontSize(150)
+            'font-size': TAG.Util.getFontSize(45)
         });
         playheadLocContainer.append(locationLabel);
 
@@ -259,7 +259,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
             'color': 'black',
             'display': 'inline-block',
             'font-weight': '600',
-            'font-size': LADS.Util.getFontSize(150)
+            'font-size': TAG.Util.getFontSize(45)
         });
         sliderLabel.text('0:00/1:00');
 
@@ -299,7 +299,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
         var zoomfader = $(document.createElement('div'));
         var currScale = timeManager.getDuration().scale;
         var minScale = 1581 / timeManager.getDuration().end;
-        var zoomFaderLeftInit = (currScale - minScale) / (LADS.TourAuthoring.Constants.maxZoom - minScale) * 100;
+        var zoomFaderLeftInit = (currScale - minScale) / (TAG.TourAuthoring.Constants.maxZoom - minScale) * 100;
         var zoomfaderUpdate;
         var oldPos = 0.0;
         var newPos = 0.0;
@@ -329,7 +329,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
             "position": "relative",
             'display': 'inline-block'
         });
-        lensSmaller.attr('src', 'images/icons/Lens.svg');
+        lensSmaller.attr('src', tagPath + 'images/icons/Lens.svg');
         lensSmaller.attr('id', 'lensSmall');
         lensSmaller.click(function () {
             var pos = zoomfader.position().left - 0.1 * (zoomslider.width());
@@ -403,7 +403,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
             "position": "relative",
             'display': 'inline-block'
         });
-        lensBigger.attr('src', 'images/icons/Lens.svg');
+        lensBigger.attr('src', tagPath + 'images/icons/Lens.svg');
         lensBigger.attr('id', 'lensBig');
         lensBigger.click(function () {
             var pos = zoomfader.position().left + 0.1 * (zoomslider.width());
@@ -441,7 +441,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
             "margin-top": "-1%",
             "position": "relative",
             'display': 'none',
-            'margin-left': '15%', 'font-weight': '600', 'font-size': LADS.Util.getFontSize(150)
+            'margin-left': '15%', 'font-weight': '600', 'font-size': TAG.Util.getFontSize(150)
         });
 
         undoRedoButtonArea.css({
@@ -457,7 +457,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
 
         // undo and redo buttons
         $(undoButton).addClass('undoButton');
-        undoButton.attr('src', 'images/icons/Undo.svg');
+        undoButton.attr('src', tagPath + 'images/icons/Undo.svg');
         undoButton.css(undoRedoButtonCSS);
         undoButton.click(function () {
             undoManager.undo();
@@ -465,7 +465,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
         undoRedoButtonArea.append(undoButton);
 
         $(redoButton).addClass('redoButton');
-        redoButton.attr('src', 'images/icons/Redo.svg');
+        redoButton.attr('src', tagPath + 'images/icons/Redo.svg');
         redoButton.css(undoRedoButtonCSS);
         redoButton.click(function () {
             undoManager.redo();
@@ -522,9 +522,9 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
             oldScale = dur.scale,
             totalTime = dur.end,
             minScale = trackBody.width() / totalTime,
-            newScale = minScale + percent * (LADS.TourAuthoring.Constants.maxZoom - minScale);
+            newScale = minScale + percent * (TAG.TourAuthoring.Constants.maxZoom - minScale);
 
-        newScale = Math.min(Math.max(newScale, minScale), LADS.TourAuthoring.Constants.maxZoom);
+        newScale = Math.min(Math.max(newScale, minScale), TAG.TourAuthoring.Constants.maxZoom);
         lastScale = oldScale;
 
         // data for zooming
@@ -567,7 +567,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
                 if (newTrackLength >= trackBody.width()) {
                     timeManager.setScale(newScale);
                 }
-            } else if (newScale <= LADS.TourAuthoring.Constants.maxZoom) {                                  // max zoom
+            } else if (newScale <= TAG.TourAuthoring.Constants.maxZoom) {                                  // max zoom
                 timeManager.setScale(newScale);
             }
             
@@ -587,7 +587,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
                     if (newTrackLength >= trackBody.width()) {
                         timeManager.setScale(newScale);
                     }
-                } else if (newScale <= LADS.TourAuthoring.Constants.maxZoom) { // max zoom
+                } else if (newScale <= TAG.TourAuthoring.Constants.maxZoom) { // max zoom
                     timeManager.setScale(newScale);
                 }
                 // end scale check
@@ -609,7 +609,7 @@ LADS.TourAuthoring.PlaybackControl = function (spec) {
                     if (newTrackLength >= trackBody.width()) {
                         timeManager.setScale(newScale);
                     }
-                } else if (newScale <= LADS.TourAuthoring.Constants.maxZoom) {                              // max zoom
+                } else if (newScale <= TAG.TourAuthoring.Constants.maxZoom) {                              // max zoom
                     timeManager.setScale(newScale);
                 }
                 

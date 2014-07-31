@@ -1,15 +1,15 @@
-﻿/// <reference path="LADS.TourAuthoring.InkTrack.js" />
-LADS.Util.makeNamespace('LADS.TourAuthoring.ComponentControls');
+﻿/// <reference path="TAG.TourAuthoring.InkTrack.js" />
+TAG.Util.makeNamespace('TAG.TourAuthoring.ComponentControls');
 
 
 
 /**Controls for adding Components, editing properties of them, and undo/redo buttons
- * @class LADS.TourAuthoring.ComponentControls
+ * @class TAG.TourAuthoring.ComponentControls
  * @constructor
  * @param spec  root, timeline, timeManager attr
  * @param my    not used
  */
-LADS.TourAuthoring.ComponentControls = function (spec, my) {
+TAG.TourAuthoring.ComponentControls = function (spec, my) {
     "use strict";
 
     var functionsPanel = $(document.createElement('div')),
@@ -45,8 +45,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         addCompButtonHeight,
         myPicker,
         resizableHeight,
-        artQueue = LADS.Util.createQueue(),
-        mediaQueue = LADS.Util.createQueue(),
+        artQueue = TAG.Util.createQueue(),
+        mediaQueue = TAG.Util.createQueue(),
         PICKER_SEARCH_TEXT = 'Search by Name, Artist, or Year...',
         IGNORE_IN_SEARCH = ['visible', 'exhibits', 'selected'],
         rinContainer = viewer.getContainer(),
@@ -63,13 +63,13 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
 
     functionsPanelDocfrag.appendChild(functionsPanel[0]);
     timeline.setCompControl(that);
-    var catalogPickerOverlay = LADS.Util.UI.blockInteractionOverlay();
+    var catalogPickerOverlay = TAG.Util.UI.blockInteractionOverlay();
     $(catalogPickerOverlay).addClass('catalogPickerOverlay');
-    $(catalogPickerOverlay).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex);
+    $(catalogPickerOverlay).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
 
-    var associatedMediaPickerOverlay = LADS.Util.UI.blockInteractionOverlay();
+    var associatedMediaPickerOverlay = TAG.Util.UI.blockInteractionOverlay();
     $(associatedMediaPickerOverlay).addClass('associatedMediaPickerOverlay');
-    $(associatedMediaPickerOverlay).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex);
+    $(associatedMediaPickerOverlay).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
 
     var currentInkController;
     var isEditingText = false;
@@ -136,13 +136,13 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 var videotag = $(document.createElement('video'));
                 videotag.attr('preload', 'metadata');
                 var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
-                LADS.Worktop.Database.getConvertedCheck(
+                TAG.Worktop.Database.getConvertedCheck(
                     (function (i, track, media, videotag) {
                         return function (output) {
                             if (output !== "False") {
                                 console.log("converted: ");
                                 var mp4filepath = "/Images/" + output.substr(0, output.lastIndexOf('.')) + ".mp4";
-                                var mp4file = LADS.Worktop.Database.fixPath(mp4filepath);
+                                var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
                                 videotag.attr('src', mp4file);
                                 videotag.on('loadedmetadata', function () {
                                     //remove from the video array and add display with the right duration
@@ -168,8 +168,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
      * @param {String} displayString     String describing error (to be displayed)
      */
     function creationError(displayString) {
-        var messageBox = LADS.Util.UI.popUpMessage(null, displayString, null);
-        $(messageBox).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
+        var messageBox = TAG.Util.UI.popUpMessage(null, displayString, null);
+        $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
         $('body').append(messageBox);
         $(messageBox).fadeIn(500);
         timeline.onUpdate(true);
@@ -237,12 +237,12 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             return false;
         }
 
-        if (linkType === LADS.TourAuthoring.TrackType.artwork) {
+        if (linkType === TAG.TourAuthoring.TrackType.artwork) {
             kfvx = keyframe.state.viewport.region.center.x;
             kfvy = keyframe.state.viewport.region.center.y;
             kfvw = keyframe.state.viewport.region.span.x;
             kfvh = keyframe.state.viewport.region.span.y;
-        } else if (linkType === LADS.TourAuthoring.TrackType.image) {
+        } else if (linkType === TAG.TourAuthoring.TrackType.image) {
             kfvw = 1.0 / keyframe.state.viewport.region.span.x;
             rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
             kfvh = keyframe.state.viewport.region.span.y; // not used
@@ -280,12 +280,12 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             return false;
         }
 
-        if (linkType === LADS.TourAuthoring.TrackType.artwork) {
+        if (linkType === TAG.TourAuthoring.TrackType.artwork) {
             new_kfvx = new_keyframe.state.viewport.region.center.x;
             new_kfvy = new_keyframe.state.viewport.region.center.y;
             new_kfvw = new_keyframe.state.viewport.region.span.x;
             new_kfvh = new_keyframe.state.viewport.region.span.y;
-        } else if (linkType === LADS.TourAuthoring.TrackType.image) {
+        } else if (linkType === TAG.TourAuthoring.TrackType.image) {
             new_kfvw = 1.0 / new_keyframe.state.viewport.region.span.x;
             rw = new_keyframe.state.viewport.region.span.x * currcanv.width();
             new_kfvh = new_keyframe.state.viewport.region.span.y; // not used
@@ -301,7 +301,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
      * @param track
      */
     function deleteInkTrack(track) {
-        var command = LADS.TourAuthoring.Command({
+        var command = TAG.TourAuthoring.Command({
             execute: function () {
                 timeline.removeTrack(track);
             },
@@ -335,7 +335,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function editInks(track, datastr) {
         var oldDataStr = track.getInkPath();
-        var command = LADS.TourAuthoring.Command({
+        var command = TAG.TourAuthoring.Command({
             execute: function () {
                 track.setInkPath(datastr);
                 timeline.onUpdate(true);
@@ -386,7 +386,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         var confirmationBox;
 
         if (currentInkController.isDatastringEmpty(currentInkController.update_datastring())) {
-            confirmationBox = LADS.Util.UI.PopUpConfirmation(function () {
+            confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
                 deleteInkTrack(track);
                 inkEditDraw.hide();
 
@@ -470,7 +470,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
             inkdiv = createInkCanv(),
-            p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
 
         isEditingDraw = true;
 
@@ -513,7 +513,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
         inkAuthoring = p1;
         p1.set_editable();
-        p1.set_mode(LADS.TourAuthoring.InkMode.draw);
+        p1.set_mode(TAG.TourAuthoring.InkMode.draw);
         ////// new ink draw stuff
 
         //   p1.setPenColor(p1.get_attr(datastring, 'stroke', 's'));
@@ -621,7 +621,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             confirmationBox;
 
         if (currentInkController.isDatastringEmpty(currentInkController.update_datastring())) {         //first, check if the ink is empty
-            confirmationBox = LADS.Util.UI.PopUpConfirmation(function () {
+            confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
                 deleteInkTracks(track);
                 inkTransparencyControls.hide();
 
@@ -678,7 +678,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
             inkdiv = createInkCanv(),
-            p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
+            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
             currentMode,
             currOpacity,
             real_kfw,
@@ -725,7 +725,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
 
         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
         inkAuthoring = p1;
-        p1.set_mode(LADS.TourAuthoring.InkMode.shapes); //shape manipulation mode
+        p1.set_mode(TAG.TourAuthoring.InkMode.shapes); //shape manipulation mode
         p1.set_editable();
 
 
@@ -838,7 +838,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         var confirmationBox;
         //first, check if the ink is empty
         if (currentInkController.isTextboxEmpty()) {
-            confirmationBox = LADS.Util.UI.PopUpConfirmation(function () {
+            confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
                 deleteInkTracks(track);
                 // inkEditText.hide();
                 inkTextControls.hide();
@@ -899,7 +899,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
             inkdiv = createInkCanv(),
-            p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
+            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
             fontsize,
             line_breaks,
             num_lines,
@@ -950,7 +950,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         inkAuthoring = p1;
         cw = $("#inkCanv").width();
         ch = $("#inkCanv").height();
-        p1.set_mode(LADS.TourAuthoring.InkMode.text);
+        p1.set_mode(TAG.TourAuthoring.InkMode.text);
         p1.set_editable();
 
         //     fontsize = p1.get_attr(datastring, "fontsize", 'f') * ch;
@@ -1063,7 +1063,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
 
         // setting attributes/CSS of the components
         addDropDownIconComponent.attr('id', 'addDropDownIconComponent');
-        addDropDownIconComponent.attr('src', 'images/icons/Down.png');
+        addDropDownIconComponent.attr('src', tagPath + 'images/icons/Down.png');
         addDropDownIconComponent.css({
             'width': '10%',
             'margin-left': '35%',
@@ -1074,7 +1074,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         addComponentLabel.attr('id', 'addComponentLabel');
         addComponentLabel.css({
             "left": menuOffsetL, "top": "5%", "position": "relative",
-            "font-size": LADS.Util.getFontSize(200), "color": "rgb(256, 256, 256)",
+            "font-size": TAG.Util.getFontSize(70), "color": "rgb(256, 256, 256)",
             //Using the current background color value multiplied by the ( 1- alpha value )
             'background-color': "rgb(63, 55, 53)",
             'padding': '3% 2% 4% 2%',
@@ -1157,7 +1157,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             position: "fixed",
             top: '0px',
             left: '0px',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 18
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 18
         });
         fade.attr("class", "fade");
         fade.on('mousedown', function (evt) {
@@ -1177,7 +1177,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             'background-color': 'rgba(0,0,0,0.95)',
             'float': 'left',
             'clear': 'left',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 19
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         });
 
         dropFile.css({
@@ -1188,7 +1188,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             'width': '74%',
             'background-color': 'rgba(0,0,0,0.95)',
             'float': 'left',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 19
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         });
 
         dropInk.css({
@@ -1199,7 +1199,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             'width': '74%',
             'background-color': 'rgba(0,0,0,0.95)',
             'float': 'left',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 19
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         });
 
 
@@ -1276,7 +1276,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 });
             } catch (err) {
                 console.log(err.message);
-                mediaLengths.push(LADS.TourAuthoring.Constants.maxTourLength);
+                mediaLengths.push(TAG.TourAuthoring.Constants.maxTourLength);
                 if (i < files.length - 1) {
                     getMusicPropertiesHelper(files, i + 1, callback);
                 } else {
@@ -1286,14 +1286,14 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         }
 
         if (title === "Audio (MP3)") {
-            upldr = LADS.Authoring.FileUploader(root, LADS.Authoring.FileUploadTypes.Standard,
+            upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
             function (files) {
                 var file;
                 for (i = 0; i < files.length; i++) {
                     file = files[i];
                     names.push(file.displayName);
                 }
-                type = LADS.TourAuthoring.TrackType.audio;
+                type = TAG.TourAuthoring.TrackType.audio;
                 mediaFiles = files;
             },
             function (urls) {
@@ -1315,11 +1315,11 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                         positionX = initLoc;
                         displayLength = mediaLength;
                         if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                            timeManager.setEnd(Math.min(LADS.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+                            timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
                         }
-                        diff = LADS.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-                        newDisplay = (diff < LADS.TourAuthoring.Constants.displayEpsilon) ?
-                                             track.addDisplay(timeManager.timeToPx(LADS.TourAuthoring.Constants.maxTourLength - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) :
+                        diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
+                        newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
+                                             track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                              track.addDisplay(positionX, Math.min(diff, displayLength));
 
                         if (timeline.getTracks().length > 0) {
@@ -1336,11 +1336,11 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             ['.mp3'],
             false,
             function () {
-                root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file. Please try again later."));
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file. Please try again later."));
             },
             true);
-            upldr.setMaxDuration(LADS.TourAuthoring.Constants.maxTourLength);
-            upldr.setMinDuration(LADS.TourAuthoring.Constants.minMediaLength);
+            upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
+            upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
         }
 
         /**Helper function to get properties of video files
@@ -1364,7 +1364,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     console.log(error);
                 });
             } catch (err) {
-                mediaLengths.push(LADS.TourAuthoring.Constants.maxTourLength);
+                mediaLengths.push(TAG.TourAuthoring.Constants.maxTourLength);
                 if (i < files.length - 1) {
                     getVideoPropertiesHelper(files, i + 1, callback);
                 } else {
@@ -1374,7 +1374,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         }
 
         if (title === "Video (MP4)") {
-            upldr = LADS.Authoring.FileUploader(root, LADS.Authoring.FileUploadTypes.Standard,
+            upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
             function (files, localURLs, confirmCallback, cancelCallback) {
                 var file,
                     total = files.length,
@@ -1385,7 +1385,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     names.push(file.displayName);
                     var toUpload = true;
                     if (file.fileType !== '.mp4') {
-                        var confirmBox = LADS.Util.UI.PopUpConfirmation(function () {
+                        var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
                             if (++decided >= total) {
                                 confirmCallback && confirmCallback();
                             }
@@ -1401,7 +1401,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                         root.append(confirmBox);
                         $(confirmBox).show();
                     } else {//file is Mp4, ask users if they still want to convert it. Regardless, upload the video
-                        var confirmBox = LADS.Util.UI.PopUpConfirmation((function (index) {
+                        var confirmBox = TAG.Util.UI.PopUpConfirmation((function (index) {
                             return function () {
                                 toConvert.push(index);
                                 if (++decided >= total) {
@@ -1421,7 +1421,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 if (decided >= total) {
                     confirmCallback && confirmCallback();
                 }
-                type = LADS.TourAuthoring.TrackType.video;
+                type = TAG.TourAuthoring.TrackType.video;
                 mediaFiles = files;
                 mp42Convert = toConvert;
                 return 'uploading test!';
@@ -1446,7 +1446,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                             var index = newFileName.lastIndexOf(".");
                             var fileExtension = newFileName.slice(index);
                             var baseFileName = newFileName.slice(0, index);
-                            LADS.Worktop.Database.convertVideo(function () {
+                            TAG.Worktop.Database.convertVideo(function () {
                             }, null, newFileName, fileExtension, baseFileName, null);
                         }
                         var track = timeline.addVideoTrack(url, name, null, mediaLength);
@@ -1454,12 +1454,12 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                         var positionX = initLoc;
                         var displayLength = mediaLength;
                         if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-                            timeManager.setEnd(Math.min(LADS.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+                            timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
                         }
-                        var diff = LADS.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
+                        var diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
                         if (displayLength !== 0 && mediaFiles[i].fileType === '.mp4') {//check if the video is mp4 and we currently can get the length of the video
-                            var newDisplay = (diff < LADS.TourAuthoring.Constants.displayEpsilon) ?
-                                             track.addDisplay(timeManager.timeToPx(LADS.TourAuthoring.Constants.maxTourLength - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) :
+                            var newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
+                                             track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                              track.addDisplay(positionX, Math.min(diff, displayLength));
                         } else {//else we don't add a display and also gray out the track
                             videos2Convert.push(track);
@@ -1480,14 +1480,14 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             ['.mp4', '.webm', '.ogv'],
             false,
             function () {
-                root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
             true);
-            upldr.setMaxDuration(LADS.TourAuthoring.Constants.maxTourLength);
-            upldr.setMinDuration(LADS.TourAuthoring.Constants.minMediaLength);
+            upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
+            upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
         }
         if (title === "Image") {
-            LADS.Authoring.FileUploader(root, LADS.Authoring.FileUploadTypes.Standard,
+            TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
             function (files) {
                 for (i = 0; i < files.length; i++) {
                     names.push(files[i].displayName);
@@ -1500,8 +1500,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 for (i = 0; i < urls.length; i++) {
                     track = timeline.addImageTrack(urls[i], names[i].replace(/\'/, '').replace(/\"/, ''));
                     dispLen = Math.min(5, timeManager.getDuration().end - timeManager.pxToTime(initLoc));
-                    newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(initLoc, dispLen);
-                    if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
+                    newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(initLoc, dispLen);
+                    if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                         newDisplay.setIn(0);
                         newDisplay.setOut(0);
                         newDisplay.setMain(dispLen);
@@ -1520,7 +1520,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             ['.jpg', '.png', '.gif', '.tif', '.tiff'],
             false,
             function () {
-                root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
             true);
         }
@@ -1544,12 +1544,12 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         addComponentButton.css({
             "left": "0%",
             "position": "relative",
-            "font-size": LADS.Util.getFontSize(190),
+            "font-size": TAG.Util.getFontSize(55),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '4% 0 5% 0',
             'text-indent': '4%',
-            'z-index': LADS.TourAuthoring.Constants.aboveRinZIndex + 19
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         });
 
         // mouseenter function
@@ -1622,8 +1622,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         addComponentButton.on('click', function (evt) {
             var messageBox;
             if (timeline.getEditInkOn() === true) {
-                messageBox = LADS.Util.UI.popUpMessage(null, "An ink is already being edited.", null);
-                $(messageBox).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 2000000);
+                messageBox = TAG.Util.UI.popUpMessage(null, "An ink is already being edited.", null);
+                $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 2000000);
                 $("#resizableArea").parent().parent().append(messageBox);
                 closeComponentMenu();
                 $(messageBox).fadeIn(500);
@@ -1712,7 +1712,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     isEditingText = false;
                     //create an ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
                     currentInkController = p1;
 
                     //  INITIAL_INK_TEXT.createInputs();
@@ -1743,7 +1743,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     // p1.setFontColor("FFFFFF");
                     // p1.setFontFamily("Times New Roman, serif");
                     // p1.setFontSize("12");
-                    p1.set_mode(LADS.TourAuthoring.InkMode.text);
+                    p1.set_mode(TAG.TourAuthoring.InkMode.text);
                     p1.set_editable();
                     currentInkController = p1;
                     $('#writeAnnotation').val("");
@@ -1768,7 +1768,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
 
                     //create ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
                     currentInkController = p1;
 
                     INITIAL_DRAW.createModeButton();
@@ -1790,7 +1790,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     //  myPicker.fromString("000000"); //jscolor picker
                     $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                     inkAuthoring = p1;
-                    p1.set_mode(LADS.TourAuthoring.InkMode.draw);
+                    p1.set_mode(TAG.TourAuthoring.InkMode.draw);
                     p1.set_editable(); // give the canvas pointer events
                     //   p1.updatePenWidth("brushSlider");
                     //   p1.updatePenColor("brushColorToggle");
@@ -1802,7 +1802,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 case "highlight":
                     //create an ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new LADS.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
                     var newHeight;
                     currentInkController = p1;
                     isEditingTransparency = false;
@@ -1824,7 +1824,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     //   initTrans();
                     $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                     inkAuthoring = p1;
-                    p1.set_mode(LADS.TourAuthoring.InkMode.shapes);
+                    p1.set_mode(TAG.TourAuthoring.InkMode.shapes);
                     p1.set_editable(); //in this case, we're just making sure that the artwork can't be manipulated
 
 
@@ -1920,10 +1920,10 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
         associatedsearchbar.val("");
         associatedsearchbar.keyup(function () {
-            LADS.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
         associatedsearchbar.change(function () {
-            LADS.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
         $(associatedMediaPickerHeader).append(associatedsearchbar);
 
@@ -1965,11 +1965,11 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         var diff,
             newDisplay;
         if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
-            timeManager.setEnd(Math.min(LADS.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
+            timeManager.setEnd(Math.min(TAG.TourAuthoring.Constants.maxTourLength, displayLength + timeManager.pxToTime(positionX)));
         }
-        diff = LADS.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
-        newDisplay = (diff < LADS.TourAuthoring.Constants.displayEpsilon) ?
-                             track.addDisplay(timeManager.timeToPx(LADS.TourAuthoring.Constants.maxTourLength - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) :
+        diff = TAG.TourAuthoring.Constants.maxTourLength - timeManager.pxToTime(positionX);
+        newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
+                             track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                              track.addDisplay(positionX, Math.min(diff, displayLength));
         if (timeline.getTracks().length > 0) {
             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
@@ -2005,7 +2005,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         loading.text('Loading...');
         loading.attr('id', 'associatedLoadingLabel');
 
-        circle.attr('src', 'images/icons/progress-circle.gif');
+        circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
         circle.css({
             'height': '12px',
             'width': 'auto',
@@ -2114,8 +2114,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                             positionX = timeManager.getCurrentPx();
                             displayLength = 5;
                             dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                            newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                            if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
+                            newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                            if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                                 newDisplay.setIn(0);
                                 newDisplay.setOut(0);
                                 newDisplay.setMain(dispLen);
@@ -2168,7 +2168,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
          * @param {Number} i
          */
         function getArt(i) {
-            LADS.Worktop.Database.getAssocMediaTo(myFilteredArtwork[i], function (doqs) {
+            TAG.Worktop.Database.getAssocMediaTo(myFilteredArtwork[i], function (doqs) {
                 var mediaArray = [];
                 var k = 0;
                 var doq;
@@ -2186,7 +2186,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                         k++;
                         doq = doqs[j];
                         c1 = (doq.Metadata.ContentType === 'Video' || doq.Metadata.ContentType === 'Audio');
-                        c2 = (doq.Metadata.Duration <= LADS.TourAuthoring.Constants.maxTourLength && doq.Metadata.Duration >= LADS.TourAuthoring.Constants.minMediaLength);
+                        c2 = (doq.Metadata.Duration <= TAG.TourAuthoring.Constants.maxTourLength && doq.Metadata.Duration >= TAG.TourAuthoring.Constants.minMediaLength);
                         c3 = (c2 || doq.Metadata.Duration === undefined);
                         if ((c1 && c3) || doq.Metadata.ContentType === 'Image') {           //make sure no text associated media for now
                             mediaArray.push(doq);
@@ -2196,7 +2196,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                             if (mediaArray.length > 0) { //only shows artworks with at least one associated media
                                 drawAssociatedMedia(mediaCache[myFilteredArtwork[i]], assMediasingleDoubleclick, mediaHolderDocfrag);// create dom elements for this artwork's associated media
                                 // retrieve titles of artworks that have at least one associated media, create divs for them in the artwork list
-                                LADS.Worktop.Database.getDoq(myFilteredArtwork[i], function (nextArt) {
+                                TAG.Worktop.Database.getDoq(myFilteredArtwork[i], function (nextArt) {
                                     var name;
                                     var hasSpace = false;
                                     var scanLength;
@@ -2254,7 +2254,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 drawAssociatedMedia(mediaCache[myFilteredArtwork[i]], assMediasingleDoubleclick, allAMDocfrag);
             }
             associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
-            LADS.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
 
         function loadInArtworks(artworks) {
@@ -2317,7 +2317,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                         margin: '1px',
                     });
                     $(catalogPickerArtworks).append(artHolder);
-                    LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+                    TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
 
                     $(artHolderImageHolder).addClass('artHolderImageHolder');
                     $(artHolderImageHolder).css({
@@ -2332,7 +2332,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
 
                     // create image for artwork holder
                     $(artHolderImage).addClass('artHolderImage');
-                    $(artHolderImage).attr('src', LADS.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
+                    $(artHolderImage).attr('src', TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
                     $(artHolderImage).css({
                         position: 'absolute',
                         'width': 'auto',
@@ -2403,7 +2403,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 $(".mediaHolder").detach();
                 drawAssociatedMedia(mediaCache[selected], assMediasingleDoubleclick, artworkAMDocfrag);
                 associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
-                LADS.Util.searchData($('.associatedsearchbar').val(), '.mediaHolder', IGNORE_IN_SEARCH);
+                TAG.Util.searchData($('.associatedsearchbar').val(), '.mediaHolder', IGNORE_IN_SEARCH);
             });
         }
 
@@ -2441,8 +2441,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                         positionX = timeManager.getCurrentPx();
                         displayLength = 5;
                         dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                        newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                        if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
+                        newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                        if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                             newDisplay.setIn(0);
                             newDisplay.setOut(0);
                             newDisplay.setMain(dispLen);
@@ -2559,13 +2559,13 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
 
             mediaHolderImage.addClass('mediaHolderImage');                              // create the thumbnail to show in the media holder
             if (media.Metadata.ContentType === 'Audio') {
-                mediaHolderImage.attr('src', 'images/audio_icon.svg');
+                mediaHolderImage.attr('src', tagPath + 'images/audio_icon.svg');
             } else if (media.Metadata.ContentType === 'Video') {
-                mediaHolderImage.attr('src', (media.Metadata.Thumbnail && !media.Metadata.Thumbnail.match(/.mp4/)) ? LADS.Worktop.Database.fixPath(media.Metadata.Thumbnail) : 'images/video_icon.svg');
+                mediaHolderImage.attr('src', (media.Metadata.Thumbnail && !media.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(media.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg');
             } else if (media.Metadata.ContentType === 'Image') {
-                mediaHolderImage.attr('src', media.Metadata.Thumbnail ? LADS.Worktop.Database.fixPath(media.Metadata.Thumbnail) : 'images/image_icon.svg');
+                mediaHolderImage.attr('src', media.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(media.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg');
             } else {                                                                    //text associated media without any media...
-                mediaHolderImage.attr('src', 'images/text_icon.svg');
+                mediaHolderImage.attr('src', tagPath + 'images/text_icon.svg');
             }
             mediaHolderImage.css({
                 position: 'absolute',
@@ -2659,10 +2659,10 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         searchbar.attr('type', 'text');
         searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
         searchbar.keyup(function () {
-            LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+            TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
         });
         searchbar.change(function () {
-            LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+            TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
         });
 
         $(catalogPickerExhibitions).addClass('catalogPickerExhibitions');
@@ -2732,7 +2732,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         loading.text('Loading...');
         loading.attr('id', 'loadingLabel');
 
-        circle.attr('src', 'images/icons/progress-circle.gif');
+        circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
         circle.css({
             'height': '12px',
             'width': 'auto',
@@ -2741,7 +2741,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         });
         loading.append(circle);
 
-        LADS.Worktop.Database.getExhibitions(function (exhibitions) {
+        TAG.Worktop.Database.getExhibitions(function (exhibitions) {
             var origName;
             var name;
             var hasSpace = false;
@@ -2803,8 +2803,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     catalogPickerImport.disabled = selectedArtworks.length ? false : true;
                     $('.artButton').hide().data('visible', false);
                     $('.' + selected).show().data('visible', true);
-                    LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
-                    LADS.Worktop.Database.getArtworksIn(exhibHolder.attr('id'), loadInArtworks, function () {
+                    TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+                    TAG.Worktop.Database.getArtworksIn(exhibHolder.attr('id'), loadInArtworks, function () {
                         console.log("error");
                     }, function () {
                         console.log("error2");
@@ -2812,7 +2812,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 });
             }
 
-            LADS.Worktop.Database.getArtworks(loadInArtworks, function () {
+            TAG.Worktop.Database.getArtworks(loadInArtworks, function () {
                 console.log("error");
             }, function () {
                 console.log("error2");
@@ -2883,7 +2883,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                         margin: '1px',
                     });
                     $('.catalogPickerArtworks').append(artHolder);
-                    LADS.Util.searchData($('#searchbar').val(), '.artButton', IGNORE_IN_SEARCH);
+                    TAG.Util.searchData($('#searchbar').val(), '.artButton', IGNORE_IN_SEARCH);
 
                     $(artHolderImageHolder).addClass('artHolderImageHolder');
                     $(artHolderImageHolder).css({
@@ -2897,7 +2897,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
 
                     // create image for artwork holder
                     $(artHolderImage).addClass('artHolderImage');
-                    $(artHolderImage).attr('src', LADS.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
+                    $(artHolderImage).attr('src', TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
                     $(artHolderImage).css({
                         width: '100%',
                         height: '100%',
@@ -3012,8 +3012,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     positionX = timeManager.getCurrentPx();
                     displayLength = 5;
                     dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                    newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                    if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
+                    newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                    if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                         newDisplay.setIn(0);
                         newDisplay.setOut(0);
                         newDisplay.setMain(dispLen);
@@ -3060,12 +3060,12 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             catalogPickerImport.disabled = selectedArtworks.length ? false : true;
             $('.catalogPickerArtworks').empty();
             $('.artButton').show().data('visible', true);
-            LADS.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+            TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
             selectedExhib = null;
             if (allArtworks) {
                 loadInArtworks(allArtworks);
             } else {
-                LADS.Worktop.Database.getArtworks(loadInArtworks, function () {
+                TAG.Worktop.Database.getArtworks(loadInArtworks, function () {
                     console.log("error");
                 }, function () {
                     console.log("error2");
@@ -3107,8 +3107,8 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id);
                     displayLength = 5;
                     var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                    var newDisplay = (dispLen < LADS.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - LADS.TourAuthoring.Constants.displayEpsilon), LADS.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                    if (dispLen < 1.5 && dispLen >= LADS.TourAuthoring.Constants.displayEpsilon) {
+                    var newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                    if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                         newDisplay.setIn(0);
                         newDisplay.setOut(0);
                         newDisplay.setMain(dispLen);
@@ -3325,7 +3325,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                     return;
                 }
                 var undoMgr = currentInkController.getInkUndoManager();
-                var command = LADS.TourAuthoring.Command({
+                var command = TAG.TourAuthoring.Command({
                     execute: function () {
                         textArea.val(currText);
                         updateAreaText();
@@ -3645,7 +3645,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                    return;
                }
                var undoMgr = currentInkController.getInkUndoManager();
-               var command = LADS.TourAuthoring.Command({
+               var command = TAG.TourAuthoring.Command({
                    execute: function () {
                        textEditArea.val(currEditText);
                        updateEditAreaText();
@@ -4506,7 +4506,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 return;
             }
             var undoMgr = currentInkController.getInkUndoManager();
-            var command = LADS.TourAuthoring.Command({
+            var command = TAG.TourAuthoring.Command({
                 execute: function () {
                     $('#writeAnnotation').val(currText);
                     // updateAreaText();
@@ -4675,7 +4675,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            brushLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, brushSlider);
-           //currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+           //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
        });
        
        // brush width slider drag handler
@@ -4689,7 +4689,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                }
                currentInkController.updatePenWidth("brushSlider");
                currentInkController.setEraserWidth(brushSliderPoint.attr('value'));
-               //currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+               //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
                brushLabel1.text(Math.round(brushSliderPoint.attr('value')) + "px");
            },
            appendTo: 'body'
@@ -4718,7 +4718,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            colorLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, colorDiv);
-           currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
            drawLabel.css({ 'color': 'black' });
            eraseLabel.css({ 'color': 'gray' });
            drawMode = 'draw';
@@ -4731,7 +4731,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
        $(item).attr('readonly', 'readonly');
        $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%'});
        item.onfocus = function () {
-           currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
        };
        $(item).on('keyup', function (event) {
            event.stopPropagation();
@@ -4743,7 +4743,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                myPicker.fromString("000000");
                myPicker.onImmediateChange = function () {
                    currentInkController.updatePenColor("brushColorToggle");
-                   currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+                   currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
                    $('.changeColor1')[0].innerHTML = "#"+$("#brushColorToggle").attr("value");
                };
            }, false);
@@ -4785,7 +4785,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            opacityLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, opacitySlider);
-           currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
            drawLabel.css({ 'color': 'black' });
            eraseLabel.css({ 'color': 'gray' });
            drawMode = 'draw';
@@ -4932,7 +4932,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
              $(".thicknessLabel").css({ 'font-weight': 'normal' });
              brushEditLabel.css({ 'font-weight': 'bold' });
              updateToggle(drawEditArray, brushEditSlider);
-             //currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+             //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
          });
  
          // brush width slider drag handler
@@ -4945,7 +4945,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                      brushEditSliderPoint.attr('value', 7.0);
                  }
                  currentInkController.updatePenWidth("brushEditSlider");
-                 //currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+                 //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
                  brushEditLabel1.text(Math.round(brushEditSliderPoint.attr('value')) + "px");
              },
              appendTo: 'body'
@@ -4974,7 +4974,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
              $(".thicknessLabel").css({ 'font-weight': 'normal' });
              colorEditLabel.css({ 'font-weight': 'bold' });
              updateToggle(drawEditArray, colorEditDiv);
-             currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+             currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
              drawEditLabel.css({ 'color': 'black' });
              eraseEditLabel.css({ 'color': 'gray' });
              drawEditMode = 'draw';
@@ -4987,7 +4987,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
          $(itemEdit).attr('readonly', 'readonly');
          $(itemEdit).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%' });
          itemEdit.onfocus = function () {
-             currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+             currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
              drawEditLabel.css({ 'color': 'black' });
              eraseEditLabel.css({ 'color': 'gray' });
              drawEditMode = 'draw';
@@ -5003,7 +5003,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                  myEditDrawPicker.fromString("000000");
                  myEditDrawPicker.onImmediateChange = function () {
                      currentInkController.updatePenColor("brushEditColorToggle");
-                     currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+                     currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
                      drawEditLabel.css({ 'color': 'black' });
                      eraseEditLabel.css({ 'color': 'gray' });
                      drawEditMode = 'draw';
@@ -5300,7 +5300,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 currentInkController.setPenWidth(brushSliderPoint.attr('value'));
                 currentInkController.setEraserWidth(brushSliderPoint.attr('value'));
-                currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
                 brushLabel1.text(Math.round(brushSliderPoint.attr('value')) + "px");
 
                 // switch to draw mode
@@ -5348,7 +5348,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             colorLabel.css({ 'font-weight': 'bold' });
 
-            currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
             //  drawLabel.css({ 'color': 'black' });
             //  eraseLabel.css({ 'color': 'gray' });
 
@@ -5361,7 +5361,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
         $(item).attr('readonly', 'readonly');
         $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%' });
         item.onfocus = function () {
-            currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
         };
 
         $(item).on('keyup', function (event) {
@@ -5391,7 +5391,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 $('#brushColorToggle').attr('value', color);
                 $('.changeColor1').text($("#brushColorToggle").attr('value'));
                 $(item).css({ 'background-color': color, 'text': color });
-                currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
                 $('.changeColor1')[0].innerHTML = $("#brushColorToggle").attr("value");
                 $(item).css({ 'background-color': '#' + color, 'text': color });
 
@@ -5403,7 +5403,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
                 $('#brushColorToggle').attr('value', "000000");
                 $('.changeColor1').text("#" + $("#brushColorToggle").attr('value'));
                 currentInkController.setPenColor("#000000");
-                currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
                 $('.changeColor1')[0].innerHTML = "#" + $("#brushColorToggle").attr("value");
             }
         }
@@ -6324,7 +6324,7 @@ LADS.TourAuthoring.ComponentControls = function (spec, my) {
             //  myPicker.fromString("000000");
             //  myPicker.onImmediateChange = function () {
             //     currentInkController.updatePenColor("brushColorToggle");
-            //    currentInkController.set_mode(LADS.TourAuthoring.InkMode.draw);
+            //    currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
             //  $('.changeColor1')[0].innerHTML = "#" + $("#brushColorToggle").attr("value");
             //};
             var check = true; // if check becomes false, then a warning message appeared, do not proceed after trying to attach

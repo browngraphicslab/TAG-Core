@@ -1629,6 +1629,7 @@ TAG.Util.UI = (function () {
         getLocationList: getLocationList,
         popUpMessage: popUpMessage,
         PopUpConfirmation: PopUpConfirmation,
+        popupInputBox: popupInputBox,
         cgBackColor: cgBackColor,
         setUpBackButton: setUpBackButton,
         blockInteractionOverlay: blockInteractionOverlay,
@@ -2484,6 +2485,149 @@ TAG.Util.UI = (function () {
     }
 
     /**
+     * Create an input box popup
+     * @method popupInputBox
+     * @param {Object} options             some input options (callback function for confirm button, etc)
+     *            {Function} cancelAction    action to take on clicking "cancel"
+     *            {Function} confirmAction   action to take on clicking "confirm"
+     *            {jQuery obj} container     container used for styling the popup box
+     *            {String} message           message to show at top of popup
+     *            {String} placeholder       placeholder text inside input field
+     *            {String} confirmText       custom text for the "confirm" button
+     * @return {jQuery obj}                overly of popup box
+     */
+    function popupInputBox(options) {
+        var overlay = $(blockInteractionOverlay()),
+            cancelAction = function () {
+                options.cancelAction && options.cancelAction();
+                removeAll();
+            },
+            confirmAction = function () {
+                options.confirmAction && options.confirmAction(inputField.val()); // TODO iframe sanitize input here?
+                removeAll();
+            },
+            popupHandler = {
+                13: confirmAction
+            },
+            container = options.container || window,
+            currKeyHandler = globalKeyHandler[0],
+            popupBox = $(document.createElement('div')),
+            popupBoxSpecs = TAG.Util.constrainAndPosition($(container).width(), $(container).height(), {
+                center_h: true,
+                center_v: true,
+                width: 0.5,
+                height: 0.35,
+                max_width: 560,
+                max_height: 200,
+            }),
+            messageLabel = $(document.createElement('div')),
+            optionButtonDiv = $(document.createElement('div')),
+            inputField = $(document.createElement('input')),
+            message = options.message || '',
+            confirmButton = $(document.createElement('button')),
+            cancelButton = $(document.createElement('button')),
+            confirmButtonText = options.confirmText || '';
+
+        globalKeyHandler[0] = popupHandler; // TODO KEYHANDLER should we be prepending rather than overwriting first element? same with popupconfirmation above
+
+        popupBox.css({
+            position: 'absolute',
+            left: popupBoxSpecs.x + 'px',
+            top: popupBoxSpecs.y + 'px',
+            width: popupBoxSpecs.width + 'px',
+            height: popupBoxSpecs.height + 'px',
+            border: '3px double white',
+            'background-color': 'black'
+        });
+
+        messageLabel.css({
+            color: 'white',
+            'width': '80%',
+            'height': '30%',
+            'left': '10%',
+            'top': '12.5%',
+            'font-size': '0.6em',
+            'position': 'relative',
+            'text-align': 'center',
+            'word-wrap': 'break-word'
+        });
+
+        messageLabel.text(message);
+
+        inputField.css({
+            width: '60%',
+            left: '20%',
+            position: 'relative'
+        });
+        inputField.attr({
+            type: 'text',
+            placeholder: options.placeholder || 'Paste URL here...'
+        });
+
+        optionButtonDiv.addClass('optionButtonDiv');
+        optionButtonDiv.css({
+            'height': '20%',
+            'width': '100%',
+            'position': 'absolute',
+            'bottom': '10%',
+            'right': '5%'
+        });
+
+        confirmButton.css({
+            'color': 'white',
+            'padding': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'position': 'relative',
+            'float': "left",
+            'margin-left': '12%',
+            'margin-top': '-1%'
+
+        });
+        confirmButtonText = !confirmButtonText ? "Confirm" : confirmButtonText;
+        confirmButton.text(confirmButtonText);
+
+        confirmButton.on('click', confirmAction);
+
+        confirmButton.on('keydown', function (event) { // TODO KEYHANDLER do we need a separate keydown handler for this? should be handled in global key handling
+            switch (event.which) {
+                case 13: // enter key
+                    confirmAction();
+            }
+        });
+
+        cancelButton.css({
+            'color': 'white',
+            'padding': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'position': 'relative',
+            'float': "right",
+            'margin-right': '3%',
+            'margin-top': '-1%'
+        });
+        cancelButton.text('Cancel');
+        cancelButton.on('click', cancelAction);
+
+        function removeAll() {
+            overlay.fadeOut(500, function () {
+                overlay.remove();
+            });
+            globalKeyHandler[0] = currKeyHandler;
+        }
+
+        optionButtonDiv.append(cancelButton);
+        optionButtonDiv.append(confirmButton);
+
+        popupBox.append(messageLabel);
+        popupBox.append(inputField);
+        popupBox.append(optionButtonDiv);
+
+        overlay.append(popupBox);
+        return overlay;
+    }
+
+    /**
      * Following functions transition between pages while in splitscreen mode
      */
     /**
@@ -2887,37 +3031,60 @@ TAG.Util.UI = (function () {
     }
 
     //gets JSON encoded location list from artwork XML and displays the information
-    function getLocationList(metadata) {
+    function getLocationList(metadata) { //TODO DW - update/review this
         var locationList;
         //parsing the location field in the artwork metadata to obtain the pushpin information
-        var data = metadata.Location;
+        var data = metadata.RichLocationHistory || metadata.Location;
         try {
             locationList = JSON.parse(data);
         } catch (e) {
             console.log('artwork location metadata cannot be parsed.');
             locationList = [];
+            return locationList;
         }
 
-        // load dates and modernize old date objects
-        for (var i = 0; i < locationList.length; i++) {
-            var locationItem = locationList[i];
-            if (locationItem.date) {
-                // convert old dates to new dates
-                if (locationItem.date.getFullYear) {
-                    var y = date.getUTCFullYear();
-                    var m = date.getUTCMonth();
-                    var d = date.getUTCDay();
-                    locationItem.date = {
-                        year: y,
-                        month: m,
-                        day: d,
+        if (locationList.locations) {
+            // load dates and modernize old date objects
+            for (var i = 0; i < locationList.locations.length; i++) {
+                var locationItem = locationList.locations[i];
+                if (locationItem.date) {
+                    // convert old dates to new dates
+                    if (locationItem.date.getFullYear) {
+                        var y = date.getUTCFullYear();
+                        var m = date.getUTCMonth();
+                        var d = date.getUTCDay();
+                        locationItem.date = {
+                            year: y,
+                            month: m,
+                            day: d,
+                        }
                     }
+                    //no longer needed
+                    //locationItem.pushpin.date = locationItem.date;
                 }
-                locationItem.pushpin.date = locationItem.date;
             }
+            return locationList.locations;
+        } else {
+            // load dates and modernize old date objects
+            for (var i = 0; i < locationList.length; i++) {
+                var locationItem = locationList[i];
+                if (locationItem.date) {
+                    // convert old dates to new dates
+                    if (locationItem.date.getFullYear) {
+                        var y = date.getUTCFullYear();
+                        var m = date.getUTCMonth();
+                        var d = date.getUTCDay();
+                        locationItem.date = {
+                            year: y,
+                            month: m,
+                            day: d,
+                        }
+                    }
+                    locationItem.pushpin.date = locationItem.date;
+                }
+            }
+            return locationList;
         }
-
-        return locationList;
     }
 
     var selectCSS = {
@@ -3369,22 +3536,20 @@ TAG.Util.UI = (function () {
 
                 if (comp.Metadata.ContentType === 'Audio') {
                     compHolderImage.attr('src', tagPath+'images/audio_icon.svg');
-                }
-                else if (comp.Metadata.ContentType === 'Video' || comp.Type === 'Video' || comp.Metadata.Type === 'VideoArtwork') {
+                } else if (comp.Metadata.ContentType === 'Video' || comp.Type === 'Video' || comp.Metadata.Type === 'VideoArtwork') {
                     compHolderImage.attr('src', (comp.Metadata.Thumbnail && !comp.Metadata.Thumbnail.match(/.mp4/)) ? FIXPATH(comp.Metadata.Thumbnail) : 'images/video_icon.svg');
                     shouldAppendTII = true;
                     typeIndicatorImage.attr('src', tagPath+'images/icons/catalog_video_icon.svg');
-                }
-                else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
+                } else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/image_icon.svg');
-                }
-                else if (comp.Type === 'Empty') { // tours....don't know why the type is 'Empty'
-                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/icons/catalog_tour_icon.svg');
+                } else if (comp.Metadata.ContentType === 'iframe') {
+                    compHolderImage.attr('src', tagPath + 'images/icons/audio_icon.svg'); // TODO iframe fix this with new icon
+                } else if (comp.Type === 'Empty') { // tours....don't know why the type is 'Empty'
+                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;
-                    typeIndicatorImage.attr('src', tagPath+'images/icons/catalog_tour_icon.svg');
-                }
-                else {//text associated media without any media...
-                    compHolderImage.attr('src', tagPath+'images/text_icon.svg');
+                    typeIndicatorImage.attr('src', tagPath + 'images/icons/catalog_tour_icon.svg');
+                } else {//text associated media without any media...
+                    compHolderImage.attr('src', tagPath + 'images/text_icon.svg');
                 }
 
                 // if (compHolderImage.height() / compHolderImage.width() > 1) {
@@ -3941,6 +4106,7 @@ TAG.Util.RLH = function (input) {
                         position: 'relative',
                         width: '100%',
                         height: '7%',
+                        'font-size': '.5em'
                     })
                     .appendTo(locationPanel);
 
@@ -4004,7 +4170,7 @@ TAG.Util.RLH = function (input) {
                     .css({
                         'font-size': '2.5em',
                         position: 'absolute',
-                        top: '0%',
+                        top: '15%',
                         height: '90%'
                     })
                     .appendTo(metadataContainer);
@@ -4057,6 +4223,7 @@ TAG.Util.RLH = function (input) {
         mapContainer = $(document.createElement('div'))
                     .attr('id', 'locationHistoryMapContainer')
                     .css({
+                        top:'2%',
                         position: 'absolute',
                         width: '80%',
                         height: '100%',
@@ -4107,7 +4274,7 @@ TAG.Util.RLH = function (input) {
                         position: 'relative',
                         left: '10%',
                         width: '80%',
-                        top: '2%',
+                        top: '3%',
                         height: '6%',
                         'margin-bottom': '1%'
                     })
@@ -4148,6 +4315,7 @@ TAG.Util.RLH = function (input) {
                         })
                         .appendTo(buttonsRegion)
                         .text('Sort By Date');
+
             importMapButton = $(document.createElement('button'))
                     .attr({
                         'id': 'locationHistoryImportMapButton',
@@ -4170,15 +4338,37 @@ TAG.Util.RLH = function (input) {
                             'margin-right': '10px',
                             float: 'right'
                         })
-                        .appendTo(buttonsRegion)
-                        .text('Delete/Hide Map'); // TODO have the text change depending on the map
+                        .appendTo(buttonsRegion);
+
+            dotsContainer = $(document.createElement('div'))
+                            .attr('id', 'locationHistoryDotsContainer')
+                            .css({
+                                'margin-left': 'auto',
+                                'margin-right': 'auto',
+                                'width': '30%',
+                                'height': '50%',
+                                'top': '0%',
+                                'text-align': 'center'
+                            })
+                            .appendTo(buttonsRegion);
 
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
+                var mapName = function () {
+                    if (mapGuids[currentIndex]) {
+                        if (mapDoqs[mapGuids[currentIndex]].Name.length > 20) {
+                            return "'" + mapDoqs[mapGuids[currentIndex]].Name.substring(0, 20) + '...' + "'";
+                        } else {
+                            return "'" + mapDoqs[mapGuids[currentIndex]].Name + "'";
+                        }
+                    } else {
+                        return 'Custom Map';
+                    }
+                }();
                 if (!(currentIndex === 0)) { //if it's not the bing map being displayed, confirm the deletion
                     var overlay = LADS.Util.UI.PopUpConfirmation(function () {
                         deleteMap();
-                    }, "Are you sure you want to delete this map and all locations associated with it?", "Yes");
+                    }, "Are you sure you want to delete " + mapName + " and all locations associated with it?", "Yes");
                     root.append(overlay);
                     $(overlay).show();
                     evt.stopPropagation();
@@ -4189,34 +4379,28 @@ TAG.Util.RLH = function (input) {
             addLocationButton.on('click', addLocation);
             sortLocationsByTitleButton.on('click', sortLocationsByTitle);
             sortLocationsByDateButton.on('click', sortLocationsByDate);
-        }
-
-        dotsContainer = $(document.createElement('div'))
-                        .attr('id', 'locationHistoryDotsContainer')
-                        .css({
-                            position: 'absolute',
-                            'width': '30%',
-                            'height': '50%',
-                            'top': '0%',
-                            'left': '40%',
-                            'text-align': 'center'
-                        })
-                        .appendTo(buttonsRegion);
-
-        if (!input.authoring) {
-            dotsContainer.css({
-                'width': '40%',
-                'left': '30%'
-            });
+        } else {
+            dotsContainer = $(document.createElement('div'))
+                            .attr('id', 'locationHistoryDotsContainer')
+                            .css({
+                                position: 'absolute',
+                                'width': '40%',
+                                'height': '50%',
+                                'top': '0%',
+                                'left': '30%',
+                                'text-align': 'center'
+                            })
+                            .appendTo(buttonsRegion);
         }
 
         locationsRegion = $(document.createElement('div'))
                     .attr('id', 'locationHistoryLocationsRegion')
                     .css({
+                        top:'1%',
                         position: 'relative',
                         width: '80%',
                         left: '10%',
-                        height: '33%',
+                        height: '32%',
                         color: 'white',
                         'font-size': '11',
                         'font-weight': '300',
@@ -4268,7 +4452,7 @@ TAG.Util.RLH = function (input) {
                 'font-size': '40px',
                 'vertical-align':'middle',
                 position: 'absolute',
-                top: '0%',
+                top: '15%',
                 height: '90%',
                 'z-index': '50',
                 color: 'white'
@@ -4397,10 +4581,22 @@ TAG.Util.RLH = function (input) {
         var index = currentIndex;
         if (mapGuids[index]) {
             LADS.Worktop.Database.changeMap(mapDoqs[mapGuids[index]], {
-                Name: nameInput.val(),
+                Name: nameInput.val() || 'Custom Map',
                 AdditionalInfo: additionalInfoInput.val(),
                 //Description: mapDescriptionInput.val()
             }, function () {
+                var mapName = function () {
+                    if (nameInput.val()) {
+                        if (nameInput.val().length > 20) {
+                            return "'" + nameInput.val().substring(0, 20) + '...' + "'";
+                        } else {
+                            return "'" + nameInput.val() + "'";
+                        }
+                    } else {
+                        return "'Custom Map'";
+                    }
+                }();
+                deleteButton && deleteButton.text('Delete ' + mapName);
                 LADS.Util.removeProgressCircle(progCirc);
                 LADS.Worktop.Database.getDoq(mapDoqs[mapGuids[index]].Identifier, function (newMap) {
                     mapDoqs[mapGuids[index]] = newMap;
@@ -4483,7 +4679,18 @@ TAG.Util.RLH = function (input) {
                 deleteButton && deleteButton.text('Hide Bing Map');
             }
         } else {
-            deleteButton && deleteButton.text('Delete Map');
+            var mapName = function () {
+                if (mapDoqs[guid].Name) {
+                    if (mapDoqs[guid].Name.length > 20) {
+                        return "'" + mapDoqs[guid].Name.substring(0, 20) + '...' + "'";
+                    } else {
+                        return "'" + mapDoqs[guid].Name + "'";
+                    }
+                } else {
+                    return 'Custom Map';
+                }
+            }();
+            deleteButton && deleteButton.text('Delete ' + mapName);
         }
     }
 
@@ -4830,7 +5037,8 @@ TAG.Util.RLH = function (input) {
                 container.css({
                     position: 'relative',
                     width: '100%',
-                    'padding-left': '10px'
+                    'padding-left': '10px',
+                    'font-size':'20px'
                 });
 
                 container.text(result.address.formattedAddress);
@@ -5009,7 +5217,7 @@ TAG.Util.RLH = function (input) {
                 w = parseFloat(pushpin.css('width')),
                 h = parseFloat(pushpin.css('height'));
 
-            LADS.Util.makeManipulatable(pushpin[0], {
+            TAG.Util.makeManipulatable(pushpin[0], {
                 onManipulate: function (res) {
                     if (editing) {
                         if (isOverlay) {
@@ -5045,22 +5253,23 @@ TAG.Util.RLH = function (input) {
                     }
                 },
                 onRelease: function (evt) {
-                    //add the overlay back once mouse is released
-                    isOverlay = true;
+                    if (editing && !isOverlay) {
+                        //add the overlay back once mouse is released
+                        isOverlay = true;
 
-                    //if pushpin is not within bounds of image, it snaps back to the edge on release
-                    if (!annotImg.isInImageBounds(pushpin)) {
-                        var coord = annotImg.returnElementToBounds(pushpin);
-                        pushpin.css("top", (coord.y - h) + "px");
-                        pushpin.css("left", (coord.x - 0.5 * w) + "px");
-                        annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
-                    } else {
-                        annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
+                        //if pushpin is not within bounds of image, it snaps back to the edge on release
+                        if (!annotImg.isInImageBounds(pushpin)) {
+                            var coord = annotImg.returnElementToBounds(pushpin);
+                            pushpin.css("top", (coord.y - h) + "px");
+                            pushpin.css("left", (coord.x - 0.5 * w) + "px");
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
+                        } else {
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
+                        }
+                        annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
                     }
-
-                    annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
                 },
-                onScroll: function (delta, pivot) { //allow scrolling of the map while dragging a pin
+                onScroll: function (delta, pivot) { //allow scrolling of the map while dragging a pin (or when the mouse is on top of a pin)
                     annotImg.scroll(delta, { //use the location of the pushpin for the pivot
                         x: w + parseFloat(pushpin.css('left')),
                         y: h + parseFloat(pushpin.css('top'))
@@ -5168,7 +5377,7 @@ TAG.Util.RLH = function (input) {
         pushpin['container'] = container;
 
         container.css({
-            margin: '10px 0px 20px 0px',
+            margin: '0px 0px 10px 0px',
             position: 'relative',
             width: '97%',
         });
@@ -5293,28 +5502,29 @@ TAG.Util.RLH = function (input) {
 
                     //scroll to the correct position
                     locationsRegion.scrollTop(0);
-                    locationsRegion.scrollTop(editingFormElements.container.position().top);
+                    locationsRegion.scrollTop(editingFormElements.container.position().top + 20);
                 }
             });
         }
 
         titleContainer.css({
             display: 'inline-block',
-            margin: '0px 20px 0px 10px',
+            margin: '0px 10px 0px 10px',
             position: 'relative',
             'vertical-align': 'middle',
             'font-size': '24px'
         });
-        titleContainer.text((location.title || '(No Title)') + ',');
+        titleContainer.text((location.title ? location.title + (location.date ? ',' : '') : (location.date ? '' : '(Untitled Location)')));
+        (!location.title && titleContainer.css({margin:'0px 0px 0px 10px'}));
 
         dateContainer.css({
             display: 'inline-block',
-            margin: '0px 0px 0px 10px',
+            margin: '0px 0px 0px 0px',
             position: 'relative',
             'vertical-align': 'middle',
             'font-size': '24px'
         });
-        dateContainer.text(location.date || '(No Date)');
+        dateContainer.text(location.date || '');
 
         descContainer.css({
             display: 'none',
@@ -5830,10 +6040,11 @@ TAG.Util.RLH = function (input) {
 
     }
 
-    /**
-     * Helper methods for selecting/deselecting pins and locations on maps
-     */
 
+    /**
+     * De-select a location pin and the corresponding location list item
+     * @method deselect
+     */
     function deselect(location, pushpin, custom) {
         location.descContainer.css({ 'display': 'none' });
         $('.locationItemContainer').css('background-color', 'rgba(0,0,0,0)');
@@ -5844,6 +6055,10 @@ TAG.Util.RLH = function (input) {
         }
     }
 
+    /**
+     * Select a location pin and the corresponding location list item
+     * @method select
+     */
     function select(location, pushpin, custom) {
         var l;
 

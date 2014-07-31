@@ -1,7 +1,5 @@
 @import 'common.styl'
 
-sideBarWidth = 22%
-
 //function
 headerTitle(size)
 	font-size size
@@ -169,7 +167,7 @@ headerTitle(size)
 	width 80%
 	height 14%
 	background-color rgba(0,0,0,.9)
-	bottom 0%
+	bottom -10%
 	left 10%
 	position absolute
 	vertical-align middle
@@ -269,10 +267,11 @@ headerTitle(size)
 	left 0px
 	position absolute
 	top 0px
-	width sideBarWidth !important // we shouldn't have to use !important
+	width 22%
 	z-index 100
 
 #artmodeRoot #sideBarInfo
+    position absolute
 	width 100%
 	height 73%
 	margin-bottom 2%
@@ -296,7 +295,6 @@ headerTitle(size)
 #artmodeRoot #togglerImage
 	position absolute
 	top 30%
-	left 0%
 	width 72%
 	height 42%
 
@@ -418,8 +416,8 @@ headerTitle(size)
 	width 95%
 	color #dddddd
 	padding-right 20px
-	overflow-y scroll
-	height 170px
+	overflow-y auto
+
 
 #artmodeRoot .exhibitionPicker
 	wh 40%
