@@ -260,6 +260,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadingArea.hide();
     }
 
+    /**
+     * Applies customization changes to main divs
+     * @method applyCustomization
+     */
     function applyCustomization() {
         var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR);
         $('.primaryFont').css({
@@ -275,6 +279,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'font-family': FONT
         });
     }
+
     /**
      * Shows collection and title
      * @method loadCollection

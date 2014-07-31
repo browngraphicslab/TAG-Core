@@ -30,6 +30,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,
+        PRIMARY_FONT_COLOR = TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        FONT = TAG.Worktop.Database.getMuseumFontFamily(),
 
         // input options
         doq            = options.doq,              // the artwork doq
@@ -482,6 +484,24 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         infoTitle.text(doq.Name);
         infoArtist.text(doq.Metadata.Artist);
         infoYear.text(doq.Metadata.Year);
+        infoTitle.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            'font-family': FONT
+        });
+
+        infoArtist.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            'font-family': FONT
+        });
+
+        infoYear.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            'font-family': FONT
+        });
+        locHistory.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            'font-family': FONT
+        });
 
         // splitscreen
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
@@ -580,6 +600,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 infoCustom = $(document.createElement('div'));
                 infoCustom.addClass('infoCustom');
                 infoCustom.text(fieldTitle + ': ' + fieldValue);
+                infoCustom.css({
+                    'color': '#' + PRIMARY_FONT_COLOR,
+                    'font-family': FONT
+                });
                 infoCustom.appendTo(info);
             }
         }
@@ -1154,6 +1178,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             i;
        
         label.text(title);
+        label.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            'font-family': FONT
+        });
         toggle.attr({
             src: tagPath+'images/icons/plus.svg',
             expanded: false
