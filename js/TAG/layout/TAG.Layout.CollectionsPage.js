@@ -1546,7 +1546,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             artNode,
             yearKey,
             i;
-        comparator = sortComparator('yearKey');
+        comparator = sortComparator('yearKey', 'nameKey');
         valuation  = sortValuation('yearKey');
         avlTree = new AVLTree(comparator, valuation);
         for (i = 0; i < artworks.length; i++) {
@@ -1554,11 +1554,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!isNaN(yearKey)){
                 artNode = {
                     artwork: artworks[i],
+                    nameKey: artworks[i].Name,
                     yearKey: artworks[i].Type === 'Empty' ? Number.POSITIVE_INFINITY : yearKey //Tours set to Infinity to show up at end of 'Year' sort
-                    };
+                };
             } else{                        
                 artNode = {
                     artwork: artworks[i],
+                    nameKey: artworks[i].Name,
                     yearKey: Number.POSITIVE_INFINITY //Set unintelligible dates to Infinity to show up at end of 'Year' sort 
                 };
             }
