@@ -35,7 +35,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             y: rootWidth/2
         },
         doManipulation = true,      //used in RLH to prevent manipulation of image in certain cases
-        aspectRatio = rootWidth/rootHeight,
+        aspectRatio = 1, //TODO - how to find this
         
         // misc uninitialized variables
         viewer,
@@ -200,7 +200,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
 
     function dzManip(res) {
-        console.log('manip');
         var scale = res.scale,
             trans = res.translation,
             pivot = res.pivot;
@@ -282,11 +281,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method isInImageBounds
     */
     function isInImageBounds(element) {
+
         var val = false;
         var point = locationOf(element);
-        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1 / aspectRatio) + .05)) {
+        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1/aspectRatio) + .05)) {
             val = true;
         }
+        //console.log(point.x + ', ' + point.y);
+        //console.log((1 / aspectRatio) + .05);
+        //console.log('inBounds= ' + val);
         return val;
     }
 

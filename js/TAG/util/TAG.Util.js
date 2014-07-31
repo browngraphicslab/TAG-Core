@@ -2889,37 +2889,60 @@ TAG.Util.UI = (function () {
     }
 
     //gets JSON encoded location list from artwork XML and displays the information
-    function getLocationList(metadata) {
+    function getLocationList(metadata) { //TODO DW - update/review this
         var locationList;
         //parsing the location field in the artwork metadata to obtain the pushpin information
-        var data = metadata.Location;
+        var data = metadata.RichLocationHistory || metadata.Location;
         try {
             locationList = JSON.parse(data);
         } catch (e) {
             console.log('artwork location metadata cannot be parsed.');
             locationList = [];
+            return locationList;
         }
 
-        // load dates and modernize old date objects
-        for (var i = 0; i < locationList.length; i++) {
-            var locationItem = locationList[i];
-            if (locationItem.date) {
-                // convert old dates to new dates
-                if (locationItem.date.getFullYear) {
-                    var y = date.getUTCFullYear();
-                    var m = date.getUTCMonth();
-                    var d = date.getUTCDay();
-                    locationItem.date = {
-                        year: y,
-                        month: m,
-                        day: d,
+        if (locationList.locations) {
+            // load dates and modernize old date objects
+            for (var i = 0; i < locationList.locations.length; i++) {
+                var locationItem = locationList.locations[i];
+                if (locationItem.date) {
+                    // convert old dates to new dates
+                    if (locationItem.date.getFullYear) {
+                        var y = date.getUTCFullYear();
+                        var m = date.getUTCMonth();
+                        var d = date.getUTCDay();
+                        locationItem.date = {
+                            year: y,
+                            month: m,
+                            day: d,
+                        }
                     }
+                    //no longer needed
+                    //locationItem.pushpin.date = locationItem.date;
                 }
-                locationItem.pushpin.date = locationItem.date;
             }
+            return locationList.locations;
+        } else {
+            // load dates and modernize old date objects
+            for (var i = 0; i < locationList.length; i++) {
+                var locationItem = locationList[i];
+                if (locationItem.date) {
+                    // convert old dates to new dates
+                    if (locationItem.date.getFullYear) {
+                        var y = date.getUTCFullYear();
+                        var m = date.getUTCMonth();
+                        var d = date.getUTCDay();
+                        locationItem.date = {
+                            year: y,
+                            month: m,
+                            day: d,
+                        }
+                    }
+                    locationItem.pushpin.date = locationItem.date;
+                }
+            }
+            return locationList;
         }
-
-        return locationList;
     }
 
     var selectCSS = {
@@ -3943,6 +3966,7 @@ TAG.Util.RLH = function (input) {
                         position: 'relative',
                         width: '100%',
                         height: '7%',
+                        'font-size': '.5em'
                     })
                     .appendTo(locationPanel);
 
@@ -4006,7 +4030,7 @@ TAG.Util.RLH = function (input) {
                     .css({
                         'font-size': '2.5em',
                         position: 'absolute',
-                        top: '0%',
+                        top: '15%',
                         height: '90%'
                     })
                     .appendTo(metadataContainer);
@@ -4191,7 +4215,7 @@ TAG.Util.RLH = function (input) {
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
                 var mapName = function () {
-                    if (mapDoqs[mapGuids[currentIndex]].Name) {
+                    if (mapGuids[currentIndex]) {
                         if (mapDoqs[mapGuids[currentIndex]].Name.length > 20) {
                             return "'" + mapDoqs[mapGuids[currentIndex]].Name.substring(0, 20) + '...' + "'";
                         } else {
@@ -4220,10 +4244,10 @@ TAG.Util.RLH = function (input) {
                             .attr('id', 'locationHistoryDotsContainer')
                             .css({
                                 position: 'absolute',
-                                'width': '30%',
+                                'width': '40%',
                                 'height': '50%',
                                 'top': '0%',
-                                'left': '40%',
+                                'left': '30%',
                                 'text-align': 'center'
                             })
                             .appendTo(buttonsRegion);
@@ -4288,7 +4312,7 @@ TAG.Util.RLH = function (input) {
                 'font-size': '40px',
                 'vertical-align':'middle',
                 position: 'absolute',
-                top: '0%',
+                top: '15%',
                 height: '90%',
                 'z-index': '50',
                 color: 'white'
@@ -4873,7 +4897,8 @@ TAG.Util.RLH = function (input) {
                 container.css({
                     position: 'relative',
                     width: '100%',
-                    'padding-left': '10px'
+                    'padding-left': '10px',
+                    'font-size':'20px'
                 });
 
                 container.text(result.address.formattedAddress);
@@ -5087,9 +5112,8 @@ TAG.Util.RLH = function (input) {
                         //otherwise the location of the pushpin is not updated with manipulation
                     }
                 },
-                onRelease: function (evt) {//TODO - causing weird things to happen when pushpin is clicked?
-                    annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
-                    if (editing) {
+                onRelease: function (evt) {
+                    if (editing && !isOverlay) {
                         //add the overlay back once mouse is released
                         isOverlay = true;
 
@@ -5102,6 +5126,7 @@ TAG.Util.RLH = function (input) {
                         } else {
                             annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
                         }
+                        annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
                     }
                 },
                 onScroll: function (delta, pivot) { //allow scrolling of the map while dragging a pin (or when the mouse is on top of a pin)
@@ -5344,21 +5369,22 @@ TAG.Util.RLH = function (input) {
 
         titleContainer.css({
             display: 'inline-block',
-            margin: '0px 20px 0px 10px',
+            margin: '0px 10px 0px 10px',
             position: 'relative',
             'vertical-align': 'middle',
             'font-size': '24px'
         });
-        titleContainer.text((location.title || '(No Title)') + ',');
+        titleContainer.text((location.title ? location.title + (location.date ? ',' : '') : (location.date ? '' : '(Untitled Location)')));
+        (!location.title && titleContainer.css({margin:'0px 0px 0px 10px'}));
 
         dateContainer.css({
             display: 'inline-block',
-            margin: '0px 0px 0px 10px',
+            margin: '0px 0px 0px 0px',
             position: 'relative',
             'vertical-align': 'middle',
             'font-size': '24px'
         });
-        dateContainer.text(location.date || '(No Date)');
+        dateContainer.text(location.date || '');
 
         descContainer.css({
             display: 'none',

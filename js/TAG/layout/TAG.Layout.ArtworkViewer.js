@@ -22,10 +22,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         backButton          = root.find('#backButton'),
         linkButton          = root.find('#linkButton'),
         linkButtonContainer = root.find('#linkContainer'),
-        locHistoryDiv       = root.find('#locationHistoryDiv'),
+        //locHistoryDiv       = root.find('#locationHistoryDiv'),
         info                = root.find('#info'),
         locHistoryToggle    = root.find('#locationHistoryToggle'),
-        locHistory          = root.find('#locationHistory'),
+        //locHistory          = root.find('#locationHistory'),
         locHistoryContainer = root.find('#locationHistoryContainer'),
 
         // constants
@@ -1032,7 +1032,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      */
     function initlocationHistory() {
         var RLH,
-            isOpen = false;
+            isOpen = false,
+            locationPanelDiv;
 
         locHistoryContainer.on('click', function () { toggleLocationOpen(); });
 
@@ -1042,24 +1043,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             root: root,
             authoring: false
         });
-        locHistoryDiv = RLH.init();
+        locationPanelDiv = RLH.init();
 
         function toggleLocationOpen() {
             isOpen ? locationClose() : locationOpen();
         }
 
-        function locationOpen() {
+        function locationOpen() { //TODO why isn't this sliding open?
             if (!isOpen) {
+                locHistoryToggle.css({'display':'none'});
                 toggler.css('display', 'none');
-                locHistoryDiv.show("slide", { direction: 'left' }, 500);
-                locHistoryDiv.css({ display: 'inline' });
+                locationPanelDiv.show("slide", { direction: 'left' }, 500);
+                locationPanelDiv.css({ display: 'inline' });
                 isOpen = true;
             }
         }
 
         function locationClose() {
             if (isOpen) {
-                locHistoryDiv.hide("slide", { direction: 'left' }, 500, function () {
+                locationPanelDiv.hide("slide", { direction: 'left' }, 500, function () {
                     toggler.css('display', 'block');
                 });
                 isOpen = false;
