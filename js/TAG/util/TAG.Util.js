@@ -4059,6 +4059,7 @@ TAG.Util.RLH = function (input) {
         mapContainer = $(document.createElement('div'))
                     .attr('id', 'locationHistoryMapContainer')
                     .css({
+                        top:'2%',
                         position: 'absolute',
                         width: '80%',
                         height: '100%',
@@ -4109,7 +4110,7 @@ TAG.Util.RLH = function (input) {
                         position: 'relative',
                         left: '10%',
                         width: '80%',
-                        top: '2%',
+                        top: '3%',
                         height: '6%',
                         'margin-bottom': '1%'
                     })
@@ -4150,6 +4151,7 @@ TAG.Util.RLH = function (input) {
                         })
                         .appendTo(buttonsRegion)
                         .text('Sort By Date');
+
             importMapButton = $(document.createElement('button'))
                     .attr({
                         'id': 'locationHistoryImportMapButton',
@@ -4173,6 +4175,18 @@ TAG.Util.RLH = function (input) {
                             float: 'right'
                         })
                         .appendTo(buttonsRegion);
+
+            dotsContainer = $(document.createElement('div'))
+                            .attr('id', 'locationHistoryDotsContainer')
+                            .css({
+                                'margin-left': 'auto',
+                                'margin-right': 'auto',
+                                'width': '30%',
+                                'height': '50%',
+                                'top': '0%',
+                                'text-align': 'center'
+                            })
+                            .appendTo(buttonsRegion);
 
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
@@ -4201,34 +4215,28 @@ TAG.Util.RLH = function (input) {
             addLocationButton.on('click', addLocation);
             sortLocationsByTitleButton.on('click', sortLocationsByTitle);
             sortLocationsByDateButton.on('click', sortLocationsByDate);
-        }
-
-        dotsContainer = $(document.createElement('div'))
-                        .attr('id', 'locationHistoryDotsContainer')
-                        .css({
-                            position: 'absolute',
-                            'width': '30%',
-                            'height': '50%',
-                            'top': '0%',
-                            'left': '40%',
-                            'text-align': 'center'
-                        })
-                        .appendTo(buttonsRegion);
-
-        if (!input.authoring) {
-            dotsContainer.css({
-                'width': '40%',
-                'left': '30%'
-            });
+        } else {
+            dotsContainer = $(document.createElement('div'))
+                            .attr('id', 'locationHistoryDotsContainer')
+                            .css({
+                                position: 'absolute',
+                                'width': '30%',
+                                'height': '50%',
+                                'top': '0%',
+                                'left': '40%',
+                                'text-align': 'center'
+                            })
+                            .appendTo(buttonsRegion);
         }
 
         locationsRegion = $(document.createElement('div'))
                     .attr('id', 'locationHistoryLocationsRegion')
                     .css({
+                        top:'1%',
                         position: 'relative',
                         width: '80%',
                         left: '10%',
-                        height: '33%',
+                        height: '32%',
                         color: 'white',
                         'font-size': '11',
                         'font-weight': '300',
@@ -5204,7 +5212,7 @@ TAG.Util.RLH = function (input) {
         pushpin['container'] = container;
 
         container.css({
-            margin: '10px 0px 20px 0px',
+            margin: '0px 0px 10px 0px',
             position: 'relative',
             width: '97%',
         });
@@ -5329,7 +5337,7 @@ TAG.Util.RLH = function (input) {
 
                     //scroll to the correct position
                     locationsRegion.scrollTop(0);
-                    locationsRegion.scrollTop(editingFormElements.container.position().top);
+                    locationsRegion.scrollTop(editingFormElements.container.position().top + 20);
                 }
             });
         }
