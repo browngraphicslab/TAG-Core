@@ -444,14 +444,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      */
     function makeSidebar() {
         var backBttnContainer = root.find("#backBttnContainer"),
-            sideBarSections   = root.find('#sideBarSections'),
-            sideBarInfo       = root.find('#sideBarInfo'),
-            infoTitle         = root.find('#infoTitle'),
-            infoArtist        = root.find('#infoArtist'),
-            infoYear          = root.find('#infoYear'),
-            assetContainer    = root.find('#assetContainer'),
-            isBarOpen         = true,
-            currBottom        = 0,
+            sideBarSections = root.find('#sideBarSections'),
+            sideBarInfo = root.find('#sideBarInfo'),
+            infoTitle = root.find('#infoTitle'),
+            infoArtist = root.find('#infoArtist'),
+            infoYear = root.find('#infoYear'),
+            assetContainer = root.find('#assetContainer'),
+            isBarOpen = true,
+            currBottom = 0,
             item,
             fieldTitle,
             fieldValue,
@@ -463,7 +463,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             tourDrawer,
             locHistoryButton,
             mediaDrawer,
-            xfadeDrawer;
+            xfadeDrawer,
+            xfadeSlider,
+            xfadeSliderPoint;
 
         sideBarInfo.css({
             'height' : sideBarSections.height()-25 + 'px'
@@ -595,7 +597,44 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 curr = associatedMedia[associatedMedia.guids[i]];
                 if (curr.linq.Metadata.Type === 'Layer') {
                     if (!xfadeDrawer) {
-                        xfadeDrawer = createDrawer('Crossfades', true);
+                        xfadeSlider = $(document.createElement('div'));
+                        xfadeSlider.css({
+                            border: '2px solid rgba(255,255,255,0.8)',
+                            height: '25px',
+                            left: '10%',
+                            margin: '5px 0px 5px 0px',
+                            position: 'relative',
+                            width: '80%'
+                        });
+                        xfadeSliderPoint = $(document.createElement('div'));
+                        xfadeSliderPoint.css({
+                            'background-color': 'rgba(255,255,255,0.8)',
+                            height: '100%',
+                            left: '0%',
+                            position: 'absolute',
+                            top: '0%',
+                            width: '50%'
+                        });
+                        xfadeSlider.append(xfadeSliderPoint);
+
+                        xfadeSlider.on('mousedown', function(evt) {
+                            var leftPercent = evt.offsetX / xfadeSlider.width();
+                            xfadeSliderPoint.css('width', leftPercent * 100 + '%');
+                            $('.xfadeImg').css('opacity', leftPercent);
+
+                            xfadeSlider.on('mousemove', function (evt) {
+                                var leftPercent = evt.offsetX / xfadeSlider.width();
+                                xfadeSliderPoint.css('width', leftPercent * 100 + '%');
+                                $('.xfadeImg').css('opacity', leftPercent);
+                            });
+                        });
+
+                        xfadeSlider.on('mouseup mouseleave', function (evt) {
+                            xfadeSlider.off('mousemove');
+                        });
+
+                        
+                        xfadeDrawer = createDrawer('Crossfades', xfadeSlider);
                     }
                     loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
                 } else {
@@ -611,7 +650,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
             if (xfadeDrawer) {
                 assetContainer.append(xfadeDrawer);
-                currBottom += mediaDrawer.height();
+                currBottom += xfadeDrawer.height();
             }
         }
 
@@ -1090,10 +1129,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
     /**
      * Create a drawer (e.g., for list of related tours or the artwork's description) 
-     * @param {String} title        title of the drawer
-     * @return {jQuery obj}         the drawer
+     * @param {String} title            title of the drawer
+     * @param {jQuery obj} topContents  an element to be included before the main contents of the drawer
+     * @return {jQuery obj}             the drawer
      */
-    function createDrawer(title) {
+    function createDrawer(title, topContents) {
         var drawer          = $(document.createElement('div')).addClass('drawer'),
             drawerHeader    = $(document.createElement('div')).addClass('drawerHeader'),
             label           = $(document.createElement('div')).addClass('drawerLabel'),
@@ -1112,7 +1152,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         drawerHeader.append(label);
         drawerHeader.append(toggleContainer);
         toggleContainer.append(toggle);
+        
         drawer.append(drawerContents);
+        topContents && drawerContents.append(topContents);
 
         //have the toggler icon minus when is is expanded, plus otherwise.
         drawerHeader.on('click', function (evt) {

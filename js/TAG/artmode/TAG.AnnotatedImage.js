@@ -537,7 +537,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             mediaContainer = $(document.createElement('div')).addClass('mediaMediaContainer'),
 
             // constants
-            IS_HOTSPOT      = linq.Metadata.Type ? (linq.Metadata.Type === "Hotspot") : false,
+            IS_HOTSPOT = linq.Metadata.Type ? (linq.Metadata.Type === "Hotspot") : false,
+            IS_XFADE   = linq.Metadata.Type ? (linq.Metadata.Type === "Layer") : false,
             X               = parseFloat(linq.Offset._x),
             Y               = parseFloat(linq.Offset._y),
             TITLE           = TAG.Util.htmlEntityDecode(mdoq.Name),
@@ -573,53 +574,63 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @method initMediaObject
          */
         function initMediaObject() {
-            // set up divs for the associated media
-            outerContainer.css('width', Math.min(Math.max(250, (rootWidth / 5)), 450) + 'px');
-            innerContainer.css('backgroundColor', 'rgba(0,0,0,0.65)');
+            if (IS_XFADE && linq.Offset && linq.Dimensions) {
+                outerContainer.css({
+                    'border': '1px solid rgba(255,255,255,0.4)',
+                    'background': 'rgba(0,0,0,0)',
+                    'position': 'absolute'
+                });
+                assetCanvas.append(outerContainer);
+                outerContainer.hide();
+            } else {
+                // set up divs for the associated media
+                outerContainer.css('width', Math.min(Math.max(250, (rootWidth / 5)), 450) + 'px');
+                innerContainer.css('backgroundColor', 'rgba(0,0,0,0.65)');
 
-            if (TITLE) {
-                titleDiv = $(document.createElement('div'));
-                titleDiv.addClass('annotatedImageMediaTitle');
-                titleDiv.text(TITLE);
+                if (TITLE) {
+                    titleDiv = $(document.createElement('div'));
+                    titleDiv.addClass('annotatedImageMediaTitle');
+                    titleDiv.text(TITLE);
 
-                innerContainer.append(titleDiv);
+                    innerContainer.append(titleDiv);
+                }
+
+                innerContainer.append(mediaContainer);
+
+                if (DESCRIPTION) {
+                    descDiv = $(document.createElement('div'));
+                    descDiv.addClass('annotatedImageMediaDescription');
+                    descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
+
+                    innerContainer.append(descDiv);
+                }
+
+                if (RELATED_ARTWORK) {
+                    // TODO append related artwork button here
+                }
+
+                outerContainer.append(innerContainer);
+                assetCanvas.append(outerContainer);
+                outerContainer.hide();
+
+                // create hotspot circle if need be
+                if (IS_HOTSPOT) {
+                    circle = $(document.createElement("img"));
+                    position = new Seadragon.Point(X, Y);
+                    circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
+                    circle.addClass('annotatedImageHotspotCircle');
+                    root.append(circle);
+                }
+
+                // allows asset to be dragged, despite the name
+                TAG.Util.disableDrag(outerContainer);
+
+                // register handlers
+                TAG.Util.makeManipulatable(outerContainer[0], {
+                    onManipulate: mediaManip,
+                    onScroll: mediaScroll
+                }, null, true); // NO ACCELERATION FOR NOW
             }
-
-            innerContainer.append(mediaContainer);
-
-            if (DESCRIPTION) {
-                descDiv = $(document.createElement('div'));
-                descDiv.addClass('annotatedImageMediaDescription');
-                descDiv.html(Autolinker.link(DESCRIPTION, {email: false, twitter: false}));
-                
-                innerContainer.append(descDiv);
-            }
-
-            if (RELATED_ARTWORK) {
-                // TODO append related artwork button here
-            }
-
-            outerContainer.append(innerContainer);
-            assetCanvas.append(outerContainer);
-            outerContainer.hide();
-
-            // create hotspot circle if need be
-            if (IS_HOTSPOT) {
-                circle = $(document.createElement("img"));
-                position = new Seadragon.Point(X, Y);
-                circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
-                circle.addClass('annotatedImageHotspotCircle');
-                root.append(circle);
-            }
-
-            // allows asset to be dragged, despite the name
-            TAG.Util.disableDrag(outerContainer);
-
-            // register handlers
-            TAG.Util.makeManipulatable(outerContainer[0], {
-                onManipulate: mediaManip,
-                onScroll:     mediaScroll
-            }, null, true); // NO ACCELERATION FOR NOW
         }
 
         /**
@@ -818,7 +829,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var $mediaElt,
                 img,
                 iframe,
-                closeButton;
+                closeButton,
+                x,
+                y,
+                w,
+                h,
+                rect;
 
             if(!mediaLoaded) {
                 mediaLoaded = true;
@@ -826,70 +842,93 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 return;
             }
 
-            closeButton = createCloseButton();
-            mediaContainer.append(closeButton[0]);
-            closeButton.on('click', function (evt) {
-                evt.stopPropagation();
-                hideMediaObject();
-            });
-
-            if (CONTENT_TYPE === 'Image') {
-                img = document.createElement('img');
-                img.src = FIX_PATH(SOURCE);
-                $(img).css({
-                    position: 'relative',
-                    width:    '100%',
-                    height:   'auto'
-                });
-                mediaContainer.append(img);
-            } else if (CONTENT_TYPE === 'Video') {
-                mediaElt = document.createElement('video');
-                $mediaElt = $(mediaElt);
-
+            if (IS_XFADE) {
+                $mediaElt = $(document.createElement('img')).addClass('xfadeImg');
                 $mediaElt.attr({
-                    preload:  'none',
-                    poster:   (THUMBNAIL && !THUMBNAIL.match(/.mp4/)) ? FIX_PATH(THUMBNAIL) : '',
-                    src:      FIX_PATH(SOURCE),
-                    type:     'video/mp4; codecs="avc1.42E01E, mp4a.40.2"',
-                    controls: false
+                    src: FIX_PATH(SOURCE)
                 });
-
-                // TODO need to use <source> tags rather than setting the source and type of the
-                //      video in the <video> tag's attributes; see video player code
-                
                 $mediaElt.css({
-                    position: 'relative',
-                    width:    '100%'
+                    height: '100%',
+                    opacity: 0.5,
+                    position: 'absolute',
+                    width: '100%'
+                });
+                outerContainer.append($mediaElt);
+
+                x = parseFloat(linq.Offset._x || 0);
+                y = parseFloat(linq.Offset._y || 0);
+                w = parseFloat(linq.Dimensions._x || 50);
+                h = parseFloat(linq.Dimensions._y || 50);
+
+                rect = new Seadragon.Rect(x, y, w, h);
+
+                viewer.drawer.addOverlay(outerContainer[0], rect);
+            } else {
+                closeButton = createCloseButton();
+                mediaContainer.append(closeButton[0]);
+                closeButton.on('click', function (evt) {
+                    evt.stopPropagation();
+                    hideMediaObject();
                 });
 
-                initMediaControls(mediaElt);
+                if (CONTENT_TYPE === 'Image') {
+                    img = document.createElement('img');
+                    img.src = FIX_PATH(SOURCE);
+                    $(img).css({
+                        position: 'relative',
+                        width: '100%',
+                        height: 'auto'
+                    });
+                    mediaContainer.append(img);
+                } else if (CONTENT_TYPE === 'Video') {
+                    mediaElt = document.createElement('video');
+                    $mediaElt = $(mediaElt);
 
-            } else if (CONTENT_TYPE === 'Audio') {
-                mediaElt = document.createElement('audio');
-                $mediaElt = $(mediaElt);
+                    $mediaElt.attr({
+                        preload: 'none',
+                        poster: (THUMBNAIL && !THUMBNAIL.match(/.mp4/)) ? FIX_PATH(THUMBNAIL) : '',
+                        src: FIX_PATH(SOURCE),
+                        type: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"',
+                        controls: false
+                    });
 
-                $mediaElt.attr({
-                    preload:  'none',
-                    type:     'audio/mp3',
-                    src:      FIX_PATH(SOURCE),
-                    controls: false
-                });
+                    // TODO need to use <source> tags rather than setting the source and type of the
+                    //      video in the <video> tag's attributes; see video player code
 
-                initMediaControls(mediaElt);
-                $mediaElt.on('error', function(){
-                    console.log("Here's an error ");
-                });
-            } else if (CONTENT_TYPE === 'iframe') {
-                iframe = $(document.createElement('iframe'));
-                iframe.attr({
-                    src: SOURCE,
-                    frameborder: '0'
-                });
-                iframe.css({
-                    width: '100%',
-                    height: '200px' // TODO iframe -- this is just for testing
-                });
-                mediaContainer.append(iframe);
+                    $mediaElt.css({
+                        position: 'relative',
+                        width: '100%'
+                    });
+
+                    initMediaControls(mediaElt);
+
+                } else if (CONTENT_TYPE === 'Audio') {
+                    mediaElt = document.createElement('audio');
+                    $mediaElt = $(mediaElt);
+
+                    $mediaElt.attr({
+                        preload: 'none',
+                        type: 'audio/mp3',
+                        src: FIX_PATH(SOURCE),
+                        controls: false
+                    });
+
+                    initMediaControls(mediaElt);
+                    $mediaElt.on('error', function () {
+                        console.log("Here's an error ");
+                    });
+                } else if (CONTENT_TYPE === 'iframe') {
+                    iframe = $(document.createElement('iframe'));
+                    iframe.attr({
+                        src: SOURCE,
+                        frameborder: '0'
+                    });
+                    iframe.css({
+                        width: '100%',
+                        height: '500px' // TODO iframe -- this is just for testing
+                    });
+                    mediaContainer.append(iframe);
+                }
             }
         }
 
@@ -1158,30 +1197,35 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 h = outerContainer.height(),
                 w = outerContainer.width();
 
-            //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
-            if(IS_HOTSPOT) {
-                circle.css('visibility', 'visible');
-                addOverlay(circle[0], position, Seadragon.OverlayPlacement.TOP_LEFT);
-                viewer.viewport.panTo(position, false);
-                viewer.viewport.applyConstraints()
-                t = viewer.viewport.pixelFromPoint(position).y - h/2 + circleRadius/2;
-                l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
+
+            if (IS_XFADE) {
+                outerContainer.show();
             } else {
-                t = rootHeight * 1/10 + Math.random() * rootHeight * 2/10;
-                l = rootWidth  * 3/10 + Math.random() * rootWidth  * 2/10;
-            };
-            outerContainer.css({
-                'top':            t + "px",
-                'left':           l + "px",
-                'position':       "absolute",
-                'z-index':        1000,
-                'pointer-events': 'all'
-            });
+                //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
+                if (IS_HOTSPOT) {
+                    circle.css('visibility', 'visible');
+                    addOverlay(circle[0], position, Seadragon.OverlayPlacement.TOP_LEFT);
+                    viewer.viewport.panTo(position, false);
+                    viewer.viewport.applyConstraints()
+                    t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
+                    l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
+                } else {
+                    t = rootHeight * 1 / 10 + Math.random() * rootHeight * 2 / 10;
+                    l = rootWidth * 3 / 10 + Math.random() * rootWidth * 2 / 10;
+                };
+                outerContainer.css({
+                    'top': t + "px",
+                    'left': l + "px",
+                    'position': "absolute",
+                    'z-index': 1000,
+                    'pointer-events': 'all'
+                });
 
-            outerContainer.show();
-            assetCanvas.append(outerContainer);
+                outerContainer.show();
+                assetCanvas.append(outerContainer);
+            }
 
-            if(!thumbnailButton) {
+            if (!thumbnailButton) {
                 thumbnailButton = $('#thumbnailButton-' + mdoq.Identifier);
             }
 
@@ -1189,7 +1233,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'color': 'black',
                 'background-color': 'rgba(255,255,255, 0.3)'
             });
-            
+
             // TODO is this necessary?
             // if ((info.contentType === 'Video') || (info.contentType === 'Audio')) {
             //     resizeControlElements();
@@ -1203,12 +1247,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @method hideMediaObject
          */
         function hideMediaObject() {
-            pauseResetMediaObject();
-            IS_HOTSPOT && removeOverlay(circle[0]);
-            outerContainer.hide();   
+            if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
+                outerContainer.hide();
+            } else {
+                pauseResetMediaObject();
+                IS_HOTSPOT && removeOverlay(circle[0]);
+                outerContainer.hide();
+            }
+
             mediaHidden = true;
 
-            if(!thumbnailButton) {
+            if (!thumbnailButton) {
                 thumbnailButton = $('#thumbnailButton-' + mdoq.Identifier);
             }
 
@@ -1216,11 +1265,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'color': 'white',
                 'background-color': ''
             });
-            TAG.Util.IdleTimer.restartTimer();              
+            TAG.Util.IdleTimer.restartTimer();
             dzManipPreprocessing();                     //When an object is hidden, set the artwork as active
 
         }
-
         /**
          * Show if hidden, hide if shown
          * @method toggleMediaObject

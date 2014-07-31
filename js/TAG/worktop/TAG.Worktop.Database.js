@@ -872,7 +872,7 @@ TAG.Worktop.Database = (function () {
         404: notFound();
         401: notAuthorized();
       }
-      Any HTTP response is supported, see the issue tracker (#205) for info on the status
+      Any HTTP response is supported, see the issue tracker (redmine #205) for info on the status
       codes the server might respond with.  Handlers are called with the jqXHR object
       (http://api.jquery.com/jQuery.ajax/#jqXHR) as the first argument, and a function
       to redo the request as the second argument.  This can be useful if the user needs

@@ -1068,9 +1068,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function makeLayerContainer() {
             layerContainer = $(document.createElement('img'))
                                 .attr({
-                                    id: 'layerContainer',
                                     src: currSource
                                 })
+                                .addClass('layerContainer')
                                 .appendTo(root);
 
             // add manipulation handlers
@@ -1145,13 +1145,23 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @param {Seadragon.Rect} rect      the rect on the artwork on which we'll add the layer container (see Seadragon.Drawer docs)
          */
         function toggleToLayer(rect) {
+            var i,
+                oldLayerContainers = $('.layerContainer');
+
             isHotspot && toggleFromHotspot();
 
             makeLayerContainer();
 
-            toggleLayerButton.text('Remove Layer');
+            toggleLayerButton.text('Remove Crossfade');
             toggleHotspotButton.attr('disabled', 'disabled');
             toggleHotspotButton.css('opacity', '0.5');
+
+            if (oldLayerContainers.length > 0) {   // clicking on a thumbnail button really quickly would add a bunch of layerContainers...but
+                for (i = 0; i < oldLayerContainers.length; i++) { // a cleaner way to avoid that would be to just disable the thumbnail button when its media is already open
+                    annotatedImage.viewer.drawer.removeOverlay(oldLayerContainers[i]);
+                    $(oldLayerContainers[i]).remove();
+                }
+            }
 
             layerContainer.css({
                 'border': '2px solid red',
@@ -1164,7 +1174,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 layerContainer.css({
                     'left': '30%',
                     'top': '20%',
-                    'width': '40%'
+                    'width': '40%',
+                    'height': 'auto'
                 });
                 rect = getLayerRect();
             }
@@ -1179,7 +1190,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @method toggleFromLayer
          */
         function toggleFromLayer() {
-            toggleLayerButton.text('Create Layer');
+            toggleLayerButton.text('Create Crossfade');
             toggleHotspotButton.removeAttr('disabled');
             toggleHotspotButton.css('opacity', '1.0');
 
@@ -1648,8 +1659,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 // remove the associated media's linq to this artwork
                 if (assetDoqID) {
                     TAG.Worktop.Database.changeArtwork(artwork.Identifier, { RemoveIDs: assetDoqID }, function () {
+                        close();
                         createMediaList();
-                        MEDIA_EDITOR.close();
                         rightbarLoadingDelete.fadeOut();
                     }, function () {
                         console.log("error 1");
@@ -1717,6 +1728,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          */
         function open(asset, content, callback) {
             var editingMediamsg;
+
             if (editingMedia) {
                 editingMediamsg = $(TAG.Util.UI.popUpMessage(null, "You are currently making changes. Please save or cancel before opening another media for editing.", "OK", false));
                 root.append(editingMediamsg);
@@ -1764,7 +1776,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 }
 
                 toggleHotspotButton.text(isHotspot ? 'Remove Hotspot' : 'Create Hotspot');
-                toggleLayerButton.text(isLayer ? 'Remove Layer' : 'Create Layer');
+                toggleLayerButton.text(isLayer ? 'Remove Crossfade' : 'Create Crossfade');
 
                 isHotspot ? toggleToHotspot(point) : toggleFromHotspot();
                 isLayer ? toggleToLayer(rect) : toggleFromLayer();
@@ -1813,8 +1825,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             if (isOpen) {
                 rightbar = $('.rightbar');
                 hotspotAnchor.fadeOut(100);
-                annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
-                layerContainer.remove();
+                if (layerContainer) {
+                    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
+                    layerContainer.remove();
+                }
                 annotatedImage.unfreezeArtwork();
                 rightbar.animate({ 'right': '-20%' }, 600);
                 $('.assetHolder').css('background-color', '');
