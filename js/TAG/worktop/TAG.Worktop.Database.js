@@ -458,7 +458,7 @@ TAG.Worktop.Database = (function () {
             true);
     }
     //check for files. 
-    function getConvertedCheck(success, error, fileName) {
+    function getConvertedCheck(success, error, fileName,basefilename) {
         asyncRequest(
             'GET',
             'ConvertedCheck',

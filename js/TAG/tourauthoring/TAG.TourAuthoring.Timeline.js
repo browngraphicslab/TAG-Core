@@ -1836,11 +1836,12 @@ TAG.TourAuthoring.Timeline = function (spec) {
      * @param {Time} mediaLength        Track duration
      * @return {Object} newTrack        of type VideoTrack.js
      */
-    function addVideoTrack(media, name, pos, mediaLength) {
+    function addVideoTrack(media, name, pos, mediaLength, toconvert, converted) {
         var object = createSpec(media, name, pos);
         var newTrack;
         object.mediaLength = mediaLength;
-        //object.converted = converted;
+        object.converted = converted;
+        object.toConvert = toconvert;
         newTrack = new TAG.TourAuthoring.VideoTrack(object);
         addAnyTrack(newTrack, name, pos);
         return newTrack;
@@ -2605,7 +2606,9 @@ TAG.TourAuthoring.Timeline = function (spec) {
                 track = addImageTrack(resources[r].uriReference, trackname, e);
             } else if (type === 'VideoES') {
                 mediaLength = exp.data.mediaLength;
-                track = addVideoTrack(resources[r].uriReference, trackname, e, mediaLength);
+                var toConvert = exp.data.toConvert || false;
+                var converted = exp.data.converted || false;
+                track = addVideoTrack(resources[r].uriReference, trackname, e, mediaLength, toConvert, converted);
             } else if (type === 'AES') {
                 mediaLength = exp.data.mediaLength;
                 track = addAudioTrack(resources[r].uriReference, trackname, e, mediaLength);

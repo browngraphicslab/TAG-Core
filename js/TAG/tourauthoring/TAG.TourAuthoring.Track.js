@@ -65,7 +65,8 @@ TAG.TourAuthoring.Track = function (spec, my) {
     my.displays = [];                                                                               // array of attached displays
     my.allKeyframes = [];                                                                           // array of all the keyframes for the audio track
     my.inRightTap = false;                                                                          // checks for long press on the title div                                                                
-
+    my.converted = spec.converted;                                                                  // boolean to check if a video track is converted or not
+    my.toConvert = spec.toConvert;                                                                  // boolean to check if the user want to convert a video track right after uploading
     // Title for header
     var titledivPlaceholder,                                                                        // div holding the title div                                     
         titleText,                                                                                  // div holding the track title 
@@ -91,7 +92,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         yMoved = 0,                                                                                 // vertical movement
         dragEvents = 0;                                                                             // dragging movement
 
-
+    var convertbtn;                                                                                 //convert video button for video tracks
     var firstBlock = true;
     var trackToReplace = null;                                                                      // global variable to hold the track which the selected track will be swapped with
     var grTrack;                                                                                    // makes the track manipulatable
@@ -164,12 +165,47 @@ TAG.TourAuthoring.Track = function (spec, my) {
         addScreenPlayEntries: addScreenPlayEntries,
         getMinimizedState: getMinimizedState,
         getCompOps: getCompOps,
-        changeTrackColor:changeTrackColor,
+        changeTrackColor: changeTrackColor,
+        videoConverted: videoConverted,
      };
 
     my.that = that;                                                                                 // object w/ all public methods of this class
     
+    checkVideoConverted();
+    function checkVideoConverted() {
+        if (my.converted === false) {
+            var videotag = $(document.createElement('video'));
+            videotag.attr('preload', 'metadata');
+            var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
+            var basefilename = filename.substr(0, filename.lastIndexOf('.'));
+            TAG.Worktop.Database.getConvertedCheck(
+                (function (videotag) {
+                    return function (output) {
+                        if (output !== "False" && output !== "Error") {
+                            console.log("converted: ");
+                            var mp4filepath = "/Images/" + basefilename + ".mp4";
+                            var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
+                            videotag.attr('src', mp4file);
+                            videotag.on('loadedmetadata', function () {
+                                //remove from the video array and add display with the right duration
+                                changeTrackColor('white');
+                                addDisplay(0, this.duration);
+                                my.converted = true;
+                                convertbtn.remove();
+                            });
 
+                        } if (output === "Error") {
+                            my.converted = false;
+                            console.log("Error ocurred when converting");
+                        }
+                        else {
+                            console.log("not converted: ");
+                        }
+                    }
+                })(videotag), null, filename, basefilename);
+        }
+    }
+    setInterval(checkVideoConverted, 1000 * 30);
 
     /**Creates the title div for a track
      * @method _initTitle
@@ -232,7 +268,9 @@ TAG.TourAuthoring.Track = function (spec, my) {
             "box-shadow": "5px 0px 10px -2px #888 inset",
             "overflow":"hidden"
         });
-
+        if (!my.mediaLength && my.converted === false) {
+            my.track.css({ "background-color": "gray", });
+        }
         my.svg = d3.select(my.track[0])
             .append("svg")
             .attr('width', '100%')
@@ -386,6 +424,16 @@ TAG.TourAuthoring.Track = function (spec, my) {
         menu.addButton('Rename', 'left', componentOptionRename);
         if (my.type === TAG.TourAuthoring.TrackType.ink) {
             menu.addButton('Edit Ink', 'left', componentOptionEditInk);
+        }
+        if (my.type === TAG.TourAuthoring.TrackType.video && my.converted !== true) {
+            convertbtn = menu.addButton('Convert', 'left', componentOptionConvertVideo);
+            if (my.toConvert === true) {
+                convertbtn.text("Converting");
+                convertbtn.css({
+                    'color': 'gray'
+                })
+                convertbtn.data('disabled', true);
+            }
         }
         menu.addButton('Duplicate', 'left', componentOptionDuplicate);
         menu.addButton('Delete', 'left', componentOptionDelete);
@@ -817,7 +865,33 @@ TAG.TourAuthoring.Track = function (spec, my) {
         }
 
     }
+    /**Handles video track conversion.
+     *@method componenetOptionConvertVideo
+     *@param: {Event} evt
+     */
+    function componentOptionConvertVideo(evt) {
+        var curtrack = that;
+        var newFileName = media.slice(8, media.length);
+        var index = newFileName.lastIndexOf(".");
+        var fileExtension = newFileName.slice(index);
+        var baseFileName = newFileName.slice(0, index);
+        TAG.Worktop.Database.convertVideo(function () {
+        }, null, newFileName, fileExtension, baseFileName, null);
+        //videoConvert.push(curtrack);
+        my.toConvert = true;
 
+        //disable the button
+        convertbtn.text("Converting");
+        convertbtn.css({
+            'color': 'gray'
+        })
+        convertbtn.data('disabled', true);
+        var currSelection = dataHolder.getSelectedTrack();
+        if (currSelection) {
+            currSelection.setDeselected();
+        }
+        close();
+    }
     /**Event handling for delete button
      * @method componentOptionDelete
      * @param {Event] evt
@@ -2593,6 +2667,11 @@ TAG.TourAuthoring.Track = function (spec, my) {
     function changeTrackColor(color) {
         my.track.css('background-color', color);
     }
+
+    function videoConverted(converted) {
+        my.converted = converted;
+    }
+
     /**Add track resource to RIN resource table
      * @method addResource
      * @param table     RIN resource table object to add entry to
@@ -2641,6 +2720,8 @@ TAG.TourAuthoring.Track = function (spec, my) {
             case TAG.TourAuthoring.TrackType.video:
                 exp.providerId = 'VideoES';
                 exp.data.mediaLength = my.mediaLength;
+                exp.data.converted = my.converted;
+                exp.data.toConvert = my.toConvert;
                 break;
 
             case TAG.TourAuthoring.TrackType.ink:

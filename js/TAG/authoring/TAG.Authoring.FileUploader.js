@@ -225,9 +225,18 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 numFiles = files.length; // global
                                                 globalUriStrings = uriStrings;
                                                 globalUpload = upload;
+                                                var localResult = localCallback(files, localURLs,
+                                                    uploadStart(0, upload),
+                                                    function () {
+                                                        fileUploadError = uploadErrorAlert(null, "uploading canceled due to the unsupported format", null);
+                                                        $(fileUploadError).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                        $('body').append(fileUploadError);
+                                                        $(fileUploadError).fadeIn(500);
+                                                    });
 
-                                                uploadStart(0, upload)();
-                                                addLocalCallback(files, localURLs)();
+                                                if (localResult !== 'uploading test!') {
+                                                    uploadStart(0, upload)();
+                                                }
                                             });
                                         }
 

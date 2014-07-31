@@ -136,6 +136,66 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         callback(that);
     }
     
+    //an array to store video guids that need to be converted
+    var conversionVideos = [];
+    /**
+    * check for conversion in interval
+    */
+    function checkConversion() {
+        for (var i = 0; i < conversionVideos.length; i++) {
+            var artwork = conversionVideos[i];
+            TAG.Worktop.Database.getConvertedVideoCheck(
+                (function (i, artwork) {
+                    return function (output) {
+                        if (output !== "" && output !== "False" && output !== "Error") {
+                            console.log("converted: ");
+                            var element = $(document.getElementById("videoInPreview"));
+                            if (element && element.attr("identifier") === output) {
+                                reloadVideo(element);
+                                conversionVideos.remove(artwork);
+                            }
+                        } else if (output === "Error") {
+                            $("#videoErrorMsg").text("There is an error occured when converting this video.");
+                        }
+                        else {
+                            console.log("not converted: ");
+                        }
+                    }
+                })(i, artwork), null, conversionVideos[i]);
+        }
+    }
+    setInterval(checkConversion, 1000 * 60);
+
+    /** Reload the video when conversion is done
+    * @ param: videoInPreview element
+    */
+
+    function reloadVideo(element) {
+        var source = element.attr("src");
+        if (element[0].children.length < 3) {
+            element.removeAttr("src");
+            var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
+            var sourceMP4 = sourceWithoutExtension + ".mp4";
+            var sourceWEBM = sourceWithoutExtension + ".webm";
+            var sourceOGV = sourceWithoutExtension + ".ogv";
+
+            addSourceToVideo(element, sourceMP4, 'video/mp4');
+            addSourceToVideo(element, sourceWEBM, 'video/webm');
+            addSourceToVideo(element, sourceOGV, 'video/ogv');
+        }
+        $(document.getElementById("leftLoading")).remove();
+        $(function () {
+            $("#leftLoading").remove();
+        })
+        if ($("#videoErrorMsg")) {
+            $("#videoErrorMsg").remove();
+        }
+        element.show();
+        var video = document.getElementById("videoInPreview");
+        video.load();
+        video.play();
+    }
+
     /**Handles enter key press on the SettingsView page
      * @ method enterKeyHandlerSettingsView
      */
@@ -1699,7 +1759,42 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
                 holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
-                holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer);
+                TAG.Worktop.Database.getConvertedVideoCheck(
+                function (output) {
+                    if (output !== "" && output !== "False" && output !== "Error") {
+                        holder.removeAttr('src');
+                        var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
+                        var sourceMP4 = sourceWithoutExtension + ".mp4";
+                        var sourceWEBM = sourceWithoutExtension + ".webm";
+                        var sourceOGV = sourceWithoutExtension + ".ogv";
+
+                        addSourceToVideo(holder, sourceMP4, 'video/mp4');
+                        addSourceToVideo(holder, sourceWEBM, 'video/webm');
+                        addSourceToVideo(holder, sourceOGV, 'video/ogv');
+                        $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
+                    } else {
+                        if (output === "False") {
+                            $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "This video is being converted to compatible formats for different browsers";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            conversionVideos.push(artwork.Identifier);
+                        } else {
+                            $("#videoErrorMsg").remove();
+                            var msg = "There is an error occured when converting this video.";
+                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                        }
+                        holder.attr('src', source);
+                    }
+                }, null, media.Identifier);
+                if (conversionVideos.indexOf(media.Identifier) > -1) {
+                    var msg = "This video is being converted to compatible formats for different browsers";
+                    viewer.append(TAG.Util.createConversionLoading(msg));
+                } else {
+                    holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, media.Metadata.Converted);
+                }
+                fixVolumeBar(holder);
                 break;
             case "audio":
                 holder = $(document.createElement('audio'));
@@ -1905,13 +2000,43 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         buttonContainer.append(assocButton);
         if (media.Metadata.ContentType.toLowerCase() === 'video') {
-            buttonContainer.append(thumbnailButton);
-        } else if (media.Metadata.ContentType.toLowerCase() === 'image' && !media.Metadata.Thumbnail && media.Metadata.Source[0] === '/' && !source.match(/.mp3/)) {
+            var convertBtn = createButton('Convert Video',
+                    function () {
+                        var source = media.Metadata.Source;
+                        var newFileName = source.slice(8, source.length);
+                        var index = newFileName.lastIndexOf(".");
+                        var fileExtension = newFileName.slice(index);
+                        var baseFileName = newFileName.slice(0, index);
+                        if (media.Metadata.Converted !== "True") {
+                            TAG.Worktop.Database.convertVideo(function () {
+                            }, null, newFileName, fileExtension, baseFileName, media.Identifier);
+                            conversionVideos.push(media.Identifier);
+                            $("#videoErrorMsg").remove();
+                            var msg = "This video is being converted to compatible formats for different browsers";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, "False");
+                            convertBtn.hide().data('disabled', true);
+                        }
+                    }, {
+                        'margin-right': '3%',
+                        'margin-top': '1%',
+                        'margin-bottom': '1%',
+                        'margin-left': '0.5%',
+                        'float': 'right'
+                    })
+            convertBtn.attr('class', 'convertVideoBtn');
+            if (!media.Metadata.Converted || conversionVideos.indexOf(media.Identifier) === -1) {
+                convertBtn.show().data('disabled', false);
+            } else {
+                convertBtn.hide().data('disabled', true);
+            }
+            buttonContainer.append(thumbnailButton).append(convertBtn);
+        } else if (media.Metadata.ContentType.toLowerCase() === 'image' && !media.Metadata.Thumbnail && media.Metadata.Source && media.Metadata.Source[0] === '/' && !source.match(/.mp3/)) {
             // hacky way to see if asset was imported recently enough to support thumbnailing (these are /Images/_____.__
             // rather than http:// _______/Images/_______.__
             buttonContainer.append(generateAssocMediaThumbnailButton);
         }
-        buttonContainer.append(deleteButton).append(saveButton);
+        buttonContainer.append(deleteButton).append(saveButton); //SAVE BUTTON// 
     }
 
     /**Save an associated media
@@ -2014,10 +2139,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function done() {
                 loadAssocMediaView(newDoq.Identifier);
             }
-            LADS.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, LADS.Util.multiFnHandler(authError, done), LADS.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
+            TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
 
         };
-        LADS.Worktop.Database.createIframeAssocMedia(options, onSuccess);
+        TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
     }
 
     /**
@@ -2374,7 +2499,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         cancelLastSetting = function () { cancel = true; };
     }
+    /*nest source tag inside video element*/
+    function addSourceToVideo(element, src, type) {
+        var source = document.createElement('source');
 
+        source.src = src;
+        source.type = type;
+
+        element[0].appendChild(source);
+    }
     /**Loads an artwork to the right side
      * @method loadArtwork
      * @param {Object} artwork  artwork to load
@@ -2392,14 +2525,50 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.attr('src', TAG.Worktop.Database.fixPath(artwork.URL));
         } else {
             mediaElement = $(document.createElement('video'));
-            mediaElement.attr('id', 'videoInPreview');
+            mediaElement.attr('id', "videoInPreview");
+            //fixVolumeBar(mediaElement);
             mediaElement.attr('poster', (artwork.Metadata.Thumbnail && !artwork.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail) : '');
             mediaElement.attr('identifier', artwork.Identifier);
             mediaElement.attr("preload", "none");
             mediaElement.attr("controls", "");
             mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
-            mediaElement.attr('src', TAG.Worktop.Database.fixPath(artwork.Metadata.Source));
-            mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer);
+            var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
+
+            TAG.Worktop.Database.getConvertedVideoCheck(
+                function (output) {
+                    if (output !== "" && output !== "False" && output !== "Error") {
+                        var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
+                        var sourceMP4 = sourceWithoutExtension + ".mp4";
+                        var sourceWEBM = sourceWithoutExtension + ".webm";
+                        var sourceOGV = sourceWithoutExtension + ".ogv";
+
+                        addSourceToVideo(mediaElement, sourceMP4, 'video/mp4');
+                        addSourceToVideo(mediaElement, sourceWEBM, 'video/webm');
+                        addSourceToVideo(mediaElement, sourceOGV, 'video/ogv');
+                        $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
+                    } else {
+                        if (output === "False") {
+                            $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "This video is being converted to compatible formats for different browsers";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            conversionVideos.push(artwork.Identifier);
+                        } else if (output === "Error") {
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "There is an error occured when converting this video.";
+                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                        }
+                        mediaElement.attr('src', source);
+                    }
+                }, null, artwork.Identifier);
+            if (conversionVideos.indexOf(artwork.Identifier) > -1) {
+                var msg = "This video is being converted to compatible formats for different browsers";
+                viewer.append(TAG.Util.createConversionLoading(msg));
+            } else {
+                mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, artwork.Metadata.Converted);
+            }
         }
         mediaElement.crossOrigin = "";
         // Create a progress circle
@@ -2439,7 +2608,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var customSettings = {};
         var desc = createSetting('Description', descInput);
         var yearMetadataDiv = createYearMetadataDiv(artwork);
-
         titleInput.focus(function () {
             if (titleInput.val() === 'Title')
                 titleInput.select();
@@ -2462,18 +2630,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 customSettings[key] = createSetting(key, customInputs[key]);
             });
         }
-
+        
         settingsContainer.append(title);
         settingsContainer.append(artist);
         //settingsContainer.append(yearDiv);
         //settingsContainer.append(timelineYearDiv);
         settingsContainer.append(yearMetadataDiv);
         settingsContainer.append(desc);
+        var yearInput = $(document.getElementById("yearInput"));
 
         $.each(customSettings, function (key, val) {
             settingsContainer.append(val);
         });
-
+        
         // Create buttons
         editArt = createButton('Enter Artwork Editor',
             function () { editArtwork(artwork); },
@@ -2492,18 +2661,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
+        var inputs = {
+            artistInput: artistInput,
+            nameInput: titleInput,
+            yearInput: yearInput,
+            descInput: descInput,
+            customInputs: customInputs,
+        };
         var saveButton = createButton('Save Changes',
             function () {
                 if (titleInput.val() === undefined || titleInput.val() === "") {
                     titleInput.val("Untitled Artwork");
                 }
-                saveArtwork(artwork, {
-                    artistInput: artistInput,   //Artwork artist
-                    nameInput: titleInput,      //Artwork title
-                    yearInput: yearInput,       //Artwork year
-                    descInput: descInput,       //Artwork description
-                    customInputs: customInputs, //Artwork custom info fields
-                });
+                saveArtwork(artwork, inputs);
             }, {
                 'margin-right': '3%',
                 'margin-top': '1%',
@@ -2511,6 +2681,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '.5%',
                 'float': 'right'
             });
+        var xmluploaderbtn = createButton('Upload XML',
+                        function () {
+                            uploadXML(artwork, inputs, settingsContainer);
+                        },
+                        {
+                            'margin-left': '2%',
+                            'margin-top': '1%',
+                            'margin-right': '0%',
+                            'margin-bottom': '3%',
+                        });
 
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
@@ -2523,9 +2703,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left'
             });
         if (artwork.Metadata.Type !== 'VideoArtwork') {
-            buttonContainer.append(editArt).append(deleteArt).append(saveButton);
+            buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
         } else {
-            buttonContainer.append(thumbnailButton).append(deleteArt).append(saveButton);
+            var convertBtn = createButton('Convert Video',
+                    function () {
+                        var source = artwork.Metadata.Source;
+                        var newFileName = source.slice(8, source.length);
+                        var index = newFileName.lastIndexOf(".");
+                        var fileExtension = newFileName.slice(index);
+                        var baseFileName = newFileName.slice(0, index);
+                        if (artwork.Metadata.Converted !== "True") {
+                            TAG.Worktop.Database.convertVideo(function () {
+                            }, null, newFileName, fileExtension, baseFileName, artwork.Identifier);
+                            conversionVideos.push(artwork.Identifier);
+                            $("#videoErrorMsg").remove();
+                            var msg = "This video is being converted to compatible formats for different browsers";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, "False");
+                            convertBtn.hide().data('disabled', true);
+                        }
+                    }, {
+                        'margin-right': '3%',
+                        'margin-top': '1%',
+                        'margin-bottom': '1%',
+                        'margin-left': '1.5%',
+                        'float': 'right'
+                    })
+            convertBtn.attr('class', 'convertVideoBtn');
+            if (!artwork.Metadata.Converted && conversionVideos.indexOf(artwork.Identifier) === -1) {
+                convertBtn.show().data('disabled', false);
+            } else {
+                convertBtn.hide().data('disabled', true);
+            }
+            buttonContainer.append(thumbnailButton).append(deleteArt).append(saveButton).append(convertBtn).append(xmluploaderbtn); //SAVE BUTTON//
         }
     }
 
@@ -2581,7 +2791,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createArtwork() {
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
-            var check, i, url, name, done=0, total=urls.length, durations=[];
+            var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
             prepareNextView(false);
             clearRight();
             prepareViewer(true);
@@ -2589,12 +2799,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 if (done >= total) {
-                    loadArtView();
+                    loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
                 } else {
                     durationHelper(done);
                 }
             }
 
+            //////////
             if (files.length > 0) {
                 durationHelper(0);
             }
@@ -2612,7 +2823,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     updateDoq(j);
                 }
             }
-
+            ///////////
             function updateDoq(j) {
                 var newDoq;
                 try {
@@ -2626,12 +2837,586 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (durations[j]) {
                     ops.Duration = durations[j];
                 }
+                if (!alphaName || names[j] < alphaName) {
+                    toScroll = newDoq;                          //Alphabetical order
+                    alphaName = names[j];
+                }
+
                 TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                var source = newDoq.Metadata.Source;
+                if (contentTypes[j] === "Video") {
+                    var newFileName = source.slice(8, source.length);
+                    var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
+                        var index = newFileName.lastIndexOf(".");
+                        var fileExtension = newFileName.slice(index);
+                        var baseFileName = newFileName.slice(0, index);
+
+                        TAG.Worktop.Database.convertVideo(function () {
+                        }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
+                        conversionVideos.push(newDoq.Identifier);
+                        var mediaElement = $(document.getElementById("videoInPreview"));
+                        if (mediaElement[0]) {
+                            var msg = "This video is being converted to compatible formats for different browsers";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            $("#videoErrorMsg").remove();
+                        }
+                        $(".convertVideoBtn").hide().data("disabled", true);
+                    }, "Would you like to convert " + newFileName + "?", "Yes", true, function () {
+                        $(".convertVideoBtn").show().data("disabled", false);
+                    });
+
+                    root.append(confirmBox);
+                    $(confirmBox).show();
+                }
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.webm', '.ogv', '.mpeg', '.avi', '.flv', '.wmv', '.mov']);
     }
+    /*upload xml for single artwork
+   artwork
+   inputs: all the input fields in the settingsContainer
+   settingsContainer
+   */
+    function uploadXML(artwork, inputs, settingsContainer) {
+        var parsingOverlay = $(TAG.Util.UI.blockInteractionOverlay()),
+            parsingOverlayText = $(document.createElement('label')),
+            parsingPicker = $(document.createElement('div')),
+            parsingPickerHeader = $(document.createElement('div')),
+            parsingInfo = $(document.createElement('div')),
+            curtitle = artwork.Name,
+            curdata,
+            isrightdata = false,
+            customFields = [],
+            mtinputs = {};
+        if (artwork.Metadata.InfoFields) {
+            customFields = Object.keys(artwork.Metadata.InfoFields);
+        };
+        var metadataspec = {
+            title: "title",
+            description: "description",
+            year: "year",
+            artist: "artist",
+            extra1: customFields[0] || "",
+            extra2: customFields[1] || "",
+            extra3: customFields[2] || "",
+            extra4: customFields[3] || "",
+        };
+        parsingOverlay.addClass('parsingOverlay');
+        parsingOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
+        parsingOverlayText.css({ 'color': 'white', 'width': '10%', 'height': '5%', 'top': '38%', 'left': '35%', 'position': 'relative', 'font-size': '250%' });
+        parsingOverlayText.text('Parsing Metadata File now. Please wait.');
+        parsingOverlay.append(parsingOverlayText);
+        parsingOverlayText.hide();
+        root.append(parsingOverlay);
+        parsingPicker.addClass("parsingPicker");
+        parsingPicker.css({
+            position: 'absolute',
+            width: '29%',
+            height: '49%',
+            padding: '1%',
+            'background-color': 'black',
+            'border': '3px double white',
+            top: '25%',
+            left: '35%',
+        });
+        parsingOverlay.append(parsingPicker);
+        parsingOverlay.fadeIn();
+        parsingPickerHeader.addClass('parsingPickerHeader');
+        parsingPickerHeader.text("Please change if you have different names for the metadata fields below in your xml file.");
+        parsingPickerHeader.css({
+            'font-size': '160%',
+            'width': '100%',
+            'float': 'left',
+            'color': 'white',
+            'background-color': 'black',
+        });
+        parsingPicker.append(parsingPickerHeader);
+        parsingInfo.css({
+            position: 'absolute',
+            left: '3%',
+            top: '17%',
+            padding: '1%',
+            height: '66%',
+            width: '94%',
+            overflow: 'auto',
+        });
+        parsingPicker.append(parsingInfo);
+        $.each(metadataspec, function (key, val) {
+            var input = createTextInput(val, null, null, false, false);
+            var field = createSetting(key, input, null, '7px');
+            field.addClass("metadataspec");
+            field.css('color', 'white');
+            field.css({
+                float: 'left',
+                background: '#222',
+                width: '96%',
+                height: '11%',
+                padding: '2px',
+                margin: '1px',
+            });
+            mtinputs[key] = input;// { field: field, input: input };
+            field.show().data('visible', true);
+            parsingInfo.append(field);
+        });
 
+        //buttons
+        var parsingPickerConfirm = $(document.createElement('button'));
+        parsingPickerConfirm.attr("id", "parsingPickerConfirm");
+        //parsingPickerConfirm.attr('disabled', true);
+        parsingPickerConfirm.text("Confirm");
+        parsingPickerConfirm.css({
+            position: 'absolute',
+            bottom: '2%',
+            right: '22%',
+        });
+        parsingPickerConfirm.click(function () {
+            //parsingPickerOverlay.fadeOut();
+            $.each(metadataspec, function (key, val) {
+                // update spec according to inputs val
+                var newval = mtinputs[key].val();
+                //if (newval !== val){// && newval!=="") {
+                metadataspec[key] = newval;
+                //}
+            });
+            parsingPicker.fadeOut();
+            parsingOverlayText.fadeIn();
+            initFilepicker(metadataspec);
+        });
+        parsingPicker.append(parsingPickerConfirm);
+
+        var parsingPickerCancel = document.createElement('button');
+        var $parsingPickerCancel = $(parsingPickerCancel);
+        $parsingPickerCancel.text("Cancel");
+        $parsingPickerCancel.css({
+            position: 'absolute',
+            bottom: '2%',
+            right: '5%',
+        });
+
+        // cancel button click handler
+        $parsingPickerCancel.click(function () {
+            parsingOverlay.fadeOut();
+            parsingPickerCancel.disabled = true;
+        });
+        parsingPicker.append($parsingPickerCancel);
+        function initFilepicker(spec) {
+            var filepicker = new Windows.Storage.Pickers.FileOpenPicker();
+            filepicker.fileTypeFilter.replaceAll([".xml"]);
+            filepicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.desktop;
+            filepicker.pickSingleFileAsync().then(function (file) {
+                if (file) {
+                    var size;
+                    var maxFileSize = 30 * 1024 * 1024;
+                    var toparse;
+                    file.getBasicPropertiesAsync().then(
+                        function (basicProperties) {
+                            size = basicProperties.size;
+                            if (size < maxFileSize) {
+                                toparse = true;
+                                parsefile();
+                            } else {
+                                var warningBox = TAG.Util.UI.PopUpConfirmation(function () {
+                                    toparse = true;
+                                    parsefile();
+                                }, "The file is larger than 30MB. Parsing it might crash your computer. Are you sure you want to continue?", "Confirm", true, function () {
+                                    toparse = false;
+                                });
+                                root.append(warningBox);
+                                $(warningBox).show();
+                            }
+
+                            //picked the xml file and parse the strings
+                            function parsefile() {
+                                $.ajax({
+                                    type: "GET",
+                                    url: window.URL.createObjectURL(file),
+                                    dataType: "xml",
+                                    success: function (xml) {
+                                        // Parse the xml file and get data
+                                        var lists = [];
+                                        var elements = xml.documentElement.childNodes;
+                                        var i, curname;
+                                        for (i = 0; i < elements.length; i++) {//each artwork
+                                            if (isrightdata === false) {
+                                                curname = elements[i].localName;
+                                                if (curname !== null) {
+                                                    var metadatas = elements[i].childNodes;
+                                                    var list = {};
+                                                    var j, name;
+                                                    for (j = 0; j < metadatas.length; j++) {//each metadata field in the artwork
+                                                        name = metadatas[j].localName;
+                                                        if (name !== null) {
+                                                            name = name.toLowerCase();
+                                                            if (metadatas[j].childNodes[0]) {
+                                                                list[name] = metadatas[j].childNodes[0].nodeValue;
+                                                                if (name === spec.title && metadatas[j].childNodes[0].nodeValue === curtitle) {
+                                                                    isrightdata = true;
+                                                                }
+                                                            } else {
+                                                                list[name] = "";
+                                                            }
+                                                        }
+                                                    }
+                                                    lists.push(list);
+                                                    if (isrightdata === true) {
+                                                        curdata = list;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if (isrightdata === true) {
+                                            //find the match and update the artwork info using curdata
+                                            //$(".parsingOverlay").fadeOut();
+                                            updateArtwork(artwork, inputs, curdata, settingsContainer, spec);
+                                            $(".parsingOverlay").remove();
+
+                                        } else {//make a metadata picker for them to choose the metadata they want if no match found
+                                            _metadatapicker(artwork, inputs, settingsContainer, lists, spec);
+                                            $(".parsingOverlay").remove();
+
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+                }
+            });
+            //$(".parsingOverlay").remove();
+        }
+    }
+    /*update artwork inputs after parse xml file
+    @param: artwork: the artwork you are going to update metadata for
+        inputs: all the input fields on settingsContainer. 
+        data: the metadata that is going to be updated for the artwork
+    */
+    function updateArtwork(artwork, inputs, data, settingsContainer, spec) {
+        var counter = 0;//counter to keep track of customfields. now 4max
+        var infoFields = {};
+        var customSettings = {};
+
+        var title = data[spec.title];
+        var artist = data[spec.artist];
+        var year = data[spec.year];
+        var description = data[spec.description];
+        var ele;
+        var curval;
+        if (!title)
+            title = "";
+        delete data[spec.title];
+        delete spec.title;
+        if (!year)
+            year = "";
+        delete data[spec.year];
+        delete spec.year;
+        if (!artist)
+            artist = "";
+        delete data[spec.artist];
+        delete spec.artist;
+        if (!description)
+            description = "";
+        delete data[spec.description];
+        delete spec.description;
+        $.each(spec, function (key, val) {
+            if (val !== "") {
+                infoFields[val] = "";
+            }
+        });
+        if (Object.keys(data).length > 0) {//if there are more fields:
+            $.each(infoFields, function (key, val) {
+                curval = data[key];
+                if (curval) {
+                    delete data[key];
+                    infoFields[key] = curval;
+                }
+                delete spec[key];
+                counter++;
+            });
+            for (ele in data) {
+                if (counter < 4) {
+                    infoFields[ele] = data[ele];
+                    // create input field for new cus field
+                    inputs.customInputs[ele] = createTextInput(TAG.Util.htmlEntityDecode(data[ele]), true);
+                    customSettings[ele] = createSetting(ele, inputs.customInputs[ele]);
+                    counter++;
+                }
+            }
+
+            $.each(customSettings, function (key, val) {
+                settingsContainer.append(val);
+            });
+
+        }
+        //$(".parsingOverlay").remove();
+        prepareNextView(false, null, null, "Saving...");
+        clearRight();
+        prepareViewer(true);
+        TAG.Worktop.Database.changeArtwork(artwork, {
+            Name: title,
+            Artist: artist,
+            Year: year,
+            Description: description,
+            InfoFields: JSON.stringify(infoFields),
+        }, function () {
+            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
+                return;
+            }
+            loadArtView(artwork.Identifier);
+        }, authError, conflict(artwork, "Update", loadArtView), error(loadArtView));
+    }
+    /*a picker for user to choose metadata when nothing matches in the file
+    @params: artwork: doq of artwork
+            inputs: all the input fields in settingsContainer 
+            settingsContainer: settingsContainer, passed in for adding new input later
+            metadatalist: a list of metadata that parsed in xml file
+    */
+    function _metadatapicker(artwork, inputs, settingsContainer, metadatalist, spec) {
+        var allTitles = {};
+        var metadataPickerOverlay = $(TAG.Util.UI.blockInteractionOverlay());
+        var metadataPicker = $(document.createElement('div'));
+        var metadataPickerHeader = $(document.createElement('div'));
+        var searchbar = $(document.createElement('input'));
+        //var searchresults;
+        var metadataLists = $(document.createElement('div'));
+        var metadataInfos = $(document.createElement('div'));
+        var metadataholder = $(document.createElement('div'));
+        var fields = {};//fields to store all the metadata elements
+        //get all metadata titles from metadatalist.
+        var selectedmetadata;
+        var i;
+        var counter = 0;
+        var curlast;
+        var curlist = metadatalist;
+        metadataPickerOverlay.addClass('metadataPickerOverlay');
+        metadataPickerOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
+
+        metadataPicker.addClass("metadataPicker");
+        metadataPicker.css({
+            position: 'absolute',
+            width: '71%',
+            height: '65%',
+            padding: '1%',
+            'background-color': 'black',
+            'border': '3px double white',
+            top: '17%',
+            left: '14%',
+        });
+        metadataPickerOverlay.append(metadataPicker);
+
+        metadataPickerHeader.addClass('metadataPickerHeader');
+        metadataPickerHeader.text("No match found. Please select the metadata you would like to import for " + artwork.Name);
+        metadataPickerHeader.css({
+            'font-size': '160%',
+            'width': '100%',
+            'float': 'left',
+            'color': 'white',
+            'background-color': 'black',
+        });
+        metadataPicker.append(metadataPickerHeader);
+
+        searchbar.css({
+            'margin-left': '1%',
+            'margin-top': '1%',
+            'width': '29%',
+        });
+        searchbar.on('keyup', function (event) {
+            event.stopPropagation();
+        });
+        searchbar.attr('type', 'text');
+        searchbar.attr('placeholder', "Search metadata by Title");
+        searchbar.keyup(function () {
+            searchtitles(searchbar.val(), allTitles);//, IGNORE_IN_SEARCH);
+        });
+        searchbar.change(function () {
+            searchtitles(searchbar.val(), allTitles);//, IGNORE_IN_SEARCH);
+        });
+        metadataPicker.append(searchbar);
+        //search function in terms of titles
+        function searchtitles(tofind, alltitles, container) {
+            var searchresults = [];
+            curlist = [];
+            var title, ind;
+            for (ind in alltitles) {
+                title = alltitles[ind];
+                if (TAG.Util.searchString(title, tofind)) {
+                    searchresults.push(ind);
+                    curlist.push(metadatalist[ind]);
+                }
+            }
+            //generate mtholders for the results
+            metadataLists.empty();
+            for (var mtfield in fields) {
+                fields[mtfield].field.hide();
+            }
+            counter = 0;
+            var num = searchresults.length < 30 ? searchresults.length : 30;
+            for (var j = 0; j < num; j++) {
+                var curtitle = alltitles[searchresults[j]];
+                var titlediv = makemtholder(curtitle, searchresults[j]);
+                counter++;
+                if (j === 0)
+                    titlediv.click();
+            }
+        }
+        // creates a panel for all the metadata objects
+        metadataLists.addClass('metadataLists');
+        metadataLists.css({
+            position: 'absolute',
+            'border-right': '1px solid white',
+            top: '13%',
+            padding: '1%',
+            height: '73%',
+            width: '28%',
+            overflow: 'auto',
+        });
+        metadataPicker.append(metadataLists);
+        metadataLists.bind('scroll', function () {
+            if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                if (counter < curlist.length) {
+                    var num = counter + 30 <= curlist.length ? 30 : curlist.length - counter;
+                    for (var k = 0; k < num; k++) {
+                        if (counter + k < curlist.length) {
+                            makemtholder(allTitles[counter + k], counter + k);
+                            counter++;
+                        }
+                    }
+                }
+            }
+        })
+        // creates a panel for all metadata's detailed info
+        metadataInfos.addClass('metadataInfos');
+        metadataInfos.css({
+            position: 'absolute',
+            left: '33%',
+            top: '13%',
+            padding: '1%',
+            height: '73%',
+            width: '62%',
+            overflow: 'auto',
+        });
+        metadataPicker.append(metadataInfos);
+        metadataholder.attr('class', 'metadataHolder');
+        metadataInfos.append(metadataholder);
+
+        for (i = 0; i < metadatalist.length; i++) {
+            var mt = metadatalist[i];
+            var title = mt["title"];
+            if (!mt['title'])
+                title = "Untitled";
+            allTitles[i] = title;
+            if (i < 30) {
+                var mtHolder = makemtholder(title, i);
+                //set the first one selected once we firstly open the picker
+                if (i === 0) {
+                    mtHolder.click();
+                }
+                counter++;
+            }
+        };
+
+        function makemtholder(ttl, index) {
+            var mtHolder = $(document.createElement('div'));
+            mtHolder.addClass('mtHolder');
+            mtHolder.attr('id', index);
+            mtHolder.css({
+                width: '100%',
+                height: '9%',
+                'text-overflow': 'ellipsis',
+                margin: '1px 0px 1px 0px',
+                'font-size': '120%',
+                'padding-left': '3%',
+                'padding-top': '3%',
+                'color': 'white',
+                'background-color': 'black'
+            });
+            mtHolder.text(ttl);
+            metadataLists.append(mtHolder);
+            makemtClickable(mtHolder);
+            return mtHolder;
+        }
+        //click function for each metadata element
+        function makemtClickable(mtholder) {
+            mtholder.click(function () {
+                $(".mtHolder").css('background', 'black');
+                mtholder.css('background', '#999');
+
+                var selected = mtholder.attr('id');
+                selectedmetadata = metadatalist[selected];
+                if (selectedmetadata) {
+                    $("#metadataPickerImport").attr('disabled', false);
+                    for (var ele in fields) {//if there is already a field for that element, change the value and show it.
+                        if (ele in selectedmetadata) {
+                            fields[ele].input.val(selectedmetadata[ele]);
+                            fields[ele].field.show().data('visible', true);
+                        } else {
+                            fields[ele].field.hide().data('visible', false);
+                        }
+                    }
+                    for (var rest in selectedmetadata) {
+                        //if there are extra fields, add them
+                        if (!fields[rest]) {
+                            var input = createTextInput(selectedmetadata[rest], null, null, false, true);
+                            var field = createSetting(rest, input, null, '7px');
+                            field.addClass("metadataField");
+                            field.attr('title', rest);
+                            field.css('color', 'white');
+                            field.css({
+                                float: 'left',
+                                background: '#222',
+                                width: '96%',
+                                height: '25%',
+                                padding: '2px',
+                                margin: '1px',
+                            });
+                            fields[rest] = { field: field, input: input };
+                            field.show().data('visible', true);
+                            metadataholder.append(field);
+                        }
+                    }
+                }
+            });
+        }
+
+        var metadataPickerImport = $(document.createElement('button'));
+        metadataPickerImport.attr("id", "metadataPickerImport");
+        metadataPickerImport.attr('disabled', true);
+        if (selectedmetadata)
+            metadataPickerImport.attr('disabled', false);
+        metadataPickerImport.text("Import");
+        metadataPickerImport.css({
+            position: 'absolute',
+            bottom: '2%',
+            right: '22%',
+        });
+        metadataPickerImport.click(function () {
+            updateArtwork(artwork, inputs, selectedmetadata, settingsContainer, spec);
+            $('.metadataInfos').empty();
+            metadataPickerOverlay.fadeOut();
+        });
+        metadataPicker.append(metadataPickerImport);
+
+        var metadataPickerCancel = document.createElement('button');
+        var $metadataPickerCancel = $(metadataPickerCancel);
+        $metadataPickerCancel.text("Cancel");
+        $metadataPickerCancel.css({
+            position: 'absolute',
+            bottom: '2%',
+            right: '5%',
+        });
+
+        // cancel button click handler
+        $metadataPickerCancel.click(function () {
+            metadataPickerOverlay.fadeOut();
+            $('.metadataInfos').empty();
+            metadataPickerCancel.disabled = true;
+        });
+        metadataPicker.append(metadataPickerCancel);
+        root.append(metadataPickerOverlay);
+        $(".parsingOverlay").fadeOut();
+        metadataPickerOverlay.fadeIn();
+    }
     /**Edit an artwork
      * @method editArtwork
      * @param {Object} artwork   artwork to edit
@@ -3219,25 +4004,36 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param width             if not falsey then assumed to be number represengint percent, must be less than 95
      * @return container        container of new setting
      */
-    function createSetting(text, input, width) {
+    function createSetting(text, input, width, labelLeft) {
         var container = $(document.createElement('div'));
-        container.attr('class', 'settingLine');
+        container.css({
+            'width': '100%',
+            'margin-bottom': '4%',
+        });
 
         var label = $(document.createElement('div'));
         label.css({
+            //'font-size': SETTING_FONTSIZE,
             'width': width ? 45 - (width - 50) + '%' : '45%',
+            'overflow': 'hidden',
+            'text-overflow': 'ellipsis',
+            'font-style': 'italic',
+            'display': 'inline-block',
+            'margin-left': labelLeft,
         });
         label.text(text);
-        label.attr('class', 'labelText');
 
         if (width) {
             width = width + '%';
         } else {
             width = '50%';
         }
-        input.attr('class', 'settingInput');
         input.css({
             'width': width,
+            //'font-size': INPUT_FONTSIZE,
+            'float': 'right',
+            'margin-right': '3%',
+            'box-sizing': 'border-box',
         });
 
         var clear = $(document.createElement('div'));
@@ -3301,7 +4097,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         timelineMonthInput.css('margin-right','0%');
         timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value')),'');
         timelineDayInput.css('margin-right', '0%');
-
+        yearInput.attr('id', 'yearInput');
         //Add focus to inputs:
         yearInput.focus(function () {
             if (yearInput.val() === 'Year'){
@@ -3619,11 +4415,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param hideOnClick
      * @return input                newly created input
      */
-    function createTextInput(text, defaultval, maxlength, hideOnClick) {
+    function createTextInput(text, defaultval, maxlength, hideOnClick, readonly) {
         var input = $(document.createElement('input')).val(text);
+        //if (defaultval) {
+        //    defaultVal(text, input, !!hideOnClick);
+        //}
+        input.attr('autocomplete', 'off');
+        input.attr('spellcheck', 'false');
+        input.css({
+            //'color': TEXT_COLOR,
+            //'border-color': INPUT_BORDER,
+            'padding': '.5%',
+        });
         input.attr({
             'type': 'text',
-            'maxlength': maxlength
+            'maxlength': maxlength,
+            'readonly': !!readonly
         });
         return input;
     }
