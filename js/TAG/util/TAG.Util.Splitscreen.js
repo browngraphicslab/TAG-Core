@@ -162,6 +162,15 @@ TAG.Util.Splitscreen = (function () {
             if (viewerL) {
                 $(viewerL.container).css({ 'width': '100%', 'height': '100%' });
                 viewerL.scheduleUpdate();
+                /**
+                var newLContainerSize = {
+                    x: $(viewerL.container).width(),
+                    y: $(viewerL.container).height()
+                };
+                viewerL.viewport.resize(newLContainerSize, false);
+                viewerL.viewport.applyConstraints();
+                viewerL.viewport.update();
+                **/
             }
             viewerR = null;
 
@@ -171,7 +180,10 @@ TAG.Util.Splitscreen = (function () {
             if (viewerR) {
                 $(viewerR.container).css({ 'width': '100%', 'height': '100%' });
                 viewerR.scheduleUpdate();
+               // viewerR.viewport.applyConstraints();
+               // viewerR.viewport.update();
             }
+            //viewerR.viewport.panTo(new Seadragon.Point(outerContainerPivot.x,outerContainerPivot.y));
             viewerL = null;
 
         }
@@ -182,10 +194,12 @@ TAG.Util.Splitscreen = (function () {
         fixLayoutsOnExit();
 
         if (viewerL) {
-            viewerL.scheduleUpdate();
+           // viewerL.scheduleUpdate();
+            //viewerL.viewport.applyConstraints();
         }
         if (viewerR) {
-            viewerR.scheduleUpdate();
+            //viewerR.scheduleUpdate();
+            //viewerR.viewport.applyConstraints();
         }
         viewerL = null;
         viewerR = null;
@@ -239,7 +253,6 @@ TAG.Util.Splitscreen = (function () {
                     'left': 'auto'
                 });
                 splitscreenContainer.css('display', 'block');
-                root.applyConstraints && root.applyConstraints();
                 //locationHistoryToggle.css({
                 //    left: '87.5%',
                 //    'border-bottom-right-radius': '10px',

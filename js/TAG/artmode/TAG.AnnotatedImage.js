@@ -28,8 +28,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
                                            //   also contains an array of GUIDs for cleaner iteration
         toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
-        rootHeight = $('#tagRoot').height(),
-        rootWidth = $('#tagRoot').width(),
+        rootHeight = $('#tagRoot').height(), //tag root height
+        rootWidth = $('#tagRoot').width(),  //total tag root width for manipulation (use root.width() instead for things that matter for splitscreen styling)
         outerContainerPivot = {
             x: rootHeight/2,
             y: rootWidth/2
@@ -336,7 +336,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             return viewer.viewport.pixelFromPoint(new Seadragon.Point(point.x, (1 / aspectRatio)));
         }
     }
-
+    
     /**
     * Calculates the location (point) of an element (bottom center)
     * Used in rich location history.
@@ -1108,6 +1108,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function move(prevVelocity, prevLocation, finalPos, delay){
             var currentPosition,
                 newVelocity,
+                top = parseFloat(outerContainer.css('top')),
+                left = parseFloat(outerContainer.css('left')),
                 timer;
 
             if (mediaHidden) {
@@ -1133,8 +1135,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             //Current position is previous position + movement from velocity * time
             currentPosition = { 
-                x: prevLocation.x + delay*prevVelocity.x,
-                y: prevLocation.y + delay*prevVelocity.y                  
+                x: left + delay*prevVelocity.x,
+                y: top + delay*prevVelocity.y   
             };
 
             // New velocity is proportional to distance left to travel
