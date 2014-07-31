@@ -3343,7 +3343,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         year = createSetting('Year', yearInput, 60);
         year.css({
-            width: '30%',
+            width: '32%',
             display: 'inline-block'
         });
         month = createSetting('Month', monthInput, 60);
@@ -3385,7 +3385,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         toggleAllow(timelineMonthInput);
         timelineDay = createSetting('Day', timelineDayInput,'60%');
         timelineDay.css({
-            width : '17%',
+            width : '20%',
             'padding-left': '2%',
             display: 'inline-block'
         });
