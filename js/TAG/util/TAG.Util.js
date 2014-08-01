@@ -5144,6 +5144,7 @@ TAG.Util.RLH = function (input) {
                 callback    :   function(){
                     annotImg.openArtwork(input.mapdoq);
                     annotImgs[input.mapdoq.Identifier] = annotImg;
+                    annotImg.initZoom();
                     
                     if (++input.progress.done >= input.progress.total) {
                             input.loadCallback && input.loadCallback();
