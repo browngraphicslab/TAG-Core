@@ -574,64 +574,8 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
 
         setTextAttributes(svgText);
     }
-
-    ///**
-    // * Pans and resizes all inks to move with the artwork. Uses the initial keyframe of the artwork (converted here to absolute coordinates) and the
-    // * inputted dimensions to compute deltas and scale factors. Once we have these, first pan to (0,0), then scale, then pan to pos+deltas.
-    // * @param dims   the current dimensions of our artwork in absolute coordinates
-    // */
-    //function adjustViewBox (dims) {
-    //    var new_px = dims.x,
-    //        new_py = dims.y,
-    //        new_pw = dims.width,
-    //        new_ph = dims.height,
-    //        real_kfw, real_kfh, real_kfx, real_kfy;
-    //    // convert weird deeepzoom keyframe coordinates to absolute coordinates
-    //    real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
-    //    real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
-    //    real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
-    //    real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -kfy * real_kfh)
-        
-    //    // if the new position is not trivially different from the old position, pan and zoom
-    //    if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
-    //        var lambda_w = origPaperW / real_kfw;
-    //        var lambda_h = origPaperH / real_kfh;
-    //        var nvw = new_pw * lambda_w; // nv*: dimensions of the new virtual canvas (where the ink canvas would be if we were panning and zooming it with the artwork)
-    //        var nvh = new_ph * lambda_h;
-    //        var nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
-    //        var nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
-
-    //        var SW = nvw / lastcw; // scale factor in x direction
-    //        oldScale = new_pw / origpw;
-
-    //        if (!transCoords.length || trans_mode === 'block') { // for all ink types except isolates (can't just resize the window for them)
-    //            var newwid = origPaperW / oldScale;
-    //            var newhei = origPaperH / oldScale;
-    //            paper.setViewBox(-nvx / oldScale, -nvy / oldScale, newwid, newhei); // see raphael documentation
-    //        } else {
-    //            var cw = canvElt.width();
-    //            var ch = canvElt.height();
-    //            magX = cw;
-    //            magY = ch;
-    //            panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }); // no need to draw updated ink yet
-    //            resizeObjects(SW, SW); // still no need, since we still have to pan
-    //            panObjects(nvx / origPaperW, nvy / origPaperH, { cw: cw, ch: ch }, true);
-    //        }
-
-    //        // reset coordinates
-    //        lastcx = nvx;
-    //        lastcy = nvy;
-    //        lastcw = nvw;
-    //        lastch = nvh;
-    //        lastpx = new_px;
-    //        lastpy = new_py;
-    //        lastpw = new_pw;
-    //        lastph = new_ph;
-    //    }
-    //}
     
-
-    /** KEEPasdfasdfasfasdf
+    /**
      * Pans and resizes all inks to move with the artwork. Uses the initial keyframe of the artwork
      * (converted here to absolute coordinates) and the inputted dimensions to compute deltas and scale
      * factors. Once we have these, first pan to (0,0), then scale, then pan to position + deltas.
@@ -712,84 +656,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             lastph = new_ph;
         }
     }
-
-    ///** ((BEN L))
-    // * Pans and resizes the ink canvas to move with the artwork. Uses the initial keyframe of the artwork (converted here to absolute coordinates) and the
-    // * inputted dimensions to compute deltas and scale factors. Once we have these, first pan to (0,0), then scale, then pan to pos+deltas.
-    // * @param dims   the current dimensions of our artwork in absolute coordinates
-    // */
-    //function adjustViewBoxDiv(dims, no_opac_check) {
-    //    var new_px = dims.x,
-    //        new_py = dims.y,
-    //        new_pw = dims.width,
-    //        new_ph = dims.height,
-    //        real_kfw, real_kfh, real_kfx, real_kfy;
-    //    try {
-    //        // convert weird deeepzoom keyframe coordinates to absolute coordinates
-    //        real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
-    //        real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
-    //        real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
-    //        real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -kfy * real_kfh)
-    //    }
-    //    catch (err) {
-    //        console.log("ERROR in adjustViewBox: " + err);
-    //        real_kfx = origpx;
-    //        real_kfy = origpy;
-    //        real_kfw = origpw;
-    //        real_kfh = origph;
-    //    }
-
-    //    // if the new position is not trivially different from the old position, pan and zoom
-    //    if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
-    //        var eid_elt = $("[ES_ID='" + expId + "']");
-    //        var lambda_w = origPaperW / real_kfw;
-    //        var lambda_h = origPaperH / real_kfh;
-    //        var nvw = new_pw * lambda_w; // new dimensions of the virtual canvas
-    //        var nvh = new_ph * lambda_h;
-    //        var nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
-    //        var nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
-
-    //        var SW = nvw / lastcw; // scale factor in x direction
-    //        var SH = nvh / lastch; // scale factor in y direction (in case we ever have non-aspect-ratio-preserving scaling)
-
-    //        var cw = canvElt.width();
-    //        var ch = canvElt.height();
-
-    //        // translate to (0,0), scale by (SW,SH), translate to (nvx,nvy)
-    //        // in panning, we divide by the width of the paper because all coordinates are in [0,1]
-    //        panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }, 0); // no need to draw updated ink yet
-    //        resizeObjects(SW, SH); // still no need, since we still have to pan
-    //        panObjects(nvx / origPaperW, nvy / origPaperH, { cw: cw, ch: ch }, 1);//no_opac_check || parseFloat(eid_elt[0].style.opacity));
-    //        //if (true || parseFloat(eid_elt[0].style.opacity)) { // only draw if the ink is on screen or if we're on the initial load
-    //        //    panObjects(nvx / origPaperW, nvy / origPaperH);
-    //        //    console.log("DRAWING");
-    //        //}
-    //        //else {
-    //        //    panObjects(nvx / origPaperW, nvy / origPaperH, 'do not draw');
-    //        //    console.log("NOT DRAWING");
-    //        //}
-
-    //        // reset coordinates
-    //        lastcx = nvx;
-    //        lastcy = nvy;
-    //        lastcw = nvw;
-    //        lastch = nvh;
-    //        lastpx = new_px;
-    //        lastpy = new_py;
-    //        lastpw = new_pw;
-    //        lastph = new_ph;
-
-    //        var new_opac;
-    //        try {
-    //            new_opac = parseInt(no_opac_check || eid_elt[0].style.opacity,10);
-    //        }
-    //        catch (err) {
-    //            console.log("error in adjustViewBox: " + err);
-    //        }
-    //        oldOpac = new_opac;
-    //    }
-    //}
-    //that.adjustViewBoxDiv = adjustViewBoxDiv;
 
     /**
      * Convert a string representing a block transparency to one representing an isolate transparency.
@@ -1110,59 +976,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     }
 
     /**
-     * Uses the arrays ml, xy, and pa to draw paths with the correct properties.
-     * First clears the canvas of existing paths, then draws new ones.
-     */
-    //function drawPaths() {
-    //    var cw = viewerElt.width();
-    //    var ch = viewerElt.height();
-    //    var paths = "";
-    //    var cpaths = "";
-    //    var i;
-    //    var len = pathObjects.length;
-    //    for (i = 0; i < len; i++) { //removes paths from canvas
-    //        pathObjects[i].remove();
-    //    }
-    //    pathObjects.length = 0;
-    //    for (i = 0; i < ml.length; i++) { //construct the paths
-    //        if (ml[i] === 'M') {
-    //            paths += "PATH::[pathstring]"; // the paths to be drawn now
-    //            cpaths += "PATH::[pathstring]"; // the paths we will save for our datastring (in relative coordinates)
-    //        }
-    //        paths += ml[i] + (cw * xy[i][0]) + ',' + (ch * xy[i][1]); // absolute coords
-    //        cpaths += ml[i] + (xy[i][0]) + ',' + (xy[i][1]); // relative coords
-    //        if (ml[i + 1] != 'L') {
-    //            // if we're here, we've reached the end of a path, so add style information to the path strings
-    //            paths += "[stroke]" + pa[i].color + "[strokeo]" + pa[i].opacity + "[strokew]" + (ch * pa[i].width) + "[]|";
-    //            cpaths += "[stroke]" + pa[i].color + "[strokeo]" + pa[i].opacity + "[strokew]" + pa[i].width + "[]|";
-    //        }
-    //    }
-    //    var path = [];
-    //    if (paths.length > 0) {
-    //        path = paths.split('PATH::');
-    //    }
-    //    for (i = 1; i < path.length; i++) {
-    //        var pstring = getAttr(path[i], "pathstring", "s");
-    //        var strokec = getAttr(path[i], "stroke", "s");
-    //        var strokeo = getAttr(path[i], "strokeo", "f");
-    //        var strokew = getAttr(path[i], "strokew", "f");
-    //        var drawing = paper.path(pstring); // draw the path to the canvas
-    //        drawing.data("type", "path");
-    //        drawing.attr({
-    //            "stroke-width": strokew,
-    //            "stroke-opacity": strokeo,
-    //            "stroke": strokec,
-    //            "stroke-linejoin": "round",
-    //            "stroke-linecap": "round"
-    //        });
-    //        pathObjects.push(drawing);
-    //    }
-    //    currpaths = cpaths; // currpaths is used in update_datastring as the string representing all paths on the canvas
-    //    //update_datastring();
-    //}
-    //that.drawPaths = drawPaths;
-
-    /**
      * A helper function to draw transparencies. Takes the arrays transLetters (representing the
      * svg path commands in the transparency string) and transCoords (corresponding locations on the
      * canvas in relative coordinates) and draws the appropriate type of transparency to the canvas.
@@ -1204,43 +1017,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         update_datastring();// TODO DOC do we need to call this so often?
     }
 
-    ///**
-    // * Called if we drag on the ink canvas in eraser mode. Finds endpoints in the current paths close
-    // * to the drag event location and splices them out of the path array.
-    // * @param location   the locaton of the drag event
-    // */
-    //function erase(location) {
-    //    var cw = canvElt.width();
-    //    var ch = canvElt.height();
-    //    var range = eraserWidth;
-    //    for (var i = 0; i < xy.length; i++) { // for each coordinate, test for proximity to location
-    //        if (location[0] - range <= (cw * xy[i][0]) && (cw * xy[i][0]) <= location[0] + range) {
-    //            if (location[1] - range <= (ch * xy[i][1]) && (ch * xy[i][1]) <= location[1] + range) {
-    //                if (ml[i + 1] === 'L') { // if we splice in the middle of a path, split into two paths
-    //                    ml[i + 1] = 'M';
-    //                }
-    //                ml.splice(i, 1);
-    //                xy.splice(i, 1);
-    //                pa.splice(i, 1);
-    //            }
-    //        }
-    //    }
-    //    var check = false;
-    //    for (var j = 0; j < ml.length; j++) {
-    //        if (ml[j] === "L") {
-    //            check = true;
-    //            break;
-    //        }
-    //    }
-    //    if (!check) {
-    //        xy.length = 0;
-    //        ml.length = 0;
-    //        pa.length = 0;
-    //    }
-    //    drawPaths(); // after we're done splicing, redraw the paths
-    //}
-    //that.erase = erase;
-
     /**
      * Takes in a datastring and parses for a certain attribute by splitting at "[" and "]" (these surround
      * attribute names).
@@ -1259,16 +1035,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
         return parseFloat(val);
     }
-
-    //function set_attr(attr, newval) {
-    //    var arrs = datastring.split("[" + attr + "]");
-    //    var arr2 = arrs[1].split("]");
-    //    arr2.splice(0, 1);
-    //    arr2[0] = "[color]"+arr2[0];
-    //    var str2 = arr2.join("]");
-    //    datastring = arrs[0] + "[fontsize]" + newval + str2;
-    //}
-    //that.set_attr = set_attr;
     
     /**
      * Returns the isolate/block bounding shapes
@@ -1470,133 +1236,133 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
      */
     function creationError(displayString) {
         timeline.hideEditorOverlay();
-        var messageBox = TAG.Util.UI.popUpMessage(null, displayString, null);
-        $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
-        $('body').append(messageBox);
-        $(messageBox).fadeIn(500);
+        var messageBox = $(TAG.Util.UI.popUpMessage(null, displayString, null));
+        messageBox.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+        $('#tagRoot').append(messageBox); // TODO CHECK is this correct in both apps?
+        messageBox.fadeIn(500);
     }
 
     /**
      * Checks if currently inside display
-     * @returns             true if in display, false otherwise
+     * @method checkInDisplay
+     * @param {TAG.TourAuthoring.Track} track        selected track
+     * @return {Boolean}                             true if in a display in selected track
      */
     function checkInDisplay(track) {
-        var currTime = timeManager.getCurrentTime();
-        //for (var i = 0; i < displays.length ; i++) {
-        //    var disp = displays[i];
-        //    if (disp.getStart() <= currTime && currTime <= disp.getEnd()) {
-        //        inDisplay = true;
-        //        break;
-        //    }
+        var currTime = timeManager.getCurrentTime(),
+            nearestDisplay = track.getStorageContainer().displays.nearestNeighbors(currTime, 1)[0];
+
+        return !!nearestDisplay;
+    }
+
+    /**
+     * Helper function to do some preprocessing on text inks before linking them
+     * @method linkText
+     * @return {Boolean}     true if successful in linking, false otherwise
+     */
+    function linkText() {
+        //var track,
+        //    keyframe;
+
+        //dataHolder = dataHolder || timeline.dataHolder;
+
+        //// check if track is valid (i.e., there is a selected track and it's an artwork or image track)
+        //track = dataHolder.getSelectedTrack();
+        //if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
+        //    creationError("There is no artwork or image track selected. Please select a valid track or create as an unlinked annotation.");
+        //    return false;
         //}
-        var nearestDisplay = track.getStorageContainer().displays.nearestNeighbors(currTime, 1)[0];
-        if (nearestDisplay) {
-            return true;
-        } else {
+
+        // check if the text is a valid (non-empty) ink by checking the value of the textbox. If invalid, show a warning message.
+        if (isTextboxEmpty()) {
+            creationError("Unable to attach an empty annotation. Please add to annotation before attaching.");
             return false;
         }
+
+        //// check to make sure the playhead is in a display; if not, show a warning message
+        //if (!checkInDisplay(track)) {
+        //    creationError("Please move the playhead within the currently selected track's display.");
+        //    return false;
+        //}
+
+        //// make sure capturing keyframe is successful, too
+        //keyframe = viewer.captureKeyframe(track.getTitle());
+        //if (!keyframe) {
+        //    creationError("The track selected must be fully on screen in order to attach an annotation. Please seek to a location where the track is visible.");
+        //    return false;
+        //}
+
+        saveText();
+        return link();
     }
 
     /**
-     * Helper function to do some preprocessing on text inks before linking them.
-     * @return    true if we should proceed to linking, false if there are warning messages
+     * Helper function to do some preprocessing on unattached text inks
+     * @method linkTextUnattached
+     * @return {Boolean}     true if no warnings, false otherwise
      */
-    function link_text() {
-        if (!dataHolder) {
-            dataHolder = timeline.dataHolder;
-        }
-        var track = dataHolder.getSelectedTrack();
-        if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
-            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
-            return false;
-        }
-
-        // First, check if the text is a valid (non-empty) ink by checking the value of the textbox. If invalid, show a warning message.
+    function linkTextUnattached() {
+        // check if the text is a valid (non-empty) ink by checking the value of the textbox. If invalid, show a warning message.
         if (isTextboxEmpty()) {
             creationError("Unable to attach an empty ink. Please add to ink component before attaching.");
             return false;
         }
-        // next, check to make sure the playhead is in a display; if not, show a warning message
-        var inDisplay = checkInDisplay(track);//.getDisplays());
-        // also check if the selected track is an artwork or an image
-        if (!inDisplay) {
-            creationError("Please move the playhead within the currently selected track's display.");
-            return false; // if a warning popped up, return false
-        }
-        var keyframe = viewer.captureKeyframe(track.getTitle());
-        if (!keyframe) {
-            creationError("The track selected must be fully on screen in order to attach an ink. Please seek to a location where the track is visible.");
-            return false;
-        }
+        return linkUnattached();
+    }
 
+    /**
+     * Helper function to do some preprocessing on transparencies before linking them
+     *
+     * TODO could factor out some code from here and linkText
+     *
+     * @method linkTrans
+     * @return {Boolean}     true if successful in linking, false otherwise
+     */
+    function linkTrans() {
+        //var track,
+        //    keyframe;
 
-        save_text();
+        //dataHolder = dataHolder || timeline.dataHolder;
+
+        //// TODO DOC can we delete these checks? they happen in link anyway...
+
+        //// check if track is valid (i.e., there is a selected track and it's an artwork or image track)
+        //track = dataHolder.getSelectedTrack();
+        //if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
+        //    creationError("There is no artwork or image track selected. Please select a valid track or create as an unlinked annotation.");
+        //    return false;
+        //}
+
+        //// check to make sure the playhead is in a display; if not, show a warning message
+        //if (!checkInDisplay(track)) {
+        //    creationError("Please move the playhead within the currently selected track's display.");
+        //    return false;
+        //}
+
+        //// make sure capturing keyframe is successful, too
+        //keyframe = viewer.captureKeyframe(track.getTitle());
+        //if (!keyframe) {
+        //    creationError("The track selected must be fully on screen in order to attach an annotation. Please seek to a location where the track is visible.");
+        //    return false;
+        //}
+
+        getTransShapeData();
         return link();
     }
-    that.link_text = link_text;
 
     /**
-     * Helper function to do some preprocessing on text inks before creating them unattached.
-     * @return     true if no warnings and we should create, false otherwise
+     * Helper function to do some preprocessing on unattached transparency inks
+     * @method linkTransUnattached
+     * @return {Boolean}     true if no warnings, false otherwise
      */
-    function link_text_unattached() {
-        // First, check if the text is a valid (non-empty) ink by checking the value of the textbox. If invalid, show a warning message.
-        if (isTextboxEmpty()) {
-            creationError("Unable to attach an empty ink. Please add to ink component before attaching.");
-            return false;
-        }
-        if (!linkUnattached()) return false;
-        return true;
-    }
-    that.link_text_unattached = link_text_unattached;
-
-    /**
-     * Helper function to do some preprocessing on transparencies before linking them.
-     * @return     true if no warnings, false otherwise (see link_text for description of warnings)
-     */
-    function link_trans() {
-        if (!dataHolder) {
-            dataHolder = timeline.dataHolder;
-        }
-        var track = dataHolder.getSelectedTrack();
-        
-        if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
-            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
-            return false;
-        }
-
-        var inDisplay = checkInDisplay(track);
-        
-        if (!inDisplay) {
-            creationError("Please move the playhead within the currently selected track's display.");
-            return false; // if a warning popped up, return false
-        }
-        
-        var keyframe = viewer.captureKeyframe(track.getTitle());
-        if (!keyframe) {
-            creationError("The track selected must be fully on screen in order to attach an ink. Please seek to a location where the track is visible.");
-            return false;
-        }
-
-        get_trans_shape_data();
-        return link();
-    }
-    that.link_trans = link_trans;
-
-    /**
-     * Helper function to do some preprocessing on transparencies before creating them unattached.
-     * @return     true if no warnings, false otherwise
-     */
-    function link_trans_unattached() {
+    function linkTransUnattached() {
         if (isDatastringEmpty(update_datastring())) {
             creationError("Unable to attach an empty ink. Please add to ink component before attaching.");
             return false;
         }
-        get_trans_shape_data();
-        linkUnattached();
-        return true;
+        getTransShapeData();
+        return linkUnattached();
     }
-    that.link_trans_unattached = link_trans_unattached;
 
     /**
      * Function to link an ink to an artwork. Called for all types of inks (possibly after preprocessing, in
@@ -1604,74 +1370,95 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
      * return     true if linking was successful, false if warnings
      */
     function link() {
-        if (!dataHolder) {
-            dataHolder = timeline.dataHolder;
-        }
-        var track = dataHolder.getSelectedTrack();
+        var track,
+            keyframe,
+            datastr = updateDatastring(),
+            proxyDiv,
+            proxy,
+            kfvx,
+            kfvy,
+            kfvw,
+            kfvh,
+            rw,
+            inkType,
+            linkType,
+            inkDisplayTime,
+            parentDisplay,
+            boundingEdge,
+            inkDisplay;
 
+        dataHolder = dataHolder || timeline.dataHolder;
+
+        // check if track is valid (i.e., there is a selected track and it's an artwork or image track)
+        track = dataHolder.getSelectedTrack();
         if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
-            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
+            creationError("There is no artwork or image track selected. Please select a valid track or create as an unattached annotation.");
             return false;
         }
-        if (isDatastringEmpty(update_datastring())) { // make sure the datastring is nonempty before we attach
-            creationError("Unable to attach an empty ink. Please add to ink component before attaching.");
+
+        // make sure the datastring is nonempty before we attach
+        if (isDatastringEmpty(datastr)) {
+            creationError("Unable to attach an empty annotation. Please add to annotation before saving.");
             return false;
         }
-        var inDisplay = checkInDisplay(track);
+
         // make sure the track selection is valid, it is an artwork or an image, and the playhead is in a track display
-        if (!inDisplay) {
+        if (!checkInDisplay(track)) {
             creationError("Please move the playhead within the currently selected track's display.");
-            return false; // if a warning popped up, return false
+            return false;
         }
 
         // prepare to set track data
-        artName = track.getTitle();
-        var cw = canvElt.width();
-        var ch = canvElt.height();
-        magX = cw;
-        magY = ch;
-        var proxy_div = $("[data-proxy='" + escape(artName) + "']");
-        var proxy = {
-            x: proxy_div.data("x"),
-            y: proxy_div.data("y"),
-            w: proxy_div.data("w"),
-            h: proxy_div.data("h")
-        };
+        artName = track.getTitle(); // "global" var
+        linkType = track.getType();
 
-        var datastr = update_datastring();
-
-        var keyframe = viewer.captureKeyframe(artName);
+        // make sure capturing keyframe is successful, too
+        keyframe = viewer.captureKeyframe(artName);
         if (!keyframe) {
-            creationError("The track selected must be fully on screen in order to attach an ink. Please seek to a location where the track is visible.");
+            creationError("The track selected must be fully on screen in order to attach an annotation. Please seek to a location where the track is visible.");
             return false;
         }
 
-        var kfvx, kfvy, kfvw, kfvh,
-            linkType = track.getType();
-        // get initial keyframe for the artwork/image we're attaching to
+        magX = canvWidth;
+        magY = canvHeight;
+        proxyDiv = $("[data-proxy='" + escape(artName) + "']");
+        proxy = {
+            x: proxyDiv.data("x"),
+            y: proxyDiv.data("y"),
+            w: proxyDiv.data("w"),
+            h: proxyDiv.data("h")
+        };
+
+        
+        // get initial keyframe for the artwork/image we're attaching to (in the deepzoom format)
         if (linkType === TAG.TourAuthoring.TrackType.artwork) {
             kfvx = keyframe.state.viewport.region.center.x;
             kfvy = keyframe.state.viewport.region.center.y;
             kfvw = keyframe.state.viewport.region.span.x;
             kfvh = keyframe.state.viewport.region.span.y;
+        } else if (linkType === TAG.TourAuthoring.TrackType.image) {
+            kfvw = 1.0 / keyframe.state.viewport.region.span.x;
+            rw = keyframe.state.viewport.region.span.x * canvElt.width();
+            kfvh = keyframe.state.viewport.region.span.y; // not used
+            kfvx = -keyframe.state.viewport.region.center.x * kfvw;
+            kfvy = -(canvElt.height() / rw) * keyframe.state.viewport.region.center.y;
         }
-        else if (linkType === TAG.TourAuthoring.TrackType.image) {
-            kfvw = 1.0 / keyframe.state.viewport.region.span.x;//$("#" + canvid).width() / (keyframe.state.viewport.region.span.x * cw);
-            var rw = keyframe.state.viewport.region.span.x * canvElt.width();
-            kfvh = keyframe.state.viewport.region.span.y; /////bogus entry, not used
-            kfvx = -keyframe.state.viewport.region.center.x * kfvw;// /
-            kfvy = -(canvElt.height() / rw) * keyframe.state.viewport.region.center.y;// / (.5*(keyframe.state.viewport.region.span.x
-        }
-        // set track data
-        var inkType = datastr.split("::")[0].toLowerCase();
-        inkTrack = timeline.addInkTrack(track, "Ink " + decodeURI(track.getTitle()), inkType);
-        inkTrack.setInkLink(track);
 
-        if (inkType === "trans")
+        // set track data
+        inkType = datastr.split("::")[0].toLowerCase();
+        inkTrack = timeline.addInkTrack(track, "Ink " + decodeURI(artName), inkType);
+
+        if (inkType === "trans") {
             datastr += bounding_shapes; // if we're attaching a transparency, also include the bounding ellipse/rects in the datastring so we can edit later
+        }
+
         inkTrack.setInkPath(datastr);
-        //inkTrack.setInkProps({}); // not used
-        inkTrack.setInkInitKeyframe({ "x": kfvx, "y": kfvy, "w": kfvw, "h": kfvh });
+        inkTrack.setInkInitKeyframe({ // the init keyframe is used to position the ink when the artwork is moved
+            "x": kfvx,
+            "y": kfvy,
+            "w": kfvw,
+            "h": kfvh
+        });
         inkTrack.setInkEnabled(true); // set linked
         inkTrack.setInkType(inkType);
         inkTrack.setInkRelativeArtPos(getArtRelativePos(proxy));
@@ -1679,14 +1466,14 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         inkTrack.addInkTypeToTitle(inkType);
 
         isAttached = true;
-        canvElt.remove();
+        canvElt.remove(); // remove raphael canvas
 
-        var inkDisplayTime = timeManager.getCurrentTime();
-        var parentDisplay = track.getStorageContainer().displays.nearestNeighbors(inkDisplayTime, 1)[0].display;
-        var boundingEdge = parentDisplay.getEnd();
-        var inkDisplay = inkTrack.addDisplay(timeManager.getCurrentPx(), Math.min(5, boundingEdge - inkDisplayTime)); //add a display at the playhead location
+        inkDisplayTime = timeManager.getCurrentTime();
+        parentDisplay = track.getStorageContainer().displays.nearestNeighbors(inkDisplayTime, 1)[0].display;
+        boundingEdge = parentDisplay.getEnd();
+        inkDisplay = inkTrack.addDisplay(timeManager.getCurrentPx(), Math.min(5, boundingEdge - inkDisplayTime)); //add a display at the playhead location
 
-        // set parent-child association between displays
+        // set parent-child association between displays (used for constraining display dragging, etc)
         parentDisplay.addChildDisplay(inkDisplay);
         inkDisplay.setParentDisplay(parentDisplay);
 
@@ -1697,13 +1484,13 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         // add command to undo both track creation and display at once
         undoManager.combineLast(2);
 
+        // it looks like this is forcing a tour refresh? TODO MAKE DEDICATED METHOD
         if (dataHolder._trackArray.length > 0) {
             dataHolder._trackArray[0].track.leftAndRight({ translation: { x: 0 } }, false);
         }
 
         return true;
     }
-    that.link = link;
 
     /**
      * Function to create an unattached ink. Called for all types of inks (possibly after preprocessing, in
@@ -1711,73 +1498,28 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
      * return     true if creation was successful, false if warnings
      */
     function linkUnattached() {
-        var inkEmptyOverlay = $(TAG.Util.UI.blockInteractionOverlay());
-        var inkEmptyDialog = $(document.createElement("div"));
+        var datastr = updateDatastring(),
+            inkType;
 
-        function okTapInkAttach(evt) {
-            inkEmptyOverlay.fadeOut(200);
-        }
-        if (isDatastringEmpty(update_datastring())) {
-            inkEmptyDialog.attr("id", "inkEmptyDialog");
-            inkEmptyDialog.css({
-                display: 'none',
-                position: 'fixed',
-                top: '40%',
-                left: '30%',
-                width: 'auto',
-                'background-color': 'black',
-                'border': '3px double white',
-                'z-index': TAG.TourAuthoring.aboveRinZIndex + 5,
-                'text-align': 'center',
-                'padding': '1.5% 1.5% 2% 2%',
-            });
-
-            inkEmptyOverlay.append(inkEmptyDialog);
-            $("body").append(inkEmptyOverlay);
-            inkEmptyOverlay.fadeIn(100);
-
-            var text = $(document.createElement("div"));
-            text.text("Unable to attach an empty ink. Please add to ink component before attaching.");
-            text.css('font-size', '1.25em', "text-align", 'left');
-            inkEmptyDialog.append(text);
-
-            var buttonDiv = $(document.createElement("div"));
-            buttonDiv.css('text-align', 'center');
-
-            var ok = $(document.createElement("button"));
-            ok.text("OK");
-            ok.css({
-                width: 'auto',
-                'background-color': 'black',
-                'border': '1px solid white',
-                'margin-top': '25px',
-                //'margin-right':'2%'
-            });
-            buttonDiv.append(ok);
-            inkEmptyDialog.append(buttonDiv);
-            inkEmptyDialog.show();
-
-            TAG.Util.makeManipulatable(ok[0], {
-                onTapped: okTapInkAttach
-            }, false);
+        if (isDatastringEmpty(datastr)) {
+            creationError("Unable to attach an empty annotation. Please add to annotation before saving.");
             return false;
         }
 
         // add track and set track data
         inkTrack = timeline.addInkTrack(null, "Unattached Ink", 1);
         inkTrack.setInkLink(null);
-        var datastr = update_datastring();
-        var inkType = datastr.split("::")[0].toLowerCase();
-        if (inkType == "trans")
+        inkType = datastr.split("::")[0].toLowerCase();
+        if (inkType === "trans") {
             datastr += bounding_shapes;
+        }
         inkTrack.setInkPath(datastr);
         inkTrack.setInkEnabled(false); // unattached
-        inkTrack.setInkSize(fontSize);
-        inkTrack.setInkInitKeyframe({}); // initial keyframe doesn't matter, since not linked
-        inkTrack.setInkRelativeArtPos({}); // initial art position doesn't matter, since not linked
+        inkTrack.setInkSize(fontSize); // TODO DOC is this necessary
+        inkTrack.setInkInitKeyframe({}); // initial keyframe doesn't matter, since not attached
+        inkTrack.setInkRelativeArtPos({}); // initial art position doesn't matter, since not attached
 
         inkTrack.addInkTypeToTitle(inkType);
-
 
         isAttached = false;
         canvElt.remove();
@@ -1788,7 +1530,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
         return true;
     }
-    that.linkUnattached = linkUnattached;
 
     function getTextElt() {
         return textElt;
@@ -2023,18 +1764,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
     }
     that.load_transparency_bounding_shapes = load_transparency_bounding_shapes;
-
-    /**
-     * DEPRECATED -- constructor for old marquees
-     */
-    //function marquee(rectN, rectE, rectS, rectW, rectC) {
-    //    this.rn = rectN;
-    //    this.re = rectE;
-    //    this.rs = rectS;
-    //    this.rw = rectW;
-    //    this.rc = rectC;
-    //}
-    //that.marquee = marquee;
 
     /**
      * Using the point pt, computes the incoming bezier anchor coordinates for the next point (next) in the path.
@@ -2796,42 +2525,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     that.update_datastring = update_datastring;
 
     /**
-     * When we load in a path datastring, update ml, xy, and pa to reflect the new data.
-     * @param str   the datastring loaded
-     */
-    //function update_ml_xy_pa (str) {
-    //    var i, j;
-
-    //    // add info to ml and pa
-    //    for (i = 0; i < str.length; i++) {
-    //        if ((str[i] === "L") || (str[i] === "M")) {
-    //            var cpth = str.substring(i).split("|")[0];
-    //            var strokec = getAttr(cpth, "stroke", "s");
-    //            var strokeo = getAttr(cpth, "strokeo", "f");
-    //            var strokew = getAttr(cpth, "strokew", "f");
-    //            ml.push(str[i]);
-    //            pa.push({ "color": strokec, "opacity": strokeo, "width": strokew });
-    //        }
-    //    }
-
-    //    // add info to xy (probably easier with regular expressions)
-    //    var arr1 = str.split("L");
-    //    for (i = 0; i < arr1.length; i++) {
-    //        if (arr1[i].length > 0) {
-    //            var arr2 = arr1[i].split("M");
-    //            for (j = 0; j < arr2.length; j++) {
-    //                if (arr2[j].length > 0 && arr2[j].charAt(0) != 'P') {
-    //                    var arr3 = arr2[j].split(",");
-    //                    xy.push([parseFloat(arr3[0]), parseFloat(arr3[1])]);
-    //                }
-    //            }
-    //        }
-    //    }
-    //    click = false;
-    //}
-    //that.update_ml_xy_pa = update_ml_xy_pa;
-
-    /**
      * The following are setters for various ink parameters
      * @param _    the value to be set to the corresponding ink parameter
      */
@@ -2839,9 +2532,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     function setPenOpacity(o) { penOpacity = o; }
     function setPenWidth(w) { penWidth = w; }
     function setEraserWidth(w) { eraserWidth = w; }
-    //function setShapeStrokeColor(c) { shapeStrokeColor = (c[0] == '#') ? c : ("#" + c); }
-    //function setShapeStrokeOpacity(o) { shapeStrokeOpacity = o; }
-    //function setShapeStrokeWidth(w) { shapeStrokeWidth = w; }
     function setMarqueeFillColor(c) { marqueeFillColor = (c[0] == '#') ? c : ("#" + c); }
     function setMarqueeFillOpacity(o) { marqueeFillOpacity = o; }
     function setEnabled(en) { isAttached = end; }
@@ -2886,9 +2576,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     that.setPenOpacity = setPenOpacity;
     that.setPenWidth = setPenWidth;
     that.setEraserWidth = setEraserWidth;
-    //that.setShapeStrokeColor = setShapeStrokeColor;
-    //that.setShapeStrokeOpacity = setShapeStrokeOpacity;
-    //that.setShapeStrokeWidth = setShapeStrokeWidth;
     that.setMarqueeFillColor = setMarqueeFillColor;
     that.setMarqueeFillOpacity = setMarqueeFillOpacity;
     that.setEnabled = setEnabled;
@@ -2905,9 +2592,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     function getPenOpacity() { return penOpacity; }
     function getPenWidth() { return penWidth; }
     function getEraserWidth() { return eraserWidth; }
-    //function getShapeStrokeColor() { return shapeStrokeColor; }
-    //function getShapeStrokeOpacity() { return shapeStrokeOpacity; }
-    //function getShapeStrokeWidth() { return shapeStrokeWidth; }
     function getMarqueeFillColor() { return marqueeFillColor; }
     function getMarqueeFillOpacity() { return marqueeFillOpacity; }
     function getEnabled() { return isAttached; }
@@ -2921,9 +2605,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     that.getPenOpacity = getPenOpacity;
     that.getPenWidth = getPenWidth;
     that.getEraserWidth = getEraserWidth;
-    //that.getShapeStrokeColor = getShapeStrokeColor;
-    //that.getShapeStrokeOpacity = getShapeStrokeOpacity;
-    //that.getShapeStrokeWidth = getShapeStrokeWidth;
     that.getMarqueeFillColor = getMarqueeFillColor;
     that.getMarqueeFillOpacity = getMarqueeFillOpacity;
     that.getEnabled = getEnabled;
@@ -2933,114 +2614,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     that.getFontOpacity = getFontOpacity;
     that.getTransMode = getTransMode;
 
-    /**
-     * The following are essentially setters, but they take in an id, grab the
-     * value of the dom element with that id, and set the correct variable accordingly
-     * @param id   the id of the dom element whose value we want to use
-     */
-    //function updatePenColor(id) {
-    //    var val = document.getElementById(id).value;
-    //    //console.log("col = " + val);
-    //    if (val !== undefined) {
-    //        if (val.indexOf("#") == -1)
-    //            val = "#" + val;
-    //        penColor = val;
-    //    }
-    //}
-    //function updatePenOpacity(id) {
-    //    var val = document.getElementById(id).value;
-    //    //console.log("opac = " + val);
-    //    if (val !== undefined)
-    //        penOpacity = val;
-    //}
-    //function updatePenWidth(id) {
-    //    var val = document.getElementById(id).value;
-    //    //console.log("wid = " + val);
-    //    if (val !== undefined)
-    //        penWidth = val;
-    //}
-    //function updateEraserWidth(id) {
-    //    var val = document.getElementById(id).value;
-    //    if (val !== undefined)
-    //        eraserWidth = val;
-    //}
-    ////function updateShapeStrokeColor(id) {
-    ////    var val = document.getElementById(id).value;
-    ////    if (val.length === 6) {
-    ////        shapeStrokeColor = "#" + val;
-    ////    }
-    ////}
-    ////function updateShapeStrokeOpacity(id) {
-    ////    var val = document.getElementById(id).value;
-    ////    if (val !== undefined)
-    ////        shapeStrokeOpacity = val;
-    ////}
-    ////function updateShapeStrokeWidth(id) {
-    ////    var val = document.getElementById(id).value;
-    ////    if (val !== undefined)
-    ////        shapeStrokeWidth = val;
-    ////}
-    ////function updateShapeFillColor(id) {
-    ////    var val = document.getElementById(id).value;
-    ////    if (val.length === 6)
-    ////        shapeFillColor = "#" + val;
-    ////}
-    ////function updateShapeFillOpacity(id) {
-    ////    var val = document.getElementById(id).value;
-    ////    if (val !== undefined)
-    ////        shapeFillOpacity = val;
-    ////}
-    //function updateMarqueeColor(id) {
-    //    var val = document.getElementById(id).value;
-    //    if (val.length === 6)
-    //        marqueeFillColor = val;
-    //}
-    //function updateMarqueeOpacity(id) {
-    //    var val = document.getElementById(id).value;
-    //    if (val !== undefined)
-    //        marqueeFillOpacity = val;
-    //}
-    //function updateFontFamily(id) {
-    //    var val = document.getElementById(id).value;
-    //    if (val !== undefined) {
-    //        fontFamily = val;
-    //    }
-    //}
-    //function updateFontSize(id) {
-    //    var val = document.getElementById(id).value;
-    //    if (val !== undefined) {
-    //        fontSize = parseFloat(val);
-    //    }
-    //}
-    //function updateFontColor(id) {
-    //    var val = document.getElementById(id).value;
-    //    if (val !== undefined) {
-    //        if (val.indexOf("#") == -1)
-    //            val = "#" + val;
-    //        fontColor = val;
-    //    }
-    //}
-    //function updateFontOpacity(id) {
-    //    var val = document.getElementById(id).value;
-    //    if (val !== undefined) {
-    //        fontOpacity = val;
-    //    }
-    //}
-
-    //that.updatePenColor = updatePenColor;
-    //that.updatePenOpacity = updatePenOpacity;
-    //that.updatePenWidth = updatePenWidth;
-    //that.updateEraserWidth = updateEraserWidth;
-    ////that.updateShapeStrokeColor = updateShapeStrokeColor;
-    ////that.updateShapeStrokeOpacity = updateShapeStrokeOpacity;
-    ////that.updateShapeFillColor = updateShapeFillColor;
-    ////that.updateShapeFillOpacity = updateShapeFillOpacity;
-    //that.updateMarqueeColor = updateMarqueeColor;
-    //that.updateMarqueeOpacity = updateMarqueeOpacity;
-    //that.updateFontFamily = updateFontFamily;
-    //that.updateFontSize = updateFontSize;
-    //that.updateFontColor = updateFontColor;
-    //that.updateFontOpacity = updateFontOpacity;
 
     //////// NEW PATH SMOOTHING CODE //////////
     var points = [],
