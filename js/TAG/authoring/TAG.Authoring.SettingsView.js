@@ -2265,8 +2265,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 $("#leftLoading").remove();
                             }
                         }, "Would you like to convert" + newFileName + "?", "Yes", true, function () {
-                            $(".convertVideoBtn").show().data("disabled", false);
-                            var msg = "The video format is not supported.";
+                            if (fileExtension !== ".mp4") {
+                                var msg = "The video format is not supported.";
+                                viewer.append(LADS.Util.createConversionLoading(msg, true));
+                            }
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         });
 
@@ -2934,8 +2936,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         $(".convertVideoBtn").hide().data("disabled", true);
                     }, "Would you like to convert " + newFileName + "?", "Yes", true, function () {
-                        $(".convertVideoBtn").show().data("disabled", false);
-                        var msg = "The video format is not supported.";
+                        if (fileExtension !== ".mp4") {
+                            var msg = "The video format is not supported.";
+                            viewer.append(LADS.Util.createConversionLoading(msg, true));
+                        }
                         viewer.append(LADS.Util.createConversionLoading(msg, true));
                     });
 
