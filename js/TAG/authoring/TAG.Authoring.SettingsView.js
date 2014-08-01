@@ -650,7 +650,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var startPage = previewStartPage();
 
         // Get DB Values
-        var alpha = TAG.Worktop.Database.getMuseumOverlayTransparency();
+        /*var alpha = TAG.Worktop.Database.getMuseumOverlayTransparency();
         var overlayColor = TAG.Worktop.Database.getMuseumOverlayColor();
         var name = TAG.Worktop.Database.getMuseumName();
         var loc = TAG.Worktop.Database.getMuseumLoc();
@@ -666,13 +666,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         var logoColor = TAG.Worktop.Database.getLogoBackgroundColor();
         var backgroundColor = TAG.Worktop.Database.getBackgroundColor();
-        var backgroundOpacity = TAG.Worktop.Database.getBackgroundOpacity();
+        var backgroundOpacity = TAG.Worktop.Database.getBackgroundOpacity();*/
         var primaryFontColor = TAG.Worktop.Database.getPrimaryFontColor();
         var secondaryFontColor = TAG.Worktop.Database.getSecondaryFontColor();
         var fontFamily = TAG.Worktop.Database.getFontFamily();
 
         // Create inputs
-        var alphaInput = createTextInput(Math.floor(alpha * 100), true);
+        //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
         var bgImgInput = createButton('Change Image', function () {
             changesHaveBeenMade = true;
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
@@ -684,28 +684,28 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             });
         });
-        var logoInput = createButton('Change Logo', function () {
+        /*var logoInput = createButton('Change Logo', function () {
             changesHaveBeenMade = true;
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                 var url = urls[0];
                 logoInput.val(url);
                 $('#logo')[0].src = TAG.Worktop.Database.fixPath(url);
             });
-        });
-        var overlayColorInput = createBGColorInput(overlayColor, '.infoDiv', null, function () { return alphaInput.val(); });
+        });*/
+        /*var overlayColorInput = createBGColorInput(overlayColor, '.infoDiv', null, function () { return alphaInput.val(); });
         var nameInput = createTextInput(TAG.Util.htmlEntityDecode(name), true, 40);
         var locInput = createTextInput(TAG.Util.htmlEntityDecode(loc), true, 45);
         var infoInput = createTextAreaInput(TAG.Util.htmlEntityDecode(info), true);
         var logoColorInput = createBGColorInput(logoColor, '.logoContainer', null, function () { return 100; });
         var backgroundColorInput = createBGColorInput(backgroundColor, '.background', null, function() { return backgroundOpacityInput.val(); });
-        var backgroundOpacityInput = createTextInput(backgroundOpacity, true);
+        var backgroundOpacityInput = createTextInput(backgroundOpacity, true);*/
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
         var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Lobster', 'Pacifico', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
         
 
         // Handle changes
-        onChangeUpdateNum(alphaInput, 0, 100, function (num) {
+        /*onChangeUpdateNum(alphaInput, 0, 100, function (num) {
             updateBGColor('.infoDiv', overlayColorInput.val(), num);
         });
         onChangeUpdateText(nameInput, '#museumName', 40);
@@ -722,10 +722,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         onChangeUpdateText(infoInput, '#museumInfo', 300);
         onChangeUpdateNum(backgroundOpacityInput, 0, 100, function(num) {
             updateBGColor('.background', backgroundColorInput.val(), num);
-        })
+        })*/
 
         var bgImage = createSetting('Background Image', bgImgInput);
-        var overlayAlpha = createSetting('Overlay Transparency (0-100)', alphaInput);
+        /*var overlayAlpha = createSetting('Overlay Transparency (0-100)', alphaInput);
         var overlayColorSetting = createSetting('Overlay Color', overlayColorInput);
         var museumName = createSetting('Museum Name', nameInput);
         var museumLoc = createSetting('Museum Location', locInput);
@@ -733,13 +733,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var museumLogo = createSetting('Museum Logo', logoInput);
         var logoColorSetting = createSetting('Museum Logo Background Color', logoColorInput);
         var backgroundColorSetting = createSetting('Background Color', backgroundColorInput);
-        var backgroundOpacitySetting = createSetting('Background Opacity (0-100)', backgroundOpacityInput);
+        var backgroundOpacitySetting = createSetting('Background Opacity (0-100)', backgroundOpacityInput);*/
         var primaryFontColorSetting = createSetting('Primary Font Color', primaryFontColorInput);
         var secondaryFontColorSetting = createSetting('Secondary Font Color', secondaryFontColorInput);
         var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
 
         settingsContainer.append(bgImage);
-        settingsContainer.append(overlayColorSetting);
+        /*settingsContainer.append(overlayColorSetting);
         settingsContainer.append(overlayAlpha);
         settingsContainer.append(museumName);
         settingsContainer.append(museumLoc);
@@ -747,7 +747,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(museumLogo);
         settingsContainer.append(logoColorSetting);
         settingsContainer.append(backgroundColorSetting);
-        settingsContainer.append(backgroundOpacitySetting);
+        settingsContainer.append(backgroundOpacitySetting);*/
         settingsContainer.append(primaryFontColorSetting);
         settingsContainer.append(secondaryFontColorSetting);
         settingsContainer.append(fontFamilySetting);
@@ -779,24 +779,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Save button
         var saveButton = createButton('Save Changes', function () {
-            if (locInput === undefined) {
+            /*if (locInput === undefined) {
                 locInput = "";
             }
             if (infoInput === undefined) {
                 infoInput = "";
-            }
+            }*/
             //save Splash screen and pass in inputs with following keys:
             saveSplashScreen({
-                alphaInput: alphaInput,                             //Overlay Transparency
+                /*alphaInput: alphaInput,                             //Overlay Transparency
                 overlayColorInput: overlayColorInput,               //Overlay Color
                 nameInput: nameInput,                               //Museum Name
                 locInput: locInput,                                 //Museum Location
                 infoInput: infoInput,                               //Museum Info
-                logoColorInput: logoColorInput,                     //Logo background color
+                logoColorInput: logoColorInput,      */               //Logo background color
                 bgImgInput: bgImgInput,                             //Background image
-                logoInput: logoInput,                               //Logo image
+                /*logoInput: logoInput,                               //Logo image
                 backgroundColorInput: backgroundColorInput,         //Background Color
-                backgroundOpacityInput: backgroundOpacityInput,     //Background Opacity
+                backgroundOpacityInput: backgroundOpacityInput, */    //Background Opacity
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 fontFamilyInput: fontFamilyInput,
@@ -847,30 +847,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearRight();
         //prepareViewer(true);
 
-        var alpha = inputs.alphaInput.val()/100;
+        /*var alpha = inputs.alphaInput.val()/100;
         var overlayColor = inputs.overlayColorInput.val();
         var name = inputs.nameInput.val();
         var loc = inputs.locInput.val();
         var info = inputs.infoInput.val().replace('/\n\r?/g', '<br />');
-        var logoColor = inputs.logoColorInput.val();
+        var logoColor = inputs.logoColorInput.val();*/
         var bgImg = inputs.bgImgInput.val();
-        var logo = inputs.logoInput.val();
+        /*var logo = inputs.logoInput.val();
         var backgroundColor = inputs.backgroundColorInput.val();
-        var backgroundOpacity = inputs.backgroundOpacityInput.val();
+        var backgroundOpacity = inputs.backgroundOpacityInput.val();*/
         var primaryFontColor = inputs.primaryFontColorInput.val();
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
         var fontFamily = inputs.fontFamilyInput.val();
         var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
 
         var options = {
-            Name: name,
+            /*Name: name,
             OverlayColor: overlayColor,
             OverlayTrans: alpha,
             Location: loc,
             Info: info,
             IconColor: logoColor,
             BackgroundColor: backgroundColor,
-            BackgroundOpacity: backgroundOpacity,
+            BackgroundOpacity: backgroundOpacity,*/
             PrimaryFontColor: primaryFontColor,
             SecondaryFontColor: secondaryFontColor,
             FontFamily: fontFamily,
@@ -890,7 +890,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 return;
             };
             LADS.Worktop.Database.getMain(function () {
-                if (!(prevSelectedLeftLabel && (prevSelectedLeftLabel.text() === "Password Settings"))) {
+                if (!(prevSelectedMiddleLabel && (prevSelectedMiddleLabel.text() === "Password Settings"))) {
                     loadGeneralView();
                 };
             }, error(loadGeneralView), null);
@@ -1187,7 +1187,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 .text(sortObj)
                                 .css({
                                     "width": "90%",
-                                    'font-size': INPUT_FONTSIZE,
+                                    //'font-size': INPUT_FONTSIZE,
                                     'box-sizing': 'border-box',
                                     "border": "2px solid black",
                                     "background-color": "white",
@@ -1216,7 +1216,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 .text(sortObj)
                                 .css({
                                     "width": "90%",
-                                    'font-size': INPUT_FONTSIZE,
+                                    //'font-size': INPUT_FONTSIZE,
                                     'box-sizing': 'border-box',
                                     "border": "2px solid black",
                                     "background-color": "white",
