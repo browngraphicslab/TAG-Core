@@ -4349,7 +4349,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          */
         function updateAreaText(txt) {
             var textA = currentInkController.getSVGText() || 'Your Text Here';
-            if (txt) {
+            if (txt || txt==='') {
                 textBodyLabel1.text(txt); // or .text()
                 $(textA).attr('text', txt);
                 $(textA).data('str', txt);
@@ -4359,7 +4359,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 textA = currentInkController.getSVGText();
                 currentInkController.removeAll();
                 if (textA) {
-                    currentInkController.addTextBox(textA.attrs.x, textA.attrs.y, textArea.val(), true);
+                    currentInkController.addTextBox(textA.attrs.x, textA.attrs.y, textArea.val());
                     textA.data('str', textArea.val());
                 }
             } else {

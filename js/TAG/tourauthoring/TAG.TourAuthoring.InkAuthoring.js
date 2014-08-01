@@ -392,7 +392,7 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                     xloc: (C1X + C2X)/2,
                     yloc: (C1Y + C2Y)/2,
                     xdim: SQRT2/2 * (C2X - C1X - 2),
-                    ydim: SQRT2/2 * (C2Y - C1Y)
+                    ydim: SQRT2/2 * (C2Y - C1Y + 2)
                 });
             } else {
                 repositionHighlightElt({
