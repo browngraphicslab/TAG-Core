@@ -2300,10 +2300,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             var msg = "This video is being converted to compatible formats for different browsers";
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             conversionVideos.push(artwork.Identifier);
-                        } else {
+                        } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
                             var msg = "There is an error occured when converting this video.";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
+                        } else {
+                            if (media.Extension !== ".mp4") {
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "The video format is not supported.";
+                                viewer.append(LADS.Util.createConversionLoading(msg, true));
+                            }
                         }
                         holder.attr('src', source);
                     }
@@ -2527,6 +2535,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }, null, newFileName, fileExtension, baseFileName, media.Identifier);
                             conversionVideos.push(media.Identifier);
                             $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
                             var msg = "This video is being converted to compatible formats for different browsers";
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, "False");
@@ -2757,35 +2766,38 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (durations[j]) {
                         options.Duration = durations[j];
                     }
-                    LADS.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, LADS.Util.multiFnHandler(authError, incrDone), LADS.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
                     if (contentTypes[j] === "Video") {
 
                         //conversionVideos.push(newDoq.Identifier);
                         var source = newDoq.Metadata.Source;
                         var newFileName = source.slice(8, source.length);
-                        var confirmBox = LADS.Util.UI.PopUpConfirmation(function () {
-                            var index = newFileName.lastIndexOf(".");
-                            var fileExtension = newFileName.slice(index);
-                            var baseFileName = newFileName.slice(0, index);
-
+                        var index = newFileName.lastIndexOf(".");
+                        var fileExtension = newFileName.slice(index);
+                        var baseFileName = newFileName.slice(0, index);
+                        var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
                             //$(document.getElementById("leftLoading")).remove();
-                            //viewer.append(LADS.Util.createConversionLoading("This video is being converted to a compatible format"));
-                            LADS.Worktop.Database.convertVideo(function () {
+                            //viewer.append(LADS.Util.createConversionLoading("This video is being converted to compatible formats for different browsers"));
+                            TAG.Worktop.Database.convertVideo(function () {
                             }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
                             conversionVideos.push(newDoq.Identifier);
                             var mediaElement = $(document.getElementById("videoInPreview"));
                             if (mediaElement[0]) {
-                                var msg = "This video is being converted to a compatible format";
-                                viewer.append(LADS.Util.createConversionLoading(msg));
+                                var msg = "This video is being converted to compatible formats for different browsers";
+                                viewer.append(TAG.Util.createConversionLoading(msg));
                                 $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
                             }
                         }, "Would you like to convert" + newFileName + "?", "Yes", true, function () {
+                            if (fileExtension !== ".mp4") {
+                                var msg = "The video format is not supported.";
+                                viewer.append(LADS.Util.createConversionLoading(msg, true));
+                            }
                             $(".convertVideoBtn").show().data("disabled", false);
                         });
 
                         root.append(confirmBox);
                         $(confirmBox).show();
-                        
                     }
                 } catch (error) {
                     done++;
@@ -2795,8 +2807,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (!alphaName || names[j] < alphaName) {
                     toScroll = newDoq;                          //Alphabetical order
                     alphaName = names[j];
-                }   
-                
+                }
             }
         }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.mp4', '.webm', '.ogv']);
     }
@@ -3156,6 +3167,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $("#leftLoading").remove();
                             var msg = "There is an error occured when converting this video.";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
+                        } else {
+                            if (artwork.Extension !== ".mp4") {
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "The video format is not supported.";
+                                viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            }
                         }
                         mediaElement.attr('src', source);
                     }
@@ -3346,6 +3364,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }, null, newFileName, fileExtension, baseFileName, artwork.Identifier);
                             conversionVideos.push(artwork.Identifier);
                             $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
                             var msg = "This video is being converted to compatible formats for different browsers";
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, "False");
@@ -3474,11 +3493,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var source = newDoq.Metadata.Source;
                 if (contentTypes[j] === "Video") {
                     var newFileName = source.slice(8, source.length);
+                    var index = newFileName.lastIndexOf(".");
+                    var fileExtension = newFileName.slice(index);
+                    var baseFileName = newFileName.slice(0, index);
                     var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
-                        var index = newFileName.lastIndexOf(".");
-                        var fileExtension = newFileName.slice(index);
-                        var baseFileName = newFileName.slice(0, index);
-
                         TAG.Worktop.Database.convertVideo(function () {
                         }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
                         conversionVideos.push(newDoq.Identifier);
@@ -3490,6 +3508,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         $(".convertVideoBtn").hide().data("disabled", true);
                     }, "Would you like to convert " + newFileName + "?", "Yes", true, function () {
+                        if (fileExtension !== ".mp4") {
+                            var msg = "The video format is not supported.";
+                            viewer.append(LADS.Util.createConversionLoading(msg, true));
+                        }
                         $(".convertVideoBtn").show().data("disabled", false);
                     });
 
@@ -5104,7 +5126,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (typeof text === 'string')
             text = text.replace(/<br \/>/g, '\n').replace(/<br>/g, '\n').replace(/<br\/>/g, '\n');
         var input = $(document.createElement('textarea')).val(text);
-        input.autoSize();
+        input.css('overflow-y', 'scroll');
+        //input.autoSize();
         doWhenReady(input, function (elem) {
             var realHeight = input[0].scrollHeight;
             $(input).css('height', realHeight + 'px');
