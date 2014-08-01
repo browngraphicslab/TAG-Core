@@ -1391,6 +1391,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var preview;
         var sortOptions;
         var idLabel;
+        var timeline;
         var nameInput;
         var descInput;
         var bgInput;
