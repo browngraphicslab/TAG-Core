@@ -3257,18 +3257,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             yearMetadataDivSpecs;
 
         //Create input boxes: 
-        //TO-DO : change selected day and month and timeline data to initialize as those saved on server.
-       // if (artwork.Metadata.Year){
-            yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 20);
-       // } //else {
-             //Temporary fix to handle media that dont have year stored on server yet:
-            //yearInput = createTextInput('',true,20);
-        //}
+        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 20);
         monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month);
         monthInput.css('margin-right', '0%');
-        dayInput = createSelectInput(getDayOptions(monthInput.attr('value')),work.Metadata.Day);
+        dayInput = createSelectInput(getDayOptions(monthInput.attr('value')), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
-        //TO-DO: test this with input year saved as empty string- should come up as suggested year...
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
         timelineYearInput = createTextInput(timelineInputText, true, 20);
         if (timelineYearInput.val()===''){
@@ -3276,7 +3269,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),work.Metadata.TimelineMonth);
         timelineMonthInput.css('margin-right','0%');
-        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value')),work.Metadata.TimelineDay);
+        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value')), work.Metadata.TimelineDay);
         timelineDayInput.css('margin-right', '0%');
 
         //Add focus to inputs:
