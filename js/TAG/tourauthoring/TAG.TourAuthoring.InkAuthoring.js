@@ -3068,6 +3068,7 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         setArtName: setArtName,
         retrieveOrigDims: retrieveOrigDims,
         setExpId: setExpId,
-        drawBezierPath: drawBezierPath
+        drawBezierPath: drawBezierPath,
+        isTextboxEmpty: isTextboxEmpty
     };
 };
