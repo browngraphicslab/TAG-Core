@@ -42,6 +42,8 @@ TAG.Util = (function () {
         saveThumbnail: saveThumbnail,
         htmlEntityEncode: htmlEntityEncode,
         htmlEntityDecode: htmlEntityDecode,
+        checkVideoConverted4Track: checkVideoConverted4Track,
+        createConversionLoading: createConversionLoading,
         videoErrorHandler: videoErrorHandler,
         getHtmlAjax: getHtmlAjax,
         localVisibility: localVisibility,
@@ -1508,9 +1510,82 @@ TAG.Util = (function () {
         }
     }
 
+    /**
+    function to check if the videos have been converted.
+    Also, show the display in the track after conversion is done
+    @param: an array of video tracks to convert.
+    */
+    function checkVideoConverted4Track(videos2Convert) {
+        if (videos2Convert.length > 0) {
+            for (var i = 0; i < videos2Convert.length; i++) {
+                var track = videos2Convert[i];
+                var media = track.getMedia();
+                var videotag = $(document.createElement('video'));
+                videotag.attr('preload', 'metadata');
+                var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
+                TAG.Worktop.Database.getConvertedCheck(
+                    (function (i, track, media, videotag) {
+                        return function (output) {
+                            if (output !== "False") {
+                                console.log("converted/ or not being written now");
+                                var mp4filepath = "/Images/" + output.substr(0, output.lastIndexOf('.')) + ".mp4";
+                                var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
+                                videotag.attr('src', mp4file);
+                                videotag.on('loadedmetadata', function () {
+                                    //remove from the video array and add display with the right duration
+                                    track.changeTrackColor('white');
+                                    track.videoConverted(true);
+                                    track.addDisplay(0, this.duration);
+                                    videos2Convert.remove(track);
+                                });
+
+                            } else {
+                                console.log("not converted: ");
+                            }
+                        }
+                    })(i, track, media, videotag), null, filename);
+            }
+        }
+    }
+
+    /*create video conversion loading message and circle for 
+	  when imported videos are converting
+	  O/P: the div containing the loading circle and message*/
+    function createConversionLoading(msg, nocircle) {
+        var container = $(document.createElement('div'));
+        container.attr('id', 'leftLoading');
+        container.css({
+            'position': 'absolute',
+            'width': '80%',
+            'left': '10%',
+            'top': '40%',
+            'color': 'white',
+            'text-align': 'center',
+        });
+
+        var label = $(document.createElement('label'));
+        label.text(msg);
+        label.css({
+            'height': '50%',
+            'width': '50%',
+            'font-size': '250%'
+        });
+        if (!nocircle) {
+            var circle = $(document.createElement('img'));
+            circle.attr('src', 'images/icons/progress-circle.gif');
+            circle.css({
+                'height': '80px',
+                'width': 'auto',
+                'left': '50%'
+            });
+            container.append(circle);
+        }
+        container.append(label);
+        return container;
+    }
     // sets up error handler for a video element
     // container is the div we'll append error messages to
-    function videoErrorHandler(videoElt, container) {
+    function videoErrorHandler(videoElt, container, conversionFlag) {
         return function (err) {
             var msg = "";
             switch (err.target.error.code) {
@@ -1524,30 +1599,45 @@ TAG.Util = (function () {
                     msg = "Error decoding video. Please see FAQs on the TAG website.";
                     break;
                 case err.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-                    msg = "Either the video format is not supported or a network or server error occurred. Please see FAQs on the TAG website.";
+                    if (conversionFlag && conversionFlag === "False") {
+                        //var loadingContainer = createConversionLoading();
+                        msg = "This video is being converted to compatible formats for different browsers";
+                        //container.append(createConversionLoading(msg));
+                        //} else if (!conversionFlag) {
+                        //msg = "The video format is not supported.";
+                        //container.append(createConversionLoading(msg));
+                    } else {
+                        msg = "Either the video format is not supported or a network or server error occurred. Please see FAQs on the TAG website.";
+                    }
                     break;
                 default:
                     msg = "Error: please see FAQs on the TAG website.";
                     break;
             }
             console.log("video error: " + msg);
-            var msgdiv = $(document.createElement('div'));
-            msgdiv.css({
-                'position':'absolute',
-                'width': '80%',
-                'left': '10%',
-                'top': '50%',
-                'color': 'white',
-                'text-align': 'center',
-                'font-size': TAG.Util.getMaxFontSizeEM(msg, 2, container.width() * 0.8, container.height() * 0.2, 0.1)
-            });
-            msgdiv.text(msg);
+            if (conversionFlag && conversionFlag === "False") {
+                container.append(createConversionLoading(msg));
+            } else if (!document.getElementById("leftLoading")) {
+                //if (conversionFlag==="True") { //&& conversionFlag === "True"
+                var msgdiv = $(document.createElement('div'));
+                msgdiv.attr("id", "videoErrorMsg");
+                msgdiv.css({
+                    'position': 'absolute',
+                    'width': '80%',
+                    'left': '10%',
+                    'top': '50%',
+                    'color': 'white',
+                    'text-align': 'center',
+                    'font-size': LADS.Util.getMaxFontSizeEM(msg, 2, container.width() * 0.8, container.height() * 0.2, 0.1)
+                });
+                msgdiv.text(msg);
+                container.append(msgdiv);
+            }
             videoElt.hide();
-            container.append(msgdiv);
-            videoElt[0].onerror = function (err) {  }; // get rid of the error handler afterwards
+
+            videoElt[0].onerror = function (err) { };// get rid of the error handler afterwards
         }
     }
-
     /**
      * Used by web app code to slide in pages given their html files
      * @param path     the path to the html file within the html directory
@@ -5188,6 +5278,7 @@ TAG.Util.RLH = function (input) {
                 callback    :   function(){
                     annotImg.openArtwork(input.mapdoq);
                     annotImgs[input.mapdoq.Identifier] = annotImg;
+                    annotImg.initZoom();
                     
                     if (++input.progress.done >= input.progress.total) {
                             input.loadCallback && input.loadCallback();
