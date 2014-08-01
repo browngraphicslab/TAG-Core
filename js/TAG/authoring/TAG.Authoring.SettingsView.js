@@ -228,7 +228,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 conversionVideos.remove(artwork);
                             }
                         } else if (output === "Error") {
-                            $("#videoErrorMsg").text("There is an error occured when converting this video.");
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "There is an error occured when converting this video. Please try again";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            conversionVideos.remove(artwork);
                         }
                         else {
                             console.log("not converted: ");
@@ -1348,11 +1352,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //TO-DO: add in on server side from TAG.Worktop.Database.js changeExhibition() 
         var timelineShown;
-        if (exhibition.Metadata.Timeline){
-            timelineShown = (/^true$/i).test(exhibition.Metadata.Timeline); 
+        if (exhibition.Metadata.Timeline === ("true"||"false")){
+            exhibition.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
         } else {
-            timelineShown = false;
+            //backwards compatibility
+            timelineShown = true;
         }
+        console.log(timelineShown);
         var showTimeline = createButton('Show Timeline', function(){
             timelineShown = true;
             showTimeline.css('background-color', 'white');
@@ -1688,8 +1694,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             Name: name,
             Private: priv,
             Description: desc,
-            //TO-DO: add in once valid request parameter
-            //Timeline: timeline,
             SortOptions: JSON.stringify(sortOptions),
             Timeline: timeline
         }
@@ -2304,7 +2308,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video.";
+                            var msg = "There is an error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
                             if (media.Extension !== ".mp4") {
@@ -2550,7 +2554,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         'float': 'right'
                     })
             convertBtn.attr('class', 'convertVideoBtn');
-            if (!media.Metadata.Converted || conversionVideos.indexOf(media.Identifier) === -1) {
+            if (media.Metadata.Converted!=="True" && conversionVideos.indexOf(media.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
                 convertBtn.hide().data('disabled', true);
@@ -3055,7 +3059,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
                                 previousIdentifier = val.identifier;
-
                                 loadArtwork(val);
                                 currentIndex = i;
                             }, val.Identifier, false, function () {
@@ -3166,7 +3169,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video.";
+                            var msg = "There is an error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
                             if (artwork.Extension !== ".mp4") {
@@ -3296,7 +3299,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var inputs = {
             artistInput: artistInput,                                      //Artwork artist
             nameInput: titleInput,                                         //Artwork title
-            yearInput: yearMetadataDivSpecs.yearInput,                     //Artwork year or era
+            yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
             monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
             dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
             timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
@@ -3329,16 +3332,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             'margin-bottom': '3%',
                         });
 
-        var xmluploaderbtn = createButton('Upload XML',
-                            function () {
-                                uploadXML(artwork, inputs, settingsContainer);
-                            },
-                            {
-                                'margin-left': '2%',
-                                'margin-top': '1%',
-                                'margin-right': '0%',
-                                'margin-bottom': '3%',
-                            });
 
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
@@ -3379,7 +3372,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         'float': 'right'
                     })
             convertBtn.attr('class', 'convertVideoBtn');
-            if (!artwork.Metadata.Converted && conversionVideos.indexOf(artwork.Identifier) === -1) {
+            if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
                 convertBtn.hide().data('disabled', true);
@@ -4765,7 +4758,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 20);
         monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month);
         monthInput.css('margin-right', '0%');
-        dayInput = createSelectInput(getDayOptions(monthInput.attr('value')), work.Metadata.Day);
+        dayInput = createSelectInput(getDayOptions(monthInput.attr('value'),yearInput,monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
         timelineYearInput = createTextInput(timelineInputText, true, 20);
@@ -4774,7 +4767,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),work.Metadata.TimelineMonth);
         timelineMonthInput.css('margin-right','0%');
-        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value')), work.Metadata.TimelineDay);
+        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value'),timelineYearInput,timelineMonthInput), work.Metadata.TimelineDay);
         timelineDayInput.css('margin-right', '0%');
         yearInput.attr('id', 'yearInput');
         //Add focus to inputs:
@@ -4873,7 +4866,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearInput.on('input', function(){
             setOptions(monthInput, getMonthOptions(yearInput.attr('value')),'');
             toggleAllow(monthInput);
-            setOptions(dayInput, getDayOptions(monthInput.attr('value')));
+            setOptions(dayInput, getDayOptions(monthInput.attr('value'),yearInput,monthInput));
             toggleAllow(dayInput);
             if (!timelineYearJustChanged|| timelineYearInput.val()===''){
                 timelineYearInput.val(getTimelineInputText(yearInput));
@@ -4883,17 +4876,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 timelineYearJustChanged = false;
                 setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr("value")));
                 toggleAllow(timelineMonthInput);
-                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value")));
+                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"),timelineYearInput,timelineMonthInput));
                 toggleAllow(timelineDayInput);
             }
             timelineYearAutofilled = false;
         });
         monthInput.change(function(){
-            setOptions(dayInput,getDayOptions(monthInput.attr("value")),'');
+            setOptions(dayInput,getDayOptions(monthInput.attr("value"),yearInput,monthInput),dayInput.attr('value'));
             toggleAllow(dayInput);
             if (timelineMonthInput.attr("value") === "") {
                 timelineMonthInput.attr("value",monthInput.attr("value"));
-                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value")));
+                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"),timelineYearInput,timelineMonthInput));
                 toggleAllow(timelineDayInput);
             }
         });
@@ -4913,24 +4906,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if ( timelineYearInput.attr('value').length>0 &&!isSingleYear(timelineYearInput.attr('value'))){
                 timelineYearAllowed = false;
                 timelineYearInput.css({
-                    'background-color': 'gray',
-                    'opacity' : '0.3'
+                    'border-color': 'red',
+                    'border-width' : 'medium',
+                    'opacity' : '0.7'
                 });
             } else {
                 timelineYearAllowed = true;
                 timelineYearInput.css({
-                    'background-color': 'white',
-                    'opacity' : '1'
+                    'border-color' : '#a7b4ae',
+                    'border-width': 'thin',
+                    'opacity': '1'
                 });
             }
             setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr('value')),'');
             toggleAllow(timelineMonthInput, timelineYearAllowed);
-            setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr('value')),'');
+            setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr('value'),timelineYearInput,timelineMonthInput),'');
             toggleAllow(timelineDayInput, timelineYearAllowed);
         });
         timelineMonthInput.change(function(){
-            setOptions(timelineDayInput,getDayOptions(timelineMonthInput.attr("value")),'');
-            toggleAllow(timelineDayInput);
+            setOptions(timelineDayInput,getDayOptions(timelineMonthInput.attr("value"),timelineYearInput,timelineMonthInput),timelineDayInput.attr('value'));
+            toggleAllow(timelineDayInput, true);
         });
 
         //Set up year metadatadiv
@@ -4973,7 +4968,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @return {String} timelineInputText   text to display in timelineYearInput 
          */
         function getTimelineInputText(yearInput){
-            var timelineInputText = TAG.Util.parseDateToYear(yearInput.attr('value'));
+            var timelineInputText = TAG.Util.parseDateToYear({ year : yearInput.attr('value')});
             if (timelineInputText){
                 if (timelineInputText<0){
                     return -timelineInputText + ' BCE';
@@ -5008,7 +5003,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @param {String} month
          * @return {Array} dayArray     array of day drop down options
          */
-        function getDayOptions(month){
+        function getDayOptions(month, yearIn, monthIn){
             var dayArray = [''],
                 testDate,
                 daysInMonth,
@@ -5016,7 +5011,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (month === '') { 
                 return dayArray;
             }
-            testDate = new Date(TAG.Util.parseDateToYear(yearInput.attr('value')), monthInput.dropDownOptions.indexOf(month), 0);
+            testDate = new Date(TAG.Util.parseDateToYear({year: yearIn.attr('value')}), monthIn.dropDownOptions.indexOf(month), 0);
             daysInMonth = testDate.getDate();
             for (i=1;i<daysInMonth+1;i++){
                 dayArray.push(i);

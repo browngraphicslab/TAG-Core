@@ -402,33 +402,77 @@ TAG.Util = (function () {
 
     /* Get an integer year from date metadata
      * @method parseDateToYear
-     * @param {String} dateString      string representing date metadata
-     * @return {Integer} year          integer year
+     * @param {Object} date       object containing year, month, and day 
+     * @return {Number} year      year (can have decimals to represent month, days)
      */
-    function parseDateToYear(dateString){
-        var neg = false,
+    function parseDateToYear(date){
+        var yearString,
+            neg = false,
             cent,
-            year; 
-        if (dateString){
+            year,
+            month,
+            monthDict,
+            day,
+            metadataDate,
+            startDate,
+            millisecondDifference,
+            millisecondsPerDay = 1000 * 3600 * 24,
+            dayInYear,
+            totalDaysInYear,
+            dayDecimal;
+
+        if (date && date.year){
+            yearString = date.year;
             //Catches 'ad', 'bc', 'bce' case, spacing, and order insensitive
-            if (dateString.search(/bce?/i)>=0){
+            if (yearString.search(/bce?/i)>=0){
                 neg = true;
-                dateString = dateString.replace(/bce?/gi,'');
+                yearString = yearString.replace(/bce?/gi,'');
             }
-            dateString = dateString.replace(/ad/gi,'')
+            yearString = yearString.replace(/ad/gi,'')
                                    .replace(/ce(?!n)/gi,'')
                                    .replace(/\s/g,'');
             //Catch 'century', 'c', and 'c.' and return mid year of that century (17th c --> 1650)
-            if (dateString.search(/c.?/i)>=0 || dateString.search(/century/i)>=0){
-                dateString.replace(/[a-z]\w/gi,'')
+            if (yearString.search(/c.?/i)>=0 || yearString.search(/century/i)>=0){
+                yearString.replace(/[a-z]\w/gi,'')
                           .replace(/c.?/gi, '')
-                cent = parseInt(dateString) - 1 ;
-                dateString = cent.toString() + '50';
+                cent = parseInt(yearString) - 1 ;
+                yearString = cent.toString() + '50';
+            }
+
+            year = parseInt(yearString);
+            if (date.month){
+                month = date.month;
+                monthDict = {
+                    "January": 1,
+                    "February:": 2,
+                    "March": 3,
+                    "April": 4,
+                    "May": 5,
+                    "June": 6,
+                    "July": 7,
+                    "August": 8,
+                    "September": 9,
+                    "October": 10,
+                    "November":11,
+                    "December": 12
+                }
+                if (date.day){
+                    day = date.day;
+                } else {
+                    day = 1;
+                }
+                metadataDate = new Date(year, monthDict[month],day);
+                startDate = new Date(year,0,0);
+                millisecondDifference = metadataDate - startDate;
+                dayInYear = Math.round(millisecondDifference/millisecondsPerDay);
+                //check for leap year
+                (new Date(year,2,0).getDate() === 29) ? totalDaysInYear = 366 : totalDaysInYear = 365;
+                dayDecimal = dayInYear/totalDaysInYear;
+                year = year + dayDecimal;
             }
             if (neg){
-                dateString = "-" + dateString;  
+                year = -year;  
             }
-            year = parseInt(dateString);
             return year;
         }
     }
@@ -1528,7 +1572,7 @@ TAG.Util = (function () {
         });
         if (!nocircle) {
             var circle = $(document.createElement('img'));
-            circle.attr('src', 'images/icons/progress-circle.gif');
+            circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
             circle.css({
                 'height': '80px',
                 'width': 'auto',
@@ -3340,7 +3384,7 @@ TAG.Util.UI = (function () {
             event.stopPropagation();
         });
         // TAG.Util.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
-        pickerSearchBar.attr("placeholder", "Search by Name...");
+        pickerSearchBar.attr("placeholder", "Search");
         pickerSearchBar.keyup(function () {
             TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
         });
@@ -5234,6 +5278,7 @@ TAG.Util.RLH = function (input) {
                 callback    :   function(){
                     annotImg.openArtwork(input.mapdoq);
                     annotImgs[input.mapdoq.Identifier] = annotImg;
+                    annotImg.initZoom();
                     
                     if (++input.progress.done >= input.progress.total) {
                             input.loadCallback && input.loadCallback();

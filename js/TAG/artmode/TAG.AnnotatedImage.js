@@ -39,6 +39,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         artworkFrozen = false,
         
         // misc uninitialized variables
+        viewerelt,
         viewer,
         assetCanvas;
 
@@ -73,7 +74,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         loadAssociatedMedia: loadAssociatedMedia,
         getOverlayCoordinates: getOverlayCoordinates,
         freezeArtwork: freezeArtwork,
-        unfreezeArtwork: unfreezeArtwork
+        unfreezeArtwork: unfreezeArtwork,
+        initZoom: initZoom
     };
 
 
@@ -265,6 +267,27 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     };
 
     /**
+    * Sets up the annotated image to allow zoom on double click.  Used in RLH
+    * @method initZoom
+    */
+    function initZoom() {
+        viewerelt && function () {
+            viewerelt.on('dblclick', function () {
+                zoomToPoint();
+            });
+        }();
+        console.log('error in initzoom');
+    }
+
+    /**
+    * Zooms into the deepzoom image.  Used when double-clicking on a map in rlh.
+    * @method zoomToPoint()
+    */
+    function zoomToPoint() { //TODO zoom to where the mouse is
+        viewer.viewport.zoomBy(2);
+    }
+
+    /**
     * Returns whether an element is in the viewport's bounds (including a buffer of 10 pixels)
     * Used in rich location history.
     * @method isInViewportBounds
@@ -443,8 +466,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @method init
      */
     function init() {
-        var viewerelt,
-            canvas;
+        var canvas;
 
         if(Seadragon.Config) {
             Seadragon.Config.visibilityRatio = 0.8; // TODO see why Seadragon.Config isn't defined; should it be?

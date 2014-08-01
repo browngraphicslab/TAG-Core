@@ -22,6 +22,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         nextArrowArea            = root.find('#nextArrowArea'),
         nextArrow                = root.find('#nextArrow'),
         collectionHeader         = root.find('#collectionHeader'),
+        collectionDotHolder      = root.find('#collectionDotHolder'),
         bgimage                  = root.find('#bgimage'),
         bottomContainer          = root.find('#bottomContainer'),
         catalogDiv               = root.find('#catalogDiv'),
@@ -214,7 +215,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             j,
             lastCollectionIndex,
             firstCollectionIndex,
-            collectionDotHolder = $(document.createElement('div')),
             collectionDot;
 
         // Iterate through entire list of collections to to determine which are visible/not private/published.  Also set toShowFirst
@@ -229,7 +229,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // Iterate through visible/not private/published collections, and set their prev and next values
         // Also create a scroll dot for each (under main collection title)
-        collectionDotHolder.addClass('collectionDotHolder');
+        collectionDotHolder.empty();
         for(i = 0; i < visibleCollections.length; i++) {
             if(visibleCollections.length<=2){ 
                 lastCollectionIndex = null;
@@ -241,7 +241,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             visibleCollections[i].prevCollectionIndex = visibleCollections[i - 1] ? i - 1 : lastCollectionIndex;
             visibleCollections[i].nextCollectionIndex = visibleCollections[i + 1] ? i + 1 : firstCollectionIndex;
            
-            collectionDot  = $(document.createElement('div'))
+            collectionDot = $(document.createElement('div'))
                         .addClass('collectionDot')
                         .css({
                             "width": COLLECTION_DOT_WIDTH,
@@ -255,7 +255,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             //}
                         );//}());
             collectionDotHolder.append(collectionDot);
-            topBar.append(collectionDotHolder);
 
             collectionDots[visibleCollections[i].Identifier] = collectionDot;
         }
@@ -310,6 +309,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 prevCollection    = $(document.createElement('div')),
                 titleBox          = $(document.createElement('div')),
                 collectionDescription = $(document.createElement('div')),
+                dummyDot,
                 str,
                 text              = collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
 
@@ -330,11 +330,25 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
             }
 
-            //Make collection dot white and others gray
-            for(i = 0; i < visibleCollections.length; i++) { 
-                collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
-            }
-            collectionDots[collection.Identifier].css('background-color', 'white');
+            if (!collectionDots[collection.Identifier]){
+                //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
+                dummyDot = $(document.createElement('div'))
+                        .addClass('collectionDot')
+                        .css({
+                            "width": COLLECTION_DOT_WIDTH,
+                            "height":  COLLECTION_DOT_WIDTH,
+                            "border-radius": COLLECTION_DOT_WIDTH / 2,
+                            "margin": COLLECTION_DOT_WIDTH/4,
+                            "background-color":'white'
+                        });
+                collectionDotHolder.append(dummyDot);
+            } else {
+                //Make collection dot white and others gray
+                for(i = 0; i < visibleCollections.length; i++) { 
+                    collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
+                }
+                collectionDots[collection.Identifier].css('background-color', 'white');
+            }                
 
             // Add collection title
             collectionArea.empty();
@@ -456,8 +470,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //If there's no description, change UI so that artwork tiles take up entire bottom area
             collection.Metadata.Description ? infoDiv.css('width', '25%') : infoDiv.css('width', '0');
 
-            //TO-DO: add in 
-            //timelineShown = collection.Metadata.Timeline;
+            if (collection.Metadata.Timeline === ("true"||"false")){
+                collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
+            }
 
             currCollection = collection;
             currentArtwork = artwrk || null;
@@ -643,8 +658,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             if (timelineShown){   
                     initTimeline(artworks);
+                    bottomContainer.css({
+                        'height' : '69%',
+                        'top' : '25%'
+                    })
             } else {
-                bottomContainer.css('height', '85%');
+                bottomContainer.css({
+                    'height': '85%',
+                    'top' : '20%'
+                });
             } 
         }
 
@@ -692,7 +714,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
                 //TO-DO add panning here 
                 showArtwork(currentWork, false)();
-                zoomTimeline(TAG.Util.parseDateToYear(currentWork.Metadata.Year), fullMinDisplayDate, fullMaxDisplayDate);
+                zoomTimeline(TAG.Util.parseDateToYear(getArtworkDate(currentWork,true)), fullMinDisplayDate, fullMaxDisplayDate);
                 justShowedArtwork = true;
             });
 
@@ -724,10 +746,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' : currentWork.Metadata.Artist);
             } else if (tag === 'Year') {
                 yearTextBox.css('visibility','visible');
-                yearText = TAG.Util.parseDateToYear(currentWork.Metadata.Year);
-                if (yearText<0){
-                    yearText = -yearText + ' BCE';
-                }
+                //TO-DO year text needs to be formatted in mm/dd/yyyy
+                yearText = getDateText(getArtworkDate(currentWork,true));
                 yearTextBox.text(currentWork.Type === 'Empty' ? '' :  yearText);
                 artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' :  TAG.Util.htmlEntityDecode(currentWork.Name));
             } else if (tag === 'Type') {
@@ -805,14 +825,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var avlTree,
             maxNode,
             maxDate,
-            minDate;
+            minDate,
+            timelineDate;
 
         if (!artworks || artworks.length === 0){
             return;
         };
 
         //Sort artworks by year and find the minimum and maximum
-        avlTree = sortByYear(artworks);
+        avlTree = sortByYear(artworks, true);
         maxNode = avlTree.max();
 
         //Skip before tours and artworks with incompatible dates
@@ -830,9 +851,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         //TO-DO: calculate and pass in numTicks based on number of years
         currentTimeline = prepTimelineArea(minDate, maxDate);
         currTimelineCircleArea = prepTimelineCircles(avlTree, minDate, maxDate);
-        currentArtwork && zoomTimeline(TAG.Util.parseDateToYear(currentArtwork.Metadata.Year), fullMinDisplayDate, fullMaxDisplayDate);
-
-
+        if (currentArtwork){
+            zoomTimeline(TAG.Util.parseDateToYear(getArtworkDate(currentWork,true)), fullMinDisplayDate, fullMaxDisplayDate);
+        }
+     
         /**Helper function to prepare timeline area including 'ticks'
         * @method prepTimelineArea
         * @param  {Integer} minDate          minimum artwork date
@@ -924,12 +946,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     //TO-DO: add this back in so that it works with new animations (all relative positioning)
                     //eventCircle.css('left', eventCircle.position().left - LEFT_SHIFT + 'px');
 
-                    //Artworks before year 0 are automatically given the 'BCE' tag
-                    if (curr.yearKey<0){
-                        yearText = (-curr.yearKey).toString() + ' BCE';
-                    } else{
-                        yearText = curr.yearKey.toString();
-                    }
+                    yearText = getDateText(getArtworkDate(curr.artwork, true));
 
                     //Create and append timeline date labels
                     timelineDateLabel = $(document.createElement('div'))
@@ -1424,7 +1441,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 if (artwork.Type !== "Empty") {
                     artistInfo.text("Artist: " + (artwork.Metadata.Artist || "Unknown"));
-                    yearInfo.text(artwork.Metadata.Year || " ");
+                    yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
                 } else {
                     artistInfo.text("(Interactive Tour)" );
                     yearInfo.text(" " );
@@ -1587,8 +1604,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             return avlTree;
         } else if (tag === 'Year') {
-
-            return sortByYear(artworks);
+            return sortByYear(artworks,false);
 
         } else if (tag === 'Type') {
             comparator = sortComparator('typeKey', 'nameKey');
@@ -1613,21 +1629,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * Also used to catch common non-integer input date forms and generate timeline 
      * years for their display. 
      * @method sortByYear
-     * @param  {Object} artworks      list of artworks to sort
+     * @param  {Object} artworks      list of artworks to sort9
+     * @param {Boolean} timelineDate  whether you are sorting by timeline date (vs metadata date for thumbnail sorting)
      * @return {AVLTree} avlTree      sorted tree so order can be easily accessed
     **/
-    function sortByYear(artworks){
+    function sortByYear(artworks, timelineDate){
         var comparator,
             valuation,
             avlTree,
             artNode,
+            artworkDate,
             yearKey,
             i;
         comparator = sortComparator('yearKey', 'nameKey');
         valuation  = sortValuation('yearKey');
         avlTree = new AVLTree(comparator, valuation);
         for (i = 0; i < artworks.length; i++) {
-            yearKey = TAG.Util.parseDateToYear(artworks[i].Metadata.Year);
+            if (timelineDate){
+                artworkDate = getArtworkDate(artworks[i],true);
+            } else {
+                artworkDate = getArtworkDate(artworks[i],false);
+            }
+            yearKey = TAG.Util.parseDateToYear(artworkDate);
             if (!isNaN(yearKey)){
                 artNode = {
                     artwork: artworks[i],
@@ -1644,6 +1667,80 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             avlTree.add(artNode);
         }
         return avlTree;
+    }
+
+    /* Get a date object representing temporal metadata for an artwork
+    * @method getArtworkDate
+    * @param {Object} artwork       artwork we care about
+    * @param {Boolean} timelineDate     whether we want the metadata date or the timeline date
+    * @return {Object} artworkDate      object containing year, month, day attributes
+    */
+    function getArtworkDate(artwork, timelineDate){
+        var artworkDate;
+        //second conditional checks to see if that metadata field exists in the server (backwards compatibility)
+        if (timelineDate && (artwork.Metadata.TimelineYear||artwork.Metadata.TimelineYear==='')){
+                artworkDate = {
+                    year : artwork.Metadata.TimelineYear,
+                    month : artwork.Metadata.TimelineMonth,
+                    day : artwork.Metadata.TimelineDay
+                }
+            } else {
+                 artworkDate = {
+                    year : artwork.Metadata.Year,
+                    month : artwork.Metadata.Month,
+                    day : artwork.Metadata.Day
+                }
+            }
+        return artworkDate;
+    }
+
+    /*Get the text to display based on a date object
+    * @method getDateText
+    * @param {Object} date     object containing year, month, day attributes
+    * @return {String} dateText    text to display in mm/dd/yyyy or mm/yyyy format (Note- would need to change for internationalization)
+    */   
+    function getDateText(date){
+        var yearText,
+            neg = false,
+            monthDict,
+            month,
+            monthText,
+            dayText,
+            dateText;
+        yearText = TAG.Util.parseDateToYear({year: date.year});
+        if (yearText<0){
+            yearText = -yearText;
+            neg = true;
+        } 
+        dateText = yearText;
+        monthDict = {
+                    "January": 1,
+                    "February:": 2,
+                    "March": 3,
+                    "April": 4,
+                    "May": 5,
+                    "June": 6,
+                    "July": 7,
+                    "August": 8,
+                    "September": 9,
+                    "October": 10,
+                    "November":11,
+                    "December": 12
+                }
+        if (date.month){
+            month = date.month;
+            monthText = monthDict[month];
+            if (date.day){
+               dayText = date.day;
+               dateText = monthText + '/' + dayText + '/' + dateText; 
+            } else {
+                dateText = monthText + '/' + dateText;
+            }
+        }
+        if (neg){
+            dateText = dateText + ' BCE';
+        }
+        return dateText;
     }
 
     /** 
