@@ -1,0 +1,3817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>TAG.AnnotatedImage - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>TAG.AnnotatedImage Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l3"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:3</code></a>
+        </div>
+    
+
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>Representation of deepzoom image with associated media. Contains
+touch handlers and a method for creating associated media objects.</p>
+
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_TAG.AnnotatedImage" class="method item">
+    <h3 class="name"><code>TAG.AnnotatedImage</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>options</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l3"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:3</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">options</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>some options for the artwork and assoc media</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    
+                    <p>some public methods and variables</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_addAnimationHandler">addAnimationHandler</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_addOverlay">addOverlay</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_centerElement">centerElement</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createCloseButton">createCloseButton</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createLinqSuccess">createLinqSuccess</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createMediaElements">createMediaElements</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createMediaObject">createMediaObject</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createStartingPoint">createStartingPoint</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_dzManip">dzManip</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_dzManipPreprocessing">dzManipPreprocessing</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_dzScroll">dzScroll</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getAssociatedMedia">getAssociatedMedia</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getCoordinate">getCoordinate</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getMediaPivot">getMediaPivot</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getToManip">getToManip</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_hideMediaObject">hideMediaObject</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_init">init</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_initMediaControls">initMediaControls</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_initMediaObject">initMediaObject</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_initZoom">initZoom</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_isInImageBounds">isInImageBounds</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_isInViewportBounds">isInViewportBounds</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_isVisible">isVisible</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_loadAssociatedMedia">loadAssociatedMedia</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_locationOf">locationOf</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_mediaManip">mediaManip</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_mediaManipPreprocessing">mediaManipPreprocessing</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_mediaScroll">mediaScroll</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_mediaSuccess">mediaSuccess</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_move">move</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_openArtwork">openArtwork</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_panToPoint">panToPoint</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_pointFromPixel">pointFromPixel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_removeOverlay">removeOverlay</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_returnElementToBounds">returnElementToBounds</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_scroll">scroll</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_showMediaObject">showMediaObject</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_toggleMediaObject">toggleMediaObject</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_unload">unload</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_updateOverlay">updateOverlay</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_zoomToPoint()">zoomToPoint()</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_addAnimationHandler" class="method item">
+    <h3 class="name"><code>addAnimationHandler</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>handler</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l510"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:510</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Adds an animation handler to the annotated image. This is used to allow the image to move
+when the minimap is manipulated.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">handler</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the handler to add</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_addOverlay" class="method item">
+    <h3 class="name"><code>addOverlay</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>element</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>point</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>placement</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l144"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:144</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Wrapper around Seadragon.Drawer.addOverlay; adds an HTML overlay to the seadragon
+canvas. Currently only used in ArtworkEditor.js.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">element</code>
+                        <span class="type">HTML element</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the overlay element to add</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">point</code>
+                        <span class="type">Seadragon.Point</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the point at which to add the overlay</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">placement</code>
+                        <span class="type">Seadragon.OverlayPlacement</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the placement at the given point</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_centerElement" class="method item">
+    <h3 class="name"><code>centerElement</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l383"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:383</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Puts an element in the center of the viewport
+Used in RLH</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_createCloseButton" class="method item">
+    <h3 class="name"><code>createCloseButton</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">HTML element</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l1235"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:1235</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Create a closeButton for associated media</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">HTML element</span>:
+                    
+                    <p>the button as a &#39;div&#39;</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_createLinqSuccess" class="method item">
+    <h3 class="name"><code>createLinqSuccess</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>assocMedia</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l554"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:554</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Helper function for the calls to .getLinq above. It accepts an assoc media doc and returns
+a success callback function that accepts a linq. Using this information, it creates a new
+hotspot from the doq and linq</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">assocMedia</code>
+                        <span class="type">Doq</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the relevant associated media doq</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_createMediaElements" class="method item">
+    <h3 class="name"><code>createMediaElements</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l885"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:885</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Load the actual image/video/audio; this can take a while if there are
+a lot of media, so just do it when the thumbnail button is clicked</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_createMediaObject" class="method item">
+    <h3 class="name"><code>createMediaObject</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>doq</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>linq</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l574"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:574</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Creates an associated media object to be added to associatedMedia.
+This object contains methods that could be called in Artmode.js or
+ArtworkEditor.js. This could be in its own file.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">doq</code>
+                        <span class="type">Mdoq</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the media doq</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">linq</code>
+                        <span class="type">Linq</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the linq between the media doq and the artwork doq</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    
+                    <p>some public methods to be used in other files</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_createStartingPoint" class="method item">
+    <h3 class="name"><code>createStartingPoint</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l418"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:418</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a Seadragon point in the center of the viewport + a 1% offset (to prevent overlap)
+Used in RLH to create new pins</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_dzManip" class="method item">
+    <h3 class="name"><code>dzManip</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>res</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l201"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:201</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Manipulation/drag handler for makeManipulatable on the deepzoom image</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">res</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>object containing hammer event info</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_dzManipPreprocessing" class="method item">
+    <h3 class="name"><code>dzManipPreprocessing</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l188"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:188</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>When the artwork is active, sets the manipulation method and dimensions for the active container</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_dzScroll" class="method item">
+    <h3 class="name"><code>dzScroll</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>scale</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>pivot</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l229"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:229</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Scroll/pinch-zoom handler for makeManipulatable on the deepzoom image</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">scale</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>scale factor</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">pivot</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>location of event (x,y)</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getAssociatedMedia" class="method item">
+    <h3 class="name"><code>getAssociatedMedia</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l102"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:102</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Return list of associatedMedia</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    
+                    <p>associated media object</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getCoordinate" class="method item">
+    <h3 class="name"><code>getCoordinate</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>element</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Seadragon.Point</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l396"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:396</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Gets a Seadragon point from the given overlay element. Uses BOTTOM as the default OverlayPlacement</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">element</code>
+                        <span class="type">HTML elt</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the overlay element</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Seadragon.Point</span>:
+                    
+                    <p>the location of the overlay in Seadragon coordinates</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getMediaPivot" class="method item">
+    <h3 class="name"><code>getMediaPivot</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l92"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:92</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Return the dimensions of the active associated media or artwork</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    
+                    <p>object with dimensions</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getToManip" class="method item">
+    <h3 class="name"><code>getToManip</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l82"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:82</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Return applicable manipulation method</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    
+                    <p>manipulation method object</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_hideMediaObject" class="method item">
+    <h3 class="name"><code>hideMediaObject</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l1314"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:1314</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Hide the associated media</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_init" class="method item">
+    <h3 class="name"><code>init</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l464"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:464</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initialize seadragon, set up handlers for the deepzoom image, load assoc media if necessary</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initMediaControls" class="method item">
+    <h3 class="name"><code>initMediaControls</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>elt</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l687"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:687</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initialize any media controls</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">elt</code>
+                        <span class="type">HTML element</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>video or audio element</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initMediaObject" class="method item">
+    <h3 class="name"><code>initMediaObject</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l622"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:622</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initialize various parts of the media object: UI, manipulation handlers</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initZoom" class="method item">
+    <h3 class="name"><code>initZoom</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l269"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:269</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets up the annotated image to allow zoom on double click.  Used in RLH</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_isInImageBounds" class="method item">
+    <h3 class="name"><code>isInImageBounds</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l315"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:315</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns whether an element is within the bounds of the deepzoom image (with a margin of .05 in Seadragon coordinates)
+Used in rich location history.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_isInViewportBounds" class="method item">
+    <h3 class="name"><code>isInViewportBounds</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l290"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:290</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns whether an element is in the viewport&#39;s bounds (including a buffer of 10 pixels)
+Used in rich location history.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_isVisible" class="method item">
+    <h3 class="name"><code>isVisible</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l1349"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:1349</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns whether the media object is visible</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_loadAssociatedMedia" class="method item">
+    <h3 class="name"><code>loadAssociatedMedia</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l520"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:520</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Retrieves associated media from server and stores them in the
+associatedMedia array.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>function to call after loading associated media</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_locationOf" class="method item">
+    <h3 class="name"><code>locationOf</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l368"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:368</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Calculates the location (point) of an element (bottom center)
+Used in rich location history.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_mediaManip" class="method item">
+    <h3 class="name"><code>mediaManip</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>res</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l1027"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:1027</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Drag/manipulation handler for associated media</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">res</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>object containing hammer event info</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_mediaManipPreprocessing" class="method item">
+    <h3 class="name"><code>mediaManipPreprocessing</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l997"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:997</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stores the dimensions and points to the media manipulation method  of the active associated media, also sends it to the front
+media manip.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_mediaScroll" class="method item">
+    <h3 class="name"><code>mediaScroll</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>scale</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>pivot</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l1215"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:1215</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Zoom handler for associated media (e.g., for mousewheel scrolling)</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">scale</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>scale factor</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">pivot</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>point of contact</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_mediaSuccess" class="method item">
+    <h3 class="name"><code>mediaSuccess</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>doqs</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l536"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:536</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Success callback function for .getAssocMediaTo call above. If the list of media is
+non-null and non-empty, it gets the linq between each doq and the artwork</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">doqs</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the media doqs</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_move" class="method item">
+    <h3 class="name"><code>move</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>res</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>prevVelocity</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>prevLocation</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>finalPos</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>delay</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l1151"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:1151</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Recursive helper function for mediaManip.
+Moves object between start location and final location with proper physics.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">res</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>object containing hammer event info</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">prevVelocity</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>velocity of object on release</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">prevLocation</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>location of object</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">finalPos</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>target location of object</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">delay</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>delay (for timer)</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_openArtwork" class="method item">
+    <h3 class="name"><code>openArtwork</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>doq</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l111"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:111</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Open the deepzoom image</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">doq</code>
+                        <span class="type">Doq</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>artwork doq to open // TODO this shouldn&#39;t be necessary -- we know the artwork...</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>whether opening was successful</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_panToPoint" class="method item">
+    <h3 class="name"><code>panToPoint</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l249"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:249</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Reset the deepzoom image (center, zoom out) if an element is not currently visible in the viewport.
+Used in rich location history.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_pointFromPixel" class="method item">
+    <h3 class="name"><code>pointFromPixel</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l409"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:409</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a Seadragon point corresponding to a pixel
+Used in RLH</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeOverlay" class="method item">
+    <h3 class="name"><code>removeOverlay</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>the</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l164"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:164</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Wrapper around Seadragon.Drawer.removeOverlay. Removes an HTML overlay from the seadragon
+canvas.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">the</code>
+                        <span class="type">HTML element</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>ovlerlay element to remove</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_returnElementToBounds" class="method item">
+    <h3 class="name"><code>returnElementToBounds</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l333"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:333</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns coordinates that an element should be returned to if it is dragged too far from the deepzoom image.
+(with a margin of .05 in Seadragon coordinates)
+Used in rich location history.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_scroll" class="method item">
+    <h3 class="name"><code>scroll</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l430"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:430</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Used for zooming when simultaneously dragging a pin in RLH</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_showMediaObject" class="method item">
+    <h3 class="name"><code>showMediaObject</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l1258"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:1258</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Show the associated media on the seadragon canvas. If the media is not
+a hotspot, show it in a slightly random position.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_toggleMediaObject" class="method item">
+    <h3 class="name"><code>toggleMediaObject</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l1341"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:1341</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Show if hidden, hide if shown</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_unload" class="method item">
+    <h3 class="name"><code>unload</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l180"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:180</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Unloads the seadragon viewer</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_updateOverlay" class="method item">
+    <h3 class="name"><code>updateOverlay</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>element</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>placement</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l127"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:127</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Wrapper around Seadragon.Drawer.updateOverlay; moves an HTML element &quot;overlay.&quot;
+Used mostly in conjunction with hotspot circles (this function is currently
+only called from ArtworkEditor.js)</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">element</code>
+                        <span class="type">HTML element</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the overlay element to move</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">placement</code>
+                        <span class="type">Seadragon.OverlayPlacement</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the new placement of the overlay</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_zoomToPoint()" class="method item">
+    <h3 class="name"><code>zoomToPoint()</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_TAG_artmode_TAG.AnnotatedImage.js.html#l282"><code>js&#x2F;TAG&#x2F;artmode&#x2F;TAG.AnnotatedImage.js:282</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Zooms into the deepzoom image.  Used when double-clicking on a map in rlh.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

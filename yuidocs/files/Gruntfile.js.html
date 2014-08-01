@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Gruntfile.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: Gruntfile.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * This file takes care of compiling jade and stylus files and
+ * building TAG.js by concatenating a collection of source js
+ * files. The source files can be found in the JSSRC array below.
+ * 
+ * To use Grunt, run
+ *
+ *    $ grunt
+ *
+ * from the command line. You can also run
+ *
+ *    $ grunt watch
+ *
+ * which will watch for saved changes in any files in the WATCH
+ * array below. WATCH contains all of the js files in JSSRC (when
+ * any of our source files change, we want to recompile TAG.js)
+ * as well as the styl and jade files (when these change, we want
+ * to recompile respective css and html files).
+ *
+ * We use Grunt for a couple reasons:
+ *   - it&#x27;s a pain to always compile jade and stylus by hand
+ *   - it&#x27;s nice to be able to include a single js file (TAG.js)
+ *     rather than a whole collection of them, and doing so lets us
+ *     put all TAG code -- including third-party libraries we use --
+ *     inside a contained scope, so our variables don&#x27;t clobber those
+ *     in the host site&#x27;s code
+ *
+ * To look further into the second point above, you can take a look
+ * at the &quot;concat&quot; task below. It concatenates a bunch of js files
+ * together inside a &quot;banner&quot; and a &quot;footer.&quot; The banner, which will
+ * appear at the top of TAG.js, defines a function (TAG) that wraps all
+ * of our code and declares some global variables. The footer appends a
+ * closing curly brace to the very end of the file to finish the TAG
+ * function.
+ */
+
+var JSSRC = [
+		&#x27;js/jQueryUI/js/jquery-1.7.1.js&#x27;,                      // TAGCORE
+		&#x27;js/jQueryUI/js/jquery-ui-1.8.16.custom.min.js&#x27;,       // TAGCORE
+		&#x27;js/jQueryUI/js/jquery.available.min.js&#x27;,              // TAGCORE
+		&#x27;js/jQueryUI/js/jquery.fittext.js&#x27;,                    // TAGCORE
+		&#x27;js/jQueryUI/js/jquery.autoSize.js&#x27;,                   // TAGCORE
+		&#x27;js/jQueryUI/js/jquery.numeric.js&#x27;,                    // TAGCORE
+
+		&#x27;js/seadragon/src/Seadragon.Core.js&#x27;,                  // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Config.js&#x27;,                // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Strings.js&#x27;,               // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Debug.js&#x27;,                 // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Profiler.js&#x27;,              // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Point.js&#x27;,                 // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Rect.js&#x27;,                  // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Spring.js&#x27;,                // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Utils.js&#x27;,                 // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.MouseTracker.js&#x27;,          // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.EventManager.js&#x27;,          // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.ImageLoader.js&#x27;,           // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Buttons.js&#x27;,               // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.TileSource.js&#x27;,            // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.DisplayRect.js&#x27;,           // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.DeepZoom.js&#x27;,              // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Viewport.js&#x27;,              // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Drawer.js&#x27;,                // TAGCORE
+		&#x27;js/seadragon/src/Seadragon.Viewer.js&#x27;,      
+
+		
+		&#x27;js/utils/CryptoJS/rollups/sha1.js&#x27;,                   // TAGCORE
+		&#x27;js/utils/CryptoJS/rollups/sha224.js&#x27;,                 // TAGCORE
+		&#x27;js/utils/CryptoJS/rollups/sha256.js&#x27;,                 // TAGCORE
+		&#x27;js/utils/CryptoJS/rollups/sha384.js&#x27;,                 // TAGCORE
+		&#x27;js/utils/CryptoJS/rollups/sha512.js&#x27;,                 // TAGCORE
+		&#x27;js/utils/jquery.getScrollbarWidth.js&#x27;,                // TAGCORE
+		&#x27;js/utils/jquery.throttle-debounce.js&#x27;,                // TAGCORE
+		&#x27;js/utils/jquery-css-transform.js&#x27;,                    // TAGCORE
+		&#x27;js/utils/jquery-animate-css-transform.js&#x27;,            // TAGCORE
+		&#x27;js/utils/jquery.xml2json.js&#x27;,                         // TAGCORE
+		&#x27;js/utils/json2xml.js&#x27;,                                // TAGCORE
+		&#x27;js/utils/jquery.hammer.js&#x27;,                           // TAGCORE
+		&#x27;js/utils/hammer.js&#x27;,                                  // TAGCORE
+		&#x27;js/utils/avltree.js&#x27;,                                 // TAGCORE
+		&#x27;js/utils/avlnode.js&#x27;,                                 // TAGCORE
+		&#x27;js/utils/binaryheap.js&#x27;,                              // TAGCORE
+		&#x27;js/utils/dataholder.js&#x27;,                              // TAGCORE
+		&#x27;js/utils/doubleLinkedList.js&#x27;,                        // TAGCORE
+		&#x27;js/utils/hashtable.js&#x27;,                               // TAGCORE
+		&#x27;js/d3/d3.v2.js&#x27;,                                      // TAGCORE
+		&#x27;js/TAG/util/TAG.Util.js&#x27;,                             // TAGCORE
+		&#x27;js/html2canvas/html2canvas.js&#x27;,                       // TAGCORE
+		&#x27;js/utils/jquery.livequery.js&#x27;,                        // TAGCORE
+		&#x27;js/utils/Autolinker.js-master/dist/Autolinker.js&#x27;,          // TAGCORE
+
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js&#x27;, // TAGCORE
+		&#x27;js/TAG/util/TAG.Util.Constants.js&#x27;,                   // TAGCORE
+		&#x27;js/TAG/util/TAG.Util.Splitscreen.js&#x27;,                 // TAGCORE
+		&#x27;js/TAG/util/TAG.Util.IdleTimer.js&#x27;,                   // TAGCORE
+		&#x27;js/TAG/worktop/Worktop.Database.js&#x27;,                  // TAGCORE
+		&#x27;js/TAG/worktop/Worktop.Doq.js&#x27;,                       // TAGCORE
+		&#x27;js/TAG/worktop/TAG.Worktop.Database.js&#x27;,              // TAGCORE
+		&#x27;js/TAG/artmode/TAG.AnnotatedImage.js&#x27;,      
+		&#x27;js/TAG/auth/TAG.Auth.js&#x27;,                             // TAGCORE
+		&#x27;js/TAG/layout/TAG.Layout.StartPage.js&#x27;,               // TAGCORE
+		&#x27;js/TAG/layout/TAG.Layout.ArtworkViewer.js&#x27;,           // TAGCORE
+		&#x27;js/TAG/layout/TAG.Layout.CollectionsPage.js&#x27;,         // TAGCORE
+		&#x27;js/TAG/layout/TAG.Layout.InternetFailurePage.js&#x27;,     // TAGCORE
+		&#x27;js/TAG/layout/TAG.Layout.MetroSplitscreenMessage.js&#x27;, // TAGCORE
+		&#x27;js/TAG/layout/TAG.Layout.TourPlayer.js&#x27;,              // TAGCORE
+		&#x27;js/TAG/layout/TAG.Layout.VideoPlayer.js&#x27;,             // TAGCORE
+		&#x27;js/TAG/layout/TAG.Layout.ArtworkEditor.js&#x27;,
+		&#x27;js/TAG/layout/TAG.Layout.TourAuthoringNew.js&#x27;,
+        
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.TimeManager.js&#x27;,        // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.UndoManager.js&#x27;,        // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.ArtworkTrack.js&#x27;,       // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.AudioTrack.js&#x27;,         // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.Viewer.js&#x27;,             // TAGCORE
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.ArtworkTrack.js&#x27;,       // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.Command.js&#x27;,            // TAGCORE
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.ComponentControls.js&#x27;,  // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.Display.js&#x27;,            // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.EditorMenu.js&#x27;,         // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.ImageTrack.js&#x27;,         // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.InkAuthoring.js&#x27;,       // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.InkTrack.js&#x27;,           // TAGCORE
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.Keyframe.js&#x27;,           // TAGCORE
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.PlaybackControl.js&#x27;,    // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.Tests.js&#x27;,              // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.Timeline.js&#x27;,           // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.TopMenu.js&#x27;,            // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.TourOptions.js&#x27;,        // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.Track.js&#x27;,              // TAGCORE 
+		&#x27;js/TAG/tourauthoring/TAG.TourAuthoring.VideoTrack.js&#x27;,         // TAGCORE 
+        
+		&#x27;js/TAG/authoring/TAG.Authoring.SettingsView.js&#x27;,  // TAGCORE
+		&#x27;js/TAG/authoring/TAG.Authoring.FileUploader.js&#x27;,  // TAGCORE
+		&#x27;js/TAG/authoring/jscolor/jscolor.js&#x27;,             // TAGCORE
+
+		&#x27;js/utils/popcorn.min.js&#x27;,                         // TAGCORE
+		&#x27;js/utils/popcorn.capture.js&#x27;,                     // TAGCORE
+
+		&#x27;telemetry/telemetry.js&#x27;,                          // TAGCORE
+		
+		&#x27;js/tests.js&#x27;,                                     // TAGCORE
+		
+		&#x27;js/core.js&#x27;                                       // TAGCORE
+	],
+	WATCH = JSSRC.slice(); // WATCH will be a superset of JSSRC
+
+// add additional files to WATCH
+WATCH.push(
+	&#x27;html/*.jade&#x27;,
+	&#x27;css/*.styl&#x27;
+);
+
+module.exports = function(grunt) {
+	grunt.initConfig({
+	    concat: {
+	        options: {
+	            separator: &#x27;\n;\n&#x27;,
+	            banner: &#x27;var TAG_GLOBAL = function(tagInput) { \
+					        \n    var tagPath              = tagInput.path || &quot;&quot;, \
+					        \n        containerId          = tagInput.containerId || &quot;tagContainer&quot;, \
+					        \n        ip                   = tagInput.serverIp || &quot;browntagserver.com&quot;, \
+					        \n        allowServerChange    = tagInput.allowServerChange, \
+					        \n 		  allowAuthoringMode   = tagInput.allowAuthoringMode, \
+					        \n        idleDuration         = tagInput.idleDuration, \
+					        \n        currentPage          = {}, // name and obj properties \
+					        \n        urlToLoad            = tagInput.urlToLoad, \
+					        \n        urlToParse           = tagInput.urlToParse, \
+					        \n        pageToLoad           = {}, // a specific page to load \
+					        \n        TELEMETRY_SESSION_ID = null, \
+                            \n        IS_WINDOWS           = (typeof Windows !== &quot;undefined&quot;), \
+                            \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
+					        \n        idleTimer, \
+                            \n        Worktop = {}, \
+			                \n        TAG                  = {}; \n\n&#x27;,
+				footer: &#x27;};&#x27;
+			},
+			dist: {
+				src: JSSRC,
+				dest: &#x27;js/TAG.js&#x27;
+			}
+		},
+		stylus: {
+			compile: {
+				options: {
+					compress: false // in ship builds, set this to &quot;true&quot;
+				},
+				files: {
+					&#x27;css/TAG.css&#x27;: [
+						&#x27;css/common.styl&#x27;,               // TAGCORE
+						&#x27;css/StartPage.styl&#x27;,            // TAGCORE
+						&#x27;css/InternetFailurePage.styl&#x27;,  // TAGCORE
+						&#x27;css/Artmode.styl&#x27;,              // TAGCORE
+						&#x27;css/NewCatalog.styl&#x27;,           // TAGCORE
+						&#x27;css/VideoPlayer.styl&#x27;,          // TAGCORE
+						&#x27;css/TourPlayer.styl&#x27;,           // TAGCORE
+						&#x27;css/General.styl&#x27;,              // TAGCORE
+						&#x27;css/SettingsView.styl&#x27;,         // TAGCORE
+						&#x27;css/Util.styl&#x27;                  // TAGCORE
+					]
+				}
+			}
+		},
+		jade: {
+			compile: {
+				options: {
+					pretty: true // in ship builds, set this to &quot;false&quot;
+				},
+				files: {
+					&#x27;html/StartPage.html&#x27;:           &#x27;html/StartPage.jade&#x27;,           // TAGCORE
+					&#x27;html/InternetFailurePage.html&#x27;: &#x27;html/InternetFailurePage.jade&#x27;, // TAGCORE
+					&#x27;html/Artmode.html&#x27;:             &#x27;html/Artmode.jade&#x27;,             // TAGCORE
+					&#x27;html/NewCatalog.html&#x27;:          &#x27;html/NewCatalog.jade&#x27;,          // TAGCORE
+					&#x27;html/VideoPlayer.html&#x27;:         &#x27;html/VideoPlayer.jade&#x27;,         // TAGCORE
+					&#x27;html/SettingsView.html&#x27;:        &#x27;html/SettingsView.jade&#x27;,        // TAGCORE
+					&#x27;html/TourPlayer.html&#x27;:          &#x27;html/TourPlayer.jade&#x27;           // TAGCORE
+				}
+			}
+		},
+		watch: {
+			files: WATCH,
+			tasks: [&#x27;stylus&#x27;, &#x27;jade&#x27;, &#x27;concat&#x27;]
+		}
+	});
+
+	grunt.loadNpmTasks(&#x27;grunt-contrib-concat&#x27;);
+	grunt.loadNpmTasks(&#x27;grunt-contrib-stylus&#x27;);
+	grunt.loadNpmTasks(&#x27;grunt-contrib-jade&#x27;);
+	grunt.loadNpmTasks(&#x27;grunt-contrib-watch&#x27;);
+
+	grunt.registerTask(&#x27;default&#x27;, [&#x27;jade&#x27;, &#x27;stylus&#x27;, &#x27;concat&#x27;]); // normal calls to grunt will not run the &quot;uglify&quot; task
+}
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

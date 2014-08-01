@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/layout/TAG.Layout.ArtworkViewer.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/layout/TAG.Layout.ArtworkViewer.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿TAG.Util.makeNamespace(&quot;TAG.Layout.ArtworkViewer&quot;);
+
+/**
+ * The artwork viewer, which contains a sidebar with tools and thumbnails as well
+ * as a central area for the deepzoom image.
+ * @class TAG.Layout.ArtworkViewer
+ * @constructor
+ * @param {Object} options              some options for the artwork viewer page
+ * @param {HTML Element} container      the root container 
+ * @return {Object}                     some public methods
+ */
+TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options, exhibition) {
+    &quot;use strict&quot;;
+
+    options = options || {}; // cut down on null checks later
+
+    var // DOM-related
+        root                = TAG.Util.getHtmlAjax(&#x27;Artmode.html&#x27;),
+        sideBar             = root.find(&#x27;#sideBar&#x27;),
+        toggler             = root.find(&#x27;#toggler&#x27;),
+        togglerImage        = root.find(&#x27;#togglerImage&#x27;),
+        backButton          = root.find(&#x27;#backButton&#x27;),
+        linkButton          = root.find(&#x27;#linkButton&#x27;),
+        linkButtonContainer = root.find(&#x27;#linkContainer&#x27;),
+        //locHistoryDiv       = root.find(&#x27;#locationHistoryDiv&#x27;),
+        info                = root.find(&#x27;#info&#x27;),
+        locHistoryToggle    = root.find(&#x27;#locationHistoryToggle&#x27;),
+        locHistory          = root.find(&#x27;#locationHistory&#x27;),
+        locHistoryContainer = root.find(&#x27;#locationHistoryContainer&#x27;),
+
+        // constants
+        FIX_PATH = TAG.Worktop.Database.fixPath,
+        PRIMARY_FONT_COLOR = TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        FONT = TAG.Worktop.Database.getMuseumFontFamily(),
+
+        // input options
+        doq            = options.doq,              // the artwork doq
+        prevPage       = options.prevPage,         // the page we came from (string)
+        prevScroll     = options.prevScroll || 0,  // scroll position where we came from
+        prevCollection = options.prevCollection,   // collection we came from, if any
+        prevTag        = options.prevTag,          // sort tag of collection we came from, if any
+        prevMult       = options.prevMult,      
+
+        // misc initialized vars  
+        locHistoryActive = false,                   // whether location history is open
+        locClosing       = false,                   // whether location history is closing
+        locOpening       = false,                   // whether location history is opening
+        drawers          = [],                      // the expandable sections for assoc media, tours, description, etc...
+        mediaHolders     = [],                      // array of thumbnail buttons
+        loadQueue        = TAG.Util.createQueue(),  // async queue for thumbnail button creation, etc
+        screenWidth      = $(&#x27;#tagRoot&#x27;).width(),      // Width of entire tag screen (for split screen styling)
+        
+
+        // misc uninitialized vars
+        locationList,                               // location history data
+        map,                                        // Bing Maps map for location history
+        annotatedImage,                             // an AnnotatedImage object
+        associatedMedia,                            // object of associated media objects generated by AnnotatedImage
+        manipulate;                                 // Manipulation method
+                                  
+    // get things rolling if doq is defined (it better be)
+    doq &amp;&amp; init();
+
+    return {
+        getRoot: getRoot
+    };
+
+    /**
+     * Initiate artmode with a root, artwork image and a sidebar on the left
+     * @method init
+     */
+    function init() {
+        var head,
+            script,
+            meta;
+
+        if (!idleTimer) {
+            idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+            idleTimer.start();
+        }
+
+        // add script for displaying bing maps
+        head = document.getElementsByTagName(&#x27;head&#x27;).item(0);
+        script = document.createElement(&quot;script&quot;);
+        script.charset = &quot;UTF-8&quot;;
+        script.type = &quot;text/javascript&quot;;
+        script.src = &quot;http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&quot;;
+        head.appendChild(script);
+
+        meta = document.createElement(&#x27;meta&#x27;);
+        meta.httpEquiv = &quot;Content-Type&quot;;
+        meta.content = &quot;text/html; charset=utf-8&quot;;
+        head.appendChild(meta);
+
+        locationList = TAG.Util.UI.getLocationList(doq.Metadata);
+
+        annotatedImage = TAG.AnnotatedImage({
+            root: root,
+            doq:  doq,
+            callback: function () {
+                associatedMedia = annotatedImage.getAssociatedMedia();
+                associatedMedia.guids.sort(function (a, b) {
+                    return associatedMedia[a].doq.Name.toLowerCase() &lt; associatedMedia[b].doq.Name.toLowerCase() ? -1 : 1;
+                });
+                try { // TODO figure out why loadDoq sometimes causes a NetworkError (still happening?)
+                    annotatedImage.openArtwork(doq);
+                } catch(err) {
+                    debugger;
+                    console.log(err); // TODO if we hit a network error, show an error message
+                }
+                TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+                initSplitscreen();
+                makeSidebar();
+                createSeadragonControls();
+            },
+            noMedia: false
+        });
+    }
+
+    /**
+     * Initializes splitscreen functionality
+     * @method initSplitscreen
+     */
+    function initSplitscreen() {
+        var splitscreenContainer = $(document.createElement(&#x27;div&#x27;)),
+            splitscreenIcon = $(document.createElement(&#x27;img&#x27;));
+
+        splitscreenContainer.attr(&#x27;id&#x27;, &#x27;splitscreenContainer&#x27;);
+        splitscreenContainer.css({
+            &#x27;background-color&#x27;: &#x27;rgba(0,0,0,0.6)&#x27;,
+            &#x27;border-top-left-radius&#x27;: &#x27;10px&#x27;,
+            &#x27;height&#x27;: &#x27;5%&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;right&#x27;: &#x27;0%&#x27;,
+            &#x27;text-align&#x27;: &#x27;center&#x27;,
+            &#x27;top&#x27;: &#x27;95%&#x27;,
+            &#x27;vertical-align&#x27;: &#x27;center&#x27;,
+            &#x27;width&#x27;: &#x27;5%&#x27;,
+            &#x27;z-index&#x27;: &#x27;500&#x27;
+        });
+
+        splitscreenIcon.attr({
+            id: &#x27;splitscreen-icon&#x27;,
+            src: tagPath+&#x27;images/SplitWhite_dotted.svg&#x27;
+        });
+        splitscreenIcon.css({
+            height: &#x27;60%&#x27;,
+            left: &#x27;2%&#x27;,
+            opacity: &#x27;0.6&#x27;,
+            position: &#x27;absolute&#x27;,
+            top: &#x27;10%&#x27;,
+            width: &#x27;75%&#x27;
+        });
+
+        splitscreenContainer.on(&#x27;click&#x27;, function () {
+            var collectionsPage,
+                collectionsPageRoot;
+            // TODO merge deal with location history container being open (it should be closed upon entering splitscreen)
+            if (!TAG.Util.Splitscreen.isOn()) {
+                // TODO merge:
+                //   - dim out location history text in sidebar and disable it
+                //   - 
+                collectionsPage = TAG.Layout.CollectionsPage();
+
+                collectionsPageRoot = collectionsPage.getRoot();
+                collectionsPageRoot.data(&#x27;split&#x27;, &#x27;R&#x27;);
+
+                splitscreenContainer.css(&#x27;display&#x27;, &#x27;none&#x27;);
+                TAG.Util.Splitscreen.init(root, collectionsPageRoot);
+                annotatedImage.viewer.scheduleUpdate();
+                //annotatedImage.viewer.viewport.applyConstraints();
+                TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+            }
+        });
+
+        splitscreenContainer.append(splitscreenIcon);
+        root.append(splitscreenContainer);
+        if (TAG.Util.Splitscreen.isOn()) {
+            splitscreenContainer.css(&#x27;display&#x27;, &#x27;none&#x27;);
+        }
+    }
+
+    /**
+     * Add controls and key handlers for manual Seadragon manipulation
+     * @method createSeadragonControls
+     */
+    function createSeadragonControls() {
+        var container        = root.find(&#x27;#seadragonManipContainer&#x27;),
+            slideButton      = root.find(&#x27;#seadragonManipSlideButton&#x27;),
+            tagRoot          = $(&#x27;#tagRoot&#x27;),
+            top              = 0,
+            count            = 0,
+            panDelta         = 20,
+            zoomScale        = 1.1,
+            containerFocused = true,
+            interval;
+
+        // splitscreen
+        if (root.data(&#x27;split&#x27;) === &#x27;R&#x27; &amp;&amp; TAG.Util.Splitscreen.isOn()) {
+            container.css({
+                &#x27;right&#x27;: &#x27;auto&#x27;,
+                &#x27;left&#x27;: &#x27;0%&#x27;
+            });
+        }
+        container.css(&#x27;min-width&#x27;, 0.19 * screenWidth);
+
+        slideButton.on(&#x27;click&#x27;, function () {
+            count = 1 - count;
+            container.animate({
+                top: top
+            });
+            if (count === 0){
+                top = &#x27;0%&#x27;;
+                slideButton.html(&quot;Show Controls&quot;);
+            } else {
+                top = &#x27;-23%&#x27;;
+                slideButton.html(&#x27;Hide Controls&#x27;);
+            }   
+        });
+        
+        TAG.Telemetry.register(slideButton,&#x27;click&#x27;,&#x27;seadragon_button_panel_toggled&#x27;,function(tobj){
+            tobj.custom_1 = doq.Name;
+            tobj.custom_2 = doq.Identifier;
+        });
+        container.append(slideButton);
+        container.append(createButton(&#x27;leftControl&#x27;,  tagPath+&#x27;images/icons/zoom_left.svg&#x27;));
+        container.append(createButton(&#x27;upControl&#x27;,    tagPath+&#x27;images/icons/zoom_up.svg&#x27;));
+        container.append(createButton(&#x27;rightControl&#x27;, tagPath+&#x27;images/icons/zoom_right.svg&#x27;));
+        container.append(createButton(&#x27;downControl&#x27;,  tagPath+&#x27;images/icons/zoom_down.svg&#x27;));
+        container.append(createButton(&#x27;zinControl&#x27;,   tagPath+&#x27;images/icons/zoom_plus.svg&#x27;));
+        container.append(createButton(&#x27;zoutControl&#x27;,  tagPath+&#x27;images/icons/zoom_minus.svg&#x27;));
+
+        /////////////////////////// RAPID PROTOTYPING /////////////////////////////
+
+        var crossfadeSlider = $(document.createElement(&#x27;input&#x27;)).attr({
+            &#x27;id&#x27;: &#x27;crossfadeSlider&#x27;,
+            &#x27;type&#x27;: &#x27;range&#x27;,
+            &#x27;value&#x27;: 1,
+            &#x27;min&#x27;: 0,
+            &#x27;max&#x27;: 1,
+            &#x27;step&#x27;: 0.05
+        });
+
+        crossfadeSlider.on(&#x27;change mousemove&#x27;, function() {
+            $(&#x27;.mediaOuterContainer&#x27;).css(&#x27;opacity&#x27;, crossfadeSlider.val());
+        });
+        // container.append(crossfadeSlider);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+
+
+        /**
+         * Create a seadragon control button
+         * @method createButton
+         * @param {String} id        the id for the new button
+         * @param {String} imgPath   the path to the button&#x27;s image
+         * @param {Number} left      css left property for button
+         * @param {Number} top       css top property for button
+         * @return {jQuery obj}      the button
+         */
+        function createButton(id, imgPath, left, top) {
+            var img = $(document.createElement(&#x27;img&#x27;));
+
+            img.attr({
+                src: imgPath,
+                id:  id
+            });
+
+            img.removeAttr(&#x27;width&#x27;);
+            img.removeAttr(&#x27;height&#x27;);
+            
+            img.css({
+                left: left + &quot;px&quot;,
+                top: top + &quot;px&quot;
+            });
+
+            if (id === &#x27;leftControl&#x27; || id === &#x27;rightControl&#x27;){
+                img.addClass(&#x27;seadragonManipButtonLR&#x27;);
+            } else if (id === &#x27;upControl&#x27;|| id === &#x27;downControl&#x27;){
+                img.addClass(&#x27;seadragonManipButtonUD&#x27;);
+            } else if (id === &#x27;zinControl&#x27;|| id === &#x27;zoutControl&#x27;){
+                img.addClass(&#x27;seadragonManipButtoninout&#x27;);
+            }
+
+            return img;
+        }
+        
+        TAG.Telemetry.register(root.find(&quot;#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl&quot;), &#x27;click&#x27;, &#x27;seadragon_control_clicked&#x27;, function (tobj) {
+            tobj.custom_1 = doq.Name;
+            tobj.custom_2 = doq.Identifier;
+        });
+        
+        /**
+         * Keydown handler for artwork manipulation; wrapper around doManip that first
+         * prevents default key behaviors
+         * @method keyHandler
+         * @param {Object} evt         the event object
+         * @param {String} direction   the direction in which to move the artwork
+         */
+        function keyHandler(evt, direction) {
+            evt.preventDefault();
+            clearInterval(interval);
+            doManip(evt, direction);
+        }
+
+        /**
+         * Click handler for button in given direction; a wrapper around doManip that also
+         * executes doManip in an interval if the user is holding down a button
+         * @method buttonHandler
+         * @param {Object} evt         the event object
+         * @param {String} direction   the direction in which to move the artwork
+         */
+        function buttonHandler(evt, direction) {
+            doManip(evt, direction);
+            clearInterval(interval);
+            interval = setInterval(function() {
+                doManip(evt, direction);
+            }, 100);
+        }
+
+        /**
+         * Do fixed manipulation in response to seadragon controls or key presses
+         * @method doManip
+         * @param {Object} evt         the event object
+         * @param {String} direction   the direction in which to move the artwork
+         */
+        function doManip(evt, direction) {
+            var pivot = annotatedImage.getMediaPivot();
+            manipulate = annotatedImage.getToManip();
+
+            if (direction === &#x27;left&#x27;) {
+                manipulate({pivot: pivot, translation: {x: -panDelta, y: 0}, scale: 1});
+            } else if (direction === &#x27;up&#x27;) {
+                manipulate({pivot: pivot, translation: {x: 0, y: -panDelta}, scale: 1});
+            } else if (direction === &#x27;right&#x27;) {
+                manipulate({pivot: pivot, translation: {x: panDelta, y: 0}, scale: 1});
+            } else if (direction === &#x27;down&#x27;) {
+                manipulate({pivot: pivot, translation: {x: 0, y: panDelta}, scale: 1});
+            } else if (direction === &#x27;in&#x27;) {
+                manipulate({pivot: pivot, translation: {x: 0, y: 0}, scale: zoomScale});
+            } else if (direction === &#x27;out&#x27;) {
+                manipulate({pivot: pivot, translation: {x: 0, y: 0}, scale: 1/zoomScale});
+            }   
+        }
+
+
+        // tabindex code is to allow key press controls (focus needs to be on the TAG container)
+        $(&#x27;#tagContainer&#x27;).attr(&quot;tabindex&quot;, -1);
+        $(&quot;[tabindex=&#x27;-1&#x27;]&quot;).focus();
+        $(&quot;[tabindex=&#x27;-1&#x27;]&quot;).css(&#x27;outline&#x27;, &#x27;none&#x27;);
+        $(&quot;[tabindex=&#x27;-1&#x27;]&quot;).on(&#x27;click&#x27;, function() {
+            $(&quot;[tabindex=&#x27;-1&#x27;]&quot;).focus();
+            containerFocused = true;
+            annotatedImage.dzManipPreprocessing();     //Tell AnnotatedImage that the main artwork is active
+        });
+        $(&quot;[tabindex=&#x27;-1&#x27;]&quot;).focus(function() {
+            containerFocused = true;
+        });
+        $(&quot;[tabindex=&#x27;-1&#x27;]&quot;).focusout(function() {
+            containerFocused = false;
+        });
+
+        // TODO merge: need to fix the $(...) calls above for splitscreen
+
+        
+
+        $(document).on(&#x27;keydown&#x27;, function(evt) {
+            if(containerFocused) {
+                switch(evt.which) {
+                    case 37:
+                        keyHandler(evt, &#x27;left&#x27;);
+                        break;
+                    case 38:
+                        keyHandler(evt, &#x27;up&#x27;);
+                        break;
+                    case 39:
+                        keyHandler(evt, &#x27;right&#x27;);
+                        break;
+                    case 40:
+                        keyHandler(evt, &#x27;down&#x27;);
+                        break;
+                    case 187:
+                    case 61:
+                        keyHandler(evt, &#x27;in&#x27;);
+                        break;
+                    case 189:
+                    case 173:
+                        keyHandler(evt, &#x27;out&#x27;);
+                        break;
+                }
+            }
+        });
+
+        $(document).keyup(function(evt){
+            clearInterval(interval);
+        });
+
+        root.find(&#x27;#seadragonManipContainer&#x27;).on(&#x27;click&#x27;, function(evt) {
+            evt.stopPropagation(); //Prevent the click going through to the main container
+            evt.preventDefault();
+            TAG.Util.IdleTimer.restartTimer();
+        });
+
+        root.find(&#x27;#leftControl&#x27;).on(&#x27;mousedown&#x27;, function(evt) {
+            buttonHandler(evt, &#x27;left&#x27;);
+        });
+        root.find(&#x27;#upControl&#x27;).on(&#x27;mousedown&#x27;, function(evt) {
+            buttonHandler(evt, &#x27;up&#x27;);
+        });
+        root.find(&#x27;#rightControl&#x27;).on(&#x27;mousedown&#x27;, function (evt) {
+            buttonHandler(evt, &#x27;right&#x27;);
+        });
+        root.find(&#x27;#downControl&#x27;).on(&#x27;mousedown&#x27;, function (evt) {
+            buttonHandler(evt, &#x27;down&#x27;);
+        });
+        root.find(&#x27;#zinControl&#x27;).on(&#x27;mousedown&#x27;, function (evt) {
+            buttonHandler(evt, &#x27;in&#x27;);
+        });
+        root.find(&#x27;#zoutControl&#x27;).on(&#x27;mousedown&#x27;, function (evt) {
+            buttonHandler(evt, &#x27;out&#x27;);
+        });
+
+        root.find(&#x27;.seadragonManipButtonLR&#x27;).on(&#x27;mouseup mouseleave&#x27;, function () {
+            clearInterval(interval);
+        });
+
+        root.find(&#x27;.seadragonManipButtonUD&#x27;).on(&#x27;mouseup mouseleave&#x27;, function () {
+            clearInterval(interval);
+        });
+
+        root.find(&#x27;.seadragonManipButtoninout&#x27;).on(&#x27;mouseup mouseleave&#x27;, function () {
+            clearInterval(interval);
+        });
+
+        TAG.Telemetry.register($(&quot;[tabindex=&#x27;-1&#x27;]&quot;),&#x27;keydown&#x27;,&#x27;seadragon_key_pressed&#x27;,function(tobj){
+            if (containerFocused===false){
+                return true;
+            }
+             tobj.custom_1 = doq.Name;
+             tobj.custom_2 = doq.Identifier;
+        });
+    }
+
+    /**
+     * Makes the artwork viewer sidebar
+     * @method makeSidebar
+     */
+    function makeSidebar() {
+        var backBttnContainer = root.find(&quot;#backBttnContainer&quot;),
+            sideBarSections = root.find(&#x27;#sideBarSections&#x27;),
+            sideBarInfo = root.find(&#x27;#sideBarInfo&#x27;),
+            infoTitle = root.find(&#x27;#infoTitle&#x27;),
+            infoArtist = root.find(&#x27;#infoArtist&#x27;),
+            infoYear = root.find(&#x27;#infoYear&#x27;),
+            assetContainer = root.find(&#x27;#assetContainer&#x27;),
+            isBarOpen = true,
+            currBottom = 0,
+            item,
+            fieldTitle,
+            fieldValue,
+            infoCustom,
+            i,
+            curr,
+            button,
+            descriptionDrawer,
+            tourDrawer,
+            locHistoryButton,
+            mediaDrawer,
+            xfadeDrawer,
+            xfadeSlider,
+            xfadeSliderPoint;
+
+        sideBarInfo.css({
+            &#x27;height&#x27; : sideBarSections.height()-25 + &#x27;px&#x27;
+            });
+        backButton.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Back.svg&#x27;);
+        togglerImage.attr(&quot;src&quot;, tagPath + &#x27;images/icons/Close.svg&#x27;);
+        infoTitle.text(doq.Name);
+        infoArtist.text(doq.Metadata.Artist);
+        infoYear.text(doq.Metadata.Year);
+        infoTitle.css({
+            &#x27;color&#x27;: &#x27;#&#x27; + PRIMARY_FONT_COLOR,
+            &#x27;font-family&#x27;: FONT
+        });
+
+        infoArtist.css({
+            &#x27;color&#x27;: &#x27;#&#x27; + PRIMARY_FONT_COLOR,
+            &#x27;font-family&#x27;: FONT
+        });
+
+        infoYear.css({
+            &#x27;color&#x27;: &#x27;#&#x27; + PRIMARY_FONT_COLOR,
+            &#x27;font-family&#x27;: FONT
+        });
+        locHistory &amp;&amp; locHistory.css({
+            &#x27;color&#x27;: &#x27;#&#x27; + PRIMARY_FONT_COLOR,
+            &#x27;font-family&#x27;: FONT
+        });
+
+        // splitscreen
+        if (root.data(&#x27;split&#x27;) === &#x27;R&#x27; &amp;&amp; TAG.Util.Splitscreen.isOn()) {
+            sideBar.css({
+                &#x27;left&#x27;: &#x27;auto&#x27;,
+                &#x27;right&#x27;: &#x27;0%&#x27;
+            });
+            toggler.css({
+                left: &#x27;-12%&#x27;,
+                &#x27;border-top-left-radius&#x27;: &#x27;10px&#x27;,
+                &#x27;border-top-right-radius&#x27;: &#x27;0px&#x27;,
+                &#x27;border-bottom-right-radius&#x27;: &#x27;0px&#x27;,
+                &#x27;border-bottom-left-radius&#x27;: &#x27;10px&#x27;
+            });
+            togglerImage.attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/Open.svg&#x27;)
+                        .css(&#x27;right&#x27;,&#x27;0%&#x27;);
+        } else {
+            togglerImage.css(&#x27;left&#x27;, &#x27;0%&#x27;);
+        }
+        sideBar.css(&#x27;min-width&#x27;, 0.22 * screenWidth);
+        
+
+        // toggler to hide/show sidebar
+        toggler.on(&#x27;click&#x27;, function () {
+            var opts = {},
+                isLeft = root.data(&#x27;split&#x27;) === &#x27;L&#x27;;
+
+            if(isLeft) {
+                opts.left = isBarOpen ? &#x27;-&#x27; + (0.22*screenWidth) + &#x27;px&#x27; : &#x27;0%&#x27;;
+            } else {
+                opts.right = isBarOpen ? &#x27;-&#x27; + (0.22 * screenWidth) + &#x27;px&#x27; : &#x27;0%&#x27;;
+            }
+
+            isBarOpen = !isBarOpen;
+
+            sideBar.animate(opts, 1000, function () {
+                togglerImage.attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/&#x27; + ((!!isBarOpen)^(!isLeft) ? &#x27;Close.svg&#x27; : &#x27;Open.svg&#x27;));
+            });
+        });
+
+        TAG.Util.UI.setUpBackButton(backButton, goBack);
+        TAG.Telemetry.register(backButton, &#x27;click&#x27;, &#x27;artwork_to_collections&#x27;, function(tobj) {
+            tobj.custom_1 = doq.Name;
+            tobj.custom_2 = doq.Identifier;
+        });
+        
+        if(IS_WEBAPP) {
+            linkButton.attr(&#x27;src&#x27;, tagPath+&#x27;images/link.svg&#x27;);
+            linkButton.on(&#x27;click&#x27;, function() {
+                var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
+                    tagpagename: &#x27;artwork&#x27;,
+                    tagguid: doq.Identifier
+                });
+
+                root.append(linkOverlay);
+                linkOverlay.fadeIn(500, function() {
+                    linkOverlay.find(&#x27;.linkDialogInput&#x27;).select();
+                });
+            });
+        } else {
+            linkButtonContainer.remove();
+        }
+
+        function goBack() {
+            var collectionsPage,
+                collectionsPageRoot;
+            backButton.off(&#x27;click&#x27;);
+
+            //idleTimer &amp;&amp; idleTimer.kill();
+            //idleTimer = null;
+
+            annotatedImage &amp;&amp; annotatedImage.unload();
+            collectionsPage = TAG.Layout.CollectionsPage({
+                backScroll:     prevScroll,
+                backArtwork:    doq,
+                backCollection: prevCollection,
+                backTag : prevTag,
+                backMult : prevMult
+            });
+
+            collectionsPageRoot = collectionsPage.getRoot();
+            collectionsPageRoot.data(&#x27;split&#x27;, root.data(&#x27;split&#x27;) === &#x27;R&#x27; ? &#x27;R&#x27; : &#x27;L&#x27;);
+
+            TAG.Util.UI.slidePageRightSplit(root, collectionsPageRoot, function () {});
+
+            currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+            currentPage.obj  = collectionsPage;
+        }
+
+
+        // add more information for the artwork if curator added in the authoring mode
+        for (item in doq.Metadata.InfoFields) {
+            if(doq.Metadata.InfoFields.hasOwnProperty(item)) {
+                fieldTitle = item;
+                fieldValue = doq.Metadata.InfoFields[item];
+                infoCustom = $(document.createElement(&#x27;div&#x27;));
+                infoCustom.addClass(&#x27;infoCustom&#x27;);
+                infoCustom.text(fieldTitle + &#x27;: &#x27; + fieldValue);
+                infoCustom.css({
+                    &#x27;color&#x27;: &#x27;#&#x27; + PRIMARY_FONT_COLOR,
+                    &#x27;font-family&#x27;: FONT
+                });
+                infoCustom.appendTo(info);
+            }
+        }
+
+        // make sure the info text fits in the div (TODO is this necessary?)
+        TAG.Util.fitText(info, 1.1);
+
+        // create drawers
+        if (doq.Metadata.Description) {
+            descriptionDrawer = createDrawer(&quot;Description&quot;);
+            descriptionDrawer.contents.html(Autolinker.link(doq.Metadata.Description.replace(/\n/g, &quot;&lt;br /&gt;&quot;), {email: false, twitter: false}));
+            assetContainer.append(descriptionDrawer);
+            currBottom = descriptionDrawer.height();
+        }
+ 
+        if (locationList.length &gt; 0) {
+            locHistoryButton = initlocationHistory();
+            assetContainer.append(locHistoryButton);
+            currBottom += locHistoryButton.height();
+        } else {
+            root.find(&#x27;#locationHistoryContainer&#x27;).remove();
+        }
+
+        if (associatedMedia.guids.length &gt; 0) {
+            for (i = 0; i &lt; associatedMedia.guids.length; i++) {
+                curr = associatedMedia[associatedMedia.guids[i]];
+                if (curr.linq.Metadata.Type === &#x27;Layer&#x27;) {
+                    if (!xfadeDrawer) {
+                        xfadeSlider = $(document.createElement(&#x27;div&#x27;));
+                        xfadeSlider.css({
+                            border: &#x27;2px solid rgba(255,255,255,0.8)&#x27;,
+                            height: &#x27;25px&#x27;,
+                            left: &#x27;10%&#x27;,
+                            margin: &#x27;5px 0px 5px 0px&#x27;,
+                            position: &#x27;relative&#x27;,
+                            width: &#x27;80%&#x27;
+                        });
+                        xfadeSliderPoint = $(document.createElement(&#x27;div&#x27;));
+                        xfadeSliderPoint.css({
+                            &#x27;background-color&#x27;: &#x27;rgba(255,255,255,0.8)&#x27;,
+                            height: &#x27;100%&#x27;,
+                            left: &#x27;0%&#x27;,
+                            position: &#x27;absolute&#x27;,
+                            top: &#x27;0%&#x27;,
+                            width: &#x27;50%&#x27;
+                        });
+                        xfadeSlider.append(xfadeSliderPoint);
+
+                        xfadeSlider.on(&#x27;mousedown&#x27;, function(evt) {
+                            var leftPercent = evt.offsetX / xfadeSlider.width();
+                            xfadeSliderPoint.css(&#x27;width&#x27;, leftPercent * 100 + &#x27;%&#x27;);
+                            $(&#x27;.xfadeImg&#x27;).css(&#x27;opacity&#x27;, leftPercent);
+
+                            xfadeSlider.on(&#x27;mousemove&#x27;, function (evt) {
+                                var leftPercent = evt.offsetX / xfadeSlider.width();
+                                xfadeSliderPoint.css(&#x27;width&#x27;, leftPercent * 100 + &#x27;%&#x27;);
+                                $(&#x27;.xfadeImg&#x27;).css(&#x27;opacity&#x27;, leftPercent);
+                            });
+                        });
+
+                        xfadeSlider.on(&#x27;mouseup mouseleave&#x27;, function (evt) {
+                            xfadeSlider.off(&#x27;mousemove&#x27;);
+                        });
+
+                        
+                        xfadeDrawer = createDrawer(&#x27;Crossfades&#x27;, xfadeSlider);
+                    }
+                    loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
+                } else {
+                    if (!mediaDrawer) {
+                        mediaDrawer = createDrawer(&#x27;Associated Media&#x27;);
+                    }
+                    loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+                }
+            }
+            if (mediaDrawer) {
+                assetContainer.append(mediaDrawer);
+                currBottom += mediaDrawer.height();
+            }
+            if (xfadeDrawer) {
+                assetContainer.append(xfadeDrawer);
+                currBottom += xfadeDrawer.height();
+            }
+        }
+
+        /**
+         * Creates a tour thumbnail button
+         * @method createTourButton
+         * @param {jQuery obj} container     the element to which we&#x27;ll append this button
+         * @param {doq} tour                 the tour doq
+         */
+        function createTourButton(container, tour) {
+            return function() {
+                container.append(TAG.Util.Artwork.createThumbnailButton({
+                    title:       TAG.Util.htmlEntityDecode(tour.Name),
+                    handler:     tourClicked(tour),
+                    buttonClass: &#x27;tourButton&#x27;,
+                    src:         (tour.Metadata.Thumbnail ? FIX_PATH(tour.Metadata.Thumbnail) : tagPath+&#x27;images/tour_icon.svg&#x27;)
+                }));
+            }
+        }
+
+        /**
+         * Creates a thumbnail button for an associated media
+         * @method createMediaButton
+         * @param {jQuery obj} container       the element to which we&#x27;ll append the button
+         * @param {Object} media               an associated media object (from AnnotatedImage)
+         */
+        function createMediaButton(container, media) {
+            return function() {
+                var src = &#x27;&#x27;,
+                    metadata = media.doq.Metadata,
+                    thumb = metadata.Thumbnail;
+
+                switch (metadata.ContentType) {
+                    case &#x27;Audio&#x27;:
+                        src = tagPath+&#x27;images/audio_icon.svg&#x27;;
+                        break;
+                    case &#x27;Video&#x27;:
+                        src = (thumb &amp;&amp; !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : tagPath + &#x27;images/video_icon.svg&#x27;;
+                        break;
+                    case &#x27;Image&#x27;:
+                        src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);
+                        break;
+                    default:
+                        src = tagPath + &#x27;images/text_icon.svg&#x27;;
+                        break;
+                }
+
+                container.append(TAG.Util.Artwork.createThumbnailButton({
+                    title:       TAG.Util.htmlEntityDecode(media.doq.Name),
+                    handler:     mediaClicked(media),
+                    buttonClass: &#x27;mediaButton&#x27;,
+                    buttonID:    &#x27;thumbnailButton-&#x27;+media.doq.Identifier,
+                    src:         src
+                }));
+            }
+        }
+
+        /**
+         * Generates a click handler for a specific associated media object
+         * @method mediaClicked
+         * @param {Object} media       the associated media object (from AnnotatedImage)
+         */
+        function mediaClicked(media) {
+            //var toggleFunction = toggleLocationPanel;
+            return function (evt) {
+                evt.stopPropagation();
+                locHistoryActive = true;
+                
+                media.create(); // returns if already created
+                media.toggle();
+                TAG.Util.IdleTimer.restartTimer();
+                (media.linq.Metadata.Type !== &#x27;Layer&#x27;) &amp;&amp; media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
+                media.pauseReset();
+                // toggleLocationPanel();
+            };
+        }
+
+        // Load tours and filter for tours associated with this artwork
+        TAG.Worktop.Database.getTours(function (tours) {
+            var relatedTours,
+                maxHeight;
+
+            relatedTours = tours.filter(function (tour) {
+                var relatedArtworks;
+                if (!tour.Metadata || !tour.Metadata.RelatedArtworks || tour.Metadata.Private === &quot;true&quot;) {
+                    return false;
+                }
+                relatedArtworks = JSON.parse(tour.Metadata.RelatedArtworks);
+                if(!relatedArtworks || !relatedArtworks.length) {
+                    return false;
+                }
+                return relatedArtworks.indexOf(doq.Identifier) &gt;= 0;
+            });
+
+            if (relatedTours.length &gt; 0) {
+                tourDrawer = createDrawer(&#x27;Tours&#x27;);
+                assetContainer.append(tourDrawer);
+                currBottom += tourDrawer.height();
+
+                tourDrawer.contents.text(&#x27;&#x27;);
+                for(i=0; i&lt;relatedTours.length; i++) {
+                    loadQueue.add(createTourButton(tourDrawer.contents, relatedTours[i]));
+                }
+            }
+
+            // set max height of drawers to avoid expanding into minimap area
+            maxHeight = Math.max(1, assetContainer.height() - currBottom ); //to account for the height of the drawerLabel of the current drawer.
+            
+            root.find(&quot;.drawerContents&quot;).css({
+                &quot;max-height&quot;: maxHeight + &quot;px&quot;,
+
+            });
+        });
+
+        function tourClicked(tour) {
+            return function () {
+                var rinData,
+                    parentid,
+                    prevInfo,
+                    rinPlayer,
+                    confirmationBox;
+
+                if (TAG.Util.Splitscreen.isOn()) {
+                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
+                            TAG.Util.Splitscreen.exit(root.data(&#x27;split&#x27;) || &#x27;L&#x27;);
+                            tourClicked(tour)();
+                        },
+                        &quot;By opening this tour, you will exit splitscreen mode. Would you like to continue?&quot;,
+                        &quot;Continue&quot;,
+                        false,
+                        function () {
+                            confirmationBox.remove();
+                        },
+                        root
+                    ));
+                    confirmationBox.css({
+                        &#x27;z-index&#x27;: 10001,
+                        &#x27;font-size&#x27;: &#x27;60%&#x27;
+                    });
+                    root.append(confirmationBox);
+                    confirmationBox.show();
+                } else {
+                    annotatedImage.unload();
+                    prevInfo = { artworkPrev: &quot;artmode&quot;, prevScroll: prevScroll, prevTag: prevTag };
+                    rinData = JSON.parse(unescape(tour.Metadata.Content));
+                    rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options);
+
+                    TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
+                }
+            };
+        }
+
+        /*************************************************************************
+         * MINIMAP CODE. bleveque: didn&#x27;t rewrite this; separate issue
+         *                         if some variable names are off now, let me know
+         */
+
+        //Create minimapContainer...
+        var minimapContainer = root.find(&#x27;#minimapContainer&#x27;);
+
+        //if the #info div exceeds the half the length of the sidebar, the div&#x27;s max-height is set to its default with an auto scroll property.
+        info.css({
+            &#x27;overflow-y&#x27; : &#x27;auto&#x27;,
+            &#x27;max-height&#x27; : sideBar.height()*2/5- (info.offset().top - sideBar.offset().top)+ &#x27;px&#x27;,
+
+        });
+
+       
+
+    
+    //when the #info div&#x27;s size is not too large, the text inside metadata fields is made as much visible as possible
+        assetContainer.css({
+            &#x27;max-height&#x27;: sideBarInfo.height()-info.height()+ (info.offset().top - sideBar.offset().top) + &#x27;px&#x27;,
+
+        });
+
+        
+
+        sideBarSections.append(minimapContainer);
+
+        //A white rectangle for minimap to show the current shown area for artwork
+        var minimaprect = root.find(&#x27;#minimaprect&#x27;);
+
+        //Load deepzoom thumbnail. 
+        var img = new Image();
+        var loaded = false;
+        var AR = 1;//ratio between width and height.
+        var minimapw = 1;//minimap width
+        var minimaph = 1;//minimap height
+        var minimap;
+
+        /*
+        **Load the image of artwork and initialize the minimap rectangle
+        * @method minimapLoaded
+        */
+        function minimapLoaded() {
+            if (loaded) return;
+            loaded = true;
+            //load the artwork image
+            minimap = root.find(&#x27;#minimap&#x27;);
+            minimap.attr(&#x27;src&#x27;, TAG.Worktop.Database.fixPath(doq.URL));
+
+            //make the minimap not moveable. 
+            minimap.mousedown(function () {
+                return false;
+            });
+
+            //TAG.Util.disableDrag(minimapContainer);
+
+            AR = img.naturalWidth / img.naturalHeight;
+            var heightR = img.naturalHeight / $(minimapContainer).height();//the ratio between the height of image and the container.
+            var widthR = img.naturalWidth / $(minimapContainer).width();//ratio between the width of image and the container.
+            //make sure the whole image shown inside the container based on the longer one of height and width.
+            if (heightR &gt; widthR) {
+                minimap.removeAttr(&quot;height&quot;);
+                minimap.removeAttr(&quot;width&quot;);
+                minimap.css({ &quot;height&quot;: &quot;100%&quot; });
+            }
+            else {
+                minimap.removeAttr(&quot;height&quot;);
+                minimap.removeAttr(&quot;width&quot;);
+                minimap.css({ &quot;width&quot;: &quot;100%&quot; });
+            }
+
+            //make the image manipulatable. 
+            if (IS_WINDOWS) {
+                var gr = TAG.Util.makeManipulatableWin(minimap[0], {
+                    onManipulate: onMinimapManipWin,
+                    onScroll: onMinimapScrollWin,
+                    onTapped: onMinimapTappedWin
+                }, false);
+            } else {
+                var gr = TAG.Util.makeManipulatable(minimap[0], {
+                    onManipulate: onMinimapManip,
+                    onScroll: onMinimapScroll,
+                    onTapped: onMinimapTapped
+                }, true);
+            }
+            /**********************/
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+
+            //centers rectangle
+            var minimapt = (minimapContainer.height() / 2) - (minimap.height() / 2);
+            var minimapl = (minimapContainer.width() / 2) - (minimap.width() / 2);
+            minimaprect.css({
+                width: (minimapw - 1) + &quot;px&quot;,
+                height: (minimaph - 1) + &quot;px&quot;,
+                top: minimapt + &quot;px&quot;,
+                left: (minimapl - 1) + &quot;px&quot;
+            });
+            /*********************/
+        }
+        /*
+        **Implement manipulation function from makeManipulatable.
+        * @method onMinimapManip
+        * @param {Object} evt        object containing hammer event info 
+        */
+        function onMinimapManip(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+            var minimapt = minimap.position().top;
+            var minimapl = parseFloat(minimap.css(&#x27;marginLeft&#x27;));
+
+            //find pivot and translation of manipulation event
+            var px = evt.pivot.x + (minimap.offset().left - minimapContainer.offset().left);
+            var py = evt.pivot.y + (minimap.offset().top - minimapContainer.offset().top);
+            var tx = evt.translation.x;
+            var ty = evt.translation.y;
+
+            var x = px + tx;
+            var y = py + ty;
+            x = (x - minimapl) / minimapw;
+            y = (y - minimapt) / minimaph;
+            y = y / AR;
+            x = Math.max(0, Math.min(x, 1));
+            y = Math.max(0, Math.min(y, 1 / AR));
+            var s = 1 + (1 - evt.scale);
+            if (s) annotatedImage.viewer.viewport.zoomBy(s, false);
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
+        /*
+        **Implement manipulation function from makeManipulatableWin in win8 app.
+        * @method onMinimapManipWin
+        * @param {Object} evt        object containing windows event info 
+        */
+        function onMinimapManipWin(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+            var minimapt = minimap.position().top;
+            var minimapl = parseFloat(minimap.css(&#x27;marginLeft&#x27;));
+
+            var px = evt.pivot.x;
+            var py = evt.pivot.y;
+            var tx = evt.translation.x;
+            var ty = evt.translation.y;
+
+            var x = px + tx;
+            var y = py + ty;
+            x = (x - minimapl) / minimapw;
+            y = (y - minimapt) / minimaph;
+            y = y / AR;
+            x = Math.max(0, Math.min(x, 1));
+            y = Math.max(0, Math.min(y, 1 / AR));
+
+            var s = 1 + (1 - evt.scale);
+            if (s) {
+                annotatedImage.viewer.viewport.zoomBy(s, false);
+            }
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
+        /**Implement scroll function from makeManipulatable
+         * @method onMinimapScroll
+         * @param {Number} scale     scale factor
+         * @param {Object} pivot     x and y location of event
+         */
+        function onMinimapScroll(scale, pivot) {
+            //create hammer event and pass into onMinimapManip
+            onMinimapManip({
+                scale: scale,
+                translation: {
+                    x: 0,
+                    y: 0
+                },
+                pivot: pivot
+            });    
+        }
+
+        /**Implement scroll function in win8app from makeManipulatableWin
+         * @method onMinimapScrollWin
+         * @param {Number} delta     change
+         * @param {Object} pivot     x and y location of event
+         */
+        function onMinimapScrollWin(delta, pivot) {
+            annotatedImage.viewer.viewport.zoomBy(delta, annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)));
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
+        /**Implement tapped function from makeManipulatable
+        * @method onMinimapTapped
+        * @param {Object} evt        object containing hammer event info
+        */
+        function onMinimapTapped(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+            var minimapt = minimap.position().top;
+            var minimapl = parseFloat(minimap.css(&#x27;marginLeft&#x27;));
+
+            var xPos = evt.position.x + minimap.offset().left;
+            var yPos = evt.position.y + minimap.offset().top;
+            var x =(xPos-minimapl)/ minimapw;
+            var y = (yPos-minimapt)/minimaph;
+            y = y / AR;
+            x = Math.max(0, Math.min(x, 1));
+            y = Math.max(0, Math.min(y, 1 / AR));
+            var s = 1;
+            if (s) annotatedImage.viewer.viewport.zoomBy(s, false);
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
+        /**Implement tapped function in win8 from makeManipulatableWin
+        * @method onMinimapTapped
+        * @param {Object} evt        object containing windows event info
+        */
+        function onMinimapTappedWin(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+            var minimapt = minimap.position().top;
+            var minimapl = parseFloat(minimap.css(&#x27;marginLeft&#x27;));
+
+            var xPos = evt.position.x;
+            var yPos = evt.position.y;
+            var x = (xPos - minimapl) / minimapw;
+            var y = (yPos - minimapt) / minimaph;
+            y = y / AR;
+            x = Math.max(0, Math.min(x, 1));
+            y = Math.max(0, Math.min(y, 1 / AR));
+            var s = 1;
+            if (s) {
+                annotatedImage.viewer.viewport.zoomBy(s, false);
+            }
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
+            annotatedImage.viewer.viewport.applyConstraints();
+        }
+
+        img.onload = minimapLoaded;
+        //should be complete image of artwork NOT thumbnail
+        img.src = TAG.Worktop.Database.fixPath(doq.URL);
+        if (img.complete) {
+            minimapLoaded();
+        }
+        /*
+        **Move the minimap rectangle based on the manipulation of the image
+        * @method dzMoveHandler
+        * @param {event} evt            manipulation event of the image
+        */
+        function dzMoveHandler(evt) {
+            var minimaph = minimap.height();
+            var minimapw = minimap.width();
+
+            //centers rectangle
+            var minimapt = (minimapContainer.height() / 2) - (minimap.height() / 2);
+            var minimapl = (minimapContainer.width() / 2) - (minimap.width() / 2);
+
+            var viewport = evt.viewport;
+            var rect = viewport.getBounds(true);
+            var tl = rect.getTopLeft();
+            var br = rect.getBottomRight();
+            var x = tl.x;
+            var y = tl.y;
+            var xp = br.x;
+            var yp = br.y;
+            if (x &lt; 0) x = 0;
+            if (y &lt; 0) y = 0;
+            if (xp &gt; 1) xp = 1;
+            if (yp &gt; 1 / AR) yp = 1 / AR;
+            y = y * AR;
+            yp = yp * AR;
+            yp = yp - y;
+            xp = xp - x;
+            x = minimapl + x * minimapw;
+            y = minimapt + y * minimaph;
+            xp = xp * minimapw;
+            yp = yp * minimaph;
+            minimaprect.css({
+                width: (xp-1) + &quot;px&quot;,
+                height: (yp - 1) + &quot;px&quot;,
+                top: y + &quot;px&quot;,
+                left: (x-1) + &quot;px&quot;
+            });
+        }
+        annotatedImage.addAnimateHandler(dzMoveHandler);
+         
+        /*
+         * END MINIMAP CODE
+         ******************/
+    }
+
+
+
+    /**
+     * Create a drawer with a disclosure button used to display
+     * hotspots, assets, tours. The returned jQuery object has
+     * a property called &quot;contents&quot; which should be used to add
+     * buttons or messages to the contents of the drawer.
+     *
+     * @param title, the display title for the drawer
+     * @author jastern
+     */
+    function initlocationHistory() {
+        var RLH,
+            isOpen = false,
+            locationPanelDiv;
+
+        locHistoryContainer.on(&#x27;click&#x27;, function () { toggleLocationOpen(); });
+
+        //panel that slides out when location history is clicked
+        RLH = TAG.Util.RLH({
+            artwork: doq,
+            root: root,
+            authoring: false
+        });
+        locationPanelDiv = RLH.init();
+
+        function toggleLocationOpen() {
+            isOpen ? locationClose() : locationOpen();
+        }
+
+        function locationOpen() { //TODO why isn&#x27;t this sliding open?
+            if (!isOpen) {
+                locHistoryToggle.css({&#x27;display&#x27;:&#x27;none&#x27;});
+                toggler.css(&#x27;display&#x27;, &#x27;none&#x27;);
+                locationPanelDiv.show(&quot;slide&quot;, { direction: &#x27;left&#x27; }, 500);
+                locationPanelDiv.css({ display: &#x27;inline&#x27; });
+                isOpen = true;
+            }
+        }
+
+        function locationClose() {
+            if (isOpen) {
+                locationPanelDiv.hide(&quot;slide&quot;, { direction: &#x27;left&#x27; }, 500, function () {
+                    toggler.css(&#x27;display&#x27;, &#x27;block&#x27;);
+                });
+                isOpen = false;
+            }
+        }
+
+        return locHistoryContainer;
+    }
+
+    /**
+     * Create a drawer (e.g., for list of related tours or the artwork&#x27;s description) 
+     * @param {String} title            title of the drawer
+     * @param {jQuery obj} topContents  an element to be included before the main contents of the drawer
+     * @return {jQuery obj}             the drawer
+     */
+    function createDrawer(title, topContents) {
+        var drawer          = $(document.createElement(&#x27;div&#x27;)).addClass(&#x27;drawer&#x27;),
+            drawerHeader    = $(document.createElement(&#x27;div&#x27;)).addClass(&#x27;drawerHeader&#x27;),
+            label           = $(document.createElement(&#x27;div&#x27;)).addClass(&#x27;drawerLabel&#x27;),
+            toggleContainer = $(document.createElement(&#x27;div&#x27;)).addClass(&#x27;drawerToggleContainer&#x27;),
+            toggle          = $(document.createElement(&#x27;img&#x27;)).addClass(&quot;drawerPlusToggle&quot;),
+            drawerContents  = $(document.createElement(&#x27;div&#x27;)).addClass(&quot;drawerContents&quot;),
+            i;
+       
+        label.text(title);
+        label.css({
+            &#x27;color&#x27;: &#x27;#&#x27; + PRIMARY_FONT_COLOR,
+            &#x27;font-family&#x27;: FONT
+        });
+        toggle.attr({
+            src: tagPath+&#x27;images/icons/plus.svg&#x27;,
+            expanded: false
+        });
+
+        drawer.append(drawerHeader);
+        drawerHeader.append(label);
+        drawerHeader.append(toggleContainer);
+        toggleContainer.append(toggle);
+        
+        drawer.append(drawerContents);
+        topContents &amp;&amp; drawerContents.append(topContents);
+
+        //have the toggler icon minus when is is expanded, plus otherwise.
+        drawerHeader.on(&#x27;click&#x27;, function (evt) {
+            if (toggle.attr(&#x27;expanded&#x27;) !== &#x27;true&#x27;) {
+                root.find(&quot;.drawerPlusToggle&quot;).attr({
+                   src: tagPath+&#x27;images/icons/plus.svg&#x27;,
+                    expanded: false
+                });
+
+                root.find(&quot;.drawerContents&quot;).slideUp();
+
+                toggle.attr({
+                    src: tagPath+&#x27;images/icons/minus.svg&#x27;,
+                    expanded: true
+                });
+            } else {
+                toggle.attr({
+                    src: tagPath+&#x27;images/icons/plus.svg&#x27;,
+                    expanded: false
+                });
+
+                for(i=0; i&lt;associatedMedia.guids.length; i++) {
+                    if(associatedMedia[associatedMedia.guids[i]].isVisible()) {
+                        associatedMedia[associatedMedia.guids[i]].hide();
+                    }
+                }
+
+            }
+
+            drawerContents.slideToggle();
+            drawerContents.css({&#x27;display&#x27;:&#x27;inline-block&#x27;});
+        });
+        
+        drawer.contents = drawerContents;
+        return drawer;
+    }
+
+    /**
+     * Return art viewer root element
+     * @method
+     * @return {jQuery obj}    root jquery object
+     */
+    function getRoot() {
+        return root;
+    }
+
+    /**
+     * Make the map for location History.
+     * @method makeMap
+     * @param {Function} callback     function to be called when map making is complete
+    */
+    function makeMap(callback) {
+        var mapOptions,
+            viewOptions;
+
+        mapOptions = {
+            credentials:         &quot;AkNHkEEn3eGC3msbfyjikl4yNwuy5Qt9oHKEnqh4BSqo5zGiMGOURNJALWUfhbmj&quot;,
+            mapTypeID:           Microsoft.Maps.MapTypeId.road,
+            showScalebar:        true,
+            enableClickableLogo: false,
+            enableSearchLogo:    false,
+            showDashboard:       true,
+            showMapTypeSelector: false,
+            zoom:                2,
+            center:              new Microsoft.Maps.Location(20, 0)
+        };
+        
+        viewOptions = {
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+        };
+        
+        map = new Microsoft.Maps.Map(document.getElementById(&#x27;lpMapDiv&#x27;), mapOptions);
+        map.setView(viewOptions);
+
+        callback &amp;&amp; callback();
+    }
+
+};
+
+TAG.Layout.ArtworkViewer.default_options = {
+    catalogState: {},
+    doq: null,
+    split: &#x27;L&#x27;,
+};
+
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/layout/TAG.Layout.StartPage.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/layout/TAG.Layout.StartPage.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+TAG.Util.makeNamespace(&quot;TAG.Layout.StartPage&quot;);
+
+
+/**
+* The start page for TAG, which contains mueseum info, server preferences and credits.
+* @class TAG.Layout.StartPage
+* @constructor
+*
+* @param {Object} options
+* @param {Function} startPageCallback
+* @return {Object} that                 collection of public methods and properties
+*/
+TAG.Layout.StartPage = function (options, startPageCallback) {
+    &quot;use strict&quot;; ////////////////////////////////////////////////
+
+    options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
+    options.tagContainer = $(&quot;#tagRoot&quot;);
+
+    var root = TAG.Util.getHtmlAjax(&#x27;StartPage.html&#x27;), // use AJAX to load html from .html file
+        overlay = root.find(&#x27;#overlay&#x27;),
+        primaryFont = root.find(&#x27;.primaryFont&#x27;),
+        serverTagBuffer = root.find(&#x27;#serverTagBuffer&#x27;),
+        serverSetUpContainer = root.find(&#x27;#serverSetUpContainer&#x27;),
+        authoringButtonContainer = root.find(&#x27;#authoringButtonContainer&#x27;),
+        authoringButtonBuffer = root.find(&#x27;#authoringButtonBuffer&#x27;),
+        loginDialog = root.find(&#x27;#loginDialog&#x27;),
+        serverURL,
+        tagContainer;
+
+        
+    // TODO merging TAG.Telemetry.register(overlay, &#x27;click&#x27;, &#x27;start_to_collections&#x27;);
+
+    if (localStorage.ip &amp;&amp; localStorage.ip.indexOf(&#x27;:&#x27;) !== -1) {
+        localStorage.ip = localStorage.ip.split(&#x27;:&#x27;)[0];
+    }
+    
+    serverURL = &#x27;http://&#x27; + (localStorage.ip ? localStorage.ip + &#x27;:8080&#x27; : &quot;browntagserver.com:8080&quot;);
+    tagContainer = options.tagContainer || $(&#x27;body&#x27;);
+
+    testConnection();
+    //applyCustomization();
+
+    /**
+     * Test internet and server connections
+     * @param options             Object
+     *            internetURL     url of alternate site against which we&#x27;ll test connectivity
+     */
+    function testConnection(options) {
+        var internetURL = (options &amp;&amp; options.internetURL) || &quot;http://www.google.com/&quot;,
+            connectionTimeout,
+            timedOut;
+
+        console.log(&quot;checking server url: &quot; + serverURL);
+        $.ajax({
+            url: serverURL,
+            dataType: &quot;text&quot;,
+            async: true,
+            cache: false,
+            success: function () {
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    console.log(&quot;success checking server url&quot;);
+                    successConnecting();
+                }
+            },
+            error: function (err) {
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    $.ajax({  // TODO: not a solid way to do this
+                        url: internetURL,
+                        dataType: &quot;text&quot;,
+                        async: false,
+                        cache: false,
+                        success: function () {
+                            if(!timedOut) {
+                                clearTimeout(connectionTimeout);
+                                tagContainer.empty();
+                                tagContainer.append((new TAG.Layout.InternetFailurePage(&quot;Server Down&quot;)).getRoot());
+                            }
+                        },
+                        error: function (err) {
+                            if(!timedOut) {
+                                clearTimeout(connectionTimeout);
+                                tagContainer.empty();
+                                tagContainer.append((new TAG.Layout.InternetFailurePage(&quot;No Internet&quot;)).getRoot());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        connectionTimeout = setTimeout(function() {
+            timedOut = true;
+            tagContainer.empty();
+            tagContainer.append((new TAG.Layout.InternetFailurePage(&quot;Server Down&quot;)).getRoot());
+        }, 10000); // 10 second timeout to show internet failure page
+    }
+
+    function successConnecting() {
+        TAG.Worktop.Database.getMain(loadHelper, function () {
+            tagContainer.empty();
+            tagContainer.append((new TAG.Layout.InternetFailurePage(&quot;Server Down&quot;)).getRoot());
+        });
+    }
+
+    var that = {};    
+    var backgroundColor,
+        logoContainer,
+        touchHint,
+        handGif;    
+
+    /**
+    * sets up the entire visual layout and images of the splash screen
+    * @method loadHelper
+    * @param {Object} main     contains all image paths and museum info
+    */
+    function loadHelper(main) {
+        
+
+        if (startPageCallback) {
+            startPageCallback(root);
+        }
+
+        TAG.Util.Constants.set(&quot;START_PAGE_SPLASH&quot;, tagPath+&quot;images/birdtextile.jpg&quot;);
+        if(!allowServerChange) {
+            $(&#x27;#serverTagBuffer&#x27;).remove();
+        }
+    
+        if(!allowAuthoringMode){
+            $(&#x27;#authoringButtonBuffer&#x27;).remove();
+        }
+        
+        overlay.on(&#x27;click&#x27;, switchPage);
+        
+        setImagePaths(main);
+        setUpCredits();
+        setUpInfo(main);
+        initializeHandlers();
+
+        authoringButtonContainer.on(&#x27;click&#x27;, openDialog);
+        authoringButtonBuffer.on(&#x27;click&#x27;, function (evt) {
+            evt.stopPropagation();
+        });
+
+        //opens the collections page on touch/click
+        function switchPage() {
+            var collectionsPage;
+
+            overlay.off(&#x27;click&#x27;);
+            collectionsPage = TAG.Layout.CollectionsPage(); // TODO merging
+            TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+
+            currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+            currentPage.obj  = collectionsPage;
+        }
+
+        // Test for browser compatibility
+        if(!isBrowserCompatible()) {
+            handleIncompatibleBrowser();
+        }
+    }
+
+    /**
+    * Checks if TAG is compatible with the current browser.
+    *
+    * @method isBrowserCompatible
+    * @author Athyuttam Eleti
+    * @return true if the browser is compatible with TAG, false if it isn&#x27;t
+    */
+    function isBrowserCompatible() {
+        console.log(&quot;\n///// Browser Compatibility /////&quot;)
+        var userAgent = navigator.userAgent.toLowerCase();
+        console.log(&quot;userAgent: &quot; + navigator.userAgent);
+
+        // Android and iOS are incompatible
+        if(userAgent.indexOf(&#x27;android&#x27;) &gt;= 0 || userAgent.indexOf(&#x27;iphone&#x27;) &gt;= 0 || userAgent.indexOf(&#x27;ipad&#x27;) &gt;= 0 || userAgent.indexOf(&#x27;ipod&#x27;) &gt;= 0) {
+            if(userAgent.indexOf(&#x27;android&#x27;) &gt;= 0) {
+                console.log(&quot;Detected Android Device. Unsupported browser.&quot;);
+            } else if (userAgent.indexOf(&#x27;iphone&#x27;) &gt;= 0) {
+                console.log(&quot;Detected iPhone. Unsupported browser.&quot;);
+            } else if (userAgent.indexOf(&#x27;ipad&#x27;) &gt;= 0) {
+                console.log(&quot;Detected iPad. Unsupported browser.&quot;);
+            } else if(userAgent.indexOf(&#x27;ipod&#x27;) &gt;= 0) {
+                console.log(&quot;Detected iPod. Unsupported browser.&quot;);
+            }
+            return false;
+        } else {
+            var browser = getBrowserVersion();
+            console.log(&quot;Browser Version: &quot; + browser);
+
+            browser = browser.toLowerCase();
+            var version = 0;
+
+            // Opera is incompatible
+            if(browser.indexOf(&#x27;opera&#x27;) &gt;= 0 || userAgent.indexOf(&#x27;opr&#x27;) &gt;= 0) {
+                console.log(&quot;Detected Opera. Unsupported browser.&quot;);
+                return false;
+            } 
+            // Chrome 31+
+            else if(browser.indexOf(&#x27;chrome&#x27;) &gt;= 0) {
+                version = browser.substring(browser.indexOf(&#x27; &#x27;) + 1, browser.indexOf(&quot;.&quot;));
+                console.log(&quot;Detected Chrome Version: &quot; + version);
+                return(version &gt;= 31);
+            } 
+            // Safari 7+
+            else if(browser.indexOf(&#x27;safari&#x27;) &gt;= 0) {
+                var detailedVersion = browser.substring(browser.indexOf(&#x27; &#x27;, browser.indexOf(&#x27; &#x27;) + 1) + 1);
+                version = detailedVersion.substring(0, detailedVersion.indexOf(&quot;.&quot;));
+                console.log(&quot;Detected Safari Version: &quot; + version);
+                return(version &gt;= 7);
+            } 
+            // Firefox 28+
+            else if(browser.indexOf(&#x27;firefox&#x27;) &gt;= 0) {
+                version = browser.substring(browser.indexOf(&#x27; &#x27;) + 1, browser.indexOf(&quot;.&quot;));
+                console.log(&quot;Detected Firefox Version: &quot; + version);
+                return(version &gt;= 28);
+            } 
+            // Internet Explorer 10+
+            else if(browser.indexOf(&#x27;msie&#x27;) &gt;= 0 || browser.indexOf(&#x27;ie&#x27;) &gt;= 0) {
+                version = browser.substring(browser.indexOf(&#x27; &#x27;) + 1, browser.indexOf(&quot;.&quot;));
+                console.log(&quot;Detected IE Version: &quot; + version);
+                return(version &gt;= 10);
+            } 
+            // Other browsers are incompatible
+            else {
+                console.log(&quot;Unsupported browser.&quot;);
+                return false;
+            }
+        }
+    }
+
+    /** 
+    * Finds the current browser version.
+    * Code from http://stackoverflow.com/questions/5916900/detect-version-of-browser
+    *
+    * @method getBrowserVersion
+    * @author Athyuttam Eleti
+    * @return Browser name followed by version e.g. &quot;Chrome 34.0.1847.116&quot;
+    */
+    function getBrowserVersion() {
+        var ua= navigator.userAgent, tem, 
+        M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*([\d\.]+)/i) || [];
+
+        if(/trident/i.test(M[1])){
+            tem=  /\brv[ :]+(\d+(\.\d+)?)/g.exec(ua) || [];
+            return &#x27;IE &#x27;+(tem[1] || &#x27;&#x27;);
+        }
+
+        M= M[2]? [M[1], M[2]]:[navigator.appName, navigator.appVersion, &#x27;-?&#x27;];
+        if((tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+
+        return M.join(&#x27; &#x27;);
+    }
+
+    /**
+    * Displays a dialog box indicating that the user is using an
+    * incompatible browser. Points them to links to download the latest
+    * version of supported browsers such as IE, Chrome, Safari and Firefox.
+    *
+    * @method handleIncompatibleBrowser
+    * @author Athyuttam Eleti
+    */
+    function handleIncompatibleBrowser() {
+        var tagContainer = $(&#x27;#tagRoot&#x27;);
+
+        // Creating Overlay
+        var browserDialogOverlay = $(document.createElement(&#x27;div&#x27;));
+        browserDialogOverlay.attr(&#x27;id&#x27;, &#x27;browserDialogOverlay&#x27;);
+        browserDialogOverlay.addClass(&#x27;dialogBoxOverlay&#x27;);
+        tagContainer.prepend(browserDialogOverlay);
+
+        // Creating Dialog Box Container (required for centering)
+        var browserDialogContainer = $(document.createElement(&#x27;div&#x27;));
+        browserDialogContainer.attr(&#x27;id&#x27;, &#x27;browserDialogContainer&#x27;);
+        browserDialogContainer.addClass(&#x27;dialogBoxContainer&#x27;);
+        browserDialogOverlay.append(browserDialogContainer);
+
+        // Creating Dialog Box
+        var browserDialog = $(document.createElement(&#x27;div&#x27;));
+        browserDialog.attr(&#x27;id&#x27;, &#x27;browserDialog&#x27;);
+        browserDialog.addClass(&#x27;dialogBox&#x27;);
+        browserDialogContainer.append(browserDialog);
+
+        // Content
+        var browserDialogPara = $(document.createElement(&#x27;p&#x27;));
+        browserDialogPara.attr(&#x27;id&#x27;, &#x27;dialogBoxPara&#x27;);
+        browserDialogPara.text(&quot;Touch Art Gallery is not supported in your browser. Please download or update to a newer browser.&quot;);
+        browserDialog.append(browserDialogPara);
+
+        // Browser Icon Container
+        var browserIcons = $(document.createElement(&#x27;div&#x27;));
+        browserIcons.attr(&#x27;id&#x27;, &#x27;browserIcons&#x27;);
+        browserDialog.append(browserIcons);
+
+        // Browser Icon Links
+        var ieIconLink = $(document.createElement(&#x27;a&#x27;)).attr(&#x27;href&#x27;, &#x27;http://windows.microsoft.com/ie&#x27;);
+        var chromeIconLink = $(document.createElement(&#x27;a&#x27;)).attr(&#x27;href&#x27;, &#x27;https://www.google.com/chrome&#x27;);
+        var firefoxIconLink = $(document.createElement(&#x27;a&#x27;)).attr(&#x27;href&#x27;, &#x27;http://www.firefox.com&#x27;);
+        var safariIconLink = $(document.createElement(&#x27;a&#x27;)).attr(&#x27;href&#x27;, &#x27;http://www.apple.com/safari&#x27;);
+
+        var linksArray = [ieIconLink, chromeIconLink, firefoxIconLink, safariIconLink];
+        for(var i = 0; i &lt; linksArray.length; i++) {
+            var current = linksArray[i]
+            current.attr(&#x27;target&#x27;, &#x27;_blank&#x27;); // Set target=&quot;_blank&quot; to open links in new tab
+            current.addClass(&#x27;browserIconLink&#x27;); // Set the corresponding CSS class to each link
+        }
+
+        browserIcons.append(ieIconLink, chromeIconLink, firefoxIconLink, safariIconLink);
+
+        // Browser Icon Images
+        var ieIcon = $(document.createElement(&#x27;img&#x27;)).attr(&#x27;title&#x27;, &#x27;Internet Explorer&#x27;).attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/browserIcons/ie.png&#x27;);
+        var chromeIcon = $(document.createElement(&#x27;img&#x27;)).attr(&#x27;title&#x27;, &#x27;Google Chrome&#x27;).attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/browserIcons/chrome.png&#x27;); 
+        var firefoxIcon = $(document.createElement(&#x27;img&#x27;)).attr(&#x27;title&#x27;, &#x27;Firefox&#x27;).attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/browserIcons/firefox.png&#x27;);
+        var safariIcon = $(document.createElement(&#x27;img&#x27;)).attr(&#x27;title&#x27;, &#x27;Safari&#x27;).attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/browserIcons/safari.png&#x27;);
+
+        ieIconLink.append(ieIcon);
+        chromeIconLink.append(chromeIcon);
+        firefoxIconLink.append(firefoxIcon);
+        safariIconLink.append(safariIcon);
+
+        $(&#x27;#browserIcons a img&#x27;).addClass(&#x27;browserIcon&#x27;);
+    }
+    
+    /**
+    * adjusts the text to fit the screen size
+    * @method fixText
+    */
+    function fixText() { // TODO fix this up, make it cleaner
+            var nameDivSize,
+                nameSpanSize,
+                fontSizeSpan,
+                subheadingFont;
+            if (TAG.Util.elementInDocument(museumName)) {
+                subheadingFont = parseInt($(museumLoc).css(&#x27;font-size&#x27;), 10);
+                nameDivSize = $(museumName).height();
+                fontSizeSpan = $(museumName).height();
+                
+                var museumNameSpan = document.getElementById(&quot;museumNameSpan&quot;); //can&#x27;t seem to find this variable in scope
+                $(museumNameSpan).css(&#x27;height&#x27;, nameSpanSize);               
+            }
+        }
+
+    /**
+    * initializes the handlers for various &#x27;click&#x27; functions including setting up a server
+    * @method initializeHandlers
+    */
+    function initializeHandlers(){
+        logoContainer.on(&#x27;click&#x27;, function (evt) {
+            evt.stopPropagation();
+        });
+
+        serverSetUpContainer.on(&#x27;click&#x27;, function() {
+            TAG.Util.UI.ChangeServerDialog();
+        });
+
+        serverTagBuffer.on(&#x27;click&#x27;, function (evt) {
+            evt.stopPropagation();
+        });
+
+        overlay.on(&#x27;click&#x27;, &#x27;a&#x27;, function (evt) {
+            // this === the link that was clicked
+            var href = $(this).attr(&quot;href&quot;);
+            evt.stopPropagation();
+        });
+    }
+
+
+    /**
+    * gets the paths for all the images displayed on the splash screen
+    * @method setImagePaths
+    * @param {Object} main    contains all the image links
+    */
+    function setImagePaths(main){
+        var fullScreen,
+            overlayColor,
+            overlayTransparency,
+            imageBgColor,
+            logo;
+            
+            
+        // set image paths
+        root.find(&#x27;#expandImage&#x27;).attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Left.png&#x27;);
+        root.find(&#x27;#handGif&#x27;).attr(&#x27;src&#x27;, tagPath+&#x27;images/RippleNewSmall.gif&#x27;);
+
+        fullScreen = root.find(&#x27;#background&#x27;);
+        fullScreen.css(&#x27;background-image&#x27;, &quot;url(&quot; + TAG.Worktop.Database.fixPath(main.Metadata[&quot;BackgroundImage&quot;]) + &quot;)&quot;);
+
+        overlayColor = main.Metadata[&quot;OverlayColor&quot;];
+        overlayTransparency = main.Metadata[&quot;OverlayTransparency&quot;];
+
+        backgroundColor = TAG.Util.UI.hexToRGB(overlayColor) + overlayTransparency + &#x27;)&#x27;;
+
+        imageBgColor = &#x27;#&#x27; + main.Metadata[&quot;IconColor&quot;];
+        logoContainer = root.find(&#x27;#logoContainer&#x27;);
+        logoContainer.css({ &#x27;background-color&#x27;: imageBgColor });
+
+        logo = root.find(&#x27;#logo&#x27;);
+        logo.attr(&#x27;src&#x27;, TAG.Worktop.Database.fixPath(main.Metadata[&quot;Icon&quot;]));
+    }
+
+    
+    /**
+    * Sets up the credits box with its content including text and images. Also includes function for animation of credits.
+    * @method setUpCredits
+    */
+    function setUpCredits(){
+        var brownInfoBox,
+            expandInfoButton,
+            expandImage,
+            tagName,
+            fullTag,
+            infoExpanded,
+            brownPeople,
+            sponsoredText,
+            microsoftLogo;
+
+        brownInfoBox = root.find(&#x27;#brownInfoBox&#x27;);
+        brownInfoBox.on(&#x27;click&#x27;, expandInfo);
+
+        expandInfoButton = root.find(&#x27;#expandInfoButton&#x27;);
+        expandImage = root.find(&#x27;#expandImage&#x27;);
+        tagName = root.find(&#x27;#tagName&#x27;);
+        fullTag = root.find(&#x27;#fullTag&#x27;);
+
+        infoExpanded = false; //used to expand/collapse info
+        brownPeople = $(document.createElement(&#x27;div&#x27;));
+        brownPeople.attr(&#x27;id&#x27;, &#x27;brownPeople&#x27;);
+        brownPeople.text(&#x27;Brown University \nHello&#x27;);
+
+        sponsoredText = $(document.createElement(&#x27;label&#x27;));
+        sponsoredText.attr(&#x27;id&#x27;, &#x27;sponsoredText&#x27;);
+        sponsoredText.css(&#x27;overflow&#x27;, &#x27;hidden&#x27;);
+        sponsoredText.css(&#x27;white-space&#x27;, &#x27;pre&#x27;);
+        sponsoredText.text(&#x27;Sponsored by&#x27;);
+
+        microsoftLogo = $(document.createElement(&#x27;img&#x27;));
+        microsoftLogo.attr(&#x27;id&#x27;, &#x27;microsoftLogo&#x27;);
+        microsoftLogo.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/MicrosoftLogo.png&#x27;);
+
+        /**
+        * animation of credits when user clicks 
+        * @method expandInfo
+        * @param {Object} event     the trigger event for animation, in this case a click
+        */
+        function expandInfo(event) {
+            event.stopPropagation();
+            if (infoExpanded) {
+                infoExpanded = false;
+                expandImage.css({ &#x27;transform&#x27;: &#x27;scaleX(1)&#x27; });
+                expandInfoButton.animate({ width: &#x27;15%&#x27;, &#x27;border-top-left-radius&#x27;: &#x27;0px&#x27; }, 700);
+                brownInfoBox.animate({ width: &#x27;20%&#x27;, height: &#x27;10%&#x27;, right: &quot;0%&quot;, &#x27;border-top-left-radius&#x27;: &#x27;0px&#x27; }, 700);
+                sponsoredText.remove();
+                microsoftLogo.remove();
+                fullTag.animate({ left: &#x27;20%&#x27;, top: &#x27;60%&#x27;, &#x27;font-size&#x27;: &#x27;90%&#x27; }, 700);
+                tagName.animate({ left: &#x27;20%&#x27;, top: &#x27;10%&#x27;, &#x27;font-size&#x27;: &#x27;200%&#x27; }, 700);
+                brownPeople.animate({ &quot;left&quot;: &quot;75%&quot;, &quot;top&quot;: &quot;75%&quot;, &#x27;font-size&#x27;: &#x27;0%&#x27; }, 500);
+            }
+            else {
+                infoExpanded = true;
+                expandInfoButton.animate({ width: &#x27;8%&#x27;, &#x27;border-top-left-radius&#x27;: &#x27;20px&#x27; }, 700);
+                brownInfoBox.animate({ width: &#x27;60%&#x27;, height: &#x27;25%&#x27;, right: &quot;0%&quot;, &#x27;border-top-left-radius&#x27;: &#x27;20px&#x27; }, 700);
+                brownInfoBox.append(brownPeople);
+                brownInfoBox.append(sponsoredText);
+                brownInfoBox.append(microsoftLogo);
+                expandImage.css({ &#x27;transform&#x27;: &#x27;scaleX(-1)&#x27; });
+                brownPeople.css({ &quot;right&quot;: &quot;0%&quot;, &quot;bottom&quot;: &quot;0%&quot;, &quot;position&quot;: &quot;absolute&quot;, &quot;font-size&quot;: &quot;0%&quot; });
+                brownPeople.animate({ &quot;left&quot;: &quot;12%&quot;, &quot;top&quot;: &quot;51%&quot;, &quot;position&quot;: &quot;absolute&quot;, &quot;font-size&quot;: &quot;61%&quot; }, 700, &#x27;swing&#x27;, function () { $(brownPeople).fitText(5); });
+                tagName.animate({ left: &#x27;12%&#x27;, top: &#x27;3%&#x27;, &#x27;font-size&#x27;: &#x27;300%&#x27; }, 700);
+                fullTag.animate({ left: &#x27;12%&#x27;, top: &#x27;35%&#x27;, &#x27;font-size&#x27;: &#x27;130%&#x27; }, 700);
+            }
+        }
+    }
+
+    
+    /**
+    * sets up the info div which contains all the museum information
+    * @method setUpInfo
+    * @param {Object} main    contains all the museum information
+    */
+    function setUpInfo(main){
+        var infoTextHolder,
+            infoDiv;
+        
+        infoTextHolder = root.find(&#x27;#infoTextHolder&#x27;);
+        infoDiv = root.find(&#x27;#infoDiv&#x27;);
+        infoDiv.css({
+            &#x27;background-color&#x27;: backgroundColor
+        });
+
+        touchHint = root.find(&#x27;#touchHint&#x27;);
+        handGif = root.find(&#x27;#handGif&#x27;);
+
+        setUpMuseumInfo(main);
+    }
+
+    /**
+    * Applying Customization Changes
+    * @method applyCustomization
+    */
+    function applyCustomization() {
+        $(primaryFont).css({ 
+            &#x27;color&#x27;: PRIMARY_FONT_COLOR,
+            &#x27;font-family&#x27;: &#x27;Pacifico&#x27;
+        });
+    }
+
+    /**
+    * Fills in all museum info including name and location
+    * @method setUpMuseumInfo
+    * @param {Object} main     contains all the museum information
+    */
+    function setUpMuseumInfo(main){
+        var museumName,
+            museumNameSpan,
+            tempName,
+            museumLoc,
+            museumLocSpan,
+            tempLoc,
+            museumInfoDiv,
+            museumInfoSpan,
+            tempInfo,
+            primaryFontColor,
+            secondaryFontColor;
+
+        
+        primaryFontColor = main.Metadata[&quot;PrimaryFontColor&quot;];
+        secondaryFontColor = main.Metadata[&quot;SecondaryFontColor&quot;];
+        museumName = root.find(&#x27;#museumName&#x27;);
+        museumNameSpan = root.find(&#x27;#museumNameSpan&#x27;);
+        tempName = main.Metadata[&quot;MuseumName&quot;];
+        if (tempName === undefined) {
+            tempName = &quot;&quot;;
+        }
+        museumNameSpan.text(tempName);
+
+        museumLoc = root.find(&#x27;#museumLoc&#x27;);
+        museumLocSpan = root.find(&#x27;#museumLocSpan&#x27;);
+        tempLoc = main.Metadata[&quot;MuseumLoc&quot;];
+        if (tempLoc === undefined) {
+            tempLoc = &quot;&quot;;
+        }
+
+        museumLocSpan.text(tempLoc);
+
+        that.fixText = fixText;
+
+        museumInfoDiv = root.find(&#x27;#museumInfoDiv&#x27;);
+
+        museumInfoSpan = root.find(&#x27;#museumInfoSpan&#x27;);
+        tempInfo = main.Metadata[&quot;MuseumInfo&quot;];
+        if (!tempInfo) {
+            tempInfo = &quot;&quot;;
+        }
+
+        if (IS_WINDOWS) {
+            museumInfoSpan.html(tempInfo);
+        } else {
+            museumInfoSpan.html(Autolinker.link(tempInfo , {email: false, twitter: false}));
+        }
+        
+        $(primaryFont).css({ 
+            &#x27;color&#x27;: &#x27;#&#x27; + primaryFontColor,
+            &#x27;font-family&#x27;: main.Metadata[&quot;FontFamily&quot;]
+            
+         });
+
+    }
+
+    /**Opens authoring mode password dialog
+     * @method openDialog
+     */
+    function openDialog() {
+        TAG.Auth.authenticate(enterAuthoringMode);
+
+        if(localStorage.ip === &#x27;tagtestserver.cloudapp.net&#x27;) {
+            $(&#x27;#password&#x27;).attr(&#x27;value&#x27;, &#x27;Test1234&#x27;);
+        } else if (localStorage.ip === &#x27;localhost&#x27;) {
+            $(&#x27;#password&#x27;).attr(&#x27;value&#x27;, &#x27;admin&#x27;);
+        }
+    }
+
+    /**Loads authoring mode Settings View
+     * @method enterAuthoringMode
+     */
+    function enterAuthoringMode() {
+        overlay.on(&#x27;click&#x27;, function() {;});
+        authoringButtonContainer.off(&#x27;click&#x27;);
+        var authoringMode = new TAG.Authoring.SettingsView();
+        TAG.Util.UI.slidePageLeft(authoringMode.getRoot());
+    }
+ 
+    /**
+    * @method getRoot
+    * @return    the root of the splash screen DOM
+    */
+    function getRoot() {
+        return root;
+    }
+    that.getRoot = getRoot;
+
+    return that;
+};
+
+TAG.Layout.StartPage.default_options = {
+    repository: &quot;http://cs.brown.edu/research/lads/LADS2.0Data/repository.xml&quot;,
+};
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

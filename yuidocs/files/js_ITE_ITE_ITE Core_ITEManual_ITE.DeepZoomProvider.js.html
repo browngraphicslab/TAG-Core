@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/ITE/ITE/ITE Core/ITEManual/ITE.DeepZoomProvider.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/ITE/ITE/ITE Core/ITEManual/ITE.DeepZoomProvider.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+window.ITE = window.ITE || {};
+
+ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
+
+	//Extend class from ProviderInterfacePrototype
+	var Utils 		= new ITE.Utils(),
+		TAGUtils	= ITE.TAGUtils,
+		_super 		= new ITE.ProviderInterfacePrototype(),
+		self 		= this;
+
+	Utils.extendsPrototype(this, _super);
+
+    var keyframes       		= trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+	self.player 				= player;
+	self.taskManager 			= taskManager;
+	self.trackData 				= trackData;
+	self.orchestrator			= orchestrator;
+	self.status 				= &quot;loading&quot;;
+	self.trackData   			= trackData;
+	self.animationCallback;
+
+	var interactionHandlers 		= {},
+		movementTimeouts 			= [];
+
+    //DOM related
+    var _deepZoom,
+    	_UIControl,
+    	_viewer,
+    	_mouseTracker;
+
+	//Start things up...
+    initialize()
+
+   /** 
+	* I/P: none
+	* Initializes track, creates UI, and attachs handlers
+	* O/P: none
+	*/
+	function initialize(){
+		_super.initialize()
+
+		//Create UI and append to ITEHolder
+		_UIControl = $(document.createElement(&quot;div&quot;))
+        	.addClass(&quot;UIControl&quot;)
+        	.attr(&quot;id&quot;, &quot;DeepZoomHolder&quot;)
+			.on(&#x27;mousedown scroll click mousemove resize&#x27;, function(evt) {
+            	evt.preventDefault();
+        	})
+        	.css({
+        		&quot;z-index&quot;	: 0,
+        		&quot;width&quot;		: &quot;100%&quot;,
+        		&quot;height&quot;	: &quot;100%&quot;
+        	});
+
+		$(&quot;#ITEHolder&quot;).append(_UIControl);
+
+		//_viewer is the actual seadragon viewer.  It is appended to UIControl.
+		_viewer	= new OpenSeadragon.Viewer({
+			id 			 		: &quot;DeepZoomHolder&quot;,
+			prefixUrl	 		: &quot;../../Dependencies/openseadragon-bin-1.1.1/images/&quot;,
+			zoomPerClick 		: 1,
+			minZoomImageRatio	: .5,
+			maxZoomImageRatio	: 2,
+			visibilityRatio		: .2
+		})
+        _viewer.setMouseNavEnabled(false);
+        _viewer.clearControls();
+
+        // _deepZoom is the canvas with the deepZoom image files
+        _deepZoom = $(_viewer.canvas)
+			.addClass(&quot;deepZoomImage&quot;);
+
+		_mouseTracker = new OpenSeadragon.MouseTracker({
+			&quot;element&quot;: &quot;DeepZoomHolder&quot;
+		})
+		
+		var i, keyframeData;
+
+		//Initialize keyframes and load into taskManager
+		for (i=1; i&lt;keyframes.length; i++) {
+			keyframeData={
+						  opacity	: keyframes[i].opacity,
+						  bounds 	: new OpenSeadragon.Rect(parseFloat(keyframes[i].pos.x), parseFloat(keyframes[i].pos.y), keyframes[i].scale, keyframes[i].scale/2)
+						};
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+		}
+		self.status = &quot;ready&quot;;
+
+		// Attach Handlers
+		attachHandlers()
+	};
+
+   /** 
+	* I/P: none
+	* Loads actual image asset, and sets status to paused when complete
+	* O/P: none
+	*/
+	this.load = function(){
+		_super.load()
+		//Sets the DeepZoom&#x27;s URL source
+    	_viewer.open(&quot;../../Assets/TourData/&quot; + this.trackData.assetUrl);
+	};
+
+   /** 
+	* I/P: none
+	* Grabs current actual state of image, and sets savedState to it 
+	* returns savedState
+	* O/P: savedState
+	*/
+	this.getState = function(){
+		self.savedState = {
+			time	: self.taskManager.timeManager.getElapsedOffset(),
+			bounds 	: _viewer.viewport.getBounds(true)
+		};	
+		return self.savedState;
+	};
+
+   /**
+	* I/P: state	state to make actual image reflect
+	* Sets properties of the image to reflect the input state
+	* O/P: none
+	*/
+	this.setState = function(state){
+		_viewer.viewport.fitBounds(state.bounds, true);
+	};
+
+	/* 
+	* I/P: {time, ms}	duration duration of animation
+	* I/P: data 		data of next keyframe to animate to
+	* Starts or resumes tour
+	* Called when tour is played
+	* Starts animation, if needed
+	* O/P: none
+	*/
+	this.play = function(targetTime, data){
+	// Resets state to be where it was when track was paused, then clears the saved state
+		self.animationCallback = function() {
+			self.animate(targetTime - self.savedState.time, data);
+			self.savedState = null;	
+			_viewer.removeHandler(&quot;animation-finish&quot;, self.animationCallback)
+		}
+
+		// If tour was paused for any reason:
+		if(this.savedState) {
+			// If tour has been manipulated, reset it and continue animating (via the above callback method)
+			if(self.imageHasBeenManipulated){
+				this.setState(this.savedState);
+				_viewer.addHandler(&quot;animation-finish&quot;, self.animationCallback);	
+			}
+			// If tour was paused simply and has not been manipulated, just start it from where it was before 
+			else {
+				self.animate(targetTime - self.savedState.time, data);
+			}
+		} 
+		// If &quot;play&quot; is being called from taskmanager, just start animating to the next keyframe
+		else {
+			this.animate(targetTime - this.taskManager.timeManager.getElapsedOffset(), data);
+		}
+	};
+
+	this.pause = function(){
+		// Sets savedState to be current state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		this.setState(self.savedState);	// Stops animation
+		self.animation.kill();
+	}
+
+
+	/* 
+	* I/P: none
+	* interpolates between current state and next keyframe
+	* O/P: none
+	*/
+	this.animate = function(duration, state){
+		self.imageHasBeenManipulated = false;
+		setSeadragonConfig(duration);
+		_viewer.viewport.fitBounds(state.bounds, false);
+		self.animation = TweenLite.to(_UIControl, duration, {opacity: state.opacity});		
+		self.animation.play(); 
+	};
+
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	function addInk(inkTrack){
+		if (!_viewer.viewport){
+			console.log(&quot;failed to load ink as DZ is not ready&quot; )
+			setTimeout(function(){
+				addInk(inkTrack) } , 100)
+		} else {
+			var point = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(50, 50))
+			console.log(&quot;point: &quot; + point)
+			_viewer.addOverlay(inkTrack._UIControl[0], point);	
+		}
+	};
+	this.addInk = addInk;
+	/* 
+	* I/P: duration	duration of track
+	* Helper function for animate() that is a bit of a hack
+	* Since Seadragon&#x27;s animation is a bit jenky, and you can&#x27;t input your own animation time, we&#x27;re going to do it manually.
+	* We&#x27;re also going to change the &quot;spring stiffness&quot;, which is another characteristic of their animation scheme 
+	* (they use a physics-based, non-linear approach), so that Seadragon animation looks more linear and 
+	* thus more similar to other animation in tours (re: Andy&#x27;s Law of Least Astonishment)
+	* O/P: none
+	*/
+	function setSeadragonConfig(duration){									
+		_viewer.viewport.centerSpringY.animationTime 	= duration-.1;	
+		_viewer.viewport.centerSpringX.animationTime 	= duration-.1;
+		_viewer.viewport.zoomSpring.animationTime 		= duration-.1;
+		_viewer.viewport.centerSpringX.springStiffness 	= .0000000001;
+		_viewer.viewport.zoomSpring.springStiffness 	= .0000000001;
+	}
+
+	// Reset the above after animation is complete (called in MediaManip())
+	// These are the actual values of these variables in Seadragon&#x27;s src code (all animation times = 1.2, springStiffness = 6.5)
+	function resetSeadragonConfig(){
+		_viewer.viewport.centerSpringY.animationTime 	= 1.2;
+		_viewer.viewport.centerSpringX.animationTime 	= 1.2;
+		_viewer.viewport.zoomSpring.animationTime 		= 1.2;
+		_viewer.viewport.centerSpringX.springStiffness 	= 6.5;
+		_viewer.viewport.zoomSpring.springStiffness 	= 6.5;
+	}
+   /** 
+	* I/P: none
+	* Return a set of interactionHandlers attached to asset from provider
+	*/
+	function getInteractionHandlers(){
+	}
+ 
+    /**
+     * I/P {Object} res     object containing hammer event info
+     * Drag/manipulation handler for associated media
+     * Manipulation for touch and drag events
+     */
+    function mediaManip(res) {
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+
+    	resetSeadragonConfig()
+        var scale = res.scale,
+            trans = res.translation,
+            pivot = res.pivot;
+        _viewer.viewport.panBy(_viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y)), false);
+    }
+    
+    /**
+     * Scroll/pinch-zoom handler for makeManipulatable on the deepzoom image
+     * @method dzScroll
+     * @param {Number} scale          scale factor
+     * @param {Object} pivot          location of event (x,y)
+     */
+    function mediaScroll(scale, pivot) {
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+     	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+    	resetSeadragonConfig()
+      	_viewer.viewport.zoomBy(scale, _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y)), false);
+    	_viewer.viewport.applyConstraints();
+    }
+   
+
+    /** 
+	* I/P: none
+	* Initializes handlers 
+	*/
+    function attachHandlers() {
+
+        // // Allows asset to be dragged, despite the name
+        // TAG.Util.disableDrag(_deepZoom);
+
+        // _deepZoom.on(&quot;mousedown&quot;, function() {
+        // 	console.log(&quot;mouse down&quot;)
+        // })
+        // _deepZoom.on(&quot;mouseup&quot;, function() {
+        // 	console.log(&quot;mouse up&quot;)
+        // })
+        // _deepZoom.on(&quot;mousemove&quot;, function() {
+        // 	console.log(&quot;mouse move&quot;)
+        // })
+        // _deepZoom.on(&quot;click&quot;, function() {
+        // 	console.log(&quot;click&quot;)
+        // })
+
+        // _viewer.addHandler(&quot;container-release&quot;, function() {
+        // 	console.log(&quot;mouseup: &quot; + _deepZoom.mouseup)
+        // 	console.log(&quot;mousedown: &quot; + _deepZoom.mousedown)
+
+        // 	_deepZoom.mouseup()
+        // })
+
+        // _mouseTracker.releaseHandler = function(){
+        // 	console.log(&quot;Mouse tracker worked!! release&quot;)
+        // }
+        // _mouseTracker.pressHandler = function(){
+        // 	console.log(&quot;Mouse tracker worked!! press&quot;)
+        // }
+
+        // console.log(&quot;_mouseTracker: &quot; + Object.keys(_mouseTracker.element))
+
+        // Register handlers
+        TAG.Util.makeManipulatable(_deepZoom[0], {
+            onScroll: function (delta, pivot) {
+                mediaScroll(delta, pivot);
+            },
+            onManipulate: function (res) {
+                res.translation.x = - res.translation.x;        //Flip signs for dragging
+                res.translation.y = - res.translation.y;
+                mediaManip(res); 
+            }
+        }, null, true);
+
+        interactionHandlers.onManipulate 	= mediaManip;
+        interactionHandlers.onScroll		= mediaScroll;    	
+    }
+};
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

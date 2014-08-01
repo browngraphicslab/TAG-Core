@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/layout/TAG.Layout.TourPlayer.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/layout/TAG.Layout.TourPlayer.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+TAG.Util.makeNamespace(&quot;TAG.Layout.TourPlayer&quot;);
+
+/**
+ * Player for RIN tours
+ * @param tour         RIN tour in Javascript object (pre-parsed from JSON)
+ * @param exhibition   exhibition we came from (if any) (doq object)
+ * @param prevInfo   object containing previous page info 
+ *    artworkPrev      value is &#x27;artmode&#x27; when we arrive here from the art viewer
+ *    prevScroll       value of scrollbar from new catalog page
+ * @param artmodeOptions      options to pass into TAG.Layout.ArtworkViewer
+ * @param tourObj      the tour doq object, so we can return to the proper tour in the collections screen
+ */
+TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj) {
+    console.log(&quot;******************************************************************************&quot;)
+
+    &quot;use strict&quot;;
+    var artworkPrev;
+    var prevScroll = 0;
+	var prevExhib = exhibition;
+    var prevTag = prevInfo.prevTag;
+    var prevMult = prevInfo.prevMult;
+    var rinPath = IS_WINDOWS ? tagPath+&#x27;js/WIN8_RIN/web&#x27; : tagPath+&#x27;js/RIN/web&#x27;;
+    var ispagetoload = pageToLoad &amp;&amp; (pageToLoad.pagename === &#x27;tour&#x27;);
+
+    var tagContainer = $(&#x27;#tagRoot&#x27;);
+
+    var player,
+        root = TAG.Util.getHtmlAjax(&#x27;TourPlayer.html&#x27;),
+        rinPlayer = root.find(&#x27;#rinPlayer&#x27;),
+        backButtonContainer = root.find(&#x27;#backButtonContainer&#x27;),
+        backButton = root.find(&#x27;#backButton&#x27;),
+        linkButtonContainer = root.find(&#x27;#linkContainer&#x27;),
+        linkButton = root.find(&#x27;#linkButton&#x27;),
+        overlayOnRoot = root.find(&#x27;#overlayOnRoot&#x27;),
+        bigThumbnailContainer = root.find(&#x27;#bigThumbnailContainer&#x27;),
+        bigThumbnail = root.find(&#x27;#bigThumbnail&#x27;),
+        bigPlayButton = root.find(&#x27;#bigPlayButton&#x27;);
+
+    // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
+    // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+    // idleTimer.start();
+    idleTimer &amp;&amp; idleTimer.kill();
+    idleTimer = null;
+
+    backButton.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Back.svg&#x27;);
+
+    //clicked effect for back button
+    backButton.on(&#x27;mousedown&#x27;, function(){
+        TAG.Util.UI.cgBackColor(&quot;backButton&quot;, backButton, false);
+    });
+    backButton.on(&#x27;mouseleave&#x27;, function () {
+        TAG.Util.UI.cgBackColor(&quot;backButton&quot;, backButton, true);
+    });
+
+    backButton.on(&#x27;click&#x27;, goBack);
+
+    if(IS_WEBAPP) {
+        linkButton.attr(&#x27;src&#x27;, tagPath+&#x27;images/link.svg&#x27;);
+        linkButton.on(&#x27;click&#x27;, function() {
+            var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
+                tagpagename: &#x27;tour&#x27;,
+                tagguid: tourObj.Identifier,
+                tagonlytour: false
+            });
+
+            root.append(linkOverlay);
+            linkOverlay.fadeIn(500, function() {
+                linkOverlay.find(&#x27;.linkDialogInput&#x27;).select();
+            });
+        });
+    } else {
+        linkButtonContainer.remove();
+    }
+
+    if(ispagetoload) {
+        pageToLoad.pagename = &#x27;&#x27;;
+        if(pageToLoad.onlytour) {
+            backButtonContainer.remove();
+            linkButtonContainer.remove();
+        } else {
+            backButtonContainer.css(&#x27;display&#x27;, &#x27;none&#x27;);
+            linkButtonContainer.css(&#x27;display&#x27;, &#x27;none&#x27;);
+        }
+        if(tourObj &amp;&amp; tourObj.Metadata &amp;&amp; tourObj.Metadata.Thumbnail) {
+            bigThumbnail.attr(&#x27;src&#x27;, TAG.Worktop.Database.fixPath(tourObj.Metadata.Thumbnail));
+            bigPlayButton.attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/Play.svg&#x27;);
+            bigThumbnailContainer.css(&#x27;display&#x27;, &#x27;block&#x27;);
+
+            bigPlayButton.on(&#x27;click&#x27;, startTour);
+            bigThumbnail.on(&#x27;click&#x27;, startTour);
+        }
+    }
+
+    /**
+     * Simulate a click on the RIN play button. Used by tour embedding code.
+     * 
+     * bleveque: I wrote, but strongly dislike, this. I would prefer to
+     * call the click handler directly rather than fake a click event. The handler for 
+     * the play button is somewhere in the RIN code; instead of digging
+     * for it, calling it, and making sure that it also changes the button
+     * element, I decided to do this and wait for ITE to make everything better. 
+     *
+     * @method startTour
+     */
+    function startTour() {
+        bigThumbnailContainer.remove();
+        $(&#x27;.rin_PlayPauseContainer&#x27;).find(&#x27;input&#x27;).trigger(&#x27;click&#x27;);
+        if(!pageToLoad.onlytour) {
+            backButtonContainer.css(&#x27;display&#x27;, &#x27;block&#x27;);
+            linkButtonContainer.css(&#x27;display&#x27;, &#x27;block&#x27;);
+        }
+    }
+
+    function goBack () {
+        console.log(&#x27;player: &#x27;+player);
+
+        var artmode, collectionsPage;
+
+        // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
+        // idleTimer.kill();
+        // idleTimer = null;
+        
+        if(player) {
+            player.pause();
+            player.screenplayEnded.unsubscribe();
+            console.log(&#x27;UNLOADING PLAYER&#x27;);
+            player.unload();
+        }
+
+        if(!player || rinPlayer.children().length === 0) {
+            return; // if page hasn&#x27;t loaded yet, don&#x27;t exit (TODO -- should have slide page overlay)
+        }
+
+        backButton.off(&#x27;click&#x27;); // prevent user from clicking twice
+
+        if (artmodeOptions) {
+            artmode = new TAG.Layout.ArtworkViewer(artmodeOptions);
+            TAG.Util.UI.slidePageRightSplit(root, artmode.getRoot());
+
+            currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+            currentPage.obj  = artmode;
+        } else {
+            var backInfo = { backArtwork: tourObj, backScroll: prevScroll };
+            collectionsPage = new TAG.Layout.CollectionsPage({
+                backScroll: prevScroll,
+                backArtwork: tourObj,
+                backCollection: exhibition,
+                backTag : prevTag,
+                backMult : prevMult
+            });
+            console.log(&quot;collectionsPage&quot; + collectionsPage);
+            TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
+				artworkPrev = &quot;catalog&quot;;
+			});
+        
+            currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+            currentPage.obj  = collectionsPage;         
+        }
+        // TODO: do we need this next line?
+        // tagContainer.css({ &#x27;font-size&#x27;: &#x27;11pt&#x27;, &#x27;font-family&#x27;: &quot;&#x27;source sans pro regular&#x27; sans-serif&quot; }); // Quick hack to fix bug where rin.css was overriding styles for body element -jastern 4/30
+    }
+
+    return {
+        getRoot: function () {
+            return root;
+        },
+        startPlayback: function () { // need to call this to ensure the tour will play when you exit and re-enter a tour, since sliding functionality and audio playback don&#x27;t cooperate
+            rin.processAll(null, rinPath).then(function () {
+                var options = &#x27;systemRootUrl=&#x27;+rinPath+&#x27;/&amp;autoplay=&#x27;+(ispagetoload ? &#x27;false&#x27; : &#x27;true&#x27;)+&#x27;&amp;loop=false&#x27;;
+                // create player
+                player = rin.createPlayerControl(rinPlayer[0], options);
+                for (var key in tour.resources) {
+                    if (tour.resources.hasOwnProperty(key)) {
+                        if (typeof tour.resources[key].uriReference === &#x27;string&#x27;) {
+                            tour.resources[key].uriReference = TAG.Worktop.Database.fixPath(tour.resources[key].uriReference);
+                        }
+                    }
+                }
+                player.loadData(tour, function () {});
+                if(!ispagetoload) {
+                    player.screenplayEnded.subscribe(function() { // at the end of a tour, go back to the collections view
+                        setTimeout(goBack, 1000);
+                    });
+                }
+            });
+        }
+    };
+
+};
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

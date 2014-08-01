@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/authoring/TAG.Authoring.FileUploader.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/authoring/TAG.Authoring.FileUploader.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿TAG.Util.makeNamespace(&#x27;TAG.Authoring.FileUploader&#x27;);
+
+/**
+ * Enum of file upload types
+ */
+TAG.Authoring.FileUploadTypes = {
+    Standard: 0,
+    DeepZoom: 1,
+    AssociatedMedia: 2,
+    VideoArtwork: 3
+};
+
+/**
+ * Helper class for performing file uploads
+ * Also creates HTML overlay that displays progress / spinning wheel
+ * Note: everything is handled internally, no external API, does its thing then removes itself and disappears
+ * @param root              Root of HTML, upload overlay will be appended to this while upload is running and removed when finished automatically!
+ * @param type              Type of file upload (defined by FileUploadTypes)
+ * @param localCallback     Callback passed local file info (args: &lt;WinJS.StorageFile&gt; file, &lt;String&gt; localURL)
+ * @param finishedCallback  Callback to execute once upload is finished (standard args: &lt;String&gt; url; deepzoom args: &lt;String&gt; xmlDoq)
+ * @param filters           Array of file types selectable by user
+ * @param useThumbs         Use thumbnail view mode?
+ * @param progressFunc      Function to keep track of progress (e.g. for displaying a progress bar somewhere)
+ */
+TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar) {
+    &quot;use strict&quot;;
+    var that = {};
+    filters = filters || [&quot;*&quot;];
+    multiple = multiple || false;
+
+
+    var uploadingOverlay = $(document.createElement(&#x27;div&#x27;)),
+        innerProgressBar = $(document.createElement(&#x27;div&#x27;)); // HTML upload overlay
+    var filesFinished = 0;
+    var numFiles = 100000;
+    var dataReaderLoads = [];
+    var uploadQueue = TAG.Util.createQueue();
+    var globalUriStrings = [], globalFiles = [], globalUpload = null;
+    var percentLoaded = 0;
+    var totalBytesToSend = {}; // an entry for each upload object, indexed by guid
+    var totalBytesSent = {};
+    var promises = [];
+    var globalFilesObject;
+    var uploadFilesObject;
+    var maxDuration = Infinity;
+    var minDuration = -1;
+    var size;
+    var largeFiles = &quot;&quot;;
+    var longFiles = [];
+    var shortFiles = [];
+    var fileUploadError;
+    var maxFileSize = 50 * 1024 * 1024;
+    var maxDeepZoomFileSize = 250 * 1024 * 1024;
+
+    // Basic HTML initialization
+    (function init() {
+        var uploadOverlayText = $(document.createElement(&#x27;label&#x27;)),
+            progressIcon = $(document.createElement(&#x27;img&#x27;)),
+            progressBar = $(document.createElement(&#x27;div&#x27;));
+
+        // Progress / spinner wheel overlay to display while uploading
+        uploadingOverlay.attr(&quot;id&quot;, &quot;uploadingOverlay&quot;);
+        uploadingOverlay.css({ &#x27;position&#x27;: &#x27;absolute&#x27;, &#x27;left&#x27;: &#x27;0%&#x27;, &#x27;top&#x27;: &#x27;0%&#x27;, &#x27;background-color&#x27;: &#x27;rgba(0, 0, 0, .5)&#x27;, &#x27;width&#x27;: &#x27;100%&#x27;, &#x27;height&#x27;: &#x27;100%&#x27;, &#x27;z-index&#x27;: 100000100 });
+
+        uploadOverlayText.css({ &#x27;color&#x27;: &#x27;white&#x27;, &#x27;width&#x27;: &#x27;10%&#x27;, &#x27;height&#x27;: &#x27;5%&#x27;, &#x27;top&#x27;: &#x27;38%&#x27;, &#x27;left&#x27;: &#x27;40%&#x27;, &#x27;position&#x27;: &#x27;relative&#x27;, &#x27;font-size&#x27;: &#x27;250%&#x27; });
+        uploadOverlayText.text(&#x27;Uploading file(s). Please wait.&#x27;);
+
+        progressIcon.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;, &#x27;top&#x27;: &#x27;50%&#x27;, &#x27;left&#x27;: &#x27;14%&#x27;
+        });
+        progressIcon.attr(&#x27;src&#x27;, &#x27;images/icons/progress-circle.gif&#x27;);
+
+        progressBar.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;, &#x27;top&#x27;: &#x27;42%&#x27;, &#x27;left&#x27;: &#x27;45%&#x27;, &#x27;border-style&#x27;: &#x27;solid&#x27;, &#x27;border-color&#x27;: &#x27;white&#x27;, &#x27;width&#x27;: &#x27;10%&#x27;, &#x27;height&#x27;: &#x27;2%&#x27;
+        });
+
+        innerProgressBar.css({
+            &#x27;background-color&#x27;: &#x27;white&#x27;, &#x27;width&#x27;: &#x27;0%&#x27;, &#x27;height&#x27;: &#x27;100%&#x27;
+        });
+
+        progressBar.append(innerProgressBar);
+        uploadingOverlay.append(uploadOverlayText);
+        uploadingOverlay.append(progressBar);
+        uploadingOverlay.hide();
+        root.append(uploadingOverlay);
+    })();
+
+    /**
+     * Starts the file upload
+     */
+    (function uploadFile() {
+        // Opens file picker
+        var currentState = Windows.UI.ViewManagement.ApplicationView.value;        
+        var filePicker = new Windows.Storage.Pickers.FileOpenPicker();
+        if (useThumbs) {
+            filePicker.viewMode = Windows.Storage.Pickers.PickerViewMode.thumbnail;
+        } else {
+            filePicker.viewMode = Windows.Storage.Pickers.PickerViewMode.list;
+        }
+        filePicker.fileTypeFilter.replaceAll(filters);
+        filePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.desktop;
+        try {
+            if (multiple) { // batch upload
+                filePicker.pickMultipleFilesAsync().then(
+                    uploadFilesObject = function (filesObject) { // Now file has been picked
+                            var uriStrings = [],
+                                upload = new UploadOp(),
+                                localURLs = [],
+                                k, files = [],
+                                //largeFiles = [],
+                                hashedDate, newHashedDate; // local URL
+                            globalFilesObject = filesObject;
+                            totalBytesToSend = {};
+                            totalBytesSent = {};
+                            largeFiles = &quot;&quot;;
+                            longFiles = [];
+                            shortFiles = [];
+                            var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
+                            bar.width(&quot;0%&quot;);
+                            if (filesObject.length === 0) {
+                                removeOverlay();
+                                addLocalCallback([], [])();
+                                return;
+                            }
+                            // create an actual array out of the windows files object -- filter out files that are too large/long
+
+                            function fileLimitHelper(file, i) {
+                                file.getBasicPropertiesAsync().then(
+                                    function (basicProperties) {
+                                        size = basicProperties.size;
+
+                                        numFiles = files.length; // global
+                                        var maxSize;
+                                        switch (type) {
+                                            case TAG.Authoring.FileUploadTypes.VideoArtwork:
+                                            case TAG.Authoring.FileUploadTypes.AssociatedMedia:
+                                            case TAG.Authoring.FileUploadTypes.Standard:
+                                                maxSize = maxFileSize;
+                                                break;
+                                            case TAG.Authoring.FileUploadTypes.DeepZoom:
+                                                maxSize = maxDeepZoomFileSize;
+                                                break;
+                                        }
+                                        if (size &lt; maxSize) {
+                                            files.push(file);
+                                            localURLs.push(window.URL.createObjectURL(file, { oneTimeOnly: true }));
+                                            switch (type) {
+                                                case TAG.Authoring.FileUploadTypes.VideoArtwork:
+                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUploadVideoArtwork&amp;Client=Windows&amp;ReturnDoq=true&amp;token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1));
+                                                    break;
+                                                case TAG.Authoring.FileUploadTypes.AssociatedMedia:
+                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUploadAssociatedMedia&amp;Client=Windows&amp;ReturnDoq=true&amp;token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1));
+                                                    break;
+                                                case TAG.Authoring.FileUploadTypes.Standard:
+                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUpload&amp;Client=Windows&amp;token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1));
+                                                    break;
+                                                case TAG.Authoring.FileUploadTypes.DeepZoom:
+                                                    if (file.contentType.match(/video/)) {
+                                                        uriStrings.push(TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUploadVideoArtwork&amp;Client=Windows&amp;ReturnDoq=true&amp;token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1));
+                                                    } else {
+                                                        uriStrings.push(TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUploadDeepzoom&amp;Client=Windows&amp;ReturnDoq=true&amp;token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1));
+                                                    }
+                                                    break;
+                                            }
+                                        }
+                                        else {                                            
+                                            largeFiles += (&quot;&lt;br /&gt;&quot; + file.name);
+                                        }
+                                        
+                                        // if we haven&#x27;t hit all the files, keep going
+                                        if (i &lt; filesObject.length - 1) {
+                                            fileLimitHelper(filesObject[i + 1], i + 1);
+                                        } else if (i === (filesObject.length - 1)) { // here we&#x27;ve reached the end
+                                            checkDurations(files, function () {
+                                                var mins, secs;
+                                                removeOverlay();
+                                                addLocalCallback([], [])();
+                                                if (files.length === 0 &amp;&amp; largeFiles !== &#x27;&#x27;) { //no &gt; time-limit files
+                                                    //alert that all files failed.
+                                                    fileUploadError = uploadErrorAlert(null, &quot;The selected file(s) could not be uploaded because they exceed the 50MB file limit.&quot;, null);
+                                                    $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                    $(&#x27;body&#x27;).append(fileUploadError);
+                                                    $(fileUploadError).fadeIn(500);
+                                                    return;
+                                                }
+                                                else if (files.length === 0 &amp;&amp; longFiles.length &gt; 0) { // no &gt; 50MB files
+                                                    mins = Math.floor(maxDuration / 60);
+                                                    secs = maxDuration % 60;
+                                                    if (secs === 0) secs = &#x27;00&#x27;;
+                                                    else if (secs &lt;= 9) secs = &#x27;0&#x27; + secs;
+
+                                                    fileUploadError = uploadErrorAlert(null, &quot;The selected file(s) could not uploaded because they exceed &quot; + mins + &quot;:&quot; + secs + &quot; in length.&quot;, null);
+
+                                                    $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                    $(&#x27;body&#x27;).append(fileUploadError);
+                                                    $(fileUploadError).fadeIn(500);
+                                                    return;
+                                                }
+                                                else if (files.length === 0 &amp;&amp; shortFiles.length &gt; 0) { // no &gt; 50MB files
+                                                    mins = Math.floor(minDuration / 60);
+                                                    secs = minDuration % 60;
+                                                    if (secs === 0) secs = &#x27;00&#x27;;
+                                                    else if (secs &lt;= 9) secs = &#x27;0&#x27; + secs;
+
+                                                    fileUploadError = uploadErrorAlert(null, &quot;The selected file(s) could not uploaded because they are shorter than &quot; + mins + &quot;:&quot; + secs + &quot; in length.&quot;, null);
+
+                                                    $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                    $(&#x27;body&#x27;).append(fileUploadError);
+                                                    $(fileUploadError).fadeIn(500);
+                                                    return;
+                                                }
+                                                else if (files.length === 0) {
+                                                    mins = Math.floor(maxDuration / 60);
+                                                    secs = maxDuration % 60;
+                                                    if (secs === 0) secs = &#x27;00&#x27;;
+                                                    else if (secs &lt;= 9) secs = &#x27;0&#x27; + secs;
+
+                                                    fileUploadError = uploadErrorAlert(null, &quot;The selected file(s) could not be uploaded because they exceed the 50MB file limit or exceed the &quot; + mins + &quot;:&quot; + secs + &quot; duration limit.&quot;, null);
+                                                    $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                    $(&#x27;body&#x27;).append(fileUploadError);
+                                                    $(fileUploadError).fadeIn(500);
+                                                    return;
+                                                }
+                                                globalFiles = files;
+                                                numFiles = files.length; // global
+                                                globalUriStrings = uriStrings;
+                                                globalUpload = upload;
+                                                var localResult = localCallback(files, localURLs,
+                                                    uploadStart(0, upload),
+                                                    function () {
+                                                        fileUploadError = uploadErrorAlert(null, &quot;uploading canceled due to the unsupported format&quot;, null);
+                                                        $(fileUploadError).css(&#x27;z-index&#x27;, LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                        $(&#x27;body&#x27;).append(fileUploadError);
+                                                        $(fileUploadError).fadeIn(500);
+                                                    });
+
+                                                if (localResult !== &#x27;uploading test!&#x27;) {
+                                                    uploadStart(0, upload)();
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                );
+                            }
+
+                            fileLimitHelper(filesObject[0], 0);
+                    });
+            }
+            else { // single upload
+                filePicker.pickSingleFileAsync().then(
+                    function (file) { // Now file has been picked
+
+                        // error check
+                        if (!file) {
+                            removeOverlay();
+                            addLocalCallback([], [], [])();
+                        }
+                        else {
+                            file.getBasicPropertiesAsync().then(
+                                   function (basicProperties) {
+                                       size = basicProperties.size;
+
+                                       var maxSize;
+                                       switch (type) {
+                                           case TAG.Authoring.FileUploadTypes.VideoArtwork:
+                                           case TAG.Authoring.FileUploadTypes.AssociatedMedia:
+                                           case TAG.Authoring.FileUploadTypes.Standard:
+                                               maxSize = maxFileSize;
+                                               break;
+                                           case TAG.Authoring.FileUploadTypes.DeepZoom:
+                                               maxSize = maxDeepZoomFileSize;
+                                               break;
+                                       }
+                                       //50 MB size limit for standard, 250 MB size limit for deep zoom images
+                                       if (size &lt; maxSize) {
+                                           checkDuration(file, function () {
+                                               var uriString,
+                                                   upload = new UploadOp(),
+                                                   localURL; // local URL
+
+                                               globalFiles = [file];
+                                               numFiles = 1;
+
+                                               localURL = window.URL.createObjectURL(file, { oneTimeOnly: true });
+
+                                               // Set specifics of request by type
+                                               switch (type) {
+                                                   case TAG.Authoring.FileUploadTypes.VideoArtwork:
+                                                       uriString = TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUploadVideoArtwork&amp;Client=Windows&amp;ReturnDoq=true&amp;Token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1);
+                                                       break;
+                                                   case TAG.Authoring.FileUploadTypes.AssociatedMedia:
+                                                       uriString = TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUploadAssociatedMedia&amp;Client=Windows&amp;ReturnDoq=true&amp;Token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1);
+                                                       break;
+                                                   case TAG.Authoring.FileUploadTypes.Standard:
+                                                       uriString = TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUpload&amp;Client=Windows&amp;Token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1);
+                                                       break;
+                                                   case TAG.Authoring.FileUploadTypes.DeepZoom:
+                                                       uriString = TAG.Worktop.Database.getSecureURL() + &quot;/?Type=FileUploadDeepzoom&amp;Client=Windows&amp;ReturnDoq=true&amp;token=&quot; + TAG.Auth.getToken() + &quot;&amp;Extension=&quot; + file.fileType.substr(1);
+                                                       break;
+                                               }
+
+                                               globalUriStrings = [uriString];
+                                               globalUpload = upload;
+
+                                               // Set up the upload
+                                               var msg;
+                                               if (typeof (msg = localCallback([file], [localURL], [uriString])) === &#x27;string&#x27;) {
+                                                   fileUploadError = uploadErrorAlert(null, msg, null);
+                                                   $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                   $(&#x27;body&#x27;).append(fileUploadError);
+                                                   $(fileUploadError).fadeIn(500);
+                                               } else {
+                                                   upload.start(0);
+                                               }
+                                           }, function () { // longbad
+                                               var mins = Math.floor(maxDuration / 60);
+                                               var secs = maxDuration % 60;
+                                               if (secs === 0) secs = &#x27;00&#x27;;
+                                               else if (secs &lt;= 9) secs = &#x27;0&#x27; + secs;
+
+                                               fileUploadError = uploadErrorAlert(null, &quot;The selected file exceeded the &quot; + mins + &quot;:&quot; + secs + &quot; duration limit and could not be uploaded.&quot;, null);
+                                               $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                               $(&#x27;body&#x27;).append(fileUploadError);
+                                               $(fileUploadError).fadeIn(500);
+                                           }, function () { // shortbad
+                                               var mins = Math.floor(minDuration / 60);
+                                               var secs = minDuration % 60;
+                                               if (secs === 0) secs = &#x27;00&#x27;;
+                                               else if (secs &lt;= 9) secs = &#x27;0&#x27; + secs;
+
+                                               fileUploadError = uploadErrorAlert(null, &quot;The selected file is shorter than the &quot; + mins + &quot;:&quot; + secs + &quot; lower duration limit and could not be uploaded.&quot;, null);
+                                               $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                               $(&#x27;body&#x27;).append(fileUploadError);
+                                               $(fileUploadError).fadeIn(500);
+                                           });
+
+                                       }
+
+
+                                       else {
+                                           fileUploadError = uploadErrorAlert(null, &quot;The selected file exceeded the 50MB file limit and could not be uploaded.&quot;, null);
+                                           $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                           $(&#x27;body&#x27;).append(fileUploadError);
+                                           $(fileUploadError).fadeIn(500);
+
+                                       }
+
+                                   });
+                        }
+
+                    });
+            }
+        } catch (e) {
+            // file access failed
+            console.log(&quot;file access failed: &quot;+e.message);
+            if (errorCallback)
+                errorCallback();
+        }
+    })();
+
+    function checkDuration(file, good, longbad, shortbad) {
+        if (file.fileType === &#x27;.mp3&#x27;) {
+            // Get music properties
+            file.properties.getMusicPropertiesAsync().done(function (musicProperties) {
+                if (musicProperties.duration / 1000 &gt; maxDuration) {
+                    longbad();
+                } else if (musicProperties.duration / 1000 &lt; minDuration) {
+                    shortbad();
+                } else {
+                    good();
+                }
+            },
+            longbad); // error callback
+        } else if (file.fileType === &#x27;.mp4&#x27;) {
+            file.properties.getVideoPropertiesAsync().done(function (videoProperties) {
+                if (videoProperties.duration / 1000 &gt; maxDuration) {
+                    longbad();
+                } else if (videoProperties.duration / 1000 &lt; minDuration) {
+                    shortbad();
+                } else {
+                    good();
+                }
+            },
+            longbad); // error callback
+        } else {
+            good();
+        }
+    }
+
+    function checkDurations(files, callback) {
+        var removeVals = [];
+        var done = 0;
+        if (files.length === 0) {
+            callback();
+            return;
+        }
+        helper(0);
+
+        function helper(j) {
+            checkDuration(files[j], function () {
+                done++;
+                if (done === files.length) remove();
+                else helper(j++);
+            }, function () { // longbad
+                removeVals.push(j);
+                longFiles.push(files[j]);
+                done++;
+                if (done === files.length) remove();
+                else helper(j++);
+            }, function () { // shortbad
+                removeVals.push(j);
+                shortFiles.push(files[j]);
+                done++;
+                if (done === files.length) remove();
+                else helper(j++);
+            });
+        }
+
+        function remove() {
+            removeVals.sort(function (a, b) { return b - a; });
+            for (var i = 0; i &lt; removeVals.length; i++) {
+                files.splice(removeVals[i], 1);
+            }
+            callback();
+        }
+    }
+
+    function uploadStart(i, upload) {
+        return function () {
+            upload.start(i);
+        };
+    }
+
+    function addLocalCallback(files, localUrls, uriStrings) {
+        return function () {
+            localCallback(files, localUrls, uriStrings);
+        };
+    }
+
+    // Helper functions
+
+    /**
+     * Appends overlay to root
+     * (no idea if this will actually disable interactions too as is)
+     */
+    function addOverlay(elmt) {
+        if ($(&quot;#uploadingOverlay&quot;).length === 0) {
+            elmt.append(uploadingOverlay);
+        }
+    }
+
+    /**
+     * Totally remove the overlay from the DOM / destroy
+     */
+    function removeOverlay() {
+        uploadingOverlay.remove();
+    }
+
+    /**
+     * Inner class that performs actual upload operation
+     * Partly taken from: http://msdn.microsoft.com/en-us/library/windows/apps/Hh700372.aspx
+     */
+    function UploadOp() {
+        var upload = null,
+            promise = null;
+
+        /**
+         * Starts upload of given file
+         * @param uriString     Spec passed to server
+         * @param file          File object representing file to be uploaded
+         */
+        this.start = function (i) {
+            var uri, uploader;
+            var uriString = globalUriStrings[i], file = globalFiles[i];
+            try {
+                addOverlay(root);
+                uploadingOverlay.show();
+
+                uri = new Windows.Foundation.Uri(uriString);
+                uploader = new Windows.Networking.BackgroundTransfer.BackgroundUploader();
+
+                // Set a header, so the server can save the file (this is specific to the sample server).
+                uploader.setRequestHeader(&quot;Filename&quot;, file.name);
+                uploader.setRequestHeader(&quot;Content-Type&quot;, &quot;multipart/form-data; boundary=----WebKitFormBoundaryqj1e7E6nvkEBR9N5&quot;);
+
+                // Create a new upload operation.
+                upload = uploader.createUpload(uri, file);
+                var ind = upload.guid; // property name in the totalBytesSent object
+                totalBytesSent[ind] = 0;
+                file.getBasicPropertiesAsync().then(
+                    function (basicProperties) {
+                        size = basicProperties.size;
+
+                            // Start the upload and persist the promise to be able to cancel the upload.
+                            promise = upload.startAsync().then(interComplete(i), error, progress);
+                            promises.push(promise);
+                    }
+                );
+            } catch (err) {
+                removeOverlay();
+                console.log(err.message);
+            }
+        };
+
+        // On application activation, reassign callbacks for an upload
+        // operation persisted from previous application state.
+        this.load = function (loadedUpload) {
+            try {
+                upload = loadedUpload;
+                promise = upload.attachAsync().then(complete, error, progress(upload));
+            } catch (err) {
+                removeOverlay();
+                if (errorCallback)
+                    errorCallback();
+            }
+        };
+    }
+
+    function interComplete(i) {
+        return function (uploadOperation) {
+            complete(uploadOperation, i);
+        };
+    }
+
+    /**
+     * Called when upload is completed
+     * @param uploadOperation       Finished upload passed by background uploader
+     */
+    function complete(uploadOperation, i) {
+        var response = uploadOperation.getResponseInformation(),
+            iInputStream = uploadOperation.getResultStreamAt(0),
+            dataReader = new Windows.Storage.Streams.DataReader(iInputStream),
+            loadop = dataReader.loadAsync(10000000);
+
+        // Once response is read
+        loadop.operation.completed = function () {
+            var dataReaderLoad = dataReader.readString(dataReader.unconsumedBufferLength);
+            dataReaderLoads.push($.trim(dataReaderLoad)); // DEBUGGING: this function mutates the data
+            finishedUpload();
+        };
+        if(i&lt;numFiles-1) {
+            uploadStart(i + 1, globalUpload)();
+        }
+    }
+
+    function finishedUpload() {
+        filesFinished += 1;
+        if (filesFinished === numFiles) {
+            removeOverlay();
+            finishedCallback(dataReaderLoads);
+            var msg = &quot;&quot;, str, mins, secs;
+            var longFilesExist = false;
+            var i;
+            if (largeFiles !== &quot;&quot;) {
+                msg = &quot;The following file(s) exceeded the 50MB file limit:&quot; + largeFiles;
+            }
+            if (longFiles.length) {
+                longFilesExist = true;
+                mins = Math.floor(maxDuration / 60);
+                secs = maxDuration % 60;
+                if (secs === 0) {
+                    secs = &#x27;00&#x27;;
+                }
+                else if (secs &lt;= 9) {
+                    secs = &#x27;0&#x27; + secs;
+                }
+                str = &quot;The following file(s) exceeded the &quot; + mins + &quot;:&quot; + secs + &quot; duration limit:&lt;br /&gt;&quot;;
+                for (i = 0; i &lt; longFiles.length; i++) {
+                    str = str + longFiles[i].name + &quot;&lt;br /&gt;&quot;;
+                }
+                msg = msg + str;
+            }
+            if (shortFiles.length) {
+                if (longFilesExist) {
+                    msg = msg + &quot;&lt;br /&gt;&quot;;
+                }
+                mins = Math.floor(minDuration / 60);
+                secs = minDuration % 60;
+                if (secs === 0) {
+                    secs = &#x27;00&#x27;;
+                }
+                else if (secs &lt;= 9) {
+                    secs = &#x27;0&#x27; + secs;
+                }
+                str = &quot;The following file(s) are shorter than the &quot; + mins + &quot;:&quot; + secs + &quot; lower duration limit:&lt;br /&gt;&quot;;
+                for (i = 0; i &lt; shortFiles.length; i++) {
+                    str = str + shortFiles[i].name + &quot;&lt;br /&gt;&quot;;
+                }
+                msg = msg + str;
+            }
+            if (msg) {
+                var fileUploadError = uploadErrorAlert(null, msg, null, false, true);
+                $(fileUploadError).css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                $(&#x27;body&#x27;).append(fileUploadError);
+                $(fileUploadError).fadeIn(500);
+            }
+        }
+    }
+
+    /**
+     * If file upload fails
+     */
+    function error(err) {
+        var shouldContinue = false,
+            popup;
+        if (err.message.split(&quot; &quot;)[0] === &quot;Unauthorized&quot;) {
+            removeOverlay();
+            console.log(&quot;unauthorized&quot;);
+            TAG.Auth.authenticate(
+                function () {
+                    uploadFilesObject(globalFilesObject); // need to deal with this for single file uploads, too, if this ever comes back...
+                },
+                function () {
+                    shouldContinue = true;
+                    popup = TAG.Util.UI.popUpMessage(null, &quot;File(s) not uploaded. You must login to upload files.&quot;);
+                    $(&#x27;body&#x27;).append(popup);
+                    $(popup).show();
+                }
+            );
+        } else {
+            removeOverlay();
+            console.log(&quot;internal server error: possibly not enough RAM on the server VM to handle this upload&quot;);
+            popup = TAG.Util.UI.popUpMessage(null, &quot;A server error occurred. It is possible that an image you are trying to upload is too large for the server&#x27;s memory.&quot;);
+            $(&#x27;body&#x27;).append(popup);
+            $(popup).show();
+        }
+        if (shouldContinue) {
+            console.log(&#x27;file upload error: &#x27; + err.message);
+            console.log(err.message);
+            removeOverlay();
+            
+            if (errorCallback) {
+                errorCallback();
+            }
+        }
+    }
+
+    /**
+     * Called by uploader as upload progresses
+     * @param upload        upload object / info
+     */
+    function progress(upload) {        
+        var bar = innerProgBar || innerProgressBar;
+        totalBytesToSend[upload.guid] = upload.progress.totalBytesToSend;
+        var bytesSent = upload.progress.bytesSent;
+        totalBytesSent[upload.guid] = bytesSent;
+        var percentComplete = 0;
+        for (var key in totalBytesSent) {
+            if (totalBytesToSend[key]) {
+                percentComplete += totalBytesSent[key] / (totalBytesToSend[key] * numFiles);
+
+            }
+        }        
+        bar.width(percentComplete * 90 + &quot;%&quot;);
+    }
+
+    function cancelPromises() {
+        var i;
+        for (i = 0; i &lt; promises.length; i++) { // promise.cancel doesn&#x27;t do anything for fulfilled promises
+            promises[i].cancel();
+        }
+    }
+    that.cancelPromises = cancelPromises;
+
+    function setMaxDuration(seconds) {
+        maxDuration = seconds;
+    }
+    that.setMaxDuration = setMaxDuration;
+
+    function setMinDuration(seconds) {
+        minDuration = seconds;
+    }
+    that.setMinDuration = setMinDuration;
+
+    /**
+    * copied from TAG.Util.UI because the boxes have crap CSS. tru fax.
+    */
+    function uploadErrorAlert(clickAction, message, buttonText, noFade, useHTML) {
+        var overlay = TAG.Util.UI.blockInteractionOverlay();
+
+        var confirmBox = document.createElement(&#x27;div&#x27;);
+        var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+           {
+               center_h: true,
+               center_v: true,
+               width: 0.5,
+               height: 0.35,
+               max_width: 560,
+               max_height: 200,
+           });
+
+        $(confirmBox).css({
+            position: &#x27;absolute&#x27;,
+            left: confirmBoxSpecs.x + &#x27;px&#x27;,
+            top: confirmBoxSpecs.y + &#x27;px&#x27;,
+            width: confirmBoxSpecs.width + &#x27;px&#x27;,
+            height: confirmBoxSpecs.height + &#x27;px&#x27;,
+            border: &#x27;3px double white&#x27;,
+            &#x27;background-color&#x27;: &#x27;black&#x27;,
+        });
+
+        var messageLabel = document.createElement(&#x27;div&#x27;);
+        $(messageLabel).css({
+            &#x27;color&#x27;: &#x27;white&#x27;,
+            &#x27;width&#x27;: &#x27;90%&#x27;,
+            &#x27;height&#x27;: &#x27;57.5%&#x27;,
+            &#x27;left&#x27;: &#x27;5%&#x27;,
+            &#x27;top&#x27;: &#x27;12.5%&#x27;,
+            &#x27;font-size&#x27;: &#x27;1.25em&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;text-align&#x27;: &#x27;center&#x27;,
+            &#x27;word-wrap&#x27;: &#x27;break-word&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;auto&#x27;,
+        });
+        if (useHTML) {
+            $(messageLabel).html(message);
+        } else {
+            $(messageLabel).text(message);
+        }
+        var optionButtonDiv = document.createElement(&#x27;div&#x27;);
+        $(optionButtonDiv).addClass(&#x27;optionButtonDiv&#x27;);
+        $(optionButtonDiv).css({
+            &#x27;height&#x27;: &#x27;30%&#x27;,
+            &#x27;width&#x27;: &#x27;98%&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;bottom&#x27;: &#x27;0%&#x27;,
+            &#x27;right&#x27;: &#x27;2%&#x27;,
+        });
+
+        var confirmButton = document.createElement(&#x27;button&#x27;);
+        $(confirmButton).css({
+            &#x27;padding&#x27;: &#x27;1%&#x27;,
+            &#x27;border&#x27;: &#x27;1px solid white&#x27;,
+            &#x27;width&#x27;: &#x27;auto&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;float&#x27;: &quot;right&quot;,
+            &#x27;margin-right&#x27;: &#x27;3%&#x27;,
+            &#x27;margin-top&#x27;: &#x27;0%&#x27;,
+        });
+        buttonText = (!buttonText || buttonText === &quot;&quot;) ? &quot;OK&quot; : buttonText;
+        $(confirmButton).text(buttonText);
+        confirmButton.onclick = function () {
+            if (clickAction)
+                clickAction();
+            removeAll();
+        };
+
+        function removeAll() {
+            if (noFade) {
+                $(overlay).hide();
+                $(overlay).remove();
+            } else {
+                $(overlay).fadeOut(500, function () { $(overlay).remove(); });
+            }
+        }
+
+        $(optionButtonDiv).append(confirmButton);
+
+        $(confirmBox).append(messageLabel);
+        $(confirmBox).append(optionButtonDiv);
+
+        $(overlay).append(confirmBox);
+        return overlay;
+    }
+
+    return that;
+};
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/layout/TAG.Layout.ArtworkEditor.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/layout/TAG.Layout.ArtworkEditor.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿TAG.Util.makeNamespace(&quot;TAG.Layout.ArtworkEditor&quot;);
+
+/**
+ * The layout definition for the artwork editor. 
+ * Click &#x27;Edit Artwork Info&#x27; in the Authoring Mode to enter.
+ * Contains info, location, and media editors.
+ * @class TAG.Layout.ArtworkEditor
+ * @constructor
+ * @param {doq} artwork          doq of the relevant artwork (see github wiki for doq structure)
+ * @return {Object}              any public methods or properties
+ */
+
+TAG.Layout.ArtworkEditor = function (artwork) {
+    &quot;use strict&quot;;
+
+    var // DOM-related
+        root = $(document.createElement(&#x27;div&#x27;)),                    // get via Util.getHtmlAjax in web app
+        topbar = $(document.createElement(&#x27;div&#x27;)),                  // get via root.find(...) in web app, set up in JADE
+        mainPanel = $(document.createElement(&#x27;div&#x27;)),
+        titleArea = $(document.createElement(&#x27;div&#x27;)),
+        rightbarLoadingDelete = $(document.createElement(&#x27;div&#x27;)),
+
+        // misc initialized variables
+        helpText = &quot;To select a location, type into the search field or \
+                    right-click/long-press on the map and drag the pushpin \
+                    to the desired location, then click on the desired \
+                    address and click &#x27;Confirm.&#x27;&quot;,                                        // location history hint text
+        credentials = &quot;AkNHkEEn3eGC3msbfyjikl4yNwuy5Qt9oHKEnqh4BSqo5zGiMGOURNJALWUfhbmj&quot;, // bing maps credentials
+        locationList = [],                                                                // list of locations in location history
+        artworkMetadata = {},                                                             // will be populated by HTML elements whose values have artwork metadata
+        textMetadata = {},                                                                // deprecated -- for text metadata
+        loadQueue = TAG.Util.createQueue(),                                               // async queue for loading UI elements                                                  
+        topbarHeight = 8,                                                                 // % height of top bar
+        METADATA_EDITOR = MetadataEditor(),                                               // MetadataEditor object to deal with metadata-related business
+        THUMBNAIL_EDITOR = ThumbnailEditor(),                                             // ThumbnailEditor object to deal with setting up thumbnail editing
+        LOCATION_HISTORY = RichLocationHistory(),                                         // RichLocationHistory object ................................
+        MEDIA_EDITOR = AssocMediaEditor(),                                                // AssocMediaEditor object ................................
+       // currentKeyHandler = TAG.Util.UI.getStack()[0],
+
+        // misc uninitialized variables
+        annotatedImage,               // AnnotatedImage object
+        associatedMedia,
+        metadataButton,               // &quot;Information&quot; sidebar button
+        rightArrow,                   // right arrow in &quot;Information&quot; button
+        editThumbnailButton,          // &quot;Edit Thumbnail&quot; button
+        rightArrowEditThumb,          // right arrow in &quot;Edit Thumbnail&quot; button
+        editLocButton,                // &quot;Edit Location History&quot; button
+        rightArrowEditLoc,            // right arrow in &quot;Edit Location History&quot; button
+        sidebarHideButtonContainer;   // tab to expand/contract side bar
+        
+        
+
+    // get things rolling
+    init();
+
+    return {
+        getRoot: getRoot
+    };
+    
+    /**
+     * Loads deepzoom image and creates UI (via a call to initUI)
+     * @method init
+     */
+    function init() {
+        root.css({ // TODO STYL
+            &quot;background-color&quot;: &quot;rgb(219,217,204)&quot;,
+            &quot;color&quot;: &quot;black&quot;,
+            &quot;width&quot;: &quot;100%&quot;,
+            &quot;height&quot;: &quot;100%&quot;
+        });
+        mainPanel.css({ // TODO JADE/STYL
+            width: &#x27;100%&#x27;,
+            height: (100 - topbarHeight) + &#x27;%&#x27;
+        }).addClass(&quot;mainPanel&quot;);
+
+        //creates deep zoom image
+        if (artwork) {
+            
+            annotatedImage = new TAG.AnnotatedImage({
+                root: root,
+                doq: artwork,
+                callback: function () {
+
+                    if (!(annotatedImage.openArtwork(artwork))) { // if artwork load is unsuccessful...
+                        var popup = TAG.Util.UI.popUpMessage(function () {
+                            TAG.Authoring.NewSettingsView(&quot;Artworks&quot;, function (settingsView) {
+                                TAG.Util.UI.slidePageRight(settingsView.getRoot());
+                            }, null, artwork.Identifier);
+                        }, &quot;There was an error loading the image.&quot;, &quot;Go Back&quot;, true);
+                        root.append(popup);
+                        $(popup).show();
+                    }
+                    initUI();
+                },
+                noMedia: true
+            });
+        } else {
+            initUI();
+        }
+    }
+
+    /**
+     * Initializes the artwork editor UI (side bar, top bar, etc)
+     * @method initUI
+     */
+    function initUI() {
+        createTopBar();
+        root.append(mainPanel);     // TODO JADE
+        makeSidebar();
+        METADATA_EDITOR.init();     // initialize different parts of the editor
+        LOCATION_HISTORY.init();
+        THUMBNAIL_EDITOR.init();
+        MEDIA_EDITOR.init();
+    }
+
+    /**
+     * Creates the artwork editor top bar (back button, save changes button, etc)
+     * @method createTopBar
+     */
+    function createTopBar() { // TODO most of this can be factored to J/S
+        var backButton = $(document.createElement(&#x27;img&#x27;)), // TODO JADE
+            topBarLabel = $(document.createElement(&#x27;div&#x27;)), // TODO JADE
+            topBarLabelSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08, { // TODO should be able to do this in STYL file
+                width: 0.4,
+                height: 0.9,
+            }),
+            titleAreaSpecs,
+            aefontsize;
+
+        topbar.css({ // TODO JADE/STYL
+            &quot;background-color&quot;: &quot;rgb(63,55,53)&quot;,
+            &quot;color&quot;: &quot;rgb(175,200,178)&quot;,
+            &quot;width&quot;: &#x27;100%&#x27;,
+            &#x27;height&#x27;: topbarHeight + &#x27;%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;z-index&#x27;: 1 // above any moving layers
+        }).addClass(&quot;topbar&quot;);
+
+        backButton.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Back.svg&#x27;); // TODO add tagpath in web app
+        backButton.css({ // TODO STYL
+            &#x27;height&#x27;: &#x27;63%&#x27;,
+            &#x27;margin-left&#x27;: &#x27;1.2%&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;width&#x27;: &#x27;auto&#x27;,
+            &#x27;top&#x27;: &#x27;18.5%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        });
+        topbar.append(backButton); // TODO JADE
+
+        // TODO use TAG.Util.setUpBackButton in web app to combine mousedown/mouseleave/click
+        backButton.on(&#x27;mousedown&#x27;, function () {
+            TAG.Util.UI.cgBackColor(&quot;backButton&quot;, backButton, false);
+        });
+        backButton.on(&#x27;click&#x27;, function () {
+           // TAG.Util.UI.getStack()[0] = currentKeyHandler;
+            var authoringHub,
+                editingMediamsg;
+            if (MEDIA_EDITOR.isOpen()) {
+                editingMediamsg = $(TAG.Util.UI.popUpMessage(null, &quot;You are currently editing a Hotspot or Media&quot;, &quot;OK&quot;, false));
+                root.append(editingMediamsg);
+                editingMediamsg.show();
+                TAG.Util.UI.cgBackColor(&quot;backButton&quot;, backButton, true);
+            } else {
+                backButton.off(&#x27;click&#x27;);
+                authoringHub = new TAG.Authoring.SettingsView(&quot;Artworks&quot;, null, null, artwork.Identifier);
+                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            }
+        });
+ 
+        topBarLabel.css({ // TODO STYL (see constrainAndPosition comment above)
+            &#x27;margin-right&#x27;: &#x27;2%&#x27;,
+            &#x27;margin-top&#x27;: 8 * 0.045 + &#x27;%&#x27;, // ?
+            &#x27;color&#x27;: &#x27;white&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;text-align&#x27;: &#x27;right&#x27;,
+            &#x27;right&#x27;: &#x27;0px&#x27;,
+            &#x27;top&#x27;: &#x27;0px&#x27;,
+            &#x27;height&#x27;: topBarLabelSpecs.height + &#x27;px&#x27;,
+            &#x27;width&#x27;: topBarLabelSpecs.width + &#x27;px&#x27;,
+        });
+
+        // TODO see if you can do this in STYL file as well
+        aefontsize = TAG.Util.getMaxFontSizeEM(&#x27;Artwork Editor&#x27;, 0.5, topBarLabelSpecs.width, topBarLabelSpecs.height * 0.8);
+        topBarLabel.css({ &#x27;font-size&#x27;: aefontsize });
+
+        topBarLabel.text(&#x27;Artwork Editor&#x27;); // TODO JADE
+
+        // TODO STYL
+        titleAreaSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08, {
+            center_v: true,
+            width: 0.55,
+            height: 0.5,
+            x_offset: 0.05,
+            x_max_offset: 60,
+        });
+
+        titleArea.text(artwork.Name);
+
+        // TODO STYL (try to eliminate need for constrainAndPosition)
+        titleArea.css({
+            &#x27;margin-left&#x27;: &#x27;3.25%&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;color&#x27;: &#x27;white&#x27;,
+            &#x27;font-size&#x27;: aefontsize,
+            &#x27;margin-top&#x27;: 8 * 0.045 + &#x27;%&#x27;, // ?
+            &#x27;left&#x27;: titleAreaSpecs.x + &#x27;px&#x27;,
+            width: titleAreaSpecs.width + &#x27;px&#x27;,
+            height: topBarLabelSpecs.height + &#x27;px&#x27;,
+            overflow: &#x27;hidden&#x27;,
+            &#x27;text-overflow&#x27;: &#x27;ellipsis&#x27;,
+            &#x27;white-space&#x27;: &#x27;nowrap&#x27;
+        });
+        titleArea.attr(&#x27;id&#x27;, &#x27;titleArea&#x27;); // TODO JADE
+
+        topbar.append(titleArea); // TODO JADE
+
+        // TODO JADE
+        topbar.append(topBarLabel);
+        root.append(topbar);
+    }
+
+    /**
+     * Creates associated media list in left panel
+     * @method createMediaList
+     * @param {jQuery obj} container        the element containing this list
+     */
+    function createMediaList(container) {
+        annotatedImage.loadAssociatedMedia(function (mediaList) {
+            container = container || $(&#x27;.assetContainer&#x27;);
+            container.empty();
+            mediaList = annotatedImage.getAssociatedMedia();
+            var i,
+                src;
+
+            // sort alphabetically
+            mediaList.guids.sort(function (a, b) {
+                return mediaList[a].doq.Name &lt; mediaList[b].doq.Name ? -1 : 1;
+            });
+
+            // create divs for each media
+            for (i = 0; i &lt; mediaList.guids.length; i++) {
+                var mediadoq = mediaList[mediaList.guids[i]].doq;
+                switch (mediadoq.Metadata.ContentType) {
+                    case &#x27;Audio&#x27;:
+                        src = tagPath + &#x27;images/audio_icon.svg&#x27;;
+                        break;
+                    case &#x27;Video&#x27;:
+                        src = ((mediadoq.Metadata.Thumbnail &amp;&amp; !mediadoq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + &#x27;images/video_icon.svg&#x27;);
+                        break;
+                    case &#x27;Image&#x27;:
+                        src = (mediadoq.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + &#x27;images/image_icon.svg&#x27;);
+                        break;
+                    default:
+                        src = tagPath + &#x27;images/text_icon.svg&#x27;;
+                        break;
+                }
+                loadQueue.add((function (j) {
+                    container.append(TAG.Util.Artwork.createThumbnailButton({
+                        title: mediadoq.Name,
+                        handler: thumbnailButtonClick(mediaList[mediaList.guids[j]]),
+                        buttonClass: &quot;assetHolder&quot;,
+                        src: src
+                    }));
+                })(i));
+            }
+        });
+
+    }
+
+    /**
+     * Click handler for an associated media thumbnail button. Opens the media editing pane.
+     * @method thumbnailButtonClick
+     * @param {Object} asset            associated media object
+     * @param {jQuery obj} holder       the thumbnail button
+     */
+    function thumbnailButtonClick(asset) { // TODO in the web app, pass this in to TAG.Util.Artwork.createThumbnailButton
+        return function (evt) {
+            closeAllPanels();
+            MEDIA_EDITOR.open(asset, MEDIA_EDITOR.createMediaWrapper(asset), function () {
+                $(&#x27;.assetHolder&#x27;).css(&#x27;background-color&#x27;, &#x27;&#x27;);
+                $(evt.target).css(&#x27;background-color&#x27;, &#x27;rgba(255, 255, 255, 0.75)&#x27;);
+            });
+        };
+    }
+
+    /**
+     * Make the artwork editing side bar.
+     * @method makeSidebar
+     */
+    function makeSidebar() {
+        var i,                 // iteration index
+            sidebar,           // div for whole side bar
+            buttonContainer,   // contains information, loc history, and thumbnail buttons
+            artworkInfoLabel,  // &quot;Artwork Information&quot; label
+            buttonCSS,         // some button css
+            newButtonCSS,      // some more button css (do both of these in STYL)
+            sidePanelFontSize, // result of call to Util.getMaxFontSizeEM (can try to do this in STYL after some trial and error)
+            titleFontSize,     // font size of &quot;Artwork Information&quot; header (STYL)
+            metaDataLabel,     // &quot;Information&quot; label
+            editLocLabel,      // &quot;Edit Location History&quot; label
+            editThumbLabel,    // &quot;Edit Thumbnail&quot; label
+            assocMediaLabel,   // &quot;Associated Media&quot; label
+            addRemoveMedia,    // &quot;Add/Remove Media&quot; button
+            assetContainer,    // contains assoc media thumbnail buttons
+            sidebarHideButton, // button to toggle side bar visibility
+            sidebarHideIcon,   // arrow icon in the side bar hide button
+            expanded = true;   // whether the side bar is expanded or contracted
+
+        buttonCSS = { // TODO STYL
+            &#x27;margin-top&#x27;: &#x27;2%&#x27;,
+            &#x27;margin-bottom&#x27;: &#x27;3%&#x27;,
+            &#x27;width&#x27;: &#x27;81%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        };
+
+        newButtonCSS = { // TODO STYL
+            &#x27;margin-top&#x27;: &#x27;2%&#x27;,
+            &#x27;margin-bottom&#x27;: &#x27;3%&#x27;,
+            &#x27;width&#x27;: &#x27;100%&#x27;,
+            &#x27;height&#x27;: root.height() * 0.05,
+            &#x27;color&#x27;: &#x27;white&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;
+        };
+
+        sidePanelFontSize = TAG.Util.getMaxFontSizeEM(&quot;Edit Related Maps&quot;, 1, root.width() * 0.1, 0.65 * newButtonCSS.height); // TODO can probably do this in STYL
+        titleFontSize = TAG.Util.getMaxFontSizeEM(&quot;Artwork Information&quot;, 1, root.width() * 0.15, 0.8 * newButtonCSS.height); // TODO can probably do this in STYL
+
+        sidebar = $(document.createElement(&#x27;div&#x27;)); // TODO JADE/STYL
+        sidebar.addClass(&quot;sidebar&quot;);
+        sidebar.css({
+            &#x27;width&#x27;: &#x27;20%&#x27;,
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;left&#x27;: &#x27;0%&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;background-color&#x27;: &#x27;rgba(0,0,0,0.85)&#x27;,
+            &#x27;z-index&#x27;: 100,
+        });
+
+        buttonContainer = $(document.createElement(&#x27;div&#x27;)); // TODO JADE/STYL
+        buttonContainer.attr(&#x27;class&#x27;, &#x27;buttonContainer&#x27;);
+        buttonContainer.css({
+            position: &#x27;relative&#x27;,
+            &#x27;margin-top&#x27;: &#x27;4%&#x27;,
+            &#x27;text-align&#x27;:&#x27;center&#x27;
+        });
+        sidebar.append(buttonContainer);
+
+        artworkInfoLabel = $(document.createElement(&#x27;div&#x27;)); // TODO JADE/STYL
+        artworkInfoLabel.addClass(&#x27;artworkInfoLabel&#x27;);
+        artworkInfoLabel.text(&#x27;Artwork Information&#x27;);
+        artworkInfoLabel.css({
+            color: &#x27;white&#x27;,
+            &#x27;font-size&#x27;: titleFontSize,
+            &#x27;margin-top&#x27;: &#x27;2%&#x27;
+        });
+        buttonContainer.append(artworkInfoLabel);
+
+        rightArrow = $(document.createElement(&#x27;img&#x27;)); // TODO J/S
+        rightArrow.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Right.png&#x27;); // TODO keep this in js, tack on tagPath in web app
+        rightArrow.css({
+            &quot;position&quot;: &quot;absolute&quot;,
+            &quot;right&quot;: &quot;5%&quot;,
+            top: &quot;30%&quot;,
+            width: &quot;auto&quot;,
+            height: &quot;40%&quot;
+        });
+
+        metadataButton = $(document.createElement(&#x27;div&#x27;)) // TODO J/S
+                            .css(newButtonCSS);
+        metadataButton.append(rightArrow);
+
+        metaDataLabel = $(document.createElement(&#x27;label&#x27;)); // TODO J/S
+        metaDataLabel.text(&quot;Information&quot;);
+        metaDataLabel.css({
+            &quot;width&quot;: &quot;100%&quot;,
+            &quot;height&quot;: &quot;100%&quot;,
+            &quot;text-align&quot;: &quot;center&quot;,
+            &quot;line-height&quot;: metadataButton.height() + &quot;px&quot;,
+            &quot;font-size&quot;: sidePanelFontSize
+        });
+
+        metadataButton.append(metaDataLabel);
+        buttonContainer.append(metadataButton);
+
+        rightArrowEditLoc = $(document.createElement(&#x27;img&#x27;)); // TODO J/S
+        rightArrowEditLoc.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Right.png&#x27;);
+        rightArrowEditLoc.css({ &quot;position&quot;: &quot;absolute&quot;, &quot;right&quot;: &quot;5%&quot;, top: &quot;30%&quot;, width: &quot;auto&quot;, height: &quot;40%&quot; });
+
+        editLocLabel = $(document.createElement(&#x27;label&#x27;)); // TODO J/S
+        editLocLabel.text(&quot;Edit Related Maps&quot;);
+        editLocLabel.css({ &quot;width&quot;: &quot;100%&quot;, &quot;height&quot;: &quot;100%&quot;, &quot;line-height&quot;: &quot;100%&quot;, &quot;text-align&quot;: &quot;center&quot; });
+
+        editLocButton = $(document.createElement(&#x27;div&#x27;)); // TODO J/S
+        editLocButton.css(newButtonCSS);
+        buttonContainer.append(editLocButton);
+        editLocButton.append(rightArrowEditLoc);
+        editLocButton.append(editLocLabel);
+        editLocLabel.css({ &quot;line-height&quot;: editLocButton.height() + &quot;px&quot;, &quot;font-size&quot;: sidePanelFontSize });
+
+        editThumbLabel = $(document.createElement(&#x27;label&#x27;)); // TODO J/S
+        editThumbLabel.text(&quot;Capture Thumbnail&quot;);
+        editThumbLabel.css({ &quot;width&quot;: &quot;100%&quot;, &quot;height&quot;: &quot;100%&quot;, &quot;line-height&quot;: &quot;100%&quot;, &quot;text-align&quot;: &quot;center&quot; });
+
+        rightArrowEditThumb = $(document.createElement(&#x27;img&#x27;)); // TODO J/S
+        rightArrowEditThumb.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Right.png&#x27;);
+        rightArrowEditThumb.css({ &quot;position&quot;: &quot;absolute&quot;, &quot;right&quot;: &quot;5%&quot;, top: &quot;30%&quot;, width: &quot;auto&quot;, height: &quot;40%&quot; });
+
+        editThumbnailButton = $(document.createElement(&#x27;div&#x27;)); // TODO J/S
+        editThumbnailButton.addClass(&quot;editThumbnailButton&quot;);
+        editThumbnailButton.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+        editThumbnailButton.css(newButtonCSS);
+
+        buttonContainer.append(editThumbnailButton); // TODO J/S
+        editThumbnailButton.append(rightArrowEditThumb);
+        editThumbnailButton.append(editThumbLabel);
+        editThumbLabel.css({ &quot;line-height&quot;: editLocButton.height() + &quot;px&quot;, &quot;font-size&quot;: sidePanelFontSize });
+
+        // toggles metadata form and button
+        metadataButton.on(&#x27;click&#x27;, function () {
+            METADATA_EDITOR.toggle();
+        });
+
+        // toggles location history editing panel and button
+        editLocButton.on(&#x27;click&#x27;, function () {
+            LOCATION_HISTORY.toggle();
+        });
+        
+        // toggles edit thumbnail functionality
+        editThumbnailButton.on(&#x27;click&#x27;, function () {
+            THUMBNAIL_EDITOR.toggle();
+        });
+
+        assocMediaLabel = $(document.createElement(&#x27;div&#x27;)); // TODO JADE/STYL
+        assocMediaLabel.addClass(&#x27;assocMediaLabel&#x27;);
+        assocMediaLabel.text(&#x27;Associated Media&#x27;);
+        assocMediaLabel.css({
+            color: &#x27;white&#x27;,
+            &#x27;font-size&#x27;: titleFontSize,
+            &#x27;margin-top&#x27;: &#x27;2%&#x27;,
+            &#x27;margin-bottom&#x27;: &quot;2%&quot;
+        });
+        buttonContainer.append(assocMediaLabel);
+
+        addRemoveMedia = $(document.createElement(&#x27;button&#x27;)); // TODO JADE/STYL
+        addRemoveMedia.addClass(&#x27;addRemoveMedia&#x27;);
+        addRemoveMedia.text(&#x27;Add/Remove Media&#x27;);
+        addRemoveMedia.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+        addRemoveMedia.css(buttonCSS);
+        buttonContainer.append(addRemoveMedia);
+
+        // open media picker on button click
+        addRemoveMedia.on(&#x27;click&#x27;, createMediaPicker);
+
+        /**
+         * Create the associated media selection picker
+         * @method createMediaPicker
+         */
+        function createMediaPicker() {
+            TAG.Util.UI.createAssociationPicker(root,
+                &quot;Choose the media you wish to associate with this artwork&quot;,
+                {comp: artwork, type: &#x27;artwork&#x27;},
+                &quot;artwork&quot;,
+                [{
+                    name: &quot;all media&quot;,
+                    getObjs: TAG.Worktop.Database.getAssocMedia,
+                }, {
+                    name: &quot;currently associated&quot;,
+                    getObjs: TAG.Worktop.Database.getAssocMediaTo,
+                    args: [artwork.Identifier]
+                }, {
+                    name: &quot;recently associated&quot;,
+                    getObjs: TAG.Util.UI.getRecentlyAssociated
+                }], {
+                    getObjs: TAG.Worktop.Database.getAssocMediaTo,
+                    args: [artwork.Identifier]
+                }, function () { // TODO (low priority) -- shouldn&#x27;t need to reload entire list here
+                    $(&#x27;.assetContainer&#x27;).empty();
+                    createMediaList($(&#x27;.assetContainer&#x27;));
+                });
+        }
+
+        assetContainer = $(document.createElement(&#x27;div&#x27;)); // TODO JADE/STYL
+        assetContainer.attr(&#x27;class&#x27;, &#x27;buttonContainer&#x27;);
+        assetContainer.css({
+            position: &#x27;relative&#x27;,
+            top: &#x27;0%,&#x27;,
+            &#x27;margin-top&#x27;: &#x27;2%&#x27;,
+            padding: &#x27;0px 4% 0px 12%&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;auto&#x27;,
+            height: &#x27;60%&#x27;
+        });
+        assetContainer.addClass(&#x27;assetContainer&#x27;);
+        sidebar.append(assetContainer);
+
+        createMediaList(assetContainer);
+
+        // sidebar toggle button
+        sidebarHideButtonContainer = $(document.createElement(&#x27;div&#x27;)); // TODO J/S
+        sidebarHideButtonContainer.addClass(&#x27;sidebarHideButtonContainer&#x27;);
+        sidebarHideButtonContainer.css({
+            &#x27;top&#x27;: &#x27;0%&#x27;,
+            &#x27;right&#x27;: &#x27;0%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;width&#x27;: &#x27;2%&#x27;,
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;z-index&#x27;: 1000
+        });
+
+        sidebarHideButton = $(document.createElement(&#x27;div&#x27;)); // TODO J/S
+        sidebarHideButton.css({
+            &#x27;top&#x27;: &#x27;45%&#x27;,
+            &#x27;right&#x27;: &#x27;0%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;width&#x27;: &#x27;100%&#x27;,
+            &#x27;height&#x27;: &#x27;10%&#x27;,
+            &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.85)&#x27;,
+            &#x27;border-bottom-right-radius&#x27;: &#x27;10px&#x27;,
+            &#x27;border-top-right-radius&#x27;: &#x27;10px&#x27;
+        });
+
+        sidebarHideIcon = $(document.createElement(&#x27;img&#x27;)); // TODO J/S
+        sidebarHideIcon.css({ &#x27;top&#x27;: &#x27;30%&#x27;, &#x27;width&#x27;: &#x27;40%&#x27;, &#x27;height&#x27;: &#x27;auto&#x27;, &#x27;position&#x27;: &#x27;relative&#x27;, &#x27;left&#x27;: &#x27;20%&#x27; });
+        sidebarHideIcon.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Left.png&#x27;); // TODO keep this in js, use tagPath + ....
+        sidebarHideButton.append(sidebarHideIcon);
+
+        sidebarHideButtonContainer.append(sidebarHideButton);
+
+        sidebarHideButtonContainer.on(&#x27;click&#x27;, function () {
+            var left = expanded ? &#x27;-20%&#x27; : &#x27;0%&#x27;;
+            sidebarHideIcon.attr(&#x27;src&#x27;, expanded ? tagPath+&#x27;images/icons/Right.png&#x27; : tagPath+&#x27;images/icons/Left.png&#x27;); // TODO tagPath + ... in web app
+            sidebar.animate({ &#x27;left&#x27;: left }, 600);
+            sidebarHideButtonContainer.animate({ &#x27;left&#x27;: left }, 600);
+            expanded = !expanded;
+        });
+
+        mainPanel.append(sidebar); // TODO JADE
+        mainPanel.append(sidebarHideButtonContainer);
+    }
+
+    /**
+     * If we have an out-of-date doq (e.g., if another TAG
+     * client updated the doq while we were working), force
+     * the call anyway, which will overwrite their changes.
+     * This may not be the best behavior, so if you think of
+     * a well-defined solution, please rewrite this function!
+     * @method conflict
+     * @param {jqXHR} jqXHR         async request object (see http://api.jquery.com/Types/#jqXHR)
+     * @param {Object} ajaxCall     see documentation in TAG.Worktop.Database (and the code in asyncRequest in that file)
+     */
+    function conflict(jqXHR, ajaxCall) {
+        ajaxCall &amp;&amp; ajaxCall.force &amp;&amp; ajaxCall.force();
+    }
+
+    /**
+     * Return root of artwork editor DOM.
+     * @method getRoot
+     * @return {jQuery obj}       root of artwork editor DOM
+     */
+    function getRoot() {
+        return root;
+    }
+
+    /**
+     * Closes all open panels (metadata editing panel, location history
+     * panel, and thumbnail editing panel).
+     * @method closeAllPanels
+     */
+    function closeAllPanels() {
+        THUMBNAIL_EDITOR.close();
+        LOCATION_HISTORY.close();
+        METADATA_EDITOR.close();
+    }
+
+    /**
+     * Thumbnail editing code. Just a wrapper around some thumbnail functions to clean things up.
+     * @method ThumbnailEditor
+     * @return {Object}         an object with &quot;public&quot; thumbnail editing methods
+     */
+    function ThumbnailEditor() {
+        var tnBorderWrapper,
+            isOpen = false,
+            mainPanelHeight,
+            mainPanelWidth,
+            ratio,
+            tnSave;
+
+        /**
+         * Initialize the thumbnail editor. Mostly UI stuff here.
+         * @method init
+         */
+        function init() { // TODO most of this could be moved to JADE/STYL (the only thing that should be necessary here is binding click handlers)
+            var tnBorderCenter,
+                tnBorderLeft,
+                tnBorderTop,
+                tnBorderBottom,
+                tnBorderRight,
+                tnHelp,
+                tnHelpPadding,
+                tnHelpBorder,
+                tnBottomWidth;
+
+            mainPanelHeight = $(&#x27;.mainPanel&#x27;).height(),
+            mainPanelWidth = $(&#x27;.mainPanel&#x27;).width(),
+            ratio = 1.564,
+
+            tnBorderWrapper = $(document.createElement(&#x27;div&#x27;));
+            tnBorderWrapper.addClass(&#x27;tnBorderWrapper&#x27;);
+            tnBorderWrapper.css({
+                position: &#x27;relative&#x27;,
+                top: &#x27;0px&#x27;,
+                left: &#x27;0px&#x27;,
+                height: &#x27;100%&#x27;,
+                width: &#x27;100%&#x27;,
+                display: &#x27;none&#x27;,
+            });
+
+            tnBorderCenter = $(document.createElement(&#x27;div&#x27;));
+            tnBorderCenter.addClass(&quot;tnBorderCenter&quot;);
+            tnBorderCenter.css({
+                position: &#x27;absolute&#x27;,
+                top: &#x27;15%&#x27;,
+                left: &#x27;25%&#x27;,
+                height: 50 + &#x27;%&#x27;,
+                width: ((50 * mainPanelHeight * ratio) / mainPanelWidth) + &#x27;%&#x27;,
+                &#x27;background-color&#x27;: &#x27;transparent&#x27;,
+                border: &#x27;2px solid white&#x27;,
+                &#x27;z-index&#x27;: 60,
+            });
+
+            tnBorderLeft = $(document.createElement(&#x27;div&#x27;));
+            tnBorderLeft.addClass(&quot;tbBorderLeft&quot;);
+            tnBorderLeft.css({
+                position: &#x27;absolute&#x27;,
+                top: &#x27;0%&#x27;,
+                left: 0,
+                height: &#x27;100%&#x27;,
+                width: &#x27;25%&#x27;,
+                &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.6)&#x27;,
+                &#x27;z-index&#x27;: 50,
+            });
+
+            tnBorderTop = $(document.createElement(&#x27;div&#x27;));
+            tnBorderTop.addClass(&quot;tnBorderTop&quot;);
+            tnBorderTop.css({
+                position: &#x27;absolute&#x27;,
+                top: &#x27;0%&#x27;,
+                left: &#x27;25%&#x27;,
+                height: &#x27;15%&#x27;,
+                width: $(tnBorderCenter).width() + &#x27;%&#x27;,
+                &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.6)&#x27;,
+                &#x27;z-index&#x27;: 50,
+            });
+
+            tnBorderBottom = $(document.createElement(&#x27;div&#x27;));
+            tnBorderBottom.addClass(&quot;tnBorderBottom&quot;);
+            tnBorderBottom.css({
+                position: &#x27;absolute&#x27;,
+                top: (15 + $(tnBorderCenter).height()) + &#x27;%&#x27;,
+                left: &#x27;25%&#x27;,
+                height: (100 - $(tnBorderCenter).height() - $(tnBorderTop).height()) + &#x27;%&#x27;,
+                width: $(tnBorderCenter).width() + &#x27;%&#x27;,
+                &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.6)&#x27;,
+                &#x27;z-index&#x27;: 55,
+            });
+
+            tnBorderRight = $(document.createElement(&#x27;div&#x27;));
+            tnBorderRight.addClass(&quot;tnBorderRight&quot;);
+            tnBorderRight.css({
+                position: &#x27;absolute&#x27;,
+                top: &#x27;0%&#x27;,
+                left: (25 + $(tnBorderCenter).width()) + &#x27;%&#x27;,
+                height: &#x27;100%&#x27;,
+                width: (100 - 25 - $(tnBorderCenter).width()) + &#x27;%&#x27;,
+                &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.6)&#x27;,
+                &#x27;z-index&#x27;: 50,
+            });
+
+            tnHelp = $(document.createElement(&#x27;div&#x27;)); // TODO this help box looks weird
+            tnHelp.addClass(&#x27;tnHelp&#x27;);
+            tnHelp.css({
+                position: &#x27;relative&#x27;,
+                top: &#x27;5%&#x27;,
+                left: &#x27;0%&#x27;,
+                width: &#x27;100%&#x27;,
+                padding: &#x27;1%&#x27;,
+                &#x27;text-align&#x27;: &#x27;center&#x27;,
+                &#x27;font-size&#x27;: &#x27;120%&#x27;,
+                color: &#x27;white&#x27;,
+            });
+            tnHelp.text(&quot;Move and resize the artwork within the thumbnail window, and select “Save Thumbnail” when you’re happy with the composition.&quot;);
+            tnHelpPadding = (parseInt($(tnHelp).css(&#x27;padding&#x27;), 10) / 100) * ($(tnBorderBottom).innerWidth() / 100) * root.width();
+            tnHelpBorder = parseInt($(tnHelp).css(&#x27;border&#x27;), 10);
+            tnBottomWidth = ($(tnBorderBottom).innerWidth() / 100) * root.width();
+            tnHelp.width(tnBottomWidth - 2 * tnHelpBorder - 2 * tnHelpPadding);
+
+            tnSave = $(document.createElement(&#x27;button&#x27;));
+            tnSave.text(&quot;Save Thumbnail&quot;);
+            tnSave.css({
+                position: &#x27;relative&#x27;,
+                &#x27;top&#x27;: &#x27;8%&#x27;,
+                &#x27;float&#x27;: &#x27;right&#x27;
+            });
+            tnSave.on(&quot;click&quot;, save);
+
+            tnBorderBottom.append(tnHelp);
+            tnBorderBottom.append(tnSave);
+            tnBorderWrapper.append(tnBorderTop);
+            tnBorderWrapper.append(tnBorderLeft);
+            tnBorderWrapper.append(tnBorderCenter);
+            tnBorderWrapper.append(tnBorderBottom);
+            tnBorderWrapper.append(tnBorderRight);
+            mainPanel.append(tnBorderWrapper);
+        }
+
+        /**
+         * Toggle the thumbnail editor in and out.
+         * @method toggle
+         */
+        function toggle() {
+            isOpen ? close() : open();
+            //if (isOpen) {
+            //    tnBorderWrapper.fadeOut();
+            //} else {
+            //    closeAllPanels();
+            //    open();
+            //}
+            //if (locPanelOpen) {
+            //    $(&#x27;.locationPanelDiv&#x27;).hide(&quot;slide&quot;, { direction: &#x27;left&#x27; }, 500, function () {
+            //        $(&#x27;.sidebarHideButtonContainer&#x27;).show();
+            //    });
+            //    locPanelOpen = false;
+            //}
+            //if ($(tnBorderWrapper)[0] === undefined) {
+            //    makethumbnailPicker();
+            //    $(tnBorderWrapper).fadeToggle(200);
+            //} else {
+            //    $(tnBorderWrapper).fadeToggle(200);
+            //}
+        }
+
+        /**
+         * Opens the thumbnail editor and closes any open panels.
+         * @method open
+         */
+        function open() {
+            if (!isOpen) {
+                closeAllPanels();
+                tnBorderWrapper.fadeIn();
+                editThumbnailButton.css({
+                    &#x27;background-color&#x27;: &#x27;white&#x27;,
+                    &#x27;color&#x27;: &#x27;black&#x27;
+                });
+                rightArrowEditThumb.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/RightB.png&#x27;);
+                isOpen = true;
+            }
+        }
+
+        /**
+         * Closes the thumbnail editor.
+         * @method close
+         */
+        function close() {
+            if (isOpen) {
+                tnBorderWrapper.fadeOut();
+                editThumbnailButton.css({
+                    &#x27;background-color&#x27;: &#x27;transparent&#x27;,
+                    &#x27;color&#x27;: &#x27;white&#x27;
+                });
+                rightArrowEditThumb.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Right.png&#x27;);
+                isOpen = false;
+            }
+        }
+
+        /**
+         * Saves the current thumbnail selection.
+         * @method save
+         */
+        function save() {
+            //progress circle
+            var progressCircleCSS = {
+                &#x27;position&#x27;: &#x27;absolute&#x27;,
+                &#x27;top&#x27;: &#x27;110%&#x27;,
+                &#x27;left&#x27;: &#x27;100%&#x27;,
+                &#x27;z-index&#x27;: &#x27;50&#x27;,
+                &#x27;height&#x27;: &#x27;auto&#x27;,
+                &#x27;width&#x27;: &#x27;40px&#x27;
+            };
+            var progressCircle = TAG.Util.showProgressCircle($(&#x27;.tnHelp&#x27;), progressCircleCSS, &#x27;0px&#x27;, &#x27;0px&#x27;, false);
+
+            var canvas = $(&quot;canvas&quot;),
+                ctx = canvas[0].getContext(&quot;2d&quot;),
+                tnBorderCenter = $(&#x27;.tnBorderCenter&#x27;),
+                x = tnBorderCenter.offset().left, // get position of thumbnail frame
+                y = tnBorderCenter.offset().top,
+                width = tnBorderCenter.outerWidth(),
+                height = tnBorderCenter.outerHeight(),
+                imgdata = ctx.getImageData(x, y, width, height), // gets imagedata from position of thumbnail frame
+                tmpCanvas = document.createElement(&quot;canvas&quot;),
+                tmpCtx,
+                dataurl;
+
+            tnSave.attr(&#x27;disabled&#x27;, &#x27;true&#x27;);
+
+            tmpCanvas.width = imgdata.width; // set width of canvas like this (using CSS will stretch contents)
+            tmpCanvas.height = imgdata.height;
+
+            tmpCtx = tmpCanvas.getContext(&quot;2d&quot;);
+            tmpCtx.putImageData(imgdata, 0, 0);
+
+            dataurl = tmpCanvas.toDataURL(); // gets dataurl from tmpcanvas, ready to send to server!
+
+            TAG.Worktop.Database.uploadImage(dataurl, function (imageURL) {
+                TAG.Worktop.Database.changeArtwork(artwork.Identifier, { Thumbnail: imageURL }, thumbnailSuccess, thumbnailUnauth, conflict);
+            }, thumbnailUnauth, thumbnailError);
+
+            // success handler for saving
+            function thumbnailSuccess() {
+                TAG.Util.removeProgressCircle(progressCircle);
+                tnSave[0].removeAttribute(&#x27;disabled&#x27;);
+                close();
+            }
+
+            // unauthorized handler
+            function thumbnailUnauth() {
+                TAG.Util.removeProgressCircle(progressCircle);
+                var popup = TAG.Util.UI.popUpMessage(null, &quot;Thumbnail not saved.  You must log in to save changes.&quot;);
+                $(&#x27;body&#x27;).append(popup);
+                $(popup).show();
+                tnSave[0].removeAttribute(&#x27;disabled&#x27;);
+            }
+
+            // general error handler
+            function thumbnailError() {
+                TAG.Util.removeProgressCircle(progressCircle);
+                var popup = TAG.Util.UI.popUpMessage(null, &quot;Thumbnail not saved.  There was an error contacting the server.&quot;);
+                $(&#x27;body&#x27;).append(popup);
+                $(popup).show();
+                tnSave[0].removeAttribute(&#x27;disabled&#x27;);
+            }
+        }
+
+        return {
+            init: init,
+            toggle: toggle,
+            close: close,
+            open: open,
+            save: save
+        };
+    }
+
+    /**
+     * Rich location history API. Location history code can make everything else messy and dense, so we&#x27;ll cordon it off here.
+     * @method RichLocationHistory
+     * @return {Object}         an object with &quot;public&quot; location history methods
+     */
+    function RichLocationHistory() {
+        var isOpen = false,
+            RLH,
+            locationPanelDiv;
+
+        function init() {
+            RLH = TAG.Util.RLH({
+                artwork: artwork,
+                root: root,
+                authoring: true
+            });
+            locationPanelDiv = RLH.init();
+        }
+
+        function open() {
+            if (!isOpen) {
+                closeAllPanels();
+                MEDIA_EDITOR.close();
+                editLocButton.css({ &#x27;background-color&#x27;: &#x27;white&#x27;, &#x27;color&#x27;: &#x27;black&#x27; });
+                rightArrowEditLoc.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/RightB.png&#x27;);
+                sidebarHideButtonContainer.hide();
+                locationPanelDiv.show(&quot;slide&quot;, { direction: &#x27;left&#x27; }, 500);
+                locationPanelDiv.css({ display: &#x27;inline&#x27; });
+                
+                isOpen = true;
+            }
+        }
+
+        function close() {
+            if (isOpen) {
+                editLocButton.css({ &#x27;background-color&#x27;: &#x27;transparent&#x27;, &#x27;color&#x27;: &#x27;white&#x27; });
+                rightArrowEditLoc.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Right.png&#x27;);
+                locationPanelDiv.hide(&quot;slide&quot;, { direction: &#x27;left&#x27; }, 500, function () {
+                    if (!METADATA_EDITOR.isOpen()) {
+                        sidebarHideButtonContainer.show();
+                    }
+                });
+                
+                isOpen = false;
+            }
+        }
+
+        function toggle() {
+            isOpen ? close() : open();
+        }
+
+        function returnIsOpen() {
+            return isOpen;
+        }
+
+        return {
+            init: init,
+            open: open,
+            close: close,
+            toggle: toggle,
+            isOpen: returnIsOpen
+        };
+    }
+
+    /**
+     * Media editing panel. Contains methods for initializing, opening, and closing the panel, as well as
+     * methods for saving and deleting media.
+     * @method AssocMediaEditor
+     * @return {Object}       an object with &quot;public&quot; associated media editing methods
+     */
+    function AssocMediaEditor() {
+        var isOpen = false,
+            editingMedia = false,
+            hotspotAnchor,
+            layerContainer,
+            currSource,
+            toggleHotspotButton,
+            toggleLayerButton,
+            activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
+            isHotspot = false, // whether the current media is a hotspot
+            isLayer = false;
+
+        /**
+         * Initialize a reusible hotspot circle div and store it in the variable hotspotAnchor
+         * @method makeHotspotAnchor
+         */
+        function makeHotspotAnchor() {
+            var hotspotCircle = $(document.createElement(&#x27;div&#x27;)),
+                innerCircle = $(document.createElement(&#x27;div&#x27;)),
+                hotspotHint = $(document.createElement(&#x27;div&#x27;)),
+                clickableArea = $(document.createElement(&#x27;div&#x27;));
+
+            hotspotAnchor = $(document.createElement(&#x27;div&#x27;)).css({ // TODO JADE/STYL
+                &#x27;position&#x27;: &#x27;absolute&#x27;,
+                &#x27;display&#x27;: &#x27;none&#x27;
+            }).addClass(&#x27;hotspotedit&#x27;);
+
+            hotspotCircle.css({ // TODO JADE/STYL -- should use same stylus as hotspot circles in kiosk mode
+                &#x27;position&#x27;: &#x27;absolute&#x27;,
+                &#x27;display&#x27;: &#x27;block&#x27;,
+                &#x27;width&#x27;: &#x27;40px&#x27;,
+                &#x27;height&#x27;: &#x27;40px&#x27;,
+                &#x27;border&#x27;: &#x27;solid rgba(255,255,255,1) 5px&#x27;,
+                &#x27;border-radius&#x27;: &#x27;50%&#x27;,
+                &#x27;top&#x27;: &#x27;-50px&#x27;,
+                &#x27;left&#x27;: &#x27;-50px&#x27;
+            })
+            .attr(&#x27;on&#x27;, null)
+            .appendTo(hotspotAnchor);
+
+            innerCircle.css({ // TODO JADE/STYL
+                &#x27;display&#x27;: &#x27;block&#x27;,
+                &#x27;width&#x27;: &#x27;30px&#x27;,
+                &#x27;height&#x27;: &#x27;30px&#x27;,
+                &#x27;background&#x27;: &#x27;rgba(0,0,0,0.01)&#x27;,
+                &#x27;border&#x27;: &#x27;solid rgba(0,0,0,1) 5px&#x27;,
+                &#x27;border-radius&#x27;: &#x27;50%&#x27;
+            })
+            .appendTo(hotspotCircle);
+
+            clickableArea.css({ // TODO JADE/STYL
+                &#x27;display&#x27;: &#x27;block&#x27;,
+                &#x27;width&#x27;: &#x27;0px&#x27;,
+                &#x27;height&#x27;: &#x27;0px&#x27;,
+                &#x27;background&#x27;: &#x27;rgba(0,0,0,0)&#x27;,
+                &#x27;border&#x27;: &#x27;solid rgba(0,0,0,0.1) 15px&#x27;,
+                &#x27;border-radius&#x27;: &#x27;50%&#x27;
+            })
+            .appendTo(innerCircle);
+
+            hotspotHint.text(&#x27;Hotspot (drag to update)&#x27;).css({ // TODO JADE/STYL
+                &#x27;position&#x27;: &#x27;relative&#x27;,
+                &#x27;left&#x27;: &#x27;-5px&#x27;,
+                &#x27;top&#x27;: &#x27;-5px&#x27;,
+                &#x27;width&#x27;: &#x27;auto&#x27;,
+                &#x27;color&#x27;: &#x27;white&#x27;,
+                &#x27;font-weight&#x27;: &#x27;bold&#x27;,
+                &#x27;font-size&#x27;: &#x27;large&#x27;,
+                &#x27;padding&#x27;: &#x27;8px&#x27;,
+                &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.85)&#x27;
+            }).appendTo(hotspotAnchor);
+
+            TAG.Util.disableDrag(root);
+
+            // TODO use makeManipulatable here for web app (and for win8 app... some dragging issues right now, though)
+            TAG.Util.makeManipulatableWin(hotspotCircle[0], {
+                onManipulate: function (res) {
+                    var t = hotspotAnchor.css(&#x27;top&#x27;),
+                        l = hotspotAnchor.css(&#x27;left&#x27;);
+                    hotspotAnchor.css(&quot;top&quot;, (parseInt(t, 10) + res.pivot.y - 20) + &quot;px&quot;);
+                    hotspotAnchor.css(&quot;left&quot;, (parseInt(l, 10) + res.pivot.x - 20) + &quot;px&quot;);
+                    annotatedImage.updateOverlay(hotspotAnchor[0], Seadragon.OverlayPlacement.TOP_LEFT);
+                }
+            });
+
+            hotspotAnchor.appendTo(root);
+        }
+
+        /**
+         * Adds hotspot circle to canvas and pans to circle&#x27;s location
+         * @method toggleToHotspot
+         * @param {Seadragon.Point} point       the point at which to add the hotspot circle (defaults to center of canvas)
+         */
+        function toggleToHotspot(point) {
+            point = point || annotatedImage.viewer.viewport.getCenter();
+
+            var pixel = annotatedImage.viewer.viewport.pixelFromPoint(point),
+                pixel_adj = new Seadragon.Point(pixel.x + 50, pixel.y + 50),
+                point_adj = annotatedImage.viewer.viewport.pointFromPixel(pixel_adj);
+
+            isLayer &amp;&amp; toggleFromLayer();
+
+            toggleHotspotButton.text(&#x27;Remove Hotspot&#x27;);
+            toggleLayerButton.attr(&#x27;disabled&#x27;, &#x27;disabled&#x27;);
+            toggleLayerButton.css(&#x27;opacity&#x27;, &#x27;0.5&#x27;);
+
+            annotatedImage.addOverlay(hotspotAnchor[0], point_adj, Seadragon.OverlayPlacement.TOP_LEFT); // TODO see new AnnotatedImage; also, do we really want to be adding a new overlay each time? we only have one hotspot circle, so maybe just want to update the existing overlay
+            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(point.x, point.y), false);
+            hotspotAnchor.fadeIn(100);
+            isHotspot = true;
+        }
+
+        /**
+         * Removes hotspot from canvas
+         * @method toggleFromHotspot
+         */
+        function toggleFromHotspot() {
+            toggleHotspotButton.text(&#x27;Create Hotspot&#x27;);
+            toggleLayerButton.removeAttr(&#x27;disabled&#x27;);
+            toggleLayerButton.css(&#x27;opacity&#x27;, &#x27;1.0&#x27;);
+
+            annotatedImage.removeOverlay(hotspotAnchor[0]); // TODO check
+            hotspotAnchor.fadeOut(100);
+            isHotspot = false;
+        }
+
+        /**
+         * Returns a Seadragon.Rect bounding the artwork layer on screen
+         * @method getLayerRect
+         * @return {Seadragon.Rect}         the Seadragon.Rect
+         */
+        function getLayerRect() {
+            var offset = layerContainer.offset(),
+                width = layerContainer.width(),
+                height = layerContainer.height(),
+                topLeft = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left, offset.top)),
+                bottomRight = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left + width, offset.top + height));
+
+            return new Seadragon.Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+        }
+
+        /**
+         * Initialize a reusable layer container and store it in the variable layerContainer
+         * @method makeLayerContainer
+         */
+        function makeLayerContainer() {
+            layerContainer = $(document.createElement(&#x27;img&#x27;))
+                                .attr({
+                                    src: currSource
+                                })
+                                .addClass(&#x27;layerContainer&#x27;)
+                                .appendTo(root);
+
+            // add manipulation handlers
+            LADS.Util.makeManipulatable(layerContainer[0], {
+                onManipulate: function (res) {
+                    var l = layerContainer.offset().left, // TODO might need to update this for web app
+                        t = layerContainer.offset().top,
+                        tx = res.translation.x,
+                        ty = res.translation.y;
+
+                    layerContainer.css({
+                        left: (l + tx) + &#x27;px&#x27;,
+                        top: (t + ty) + &#x27;px&#x27;
+                    });
+
+                    annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
+                },
+                onScroll: function (res, pivot) {
+                    var l = layerContainer.offset().left, // TODO might need to update this for web app
+                        t = layerContainer.offset().top,
+                        w = layerContainer.width(),
+                        h = layerContainer.height(),
+                        newW = w * res,
+                        newH = h * res;
+
+                    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]); // remove and re-add to ensure correct positioning if we move artwork
+                    root.append(layerContainer);
+
+                    layerContainer.css({
+                        left: (l + (1 - res) * (pivot.x)) + &#x27;px&#x27;,
+                        top: (t + (1 - res) * (pivot.y)) + &#x27;px&#x27;,
+                        width: newW + &#x27;px&#x27;,
+                        height: newH + &#x27;px&#x27;,
+                        position: &#x27;absolute&#x27;
+                    });
+
+                    annotatedImage.viewer.drawer.addOverlay(layerContainer[0], getLayerRect());
+                }
+            }, false, true);
+
+            //layerContainer.on(&#x27;mousedown&#x27;, function () {
+            //    var l = layerContainer.offset().left, // TODO might need to update this for web app
+            //        t = layerContainer.offset().top,
+            //        w = layerContainer.width(),
+            //        h = layerContainer.height();
+
+            //    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]); // remove to ensure correct positioning if artwork is in midst of a move
+            //    root.append(layerContainer);
+            //    layerContainer.css({
+            //        left: l + &#x27;px&#x27;,
+            //        top: t + &#x27;px&#x27;,
+            //        width: w + &#x27;px&#x27;,
+            //        height: h + &#x27;px&#x27;,
+            //        position: &#x27;absolute&#x27;
+            //    });
+            //});
+
+            layerContainer.on(&#x27;mouseup&#x27;, function () {
+                annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
+            });
+
+            layerContainer.hover(function () {
+                annotatedImage.freezeArtwork();
+            }, function () {
+                annotatedImage.unfreezeArtwork();
+            });
+        }
+
+        /**
+         * Makes layerContainer visible at the specified location
+         * @method toggleToLayer
+         * @param {Seadragon.Rect} rect      the rect on the artwork on which we&#x27;ll add the layer container (see Seadragon.Drawer docs)
+         */
+        function toggleToLayer(rect) {
+            var i,
+                oldLayerContainers = $(&#x27;.layerContainer&#x27;);
+
+            isHotspot &amp;&amp; toggleFromHotspot();
+
+            makeLayerContainer();
+
+            toggleLayerButton.text(&#x27;Remove Crossfade&#x27;);
+            toggleHotspotButton.attr(&#x27;disabled&#x27;, &#x27;disabled&#x27;);
+            toggleHotspotButton.css(&#x27;opacity&#x27;, &#x27;0.5&#x27;);
+
+            if (oldLayerContainers.length &gt; 0) {   // clicking on a thumbnail button really quickly would add a bunch of layerContainers...but
+                for (i = 0; i &lt; oldLayerContainers.length; i++) { // a cleaner way to avoid that would be to just disable the thumbnail button when its media is already open
+                    annotatedImage.viewer.drawer.removeOverlay(oldLayerContainers[i]);
+                    $(oldLayerContainers[i]).remove();
+                }
+            }
+
+            layerContainer.css({
+                &#x27;border&#x27;: &#x27;2px solid red&#x27;,
+                &#x27;display&#x27;: &#x27;block&#x27;,
+                &#x27;opacity&#x27;: &#x27;0.5&#x27;,
+                &#x27;position&#x27;: &#x27;absolute&#x27;
+            }).appendTo(root);
+
+            if (!rect) {
+                layerContainer.css({
+                    &#x27;left&#x27;: &#x27;30%&#x27;,
+                    &#x27;top&#x27;: &#x27;20%&#x27;,
+                    &#x27;width&#x27;: &#x27;40%&#x27;,
+                    &#x27;height&#x27;: &#x27;auto&#x27;
+                });
+                rect = getLayerRect();
+            }
+
+            annotatedImage.viewer.drawer.addOverlay(layerContainer[0], rect);
+
+            isLayer = true;
+        }
+
+        /**
+         * Removes layer image from canvas and updates some button text/attributes
+         * @method toggleFromLayer
+         */
+        function toggleFromLayer() {
+            toggleLayerButton.text(&#x27;Create Crossfade&#x27;);
+            toggleHotspotButton.removeAttr(&#x27;disabled&#x27;);
+            toggleHotspotButton.css(&#x27;opacity&#x27;, &#x27;1.0&#x27;);
+
+            if (layerContainer) {
+                annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
+                layerContainer.remove();
+                layerContainer.css(&#x27;display&#x27;, &#x27;none&#x27;);
+            }
+            isLayer = false;
+        }
+
+        /** TODO GET RID OF THIS IN WEB APP (just use current assoc media object)
+         * Set a metadata value for the active media content.
+         * @param key
+         * @param val
+         */
+        function setActiveMediaMetadata(key, val) {
+            var $media = $(&#x27;.rightbar&#x27;).find(&#x27;.assocmedia&#x27;).children();
+            ($media.length) ? $media.data(key, val) : textMetadata[key] = val;
+        }
+
+        /** TODO GET RID OF THIS IN WEB APP (just use current assoc media object)
+         * Get metadata values for the active media content.
+         * @param key (optional)   the key to retrieve. If key is not given, retrieve 
+         *     the entire values object. 
+         */
+        function getActiveMediaMetadata(key) {
+            var $media = $(&#x27;.rightbar&#x27;).find(&#x27;.assocmedia&#x27;).children();
+            if (!key) {
+                return false;
+            }
+            else {
+                return $media.data(key) || textMetadata[key];
+            }
+        }
+
+        // Fix volume far for video/audio
+        function fixVolumeBar(holder) {
+            var media = holder[0];
+            var lastVolume = media.volume;
+            var muted = false;
+            media.addEventListener(&#x27;volumechange&#x27;, function () {
+                if (media.muted) {
+                    media.volume = 0;
+                    muted = true;
+                }
+                else {
+                    if (muted) {
+                        media.volume = lastVolume;
+                        muted = false;
+                    }
+                    lastVolume = media.volume;
+                }
+            }, false);
+        }
+
+        /** 
+         * Create a view in the editing pane for the specified media
+         * @method createMediaWrapper
+         * @param {Object} media    the assoc media object we want to &quot;wrap&quot;
+         * @return {jQuery obj}     a jQuery element wrapping a view into the content
+         */
+        function createMediaWrapper(media) {
+            var video,
+                audio,
+                iframe,
+                src = media.doq.Metadata.Source,
+                type = media.doq.Metadata.ContentType,
+                thumbnail = (media.doq.Metadata.Thumbnail &amp;&amp; !media.doq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(media.doq.Metadata.Thumbnail) : &#x27;&#x27;,
+                src_webm,
+                src_ogg,
+                src_mp4,
+                src_mp3,
+                errText,
+                msgdiv,
+                fixedSrc = TAG.Worktop.Database.fixPath(src);
+
+            if (type === &#x27;Image&#x27;) {
+                return $(document.createElement(&#x27;div&#x27;))
+                    .css({
+                        &#x27;width&#x27;: &#x27;100%&#x27;,
+                        &#x27;height&#x27;: &#x27;100%&#x27;,
+                        &#x27;background-image&#x27;: &#x27;url(&#x27; + fixedSrc + &#x27;)&#x27;,
+                        &#x27;background-repeat&#x27;: &#x27;no-repeat&#x27;,
+                        &#x27;background-position&#x27;: &#x27;center center&#x27;,
+                        &#x27;background-size&#x27;: &#x27;contain&#x27;,
+                        &#x27;border&#x27;: &#x27;0&#x27;
+                    });
+            } else if (type === &#x27;Video&#x27;) {
+                video = $(document.createElement(&#x27;video&#x27;));
+                fixVolumeBar(video);
+                video[0].onerror = function (err) { // TODO put this error handler in the Util file -- could be useful elsewhere
+                    var msg = &quot;&quot;;
+                    switch (err.target.error.code) {
+                        case err.target.error.MEDIA_ERR_ABORTED:
+                            msg = &quot;Video playback aborted. Please see FAQs on the TAG website.&quot;;
+                            break;
+                        case err.target.error.MEDIA_ERR_NETWORK:
+                            msg = &quot;Network error during video upload. Please see FAQs on the TAG website.&quot;;
+                            break;
+                        case err.target.error.MEDIA_ERR_DECODE:
+                            msg = &quot;Error decoding video. Please see FAQs on the TAG website.&quot;;
+                            break;
+                        case err.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                            msg = &quot;Either the video format is not supported or a network or server error occurred. Please see FAQs on the TAG website.&quot;;
+                            break;
+                        default:
+                            msg = &quot;Error: please see FAQs on the TAG website.&quot;;
+                            break;
+                    }
+
+                    msgdiv = $(document.createElement(&#x27;div&#x27;));
+                    msgdiv.css({
+                        &#x27;width&#x27;: &#x27;80%&#x27;,
+                        &#x27;margin-left&#x27;: &#x27;10%&#x27;,
+                        &#x27;margin-top&#x27;: &#x27;50%&#x27;,
+                        &#x27;color&#x27;: &#x27;white&#x27;,
+                        &#x27;text-align&#x27;: &#x27;center&#x27;
+                    });
+                    msgdiv.text(msg);
+
+                    video.hide();
+                    video.parent().append(msgdiv);
+                    video[0].onerror = function (err) { }; // neglect any further errors
+                };
+                video.attr({
+                    &#x27;preload&#x27;: &#x27;none&#x27;,
+                    &#x27;poster&#x27;: thumbnail,
+                    &#x27;controls&#x27;: &#x27;controls&#x27;
+                });
+
+                src_mp4 = document.createElement(&#x27;source&#x27;);
+                src_mp4.src = fixedSrc;
+                src_mp4.type = &quot;video/mp4&quot;;
+
+                src_webm = document.createElement(&#x27;source&#x27;);
+                src_webm.src = fixedSrc;
+                src_webm.type = &quot;video/webm&quot;;
+
+                src_ogg = document.createElement(&#x27;source&#x27;);
+                src_ogg.src = fixedSrc;
+                src_ogg.type = &quot;video/ogg&quot;;
+
+                video.append(src_mp4);
+                video.append(src_webm);
+                video.append(src_ogg);
+                video[0].innerHTML += &quot;Your browser does not support this video.&quot;; // fallback text
+
+                video.css({ // TODO could be done in STYL even though video probably shouldn&#x27;t be created in JADE
+                    color: &quot;white&quot;,
+                    position: &#x27;relative&#x27;,
+                    width: &#x27;100%&#x27;,
+                    height: &#x27;100%&#x27;
+                });
+                return video;
+            } else if (type === &#x27;Audio&#x27;) {
+                audio = $(document.createElement(&#x27;audio&#x27;));
+                fixVolumeBar(audio);
+                audio.attr({
+                    &#x27;preload&#x27;: &#x27;none&#x27;,
+                    &#x27;controls&#x27;: &#x27;controls&#x27;
+                });
+
+                src_mp3 = document.createElement(&#x27;source&#x27;);
+                src_mp3.src = fixedSrc;
+                src_mp3.type = &quot;audio/mp3&quot;;
+
+                src_ogg = document.createElement(&#x27;source&#x27;);
+                src_ogg.src = fixedSrc;
+                src_ogg.type = &quot;audio/ogg&quot;;
+
+                audio.append(src_mp3);
+                audio.append(src_ogg);
+
+                audio.css({ // TODO see video comment above
+                    position: &#x27;absolute&#x27;,
+                    width: &#x27;100%&#x27;,
+                    bottom: &#x27;0%&#x27;
+                });
+                return audio;
+            } else if (type === &#x27;iframe&#x27;) {
+                iframe = $(document.createElement(&#x27;iframe&#x27;));
+                iframe.attr({
+                    src: src,
+                    frameborder: &#x27;0&#x27;
+                });
+                iframe.css({
+                    width: &#x27;100%&#x27;,
+                    height: &#x27;100%&#x27;
+                });
+                return iframe;
+            }
+        }
+
+        /**
+         * Wrapper around TAG.Worktop.Database.changeHotspot to update assoc media after
+         * editing in the right pane.
+         * @method updateAssocMedia
+         * @param {Object} info        assoc media info to update
+         */
+        function updateAssocMedia(info) { // TODO use new AnnotatedImage; also, could eliminate need for param here by using &#x27;global&#x27; current assoc media object (same with showEditMedia above, actually)
+            var title = info.title,
+                desc = info.desc,
+                contentType = info.contentType,
+                contentUrl = info.contentUrl,
+                duration = info.duration,
+                assetType = info.assetType,
+                worktopInfo = info.metadata || {},
+                //dzPos = info.pos ? annotatedImage.viewer.viewport.pointFromPixel(info.pos) : { x: 0, y: 0 },
+                coords,
+                rightbarLoadingSave,
+                options;
+
+            if (info.pos) {
+                coords = annotatedImage.viewer.viewport.pointFromPixel(info.pos);
+                coords.width = 0;
+                coords.height = 0;
+            } else if (info.rect) {
+                coords = info.rect
+            } else {
+                coords = {
+                    x: 0,
+                    y: 0,
+                    width: 0,
+                    height: 0
+                };
+            }
+
+            rightbarLoadingSave = $(document.createElement(&#x27;div&#x27;));
+            rightbarLoadingSave.css({
+                &#x27;width&#x27;: &#x27;20%&#x27;,
+                &#x27;height&#x27;: &#x27;100%&#x27;,
+                &#x27;position&#x27;: &#x27;absolute&#x27;,
+                &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.85)&#x27;,
+                &#x27;top&#x27;: $(&#x27;.topbar&#x27;).css(&#x27;height&#x27;),
+                &#x27;right&#x27;: &#x27;0%&#x27;,
+                &#x27;z-index&#x27;: 100
+            });
+            mainPanel.append(rightbarLoadingSave);
+
+            TAG.Util.showLoading(rightbarLoadingSave, &#x27;20%&#x27;);
+            rightbarLoadingSave.attr(&#x27;class&#x27;, &#x27;rightbarLoadingSave&#x27;);
+
+            options = {
+                Name: title,
+                ContentType: contentType,
+                Duration: duration,
+                Source: contentUrl,
+                LinqTo: artwork.Identifier,
+                X: coords.x,
+                Y: coords.y,
+                W: coords.width,
+                H: coords.height,
+                LinqType: assetType,
+                Description: desc
+            };
+
+            TAG.Worktop.Database.changeHotspot(worktopInfo.assetDoqID, options, updateSuccess, no_op, conflict, no_op);
+
+            /**
+             * Success callback for call to changeHotspot in updateAssocMedia;
+             * reloads media list and hides editing pane
+             * @method updateSuccess
+             */
+            function updateSuccess() {
+                close();
+                createMediaList();
+                rightbarLoadingSave.fadeOut();
+            }
+
+            function no_op() { // TODO I think TAG.Worktop.Database functions can just accept null callbacks, since they use the safeCall util function. if so, use null
+
+            }
+        }
+
+        /**
+         * Initializes UI for associated media editor.
+         * @method init
+         */
+        function init() {
+            var $rightbar = $(document.createElement(&#x27;div&#x27;)) // move all of these to JADE/STYL
+                    .addClass(&quot;rightbar&quot;)
+                    .css({
+                        &#x27;width&#x27;: &#x27;20%&#x27;,
+                        &#x27;height&#x27;: &#x27;100%&#x27;,
+                        &#x27;position&#x27;: &#x27;absolute&#x27;,
+                        &#x27;background-color&#x27;: &#x27;rgba(0,0,0,0.85)&#x27;,
+                        &#x27;top&#x27;: $(&#x27;.topbar&#x27;).css(&#x27;height&#x27;),
+                        &#x27;right&#x27;: &#x27;-20%&#x27;,
+                        &#x27;float&#x27;: &#x27;right&#x27;,
+                        &#x27;z-index&#x27;: 100,
+                        &#x27;color&#x27;: &#x27;white&#x27;
+                    }),
+                rightbarHeader = $(document.createElement(&#x27;div&#x27;))
+                    .css({
+                        &#x27;margin&#x27;: &#x27;5% 8%&#x27;,
+                        &#x27;color&#x27;: &#x27;white&#x27;,
+                        &#x27;font-size&#x27;: &#x27;150%&#x27;,
+                        &#x27;float&#x27;: &#x27;left&#x27;,
+                        &#x27;position&#x27;: &#x27;relative&#x27;,
+                    })
+                    .addClass(&#x27;header&#x27;)
+                    .text(&#x27;Edit Associated Media&#x27;)
+                    .appendTo($rightbar),
+                $assocMediaContainer = $(document.createElement(&#x27;div&#x27;))
+                    .css({
+                        &#x27;position&#x27;: &#x27;relative&#x27;,
+                        &#x27;margin&#x27;: &#x27;15% 8%&#x27;,
+                        &#x27;margin-top&#x27;: &#x27;20%&#x27;,
+                        &#x27;border&#x27;: &#x27;2px solid white&#x27;,
+                        &#x27;width&#x27;: &#x27;86%&#x27;,
+                        &#x27;height&#x27;: &#x27;30%&#x27;
+                    })
+                    .addClass(&#x27;assocMediaContainer&#x27;)
+                    .appendTo($rightbar),
+                $assocMediaContent = $(document.createElement(&#x27;div&#x27;))
+                    .addClass(&#x27;assocmedia&#x27;)
+                    .addClass(&#x27;contentwrapper&#x27;)
+                    .css({
+                        &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.9)&#x27;,
+                        &#x27;height&#x27;: &#x27;100%&#x27;,
+                        &#x27;width&#x27;: &#x27;100%&#x27;,
+                        &#x27;left&#x27;: &#x27;0&#x27;,
+                        &#x27;position&#x27;: &#x27;absolute&#x27;
+                    })
+                    .appendTo($assocMediaContainer),
+                $toggleModeContainer = $(document.createElement(&#x27;div&#x27;))
+                    .addClass(&#x27;toggleModeContainer&#x27;)
+                    .css({
+                        &#x27;width&#x27;: &#x27;60%&#x27;,
+                        &#x27;left&#x27;: &#x27;20%&#x27;,
+                        &#x27;position&#x27;: &#x27;relative&#x27;,
+                    })
+                    .appendTo($rightbar),
+                $toggleHotspot = $(document.createElement(&#x27;button&#x27;))
+                    .addClass(&#x27;toggleHotspot&#x27;)
+                    .css({ // css for this and toggleLayer should be defined as a class rule
+                        &#x27;width&#x27;: &#x27;100%&#x27;,
+                        &#x27;height&#x27;: &#x27;auto&#x27;,
+                        &#x27;border&#x27;: &#x27;2px solid white&#x27;,
+                        &#x27;position&#x27;: &#x27;relative&#x27;
+                    })
+                    .attr(&#x27;type&#x27;, &#x27;button&#x27;)
+                    .appendTo($toggleModeContainer),
+                $toggleLayer = $(document.createElement(&#x27;button&#x27;))
+                    .addClass(&#x27;toggleLayer&#x27;)
+                    .css({
+                        &#x27;width&#x27;: &#x27;100%&#x27;,
+                        &#x27;height&#x27;: &#x27;auto&#x27;,
+                        &#x27;margin-top&#x27;: &#x27;10px&#x27;,
+                        &#x27;border&#x27;: &#x27;2px solid white&#x27;,
+                        &#x27;position&#x27;: &#x27;relative&#x27;
+                    })
+                    .attr(&#x27;type&#x27;, &#x27;button&#x27;)
+                    .appendTo($toggleModeContainer),
+                $titleContainer = $(document.createElement(&#x27;div&#x27;))
+                    .addClass(&#x27;textareaContainer&#x27;)
+                    .css({
+                        &#x27;width&#x27;: &#x27;100%&#x27;,
+                        &#x27;padding&#x27;: &#x27;5% 8%&#x27;,
+                        &#x27;margin-top&#x27;: &#x27;5%&#x27;,
+                    })
+                    .appendTo($rightbar),
+                $titleText = $(document.createElement(&#x27;input&#x27;))
+                    .addClass(&#x27;title&#x27;)
+                    .attr(&#x27;placeholder&#x27;, &#x27; Title&#x27;)
+                    .attr(&#x27;title&#x27;, &#x27;Title&#x27;)
+                    .css({
+                        &#x27;width&#x27;: &#x27;64%&#x27;,
+                        &#x27;font-size&#x27;: &#x27;11pt&#x27;
+                    })
+                    .appendTo($titleContainer),
+                $descContainer = $(document.createElement(&#x27;div&#x27;))
+                    .addClass(&#x27;textareaContainer&#x27;)
+                    .css({
+                        &#x27;width&#x27;: &#x27;87%&#x27;,
+                        &#x27;height&#x27;: &#x27;12%&#x27;,
+                        &#x27;position&#x27;: &#x27;relative&#x27;,
+                        &#x27;padding&#x27;: &#x27;5% 8%&#x27;
+                    })
+                    .appendTo($rightbar),
+                $descArea = $(document.createElement(&#x27;textarea&#x27;))
+                    .addClass(&#x27;description&#x27;)
+                    .attr(&#x27;placeholder&#x27;, &#x27; Description&#x27;)
+                    .css({
+                        &#x27;background-color&#x27;: &#x27;white&#x27;,
+                        &#x27;width&#x27;: &#x27;92.5%&#x27;,
+                        &#x27;min-width&#x27;: &#x27;92.5%&#x27;,
+                        &#x27;height&#x27;: &#x27;90%&#x27;
+                    })
+                    .appendTo($descContainer),
+                $assocMediaButtonContainer = $(document.createElement(&#x27;div&#x27;))
+                    .addClass(&#x27;buttoncontainer&#x27;)
+                    .css({
+                        &#x27;width&#x27;: &#x27;87%&#x27;,
+                        &#x27;padding&#x27;: &#x27;5% 8%&#x27;,
+                        &#x27;position&#x27;: &#x27;relative&#x27;
+                    })
+                    .appendTo($rightbar),
+                $deleteAssocMediaButton = $(document.createElement(&#x27;button&#x27;))
+                    .addClass(&#x27;asscmediabutton deletebutton&#x27;)
+                    .text(&#x27;Delete&#x27;)
+                    .css({
+                        &#x27;float&#x27;: &#x27;left&#x27;,
+                        &#x27;border&#x27;: &#x27;2px solid white&#x27;,
+                        &#x27;width&#x27;: &#x27;45%&#x27;
+                    })
+                    .attr(&#x27;type&#x27;, &#x27;button&#x27;)
+                    .appendTo($assocMediaButtonContainer),
+                $saveAssocMediaButton = $(document.createElement(&#x27;button&#x27;))
+                    .addClass(&#x27;asscmediabutton addbutton&#x27;)
+                    .text(&#x27;Save&#x27;)
+                    .attr(&#x27;type&#x27;, &#x27;button&#x27;)
+                    .css({
+                        &#x27;float&#x27;: &#x27;right&#x27;,
+                        &#x27;border&#x27;: &#x27;2px solid white&#x27;,
+                        &#x27;width&#x27;: &#x27;45%&#x27;
+                    })
+                    .appendTo($assocMediaButtonContainer),
+                closeButton = $(document.createElement(&#x27;img&#x27;))
+                    .attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/x.svg&#x27;)
+                    .css({
+                        &#x27;position&#x27;: &#x27;absolute&#x27;,
+                        &#x27;top&#x27;: ($(window).height() - ($(window).height() * topbarHeight / 100)) * 0.95 - 15 + &#x27;px&#x27;,
+                        &#x27;left&#x27;: &#x27;8%&#x27;,
+                        &#x27;width&#x27;: &#x27;11%&#x27;,
+                        &#x27;height&#x27;: &#x27;auto&#x27;,
+                    })
+                    .appendTo($rightbar);
+
+            makeHotspotAnchor();
+            // makeLayerContainer(); -- called in toggleToLayer now
+
+            $toggleHotspot.on(&#x27;click&#x27;, function () {
+                isHotspot ? toggleFromHotspot() : toggleToHotspot();
+            });
+
+            $toggleLayer.on(&#x27;click&#x27;, function () {
+                isLayer ? toggleFromLayer() : toggleToLayer();
+            });
+
+            toggleHotspotButton = $toggleHotspot; // get rid of these intermediate variables...
+            toggleLayerButton = $toggleLayer;
+
+            $deleteAssocMediaButton.on(&#x27;click&#x27;, function () {
+                var assetDoqID = getActiveMediaMetadata(&#x27;assetDoqID&#x27;); // TODO see comment below about AnnotatedImage
+
+                if (getActiveMediaMetadata(&#x27;contentType&#x27;) === &#x27;Video&#x27;) { // TODO when this file is better integrated with the new AnnotatedImage, should store the current active media in a &#x27;global&#x27; variable and just access its contentType rather than going through a helper function
+                    $(&#x27;.rightbar&#x27;).find(&#x27;video&#x27;)[0].pause();
+                } else if (getActiveMediaMetadata(&#x27;contentType&#x27;) === &#x27;Audio&#x27;) {
+                    $(&#x27;.rightbar&#x27;).find(&#x27;audio&#x27;)[0].pause();
+                }
+
+                rightbarLoadingDelete.css({ // TODO STYL
+                    &#x27;width&#x27;: &#x27;20%&#x27;,
+                    &#x27;height&#x27;: &#x27;100%&#x27;,
+                    &#x27;position&#x27;: &#x27;absolute&#x27;,
+                    &#x27;background-color&#x27;: &#x27;rgba(0,0,0,.85)&#x27;,
+                    &#x27;top&#x27;: $(&#x27;.topbar&#x27;).css(&#x27;height&#x27;),
+                    &#x27;right&#x27;: &#x27;0%&#x27;,
+                    &#x27;z-index&#x27;: 100
+                });
+                mainPanel.append(rightbarLoadingDelete);
+                TAG.Util.showLoading(rightbarLoadingDelete, &#x27;20%&#x27;);
+
+                // remove the associated media&#x27;s linq to this artwork
+                if (assetDoqID) {
+                    TAG.Worktop.Database.changeArtwork(artwork.Identifier, { RemoveIDs: assetDoqID }, function () {
+                        close();
+                        createMediaList();
+                        rightbarLoadingDelete.fadeOut();
+                    }, function () {
+                        console.log(&quot;error 1&quot;);
+                    }, function () {
+                        console.log(&quot;error 2&quot;);
+                    }, function () {
+                        console.log(&quot;error 3&quot;);
+                    });
+                } else {
+                    close();
+                    createMediaList();
+                    rightbarLoadingDelete.fadeOut();
+                }
+            });
+
+            $saveAssocMediaButton.on(&#x27;click&#x27;, function () {
+                var titleTextVal,
+                    assetType;
+
+                $(&#x27;.assetHolder&#x27;).css(&#x27;background-color&#x27;, &#x27;&#x27;);
+
+                if (getActiveMediaMetadata(&#x27;ContentType&#x27;) === &#x27;Video&#x27;) { // TODO see comments in the delete button&#x27;s click handler
+                    $(&#x27;.rightbar&#x27;).find(&#x27;video&#x27;)[0].pause();
+                } else if (getActiveMediaMetadata(&#x27;ContentType&#x27;) === &#x27;Audio&#x27;) { // TODO see comments in the delete button&#x27;s click handler
+                    $(&#x27;.rightbar&#x27;).find(&#x27;audio&#x27;)[0].pause();
+                }
+
+                titleTextVal = $titleText.val() || &#x27;Untitled&#x27;;
+
+                assetType = isHotspot ? &#x27;Hotspot&#x27; : (isLayer ? &#x27;Layer&#x27; : &#x27;Asset&#x27;);
+
+                updateAssocMedia({
+                    title: TAG.Util.encodeXML(titleTextVal),
+                    desc: TAG.Util.encodeXML($descArea.val()),
+                    pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don&#x27;t have to figure out what this means
+                    rect: isLayer ? getLayerRect() : null,
+                    contentType: activeAssocMedia.doq.Metadata.ContentType,
+                    contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
+                    assetType: assetType,
+                    metadata: {
+                        assetDoqID: activeAssocMedia.doq.Identifier
+                    }
+                });
+            });
+
+            closeButton.on(&#x27;click&#x27;, function () {
+                if (getActiveMediaMetadata(&#x27;contentType&#x27;) === &#x27;Video&#x27;) { // TODO see comments above
+                    $(&#x27;.rightbar&#x27;).find(&#x27;video&#x27;)[0].pause();
+                } else if (getActiveMediaMetadata(&#x27;contentType&#x27;) === &#x27;Audio&#x27;) {
+                    $(&#x27;.rightbar&#x27;).find(&#x27;audio&#x27;)[0].pause();
+                }
+                close();
+            });
+
+            mainPanel.append($rightbar);
+        }
+
+        /**
+         * Opens the media editor with the specified media.
+         * @method open
+         * @param {Object} asset         the media to edit
+         * @param {jQuery obj} content   a dom element suitable for displaying the content (could be the result
+         *                                of a call to createMediaWrapper)
+         * @param {Function} callback    a callback function to call after the editing pane has opened
+         */
+        function open(asset, content, callback) {
+            var editingMediamsg;
+
+            if (editingMedia) {
+                editingMediamsg = $(TAG.Util.UI.popUpMessage(null, &quot;You are currently making changes. Please save or cancel before opening another media for editing.&quot;, &quot;OK&quot;, false));
+                root.append(editingMediamsg);
+                editingMediamsg.show();
+                return;
+            }
+            editingMedia = false;
+
+            TAG.Worktop.Database.getLinq(artwork.Identifier, asset.doq.Identifier, linqCallback, function () { }, function () { });
+
+            /**
+             * Helper function for showEditMedia, called when the linq between the
+             * media and the artwork has been obtained
+             * @method linqCallback
+             * @param {linq} linq           a linq object (see github wiki for structure)
+             */
+            function linqCallback(linq) {
+                var x = parseFloat(linq.Offset._x),
+                    y = parseFloat(linq.Offset._y),
+                    w = parseFloat(linq.Dimensions ? linq.Dimensions._x : 0), // some backwards compatibility checking
+                    h = parseFloat(linq.Dimensions ? linq.Dimensions._y : 0),
+                    title = TAG.Util.htmlEntityDecode(asset.doq.Name),
+                    description = asset.doq.Metadata.Description ? TAG.Util.htmlEntityDecode(asset.doq.Metadata.Description).replace(/&lt;br&gt;/g, &#x27;\n&#x27;) : &#x27;&#x27;,
+                    point,
+                    enableLayering = asset.doq.Metadata.ContentType === &#x27;Image&#x27; &amp;&amp; linq.Dimensions,
+                    rect,
+                    oldtitle,
+                    key,
+                    oldDescription,
+                    rightbar = $(&#x27;.rightbar&#x27;); // TODO get this from JADE, store as a &#x27;global&#x27; variable at top of file
+
+                isHotspot = linq.Metadata.Type === &quot;Hotspot&quot;;
+                isLayer = linq.Metadata.Type === &quot;Layer&quot;;
+
+                if (enableLayering) {
+                    currSource = LADS.Worktop.Database.fixPath(asset.doq.Metadata.Source);
+                }
+
+                $(&#x27;.assocMediaContainer&#x27;).show();
+
+                if (isHotspot) {
+                    point = new Seadragon.Point(x, y);
+                } else if (isLayer) {
+                    rect = new Seadragon.Rect(x, y, w, h);
+                }
+
+                toggleHotspotButton.text(isHotspot ? &#x27;Remove Hotspot&#x27; : &#x27;Create Hotspot&#x27;);
+                toggleLayerButton.text(isLayer ? &#x27;Remove Crossfade&#x27; : &#x27;Create Crossfade&#x27;);
+
+                isHotspot ? toggleToHotspot(point) : toggleFromHotspot();
+                isLayer ? toggleToLayer(rect) : toggleFromLayer();
+
+                // don&#x27;t show the toggle layer button if we&#x27;re dealing with audio/video or an older server
+                toggleLayerButton.css({
+                    &#x27;display&#x27;: enableLayering ? &#x27;inline-block&#x27; : &#x27;none&#x27;
+                });
+
+                rightbar.find(&#x27;.assocmedia&#x27;).html(content);
+                rightbar.find(&#x27;.title&#x27;).val(title);
+                rightbar.find(&#x27;.description&#x27;).val(description);
+
+                rightbar.find(&#x27;.title&#x27;).on(&#x27;keyup&#x27;, function () {
+                    editingMedia = true;
+                });
+
+                rightbar.find(&#x27;.description&#x27;).on(&#x27;keyup&#x27;, function () {
+                    editingMedia = true;
+                });
+
+                if (!isOpen) {
+                    rightbar.animate({ &#x27;right&#x27;: 0 }, 600);
+                }
+
+                for (key in asset.doq.Metadata) { // TODO just use &#x27;global&#x27; current assoc media object rather than doing this set/getActiveMediaMetadata business
+                    if (asset.doq.Metadata.hasOwnProperty(key)) {
+                        setActiveMediaMetadata(key, asset.doq.Metadata[key]);
+                    }
+                }
+                setActiveMediaMetadata(&#x27;assetDoqID&#x27;, asset.doq.Identifier);
+
+                isOpen = true;
+                activeAssocMedia = asset;
+
+                callback &amp;&amp; callback();
+            }
+        }
+
+        /**
+         * Closes the media editor.
+         * @method close
+         */
+        function close() {
+            var rightbar;
+            if (isOpen) {
+                rightbar = $(&#x27;.rightbar&#x27;);
+                hotspotAnchor.fadeOut(100);
+                if (layerContainer) {
+                    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
+                    layerContainer.remove();
+                }
+                annotatedImage.unfreezeArtwork();
+                rightbar.animate({ &#x27;right&#x27;: &#x27;-20%&#x27; }, 600);
+                $(&#x27;.assetHolder&#x27;).css(&#x27;background-color&#x27;, &#x27;&#x27;);
+                editingMedia = false;
+                isOpen = false;
+            }
+        }
+
+        /**
+         * Returns whether the editing panel is open
+         * @method returnIsOpen
+         * @return {Boolean}      true if open
+         */
+        function returnIsOpen() {
+            return isOpen;
+        }
+
+        return {
+            init: init,
+            open: open,
+            close: close,
+            createMediaWrapper: createMediaWrapper,
+            isOpen: returnIsOpen
+        };
+    }
+
+    /**
+     * Artwork metadata editor. Contains methods for initializing the metadata form, saving metadata, adding additional
+     * metadata fields, etc...
+     * @method MetadataEditor
+     * @return {Object}      an object with &quot;public&quot; associated media editing methods
+     */
+    function MetadataEditor() {
+        var isOpen,
+            addInfoButton,
+            saveMetadataButton,
+            textFieldContainer,
+            metadataForm;
+
+        /**
+         * Create a metadata editing field.
+         * @method createMetadataTextArea
+         * @param {Object} options
+         */
+        function createMetadataTextArea(options) {
+            var field = options.field,
+                entry = options.entry,
+                animate = options.animate,
+                isTextarea = options.isTextarea,
+                isAdditionalField = options.isAdditionalField,
+                textareaContainer = $(document.createElement(&#x27;div&#x27;)).addClass(&#x27;textareaContainer&#x27;),
+                fieldTitle = $(document.createElement(isAdditionalField ? &#x27;input&#x27; : &#x27;div&#x27;)).addClass(&#x27;fieldTitle&#x27;),
+                textarea = $(document.createElement(isTextarea ? &#x27;textarea&#x27; : &#x27;input&#x27;)),
+                deleteFieldIcon = $(document.createElement(&#x27;div&#x27;));
+
+            textareaContainer.css({ // TODO STYL
+                &#x27;margin-bottom&#x27;: &#x27;7%&#x27;,
+                &#x27;width&#x27;: &#x27;100%&#x27;,
+                &#x27;text-align&#x27;: &#x27;left&#x27;
+            });
+
+            isAdditionalField &amp;&amp; fieldTitle.addClass(&#x27;additionalField&#x27;);
+            isAdditionalField ? fieldTitle.attr(&#x27;value&#x27;, field) : fieldTitle.text(field);
+
+            fieldTitle.css({ // TODO STYL
+                &#x27;display&#x27;: &#x27;inline-block&#x27;,
+                &#x27;color&#x27;: isAdditionalField ? &#x27;black&#x27; : &#x27;white&#x27;,
+                &#x27;margin-right&#x27;: &#x27;14px&#x27;,
+                &#x27;width&#x27;: &#x27;15%&#x27;,
+                &#x27;text-align&#x27;: &#x27;right&#x27;,
+                &#x27;vertical-align&#x27;: isAdditionalField ? &#x27;&#x27; : &#x27;top&#x27;,
+                &#x27;padding-top&#x27;: isAdditionalField ? &#x27;0px&#x27; : &#x27;5px&#x27;,
+                &#x27;overflow&#x27;: &#x27;auto&#x27;,
+                &#x27;border&#x27;: &quot;0px solid black&quot;,
+            });
+
+            if (isTextarea) {
+                textarea.attr(&#x27;rows&#x27;, 3);
+                textarea.css({ // TODO add a class, use textarea.classname vs input.classname in STYL
+                    &#x27;overflow&#x27;: &#x27;auto&#x27;,
+                    &#x27;padding&#x27;: &#x27;0px&#x27;,
+                    &#x27;background&#x27;: &#x27;white&#x27;,
+                    &#x27;border&#x27;: &quot;0px solid black&quot;,
+                });
+            }
+            textarea.css({ // TODO STYL
+                &#x27;width&#x27;: &#x27;70%&#x27;,
+                &#x27;font-size&#x27;: &#x27;11pt&#x27;,
+                &#x27;display&#x27;: &#x27;inline-block&#x27;,
+                &#x27;border&#x27;: &quot;0px solid black&quot;,
+            });
+            textarea.attr(&#x27;placeholder&#x27;, field);
+
+            if (isAdditionalField) {
+                fieldTitle.attr(&#x27;entry&#x27;, entry);
+                textarea.on(&#x27;keyup&#x27;, function () {
+                    fieldTitle.attr(&#x27;entry&#x27;, textarea.attr(&#x27;value&#x27;));
+                });
+            }
+            artworkMetadata[field] = textarea;
+            textarea.val(entry);
+            textarea.attr(&#x27;title&#x27;, field);
+
+            deleteFieldIcon.css({ &#x27;margin-left&#x27;: &#x27;15px&#x27;, display: &#x27;inline-block&#x27;, width: &#x27;30px&#x27; });
+            if (field !== &#x27;Title&#x27; &amp;&amp; field !== &#x27;Keywords&#x27; &amp;&amp; field !== &#x27;Artist&#x27; &amp;&amp; field !== &#x27;Year&#x27; &amp;&amp; field !== &#x27;Description&#x27;) {
+                deleteFieldIcon = $(document.createElement(&#x27;img&#x27;));
+                deleteFieldIcon.attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/minus.svg&#x27;);
+                deleteFieldIcon.css({
+                    &#x27;float&#x27;: &#x27;right&#x27;,
+                    &#x27;margin-right&#x27;: &#x27;2%&#x27;,
+                    &#x27;width&#x27;: &#x27;30px&#x27;,
+                    &#x27;height&#x27;: &#x27;30px&#x27;,
+                    &#x27;display&#x27;: &#x27;inline-block&#x27;
+                });
+                deleteFieldIcon.bind(&quot;click&quot;, { Param1: field, }, function (event) {
+                    textareaContainer.remove();
+                    if (!shouldDisableAddButton()) {
+                        addInfoButton.removeAttr(&#x27;disabled&#x27;);
+                    }
+                });
+            }
+            animate &amp;&amp; textareaContainer.css(&#x27;display&#x27;, &#x27;none&#x27;);
+
+            textareaContainer.append(fieldTitle);
+            textareaContainer.append(textarea);
+            textareaContainer.append(deleteFieldIcon);
+            textFieldContainer.append(textareaContainer);
+            if (animate) {
+                textareaContainer.slideDown(function () {
+                    $(&quot;#metadataForm&quot;).animate({ scrollTop: $(&quot;#metadataForm&quot;)[0].scrollHeight }, 1000);
+                });
+            }
+            return textarea;
+        }
+
+        /**
+         * Creates additional metadata fields
+         */
+        function createCustomFields() {
+            var infoFields = artwork.Metadata.InfoFields;
+            infoFields = infoFields || {};
+            $.each(infoFields, function (key, val) {
+                createMetadataTextArea({ field: key, entry: val, animate: true, isAdditionalField: true });
+            });
+        }
+
+        /**
+         * Returns true if we should disable the &quot;Add Information Field&quot; button. We should if there are more than
+         * two additional fields already.
+         * @method shouldDisableAddButton
+         * @return {Boolean}         whether or not we should disable the button
+         */
+        function shouldDisableAddButton() {
+            return $(&#x27;.additionalField&#x27;).length &gt;= 2;
+        }
+
+        /**
+         * Initialize the metadata editor UI
+         * @method init
+         */
+        function init() {
+            var formTitle;
+
+            metadataForm = $(document.createElement(&#x27;div&#x27;)) // TODO JADE/STYL
+            .attr(&quot;id&quot;, &quot;metadataForm&quot;)
+            .css({
+                &#x27;background&#x27;: &#x27;rgba(0, 0, 0, 0.85)&#x27;,
+                &#x27;border-radius&#x27;: &#x27;0px 10px 10px 0px&#x27;,
+                &#x27;left&#x27;: &#x27;20%&#x27;,
+                &#x27;width&#x27;: &#x27;38%&#x27;,
+                &#x27;position&#x27;: &#x27;absolute&#x27;,
+                &#x27;display&#x27;: &#x27;none&#x27;,
+                &#x27;color&#x27;: &#x27;white&#x27;,
+                &#x27;padding-top&#x27;: &#x27;1%&#x27;,
+                &#x27;margin-top&#x27;: &#x27;1%&#x27;,
+                &#x27;z-index&#x27;: 100000,
+                &#x27;max-height&#x27;: &#x27;70%&#x27;,
+                &#x27;overflow-y&#x27;: &#x27;scroll&#x27;
+            })
+            .appendTo(mainPanel);
+
+            formTitle = $(document.createElement(&#x27;div&#x27;)); // TODO JADE/STYL
+            formTitle.text(&quot;Metadata Editor&quot;);
+            formTitle.css({
+                &#x27;width&#x27;: &#x27;100%&#x27;,
+                &#x27;text-align&#x27;: &#x27;center&#x27;,
+                &#x27;font-size&#x27;: &#x27;150%&#x27;,
+            });
+            metadataForm.append(formTitle);
+
+            textFieldContainer = $(document.createElement(&#x27;div&#x27;)); // TODO JADE/STYL
+            textFieldContainer.attr(&quot;id&quot;, &quot;textFieldContainer&quot;);
+            textFieldContainer.css({
+                &#x27;position&#x27;: &#x27;relative&#x27;,
+                &#x27;height&#x27;: &#x27;25%&#x27;,
+                &#x27;overflow&#x27;: &#x27;auto&#x27;,
+                &#x27;padding&#x27;: &#x27;0px 4% 0px 0px&#x27;,
+                &#x27;margin-top&#x27;: &#x27;30px&#x27;
+            });
+            metadataForm.append(textFieldContainer);
+
+            addInfoButton = $(document.createElement(&#x27;button&#x27;));
+            addInfoButton.text(&#x27;Add Information Field&#x27;); // TODO JADE/STYL
+            addInfoButton.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+            addInfoButton.css({
+                &#x27;left&#x27;: &#x27;10%&#x27;,
+                &#x27;width&#x27;: &#x27;80%&#x27;,
+                &#x27;margin-top&#x27;: &#x27;2%&#x27;,
+                &#x27;margin-bottom&#x27;: &#x27;3%&#x27;,
+                &#x27;position&#x27;: &#x27;relative&#x27;
+            });
+            metadataForm.append(addInfoButton);
+
+            saveMetadataButton = $(document.createElement(&#x27;button&#x27;)); // TODO JADE/STYL
+            saveMetadataButton.text(&#x27;Save Changes&#x27;);
+            saveMetadataButton.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+            saveMetadataButton.css({
+                &#x27;left&#x27;: &#x27;10%&#x27;,
+                &#x27;width&#x27;: &#x27;80%&#x27;,
+                &#x27;margin-top&#x27;: &#x27;2%&#x27;,
+                &#x27;margin-bottom&#x27;: &#x27;3%&#x27;,
+                &#x27;position&#x27;: &#x27;relative&#x27;
+            });
+            metadataForm.append(saveMetadataButton);
+
+            createMetadataTextArea({ field: &#x27;Title&#x27;, entry: artwork.Name }); // TODO a lot of this can be factored to J/S
+            createMetadataTextArea({ field: &#x27;Artist&#x27;, entry: artwork.Metadata.Artist });
+            createMetadataTextArea({ field: &#x27;Year&#x27;, entry: artwork.Metadata.Year });
+            createMetadataTextArea({ field: &#x27;Description&#x27;, entry: artwork.Metadata.Description, isTextarea: true });
+            createCustomFields();
+
+            if (shouldDisableAddButton()) {
+                addInfoButton.attr(&#x27;disabled&#x27;, &#x27;true&#x27;);
+            }
+
+            addInfoButton.on(&#x27;click&#x27;, function () {
+                createMetadataTextArea({ field: &quot;new&quot;, entry: &quot;metadata field&quot;, animate: true, isAdditionalField: true });
+                if (shouldDisableAddButton()) {
+                    addInfoButton.attr(&#x27;disabled&#x27;, &#x27;disabled&#x27;);
+                }
+            });
+
+            saveMetadataButton.on(&#x27;click&#x27;, save);
+        }
+
+        /**
+         * Save artwork metadata
+         * @method save
+         */
+        function save() {
+            var i,
+                additionalFields = $(&#x27;.additionalField&#x27;),
+                infoFields = {};
+
+            saveMetadataButton.text(&#x27;Saving...&#x27;);
+            saveMetadataButton.attr(&#x27;disabled&#x27;, &#x27;true&#x27;);
+
+            for (i = 0; i &lt; additionalFields.length; i++) {
+                infoFields[$(additionalFields[i]).attr(&quot;value&quot;)] = $(additionalFields[i]).attr(&#x27;entry&#x27;);
+            }
+
+            TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
+                Name: $(artworkMetadata.Title).val(),
+                Artist: $(artworkMetadata.Artist).val(),
+                Year: $(artworkMetadata.Year).val(),
+                Location: JSON.stringify(locationList),
+                Description: $(artworkMetadata.Description).val(),
+                InfoFields: JSON.stringify(infoFields)
+            }, saveSuccess, saveFail, conflict, saveError);
+            
+            // success handler for save button
+            function saveSuccess() {
+                titleArea.text(artworkMetadata.Title.val());
+                saveMetadataButton.text(&#x27;Save Changes&#x27;);
+                saveMetadataButton[0].removeAttribute(&#x27;disabled&#x27;);
+            }
+
+            // general failure callback for save button
+            function saveFail() {
+                popup = $(TAG.Util.UI.popUpMessage(null, &quot;Changes have not been saved.  You must log in to save changes.&quot;));
+                $(&#x27;body&#x27;).append(popup);
+                popup.show();
+                saveMetadataButton.text(&#x27;Save Changes&#x27;);
+                saveMetadataButton[0].removeAttribute(&#x27;disabled&#x27;);
+            }
+
+            // error handler for save button
+            function saveError() {
+                var popup;
+                popup = $(TAG.Util.UI.popUpMessage(null, &quot;Changes have not been saved.  There was an error contacting the server.&quot;));
+                $(&#x27;body&#x27;).append(popup); // TODO (&#x27;body&#x27; might not be quite right in web app)
+                popup.show();
+                saveMetadataButton.text(&#x27;Save Changes&#x27;);
+                saveMetadataButton[0].removeAttribute(&#x27;disabled&#x27;);
+            }
+        }
+
+        /**
+         * Open the metadata editor
+         * @method open
+         */
+        function open() {
+            if (!isOpen) {
+                closeAllPanels();
+                metadataForm.toggle();
+                metadataButton.css({ &#x27;background-color&#x27;: &#x27;white&#x27;, &#x27;color&#x27;: &#x27;black&#x27; }); // TODO could do css toggling using classes and static css
+                rightArrow.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/RightB.png&#x27;);
+                sidebarHideButtonContainer.hide();
+                isOpen = true;
+            }
+        }
+
+        /**
+         * Close the metadata editor
+         * @method close
+         */
+        function close() {
+            if (isOpen) {
+                metadataForm.toggle();
+                metadataButton.css({ &#x27;background-color&#x27;: &#x27;transparent&#x27;, &#x27;color&#x27;: &#x27;white&#x27; });
+                rightArrow.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/Right.png&#x27;);
+                sidebarHideButtonContainer.show();
+                isOpen = false;
+            }
+        }
+
+
+        /**
+         * Toggle the metadata editor open and closed
+         * @method toggle
+         */
+        function toggle() {
+            isOpen ? close() : open();
+        }
+
+        /**
+         * Returns whether the editing panel is open
+         * @method returnIsOpen
+         * @return {Boolean}      true if open
+         */
+        function returnIsOpen() {
+            return isOpen;
+        }
+
+        return {
+            init: init,
+            save: save,
+            open: open,
+            close: close,
+            toggle: toggle,
+            isOpen: returnIsOpen
+        };
+    }
+};
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

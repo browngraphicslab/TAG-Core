@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/tagInk.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/tagInk.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿/**
+ * Library for tour annotation drawing. Instance created in InkES.
+ * Uses the RaphaelJS library for svg manipulation.
+ * @class tagInk
+ * @constructor
+ * @param {String} canvId            the id of the div to which we&#x27;ll assign the Raphael canvas.
+ * @param {HTML element} html_elt    in the case that the div above is not in the dom yet, send in a variable for its html element.
+ */
+
+var tagInk = function (canvId, html_elt) {
+    &quot;use strict&quot;;
+
+    // set up the Raphael paper/canvas
+    var that = {},
+        canvid = canvId,
+        html_elt = (html_elt) ? html_elt : $(&quot;#&quot; + canvid)[0],
+        domelement = $(html_elt),
+        textElt,
+        paper = Raphael(html_elt, &quot;100%&quot;, &quot;100%&quot;);
+    
+    // Enum defining ink modes
+    var InkMode = {
+        shapes: 0, //shape manipulation
+        draw: 1,
+        erase: 2,
+        text: 5
+    };
+
+    // brush variables
+    var penColor = &quot;#000000&quot;, // a comment here
+        penOpacity = 1.0,
+        penWidth = 4,
+        eraserWidth = 5,
+        ml = [], //path M/L values (see svg path format)
+        xy = [], //path coordinates; each entry has an x and y property
+        pa = [], //path attributes
+        pathObjects = [],
+        currpaths = &quot;&quot;; //this will be the string representing all of our paths; to get the paths individually, split at &#x27;M&#x27;
+
+
+
+    // ellipse/rectangle variables
+    var shapeStrokeColor = &quot;#ffffff&quot;,
+        shapeStrokeOpacity = 0.7,
+        shapeStrokeWidth = 5,
+        shapeFillColor = &quot;#000000&quot;,
+        shapeFillOpacity = 0;
+
+    // block/isolate variables
+    var marqueeFillColor = &quot;#000000&quot;,
+        marqueeFillOpacity = 0.8,
+        trans_mode = &#x27;isolate&#x27;,
+        transCoords = [],
+        transLetters = [],
+        trans_currpath = &quot;&quot;,
+        bounding_shapes = &quot;&quot;;
+
+    // text variables
+    var fontFamily = &quot;&#x27;Times New Roman&#x27;, serif&quot;,
+        fontColor = &quot;#ffffff&quot;,
+        fontSize = &#x27;12px&#x27;,
+        fontOpacity = 1.0,
+        textboxid = &quot;textbox&quot;,
+        outerdivid = &quot;outerdiv&quot;,
+        lastText = &quot;&quot;,
+        svgText,
+        magX = domelement.width(),
+        magY = domelement.height();
+
+    // misc variables
+    var inktrack = null,
+        calling_file = &#x27;inkes&#x27;,
+        marquees = [], // old marquees
+        click = false, // has the mouse been clicked?
+        datastring = &quot;&quot;,
+        mode = InkMode.draw,
+        enabled = true, //attached ink tracks by default
+        initKeyframe = {},
+        artName = &quot;&quot;,
+        EID = &quot;&quot;, // rin experience id (name of the ink track)
+        oldScale = 1,
+        firstTimeThrough = 2,
+        inkPannedX,
+        inkPannedY;
+
+    // set up the coordinates for adjustViewBox
+    var viewerElt = ($(&quot;#rinplayer&quot;).length) ? $(&quot;#rinplayer&quot;) : $(&quot;#rinPlayer&quot;),
+        origPaperX = 0, // original coordinates of the paper (match with rinContainer)
+        origPaperY = 0,
+        origPaperW = viewerElt.width(),
+        origPaperH = viewerElt.height(),
+        origpx = 0, // original coordinates of the artwork
+        origpy = 0,
+        origpw = 0,
+        origph = 0,
+        lastpx = 0, // most recent coordinates of the artwork
+        lastpy = 0,
+        lastpw = 0,
+        lastph = 0,
+        lastcx = 0, // most recent coordinates of the &quot;virtual canvas&quot; which helps us place inks correctly
+        lastcy = 0, // the virtual canvas is where the Raphael canvas would be if it were moving with the artwork
+        lastcw = origPaperW,
+        lastch = origPaperH,
+        oldOpac = 0; // keeps track of whether an ink is on screen or not
+
+    that.canvid = canvId;
+    $(&quot;#&quot; + canvid + &quot; svg&quot;).css(&quot;position&quot;, &quot;absolute&quot;);
+
+    // methods //
+
+    /** KEEP
+     * Pans and resizes all inks to move with the artwork. Uses the initial keyframe of the artwork (converted here to absolute coordinates) and the
+     * inputted dimensions to compute deltas and scale factors. Once we have these, first pan to (0,0), then scale, then pan to pos+deltas.
+     * @param dims   the current dimensions of our artwork in absolute coordinates
+     */
+    function adjustViewBox(dims, no_opac_check) {
+        var new_px = dims.x,
+            new_py = dims.y,
+            new_pw = dims.width,
+            new_ph = dims.height,
+            real_kfw, real_kfh, real_kfx, real_kfy,
+            lambda_w, lambda_h, nvw, nvh, nvx, nvy,
+            SW, newwid, newhei, cw, ch;
+        // convert weird deeepzoom keyframe coordinates to absolute coordinates
+        real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
+        real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
+        real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
+        real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -initKeyframe.y * real_kfh)
+
+        // if the new position is not trivially different from the old position, pan and zoom
+        if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
+            //var eid_elt = $(&quot;[ES_ID=&#x27;&quot; + EID + &quot;&#x27;]&quot;);
+            lambda_w = origPaperW / real_kfw;
+            lambda_h = origPaperH / real_kfh;
+            nvw = new_pw * lambda_w; // nv*: dimensions of the new virtual canvas (where the ink canvas would be if we were panning and zooming it with the artwork)
+            nvh = new_ph * lambda_h;
+            nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
+            nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
+
+            SW = nvw / lastcw; // scale factor in x direction
+            // var SH = nvh / lastch; // scale factor in y direction (in case we ever have non-aspect-ratio-preserving scaling)
+
+            oldScale = new_pw / origpw;
+            // oldScaleH = new_ph / origph; // in case we ever have non-aspect-ratio-preserving scaling
+
+            if (!transCoords.length || trans_mode === &#x27;block&#x27;) { // for all ink types except isolates (can&#x27;t just resize the window for them)
+                newwid = origPaperW / oldScale;
+                newhei = origPaperH / oldScale;
+                paper.setViewBox(-nvx / oldScale, -nvy / oldScale, newwid, newhei); // see raphael documentation
+            }
+            else {
+                cw = domelement.width();
+                ch = domelement.height();
+                magX = cw;
+                magY = ch;
+                panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }, 0); // no need to draw updated ink yet
+                resizeObjects(SW, SW); // still no need, since we still have to pan
+                panObjects(nvx / origPaperW, nvy / origPaperH, { cw: cw, ch: ch }, 1);
+            }
+
+            // reset coordinates
+            lastcx = nvx;
+            lastcy = nvy;
+            lastcw = nvw;
+            lastch = nvh;
+            lastpx = new_px;
+            lastpy = new_py;
+            lastpw = new_pw;
+            lastph = new_ph;
+        }
+    }
+    that.adjustViewBox = adjustViewBox;
+
+    /** KEEP
+     * Convert a string representing a block transparency to one representing an isolate transparency.
+     * Block/isolate is determined by the fill property of the svg element. If we draw the path counterclockwise (rather than clockwise)
+     * and also draw a path around the whole canvas, the in-between space will be filled and we will get an isolate transparency. This
+     * method reverses the given path and adds the aforementioned outer path.
+     * @param pth    the path to reverse
+     * @return    reversed path (with outer path)
+     */
+    function block_to_isol(pth) {
+        var new_pth = &quot;&quot;;
+        var segs = [&quot;&quot;];
+        var parsed_pth = Raphael.parsePathString(pth);
+        var num_array = [];
+        var mstart = 0;
+        var ctr = 0;
+        var cw = viewerElt.width();
+        var ch = viewerElt.height();
+
+        // iterate through in reverse order
+        for (var i = parsed_pth.length - 2; i &gt;= 0; i--) {
+            if (parsed_pth[i][0] == &quot;z&quot;) {
+                new_pth += &quot;M&quot; + num_array[0] + &quot;,&quot; + num_array[1];
+                for (var j = 2; j &lt; num_array.length; j++) {
+                    new_pth += ((j % 6 == 2) ? (&quot;C&quot; + num_array[j]) : (num_array[j]));
+                    new_pth += ((j % 6 != 1) ? (&quot;,&quot;) : &quot;&quot;);
+                }
+                new_pth += &quot;z&quot;;
+                num_array.length = 0;
+                num_array = []; // every time we hit a close-path command (&#x27;z&#x27;), restart num_array for new path
+            }
+            else if (parsed_pth[i][0] == &quot;M&quot;) {
+                num_array.push(parsed_pth[i][1]);
+                num_array.push(parsed_pth[i][2]);
+            }
+            else {
+                num_array.push(parsed_pth[i][5]);
+                num_array.push(parsed_pth[i][6]);
+                num_array.push(parsed_pth[i][3]);
+                num_array.push(parsed_pth[i][4]);
+                num_array.push(parsed_pth[i][1]);
+                num_array.push(parsed_pth[i][2]);
+            }
+        }
+
+        // manually add the last path, since there is no &#x27;z&#x27; at the start of our pathstring
+        new_pth += &quot;M&quot; + num_array[0] + &quot;,&quot; + num_array[1];
+        for (var j = 2; j &lt; num_array.length; j++) {
+            new_pth += ((j % 6 == 2) ? (&quot;C&quot; + num_array[j]) : (num_array[j]));
+            new_pth += ((j % 6 != 1) ? (&quot;,&quot;) : &quot;&quot;);
+        }
+        new_pth += &quot;z&quot;;
+        new_pth += &quot;M-5,-5L&quot; + (cw + 5) + &quot;,-5L&quot; + (cw + 5) + &quot;,&quot; + (ch + 5) + &quot;L-5,&quot; + (ch + 5) + &quot;L-5,-5z&quot;; // outer path
+        return new_pth;
+    }
+    that.block_to_isol = block_to_isol;
+
+    /** KEEP
+     * Uses the arrays ml, xy, and pa to draw paths with the correct properties.
+     * First clears the canvas of existing paths, then draws new ones.
+     */
+    function drawPaths() {
+        var cw = viewerElt.width();
+        var ch = viewerElt.height();
+        var paths = &quot;&quot;;
+        var cpaths = &quot;&quot;;
+        var len = pathObjects.length;
+        for (var i = 0; i &lt; len; i++) { //removes paths from canvas
+            pathObjects[i].remove();
+        }
+        pathObjects.length = 0;
+        for (var i = 0; i &lt; ml.length; i++) { //construct the paths
+            if (ml[i] === &#x27;M&#x27;) {
+                paths += &quot;PATH::[pathstring]&quot;; // the paths to be drawn now
+                cpaths += &quot;PATH::[pathstring]&quot;; // the paths we will save for our datastring (in relative coordinates)
+            }
+            paths += ml[i] + (cw * xy[i][0]) + &#x27;,&#x27; + (ch * xy[i][1]); // absolute coords
+            cpaths += ml[i] + (xy[i][0]) + &#x27;,&#x27; + (xy[i][1]); // relative coords
+            if (ml[i + 1] != &#x27;L&#x27;) {
+                // if we&#x27;re here, we&#x27;ve reached the end of a path, so add style information to the path strings
+                paths += &quot;[stroke]&quot; + pa[i].color + &quot;[strokeo]&quot; + pa[i].opacity + &quot;[strokew]&quot; + (ch * pa[i].width) + &quot;[]|&quot;;
+                cpaths += &quot;[stroke]&quot; + pa[i].color + &quot;[strokeo]&quot; + pa[i].opacity + &quot;[strokew]&quot; + pa[i].width + &quot;[]|&quot;;
+            }
+        }
+        var path = [];
+        if (paths.length &gt; 0) {
+            path = paths.split(&#x27;PATH::&#x27;);
+        }
+        for (var i = 1; i &lt; path.length; i++) {
+            var pstring = get_attr(path[i], &quot;pathstring&quot;, &quot;s&quot;);
+            var strokec = get_attr(path[i], &quot;stroke&quot;, &quot;s&quot;);
+            var strokeo = get_attr(path[i], &quot;strokeo&quot;, &quot;f&quot;);
+            var strokew = get_attr(path[i], &quot;strokew&quot;, &quot;f&quot;);
+            var drawing = paper.path(pstring); // draw the path to the canvas
+            drawing.data(&quot;type&quot;, &quot;path&quot;);
+            drawing.attr({
+                &quot;stroke-width&quot;: strokew,
+                &quot;stroke-opacity&quot;: strokeo,
+                &quot;stroke&quot;: strokec,
+                &quot;stroke-linejoin&quot;: &quot;round&quot;,
+                &quot;stroke-linecap&quot;: &quot;round&quot;
+            });
+            pathObjects.push(drawing);
+        }
+        currpaths = cpaths; // currpaths is used in update_datastring as the string representing all paths on the canvas
+        //update_datastring();
+    }
+    that.drawPaths = drawPaths;
+
+    /** KEEP
+     * A helper function to draw transparencies. Takes the arrays transLetters (representing the
+     * svg path commands in the transparency string) and transCoords (corresponding locations on the
+     * canvas in relative coordinates) and draws the appropriate type of transparency to the canvas.
+     * If the type is &#x27;isolate,&#x27; calls block_to_isol, which reverses the path and adds an outer path
+     * around the canvas to fill the in-between space.
+     */
+    function drawTrans() {
+        remove_all(); // be careful that this method isn&#x27;t called unless the type of the ink is &#x27;trans&#x27;!
+        var cw = domelement.width();
+        var ch = domelement.height();
+        var path = &quot;&quot;;
+        var ind = 0;
+        // iterate through the transLetters array and create our svg path accordingly
+        for (var i = 0; i &lt; transLetters.length; i++) {
+            if (transLetters[i] == &quot;M&quot; || transLetters[i] == &quot;L&quot;) { // if M or L, add next two coords to the path
+                path += transLetters[i] + (transCoords[ind] * cw) + &quot;,&quot; + (transCoords[ind + 1] * ch);
+                ind += 2;
+            }
+            else if (transLetters[i] == &quot;C&quot;) {
+                path += &quot;C&quot; + (transCoords[ind] * cw);
+                for (var k = 1; k &lt; 6; k++) { // if C, add next six coords to the path (coords represent bezier curve)
+                    path += &quot;,&quot; + ((k % 2) ? (transCoords[ind + k] * ch) : (transCoords[ind + k] * cw));
+                }
+                ind += 6;
+            }
+            else if (transLetters[i] == &quot;z&quot;) // if z, close the path
+                path += &quot;z&quot;
+            else
+                console.log(&quot;ELSE: &quot; + transLetters[i]);
+        }
+        var final_path = path;
+        if (trans_mode == &#x27;isolate&#x27;) // if the mode is &#x27;isolate,&#x27; reverse the path and add an outer path
+            final_path = block_to_isol(path);
+        var trans = paper.path(final_path).attr({ &quot;fill&quot;: marqueeFillColor, &quot;fill-opacity&quot;: marqueeFillOpacity, &quot;stroke-width&quot;: 0 }).data(&quot;type&quot;, &quot;trans&quot;);
+        trans_currpath = &quot;TRANS::[path]&quot; + path + &quot;[color]&quot; + marqueeFillColor + &quot;[opac]&quot; + marqueeFillOpacity + &quot;[mode]&quot; + trans_mode + &quot;[]&quot;;
+        update_datastring(); // this call might be unnecessary
+    }
+    that.drawTrans = drawTrans;
+
+    /** KEEP
+     * Takes in a datastring and parses for a certain attribute by splitting at &quot;[&quot; and &quot;]&quot; (these surround
+     * attribute names).
+     * NOTE if errors are coming from this function, could be that the datastring is empty...
+     * @param str        the datastring
+     * @param attr       the attribute we&#x27;ll parse for
+     * @param parsetype  &#x27;i&#x27; (int), &#x27;s&#x27; (string), or &#x27;f&#x27; (float)
+     * @return  the value of the attribute in the correct format
+     */
+    function get_attr(str, attr, parsetype) {
+        if (parsetype === &quot;f&quot;) {
+            return parseFloat(str.split(&quot;[&quot; + attr + &quot;]&quot;)[1].split(&quot;[&quot;)[0]);
+        } else if (parsetype === &quot;s&quot;) {
+            return str.split(&quot;[&quot; + attr + &quot;]&quot;)[1].split(&quot;[&quot;)[0];
+        } else {
+            return parseInt(str.split(&quot;[&quot; + attr + &quot;]&quot;)[1].split(&quot;[&quot;)[0]);
+        }
+    }
+    that.get_attr = get_attr;
+
+    /** KEEP
+     * Loads an ink onto the ink canvas using its datastring (e.g. from track data).
+     * @param   the datastring to be loaded (see update_datastring for datastring format)
+     */
+    function loadInk(datastr) {
+        var shapes = datastr.split(&quot;|&quot;);
+        var i;
+        var cw = domelement.width();
+        var ch = domelement.height();
+        magX = cw;
+        magY = ch;
+        var shapes_len = shapes.length;
+        for (i = 0; i &lt; shapes_len; i++) {
+            var shape = shapes[i];
+            if (shape &amp;&amp; (shape != &quot;&quot;)) {
+                var type = shape.split(&quot;::&quot;)[0];
+                switch (type.toLowerCase()) {
+                    case &quot;text&quot;:
+                        // format: [str]&lt;text&gt;[font]&lt;font&gt;[fontsize]&lt;fontsize&gt;[color]&lt;font color&gt;[x]&lt;x&gt;[y]&lt;y&gt;[]
+                        var size = get_attr(shape, &quot;fontsize&quot;, &quot;f&quot;) * ch;
+                        fontSize = size;
+                        var x = get_attr(shape, &quot;x&quot;, &quot;f&quot;) * cw;
+                        var y = get_attr(shape, &quot;y&quot;, &quot;f&quot;) * ch;
+                        var w, h;
+                        try {
+                            w = get_attr(shape, &#x27;w&#x27;, &#x27;f&#x27;);
+                            h = get_attr(shape, &#x27;h&#x27;, &#x27;f&#x27;);
+                        } catch (err) {
+                            w = null;
+                            h = null;
+                        }
+                        var text_color = get_attr(shape, &quot;color&quot;, &quot;s&quot;);
+                        var text_font = get_attr(shape, &quot;font&quot;, &quot;s&quot;);
+                        var text_text = get_attr(shape, &quot;str&quot;, &quot;s&quot;);
+                        var text = paper.text(x, y, text_text);
+                        text.attr({
+                            &quot;font-family&quot;: text_font,
+                            &quot;font-size&quot;: size + &quot;px&quot;,
+                            &quot;fill&quot;: text_color,
+                            &quot;text-anchor&quot;: &quot;start&quot;,
+                        });
+                        text.data({
+                            &quot;x&quot;: x,
+                            &quot;y&quot;: y,
+                            &#x27;w&#x27;: w,
+                            &#x27;h&#x27;: h,
+                            &quot;fontsize&quot;: size,
+                            &quot;color&quot;: text_color,
+                            &quot;font&quot;: text_font,
+                            &quot;type&quot;: &quot;text&quot;,
+                            &quot;str&quot;: text_text,
+                        });
+                        textElt = text;
+                        break;
+                    case &quot;path&quot;:
+                        // format: [pathstring]M284,193L284,193[stroke]000000[strokeo]1[strokew]10[]
+                        if (!currpaths) {
+                            currpaths = &quot;&quot;;
+                        }
+                        currpaths += shape + &quot;|&quot;;
+                        update_ml_xy_pa(shape + &quot;|&quot;);
+                        break;
+                    case &quot;bezier&quot;:
+                        if (!pathstring)
+                            pathstring = &quot;&quot;;
+                        pathstring += get_attr(shape, &quot;pathstring&quot;, &#x27;s&#x27;);
+                        pa.push({ color: get_attr(shape, &quot;stroke&quot;, &#x27;s&#x27;), opacity: get_attr(shape, &quot;strokeo&quot;, &quot;f&quot;), width: get_attr(shape, &quot;strokew&quot;, &quot;f&quot;) });
+                        break;
+                    case &quot;trans&quot;:
+                        // format: [path]&lt;path&gt;[color]&lt;color&gt;[opac]&lt;opac&gt;[mode]&lt;block or isolate&gt;[]
+                        if (!trans_currpath) {
+                            trans_currpath = &quot;&quot;;
+                        }
+                        trans_currpath += shape + &quot;|&quot;;
+                        var pathstringt = get_attr(shape, &quot;path&quot;, &#x27;s&#x27;);
+                        marqueeFillColor = get_attr(shape, &quot;color&quot;, &#x27;s&#x27;);
+                        marqueeFillOpacity = get_attr(shape, &quot;opac&quot;, &quot;f&quot;);
+                        trans_mode = get_attr(shape, &quot;mode&quot;, &#x27;s&#x27;);
+                        transCoords = pathstringt.match(/[0-9.\-]+/g);
+                        transLetters = pathstringt.match(/[CMLz]/g);
+                        drawTrans();
+                        break;
+                    default:
+                        console.log(&quot;Using deprecated ink types: &quot; + type.toLowerCase() + &quot;.&quot;);
+                        break;
+                }
+            }
+        }
+        drawPaths();
+        if (pathstring) {
+            drawBezierPath();
+        }
+
+        // force adjustViewBox to run so viewbox is always set 
+        //lastpx = origpx + 10000;
+        if (enabled) {
+            paper.setViewBox(0, 0, cw, ch);
+            //adjustViewBox({ x: origpx, y: origpy, width: origpw, height: origph });
+        }
+    }
+    that.loadInk = loadInk;
+
+    /** KEEP
+     * Helper function to determine whether p1 and p2 are effectively the same point. Returns true if so.
+     */
+    function nontrivial(p1, p2) {
+        return ((Math.abs(p1.x - p2.x) &gt; 0.00000001) || (Math.abs(p1.y - p2.y) &gt; 0.00000001) || (Math.abs(p1.w - p2.w) &gt; 0.00000001) || (Math.abs(p1.h - p2.h) &gt; 0.00000001));
+    }
+    that.nontrivial = nontrivial;
+
+    /** KEEP
+     * Pans all objects in the canvas by dx, dy.
+     * @param dx, dy    the deltas
+     * @param draw      should we take time to draw the objects?
+     */
+    function panObjects(dx, dy, canv_dims, draw) {
+        var cw = canv_dims.cw;
+        var ch = canv_dims.ch;
+        paper.forEach(function (elt) { // first take care of panning rects, ellipses, and texts by changing their attributes
+            var type = elt.data(&quot;type&quot;);
+            if (type === &quot;text&quot;) {
+                elt.attr({
+                    &#x27;x&#x27;: parseFloat(elt.attr(&quot;x&quot;)) + dx * cw,
+                    &#x27;y&#x27;: parseFloat(elt.attr(&quot;y&quot;)) + dy * ch,
+                });
+                elt.data(&#x27;x&#x27;, parseFloat(elt.data(&quot;x&quot;)) + dx * cw);
+                elt.data(&#x27;y&#x27;, parseFloat(elt.data(&quot;y&quot;)) + dy * ch);
+                inkPannedX = elt.attr(&#x27;x&#x27;);
+                inkPannedY = elt.attr(&#x27;y&#x27;);
+            }
+        });
+
+        // pan paths by modifying xy
+        var xylen = xy.length;
+        for (var i = 0; i &lt; xylen; i++) {
+            xy[i][0] = xy[i][0] + dx;
+            xy[i][1] = xy[i][1] + dy;
+        }
+
+        // pan transparencies by modifying transCoords
+        var tclen = transCoords.length;
+        for (var i = 0; i &lt; tclen; i++) {
+            transCoords[i] += ((i % 2) ? dy : dx);
+        }
+
+        // if type is drawing, call drawPaths if necessary
+        if (xylen &amp;&amp; draw) {
+            drawPaths();
+        }
+
+        // if type is transparency, call drawTrans if ncecessary
+        if (tclen &amp;&amp; draw) {
+            drawTrans();
+        }
+
+        // if the type of our ink is a text, redraw (if necessary) by just removing all and loading the datastring back in
+        if (!xylen &amp;&amp; !tclen &amp;&amp; draw) {
+            var dstring = update_datastring();
+            remove_all();
+            datastring = dstring;
+            loadInk(datastring);
+        }
+    }
+    that.panObjects = panObjects;
+
+    /** KEEP
+     * Helper function to convert to relative coordinates.
+     * @param abs_coord   the absolute coordinate
+     * @param canv_dim    the relevant canvas dimension to scale by
+     */
+    function rel_dims(abs_coord, canv_dim) {
+        return parseFloat(abs_coord) / parseFloat(canv_dim);
+    }
+    that.rel_dims = rel_dims;
+
+    /** KEEP
+     * Removes all Raphael elements from the canvas and clears arrays
+     */
+    function remove_all() {
+        paper.clear();
+        ml.length = 0;
+        xy.length = 0;
+        pa.length = 0;
+        pathObjects.length = 0;
+        marquees.length = 0;
+        currpaths = &quot;&quot;;
+        datastring = &#x27;&#x27;;
+    }
+    that.remove_all = remove_all;
+
+    /** KEEP
+     * Resizes all elements in the ink canvas.
+     * @param scale_x, scale_y   the scale factors to resize by
+     * @param draw               should we take the time to draw the result?
+     */
+    function resizeObjects(scale_x, scale_y, draw) {
+        paper.forEach(function (elt) { // resize ellipses, rects, and texts by scaling attributes
+            var type = elt.data(&quot;type&quot;);
+            if (type === &quot;text&quot;) {
+                elt.attr({
+                    &#x27;font-size&#x27;: parseFloat(elt.attr(&quot;font-size&quot;)) * scale_y,
+                    &#x27;x&#x27;: elt.attr(&quot;x&quot;) * scale_x,
+                    &#x27;y&#x27;: elt.attr(&quot;y&quot;) * scale_y,
+                });
+                elt.data({
+                    &#x27;fontsize&#x27;: elt.data(&quot;fontsize&quot;) * scale_y,
+                    &#x27;x&#x27;: elt.data(&quot;x&quot;) * scale_x,
+                    &#x27;y&#x27;: elt.data(&quot;y&quot;) * scale_y,
+                });
+            }
+        });
+
+        // resize paths by scaling elements of xy
+        var xylen = xy.length;
+        for (var i = 0; i &lt; xylen; i++) {
+            xy[i][0] = xy[i][0] * scale_x;
+            xy[i][1] = xy[i][1] * scale_y;
+            pa[i].width = pa[i].width * scale_x;
+        }
+
+        // resize transparencies by scaling elements of transCoords
+        var tclen = transCoords.length;
+        for (var i = 0; i &lt; tclen; i++) {
+            transCoords[i] *= ((i % 2) ? scale_y : scale_x);
+        }
+
+        // call drawPaths or drawTrans to update paths and transparencies, respectively, if need be
+        if (xylen &amp;&amp; draw)
+            drawPaths();
+        if (tclen &amp;&amp; draw)
+            drawTrans();
+
+        // update texts if need by by calling remove_all and then loading in the datastring
+        if (!xylen &amp;&amp; !tclen &amp;&amp; draw) {
+            var dstring = update_datastring();
+            remove_all();
+            datastring = dstring;
+            loadInk(datastring);
+        }
+    }
+    that.resizeObjects = resizeObjects;
+
+    /** KEEP
+     * Set the variables related to adjustViewBox (original artwork location) using the art proxy,
+     * which keeps track of its dimensions
+     */
+    function retrieveOrigDims() {
+        var proxy = $(&quot;[data-proxy=&#x27;&quot; + escape(artName) + &quot;&#x27;]&quot;);
+        var kfx = initKeyframe.x;
+        var kfy = initKeyframe.y;
+        var kfw = initKeyframe.w;
+        var real_kfw = origPaperW / kfw;
+        var real_kfh = real_kfw * (proxy.data(&quot;h&quot;) / proxy.data(&quot;w&quot;));
+        var real_kfx = -kfx * real_kfw;
+        var real_kfy = -kfy * real_kfh;
+        origpx = real_kfx;
+        origpy = real_kfy;
+        origpw = real_kfw;
+        origph = real_kfh;
+        lastpx = origpx;
+        lastpy = origpy;
+        lastpw = origpw;
+        lastph = origph;
+    }
+    that.retrieveOrigDims = retrieveOrigDims;
+
+    /** KEEP
+     * Setter for the artname of a linked ink&#x27;s associated artwork
+     */
+    function setArtName(name) {
+        artName = name;
+    }
+    that.setArtName = setArtName;
+
+    /** KEEP
+     * Setter (sets experience id of ink)
+     */
+    function setEID(inEID) {
+        EID = inEID;
+    }
+    that.setEID = setEID;
+
+    /** KEEP
+     * Sets the initial artwork keyframe
+     */
+    function setInitKeyframeData(kf) {
+        initKeyframe = kf;
+    }
+    that.setInitKeyframeData = setInitKeyframeData;
+
+    /** KEEP
+     * Sets the ink mode
+     */
+    function set_mode(i) {
+        i = parseInt(i);
+        mode = i;
+    }
+    that.set_mode = set_mode;
+
+    /** KEEP
+     * Returns a string giving all necessary information to recreate the current scene.
+     * The result is stored in ink tracks as the &#x27;datastring.&#x27; Also used throughout
+     * InkAuthoring to make sure we have an up to date datastring. The formats for each
+     * type of ink is given below (note that the trailing &#x27;[]&#x27; makes it easier to parse).
+     * Note that the MARQUEE type is deprecated -- it has been replaced by TRANS type
+     * transparencies represented by paths rather than collections of rectangles. The
+     * BOUNDRECT and BOUNDELLIPSE types are for reloading rectangles and ellipses when we
+     * edit transparencies (their formats are identical to RECT/ELLIPSE). All coordinates are relative.
+     *
+     *   PATH::[pathstring]&lt;svg path string&gt;[stroke]&lt;color&gt;[strokeo]&lt;opacity&gt;[strokew]&lt;width&gt;[]
+     *   RECT::[x]&lt;x&gt;[y]&lt;y&gt;[w]&lt;width&gt;[h]&lt;height&gt;[fillc]&lt;color&gt;[fillo]&lt;opac&gt;[strokec]&lt;color&gt;[strokeo]&lt;opac&gt;[strokew]&lt;width&gt;[]
+     *   ELLIPSE::[cx]&lt;center x&gt;[cy]&lt;center y&gt;[rx]&lt;x radius&gt;[ry]&lt;y radius&gt;[fillc]&lt;color&gt;[fillo]&lt;opac&gt;[strokec]&lt;color&gt;[strokeo]&lt;opac&gt;[strokew]&lt;width&gt;[]
+     *   MARQUEE::[x]&lt;x&gt;[y]&lt;y&gt;[w]&lt;width&gt;[h]&lt;height&gt;[surrfillc]&lt;fill color&gt;[surrfillo]&lt;fill opac&gt;[]
+     *   TEXT::[str]&lt;text&gt;[font]&lt;font&gt;[fontsize]&lt;fontsize&gt;[color]&lt;font color&gt;[x]&lt;x&gt;[y]&lt;y&gt;[w]&lt;width&gt;[h]&lt;height&gt;[]
+     *   TRANS::[path]&lt;path&gt;[color]&lt;color&gt;[opac]&lt;opac&gt;[mode]&lt;block or isolate&gt;[]
+     *   BOUNDRECT::[x]&lt;x&gt;[y]&lt;y&gt;[w]&lt;width&gt;[h]&lt;height&gt;[fillc]&lt;color&gt;[fillo]&lt;opac&gt;[strokec]&lt;color&gt;[strokeo]&lt;opac&gt;[strokew]&lt;width&gt;[]
+     *   BOUNDELLIPSE::[cx]&lt;center x&gt;[cy]&lt;center y&gt;[rx]&lt;x radius&gt;[ry]&lt;y radius&gt;[fillc]&lt;color&gt;[fillo]&lt;opac&gt;[strokec]&lt;color&gt;[strokeo]&lt;opac&gt;[strokew]&lt;width&gt;[]
+     *
+     * @return    up to date datastring
+     */
+    function update_datastring() {
+        var data_string = &quot;&quot;;
+        var canv_width = domelement.width();
+        var canv_height = domelement.height();
+        if (currpaths &amp;&amp; currpaths != &quot;&quot;) { // add pen paths to datastring
+            if (currpaths.split(&quot;Mundefined&quot;).length &gt; 1)
+                currpaths = currpaths.split(&quot;Mundefined&quot;).join(&quot;&quot;);
+            data_string += currpaths;
+        }
+        if (trans_currpath &amp;&amp; trans_currpath != &quot;&quot;) { // add transparency paths to datastring
+            data_string += trans_currpath;
+        }
+        if (cpathstring) {
+            data_string += cpathstring.replace(/undefined/g, &#x27;&#x27;);
+        }
+
+        paper.forEach(function (elt) { // now check the canvas for text
+            if (elt.data(&quot;type&quot;) === &quot;text&quot;) {
+                var pth = &quot;TEXT::[str]&quot; + elt.data(&quot;str&quot;)
+                    + &quot;[font]&quot; + elt.data(&quot;font&quot;)
+                    + &quot;[fontsize]&quot; + rel_dims(elt.data(&quot;fontsize&quot;), canv_height) //scale font-size
+                    + &quot;[color]&quot; + elt.data(&quot;color&quot;)
+                    + &quot;[x]&quot; + rel_dims(elt.data(&quot;x&quot;), canv_width)
+                    + &quot;[y]&quot; + rel_dims(elt.data(&quot;y&quot;), canv_height)
+                    + &quot;[w]&quot; + elt.data(&#x27;w&#x27;)
+                    + &quot;[h]&quot; + elt.data(&#x27;h&#x27;)
+                    + &quot;[]&quot;;
+                data_string += pth + &quot;|&quot;;
+            }
+            else {
+                console.log(&quot;type = &quot; + elt.data(&quot;type&quot;));
+            }
+        });
+        datastring = data_string;
+        return data_string;
+    }
+    that.update_datastring = update_datastring;
+
+    /** KEEP
+     * When we load in a path datastring, update ml, xy, and pa to reflect the new data.
+     * @param str   the datastring loaded
+     */
+    function update_ml_xy_pa(str) {
+        var i, j;
+
+        // add info to ml and pa
+        for (i = 0; i &lt; str.length; i++) {
+            if ((str[i] == &quot;L&quot;) || (str[i] == &quot;M&quot;)) {
+                var cpth = str.substring(i).split(&quot;|&quot;)[0];
+                var strokec = get_attr(cpth, &quot;stroke&quot;, &quot;s&quot;);
+                var strokeo = get_attr(cpth, &quot;strokeo&quot;, &quot;f&quot;);
+                var strokew = get_attr(cpth, &quot;strokew&quot;, &quot;f&quot;);
+                ml.push(str[i]);
+                pa.push({ &quot;color&quot;: strokec, &quot;opacity&quot;: strokeo, &quot;width&quot;: strokew });
+            }
+        }
+
+        // add info to xy (probably easier with regular expressions)
+        var arr1 = str.split(&quot;L&quot;);
+        for (i = 0; i &lt; arr1.length; i++) {
+            if (arr1[i].length &gt; 0) {
+                var arr2 = arr1[i].split(&quot;M&quot;);
+                for (j = 0; j &lt; arr2.length; j++) {
+                    if (arr2[j].length &gt; 0 &amp;&amp; arr2[j].charAt(0) != &#x27;P&#x27;) {
+                        var arr3 = arr2[j].split(&quot;,&quot;);
+                        xy.push([parseFloat(arr3[0]), parseFloat(arr3[1])]);
+                    }
+                }
+            }
+        }
+        click = false;
+    }
+    that.update_ml_xy_pa = update_ml_xy_pa;
+
+    //////// NEW PATH SMOOTHING CODE //////////
+    var points = [],
+        roughPoints = [],
+        paper,
+        thresh = 8,
+        closeThresh = 5,
+        canBeClosed = false,
+        pathstring = &quot;&quot;,
+        cpathstring = &quot;&quot;,
+        closeCircle,
+        old_points = [],
+        old_pa = [],
+        //old_pathstring = &#x27;&#x27;,
+        canvW, canvH;
+
+    function distance(pt1, pt2, cw, ch) {
+        var dx = (pt1[0] - pt2[0]) * (cw || 1);
+        var dy = (pt1[1] - pt2[1]) * (ch || 1);
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // get array of coordinates from a pathstring (x, y, x, y, ...)
+    function extractCoords(pthstr) {
+        return pthstr.match(/[0-9.\-]+/g);
+    }
+
+    // get array of letters from a pathstring (&#x27;M&#x27;, &#x27;R&#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27;M&#x27;, &#x27;L&#x27;, ...)
+    function extractLetters(pthstr) {
+        return pthstr.match(/[MLR ]/g);
+    }
+
+    // draws either the given path or pathstring if none is provided
+    function drawBezierPath(str) {
+        var cw = viewerElt.width();
+        var ch = viewerElt.height();
+        var pathsToDraw = [], pathsToSave = &#x27;&#x27;, pathToDraw = &#x27;&#x27;;
+        var raphaelpath = &#x27;&#x27;,
+            roughpath = &#x27;&#x27;,
+            i, path, circle;
+
+        paper.clear();
+
+        str = str || pathstring;
+        if (!str) return;
+
+        var MRL = extractLetters(str);
+        var coords = extractCoords(str);
+
+        var paCount = 0;
+        for (i = 0; i &lt; MRL.length; i++) { //construct the paths
+            if (MRL[i] === &#x27;M&#x27;) {
+                pathsToSave += &quot;BEZIER::[pathstring]&quot;;
+            }
+            //console.log(&quot;ch*coords[&quot;+(2*i+1)+&quot;] = &quot;+ch*coords[2*i+1]);
+            pathToDraw += MRL[i] + (cw * coords[2 * i]) + &#x27;,&#x27; + (ch * coords[2 * i + 1]); // absolute coords
+            pathsToSave += MRL[i] + coords[2 * i] + &#x27;,&#x27; + coords[2 * i + 1]; // relative coords
+            if (MRL[i + 1] === &#x27;M&#x27; || i === MRL.length - 1) {
+                pathsToDraw.push(pathToDraw);
+                pathToDraw = &#x27;&#x27;;
+                pathsToSave += &quot;[stroke]&quot; + pa[paCount].color + &quot;[strokeo]&quot; + pa[paCount].opacity + &quot;[strokew]&quot; + pa[paCount].width + &quot;[]|&quot;;
+                paCount++;
+            }
+        }
+        console.log(&quot;to save: &quot; + pathsToSave);
+        for (i = 0; i &lt; pathsToDraw.length; i++) { // need to split up the paths so we can style each separately
+            console.log(&quot;to draw: &quot; + pathsToDraw[i]);
+            var drawing = paper.path(pathsToDraw[i]); // draw the path to the canvas
+            drawing.data(&quot;type&quot;, &quot;bezier&quot;);
+            drawing.attr({
+                &quot;stroke-width&quot;: pa[i].width * ch,
+                &quot;stroke-opacity&quot;: pa[i].opacity,
+                &quot;stroke&quot;: pa[i].color,
+                &quot;stroke-linejoin&quot;: &quot;round&quot;,
+                &quot;stroke-linecap&quot;: &quot;round&quot;
+            });
+        }
+        cpathstring = pathsToSave; // currpaths is used in update_datastring as the string representing all paths on the canvas
+    }
+    that.drawBezierPath = drawBezierPath;
+
+    // constructs bezier path to draw
+    function constructBezierPath(clip) {
+        var raphaelpath = &#x27;&#x27;,
+            roughpath = &#x27;&#x27;,
+            i, path, circle, len = points.length, rlen = roughPoints.length,
+            p1x = points[0][0], p1y = points[0][1],
+            rp1x, rp1y;
+
+        if (len === 1) {
+            raphaelpath = &quot;M&quot; + p1x + &quot;,&quot; + p1y + &quot;L&quot; + p1x + &quot;,&quot; + p1y;
+        } else if (len === 2) {
+            raphaelpath = &quot;M&quot; + p1x + &quot;,&quot; + p1y + &quot;R&quot; + points[1][0] + &quot;,&quot; + points[1][1] + &quot; &quot; + points[1][0] + &quot;,&quot; + points[1][1];
+        } else if (len &gt; 2) {
+            raphaelpath = &quot;M&quot; + p1x + &quot;,&quot; + p1y + &quot;R&quot;;
+            for (i = 1; i &lt; len; i++) {
+                raphaelpath += ((i === 1) ? &quot;&quot; : &quot; &quot;) + points[i][0] + &quot;,&quot; + points[i][1];
+            }
+        }
+        if (rlen &gt; 0) {
+            rp1x = roughPoints[0][0];
+            rp1y = roughPoints[0][1];
+            if (len &gt; 0) {
+                for (i = 0; i &lt; rlen; i++) {
+                    roughpath += &quot; &quot; + roughPoints[i][0] + &quot;,&quot; + roughPoints[i][1];
+                }
+            } else {
+                if (rlen === 1) {
+                    roughpath = &quot;M&quot; + rp1x + &quot;,&quot; + rp1y + &quot;L&quot; + rp1x + &quot;,&quot; + rp1y;
+                    if (rlen === 2) {
+                        roughpath = &quot;M&quot; + rp1x + &quot;,&quot; + rp1y + &quot;L&quot; + roughPoints[1][0] + &quot;,&quot; + roughPoints[1][1];
+                    } else {
+                        roughpath = &quot;M&quot; + rp1x + &quot;,&quot; + rp1y + &quot;R&quot;;
+                        for (i = 1; i &lt; rlen; i++) {
+                            roughpath += ((i === 1) ? &quot;&quot; : &quot; &quot;) + roughPoints[i][0] + &quot;,&quot; + roughPoints[i][1];
+                        }
+                    }
+                }
+            }
+        }
+        if (clip) {
+            pathstring += raphaelpath;
+            pathstring += (rlen === 0) ? &quot;&quot; : &quot; &quot; + roughPoints[rlen - 1][0] + &quot;,&quot; + roughPoints[rlen - 1][1];
+            drawBezierPath();
+        } else {
+            drawBezierPath(pathstring + raphaelpath + roughpath);
+        }
+    }
+
+    // setter for distance between bezier points
+    function setThresh(val) {
+        thresh = parseInt(val, 10);
+    }
+
+    // setter for close path threshold
+    function setCloseThresh(val) {
+        closeThresh = parseInt(val, 10);
+    }
+    //////////////////////////////////////////
+
+    return that;
+};
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

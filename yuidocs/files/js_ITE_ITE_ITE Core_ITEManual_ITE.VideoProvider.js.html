@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/ITE/ITE/ITE Core/ITEManual/ITE.VideoProvider.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/ITE/ITE/ITE Core/ITEManual/ITE.VideoProvider.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+window.ITE = window.ITE || {};
+
+ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
+
+	//Extend class from ProviderInterfacePrototype
+	var Utils 		= new ITE.Utils(),
+		TAGUtils	= ITE.TAGUtils,
+		_super 		= new ITE.ProviderInterfacePrototype(),
+		self 		= this;
+
+	Utils.extendsPrototype(this, _super);
+
+    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+
+	self.player 		= player;
+	self.taskManager 	= taskManager;
+	self.trackData 		= trackData;
+	self.orchestrator	= orchestrator;
+	self.status 		= &quot;loading&quot;;
+	self.savedState		= keyframes[0];
+	self.animation;
+	self.audioAnimation;
+
+	var interactionHandlers 	= {},
+	movementTimeouts 			= [];
+    //DOM related
+    var _video,
+    	_UIControl,
+    	_videoControls;
+
+	//Start things up...
+    initialize()
+
+   /** 
+	* I/P: none
+	* Initializes track, creates UI, and attachs handlers
+	* O/P: none
+	*/
+	function initialize(){
+		_super.initialize()
+
+		//Create UI and append to ITEHolder
+		_video		= $(document.createElement(&quot;video&quot;))
+			.addClass(&quot;assetVideo&quot;);
+
+		_videoControls = _video[0];
+
+		_UIControl	= $(document.createElement(&quot;div&quot;))
+			.addClass(&quot;UIControl&quot;)
+			.append(_video);
+
+		$(&quot;#ITEHolder&quot;).append(_UIControl);
+
+		var i, keyframeData;
+
+		for (i=1; i&lt;keyframes.length; i++) {
+			keyframeData={
+						  &quot;opacity&quot;	: keyframes[i].opacity,
+						  &quot;pos&quot; : {
+						  	&quot;top&quot;	: (500*keyframes[i].pos.y/100) + &quot;px&quot;,
+						  	&quot;left&quot;	: (1000*keyframes[i].pos.x/100) + &quot;px&quot;
+						  },
+						  &quot;size&quot; : {
+						  	&quot;width&quot;	: (1000*keyframes[i].size.x/100) + &quot;px&quot;
+						  },
+						  &quot;volume&quot;	: keyframes[i].volume
+						};
+			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+		}
+		self.status = &quot;ready&quot;;
+
+		//Attach Handlers
+		attachHandlers() 
+	};
+
+
+   /** 
+	* I/P: none
+	* Loads actual video asset, and sets status to paused when complete
+	* O/P: none
+	*/
+	this.load = function(){
+		_super.load()
+
+		//Sets the image’s URL source
+		_video.attr({
+			&quot;src&quot;	: &quot;../../Assets/TourData/&quot; + self.trackData.assetUrl,
+			&quot;type&quot; 	: self.trackData.type
+		})
+
+		_videoControls.load()
+		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
+		_video.onload = function (event) {//Is this ever getting called?
+			this.setStatus(2);
+			this.setState(keyframes[0]);
+		};
+	};
+
+   /** 
+	* I/P: none
+	* Grabs current actual state of video, and sets savedState to it 
+	* returns savedState
+	* O/P: savedState
+	*/
+	this.getState = function(){
+		self.savedState = {
+			//displayNumber	: this.getPreviousKeyframe().displayNumber,
+			time			: self.taskManager.timeManager.getElapsedOffset(),
+			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
+			pos : {
+				left		: _UIControl.position().left,
+				top 		: _UIControl.position().top
+			},
+			size: {
+				width	: _UIControl.width()
+			},
+			videoOffset	: _videoControls.currentTime,
+			volume		: _videoControls.volume/self.player.currentVolumeLevel
+		};	
+		return self.savedState;
+	};
+
+   /**
+	* I/P: state	state to make actual video reflect
+	* Sets properties of the image to reflect the input state
+	* O/P: none
+	*/
+	this.setState = function(state){
+		_UIControl.css({
+			&quot;left&quot;:			state.pos.left,
+			&quot;top&quot;:			state.pos.top,
+			&quot;width&quot;:		state.size.width,
+			&quot;opacity&quot;:		state.opacity
+		});
+		_videoControls.volume = state.volume*self.player.currentVolumeLevel;
+		state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
+	};
+
+ 	/** 
+	* I/P: none
+	* Plays video asset
+	* O/P: none
+	*/
+	this.play = function(targetTime, data){
+		_super.play.call(self, targetTime, data);
+		_videoControls.play();
+		_videoControls.hasAttribute(&quot;controls&quot;) ? _videoControls.removeAttribute(&quot;controls&quot;) : null;
+	}
+
+	this.pause = function(){
+		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
+		this.getState();
+		self.animation.kill();
+		self.audioAnimation.stop();
+		_videoControls.pause()
+		_videoControls.setAttribute(&quot;controls&quot;, &quot;controls&quot;)
+	}
+
+
+	/* 
+	* I/P: newVolume 	 new volume set by user via UI
+	* Sets the current volume to the newVolume * value from keyframes, and then animates the audio to the next keyframe 
+	* O/P: none
+	*/
+	this.setVolume = function(newVolume){
+		if (newVolume === 0) {
+			this.toggleMute()
+		} else {	
+			//Set volume to newVolume * value from keyframes
+			_videoControls.volume = _videoControls.volume*newVolume/self.player.previousVolumeLevel;
+			
+			if (this.orchestrator.status === 1){
+
+				//Duration of current time to next keyframe
+				var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();
+	
+				//Stop current animation
+				self.audioAnimation.stop();
+			
+				//Animate to the next keyframe
+				self.audioAnimation =_video.animate({
+					volume: self.currentAnimationTask.nextKeyframeData.volume*newVolume
+				}, duration*1000);
+			}
+		}
+	};
+
+
+
+	/* 
+	* I/P: isMuted 	 boolean, whether or not tour is now muted
+	* mutes or unmutes tour
+	* O/P: none
+	*/
+	this.toggleMute = function(isMuted){
+		isMuted? _videoControls.muted = true : _videoControls.muted = false;
+	}
+
+	/* 
+	I/P: none
+	interpolates between current state and next keyframe
+	O/P: none
+	*/
+	this.animate = function(duration, state){
+		self.animation = TweenLite.to(_UIControl, duration, {
+			&quot;left&quot;:			state.pos.left,
+			&quot;top&quot;:			state.pos.top,
+			&quot;width&quot;:		state.size.width,
+			&quot;opacity&quot;:		state.opacity
+		});
+		self.animation.play();
+		self.audioAnimation =_video.animate({
+			volume: state.volume*self.player.currentVolumeLevel
+		}, duration*1000);
+	};
+
+	/* 
+	* I/P: inkTrack ink track to attach to this asset
+	* Adds ink as an overlay
+	* O/P: none
+	*/
+	this.addInk = function(inkTrack){
+		console.log(&quot;adding &quot;+ inkTrack.trackData.name + &quot; as an overlay in a video&quot;)
+	};
+
+   /** 
+	* I/P: none
+	* Return a set of interactionHandlers attached to asset from provider
+	*/
+	function getInteractionHandlers(){
+		return interactionHandlers;
+	}
+ 
+    /**
+     * I/P {Object} res     object containing hammer event info
+     * Drag/manipulation handler for associated media
+     * Manipulation for touch and drag events
+     */
+    function mediaManip(res) {
+        var top     	= _UIControl.position().top,
+            left     	= _UIControl.position().left,
+            width     	= _UIControl.width(),
+            height     	= _UIControl.height(),
+            finalPosition;
+
+        // If the player is playing, pause it
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+
+        // If event is initial touch on artwork, save current position of media object to use for animation
+        if (res.eventType === &#x27;start&#x27;) {
+            startLocation = {
+                x: left,
+                y: top
+            };
+        }	              
+        // Target location (where object should be moved to)
+        finalPosition = {
+            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+        };   
+
+        // Animate to target location
+        self.interactionAnimation &amp;&amp; self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
+        	top: finalPosition.y,
+        	left: finalPosition.x
+        });		
+    }
+	
+
+    /**
+     * I/P {Number} scale     scale factor
+     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
+     * Zoom handler for associated media (e.g., for mousewheel scrolling)
+     */
+    function mediaScroll(scale, pivot) {
+    	var t    	= _UIControl.position().top,
+            l    	= _UIControl.position().left,
+            w   	= _UIControl.width(),
+            h  		= _UIControl.height(),
+            newW  	= w * scale,
+            newH,
+            maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
+            minW	= 200,
+            newX,
+            newY;
+
+    	(self.orchestrator.status === 1) ? self.player.pause() : null
+
+        // Constrain new width
+        if((newW &lt; minW) || (newW &gt; maxW)) {
+            newW 	= Math.min(maxW, Math.max(minW, newW));
+        };
+
+        // Update scale, new X and new Y according to newly constrained values.
+        scale 	= newW / w;
+        newH	= h * scale;
+        newX 	= l + pivot.x*(1-scale);
+       	newY 	= t + pivot.y*(1-scale); 
+
+       	//Animate _UIControl to this new position
+        self.interactionAnimation &amp;&amp; self.interactionAnimation.kill();
+        self.interactionAnimation = TweenLite.to(_UIControl, .05, {
+        	top: newY,
+        	left: newX,
+        	width: newW,
+        	height: newH
+        });	
+    }
+    
+
+    /** 
+	* I/P: none
+	* Initializes handlers 
+	*/
+    function attachHandlers() {
+        // Allows asset to be dragged, despite the name
+        TAG.Util.disableDrag(_UIControl);
+
+        // Register handlers
+        TAG.Util.makeManipulatable(_UIControl[0], {
+            onManipulate: mediaManip,
+            onScroll:     mediaScroll
+        }); 
+        interactionHandlers.onManipulate 	= mediaManip;
+        interactionHandlers.onScroll		= mediaScroll;    	
+    }
+};
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

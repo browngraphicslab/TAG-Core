@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/layout/TAG.Layout.CollectionsPage.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/layout/TAG.Layout.CollectionsPage.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+TAG.Util.makeNamespace(&quot;TAG.Layout.CollectionsPage&quot;);
+
+/**
+ * The collections page
+ * @class TAG.Layout.CollectionsPage
+ * @constructor
+ * @param {Object} options         some options for the collections page
+ * @return {Object}                some public methods
+ */
+TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, container, forSplitscreen) {
+    &quot;use strict&quot;;
+
+    options = options || {}; // cut down on null checks later
+
+    var // DOM-related
+        root                     = TAG.Util.getHtmlAjax(&#x27;NewCatalog.html&#x27;), // use AJAX to load html from .html file
+        infoDiv                  = root.find(&#x27;#infoDiv&#x27;),
+        tileDiv                  = root.find(&#x27;#tileDiv&#x27;),
+        collectionArea           = root.find(&#x27;#collectionArea&#x27;),
+        backArrowArea            = root.find(&#x27;#backArrowArea&#x27;),
+        backArrow                = root.find(&#x27;#backArrow&#x27;),
+        nextArrowArea            = root.find(&#x27;#nextArrowArea&#x27;),
+        nextArrow                = root.find(&#x27;#nextArrow&#x27;),
+        collectionHeader         = root.find(&#x27;#collectionHeader&#x27;),
+        collectionDotHolder      = root.find(&#x27;#collectionDotHolder&#x27;),
+        bgimage                  = root.find(&#x27;#bgimage&#x27;),
+        bottomContainer          = root.find(&#x27;#bottomContainer&#x27;),
+        catalogDiv               = root.find(&#x27;#catalogDiv&#x27;),
+        infoTilesContainer       = root.find(&#x27;#infoTilesContainer&#x27;),
+        sortRow                  = root.find(&#x27;#sortRow&#x27;),
+        searchInput              = root.find(&#x27;#searchInput&#x27;),
+        searchTxt                = root.find(&#x27;#searchTxt&#x27;),
+        selectedArtworkContainer = root.find(&#x27;#selectedArtworkContainer&#x27;),
+        titleSpan                = root.find(&#x27;#titleSpan&#x27;),
+        imgDiv                   = root.find(&#x27;#imgDiv&#x27;),
+        currentThumbnail         = root.find(&#x27;#currentThumbnail&#x27;),
+        exploreTab               = root.find(&#x27;#exploreTab&#x27;),
+        exploreText              = root.find(&#x27;#exploreText&#x27;),
+        exploreIcon              = root.find(&#x27;#exploreIcon&#x27;),
+        infoText                 = root.find(&#x27;#moreInfo&#x27;),
+        artistInfo               = root.find(&#x27;#artistInfo&#x27;),
+        yearInfo                 = root.find(&#x27;#yearInfo&#x27;),
+        descText                 = root.find(&#x27;#descText&#x27;),
+        descSpan                 = root.find(&#x27;#descSpan&#x27;),
+        timelineArea             = root.find(&#x27;#timelineArea&#x27;),
+        topBar                   = root.find(&#x27;#topBar&#x27;),
+        loadingArea              = root.find(&#x27;#loadingArea&#x27;),
+        infoButton               = root.find(&#x27;#infoButton&#x27;),
+        linkButton               = root.find(&#x27;#linkButton&#x27;),
+        splitscreenIcon          = root.find(&#x27;#splitscreenIcon&#x27;),
+
+        // input options
+        scrollPos        = options.backScroll || 0,     // horizontal position within collection&#x27;s catalog
+        currCollection   = options.backCollection,      // the currently selected collection
+        currentArtwork   = options.backArtwork,         // the currently selected artwork
+        currentTag       = options.backTag,             // current sort tag for collection
+        multipleShown    = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
+        
+        // misc initialized vars
+        loadQueue            = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
+        artworkSelected      = false,                            // whether an artwork is selected
+        visibleCollections   = [],                               // array of collections that are visible and published
+        collectionDots       = {},                               // dict of collection dots, keyed by collection id
+        artworkCircles       = {},                               // dict of artwork circles in timeline, keyed by artwork id                  
+        artworkTiles         = {},                               // dict of artwork tiles in bottom region, keyed by artwork id
+        firstLoad            = true,                             // TODO is this necessary? what is it doing?
+        currentArtworks      = [],                               // array of artworks in current collection
+        infoSource           = [],                               // array to hold sorting/searching information
+        timelineEventCircles = [],                               // circles for timeline
+        timelineTicks        = [],                               // timeline ticks
+        scaleTicks           = [],                               // timeline scale ticks
+        artworkYears         = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
+        scaleTicksAppended   = false,                            // if scale ticks have been appended
+        tileDivHeight        = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
+        artworkShown         = false,                            // whether an artwork pop-up is currently displayed
+        timelineShown        = true,                             // whether current collection has a timeline
+
+
+        // constants
+        BASE_FONT_SIZE      = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
+        FIX_PATH            = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
+        MAX_YEAR            = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
+        EVENT_CIRCLE_WIDTH  = Math.max(20, $(&quot;#tagRoot&quot;).width() / 40),  // width of the circles for the timeline                                // pixel width of event circles
+        COLLECTION_DOT_WIDTH = Math.max(7, $(&quot;#tagRoot&quot;).width() / 120),  // width of the circles for the timeline                                // pixel width of event circles
+        LEFT_SHIFT = 9,                                            // pixel shift of timeline event circles to center on ticks 
+        TILE_BUFFER         = $(&quot;#tagRoot&quot;).width() / 100,              // number of pixels between artwork tiles
+        TILE_HEIGHT_RATIO   = 200,                                          //ratio between width and height of artwork tiles
+        TILE_WIDTH_RATIO    = 255,
+        ANIMATION_DURATION  = 800,                                         // duration of timeline zoom animation
+        PRIMARY_FONT_COLOR  = TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        SECONDARY_FONT_COLOR = TAG.Worktop.Database.getMuseumSecondaryFontColor(),
+        FONT                = TAG.Worktop.Database.getMuseumFontFamily(),
+
+        // misc uninitialized vars
+        fullMinDisplayDate,             // minimum display date of full timeline
+        fullMaxDisplayDate,             // maximum display date of full timeline
+        initTimelineWidth,              // initial width of timeline
+        initTimelineLeft,               // initial left position of timeline
+        currentTimeline,                // currently displayed timeline
+        currTimelineCircleArea,         // current timeline circle area
+        toShowFirst,                    // first collection to be shown (by default)
+        toursIn,                        // tours in current collection
+        currentThumbnail,               // img tag for current thumbnail image
+        imgDiv,                         // container for thumbnail image
+        descriptiontext,                // description of current collection or artwork
+        loadingArea,                    // container for progress circle
+        moreInfo,                       // div holding tombstone information for current artwork
+        artistInfo,                     // artist tombstone info div
+        yearInfo,                       // year tombstone info div
+        justShowedArtwork,              // for telemetry; helps keep track of artwork tile clicks
+        defaultTag;                     // default sort tag
+
+        root[0].collectionsPage = this;
+    // get things rolling
+    init();
+
+    /**
+     * Sets up the collections page UI
+     * @method init
+     */
+    function init() {
+        var progressCircCSS,
+            circle,
+            oldSearchTerm;
+
+        progressCircCSS = {
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;50&#x27;,
+            &#x27;height&#x27;: &#x27;auto&#x27;,
+            &#x27;width&#x27;: &#x27;5%&#x27;,
+            &#x27;left&#x27;: &#x27;47.5%&#x27;,
+            &#x27;top&#x27;: &#x27;42.5%&#x27;
+        };
+        
+        circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, &#x27;0px&#x27;, &#x27;0px&#x27;, false);
+
+        root.find(&#x27;.rowButton&#x27;).on(&#x27;click&#x27;, function() {
+            changeDisplayTag(currentArtworks, $(this).attr(&#x27;tagName&#x27;));
+        });
+
+        TAG.Telemetry.register(root.find(&#x27;#artistButton&#x27;), &#x27;click&#x27;, &#x27;&#x27;, function(tobj) {
+            tobj.ttype = &#x27;sort_by_artist&#x27;;
+        });
+
+        TAG.Telemetry.register(root.find(&#x27;#titleButton&#x27;), &#x27;click&#x27;, &#x27;&#x27;, function(tobj) {
+            tobj.ttype = &#x27;sort_by_title&#x27;;
+        });
+
+        TAG.Telemetry.register(root.find(&#x27;#yearButton&#x27;), &#x27;click&#x27;, &#x27;&#x27;, function(tobj) {
+            tobj.ttype = &#x27;sort_by_year&#x27;;
+        });
+
+        TAG.Telemetry.register(root.find(&#x27;#typeButton&#x27;), &#x27;click&#x27;, &#x27;&#x27;, function(tobj) {
+            tobj.ttype = &#x27;sort_by_type&#x27;;
+        });
+
+        // search on keyup
+        searchInput.on(&#x27;keyup&#x27;, function (e) {
+            if(e.which === 13) {
+                doSearch();
+            }
+        });
+
+        initSplitscreen();
+
+        infoButton.attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/info.svg&#x27;)
+                    .addClass(&#x27;bottomButton&#x27;)
+
+        if (IS_WEBAPP) {
+            linkButton.attr(&#x27;src&#x27;, tagPath + &#x27;images/link.svg&#x27;)
+                        .addClass(&#x27;bottomButton&#x27;)
+                        .on(&#x27;click&#x27;, function () {
+                            var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
+                                tagpagename: &#x27;collections&#x27;,
+                                tagcollectionid: currCollection.Identifier,
+                                tagartworkid: currentArtwork ? currentArtwork.Identifier : &#x27;&#x27;
+                            });
+
+                root.append(linkOverlay);
+                linkOverlay.fadeIn(500, function () {
+                    linkOverlay.find(&#x27;.linkDialogInput&#x27;).select();
+                });
+            });
+        } else {
+            linkButton.remove();
+        }
+        applyCustomization();
+        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+    }
+
+    /**
+     * Return the type of work
+     * @method getWorkType
+     * @param {doq} work       the doq representing the current work
+     * @return {String}        a string describing type of work (&#x27;artwork&#x27;, &#x27;video&#x27;, or &#x27;tour&#x27;)
+     */
+    function getWorkType(work) {
+        if (currentArtwork.Type === &#x27;Empty&#x27;) {
+            return &#x27;tour&#x27;;
+        } else if (currentArtwork.Metadata.Type === &#x27;VideoArtwork&#x27;) {
+            return &#x27;video&#x27;;
+        }
+        return &#x27;artwork&#x27;;
+    }
+
+    /**
+     * Helper function to add collections to top bar.  Also creates an array of visible artworks
+     * @method getCollectionsHelper
+     * @param collections               list of collections to add to page
+     */
+    function getCollectionsHelper(collections) {
+        var i,
+            privateState,   // Is collection private?
+            c,
+            j,
+            lastCollectionIndex,
+            firstCollectionIndex,
+            collectionDot;
+
+        // Iterate through entire list of collections to to determine which are visible/not private/published.  Also set toShowFirst
+        for(i=0; i&lt;collections.length; i++) {
+            c = collections[i];
+            privateState = c.Metadata.Private ? (/^true$/i).test(c.Metadata.Private) : false;
+            if(!privateState &amp;&amp; TAG.Util.localVisibility(c.Identifier)) {
+                toShowFirst = toShowFirst || c;
+                visibleCollections.push(collections[i]);
+            }
+        }
+
+        // Iterate through visible/not private/published collections, and set their prev and next values
+        // Also create a scroll dot for each (under main collection title)
+        collectionDotHolder.empty();
+        for(i = 0; i &lt; visibleCollections.length; i++) {
+            if(visibleCollections.length&lt;=2){ 
+                lastCollectionIndex = null;
+                firstCollectionIndex = null;
+            } else {
+                lastCollectionIndex = visibleCollections.length - 1;
+                firstCollectionIndex = 0;
+            }
+            visibleCollections[i].prevCollectionIndex = visibleCollections[i - 1] ? i - 1 : lastCollectionIndex;
+            visibleCollections[i].nextCollectionIndex = visibleCollections[i + 1] ? i + 1 : firstCollectionIndex;
+           
+            collectionDot = $(document.createElement(&#x27;div&#x27;))
+                        .addClass(&#x27;collectionDot&#x27;)
+                        .css({
+                            &quot;width&quot;: COLLECTION_DOT_WIDTH,
+                            &quot;height&quot;:  COLLECTION_DOT_WIDTH,
+                            &quot;border-radius&quot;: COLLECTION_DOT_WIDTH / 2,
+                            &quot;margin&quot;: COLLECTION_DOT_WIDTH/4
+                        }).on(&#x27;click&#x27;, //function(){
+                            //return function(){
+                                loadCollection(visibleCollections[i])//();
+                                //currentTag = null;
+                            //}
+                        );//}());
+            collectionDotHolder.append(collectionDot);
+
+            collectionDots[visibleCollections[i].Identifier] = collectionDot;
+        }
+
+        // Load collection
+        if (currCollection) {
+            loadCollection(currCollection, scrollPos, currentArtwork)();
+        } else if (toShowFirst) {
+            loadFirstCollection();
+        }
+
+        loadingArea.hide();
+    }
+
+    /**
+     * Applies customization changes to main divs
+     * @method applyCustomization
+     */
+    function applyCustomization() {
+        var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR);
+        $(&#x27;.primaryFont&#x27;).css({
+            &#x27;color&#x27;: dimmedColor,
+            &#x27;font-family&#x27;: FONT
+        });
+        $(&#x27;.secondaryFont&#x27;).css({
+            &#x27;color&#x27;: &#x27;#&#x27; + SECONDARY_FONT_COLOR,
+            &#x27;font-family&#x27;: FONT
+        });
+        $(&#x27;.collection-title&#x27;).css({ 
+            &#x27;color&#x27;: &#x27;#&#x27; + PRIMARY_FONT_COLOR,
+            &#x27;font-family&#x27;: FONT
+        });
+    }
+
+    /**
+     * Shows collection and title
+     * @method loadCollection
+     * @param {jQuery obj} collection     the element currently being clicked
+     * @param {Number} sPos               if undefined, set scroll position to 0, otherwise, use this
+     * @param {doq} artwrk                if undefined, set currentArtwork to null, otherwise, use this
+     */
+    function loadCollection(collection, sPos, artwrk) {
+                console.log( collection.Name + &quot;, &quot; +  sPos  + &quot;, &quot; +  artwrk);
+
+        return function(evt) {
+            var i,
+                title             = TAG.Util.htmlEntityDecode(collection.Name),
+                nextTitle,
+                prevTitle,
+                mainCollection    = $(document.createElement(&#x27;div&#x27;)),
+                nextCollection    = $(document.createElement(&#x27;div&#x27;)),
+                prevCollection    = $(document.createElement(&#x27;div&#x27;)),
+                titleBox          = $(document.createElement(&#x27;div&#x27;)),
+                collectionDescription = $(document.createElement(&#x27;div&#x27;)),
+                dummyDot,
+                str,
+                text              = collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : &quot;&quot;;
+
+            // if the idle timer hasn&#x27;t started already, start it
+            if(!idleTimer &amp;&amp; evt) { // loadCollection is called without an event to show the first collection
+                idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                idleTimer.start();
+            }
+
+            // Clear search box
+            searchTxt.text(&quot;&quot;);
+
+            // Clear catalog div (with info and artwork tiles)
+            catalogDiv.empty();
+
+            //Set background image
+            if (collection.Metadata.BackgroundImage) {
+               bgimage.css(&#x27;background-image&#x27;, &quot;url(&quot; + FIX_PATH(collection.Metadata.BackgroundImage) + &quot;)&quot;);
+            }
+
+            if (!collectionDots[collection.Identifier]){
+                //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
+                dummyDot = $(document.createElement(&#x27;div&#x27;))
+                        .addClass(&#x27;collectionDot&#x27;)
+                        .css({
+                            &quot;width&quot;: COLLECTION_DOT_WIDTH,
+                            &quot;height&quot;:  COLLECTION_DOT_WIDTH,
+                            &quot;border-radius&quot;: COLLECTION_DOT_WIDTH / 2,
+                            &quot;margin&quot;: COLLECTION_DOT_WIDTH/4,
+                            &quot;background-color&quot;:&#x27;white&#x27;
+                        });
+                collectionDotHolder.append(dummyDot);
+            } else {
+                //Make collection dot white and others gray
+                for(i = 0; i &lt; visibleCollections.length; i++) { 
+                    collectionDots[visibleCollections[i].Identifier].css(&#x27;background-color&#x27;,&#x27;rgb(170,170,170)&#x27;);
+                }
+                collectionDots[collection.Identifier].css(&#x27;background-color&#x27;, &#x27;white&#x27;);
+            }                
+
+            // Add collection title
+            collectionArea.empty();
+            mainCollection.addClass(&#x27;mainCollection&#x27;)
+                          .attr({
+                            &#x27;id&#x27;: &#x27;collection-&#x27; + collection.Identifier,
+                           });
+            titleBox.attr(&#x27;id&#x27; ,&#x27;collection-title-&#x27;+collection.Identifier)
+                    .addClass(&#x27;collection-title&#x27;)
+                    .html(title);
+            titleBox.addClass(&#x27;primaryFont&#x27;);
+           // titleBox.css({ &#x27;color&#x27;: &#x27;#&#x27;+PRIMARY_FONT_COLOR });
+            mainCollection.append(titleBox);
+            
+            // Add previous and next collection titles
+            if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
+                prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
+                backArrowArea.addClass(&#x27;arrowArea&#x27;);
+                backArrowArea.css(&#x27;left&#x27;, &#x27;0%&#x27;)
+                             .on(&#x27;click&#x27;,function(){
+                                            return function(){
+                                                loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk)();
+                                                currentTag = null;
+                                            }
+                                        }());
+                collectionArea.append(backArrowArea);
+                backArrow.attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/Close.svg&#x27;);
+                backArrow.addClass(&#x27;arrow&#x27;);
+                prevCollection.addClass(&#x27;nextPrevCollection&#x27;)
+                              .addClass(&#x27;primaryFont&#x27;)
+                              .attr({
+                                &#x27;id&#x27;: &#x27;collection-&#x27; + visibleCollections[collection.prevCollectionIndex].Identifier
+                               })
+                              .css(&#x27;left&#x27;,&#x27;3%&#x27;)
+                              .html(prevTitle)
+                              .on(&#x27;click&#x27;, function(){
+                                            return function(){
+                                                loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk)();
+                                                currentTag = null;
+                                            }
+                                        }());
+                TAG.Telemetry.register(backArrowArea, &#x27;click&#x27;, &#x27;collection_title&#x27;, function(tobj){
+                    tobj.custom_1 = prevTitle;
+                    tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                });
+                TAG.Telemetry.register(prevCollection, &#x27;click&#x27;, &#x27;collection_title&#x27;, function(tobj){
+                    tobj.custom_1 = prevTitle;
+                    tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                });
+                collectionArea.append(prevCollection);
+            };
+
+            collectionArea.append(mainCollection);
+            if (prevCollection){
+                prevCollection.css(&#x27;width&#x27;, (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
+               // prevCollection.css(&#x27;color&#x27;, &#x27;#&#x27; + PRIMARY_FONT_COLOR);
+            }
+            if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
+                nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
+                nextArrowArea.addClass(&#x27;arrowArea&#x27;);
+                nextArrowArea.css({
+                    &#x27;right&#x27;: &#x27;0%&#x27;})
+                             .on(&#x27;click&#x27;, function(){
+                                            return function(){
+                                                loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
+                                                currentTag = null;
+                                            }
+                                        }());
+                collectionArea.append(nextArrowArea);
+                nextArrow.attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/Open.svg&#x27;);
+                nextArrow.addClass(&#x27;arrow&#x27;);
+                nextCollection.addClass(&#x27;nextPrevCollection&#x27;)
+                              .addClass(&#x27;primaryFont&#x27;)
+                              .attr({
+                                &#x27;id&#x27;: &#x27;collection-&#x27; + visibleCollections[collection.nextCollectionIndex].Identifier
+                               })
+                              .html(nextTitle)
+                              .css({
+                                &#x27;width&#x27;: (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
+                                //&#x27;color&#x27;: &#x27;#&#x27; + PRIMARY_FONT_COLOR
+                              })
+                              .on(&#x27;click&#x27;, function(){
+                                            return function(){
+                                                loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
+                                                currentTag = null;
+                                            }
+                                        }());
+                TAG.Telemetry.register(nextArrowArea, &#x27;click&#x27;, &#x27;collection_title&#x27;, function(tobj){
+                    tobj.custom_1 = nextTitle;
+                    tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                });
+                TAG.Telemetry.register(nextCollection, &#x27;click&#x27;, &#x27;collection_title&#x27;, function(tobj){
+                    tobj.custom_1 = nextTitle;
+                    tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                });
+                collectionArea.append(nextCollection);
+            };
+
+
+            // Hide selected artwork container, as nothing is selected yet
+            selectedArtworkContainer.css(&#x27;display&#x27;, &#x27;none&#x27;);
+
+
+            collectionDescription.attr(&#x27;id&#x27;, &#x27;collectionDescription&#x27;);
+            collectionDescription.addClass(&#x27;secondaryFont&#x27;);
+            str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, &#x27;&lt;br /&gt;&#x27;) : &quot;&quot;;
+            collectionDescription.css({
+                &#x27;font-size&#x27;: 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+            });
+            collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
+            tileDiv.empty();
+            catalogDiv.append(tileDiv);
+            infoDiv.empty();
+            infoDiv.append(collectionDescription);
+            catalogDiv.append(infoDiv);
+            timelineArea.empty();
+
+
+            //If there&#x27;s no description, change UI so that artwork tiles take up entire bottom area
+            collection.Metadata.Description ? infoDiv.css(&#x27;width&#x27;, &#x27;25%&#x27;) : infoDiv.css(&#x27;width&#x27;, &#x27;0&#x27;);
+
+            if (collection.Metadata.Timeline === (&quot;true&quot;||&quot;false&quot;)){
+                collection.Metadata.Timeline === &quot;true&quot; ? timelineShown = true: timelineShown = false;
+            }
+
+            currCollection = collection;
+            currentArtwork = artwrk || null;
+            //loadCollection.call($(&#x27;#collection-&#x27;+ currCollection.Identifier), currCollection);
+            scrollPos = sPos || 0;
+            getCollectionContents(currCollection);
+            applyCustomization();
+    
+        }
+    }
+    this.loadCollection = loadCollection;
+
+    /**
+     * Helper function to load first collection
+     * @method loadFirstCollection
+     */
+    function loadFirstCollection() {
+        loadCollection(toShowFirst)(); // first collection selected by default
+    }
+
+    /**
+     * Get contents (artworks, videos, tours) in the specified collection and make catalog
+     * @method getCollectionContents
+     * @param {doq} collecion         the collection whose contents we want
+     * @param {Function} callback     a function to call when the contents have been retrieved
+     */
+    function getCollectionContents(collection, callback) {
+        TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+
+        /**
+         * Helper function to process collection contents
+         * @method contentsHelper
+         * @param {Array} contents     array of doq objects for each of the contents of this collection
+         */
+        function contentsHelper(contents) {
+            createArtTiles(contents);
+            initSearch(contents);
+            callback &amp;&amp; callback();
+        }
+    }
+
+    /**
+     * Store the search strings for each artwork/tour
+     * @method initSearch
+     * @param {Array} contents    the contents of this collection (array of doqs)
+     */
+    function initSearch(contents) {
+        var info,
+            i,
+            cts;
+
+        searchInput[0].value = &quot;&quot;;
+        infoSource = [];
+
+        for (i = 0; i &lt; contents.length; i++) {
+            cts = contents[i];
+            if (!cts) {
+                continue;
+            }
+            info = cts.Name + &quot; &quot; + cts.Metadata.Artist + &quot; &quot; + cts.Metadata.Year + &quot; &quot; + cts.Metadata.Type;
+            infoSource.push({
+                &quot;id&quot;: i,
+                &quot;keys&quot;: info.toLowerCase()
+            });
+        }
+    }
+
+    /**
+     * Search collection using string in search input box
+     * @method doSearch
+     */
+    function doSearch() {
+        var content = searchInput.val().toLowerCase(),
+            matchedArts = [],
+            unmatchedArts = [],
+            i;
+
+        if (!content) {
+            searchTxt.text(&quot;&quot;);
+            drawCatalog(currentArtworks, currentTag, 0, false);
+            return;
+        }
+
+        for (i = 0; i &lt; infoSource.length; i++) {
+            if (infoSource[i].keys.indexOf(content) &gt; -1) {
+                matchedArts.push(currentArtworks[i]);
+            } else {
+                unmatchedArts.push(currentArtworks[i]);
+            }
+        }
+
+        searchTxt.text(matchedArts.length &gt; 0 ? &quot;Results Found&quot; : &quot;No Matching Results&quot;);
+
+        drawCatalog(matchedArts, currentTag, 0, true);
+        drawCatalog(unmatchedArts, currentTag, matchedArts.length, false);
+    }
+
+    /**
+     * Create tiles for each artwork/tour in a collection
+     * @method createArtTiles
+     * @param {Array} artworks     an array of doq objects
+     */
+    function createArtTiles(artworks) {
+        currentArtworks = artworks;
+        if (!currentTag){
+            //If currentTag not defined currentTag is either &#x27;year&#x27; or &#x27;title&#x27; depending on if timeline is shown
+            timelineShown ? currentTag = &quot;Year&quot; : currentTag = &quot;Title&quot;;
+        } 
+        colorSortTags(currentTag);
+        drawCatalog(currentArtworks, currentTag, 0);
+    }
+
+    /**
+     * Draw the collection catalog
+     * @method drawCatalog
+     * @param {Array} artworks    the contents of the collection
+     * @param {String} tag        current sorting tag
+     * @param {Number} start      starting at start-th artwork total (note NOT start-th artwork in artworks)
+     * @param {Boolean} onSearch  whether the list of artworks is a list of works matching a search term
+     */
+    function drawCatalog(artworks, tag, start, onSearch) {
+
+        if (!currCollection) {
+            return;
+        }
+
+        if (start === 0) {
+            loadQueue.clear();
+            drawHelper();
+            
+        } else {
+            drawHelper();
+        }
+
+        // helper function to perform the actual drawing (to make sure we deal with async correctly)
+        function drawHelper() {
+            var sortedArtworks,
+                minOfSort,
+                currentWork,
+                works,
+                i, h, w, j;
+
+            if (!artworks || artworks.length === 0){
+                return;
+            }
+
+            sortedArtworks = sortCatalog(artworks, tag);
+            minOfSort      = sortedArtworks.min();
+            currentWork    = minOfSort ? minOfSort.artwork : null;
+            i = start;
+            h = catalogDiv.height() * 0.48;
+            w = h * 1.4;
+
+            tileDiv.empty();
+            tileDivHeight = tileDiv.height();
+
+            works = sortedArtworks.getContents();
+            for (j = 0; j &lt; works.length; j++) {
+                loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j));
+            }
+            loadQueue.add(function(){
+                showArtwork(currentArtwork,multipleShown &amp;&amp; multipleShown)();
+            });
+            tileDiv.css({&#x27;left&#x27;: infoDiv.width()});
+            if (infoDiv.width()===0){
+                tileDiv.css({&#x27;margin-left&#x27;:&#x27;2%&#x27;});
+            } else{
+                tileDiv.css({&#x27;margin-left&#x27;:&#x27;0%&#x27;});
+            }
+            catalogDiv.append(tileDiv);
+    
+            timelineEventCircles = [];
+            timelineTicks = [];
+            scaleTicks = [];
+            artworkYears = {};
+            timelineArea.empty();
+            if (currentTimeline){
+                currentTimeline.stop(true, true);
+                currentArtwork = null;
+            }
+            if (currTimelineCircleArea){
+                currTimelineCircleArea.stop(true,true);
+            }
+            if (timelineShown){   
+                    initTimeline(artworks);
+                    bottomContainer.css({
+                        &#x27;height&#x27; : &#x27;69%&#x27;,
+                        &#x27;top&#x27; : &#x27;25%&#x27;
+                    })
+            } else {
+                bottomContainer.css({
+                    &#x27;height&#x27;: &#x27;85%&#x27;,
+                    &#x27;top&#x27; : &#x27;20%&#x27;
+                });
+            } 
+        }
+
+    }
+
+    /**
+     * Creates an artwork tile in a collection&#x27;s catalog
+     * @method drawArtworkTile
+     * @param {doq} currentWork     the artwork/tour for which we&#x27;re creating a tile
+     * @param {String} tag          current sort tag
+     * @param {Boolean} onSearch    whether this work is a match after searching
+     * @param {Number} i            index into list of all works in this collection
+     */
+    function drawArtworkTile(currentWork, tag, onSearch, i) {
+        return function () {
+            var main      = $(document.createElement(&#x27;div&#x27;)),
+                artTitle  = $(document.createElement(&#x27;div&#x27;)),
+                artText   = $(document.createElement(&#x27;div&#x27;)),
+                tileImage = $(document.createElement(&#x27;img&#x27;)),
+                yearTextBox  = $(document.createElement(&#x27;div&#x27;)),
+                yearText,
+                tourLabel,
+                videoLabel;
+  
+            artworkTiles[currentWork.Identifier] = main;
+            main.addClass(&quot;tile&quot;);
+            tileImage.addClass(&#x27;tileImage&#x27;);
+            artTitle.addClass(&#x27;artTitle&#x27;);
+            artText.addClass(&#x27;artText&#x27;);
+            artText.css({
+                &#x27;color&#x27;: &#x27;#&#x27; + SECONDARY_FONT_COLOR,
+                &#x27;font-family&#x27;: FONT
+            });
+            yearTextBox.addClass(&#x27;yearTextBox&#x27;);
+            yearTextBox.css({
+                &#x27;color&#x27;: &#x27;#&#x27; + SECONDARY_FONT_COLOR,
+                &#x27;font-family&#x27;: FONT
+            });
+            main.on(&#x27;click&#x27;, function () {
+
+                // if the idle timer hasn&#x27;t started already, start it
+                if(!idleTimer) {
+                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                    idleTimer.start();
+                }
+                //TO-DO add panning here 
+                showArtwork(currentWork, false)();
+                zoomTimeline(TAG.Util.parseDateToYear(getArtworkDate(currentWork,true)), fullMinDisplayDate, fullMaxDisplayDate);
+                justShowedArtwork = true;
+            });
+
+            TAG.Telemetry.register(main, &#x27;click&#x27;, &#x27;&#x27;, function(tobj) {
+                var type;
+                //if (currentThumbnail.attr(&#x27;guid&#x27;) === currentWork.Identifier &amp;&amp; !justShowedArtwork) {
+                //    tobj.ttype = &#x27;collections_to_&#x27; + getWorkType(currentWork);
+                //} else {
+                    tobj.ttype = &#x27;artwork_tile&#x27;;
+                //}
+                //tobj.artwork_name = currentWork.Name;
+                //tobj.artwork_guid = currentWork.Identifier;
+                tobj.custom_1 = currentWork.Name;
+                tobj.custom_2 = currentWork.Identifier;
+                justShowedArtwork = false;
+            });
+
+            // Set tileImage to thumbnail image, if it exists
+            if(currentWork.Metadata.Thumbnail) {
+                tileImage.attr(&quot;src&quot;, FIX_PATH(currentWork.Metadata.Thumbnail));
+            } else {
+                tileImage.attr(&quot;src&quot;, tagPath+&#x27;images/no_thumbnail.svg&#x27;);
+            }
+
+            // Add title
+            if (tag === &#x27;Title&#x27;) {
+                artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
+            } else if (tag === &#x27;Artist&#x27;) {
+                artText.text(currentWork.Type === &#x27;Empty&#x27; ? &#x27;(Interactive Tour)&#x27; : currentWork.Metadata.Artist);
+            } else if (tag === &#x27;Year&#x27;) {
+                yearTextBox.css(&#x27;visibility&#x27;,&#x27;visible&#x27;);
+                //TO-DO year text needs to be formatted in mm/dd/yyyy
+                yearText = getDateText(getArtworkDate(currentWork,true));
+                yearTextBox.text(currentWork.Type === &#x27;Empty&#x27; ? &#x27;&#x27; :  yearText);
+                artText.text(currentWork.Type === &#x27;Empty&#x27; ? &#x27;(Interactive Tour)&#x27; :  TAG.Util.htmlEntityDecode(currentWork.Name));
+            } else if (tag === &#x27;Type&#x27;) {
+                artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
+            }
+            artTitle.append(artText);
+
+            // Styling for searches
+            if (!onSearch &amp;&amp; searchInput.val() !== &#x27;&#x27;) {
+                tileImage.css({ &#x27;opacity&#x27;: &#x27;0.3&#x27; });
+                main.css(&#x27;border&#x27;, &#x27;1px solid black&#x27;);
+            } else if (onSearch) {
+                tileImage.css({ &#x27;opacity&#x27;: &#x27;1.0&#x27;});
+                main.css(&#x27;border&#x27;, &#x27;1px solid rgba(255, 255, 255, 0.5)&#x27;);
+            }
+            main.append(tileImage)
+                .append(artTitle)
+                .append(yearTextBox);
+
+            if (currentWork.Type === &quot;Empty&quot;) {
+                tourLabel = $(document.createElement(&#x27;img&#x27;))
+                    .addClass(&#x27;tourLabel&#x27;)
+                    .attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/catalog_tour_icon.svg&#x27;);
+                main.append(tourLabel);
+            } else if (currentWork.Metadata.Medium === &quot;Video&quot;) {
+                videoLabel = $(document.createElement(&#x27;img&#x27;))
+                    .addClass(&#x27;videoLabel&#x27;)
+                    .attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/catalog_video_icon.svg&#x27;);
+                main.append(videoLabel);
+            }
+
+            tileDiv.append(main);
+            //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
+            var tileHeight = (0.45) * tileDivHeight;
+            main.css({&#x27;height&#x27;: (0.45) * tileDivHeight});
+            main.css({&#x27;width&#x27;: (tileHeight/TILE_HEIGHT_RATIO)*TILE_WIDTH_RATIO});
+             // Align tile so that it follows the grid pattern we want
+            main.css({
+                &#x27;left&#x27;: Math.floor(i / 2) * (main.width() + TILE_BUFFER), 
+                &#x27;top&#x27; : Math.floor(i % 2) * (main.height() + TILE_BUFFER)
+            });       
+        };
+    }
+
+    /**styles a circle for the timeline
+    * @method styleTimelineCircle
+    * @param  {HTML element} element      element to be styled
+    * @param  {bool} selected             Whether or not circle is selected
+    */
+    function styleTimelineCircle(element, selected) {
+        if (selected) {
+            element.css({
+                &#x27;height&#x27;: EVENT_CIRCLE_WIDTH*3/2,
+                &#x27;width&#x27;: EVENT_CIRCLE_WIDTH*3/2,
+                &#x27;border-radius&#x27;: EVENT_CIRCLE_WIDTH * 3 / 4,
+                &#x27;top&#x27;: -EVENT_CIRCLE_WIDTH*3 / 4,
+                &#x27;opacity&#x27;: &quot;1&quot;
+            });
+        } else {
+            element.css({
+                &#x27;height&#x27;: EVENT_CIRCLE_WIDTH,
+                &#x27;width&#x27;: EVENT_CIRCLE_WIDTH,
+                &#x27;border-radius&#x27;: EVENT_CIRCLE_WIDTH / 2,
+                &#x27;top&#x27;: -EVENT_CIRCLE_WIDTH / 2,
+                &#x27;opacity&#x27;: .5
+            });
+        }
+    }
+
+    /**Initializes timeline for a collection of artworks
+     * @method initTimeline
+     * @param  {Array} artworks              list of artworks in the collection
+     */
+    function initTimeline(artworks) {
+        var avlTree,
+            maxNode,
+            maxDate,
+            minDate,
+            timelineDate;
+
+        if (!artworks || artworks.length === 0){
+            return;
+        };
+
+        //Sort artworks by year and find the minimum and maximum
+        avlTree = sortByYear(artworks, true);
+        maxNode = avlTree.max();
+
+        //Skip before tours and artworks with incompatible dates
+        while (maxNode.yearKey === Number.POSITIVE_INFINITY){
+            maxNode = avlTree.findPrevious(maxNode);
+        }
+
+        maxDate = parseInt(maxNode.yearKey);
+        minDate = parseInt(avlTree.min().yearKey);
+
+        //Save the original maximum and minimum display date
+        fullMaxDisplayDate = maxDate;
+        fullMinDisplayDate = minDate;
+
+        //TO-DO: calculate and pass in numTicks based on number of years
+        currentTimeline = prepTimelineArea(minDate, maxDate);
+        currTimelineCircleArea = prepTimelineCircles(avlTree, minDate, maxDate);
+        if (currentArtwork){
+            zoomTimeline(TAG.Util.parseDateToYear(getArtworkDate(currentWork,true)), fullMinDisplayDate, fullMaxDisplayDate);
+        }
+     
+        /**Helper function to prepare timeline area including &#x27;ticks&#x27;
+        * @method prepTimelineArea
+        * @param  {Integer} minDate          minimum artwork date
+        * @param  {Integer} maxDate          maximum artwork date
+        * @param  {Integer} numTicks         optional specification for number of timeline ticks
+        * @return {Object}  timeline         div representing timeline ticks 
+        */
+        function prepTimelineArea(minDate, maxDate, numTicks){
+            var timeline = $(document.createElement(&#x27;div&#x27;)),
+                i,
+                numTicks = numTicks ? numTicks : 101,
+                tick;
+
+            timeline.addClass(&#x27;timeline&#x27;);
+            timelineArea.append(timeline);
+
+            //Create ticks
+            for (i = 0; i &lt; numTicks; i++) { 
+                tick = $(document.createElement(&#x27;div&#x27;));
+                tick.addClass(&#x27;timelineTick&#x27;);
+                tick.css({
+                    &#x27;left&#x27; : i/(numTicks-1)*100 + &#x27;%&#x27;
+                });
+                timeline.append(tick);
+                timelineTicks.push(tick);
+            }
+
+            initTimelineWidth = timeline.width();
+            initTimelineLeft = timeline.position().left;
+            return timeline;
+        }
+
+        /**Helper function to prepare and append the timeline event circles
+        * @method prepTimelineCircles
+        * @param  {AVLTree} avlTree        avlTree for access to artworks in year order
+        * @param  {Number}  minDate        minimum date of artworks in collection
+        * @param  {Number}  maxDate        maximum date of artworks in collection
+        */
+        function prepTimelineCircles(avlTree, minDate, maxDate){
+            var curr,
+                timeRange,
+                art,
+                positionOnTimeline,
+                eventCircle,
+                timelineCircleArea = $(document.createElement(&#x27;div&#x27;)),
+                yearText,
+                timelineDateLabel,
+                prevNode,
+                circleOverlap,
+                labelOverlap;
+
+            timeRange = maxDate - minDate;
+
+            timelineCircleArea.addClass(&#x27;timelineCircleArea&#x27;);
+            timelineArea.append(timelineCircleArea);
+
+            curr = avlTree.min();
+            art = curr.artwork;
+       
+            while (curr&amp;&amp; curr.yearKey!==Number.POSITIVE_INFINITY){
+                if (!isNaN(curr.yearKey)){
+                    positionOnTimeline = 100*(curr.yearKey - minDate)/timeRange;
+
+                    //Create and append event circle
+                    eventCircle = $(document.createElement(&#x27;div&#x27;));                
+                    eventCircle.addClass(&#x27;timelineEventCircle&#x27;)
+                                .css(&#x27;left&#x27;, positionOnTimeline + &#x27;%&#x27;)
+                                .on(&#x27;click&#x27;, (function(art) {
+                                    return function() {
+                                    if (artworkShown === true &amp;&amp; currentArtwork === art) {
+                                        hideArtwork(art)();
+                                        artworkShown = false;
+                                    } else {
+                                        if (!artworkTiles[art.Identifier]) {
+                                            return;
+                                        }
+
+                                        //TO-DO: make panning happen at first too if it makes sense 
+                                        //panTimeline(art.circle, minDate, maxDate);
+                                        zoomTimeline(artworkCircles[art.Identifier].yearKey, fullMinDisplayDate, fullMaxDisplayDate);
+                                        showArtwork(art,true)();
+                                        artworkShown  = true;
+                                        } 
+                                    }      
+                                })(art));
+                    timelineCircleArea.append(eventCircle);
+
+                    //Shift circles left by half their width so they are centered on ticks
+                    //TO-DO: add this back in so that it works with new animations (all relative positioning)
+                    //eventCircle.css(&#x27;left&#x27;, eventCircle.position().left - LEFT_SHIFT + &#x27;px&#x27;);
+
+                    yearText = getDateText(getArtworkDate(curr.artwork, true));
+
+                    //Create and append timeline date labels
+                    timelineDateLabel = $(document.createElement(&#x27;div&#x27;))
+                            .text(yearText)
+                            .addClass(&#x27;timelineDateLabel&#x27;);
+                    eventCircle.append(timelineDateLabel);
+
+                    eventCircle.yearKey = curr.yearKey;
+                    eventCircle.timelineDateLabel = timelineDateLabel;
+                    eventCircle.labelwidth = timelineDateLabel.width();
+                    eventCircle.artwork = art;                    
+                    timelineEventCircles.push(eventCircle);
+                    artworkCircles[curr.artwork.Identifier] = eventCircle;
+                    
+                    if (!artworkYears[yearText]){
+                        artworkYears[yearText] = [curr.artwork];
+                    } else {
+                        artworkYears[yearText].push(curr.artwork);
+                    }
+
+                    //Decide whether to display labels:
+                    if (avlTree.findPrevious(curr) &amp;&amp; artworkCircles[avlTree.findPrevious(curr).artwork.Identifier]){
+                        prevNode = avlTree.findPrevious(curr);
+                        //Find the previous visible timeline label:
+                        while (avlTree.findPrevious(prevNode) &amp;&amp; artworkCircles[prevNode.artwork.Identifier].timelineDateLabel.css(&#x27;visibility&#x27;)!==&#x27;visible&#x27;){
+                            prevNode = avlTree.findPrevious(prevNode);
+                        }
+                        //Check to see if the current circle is overlapping the circle of the last label: 
+                        circleOverlap = areOverlapping(artworkCircles[prevNode.artwork.Identifier].position().left, eventCircle.position().left);
+                        //Check to see if the label of the current circle would overlap that of the previously labelled artwork:
+                        labelOverlap = labelsAreOverlapping(artworkCircles[prevNode.artwork.Identifier].position().left, eventCircle.position().left, artworkCircles[prevNode.artwork.Identifier].labelwidth); 
+                        //Overlapping circles should only have 1 label: 
+                        if (artworkCircles[prevNode.artwork.Identifier] &amp;&amp; !circleOverlap &amp;&amp; !labelOverlap){
+                            timelineDateLabel.css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+                        } else{
+                            timelineDateLabel.css(&#x27;visibility&#x27;, &#x27;hidden&#x27;);
+                            if (curr.yearKey === fullMaxDisplayDate){
+                                timelineDateLabel.css(&#x27;visibility&#x27;,&#x27;visible&#x27;);
+                                if (circleOverlap){
+                                    artworkCircles[prevNode.artwork.Identifier].timelineDateLabel.css(&#x27;visibility&#x27;,&#x27;hidden&#x27;);
+                                }
+                            }               
+                        } 
+                    }
+                }
+                curr = avlTree.findNext(curr);
+                if(curr) { art = curr.artwork; }
+            }
+
+            //Set intitial style of timeline event circles
+            for (var i = 0; i &lt; timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
+                styleTimelineCircle(timelineEventCircles[i], false)
+                timelineEventCircles[i].timelineDateLabel.css({
+                    &#x27;color&#x27;: &#x27;rgb(170,170,170)&#x27;
+                });
+            };
+
+            return timelineCircleArea;
+        };
+    };
+
+
+    /** Zooms timeline to center on particular yearKey
+     * @methdd zoomTimeline
+     * @param  {Number} yearKey          yearKey of clicked artwork to zoom in on. (if null, zooms back out to initial state)
+     * @param  {Number} minDisplayDate   minimum date on timeline before (additional) zoom 
+     * @param  {Number} maxDisplayDate   maximum date on timeline before (additional) zoom
+     */
+    function zoomTimeline(yearKey, minDisplayDate, maxDisplayDate){
+        var initTimeRange,
+            width,
+            left,
+            originalScale,
+            newScale,
+            initTickSpacing,
+            newTickSpacing,
+            lastTickSpacing,
+            leftOffset,
+            shift,
+            minDatePos,
+            beforeDiff,
+            afterDiff,
+            buffer,
+            lastTimeRange,
+            timeRange,
+            numTicks=101,
+            i,
+            k,
+            j,
+            scaleTick,
+            positionOnTimeline,
+            first = true,
+            fullOverlap,
+            position1,
+            position2, 
+            labelwidth,
+            art;
+
+        if (yearKey===0||yearKey){
+
+            lastTimeRange = maxDisplayDate - minDisplayDate;
+
+            //Calculate new min and max display date. 
+            beforeDiff = Math.round(yearKey - minDisplayDate);
+            afterDiff = Math.round(maxDisplayDate - yearKey);
+            //Scale correctly if already zoomed in and clicking on first dot
+            buffer = (beforeDiff===0)? Math.max(afterDiff,1): Math.min(beforeDiff,afterDiff);
+            //If zoomed in to last marker, add a 1 year buffer for clear display
+            buffer = (afterDiff===0)? 1 : Math.min(buffer, afterDiff);
+            minDisplayDate = Math.round(yearKey- buffer);
+            maxDisplayDate = Math.round(yearKey + buffer);
+            //Don&#x27;t allow minimum display date to be less than 1 year before full minimum display date
+            if (minDisplayDate&lt;fullMinDisplayDate){
+                minDisplayDate = fullMinDisplayDate-1;
+                maxDisplayDate = yearKey +1
+            }
+            timeRange = maxDisplayDate - minDisplayDate;
+
+            //If less than 100 years each tick is a year. 
+            if (timeRange&lt;100){
+                numTicks = timeRange + 1; 
+            }
+
+        }
+
+        //Info for zooming calculations
+        initTimeRange = fullMaxDisplayDate - fullMinDisplayDate;
+        originalScale = initTimeRange/100;
+        initTickSpacing = initTimelineWidth/100;
+        lastTickSpacing = currentTimeline.width()/(numTicks-1);
+        
+        //Caculate new left position and width of timeline and timelineCircleArea (may be a better way to do some of these calculations)
+        if (yearKey===null){
+            width = initTimelineWidth;
+            left = initTimelineLeft;
+        } else {
+            if (timeRange&lt;100){
+                newTickSpacing = lastTickSpacing*(lastTimeRange/timeRange);
+            } else {
+                newScale = timeRange/100;
+                newTickSpacing = initTickSpacing*(originalScale/newScale);
+            }   
+                width = newTickSpacing*100;
+                positionOnTimeline = ((yearKey - fullMinDisplayDate)/initTimeRange)*width;
+                minDatePos = ((minDisplayDate- fullMinDisplayDate)/initTimeRange)*width;
+                leftOffset = positionOnTimeline - minDatePos;
+                shift = leftOffset - timelineArea.width()/2;               
+                if (timeRange&lt;100){
+                    //TO-Do: there is an issue with the left position calcuation for this situation, probably a better way to do this
+                    left = initTimelineLeft - minDatePos - shift - EVENT_CIRCLE_WIDTH/2;
+                } else {
+                    left = initTimelineLeft - minDatePos;
+                }
+        }
+
+
+        if (scaleTicksAppended &amp;&amp; newTickSpacing &lt; initTickSpacing * EVENT_CIRCLE_WIDTH || !yearKey) {
+            for (k=0;k&lt;scaleTicks.length;k++){
+                scaleTicks[k].remove();
+            }
+            scaleTicks = [];
+            scaleTicksAppended = false;
+        }
+
+        currentTimeline.stop(true,false);
+        currentTimeline.animate({
+            left: left + &#x27;px&#x27;,
+            width: width + &#x27;px&#x27;},
+            ANIMATION_DURATION, &quot;easeInOutQuint&quot;,function(){
+                if (newTickSpacing &gt; initTickSpacing * EVENT_CIRCLE_WIDTH &amp;&amp; yearKey) {
+                    for (k=0; k&lt;timelineTicks.length; k++){
+                        //TO-DO add more scale ticks once zoomed in far 
+                        scaleTick = $(document.createElement(&#x27;div&#x27;));
+                        scaleTick.addClass(&#x27;timelineTick&#x27;);
+                        var scaleTickPercent = (timelineTicks[k].position().left + newTickSpacing/2)/width*100;
+                        scaleTick.css({
+                            left: scaleTickPercent + &#x27;%&#x27;,
+                            // For testing: 
+                            //&#x27;background-color&#x27; : &#x27;red&#x27;
+                        });
+                        currentTimeline.append(scaleTick);
+                        scaleTicks.push(scaleTick);
+                    }
+                    scaleTicksAppended = true;
+                } 
+        });
+    
+        currTimelineCircleArea.overlapping = false;
+        currTimelineCircleArea.stop(true, false);
+        currTimelineCircleArea.animate({
+            left: left + &#x27;px&#x27;,
+            width: width + &#x27;px&#x27;},
+            ANIMATION_DURATION, &quot;easeInOutQuint&quot;, function(){
+                for (i=0; i&lt;timelineEventCircles.length; i++){
+                if (first){
+                    timelineEventCircles[i].timelineDateLabel.css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+                }
+                if (timelineEventCircles[i].yearKey&gt;=minDisplayDate &amp;&amp; timelineEventCircles[i].yearKey&lt;=maxDisplayDate){
+                    first = false;
+                }
+
+                //Check for any overlaps:
+                j = i-1;
+                if (j&gt;=0 &amp;&amp; timelineEventCircles[j].yearKey&gt;=minDisplayDate &amp;&amp; timelineEventCircles[i].yearKey&lt;=maxDisplayDate){
+                    position1 = timelineEventCircles[j].position().left;
+                    position2 = timelineEventCircles[i].position().left;
+                    labelwidth = timelineEventCircles[j].timelineDateLabel.width();
+                    fullOverlap = position1 === position2; 
+                    if (!fullOverlap &amp;&amp; (areOverlapping(position1, position2)||labelsAreOverlapping(position1,position2,labelwidth))){
+                        currTimelineCircleArea.overlapping = true;
+                    } 
+                }
+                
+                //Decide whether to display labels:
+                while (j&gt;0 &amp;&amp; timelineEventCircles[j].timelineDateLabel.css(&#x27;visibility&#x27;)!==&#x27;visible&#x27; &amp;&amp; timelineEventCircles[j].yearKey&gt;= minDisplayDate){
+                    j = j-1;
+                }
+                if (j&gt;=0 &amp;&amp; !first &amp;&amp; timelineEventCircles[j].yearKey&gt;= minDisplayDate){
+                    position1 = timelineEventCircles[j].position().left;
+                    position2 = timelineEventCircles[i].position().left;
+                    labelwidth = timelineEventCircles[j].timelineDateLabel.width();
+                    fullOverlap = position1 === position2;
+                    if (!areOverlapping(position1, position2)&amp;&amp;!labelsAreOverlapping(position1, position2, labelwidth)){
+                        timelineEventCircles[i].timelineDateLabel.css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+                    } else{
+                        timelineEventCircles[i].timelineDateLabel.css(&#x27;visibility&#x27;, &#x27;hidden&#x27;);
+                        if (timelineEventCircles[i].yearKey === yearKey){
+                            timelineEventCircles[i].timelineDateLabel.css(&#x27;visibility&#x27;,&#x27;visible&#x27;);
+                            if (fullOverlap){
+                                timelineEventCircles[j].timelineDateLabel.css(&#x27;visibility&#x27;,&#x27;hidden&#x27;);
+                            }
+                        }
+                        if (timelineEventCircles[i].yearKey === fullMaxDisplayDate){
+                            timelineEventCircles[i].timelineDateLabel.css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+                            if (labelsAreOverlapping(position1,position2)){
+                                timelineEventCircles[j].timelineDateLabel.css(&#x27;visibility&#x27;, &#x27;hidden&#x27;);
+                            }
+                        }
+                    }
+                }
+
+                //Re-add on-click functions. TO-DO: factor out. 
+                timelineEventCircles[i].unbind();
+                art = timelineEventCircles[i].artwork;
+                timelineEventCircles[i].on(&#x27;click&#x27;, (function(art) {
+                                            return function() {
+                                                if (artworkShown === true &amp;&amp; currentArtwork === art) {
+                                                    zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate);
+                                                    hideArtwork(art)();
+                                                    artworkShown = false;
+                                                } else {
+                                                    if (currTimelineCircleArea.overlapping || artworkTiles[art.Identifier]) {
+                                                        zoomTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate);
+                                                    } else {
+                                                        panTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate);
+                                                    }
+                                                    showArtwork(art,true)();
+                                                    artworkShown  = true;
+                                                } 
+                                            }      
+                                        })(art));
+         
+                };
+        }); 
+    }; 
+
+    /* Pans timeline to specific yearKey while maintaining current zoom level.
+     * @param  {Number} yearKey         yearKey of circle/artwork to pan to
+     * @param  {Number} minDisplayDate  minimum display date of timeline before panning
+     * @param  {Number} maxDisplayDate  maximum display date of timeline before panning
+     */
+    function panTimeline(yearKey, minDisplayDate, maxDisplayDate){
+        var timeRange,
+            half;
+        timeRange = maxDisplayDate - minDisplayDate;
+        half = Math.round(timeRange/2);
+        yearKey - half &lt; fullMinDisplayDate ? minDisplayDate = minDisplayDate : minDisplayDate = yearKey - half;
+        yearKey + half &gt; fullMaxDisplayDate ? maxDisplayDate = maxDisplayDate : maxDisplayDate = yearKey + half;
+        //force zoomTimeline() to maintain same zoom level by passing in desired min and max date. 
+        zoomTimeline(yearKey, minDisplayDate, maxDisplayDate);
+    }
+
+    /* Helper function to determine if two event circles are overlapping
+     * @method areOverlapping
+     * @param  {Number} position1     left pixel position of the circle that is further left
+     * @param  {Number}  position2    left pixel position of the circle that is further right
+     * @return {Boolean}              whether the circles are overlapping
+     */
+    function areOverlapping(position1, position2){
+        //TO-DO: add fullOverlap here
+        return Math.round(position2) - Math.round(position1) &lt; EVENT_CIRCLE_WIDTH;
+    }
+
+    /*Helper function to determine if the labels of two event cirlces are overlapping
+     * @method labelsAreOverlapping
+     * @param  {Number} position1       left pixel position of the circle that is further left
+     * @param  {Number} position2       left pixel position of the circle that is further right
+     * @param  {Number} labelWidth      the width of the label of the circle that is further left
+     * @return {Boolean}                whether the labels of the two circles are overlapping
+     */
+    function labelsAreOverlapping(position1, position2, labelWidth){
+        //Hard-coded 2 pixel buffer between labels for clarity 
+        return Math.round(position1) + labelWidth + 2 &gt; position2;
+    }
+
+    /**
+      * Close the pop-up outset box of an artwork preview in the collections page
+      * @method hideArtwork
+      * @param {doq} artwork        the artwork doq to be hidden
+      */
+    function hideArtwork(artwork) {
+        return function () {
+            if (!artwork) {
+                return;
+            }
+
+            selectedArtworkContainer.css(&#x27;display&#x27;, &#x27;none&#x27;);
+            if (artworkCircles[artwork.Identifier]){
+                styleTimelineCircle(artworkCircles[artwork.Identifier], false);
+                artworkCircles[artwork.Identifier].timelineDateLabel &amp;&amp; artworkCircles[artwork.Identifier].timelineDateLabel.css({
+                    &#x27;color&#x27; : &#x27;rgb(170,170,170)&#x27;  
+                });
+            }
+            zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate);
+            catalogDiv.stop(true,false);
+            catalogDiv.animate({scrollLeft: 0}, 1000);
+            artworkShown = false;
+        };
+    }
+
+    /**
+     * Shows an artwork as an outset box and shows name, description, etc
+     * @method showArtwork
+     * @param {doq} artwork     the artwork doq to be shown
+     * @param {showAllAtYear}       whether all of the artworks at a specific year should be shown
+     */
+    function showArtwork(artwork, showAllAtYear) {
+        return function () {
+            var rootWidth,
+                infoWidth,
+                tileWidth,
+                shift,
+                leftOffset,
+                previewWidth,
+                containerWidth,
+                newTile,
+                previewTile,
+                progressCircCSS,
+                timelineDateLabel,
+                circle,
+                artworksForYear,
+                i;
+
+            if (!artwork) {
+                return;
+            }
+
+            currentArtwork = artwork;
+            artworkSelected = true;
+            artworkShown = true;
+            multipleShown = showAllAtYear;
+
+            //scroll catalogDiv to center the current artwork
+            catalogDiv.stop(true,false);
+            rootWidth = root.width();
+            infoWidth = infoDiv.width();
+            tileWidth = artworkTiles[artwork.Identifier].width();
+            catalogDiv.animate({
+                scrollLeft: artworkTiles[artwork.Identifier].position().left - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER
+            }, ANIMATION_DURATION/2, &quot;easeInOutQuint&quot;, function () {
+                    //center selectedArtworkContainer over current artwork thumbnail
+                    shift = (selectedArtworkContainer.width()-tileWidth)/2;
+                    leftOffset = artworkTiles[artwork.Identifier].position().left + infoWidth - catalogDiv.scrollLeft();
+                    //if artwork tile at beginning of window
+                    if (leftOffset &lt; shift){
+                        shift = 0;
+                    }
+                    //if artwork tile at end of window
+                    if (leftOffset + tileWidth + TILE_BUFFER &gt; rootWidth){ 
+                        shift = shift * 2;
+                    }
+
+                    //if there are more than 3 artworks associated with the date year
+                    if (artworkCircles[artwork.Identifier] &amp;&amp; artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length &gt;= 3){
+                        leftOffset = bottomContainer.width()/10;
+                        shift = 0;
+                    }
+                    selectedArtworkContainer.css({
+                        &#x27;display&#x27;: &#x27;inline&#x27;,
+                        &#x27;left&#x27; : leftOffset - shift
+                    });
+
+                    if (!artwork.Metadata.Year){
+                        zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate);
+                    }
+            });
+    
+            // Set selected artwork to hide when anything else is clicked
+            root.on(&#x27;mouseup&#x27;, function(e) {
+                var subject = selectedArtworkContainer;
+                if (e.target.id != subject.attr(&#x27;id&#x27;) &amp;&amp; !$(e.target).hasClass(&#x27;tileImage&#x27;) &amp;&amp;!$(e.target).hasClass(&#x27;timelineEventCircle&#x27;) &amp;&amp; !subject.has(e.target).length) {
+                    if (artworkShown){
+                        hideArtwork(currentArtwork)();
+                    }
+                }
+            });
+
+            //Set up elements of selectedArtworkContainer
+
+            previewWidth = (0.32) * $(&quot;#tagRoot&quot;).width();
+
+            selectedArtworkContainer.empty();
+            // showAllAtYear is a boolean of of whether or not all artworks of a given year are shown, or just the artowrk selected.
+            artworksForYear = artworkCircles[artwork.Identifier] &amp;&amp; artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()];
+            if (showAllAtYear &amp;&amp; artworksForYear){
+                    selectedArtworkContainer.css(&quot;left&quot;, &quot;0px&quot;)
+
+                for (i = 0; i &lt; artworksForYear.length; i++) {
+                    newTile = createPreviewTile(artworksForYear[i]);
+                    newTile.css({
+                        &#x27;left&#x27;: (i * previewWidth) + &#x27;px&#x27;,
+                        &#x27;width&#x27;: previewWidth
+                    });
+                }
+                containerWidth = Math.min(($(&quot;#tagRoot&quot;).width()*.80), (artworksForYear.length) * previewWidth);
+            } else {
+                newTile = createPreviewTile(artwork);
+                newTile.css(&#x27;left&#x27;, &#x27;0%&#x27;);
+                containerWidth = previewWidth;
+
+            }
+            selectedArtworkContainer.css({
+                width : containerWidth
+            });
+
+            /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
+             * @method createPreviewTile
+             * @param {Object} artwork       //artwork to create preview tile for
+             * @return {Object} previewTile    //preview tile just created
+             */
+            function createPreviewTile(artwork){
+                previewTile = $(document.createElement(&#x27;div&#x27;))
+                    .addClass(&#x27;previewTile&#x27;);
+                titleSpan = $(document.createElement(&#x27;div&#x27;));
+                titleSpan.addClass(&#x27;titleSpan&#x27;)
+                         .text(TAG.Util.htmlEntityDecode(artwork.Name));
+                titleSpan.css({
+                    &#x27;color&#x27;: &#x27;#&#x27; + SECONDARY_FONT_COLOR,
+                    &#x27;font-family&#x27;: FONT
+                });
+                imgDiv = $(document.createElement(&#x27;div&#x27;));
+                imgDiv.addClass(&#x27;imgDiv&#x27;);
+                exploreTab = $(document.createElement(&#x27;div&#x27;));
+                exploreTab.addClass(&#x27;exploreTab&#x27;)
+                          .on(&#x27;click&#x27;, switchPage(artwork));
+                exploreIcon = $(document.createElement(&#x27;img&#x27;));
+                exploreIcon.addClass(&#x27;exploreIcon&#x27;)
+                           .attr(&#x27;src&#x27;, tagPath+&#x27;images/icons/ExploreIcon.svg&#x27;);
+                exploreText = $(document.createElement(&#x27;div&#x27;));
+                exploreText.addClass(&#x27;exploreText&#x27;)
+                           .css(&quot;font-size&quot;,  BASE_FONT_SIZE*2/3 + &#x27;em&#x27;)
+                           .text(&quot;Explore&quot;);
+                exploreTab.append(exploreIcon)
+                          .append(exploreText);
+                currentThumbnail = $(document.createElement(&#x27;img&#x27;));
+                currentThumbnail.addClass(&#x27;currentThumbnail&#x27;)
+                                .attr(&#x27;src&#x27;, artwork.Metadata.Thumbnail ? FIX_PATH(artwork.Metadata.Thumbnail) : (tagPath+&#x27;images/no_thumbnail.svg&#x27;))
+                                .on(&#x27;click&#x27;, switchPage(artwork));
+                TAG.Telemetry.register($(&quot;#currentThumbnail,#exploreTab&quot;), &#x27;click&#x27;, &#x27;&#x27;, function(tobj) {
+                    if (!artwork || !artworkSelected) {
+                        return true; // abort
+                    }
+                    tobj.custom_1 = artwork.Name;
+                    tobj.custom_2 = artwork.Identifier;
+                    tobj.ttype     = &#x27;collection_to_&#x27; + getWorkType(artwork); 
+                });
+                infoText = $(document.createElement(&#x27;div&#x27;));
+                infoText.addClass(&#x27;infoText&#x27;);
+                artistInfo = $(document.createElement(&#x27;div&#x27;));
+                artistInfo.addClass(&#x27;artistInfo&#x27;)
+                          .css(&#x27;font-size&#x27;, 11 * BASE_FONT_SIZE / 30 + &#x27;em&#x27;);
+                artistInfo.css({ 
+                    &#x27;color&#x27;: &#x27;#&#x27; + SECONDARY_FONT_COLOR,
+                    &#x27;font-family&#x27;: FONT
+                });
+                yearInfo = $(document.createElement(&#x27;div&#x27;));
+                yearInfo.addClass(&#x27;yearInfo&#x27;)
+                        .css(&#x27;font-size&#x27;, 11 * BASE_FONT_SIZE / 30 + &#x27;em&#x27;);
+                yearInfo.css({ 
+                    &#x27;color&#x27;: &#x27;#&#x27; + SECONDARY_FONT_COLOR,
+                    &#x27;font-family&#x27;: FONT
+                });
+                if (artwork.Type !== &quot;Empty&quot;) {
+                    artistInfo.text(&quot;Artist: &quot; + (artwork.Metadata.Artist || &quot;Unknown&quot;));
+                    yearInfo.text(getDateText(getArtworkDate(artwork,false)) || &quot; &quot;);
+                } else {
+                    artistInfo.text(&quot;(Interactive Tour)&quot; );
+                    yearInfo.text(&quot; &quot; );
+                }
+                infoText.append(artistInfo)
+                        .append(yearInfo);
+                imgDiv.append(exploreTab)
+                      .append(currentThumbnail)
+                      .append(infoText);
+                descText = $(document.createElement(&#x27;div&#x27;));
+                descText.addClass(&#x27;descText&#x27;);
+                descSpan = $(document.createElement(&#x27;div&#x27;));
+                descSpan.addClass(&#x27;descSpan&#x27;)
+                        .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, &#x27;&lt;br /&gt;&#x27;) : &#x27;&#x27;, {email: false, twitter: false}));
+                descSpan.css({
+                    &#x27;color&#x27;: &#x27;#&#x27; + SECONDARY_FONT_COLOR,
+                    &#x27;font-family&#x27;: FONT
+                });
+                descText.append(descSpan);
+                previewTile.append(titleSpan)
+                           .append(imgDiv)
+                           .append(descText);
+                selectedArtworkContainer.append(previewTile);
+                return previewTile;
+            }
+
+            //Circle (with date) on timeline
+            for (i = 0; i &lt; timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
+                styleTimelineCircle (timelineEventCircles[i], false)
+                timelineEventCircles[i].timelineDateLabel.css({
+                    &#x27;color&#x27; : &#x27;rgb(170,170,170)&#x27;,
+                    &#x27;font-size&#x27; : &#x27;100%&#x27; ,
+                    &#x27;top&#x27;: -EVENT_CIRCLE_WIDTH
+                });
+            };
+
+            // Make current circle larger and white
+            if (artworkCircles[artwork.Identifier]){
+                styleTimelineCircle(artworkCircles[artwork.Identifier], true)
+                // Add label to current date
+                artworkCircles[artwork.Identifier].timelineDateLabel.css({
+                    &#x27;visibility&#x27;: &#x27;visible&#x27;,
+                    &#x27;color&#x27; : &#x27;white&#x27;,
+                    &#x27;font-size&#x27; : &#x27;120%&#x27; ,
+                    &#x27;top&#x27;: -EVENT_CIRCLE_WIDTH 
+                })
+            };
+
+            //Progress circle for loading
+            // TODO: is this showing up? Look into
+            progressCircCSS = {
+                &#x27;position&#x27;: &#x27;absolute&#x27;,
+                &#x27;float&#x27;   : &#x27;left&#x27;,
+                &#x27;left&#x27;    : &#x27;12%&#x27;,
+                &#x27;z-index&#x27; : &#x27;50&#x27;,
+                &#x27;height&#x27;  : &#x27;20%&#x27;,
+                &#x27;width&#x27;   : &#x27;auto&#x27;,
+                &#x27;top&#x27;     : &#x27;22%&#x27;,
+            };
+
+            circle = TAG.Util.showProgressCircle(descText, progressCircCSS, &#x27;0px&#x27;, &#x27;0px&#x27;, false);
+
+            currentThumbnail.on(&#x27;load&#x27;, function () {
+                TAG.Util.removeProgressCircle(circle);
+            });
+        };
+    }
+
+
+
+
+    /**
+     * Generates a comparator function for catalog sorting
+     * @method sortComparator
+     * @param {String} primary     the primary sorting property
+     * @param {String} secondary   the secondary sorting property
+     *                                if left undefined, a.artwork.Identifier is used
+     *                                as the secondary property
+     */
+    function sortComparator(primary, secondary) {
+        return function(a, b) {
+            var aSecondary,
+                bSecondary;
+            if (a[primary] &lt; b[primary]) {
+                return -1;
+            } else if (a[primary] &gt; b[primary]) {
+                return 1;
+            } else {
+                aSecondary = secondary ? a[secondary] : a.artwork.Identifier;
+                bSecondary = secondary ? b[secondary] : b.artwork.Identifier;
+                if (aSecondary &lt; bSecondary) {
+                    return -1;
+                } else if (aSecondary &gt; bSecondary) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
+
+    /**
+     * Generates a valuation function for catalog sorting
+     * @method sortValuation
+     * @param {String} property     valuation property name
+     */
+    function sortValuation(property) {
+        return function(value, compareToNode) {
+            if (!compareToNode) {
+                return null;
+            } else if (value &lt; compareToNode[property]) {
+                return -1;
+            } else if (value &gt; compareToNode[property]) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    /**
+     * Sort the catalog by the given criterium
+     * @method sortCatalog
+     * @param {Array} artworks    an array of doq objects to be sorted
+     * @param {String} tag        the sort type
+     * @return {AVLTree}          an avl tree for easy sorting
+     */
+    function sortCatalog(artworks, tag) {
+        var comparator,
+            valuation,
+            avlTree,
+            artNode,
+            i;
+
+        if (tag === &#x27;Title&#x27;) {
+            comparator = sortComparator(&#x27;nameKey&#x27;);
+            valuation  = sortValuation(&#x27;nameKey&#x27;);
+
+            avlTree = new AVLTree(comparator, valuation);
+            avlTree.clear();
+            for (i = 0; i &lt; artworks.length; i++) {
+                artNode = {
+                    artwork: artworks[i],
+                    nameKey: artworks[i].Name,
+                };
+                avlTree.add(artNode);
+            }
+            return avlTree;
+        } else if (tag === &#x27;Artist&#x27;) {
+            comparator = sortComparator(&#x27;artistKey&#x27;);
+            valuation  = sortValuation(&#x27;artistKey&#x27;);
+
+            avlTree = new AVLTree(comparator, valuation);
+            for (i = 0; i &lt; artworks.length; i++) {
+                artNode = {
+                    artwork: artworks[i],
+                    artistKey: artworks[i].Type === &#x27;Empty&#x27; ? &#x27;~~~~&#x27; : artworks[i].Metadata.Artist // tours show up at end
+                };
+                avlTree.add(artNode);
+            }
+            return avlTree;
+        } else if (tag === &#x27;Year&#x27;) {
+            return sortByYear(artworks,false);
+
+        } else if (tag === &#x27;Type&#x27;) {
+            comparator = sortComparator(&#x27;typeKey&#x27;, &#x27;nameKey&#x27;);
+            valuation  = sortValuation(&#x27;nameKey&#x27;);
+
+            avlTree = new AVLTree(comparator, valuation);
+            for (i = 0; i &lt; artworks.length; i++) {
+                artNode = {
+                    artwork: artworks[i],
+                    nameKey: artworks[i].Name,
+                    typeKey: artworks[i].Type === &#x27;Empty&#x27; ? 1 : (artworks[i].Metadata.Type === &#x27;Artwork&#x27; ? 2 : 3)
+                };
+                avlTree.add(artNode);
+            }
+            return avlTree;
+        }
+        
+        return null; // error case: falsy tag
+    }
+
+    /**Helper function for sorting artwork tiles and timeline markers
+     * Also used to catch common non-integer input date forms and generate timeline 
+     * years for their display. 
+     * @method sortByYear
+     * @param  {Object} artworks      list of artworks to sort9
+     * @param {Boolean} timelineDate  whether you are sorting by timeline date (vs metadata date for thumbnail sorting)
+     * @return {AVLTree} avlTree      sorted tree so order can be easily accessed
+    **/
+    function sortByYear(artworks, timelineDate){
+        var comparator,
+            valuation,
+            avlTree,
+            artNode,
+            artworkDate,
+            yearKey,
+            i;
+        comparator = sortComparator(&#x27;yearKey&#x27;, &#x27;nameKey&#x27;);
+        valuation  = sortValuation(&#x27;yearKey&#x27;);
+        avlTree = new AVLTree(comparator, valuation);
+        for (i = 0; i &lt; artworks.length; i++) {
+            if (timelineDate){
+                artworkDate = getArtworkDate(artworks[i],true);
+            } else {
+                artworkDate = getArtworkDate(artworks[i],false);
+            }
+            yearKey = TAG.Util.parseDateToYear(artworkDate);
+            if (!isNaN(yearKey)){
+                artNode = {
+                    artwork: artworks[i],
+                    nameKey: artworks[i].Name,
+                    yearKey: artworks[i].Type === &#x27;Empty&#x27; ? Number.POSITIVE_INFINITY : yearKey //Tours set to Infinity to show up at end of &#x27;Year&#x27; sort
+                };
+            } else{                        
+                artNode = {
+                    artwork: artworks[i],
+                    nameKey: artworks[i].Name,
+                    yearKey: Number.POSITIVE_INFINITY //Set unintelligible dates to Infinity to show up at end of &#x27;Year&#x27; sort 
+                };
+            }
+            avlTree.add(artNode);
+        }
+        return avlTree;
+    }
+
+    /* Get a date object representing temporal metadata for an artwork
+    * @method getArtworkDate
+    * @param {Object} artwork       artwork we care about
+    * @param {Boolean} timelineDate     whether we want the metadata date or the timeline date
+    * @return {Object} artworkDate      object containing year, month, day attributes
+    */
+    function getArtworkDate(artwork, timelineDate){
+        var artworkDate;
+        //second conditional checks to see if that metadata field exists in the server (backwards compatibility)
+        if (timelineDate &amp;&amp; (artwork.Metadata.TimelineYear||artwork.Metadata.TimelineYear===&#x27;&#x27;)){
+                artworkDate = {
+                    year : artwork.Metadata.TimelineYear,
+                    month : artwork.Metadata.TimelineMonth,
+                    day : artwork.Metadata.TimelineDay
+                }
+            } else {
+                 artworkDate = {
+                    year : artwork.Metadata.Year,
+                    month : artwork.Metadata.Month,
+                    day : artwork.Metadata.Day
+                }
+            }
+        return artworkDate;
+    }
+
+    /*Get the text to display based on a date object
+    * @method getDateText
+    * @param {Object} date     object containing year, month, day attributes
+    * @return {String} dateText    text to display in mm/dd/yyyy or mm/yyyy format (Note- would need to change for internationalization)
+    */   
+    function getDateText(date){
+        var yearText,
+            neg = false,
+            monthDict,
+            month,
+            monthText,
+            dayText,
+            dateText;
+        yearText = TAG.Util.parseDateToYear({year: date.year});
+        if (yearText&lt;0){
+            yearText = -yearText;
+            neg = true;
+        } 
+        dateText = yearText;
+        monthDict = {
+                    &quot;January&quot;: 1,
+                    &quot;February:&quot;: 2,
+                    &quot;March&quot;: 3,
+                    &quot;April&quot;: 4,
+                    &quot;May&quot;: 5,
+                    &quot;June&quot;: 6,
+                    &quot;July&quot;: 7,
+                    &quot;August&quot;: 8,
+                    &quot;September&quot;: 9,
+                    &quot;October&quot;: 10,
+                    &quot;November&quot;:11,
+                    &quot;December&quot;: 12
+                }
+        if (date.month){
+            month = date.month;
+            monthText = monthDict[month];
+            if (date.day){
+               dayText = date.day;
+               dateText = monthText + &#x27;/&#x27; + dayText + &#x27;/&#x27; + dateText; 
+            } else {
+                dateText = monthText + &#x27;/&#x27; + dateText;
+            }
+        }
+        if (neg){
+            dateText = dateText + &#x27; BCE&#x27;;
+        }
+        return dateText;
+    }
+
+    /** 
+     * Set the colors of the sort tags
+     * @method colorSortTags
+     * @param {String} tag    the name of the sort tag
+     */
+    function colorSortTags(tag) {
+        //$(&#x27;.rowButton&#x27;).css(&#x27;color&#x27;, &#x27;rgb(170,170,170)&#x27;);
+       // $(&#x27;[tagName=&quot;&#x27;+tag+&#x27;&quot;]&#x27;).css(&#x27;color&#x27;, &#x27;white&#x27;);
+       var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR);
+       $(&#x27;.rowButton&#x27;).css(&#x27;color&#x27;, unselectedColor);
+       $(&#x27;[tagName=&quot;&#x27;+tag+&#x27;&quot;]&#x27;).css(&#x27;color&#x27;, &#x27;#&#x27; + SECONDARY_FONT_COLOR);
+    }
+
+    /**
+     * Changes the selected tag and re-sorts
+     * @method changeDisplayTag
+     * @param {Array} artworks     the array of artwork doqs to sort
+     * @param {String} tag         the name of the sort tag
+     */
+    function changeDisplayTag(artworks, tag) {
+        var guidsSeen   = [],
+            toursArray  = [],
+            artsArray   = [],
+            videosArray = [],
+            bigArray    = [],
+            i;
+
+        currentTag = tag;
+        colorSortTags(currentTag);
+        if (tag !== &#x27;Type&#x27;) {
+            drawCatalog(artworks, currentTag, 0, false);
+        } else {
+            for (i = 0; i &lt; artworks.length; i++) {
+                if (guidsSeen.indexOf(artworks[i].Identifier) &lt; 0) {
+                    guidsSeen.push(artworks[i].Identifier);
+                } else {
+                    continue;
+                }
+                if (artworks[i].Type === &quot;Empty&quot;) {
+                    toursArray.push(artworks[i]);
+                } else if (artworks[i].Metadata.Type === &quot;Artwork&quot;) {
+                    artsArray.push(artworks[i]);
+                } else {
+                    videosArray.push(artworks[i]);
+                }
+            }
+
+            // draw tours, artworks, then videos
+            bigArray.concat(toursArray).concat(artsArray).concat(videosArray);
+            drawCatalog(bigArray, &quot;Title&quot;, 0, false);
+        }
+        doSearch(); // search with new tag
+    }
+
+    /**
+     * Switch to the tour player
+     * @method switchPageTour
+     * @param {doq} tour    the relevant tour doq
+     */
+    function switchPageTour(tour) {
+        var rinData,
+            rinPlayer,
+            prevInfo,
+            messageBox,
+            collectionOptions,
+            parentid;
+
+            if (TAG.Util.Splitscreen.isOn()) {
+                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
+                            TAG.Util.Splitscreen.exit(root.data(&#x27;split&#x27;) || &#x27;L&#x27;);
+                            tourClicked(tour)();
+                        },
+                        &quot;By opening this tour, you will exit splitscreen mode. Would you like to continue?&quot;,
+                        &quot;Continue&quot;,
+                        false,
+                        function () {
+                            confirmationBox.remove();
+                        },
+                        root
+                    ));
+
+                    confirmationBox.css(&#x27;z-index&#x27;, 10001);
+                    root.append(confirmationBox);
+                    confirmationBox.show();
+                }
+
+
+        rinData = JSON.parse(unescape(tour.Metadata.Content));
+
+        if (!rinData || !rinData.data) {
+            messageBox = $(TAG.Util.UI.popUpMessage(null, &quot;Cannot play empty tour.&quot;, null));
+            messageBox.css(&#x27;z-index&#x27;, TAG.TourAuthoring.Constants.aboveRinZIndex + 7);
+            root.append(messageBox);
+            messageBox.fadeIn(500);
+            return;
+        }
+        
+        scrollPos = catalogDiv.scrollLeft();
+
+        collectionOptions = {
+            backScroll: scrollPos,
+            backCollection: currCollection,
+            prevTag : currentTag,
+            backArtwork: tour,
+            prevMult : multipleShown
+        }
+
+        rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour);
+
+        TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
+
+        currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
+        currentPage.obj  = rinPlayer;
+    }
+
+    /**
+     * Switch to the video player
+     * @method switchPageVideo
+     * @param {doq} video         the video to which we&#x27;ll switch
+     */
+    function switchPageVideo(video) {
+        var prevInfo,
+            videoPlayer;
+
+        scrollPos = catalogDiv.scrollLeft();
+        prevInfo = {
+            artworkPrev: null,
+            prevScroll: scrollPos,
+            prevTag: currentTag,
+            prevMult: multipleShown
+        };
+        videoPlayer = TAG.Layout.VideoPlayer(video, currCollection, prevInfo);
+        TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
+
+        currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+        currentPage.obj = videoPlayer;
+    }
+
+    /**
+     * Switch to the artwork viewer or tour player
+     * @method switchPage
+     * @param {Object} artwork      artwork to return to after switching
+     */
+    function switchPage(artwork) {
+        return function() {
+            var artworkViewer,
+                newPageRoot,
+                splitopts = &#x27;L&#x27;,
+                opts = getState(),
+                confirmationBox,
+                prevInfo;
+
+            if (!artwork|| !artworkSelected) {
+                return;
+            }
+
+            if (artwork.Type === &quot;Empty&quot;) { // tour
+                if (TAG.Util.Splitscreen.isOn()) {
+                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
+                            TAG.Util.Splitscreen.exit(root.data(&#x27;split&#x27;) || &#x27;L&#x27;);
+                            switchPageTour(artwork);
+                        },
+                        &quot;By opening this tour, you will exit split screen mode. Would you like to continue?&quot;,
+                        &quot;Continue&quot;,
+                        false,
+                        function () {
+                            confirmationBox.remove();
+                        },
+                        root
+                    ));
+                    confirmationBox.css(&#x27;z-index&#x27;, 10001);
+                    root.append(confirmationBox);
+                    confirmationBox.show();
+                } else {
+                    switchPageTour(artwork);
+                }
+            } else if (artwork.Metadata.Type === &quot;VideoArtwork&quot;) { // video
+                if (TAG.Util.Splitscreen.isOn()) {
+                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
+                            TAG.Util.Splitscreen.exit(root.data(&#x27;split&#x27;) || &#x27;L&#x27;);
+                            switchPageVideo(artwork);
+                        },
+                        &quot;By opening this video, you will exit split screen mode. Would you like to continue?&quot;,
+                        &quot;Continue&quot;,
+                        false,
+                        function () {
+                            confirmationBox.remove();
+                        },
+                        root
+                    ));
+                    confirmationBox.css(&#x27;z-index&#x27;, 10001);
+                    root.append(confirmationBox);
+                    confirmationBox.show();
+                } else {
+                    switchPageVideo(artwork);
+                }
+            } else { // deepzoom artwork
+                scrollPos = catalogDiv.scrollLeft();
+                artworkViewer = TAG.Layout.ArtworkViewer({
+                    doq: artwork,
+                    prevTag : currentTag,
+                    prevScroll: catalogDiv.scrollLeft(),
+                    prevCollection: currCollection,
+                    prevPage: &#x27;catalog&#x27;,
+                    prevMult: multipleShown
+                });
+                newPageRoot = artworkViewer.getRoot();
+                newPageRoot.data(&#x27;split&#x27;, root.data(&#x27;split&#x27;) === &#x27;R&#x27; ? &#x27;R&#x27; : &#x27;L&#x27;);
+
+                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+
+                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                currentPage.obj  = artworkViewer;
+            }
+            root.css({ &#x27;overflow-x&#x27;: &#x27;hidden&#x27; });
+        }
+    }
+
+        /**
+     * Initializes splitscreen functionality
+     * @method initSplitscreen
+     */
+    function initSplitscreen() {
+        splitscreenIcon.attr({
+                src: tagPath+&#x27;images/SplitWhite_dotted.svg&#x27;
+            })
+            .addClass(&#x27;bottomButton&#x27;)
+        if (TAG.Util.Splitscreen.isOn()) {
+            splitscreenIcon.css(&#x27;display&#x27;, &#x27;none&#x27;);
+        }
+        splitscreenIcon.on(&#x27;click&#x27;, function () {
+            var collectionsPage,
+                collectionsPageRoot,
+                newCollectionsPage,
+                newCollectionsPageRoot;
+
+            if (!TAG.Util.Splitscreen.isOn()) {
+                TAG.Util.Splitscreen.setOn(true);
+                collectionsPage = TAG.Layout.CollectionsPage();
+                collectionsPageRoot = collectionsPage.getRoot();
+                collectionsPageRoot.data(&#x27;split&#x27;, &#x27;R&#x27;);
+                splitscreenIcon.css(&#x27;display&#x27;, &#x27;none&#x27;);
+
+                newCollectionsPage = TAG.Layout.CollectionsPage();
+                newCollectionsPageRoot = newCollectionsPage.getRoot();
+                newCollectionsPageRoot.data(&#x27;split&#x27;, &#x27;L&#x27;);
+                setTimeout(function(){
+                    root.detach();
+                    root = newCollectionsPageRoot;
+                    newCollectionsPage.loadCollection(currCollection, scrollPos, currentArtwork)
+                }, 1000);
+                TAG.Util.Splitscreen.init(newCollectionsPageRoot, collectionsPageRoot);
+            }
+        });
+    }
+
+    /**
+     * Gets the current state of the collections page
+     * @method getState
+     * @return {Object}    object containing state
+     */
+    function getState() {
+        return {
+            exhibition: currCollection,
+            currentTag: currentTag,
+            currentImage: currentArtwork
+        };
+    }
+
+    /**
+     * Returns the root of the collections page
+     * @method getRoot
+     * @return {jQuery Object}    root of the collections page
+     */
+    function getRoot() {
+        return root;
+    }
+
+    return {
+        getRoot: getRoot,
+        loadCollection: loadCollection,
+        loadFirstCollection: loadFirstCollection
+    };
+};
+
+TAG.Layout.CollectionsPage.default_options = {};
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

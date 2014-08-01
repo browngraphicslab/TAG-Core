@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/util/TAG.Util.IdleTimer.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/util/TAG.Util.IdleTimer.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿/**
+ * TAG idle timer class. Wraps idle timer-related
+ * functions in a contained scope.
+ * @class TAG.Util.IdleTimer
+ * @constructor
+ * @return {Object}      a couple public methods
+ */
+
+var TAG = TAG || {};
+TAG.Util.IdleTimer = (function() {
+    var overlay,
+        stageTwoDuration,
+        overlayInterval;
+
+     /**
+      * This two-stage timer takes in two duration-callback pairs. The stage one 
+      * callback is put on a timeout configured to the pre-specified duration
+      * which will tick down until the callback executes or until it is restarted. 
+      * Upon the stage one callback&#x27;s execution, the stage two callback&#x27;s timeout
+      * is then started. However, if the second callback&#x27;s timeout is reset, it will 
+      * restart the entire timer back to stage one. Upon the second callback&#x27;s 
+      * execution, the timer will sit idle until the reset method is invoked.
+      * @method TwoStageTimer
+      * @param {Object} stageOne         the stage one timer pair (see timerPair helper function below)
+      * @param {Object} stageTwo         the stage two timer pair
+      */
+    function TwoStageTimer(stageOne, stageTwo) {
+        stageOne = stageOne || {};
+        stageTwo = stageTwo || {};
+
+        var s1d = stageOne.duration || idleDuration || 120000,   // duration of stage one timer
+            s1c = stageOne.callback || defaultStageOne,          // stage one callback
+            s2d = stageTwo.duration || 10000,                    // duration of stage two timer
+            s2c = stageTwo.callback || defaultStageTwo,          // stage two callback
+            s1TimeoutID = null,          // stage one timeout
+            s2TimeoutID = null,          // stage two timeout
+            started     = false;         // whether the TwoStageTimer has started
+
+        stageTwoDuration = s2d;
+
+        /**
+         * Start the timer (the first stage)
+         * @method start
+         */
+        function start() {
+            if(idleDuration !== 0) { // default is no idle timer
+                s1TimeoutID = setTimeout(fireS1, s1d);
+                started = true;
+            }
+        }
+
+        /**
+         * Kill the timer by stopping both timeouts and setting started to false
+         * @method kill
+         */
+        function kill() {
+            s1TimeoutID &amp;&amp; clearTimeout(s1TimeoutID);
+            s2TimeoutID &amp;&amp; clearTimeout(s2TimeoutID);
+            overlayInterval &amp;&amp; clearInterval(overlayInterval);
+            started = false;
+        }
+
+        /**
+         * Returns whether or not the timer is stopped
+         * @method isStopped
+         * @return {Boolean}       this._started
+         */
+        function isStopped() {
+            return started;
+        }
+
+        /**
+         * A general restart method -- clears timeouts and intervals and
+         * restarts stage one timeout
+         * @method restart
+         */
+        function restart() {
+            s1TimeoutID &amp;&amp; clearTimeout(s1TimeoutID);
+            s2TimeoutID &amp;&amp; clearTimeout(s2TimeoutID);
+            overlayInterval &amp;&amp; clearInterval(overlayInterval);
+
+            start();
+        }
+
+        /**
+         * Reinitialize the timer with new timerPairs
+         * method reinitialize
+         * @param {timerPair} newS1         new stage one timerPair
+         * @param {timerPair} newS2         new stage two timerPair
+         */
+        function reinitialize(newS1, newS2) {
+            clearTimeout(s1TimeoutID);
+            clearTimeout(s2TimeoutID);
+            s1d = newS1.duration;
+            s1c = newS1.callback;
+            s2d = newS2.duration;
+            s2c = newS2.callback;
+            s1TimeoutID = null;
+            s2TimeoutID = null;
+
+            stageTwoDuration = s2d;
+
+            started = false;
+
+            overlayInterval &amp;&amp; clearInterval(overlayInterval);
+        }
+
+        /**
+         * Private method to fire stage one timer
+         * @method fireS1
+         */
+        function fireS1() {
+            s1c();
+            s2TimeoutID = setTimeout(fireS2, s2d);
+        }
+
+        /**
+         * Private method to fire stage two timer
+         * @method fireS2
+         */
+        function fireS2() {
+            s2c();
+            started = false;
+        }
+
+        return {
+            start:        start,
+            kill:         kill,
+            isStopped:    isStopped,
+            restart:      restart,
+            reinitialize: reinitialize
+        };
+    }
+
+    /**
+     * Create a timerPair object
+     * @method timerPair
+     * @param {Number} duration       length of timer
+     * @param {Function} callback     function to be called when timer expires
+     */
+    function timerPair(duration, callback) {
+        return {
+            duration: duration,
+            callback: callback
+        }
+    }
+
+    /**
+     * Create default stage one timerPair
+     * @method defaultStageOne
+     * @return {Object}               default stage one pair
+     */
+    function defaultStageOne() {
+        return createIdleOverlay();
+    }
+
+    /**
+     * Create default stage two timerPair
+     * @method defaultStageTwo
+     * @return {Object}               default stage two pair
+     */
+    function defaultStageTwo() {
+        return returnHome();
+    }
+
+    /**
+     * Create default idle timer warning overlay -- default
+     * stage one callback
+     * @method createIdleOverlay
+     */
+    function createIdleOverlay() {
+        var textRegion    = $(document.createElement(&#x27;div&#x27;)).addClass(&#x27;idleTimerTextRegion&#x27;),
+            clock         = $(document.createElement(&#x27;div&#x27;)).addClass(&#x27;idleTimerClock&#x27;),
+            time          = 0,
+            origDate      = new Date(),
+            origTime      = origDate.getTime(),
+            width;
+
+        overlay = $(TAG.Util.UI.blockInteractionOverlay(0.8));
+        
+        // do this in styl file
+        overlay.css({
+            &#x27;text-align&#x27;: &#x27;center&#x27;
+        });
+
+        textRegion.css({
+            &#x27;font-size&#x27;: &#x27;2em&#x27;,
+            &#x27;left&#x27;:  &#x27;10%&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;text-align&#x27;: &#x27;center&#x27;,
+            &#x27;top&#x27;:   &#x27;30%&#x27;,
+            &#x27;width&#x27;: &#x27;80%&#x27;
+        });
+
+        clock.css({
+            &#x27;background-color&#x27;: &#x27;white&#x27;,
+            &#x27;border&#x27;: &#x27;2px solid #ffffff&#x27;,
+            &#x27;border-radius&#x27;: &#x27;50%&#x27;,
+            &#x27;display&#x27;: &#x27;block&#x27;,
+            &#x27;left&#x27;: &#x27;45%&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;top&#x27;: &#x27;50%&#x27;,
+            &#x27;width&#x27;: &#x27;10%&#x27;
+        });
+
+        textRegion.html(&#x27;Starting a new session when the timer below expires.&lt;br /&gt;Tap anywhere to continue exploring.&#x27;);
+
+        overlay.append(textRegion);
+        overlay.append(clock);
+
+        $(&#x27;#tagRoot&#x27;).append(overlay);
+        overlay.fadeIn();
+
+        width = clock.width();
+        clock.css(&#x27;height&#x27;, width + &#x27;px&#x27;);
+
+        // when overlay is clicked, restart timer and remove overlay
+        overlay.on(&#x27;click&#x27;, function() {
+            overlay.off(&#x27;click&#x27;);
+            idleTimer &amp;&amp; idleTimer.restart(); // uses the global idleTimer (declared in Gruntfile.js)
+            removeIdleOverlay();
+        });
+
+        // create ticking clock
+        overlayInterval = setInterval(function() {
+            var percentDone,
+                gradString,
+                date = new Date();
+
+            time        = date.getTime() - origTime;
+            percentDone = Math.min(time / stageTwoDuration, 1);
+            gradString  = percentDone &lt;= 0.5 ?
+                            &#x27;linear-gradient(&#x27;+(90+360*percentDone)+&#x27;deg, transparent 50%, black 50%), linear-gradient(90deg, black 50%, transparent 50%)&#x27; :
+                            &#x27;linear-gradient(&#x27;+(90+360*(percentDone - 0.5))+&#x27;deg, transparent 50%, white 50%), linear-gradient(90deg, black 50%, transparent 50%)&#x27;
+
+            clock.css(&#x27;background-image&#x27;, gradString);
+
+            if(percentDone &gt;= 1) {
+                clearInterval(overlayInterval);
+            }
+        }, 10);
+    }
+
+    /**
+     * Remove the default warning overlay
+     * @method removeIdleOverlay
+     */
+    function removeIdleOverlay() {
+        overlay &amp;&amp; overlay.fadeOut(overlay.remove);
+    }
+
+    /**
+     * Returns to home page -- default stage two callback
+     * @method returnHome
+     */
+    function returnHome() {
+        TAG.Util.Splitscreen.setOn(false);
+        TELEMETRY_SESSION_ID = &#x27;xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&#x27;.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == &#x27;x&#x27; ? r : (r &amp; 0x3 | 0x8);
+            return v.toString(16);
+        });
+
+        if(currentPage.name !== TAG.Util.Constants.pages.COLLECTIONS_PAGE || !currentPage.obj || !currentPage.obj.loadFirstCollection) {
+            catalog = new TAG.Layout.CollectionsPage();
+            TAG.Util.UI.slidePageRight(catalog.getRoot());
+        } else {
+            removeIdleOverlay();
+            currentPage.obj.loadFirstCollection();
+        }
+    }
+
+    /**
+     * Restart the idle timer; this is a utility function and could be defined elsewhere
+     * @method restartIdleTimer
+     */
+    function restartTimer() {
+        idleTimer &amp;&amp; idleTimer.restart();
+    }
+
+    return {
+        TwoStageTimer: TwoStageTimer,
+        timerPair: timerPair,
+        restartTimer: restartTimer,
+        removeIdleOverlay: removeIdleOverlay
+    };
+})();
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

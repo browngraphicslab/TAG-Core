@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/tourauthoring/TAG.TourAuthoring.TourOptions.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/tourauthoring/TAG.TourAuthoring.TourOptions.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿TAG.Util.makeNamespace(&#x27;TAG.TourAuthoring.TourOptions&#x27;);
+
+/**
+ * Class for the tour authoring &#x27;Options&#x27; menu on the top-bar
+ * @class TAG.TourAuthoring.TourOptions
+ * @constructor
+ * @param {Object} options          timeManager attr, url (url of tour if loading existing tour for editing)
+ * @return {Object} that            TourOptions as a DOM object
+ */
+TAG.TourAuthoring.TourOptions = function (options) {
+    &quot;use strict&quot;;
+
+    var
+        // main divs of the menu
+        functionsPanel,                                                     // the main div containing the &#x27;Options&#x27; Label
+        tourOptionsLabel,                                                   // the options label
+        dropMain,                                                           // the drop-down menu
+        dropdownIcon,                                                       // the drop down icon
+
+        // parameter properties
+        tour = options.tour,                                                // the actual tour being edited
+        playbackControls = options.playbackControls,                        // the bottom panel controls to play/pause the tour
+        timeManager = options.timeManager,                                  // handles all time related things in tour authoring
+        timeline = options.timeline,                                        // the timeline on the authoring page to view the tour
+        root = options.root,                                                // root of the tour authoring page
+        undoManager = options.undoManager,                                  // handles undo changes made by user by keeping track of the order of commands
+
+        // misc variables
+        dialogOverlay = $(TAG.Util.UI.blockInteractionOverlay()),          // the overlay that blocks the UI when a pop-up comes up                // NOTE: TODO: figure out how to place dialogOverlay inside of topbar to maintain modularity?   
+        timeInput,                                                          // input box to enter time
+        messageRow,                                                         // div containing messages to the user when required
+        thumbnailcaptured = $(document.createElement(&#x27;div&#x27;)),               // used for thumbnail capture in the preview window
+        menuVisible = false;                                                // used to toggle between the two states of the drop-down menu
+
+    init();
+
+    /**Initializing all the required UI components and functionality
+     * @method init
+     */
+    function init() {
+        functionsPanel = createFunctionPanel();                             // create the main panel on the top bar
+        dropdownIcon = createDropDownIcon();                                // create the down arrow icon
+        dropMain = createMainMenu();                                        // create the main drop-down menu 
+        functionsPanel.append(dropMain);                                    // add the list to the main panel
+        tourOptionsLabel = createOptionsLabel();                            // create the label with &#x27;options&#x27; text
+        tourOptionsLabel.append(dropdownIcon);                              // add the down arrow to the label
+        functionsPanel.append(tourOptionsLabel);                            // add the label to the main panel
+        dropMain.hide();                                                    // the drop-down menu is hidden by default
+        handleDialogInputs();                                               // handle the dialog box inputs
+        createMenuOptions();                                                // create and manage actions related to each option in the drop-down menu
+    }
+
+    /**Creating the main panel to hold the drop-down arrow and label text
+     * @method createFunctionPanel
+     * @return {HTML Element} panel         div containing text and drop-down arrow
+     */
+    function createFunctionPanel() {
+        var panel = $(document.createElement(&#x27;div&#x27;));
+        panel.attr(&#x27;id&#x27;, &#x27;tour-options&#x27;);
+        panel.css({
+            &quot;height&quot;: &quot;48px&quot;,
+            &quot;width&quot;: &quot;13%&quot;,
+            &quot;left&quot;: &quot;25%&quot;,
+            &quot;top&quot;: &quot;27%&quot;,
+            &quot;position&quot;: &quot;relative&quot;,
+            &quot;float&quot;: &quot;left&quot;
+        });
+        return panel;
+    }
+
+    /**
+     * Creates component buttons for the drop-down menu
+     * @method addMenuItem
+     * @param {String} title                Name of button
+     * @param {HTML Element} component      DOM element to add button to
+     * @param {String} id                   id to the element
+     * @return {HTML Element} item          the label containing the option name
+     */
+    function addMenuItem(title, component, id) {
+        var item = $(document.createElement(&#x27;label&#x27;));
+        item.addClass(&#x27;optionItem&#x27;);
+        item.attr(&#x27;id&#x27;, id);
+        item.text(title);
+        item.css({
+            &quot;left&quot;: &quot;0%&quot;,
+            &quot;position&quot;: &quot;relative&quot;,
+            &quot;font-size&quot;: TAG.Util.getFontSize(48),
+            &quot;color&quot;: &quot;rgb(256, 256, 256)&quot;,
+            &quot;display&quot;: &quot;block&quot;,
+            &#x27;padding&#x27;: &#x27;4% 0 5% 0&#x27;,
+            &#x27;text-indent&#x27;: &#x27;4%&#x27;,
+            &#x27;z-index&#x27;: TAG.TourAuthoring.Constants.aboveRinZIndex + 5
+        });
+        item.on(&#x27;mousedown&#x27;, function (evt) {
+            evt.stopImmediatePropagation();
+        });
+        component.append(item);
+        return item;
+    }
+
+    /**Creates the drop-down arrow icon
+     * @method createDropDownIcon
+     * @return {HTML Element} icon      the drop-down arrow icon image
+     */
+    function createDropDownIcon() {
+        var icon = $(document.createElement(&#x27;img&#x27;));
+        icon.addClass(&quot;tourOptionDropDownIcon&quot;);
+        icon.attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/Down.png&#x27;);
+        icon.css({
+            &#x27;top&#x27;: &#x27;-5%&#x27;,
+            &#x27;width&#x27;: &#x27;7.5%&#x27;,
+            &#x27;height&#x27;: &#x27;auto&#x27;,
+            &#x27;margin-left&#x27;: &#x27;5%&#x27;,
+            &#x27;margin-bottom&#x27;: &#x27;3%&#x27;,
+        });
+        return icon;
+    }
+
+    /**Creates the label saying &#x27;Options&#x27; to be displayed on the top bar
+     * @method createOptionsLabel
+     * @return {HTML Element} optionsLabel        label with text
+     */
+    function createOptionsLabel() {
+        var optionsLabel = $(document.createElement(&#x27;label&#x27;));
+        optionsLabel.attr(&#x27;id&#x27;, &#x27;addTourOptionsLabel&#x27;);
+        optionsLabel.text(&quot;Options&quot;);
+        optionsLabel.css({
+            &quot;font-size&quot;: TAG.Util.getFontSize(55),
+            &quot;color&quot;: &quot;rgb(255, 255, 255)&quot;
+        });
+        optionsLabel.click(function (event) {
+            var close = timeline.getCloseMenu();
+            if (close &amp;&amp; close !== hideMenu) {
+                close();
+            }
+            event.stopImmediatePropagation();
+            menuVisible = !menuVisible;
+            if (menuVisible) {
+                timeline.setisMenuOpen(true);
+                timeline.setCloseMenu(hideMenu);
+                root.on(&#x27;mousedown.topMenu&#x27;, function (event) {
+                    hideMenu();
+                });
+                $(dropdownIcon).css({
+                    &#x27;transform&#x27;: &#x27;scaleY(-1)&#x27;,
+                    &#x27;margin-bottom&#x27;: &#x27;3%&#x27;
+                });
+            } else {
+                timeline.setisMenuOpen(false);
+                timeline.setCloseMenu(hideMenu);
+                root.off(&#x27;mousedown.topMenu&#x27;);
+                $(dropdownIcon).css({
+                    &#x27;transform&#x27;: &#x27;scaleY(1)&#x27;,
+                    &#x27;margin-bottom&#x27;: &#x27;3%&#x27;
+                });
+            }
+            dropMain.css(&#x27;top&#x27;, parseInt(optionsLabel.css(&#x27;top&#x27;), 10) + optionsLabel.height());
+            dropMain.toggle();
+        });
+        optionsLabel.on(&#x27;mousedown&#x27;, function (evt) {
+            evt.stopImmediatePropagation();
+        });
+        return optionsLabel;
+    }
+
+    /**Creates the main drop down div containing editing options
+     * @method createMainMenu
+     * @return {HTML Element}  mainMenu        div containing list of editing options
+     */
+    function createMainMenu() {
+        var menu = $(document.createElement(&#x27;div&#x27;));
+        menu.css({
+            &quot;position&quot;: &quot;absolute&quot;,
+            &quot;color&quot;: &quot;rgb(256, 256, 256)&quot;,
+            &#x27;background-color&#x27;: &#x27;rgba(0,0,0,0.85)&#x27;,
+            &#x27;left&#x27;: &#x27;0&#x27;,
+            &#x27;width&#x27;: &#x27;100%&#x27;,
+            &#x27;z-index&#x27;: TAG.TourAuthoring.Constants.aboveRinZIndex
+        });
+        return menu;
+    }
+
+    /**Creates the list of editing options with their properties
+     * @method createMenuOptions
+     */
+    function createMenuOptions() {
+        // menu options
+        var thumbnailButton = addMenuItem(&#x27;Capture Thumbnail&#x27;, dropMain, &#x27;thumbnailButton&#x27;);
+        var lengthButton = addMenuItem(&#x27;Change Tour Length&#x27;, dropMain, &#x27;tourLengthButton&#x27;);
+        var exportButton = addMenuItem(&#x27;Embed Tour&#x27;, dropMain, &#x27;exportButton&#x27;);
+
+        //the capture thumbnail confirmation
+        var capturedmsg = $(document.createElement(&#x27;label&#x27;));
+
+        capturedmsg.text(&quot;Capturing Thumbnail...&quot;);
+        capturedmsg.css({
+            &#x27;text-align&#x27;: &#x27;center&#x27;,
+            &#x27;width&#x27;: &#x27;100%&#x27;,
+            &#x27;font-size&#x27;: &#x27;1.5em&#x27;,
+            &#x27;color&#x27;: &#x27;white&#x27;
+        });
+        thumbnailcaptured.append(capturedmsg);
+        thumbnailcaptured.addClass(&quot;thumbnailcaptured&quot;);
+        thumbnailcaptured.css({
+            &#x27;background-color&#x27;: &#x27;black&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;left&#x27;: &#x27;52%&#x27;,
+            &#x27;z-index&#x27;: &#x27;1000&#x27;,
+            &#x27;display&#x27;: &#x27;none&#x27;,
+            &#x27;opacity&#x27;: &#x27;0.8&#x27;,
+            &#x27;border&#x27;: &#x27;2.8px double white&#x27;
+        });
+
+        /*capture the current viewer&#x27;s thumbnail*/
+        thumbnailButton.on(&#x27;click&#x27;, function () {
+            var uiHeight = $(&#x27;#resizableArea&#x27;).height() + $(&#x27;#topbar&#x27;).height();
+            var rinplayer;
+            thumbnailcaptured.css({ &#x27;top&#x27;: 0.53 * uiHeight + &#x27;px&#x27; });
+            hideMenu();     //hide menu
+            thumbnailcaptured.fadeIn(&#x27;fast&#x27;);
+            //capture the thumbnail and upload it.
+            rinplayer = $(&#x27;#rinplayer&#x27;);
+            html2canvas([rinplayer[0]], {
+                onrendered: function (canvas) {
+                    //no need for cropping anymore, since the rinplayer is always 16:9
+                    //gets dataurl from tmpcanvas, ready to send to server!
+                    var dataurl = canvas.toDataURL();
+                    TAG.Worktop.Database.uploadImage(dataurl, function (imageURL) {
+                        TAG.Worktop.Database.changeTour(tour.Identifier, { Thumbnail: imageURL }, function () {
+                            setTimeout(function () {
+                                thumbnailcaptured.fadeOut();//alert msg disappear
+                            }, 1000);
+                        }, unauth, conflict, error);
+                    }, unauth, error);
+                },
+                allowTaint: true, // allow imageES images in thumbnails, etc
+            });
+        });
+
+        lengthButton.on(&#x27;click&#x27;, function () {
+            hideMenu();     //hide menu
+            dialogOverlay.fadeIn(500);
+            timeInput.val(timeManager.formatTime(timeManager.getDuration().end));       // Set timeInput to the current length
+            timeInput.select();
+            messageRow.text(&#x27;&#x27;);
+        });
+
+        exportButton.on(&quot;click&quot;, exportJSON);           // export tour json to file
+    }
+
+    /**Handles exceptions for unauthorized access
+     * @method unauth
+     */
+    function unauth() {
+        var popup = TAG.Util.UI.popUpMessage(null, &quot;Thumbnail not saved.  You must log in to save changes.&quot;);
+        dialogOverlay.hide();
+        $(&#x27;body&#x27;).append(popup);
+        $(popup).show();
+        setTimeout(function () {
+            thumbnailcaptured.fadeOut();//alert msg disappear
+        }, 1000);
+    }
+
+    /**If we have an out-of-date doq (e.g., if another TAG
+     * client updated the doq while we were working), force
+     * the call anyway, which will overwrite their changes.
+     * @method conflict
+     * @param {jqXHR} jqXHR     async request object (see http://api.jquery.com/Types/#jqXHR)
+     * @param {} ajaxCall       see documentation in TAG.Worktop.Database (and the code for asyncRequest in that file)
+     */
+    function conflict(jqXHR, ajaxCall) {
+        ajaxCall.force();
+    }
+
+    /**Handles server connectivity errors
+     * @method error
+     */
+    function error() {
+        var popup = TAG.Util.UI.popUpMessage(null, &quot;Thumbnail not saved.  There was an error contacting the server.&quot;);
+        dialogOverlay.hide();
+        $(&#x27;body&#x27;).append(popup);
+        $(popup).show();
+        setTimeout(function () {
+            thumbnailcaptured.fadeOut();        //alert msg disappear
+        }, 1000);
+    }
+
+    /**Creates and manages the dialogForm box to change tour length etc.
+     * @method handleDialogInputs
+     */
+    function handleDialogInputs() {
+        var lengthDialog = $(document.createElement(&#x27;div&#x27;));                                                            // create the pop-up div containing the form components
+        var dialogForm = $(document.createElement(&#x27;form&#x27;));                                                             // create a form to capture enter keypress
+        var dialogTitle = $(document.createElement(&#x27;div&#x27;));                                                             // the dialog box title text
+        var lengthDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),                   
+           {
+               center_h: true,
+               center_v: true,
+               width: 0.5,
+               height: 0.35,
+               max_width: 560,
+               max_height: 200,
+           });                                                                                                          
+        var emptyDiv = $(document.createElement(&quot;div&quot;));
+        var buttonDiv = $(document.createElement(&quot;div&quot;));                                                               // main button panel
+        var buttonRow = $(document.createElement(&#x27;div&#x27;));                                                               // div containing the save and cancel buttons
+        var submitButton = $(document.createElement(&quot;button&quot;));                                                         // submit button on the dialog box
+        var cancelButton = $(document.createElement(&#x27;button&#x27;));                                                         // cancel button on the dialog box
+
+        timeInput = $(document.createElement(&#x27;input&#x27;));                                                                 // input for the tour length time
+        messageRow = $(document.createElement(&#x27;div&#x27;));                                                                  // div to output a message to the user
+
+        lengthDialog.attr(&#x27;id&#x27;, &#x27;lengthDialog&#x27;);
+        dialogOverlay.css(&#x27;z-index&#x27;, &#x27;100000&#x27;);
+        lengthDialog.css({
+            position: &#x27;absolute&#x27;,
+            left: lengthDialogSpecs.x + &#x27;px&#x27;,
+            top: lengthDialogSpecs.y + &#x27;px&#x27;,
+            width: lengthDialogSpecs.width + &#x27;px&#x27;,
+            height: lengthDialogSpecs.height + &#x27;px&#x27;,
+            border: &#x27;3px double white&#x27;,
+            &#x27;background-color&#x27;: &#x27;black&#x27;,
+        });
+        dialogOverlay.append(lengthDialog);
+        dialogForm.attr(&#x27;id&#x27;, &#x27;dialogForm&#x27;);
+        dialogForm.css({
+            &#x27;margin-top&#x27;: &#x27;4.5%&#x27;,
+        });
+        lengthDialog.append(dialogForm);
+
+        // updates the timeManager/timeinput related stats
+        // when the length of tour is changed/submit button is clicked.
+        dialogForm.on(&#x27;submit&#x27;, function () {
+            var split = timeInput.val().split(&#x27;:&#x27;);
+            var min = parseInt(split[0], 10);
+            var sec = parseInt(split[1], 10);
+            var oldTime;
+            var command;
+
+            if (split.length === 1 &amp;&amp; (min || min === 0) &amp;&amp; min &gt;= 0) { // In this case &#x27;min&#x27; is actually seconds
+                if (min &gt; TAG.TourAuthoring.Constants.maxTourLength) {
+                    messageRow.text(&#x27;Tour length is too long. Maximum length of tour must be 15 minutes.&#x27;);
+                    messageRow.css({
+                        color: &#x27;white&#x27;,
+                        &#x27;width&#x27;: &#x27;80%&#x27;,
+                        &#x27;left&#x27;: &#x27;10%&#x27;,
+                        &#x27;font-size&#x27;: &#x27;0.7em&#x27;,
+                        &#x27;position&#x27;: &#x27;absolute&#x27;,
+                        &#x27;text-align&#x27;: &#x27;center&#x27;,
+                        &#x27;margin-top&#x27;: &#x27;3%&#x27;,
+                    });
+                    timeInput.select();
+                } else {
+                    if (min &lt; timeline.getLastDisplayTime()) { //check if new time is shorter than last display length, and limit it to that
+                        min = timeline.getLastDisplayTime();
+                    }
+                    oldTime = timeManager.getDuration().end;
+                    command = TAG.TourAuthoring.Command({
+                        execute: function () {
+                            timeManager.setEnd(min);
+                        },
+                        unexecute: function () {
+                            timeManager.setEnd(oldTime);
+                        }
+                    });
+                    command.execute();
+                    undoManager.logCommand(command);
+                    dialogOverlay.fadeOut(500);
+                }
+            } else if (split.length === 2 &amp;&amp; (min || min === 0) &amp;&amp; (sec || sec === 0) &amp;&amp; min &gt;= 0 &amp;&amp; (typeof sec === &quot;number&quot;) &amp;&amp; sec &gt;= 0 &amp;&amp; sec &lt;= 59) { // good format
+                var newTime = min * 60 + sec;
+                if (newTime &gt; TAG.TourAuthoring.Constants.maxTourLength) {
+                    messageRow.text(&#x27;Tour length is too long. Maximum length of tour is 15 minutes.&#x27;);
+                    timeInput.select();
+                } else {
+                    if (newTime &lt; timeline.getLastDisplayTime()) { //check if new time is shorter than last display length, and limit it to that
+                        newTime = timeline.getLastDisplayTime();
+                    }
+                    oldTime = timeManager.getDuration().end;
+                    command = TAG.TourAuthoring.Command({
+                        execute: function () {
+                            timeManager.setEnd(newTime);
+                        },
+                        unexecute: function () {
+                            timeManager.setEnd(oldTime);
+                        }
+                    });
+                    command.execute();
+                    undoManager.logCommand(command);
+                    dialogOverlay.fadeOut(500);
+                }
+            } else {
+                messageRow.text(&#x27;Please enter a valid length (MM:SS or seconds).&#x27;);
+                timeInput.select();
+            }
+            timeline.faderUpdate();// update the fader pposition in sliderBox
+            return false;
+        });
+
+        dialogTitle.attr(&#x27;id&#x27;, &#x27;dialogTitle&#x27;);
+        dialogTitle.css({
+            color: &#x27;white&#x27;,
+            &#x27;width&#x27;: &#x27;80%&#x27;,
+            &#x27;height&#x27;: &#x27;15%&#x27;,
+            &#x27;left&#x27;: &#x27;10%&#x27;,
+            &#x27;font-size&#x27;: &#x27;0.7em&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;text-align&#x27;: &#x27;center&#x27;,
+            &#x27;word-wrap&#x27;: &#x27;break-word&#x27;
+        });
+        dialogTitle.text(&#x27;Enter New Length (MM:SS): &#x27;);
+        dialogForm.append(dialogTitle);
+
+        timeInput.attr(&#x27;id&#x27;, &#x27;timeInput&#x27;);
+        timeInput.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        });
+        dialogTitle.append(timeInput);
+        dialogForm.append(document.createElement(&#x27;br&#x27;));
+
+        timeInput.on(&#x27;keydown&#x27;, function (ev) {
+            ev.stopImmediatePropagation();
+        });
+        timeInput.on(&#x27;keypress&#x27;, function (ev) {
+            ev.stopImmediatePropagation();
+        });
+        timeInput.on(&#x27;keyup&#x27;, function (ev) {
+            ev.stopImmediatePropagation();
+        });
+       
+        messageRow.css({
+            &#x27;color&#x27;: &#x27;white&#x27;,
+            &#x27;width&#x27;: &#x27;80%&#x27;,
+            &#x27;left&#x27;: &#x27;10%&#x27;,
+            &#x27;font-size&#x27;: &#x27;0.7em&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;text-align&#x27;: &#x27;center&#x27;,
+            &#x27;margin-top&#x27;: &#x27;3%&#x27;
+        });
+        dialogForm.append(messageRow);
+        buttonRow.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;display&#x27;: &#x27;block&#x27;,
+            &#x27;width&#x27;: &#x27;80%&#x27;,
+            &#x27;left&#x27;: &#x27;10%&#x27;,
+            &#x27;top&#x27;: &#x27;50%&#x27;
+        });
+        dialogForm.append(buttonRow);
+
+        buttonDiv.css(&#x27;text-align&#x27;, &#x27;right&#x27;);
+        emptyDiv.css(&#x27;clear&#x27;, &#x27;both&#x27;);
+        
+        submitButton.text(&quot;Apply&quot;);
+        submitButton.css({
+            &#x27;padding&#x27;: &#x27;1%&#x27;,
+            &#x27;border&#x27;: &#x27;1px solid white&#x27;,
+            &#x27;width&#x27;: &#x27;auto&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;float&#x27;: &quot;right&quot;,
+            &#x27;margin-right&#x27;: &#x27;-3%&#x27;,
+            &#x27;margin-top&#x27;: &#x27;15%&#x27;
+        });
+        
+        cancelButton.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+        cancelButton.text(&quot;Cancel&quot;);
+        cancelButton.css({
+            &#x27;padding&#x27;: &#x27;1%&#x27;,
+            &#x27;border&#x27;: &#x27;1px solid white&#x27;,
+            &#x27;width&#x27;: &#x27;auto&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;margin-left&#x27;: &#x27;-3%&#x27;,
+            &#x27;float&#x27;: &quot;left&quot;,
+            &#x27;margin-top&#x27;: &#x27;15%&#x27;,
+            &#x27;bottom&#x27;: &#x27;1%&#x27;
+        });
+        buttonRow.append(cancelButton);
+        buttonRow.append(submitButton);
+        buttonRow.append(emptyDiv);
+        dialogForm.append(buttonRow);
+        cancelButton.click(function () { dialogOverlay.fadeOut(500); });
+        buttonRow.append(cancelButton);
+        
+    }
+
+    /**Helper function to hide the drop-down menu
+     * @method hideMenu
+     */
+    function hideMenu() {
+        $(&#x27;.tourOptionDropDownIcon&#x27;).css({ &#x27;transform&#x27;: &#x27;scaleY(1)&#x27;, &#x27;margin-bottom&#x27;: &#x27;0%&#x27; });
+        menuVisible = false;
+        dropMain.hide();
+    }
+
+    /**Exports tour json to a file
+     * @method exportJSON
+     */
+    function exportJSON() {
+        var date = Date.now();
+        var json = timeline.toRIN(true);
+        var json_str = JSON.stringify(json);
+        var messageBox;
+
+        var html_content = &#x27;&#x27;;
+        html_content += &#x27;&lt;!DOCTYPE html&gt;\n&#x27;;
+        html_content += &#x27;    &lt;html&gt;\n&#x27;;
+        html_content += &#x27;    &lt;head&gt;\n&#x27;;
+        html_content += &#x27;        &lt;title&gt;TAG Tour Embedding&lt;/title&gt;\n&#x27;;
+        html_content += &#x27;        &lt;script src=&quot;TAG-min.js&quot;&gt;&lt;/script&gt;\n&#x27;;
+        html_content += &#x27;        &lt;script&gt;\n&#x27;;
+        html_content += &#x27;            window.onload = load;\n&#x27;;
+        html_content += &#x27;            function load() {\n&#x27;;
+        html_content += &#x27;                TAG({\n&#x27;;
+        html_content += &#x27;                    path: &quot;&quot;,\n&#x27;;
+        html_content += &#x27;                    containerId: &quot;tagContainer&quot;,\n&#x27;;
+        html_content += &#x27;                    serverIp: &quot;&#x27; + localStorage.ip + &#x27;&quot;,\n&#x27;;
+        html_content += &#x27;                    width: &quot;1000px&quot;,\n&#x27;;
+        html_content += &#x27;                    height: &quot;500px&quot;,\n&#x27;;
+        html_content += &#x27;                    pageToLoad: &quot;#tagpagename=tour&amp;tagguid=&#x27;+options.tour.Identifier+&#x27;&amp;tagtouronly=false&amp;tagserver=&#x27;+localStorage.ip+&#x27;&quot;\n&#x27;;
+        html_content += &#x27;                });\n&#x27;;
+        html_content += &#x27;            }\n&#x27;;
+        html_content += &#x27;        &lt;/script&gt;\n&#x27;;
+        html_content += &#x27;    &lt;/head&gt;\n&#x27;;
+        html_content += &#x27;    &lt;body style=&quot;height:1000px;width:1100px;&quot;&gt;\n&#x27;;
+        html_content += &#x27;        &lt;div id=&quot;tagContainer&quot; style=&quot;margin-left:50px;margin-top:50px&quot;&gt;&lt;/div&gt;\n&#x27;;
+        html_content += &#x27;    &lt;/body&gt;\n&#x27;;
+        html_content += &#x27;&lt;/html&gt;&#x27;;
+
+        hideMenu();
+
+        messageBox = popupTextareaDialog(&quot;Copy the text below into an HTML file and place this file in the top-level &#x27;TAG&#x27; directory of the TAG web app source code. Please see our website (cs.brown.edu/research/ptc/tag) for more details.&quot;, html_content);
+        $(&#x27;body&#x27;).append(messageBox);
+        messageBox.fadeIn(500);
+    }
+
+    /**
+     * Show a popup dialog with a textarea so the user can copy some content. This
+     * is used in the &quot;export tour data&quot; functionality to give the user an html string.
+     * @method popupTextareaDialog
+     * @param {String} description      description/directions
+     * @param {String} text             text for the textarea
+     * @return {jQuery obj}             the overlay to be appended to the root
+     */
+    function popupTextareaDialog(description, text) {
+        var overlay = $(TAG.Util.UI.blockInteractionOverlay()),
+            messageDiv = $(document.createElement(&#x27;div&#x27;)),
+            textarea = $(document.createElement(&#x27;textarea&#x27;)),
+            closeButton = $(document.createElement(&#x27;button&#x27;)),
+            optionButtonDiv = $(document.createElement(&#x27;div&#x27;)),
+            confirmBox = $(document.createElement(&#x27;div&#x27;)),
+            confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(), { // TODO is window right for the web app?
+                center_h: true,
+                center_v: true,
+                width: 0.5,
+                height: 0.6,
+                max_width: 1200,
+                max_height: 1200,
+            });
+
+        overlay.on(&#x27;click&#x27;, removeAll);
+
+        confirmBox.css({
+            position: &#x27;absolute&#x27;,
+            left: confirmBoxSpecs.x + &#x27;px&#x27;,
+            top: confirmBoxSpecs.y + &#x27;px&#x27;,
+            width: confirmBoxSpecs.width + &#x27;px&#x27;,
+            height: confirmBoxSpecs.height + &#x27;px&#x27;,
+            border: &#x27;3px double white&#x27;,
+            &#x27;background-color&#x27;: &#x27;black&#x27;
+        });
+        confirmBox.on(&#x27;click&#x27;, function (evt) {
+            evt.stopPropagation();
+        });
+
+        messageDiv.addClass(&#x27;popupTextareaMessage&#x27;);
+        messageDiv.css({
+            &#x27;font-size&#x27;: &#x27;1.2em&#x27;,
+            &#x27;height&#x27;: &#x27;60px&#x27;,
+            &#x27;left&#x27;: &#x27;5%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;margin-top&#x27;: &#x27;10px&#x27;,
+            &#x27;width&#x27;: &#x27;90%&#x27;
+        });
+        messageDiv.text(description);
+
+        textarea.css({
+            left: &#x27;4%&#x27;,
+            position: &#x27;relative&#x27;,
+            &#x27;margin-top&#x27;: &#x27;12px&#x27;,
+            width: &#x27;90%&#x27;
+        });
+        textarea.attr({
+            value: text
+        });
+
+        optionButtonDiv.addClass(&#x27;optionButtonDiv&#x27;);
+        optionButtonDiv.css({
+            &#x27;height&#x27;: &#x27;30px&#x27;,
+            &#x27;width&#x27;: &#x27;90%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;left&#x27;: &#x27;5%&#x27;,
+            &#x27;margin-top&#x27;: &#x27;10px&#x27;
+        });
+
+        closeButton.css({
+            &#x27;border&#x27;: &#x27;1px solid white&#x27;,
+            &#x27;display&#x27;: &#x27;inline-block&#x27;,
+            &#x27;float&#x27;: &#x27;right&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;
+        });
+        closeButton.text(&#x27;Close&#x27;);
+        closeButton.on(&#x27;click&#x27;, removeAll);
+
+        function removeAll() {
+            overlay.fadeOut(500, function () { overlay.remove(); });
+        }
+
+        optionButtonDiv.append(closeButton);
+        confirmBox.append(messageDiv);
+        confirmBox.append(textarea);
+        confirmBox.append(optionButtonDiv);
+        overlay.append(confirmBox);
+        textarea.css(&#x27;height&#x27;, (confirmBox.height() - optionButtonDiv.height() - messageDiv.height() - 60) + &#x27;px&#x27;);
+
+        return overlay;
+    }
+
+    /**Apply given CSS properties to the functionsPanel
+     * @method applyCSS
+     * @param {Object} css      list of css properties as an object
+     */
+    function applyCSS(css) {
+        functionsPanel.css(css);
+    }
+    
+    /**Apply given CSS properties to the tourOptionsLabel
+     * @method applyLabelCSS
+     * @param {Object} css     list of css properties as an object
+     */
+    function applyLabelCSS(css) {
+        tourOptionsLabel.css(css);
+    }
+    
+    /**Adds the tour options panel to the DOM
+     * @method addToDOM
+     * @param {HTML Element} container      the actual div/window containing TAG
+     */
+    function addToDOM(container) {
+        container.append(functionsPanel).append(dialogOverlay);
+        container.append(functionsPanel).append(thumbnailcaptured);
+    }
+    
+    // Public methods
+    return {
+        applyCSS: applyCSS,
+        applyLabelCSS: applyLabelCSS,
+        addToDOM: addToDOM,
+    };
+};
+
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

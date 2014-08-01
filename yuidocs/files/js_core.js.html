@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/core.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/core.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿// TAG (Touch Art Gallery) does not collect or publish any personal information.
+
+/**
+ * This file is responsible for performing initial setup. Please see the comments for load
+ * and init below.
+ */
+(function () { // TODO merging: make sure everything necessary from the win8 app is here
+    &quot;use strict&quot;;
+
+    if (IS_WINDOWS) {
+        $(document).on(&#x27;ready&#x27;, load);
+    } else {
+        load();
+    }
+
+    /**
+     * The first real TAG function called. Sets up the embedding within iframe and
+     * calls init, which takes care of loading scripts and displaying the first page.
+     * @method load
+     */
+    function load() {
+        var container,              // container to hold embedding
+            positioning,            // try to be friendly to the positioning the host set (either abs or rel);
+                                    //    if we&#x27;re embedding in iframe, doesn&#x27;t matter
+            tagRootContainer,       // the following two use table positioning to center the embedding
+            tagRootInnerContainer,  //    vertically and horizontally
+            tagRoot,                // the div containing TAG -- considered the &quot;root&quot; of the TAG-related DOM
+            w,                      // width of embedding
+            h,                      // height of embedding
+            l;                      // left of tagRoot
+        
+        TELEMETRY_SESSION_ID = &#x27;xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&#x27;.replace(/[xy]/g, function(c) {
+            var r = Math.random()*16|0, v = c == &#x27;x&#x27; ? r : (r&amp;0x3|0x8);
+            return v.toString(16);
+        });
+
+        if(containerId &amp;&amp; $(&#x27;#&#x27;+containerId).length &gt; 0) {
+            container = $(&#x27;#&#x27;+containerId);
+        } else {
+            console.log(&#x27;no containerId specified, or the containerId does not match an element&#x27;);
+            return; // no TAG for you
+        }
+
+        if(urlToParse || urlToLoad) {
+            pageToLoad = parseQueryParams();
+        }
+
+        // if we&#x27;re in the windows app, localStorage.ip should take precedence (starting on the last server
+        // running makes more sense than in the web app, where TAG should start to whichever server is specified
+        // by the museum/institution)
+        localStorage.ip = (IS_WINDOWS ? (localStorage.ip || ip) : (pageToLoad.tagserver || ip || localStorage.ip)) || &#x27;browntagserver.com&#x27;;
+
+        positioning = container.css(&#x27;position&#x27;);
+        if(positioning !== &#x27;relative&#x27; &amp;&amp; positioning !== &#x27;absolute&#x27;) {
+            container.css(&#x27;position&#x27;, &#x27;relative&#x27;);
+        }
+
+        tagRootContainer = $(document.createElement(&#x27;div&#x27;)).attr(&#x27;id&#x27;, &#x27;tagRootContainer&#x27;);
+        container.append(tagRootContainer);
+
+        tagRootInnerContainer = $(document.createElement(&#x27;div&#x27;)).attr(&#x27;id&#x27;, &#x27;tagRootInnerContainer&#x27;);
+        tagRootContainer.append(tagRootInnerContainer);
+        
+        tagRoot = $(document.createElement(&#x27;div&#x27;)).attr(&#x27;id&#x27;, &#x27;tagRoot&#x27;);
+        tagRootInnerContainer.append(tagRoot);
+        
+        w = container.width();
+        h = container.height();
+        l = 0;
+
+        if (IS_WEBAPP) {
+            if (w / h &gt; 16 / 9) { // constrain width or height depending on the embedding dimensions
+                l = (w - 16 / 9 * h) / 2;
+                w = 16 / 9 * h;
+            } else {
+                h = 9 / 16 * w;
+            }
+        }
+
+        tagRoot.css({
+            &#x27;font-size&#x27;:  (w/9.6) + &#x27;%&#x27;, // so font-size percentages for descendents work well
+            height:       h + &quot;px&quot;,
+            left:         l + &quot;px&quot;,
+            &#x27;max-width&#x27;:  w + &quot;px&quot;,
+            &#x27;max-height&#x27;: h + &quot;px&quot;,
+            width:        w + &quot;px&quot;
+        });
+
+        // bleveque: I got rid of the demo.html handlers here, since they don&#x27;t really belong (delete this comment if after 8/15/14)
+
+        init();
+    }
+
+    /**
+     * Parses page url for a specific TAG page to load
+     * @method parseQueryParams
+     * @return {Object}              the tag params found
+     */
+    function parseQueryParams() {
+        var url     = urlToParse,                 // url of host site
+            param,                                // param
+            ret     = {};                         // will return this
+
+        param = url.match(/tagserver=[^\&amp;]*/);
+        if(param &amp;&amp; param.length &gt; 0) {
+            ret.tagserver = param[0].split(/=/)[1];
+        }
+
+        param = url.match(/tagpagename=[a-zA-Z]+/);
+
+        if(param &amp;&amp; param.length &gt; 0) {
+            ret.pagename = param[0].split(/=/)[1];
+            switch(ret.pagename) {
+                case &#x27;collections&#x27;:
+                    param = url.match(/tagcollectionid=[a-f0-9\-]+/);
+                    if(param &amp;&amp; param.length &gt; 0) {
+                        ret.collectionid = param[0].split(/=/)[1];
+                        param = url.match(/tagartworkid=[a-f0-9\-]+/);
+                        if(param &amp;&amp; param.length &gt; 0) {
+                            ret.artworkid = param[0].split(/=/)[1];
+                        }
+                        return ret;
+                    }
+                    break;
+                case &#x27;artwork&#x27;:
+                case &#x27;video&#x27;:
+                    param = url.match(/tagguid=[a-f0-9\-]+/);
+                    if(param &amp;&amp; param.length &gt; 0) {
+                        ret.guid = param[0].split(/=/)[1];
+                        return ret;
+                    }
+                    break;
+                case &#x27;tour&#x27;:
+                    param = url.match(/tagguid=[a-f0-9\-]+/);
+                    if(param &amp;&amp; param.length &gt; 0) {
+                        ret.guid = param[0].split(/=/)[1];
+                        ret.onlytour = url.match(/tagonlytour=true/) ? true : false;
+                        return ret;
+                    }
+                    break;
+            }
+        } else if (urlToLoad) {
+            // if we didn&#x27;t have any luck parsing urlToParse, try urlToLoad
+            // this makes urlToLoad the &quot;default&quot; loading page, but still
+            // allows users to link to specific pages by specifying url params
+            urlToParse = urlToLoad;
+            urlToLoad = &#x27;&#x27;;
+            return parseQueryParams();
+        }
+        return ret;
+    }
+
+
+    /**
+     * Initialize TAG; load some scripts into the &lt;head&gt; element,
+     * load StartPage (or TourPlayer if specified in the API call).
+     * @method init
+     */
+    function init() {
+        var TAGSCRIPTS = [                                    // scripts to load
+                &#x27;js/raphael.js&#x27;,
+                &#x27;js/tagInk.js&#x27;,
+                &#x27;js/RIN/web/lib/rin-core-1.0.js&#x27;
+            ],
+            i,                                                // index
+            oHead,                                            // head element
+            oScript,                                          // script element
+            oCss,                                             // link element
+            tagContainer;                                     // div containing TAG
+
+        TAGSCRIPTS.push(
+            IS_WINDOWS ? &#x27;js/WIN8_RIN/web/lib/rin-core-1.0.js&#x27;   : &#x27;js/RIN/web/lib/rin-core-1.0.js&#x27;,
+            IS_WINDOWS ? &#x27;js/WIN8_RIN/web/lib/knockout-2.1.0.js&#x27; : &#x27;js/RIN/web/lib/knockout-2.2.1.js&#x27;
+        );
+
+        tagPath = tagPath || &#x27;&#x27;;
+        if(tagPath.length &gt; 0 &amp;&amp; tagPath[tagPath.length - 1] !== &#x27;/&#x27;) {
+            tagPath += &#x27;/&#x27;;
+        }
+
+        // load scripts
+        oHead = document.getElementsByTagName(&#x27;head&#x27;).item(0);
+        for (i = 0; i &lt; TAGSCRIPTS.length; i++) {
+            oScript = document.createElement(&quot;script&quot;);
+            oScript.type = &quot;text/javascript&quot;;
+            oScript.src = tagPath + TAGSCRIPTS[i];
+            oHead.appendChild(oScript);
+        }
+
+        // load stylesheet
+        oCss = document.createElement(&quot;link&quot;);
+        oCss.rel = &quot;stylesheet&quot;;
+        oCss.href = tagPath+&quot;css/TAG.css&quot;;
+        oHead.appendChild(oCss);
+
+        tagContainer = $(&#x27;#tagRoot&#x27;);
+
+        $(&quot;body&quot;).css(&quot;-ms-touch-action&quot;,&quot;none&quot;);
+
+        // set up idle timer restarting
+        $(&#x27;body&#x27;).on(&#x27;click.idleTimer&#x27;, function() {
+            TAG.Util.IdleTimer.restartTimer();
+        });
+
+        // // if the user specified the tourData API parameter, load into the corresponding tour
+        // if(INPUT_TOUR_ID) {
+        //     currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+        //     currentPage.obj  = null;
+
+        //     TAG.Layout.StartPage(null, function (page) {
+        //         TAG.Worktop.Database.getDoq(INPUT_TOUR_ID, function(tour) {
+        //             var tourData = JSON.parse(unescape(tour.Metadata.Content)),
+        //                 rinPlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
+
+        //             tagContainer.css(&#x27;overflow&#x27;, &#x27;hidden&#x27;);
+
+        //             tagContainer.append(rinPlayer.getRoot());
+        //             rinPlayer.startPlayback();
+
+        //             currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
+        //             currentPage.obj  = rinPlayer;
+        //         }, function() {
+        //             // TODO error handling
+        //         }, function() {
+        //             // TODO cache error handling
+        //         });
+        //     });
+        // } else { // otherwise, load to start page
+        //     currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+        //     currentPage.obj  = null;
+
+        //     TAG.Layout.StartPage(null, function (page) {
+        //         tagContainer.append(page);
+        //     });
+        // }
+        // if the user specified the tourData API parameter, load into the corresponding tour
+        if(pageToLoad &amp;&amp; pageToLoad.pagename === &#x27;tour&#x27;) {
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.obj  = null;
+
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(tour) {
+                    var tourData = JSON.parse(unescape(tour.Metadata.Content)),
+                        rinPlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
+
+                    tagContainer.css(&#x27;overflow&#x27;, &#x27;hidden&#x27;);
+
+                    tagContainer.append(rinPlayer.getRoot());
+                    rinPlayer.startPlayback();
+
+                    currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
+                    currentPage.obj  = rinPlayer;
+                }, function() {
+                    // TODO error handling
+                }, function() {
+                    // TODO cache error handling
+                });
+            });
+        } else if (pageToLoad &amp;&amp; pageToLoad.pagename === &#x27;collections&#x27;) {
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.obj  = null;
+
+            TAG.Layout.StartPage(null, function (page) {
+                var collectionsPage;
+                if(pageToLoad.collectionid) {
+                    TAG.Worktop.Database.getDoq(pageToLoad.collectionid, function(collection) {
+                        if(pageToLoad.artworkid) {
+                            TAG.Worktop.Database.getDoq(pageToLoad.artworkid, function(artwork) {
+                                collectionsPage = new TAG.Layout.CollectionsPage({
+                                    backScroll: 0,
+                                    backArtwork: artwork,
+                                    backCollection: collection
+                                });
+                                tagContainer.append(collectionsPage.getRoot());
+                            });
+                        } else {
+                            collectionsPage = new TAG.Layout.CollectionsPage({
+                                backScroll: 0,
+                                backArtwork: null,
+                                backCollection: collection
+                            });
+                            tagContainer.append(collectionsPage.getRoot());
+                        }
+                    });
+                } else {
+                    collectionsPage = TAG.Layout.CollectionsPage();
+                    tagContainer.append(collectionsPage.getRoot());
+                }
+                currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+                currentPage.obj  = collectionsPage;
+            }, function() {
+                // TODO error handling
+            }, function() {
+                // TODO cache error handling
+            });
+        } else if (pageToLoad &amp;&amp; pageToLoad.pagename === &#x27;artwork&#x27;) {
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.obj  = null;
+
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(artwork) {
+                    var artworkViewer = TAG.Layout.ArtworkViewer({
+                        doq: artwork,
+                        prevScroll: 0,
+                        prevCollection: null,
+                        prevPage: &#x27;catalog&#x27;
+                    });
+                    tagContainer.append(artworkViewer.getRoot());
+
+                    currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                    currentPage.obj  = artworkViewer;
+                });
+            }, function() {
+                // TODO error handling
+            }, function() {
+                // TODO cache error handling
+            });
+        } else if (pageToLoad &amp;&amp; pageToLoad.pagename === &#x27;video&#x27;) {
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.obj  = null;
+
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(video) {
+                    var videoPlayer = TAG.Layout.VideoPlayer(video, null, null);
+                    tagContainer.append(videoPlayer.getRoot());
+
+                    currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+                    currentPage.obj  = videoPlayer;
+                });
+            }, function() {
+                // TODO error handling
+            }, function() {
+                // TODO cache error handling
+            });
+
+
+
+            
+        } else { // otherwise, load to start page
+            currentPage.name = TAG.Util.Constants.pages.START_PAGE;
+            currentPage.obj  = null;
+
+            TAG.Layout.StartPage(null, function (page) {
+                tagContainer.append(page);
+            });
+        }
+    }
+})();
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

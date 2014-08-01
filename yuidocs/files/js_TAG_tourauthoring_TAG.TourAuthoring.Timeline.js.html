@@ -1,0 +1,2874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/tourauthoring/TAG.TourAuthoring.Timeline.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/tourauthoring/TAG.TourAuthoring.Timeline.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿TAG.Util.makeNamespace(&#x27;TAG.TourAuthoring.Timeline&#x27;);
+
+/**Manages user editing of tracks and creating the elements of the timeline on the tour authoring screen
+ * @class TAG.TourAuthoring.Timeline
+ * @constructor
+ * @param {Object} spec      @params - timeManager, undoManager, viewer 
+ * @return {Object} that     public methods of TAG.TourAuthoring.Timeline
+ */
+TAG.TourAuthoring.Timeline = function (spec) {
+    &quot;use strict&quot;;
+
+    // Divs that need to be held onto
+    var mainScrollHider,                                                                                            // the base timeline div
+        editor,                                                                                                     // Top-level container, vertical scrolling
+        trackTitleWrapper,                                                                                          // div with track heads, no scrolling at all
+        timeRuler,                                                                                                  // Ruler for measuring time in the timeline, placed at the top of the timeline
+        timeline,                                                                                                   // Track area div with time ruler and track body, horizontal scrolling
+        trackBody,                                                                                                  // Track body container, xy scrolling
+        playhead,                                                                                                   // div containing the playhead svg
+        playheadtop,                                                                                                // div containing the playhead handle svg
+        playheadSVG,                                                                                                // icon for the playhead
+        playHeadGroup,                                                                                              // the other parts of the playhead
+        playHeadTop,                                                                                                // top circle of the playhead
+        playHead,                                                                                                   // the entire playhead on the timeline
+        compCont,                                                                                                   // instance of ComponentControls
+        onUpdateNumCalls = 0,                                                                                       // RIN related number used in coreUpdate
+        trackid = 0,                                                                                                // IDs for uniquely identifying tracks
+        docfrag,                                                                                                    // part of the document to which the timeline UI is appended
+
+        // booleans
+        tourExited = false,                                                                                         // boolean checking if a tour is still open or not
+        loaded = false,                                                                                             // boolean blocking timeline reloads until tour is fully initialized
+        isMenuOpen = false,                                                                                         // boolean checking for the current menu state
+        editInkOn = false,                                                                                          // checks if ink editing is on
+        modifyingInk = false,                                                                                       // checks if an ink track is being modified
+        sendScrollLeft = true,                                                                                      // checks if left scrolling is possible on the timeline ruler
+        sendScrollTop = true,                                                                                       // checks if it&#x27;s possible to scroll to the top of a list of tracks
+        multiSelection = false,                                                                                     // checks for the multi-selection option status
+
+        manipObjects = {},                                                                                          // the list of manipulatable objects such as the timeline ruler
+        tracks = [],                                                                                                // Array of tracks on the timeline
+        multiSelectionArray = [],                                                                                   // Array of selected tracks
+        data = [],                                                                                                  // data stores the current positions for undo
+        olddata = [],                                                                                               // old data stores the current positions for redo
+        clamped_displays = [],                                                                                      // stores changed display states
+
+        // Handles time stuff
+        playbackControls = spec.playbackControls,                                                                   // handles the play/pause stuff in the timeline
+        timeManager = spec.timeManager,                                                                             // all time related tasks in the timeline
+        root = spec.root,                                                                                           // the root element of the timeline
+        undoManager = spec.undoManager,                                                                             // keeps track of the order of commands for the undo action
+        viewer = spec.viewer,                                                                                       // preview window for the current tour being edited
+        verticalScroller,                                                                                           // vertical scrollbar to scroll through the list of tracks in the timeline
+        verticalScrollBox,                                                                                          // box containing vertical scrollbar
+        sliderPane,                                                                                                 // Container and background for Slider
+        dataHolder = spec.dataHolder,                                                                               // contains all tour data
+        selectedTrack = {
+            current: null
+        },                                                                                                          // this is an object so contents can be manipulated by track objects
+
+        editorWidth = $(window).width() * 0.995,                                                                    // width of the editing window
+        editorHeight = $(window).height() * 0.4825,                                                                 // height of the editing window
+        trackTitleWidth = 0.127 * $(window).width(),                                                                // width of the title of a track
+        trackAreaHeight = editorHeight - 5 - TAG.TourAuthoring.Constants.timeRulerSize,                            // height of the track div
+
+        editInkOverlay = $(TAG.Util.UI.blockInteractionOverlay()),                                                 // overlay for when &#x27;edit ink&#x27; component option is selected while playhead is not over the art track
+        overlayLabel = $(document.createElement(&#x27;div&#x27;)),                                                            // div to put the text for the &#x27;edit ink&#x27; message
+        deleteConfirmationOverlay = $(document.createElement(&#x27;div&#x27;)),                                               // overlay that covers the screen with the &#x27;delete&#x27; pop-up confirmation box
+  
+        queue = TAG.Util.createQueue(),                                                                            // creates a queue to update the timeline ruler
+        newLabels = $(),                                                                                            // creates a new timeline label to add to the queue
+        closeMenuHolder,                                                                                            // function to close the menu
+        debounce = $.debounce(200, coreUpdate),                                                                     // used in RIN code &lt;Description&gt;
+
+        that = {                                                                                                    // object with all the public methods of the class
+            faderUpdate: faderUpdate,
+            showEditorOverlay: showEditorOverlay,
+            hideEditorOverlay: hideEditorOverlay,
+            updateVerticalScroller: updateVerticalScroller,
+            enableDisableDrag: enableDisableDrag,
+            getEditInkOn: getEditInkOn,
+            setEditInkOn: setEditInkOn,
+            getMultiSelection: getMultiSelection,
+            addToDOM: addToDOM,
+            getSelectedTrack: getSelectedTrack,        
+            setCompControl: setCompControl,
+            showEditDraw: showEditDraw,
+            showEditText: showEditText,
+            showEditTransparency: showEditTransparency,
+            setModifyingInk: setModifyingInk,
+            removeInkSession: removeInkSession,
+            updateOldData: updateOldData,
+            newDataArray: newDataArray,
+            getOldData: getOldData,
+            moveSelect: moveSelect,
+            getDisplayData: getDisplayData,
+            allDeselected: allDeselected,
+            getMultiSelectionArray: getMultiSelectionArray,
+            getTrackslength: getTrackslength,
+            getTracks: getTracks,
+            getTimeRuler: getTimeRuler,
+            setisMenuOpen: setisMenuOpen,
+            getisMenuOpen: getisMenuOpen,       
+            setCloseMenu: setCloseMenu,
+            getCloseMenu: getCloseMenu,
+            getLastDisplayTime: getLastDisplayTime,
+            fixTrackTitle: fixTrackTitle,
+            addAudioTrack: addAudioTrack,
+            addVideoTrack: addVideoTrack,
+            addArtworkTrack: addArtworkTrack,
+            addImageTrack: addImageTrack,
+            addInkTrack: addInkTrack,
+            prependAddToDom: prependAddToDom,
+            getNumTracks: getNumTracks,
+            getRelatedArtworks: getRelatedArtworks,
+            getTrackBody: getTrackBody,
+            checkForArtworks: checkForArtworks,
+            disableInk: disableInk,
+            setLoaded: setLoaded,
+            receiveKeyframe: receiveKeyframe,
+            capturingOff: capturingOff,
+            captureKeyframe: captureKeyframe,
+            getViewer: getViewer,
+            getDataHolder: getDataHolder,
+            toRIN: toRIN,
+            onUpdate: onUpdate,
+            loadRIN: loadRIN,
+            cancelAccel: cancelAccel,
+            getClampedDisplays: getClampedDisplays,
+            _removeTrack: _removeTrack
+        };
+
+   
+    editInkOverlay.addClass(&#x27;editInkOverlay&#x27;);
+    overlayLabel.text(&quot;Ink is being edited...&quot;);
+
+    // Set timeline in viewer
+    viewer.setTimeline(that);
+    createTimeline();
+
+    /**Sets up the timeline 
+     * @method createTimeline
+     */
+    function createTimeline() {
+        var trackScrollVeil = $(document.createElement(&#x27;div&#x27;)),                                            // veil for track title scrollbar
+            horizBlock = $(document.createElement(&#x27;div&#x27;)),                                                 // Cover block to hide playhead outside of display area                                          
+            vertBlock = $(document.createElement(&#x27;div&#x27;)),                                                  // ruler scrollbar veil
+            rulerScrollVeil = $(document.createElement(&#x27;div&#x27;)),                                            // veil for the timeline ruler
+            rulerWrapper = $(document.createElement(&#x27;div&#x27;)),                                               // time ruler wrapper
+            multiSelButtonPanel = $(document.createElement(&#x27;div&#x27;)),                                        // panel to hold the multi-select button
+            multiSelButton = $(document.createElement(&#x27;button&#x27;)),                                          // the multi-select button
+            sliderParts,                                                                                   // parts to be attached to the slider pane
+            constrainedHeight = editorHeight - 5,                                                          // height for the mainScrollHider
+            constrainedWidth = editorWidth - 17;                                                           // width for the mainScrollHider
+        
+        // setting global variables
+        mainScrollHider = $(document.createElement(&#x27;div&#x27;));                                                 
+        editor = $(document.createElement(&#x27;div&#x27;));                                                          
+        trackTitleWrapper = $(document.createElement(&#x27;div&#x27;));                                               
+        trackBody = $(document.createElement(&#x27;div&#x27;));                                                       
+        timeRuler = $(document.createElement(&#x27;div&#x27;));                                                       
+        timeline = $(document.createElement(&#x27;div&#x27;));                                                                                                              
+        sliderPane = $(document.createElement(&#x27;div&#x27;));                                                      
+
+        mainScrollHider.attr(&#x27;class&#x27;, &#x27;mainScrollHider&#x27;);
+        mainScrollHider.css({
+            &quot;background-color&quot;: &quot;rgb(219,218,199)&quot;,
+            &#x27;overflow&#x27;: &#x27;hidden&#x27;,
+            &#x27;height&#x27;: editorHeight + &#x27;px&#x27;,
+            &#x27;width&#x27;: editorWidth + &#x27;px&#x27;,
+            &#x27;margin-top&#x27;: &#x27;3%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        });
+
+        editor.attr(&#x27;id&#x27;, &#x27;editor&#x27;);
+        editor.css({
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &quot;width&quot;: &#x27;100%&#x27;,
+            &#x27;overflow&#x27;: &#x27;hidden&#x27;,
+        });
+
+        trackScrollVeil.attr(&#x27;id&#x27;, &#x27;trackScrollVeil&#x27;);
+        trackScrollVeil.css({
+            &#x27;width&#x27;: trackTitleWidth + 20 + &#x27;px&#x27;,
+            &#x27;height&#x27;: trackAreaHeight + &#x27;px&#x27;,
+            &#x27;margin-left&#x27;: $(window).width() * 0.02 - 20 + &#x27;px&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;clear&#x27;: &#x27;left&#x27;,
+            &#x27;top&#x27;: &#x27;0px&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;
+        });
+
+        trackTitleWrapper.attr(&#x27;id&#x27;, &#x27;trackTitleWrapper&#x27;);
+        trackTitleWrapper.css({
+            &#x27;width&#x27;: trackTitleWidth + 20 + &quot;px&quot;,
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &#x27;margin-left&#x27;: &#x27;1.5%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+            &#x27;z-index&#x27;: &#x27;102&#x27;,
+            &#x27;background-color&#x27;: &#x27;rgb(219, 218, 199)&#x27;,
+        });
+
+        trackBody.attr(&#x27;id&#x27;, &#x27;trackBody&#x27;);
+        trackBody.css({
+            &#x27;height&#x27;: trackAreaHeight + &#x27;px&#x27;,
+            &#x27;margin-left&#x27;: &#x27;15%&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        });
+
+        timeRuler.attr(&#x27;id&#x27;, &#x27;timeRuler&#x27;);
+        timeRuler.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;height&#x27;: (TAG.TourAuthoring.Constants.timeRulerSize + 17) + &#x27;px&#x27;, // changed 12 %
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+        });
+        
+        timeline.attr(&#x27;id&#x27;, &#x27;timeline&#x27;);
+        timeline.css({
+            &#x27;height&#x27;: &#x27;200%&#x27;,
+            &#x27;width&#x27;: &#x27;97%&#x27;,
+            &#x27;overflow&#x27;: &#x27;hidden&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        });
+
+        horizBlock.attr(&#x27;id&#x27;, &#x27;horizBlock&#x27;);
+        horizBlock.css({
+            &#x27;height&#x27;: TAG.TourAuthoring.Constants.timeRulerSize + &#x27;px&#x27;,
+            &#x27;width&#x27;: &#x27;15.5%&#x27;,
+            &quot;background-color&quot;: &quot;rgb(219,218,199)&quot;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;102&#x27;,
+        });
+
+        vertBlock.attr(&#x27;id&#x27;, &#x27;vertBlock&#x27;);
+        vertBlock.css({
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &#x27;width&#x27;: &#x27;1.5%&#x27;,
+            &quot;background-color&quot;: &quot;rgb(219,218,199)&quot;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;102&#x27;,
+        });
+
+        rulerScrollVeil.attr(&#x27;id&#x27;, &#x27;rulerScrollVeil&#x27;);
+        rulerScrollVeil.css({
+            &#x27;height&#x27;: TAG.TourAuthoring.Constants.timeRulerSize + &#x27;px&#x27;,
+            &#x27;width&#x27;: &#x27;85%&#x27;,
+            &#x27;margin-left&#x27;: &#x27;15.4%&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+
+        });
+
+        rulerWrapper.attr(&#x27;id&#x27;, &#x27;rulerWrapper&#x27;);
+        rulerWrapper.css({
+            &#x27;width&#x27;: &#x27;85%&#x27;,
+            &#x27;height&#x27;: (TAG.TourAuthoring.Constants.timeRulerSize) + &#x27;px&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;100&#x27;,
+            &#x27;box-shadow&#x27;: &#x27;-7px 5px 10px #888&#x27;,
+        });
+
+        moveScroll(rulerWrapper);
+
+        multiSelButtonPanel.addClass(&quot;multiSelButtonPanel&quot;);
+        multiSelButtonPanel.css({
+            &#x27;top&#x27;: &#x27;12.5%&#x27;,
+            &#x27;left&#x27;: &#x27;25%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &quot;width&quot;: &#x27;60%&#x27;,
+            &#x27;height&#x27;: &#x27;75%&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;z-index&#x27;: &#x27;5&#x27;,
+        });
+
+        multiSelButton.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+        multiSelButton.attr(&#x27;id&#x27;, &quot;multiSelButton&quot;);
+        multiSelButton.text(&quot;Multi-Select&quot;);
+        multiSelButton.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+        multiSelButton.css({
+            &quot;color&quot;: &quot;black&quot;,
+            &quot;border-color&quot;: &quot;black&quot;,
+            &quot;left&quot;: &quot;5%&quot;,
+            &#x27;top&#x27;: &#x27;3%&#x27;,
+            &quot;position&quot;: &quot;absolute&quot;,
+            &quot;font-size&quot;: &#x27;120%&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;width&#x27;: &#x27;100%&#x27;
+        });
+
+        $(multiSelButton).click(function () {
+            if (getEditInkOn() === true) {
+                return false;
+            }
+            if (multiSelection === true) {
+                multiSelection = false;
+                multiSelButton.css({
+                    &#x27;color&#x27;: &#x27;black&#x27;,
+                    &#x27;background-color&#x27;: &#x27;transparent&#x27;,
+                    &quot;border-color&quot;: &quot;black&quot;
+                });
+            } else {
+                multiSelection = true;
+                multiSelButton.css({
+                    &#x27;color&#x27;: &#x27;white&#x27;,
+                    &#x27;background-color&#x27;: &#x27;darkgreen&#x27;,
+                    &quot;border-color&quot;: &quot;white&quot;,
+                });
+            }
+        });
+        multiSelButton.fitText(0.8);
+
+        editInkOverlay.css({
+            top: TAG.Util.Constants.timeRulerSize,
+            width: &#x27;100%&#x27;,
+            height: &#x27;100%&#x27;,
+            &#x27;margin-left&#x27;: &quot;2%&quot;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;10000&#x27;,
+            &#x27;background-color&#x27;: &#x27;rgba(0, 0, 0, 0.5)&#x27;
+        });
+
+        overlayLabel.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;left&#x27;: &#x27;33.5%&#x27;,
+            &#x27;top&#x27;: &#x27;35%&#x27;,
+            &#x27;font-size&#x27;: &#x27;22pt&#x27;,
+        });
+
+        editInkOverlay.hide();
+
+        sliderPane.attr(&#x27;id&#x27;, &#x27;verticalSliderPane&#x27;);
+        sliderPane.css({
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;left&#x27;: &#x27;97.35%&#x27;,
+            &#x27;top&#x27;: 54 + &#x27;px&#x27;,
+            &#x27;display&#x27;: &#x27;inline-block&#x27;,
+            &#x27;width&#x27;: &#x27;1%&#x27;,
+            &#x27;height&#x27;: trackAreaHeight - 8 + &#x27;px&#x27;,
+        });
+        
+        sliderParts = createVerticalScroller();
+        sliderPane.append(sliderParts[0]);
+        sliderPane.append(sliderParts[1]);
+        // appending elements to documentFragment, which is then appended in AddToDOM method
+        docfrag = document.createDocumentFragment();
+
+        docfrag.appendChild(mainScrollHider[0]);
+        mainScrollHider.append(editor);                                                                 // editor =&gt; horiz scrolling hider
+        editor.append(timeline);                                                                        // track body + ruler area =&gt; editor
+        multiSelButtonPanel.append(multiSelButton);
+        horizBlock.append(multiSelButtonPanel);
+        timeline.append(horizBlock);
+        timeline.append(vertBlock);
+        timeline.append(rulerScrollVeil);
+        rulerScrollVeil.append(rulerWrapper);
+        rulerWrapper.append(timeRuler);
+        editor.append(sliderPane);
+        editor.append(editInkOverlay);
+        editInkOverlay.append(overlayLabel);
+        timeline.append(trackScrollVeil);
+        trackScrollVeil.append(trackTitleWrapper);                                                      // track head panel =&gt; editor
+        timeline.append(trackBody);
+
+        updateVerticalScroller();
+        mainScrollHider.css({
+            &#x27;height&#x27;: constrainedHeight + &#x27;px&#x27;,
+            &#x27;width&#x27;: constrainedWidth + &#x27;px&#x27;
+        });
+        multiSelButton.fitText(0.8);
+
+        createPlayhead();
+    }
+
+    /**updates timeline when tour length changes
+     * @method faderUpdate
+     */
+    function faderUpdate() {
+        timeManager.seek(timeManager.pxToTime(timeManager.getCurrentPx() + trackBody.scrollLeft()));
+    }
+    
+    /**moving and scrolling
+     * @method moveScroll
+     * @param {HTML Element} wrap       rulerWrapper div 
+     */
+    function moveScroll(wrap) {
+        var toMoveLR = 0,
+            throttleLR,
+            toMoveUD = 0,
+            throttleUD;
+        var updateSlider = null;
+        var _timeRulerSize = function (ev) {
+            timeRuler.css(&#x27;width&#x27;, timeManager.timeToPx(ev.end) + &#x27;px&#x27;);
+        };
+
+        manipObjects.ruler = (TAG.Util.makeManipulatable(wrap[0], {
+            onManipulate: function (res) {
+                wrap.scrollLeft(wrap.scrollLeft() - res.translation.x);
+                manipObjects.track.cancelAccel();
+            },
+            onScroll: function (delta) {
+                var close = getCloseMenu();
+                if (close) {
+                    close();
+                }
+
+                if (delta === 1.1) {
+                    wrap.scrollLeft(wrap.scrollLeft() - 30);
+                } else {
+                    wrap.scrollLeft(wrap.scrollLeft() + 30);
+                }
+
+                manipObjects.track.cancelAccel();
+            },
+            onTapped: function (evt) {
+                if (modifyingInk) {
+                    return false;
+                }
+                timeManager.seek(timeManager.pxToTime(evt.position.x + trackBody.scrollLeft()));
+            }
+        }));
+
+        manipObjects.track = (TAG.Util.makeManipulatable(trackBody[0], {
+            onManipulate: function (res) {
+                var newY;
+                manipObjects.ruler.cancelAccel();
+                if (res.translation.x !== 0) {
+                    console.log(&#x27;trans = &#x27; + res.translation.x);
+                    console.log(&#x27;pivot = &#x27; + res.pivot.x);
+                    trackBody.scrollLeft(trackBody.scrollLeft() - res.translation.x);
+                }
+                if (res.translation.y !== 0) {
+                    if (calculateTotalTrackHeight() &gt; trackBody.height()) {
+                        newY = trackBody.scrollTop() - res.translation.y;
+                        trackBody.scrollTop(newY);
+                        scrollWithBody(newY);
+                    }
+                }
+            }
+        }));
+
+        wrap.scroll(function (evt) {
+            if (sendScrollLeft) {
+                sendScrollLeft = false;
+                trackBody.scrollLeft(wrap.scrollLeft());
+            } else {
+                sendScrollLeft = true;
+            }
+        });
+
+        trackTitleWrapper.scroll(function (evt) {
+            if (sendScrollTop) {
+                sendScrollTop = false;
+                trackBody.scrollTop(trackTitleWrapper.scrollTop());
+                scrollWithBody(trackTitleWrapper.scrollTop());
+            } else {
+                sendScrollTop = true;
+            }
+        });
+
+        trackBody.scroll(function (evt) {
+            if (sendScrollLeft) {
+                sendScrollLeft = false;
+                wrap.scrollLeft(trackBody.scrollLeft());
+            } else {
+                sendScrollLeft = true;
+            }
+
+            if (updateSlider) {
+                updateSlider();
+            }
+            seekPlayhead();
+
+            if (sendScrollTop) {
+                sendScrollTop = false;
+                if (calculateTotalTrackHeight() &lt; trackBody.height()) {
+                    return;
+                }
+                trackTitleWrapper.scrollTop(trackBody.scrollTop());
+                updateVerticalScroller();
+                scrollWithBody(trackTitleWrapper.scrollTop());
+            } else {
+                sendScrollTop = true;
+            }
+        });
+
+        /**updates the slider box when tour time is changed
+         * @method registerUpdateSlider
+         * @param realUpdate
+         */
+        function registerUpdateSlider(realUpdate) {
+            updateSlider = realUpdate;
+        }
+        that.registerUpdateSlider = registerUpdateSlider;
+
+        _timeRulerSize(timeManager.getDuration());
+        timeManager.onSizing(_timeRulerSize);
+    }
+
+    /**Creates the playhead for the timeline
+     * @method createPlayhead 
+     */
+    function createPlayhead() {
+        var rawSvgElem,
+            rawGElem,
+            $body;
+
+        playheadSVG = d3.select(timeline[0])
+                        .append(&quot;svg&quot;)
+                        .style(&#x27;position&#x27;, &#x27;absolute&#x27;)
+                        .style(&#x27;left&#x27;, &#x27;0px&#x27;).style(&#x27;top&#x27;, &#x27;0px&#x27;)
+                        .attr(&#x27;id&#x27;, &#x27;playhead&#x27;)
+                        .attr(&quot;width&quot;, &#x27;0%&#x27;)
+                        .style(&quot;z-index&quot;,&quot;101&quot;)
+                        .attr(&quot;height&quot;, &#x27;100%&#x27;);                                            // div to be transformed into an svg group
+        rawSvgElem = playheadSVG[0][0];
+        playHeadGroup = playheadSVG.append(&quot;g&quot;).attr(&quot;transform&quot;, &quot;translate(5,0)&quot;);
+        rawGElem = playHeadGroup[0][0];
+        playHeadTop = playHeadGroup.append(&quot;circle&quot;)
+                        .attr(&#x27;cx&#x27;, &#x27;0&#x27;)
+                        .attr(&#x27;cy&#x27;, &#x27;27px&#x27;)
+                        .attr(&#x27;r&#x27;, &#x27;18px&#x27;)
+                        .attr(&#x27;fill&#x27;, &#x27;black&#x27;)
+                        .attr(&#x27;stroke&#x27;, &#x27;black&#x27;)
+                        .attr(&#x27;stroke-width&#x27;, &#x27;7px&#x27;)
+                        .attr(&#x27;fill-opacity&#x27;, &#x27;0&#x27;);
+        
+        playHead = playHeadGroup.append(&quot;line&quot;)
+                        .attr(&#x27;x1&#x27;, &#x27;0&#x27;)
+                        .attr(&#x27;y1&#x27;, &#x27;45px&#x27;) // 11.4%
+                        .attr(&#x27;x2&#x27;, &#x27;0&#x27;)
+                        .attr(&#x27;y2&#x27;, &#x27;100%&#x27;)
+                        .attr(&#x27;pointer-events&#x27;, &#x27;none&#x27;)
+                        .attr(&#x27;stroke&#x27;, &#x27;black&#x27;)
+                        .attr(&#x27;stroke-width&#x27;, &#x27;1px&#x27;);
+
+        $body = $(&#x27;body&#x27;);
+        playHeadGroup.on(&#x27;mousedown&#x27;, function () {
+            var start,
+                startTime,
+                time;
+
+            start = d3.mouse($body[0])[0];
+            startTime = timeManager.getCurrentPx();
+            $body.on(&#x27;mousemove.playhead&#x27;, function (ev) {
+                if (editInkOn === true) {      
+                    return false;
+                }
+                time = startTime + (ev.pageX - start);
+                if (time &gt; $(&#x27;#timeRuler&#x27;).width()) {           // Don&#x27;t let the playhead be moved out of bounds
+                    time = $(&#x27;#timeRuler&#x27;).width();
+                } else if (time &lt; 0) {
+                    time = 0;
+                } else {
+                    start = ev.pageX;                           // Only update start if the mouse isn&#x27;t out of bounds so the mouse, synchronizes with the playhead
+                }
+                timeManager.seek(timeManager.pxToTime(time));
+                startTime = time;
+            });
+            $body.on(&#x27;mouseup.playhead&#x27;, function () {
+                $body.off(&#x27;mousemove.playhead&#x27;);
+                $body.off(&#x27;mouseup.playhead&#x27;);
+            });
+        });
+        timeManager.onSeek(seekPlayhead);
+        timeManager.onSizing(seekPlayhead);
+        timeManager.onPlay(seekPlayhead);
+    }
+
+    /**Seeks the playhead on the timeline
+     * @method seekPlayhead
+     */
+    function seekPlayhead() {
+        var time = timeManager.getCurrentPx(); // fix editor.width() * 0.15 -- if we ever change the margin of trackBody, this will be really confusing!
+        playHeadGroup.attr(&quot;transform&quot;, &quot;translate(&quot; + (time + editor.width() * 0.15 - trackBody.scrollLeft()) + &quot;)&quot;);
+    }
+
+
+
+  /******** beginning of _makeHTML - Surbhi ********/
+
+   /* (function _makeHTML() {
+        // container div that hides vertical scrollbar of top-level container
+        /*mainScrollHider = $(document.createElement(&#x27;div&#x27;));
+        mainScrollHider.attr(&#x27;class&#x27;, &#x27;mainScrollHider&#x27;);
+        mainScrollHider.css({
+            &quot;background-color&quot;: &quot;rgb(219,218,199)&quot;,
+            &#x27;overflow&#x27;: &#x27;hidden&#x27;,
+            &#x27;height&#x27;: editorHeight + &#x27;px&#x27;,
+            &#x27;width&#x27;: editorWidth + &#x27;px&#x27;,
+            &#x27;margin-top&#x27;: &#x27;3%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        });
+
+        // Top-level container, vertical scrolling
+        editor = $(document.createElement(&#x27;div&#x27;));
+        editor.attr(&#x27;id&#x27;, &#x27;editor&#x27;);
+        editor.css({
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &quot;width&quot;: &#x27;100%&#x27;, 
+            //&#x27;width&#x27;: &#x27;100%&#x27;,
+            &#x27;overflow&#x27;: &#x27;hidden&#x27;,
+        });
+
+
+        // veil for track title scrollbar
+        var trackScrollVeil = $(document.createElement(&#x27;div&#x27;));
+        trackScrollVeil.attr(&#x27;id&#x27;, &#x27;trackScrollVeil&#x27;);
+        trackScrollVeil.css({
+            &#x27;width&#x27;: trackTitleWidth + 20 + &#x27;px&#x27;,
+            &#x27;height&#x27;: trackAreaHeight + &#x27;px&#x27;,
+            &#x27;margin-left&#x27;: $(window).width() * 0.02 - 20 + &#x27;px&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;clear&#x27;: &#x27;left&#x27;,
+            &#x27;top&#x27;: &#x27;0px&#x27;,
+            &#x27;position&#x27;:&#x27;relative&#x27;
+        });
+        // div with track heads, no scrolling at all
+        trackTitleWrapper = $(document.createElement(&#x27;div&#x27;));
+        trackTitleWrapper.attr(&#x27;id&#x27;, &#x27;trackTitleWrapper&#x27;);
+        trackTitleWrapper.css({
+            &#x27;width&#x27;: trackTitleWidth + 20 + &quot;px&quot;,
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &#x27;margin-left&#x27;: &#x27;1.5%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+            &#x27;z-index&#x27;: &#x27;102&#x27;,
+            &#x27;background-color&#x27;: &#x27;rgb(219, 218, 199)&#x27;,
+        });
+
+        // Track body container, xy scrolling
+        trackBody = $(document.createElement(&#x27;div&#x27;));
+        trackBody.attr(&#x27;id&#x27;, &#x27;trackBody&#x27;);
+        trackBody.css({
+            &#x27;height&#x27;: trackAreaHeight + &#x27;px&#x27;,
+            &#x27;margin-left&#x27;: &#x27;15%&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        });
+
+        // Ruler for measuring time in the timeline
+        // Placed at the top of the timeline
+        timeRuler = $(document.createElement(&#x27;div&#x27;));
+        timeRuler.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;height&#x27;: (TAG.TourAuthoring.Constants.timeRulerSize + 17) + &#x27;px&#x27;, // changed 12 %
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+        });
+        timeRuler.attr(&#x27;id&#x27;, &#x27;timeRuler&#x27;);
+
+        // Track area div with time ruler and track body, horizontal scrolling
+        timeline = $(document.createElement(&#x27;div&#x27;));
+        timeline.attr(&#x27;id&#x27;, &#x27;timeline&#x27;);
+        timeline.css({
+            &#x27;height&#x27;: &#x27;200%&#x27;,
+            &#x27;width&#x27;: &#x27;97%&#x27;,
+            &#x27;overflow&#x27;: &#x27;hidden&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+        });
+
+        // Cover block to hide playhead outside of display area
+        var horizBlock = $(document.createElement(&#x27;div&#x27;));
+        horizBlock.attr(&#x27;id&#x27;, &#x27;horizBlock&#x27;);
+        horizBlock.css({
+            &#x27;height&#x27;: TAG.TourAuthoring.Constants.timeRulerSize + &#x27;px&#x27;,
+            &#x27;width&#x27;: &#x27;15.5%&#x27;,
+            &quot;background-color&quot;: &quot;rgb(219,218,199)&quot;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;102&#x27;,
+        });
+
+        var vertBlock = $(document.createElement(&#x27;div&#x27;));
+        vertBlock.attr(&#x27;id&#x27;, &#x27;vertBlock&#x27;);
+        vertBlock.css({
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &#x27;width&#x27;: &#x27;1.5%&#x27;,
+            &quot;background-color&quot;: &quot;rgb(219,218,199)&quot;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;102&#x27;,
+        });
+
+        // ruler scrollbar veil
+        var rulerScrollVeil = $(document.createElement(&#x27;div&#x27;));
+        rulerScrollVeil.attr(&#x27;id&#x27;, &#x27;rulerScrollVeil&#x27;);
+        rulerScrollVeil.css({
+            &#x27;height&#x27;: TAG.TourAuthoring.Constants.timeRulerSize + &#x27;px&#x27;,
+            &#x27;width&#x27;: &#x27;85%&#x27;,
+            &#x27;margin-left&#x27;: &#x27;15.4%&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+
+        });
+
+        // time ruler wrapper
+        var rulerWrapper = $(document.createElement(&#x27;div&#x27;));
+        rulerWrapper.attr(&#x27;id&#x27;, &#x27;rulerWrapper&#x27;);
+        rulerWrapper.css({
+            &#x27;width&#x27;: &#x27;85%&#x27;,
+            &#x27;height&#x27;: (TAG.TourAuthoring.Constants.timeRulerSize) + &#x27;px&#x27;,
+            &#x27;overflow-x&#x27;: &#x27;hidden&#x27;,
+            &#x27;overflow-y&#x27;: &#x27;hidden&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;100&#x27;,
+            &#x27;box-shadow&#x27; : &#x27;-7px 5px 10px #888&#x27;,
+        }); */
+        // this function will be called when change tour length to update fader position
+      /*  function faderUpdate() {
+            timeManager.seek(timeManager.pxToTime(timeManager.getCurrentPx() + trackBody.scrollLeft()));
+        }
+        that.faderUpdate = faderUpdate;
+
+        manipObjects.ruler = (TAG.Util.makeManipulatable(rulerWrapper[0], {
+            onManipulate: function (res) {
+                rulerWrapper.scrollLeft(rulerWrapper.scrollLeft() - res.translation.x);
+                manipObjects.track.cancelAccel();
+            },
+            onScroll: function (delta) {
+                var close = getCloseMenu();
+                if (close) {
+                    close();
+                }
+
+                if (delta === 1.1) {
+                    rulerWrapper.scrollLeft(rulerWrapper.scrollLeft() - 30);
+                } else {
+                    rulerWrapper.scrollLeft(rulerWrapper.scrollLeft() + 30);
+                }
+
+                manipObjects.track.cancelAccel();
+            },
+            onTapped: function (evt) {
+                if (modifyingInk) {
+                    return false;
+                }
+                timeManager.seek(timeManager.pxToTime(evt.position.x + trackBody.scrollLeft()));
+            }
+        })); 
+
+        var toMoveLR = 0;
+        var throttleLR;
+        var toMoveUD = 0;
+        var throttleUD;
+        manipObjects.track = (TAG.Util.makeManipulatable(trackBody[0], {
+            onManipulate: function (res) {
+                manipObjects.ruler.cancelAccel();
+                if (res.translation.x !== 0) {
+                    console.log(&#x27;trans = &#x27;+res.translation.x);
+                    console.log(&#x27;pivot = &#x27;+res.pivot.x);
+                    trackBody.scrollLeft(trackBody.scrollLeft() - res.translation.x);
+                }
+                if (res.translation.y !== 0) {
+                    if (calculateTotalTrackHeight() &gt; trackBody.height()) {
+                        var newY = trackBody.scrollTop() - res.translation.y;
+                        trackBody.scrollTop(newY);
+                        scrollWithBody(newY);
+                    }
+                }
+            }
+        }));
+
+        rulerWrapper.scroll(function (evt) {
+            if (sendScrollLeft) {
+                sendScrollLeft = false;
+                trackBody.scrollLeft(rulerWrapper.scrollLeft());
+            } else {
+                sendScrollLeft = true;
+            }
+        }); 
+
+        trackTitleWrapper.scroll(function (evt) {
+            if (sendScrollTop) {
+                sendScrollTop = false;
+                trackBody.scrollTop(trackTitleWrapper.scrollTop());
+                scrollWithBody(trackTitleWrapper.scrollTop());
+            } else {
+                sendScrollTop = true;
+            }
+        });
+
+        trackBody.scroll(function (evt) {
+            if (sendScrollLeft) {
+                sendScrollLeft = false;
+                rulerWrapper.scrollLeft(trackBody.scrollLeft());
+            } else {
+                sendScrollLeft = true;
+            }
+
+            // Would be nice to figure out a way to avoid calling this unnecessarily
+            // (ie. when the slider is moved)
+            if (updateSlider) {
+                updateSlider();
+            }
+            _seekPlayhead();
+
+            if (sendScrollTop) {
+                sendScrollTop = false;
+                if (calculateTotalTrackHeight() &lt; trackBody.height()) {
+                    return;
+                }
+                trackTitleWrapper.scrollTop(trackBody.scrollTop());
+                updateVerticalScroller();
+                scrollWithBody(trackTitleWrapper.scrollTop());
+            } else {
+                sendScrollTop = true;
+            }
+        }); 
+
+        var updateSlider = null;
+        function registerUpdateSlider(realUpdate) {
+            updateSlider = realUpdate;
+        }
+        that.registerUpdateSlider = registerUpdateSlider;
+
+
+        var _timeRulerSize = function (ev) {
+            timeRuler.css(&#x27;width&#x27;, timeManager.timeToPx(ev.end) + &#x27;px&#x27;);
+        };
+        _timeRulerSize(timeManager.getDuration());
+        timeManager.onSizing(_timeRulerSize);
+
+        /*******************************Xiaoyi/Libby****************************************/
+     /*   var multiSelButtonPanel = $(document.createElement(&#x27;div&#x27;));
+        multiSelButtonPanel.addClass(&quot;multiSelButtonPanel&quot;);
+        multiSelButtonPanel.css({
+            &#x27;top&#x27;: &#x27;12.5%&#x27;,
+            &#x27;left&#x27;: &#x27;25%&#x27;,
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &quot;width&quot;: &#x27;60%&#x27;,
+            &#x27;height&#x27;: &#x27;75%&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;z-index&#x27;: &#x27;5&#x27;,
+        });
+
+        var multiSelButton = $(document.createElement(&#x27;button&#x27;));
+        multiSelButton.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+        multiSelButton.attr(&#x27;id&#x27;, &quot;multiSelButton&quot;);
+        multiSelButton.text(&quot;Multi-Select&quot;);
+        multiSelButton.attr(&#x27;type&#x27;, &#x27;button&#x27;);
+        multiSelButton.css({
+            &quot;color&quot;: &quot;black&quot;,
+            &quot;border-color&quot;: &quot;black&quot;,
+            &quot;left&quot;: &quot;5%&quot;,
+            &#x27;top&#x27;: &#x27;3%&#x27;,
+            &quot;position&quot;: &quot;absolute&quot;,
+            &quot;font-size&quot;: &#x27;120%&#x27;,
+            &#x27;float&#x27;: &#x27;left&#x27;,
+            &#x27;width&#x27;: &#x27;100%&#x27;
+        });
+        
+        $(multiSelButton).click(function () {
+            if (getEditInkOn() === true) {
+                //multiSelButton.css({
+                //    &#x27;color&#x27;: &#x27;gray&#x27;,
+                //});
+                return false;
+            }
+            if (multiSelection === true) {
+                multiSelection = false;
+                multiSelButton.css({
+                    &#x27;color&#x27;: &#x27;black&#x27;,
+                    &#x27;background-color&#x27;: &#x27;transparent&#x27;,
+                    &quot;border-color&quot;: &quot;black&quot;
+                });
+            }
+            else {
+                multiSelection = true;
+                multiSelButton.css({
+                    &#x27;color&#x27;: &#x27;white&#x27;,
+                    &#x27;background-color&#x27;: &#x27;darkgreen&#x27;,
+                    &quot;border-color&quot;: &quot;white&quot;,
+                });
+            }
+        });
+
+        editInkOverlay.css({
+            top: TAG.Util.Constants.timeRulerSize,
+            width: &#x27;100%&#x27;,
+            height: &#x27;100%&#x27;,
+            &#x27;margin-left&#x27;: &quot;2%&quot;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;z-index&#x27;: &#x27;10000&#x27;,
+            &#x27;background-color&#x27;: &#x27;rgba(0, 0, 0, 0.5)&#x27;
+        });
+
+        overlayLabel.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;left&#x27;: &#x27;33.5%&#x27;,
+            &#x27;top&#x27;: &#x27;35%&#x27;,
+            &#x27;font-size&#x27;: &#x27;22pt&#x27;,
+        });
+
+        editInkOverlay.hide();
+
+        // Container and background for Slider
+        sliderPane = $(document.createElement(&#x27;div&#x27;));
+        sliderPane.attr(&#x27;id&#x27;, &#x27;verticalSliderPane&#x27;);
+        sliderPane.css({
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;left&#x27;: &#x27;97.35%&#x27;,
+            &#x27;top&#x27;: 54 + &#x27;px&#x27;,
+            &#x27;display&#x27;: &#x27;inline-block&#x27;,
+            &#x27;width&#x27;: &#x27;1%&#x27;,
+            &#x27;height&#x27;: trackAreaHeight - 8 + &#x27;px&#x27;,
+        });
+        
+        var sliderParts = createVerticalScroller(sliderPane);
+        sliderPane.append(sliderParts[0]);
+        sliderPane.append(sliderParts[1]);
+
+        // appending elements to documentFragment, which is then appended in AddToDOM method
+        docfrag = document.createDocumentFragment();
+
+        docfrag.appendChild(mainScrollHider[0]);
+            mainScrollHider.append(editor); // editor =&gt; horiz scrolling hider
+                editor.append(timeline); // track body + ruler area =&gt; editor
+                        multiSelButtonPanel.append(multiSelButton);
+                        horizBlock.append(multiSelButtonPanel);
+                    timeline.append(horizBlock);
+                    timeline.append(vertBlock);
+                    timeline.append(rulerScrollVeil);
+                        rulerScrollVeil.append(rulerWrapper);
+                            rulerWrapper.append(timeRuler);
+                editor.append(sliderPane);
+                editor.append(editInkOverlay);
+                    editInkOverlay.append(overlayLabel);
+                    timeline.append(trackScrollVeil);
+                        trackScrollVeil.append(trackTitleWrapper); // track head panel =&gt; editor
+                    timeline.append(trackBody);
+
+               
+
+        var constrainedHeight = editorHeight - 5;
+        var constrainedWidth = editorWidth - 17;
+        mainScrollHider.css({
+            &#x27;height&#x27;: constrainedHeight + &quot;px&quot;,
+            &#x27;width&#x27;: constrainedWidth + &quot;px&quot;,
+        });
+        multiSelButton.fitText(0.8); 
+
+        /***************************************************************************/
+        ///////////
+        // Playhead
+        //Creating the svg version of the playhead. -David Correa
+       /*playheadSVG = d3.select(timeline[0])
+                                    .append(&quot;svg&quot;)
+                                    .style(&#x27;position&#x27;, &#x27;absolute&#x27;)
+                                    .style(&#x27;left&#x27;, &#x27;0px&#x27;).style(&#x27;top&#x27;, &#x27;0px&#x27;)
+                                    .attr(&#x27;id&#x27;, &#x27;playhead&#x27;)
+                                    .attr(&quot;width&quot;, &#x27;0%&#x27;)
+                                    .style(&quot;z-index&quot;,&quot;101&quot;)
+                                    .attr(&quot;height&quot;, &#x27;100%&#x27;); // div to be transformed into an svg group
+        var rawSvgElem = playheadSVG[0][0];
+
+        playHeadGroup = playheadSVG.append(&quot;g&quot;).attr(&quot;transform&quot;, &quot;translate(5,0)&quot;);
+        var rawGElem = playHeadGroup[0][0];
+
+        playHeadTop = playHeadGroup.append(&quot;circle&quot;)
+                                   .attr(&#x27;cx&#x27;, &#x27;0&#x27;)
+                                   .attr(&#x27;cy&#x27;, &#x27;27px&#x27;)
+                                   .attr(&#x27;r&#x27;, &#x27;18px&#x27;)
+                                   .attr(&#x27;fill&#x27;, &#x27;black&#x27;)
+                                   .attr(&#x27;stroke&#x27;, &#x27;black&#x27;)
+                                   .attr(&#x27;stroke-width&#x27;, &#x27;7px&#x27;)
+                                   .attr(&#x27;fill-opacity&#x27;, &#x27;0&#x27;);
+        
+        playHead = playHeadGroup.append(&quot;line&quot;)
+                                         .attr(&#x27;x1&#x27;, &#x27;0&#x27;)
+                                         .attr(&#x27;y1&#x27;, &#x27;45px&#x27;) // 11.4%
+                                         .attr(&#x27;x2&#x27;, &#x27;0&#x27;)
+                                         .attr(&#x27;y2&#x27;, &#x27;100%&#x27;)
+                                        .attr(&#x27;pointer-events&#x27;, &#x27;none&#x27;)
+                                         .attr(&#x27;stroke&#x27;, &#x27;black&#x27;)
+                                         .attr(&#x27;stroke-width&#x27;, &#x27;1px&#x27;);
+
+        var $body = $(&#x27;body&#x27;);
+        playHeadGroup.on(&#x27;mousedown&#x27;, function () {
+            var start,
+                startTime,
+                time;
+
+            start = d3.mouse($body[0])[0];
+            startTime = timeManager.getCurrentPx();
+
+            $body.on(&#x27;mousemove.playhead&#x27;, function (ev) {
+                if (editInkOn === true) {      
+                    return false;
+                }
+                time = startTime + (ev.pageX - start);
+                // Don&#x27;t let the playhead be moved out of bounds
+                if (time &gt; $(&#x27;#timeRuler&#x27;).width()) {
+                    time = $(&#x27;#timeRuler&#x27;).width();
+                } else if (time &lt; 0) {
+                    time = 0;
+                } else {
+                    // Only update start if the mouse isn&#x27;t out of bounds so the mouse
+                    // correctly synchronizes with the playhead.
+                    start = ev.pageX;
+                }
+       
+                timeManager.seek(timeManager.pxToTime(time));
+                startTime = time;
+            });
+            $body.on(&#x27;mouseup.playhead&#x27;, function () {
+                $body.off(&#x27;mousemove.playhead&#x27;);
+                $body.off(&#x27;mouseup.playhead&#x27;);
+            });
+        });
+
+        var _seekPlayhead = function () {
+            var time = timeManager.getCurrentPx(); // fix editor.width() * 0.15 -- if we ever change the margin of trackBody, this will be really confusing!
+            playHeadGroup.attr(&quot;transform&quot;, &quot;translate(&quot; + (time + editor.width() * 0.15 - trackBody.scrollLeft()) + &quot;)&quot;);
+        };
+
+        timeManager.onSeek(_seekPlayhead);
+        timeManager.onSizing(_seekPlayhead);
+        timeManager.onPlay(_seekPlayhead);
+    })(); 
+
+
+    /***** End of _makeHTML - Surbhi ******/
+
+
+
+
+    /**Creates an overlay on the screen when ink edits are made
+     * @method showEditorOverlay
+     */
+    function showEditorOverlay() {
+        var overlayLabelSpec = TAG.Util.constrainAndPosition(editInkOverlay.width(), editInkOverlay.height(),
+            {
+                center_h: true,
+                center_v: true,
+                width: 0.3,
+                height: 0.2,
+                max_width: 400,
+                max_height: 100,
+            });
+        var labelFontSize = TAG.Util.getMaxFontSizeEM(&quot;Ink is being edited...&quot;, 0, overlayLabelSpec.width - 10, overlayLabelSpec.height, 0.01);
+
+        $(&#x27;#resizeButton&#x27;).attr(&#x27;src&#x27;, &#x27;images/icons/Ellipsis_gray.svg&#x27;); // TODO need a new icon here
+        setEditInkOn(true);
+        $(&#x27;#multiSelButton&#x27;).css({
+            &#x27;color&#x27;: &#x27;gray&#x27;,
+            &#x27;border-color&#x27;: &#x27;gray&#x27;
+        });
+           
+        playHeadTop.attr(&#x27;fill&#x27;, &#x27;gray&#x27;);
+        playHeadTop.attr(&#x27;stroke&#x27;, &#x27;gray&#x27;);
+        overlayLabel.css({
+            top: overlayLabelSpec.y + &#x27;px&#x27;,
+            left: overlayLabelSpec.x + &#x27;px&#x27;,
+            width: overlayLabelSpec.width + &#x27;px&#x27;,
+            height: overlayLabelSpec.height + &#x27;px&#x27;,
+            &#x27;font-size&#x27;: labelFontSize,
+            &#x27;overflow&#x27;: &#x27;hidden&#x27;,
+        });
+        editInkOverlay.show();
+    }
+
+    /**Hides the overlay
+     * @method hideEditorOverlay
+     */
+    function hideEditorOverlay() {
+        $(&#x27;#resizeButton&#x27;).attr(&#x27;src&#x27;, tagPath + &#x27;images/icons/dragTourWindow.svg&#x27;);
+        setEditInkOn(false);
+        $(&#x27;#multiSelButton&#x27;).css({
+            &#x27;color&#x27;: &#x27;black&#x27;,
+            &#x27;border-color&#x27;:&#x27;black&#x27;
+        });
+        playHeadTop.attr(&#x27;fill&#x27;, &#x27;black&#x27;);
+        playHeadTop.attr(&#x27;stroke&#x27;, &#x27;black&#x27;);
+        editInkOverlay.hide();
+    }
+    
+    /**Creating a vertical scroll visualizer
+     * @method createVerticalScroller
+     * @return {Array} elements         parts of the vertical scroller as an array
+     */
+    function createVerticalScroller() {
+        var elements = [];
+        verticalScrollBox = $(document.createElement(&#x27;div&#x27;));
+        var greenBoxInSlider = $(document.createElement(&#x27;div&#x27;));                                             //represents the green part of the timeline for artworks and the gray part for inks -- indicates the length
+
+        verticalScroller = $(document.createElement(&#x27;div&#x27;));
+
+        verticalScrollBox.css({
+            &#x27;position&#x27;: &#x27;relative&#x27;,
+            &#x27;background-color&#x27;: &#x27;rgb(255,255,255)&#x27;,
+            &#x27;width&#x27;: &#x27;70%&#x27;,
+            &#x27;left&#x27;: &#x27;15%&#x27;,
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &#x27;overflow&#x27;: &#x27;hidden&#x27;,
+            &#x27;border&#x27;: &#x27;1px solid gray&#x27;,
+        });
+
+        verticalScroller.attr(&#x27;id&#x27;, &#x27;verticalSlider&#x27;);
+        verticalScroller.css({
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;height&#x27;: &#x27;100px&#x27;,
+            &#x27;width&#x27;: &#x27;100%&#x27;,
+            &#x27;border&#x27;: &#x27;2px none black&#x27;,
+            &#x27;left&#x27;: &#x27;-1px&#x27;,
+        });
+
+        verticalScroller.draggable({
+            axis: &#x27;y&#x27;,
+            drag: function (evt, ui) {
+                var newRelativeScroll,
+                    newAbsoluteScroll;
+                evt.stopPropagation();
+                ui.position.top = Math.constrain(ui.position.top, 0, sliderPane.height() - verticalScroller.height() - 2);
+
+                newRelativeScroll = ui.position.top / (sliderPane.height() - verticalScroller.height() - 4);
+                newAbsoluteScroll = newRelativeScroll * (calculateTotalTrackHeight() - trackBody.height() + 8);
+
+                trackBody.scrollTop(newAbsoluteScroll);
+                trackTitleWrapper.scrollTop(newAbsoluteScroll);
+                cancelAccel();
+            }
+        });
+        
+        elements.push(verticalScrollBox);
+        elements.push(verticalScroller);
+
+        verticalScroller.mousedown(function (evt) {
+            evt.stopPropagation();
+        });
+
+        var upArrow = $(document.createElement(&#x27;img&#x27;));
+        upArrow.attr(&#x27;src&#x27;, &#x27;images/icons/white_up_arrow3.svg&#x27;);
+        var upArrowBox = $(document.createElement(&#x27;div&#x27;));
+        upArrowBox.css({
+            width: &#x27;100%&#x27;,
+            height: &#x27;10%&#x27;,
+            top: &#x27;0%&#x27;
+        });
+        upArrow.css(&#x27;width&#x27;, &#x27;110%&#x27;);
+        upArrowBox.append(upArrow);
+        var downArrow = $(document.createElement(&#x27;img&#x27;));
+        downArrow.attr(&#x27;src&#x27;, &#x27;images/icons/white_down_arrow3.svg&#x27;);
+        var downArrowBox = $(document.createElement(&#x27;div&#x27;));
+        downArrowBox.css({
+            width: &#x27;100%&#x27;,
+            height: &#x27;10%&#x27;,
+            position: &#x27;absolute&#x27;,
+            bottom: &#x27;0px&#x27;
+        });
+        downArrow.css({
+            width: &#x27;110%&#x27;,
+            position: &#x27;absolute&#x27;,
+            bottom: &#x27;0px&#x27;
+        });
+        downArrowBox.append(downArrow);
+        greenBoxInSlider.css({
+            &#x27;background-color&#x27;: &#x27;DarkGreen&#x27;,
+            &#x27;top&#x27;: &#x27;0%&#x27;,
+            &#x27;left&#x27;: &#x27;15%&#x27;,
+            &#x27;height&#x27;: &#x27;100%&#x27;,
+            &#x27;position&#x27;: &#x27;absolute&#x27;,
+            &#x27;width&#x27;: &#x27;70%&#x27;,
+            &#x27;border&#x27;: &#x27;2px solid&#x27;,
+        });
+
+        greenBoxInSlider.append(upArrowBox);
+        greenBoxInSlider.append(downArrowBox);
+        verticalScroller.append(greenBoxInSlider);
+        return elements;
+    }
+
+    /**used by vertical position viz to update its location when scrolling occurs on other vertically-scrollable elements.
+     * @method scrollWithBody
+     * @param {Number} scrollPos        
+     */
+    function scrollWithBody(scrollPos) {
+        var totalTrackHeight = calculateTotalTrackHeight();
+        var newTop = scrollPos / totalTrackHeight * sliderPane.height();
+
+        if (newTop &lt; 0) {
+            newTop = 0;
+        } else if (newTop &gt; sliderPane.height() - verticalScroller.height() - 2) {
+            newTop = sliderPane.height() - verticalScroller.height() - 2;
+        }
+        verticalScroller.css({
+            &#x27;top&#x27;: newTop + &#x27;px&#x27;
+        });
+    }
+
+    /**Updates the vertical scroll bar on the timeline depending on the number of tracks
+     * @method updateVerticalScroller
+     */
+    function updateVerticalScroller() {
+
+        var oldVertHeight = verticalScroller.height();
+        var totalTrackHeight = calculateTotalTrackHeight();
+        var newTop = trackBody.scrollTop() / totalTrackHeight * sliderPane.height() - 4;
+
+       
+        if (newTop &lt; 0) { newTop = 0; }
+
+        if (totalTrackHeight === 0) {                                               // edge case for no tracks onscreen
+            sliderPane.height(trackBody.height() - 10);
+            verticalScroller.css({
+                &#x27;height&#x27;: sliderPane.height() + &#x27;px&#x27;,
+                &#x27;top&#x27;: &#x27;0px&#x27;,
+            });
+            enableDisableDrag();
+        }
+        if (oldVertHeight !== (trackTitleWrapper.height() - 4) * sliderPane.height() / totalTrackHeight) {
+            if (totalTrackHeight &lt; trackTitleWrapper.height()) {
+                verticalScroller.css({ &#x27;height&#x27;: &#x27;100%&#x27; });
+            } else {
+                verticalScroller.css({ &#x27;height&#x27;: (trackTitleWrapper.height() - 4) * sliderPane.height() / totalTrackHeight + &#x27;px&#x27; });
+            }
+            verticalScroller.css({ &#x27;top&#x27;: newTop + &#x27;px&#x27; });
+        }
+        console.log(&quot;totaltrackHeight&quot; + totalTrackHeight);
+        console.log(&quot;trackBodyheight&quot; + trackBody.height());
+        
+        //Hide the scroll bar if the height of the tracks is less than the height of the body
+        if (totalTrackHeight &lt; trackBody.height()) {
+            console.log(&quot;hiding&quot;);
+            verticalScroller.css(&#x27;visibility&#x27;, &#x27;hidden&#x27;);
+            verticalScrollBox.css(&#x27;visibility&#x27;, &#x27;hidden&#x27;);
+        } else {
+            verticalScroller.css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+            verticalScrollBox.css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+        }
+       
+    }
+    
+    /**Checks if the vertical scroll bar is draggable depending on it&#x27;s current dimensions
+     * @enableDisableDrag
+     */
+    function enableDisableDrag() {
+        if (calculateTotalTrackHeight() &lt; trackTitleWrapper.height() - 10) {
+            verticalScroller.draggable(&quot;disable&quot;);
+            verticalScroller.css({
+                &#x27;height&#x27;: &#x27;100%&#x27;,
+            });
+        } else {
+            verticalScroller.draggable(&quot;enable&quot;);
+            verticalScroller.css({
+                &#x27;height&#x27;: (trackTitleWrapper.height() - 4) * sliderPane.height() / calculateTotalTrackHeight() + &#x27;px&#x27;,
+            });
+        }
+    }
+    
+    /**Finds the height of a track div
+     * @method calculateTotalTrackHeight
+     * @return {Number} track height
+     */
+    function calculateTotalTrackHeight() {
+        var i,
+            total = 0,
+            ct;
+        for (i = 0; i &lt; dataHolder._trackArray.length; i++) {
+            ct = dataHolder._trackArray[i].track;
+            if (ct.getMinimizedState()) {
+                total = total + TAG.TourAuthoring.Constants.minimizedTrackHeight;
+            } else {
+                total = total + TAG.TourAuthoring.Constants.trackHeight;
+            }
+        }
+        return total + dataHolder._trackArray.length * 2; // 2px border per track
+    }
+
+    /**Updates notches on time ruler when time duration changes (event handler)
+     * @method _updateTimeMarkers
+     * @param {Event} ev
+     */
+    function _updateTimeMarkers(ev) {
+        var i,
+            finalTime,
+            scale = ev.scale,
+            seconds = scale,
+            divChilds = timeRuler.children(&#x27;div&#x27;),
+            start = Date.now(),
+            left,
+            right,
+            leftmod,
+            j,
+            initLoad,
+            perQueueOp,
+            opLim;
+
+        queue.clear();
+        newLabels = document.createDocumentFragment();
+        divChilds.text(&#x27;&#x27;);
+
+        sendScrollLeft = true;
+        trackBody.scrollLeft(trackBody.scrollLeft());
+
+        // what are these doing? seems like the second while will push seconds*scale back below 80. What are 80 and 100 here?
+        while (seconds * scale &lt; 80) { seconds = seconds * 2; }
+        while (seconds * scale &gt; 100) { seconds = seconds / 2; }
+        seconds = Math.ceil(seconds);
+        
+        left = timeManager.pxToTime(trackBody.scrollLeft()),
+        leftmod = left - (left % seconds),
+        right = left + timeManager.pxToTime(trackBody.width());
+        initLoad = document.createDocumentFragment();
+        divChilds.remove();
+
+        for (j = leftmod; j &lt;= right; j += seconds) {
+            initLoad.appendChild(createTimeLabel(j)[0]);
+        }
+        timeRuler.append(initLoad);
+        
+        perQueueOp = 20,
+        opLim = perQueueOp * seconds;
+
+        /**helper function to add new timeline labels to the queue
+         * @method newLabelHelper
+         */
+        function newLabelHelper(i) {
+            queue.add(function () {
+                var j;
+                for (j = i; j &lt;= i + opLim; j = j + seconds) {
+                    newLabels.appendChild(createTimeLabel(j)[0]);
+                }
+            });
+        }
+
+        for (i = ev.start; i &lt;= ev.end; i = Math.min(i + opLim, ev.end)) {
+            newLabelHelper(i);
+            if (i === ev.end) { break; }
+        }
+
+        // clear and replace once finished
+        queue.add(function () {
+            var i;
+            divChilds.remove();
+            timeRuler.append(newLabels);
+            console.log(&#x27;time ruler update elapsed: &#x27; + (Date.now() - start));
+        });
+
+        /**creates a time label and appends it to the time ruler
+         * @method createTimelineLabel
+         * @param {Number} i
+         * @return {HTML Element} timeLabel
+         */
+        function createTimeLabel(i) {
+            var time = Math.min(i, ev.end),
+                timeString = timeManager.formatTime(i),
+                fontsize = TAG.Util.getFontSize(40),
+                markLoc = timeManager.timeToPx(i),
+                timeLabel = $(document.createElement(&#x27;div&#x27;))
+                            .addClass(&#x27;time-label&#x27;)
+                            .text(timeString)
+                            .css({
+                                &#x27;border-width&#x27;: &#x27;0px 0px 0px 1px&#x27;,
+                                &#x27;border-color&#x27;: &#x27;black&#x27;,
+                                &#x27;border-style&#x27;: &#x27;solid&#x27;,
+                                &#x27;position&#x27;: &#x27;absolute&#x27;,
+                                &#x27;left&#x27;: markLoc + &#x27;px&#x27;,
+                                &#x27;padding-left&#x27;: &#x27;5px&#x27;,
+                                &#x27;font-size&#x27;: fontsize,
+                                &#x27;color&#x27;: &#x27;black&#x27;,
+                                &#x27;height&#x27;: &#x27;100%&#x27;,
+                            });
+            return timeLabel;
+        }
+    }
+
+    _updateTimeMarkers(timeManager.getDuration());              // Initialization
+    timeManager.onSizing(function (ev) {
+        timeRuler.children(&#x27;div&#x27;).text(&#x27;&#x27;);
+        setTimeout(function () {
+            _updateTimeMarkers(ev);
+        }, 2);
+    });
+
+    //////////////////////
+    // PUBLIC FUNCTIONS //
+    //////////////////////
+
+    // Add Timeline HTML
+
+    /**Returns the boolean which checks for the presence of ink editing
+     * @method getEditInkOn
+     * @return {Boolean} editInkOn
+     */
+    function getEditInkOn() {
+        return editInkOn;
+    }
+    
+    /**Sets the ink editing boolean
+     * @method setEditInkOn
+     * @param {Boolean} status
+     */
+    function setEditInkOn(status) {
+        editInkOn = status;
+    }
+    
+    /**Adds the main document fragment to the DOM
+     * @method addToDOM
+     * @param {HTML Element} container
+     */
+    function addToDOM (container) {
+        container.appendChild(docfrag);
+    }
+    
+    /**Returns the current selcted track(s) as an object
+     * @method getSelectedTrack
+     * @return {Object} selectedTrack
+     */
+    function getSelectedTrack() {
+        return selectedTrack;
+    }
+    
+    /**Controls for editing components
+     * @method setCompControl
+     * @param {Object} comp         public methods of ComponentControls.js
+     */
+    function setCompControl(comp) {
+        compCont = comp;
+    }
+    
+    /**Wrapper around the method in ComponentControls.js, called when &quot;Edit Ink&quot; is clicked on a draw-type ink track.
+     * Creates a new InkController and loads in the datastring of the track.
+     * Shows the edit draw controls.
+     * If the ink is linked, need to position it correctly using keyframes and size of artwork.
+     * @param track        the ink track in question
+     * @param datastring   the track&#x27;s ink datastring (see InkController.js for format)
+     */
+    function showEditDraw(track,datastring) {
+        compCont.showEditDraw(track, datastring);
+        modifyingInk = true;
+    }
+    
+    /**Wrapper around the method in ComponentControls.js, called when &quot;Edit Ink&quot; is clicked on a text-type ink track.
+     * Creates a new InkController and loads in the datastring of the track.
+     * Shows the edit text controls.
+     * If the ink is linked, need to position it correctly using keyframes and size of artwork.
+     * @param track        the ink track in question
+     * @param datastring   the track&#x27;s ink datastring (see InkController.js for format)
+     * @param dims
+     */
+    function showEditText(track,datastring, dims) {
+        compCont.showEditText(track, datastring, dims);
+        modifyingInk = true;
+    }
+    
+    /**Wrapper around the method in ComponentControls.js, called when &quot;Edit Ink&quot; is clicked on a highlight-type ink track.
+     * Creates a new InkController and loads in the datastring of the track.
+     * Shows the edit highlighting controls.
+     * If the ink is linked, need to position it correctly using keyframes and size of artwork.
+     * @param track        the ink track in question
+     * @param datastring   the track&#x27;s ink datastring (see InkController.js for format)
+     * @param trans_type   the track&#x27;s highlighting type (block/isolate)
+     */
+    function showEditTransparency(track, datastring, trans_type) {
+        compCont.showEditTransparency(track, datastring, trans_type);
+        modifyingInk = true;
+    }
+    
+    /**Sets the value of the boolean which decides whether an ink track is being edited
+     * @method setModifyingInk
+     * @param {Boolean} state
+     */
+    function setModifyingInk(state) {
+        modifyingInk = state;
+    }
+    
+    /**Removes the current ink canvas
+     * @method removeInkSession
+     */
+    function removeInkSession() {
+        compCont.removeInkCanv();
+        compCont.hideInkControls();
+    }
+    
+    /**Xiaoyi Libby - get the limiting distance for multi select
+     * just have each display that is selected push its bounds into the heaps
+     * hacky way to solve multi selection not working when dragging a display with 0 fadeout.
+     * @method getMSBounds
+     * @param {Display} currentDisplay
+     * @return bound: the array of the smallest distances
+     **/
+    function getMSBounds(currentDisplay) {
+        var hasZeroFadeout = false;
+        if (currentDisplay &amp;&amp; currentDisplay.getFadeOut() === 0) { hasZeroFadeout = true; }
+        //create new binheaps every time the selected displays are dragged
+        //so that old bounds do not erroneously conflict with new ones
+        dataHolder.reInitHeaps();
+        for (var i = 0; i &lt; multiSelectionArray.length; i++) {
+            multiSelectionArray[i].getTrack().boundHelper(multiSelectionArray[i], hasZeroFadeout);
+        }
+    }
+   
+    /**Turn off the button for multi select 
+     * @method turnOffMS
+     */
+    function turnOffMS() {
+        multiSelection = false;
+        $(&#x27;#multiSelButton&#x27;).css({
+            &#x27;color&#x27;: &#x27;black&#x27;,
+            &#x27;background-color&#x27;: &#x27;transparent&#x27;,
+            &quot;border-color&quot;: &quot;black&quot;
+        });
+    }
+    
+   /**Update the olddata for each selected displays when the mouse goes up
+    * this is used in undo/redo to store the previous positions of all of the selected displays
+    * @method updateOldData
+    */
+    function updateOldData() {
+        var selectDisplays = getMultiSelectionArray();
+        var selectDisplaysLength = selectDisplays.length;
+        var leftDist = dataHolder._leftExternal.peek(),                                     //boundArray[0],
+            rightDist = dataHolder._rightExternal.peek();                                   //boundArray[1];
+        var leftbound,
+            rightbound;
+
+        if (selectDisplays.length === 0) { return; }
+        olddata = new Array(selectDisplaysLength);
+
+        //update bounds
+        getMSBounds();
+
+        //null checking
+        if (leftDist) { leftDist = leftDist.bound; }
+        if (rightDist) { rightDist = rightDist.bound; }
+        for (var i = 0; i &lt; selectDisplaysLength; i++) {
+            olddata[i] = new Array(5);
+            leftbound = selectDisplays[i].getStart() - leftDist;
+            rightbound = selectDisplays[i].getEnd() + rightDist;
+            olddata[i][0] = selectDisplays[i].getStart();
+            olddata[i][1] = selectDisplays[i].getMainStart();
+            olddata[i][2] = selectDisplays[i].getOutStart();
+            olddata[i][3] = leftbound;
+            olddata[i][4] = rightbound;
+        }
+    }
+    
+    /**create a new data array
+     * @method newDataArray
+     */
+    function newDataArray() {
+        data = [];
+    }
+    
+    /**returns the olddata array
+     * @method getOldData
+     * @return {Array} oldata
+     */
+    function getOldData() {
+        return olddata;
+    }
+    
+    /**Move the selected displays when user drags one of them
+     * @param res                            mouse input
+     * @param {Display} currentDisplay       the one user is dragging. 
+     */
+    function moveSelect(res, currentDisplay) {
+        var leftDist = dataHolder._leftExternal.peek().bound,                                                                               //boundArray[0],
+            rightDist = dataHolder._rightExternal.peek().bound,                                                                             //boundArray[1],
+            fadeInRightDist = dataHolder._leftInternal.peek().bound,                                                                        //boundArray[2],
+            fadeOutLeftDist = dataHolder._rightInternal.peek().bound,                                                                       //boundArray[3],
+            loc = currentDisplay.getLoc(),
+            selectDisplays = getMultiSelectionArray(),
+            currentDisplayleft = currentDisplay.getStart() - leftDist,
+            currentDisplayright = currentDisplay.getEnd() + rightDist,
+            translation = currentDisplay.getTranslation(res, currentDisplayleft, currentDisplayright, fadeInRightDist, fadeOutLeftDist),    //get the distance the display has been dragged
+            leftbound,
+            rightbound,
+            fadeinrightbound,
+            fadeoutleftbound,
+            offset = currentDisplay.getOffset();                                                                                            //distance from the main to fadein that user clicks on
+
+        //turn off multi-select once any kind of edit is made to the selection
+        turnOffMS();
+        getMSBounds(currentDisplay);
+        
+        if (data[0] === null || data[0] === undefined) {//update the data for undo at the moment mouse is down, no need to update if user keeps the mouse down and drag multi times.
+            data = new Array(getMultiSelectionArray().length);
+            for (var i = 0; i &lt; selectDisplays.length; i++) {
+                leftbound = selectDisplays[i].getStart() - leftDist;
+                rightbound = selectDisplays[i].getEnd() + rightDist;
+                fadeinrightbound = selectDisplays[i].getStart() + fadeInRightDist;
+                fadeoutleftbound = selectDisplays[i].getEnd() - fadeOutLeftDist;
+                if (data[i] === null || data[i] === undefined) {
+                    data[i] = new Array(10);
+                    data[i][0] = selectDisplays[i].getStart();
+                    data[i][1] = selectDisplays[i].getMainStart();
+                    data[i][2] = selectDisplays[i].getOutStart();
+                    data[i][3] = leftbound;
+                    data[i][4] = rightbound;
+                    data[i][5] = translation;
+                    data[i][6] = loc;
+                    data[i][7] = offset;
+                    data[i][8] = fadeinrightbound;
+                    data[i][9] = fadeoutleftbound;
+                }        
+            }
+        }
+        currentDisplay.msMove(selectDisplays, translation);//move all selectedDisplays
+    }
+    
+    /**Returns the display data array
+     * @method getDisplayData
+     * @return {Array} data
+     */
+    function getDisplayData() {
+        return data;
+    }
+    
+    /**Deselect all displays when the user clicks white space in track or right clicks on the menu
+     * @method allDeselected
+     */
+    function allDeselected() {
+        var selectedarray = getMultiSelectionArray();
+        var selectednumber = getMultiSelectionArray().length;
+        var i;
+        turnOffMS();
+        if (selectedarray.length &gt; 0) {
+            for (i = 0; i &lt; selectednumber; i++) {
+                selectedarray[0].getTrack().setDisplayDeselected(selectedarray[0], false);
+            }
+        }
+        olddata = [];
+        data = [];
+        multiSelectionArray = [];
+    }
+    
+    ////////////
+    // TRACKS //
+    ////////////
+
+    /**Public API for adding tracks (called from ComponentControls)
+     * @param media     URL of added resource (for audio, video, artwork)
+     * @param track     Associated track (for ink)
+     */
+
+
+    /**Returns boolean to check the status of multi-select
+     * @method getMultiSelection
+     * @return {Boolean} multiSelection
+     */
+    function getMultiSelection() {
+        return multiSelection;
+    }
+    
+    /**Returns the array of selected tracks
+     * @method getMultiSelectedArray
+     * @return {Array} multiSelectedArray
+     */
+    function getMultiSelectionArray() {
+        return multiSelectionArray;
+    }
+    
+    /**Returns the number of tracks on the timeline
+     * @return {Number} length
+     */
+    function getTrackslength() {
+        return tracks.length;
+    }
+    
+    /**Returns the list of track son the timeline
+     * @return {Array} tracks
+     */
+    function getTracks() {
+        return tracks;
+    }
+    
+    /**Returns the timeline ruler div
+     * @method getTimelineRuler
+     * @return timeRuler
+     */
+    function getTimeRuler() {
+        return timeRuler;
+    }
+    
+    /**Sets the state of the menu
+     * @method setisMenuOpen 
+     * @return {Boolean} status
+     */
+    function setisMenuOpen(status) {
+        isMenuOpen = status;
+    }
+    
+    /**Returns the boolean specifying the menu
+     * @method getisMenuOpen
+     * @return {Boolean} isMenuOpen
+     */
+    function getisMenuOpen() {
+        return isMenuOpen;
+    }
+
+    /**Returns an array containing changed display states
+     * @method getClampedDisplays
+     * @return {Array} clamped_displays
+     */
+    function getClampedDisplays() {
+        return clamped_displays;
+    }
+
+    /**Wrapper around the close function actions for the timeline menu
+     * @method setCloseMenu
+     * @param {Function} closeFunction
+     */
+    function setCloseMenu(closeFunction) {
+        closeMenuHolder = closeFunction;
+    }
+    
+    /**Returns the close function for the menu
+     * @method getCloseMenu
+     * @return {Function} closeMenuHolder
+     */
+    function getCloseMenu() {
+        return closeMenuHolder;
+    }
+    
+    /**Utility to get track object from title
+     * Used to load ink
+     * @method findTrackByTitle
+     * @return {Object} track object
+     */
+    function findTrackByTitle(title) {
+        return dataHolder.findTrackByTitle(title);
+    }
+
+    /**Searches through all displays and compares end times of each
+     * @method getLastDisplayTime
+     * @return {Time} allDisplaysEnd            the highest end time of all displays
+     */
+    function getLastDisplayTime() {
+        var i,
+            allDisplaysEnd = 0,
+            tracks = dataHolder.getTracks(),
+            endDisplay,
+            endDisplayTime;
+        for (i = 0; i &lt; tracks.length; i++) {
+            endDisplay = dataHolder.maxDisplay(tracks[i].track.getPos());
+            endDisplayTime = endDisplay.display.getFadeOut() + endDisplay.display.getOutStart();
+            if (endDisplayTime &gt; allDisplaysEnd) {
+                allDisplaysEnd = endDisplayTime;
+            }
+        }
+        return allDisplaysEnd;
+    }
+    
+    /**Searches list of tracks for track w/ duplicate name
+     * If duplicate exists, changes name to prevent duplication
+     * @method fixTrackTitle
+     * @param title     the new title
+     * @param id        id of the track whose title is being changed
+     */
+    function fixTrackTitle(title, id) {
+        var i,
+            j,
+            currTitle,
+            result,
+            ct,
+            titleExp,                                   //= new RegExp(title + &#x27;(?:-([0-9]+))?&#x27;),
+            extraNums = [],
+            finalNum = -1,
+            pattern = new RegExp(&quot;[&#x60;~!@#$^&amp;*()=|{}&#x27;:;&#x27;,\\[\\].&lt;&gt;/?~！@#￥……&amp;*（）——|{}【】‘；：”“&#x27;。，、？]&quot;),
+            rs = &quot;&quot;;
+        id = id || -1;
+        
+        for (i = 0; i &lt; title.length; i++) {            //removes any irregular characters from title
+            rs = rs + title.substr(i, 1).replace(pattern, &#x27;&#x27;);
+        }
+        titleExp = new RegExp(rs + &#x27;(?:-([0-9]+))?&#x27;);   //checks if there are any numbers added onto the title we have
+        dataHolder.mapTracks(function (i) {
+            currTitle = i.track.getTitle();
+            ct = &quot;&quot;;
+            for (j = 0; j &lt; currTitle.length; j++) {    //remove special characters
+                ct = ct + currTitle.substr(j, 1).replace(pattern, &#x27;&#x27;);
+            }
+            result = titleExp.exec(ct);                 //check if any numbers added to original
+            if (result &amp;&amp; result[0] === ct &amp;&amp; id !== i.track.getID()) {     // match
+                if (result[1]) {                        //if there is a trailing number
+                    extraNums.push(parseInt(result[1], 10));
+                } else {                                //if there is no trailing number, pretend substr is -1
+                    extraNums.push(-1);
+                }
+            }
+        });
+
+        if (extraNums.length &gt; 0) {
+            extraNums.sort(function (a, b) { return a - b; });
+            for (i = 0; i &lt; extraNums.length; i++) {
+                if (extraNums[i] + 1 !== i) {
+                    finalNum = i - 1;
+                    break;
+                }
+                finalNum++;
+            }
+            if (finalNum !== -1) {
+                return title + &#x27;-&#x27; + finalNum;
+            } else {                                    //track w/ no appended number does not already exist
+                return title;
+            }
+        } else {
+            return title;
+        }
+    }
+    
+    /**Adds audio track to the timeline
+     * @method addAudioTrack
+     * @param {Path}   media            path to get the media element     
+     * @param {String} name             name of the audio track
+     * @param pos                       position of the track
+     * @param {Time} mediaLength        Track duration
+     * @return {Object} newTrack        of type AudioTrack.js
+     */
+    function addAudioTrack(media, name, pos, mediaLength) {
+        var object = createSpec(media, name, pos);
+        var newTrack;
+        object.mediaLength = mediaLength;
+        newTrack = new TAG.TourAuthoring.AudioTrack(object);
+        addAnyTrack(newTrack, name, pos);
+        return newTrack;
+    }
+    
+    /**Adds video track to the timeline
+     * @method addVideoTrack
+     * @param {Path}   media            path to get the media element     
+     * @param {String} name             name of the video track
+     * @param pos                       position of the track
+     * @param {Time} mediaLength        Track duration
+     * @return {Object} newTrack        of type VideoTrack.js
+     */
+    function addVideoTrack(media, name, pos, mediaLength, toconvert, converted) {
+        var object = createSpec(media, name, pos);
+        var newTrack;
+        object.mediaLength = mediaLength;
+        object.converted = converted;
+        object.toConvert = toconvert;
+        newTrack = new TAG.TourAuthoring.VideoTrack(object);
+        addAnyTrack(newTrack, name, pos);
+        return newTrack;
+    }
+    
+    /**Adds artwork track to the timeline
+     * @method addAudioTrack
+     * @param {Path}   media            path to get the media element     
+     * @param {String} name             name of the artwork track
+     * @param {String} guid             ID of the track
+     * @param pos                       
+     * @return {Object} newTrack        of type ArtworkTrack.js
+     */
+    function addArtworkTrack(media, name, guid, pos) {
+        var object = createSpec(media, name, pos);
+        var newTrack;
+        object.guid = guid;
+        newTrack = new TAG.TourAuthoring.ArtworkTrack(object);
+        addAnyTrack(newTrack, name, pos);
+        return newTrack; 
+    }
+    
+    /**Adds image track to the timeline
+     * @method addAudioTrack
+     * @param {Path}   media            path to get the media element     
+     * @param {String} name             name of the audio track
+     * @param pos                       position of the track
+     * @return {Object} newTrack        of type ImageTrack.js
+     */
+    function addImageTrack(media, name, pos) {
+        pos = pos || (dataHolder.getSelectedTrack() ? dataHolder.getSelectedTrack().getPos() : 0);
+        var object = createSpec(media, name, pos);
+        var newTrack = new TAG.TourAuthoring.ImageTrack(object);
+        var oldPos;
+        var command = TAG.TourAuthoring.Command({
+            execute: function () {
+                _addTrack(newTrack);
+                dataHolder.insertTrack(newTrack, oldPos);
+                newTrack.setTitle(newTrack.getTitle());
+            },
+            unexecute: function () {
+                oldPos = newTrack.getPos();
+                _removeTrack(newTrack);
+            }
+        });
+        //command.execute();
+
+        _addTrack(newTrack);
+        dataHolder.insertTrack(newTrack, pos);
+        oldPos = newTrack.getPos();
+
+        if (name) {
+            newTrack.setTitle(name);
+        }
+
+        undoManager.logCommand(command);
+        //addAnyTrack(newTrack, name, pos);
+
+        return newTrack; 
+    }
+    
+    // Additional param in spec: associated-track (either pass by id or direct reference?)
+    /**Adds an annotation track to the timeline
+     * @method addInkTrack
+     * @param {Path} track
+     * @param {String} name
+     * @param inkType
+     * @param inkSpec
+     * @param pos
+     * @return {Object} newTrack
+     */
+    function addInkTrack(track, name, inkType, inkSpec, pos) {
+        var selected = dataHolder.getSelectedTrack();
+        if (!pos) {
+            if (selected) {
+                pos = selected.getPos();
+            } else if (track) {
+                pos = track.getPos();
+            } else {
+                pos = 0;
+            }
+        } 
+        var spec = {
+            dataHolder: dataHolder,
+            media: inkType,
+            root: root,
+            inkSpec: inkSpec,
+            id: pos,
+            title: fixTrackTitle(name),
+            timeManager: timeManager,
+            undoManager: undoManager,
+            update: onUpdate,
+            timeline: that,
+            trackarray: tracks,
+            selectedTrack: selectedTrack,
+        };
+
+        var oldPos;
+
+        // Create the track, wrap command
+        var newTrack = new TAG.TourAuthoring.InkTrack(spec);
+        var command = TAG.TourAuthoring.Command({
+            execute: function () {
+                _addTrack(newTrack);
+                dataHolder.insertTrack(newTrack, oldPos);
+                newTrack.setTitle(newTrack.getTitle());
+            },
+            unexecute: function () {
+                oldPos = newTrack.getPos();
+                _removeTrack(newTrack);
+            }
+        });
+        //command.execute();
+        
+        _addTrack(newTrack);
+        dataHolder.insertTrack(newTrack, pos);
+        oldPos = newTrack.getPos();
+
+        if (name) {
+            newTrack.setTitle(name);
+        }
+
+        undoManager.logCommand(command);
+
+        return newTrack;
+    }
+    
+    /**Adds the common properties to the object in each track type
+     * @method createSpec
+     * @param {Path} media      the path of the track file
+     * @param {String} name     name of the track
+     * @param pos               track id 
+     * @return {Object} spec    object with properties for each track
+     */
+    function createSpec(media, name, pos) {
+        var spec = {
+            dataHolder: dataHolder,
+            media: media,
+            root: root,
+            id: pos,
+            title: fixTrackTitle(name),
+            timeManager: timeManager,
+            undoManager: undoManager,
+            update: onUpdate,
+            timeline: that,
+            trackarray: tracks,
+            selectedTrack: selectedTrack,
+        };
+        return spec;
+    }
+   
+    /**Common functionality to add tracks Audio/Video/Image/Artwork
+     * @method addAnyTrack
+     * @param {Object} track
+     * @param {String} name
+     * @param pos
+     * @return {Object} spec
+     */
+    function addAnyTrack(track, name, pos) {
+        pos = pos || (dataHolder.getSelectedTrack() ? dataHolder.getSelectedTrack().getPos() : 0);
+        var oldPos,
+            command = TAG.TourAuthoring.Command({
+                execute: function () {
+                    _addTrack(track);
+                    dataHolder.insertTrack(track, oldPos);
+                    track.setTitle(track.getTitle());
+                },
+                unexecute: function () {
+                    oldPos = track.getPos();
+                    _removeTrack(track);
+                }
+            });
+        _addTrack(track);
+        dataHolder.insertTrack(track, pos);
+        oldPos = track.getPos();
+
+        if (name) {
+            track.setTitle(name);
+        }
+        undoManager.logCommand(command);
+    }
+
+    /**Adds the track to the DOM
+     * @method _addTrack
+     * @param track
+     */
+    function _addTrack(track) {
+        track.addTitleToDOM(trackTitleWrapper);
+        track.addEditorToDOM(trackBody);
+    }
+
+    /**Remove the track from the timeline
+     * @method _removeTrack
+     * @param track
+     */
+    function _removeTrack(track) {
+        var i;
+        dataHolder.removeTrack(track);
+        track.updatePos(track.getPos());
+        if (track.getType() === TAG.TourAuthoring.TrackType.ink &amp;&amp; track.getInkEnabled()) {
+            track.getInkLink().removeAttachedInkTrack(track);
+        }
+        track.detach();
+        dataHolder.mapTracks(function (track, i) {
+            track.track.updatePos(i);
+        });
+        onUpdate();
+    }
+    
+    /**Allows track to prepend itself to DOM.
+     * @method prependAddToDom
+     * @param track
+     * @param {String} trackTitle
+     */
+    function prependAddToDom(track, trackTitle) {
+        trackTitleWrapper.prepend(trackTitle);
+        trackBody.prepend(track);
+    }
+    
+    /**Returns the number of tracks in the current tour
+     * @method getNumTracks
+     * @return {Number} numTracks
+     */
+    function getNumTracks() {
+        return dataHolder.numTracks();
+    }
+    
+    /**List of related artworks to be registered in database
+     * @method getRelatedArtworks
+     * @return {Array} related     GUIDs of all artworks loaded into tracks
+     */
+    function getRelatedArtworks() {
+        var track,
+            i,
+            related = [];
+        dataHolder.mapTracks(function (i) {
+            track = i;
+            if (track.track.getType() === TAG.TourAuthoring.TrackType.artwork) {
+                related.push(track.track.getGUID());
+            }
+        });
+        return related;
+    }
+    
+    /**Returns the trackBody div
+     * @method getTrackBody
+     * @return trackBody
+     */
+    function getTrackBody() {
+        return trackBody;
+    }
+    
+    /**Checks if there are any artworks or images in the timeline
+     * Used in ComponentControls to check if ink can be added
+     * @method checkForArtworks
+     * @param {Number} numArtworks      number of artwork tracks in the timeline
+     * @return {Boolean}                true if there are artworks loaded, else false
+     */
+    function checkForArtworks(numArtworks) {
+        for (var i = 0; i &lt; dataHolder._trackArray.length; i++) {
+                var track = dataHolder._trackArray[i].track;
+                if (track.getType() === TAG.TourAuthoring.TrackType.artwork || track.getType() === TAG.TourAuthoring.TrackType.image) {
+                    return true;
+                }
+        }
+        return false;
+    }
+    
+    /**this calls component controls from tracks, telling ink to be disabled
+     * @method disableInk
+     */
+    function disableInk() {
+        compCont.disableInk();
+    }
+    
+    /**Called when tour has been fully initialized
+     * RIN reloads fired by edits are blocked until this is called!
+     * @method setLoaded
+     */
+    function setLoaded() {
+        loaded = true;
+        undoManager.setInitialized(true);
+    }
+    
+    /**Updates selected keyframe (or new keyframe) w/ keyframe data from RIN
+     * @method receiveKeyframe
+     * @param {String} trackName      name of the track whose media is being manipulated
+     * @param capture                 keyframe data in RIN format (needs to be parsed)
+     * @param {Boolean} select        whether receiving keyframe should be selected
+     */
+    function receiveKeyframe(trackName, capture, select) {
+        for (var i = 0; i &lt; dataHolder._trackArray.length; i++) {
+            var currentTrack = dataHolder._trackArray[i].track;
+            // If this is the track pass on the keyframe data
+            if (currentTrack.getTitle() === trackName) {
+                currentTrack.receiveKeyframe(capture, select);
+                break;
+            }
+        }
+    }
+    
+    /**Deselects selected keyframes on all tracks
+     * @method capturingOff
+     */
+    function capturingOff() {
+        var i;
+        dataHolder.mapTracks(function (i) {
+            i.track.deselectKeyframe();
+        });
+    }
+    
+    /**Grabs current keyframe state from viewer
+     * @method captureKeyframe
+     * @param {String} artname
+     * @return                      Keyframe data in xml
+     */
+    function captureKeyframe(artname) {
+        return viewer.captureKeyframe(artname);
+    }
+    
+    /**Returns the viewer property of spec
+     * @method getViewer
+     * @return viewer
+     */
+    function getViewer() {
+        return viewer;
+    }
+    
+    /**Returns the dataHolder object
+     * @method getDataHolder
+     * @return {Object} dataHolder
+     */
+    function getDataHolder() {
+        return dataHolder;
+    }
+    
+    //////////////
+    // RIN Code //
+    //////////////
+
+    /**Converts timeline to RIN format
+     * @method toRIN
+     * @return     JSON object representing current state of timeline in RIN format
+     */
+    function toRIN() {
+        var rin = {},
+            title = &quot;TAGAuthoringPreview&quot;;
+
+        // v2 code
+        rin.version = &#x27;1.0&#x27;;
+        rin.defaultScreenplayId = &quot;SCP1&quot;;
+        rin.screenplayProviderId = &#x27;screenplayProvider&#x27;;
+        rin.data = {
+            narrativeData: {
+                guid: &quot;e3ced195-0c8b-48f6-b42c-f989e52b4f03&quot;,
+                timestamp: new Date().toISOString(),
+                title: title,
+                author: &quot;TAG Authoring Tool&quot;,
+                aspectRatio: &quot;WideScreen&quot;,
+                estimatedDuration: timeManager.getDuration().end,
+                description: &quot;TAG Tour&quot;,
+                branding: &quot;TAG&quot;
+            }
+        };
+        rin.providers = {
+            ZMES: {
+                name: &quot;MicrosoftResearch.Rin.ZoomableMediaExperienceStream&quot;,
+                version: &quot;1.0&quot;
+            },
+            AES: {
+                name: &#x27;MicrosoftResearch.Rin.AudioExperienceStream&#x27;,
+                version: &quot;1.0&quot;
+            },
+            screenplayProvider: {
+                name: &quot;MicrosoftResearch.Rin.DefaultScreenplayProvider&quot;,
+                version: &quot;1.0&quot;
+            },
+            FadeInOutTransitionService: {
+                name: &quot;MicrosoftResearch.Rin.FadeInOutTransitionService&quot;,
+                version: &quot;1.0&quot;
+            },
+            InkES: {
+                name: &quot;MicrosoftResearch.Rin.InkExperienceStream&quot;,
+                version: &quot;0.0&quot;
+            },
+            VideoES: {
+                &quot;name&quot;: &quot;MicrosoftResearch.Rin.VideoExperienceStream&quot;,
+                &quot;version&quot;: 0.0
+            },
+            ImageES: {
+                name: &quot;MicrosoftResearch.Rin.ImageExperienceStream&quot;,
+                version: &quot;1.0&quot;
+            },
+        };
+
+        rin.resources = _getResourceTable();
+        rin.experiences = _getExperienceStreams();
+        rin.screenplays = {
+            SCP1: {
+                data: {
+                    experienceStreamReferences: _getScreenPlay()
+                }
+            }
+        };
+        return rin;
+    }
+    
+    /**Helper function to collect track resource entries
+     * @method _getResourceTable
+     * @return {Object} table     JSON object table of resources
+     */
+    function _getResourceTable() {
+        var i,
+            table = {};
+        dataHolder.mapTracks(function (i) {
+            i.track.addResource(table);
+        });
+        return table;
+    }
+
+    /**Helper function to collect track experience streams
+     * @method _getExperienceStreams
+     * @return {Object} es    JSON object table of ESs
+     */
+    function _getExperienceStreams() {
+        var i,
+            es = {};
+        dataHolder.mapTracks(function (i) {
+            i.track.addES(es);
+        });
+        return es;
+    }
+
+    /**Helper function for constructing screenplay xml string from tracks
+     * @method _getScreenPlay
+     * @return {String} screenplayStorage   XML screenplay string
+     */
+    function _getScreenPlay() {
+        var i,
+            screenplayStorage = [];
+        dataHolder.mapTracks(function (i) {
+            i.track.addScreenPlayEntries(screenplayStorage);
+        });
+        screenplayStorage.sort(function (a, b) { return a.begin - b.begin; }); // Screenplay must be sorted
+        return screenplayStorage;
+    }
+    
+    /**Function passed into tracks to be called on track changes to update RIN data
+     * debounce will prevent the function from being called
+     * until the debounce function hasn&#x27;t been called for
+     * the specified number of milliseconds
+     * @method coreUpdate
+     */
+    function coreUpdate() {
+        var rin;
+        onUpdateNumCalls = onUpdateNumCalls + 1;
+        timeManager.stop();
+        if (loaded) {
+            viewer.setIsReloading(true);
+            timeManager.stop();
+
+            viewer.capturingOff();
+            capturingOff();
+
+            rin = toRIN();
+            viewer.reloadTour(rin);
+        }
+
+        updateVerticalScroller();
+        enableDisableDrag();
+    }
+
+    /**Action to be executed when RIN data is updated
+     * @method onUpdate
+     * @param noDebounce
+     */
+    function onUpdate(noDebounce) {
+        if (!noDebounce) {
+            debounce();
+        } else {
+            coreUpdate();
+        }
+    }
+    
+    /**Loads tour file and initializes timeline UI accordingly
+     * @method loadRIN
+     * @param rin
+     * @param {Function} callback
+     */
+    function loadRIN(rin, callback) {
+        var parser = TAG.Util.createQueue(),
+            r,
+            e,
+            es,
+            i,
+            j,
+            y,
+            eobj,
+            experienceArray,
+            screenplayEntries,
+            trackname,
+            exp,
+            expstr,
+            expstrname,
+            currScp,
+            defaultseq,
+            mediaLength,
+            begin,
+            fadeIn,
+            fadeOut,
+            track,
+            display,
+            type,
+            length,
+            zIndex,
+            experienceStreams,
+            keyframes,
+            currKey,
+            key,
+            keyloc,
+            keylocy,
+            linkTrack,
+            inks = [],                                                                              // need to do some ink init after everything else has been loaded, save it here
+            narrativeData = rin.data.narrativeData,
+            resources = rin.resources,
+            experiences = rin.experiences,
+            screenplay = rin.screenplays.SCP1.data.experienceStreamReferences;
+        // parse narrative data
+        timeManager.setEnd(narrativeData.estimatedDuration);
+
+        // ignore providers
+        // parse resources and experiences simultaneously
+        // first, get experiences and sort by zIndex in decending order
+        screenplayEntries = rin.screenplays.SCP1.data.experienceStreamReferences;
+        experienceArray = [];
+        for (e in experiences) {
+            if (experiences.hasOwnProperty(e)) {
+                experienceArray.push({ name: e + &#x27;&#x27;, exp: experiences[e] });
+            }
+        }
+
+        /**Compares two expressions and returns a number as the result of the comparison
+         * @method compareExps
+         * @param a
+         * @param b
+         * @return {Number} 
+         */
+        function compareExps(a, b) {
+            var az = a.exp.data.zIndex,
+                bz = b.exp.data.zIndex,
+                astr,
+                bstr,
+                expstr,
+                i,
+                currscp,
+                astreams = a.exp.experienceStreams,
+                bstreams = b.exp.experienceStreams;
+            
+            if (!az) {
+                for (expstr in astreams) {
+                    if (astreams.hasOwnProperty(expstr)) {
+                        astr = astreams[expstr];
+                        if (astr) {
+                            az = astr.data.zIndex;
+                        }
+                        break;
+                    }
+                }
+            }
+            if (!bz) {
+                for (expstr in bstreams) {
+                    if (bstreams.hasOwnProperty(expstr)) {
+                        bstr = bstreams[expstr];
+                        if (bstr) {
+                            bz = bstr.data.zIndex;
+                        }
+                        break;
+                    }
+                }
+            }
+            if (az) {
+                if (bz) {
+                    return bz - az;
+                } else {
+                    // b does not exist
+                    return -1;
+                }
+            } else {
+                if (bz) {
+                    // a does not exist
+                    return 1;
+                } else {
+                    // a and b do not exist
+                    return 0;
+                }
+            }
+        }
+        experienceArray.sort(compareExps);
+
+        /**Helper function for parsing
+         * @method parseHelper
+         * @param {Object} eobj
+         * @param e
+         */
+        function parseHelper(eobj, e) {
+            parser.add(function () {
+                parseTrack(eobj, e);
+            });
+        }
+        for (e = 0; e &lt; experienceArray.length; e++) {
+            parseHelper(experienceArray[e], e);
+        }
+
+
+        // finally, ink init
+        parser.add(function () {
+            var parentDisp,
+                parentDisplays;
+            for (i = 0; i &lt; inks.length; i++) {
+                linkTrack = findTrackByTitle(inks[i].link);
+                inks[i].track.setInkLink(linkTrack);
+                if (inks[i].track.getInkEnabled()) {//if is attached ink, set parent displays for each display inside
+                    dataHolder.mapDisplays(inks[i].track.getStorageContainer(), function (currentDisplay) {
+                        parentDisplays = linkTrack.getStorageContainer().displays.nearestNeighbors(currentDisplay.display.getStart(), 1);//array of nearest neighbor&#x27;s in parent track&#x27;s display 
+                        parentDisp = parentDisplays[0] &amp;&amp; parentDisplays[0].display;
+                        currentDisplay.display.setParentDisplay(parentDisp);
+                        parentDisp &amp;&amp; parentDisp.addChildDisplay(currentDisplay.display);
+                    });
+                }
+                if (linkTrack) {
+                    linkTrack.addAttachedInkTrack(inks[i].track);
+                }
+            }
+        });
+
+        dataHolder.mapTracks(function (container, i) {
+            container.track.updatePos(i);
+        });
+        parser.add(function () {
+            setLoaded();
+        });
+        parser.add(function () {
+            /* do async viewer resize to make sure resize runs
+             * after callback adds tour authoring to DOM
+             */
+            setTimeout(viewer.resize, 1);
+
+            if (typeof callback === &#x27;function&#x27;) {
+                callback();
+            }
+
+        });
+
+        /**Deleting an ink track
+         * @method confirmDeleteDisableInk
+         * @param {String} name         name of the ink track
+         * @param {Display} display     display of the track
+         * @param {Object}  myy
+         */
+        function confirmDeleteDisableInk(name, display, myy) {
+            var deleteConfirmation = $(document.createElement(&#x27;div&#x27;));                                  // Actual dialog container
+            var dialogTitle = $(document.createElement(&#x27;div&#x27;));                                         // container for the dialog box title
+            var buttonRow = $(document.createElement(&#x27;div&#x27;));                                           // Container for &quot;continue / cancel&quot; buttons
+            var submitButton = $(document.createElement(&#x27;button&#x27;));
+            var cancelButton = $(document.createElement(&#x27;button&#x27;));
+
+            // create dialog
+            root.append(deleteConfirmationOverlay);
+            deleteConfirmationOverlay.attr(&#x27;id&#x27;, &#x27;deleteConfirmationOverlay&#x27;);
+            deleteConfirmationOverlay.css({
+                display: &#x27;none&#x27;,
+                position: &#x27;absolute&#x27;,
+                top: 0,
+                left: 0,
+                width: &#x27;100%&#x27;,
+                height: &#x27;100%&#x27;,
+                &#x27;background-color&#x27;: &#x27;rgba(0,0,0,0.6)&#x27;,
+                &#x27;z-index&#x27;: TAG.TourAuthoring.Constants.aboveRinZIndex,
+            });
+
+            deleteConfirmation.attr(&#x27;id&#x27;, &#x27;deleteConfirmation&#x27;);
+            deleteConfirmation.css({
+                position: &#x27;absolute&#x27;,
+                left: &#x27;32.5%&#x27;,
+                &#x27;width&#x27;: &#x27;35%&#x27;,
+                &#x27;top&#x27;: &#x27;30%&#x27;,
+                border: &#x27;3px double white&#x27;,
+                &#x27;background-color&#x27;: &#x27;black&#x27;,
+                &#x27;padding&#x27;: &#x27;2.5% 2.5%&#x27;,
+            });
+            deleteConfirmationOverlay.append(deleteConfirmation);
+
+            dialogTitle.attr(&#x27;id&#x27;, &#x27;dialogTitle&#x27;);
+            dialogTitle.css({
+                color: &#x27;white&#x27;,
+                &#x27;font-size&#x27;: &#x27;1.25em&#x27;,
+                &#x27;margin-bottom&#x27;: &#x27;10px&#x27;,
+                &#x27;word-wrap&#x27;: &#x27;normal&#x27;,
+            });
+            deleteConfirmation.append(dialogTitle);
+            deleteConfirmation.append(document.createElement(&#x27;br&#x27;));
+
+            buttonRow.css({
+                &#x27;margin-top&#x27;: &#x27;10px&#x27;,
+                &#x27;text-align&#x27;: &#x27;center&#x27;,
+            });
+            deleteConfirmation.append(buttonRow);
+
+            submitButton.css({
+                width: &#x27;auto&#x27;,
+                border: &#x27;1px solid white&#x27;,
+                padding: &#x27;1%&#x27;,
+                &#x27;margin-right&#x27;: &#x27;3%&#x27;,
+            });
+            submitButton.text(&#x27;Continue&#x27;);
+            $(submitButton).click(function () {
+                var len = display.removeAttachedInkDisplays();
+                display.removeDisplay(true);
+                if (len &gt; 0) {
+                    undoManager.combineLast(len + 1);
+                }
+                deleteConfirmationOverlay.fadeOut(500);
+            });
+            buttonRow.append(submitButton);
+
+            cancelButton.css({
+                width: &#x27;auto&#x27;,
+                border: &#x27;1px solid white&#x27;,
+                padding: &#x27;1%&#x27;
+            });
+            cancelButton.text(&#x27;Cancel&#x27;); 
+            cancelButton.click(function () {
+                deleteConfirmationOverlay.fadeOut(500);
+            });
+            buttonRow.append(cancelButton);
+
+            // fade in the overlay
+            deleteConfirmationOverlay.fadeIn(500);
+            dialogTitle.text(&#x27;Deleting the last display in track &quot;&#x27; + name + &#x27;&quot; will disable all attached ink tracks. Any existing ink displays will not function until a new artwork display has been created at an overlapping time.&#x27;);
+        }
+        that.confirmDeleteDisableInk = confirmDeleteDisableInk;
+
+        /**Parses an individual track
+         * Note that this is scoped into loadRIN function! (needs access to inks variable)
+         * @method parseTrack
+         * @param eobj      two params, name is track name, exp is rin format experience object
+         * @param e         track position of eobj
+         */
+        function parseTrack(eobj, e) {
+            // initialization of track
+            trackname = eobj.name;              // track name is simply key / property name
+            exp = eobj.exp;                     // actual experience entry
+            type = exp.providerId;              // ZMES or AES or ...
+            zIndex = exp.data.zIndex;
+            if (exp.resourceReferences.length !== 0) {
+                r = exp.resourceReferences[0].resourceId; // id used to get media url out of resources
+            }
+            track = null;
+            if (type === &#x27;ZMES&#x27;) {
+                track = addArtworkTrack(resources[r].uriReference, trackname, exp.data.guid, e);
+            } else if (type === &#x27;ImageES&#x27;) {
+                track = addImageTrack(resources[r].uriReference, trackname, e);
+            } else if (type === &#x27;VideoES&#x27;) {
+                mediaLength = exp.data.mediaLength;
+                var toConvert = exp.data.toConvert || false;
+                var converted = exp.data.converted || false;
+                track = addVideoTrack(resources[r].uriReference, trackname, e, mediaLength, toConvert, converted);
+            } else if (type === &#x27;AES&#x27;) {
+                mediaLength = exp.data.mediaLength;
+                track = addAudioTrack(resources[r].uriReference, trackname, e, mediaLength);
+            } else if (type === &#x27;InkES&#x27;) {
+                track = addInkTrack(null, trackname, 1, null, e);
+                track.setInkPath(exp.data.linkToExperience.embedding.element.datastring.str);
+                track.setInkEnabled(exp.data.linkToExperience.embedding.enabled);
+                track.setInkInitKeyframe(exp.data.linkToExperience.embedding.initKeyframe);
+                track.setInkRelativeArtPos(exp.data.linkToExperience.embedding.initproxy);
+                track.link = exp.data.linkToExperience.embedding.experienceId;
+                track.addInkTypeToTitle(exp.data.linkToExperience.embedding.element.datastring.str.split(&#x27;::&#x27;)[0].toLowerCase());
+                inks.push({ &#x27;track&#x27;: track, &#x27;link&#x27;: exp.data.linkToExperience.embedding.experienceId }); // do link init later
+                //create ink canvas and load datastring
+            } else {
+                console.log(&#x27;Experience not yet implemented&#x27;);
+            }
+
+            // check track ordering is correct
+            if (track.getPos() !== experienceArray.length - zIndex) {
+                console.log(&#x27;zIndex and track array position are not the same for: &#x27; + trackname);
+            }
+
+            // add displays from experience streams
+            if (track) {
+                experienceStreams = exp.experienceStreams;
+                for (var es in experienceStreams) {
+                    if (experienceStreams.hasOwnProperty(es)) {
+                        expstrname = es + &#x27;&#x27;;
+                        expstr = experienceStreams[es]; // actual experience stream
+                        length = expstr.duration;
+
+                        // to find start + end of displays, need to scan screenplay
+                        for (i = 0; i &lt; screenplay.length; i++) {
+                            currScp = screenplay[i];
+                            if (currScp.experienceStreamId === expstrname) { // found a match
+                                // note: scp length is fadeIn + main, expstr length is just main
+                                // easy shortcut for reading fades
+                                begin = currScp.begin;
+                                if (expstr.data.transition &amp;&amp; expstr.data.transition.providerId) {
+                                    fadeIn = expstr.data.transition.inDuration;
+                                    fadeOut = expstr.data.transition.outDuration;
+                                } else {
+                                    fadeIn = 0;
+                                    fadeOut = 0;
+                                }
+                                display = track.addDisplay(timeManager.timeToPx(begin));
+                                display.setMain(length);
+                                display.setIn(fadeIn);
+                                display.setOut(fadeOut);
+
+                                // add keyframes
+                                if (exp.providerId !== &#x27;InkES&#x27; &amp;&amp; exp.providerId !== &#x27;VideoES&#x27;) {
+                                    defaultseq = expstr.header.defaultKeyframeSequence;
+                                    keyframes = expstr.keyframes;
+                                    for (j = 0; j &lt; keyframes.length; j++) {
+                                        currKey = keyframes[j];
+
+                                        // ignore initialization keyframe
+                                        if (currKey.init) { continue; }
+                                        keyloc = timeManager.timeToPx(currKey.offset + display.getStart());
+                                        if (type === &#x27;ZMES&#x27; || type === &#x27;ImageES&#x27;) {
+                                            key = display.addKeyframe(keyloc, TAG.TourAuthoring.Constants.trackHeight/2);
+                                            if (key) key.loadRIN(currKey);
+                                        } else if (type === &#x27;AES&#x27;) {
+                                            // get audio to set y location
+                                            y = currKey.state.sound.volume;
+                                            y = Math.constrain(TAG.TourAuthoring.Constants.trackHeight - TAG.TourAuthoring.Constants.trackHeight * y, 0, TAG.TourAuthoring.Constants.trackHeight);
+                                            key = display.addKeyframe(keyloc, y);
+                                            if (key) track.addKeyframeToLines(key);
+                                        } else if (type === &#x27;VideoES&#x27;) {
+                                            //not used because of if check above
+                                        } else {
+                                            console.log(&#x27;Experience not yet implemented&#x27;);
+                                        }
+                                    }
+                                }
+                                // done with this display
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    /**&lt;Description&gt; 
+     * @method cancelAccel
+     */
+    function cancelAccel() {
+        manipObjects.ruler.cancelAccel();
+        manipObjects.track.cancelAccel();
+    }
+    
+    return that;
+};
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

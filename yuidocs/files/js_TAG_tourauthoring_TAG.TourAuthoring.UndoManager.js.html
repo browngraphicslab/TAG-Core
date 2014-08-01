@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/TAG/tourauthoring/TAG.TourAuthoring.UndoManager.js - Touch Art Gallery web application</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../images/WideLogo.scale-100.png" title="Touch Art Gallery web application"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/TAG.AnnotatedImage.html">TAG.AnnotatedImage</a></li>
+            
+                <li><a href="../classes/TAG.Authoring.EditorMenu.html">TAG.Authoring.EditorMenu</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkEditor.html">TAG.Layout.ArtworkEditor</a></li>
+            
+                <li><a href="../classes/TAG.Layout.ArtworkViewer.html">TAG.Layout.ArtworkViewer</a></li>
+            
+                <li><a href="../classes/TAG.Layout.CollectionsPage.html">TAG.Layout.CollectionsPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.InternetFailurePage.js.html">TAG.Layout.InternetFailurePage.js</a></li>
+            
+                <li><a href="../classes/TAG.Layout.StartPage.html">TAG.Layout.StartPage</a></li>
+            
+                <li><a href="../classes/TAG.Layout.VideoPlayer.html">TAG.Layout.VideoPlayer</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ArtworkTrack.html">TAG.TourAuthoring.ArtworkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.AudioTrack.html">TAG.TourAuthoring.AudioTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Command.html">TAG.TourAuthoring.Command</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ComponentControls.html">TAG.TourAuthoring.ComponentControls</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Display.html">TAG.TourAuthoring.Display</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.ImageTrack.html">TAG.TourAuthoring.ImageTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkAuthoring.html">TAG.TourAuthoring.InkAuthoring</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.InkTrack.html">TAG.TourAuthoring.InkTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Keyframe.html">TAG.TourAuthoring.Keyframe</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.PlaybackControl.html">TAG.TourAuthoring.PlaybackControl</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Timeline.html">TAG.TourAuthoring.Timeline</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TimeManager.html">TAG.TourAuthoring.TimeManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TopMenu.html">TAG.TourAuthoring.TopMenu</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.TourOptions.html">TAG.TourAuthoring.TourOptions</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Track.html">TAG.TourAuthoring.Track</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.UndoManager.html">TAG.TourAuthoring.UndoManager</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.VideoTrack.html">TAG.TourAuthoring.VideoTrack</a></li>
+            
+                <li><a href="../classes/TAG.TourAuthoring.Viewer.html">TAG.TourAuthoring.Viewer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Artwork.html">TAG.Util.Artwork</a></li>
+            
+                <li><a href="../classes/TAG.Util.IdleTimer.html">TAG.Util.IdleTimer</a></li>
+            
+                <li><a href="../classes/TAG.Util.Splitscreen.html">TAG.Util.Splitscreen</a></li>
+            
+                <li><a href="../classes/tagInk.html">tagInk</a></li>
+            
+                <li><a href="../classes/Telemetry.html">Telemetry</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/TAG/tourauthoring/TAG.TourAuthoring.UndoManager.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+﻿TAG.Util.makeNamespace(&#x27;TAG.TourAuthoring.UndoManager&#x27;);
+
+/**Keeps track of commands and changes issued by program and order of issuing
+ * Can unexecute or execute (undo / redo) these commands
+ * @class TAG.TourAuthoring.UndoManager
+ * @constructor
+ * @return {Object} that                public methods of the class
+ */
+TAG.TourAuthoring.UndoManager = function () {
+    &quot;use strict&quot;;
+
+    var that = {                                                // object containing the public methods of the class
+            logCommand: logCommand,
+            dirtyStateGetter: dirtyStateGetter,
+            undoStackSize: undoStackSize,
+            setPrevFalse: setPrevFalse,
+            setInitialized: setInitialized,
+            undo: undo,
+            redo: redo,
+            clear: clear,
+            greyOutBtn: greyOutBtn,
+            combineLast: combineLast
+        },
+        undoStack = [],                                         // stack keeps track of the order of commands to undo actions
+        redoStack = [],                                         // stack keeps track of the order of commands to redo actions
+        initialized = false,                                    // used to prevent undoStack from updating when timeline is opening
+        undoStackSizeOriginal = 0,                              // default stack size is 0
+        stackSize = 75;                                         // max size is 75
+
+    ////////////////////
+    // PUBLIC METHODS //
+    ////////////////////
+
+    /**Log a command that has just been executed, ie. add it to the undo stack
+     * @method logCommand
+     * @param command       TAG.TourAuthoring.Command that was just run
+     */
+    function logCommand(command) {
+        if (initialized === true) {
+            if (command.savedState === undefined)
+                command.savedState = false;
+            if (redoStack.length &gt; 0) {
+                redoStack = []; // when should do this?
+                $(&#x27;.redoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;0.4&#x27; });
+                console.log(&quot;clear redoStack?&quot;);
+            }
+            undoStack.push(command);
+            $(&#x27;.undoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;1.0&#x27; });
+            if (undoStack.length &gt; stackSize) {
+                var diff = undoStack.length - stackSize;
+                undoStack.splice(0, diff);
+            }
+        }
+    }
+    
+    /**Function returns the savedState of the element in the top of the stack, which determines if timeline is dirty or not
+     * @method dirtyStateGetter
+     */
+    function dirtyStateGetter() {
+        if (undoStack.length &gt; 0) {
+            console.log(&quot;SAVED STATE //TOP//FROM DSG// ===&quot; + undoStack[undoStack.length - 1].savedState);
+            return undoStack[undoStack.length - 1].savedState;
+        }
+        return true;
+    }
+   
+    /**Returns undoStack size
+     * @method undoStackSize
+     * @return {Number} undoStack.length
+     */
+    function undoStackSize() {
+        return undoStack.length;
+    }
+    
+    /**Sets the savedState of the top element in undoStack to true, and the rest to false 
+     * @method setPrevFalse
+     */
+    function setPrevFalse() {
+        if (undoStack.length &gt; 0) {
+            undoStack[undoStack.length - 1].savedState = true;
+            for (var i = 0; i &lt; undoStack.length - 1; i++) {
+                undoStack[i].savedState = false;
+            }
+        }
+    }
+    
+    /**Called by loadRIN method in timeline class
+     * @method setInitialized
+     * @param {Boolean} boolVal
+     */
+    function setInitialized(boolVal) {
+        initialized = boolVal;
+    }
+    
+    /**Undoes the last action when the &#x27;undo&#x27; button is clicked
+     * @method undo
+     */
+    function undo() {
+        var toUndo;
+        if (undoStack.length &gt; 0) {
+            toUndo = undoStack.pop();
+            toUndo.unexecute();
+            redoStack.push(toUndo);
+            $(&#x27;.redoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;1.0&#x27; });
+            if (undoStack.length === 0) {
+                $(&#x27;.undoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;0.4&#x27; });
+            }
+        } else {
+            $(&#x27;.undoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;0.4&#x27; });
+        }
+    }
+    
+    /**Redoes the last undone action when redo button is clicked
+     * @method redo
+     */
+    function redo() {
+        if (redoStack.length &gt; 0) {
+            var toRedo = redoStack.pop();
+            toRedo.execute();
+            undoStack.push(toRedo);
+            $(&#x27;.undoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;1.0&#x27; });
+            if (redoStack.length === 0) {
+                $(&#x27;.redoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;0.4&#x27; });
+            }
+        } else {
+            $(&#x27;.redoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;0.4&#x27; });
+        }
+    }
+    
+    /**Clears undo / redo stack
+     * Called on save or after loading
+     * @method clear
+     */
+    function clear() {
+        undoStack = [];
+        redoStack = [];
+    }
+    
+    /**Greys out the undo/redo buttons when there is no possible action
+     * @method greyOutBtn
+     */
+    function greyOutBtn() {
+        $(&#x27;.undoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;1.0&#x27; });
+        $(&#x27;.redoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;1.0&#x27; });
+        if (undoStack.length &lt; 1) {
+            $(&#x27;.undoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;0.4&#x27; });
+        }
+        if (redoStack.length &lt; 1) {
+            $(&#x27;.redoButton&#x27;).css({ &#x27;opacity&#x27;: &#x27;0.4&#x27; });
+        }
+    }
+    
+    /**Utility for combining together multiple commands
+     * (Originally used for tying auto-creation of displays together with track creation)
+     * @method combineLast
+     * @param n     Number of commands to tie together
+     */
+    function combineLast(n) {
+        var command, i;
+        n = n || 2;
+        command = {
+            execute: function () {
+                for (i = 0; i &lt; n; i++) {
+                    redo();
+                }
+            },
+            unexecute: function () {
+                for (i = 0; i &lt; n; i++) {
+                    undo();
+                }
+            }
+        };
+        logCommand(command);
+    }
+    
+    return that;
+};
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
