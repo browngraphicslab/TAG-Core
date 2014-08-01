@@ -1782,9 +1782,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             var msg = "This video is being converted to compatible formats for different browsers";
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             conversionVideos.push(artwork.Identifier);
+                        } else if (output === "Error") {
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "There is an error occured when converting this video.";
+                            viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
                             $("#videoErrorMsg").remove();
-                            var msg = "There is an error occured when converting this video.";
+                            $("#leftLoading").remove();
+                            var msg = "The video format is not supported.";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         }
                         holder.attr('src', source);
@@ -2020,6 +2026,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }, null, newFileName, fileExtension, baseFileName, media.Identifier);
                             conversionVideos.push(media.Identifier);
                             $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
                             var msg = "This video is being converted to compatible formats for different browsers";
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, "False");
@@ -2230,15 +2237,51 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var newDoq;
                 try {
                     newDoq = new Worktop.Doq(urls[j]);
-                    var options = {Name: names[j]};
+                    var options = { Name: names[j] };
                     if (durations[j]) {
                         options.Duration = durations[j];
                     }
                     TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                    if (contentTypes[j] === "Video") {
+
+                        //conversionVideos.push(newDoq.Identifier);
+                        var source = newDoq.Metadata.Source;
+                        var newFileName = source.slice(8, source.length);
+                        var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
+                            var index = newFileName.lastIndexOf(".");
+                            var fileExtension = newFileName.slice(index);
+                            var baseFileName = newFileName.slice(0, index);
+
+                            //$(document.getElementById("leftLoading")).remove();
+                            //viewer.append(LADS.Util.createConversionLoading("This video is being converted to compatible formats for different browsers"));
+                            TAG.Worktop.Database.convertVideo(function () {
+                            }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
+                            conversionVideos.push(newDoq.Identifier);
+                            var mediaElement = $(document.getElementById("videoInPreview"));
+                            if (mediaElement[0]) {
+                                var msg = "This video is being converted to compatible formats for different browsers";
+                                viewer.append(TAG.Util.createConversionLoading(msg));
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                            }
+                        }, "Would you like to convert" + newFileName + "?", "Yes", true, function () {
+                            $(".convertVideoBtn").show().data("disabled", false);
+                            var msg = "The video format is not supported.";
+                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                        });
+
+                        root.append(confirmBox);
+                        $(confirmBox).show();
+                    }
                 } catch (error) {
                     done++;
                     console.log("error in uploading: " + error.message);
                     return;
+                }
+
+                if (!alphaName || names[j] < alphaName) {
+                    toScroll = newDoq;                          //Alphabetical order
+                    alphaName = names[j];
                 }
             }
         }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3']);
@@ -2579,6 +2622,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $("#leftLoading").remove();
                             var msg = "There is an error occured when converting this video.";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
+                        } else {
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "The video format is not supported.";
+                            viewer.append(TAG.Util.createConversionLoading(msg, true));
                         }
                         mediaElement.attr('src', source);
                     }
@@ -2740,6 +2788,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }, null, newFileName, fileExtension, baseFileName, artwork.Identifier);
                             conversionVideos.push(artwork.Identifier);
                             $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
                             var msg = "This video is being converted to compatible formats for different browsers";
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, "False");
@@ -2886,6 +2935,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $(".convertVideoBtn").hide().data("disabled", true);
                     }, "Would you like to convert " + newFileName + "?", "Yes", true, function () {
                         $(".convertVideoBtn").show().data("disabled", false);
+                        var msg = "The video format is not supported.";
+                        viewer.append(LADS.Util.createConversionLoading(msg, true));
                     });
 
                     root.append(confirmBox);
