@@ -4535,7 +4535,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (typeof text === 'string')
             text = text.replace(/<br \/>/g, '\n').replace(/<br>/g, '\n').replace(/<br\/>/g, '\n');
         var input = $(document.createElement('textarea')).val(text);
-        input.autoSize();
+        input.css('overflow-y', 'scroll');
+        //input.autoSize();
         doWhenReady(input, function (elem) {
             var realHeight = input[0].scrollHeight;
             $(input).css('height', realHeight + 'px');
