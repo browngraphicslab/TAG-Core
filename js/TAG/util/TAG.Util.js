@@ -3384,7 +3384,7 @@ TAG.Util.UI = (function () {
             event.stopPropagation();
         });
         // TAG.Util.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
-        pickerSearchBar.attr("placeholder", "Search by Name...");
+        pickerSearchBar.attr("placeholder", "Search");
         pickerSearchBar.keyup(function () {
             TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
         });
