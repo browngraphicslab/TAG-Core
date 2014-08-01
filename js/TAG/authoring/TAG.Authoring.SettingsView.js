@@ -1788,10 +1788,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             var msg = "There is an error occured when converting this video.";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "The video format is not supported.";
-                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            if (media.Extension !== ".mp4") {
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "The video format is not supported.";
+                                viewer.append(LADS.Util.createConversionLoading(msg, true));
+                            }
                         }
                         holder.attr('src', source);
                     }
@@ -2268,7 +2270,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 var msg = "The video format is not supported.";
                                 viewer.append(LADS.Util.createConversionLoading(msg, true));
                             }
-                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            $(".convertVideoBtn").show().data("disabled", false);
                         });
 
                         root.append(confirmBox);
@@ -2624,10 +2626,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             var msg = "There is an error occured when converting this video.";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "The video format is not supported.";
-                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            if (artwork.Extension !== ".mp4") {
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "The video format is not supported.";
+                                viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            }
                         }
                         mediaElement.attr('src', source);
                     }
@@ -2938,7 +2942,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             var msg = "The video format is not supported.";
                             viewer.append(LADS.Util.createConversionLoading(msg, true));
                         }
-                        viewer.append(LADS.Util.createConversionLoading(msg, true));
+                        $(".convertVideoBtn").show().data("disabled", false);
                     });
 
                     root.append(confirmBox);
