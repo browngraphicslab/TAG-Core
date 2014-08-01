@@ -1,12 +1,12 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.Viewer');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.Viewer');
 
 /**Previews current tour while user edits
- * @class LADS.TourAuthoring.Viewer
+ * @class TAG.TourAuthoring.Viewer
  * @constructor
  * @param spec  timeManager attr, url (url of tour if loading existing tour for editing)
  * @param my    not used
  */
-LADS.TourAuthoring.Viewer = function (spec, my) {
+TAG.TourAuthoring.Viewer = function (spec, my) {
     "use strict";
 
     var that = {                                                                                        // object storing public methods of the class
@@ -31,7 +31,7 @@ LADS.TourAuthoring.Viewer = function (spec, my) {
         },
         player,                                                                                         // RIN player
         timeline,                                                                                       // an instance of the timeline
-       
+        
         artworkPanel = $(document.createElement('div')),                                                // a div to display the track on the viewer
         rinContainer = $(document.createElement('div')),                                                // container for RIN
         timeManager = spec.timeManager,                                                                 // handles all time-related tasks in the tour
@@ -48,7 +48,9 @@ LADS.TourAuthoring.Viewer = function (spec, my) {
         capturingOn = false,                                                                            // boolean determines if keyframe data can be captured
         currentCapture = '',                                                                            // currently captured data of a keyframe
         keyframingDisabled = false,                                                                     // whether key frames are allowed currently
-        isReloading = false;                                                                            // is the tour reloading
+        isReloading = false,                                                                            // is the tour reloading
+
+        rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
 
     /**Instantiate RIN player
      * @method _startRIN
@@ -67,7 +69,7 @@ LADS.TourAuthoring.Viewer = function (spec, my) {
 
         rinContainer.attr('id', 'rinContainer');
         rinContainer.css({
-            'border-style': 'solid', 'border-width': LADS.TourAuthoring.Constants.rinBorder+'px', 'border-color': 'white',
+            'border-style': 'solid', 'border-width': TAG.TourAuthoring.Constants.rinBorder+'px', 'border-color': 'white',
             'height': '95%', 'width': '30%', 'top': '0%', 'left': '30%', 'position': 'absolute', 'z-index': 0
         });
         artworkPanel.append(rinContainer);
@@ -82,8 +84,8 @@ LADS.TourAuthoring.Viewer = function (spec, my) {
         rinContainer.append(playerElement);
 
         // creates actual RIN player
-        rin.processAll(null, 'js/rin/web/').then(function () {
-            var options = 'systemRootUrl=js/rin/web/&hideAllControllers=true&playerMode=authorerEditor';
+        rin.processAll(null, rinPath).then(function () {
+            var options = 'systemRootUrl='+rinPath+'/&hideAllControllers=true&playerMode=authorerEditor';
             player = rin.createPlayerControl(playerElement[0], options);
             player.orchestrator.playerESEvent.subscribe(_onPlayerESEvent, 'id');
             player.orchestrator.isPlayerReadyChangedEvent.subscribe(_onPlayerStateEvent);
@@ -243,8 +245,8 @@ LADS.TourAuthoring.Viewer = function (spec, my) {
      * @method resize
      */
     function resize() {
-        var h = artworkPanel.height() - 2 * LADS.TourAuthoring.Constants.rinBorder,
-            w = artworkPanel.width() - 2 * LADS.TourAuthoring.Constants.rinBorder,
+        var h = artworkPanel.height() - 2 * TAG.TourAuthoring.Constants.rinBorder,
+            w = artworkPanel.width() - 2 * TAG.TourAuthoring.Constants.rinBorder,
             idealW = h * 16 / 9,
             idealH,                                 // ideal W given h, vice-versa (9:16 ratio)
             xoffset,
@@ -351,11 +353,11 @@ LADS.TourAuthoring.Viewer = function (spec, my) {
         if (!doNotUpdateReloading) {
             isReloading = true;
         }
-        console.log("####################################################: "+isReloading);
+        //console.log("####################################################: "+isReloading);
         for (var key in data.resources) {
             if (data.resources.hasOwnProperty(key)) {
                 if (typeof data.resources[key].uriReference === 'string') {
-                    data.resources[key].uriReference = LADS.Worktop.Database.fixPath(data.resources[key].uriReference);
+                    data.resources[key].uriReference = TAG.Worktop.Database.fixPath(data.resources[key].uriReference);
                 }               
             }
         }
@@ -378,7 +380,7 @@ LADS.TourAuthoring.Viewer = function (spec, my) {
                     isReloading = false;
 
                 }
-                console.log("##############################################: "+isReloading);
+                //console.log("##############################################: "+isReloading);
             });
         } else {
             setTimeout(function () { reloadTour(data, true); }, 50);

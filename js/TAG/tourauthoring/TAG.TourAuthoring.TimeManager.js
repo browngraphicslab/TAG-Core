@@ -1,17 +1,17 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.TimeManager');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.TimeManager');
 
 /**Manages all time-related things in TourAuthoring
  * Stores info re: start/end, current time, scale
  * Scale converts between time space (seconds) and pixel space (pixels on timeline)
  * Dispatches events to subscribers on time changes
  * All time values stored as seconds
- * @class LADS.TourAuthoring.TimeManager
+ * @class TAG.TourAuthoring.TimeManager
  * @constructor
  * @param spec      start, end, scale, current parameters, all integers, all in seconds (not required)
  * @param my        not used
  * @return that     object containing public functions
  */
-LADS.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to make sure never called in other files?
+TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to make sure never called in other files?
     "use strict";
 
     spec = spec || {};

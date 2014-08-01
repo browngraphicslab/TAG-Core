@@ -1,12 +1,12 @@
-﻿LADS.Util.makeNamespace('LADS.TourAuthoring.UndoManager');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.UndoManager');
 
 /**Keeps track of commands and changes issued by program and order of issuing
  * Can unexecute or execute (undo / redo) these commands
- * @class LADS.TourAuthoring.UndoManager
+ * @class TAG.TourAuthoring.UndoManager
  * @constructor
  * @return {Object} that                public methods of the class
  */
-LADS.TourAuthoring.UndoManager = function () {
+TAG.TourAuthoring.UndoManager = function () {
     "use strict";
 
     var that = {                                                // object containing the public methods of the class
@@ -33,7 +33,7 @@ LADS.TourAuthoring.UndoManager = function () {
 
     /**Log a command that has just been executed, ie. add it to the undo stack
      * @method logCommand
-     * @param command       LADS.TourAuthoring.Command that was just run
+     * @param command       TAG.TourAuthoring.Command that was just run
      */
     function logCommand(command) {
         if (initialized === true) {

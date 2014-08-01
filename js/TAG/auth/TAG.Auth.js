@@ -254,9 +254,9 @@ TAG.Auth = (function () {
         loginDialog.css({
             position: 'absolute',
             top: loginDialogSpecs.y + 'px',
-            width: loginDialogSpecs.width-50 + 'px',
-            height: loginDialogSpecs.height - 20+ 'px',
-            left: loginDialogSpecs.x - 60 + 'px',
+            width: loginDialogSpecs.width-200 + 'px',
+            height: loginDialogSpecs.height - 55+ 'px',
+            left: loginDialogSpecs.x + 'px',
             border: '3px double white',
             'background-color': 'black',
         });
@@ -301,8 +301,8 @@ TAG.Auth = (function () {
             display: 'block',
             'position':'relative',
             margin: 'auto',
-            'margin-top': '5%',
-            'margin-bottom': '5%'
+            'margin-top': '6%',
+            'margin-bottom': '6%'
         });
 
 
@@ -316,7 +316,7 @@ TAG.Auth = (function () {
             'left': '10%',
             'width': '80%',
             'text-align': 'center',
-            'bottom': '36%',
+            'bottom': '25%',
             'position': 'absolute',
         });
         errorMessage.html('Invalid Password. Please try again...'); //<br/>Please contact <a href="mailto:brown.touchartgallery@gmail.com">brown.touchartgallery@gmail.com</a> for password.');
@@ -329,7 +329,7 @@ TAG.Auth = (function () {
             'display': 'block',
             'width': '70%',
             'left': '10%',
-            'bottom': '0%'
+            'bottom': '-6%'
         });
         var submitButton = $(document.createElement('button'));
         submitButton.css({
@@ -337,7 +337,7 @@ TAG.Auth = (function () {
             'width': 'auto',
             'position': 'relative',
             'margin-top': '1%',
-            'margin-left': '5%',
+            'margin-left': '-7%',
             'display': 'inline-block',
         });
         var circle = $(document.createElement('img'));
@@ -371,7 +371,7 @@ TAG.Auth = (function () {
             'position': 'relative',
             'margin-top': '1%',
             'float': "right",
-            'margin-right': '-6%',
+            'margin-right': '-21%',
             'display': 'inline-block',
     });
         cancelButton.text('Cancel');

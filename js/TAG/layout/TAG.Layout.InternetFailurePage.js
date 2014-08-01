@@ -41,8 +41,8 @@ TAG.Layout.InternetFailurePage = function (errorType, detach) {
         root = TAG.Util.getHtmlAjax('InternetFailurePage.html');
         root.css("width", $("#tagRoot").width());
         root.css("height", $("#tagRoot").height());
-	mainPanel=root.find("#mainPanel");
-	mainPanel.css("width", $("#tagRoot").width());
+    	mainPanel=root.find("#mainPanel");
+    	mainPanel.css("width", $("#tagRoot").width());
         mainPanel.css("height", $("#tagRoot").height());
 
         var sadface = root.find('#sadFace');
@@ -98,6 +98,8 @@ TAG.Layout.InternetFailurePage = function (errorType, detach) {
 
         if (errorType !== DATA_LIMIT) {
             reconnectButton.click(function () {
+                var connectionTimeout,
+                    timedOut;
 
                 noticeLabel.text("Reconnecting...");
                 reconnectButton.hide();
@@ -110,34 +112,52 @@ TAG.Layout.InternetFailurePage = function (errorType, detach) {
                         async: false,
                         cache: false,
                         success: function () {
-                            if (!detach) {
-                                TAG.Layout.StartPage(null, function (root) {
-                                    TAG.Util.Splitscreen.setOn(false);
-                                    TAG.Util.UI.slidePageRight(root);
-                                }, true);
-                            
-                            } else {
-                                root.remove();
+                            if(!timedOut) {
+                                clearTimeout(connectionTimeout);
+                                if (!detach) {
+                                    TAG.Layout.StartPage(null, function (root) {
+                                        TAG.Util.Splitscreen.setOn(false);
+                                        TAG.Util.UI.slidePageRight(root);
+                                    }, true);
+                                
+                                } else {
+                                    root.remove();
+                                }
                             }
                         },
                         error: function (err) {
-                            $.ajax({
-                                url: "http://google.com",
-                                dataType: "text",
-                                async: true,
-                                cache: false,
-                                success: function () {
-                                    noticeLabel.text(getNoticeText("Server Down"));
-                                    reconnectButton.show();
-                                },
-                                error: function (err) {
-                                    noticeLabel.text(getNoticeText((errorType === "Internet Lost" ? "Internet Lost" : "No Internet")));
-                                    reconnectButton.show();
-                                }
-                            });
+                            if(!timedOut) {
+                                clearTimeout(connectionTimeout);
+                                $.ajax({
+                                    url: "http://google.com",
+                                    dataType: "text",
+                                    async: true,
+                                    cache: false,
+                                    success: function () {
+                                        if(!timedOut) {
+                                            clearTimeout(connectionTimeout);
+                                            noticeLabel.text(getNoticeText("Server Down"));
+                                            reconnectButton.show();
+                                        }
+                                    },
+                                    error: function (err) {
+                                        if(!timedOut) {
+                                            clearTimeout(connectionTimeout);
+                                            noticeLabel.text(getNoticeText((errorType === "Internet Lost" ? "Internet Lost" : "No Internet")));
+                                            reconnectButton.show();
+                                        }
+                                    }
+                                });
+                            }
                         }
                     });
                 }, 100);
+
+                connectionTimeout = setTimeout(function() {
+                    timedOut = true;
+                    noticeLabel.text(getNoticeText("Server Down"));
+                    reconnectButton.show();
+                }, 10100); // 10.1 second timeout to show server down notice (10 sec after the ajax request is sent off)
             });
         }
 

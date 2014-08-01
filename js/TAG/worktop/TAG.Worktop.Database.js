@@ -42,6 +42,10 @@ TAG.Worktop.Database = (function () {
             url: ['Name', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'LinqType', 'Thumbnail', "Converted"],
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
+        map: {
+            url: ['Name', 'Thumbnail', 'Source'],
+            body: ['AdditionalInfo', 'Description']
+        },
         feedback: {
             url: ['SourceID', 'SourceType'],
             body: ['Description']
@@ -144,6 +148,7 @@ TAG.Worktop.Database = (function () {
         getAssocMediaTo: getAssocMediaTo,
         getArtworksAssocTo: getArtworksAssocTo,
         getArtworksIn: getArtworksIn,
+        getMaps: getMaps,
         getSalt: getSalt,
         getAuth: getAuth,
         getVersion: getVersion,
@@ -169,6 +174,7 @@ TAG.Worktop.Database = (function () {
         changeExhibition: changeExhibition,
         changeArtwork: changeArtwork,
         changeHotspot: changeHotspot,
+        changeMap: changeMap,
         changeMain: changeMain,
         uploadImage: uploadImage,
     }
@@ -372,6 +378,20 @@ TAG.Worktop.Database = (function () {
     }
 
     /*
+        Gets maps related to given artwork
+            guid: artowork guid
+            success: called on success with array of map doqs as argument
+            error: see above
+            errorCache: see above
+    */
+    function getMaps(guid, success, error, errorCache) {
+        // TODO
+        _db = _db || new Worktop.Database();
+        _db.getMaps(guid, { success: success, error: error, errorCache: errorCache });
+        //success([]);
+    }
+
+    /*
         Gets the salt from the server
             success: Called with the salt as the argument
             error: See above
@@ -442,7 +462,10 @@ TAG.Worktop.Database = (function () {
         asyncRequest(
             'GET',
             'ConvertedCheck',
-            { "FileName": fileName },
+            {
+                "FileName": fileName,
+                "BaseFileName": basefilename,
+            },
             null,
             { success: convertToTextHandler(success), error: error });
     }
@@ -694,10 +717,30 @@ TAG.Worktop.Database = (function () {
         _db.postHotspot(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
 
+    // TODO document
     function createIframeAssocMedia(options, success, unauth, conflict, error) {
         _db = _db || new Worktop.Database();
         _db.postIframeAssocMedia(options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
+
+    /*
+    Change a map doq
+        guid: guid of map
+        options:
+            Name: name of the map
+            AdditionalInfo: any additional information about the map (e.g., a date string)
+            Description: description of the map
+        success: success handler called if map is changed successfully
+        unauth: see above
+        conflict: see above
+        error: see above
+    */
+    function changeMap(guid, options, success, unauth, conflict, error) {
+        _db = _db || new Worktop.Database();
+        if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
+        _db.postMap(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
+    }
+
     /*
     Change the main doq (start page)
         options: New values for main in a dictionary:
@@ -844,7 +887,7 @@ TAG.Worktop.Database = (function () {
         404: notFound();
         401: notAuthorized();
       }
-      Any HTTP response is supported, see the issue tracker (#205) for info on the status
+      Any HTTP response is supported, see the issue tracker (redmine #205) for info on the status
       codes the server might respond with.  Handlers are called with the jqXHR object
       (http://api.jquery.com/jQuery.ajax/#jqXHR) as the first argument, and a function
       to redo the request as the second argument.  This can be useful if the user needs
@@ -2025,17 +2068,31 @@ TAG.Worktop.Database = (function () {
             checkServer();
         }
         function checkServer() {
+            var connectionTimeout,
+                timedOut;
+
             asyncRequest('GET', 'CheckVersion', null, null, { success: success, error: error }, false, null, 'http://' + newAddress + ':8080');
             function success(jqXHR, ajaxCall) {
-                var version = jqXHR.statusText;
-                var mainID = jqXHR.responseText;
-                localStorage.ip = newAddress;
-                _db = new Worktop.Database(mainID);
-                onConnect && onConnect();
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    var version = jqXHR.statusText;
+                    var mainID = jqXHR.responseText;
+                    localStorage.ip = newAddress;
+                    _db = new Worktop.Database(mainID);
+                    onConnect && onConnect();
+                }
             }
             function error() {
-                onFail && onFail();
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    onFail && onFail();
+                }
             }
+
+            connectionTimeout = setTimeout(function() {
+                timedOut = true;
+                onFail && onFail();
+            }, 10000); // 10 second timeout to show error message
         }
     }
 
