@@ -1528,7 +1528,7 @@ TAG.Util = (function () {
         });
         if (!nocircle) {
             var circle = $(document.createElement('img'));
-            circle.attr('src', 'images/icons/progress-circle.gif');
+            circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
             circle.css({
                 'height': '80px',
                 'width': 'auto',

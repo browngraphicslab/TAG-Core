@@ -228,7 +228,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 conversionVideos.remove(artwork);
                             }
                         } else if (output === "Error") {
-                            $("#videoErrorMsg").text("There is an error occured when converting this video.");
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "There is an error occured when converting this video. Please try again";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            conversionVideos.remove(artwork);
                         }
                         else {
                             console.log("not converted: ");
@@ -2303,7 +2307,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video.";
+                            var msg = "There is an error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
                             if (media.Extension !== ".mp4") {
@@ -2549,7 +2553,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         'float': 'right'
                     })
             convertBtn.attr('class', 'convertVideoBtn');
-            if (!media.Metadata.Converted || conversionVideos.indexOf(media.Identifier) === -1) {
+            if (media.Metadata.Converted!=="True" && conversionVideos.indexOf(media.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
                 convertBtn.hide().data('disabled', true);
@@ -3054,7 +3058,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
                                 previousIdentifier = val.identifier;
-
                                 loadArtwork(val);
                                 currentIndex = i;
                             }, val.Identifier, false, function () {
@@ -3165,7 +3168,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video.";
+                            var msg = "There is an error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
                             if (artwork.Extension !== ".mp4") {
@@ -3295,7 +3298,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var inputs = {
             artistInput: artistInput,                                      //Artwork artist
             nameInput: titleInput,                                         //Artwork title
-            yearInput: yearMetadataDivSpecs.yearInput,                     //Artwork year or era
+            yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
             monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
             dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
             timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
@@ -3328,16 +3331,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             'margin-bottom': '3%',
                         });
 
-        var xmluploaderbtn = createButton('Upload XML',
-                            function () {
-                                uploadXML(artwork, inputs, settingsContainer);
-                            },
-                            {
-                                'margin-left': '2%',
-                                'margin-top': '1%',
-                                'margin-right': '0%',
-                                'margin-bottom': '3%',
-                            });
 
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
@@ -3378,7 +3371,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         'float': 'right'
                     })
             convertBtn.attr('class', 'convertVideoBtn');
-            if (!artwork.Metadata.Converted && conversionVideos.indexOf(artwork.Identifier) === -1) {
+            if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
                 convertBtn.hide().data('disabled', true);
