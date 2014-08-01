@@ -714,7 +714,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         nameInput.keydown(function () {
             startPage.fixText();
-        });
+        });var museumLoc
         nameInput.change(function () {
             startPage.fixText();
         });
@@ -861,7 +861,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
         var fontFamily = inputs.fontFamilyInput.val();
         var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
-        var font = inputs.fontUploadInput.val();
 
         var options = {
             Name: name,
@@ -876,7 +875,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             SecondaryFontColor: secondaryFontColor,
             FontFamily: fontFamily,
             BaseFontSize: baseFontSize,
-            Font: font,
         };
         if (bgImg) options.Background = bgImg;
         if (logo) options.Icon = logo;
@@ -1008,6 +1006,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             viewer.append(startPage);
             preventClickthrough(viewer);
         });
+        return startPage;
     }
 
     /**Preview collections page
@@ -1396,7 +1395,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var descInput;
         var bgInput;
         var previewInput;
-        if (exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
+        if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
                 var sortOptions = {
                     "Title": true,
@@ -3222,7 +3221,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         onChangeUpdateText(titleInput, null, 40);
         onChangeUpdateText(artistInput, null, 40);
-        onChangeUpdateText(yearInput, null, 40);
+        onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 40);
         onChangeUpdateText(descInput, null, 40);
 
         var title = createSetting('Title', titleInput);
@@ -5509,6 +5508,70 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             $(confirmationBox).show();
         }
     }
+
+    function displayLoadingSettings() {
+        settingsContainer.css({ visibility: 'hidden' });
+        settings.css({ overflow: 'hidden' });
+        buttonContainer.css({ visibility: 'hidden' });
+        var changeLabel = createLabel('Changes are being saved...');
+        changeLabel.attr('id', 'changeLabel');
+        changeLabel.css({
+            'position': 'absolute',
+            'top': '15%',
+            'z-index': '50',
+            'height': 'auto',
+            'width': '33%',
+            'color': 'black',
+            'font-size': '140%'
+        });
+        var progressCircCSS = {
+            'position': 'absolute',
+            'left': '40%',
+            'top': '20%',
+            'z-index': '50',
+            'height': 'auto',
+            'width': '20%'
+        };
+        var progressCL = LADS.Util.showProgressCircle(settings, progressCircCSS, '0px', '0px', true);
+        settings.append(changeLabel);
+        return progressCL;
+    };
+
+    function hideLoadingSettings(circle) {
+        $('#changeLabel').remove();
+        settingsContainer.css({ visibility: 'visible' });
+        settings.css({ overflow: 'auto' });
+        buttonContainer.css({ visibility: 'visible' });
+        circle && LADS.Util.removeProgressCircle(circle);
+    };
+
+    function showLoading() {
+        leftLabelContainer.empty();
+        leftLabelContainer.append(createLeftLoading());
+        buttonContainer.css({ visibility: 'hidden' });
+        prepareViewer(true);
+        pCircle2 = displayLoadingSettings();
+    };
+
+    function hideLoading() {
+        buttonContainer.css({ visibility: 'visible' });
+        hideLoadingSettings(pCircle2);
+    };
+
+    function backButtonClickHandler() {
+        LADS.Auth.clearToken();
+        rightQueue.clear();
+        leftQueue.clear();
+        $('#backButton').off('click');
+        if (backPage) {
+            var bpage = backPage();
+            LADS.Util.UI.slidePageRight(bpage);
+        } else {
+            LADS.Layout.StartPage(null, function (page) {
+                LADS.Util.UI.slidePageRight(page);
+            });
+        }
+    };
 
     return that;
 };
