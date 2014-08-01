@@ -15,6 +15,9 @@
 
 		#catalogDivContainer
 			#sortRow.background
+				#searchFilter
+					input#searchInput(placeholder="Enter Keyword")
+					#searchTxt
 				#yearButton.rowButton(tagName="Year")
 					|Year
 				#titleButton.rowButton(tagName="Title")
@@ -23,9 +26,11 @@
 					|Artist
 				#typeButton.rowButton(tagName="Type")
 					|Type
-				#searchFilter
-					input#searchInput(placeholder="Enter Keyword")
-					#searchTxt
+			#toggleRow.background
+				#artworksButton.toggleButton(tagName="Artworks")
+					|Artworks
+				#assetsButton.toggleButton(tagName="Assets")
+					|Assets	
 			#catalogDiv.background
 		#displayarea
 
