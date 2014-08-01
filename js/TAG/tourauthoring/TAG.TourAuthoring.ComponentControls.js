@@ -128,39 +128,39 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @method checkVideoConverted
      */
     /**********************TRY VIDEO CONVERSION********************/
-    function checkVideoConverted() {
-        if (videos2Convert.length > 0) {
-            for (var i = 0; i < videos2Convert.length; i++) {
-                var track = videos2Convert[i];
-                var media = track.getMedia();
-                var videotag = $(document.createElement('video'));
-                videotag.attr('preload', 'metadata');
-                var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
-                TAG.Worktop.Database.getConvertedCheck(
-                    (function (i, track, media, videotag) {
-                        return function (output) {
-                            if (output !== "False") {
-                                console.log("converted: ");
-                                var mp4filepath = "/Images/" + output.substr(0, output.lastIndexOf('.')) + ".mp4";
-                                var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
-                                videotag.attr('src', mp4file);
-                                videotag.on('loadedmetadata', function () {
-                                    //remove from the video array and add display with the right duration
-                                    track.changeTrackColor('white');
-                                    track.addDisplay(0, this.duration);
-                                    videos2Convert.remove(track);
-                                });
+    //function checkVideoConverted() {
+    //    if (videos2Convert.length > 0) {
+    //        for (var i = 0; i < videos2Convert.length; i++) {
+    //            var track = videos2Convert[i];
+    //            var media = track.getMedia();
+    //            var videotag = $(document.createElement('video'));
+    //            videotag.attr('preload', 'metadata');
+    //            var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
+    //            TAG.Worktop.Database.getConvertedCheck(
+    //                (function (i, track, media, videotag) {
+    //                    return function (output) {
+    //                        if (output !== "False") {
+    //                            console.log("converted: ");
+    //                            var mp4filepath = "/Images/" + output.substr(0, output.lastIndexOf('.')) + ".mp4";
+    //                            var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
+    //                            videotag.attr('src', mp4file);
+    //                            videotag.on('loadedmetadata', function () {
+    //                                //remove from the video array and add display with the right duration
+    //                                track.changeTrackColor('white');
+    //                                track.addDisplay(0, this.duration);
+    //                                videos2Convert.remove(track);
+    //                            });
 
-                            } else {
-                                console.log("not converted: ");
-                            }
-                        }
-                    })(i, track, media, videotag), null, filename);
-            }
-        }
-    }
+    //                        } else {
+    //                            console.log("not converted: ");
+    //                        }
+    //                    }
+    //                })(i, track, media, videotag), null, filename);
+    //        }
+    //    }
+    //}
 
-    setInterval(checkVideoConverted, 1000 * 30);
+    //setInterval(checkVideoConverted, 1000 * 30);
 
 
     /**Display warning message if ink cannot be loaded
@@ -1269,7 +1269,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             names = [],
             title = $(this).text(),
             initLoc = timeManager.getCurrentPx(),
-            mp42Convert = [],
+            toConvertDecisions = [],
             mediaLengths = [],
             i,
             upldr,
@@ -1401,20 +1401,20 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 var file,
                     total = files.length,
                     decided = 0,
-                    toConvert = [];
+                    decisions = [];
                 for (i = 0; i < files.length; i++) {
                     file = files[i];
                     names.push(file.displayName);
                     var toUpload = true;
                     if (file.fileType !== '.mp4') {
                         var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
+                            decisions.push(true);
                             if (++decided >= total) {
                                 confirmCallback && confirmCallback();
                             }
                         }, "This video is not in a compatible format. Would you like us to convert " + file.displayName + " for you?", "Yes", true, (function (curfile) {
                             return function () {
-                                files.remove(curfile);
-                                names.remove(curfile.displayName);
+                                decisions.push(false);
                                 if (++decided >= total) {
                                     confirmCallback && confirmCallback();
                                 }
@@ -1425,13 +1425,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     } else {//file is Mp4, ask users if they still want to convert it. Regardless, upload the video
                         var confirmBox = TAG.Util.UI.PopUpConfirmation((function (index) {
                             return function () {
-                                toConvert.push(index);
+                                decisions.push(true);
                                 if (++decided >= total) {
                                     confirmCallback && confirmCallback();
                                 }
                             };
-                        })(i), "Video " + file.displayName + " is already MP4. Would you like us to convert it to other formats for you?", "Yes", true, function () {
+                        })(i), "Video " + file.displayName + " is already MP4. Would you like us to convert it to other formats for different browsers for you?", "Yes", true, function () {
                             if (++decided >= total) {
+                                decisions.push(false);
                                 confirmCallback && confirmCallback();
                             }
                         });
@@ -1445,7 +1446,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 type = TAG.TourAuthoring.TrackType.video;
                 mediaFiles = files;
-                mp42Convert = toConvert;
+                toConvertDecisions = decisions;
                 return 'uploading test!';
             },
             function (urls) {
@@ -1463,7 +1464,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         url = urls[i];
                         name = names[i];
                         mediaLength = mediaLengths[i];
-                        if (mp42Convert.indexOf(i) > -1) {
+                        if (toConvertDecisions[i] === true) {
                             var newFileName = urls[i].slice(8, urls[i].length);
                             var index = newFileName.lastIndexOf(".");
                             var fileExtension = newFileName.slice(index);
@@ -1471,8 +1472,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             TAG.Worktop.Database.convertVideo(function () {
                             }, null, newFileName, fileExtension, baseFileName, null);
                         }
-                        var track = timeline.addVideoTrack(url, name, null, mediaLength);
-
+                        var track = timeline.addVideoTrack(url, name, null, mediaLength, toConvertDecisions[i], false);
                         var positionX = initLoc;
                         var displayLength = mediaLength;
                         if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {

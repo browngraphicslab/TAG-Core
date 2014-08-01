@@ -27,19 +27,19 @@ TAG.Worktop.Database = (function () {
     // the appropriate parameters into the body.
     var params = {
         exhibition: {
-            url: ['Name', 'Sub1', 'Sub2', 'Background', 'Img1', 'Img2', 'Private', 'Font'],
+            url: ['Name', 'Sub1', 'Sub2', 'Background', 'Img1', 'Img2', 'Private', 'Font', 'SortOptions', 'Timeline','AssocMediaView'],
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
-            url: ['Name', 'Title', 'Artist', 'Year', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
-            body: ['Description', 'Location', 'RichLocationHistory', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration', 'AddMaps', 'RemoveMaps']
+            url: ['Name', 'Title', 'Artist', 'Year','Month','Day','TimelineYear','TimelineMonth','TimelineDay','Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
+            body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration']
         },
         tour: {
             url: ['Name', 'Thumbnail', 'Private'],
             body: ['Description', 'Content', 'RelatedArtworks']
         },
         hotspot: {
-            url: ['Name', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'W', 'H', 'LinqType', 'Thumbnail', "Converted"],
+            url: ['Name', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'W', 'H', 'LinqType', 'Thumbnail', "Converted"],
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         map: {
@@ -60,41 +60,11 @@ TAG.Worktop.Database = (function () {
         HTTP_PORT: HTTP_PORT,
         HTTPS_PORT: HTTPS_PORT,
         FILE_PORT: FILE_PORT,
-        //load: deprecated(load),
-        //getExhibitionBackgroundImage: deprecated(getExhibitionBackgroundImage),
-        //updateCache: deprecated(updateCache),
-        //getMainGuid: deprecated(getMainGuid),
-        //getXML: deprecated(getXML),
-        //pushXML: deprecated(pushXML),
-        //pushLinq: deprecated(pushLinq),
-        //getDoqXML: deprecated(getDoqXML),
-        //getLinqXML: deprecated(getLinqXML),
-        //getOverlayColor: deprecated(getOverlayColor),
-        //getOverlayTransparency: deprecated(getOverlayTransparency),
-        //deleteHotspot: deprecated(deleteHotspot),
-        //getDoqLinqs: deprecated(getDoqLinqs),
-        //createEmptyDoq: deprecated(createEmptyDoq),
-        //createLinq: deprecated(createLinq),
-        //reloadMain: deprecated(reloadMain),
-        //hash: deprecated(hash),
 
         getURL: getURL,
         getSecureURL: getSecureURL,
         setURL: setURL,
         getFileURL: getFileURL,
-        //createNewExhibition: deprecated(createNewExhibition),
-        //getCreatorID: deprecated(getCreatorID),
-        //parentDoq: deprecated(parentDoq),
-        //getAllArtworks: deprecated(getAllArtworks),
-        //setArtworkDirty: deprecated(setArtworkDirty),
-        //isArtworkDirty: deprecated(isArtworkDirty),
-        //isExhibitionDirty: deprecated(isExhibitionDirty),
-        //getDoqByGuid: deprecated(getDoqByGuid),
-        //getDoqByName: deprecated(getDoqByName),
-        //getAllTours: deprecated(getAllTours),
-        //testIp: deprecated(testIp),
-        //getAllFeedback: deprecated(getAllFeedback),
-
 
         fixPath: fixPath,
         fixFontFilePath: fixFontFilePath,
@@ -124,8 +94,6 @@ TAG.Worktop.Database = (function () {
         getBaseFontSize: getBaseFontSize,
         getOptionalFeatures: getOptionalFeatures,
         getCustomFont: getCustomFont,
-
-        // NEW
 
         asyncRequest: asyncRequest,
         convertToDocHandler: convertToDocHandler,
@@ -458,11 +426,14 @@ TAG.Worktop.Database = (function () {
             true);
     }
     //check for files. 
-    function getConvertedCheck(success, error, fileName) {
+    function getConvertedCheck(success, error, fileName,basefilename) {
         asyncRequest(
             'GET',
             'ConvertedCheck',
-            { "FileName": fileName },
+            {
+                "FileName": fileName,
+                "BaseFileName": basefilename,
+            },
             null,
             { success: convertToTextHandler(success), error: error });
     }
@@ -633,6 +604,7 @@ TAG.Worktop.Database = (function () {
             Description: Exhibition description
             AddIDs: Comma separated list of artwork IDs to add to the exhibition
             RemoveIDs: Comma separated list of artwork IDs to remove from the exhibition
+            Timeline: whether the timeline for the given collection is shown
         All options are optional.  Providing unspported options in strict mode will throw an exception.
 
         success: Success handler (called if the tour is successfully changed)
@@ -653,6 +625,11 @@ TAG.Worktop.Database = (function () {
             Title: title of the artork (not used?)
             Artist: Artist of the artwork
             Year: Year of the artwork
+            Month: Month of artwork
+            Day: Day of artwork
+            TimelineYear: Year artwork displayed on timeline
+            TimelineMonth: Month artwork displayed on timeline
+            TimelineDay: Day artwork displayed on timeline
             Preview: preview image URL
             Thumbnail: thumbnail image URL
             Deepzoom: Deepzoom URL
@@ -680,6 +657,12 @@ TAG.Worktop.Database = (function () {
     Change a hotspot/associated media
         options: New values for the hotspot in a dictionary:
             Name: Name of the hotspot
+            Year: Year of the media
+            Month: Month of media
+            Day: Day of media
+            TimelineYear: Year media displayed on timeline
+            TimelineMonth: Month media displayed on timeline
+            TimelineDay: Day media displayed on timeline
             ContentType: Content type of the hotspot
             Duration: Duration of the hotspot
             Source: Source URL for the hotspot

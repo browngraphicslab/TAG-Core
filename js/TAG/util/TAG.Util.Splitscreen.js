@@ -83,6 +83,10 @@ TAG.Util.Splitscreen = (function () {
             'overflow': 'hidden',
         });
 
+        if(rootL.attr('id') === 'newCatalogRoot') {
+            rootL.find('.bottomButton').css("float", "left");
+        };
+
         // right screen
         Rscreen.attr('id', 'metascreen-R');
         Rscreen.append(rootR);
@@ -162,6 +166,15 @@ TAG.Util.Splitscreen = (function () {
             if (viewerL) {
                 $(viewerL.container).css({ 'width': '100%', 'height': '100%' });
                 viewerL.scheduleUpdate();
+                /**
+                var newLContainerSize = {
+                    x: $(viewerL.container).width(),
+                    y: $(viewerL.container).height()
+                };
+                viewerL.viewport.resize(newLContainerSize, false);
+                viewerL.viewport.applyConstraints();
+                viewerL.viewport.update();
+                **/
             }
             viewerR = null;
 
@@ -171,7 +184,10 @@ TAG.Util.Splitscreen = (function () {
             if (viewerR) {
                 $(viewerR.container).css({ 'width': '100%', 'height': '100%' });
                 viewerR.scheduleUpdate();
+               // viewerR.viewport.applyConstraints();
+               // viewerR.viewport.update();
             }
+            //viewerR.viewport.panTo(new Seadragon.Point(outerContainerPivot.x,outerContainerPivot.y));
             viewerL = null;
 
         }
@@ -182,10 +198,12 @@ TAG.Util.Splitscreen = (function () {
         fixLayoutsOnExit();
 
         if (viewerL) {
-            viewerL.scheduleUpdate();
+           // viewerL.scheduleUpdate();
+            //viewerL.viewport.applyConstraints();
         }
         if (viewerR) {
-            viewerR.scheduleUpdate();
+            //viewerR.scheduleUpdate();
+            //viewerR.viewport.applyConstraints();
         }
         viewerL = null;
         viewerR = null;
@@ -239,7 +257,6 @@ TAG.Util.Splitscreen = (function () {
                     'left': 'auto'
                 });
                 splitscreenContainer.css('display', 'block');
-                root.applyConstraints && root.applyConstraints();
                 //locationHistoryToggle.css({
                 //    left: '87.5%',
                 //    'border-bottom-right-radius': '10px',
@@ -249,6 +266,14 @@ TAG.Util.Splitscreen = (function () {
                 //locationHistoryText.css("opacity", "1.0"); // reset location history opacity to 1.0
                 //locationHistoryIcon.css("opacity", "1.0");
                 //lhmap.attr('id', 'lpMapDiv');
+            } else if(root.attr('id') === 'newCatalogRoot') {
+                root.find('.bottomButton').css({
+                    "float": "right",
+                    "display" : "block"
+                });
+                root.find('.nextPrevCollection').css({
+                                'width': (.95 * root.find("#collectionArea").width() - root.find('.mainCollection').width())/2 - root.find(".arrow").width(),
+                              })
             } else if (root.hasClass('videoPlayer')) {
                 root.find('#playPauseButton').attr('src', 'images/icons/PlayWhite.svg');
             } else if (root.hasClass('exhibition')) { // Restore defaults to exhibition

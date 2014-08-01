@@ -411,6 +411,7 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
         TAG.Util.makeManipulatable(buttondiv[0], {
             onTapped: callback
         });
+        return buttondiv;
     }
     
     /**Updates linked variable with new value in input

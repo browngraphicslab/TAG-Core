@@ -332,11 +332,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 fontSizeSpan,
                 subheadingFont;
             if (TAG.Util.elementInDocument(museumName)) {
-                subheadingFont = parseInt(museumLoc.css('font-size'), 10);
-                nameDivSize = museumName.height();
-                fontSizeSpan = museumName.height();
-    
-                museumNameSpan.css('height', nameSpanSize);
+                subheadingFont = parseInt($(museumLoc).css('font-size'), 10);
+                nameDivSize = $(museumName).height();
+                fontSizeSpan = $(museumName).height();
+                
+                var museumNameSpan = document.getElementById("museumNameSpan"); //can't seem to find this variable in scope
+                $(museumNameSpan).css('height', nameSpanSize);               
             }
         }
 

@@ -28,17 +28,18 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
                                            //   also contains an array of GUIDs for cleaner iteration
         toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
-        rootHeight = $('#tagRoot').height(),
-        rootWidth = $('#tagRoot').width(),
+        rootHeight = $('#tagRoot').height(), //tag root height
+        rootWidth = $('#tagRoot').width(),  //total tag root width for manipulation (use root.width() instead for things that matter for splitscreen styling)
         outerContainerPivot = {
             x: rootHeight/2,
             y: rootWidth/2
         },
         doManipulation = true,      //used in RLH to prevent manipulation of image in certain cases
-        aspectRatio = rootWidth / rootHeight,
+        aspectRatio = 1, //TODO - how to find this
         artworkFrozen = false,
         
         // misc uninitialized variables
+        viewerelt,
         viewer,
         assetCanvas;
 
@@ -71,8 +72,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         addOverlay: addOverlay,
         removeOverlay: removeOverlay,
         loadAssociatedMedia: loadAssociatedMedia,
+        getOverlayCoordinates: getOverlayCoordinates,
         freezeArtwork: freezeArtwork,
-        unfreezeArtwork: unfreezeArtwork
+        unfreezeArtwork: unfreezeArtwork,
+        initZoom: initZoom
     };
 
 
@@ -188,7 +191,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function dzManipPreprocessing() {
         outerContainerPivot = {
-            x: root.width()/ 2,// + root.offset().left,
+            x: root.width()/ 2,//+ root.offset().left,
             y: root.height() / 2// + root.offset().top
         };
         toManip = dzManip;
@@ -264,6 +267,27 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     };
 
     /**
+    * Sets up the annotated image to allow zoom on double click.  Used in RLH
+    * @method initZoom
+    */
+    function initZoom() {
+        viewerelt && function () {
+            viewerelt.on('dblclick', function () {
+                zoomToPoint();
+            });
+        }();
+        console.log('error in initzoom');
+    }
+
+    /**
+    * Zooms into the deepzoom image.  Used when double-clicking on a map in rlh.
+    * @method zoomToPoint()
+    */
+    function zoomToPoint() { //TODO zoom to where the mouse is
+        viewer.viewport.zoomBy(2);
+    }
+
+    /**
     * Returns whether an element is in the viewport's bounds (including a buffer of 10 pixels)
     * Used in rich location history.
     * @method isInViewportBounds
@@ -294,11 +318,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method isInImageBounds
     */
     function isInImageBounds(element) {
+
         var val = false;
         var point = locationOf(element);
-        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1 / aspectRatio) + .05)) {
+        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1/aspectRatio) + .05)) {
             val = true;
         }
+        //console.log(point.x + ', ' + point.y);
+        //console.log((1 / aspectRatio) + .05);
+        //console.log('inBounds= ' + val);
         return val;
     }
 
@@ -336,7 +364,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             return viewer.viewport.pixelFromPoint(new Seadragon.Point(point.x, (1 / aspectRatio)));
         }
     }
-
+    
     /**
     * Calculates the location (point) of an element (bottom center)
     * Used in rich location history.
@@ -365,6 +393,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         });
     }
 
+    /**
+     * Gets a Seadragon point from the given overlay element. Uses BOTTOM as the default OverlayPlacement
+     * @method getCoordinate
+     * @param {HTML elt} element       the overlay element
+     * @return {Seadragon.Point}       the location of the overlay in Seadragon coordinates
+     */
+    function getOverlayCoordinates(element) {
+        var t = parseFloat($(element).css('top')) + $(element).height(),
+            l = parseFloat($(element).css('left')) + $(element).width() / 2;
+
+        return viewer.viewport.pointFromPixel(new Seadragon.Point(l, t));
+    }
+
     /** 
     * Returns a Seadragon point corresponding to a pixel
     * Used in RLH
@@ -391,7 +432,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method scroll
     */
     function scroll(delta, pivot) {
-        dzScroll(delta, pivot);
+        dzManip({
+            scale: delta,
+            translation: {
+                x: 0,
+                y: 0
+            },
+            pivot: {
+                x: pivot.x,
+                y: pivot.y
+            }
+        });
     }
 
     /*
@@ -415,8 +466,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @method init
      */
     function init() {
-        var viewerelt,
-            canvas;
+        var canvas;
 
         if(Seadragon.Config) {
             Seadragon.Config.visibilityRatio = 0.8; // TODO see why Seadragon.Config isn't defined; should it be?
@@ -953,9 +1003,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var w = outerContainer.width(),
                 h = outerContainer.height();
             outerContainerPivot = {
-                x: w / 2 - (outerContainer.offset().left - root.offset().left),
-                y: h / 2 - (outerContainer.offset().top - root.offset().top)
+                //x: w / 2 - (outerContainer.offset().left - root.offset().left),
+                //y: h / 2 - (outerContainer.offset().top - root.offset().top)
+                x: -outerContainer.offset().left + w, //+ root.offset().left,
+                y: -outerContainer.offset().top + h
             };
+            console.log(outerContainerPivot);
             toManip = mediaManip;
             $('.mediaOuterContainer').css('z-index', 1000);
             outerContainer.css('z-index', 1001);
@@ -1108,6 +1161,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function move(prevVelocity, prevLocation, finalPos, delay){
             var currentPosition,
                 newVelocity,
+                top = parseFloat(outerContainer.css('top')),
+                left = parseFloat(outerContainer.css('left')),
                 timer;
 
             if (mediaHidden) {
@@ -1133,8 +1188,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             //Current position is previous position + movement from velocity * time
             currentPosition = { 
-                x: prevLocation.x + delay*prevVelocity.x,
-                y: prevLocation.y + delay*prevVelocity.y                  
+                x: left + delay*prevVelocity.x,
+                y: top + delay*prevVelocity.y   
             };
 
             // New velocity is proportional to distance left to travel
