@@ -2210,16 +2210,16 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     }
 
     /**
-     * Similar to addHighlightShapeAttributes, gives text boxes drag functionality, a drag handle, and undo/redo functionality.
-     * @param textbox   the text box in question
+     * Similar to addHighlightShapeAttributes, gives text boxes drag functionality, a drag handle, and undo/redo functionality
+     * @method setTextAttributes
+     * @textbox {HTML elt}            the svg HTML element for our text
      */
     function setTextAttributes(textbox) {
         var C1, //drag handles
             rds = TAG.TourAuthoring.Constants.inkDragHandleRadius,
             x = textbox.attrs.x,
             y = textbox.attrs.y,
-            origposition = {},
-            c1origposition = {},
+            origPosition = {},
             boundingBox = textbox.getBBox();
 
         // set the positions of C1 and C2 using the styling of textbox
@@ -2249,152 +2249,186 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
 
         // drag handler for C1 -- the pan handle.....
         C1.drag(function (dx, dy, mousex, mousey) { // move
-            var circleRadius = C1.attr("rx");
-            //Hard stops for textbox location in ink canvas
-            if (origposition.x + dx <= circleRadius + 5) {
-                dx = (circleRadius + 5) - origposition.x;
-            }
-            if (origposition.y + dy <= circleRadius + 5) {
-                dy = (circleRadius + 5) - origposition.y;
-            }
-            if (origposition.x + dx >= canvwidth - (circleRadius + 5)) {
-                dx = canvwidth - (circleRadius + 5) - origposition.x;
-            }
-            if (origposition.y + dy >= canvheight - (circleRadius + 5)) {
-                dy = canvheight - (circleRadius + 5) - origposition.y;
-            }
+            //var circleRadius = C1.attr("rx");
+            ////Hard stops for textbox location in ink canvas
+            //if (origposition.x + dx <= circleRadius + 5) {
+            //    dx = (circleRadius + 5) - origposition.x;
+            //}
+            //if (origposition.y + dy <= circleRadius + 5) {
+            //    dy = (circleRadius + 5) - origposition.y;
+            //}
+            //if (origposition.x + dx >= canvwidth - (circleRadius + 5)) {
+            //    dx = canvwidth - (circleRadius + 5) - origposition.x;
+            //}
+            //if (origposition.y + dy >= canvheight - (circleRadius + 5)) {
+            //    dy = canvheight - (circleRadius + 5) - origposition.y;
+            //}
 
-            var c1currx = parseInt(this.data("curr_cx"),10); // x position at the start of drag
-            var c1curry = parseInt(this.data("curr_cy"),10);
-            var xpos = c1currx + dx; // to get new x position, just add dx
-            var ypos = c1curry + dy;
-            this.attr({
-                cx: xpos, // xcenter
-                cy: ypos, // ycenter
+            //var c1currx = parseInt(this.data("curr_cx"),10); // x position at the start of drag
+            //var c1curry = parseInt(this.data("curr_cy"),10);
+            //var xpos = c1currx + dx; // to get new x position, just add dx
+            //var ypos = c1curry + dy;
+            //this.attr({
+            //    cx: xpos, // xcenter
+            //    cy: ypos, // ycenter
+            //});
+
+            //// move the textbox
+            repositionText({
+                x: origPosition.x + dx,
+                y: origPosition.y + dy
             });
-
-            // move the textbox
-            textbox.attr("x", origposition.x + dx);
-            textbox.attr("y", origposition.y + dy);
+            //textbox.attr("x", origposition.x + dx);
+            //textbox.attr("y", origposition.y + dy);
         },
         function (x, y) { // start -- record original positions
-            origposition.x = parseFloat(textbox.attrs.x);
-            origposition.y = parseFloat(textbox.attrs.y);
-
-            var bbox = C1.getBBox();
-            c1origposition.x = bbox.x;
-            c1origposition.y = bbox.y;
-            c1origposition.w = bbox.width;
-            c1origposition.h = bbox.height;
+            origPosition = {
+                x: textbox.attr('x'),
+                y: textbox.attr('y')
+            };
         },
         function (x, y) { // stop -- deal with undo/redo functionality
-            var c1bboxx = this.getBBox().x;
-            var c1bboxy = this.getBBox().y;
-            var c1bboxw = this.getBBox().width;
-            var c1bboxh = this.getBBox().height;
-            this.data("curr_cx", c1bboxx + c1bboxw / 2.0); // reset data using bounding box coords
-            this.data("curr_cy", c1bboxy + c1bboxh / 2.0);
+            var origX = origPosition.x,
+                origY = origPosition.y,
 
-            textbox.data({
-                "x": textbox.attrs.x,
-                "y": textbox.attrs.y
-            });
+                lastX = textbox.attr('x'),
+                lastY = textbox.attr('y');
 
-            var bboxx = parseFloat(textbox.attrs.x);
-            var bboxy = parseFloat(textbox.attrs.y);
 
-            c1bboxx = C1.getBBox().x;
-            c1bboxy = C1.getBBox().y;
-            c1bboxw = C1.getBBox().width;
-            c1bboxh = C1.getBBox().height;
+            //var c1bboxx = this.getBBox().x;
+            //var c1bboxy = this.getBBox().y;
+            //var c1bboxw = this.getBBox().width;
+            //var c1bboxh = this.getBBox().height;
+            //this.data("curr_cx", c1bboxx + c1bboxw / 2.0); // reset data using bounding box coords
+            //this.data("curr_cy", c1bboxy + c1bboxh / 2.0);
 
-            var ox = origposition.x;
-            var oy = origposition.y;
-            var ow = origposition.w;
-            var oh = origposition.h;
+            //textbox.data({
+            //    "x": textbox.attrs.x,
+            //    "y": textbox.attrs.y
+            //});
 
-            var o1x = c1origposition.x;
-            var o1y = c1origposition.y;
-            var o1w = c1origposition.w;
-            var o1h = c1origposition.h;
+            //var bboxx = parseFloat(textbox.attrs.x);
+            //var bboxy = parseFloat(textbox.attrs.y);
+
+            //c1bboxx = C1.getBBox().x;
+            //c1bboxy = C1.getBBox().y;
+            //c1bboxw = C1.getBBox().width;
+            //c1bboxh = C1.getBBox().height;
+
+            //var ox = origposition.x;
+            //var oy = origposition.y;
+            //var ow = origposition.w;
+            //var oh = origposition.h;
+
+            //var o1x = c1origposition.x;
+            //var o1y = c1origposition.y;
+            //var o1w = c1origposition.w;
+            //var o1h = c1origposition.h;
 
             var command = TAG.TourAuthoring.Command({
                 execute: function () {
-                    svgText.attr({ x: bboxx });
-                    svgText.attr({ y: bboxy });
-                    textbox.attr({ x: bboxx, y: bboxy });
-                    textbox.data({ x: bboxx, y: bboxy });
-
-                    C1.data("curr_cx", c1bboxx + c1bboxw / 2.0);
-                    C1.data("curr_cy", c1bboxy + c1bboxh / 2.0);
-                    C1.attr({
-                        cx: c1bboxx + c1bboxw / 2.0,
-                        cy: c1bboxy + c1bboxh / 2.0,
-                        rx: c1bboxw / 2.0,
-                        ry: c1bboxh / 2.0,
+                    repositionText({
+                        x: lastX,
+                        y: lastY
                     });
+                    //svgText.attr({ x: bboxx });
+                    //svgText.attr({ y: bboxy });
+                    //textbox.attr({ x: bboxx, y: bboxy });
+                    //textbox.data({ x: bboxx, y: bboxy });
+
+                    //C1.data("curr_cx", c1bboxx + c1bboxw / 2.0);
+                    //C1.data("curr_cy", c1bboxy + c1bboxh / 2.0);
+                    //C1.attr({
+                    //    cx: c1bboxx + c1bboxw / 2.0,
+                    //    cy: c1bboxy + c1bboxh / 2.0,
+                    //    rx: c1bboxw / 2.0,
+                    //    ry: c1bboxh / 2.0,
+                    //});
                 },
                 unexecute: function () {
-                    svgText.attr({ x: ox });
-                    svgText.attr({ y: oy });
-                    textbox.attr({ x: ox, y: oy });
-                    textbox.data({ x: ox, y: oy });
-
-                    C1.data("curr_cx", o1x + o1w / 2.0);
-                    C1.data("curr_cy", o1y + o1h / 2.0);
-                    C1.attr({
-                        cx: o1x + o1w / 2.0,
-                        cy: o1y + o1h / 2.0,
+                    repositionText({
+                        x: origX,
+                        y: origY
                     });
+                    //svgText.attr({ x: ox });
+                    //svgText.attr({ y: oy });
+                    //textbox.attr({ x: ox, y: oy });
+                    //textbox.data({ x: ox, y: oy });
+
+                    //C1.data("curr_cx", o1x + o1w / 2.0);
+                    //C1.data("curr_cy", o1y + o1h / 2.0);
+                    //C1.attr({
+                    //    cx: o1x + o1w / 2.0,
+                    //    cy: o1y + o1h / 2.0,
+                    //});
                 }
             });
             command.execute();
             inkUndoManager.logCommand(command);
         });
     }
-    that.setTextAttributes = setTextAttributes;
 
     /**
      * Takes transparency bounding shapes and converts them to bezier paths
-     * @param shapes     array of shapes to convert
-     * @return    array of corresponding paths
+     * @method shapesToPaths
+     * @param {Array} shapes       array of shapes to convert
+     * @return {Array}             array of corresponding paths
      */
-    function shapes_to_paths (shapes) {
+    function shapesToPaths (shapes) {
         //takes in an array of shapes, returns an array of paths
-        var cw = canvElt.width();
-        var ch = canvElt.height();
-        var paths = [];
-        removeAll();/////////////////
-        for (var i = 0; i < shapes.length; i++) {
-            var shape = shapes[i];
-            var path;
-            var type = shape.type.toLowerCase();
-            if (shape.type == "rect") { // in this case, bezier path is just four corners with bezier anchors along each segment
-                var x = parseFloat(shape.X) / cw;
-                var y = parseFloat(shape.Y) / ch;
-                var w = parseFloat(shape.w) / cw;
-                var h = parseFloat(shape.h) / ch;
-                var xoff = 10.0 / cw;
-                var yoff = 10.0 / ch;
-                path = "M" + x + "," + y + "C" + (x + xoff) + "," + y + "," + (x + w - xoff) + "," + y + "," + (x + w) + "," + y + "C" + (x + w) + "," + (y + yoff) + "," + (x + w) + "," + (y + h - yoff) + "," + (x + w) + "," + (y + h) + "C" + (x + w - xoff) + "," + (y + h) + "," + (x + xoff) + "," + (y + h) + "," + (x) + "," + (y + h) + "C" + x + "," + (y + h - yoff) + "," + (x) + "," + (y + yoff) + "," + (x) + "," + (y) + "z";
+        var paths = [],
+            i,
+            shape,
+            path,
+            type,
+            xloc,
+            yloc,
+            xdim,
+            ydim,
+            xoff,
+            yoff,
+            k;
+
+        removeAll();
+
+        for (i = 0; i < shapes.length; i++) {
+            shape = shapes[i];
+            path;
+            type = shape.type.toLowerCase();
+            if (shape.type === "rect") { // in this case, bezier path is just four corners with bezier anchors along each segment
+                xloc = parseFloat(shape.X) / canvWidth;
+                yloc = parseFloat(shape.Y) / canvHeight;
+                xdim = parseFloat(shape.w) / canvWidth;
+                ydim = parseFloat(shape.h) / canvHeight;
+                xoff = 10.0 / canvWidth;
+                yoff = 10.0 / canvHeight;
+                path = "M" + xloc + "," + yloc + "C" + (xloc + xoff) + "," + yloc + "," + (xloc + xdim - xoff) + "," + yloc + ",";
+                path += (xloc + xdim) + "," + yloc + "C" + (xloc + xdim) + "," + (yloc + yoff) + "," + (xloc + xdim) + ",";
+                path += (yloc + ydim - yoff) + "," + (xloc + xdim) + "," + (yloc + ydim) + "C" + (xloc + xdim - xoff) + ",";
+                path += (yloc + ydim) + "," + (xloc + xoff) + "," + (yloc + ydim) + "," + xloc + "," + (yloc + ydim) + "C" + xloc + ",";
+                path += (yloc + ydim - yoff) + "," + xloc + "," + (yloc + yoff) + "," + xloc + "," + yloc + "z";
             }
             else if (shape.type == "ellipse") { // bezier path is four points (north, east, south, west) with bezier anchors vertical/horizonal from the points a certain distance (given by the 'magic number' below)
-                var cx = parseFloat(shape.cx) / cw;
-                var cy = parseFloat(shape.cy) / ch;
-                var rx = parseFloat(shape.rx) / cw;
-                var ry = parseFloat(shape.ry) / ch;
-                var k = (4.0 / 3.0) * (Math.sqrt(2) - 1); // 'magic number' defining bezier anchor coordinates for ellipses
-                path = "M" + cx + "," + (cy - ry) + "C" + (cx + rx * k) + "," + (cy - ry) + "," + (cx + rx) + "," + (cy - ry * k) + "," + (cx + rx) + "," + cy + "C" + (cx + rx) + "," + (cy + ry * k) + "," + (cx + rx * k) + "," + (cy + ry) + "," + cx + "," + (cy + ry) + "C" + (cx - rx * k) + "," + (cy + ry) + "," + (cx - rx) + "," + (cy + ry * k) + "," + (cx - rx) + "," + cy + "C" + (cx - rx) + "," + (cy - ry * k) + "," + (cx - rx * k) + "," + (cy - ry) + "," + cx + "," + (cy - ry) + "z";
+                xloc = parseFloat(shape.cx) / canvWidth;
+                yloc = parseFloat(shape.cy) / canvHeight;
+                xdim = parseFloat(shape.rx) / canvWidth;
+                ydim = parseFloat(shape.ry) / canvHeight;
+                k = (4.0 / 3.0) * (SQRT2 - 1); // 'magic number' defining bezier anchor coordinates for ellipses
+                path = "M" + xloc + "," + (yloc - ydim) + "C" + (xloc + xdim * k) + "," + (yloc - ydim) + "," + (xloc + xdim) + ",";
+                path += (yloc - ydim * k) + "," + (xloc + xdim) + "," + yloc + "C" + (xloc + xdim) + "," + (yloc + ydim * k) + ",";
+                path += (xloc + xdim * k) + "," + (yloc + ydim) + "," + xloc + "," + (yloc + ydim) + "C" + (xloc - xdim * k) + ",";
+                path += (yloc + ydim) + "," + (xloc - xdim) + "," + (yloc + ydim * k) + "," + (xloc - rx) + "," + yloc + "C" + (xloc - xdim) + ",";
+                path += (yloc - ydim * k) + "," + (xloc - xdim * k) + "," + (yloc - ydim) + "," + xloc + "," + (yloc - ydim) + "z";
             }
             paths.push(path);
         }
-        get_outer_path(paths);
+        getOuterPath(paths);
         return paths;
     }
-    that.shapes_to_paths = shapes_to_paths;
 
     /**
      * Debugging function; prints out the ink path in our ink track
+     * @method showInkPath
      */
     function showInkPath() {
         try {
@@ -2404,20 +2438,22 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             console.log("error in showInkPath: " + err.message);
         }
     }
-    that.showInkPath = showInkPath;
 
     /**
-     * Scales a path representing a transparency/marquee.
-     * @param pth               the path whose coordinates we'll scale
-     * @param trans_factor_x    scale factor in x-direction
-     * @param trans_factor_y    scale factor in y-direction
+     * Scales a path representing a transparency/marquee. Used to scale to abs coords, etc.
+     * @param {String} pth      the path whose coordinates we'll scale
+     * @param {Number} trans_factor_x    x scale factor
+     * @param {Number} trans_factor_y    y scale factor
      * @return   scaled path
      */
-    function transform_pathstring_marq (pth, trans_factor_x, trans_factor_y) {
-        var nums = pth.match(/[0-9.\-]+/g); // gets coordinates from path
-        var newpath = "";
-        var j = 0, n = pth.length;
-        for (var i = 0; i < n; i++) {
+    function transformPathstringMarq (pth, trans_factor_x, trans_factor_y) {
+        var nums = pth.match(/[0-9.\-]+/g), // gets coordinates from path
+            newpath = '',
+            i,
+            j = 0,
+            n = pth.length;
+
+        for (i = 0; i < n; i++) {
             if ((pth[i] == "M") || (pth[i] == "L")) { // if M or L, need to scale next two coords
                 newpath = newpath + pth[i];
                 newpath += (parseFloat(nums[j]) * trans_factor_x).toFixed(6) + ",";
@@ -2440,7 +2476,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
         return newpath;
     }
-    that.transform_pathstring_marq = transform_pathstring_marq;
 
     /**
      * Returns a string giving all necessary information to recreate the current scene.
@@ -2452,6 +2487,9 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
      * BOUNDRECT and BOUNDELLIPSE types are for reloading rectangles and ellipses when we
      * edit transparencies (their formats are identical to RECT/ELLIPSE). All coordinates are relative.
      *
+     * TODO JSON -- use stringified JSON to store inks rather than this format; it would be easier to parse and less
+     *              prone to errors
+     *
      *   PATH::[pathstring]<svg path string>[stroke]<color>[strokeo]<opacity>[strokew]<width>[]
      *   RECT::[x]<x>[y]<y>[w]<width>[h]<height>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
      *   ELLIPSE::[cx]<center x>[cy]<center y>[rx]<x radius>[ry]<y radius>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
@@ -2461,9 +2499,10 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
      *   BOUNDRECT::[x]<x>[y]<y>[w]<width>[h]<height>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
      *   BOUNDELLIPSE::[cx]<center x>[cy]<center y>[rx]<x radius>[ry]<y radius>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
      *
-     * @return    up to date datastring
+     * @method updateDatastring
+     * @return {String}             up to date datastring
      */
-    function update_datastring () {
+    function updateDatastring() {
         var data_string = "",
             pth;
 
@@ -2512,19 +2551,16 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         datastring = data_string;
         return data_string;
     }
-    that.update_datastring = update_datastring;
 
     /**
      * The following are setters for various ink parameters
      * @param _    the value to be set to the corresponding ink parameter
      */
-    function setPenColor(c) { penColor = (c[0] == '#') ? c : ("#" + c); }
+    function setPenColor(c) { penColor = (c[0] === '#') ? c : ("#" + c); }
     function setPenOpacity(o) { penOpacity = o; }
     function setPenWidth(w) { penWidth = w; }
     function setEraserWidth(w) { eraserWidth = w; }
-    function setMarqueeFillColor(c) { marqueeFillColor = (c[0] == '#') ? c : ("#" + c); }
     function setMarqueeFillOpacity(o) { marqueeFillOpacity = o; }
-    function setEnabled(en) { isAttached = end; }
     function setFontFamily(f) {
         fontFamily = f;
         if (svgText) {
@@ -2549,7 +2585,7 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
     }
     function setFontColor(f) {
-        fontColor = (f[0] == '#') ? f : ("#" + f);
+        fontColor = (f[0] === '#') ? f : ("#" + f);
         if (svgText) {
             svgText.attr({
                 "fill": fontColor
@@ -2559,7 +2595,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             });
         }
     }
-    function setFontOpacity(f) { fontOpacity = f; }
     function setTransMode(m) { transMode = m; }
 
     /**
@@ -2569,13 +2604,10 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     function getPenOpacity() { return penOpacity; }
     function getPenWidth() { return penWidth; }
     function getEraserWidth() { return eraserWidth; }
-    function getMarqueeFillColor() { return marqueeFillColor; }
     function getMarqueeFillOpacity() { return marqueeFillOpacity; }
-    function getEnabled() { return isAttached; }
     function getFontFamily() { return fontFamily; }
     function getFontSize() { return fontSize; }
     function getFontColor() { return fontColor; }
-    function getFontOpacity() { return fontOpacity; }
     function getTransMode() { return transMode; }
 
 
@@ -2598,9 +2630,9 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         canvElt.css('cursor', ((mode == 1) || (mode == 2)) ? 'crosshair' : 'pointer');
     });
 
-    function distance(pt1, pt2, cw, ch) {
-        var dx = (pt1[0] - pt2[0]) * (cw || 1);
-        var dy = (pt1[1] - pt2[1]) * (ch || 1);
+    function distance(pt1, pt2) {
+        var dx = (pt1[0] - pt2[0]),
+            dy = (pt1[1] - pt2[1]);
         return Math.sqrt(dx*dx + dy*dy);
     }
 
