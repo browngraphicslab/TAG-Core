@@ -514,8 +514,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
         inkAuthoring = p1;
-        p1.set_editable();
-        p1.set_mode(TAG.TourAuthoring.InkMode.draw);
+        p1.setEditable();
+        p1.setMode(TAG.TourAuthoring.InkMode.draw);
         ////// new ink draw stuff
 
         //   p1.setPenColor(p1.get_attr(datastring, 'stroke', 's'));
@@ -734,8 +734,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
         inkAuthoring = p1;
-        p1.set_mode(TAG.TourAuthoring.InkMode.shapes); //shape manipulation mode
-        p1.set_editable();
+        p1.setMode(TAG.TourAuthoring.InkMode.shapes); //shape manipulation mode
+        p1.setEditable();
 
 
         if (linked) {
@@ -966,8 +966,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkAuthoring = p1;
         cw = $("#inkCanv").width();
         ch = $("#inkCanv").height();
-        p1.set_mode(TAG.TourAuthoring.InkMode.text);
-        p1.set_editable();
+        p1.setMode(TAG.TourAuthoring.InkMode.text);
+        p1.setEditable();
 
         //     fontsize = p1.get_attr(datastring, "fontsize", 'f') * ch;
         //     p1.setFontSize(fontsize);
@@ -1766,8 +1766,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     // p1.setFontColor("FFFFFF");
                     // p1.setFontFamily("Times New Roman, serif");
                     // p1.setFontSize("12");
-                    p1.set_mode(TAG.TourAuthoring.InkMode.text);
-                    p1.set_editable();
+                    p1.setMode(TAG.TourAuthoring.InkMode.text);
+                    p1.setEditable();
                     currentInkController = p1;
                     $('#writeAnnotation').val("");
                     //  textBodyLabel1.text("");
@@ -1815,8 +1815,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     //  myPicker.fromString("000000"); //jscolor picker
                     $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                     inkAuthoring = p1;
-                    p1.set_mode(TAG.TourAuthoring.InkMode.draw);
-                    p1.set_editable(); // give the canvas pointer events
+                    p1.setMode(TAG.TourAuthoring.InkMode.draw);
+                    p1.setEditable(); // give the canvas pointer events
                     //   p1.updatePenWidth("brushSlider");
                     //   p1.updatePenColor("brushColorToggle");
                     //   p1.updatePenOpacity("opacitySlider");
@@ -1851,8 +1851,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     //   initTrans();
                     $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                     inkAuthoring = p1;
-                    p1.set_mode(TAG.TourAuthoring.InkMode.shapes);
-                    p1.set_editable(); //in this case, we're just making sure that the artwork can't be manipulated
+                    p1.setMode(TAG.TourAuthoring.InkMode.shapes);
+                    p1.setEditable(); //in this case, we're just making sure that the artwork can't be manipulated
 
 
                     timeline.setEditInkOn(true);
@@ -4644,7 +4644,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                eraseLabel.css({ 'color': 'gray' });
                drawMode = 'draw';
                drawModeLabel1.text("Draw");
-               currentInkController.set_mode(1); // draw mode
+               currentInkController.setMode(1); // draw mode
            }
        });
 
@@ -4661,7 +4661,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                eraseLabel.css({ 'color': 'black' });
                drawMode = 'erase';
                drawModeLabel1.text("Erase");
-               currentInkController.set_mode(2); // erase mode
+               currentInkController.setMode(2); // erase mode
            }
        });
 
@@ -4702,7 +4702,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            brushLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, brushSlider);
-           //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+           //currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
        });
        
        // brush width slider drag handler
@@ -4716,7 +4716,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                }
                currentInkController.updatePenWidth("brushSlider");
                currentInkController.setEraserWidth(brushSliderPoint.attr('value'));
-               //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+               //currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                brushLabel1.text(Math.round(brushSliderPoint.attr('value')) + "px");
            },
            appendTo: 'body'
@@ -4745,7 +4745,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            colorLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, colorDiv);
-           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+           currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
            drawLabel.css({ 'color': 'black' });
            eraseLabel.css({ 'color': 'gray' });
            drawMode = 'draw';
@@ -4758,7 +4758,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
        $(item).attr('readonly', 'readonly');
        $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%'});
        item.onfocus = function () {
-           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+           currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
        };
        $(item).on('keyup', function (event) {
            event.stopPropagation();
@@ -4770,7 +4770,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                myPicker.fromString("000000");
                myPicker.onImmediateChange = function () {
                    currentInkController.updatePenColor("brushColorToggle");
-                   currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                   currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                    $('.changeColor1')[0].innerHTML = "#"+$("#brushColorToggle").attr("value");
                };
            }, false);
@@ -4812,7 +4812,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            opacityLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, opacitySlider);
-           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+           currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
            drawLabel.css({ 'color': 'black' });
            eraseLabel.css({ 'color': 'gray' });
            drawMode = 'draw';
@@ -4902,7 +4902,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                  eraseEditLabel.css({ 'color': 'gray' });
                  drawEditMode = 'draw';
                  drawEditModeLabel1.text("Draw");
-                 currentInkController.set_mode(1); // draw mode
+                 currentInkController.setMode(1); // draw mode
              }
          });
  
@@ -4919,7 +4919,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                  eraseEditLabel.css({ 'color': 'black' });
                  drawEditMode = 'erase';
                  drawEditModeLabel1.text("Erase");
-                 currentInkController.set_mode(2); // erase mode
+                 currentInkController.setMode(2); // erase mode
              }
          });
  
@@ -4959,7 +4959,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
              $(".thicknessLabel").css({ 'font-weight': 'normal' });
              brushEditLabel.css({ 'font-weight': 'bold' });
              updateToggle(drawEditArray, brushEditSlider);
-             //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+             //currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
          });
  
          // brush width slider drag handler
@@ -4972,7 +4972,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                      brushEditSliderPoint.attr('value', 7.0);
                  }
                  currentInkController.updatePenWidth("brushEditSlider");
-                 //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                 //currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                  brushEditLabel1.text(Math.round(brushEditSliderPoint.attr('value')) + "px");
              },
              appendTo: 'body'
@@ -5001,7 +5001,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
              $(".thicknessLabel").css({ 'font-weight': 'normal' });
              colorEditLabel.css({ 'font-weight': 'bold' });
              updateToggle(drawEditArray, colorEditDiv);
-             currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+             currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
              drawEditLabel.css({ 'color': 'black' });
              eraseEditLabel.css({ 'color': 'gray' });
              drawEditMode = 'draw';
@@ -5014,7 +5014,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          $(itemEdit).attr('readonly', 'readonly');
          $(itemEdit).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%' });
          itemEdit.onfocus = function () {
-             currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+             currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
              drawEditLabel.css({ 'color': 'black' });
              eraseEditLabel.css({ 'color': 'gray' });
              drawEditMode = 'draw';
@@ -5030,7 +5030,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                  myEditDrawPicker.fromString("000000");
                  myEditDrawPicker.onImmediateChange = function () {
                      currentInkController.updatePenColor("brushEditColorToggle");
-                     currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                     currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                      drawEditLabel.css({ 'color': 'black' });
                      eraseEditLabel.css({ 'color': 'gray' });
                      drawEditMode = 'draw';
@@ -5076,7 +5076,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
              $(".thicknessLabel").css({ 'font-weight': 'normal' });
              opacityEditLabel.css({ 'font-weight': 'bold' });
              updateToggle(drawEditArray, opacityEditSlider);
-             currentInkController.set_mode(1);
+             currentInkController.setMode(1);
              drawEditLabel.css({ 'color': 'black' });
              eraseEditLabel.css({ 'color': 'gray' });
              drawEditMode = 'draw';
@@ -5239,7 +5239,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 eraseLabel.css({ 'color': 'gray' });
                 drawModeLabel1.text("Draw");
                 drawMode = 'draw';
-                currentInkController.set_mode(1); // draw mode
+                currentInkController.setMode(1); // draw mode
             }
         });
 
@@ -5249,7 +5249,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 eraseLabel.css({ 'color': 'black' });
                 drawModeLabel1.text("Erase");
                 drawMode = 'erase';
-                currentInkController.set_mode(2); // erase mode
+                currentInkController.setMode(2); // erase mode
             }
         });
 
@@ -5258,7 +5258,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             eraseLabel.css({ 'color': 'gray' });
             drawModeLabel1.text("Draw");
             drawMode = 'draw';
-            currentInkController.set_mode(1); // draw mode
+            currentInkController.setMode(1); // draw mode
         }
 
         return {
@@ -5327,7 +5327,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 currentInkController.setPenWidth(brushSliderPoint.attr('value'));
                 currentInkController.setEraserWidth(brushSliderPoint.attr('value'));
-                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                 brushLabel1.text(Math.round(brushSliderPoint.attr('value')) + "px");
 
                 // switch to draw mode
@@ -5375,7 +5375,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             colorLabel.css({ 'font-weight': 'bold' });
 
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
             //  drawLabel.css({ 'color': 'black' });
             //  eraseLabel.css({ 'color': 'gray' });
 
@@ -5388,7 +5388,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(item).attr('readonly', 'readonly');
         $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%' });
         item.onfocus = function () {
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
         };
 
         $(item).on('keyup', function (event) {
@@ -5418,7 +5418,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 $('#brushColorToggle').attr('value', color);
                 $('.changeColor1').text($("#brushColorToggle").attr('value'));
                 $(item).css({ 'background-color': color, 'text': color });
-                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                 $('.changeColor1')[0].innerHTML = $("#brushColorToggle").attr("value");
                 $(item).css({ 'background-color': '#' + color, 'text': color });
 
@@ -5430,7 +5430,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 $('#brushColorToggle').attr('value', "000000");
                 $('.changeColor1').text("#" + $("#brushColorToggle").attr('value'));
                 currentInkController.setPenColor("#000000");
-                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                 $('.changeColor1')[0].innerHTML = "#" + $("#brushColorToggle").attr("value");
             }
         }
@@ -6351,7 +6351,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             //  myPicker.fromString("000000");
             //  myPicker.onImmediateChange = function () {
             //     currentInkController.updatePenColor("brushColorToggle");
-            //    currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            //    currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
             //  $('.changeColor1')[0].innerHTML = "#" + $("#brushColorToggle").attr("value");
             //};
             var check = true; // if check becomes false, then a warning message appeared, do not proceed after trying to attach
