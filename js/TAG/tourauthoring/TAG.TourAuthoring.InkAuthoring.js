@@ -37,9 +37,12 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         // DOM-related
         canvElt = $("#" + canvid),               // ink canvas elt
         viewerElt = $('#rinContainer'),          // container for player
+        canvWidth = canvElt.width(),
+        canvHeight = canvElt.height(),
 
         // constants
         TEXTBOX_ID = "textbox",
+        SQRT2 = Math.sqrt(2),
 
         // misc initialized vars
         dataHolder = spec.dataHolder,               // data holder for getting selected track, etc
@@ -106,112 +109,10 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         timeManager = spec.timeManager,
         viewer = spec.viewer;
 
-
-
-    //var that = {};
-    //var canvid = canvId;
-    //that.canvid = canvId;
-    //html_elt = (html_elt) ? html_elt : $("#" + canvid)[0];
-    //var canvElt = $(html_elt);
-    //var textElt;
-    //var dataHolder = spec.dataHolder;
-
-    //var paper = new Raphael(canvElt[0], "100%", "100%");
+    // make sure svg elt is correctly positioned
     $("#" + canvid + " svg").css("position", "absolute");
     
-    // brush variables
-    //var penColor = "#000000";
-    //var penOpacity = 1.0;
-    //var penWidth = 7;
-    //var eraserWidth = 5;
-    //var ml = []; //path M/L values (see svg path format)
-    //var xy = []; //path coordinates; each entry has an x and y property
-    //var pa = []; //path attributes
-    //var pathObjects = [];
-    //var currpaths = ""; //this will be the string representing all of our paths; to get the paths individually, split at 'M'
-    
-
-
-    //// ellipse/rectangle variables
-    //var shapeStrokeColor = "#ffffff";
-    //var shapeStrokeOpacity = 0.7;
-    //var shapeStrokeWidth = 5;
-    //var shapeFillColor = "#000000";
-    //var shapeFillOpacity = 0;
-
-    //// block/isolate variables
-    //var marqueeFillColor = "#000000";
-    //var marqueeFillOpacity = 0.8;
-    //var trans_mode = 'isolate';
-    //var transCoords = [];
-    //var transLetters = [];
-    //var transCurrpath = "";
-    //var bounding_shapes = "";
-
-    //// text variables
-    //var fontFamily = "'Times New Roman', serif";
-    //var fontColor = "#ffffff";
-    //var fontSize = '12px';
-    //var fontOpacity = 1.0;
-    //var textboxid = "textbox";
-    //var outerdivid = "outerdiv";
-    //var lastText = "";
-    //var svgText;
-
-    // misc variables
-    //var inkTrack = null;
-    //calling_file = (calling_file === 'inkes') ? 'inkes' : 'componentcontrols';
-    //var marquees = []; // old marquees
-    //var click = false; // has the mouse been clicked?
-    //var datastring = "";
-    //var mode = TAG.TourAuthoring.InkMode.draw;
-    //var isAttached = true; //attached ink tracks by default
-    //var initKeyframe = {};
-    //var artName = "";
-    //var expId = ""; // rin experience id (name of the ink track)
-    //var oldScale = 1;
-    //var firstTimeThrough = 2;
-    
-    // set up the coordinates for adjustViewBox
-    //var viewerElt;
-    //if (calling_file === 'inkes')
-    //    viewerElt = ($("#rinplayer").length) ? $("#rinplayer") : $("#rinPlayer");
-    //else
-    //    viewerElt = $("#rinContainer");
-    //var origPaperX = 0; // original coordinates of the paper (match with rinContainer)
-    //var origPaperY = 0;
-    //var origPaperW = viewerElt.width();
-    //var origPaperH = viewerElt.height();
-    //var origpx = 0; // original coordinates of the artwork
-    //var origpy = 0;
-    //var origpw = 0;
-    //var origph = 0;
-    //var lastpx = 0; // most recent coordinates of the artwork
-    //var lastpy = 0;
-    //var lastpw = 0;
-    //var lastph = 0;
-    //var lastcx = 0; // most recent coordinates of the "virtual canvas" which helps us place inks correctly
-    //var lastcy = 0; // the virtual canvas is where the Raphael canvas would be if it were moving with the artwork
-    //var lastcw = origPaperW;
-    //var lastch = origPaperH;
-    //var oldOpac = 0; // keeps track of whether an ink is on screen or not
-
-    // componentControls-specific variables for creating an ink undo manager, getting keyframes
-    //var inkUndoManager;
-    //var playbackControls;
-    //var undoManager;
-    //var timeline;
-    //var timeManager;
-    //var viewer;
-    //var dataHolder;
-    //if (calling_file !== 'inkes') {
-        //playbackControls = spec.playbackControls;
-        //undoManager = spec.undoManager;
-        //timeline = spec.timeline;
-        //timeManager = spec.timeManager;
-        //viewer = spec.viewer;
-        // set up the ink undo manager using existing undo/redo buttons
-        //inkUndoManager = new TAG.TourAuthoring.UndoManager();
+    // undo manager stuff
     inkUndoManager.setInitialized(true);
     playbackControls.undoButton.off("click");
     playbackControls.redoButton.off("click");
@@ -221,70 +122,60 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     playbackControls.redoButton.on('click', function () {
         inkUndoManager.redo();
     });
-    //}
     
     
     // methods //
 
     /**
      * Sets ink params to defaults
+     * @method resetParams
      */
     function resetParams() {
-        // brush variables
+        // "draw" variables
         penColor = "#000000";
         penOpacity = 1.0;
         penWidth = 7;
         eraserWidth = 5;
 
-        // block/isolate variables
+        // "highlight" variables
         marqueeFillColor = "#000000";
         marqueeFillOpacity = 0.8;
         trans_mode = 'isolate';
 
-        // text variables
+        // "write" variables
         fontFamily = "'Times New Roman', serif";
         fontColor = "#ffffff";
         fontSize = '12px';
     }
 
     /**
-     * Helper function to parse and multiply dimensions.
-     * @param rel_coord    the relative coordinate we want to convert to absolute coordinates
-     * @param canv_dim     the relevant dimension of the canvas used for scaling
-     * @return    the absolute coordinate
+     * Helper function to generate an absolute coordinate on svg canvas from stored relative
+     * coordinate. Relative coords are stored because inks can be viewed/edited/created in
+     * viewers of different sizes.
+     * @method toAbsoluteCoords
+     * @param {String/Number} rel      relative coordinate (in [0,1] probably)
+     * @param {Boolean} y              if the coord should be scaled in the y direction (if false, scale in s)
+     * @return {Number}                the absolute coordinate
      */
-    function abs_dims(rel_coord, canv_dim) {
-        return parseFloat(rel_coord) * parseFloat(canv_dim);
+    function toAbsoluteCoords(rel, y) { // TODO DOC make sure we can just get height/width at beginning
+        var scaleFactor = y ? canvHeight : canvWidth;
+        return parseFloat(rel_coord) * scaleFactor;
     }
-    that.abs_dims = abs_dims;
 
     /**
      * Takes an ellipse or rectangle and adds styling, drag events, drag handles to it.
-     * @param elt     the svg element
-     * @param others  styling to apply to elt
+     * @method addHighlightShapeAttributes
+     * @param {Raphael elt} elt     the svg element
      */
-    function add_attributes(elt, fillColor, fillOpacity, strokeColor, strokeOpacity, strokeWidth) {
-        var origmousex;
-        var origmousey;
-        var origposition = { x: 0, y: 0, w: 0, h: 0 };
-        var c1origposition = { x: 0, y: 0, w: 0, h: 0 };
-        var c2origposition = { x: 0, y: 0, w: 0, h: 0 };
-        var dcorigposition = { x: 0, y: 0, w: 0, h: 0 };
-        var eltbbox, c1bbox, c2bbox, dcbbox;
-        var beenMoved;
-
-        // if attributes are not passed in, use global variables
-        //if (fillColor === undefined)
-        //    fillColor = shapeFillColor;
-        //if (fillOpacity === undefined)
-        //    fillOpacity = shapeFillOpacity;
-        //if (strokeColor === undefined)
-        //    strokeColor = shapeStrokeColor;
-        //if (strokeOpacity === undefined)
-        //    strokeOpacity = shapeStrokeOpacity;
-        //if (strokeWidth === undefined)
-        //    strokeWidth = shapeStrokeWidth;
-
+    function addHighlightShapeAttributes(elt) {
+        var origmousex,
+            origmousey,
+            origPosition = {},
+            C1,
+            C2,
+            DC,
+            rds = TAG.TourAuthoring.Constants.inkDragHandleRadius,
+            isEllipse = elt.data('type') === 'ellipse'; // otherwise, is a rectangle
 
         elt.attr({ // add color attributes
             "stroke-width": 5,
@@ -292,33 +183,14 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             "stroke-opacity": 0.7,
             "fill": "#000000",
             "fill-opacity": 0,
-            "stroke-dasharray": "-",
+            "stroke-dasharray": "-"
         });
 
-        var C1, C2; // drag handles
-        var DC; // deletion circle
-        var rds = TAG.TourAuthoring.Constants.inkDragHandleRadius;
+        C1 = paper.ellipse(0, 0, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#ffffff", "fill": "#296B2F", "fill-opacity": 0.9 }).data("type", "grabHandle");
+        C2 = paper.ellipse(0, 0, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#296B2F", "fill": "#ffffff", "fill-opacity": 0.9 }).data("type", "grabHandle");
+        DC = paper.ellipse(0, 0, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#ffffff", "fill": "#880000", "fill-opacity": 0.9 }).data("type", "grabHandle");
+        placeHandles();
 
-        if (elt.data("type") == "ellipse") {
-            var rx = elt.data("curr_rx");
-            var ry = elt.data("curr_ry");
-            var cx = elt.data("currx") + rx;
-            var cy = elt.data("curry") + ry;
-            var x0 = rx / Math.sqrt(2.0); // fix where the top left drag handle should be in proportion to the radius
-            var y0 = ry * Math.sqrt(1 - x0 * x0 / (rx * rx)); // (if ellipse is a circle, handle will be on the line between center and top left corner of bounding box)
-            C1 = paper.ellipse(cx - x0 - strokeWidth/2, cy+strokeWidth / 2 - y0, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#ffffff", "fill": "#296B2F", "fill-opacity": 0.9 }).data("type", "grabHandle");
-            C2 = paper.ellipse(cx + x0 + strokeWidth / 2, cy + y0 + strokeWidth / 2, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#296B2F", "fill": "#ffffff", "fill-opacity": 0.9 }).data("type", "grabHandle");
-            DC = paper.ellipse(cx + x0 + strokeWidth / 2, cy + strokeWidth / 2 - y0, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#ffffff", "fill": "#880000", "fill-opacity": 0.9 }).data("type", "grabHandle");
-        }
-        else if (elt.data("type") == "rect") {
-            var x = elt.data("currx");
-            var y = elt.data("curry");
-            var w = elt.data("currw");
-            var h = elt.data("currh");
-            C1 = paper.ellipse(x, y, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#ffffff", "fill": "#296B2F", "fill-opacity": 0.9 }).data("type", "grabHandle");
-            C2 = paper.ellipse(x + w, y + h, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#296B2F", "fill": "#ffffff", "fill-opacity": 0.9 }).data("type", "grabHandle");
-            DC = paper.ellipse(x + w, y, rds - 2, rds - 2).attr({ "stroke-width": 2, "stroke": "#ffffff", "fill": "#880000", "fill-opacity": 0.9 }).data("type", "grabHandle");
-        }
         C1.data("curr_cx", C1.attr("cx"));
         C1.data("curr_cy", C1.attr("cy"));
         C2.data("curr_cx", C2.attr("cx"));
@@ -326,7 +198,7 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         DC.data("curr_cx", DC.attr("cx"));
         DC.data("curr_cy", DC.attr("cy"));
 
-        //log in the undo manager; show and hide elements
+        // log in the undo manager; show and hide elements
         var command = TAG.TourAuthoring.Command({
             execute: function () {
                 elt.show();
@@ -346,717 +218,213 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         command.execute();
         inkUndoManager.logCommand(command);
 
-        // define drag functionality for the panning handle (upper-left)
-        C1.drag(function (dx, dy, mousex, mousey) { // move
-            beenMoved = true;
+        /**
+         * Helper function to reposition (includes panning and zooming) a
+         * highlight rect/ellipse
+         * @method repositionHighlightElt
+         * @param {Object} attrs    xloc, yloc, xdim, and ydim properties for new location/size
+         */
+        function repositionHighlightElt(attrs) {
+            elt.data({
+                curr_xloc: attrs.xloc,
+                curr_yloc: attrs.yloc,
+                curr_xdim: attrs.xdim,
+                curr_ydim: attrs.ydim
+            });
+
+            if (isEllipse) {
+                elt.attr({
+                    cx: attrs.xloc,
+                    cy: attrs.yloc,
+                    rx: attrs.xdim,
+                    ry: attrs.ydim
+                });
+            } else {
+                elt.attr({
+                    x: attrs.xloc,
+                    y: attrs.yloc,
+                    width: attrs.xdim,
+                    height: attrs.ydim
+                });
+            }
+            placeHandles();
+
             elt.toFront();
             C1.toFront();
             C2.toFront();
             DC.toFront();
-            var halfWid = (origposition.w + strokeWidth) / 2;
-            var halfHei = (origposition.h + strokeWidth) / 2;
+        }
 
-            var circleRadius = C1.attr("rx");
-            //Hard stops for textbox location in ink canvas
-            if (c2origposition.x + strokeWidth + circleRadius + dx <= halfWid) {
-                dx = halfWid - c2origposition.x - circleRadius;
-            }
-            if (c2origposition.y + circleRadius +strokeWidth + dy <= halfHei) {
-                dy = halfWid - c2origposition.y - circleRadius;
-            }
-            if (c1origposition.x + circleRadius + dx + halfWid >= canvwidth) {
-                dx = canvwidth - halfWid - c1origposition.x - circleRadius;
-            }
-            if (c1origposition.y + circleRadius + dy + halfHei >= canvheight) {
-                dy = canvheight - c1origposition.y - circleRadius - halfHei;
-            }
+        /**
+         * Places the pan, resize, and delete handles relative to the element
+         * @method placeHandles
+         */
+        function placeHandles() {
+            var xloc = elt.data("curr_xloc"), // x for rect; cx for ellipse
+                yloc = elt.data("curr_yloc"), // y; cy
+                xdim = elt.data("curr_xdim"), // w; rx
+                ydim = elt.data("curr_ydim"), // h; ry
+                x0, // temp
+                y0; // temp
 
-            var c1currx = parseInt(C1.data("curr_cx"), 10);//x position at the start of drag
-            var c1curry = parseInt(C1.data("curr_cy"), 10);
-            var xpos = c1currx + dx; // to get new x position, just add dx
-            var ypos = c1curry + dy;
-            C1.attr({
-                cx: xpos, // xcenter
-                cy: ypos, // ycenter
-            });
 
-            var c2currx = parseInt(C2.data("curr_cx"), 10);// x position at the start of drag
-            var c2curry = parseInt(C2.data("curr_cy"), 10);
-            xpos = c2currx + dx; // to get new x position, just add dx
-            ypos = c2curry + dy;
-            C2.attr({
-                cx: xpos, // xcenter
-                cy: ypos, // ycenter
-            });
+            if (isEllipse) {
+                x0 = xdim / SQRT2; // fix where the top left drag handle should be in proportion to the radius
+                y0 = ydim / SQRT2; // (if ellipse is a circle, handle will be on the line between center and top left corner of bounding box)
 
-            var dccurrx = parseInt(DC.data("curr_cx"), 10);
-            var dccurry = parseInt(DC.data("curr_cy"), 10);
-            xpos = dccurrx + dx;
-            ypos = dccurry + dy;
-            DC.attr({
-                cx: xpos, // xcenter
-                cy: ypos, // ycenter
-            });
+                C1.attr({
+                    cx: xloc - x0 - 1, // 1 here is the stroke width / 2
+                    cy: yloc - y0 + 1
+                });
 
-            var eltcurrx, eltcurry;
-            if (elt.data("type") === "ellipse") {
-                eltcurrx = parseInt(elt.data("currx"),10) + elt.attr("rx");// x position at the start of drag
-                eltcurry = parseInt(elt.data("curry"),10) + elt.attr("ry");
+                C2.attr({
+                    cx: xloc + x0 + 1,
+                    cy: yloc + y0 + 1
+                });
+
+                DC.attr({
+                    cx: xloc + x0 + 1,
+                    cy: yloc - y0 + 1
+                });
+            } else {
+                C1.attr({
+                    cx: xloc,
+                    cy: yloc
+                });
+
+                C2.attr({
+                    cx: xloc + xdim,
+                    cy: yloc + ydim
+                });
+
+                DC.attr({
+                    cx: xloc + xdim,
+                    cy: yloc
+                });
             }
-            else if (elt.data("type") === "rect") {
-                eltcurrx = parseInt(elt.data("currx"),10);
-                eltcurry = parseInt(elt.data("curry"),10);
-            }
-            xpos = eltcurrx + dx; // to get new x position, just add dx
-            ypos = eltcurry + dy;
-            elt.attr({
-                x: xpos,
-                y: ypos,
-                cx: xpos, // xcenter
-                cy: ypos, // ycenter
+        }
+
+        /**
+         * Helper function to log a command at the end of a drag
+         * @method dragStopHandler
+         */
+        function dragStopHandler() {
+            var orig_xloc = origPosition.xloc,
+                orig_yloc = origPosition.yloc,
+                orig_xdim = origPosition.xdim,
+                orig_ydim = origPosition.ydim,
+
+                last_xloc = elt.data('curr_xloc'),
+                last_yloc = elt.data('curr_yloc'),
+                last_xdim = elt.data('curr_xdim'),
+                last_ydim = elt.data('curr_ydim'),
+
+                command = TAG.TourAuthoring.Command({
+                    execute: function () {
+                        repositionHighlightElt({
+                            xloc: last_xloc,
+                            yloc: last_yloc,
+                            xdim: last_xdim,
+                            ydim: last_ydim
+                        });
+                    },
+                    unexecute: function () {
+                        repositionHighlightElt({
+                            xloc: orig_xloc,
+                            yloc: orig_yloc,
+                            xdim: orig_xdim,
+                            ydim: orig_ydim
+                        });
+                    }
+                });
+
+            inkUndoManager.logCommand(command);
+        }
+
+        /**
+         * Helper function to record initial locations at the start of
+         * a drag.
+         * @method dragStartHandler
+         */
+        function dragStartHandler() {
+            origPosition = {
+                xloc: elt.data("curr_xloc"), // x for rect; cx for ellipse
+                yloc: elt.data("curr_yloc"), // y; cy
+                xdim: elt.data("curr_xdim"), // w; rx
+                ydim: elt.data("curr_ydim"), // h; ry
+                c2x: C2.attr('cx'), // starting position of C2
+                c2y: C2.attr('cy')
+            };
+        }
+
+        // define drag functionality for the panning handle (upper-left)
+        C1.drag(function (dx, dy, mousex, mousey) { // move
+            repositionHighlightElt({
+                xloc: origPosition.xloc + dx,
+                yloc: origPosition.yloc + dy,
+                xdim: origPosition.xdim,
+                ydim: origPosition.ydim
             });
         },
         function (x, y) { // start; record original positions
-            beenMoved = false;
-            eltbbox = elt.getBBox();
-            origposition.x = eltbbox.x;
-            origposition.y = eltbbox.y;
-            origposition.w = eltbbox.width;
-            origposition.h = eltbbox.height;
-
-            c1bbox = C1.getBBox();
-            c1origposition.x = c1bbox.x;
-            c1origposition.y = c1bbox.y;
-            c1origposition.w = c1bbox.width;
-            c1origposition.h = c1bbox.height;
-
-            c2bbox = C2.getBBox();
-            c2origposition.x = c2bbox.x;
-            c2origposition.y = c2bbox.y;
-            c2origposition.w = c2bbox.width;
-            c2origposition.h = c2bbox.height;
-
-            dcbbox = DC.getBBox();
-            dcorigposition.x = dcbbox.x;
-            dcorigposition.y = dcbbox.y;
-            dcorigposition.w = dcbbox.width;
-            dcorigposition.h = dcbbox.height;
+            dragStartHandler();
         },
         function (x, y) { // stop; log in undomanager and set data of element
-            if (!beenMoved) {
-                return;
-            }
-            var c1bboxx = C1.getBBox().x;
-            var c1bboxy = C1.getBBox().y;
-            var c1bboxw = C1.getBBox().width;
-            var c1bboxh = C1.getBBox().height;
-            this.data("curr_cx", c1bboxx + c1bboxw / 2.0); //reset data using bounding box coords
-            this.data("curr_cy", c1bboxy + c1bboxh / 2.0);
-
-            var c2bboxx = C2.getBBox().x;
-            var c2bboxy = C2.getBBox().y;
-            var c2bboxw = C2.getBBox().width;
-            var c2bboxh = C2.getBBox().height;
-            C2.data("curr_cx", c2bboxx + c2bboxw / 2.0); //reset data using bounding box coords
-            C2.data("curr_cy", c2bboxy + c2bboxh / 2.0);
-
-            var dcbboxx = DC.getBBox().x;
-            var dcbboxy = DC.getBBox().y;
-            var dcbboxw = DC.getBBox().width;
-            var dcbboxh = DC.getBBox().height;
-            DC.data("curr_cx", dcbboxx + dcbboxw / 2.0); //reset data using bounding box coords
-            DC.data("curr_cy", dcbboxy + dcbboxh / 2.0);
-
-            var bboxx = elt.getBBox().x;
-            var bboxy = elt.getBBox().y;
-            var bboxw = elt.getBBox().width;
-            var bboxh = elt.getBBox().height;
-
-            if (elt.data("type") == "ellipse") {
-                elt.data("currx", elt.attr("cx") - elt.attr("rx"));
-                elt.data("curry", elt.attr("cy") - elt.attr("ry"));
-                elt.data("curr_rx", elt.attr("rx"));
-                elt.data("curr_ry", elt.attr("ry"));
-            }
-            else if (elt.data("type") == "rect") {
-                elt.data("currx", elt.attr("x"));
-                elt.data("curry", elt.attr("y"));
-            }
-
-            var ox = origposition.x;
-            var oy = origposition.y;
-            var ow = origposition.w;
-            var oh = origposition.h;
-
-            var o1x = c1origposition.x;
-            var o1y = c1origposition.y;
-            var o1w = c1origposition.w;
-            var o1h = c1origposition.h;
-
-            var o2x = c2origposition.x;
-            var o2y = c2origposition.y;
-            var o2w = c2origposition.w;
-            var o2h = c2origposition.h;
-
-            var odcx = dcorigposition.x;
-            var odcy = dcorigposition.y;
-            var odcw = dcorigposition.w;
-            var odch = dcorigposition.h;
-
-            var command = TAG.TourAuthoring.Command({
-                execute: function () {
-                    //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
-                    elt.data("currx", bboxx);
-                    elt.data("curry", bboxy);
-                    elt.data("currw", bboxw);
-                    elt.data("currh", bboxh);
-                    elt.data("curr_rx", bboxw / 2.0);
-                    elt.data("curr_ry", bboxh / 2.0);
-                    elt.attr({
-                        cx: bboxx + bboxw / 2.0,
-                        cy: bboxy + bboxh / 2.0,
-                        rx: bboxw / 2.0,
-                        ry: bboxh / 2.0,
-                        x: bboxx,
-                        y: bboxy,
-                        width: bboxw,
-                        height: bboxh,
-                    });
-
-                    C1.data("curr_cx", c1bboxx + c1bboxw / 2.0);
-                    C1.data("curr_cy", c1bboxy + c1bboxh / 2.0);
-                    C1.attr({
-                        cx: c1bboxx + c1bboxw / 2.0,
-                        cy: c1bboxy + c1bboxh / 2.0,
-                        rx: c1bboxw / 2.0,
-                        ry: c1bboxh / 2.0,
-                    });
-                    C2.data("curr_cx", c2bboxx + c2bboxw / 2.0);
-                    C2.data("curr_cy", c2bboxy + c2bboxh / 2.0);
-                    C2.attr({
-                        cx: c2bboxx + c2bboxw / 2.0,
-                        cy: c2bboxy + c2bboxh / 2.0,
-                        rx: c2bboxw / 2.0,
-                        ry: c2bboxh / 2.0,
-                    });
-                    DC.data("curr_cx", dcbboxx + dcbboxw / 2.0);
-                    DC.data("curr_cy", dcbboxy + dcbboxh / 2.0);
-                    DC.attr({
-                        cx: dcbboxx + dcbboxw / 2.0,
-                        cy: dcbboxy + dcbboxh / 2.0,
-                        rx: dcbboxw / 2.0,
-                        ry: dcbboxh / 2.0,
-                    });
-                },
-                unexecute: function () {
-                    //console.log("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
-                    elt.data("currx", ox);
-                    elt.data("curry", oy);
-                    elt.data("currw", ow);
-                    elt.data("currh", oh);
-                    elt.data("curr_rx", ow / 2.0);
-                    elt.data("curr_ry", oh / 2.0);
-                    elt.attr({
-                        cx: ox + ow / 2.0,
-                        cy: oy + oh / 2.0,
-                        rx: ow / 2.0,
-                        ry: oh / 2.0,
-                        x: ox,
-                        y: oy,
-                        width: ow,
-                        height: oh,
-                    });
-
-                    C1.data("curr_cx", o1x + o1w / 2.0);
-                    C1.data("curr_cy", o1y + o1h / 2.0);
-                    C1.attr({
-                        cx: o1x + o1w / 2.0,
-                        cy: o1y + o1h / 2.0,
-                    });
-
-                    C2.data("curr_cx", o2x + o2w / 2.0);
-                    C2.data("curr_cy", o2y + o2h / 2.0);
-                    C2.attr({
-                        cx: o2x + o2w / 2.0,
-                        cy: o2y + o2h / 2.0,
-                    });
-
-                    DC.data("curr_cx", odcx + odcw / 2.0);
-                    DC.data("curr_cy", odcy + odch / 2.0);
-                    DC.attr({
-                        cx: odcx + odcw / 2.0,
-                        cy: odcy + odch / 2.0,
-                    });
-                }
-            });
-            command.execute();
-            inkUndoManager.logCommand(command);
+            dragStopHandler();
         });
+
+        
 
         // define drag functionality for the resizing handle (lower-right);
         // when we resize, keep the panning handle where it is, have the resizing handle follow the mouse,
         // set the shape to be whatever it needs to be to satisfy those constraints
-        C2.drag(function (dx, dy, mousex, mousey) {
-            beenMoved = true;
-            elt.toFront();
-            C1.toFront();
-            C2.toFront();
-            DC.toFront();
+        C2.drag(function (dx, dy, mousex, mousey) { // move
+            var C1X = C1.attr('cx'),
+                C1Y = C1.attr('cy'),
+                C2X = Math.max(origPosition.c2x + dx, C1X + 2*rds + 2),
+                C2Y = Math.max(origPosition.c2y + dy, C1Y + 2*rds + 2);
 
-            var currx = parseInt(C2.data("curr_cx"),10);//x position at the start of drag
-            var curry = parseInt(C2.data("curr_cy"),10);
-            var xpos = currx + dx; //to get new x position, just add dx
-            var ypos = curry + dy;
-            var x0 = C1.attr("cx");
-            var y0 = C1.attr("cy");
-            var handlerad = TAG.TourAuthoring.Constants.inkDragHandleRadius;
-
-            if (xpos - x0 > 2 * handlerad) {
-                C2.attr({ cx: xpos });
-                DC.attr({ cx: xpos });
+            if (isEllipse) {
+                repositionHighlightElt({
+                    xloc: (C1X + C2X)/2,
+                    yloc: (C1Y + C2Y)/2,
+                    xdim: SQRT2/2 * (C2X - C1X - 2),
+                    ydim: SQRT2/2 * (C2Y - C1Y)
+                });
+            } else {
+                repositionHighlightElt({
+                    xloc: C1X,
+                    yloc: C1Y,
+                    xdim: C2X - C1X,
+                    ydim: C2Y - C1Y
+                });
             }
-            if (ypos - y0 > 2 * handlerad) {
-                C2.attr({ cy: ypos });
-            }
-
-            var x1 = this.attr("cx");
-            var y1 = this.attr("cy");
-
-            var oldrx = elt.attr("rx");
-            var CX = x0 + (x1 - x0) / 2.0;
-            var CY = y0 + (y1 - y0) / 2.0;
-            var RADx = (x1 - x0) / 2.0 * Math.sqrt(2);
-            elt.attr({
-                cx: CX,
-                cy: CY,
-                rx: RADx,
-                ry: RADx * Math.sqrt((-(y1 - CY) * (y1 - CY)) / ((x1 - CX) * (x1 - CX) - (RADx) * (RADx))),
-                width: x1 - x0,
-                height: y1 - y0,
-            });
         },
         function (x, y) { //start
-            beenMoved = false;
-            var bbox = elt.getBBox();
-            origposition.x = bbox.x;
-            origposition.y = bbox.y;
-            origposition.w = bbox.width;
-            origposition.h = bbox.height;
-
-            bbox = C1.getBBox();
-            c1origposition.x = bbox.x;
-            c1origposition.y = bbox.y;
-            c1origposition.w = bbox.width;
-            c1origposition.h = bbox.height;
-
-            bbox = C2.getBBox();
-            c2origposition.x = bbox.x;
-            c2origposition.y = bbox.y;
-            c2origposition.w = bbox.width;
-            c2origposition.h = bbox.height;
-
-            bbox = DC.getBBox();
-            dcorigposition.x = bbox.x;
-            dcorigposition.y = bbox.y;
-            dcorigposition.w = bbox.width;
-            dcorigposition.h = bbox.height;
+            dragStartHandler();
         },
         function (x, y) { //stop
-            if (!beenMoved) {
-                return;
-            }
-            var c2bboxx = C2.getBBox().x;
-            var c2bboxy = C2.getBBox().y;
-            var c2bboxw = C2.getBBox().width;
-            var c2bboxh = C2.getBBox().height;
-            C2.data("curr_cx", c2bboxx + c2bboxw / 2.0); //reset data using bounding box coords
-            C2.data("curr_cy", c2bboxy + c2bboxh / 2.0);
-            if (elt.data("type") === "ellipse") {
-                elt.data("currx", elt.attr("cx") - elt.attr("rx"));
-                elt.data("curry", elt.attr("cy") - elt.attr("ry"));
-                elt.data("curr_rx", elt.attr("rx"));
-                elt.data("curr_ry", elt.attr("ry"));
-            }
-            else if (elt.data("type") === "rect") {
-                elt.data("currx", elt.attr("x"));
-                elt.data("curry", elt.attr("y"));
-                elt.data("currw", elt.attr("width"));
-                elt.data("currh", elt.attr("height"));
-            }
-
-            var bboxx = elt.getBBox().x;
-            var bboxy = elt.getBBox().y;
-            var bboxw = elt.getBBox().width;
-            var bboxh = elt.getBBox().height;
-
-            var c1bboxx = C1.getBBox().x;
-            var c1bboxy = C1.getBBox().y;
-            var c1bboxw = C1.getBBox().width;
-            var c1bboxh = C1.getBBox().height;
-
-            var dcbboxx = DC.getBBox().x;
-            var dcbboxy = DC.getBBox().y;
-            var dcbboxw = DC.getBBox().width;
-            var dcbboxh = DC.getBBox().height;
-
-            var ox = origposition.x;
-            var oy = origposition.y;
-            var ow = origposition.w;
-            var oh = origposition.h;
-
-            var o1x = c1origposition.x;
-            var o1y = c1origposition.y;
-            var o1w = c1origposition.w;
-            var o1h = c1origposition.h;
-
-            var o2x = c2origposition.x;
-            var o2y = c2origposition.y;
-            var o2w = c2origposition.w;
-            var o2h = c2origposition.h;
-
-            var odcx = dcorigposition.x;
-            var odcy = dcorigposition.y;
-            var odcw = dcorigposition.w;
-            var odch = dcorigposition.h;
-
-            // log command
-            var command = TAG.TourAuthoring.Command({
-                execute: function () {
-                    //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
-                    elt.data("currx", bboxx);
-                    elt.data("curry", bboxy);
-                    elt.data("currw", bboxw);
-                    elt.data("currh", bboxh);
-                    elt.data("curr_rx", bboxw / 2.0);
-                    elt.data("curr_ry", bboxh / 2.0);
-                    elt.attr({
-                        cx: bboxx + bboxw / 2.0,
-                        cy: bboxy + bboxh / 2.0,
-                        rx: bboxw / 2.0,
-                        ry: bboxh / 2.0,
-                        x: bboxx,
-                        y: bboxy,
-                        width: bboxw,
-                        height: bboxh,
-                    });
-
-                    C1.data("curr_cx", c1bboxx + c1bboxw / 2.0);
-                    C1.data("curr_cy", c1bboxy + c1bboxh / 2.0);
-                    C1.attr({
-                        cx: c1bboxx + c1bboxw / 2.0,
-                        cy: c1bboxy + c1bboxh / 2.0,
-                        rx: c1bboxw / 2.0,
-                        ry: c1bboxh / 2.0,
-                    });
-                    C2.data("curr_cx", c2bboxx + c2bboxw / 2.0);
-                    C2.data("curr_cy", c2bboxy + c2bboxh / 2.0);
-                    C2.attr({
-                        cx: c2bboxx + c2bboxw / 2.0,
-                        cy: c2bboxy + c2bboxh / 2.0,
-                        rx: c2bboxw / 2.0,
-                        ry: c2bboxh / 2.0,
-                    });
-                    DC.data("curr_cx", dcbboxx + dcbboxw / 2.0);
-                    DC.data("curr_cy", dcbboxy + dcbboxh / 2.0);
-                    DC.attr({
-                        cx: dcbboxx + dcbboxw / 2.0,
-                        cy: dcbboxy + dcbboxh / 2.0,
-                        rx: dcbboxw / 2.0,
-                        ry: dcbboxh / 2.0,
-                    });
-                },
-                unexecute: function () {
-                    //console.log("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
-                    elt.data("currx", ox);
-                    elt.data("curry", oy);
-                    elt.data("currw", ow);
-                    elt.data("currh", oh);
-                    elt.data("curr_rx", ow / 2.0);
-                    elt.data("curr_ry", oh / 2.0);
-                    elt.attr({
-                        cx: ox + ow / 2.0,
-                        cy: oy + oh / 2.0,
-                        rx: ow / 2.0,
-                        ry: oh / 2.0,
-                        x: ox,
-                        y: oy,
-                        width: ow,
-                        height: oh,
-                    });
-
-                    C1.data("curr_cx", o1x + o1w / 2.0);
-                    C1.data("curr_cy", o1y + o1h / 2.0);
-                    C1.attr({
-                        cx: o1x + o1w / 2.0,
-                        cy: o1y + o1h / 2.0,
-                    });
-
-                    C2.data("curr_cx", o2x + o2w / 2.0);
-                    C2.data("curr_cy", o2y + o2h / 2.0);
-                    C2.attr({
-                        cx: o2x + o2w / 2.0,
-                        cy: o2y + o2h / 2.0,
-                    });
-
-                    DC.data("curr_cx", odcx + odcw / 2.0);
-                    DC.data("curr_cy", odcy + odch / 2.0);
-                    DC.attr({
-                        cx: odcx + odcw / 2.0,
-                        cy: odcy + odch / 2.0,
-                    });
-                }
-            });
-            command.execute();
-            inkUndoManager.logCommand(command);
+            dragStopHandler();
         });
 
-        //define drag functionality for the shape itself (panning)
+        // define drag functionality for the shape itself (panning)
         elt.drag(function (dx, dy, mousex, mousey) { // move
-            beenMoved = true;
-            this.toFront();
-            C1.toFront();
-            C2.toFront();
-            DC.toFront();
-            var halfWid = (origposition.w + strokeWidth) / 2;
-            var halfHei = (origposition.h + strokeWidth) / 2;
-            var circleRadius = C1.attr("rx");
-            if (c2origposition.x + strokeWidth + circleRadius + dx <= halfWid) {
-                dx = halfWid - c2origposition.x - circleRadius;
-            }
-            if (c2origposition.y + circleRadius + strokeWidth + dy <= halfHei) {
-                dy = halfWid - c2origposition.y - circleRadius;
-            }
-            if (c1origposition.x + circleRadius + dx + halfWid >= canvwidth) {
-                dx = canvwidth - halfWid - c1origposition.x - circleRadius;
-            }
-            if (c1origposition.y + circleRadius + dy + halfHei >= canvheight) {
-                dy = canvheight - c1origposition.y - circleRadius - halfHei;
-            }
-
-            var c1currx = parseInt(C1.data("curr_cx"),10);
-            var c1curry = parseInt(C1.data("curr_cy"),10);
-            var xpos = c1currx + dx;
-            var ypos = c1curry + dy;
-            C1.attr({
-                cx: xpos,
-                cy: ypos,
-            });
-
-            var c2currx = parseInt(C2.data("curr_cx"),10);
-            var c2curry = parseInt(C2.data("curr_cy"),10);
-            xpos = c2currx + dx;
-            ypos = c2curry + dy;
-            C2.attr({
-                cx: xpos,
-                cy: ypos,
-            });
-
-            var dccurrx = parseInt(DC.data("curr_cx"), 10);
-            var dccurry = parseInt(DC.data("curr_cy"), 10);
-            xpos = dccurrx + dx;
-            ypos = dccurry + dy;
-            DC.attr({
-                cx: xpos,
-                cy: ypos,
-            });
-
-            var eltcurrx, eltcurry;
-            if (elt.data("type") == "ellipse") {
-                eltcurrx = parseInt(this.data("currx"),10) + this.attr("rx");
-                eltcurry = parseInt(this.data("curry"),10) + this.attr("ry");
-            }
-            else if (elt.data("type") == "rect") {
-                eltcurrx = parseInt(this.data("currx"),10);
-                eltcurry = parseInt(this.data("curry"),10);
-            }
-            xpos = eltcurrx + dx;
-            ypos = eltcurry + dy;
-            this.attr({
-                x: xpos,
-                y: ypos,
-                cx: xpos,
-                cy: ypos,
+            repositionHighlightElt({
+                xloc: origPosition.xloc + dx,
+                yloc: origPosition.yloc + dy,
+                xdim: origPosition.xdim,
+                ydim: origPosition.ydim
             });
         },
         function (x, y) { // start
-            beenMoved = false;
-            var bbox = elt.getBBox();
-            origposition.x = bbox.x;
-            origposition.y = bbox.y;
-            origposition.w = bbox.width;
-            origposition.h = bbox.height;
-
-            bbox = C1.getBBox();
-            c1origposition.x = bbox.x;
-            c1origposition.y = bbox.y;
-            c1origposition.w = bbox.width;
-            c1origposition.h = bbox.height;
-
-            bbox = C2.getBBox();
-            c2origposition.x = bbox.x;
-            c2origposition.y = bbox.y;
-            c2origposition.w = bbox.width;
-            c2origposition.h = bbox.height;
-
-            bbox = DC.getBBox();
-            dcorigposition.x = bbox.x;
-            dcorigposition.y = bbox.y;
-            dcorigposition.w = bbox.width;
-            dcorigposition.h = bbox.height;
+            dragStartHandler();
         },
         function (x, y) { //stop
-            if (!beenMoved) {
-                return;
-            }
-            var c1bboxx = C1.getBBox().x;
-            var c1bboxy = C1.getBBox().y;
-            var c1bboxw = C1.getBBox().width;
-            var c1bboxh = C1.getBBox().height;
-            C1.data("curr_cx", c1bboxx + c1bboxw / 2.0); //reset data using bounding box coords
-            C1.data("curr_cy", c1bboxy + c1bboxh / 2.0);
-
-            var c2bboxx = C2.getBBox().x;
-            var c2bboxy = C2.getBBox().y;
-            var c2bboxw = C2.getBBox().width;
-            var c2bboxh = C2.getBBox().height;
-            C2.data("curr_cx", c2bboxx + c2bboxw / 2.0); //reset data using bounding box coords
-            C2.data("curr_cy", c2bboxy + c2bboxh / 2.0);
-
-            if (elt.data("type") == "ellipse") {
-                elt.data("currx", elt.attr("cx") - elt.attr("rx"));
-                elt.data("curry", elt.attr("cy") - elt.attr("ry"));
-                elt.data("curr_rx", elt.attr("rx"));
-                elt.data("curr_ry", elt.attr("ry"));
-            }
-            else if (elt.data("type") == "rect") {
-                elt.data("currx", elt.attr("x"));
-                elt.data("curry", elt.attr("y"));
-            }
-
-            var bboxx = elt.getBBox().x;
-            var bboxy = elt.getBBox().y;
-            var bboxw = elt.getBBox().width;
-            var bboxh = elt.getBBox().height;
-
-            var dcbboxx = DC.getBBox().x;
-            var dcbboxy = DC.getBBox().y;
-            var dcbboxw = DC.getBBox().width;
-            var dcbboxh = DC.getBBox().height;
-
-            var ox = origposition.x;
-            var oy = origposition.y;
-            var ow = origposition.w;
-            var oh = origposition.h;
-
-            var o1x = c1origposition.x;
-            var o1y = c1origposition.y;
-            var o1w = c1origposition.w;
-            var o1h = c1origposition.h;
-
-            var o2x = c2origposition.x;
-            var o2y = c2origposition.y;
-            var o2w = c2origposition.w;
-            var o2h = c2origposition.h;
-
-            var odcx = dcorigposition.x;
-            var odcy = dcorigposition.y;
-            var odcw = dcorigposition.w;
-            var odch = dcorigposition.h;
-
-            // log command
-            var command = TAG.TourAuthoring.Command({
-                execute: function () {
-                    //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
-                    elt.data("currx", bboxx);
-                    elt.data("curry", bboxy);
-                    elt.data("currw", bboxw);
-                    elt.data("currh", bboxh);
-                    elt.data("curr_rx", bboxw / 2.0);
-                    elt.data("curr_ry", bboxh / 2.0);
-                    elt.attr({
-                        cx: bboxx + bboxw / 2.0,
-                        cy: bboxy + bboxh / 2.0,
-                        rx: bboxw / 2.0,
-                        ry: bboxh / 2.0,
-                        x: bboxx,
-                        y: bboxy,
-                        width: bboxw,
-                        height: bboxh,
-                    });
-
-                    C1.data("curr_cx", c1bboxx + c1bboxw / 2.0);
-                    C1.data("curr_cy", c1bboxy + c1bboxh / 2.0);
-                    C1.attr({
-                        cx: c1bboxx + c1bboxw / 2.0,
-                        cy: c1bboxy + c1bboxh / 2.0,
-                        rx: c1bboxw / 2.0,
-                        ry: c1bboxh / 2.0,
-                    });
-                    C2.data("curr_cx", c2bboxx + c2bboxw / 2.0);
-                    C2.data("curr_cy", c2bboxy + c2bboxh / 2.0);
-                    C2.attr({
-                        cx: c2bboxx + c2bboxw / 2.0,
-                        cy: c2bboxy + c2bboxh / 2.0,
-                        rx: c2bboxw / 2.0,
-                        ry: c2bboxh / 2.0,
-                    });
-                    DC.data("curr_cx", dcbboxx + dcbboxw / 2.0);
-                    DC.data("curr_cy", dcbboxy + dcbboxh / 2.0);
-                    DC.attr({
-                        cx: dcbboxx + dcbboxw / 2.0,
-                        cy: dcbboxy + dcbboxh / 2.0,
-                        rx: dcbboxw / 2.0,
-                        ry: dcbboxh / 2.0,
-                    });
-                },
-                unexecute: function () {
-                    //console.log("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
-                    elt.data("currx", ox);
-                    elt.data("curry", oy);
-                    elt.data("currw", ow);
-                    elt.data("currh", oh);
-                    elt.data("curr_rx", ow / 2.0);
-                    elt.data("curr_ry", oh / 2.0);
-
-                    elt.attr({
-                        cx: ox + ow / 2.0,
-                        cy: oy + oh / 2.0,
-                        rx: ow / 2.0,
-                        ry: oh / 2.0,
-                        x: ox,
-                        y: oy,
-                        width: ow,
-                        height: oh,
-                    });
-
-                    C1.data("curr_cx", o1x + o1w / 2.0);
-                    C1.data("curr_cy", o1y + o1h / 2.0);
-                    C1.attr({
-                        cx: o1x + o1w / 2.0,
-                        cy: o1y + o1h / 2.0,
-                    });
-
-                    C2.data("curr_cx", o2x + o2w / 2.0);
-                    C2.data("curr_cy", o2y + o2h / 2.0);
-                    C2.attr({
-                        cx: o2x + o2w / 2.0,
-                        cy: o2y + o2h / 2.0,
-                    });
-
-                    DC.data("curr_cx", odcx + odcw / 2.0);
-                    DC.data("curr_cy", odcy + odch / 2.0);
-                    DC.attr({
-                        cx: odcx + odcw / 2.0,
-                        cy: odcy + odch / 2.0,
-                    });
-                }
-            });
-            command.execute();
-            inkUndoManager.logCommand(command);
+            dragStopHandler();
         });
 
-        //shape deletion functionality
-        DC.mousedown(function () {
+        // shape deletion functionality
+        DC.on('click', function () {
             var dccommand = TAG.TourAuthoring.Command({
                 execute: function () {
                     elt.hide();
@@ -1077,329 +445,255 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             inkUndoManager.logCommand(dccommand);
         });
     }
-    that.add_attributes = add_attributes;
-    ///
 
+    /**
+     * Return the ink undo manager. Used in ComponenControls
+     * @method getInkUndoManager
+     * @return {TAG.TourAuthoring.UndoManager}     the ink undo manager
+     */
     function getInkUndoManager() {
         return inkUndoManager;
     }
-    that.getInkUndoManager = getInkUndoManager;
-
-    ///
 
     /**
      * Add an ellipse to the Raphael canvas. Called by the "Add Ellipse" button in isolate/block ink mode
-     * @param cx, cy    the coordinates of the center of the ellipse
-     * @param rx, ry    the radii of the ellipse
+     * @method addEllipse
+     * @param {Number} cx       center x coord of ellipse
+     * @param {Number} cy       center y coord of ellipse
+     * @param {Number} rx       x radius of ellipse
+     * @param {Number} ry       y radius of ellipse
      */
-    function add_ellipse(cx, cy, rx, ry) {
+    function addEllipse(cx, cy, rx, ry) {
         var ellipse;
-        set_mode(TAG.TourAuthoring.InkMode.shapes);
-        //console.log("setting cx and cy for the ellipse");
-        if (cx === undefined)
+        setMode(TAG.TourAuthoring.InkMode.shapes);
+        
+        if (!cx && cx !== 0) {
             cx = 100 + Math.random() * 10;
-        if (cy === undefined)
+        }
+        if (!cy && cy !== 0) {
             cy = 100 + Math.random() * 10;
-        if (rx === undefined)
+        }
+        if (!rx && rx !== 0) {
             rx = 50;
-        if (ry === undefined)
+        }
+        if (!ry && ry !== 0) {
             ry = 50;
+        }
+
         ellipse = paper.ellipse(cx, cy, rx, ry); // draw to the canvas
-        ellipse.data("currx", ellipse.getBBox().x); // add data to be used by add_attributes
-        ellipse.data("curry", ellipse.getBBox().y);
-        ellipse.data("curr_rx", rx);
-        ellipse.data("curr_ry", ry);
+        ellipse.data("curr_xloc", cx); // add data to be used by addHighlightShapeAttributes
+        ellipse.data("curr_yloc", cy);
+        ellipse.data("curr_xdim", rx);
+        ellipse.data("curr_ydim", ry);
         ellipse.data("type", "ellipse");
-        add_attributes(ellipse);
+        ellipse.data("visible", "yes");
+        addHighlightShapeAttributes(ellipse);
     }
-    that.add_ellipse = add_ellipse;
-
-    ///**
-    // * DEPRECATED
-    // * Used to give style and drag functionality to old marquees (such as is currently in the Final
-    // * Garibaldi Demo). Once all old marquees have been deleted from tours, this method can be tossed.
-    // */
-    //function add_marq_attributes(marq, marqFillColor, marqFillOpacity) {
-    //    /**
-    //        * analogous to add_attributes(...), but for marquees. The difference is that a marquee
-    //        * is a collection of five rectangles, and the center rectangle is the only one that gets
-    //        * the drag handler, while the others have the color attributes.
-    //        */
-    //    var elt = marq.rc;
-    //    var gl;
-    //    var resize = 0; //if 1, we are in zoom mode rather than pan mode
-    //    var noglow = 0; //if 1, glowing is disabled
-    //    var origmousex;
-    //    var origmousey;
-    //    var w = canvElt.width();
-    //    var h = canvElt.height();
-    //    //console.log("w=" + w + ", h=" + h);
-    //    if (marqFillColor === undefined)
-    //        marqFillColor = marqueeFillColor;////////FIX "#" + document.getElementById("marq_color").value;
-    //    if (marqFillOpacity === undefined)
-    //        marqFillOpacity = marqueeFillOpacity;/////FIX document.getElementById("marq_opacity").value;
-
-    //    elt.mouseover(function () {
-    //        if (!noglow && (mode == 3)) {
-    //            gl = elt.glow({ "width": 10, "color": "#33ff00", "opacity": 0.8 });
-    //        }
-    //    });
-    //    elt.mouseout(function () {
-    //        if (mode == 3)
-    //            gl.remove();
-    //    });
-    //    elt.attr({
-    //        "stroke-width": 0,
-    //        "stroke": "#222222",
-    //        "fill": "#ffffff",
-    //        "fill-opacity": 0
-    //    });
-    //    elt.data("surr-fill", marqFillColor);
-    //    elt.data("surr-opac", marqFillOpacity);
-    //    var mset = paper.set();
-    //    mset.push(marq.rn, marq.re, marq.rs, marq.rw);
-    //    mset.attr({
-    //        "stroke-width": 0,
-    //        "stroke": "#222222",
-    //        "fill": marqFillColor,
-    //        "fill-opacity": marqFillOpacity
-    //    });
-
-    //    //drag(move, start, stop,...)
-    //    elt.drag(function (dx, dy, mousex, mousey) {
-    //        //onmove
-    //        if (mode == 3) {
-    //            this.toFront();
-    //            var bbox = this.getBBox();
-    //            if (!resize) {
-    //                //drag an marquee -- need to update all relevant rectangles
-    //                var currx = parseInt(this.data("currx"),10);//x position at the start of drag
-    //                var curry = parseInt(this.data("curry"),10);
-    //                var xpos = currx + dx; //to get new x position, just add dx
-    //                var ypos = curry + dy;
-    //                this.attr({
-    //                    x: xpos,
-    //                    y: ypos
-    //                });
-    //                marq.rn.attr({
-    //                    height: ypos
-    //                });
-    //                marq.re.attr({
-    //                    x: xpos + bbox.width,
-    //                    y: ypos,
-    //                    width: w - (xpos + bbox.width),
-    //                    height: bbox.height
-    //                });
-    //                marq.rs.attr({
-    //                    y: ypos + bbox.height,
-    //                    height: h - (ypos + bbox.height)
-    //                });
-    //                marq.rw.attr({
-    //                    y: ypos,
-    //                    width: xpos,
-    //                    height: bbox.height
-    //                });
-
-    //            }
-    //            else {
-    //                //resize a marquee -- need to update all relevant rectangles
-    //                this.attr({
-    //                    width: bbox.width + mousex - origmousex,
-    //                    height: bbox.height + mousey - origmousey
-    //                });
-    //                marq.rs.attr({
-    //                    y: bbox.y + bbox.height + mousey - origmousey,
-    //                    height: h - (bbox.y + bbox.height + mousey - origmousey)
-    //                });
-    //                marq.re.attr({
-    //                    x: bbox.x + bbox.width + mousex - origmousex,
-    //                    width: w - (bbox.x + bbox.width + mousex - origmousex),
-    //                    height: bbox.height + mousey - origmousey
-    //                });
-    //                marq.rw.attr({
-    //                    height: bbox.height + mousey - origmousey
-    //                });
-    //            }
-    //            //console.log("this.attr.x = " + this.attr("x") + ", y = " + this.attr("y"));
-    //            //console.log(update_datastring());
-    //            origmousex = mousex;
-    //            origmousey = mousey;
-    //        }
-    //    }, function (x, y) {
-    //        //onstart
-    //        if (mode == 3) {
-    //            origmousex = x;
-    //            origmousey = y;
-    //            var bbox = this.getBBox();
-    //            //console.log("diff = " + (x - bbox.x));
-    //            var offset_x = parseFloat(canvElt.css("left"));
-    //            var offset_y = parseFloat(canvElt.css("top"));
-    //            if ((arguments[2].offsetX > (bbox.x + bbox.width * 0.5)) && (arguments[2].offsetY > (bbox.y + bbox.height * 0.5))) {
-    //                resize = 1;
-    //            }
-    //            gl.remove();
-    //            noglow = 1;
-    //            this.animate({ opacity: 0.25 }, 500, "<>");
-    //        }
-    //    }, function () {
-    //        //onstop
-    //        if (mode == 3) {
-    //            this.data("currx", this.getBBox().x); //reset data using bounding box coords
-    //            this.data("curry", this.getBBox().y);
-    //            marq.re.data("currx", this.getBBox().x + this.getBBox().width);
-    //            marq.rs.data("curry", this.getBBox().y + this.getBBox().height);
-    //            resize = 0;
-    //            this.animate({ opacity: 1 }, 500, "<>");
-    //            noglow = 0;
-    //        }
-    //    });
-    //}
-    //that.add_marq_attributes = add_marq_attributes;
 
     /**
      * Add a rectangle to the Raphael canvas. Called by the "Add Rectangle" button in isolate/block ink mode
-     * @param x, y    the coordinates of the top left corner of the rectangle
+     * @method addRectangle
+     * @param {Number} x     top left x
+     * @param {Number} y     top left y
+     * @param {Number} w     width
+     * @param {Number} h     height
      */
-    function add_rectangle(x, y) {
+    function addRectangle(x, y, w, h) {
         var rect;
-        set_mode(TAG.TourAuthoring.InkMode.shapes);
-        if (x === undefined)
-            x = 200 + Math.random() * 10;
-        if (y === undefined)
-            y = 200 + Math.random() * 10;
-        rect = paper.rect(x, y, 100, 100); // draw to the Raphael canvas
-        rect.data("currx", x); // set data to be used by add_attributes
-        rect.data("curry", y);
-        rect.data("currw", 100);
-        rect.data("currh", 100);
-        rect.data("type", "rect");
-        add_attributes(rect);
-    }
-    that.add_rectangle = add_rectangle;
+        setMode(TAG.TourAuthoring.InkMode.shapes);
 
-    
+        if (!x && x !== 0) {
+            x = 200 + Math.random() * 10;
+        }
+        if (!y && y !== 0) {
+            y = 200 + Math.random() * 10;
+        }
+        if (!w && w !== 0) {
+            w = 100;
+        }
+        if (!h && h !== 0) {
+            h = 100;
+        }
+
+        rect = paper.rect(x, y, 100, 100); // draw to the Raphael canvas
+        rect.data("curr_xloc", x); // set data to be used by addHighlightShapeAttributes
+        rect.data("curr_yloc", y);
+        rect.data("curr_xdim", 100);
+        rect.data("curr_ydim", 100);
+        rect.data("type", "rect");
+        rect.data("visible", "yes");
+        addHighlightShapeAttributes(rect);
+    }
+
+    /**
+     * Return text svg element
+     * @method getSVGText
+     * @return {Raphael text elt}     text svg element
+     */
     function getSVGText(){
         return svgText;
     }
-    that.getSVGText = getSVGText;
 
-    /** ((DAN Z))
-     * Add a text box (a textarea html element) for creating text inks.
-     * @param x, y     coordinates of the text box (absolute)
-     * @param str      any text that should be loaded into the text box (i.e. for editing inks)
+    /**
+     * Add an svg text element to the canvas
+     * @param {Number} x     absolute x coord of text box
+     * @param {Number} y     absolute y coord of text box
+     * @param {String} str   the text string to render
+     * @param {Number} size  font size (if not specified, uses value of fontSize)
      */
-    function add_text_box(x, y, w, h, str, textmag, size) {
-        x = x || 75;
-        y = y || 75;
+    function addTextBox(x, y, str, size) {
+        if (!x && x !== 0) {
+            x = 75;
+        }
+        if (!y && y !== 0) {
+            y = 75;
+        }
+
         str = str || "Your text here";
 
+        set_mode(TAG.TourAuthoring.InkMode.text);
+
         svgText = paper.text(x, y, str);
-        svgText.data({
-            type: "text",
-            str: str,
-        });
+
         svgText.attr({
             'alignment-baseline': 'before-edge',
             "text-anchor": "start",
-        });
-        set_mode(TAG.TourAuthoring.InkMode.text);
-
-        //// style the textbox
-        //textbox.attr('wrap', 'off'); //force people to do their own line breaks
-        svgText.attr({
             'font-family': fontFamily,
-            'font-size': fontSize,
+            'font-size': size ? size : fontSize,
             'fill': fontColor,
+            text: str
         });
-        svgText.attr("text", str);
-        svgText.data({
-            'font': fontFamily,
-            'fontsize': fontSize,
-            'color': fontColor,
+
+        svgText.data({ // TODO DOC is this data really necessary?
+            type: 'text',
+            str: str,
+            font: fontFamily,
+            fontsize: size ? size : fontSize,
+            color: fontColor,
         });
-        if (textmag) {
-            var newFontSize;
-            if (size) {
-                newFontSize = size;
-            } else {
-                newFontSize = rel_dims(svgText.data("fontsize"), canvElt.height()) * canvElt.height();
-            }
-            svgText.attr({
-                'font-size': newFontSize,
-            });
-            svgText.data({
-                'fontsize': newFontSize,
-            });
-        }
+
         setTextAttributes(svgText);
-
-        //// set up undo/redo commands for typing
-        //textbox.on("keyup", function (evt) { //use onpropertychange
-        //    var code = evt.keyCode;
-        //    if (code != 37 && code != 38 && code != 39 && code != 40) { // exclude arrow keys
-        //        var currText = $("#" + textboxid).attr('value');
-        //        var oldText = lastText;
-        //        var command = TAG.TourAuthoring.Command({
-        //            execute: function () {
-        //                $("#" + textboxid).attr('value', currText);
-        //            },
-        //            unexecute: function () {
-        //                $("#" + textboxid).attr('value', oldText);
-        //            }
-        //        });
-        //        inkUndoManager.logCommand(command);
-        //        lastText = $("#" + textboxid).attr("value");
-        //    }
-        //});
-
-        //setTextAttributes($("#" + textboxid)); // set up drag functionality and drag handlers
-
-        //textbox.scrollTop(0);
-        //textbox.scrollLeft(0);
     }
-    that.add_text_box = add_text_box;
 
-    /** ((BEN L))
-     * Pans and resizes all inks to move with the artwork. Uses the initial keyframe of the artwork (converted here to absolute coordinates) and the
-     * inputted dimensions to compute deltas and scale factors. Once we have these, first pan to (0,0), then scale, then pan to pos+deltas.
-     * @param dims   the current dimensions of our artwork in absolute coordinates
+    ///**
+    // * Pans and resizes all inks to move with the artwork. Uses the initial keyframe of the artwork (converted here to absolute coordinates) and the
+    // * inputted dimensions to compute deltas and scale factors. Once we have these, first pan to (0,0), then scale, then pan to pos+deltas.
+    // * @param dims   the current dimensions of our artwork in absolute coordinates
+    // */
+    //function adjustViewBox (dims) {
+    //    var new_px = dims.x,
+    //        new_py = dims.y,
+    //        new_pw = dims.width,
+    //        new_ph = dims.height,
+    //        real_kfw, real_kfh, real_kfx, real_kfy;
+    //    // convert weird deeepzoom keyframe coordinates to absolute coordinates
+    //    real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
+    //    real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
+    //    real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
+    //    real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -kfy * real_kfh)
+        
+    //    // if the new position is not trivially different from the old position, pan and zoom
+    //    if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
+    //        var lambda_w = origPaperW / real_kfw;
+    //        var lambda_h = origPaperH / real_kfh;
+    //        var nvw = new_pw * lambda_w; // nv*: dimensions of the new virtual canvas (where the ink canvas would be if we were panning and zooming it with the artwork)
+    //        var nvh = new_ph * lambda_h;
+    //        var nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
+    //        var nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
+
+    //        var SW = nvw / lastcw; // scale factor in x direction
+    //        oldScale = new_pw / origpw;
+
+    //        if (!transCoords.length || trans_mode === 'block') { // for all ink types except isolates (can't just resize the window for them)
+    //            var newwid = origPaperW / oldScale;
+    //            var newhei = origPaperH / oldScale;
+    //            paper.setViewBox(-nvx / oldScale, -nvy / oldScale, newwid, newhei); // see raphael documentation
+    //        } else {
+    //            var cw = canvElt.width();
+    //            var ch = canvElt.height();
+    //            magX = cw;
+    //            magY = ch;
+    //            panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }); // no need to draw updated ink yet
+    //            resizeObjects(SW, SW); // still no need, since we still have to pan
+    //            panObjects(nvx / origPaperW, nvy / origPaperH, { cw: cw, ch: ch }, true);
+    //        }
+
+    //        // reset coordinates
+    //        lastcx = nvx;
+    //        lastcy = nvy;
+    //        lastcw = nvw;
+    //        lastch = nvh;
+    //        lastpx = new_px;
+    //        lastpy = new_py;
+    //        lastpw = new_pw;
+    //        lastph = new_ph;
+    //    }
+    //}
+    
+
+    /** KEEPasdfasdfasfasdf
+     * Pans and resizes all inks to move with the artwork. Uses the initial keyframe of the artwork
+     * (converted here to absolute coordinates) and the inputted dimensions to compute deltas and scale
+     * factors. Once we have these, first pan to (0,0), then scale, then pan to position + deltas.
+     *
+     * In most cases, this does "panning" and "resizing" by using the Raphael Paper.setViewBox method
+     * (see http://raphaeljs.com/reference.html#Paper.setViewBox), which resets the bounds of the virtual
+     * view box of the Raphael paper. For example, by making the virtual view box "smaller," all of the inks
+     * drawn on it appear to zoom in.
+     *
+     * Currently, isolate inks are created by filling the space between an outer path (around the whole viewport)
+     * and inner paths that define the shapes in the isolate. If you were to use Paper.setViewBox on this, you
+     * could zoom in to see outside of the outer path, which was previously outside of the viewport. For isolate
+     * inks, we actually recalculate the points in the path to pan and zoom. This takes longer, but it allows us
+     * to redraw our outer path around the whole viewport. This is very open to improvement.
+     *
+     * Also, it is nice to be able to force this explicit recomputation of points when loading inks in the "edit ink"
+     * functionality. Inks are positioned relative to an initial artwork keyframe. When we edit and save an ink, that
+     * initial keyframe is updated, so we should actually recompute the points in the ink to be relative to this
+     * new initial keyframe (rather than just resetting the view box).
+     *
+     * @param {Object} dims          the current dimensions of our artwork in absolute coordinates (x, y, width, height)
+     * @param {Boolean} hardResize   forces explicit recomputation of points in/position of our ink
      */
-    function adjustViewBox (dims, no_opac_check) {
+    function adjustViewBox(dims, hardResize) {
         var new_px = dims.x,
             new_py = dims.y,
             new_pw = dims.width,
             new_ph = dims.height,
-            real_kfw, real_kfh, real_kfx, real_kfy;
+            real_kfw, real_kfh, real_kfx, real_kfy,
+            lambda_w, lambda_h, nvw, nvh, nvx, nvy,
+            SW, newwid, newhei, cw, ch;
+
         // convert weird deeepzoom keyframe coordinates to absolute coordinates
         real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
         real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
         real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
-        real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -kfy * real_kfh)
-        
+        real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -initKeyframe.y * real_kfh)
+
         // if the new position is not trivially different from the old position, pan and zoom
         if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
-            //var eid_elt = $("[ES_ID='" + expId + "']");
-            var lambda_w = origPaperW / real_kfw;
-            var lambda_h = origPaperH / real_kfh;
-            var nvw = new_pw * lambda_w; // nv*: dimensions of the new virtual canvas (where the ink canvas would be if we were panning and zooming it with the artwork)
-            var nvh = new_ph * lambda_h;
-            var nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
-            var nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
+            //var eid_elt = $("[ES_ID='" + EID + "']");
+            lambda_w = origPaperW / real_kfw;
+            lambda_h = origPaperH / real_kfh;
+            nvw = new_pw * lambda_w; // nv*: dimensions of the new virtual canvas (where the ink canvas would be if we were panning and zooming it with the artwork)
+            nvh = new_ph * lambda_h;
+            nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
+            nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
 
-            var SW = nvw / lastcw; // scale factor in x direction
+            SW = nvw / lastcw; // scale factor in x direction
             // var SH = nvh / lastch; // scale factor in y direction (in case we ever have non-aspect-ratio-preserving scaling)
 
             oldScale = new_pw / origpw;
             // oldScaleH = new_ph / origph; // in case we ever have non-aspect-ratio-preserving scaling
 
-            if (!transCoords.length || trans_mode === 'block') { // for all ink types except isolates (can't just resize the window for them)
-                var newwid = origPaperW / oldScale;
-                var newhei = origPaperH / oldScale;
+            if ((!transCoords.length || trans_mode === 'block') && !hardResize) { // for all ink types except isolates (can't just resize the window for them)
+                newwid = origPaperW / oldScale;
+                newhei = origPaperH / oldScale;
                 paper.setViewBox(-nvx / oldScale, -nvy / oldScale, newwid, newhei); // see raphael documentation
             }
             else {
-                var cw = canvElt.width();
-                var ch = canvElt.height();
+                cw = domelement.width();
+                ch = domelement.height();
                 magX = cw;
                 magY = ch;
                 panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }, 0); // no need to draw updated ink yet
@@ -1418,93 +712,84 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             lastph = new_ph;
         }
     }
-    that.adjustViewBox = adjustViewBox;
 
-    /** ((BEN L))
-     * Pans and resizes the ink canvas to move with the artwork. Uses the initial keyframe of the artwork (converted here to absolute coordinates) and the
-     * inputted dimensions to compute deltas and scale factors. Once we have these, first pan to (0,0), then scale, then pan to pos+deltas.
-     * @param dims   the current dimensions of our artwork in absolute coordinates
-     */
-    function adjustViewBoxDiv(dims, no_opac_check) {
-        var new_px = dims.x,
-            new_py = dims.y,
-            new_pw = dims.width,
-            new_ph = dims.height,
-            real_kfw, real_kfh, real_kfx, real_kfy;
-        try {
-            // convert weird deeepzoom keyframe coordinates to absolute coordinates
-            real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
-            real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
-            real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
-            real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -kfy * real_kfh)
-        }
-        catch (err) {
-            console.log("ERROR in adjustViewBox: " + err);
-            real_kfx = origpx;
-            real_kfy = origpy;
-            real_kfw = origpw;
-            real_kfh = origph;
-        }
+    ///** ((BEN L))
+    // * Pans and resizes the ink canvas to move with the artwork. Uses the initial keyframe of the artwork (converted here to absolute coordinates) and the
+    // * inputted dimensions to compute deltas and scale factors. Once we have these, first pan to (0,0), then scale, then pan to pos+deltas.
+    // * @param dims   the current dimensions of our artwork in absolute coordinates
+    // */
+    //function adjustViewBoxDiv(dims, no_opac_check) {
+    //    var new_px = dims.x,
+    //        new_py = dims.y,
+    //        new_pw = dims.width,
+    //        new_ph = dims.height,
+    //        real_kfw, real_kfh, real_kfx, real_kfy;
+    //    try {
+    //        // convert weird deeepzoom keyframe coordinates to absolute coordinates
+    //        real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
+    //        real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
+    //        real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
+    //        real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -kfy * real_kfh)
+    //    }
+    //    catch (err) {
+    //        console.log("ERROR in adjustViewBox: " + err);
+    //        real_kfx = origpx;
+    //        real_kfy = origpy;
+    //        real_kfw = origpw;
+    //        real_kfh = origph;
+    //    }
 
-        // oldOpac tracks when the ink is actually on screen (the opacity of the ink track is 0 when the playhead is not in a display)
-        if (oldOpac === 0) {
-            self.origpx = new_px;
-            self.origpy = new_py;
-            self.origpw = new_pw;
-            self.origph = new_ph;
-        }
+    //    // if the new position is not trivially different from the old position, pan and zoom
+    //    if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
+    //        var eid_elt = $("[ES_ID='" + expId + "']");
+    //        var lambda_w = origPaperW / real_kfw;
+    //        var lambda_h = origPaperH / real_kfh;
+    //        var nvw = new_pw * lambda_w; // new dimensions of the virtual canvas
+    //        var nvh = new_ph * lambda_h;
+    //        var nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
+    //        var nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
 
-        // if the new position is not trivially different from the old position, pan and zoom
-        if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
-            var eid_elt = $("[ES_ID='" + expId + "']");
-            var lambda_w = origPaperW / real_kfw;
-            var lambda_h = origPaperH / real_kfh;
-            var nvw = new_pw * lambda_w; // new dimensions of the virtual canvas
-            var nvh = new_ph * lambda_h;
-            var nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
-            var nvy = (nvh / origPaperH) * (origPaperY - real_kfy) + new_py;
+    //        var SW = nvw / lastcw; // scale factor in x direction
+    //        var SH = nvh / lastch; // scale factor in y direction (in case we ever have non-aspect-ratio-preserving scaling)
 
-            var SW = nvw / lastcw; // scale factor in x direction
-            var SH = nvh / lastch; // scale factor in y direction (in case we ever have non-aspect-ratio-preserving scaling)
+    //        var cw = canvElt.width();
+    //        var ch = canvElt.height();
 
-            var cw = canvElt.width();
-            var ch = canvElt.height();
+    //        // translate to (0,0), scale by (SW,SH), translate to (nvx,nvy)
+    //        // in panning, we divide by the width of the paper because all coordinates are in [0,1]
+    //        panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }, 0); // no need to draw updated ink yet
+    //        resizeObjects(SW, SH); // still no need, since we still have to pan
+    //        panObjects(nvx / origPaperW, nvy / origPaperH, { cw: cw, ch: ch }, 1);//no_opac_check || parseFloat(eid_elt[0].style.opacity));
+    //        //if (true || parseFloat(eid_elt[0].style.opacity)) { // only draw if the ink is on screen or if we're on the initial load
+    //        //    panObjects(nvx / origPaperW, nvy / origPaperH);
+    //        //    console.log("DRAWING");
+    //        //}
+    //        //else {
+    //        //    panObjects(nvx / origPaperW, nvy / origPaperH, 'do not draw');
+    //        //    console.log("NOT DRAWING");
+    //        //}
 
-            // translate to (0,0), scale by (SW,SH), translate to (nvx,nvy)
-            // in panning, we divide by the width of the paper because all coordinates are in [0,1]
-            panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }, 0); // no need to draw updated ink yet
-            resizeObjects(SW, SH); // still no need, since we still have to pan
-            panObjects(nvx / origPaperW, nvy / origPaperH, { cw: cw, ch: ch }, 1);//no_opac_check || parseFloat(eid_elt[0].style.opacity));
-            //if (true || parseFloat(eid_elt[0].style.opacity)) { // only draw if the ink is on screen or if we're on the initial load
-            //    panObjects(nvx / origPaperW, nvy / origPaperH);
-            //    console.log("DRAWING");
-            //}
-            //else {
-            //    panObjects(nvx / origPaperW, nvy / origPaperH, 'do not draw');
-            //    console.log("NOT DRAWING");
-            //}
+    //        // reset coordinates
+    //        lastcx = nvx;
+    //        lastcy = nvy;
+    //        lastcw = nvw;
+    //        lastch = nvh;
+    //        lastpx = new_px;
+    //        lastpy = new_py;
+    //        lastpw = new_pw;
+    //        lastph = new_ph;
 
-            // reset coordinates
-            lastcx = nvx;
-            lastcy = nvy;
-            lastcw = nvw;
-            lastch = nvh;
-            lastpx = new_px;
-            lastpy = new_py;
-            lastpw = new_pw;
-            lastph = new_ph;
-
-            var new_opac;
-            try {
-                new_opac = parseInt(no_opac_check || eid_elt[0].style.opacity,10);
-            }
-            catch (err) {
-                console.log("error in adjustViewBox: " + err);
-            }
-            oldOpac = new_opac;
-        }
-    }
-    that.adjustViewBoxDiv = adjustViewBoxDiv;
+    //        var new_opac;
+    //        try {
+    //            new_opac = parseInt(no_opac_check || eid_elt[0].style.opacity,10);
+    //        }
+    //        catch (err) {
+    //            console.log("error in adjustViewBox: " + err);
+    //        }
+    //        oldOpac = new_opac;
+    //    }
+    //}
+    //that.adjustViewBoxDiv = adjustViewBoxDiv;
 
     /**
      * Convert a string representing a block transparency to one representing an isolate transparency.
@@ -2020,10 +1305,10 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                 case "mrect":
                 case "rect":
                     // rectangle format: [x]73[y]196[w]187[h]201[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                    var x = abs_dims(get_attr(shape2, "x", "f"), cw);
-                    var y = abs_dims(get_attr(shape2, "y", "f"), ch);
-                    var w = abs_dims(get_attr(shape2, "w", "f"), cw);
-                    var h = abs_dims(get_attr(shape2, "h", "f"), ch);
+                    var x = toAbsoluteCoords(get_attr(shape2, "x", "f"));
+                    var y = toAbsoluteCoords(get_attr(shape2, "y", "f"), true);
+                    var w = toAbsoluteCoords(get_attr(shape2, "w", "f"));
+                    var h = toAbsoluteCoords(get_attr(shape2, "h", "f"), true);
                     var R = { "X": x, "Y": y, "w": w, "h": h, "type": "rect" };
                     bounding_shapes += "BOUNDRECT::[x]" + (x / cw) + "[y]" + (y / ch) + "[w]" + (w / cw) + "[h]" + (h / ch) + "[fillc]#000000[fillo]0[strokec]" + get_attr(shape2, "strokec", 's') + "[strokeo]" + get_attr(shape2, "strokeo", 'f') + "[strokew]" + get_attr(shape2, "strokew", 'f') + "[]|";
                     shapes.push(R);
@@ -2032,10 +1317,10 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                 case "mellipse":
                 case "ellipse":
                     // ellipse format: [cx]81[cy]131[rx]40[ry]27[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                    var cx = abs_dims(get_attr(shape2, "cx", "f"), cw); // center x
-                    var cy = abs_dims(get_attr(shape2, "cy", "f"), ch); // center y
-                    var rx = abs_dims(get_attr(shape2, "rx", "f"), cw); // x-radius
-                    var ry = abs_dims(get_attr(shape2, "ry", "f"), ch); // y-radius
+                    var cx = toAbsoluteCoords(get_attr(shape2, "cx", "f")); // center x
+                    var cy = toAbsoluteCoords(get_attr(shape2, "cy", "f"), true); // center y
+                    var rx = toAbsoluteCoords(get_attr(shape2, "rx", "f")); // x-radius
+                    var ry = toAbsoluteCoords(get_attr(shape2, "ry", "f"), true); // y-radius
                     var E = { "cx": cx, "cy": cy, "rx": rx, "ry": ry, "type": "ellipse" };
                     bounding_shapes += "BOUNDELLIPSE::[cx]" + (cx / cw) + "[cy]" + (cy / ch) + "[rx]" + (rx / cw) + "[ry]" + (ry / ch) + "[fillc]#000000[fillo]0[strokec]" + get_attr(shape2, "strokec", 's') + "[strokeo]" + get_attr(shape2, "strokeo", 'f') + "[strokew]" + get_attr(shape2, "strokew", 'f') + "[]|";
                     shapes.push(E);
@@ -2507,52 +1792,52 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                         transLetters = pathstringt.match(/[CMLz]/g);
                         drawTrans();
                         break;
-                    case "rect":
-                        // format: [x]73[y]196[w]187[h]201[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                        x = abs_dims(get_attr(shape, "x", "f"), cw);
-                        y = abs_dims(get_attr(shape, "y", "f"), ch);
-                        w = abs_dims(get_attr(shape, "w", "f"), cw);
-                        h = abs_dims(get_attr(shape, "h", "f"), ch);
-                        fillc = get_attr(shape, "fillc", "s");
-                        fillo = get_attr(shape, "fillo", "f");
-                        strokec = get_attr(shape, "strokec", "s");
-                        strokeo = get_attr(shape, "strokeo", "f");
-                        strokew = get_attr(shape, "strokew", "f");
-                        var R = paper.rect(x, y, w, h);
-                        R.data("currx", x);
-                        R.data("curry", y);
-                        R.data("currw", w);
-                        R.data("currh", h);
-                        R.data("type", "rect");
-                        R.data("visible", "yes");
-                        add_attributes(R, fillc, fillo, strokec, strokeo, strokew);
-                        break;
-                    case "ellipse":
-                        // format: [cx]81[cy]131[rx]40[ry]27[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                        var cx = abs_dims(get_attr(shape, "cx", "f"), cw);
-                        var cy = abs_dims(get_attr(shape, "cy", "f"), ch);
-                        var rx = abs_dims(get_attr(shape, "rx", "f"), cw);
-                        var ry = abs_dims(get_attr(shape, "ry", "f"), ch);
-                        fillc = get_attr(shape, "fillc", "s");
-                        fillo = get_attr(shape, "fillo", "f");
-                        strokec = get_attr(shape, "strokec", "s");
-                        strokeo = get_attr(shape, "strokeo", "f");
-                        strokew = get_attr(shape, "strokew", "f");
-                        var E = paper.ellipse(cx, cy, rx, ry);
-                        E.data("currx", E.getBBox().x);
-                        E.data("curry", E.getBBox().y);
-                        E.data("curr_rx", rx);
-                        E.data("curr_ry", ry);
-                        E.data("type", "ellipse");
-                        E.data("visible", "yes");
-                        add_attributes(E, fillc, fillo, strokec, strokeo, strokew);
-                        break;
+                    //case "rect":
+                    //    // format: [x]73[y]196[w]187[h]201[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
+                    //    x = toAbsoluteCoords(get_attr(shape, "x", "f"));
+                    //    y = toAbsoluteCoords(get_attr(shape, "y", "f"), true);
+                    //    w = toAbsoluteCoords(get_attr(shape, "w", "f"));
+                    //    h = toAbsoluteCoords(get_attr(shape, "h", "f"), true);
+                    //    fillc = get_attr(shape, "fillc", "s");
+                    //    fillo = get_attr(shape, "fillo", "f");
+                    //    strokec = get_attr(shape, "strokec", "s");
+                    //    strokeo = get_attr(shape, "strokeo", "f");
+                    //    strokew = get_attr(shape, "strokew", "f");
+                    //    var R = paper.rect(x, y, w, h);
+                    //    R.data("currx", x);
+                    //    R.data("curry", y);
+                    //    R.data("currw", w);
+                    //    R.data("currh", h);
+                    //    R.data("type", "rect");
+                    //    R.data("visible", "yes");
+                    //    addHighlightShapeAttributes(R, fillc, fillo, strokec, strokeo, strokew);
+                    //    break;
+                    //case "ellipse":
+                    //    // format: [cx]81[cy]131[rx]40[ry]27[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
+                    //    var cx = toAbsoluteCoords(get_attr(shape, "cx", "f"));
+                    //    var cy = toAbsoluteCoords(get_attr(shape, "cy", "f"), true);
+                    //    var rx = toAbsoluteCoords(get_attr(shape, "rx", "f"));
+                    //    var ry = toAbsoluteCoords(get_attr(shape, "ry", "f"), true);
+                    //    fillc = get_attr(shape, "fillc", "s");
+                    //    fillo = get_attr(shape, "fillo", "f");
+                    //    strokec = get_attr(shape, "strokec", "s");
+                    //    strokeo = get_attr(shape, "strokeo", "f");
+                    //    strokew = get_attr(shape, "strokew", "f");
+                    //    var E = paper.ellipse(cx, cy, rx, ry);
+                    //    E.data("currx", E.getBBox().x);
+                    //    E.data("curry", E.getBBox().y);
+                    //    E.data("curr_rx", rx);
+                    //    E.data("curr_ry", ry);
+                    //    E.data("type", "ellipse");
+                    //    E.data("visible", "yes");
+                    //    addHighlightShapeAttributes(E, fillc, fillo, strokec, strokeo, strokew);
+                    //    break;
                     case "marquee": // DEPRECATED
                         // format: [x]206[y]207[w]102[h]93[surrfillc]#222222[surrfillo].8[]
-                        var topx = abs_dims(get_attr(shape, "x", "f"), cw);
-                        var topy = abs_dims(get_attr(shape, "y", "f"), ch);
-                        w = abs_dims(get_attr(shape, "w", "f"), cw);
-                        h = abs_dims(get_attr(shape, "h", "f"), ch);
+                        var topx = toAbsoluteCoords(get_attr(shape, "x", "f"));
+                        var topy = toAbsoluteCoords(get_attr(shape, "y", "f"), true);
+                        w = toAbsoluteCoords(get_attr(shape, "w", "f"));
+                        h = toAbsoluteCoords(get_attr(shape, "h", "f"), true);
                         var surrfillc = get_attr(shape, "surrfillc", "s");
                         var surrfillo = get_attr(shape, "surrfillo", "f");
                         var botx = topx + w;
@@ -2626,43 +1911,19 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                 switch (type) {
                     case "boundrect":
                         //format: [x]73[y]196[w]187[h]201[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                        var x = abs_dims(get_attr(shape, "x", "f"), cw);
-                        var y = abs_dims(get_attr(shape, "y", "f"), ch);
-                        var w = abs_dims(get_attr(shape, "w", "f"), cw);
-                        var h = abs_dims(get_attr(shape, "h", "f"), ch);
-                        fillc = get_attr(shape, "fillc", "s");
-                        fillo = get_attr(shape, "fillo", "f");
-                        strokec = get_attr(shape, "strokec", "s");
-                        strokeo = get_attr(shape, "strokeo", "f");
-                        strokew = get_attr(shape, "strokew", "f");
-                        var R = paper.rect(x, y, w, h);
-                        R.data("currx", x);
-                        R.data("curry", y);
-                        R.data("currw", w);
-                        R.data("currh", h);
-                        R.data("type", "rect");
-                        R.data("visible", "yes");
-                        add_attributes(R, fillc, fillo, strokec, strokeo, strokew);
+                        var x = toAbsoluteCoords(get_attr(shape, "x", "f"));
+                        var y = toAbsoluteCoords(get_attr(shape, "y", "f"), true);
+                        var w = toAbsoluteCoords(get_attr(shape, "w", "f"));
+                        var h = toAbsoluteCoords(get_attr(shape, "h", "f"), true);
+                        addRectangle(x, y, w, h);
                         break;
                     case "boundellipse":
                         //format: [cx]81[cy]131[rx]40[ry]27[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                        var cx = abs_dims(get_attr(shape, "cx", "f"), cw);
-                        var cy = abs_dims(get_attr(shape, "cy", "f"), ch);
-                        var rx = abs_dims(get_attr(shape, "rx", "f"), cw);
-                        var ry = abs_dims(get_attr(shape, "ry", "f"), ch);
-                        fillc = get_attr(shape, "fillc", "s");
-                        fillo = get_attr(shape, "fillo", "f");
-                        strokec = get_attr(shape, "strokec", "s");
-                        strokeo = get_attr(shape, "strokeo", "f");
-                        strokew = get_attr(shape, "strokew", "f");
-                        var E = paper.ellipse(cx, cy, rx, ry);
-                        E.data("currx", E.getBBox().x);
-                        E.data("curry", E.getBBox().y);
-                        E.data("curr_rx", rx);
-                        E.data("curr_ry", ry);
-                        E.data("type", "ellipse");
-                        E.data("visible", "yes");
-                        add_attributes(E, fillc, fillo, strokec, strokeo, strokew);
+                        var cx = toAbsoluteCoords(get_attr(shape, "cx", "f"));
+                        var cy = toAbsoluteCoords(get_attr(shape, "cy", "f"), true);
+                        var rx = toAbsoluteCoords(get_attr(shape, "rx", "f"));
+                        var ry = toAbsoluteCoords(get_attr(shape, "ry", "f"), true);
+                        addEllipse(cx, cy, rx, ry);
                         break;
                 }
             }
@@ -2721,9 +1982,9 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
      * Helper function to determine whether p1 and p2 are effectively the same point. Returns true if so.
      */
     function nontrivial(p1, p2) {
-        return ((Math.abs(p1.x - p2.x) > 0.00000001) || (Math.abs(p1.y - p2.y) > 0.00000001) || (Math.abs(p1.w - p2.w) > 0.00000001) || (Math.abs(p1.h - p2.h) > 0.00000001));
+        var epsilon = 0.00000001;
+        return ((Math.abs(p1.x - p2.x) > epsilon) || (Math.abs(p1.y - p2.y) > epsilon) || (Math.abs(p1.w - p2.w) > epsilon) || (Math.abs(p1.h - p2.h) > epsilon));
     }
-    that.nontrivial = nontrivial;
 
     /**
      * Using the point next, computes the outgoing bezier anchor coordinates for the point pt on the path.
@@ -2742,7 +2003,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             return { x: dots.n.x, y: dots.n.y };
         }
     }
-    that.out_bez = out_bez;
 
     var inkPannedX;
     var inkPannedY;
@@ -3113,19 +2373,9 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     /**
      * Sets the ink mode
      */
-    function set_mode(i) {
-        i = parseInt(i,10);
-        mode = i;
+    function setMode(m) {
+        mode = m;
     }
-    that.set_mode = set_mode;
-
-    /**
-     * Sets the internal reference to the old opacity of the ink track
-     */
-    function setOldOpac(val) {
-        oldOpac = val;
-    }
-    that.setOldOpac = setOldOpac;
 
     /**
      * Similar to the retrieveOrigDims function, but uses a proxy variable.
@@ -3155,7 +2405,7 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     that.resetText = resetText;
 
     /**
-     * Similar to add_attributes, gives text boxes drag functionality, drag handles, and undo/redo functionality.
+     * Similar to addHighlightShapeAttributes, gives text boxes drag functionality, drag handles, and undo/redo functionality.
      * @param textbox   the text box in question
      */
     function setTextAttributes(textbox) {

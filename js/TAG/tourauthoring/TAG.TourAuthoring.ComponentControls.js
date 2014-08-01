@@ -547,7 +547,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             //now adjust viewbox so art is at the proper coordinates
             p1.update_datastring();
             p1.setOldOpac(1);
-            p1.adjustViewBoxDiv({ x: proxy.x, y: proxy.y, width: proxy.w, height: proxy.h });
+            p1.adjustViewBox({
+                x: proxy.x,
+                y: proxy.y,
+                width: proxy.w,
+                height: proxy.h
+            }, true);
             p1.drawPaths();
             p1.drawBezierPath();
         }
@@ -774,7 +779,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             real_kfy = -kfvy * real_kfw;
             p1.update_datastring();
             p1.setOldOpac(1);
-            p1.adjustViewBoxDiv({ x: proxy.x, y: proxy.y, width: proxy.w, height: proxy.h });
+            p1.adjustViewBox({
+                x: proxy.x,
+                y: proxy.y,
+                width: proxy.w,
+                height: proxy.h
+            }, true);
         }
         currentInkController = p1;
         //     currOpacity = currentInkController.getMarqueeFillOpacity();
@@ -984,7 +994,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             p1.retrieveOrigDims();
             p1.setEID(track.getTitle());
             p1.loadInk(datastring);
-            p1.adjustViewBoxDiv({ x: proxy.x, y: proxy.y, width: proxy.w, height: proxy.h });
+            p1.adjustViewBox({
+                x: proxy.x,
+                y: proxy.y,
+                width: proxy.w,
+                height: proxy.h
+            }, true);
         }
         textX = p1.getPannedPos().x || p1.get_attr(datastring, "x", "f") * cw;
         textY = p1.getPannedPos().y || p1.get_attr(datastring, "y", "f") * ch;
