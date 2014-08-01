@@ -293,7 +293,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
         }
         track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
-        track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
+        track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy));
     }
 
     /**Deletes an ink track and all associated stuff

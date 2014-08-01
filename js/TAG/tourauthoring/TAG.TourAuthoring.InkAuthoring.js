@@ -692,8 +692,8 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                 paper.setViewBox(-nvx / oldScale, -nvy / oldScale, newwid, newhei); // see raphael documentation
             }
             else {
-                cw = domelement.width();
-                ch = domelement.height();
+                cw = canvWidth; // domelement.width();
+                ch = canvHeight; // domelement.height();
                 magX = cw;
                 magY = ch;
                 panObjects(-lastcx / origPaperW, -lastcy / origPaperH, { cw: cw, ch: ch }, 0); // no need to draw updated ink yet
@@ -794,78 +794,124 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     /**
      * Convert a string representing a block transparency to one representing an isolate transparency.
      * Block/isolate is determined by the fill property of the svg element. If we draw the path counterclockwise (rather than clockwise)
-     * and also draw a path around the whole canvas, the in-between space will be filled and we will get an isolate transparency. This
+     * and also draw a path around the whole canvas, the space in between will be filled and we will get an isolate transparency. This
      * method reverses the given path and adds the aforementioned outer path.
-     * @param pth    the path to reverse
-     * @return    reversed path (with outer path)
+     * @method blockToIsol
+     * @param {String} pth     path describing the block transparency
+     * @return {String}        reversed isolate path (with outer path)
      */
-    function block_to_isol(pth) {
-        var new_pth = "";
-        var segs = [""];
-        var parsed_pth = Raphael.parsePathString(pth);
-        var num_array = [];
-        var ctr = 0;
-        var cw = viewerElt.width();
-        var ch = viewerElt.height();
-        var j;
+    function blockToIsol(pth) {
+        var newPth = '',
+            segs = [''],
+            parsedPth = Raphael.parsePathString(pth),
+            numArray = [],
+            i,
+            j;
 
         // iterate through in reverse order
-        for (var i = parsed_pth.length - 2; i >= 0; i--) {
-            if (parsed_pth[i][0] == "z") {
-                new_pth += "M" + num_array[0] + "," + num_array[1];
-                for (j = 2; j < num_array.length; j++) {
-                    new_pth += ((j % 6 == 2) ? ("C" + num_array[j]) : (num_array[j]));
-                    new_pth += ((j % 6 != 1) ? (",") : "");
+        for (var i = parsedPth.length - 2; i >= 0; i--) {
+            if (parsedPth[i][0] === "z") {
+                newPth += "M" + numArray[0] + "," + numArray[1];
+                for (j = 2; j < numArray.length; j++) {
+                    newPth += (j % 6 == 2) ? ("C" + numArray[j]) : numArray[j];
+                    newPth += (j % 6 != 1) ? "," : "";
                 }
-                new_pth += "z";
-                num_array.length = 0;
-                num_array = []; // every time we hit a close-path command ('z'), restart num_array for new path
-            }
-            else if (parsed_pth[i][0] == "M") {
-                num_array.push(parsed_pth[i][1]);
-                num_array.push(parsed_pth[i][2]);
-            }
-            else {
-                num_array.push(parsed_pth[i][5]);
-                num_array.push(parsed_pth[i][6]);
-                num_array.push(parsed_pth[i][3]);
-                num_array.push(parsed_pth[i][4]);
-                num_array.push(parsed_pth[i][1]);
-                num_array.push(parsed_pth[i][2]);
+                newPth += "z"; // close the path
+                numArray.length = 0;
+                numArray = []; // every time we hit a close-path command ('z'), restart num_array for new path
+            } else if (parsedPth[i][0] === "M") {
+                numArray.push(parsedPth[i][1]);
+                numArray.push(parsedPth[i][2]);
+            } else {
+                numArray.push(parsedPth[i][5]);
+                numArray.push(parsedPth[i][6]);
+                numArray.push(parsedPth[i][3]);
+                numArray.push(parsedPth[i][4]);
+                numArray.push(parsedPth[i][1]);
+                numArray.push(parsedPth[i][2]);
             }
         }
 
         // manually add the last path, since there is no 'z' at the start of our pathstring
-        new_pth += "M" + num_array[0] + "," + num_array[1];
-        for (j = 2; j < num_array.length; j++) {
-            new_pth += ((j % 6 == 2) ? ("C" + num_array[j]) : (num_array[j]));
-            new_pth += ((j % 6 != 1) ? (",") : "");
+        newPth += "M" + numArray[0] + "," + numArray[1];
+        for (j = 2; j < numArray.length; j++) {
+            newPth += ((j % 6 == 2) ? ("C" + numArray[j]) : (numArray[j]));
+            newPth += ((j % 6 != 1) ? (",") : "");
         }
-        new_pth += "z";
-        new_pth += "M-5,-5L" + (cw + 5) + ",-5L" + (cw + 5) + "," + (ch + 5) + "L-5," + (ch + 5) + "L-5,-5z"; // outer path
-        return new_pth;
+        newPth += "z";
+        newPth += "M-5,-5L" + (canvWidth + 5) + ",-5L" + (canvWidth + 5) + "," + (canvHeight + 5) + "L-5," + (canvHeight + 5) + "L-5,-5z"; // outer path (5px outside viewer)
+        return newPth;
     }
-    that.block_to_isol = block_to_isol;
 
     /**
      * Construct the path that models the overlap between new_path and existing_path in the appropriate
-     * transparency mode. For example, if the paths are intersecting circles, const_path_alg returns the
+     * transparency mode. Used for properly constructing a transparency from overlapping shapes.
+     * For example, if the paths are intersecting circles, constructCombinedPath returns the
      * outline of the two; if one path is completely inside the other, the inner one is returned in isolate
-     * mode and the outer is returned in block mode. Both input paths are closed (have a trailing 'z').
-     * @param new_path        one path
-     * @param existing_path   another path (in the scheme of things, we are building this path up by adding new_paths)
+     * mode and the outer is returned in block mode. Both input paths are closed (have a trailing 'z'). Please try
+     * to improve this. Could see if https://github.com/poilu/raphael-boolean could replace this.
+     *
+     * Known bugs:
+     *  - if there is a completely enclosed section of negative space (a "courtyard") inside a few intersecting
+     *    paths, this fails
+     *
+     * @method constructCombinedPath
+     * @param {String} new_path        one path
+     * @param {String} existing_path   another path (in the scheme of things, we are building this path up by adding new_paths)
+     * @return {String}                combined path
      */
-    function const_path_alg(new_path, existing_path) {
-        // array of points in the order they are added, format: {point: {x: __, y: __}, type: 'endpoint'/'intpoint', path: 0/1}  (0 if on new_path, 1 if on existing_path)
-        var order_added = [];
-        var i, j, pth_seg, next_seg, pth_seg_len;
+    function constructCombinedPath(new_path, existing_path) {
+        // orderAdded is an array of points objects in the order they are added;
+        // point format:
+        //    {
+        //        point: {
+        //            x: __,
+        //            y: __
+        //        },
+        //        type: 'endpoint' or 'intpoint',
+        //        path: 0 or 1  (0 if on new_path, 1 if on existing_path)
+        //    }
 
-        var first_point_added = 0;
-        if (existing_path === "") // if the existing path is empty, new path should replace it
+        var order_added = [],
+            i,
+            j,
+            k,
+            pth_seg,
+            next_seg,
+            pth_seg_len,
+            first_point_added = 0,
+            parsed_new_path,
+            parsed_old_path,
+            old_nz, // number of 'z's in old path (we'll get rid of these)
+            new_path_startpoints = [],
+            old_path_endpoints = [],
+            perturbed = 0,
+            ind2, // temp
+            nps,
+            prev,
+            ints,
+            seg_ints,
+            old_seg_ints = [], // for intersections along each segment of the old path
+            outer_path = "",
+            curr_ints,
+            old_seg_num,
+            index,
+            pt1,
+            test1,
+            test2,
+            l,
+            final_list = [],
+            pt,
+            next,
+            ob,
+            ib;
+
+        if (existing_path === "") { // if the existing path is empty, new path should replace it
             return new_path;
+        }
 
         // get array of vertices for the new path
-        var parsed_new_path = Raphael.parsePathString(new_path);
+        parsed_new_path = Raphael.parsePathString(new_path);
         for (i = 0; i < parsed_new_path.length; i++) {
             if (parsed_new_path[i][0] == "z") {
                 parsed_new_path.splice(i, 1); // don't want the trailing 'z's
@@ -874,8 +920,8 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
 
         // get array of vertices for the old path
-        var parsed_old_path = Raphael.parsePathString(existing_path);
-        var old_nz = 0;
+        parsed_old_path = Raphael.parsePathString(existing_path);
+        old_nz = 0;
         for (i = 0; i < parsed_old_path.length; i++) {
             if (parsed_old_path[i][0] == "z") {
                 parsed_old_path.splice(i, 1); // don't want the trailing 'z's
@@ -885,7 +931,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
 
         // get array of startpoints for the new path, including bezier coordinates out of the point (ax1, ay1) and into the next point (ax2, ay2)
-        var new_path_startpoints = [];
         for (i = 0; i < parsed_new_path.length - 1; i++) {
             pth_seg = parsed_new_path[i];
             next_seg = parsed_new_path[(i + 1) % parsed_new_path.length];
@@ -894,17 +939,15 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
 
         // get array of endpoints for the oldpath, including bezier coordinates as above
-        var old_path_endpoints = [];
         for (i = 0; i < parsed_old_path.length - 1; i++) {
             pth_seg = parsed_old_path[(i + 1) % parsed_old_path.length];
-            var ind2 = ((i + 2) % parsed_old_path.length !== 0) ? ((i + 2) % parsed_old_path.length) : 1;
+            ind2 = ((i + 2) % parsed_old_path.length !== 0) ? ((i + 2) % parsed_old_path.length) : 1;
             next_seg = parsed_old_path[ind2];
             pth_seg_len = pth_seg.length;
             old_path_endpoints.push({ x: pth_seg[pth_seg_len - 2], y: pth_seg[pth_seg_len - 1], ax1: next_seg[1], ay1: next_seg[2], ax2: next_seg[3], ay2: next_seg[4] });
         }
 
         // see if any of our endpoints are the same or are colinear; if they are, perturb one by a slight amount
-        var perturbed = 0;
         for (i = 0; i < new_path_startpoints.length; i++) {
             for (j = 0; j < old_path_endpoints.length; j++) {
                 if (same_point(new_path_startpoints[i], old_path_endpoints[j])) {
@@ -914,8 +957,8 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                     new_path_startpoints[i].ay1 += 1;
                     new_path_startpoints[i].ax2 += 1;
                     new_path_startpoints[i].ay2 += 1;
-                    perturbed = 1;
-                    break;
+                    perturbed = true;
+                    break; // break out of inner loop
                 }
             }
         }
@@ -923,10 +966,9 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         // if we perturbed any points above, we need to reset the string in new_path and reparse to get parsed_new_path
         if (perturbed) {
             new_path = "M" + new_path_startpoints[0].x + "," + new_path_startpoints[0].y;
-            var nps;
             for (i = 1; i < new_path_startpoints.length; i++) {
                 nps = new_path_startpoints[i];
-                var prev = new_path_startpoints[i - 1];
+                prev = new_path_startpoints[i - 1];
                 new_path += "C" + prev.ax1 + "," + prev.ay1 + "," + prev.ax2 + "," + prev.ay2 + "," + nps.x + "," + nps.y;
             }
             new_path += "C" + nps.ax1 + "," + nps.ay1 + "," + nps.ax2 + "," + nps.ay2 + "," + new_path_startpoints[0].x + "," + new_path_startpoints[0].y;
@@ -941,38 +983,48 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
 
         // get the array of intersection points of the two paths
-        var ints = Raphael.pathIntersection(new_path, existing_path);
-        var seg_ints = [[], [], [], []]; // for intersections along each segment of the new path (4 segments)
-        for (i = 0; i < ints.length; i++)
+        ints = Raphael.pathIntersection(new_path, existing_path);
+        seg_ints = [[], [], [], []]; // for intersections along each segment of the new path (4 segments)
+        for (i = 0; i < ints.length; i++) {
             seg_ints[ints[i].segment1 - 1].push(ints[i]); // segments are 1-indexed
+        }
 
         // sort each segment's intersections in order of increasing t-value (i.e. distance along the segment)
-        function sortHelperT1(a, b) { return a.t1 - b.t1; }
-        for (i = 0; i < seg_ints.length; i++)
+        function sortHelperT1(a, b) {
+            return a.t1 - b.t1;
+        }
+
+        for (i = 0; i < seg_ints.length; i++) {
             seg_ints[i].sort(sortHelperT1); // sort by t-value (t1 is the t-value of the int on the new path)
+        }
 
-
-        var old_seg_ints = []; // for intersections along each segment of the old path
-        for (i = 0; i < parsed_old_path.length - old_nz; i++)
+        
+        for (i = 0; i < parsed_old_path.length - old_nz; i++) {
             old_seg_ints.push([]);
+        }
 
-        for (i = 0; i < ints.length; i++)
+        for (i = 0; i < ints.length; i++) {
             old_seg_ints[ints[i].segment2 - 1].push(ints[i]);
+        }
 
         // sort each segment's intersections in order of increasing t2-value (maybe unnecessary)
-        function sortHelperT2(a, b) { return a.t2 - b.t2; }
+        function sortHelperT2(a, b) {
+            return a.t2 - b.t2;
+        }
+
         for (i = 0; i < old_seg_ints.length; i++) {
             old_seg_ints[i].sort(sortHelperT2);
         }
 
-        var outer_path = "";
 
         if (ints.length === 0) //if no intersections, the paths are disjoint and one may be contained in the other
         {
-            if (point_inside(new_path, old_path_endpoints[0].x, old_path_endpoints[0].y))
+            if (point_inside(new_path, old_path_endpoints[0].x, old_path_endpoints[0].y)) {
                 return ((trans_mode === 'isolate') ? existing_path : new_path); // existing_path is inside new_path
-            if (point_inside(existing_path, new_path_startpoints[0].x, new_path_startpoints[1].y))
+            }
+            if (point_inside(existing_path, new_path_startpoints[0].x, new_path_startpoints[1].y)) {
                 return ((trans_mode === 'isolate') ? new_path : existing_path); // new_path is inside existing_path
+            }
             return new_path + existing_path; // paths are disjoint and neither is inside the other
         }
 
@@ -985,24 +1037,24 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                     first_point_added = 1;
                 order_added.push({ point: new_path_startpoints[i], type: "endpoint", path: 0 }); // add point to order_added if it should be in the final path
             }
-            var curr_ints = seg_ints[i]; // array of intersection points on the current segment of new_path
+            curr_ints = seg_ints[i]; // array of intersection points on the current segment of new_path
             for (j = 0; j < curr_ints.length; j++) {
                 if (!repeat_pt(curr_ints[j], order_added)) {
                     // need to find which curve the previously added point is from in order to get the right bezier coordinates
                     order_added.push({ point: curr_ints[j], type: "intpoint", path: ((order_added.length) ? (order_added[order_added.length - 1].type) : 0) });
                 }
-                var old_seg_num = curr_ints[j].segment2 - 1; // index of int point in old_seg_ints
-                var k = old_seg_num;
-                var index = k;
+                old_seg_num = curr_ints[j].segment2 - 1; // index of int point in old_seg_ints
+                k = old_seg_num;
+                index = k;
 
                 // iterate through old path endpoints, adding them if they are outside new_path, stopping when we hit a repeat or a point inside new_path
                 while (!point_inside(new_path, old_path_endpoints[index].x, old_path_endpoints[index].y) && !repeat_pt(old_path_endpoints, order_added)) {
-                    var pt1 = old_path_endpoints[index];
-                    var test1 = 1;
-                    var test2 = 1;
+                    pt1 = old_path_endpoints[index];
+                    test1 = 1;
+                    test2 = 1;
                     if (index == old_seg_num) { // still on segment of existing_path that the original intersection point was on
                         // check here if there is another intersection point farther along the current segment in the existing path (so we shouldn't add the next endpoint of existing_path)
-                        for (var l = 0; l < old_seg_ints[index].length; l++) {
+                        for (l = 0; l < old_seg_ints[index].length; l++) {
                             if (old_seg_ints[index][l].t2 > curr_ints[j].t2) {
                                 test1 = 0;
                                 break;
@@ -1032,14 +1084,19 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         }
 
         // build up outer_path using order_added
-        var final_list = [];
-        var pt;
         for (i = 0; i < order_added.length - 1; i++) {
             pt = order_added[i];
-            var next = order_added[(i + 1) % order_added.length];
-            var ob = out_bez(pt, next);
-            var ib = next_in_bez(pt, next);
-            final_list.push({ ax1: ob.x, ay1: ob.y, ax2: ib.x, ay2: ib.y, x: next.point.x, y: next.point.y }); // push each point along with outgoing bezier coordinates (and incoming for the next point)
+            next = order_added[(i + 1) % order_added.length];
+            ob = out_bez(pt, next);
+            ib = next_in_bez(pt, next);
+            final_list.push({
+                ax1: ob.x,
+                ay1: ob.y,
+                ax2: ib.x,
+                ay2: ib.y,
+                x: next.point.x,
+                y: next.point.y
+            }); // push each point along with outgoing bezier coordinates (and incoming for the next point)
         }
 
         // take points in final_list and build the path string
@@ -1051,7 +1108,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         outer_path += "z";
         return outer_path;
     }
-    that.const_path_alg = const_path_alg;
 
     /**
      * Uses the arrays ml, xy, and pa to draw paths with the correct properties.
@@ -1086,10 +1142,10 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     //        path = paths.split('PATH::');
     //    }
     //    for (i = 1; i < path.length; i++) {
-    //        var pstring = get_attr(path[i], "pathstring", "s");
-    //        var strokec = get_attr(path[i], "stroke", "s");
-    //        var strokeo = get_attr(path[i], "strokeo", "f");
-    //        var strokew = get_attr(path[i], "strokew", "f");
+    //        var pstring = getAttr(path[i], "pathstring", "s");
+    //        var strokec = getAttr(path[i], "stroke", "s");
+    //        var strokeo = getAttr(path[i], "strokeo", "f");
+    //        var strokew = getAttr(path[i], "strokew", "f");
     //        var drawing = paper.path(pstring); // draw the path to the canvas
     //        drawing.data("type", "path");
     //        drawing.attr({
@@ -1110,148 +1166,158 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
      * A helper function to draw transparencies. Takes the arrays transLetters (representing the
      * svg path commands in the transparency string) and transCoords (corresponding locations on the
      * canvas in relative coordinates) and draws the appropriate type of transparency to the canvas.
-     * If the type is 'isolate,' calls block_to_isol, which reverses the path and adds an outer path
+     * If the type is 'isolate,' calls blockToIsol, which reverses the path and adds an outer path
      * around the canvas to fill the in-between space.
+     * @method drawTrans
      */
     function drawTrans() {
+        var path = '',
+            ind = 0,
+            i,
+            k,
+            final_path,
+            trans;
+
         remove_all(); // be careful that this method isn't called unless the type of the ink is 'trans'!
-        var cw = canvElt.width();
-        var ch = canvElt.height();
-        var path = "";
-        var ind = 0;
+
         // iterate through the transLetters array and create our svg path accordingly
-        for (var i = 0; i < transLetters.length; i++) {
-            if (transLetters[i] == "M" || transLetters[i] == "L") { // if M or L, add next two coords to the path
+        for (i = 0; i < transLetters.length; i++) {
+            if (transLetters[i] === "M" || transLetters[i] === "L") { // if M or L, add next two coords to the path
                 path += transLetters[i] + (transCoords[ind] * cw) + "," + (transCoords[ind + 1] * ch);
                 ind += 2;
-            }
-            else if (transLetters[i] == "C") {
+            } else if (transLetters[i] === "C") {
                 path += "C" + (transCoords[ind] * cw);
-                for (var k = 1; k < 6; k++) { // if C, add next six coords to the path (coords represent bezier curve)
-                    path += "," + ((k % 2) ? (transCoords[ind + k] * ch) : (transCoords[ind + k] * cw));
+                for (k = 1; k < 6; k++) { // if C, add next six coords to the path (coords represent bezier curve)
+                    path += "," + (transCoords[ind + k] * ((k % 2 === 1) ? canvHeight : canvWidth));
                 }
                 ind += 6;
-            }
-            else if (transLetters[i] == "z") // if z, close the path
+            } else if (transLetters[i] === "z") { // if z, close the path
                 path += "z";
-            else
-                console.log("ELSE: " + transLetters[i]);
+            }
         }
-        var final_path = path;
-        if (trans_mode == 'isolate') // if the mode is 'isolate,' reverse the path and add an outer path
-            final_path = block_to_isol(path);
-        var trans = paper.path(final_path).attr({ "fill": marqueeFillColor, "fill-opacity": marqueeFillOpacity, "stroke-width": 0 }).data("type", "trans");
+        final_path = path;
+        if (trans_mode === 'isolate') { // if the mode is 'isolate,' reverse the path and add an outer path
+            final_path = blockToIsol(path);
+        }
+        trans = paper.path(final_path).attr({ "fill": marqueeFillColor, "fill-opacity": marqueeFillOpacity, "stroke-width": 0 }).data("type", "trans");
         trans_currpath = "TRANS::[path]" + path + "[color]" + marqueeFillColor + "[opac]" + marqueeFillOpacity + "[mode]" + trans_mode + "[]";
-        update_datastring();
+        update_datastring();// TODO DOC do we need to call this so often?
     }
-    that.drawTrans = drawTrans;
 
-    /**
-     * Called if we drag on the ink canvas in eraser mode. Finds endpoints in the current paths close
-     * to the drag event location and splices them out of the path array.
-     * @param location   the locaton of the drag event
-     */
-    function erase(location) {
-        var cw = canvElt.width();
-        var ch = canvElt.height();
-        var range = eraserWidth;
-        for (var i = 0; i < xy.length; i++) { // for each coordinate, test for proximity to location
-            if (location[0] - range <= (cw * xy[i][0]) && (cw * xy[i][0]) <= location[0] + range) {
-                if (location[1] - range <= (ch * xy[i][1]) && (ch * xy[i][1]) <= location[1] + range) {
-                    if (ml[i + 1] === 'L') { // if we splice in the middle of a path, split into two paths
-                        ml[i + 1] = 'M';
-                    }
-                    ml.splice(i, 1);
-                    xy.splice(i, 1);
-                    pa.splice(i, 1);
-                }
-            }
-        }
-        var check = false;
-        for (var j = 0; j < ml.length; j++) {
-            if (ml[j] === "L") {
-                check = true;
-                break;
-            }
-        }
-        if (!check) {
-            xy.length = 0;
-            ml.length = 0;
-            pa.length = 0;
-        }
-        drawPaths(); // after we're done splicing, redraw the paths
-    }
-    that.erase = erase;
+    ///**
+    // * Called if we drag on the ink canvas in eraser mode. Finds endpoints in the current paths close
+    // * to the drag event location and splices them out of the path array.
+    // * @param location   the locaton of the drag event
+    // */
+    //function erase(location) {
+    //    var cw = canvElt.width();
+    //    var ch = canvElt.height();
+    //    var range = eraserWidth;
+    //    for (var i = 0; i < xy.length; i++) { // for each coordinate, test for proximity to location
+    //        if (location[0] - range <= (cw * xy[i][0]) && (cw * xy[i][0]) <= location[0] + range) {
+    //            if (location[1] - range <= (ch * xy[i][1]) && (ch * xy[i][1]) <= location[1] + range) {
+    //                if (ml[i + 1] === 'L') { // if we splice in the middle of a path, split into two paths
+    //                    ml[i + 1] = 'M';
+    //                }
+    //                ml.splice(i, 1);
+    //                xy.splice(i, 1);
+    //                pa.splice(i, 1);
+    //            }
+    //        }
+    //    }
+    //    var check = false;
+    //    for (var j = 0; j < ml.length; j++) {
+    //        if (ml[j] === "L") {
+    //            check = true;
+    //            break;
+    //        }
+    //    }
+    //    if (!check) {
+    //        xy.length = 0;
+    //        ml.length = 0;
+    //        pa.length = 0;
+    //    }
+    //    drawPaths(); // after we're done splicing, redraw the paths
+    //}
+    //that.erase = erase;
 
     /**
      * Takes in a datastring and parses for a certain attribute by splitting at "[" and "]" (these surround
      * attribute names).
      * NOTE if errors are coming from this function, could be that the datastring is empty...
-     * @param str        the datastring
-     * @param attr       the attribute we'll parse for
-     * @param parsetype  'i' (int), 's' (string), or 'f' (float)
-     * @return  the value of the attribute in the correct format
+     *
+     * @method getAttr
+     * @param {String} str        the datastring
+     * @param {String} attr       the attribute we'll parse for
+     * @param {String} parsetype  's' (string), or 'f' (float) ('f' is the default)
+     * @return {String/Number}    the value of the attribute in the correct type
      */
-    function get_attr(str, attr, parsetype) {
-        if(parsetype === "f")
-            return parseFloat(str.split("[" + attr + "]")[1].split("[")[0]);
-        if (parsetype === "s")
-            return str.split("[" + attr + "]")[1].split("[")[0];
-        else
-            return parseInt(str.split("[" + attr + "]")[1].split("[")[0],10);
+    function getAttr(str, attr, parsetype) {
+        var val = str.split('[' + attr + ']')[1].split('[')[0];
+        if (parsetype === "s") {
+            return val;
+        }
+        return parseFloat(val);
     }
-    that.get_attr = get_attr;
 
-    function set_attr(attr, newval) {
-        var arrs = datastring.split("[" + attr + "]");
-        var arr2 = arrs[1].split("]");
-        arr2.splice(0, 1);
-        arr2[0] = "[color]"+arr2[0];
-        var str2 = arr2.join("]");
-        datastring = arrs[0] + "[fontsize]" + newval + str2;
-    }
-    that.set_attr = set_attr;
+    //function set_attr(attr, newval) {
+    //    var arrs = datastring.split("[" + attr + "]");
+    //    var arr2 = arrs[1].split("]");
+    //    arr2.splice(0, 1);
+    //    arr2[0] = "[color]"+arr2[0];
+    //    var str2 = arr2.join("]");
+    //    datastring = arrs[0] + "[fontsize]" + newval + str2;
+    //}
+    //that.set_attr = set_attr;
     
     /**
-     * Returns the isolate/block bounding shapes.
+     * Returns the isolate/block bounding shapes
+     * @method getBoundingShapes
+     * @return {String}    the datastring of bounding shapes
      */
     function getBoundingShapes() {
         return bounding_shapes;
     }
-    that.getBoundingShapes = getBoundingShapes;
 
     /**
-     * Returns the current datastring.
+     * Returns the current datastring (TODO INK JSON fix the ink format to use stringified JSON rather than this weird custom format)
+     * @method getDatastring
+     * @return {String}   the current datastring
      */
     function getDatastring() {
         return datastring;
     }
-    that.getDatastring = getDatastring;
 
     /**
      * Uses path data representing ellipses and rectangles to get the path representing the ultimate block
-     * or isolate shape.
-     * @param paths     array of path strings representing ellipses/rects
+     * or isolate shape
+     * @method getOuterPaths
+     * @param {Array} paths        path strings representing ellipses and rects
      */
-    function get_outer_path(paths) {
-        var cw = canvElt.width();
-        var ch = canvElt.height();
-        var cumulative_path = "";
-        for (var i = 0; i < paths.length; i++) {
-            paths[i] = transform_pathstring_marq(paths[i], cw, ch); // transform each to absolute coords
-            paths[i] = (paths[i][paths[i].length - 1] === "z") ? paths[i] : (paths[i] + "z"); // make sure each is closed
+    function getOuterPath(paths) {
+        var cumulative_path = "",
+            i,
+            outer_path,
+            parsed,
+            temp,
+            j,
+            jparsed;
+
+        for (i = 0; i < paths.length; i++) {
+            temp = transformPathstringMarq(paths[i], canvWidth, canvHeight); // transform each to absolute coords
+            paths[i] = (temp[temp.length - 1] === "z") ? temp : (temp + "z"); // make sure each is closed
         }
         while (paths.length) {
-            // take the first path, loop through the list, calling const_path_alg on any that intersect, then add to cumulative_path
-            var outer_path = paths[0];
+            // take the first path, loop through the list, calling constructCombinedPath on any that intersect, then add to cumulative_path
+            outer_path = paths[0];
             paths.splice(0, 1);
             if (paths.length) {
-                var parsed = Raphael.parsePathString(outer_path); // parses outer_path as a list of objects containing path data
-                for (var j = 0; j < paths.length; j++) {
-                    var jparsed = Raphael.parsePathString(paths[j]);
+                parsed = Raphael.parsePathString(outer_path); // parses outer_path as a list of objects containing path data
+                for (j = 0; j < paths.length; j++) {
+                    jparsed = Raphael.parsePathString(paths[j]);
                     // the next line checks if paths[j] and outerpath intersect, or if one is completely inside the other
                     if (Raphael.pathIntersection(outer_path, paths[j]).length || point_inside(outer_path, jparsed[0][1], jparsed[0][2]) || point_inside(paths[j], parsed[0][1], parsed[0][2])) {
-                        outer_path = const_path_alg(paths[j], outer_path);
+                        outer_path = constructCombinedPath(paths[j], outer_path);
                         paths.splice(j, 1);
                         j = -1; //if we have an intersection, another, previously non-intersecting path might now intersect, so reset j (we spliced out the current j, so no repeats)
                     }
@@ -1260,116 +1326,143 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             cumulative_path += outer_path;
         }
         // finally, load the resulting cumulative path onto the canvas
-        load_trans_from_path(cumulative_path);
+        loadTransFromPath(cumulative_path);
     }
-    that.get_outer_path = get_outer_path;
 
     /**
-     * Helper function to get artwork's relative coordinates within the viewer.
-     * @return    an object containing relative coordinates x, y, w, h
+     * Helper function to get artwork's relative coordinates within the viewer
+     * @param {Object} proxy        proxy for the artwork's position and size (contains x, y, w, and h properties)
+     * @return {Object}             an object containing relative coordinates x, y, w, h
      */
-    function getArtRelativePos(proxy, cw, ch) {
-        return { x: proxy.x / cw, y: proxy.y / ch, w: proxy.w / cw, h: proxy.h / ch };
+    function getArtRelativePos(proxy) {
+        return {
+            x: proxy.x / canvWidth,
+            y: proxy.y / canvHeight,
+            w: proxy.w / canvWidth,
+            h: proxy.h / canvHeight
+        };
     }
-    that.getArtRelativePos = getArtRelativePos;
 
     /**
-     * Helper function to get the svg element created by Raphael.
+     * Helper function to get the svg element created by Raphael
+     * @method getSVGElement
+     * @return {HTML elt}        svg HTML element created by Raphael
      */
     function getSVGElement() {
         return canvElt.find("svg")[0];
     }
-    that.getSVGElement = getSVGElement;
 
     /**
      * Searches the current datastring for ellipses and rectangles, stores their information in bounding_shapes.
-     * Also stores their coordinates and types in an array shapes and calls shapes_to_paths on shapes
+     * Also stores their coordinates and types in an array "shapes" and calls shapesToPaths on shapes
      * to transform them to path format.
+     * @method getTransShapeData
      */
-    function get_trans_shape_data () {
-        var datastr = update_datastring();
-        var shapes = [];
-        var cw = canvElt.width();
-        var ch = canvElt.height();
+    function getTransShapeData () {
+        var datastr = update_datastring(),
+            shapes = [],
+            i,
+            shapes2,
+            type,
+            xloc, // x for rect; cx for ellipse
+            yloc, // y; cy
+            xdim, // w; rx
+            ydim, // h; ry
+            strokec, // stroke color
+            strokeo, // stroke opacity
+            strokew, // stroke width
+            elt;
+
         if (datastr === "") {
-            //console.log("no elements to attach");
             return;
         }
-        var shapes2 = datastr.split("|");
-        for (var i = 0; i < shapes2.length; i++) {
-            var shape2 = shapes2[i];
-            var type = shape2.split("::")[0];
-            type = type.toLowerCase();
-            switch (type) {
+
+        shapes2 = datastr.split("|");
+        for (i = 0; i < shapes2.length; i++) {
+            shape2 = shapes2[i];
+            type = shape2.split("::")[0];
+            strokec = getAttr(shape2, 'strokec', 's');
+            strokeo = getAttr(shape2, 'strokeo', 's');
+            strokew = getAttr(shape2, 'strokew', 'f');
+            switch (type.toLowerCase()) {
                 case "lrect":
                 case "mrect":
                 case "rect":
-                    // rectangle format: [x]73[y]196[w]187[h]201[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                    var x = toAbsoluteCoords(get_attr(shape2, "x", "f"));
-                    var y = toAbsoluteCoords(get_attr(shape2, "y", "f"), true);
-                    var w = toAbsoluteCoords(get_attr(shape2, "w", "f"));
-                    var h = toAbsoluteCoords(get_attr(shape2, "h", "f"), true);
-                    var R = { "X": x, "Y": y, "w": w, "h": h, "type": "rect" };
-                    bounding_shapes += "BOUNDRECT::[x]" + (x / cw) + "[y]" + (y / ch) + "[w]" + (w / cw) + "[h]" + (h / ch) + "[fillc]#000000[fillo]0[strokec]" + get_attr(shape2, "strokec", 's') + "[strokeo]" + get_attr(shape2, "strokeo", 'f') + "[strokew]" + get_attr(shape2, "strokew", 'f') + "[]|";
-                    shapes.push(R);
+                    // rectangle format: [x]73[y]196[w]187[h]201[strokec]#000000[strokeo]1[strokew]3[]
+                    xloc = toAbsoluteCoords(getAttr(shape2, "x", "f"));
+                    yloc = toAbsoluteCoords(getAttr(shape2, "y", "f"), true);
+                    xdim = toAbsoluteCoords(getAttr(shape2, "w", "f"));
+                    ydim = toAbsoluteCoords(getAttr(shape2, "h", "f"), true);
+                    elt = { "X": x, "Y": y, "w": w, "h": h, "type": "rect" };
+                    bounding_shapes += "BOUNDRECT::[x]" + (xloc / canvWidth) + "[y]" + (yloc / canvHeight);
+                    bounding_shapes += "[w]" + (xdim / canvWidth) + "[h]" + (ydim / canvHeight);
+                    bounding_shapes += "[fillc]#000000[fillo]0[strokec]" + strokec + "[strokeo]" + strokeo + "[strokew]" + strokew + "[]|";
+                    shapes.push(elt);
                     break;
                 case "lellipse":
                 case "mellipse":
                 case "ellipse":
-                    // ellipse format: [cx]81[cy]131[rx]40[ry]27[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                    var cx = toAbsoluteCoords(get_attr(shape2, "cx", "f")); // center x
-                    var cy = toAbsoluteCoords(get_attr(shape2, "cy", "f"), true); // center y
-                    var rx = toAbsoluteCoords(get_attr(shape2, "rx", "f")); // x-radius
-                    var ry = toAbsoluteCoords(get_attr(shape2, "ry", "f"), true); // y-radius
-                    var E = { "cx": cx, "cy": cy, "rx": rx, "ry": ry, "type": "ellipse" };
-                    bounding_shapes += "BOUNDELLIPSE::[cx]" + (cx / cw) + "[cy]" + (cy / ch) + "[rx]" + (rx / cw) + "[ry]" + (ry / ch) + "[fillc]#000000[fillo]0[strokec]" + get_attr(shape2, "strokec", 's') + "[strokeo]" + get_attr(shape2, "strokeo", 'f') + "[strokew]" + get_attr(shape2, "strokew", 'f') + "[]|";
-                    shapes.push(E);
+                    // ellipse format: [cx]81[cy]131[rx]40[ry]27[strokec]#000000[strokeo]1[strokew]3[]
+                    xloc = toAbsoluteCoords(getAttr(shape2, "cx", "f")); // center x
+                    yloc = toAbsoluteCoords(getAttr(shape2, "cy", "f"), true); // center y
+                    xdim = toAbsoluteCoords(getAttr(shape2, "rx", "f")); // x-radius
+                    ydim = toAbsoluteCoords(getAttr(shape2, "ry", "f"), true); // y-radius
+                    elt = { "cx": cx, "cy": cy, "rx": rx, "ry": ry, "type": "ellipse" };
+                    bounding_shapes += "BOUNDELLIPSE::[cx]" + (xloc / canvWidth) + "[cy]" + (yloc / canvHeight);
+                    bounding_shapes += "[rx]" + (xdim / canvWidth) + "[ry]" + (ydim / canvHeight);
+                    bounding_shapes += "[fillc]#000000[fillo]0[strokec]" + strokec + "[strokeo]" + strokeo + "[strokew]" + strokew + "[]|";
+                    shapes.push(elt);
                     break;
             }
         }
-        shapes_to_paths(shapes);
+        shapesToPaths(shapes);
     }
-    that.get_trans_shape_data = get_trans_shape_data;
 
     /**
      * Returns true if the text box containing an ink being edited/authored is empty
+     * @method isTextboxEmpty
+     * @return {Boolean}      whether text box is empty
      */
     function isTextboxEmpty() {
-        return ($('#' + textboxid).attr("value") === "");
+        return !($('#' + TEXTBOX_ID).attr("value"));
     }
-    that.isTextboxEmpty = isTextboxEmpty;
 
     /**
-     * Helper function to check if there is actually a valid ink to attach/save during ink authoring/editing. For texts, need to use isTextboxEmpty.
-     * @param datastring    the datastring to check
-     * @return    whether or not there are no inks on the canvas (i.e. the datastring does not represent anything useful)
+     * Helper function to check if there is actually a valid ink to attach/save during ink authoring/editing.
+     * For texts, need to use isTextboxEmpty.
+     * @method isDatastringEmpty
+     * @param {String} datastring     the datastring to check
+     * @return {Boolean}              whether or not there are inks on the canvas (i.e. the datastring does not represent anything useful)
      */
     function isDatastringEmpty(datastring) {
-        //console.log("is data string empty :" + datastring);
-        if (!pathstring && datastring === "") // MODIFIED
-            return true;
-        var type = datastring.split("::")[0].toLowerCase();
         var empty = false;
-        switch (type) {
+
+        if (!pathstring && datastring === "") {
+            return true;
+        }
+
+        switch (datastring.split("::")[0].toLowerCase()) {
             case 'trans':
-                if (datastring.split("[path]")[1].split("[")[0] === "")
+                if (datastring.split("[path]")[1].split("[")[0] === "") {
                     empty = true;
+                }
                 break;
             case 'bezier': // TO DO -- in case we go back to old paths, add currpaths or something
             case 'path':
-                if (!pathstring && datastring.split("[pathstring]")[1].split("[")[0] === "") // MODIFIED
+                if (!pathstring && datastring.split("[pathstring]")[1].split("[")[0] === "") {
                     empty = true;
+                }
                 break;
             case 'text':
-                if (datastring.split("[str]")[1].split("[")[0] === "")
+                if (datastring.split("[str]")[1].split("[")[0] === "") {
                     empty = true;
+                }
                 break;
             default:
                 break;
         }
         return empty;
     }
-    that.isDatastringEmpty = isDatastringEmpty;
 
     /**
      * Display warning message if ink cannot be loaded
@@ -1581,7 +1674,7 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         inkTrack.setInkInitKeyframe({ "x": kfvx, "y": kfvy, "w": kfvw, "h": kfvh });
         inkTrack.setInkEnabled(true); // set linked
         inkTrack.setInkType(inkType);
-        inkTrack.setInkRelativeArtPos(getArtRelativePos(proxy, cw, ch));
+        inkTrack.setInkRelativeArtPos(getArtRelativePos(proxy));
 
         inkTrack.addInkTypeToTitle(inkType);
 
@@ -1730,21 +1823,21 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                 switch (type.toLowerCase()) {
                     case "text":
                         // format: [str]<text>[font]<font>[fontsize]<fontsize>[color]<font color>[x]<x>[y]<y>[]
-                        var size = get_attr(shape, "fontsize", "f") * ch;
+                        var size = getAttr(shape, "fontsize", "f") * ch;
                         fontSize = size;
-                        x = get_attr(shape, "x", "f") * cw;
-                        y = get_attr(shape, "y", "f") * ch;
+                        x = getAttr(shape, "x", "f") * cw;
+                        y = getAttr(shape, "y", "f") * ch;
                         //var w, h;
                         try {
-                            w = get_attr(shape, 'w', 'f');
-                            h = get_attr(shape, 'h', 'f');
+                            w = getAttr(shape, 'w', 'f');
+                            h = getAttr(shape, 'h', 'f');
                         } catch (err) {
                             w = null;
                             h = null;
                         }
-                        var text_color = get_attr(shape, "color", "s");
-                        var text_font = get_attr(shape, "font", "s");
-                        var text_text = get_attr(shape, "str", "s");
+                        var text_color = getAttr(shape, "color", "s");
+                        var text_font = getAttr(shape, "font", "s");
+                        var text_text = getAttr(shape, "str", "s");
                         var text = paper.text(x, y, text_text);
                         text.attr({
                             "font-family": text_font,
@@ -1776,33 +1869,33 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                         break;
                     case "bezier": // bezier paths
                         
-                        pathstring += get_attr(shape,"pathstring",'s');
-                        pa.push({ color: get_attr(shape, "stroke", 's'), opacity: get_attr(shape, "strokeo", "f"), width: get_attr(shape, "strokew","f") });
+                        pathstring += getAttr(shape,"pathstring",'s');
+                        pa.push({ color: getAttr(shape, "stroke", 's'), opacity: getAttr(shape, "strokeo", "f"), width: getAttr(shape, "strokew","f") });
                         break;
                     case "trans":
                         // format: [path]<path>[color]<color>[opac]<opac>[mode]<block or isolate>[]
                         if (!trans_currpath)
                             trans_currpath = "";
                         trans_currpath += shape + "|";
-                        var pathstringt = get_attr(shape, "path", 's'); // MODIFIED
-                        marqueeFillColor = get_attr(shape, "color", 's');
-                        marqueeFillOpacity = get_attr(shape, "opac", "f");
-                        trans_mode = get_attr(shape, "mode", 's');
+                        var pathstringt = getAttr(shape, "path", 's'); // MODIFIED
+                        marqueeFillColor = getAttr(shape, "color", 's');
+                        marqueeFillOpacity = getAttr(shape, "opac", "f");
+                        trans_mode = getAttr(shape, "mode", 's');
                         transCoords = pathstringt.match(/[0-9.\-]+/g);
                         transLetters = pathstringt.match(/[CMLz]/g);
                         drawTrans();
                         break;
                     //case "rect":
                     //    // format: [x]73[y]196[w]187[h]201[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                    //    x = toAbsoluteCoords(get_attr(shape, "x", "f"));
-                    //    y = toAbsoluteCoords(get_attr(shape, "y", "f"), true);
-                    //    w = toAbsoluteCoords(get_attr(shape, "w", "f"));
-                    //    h = toAbsoluteCoords(get_attr(shape, "h", "f"), true);
-                    //    fillc = get_attr(shape, "fillc", "s");
-                    //    fillo = get_attr(shape, "fillo", "f");
-                    //    strokec = get_attr(shape, "strokec", "s");
-                    //    strokeo = get_attr(shape, "strokeo", "f");
-                    //    strokew = get_attr(shape, "strokew", "f");
+                    //    x = toAbsoluteCoords(getAttr(shape, "x", "f"));
+                    //    y = toAbsoluteCoords(getAttr(shape, "y", "f"), true);
+                    //    w = toAbsoluteCoords(getAttr(shape, "w", "f"));
+                    //    h = toAbsoluteCoords(getAttr(shape, "h", "f"), true);
+                    //    fillc = getAttr(shape, "fillc", "s");
+                    //    fillo = getAttr(shape, "fillo", "f");
+                    //    strokec = getAttr(shape, "strokec", "s");
+                    //    strokeo = getAttr(shape, "strokeo", "f");
+                    //    strokew = getAttr(shape, "strokew", "f");
                     //    var R = paper.rect(x, y, w, h);
                     //    R.data("currx", x);
                     //    R.data("curry", y);
@@ -1814,15 +1907,15 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                     //    break;
                     //case "ellipse":
                     //    // format: [cx]81[cy]131[rx]40[ry]27[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                    //    var cx = toAbsoluteCoords(get_attr(shape, "cx", "f"));
-                    //    var cy = toAbsoluteCoords(get_attr(shape, "cy", "f"), true);
-                    //    var rx = toAbsoluteCoords(get_attr(shape, "rx", "f"));
-                    //    var ry = toAbsoluteCoords(get_attr(shape, "ry", "f"), true);
-                    //    fillc = get_attr(shape, "fillc", "s");
-                    //    fillo = get_attr(shape, "fillo", "f");
-                    //    strokec = get_attr(shape, "strokec", "s");
-                    //    strokeo = get_attr(shape, "strokeo", "f");
-                    //    strokew = get_attr(shape, "strokew", "f");
+                    //    var cx = toAbsoluteCoords(getAttr(shape, "cx", "f"));
+                    //    var cy = toAbsoluteCoords(getAttr(shape, "cy", "f"), true);
+                    //    var rx = toAbsoluteCoords(getAttr(shape, "rx", "f"));
+                    //    var ry = toAbsoluteCoords(getAttr(shape, "ry", "f"), true);
+                    //    fillc = getAttr(shape, "fillc", "s");
+                    //    fillo = getAttr(shape, "fillo", "f");
+                    //    strokec = getAttr(shape, "strokec", "s");
+                    //    strokeo = getAttr(shape, "strokeo", "f");
+                    //    strokew = getAttr(shape, "strokew", "f");
                     //    var E = paper.ellipse(cx, cy, rx, ry);
                     //    E.data("currx", E.getBBox().x);
                     //    E.data("curry", E.getBBox().y);
@@ -1834,12 +1927,12 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                     //    break;
                     case "marquee": // DEPRECATED
                         // format: [x]206[y]207[w]102[h]93[surrfillc]#222222[surrfillo].8[]
-                        var topx = toAbsoluteCoords(get_attr(shape, "x", "f"));
-                        var topy = toAbsoluteCoords(get_attr(shape, "y", "f"), true);
-                        w = toAbsoluteCoords(get_attr(shape, "w", "f"));
-                        h = toAbsoluteCoords(get_attr(shape, "h", "f"), true);
-                        var surrfillc = get_attr(shape, "surrfillc", "s");
-                        var surrfillo = get_attr(shape, "surrfillo", "f");
+                        var topx = toAbsoluteCoords(getAttr(shape, "x", "f"));
+                        var topy = toAbsoluteCoords(getAttr(shape, "y", "f"), true);
+                        w = toAbsoluteCoords(getAttr(shape, "w", "f"));
+                        h = toAbsoluteCoords(getAttr(shape, "h", "f"), true);
+                        var surrfillc = getAttr(shape, "surrfillc", "s");
+                        var surrfillo = getAttr(shape, "surrfillo", "f");
                         var botx = topx + w;
                         var boty = topy + h;
                         var rn = paper.rect(0, 0, cw, topy);
@@ -1911,18 +2004,18 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
                 switch (type) {
                     case "boundrect":
                         //format: [x]73[y]196[w]187[h]201[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                        var x = toAbsoluteCoords(get_attr(shape, "x", "f"));
-                        var y = toAbsoluteCoords(get_attr(shape, "y", "f"), true);
-                        var w = toAbsoluteCoords(get_attr(shape, "w", "f"));
-                        var h = toAbsoluteCoords(get_attr(shape, "h", "f"), true);
+                        var x = toAbsoluteCoords(getAttr(shape, "x", "f"));
+                        var y = toAbsoluteCoords(getAttr(shape, "y", "f"), true);
+                        var w = toAbsoluteCoords(getAttr(shape, "w", "f"));
+                        var h = toAbsoluteCoords(getAttr(shape, "h", "f"), true);
                         addRectangle(x, y, w, h);
                         break;
                     case "boundellipse":
                         //format: [cx]81[cy]131[rx]40[ry]27[fillc]#ffff00[fillo].5[strokec]#000000[strokeo]1[strokew]3[]
-                        var cx = toAbsoluteCoords(get_attr(shape, "cx", "f"));
-                        var cy = toAbsoluteCoords(get_attr(shape, "cy", "f"), true);
-                        var rx = toAbsoluteCoords(get_attr(shape, "rx", "f"));
-                        var ry = toAbsoluteCoords(get_attr(shape, "ry", "f"), true);
+                        var cx = toAbsoluteCoords(getAttr(shape, "cx", "f"));
+                        var cy = toAbsoluteCoords(getAttr(shape, "cy", "f"), true);
+                        var rx = toAbsoluteCoords(getAttr(shape, "rx", "f"));
+                        var ry = toAbsoluteCoords(getAttr(shape, "ry", "f"), true);
                         addEllipse(cx, cy, rx, ry);
                         break;
                 }
@@ -2713,9 +2806,9 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
     //    for (i = 0; i < str.length; i++) {
     //        if ((str[i] === "L") || (str[i] === "M")) {
     //            var cpth = str.substring(i).split("|")[0];
-    //            var strokec = get_attr(cpth, "stroke", "s");
-    //            var strokeo = get_attr(cpth, "strokeo", "f");
-    //            var strokew = get_attr(cpth, "strokew", "f");
+    //            var strokec = getAttr(cpth, "stroke", "s");
+    //            var strokeo = getAttr(cpth, "strokeo", "f");
+    //            var strokew = getAttr(cpth, "strokew", "f");
     //            ml.push(str[i]);
     //            pa.push({ "color": strokec, "opacity": strokeo, "width": strokew });
     //        }
@@ -3303,7 +3396,6 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
             console.log('uh oh');
         }
     }
-    that.erase = erase;
 
     // setter for distance between bezier points
     function setThresh(val) {
