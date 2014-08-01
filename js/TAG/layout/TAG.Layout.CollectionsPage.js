@@ -248,12 +248,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "height":  COLLECTION_DOT_WIDTH,
                             "border-radius": COLLECTION_DOT_WIDTH / 2,
                             "margin": COLLECTION_DOT_WIDTH/4
-                        }).on('click',function(){
-                            return function(){
-                                loadCollection(visibleCollections[i])();
-                                currentTag = null;
-                            }
-                        }());
+                        }).on('click', //function(){
+                            //return function(){
+                                loadCollection(visibleCollections[i])//();
+                                //currentTag = null;
+                            //}
+                        );//}());
             collectionDotHolder.append(collectionDot);
             topBar.append(collectionDotHolder);
 

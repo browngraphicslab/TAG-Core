@@ -25,7 +25,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
         info                = root.find('#info'),
         locHistoryToggle    = root.find('#locationHistoryToggle'),
-        //locHistory          = root.find('#locationHistory'),
+        locHistory          = root.find('#locationHistory'),
         locHistoryContainer = root.find('#locationHistoryContainer'),
 
         // constants
@@ -493,7 +493,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'color': '#' + PRIMARY_FONT_COLOR,
             'font-family': FONT
         });
-        locHistory.css({
+        locHistory && locHistory.css({
             'color': '#' + PRIMARY_FONT_COLOR,
             'font-family': FONT
         });
