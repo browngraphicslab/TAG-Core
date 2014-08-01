@@ -2247,11 +2247,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         //conversionVideos.push(newDoq.Identifier);
                         var source = newDoq.Metadata.Source;
                         var newFileName = source.slice(8, source.length);
+                        var index = newFileName.lastIndexOf(".");
+                        var fileExtension = newFileName.slice(index);
+                        var baseFileName = newFileName.slice(0, index);
                         var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
-                            var index = newFileName.lastIndexOf(".");
-                            var fileExtension = newFileName.slice(index);
-                            var baseFileName = newFileName.slice(0, index);
-
                             //$(document.getElementById("leftLoading")).remove();
                             //viewer.append(LADS.Util.createConversionLoading("This video is being converted to compatible formats for different browsers"));
                             TAG.Worktop.Database.convertVideo(function () {
@@ -2920,11 +2919,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var source = newDoq.Metadata.Source;
                 if (contentTypes[j] === "Video") {
                     var newFileName = source.slice(8, source.length);
+                    var index = newFileName.lastIndexOf(".");
+                    var fileExtension = newFileName.slice(index);
+                    var baseFileName = newFileName.slice(0, index);
                     var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
-                        var index = newFileName.lastIndexOf(".");
-                        var fileExtension = newFileName.slice(index);
-                        var baseFileName = newFileName.slice(0, index);
-
                         TAG.Worktop.Database.convertVideo(function () {
                         }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
                         conversionVideos.push(newDoq.Identifier);
