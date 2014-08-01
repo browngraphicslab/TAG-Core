@@ -22,6 +22,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         nextArrowArea            = root.find('#nextArrowArea'),
         nextArrow                = root.find('#nextArrow'),
         collectionHeader         = root.find('#collectionHeader'),
+        collectionDotHolder      = root.find('#collectionDotHolder'),
         bgimage                  = root.find('#bgimage'),
         bottomContainer          = root.find('#bottomContainer'),
         catalogDiv               = root.find('#catalogDiv'),
@@ -214,7 +215,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             j,
             lastCollectionIndex,
             firstCollectionIndex,
-            collectionDotHolder = $(document.createElement('div')),
             collectionDot;
 
         // Iterate through entire list of collections to to determine which are visible/not private/published.  Also set toShowFirst
@@ -229,7 +229,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // Iterate through visible/not private/published collections, and set their prev and next values
         // Also create a scroll dot for each (under main collection title)
-        collectionDotHolder.addClass('collectionDotHolder');
+        collectionDotHolder.empty();
         for(i = 0; i < visibleCollections.length; i++) {
             if(visibleCollections.length<=2){ 
                 lastCollectionIndex = null;
@@ -241,7 +241,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             visibleCollections[i].prevCollectionIndex = visibleCollections[i - 1] ? i - 1 : lastCollectionIndex;
             visibleCollections[i].nextCollectionIndex = visibleCollections[i + 1] ? i + 1 : firstCollectionIndex;
            
-            collectionDot  = $(document.createElement('div'))
+            collectionDot = $(document.createElement('div'))
                         .addClass('collectionDot')
                         .css({
                             "width": COLLECTION_DOT_WIDTH,
@@ -255,7 +255,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             //}
                         );//}());
             collectionDotHolder.append(collectionDot);
-            topBar.append(collectionDotHolder);
 
             collectionDots[visibleCollections[i].Identifier] = collectionDot;
         }
@@ -310,6 +309,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 prevCollection    = $(document.createElement('div')),
                 titleBox          = $(document.createElement('div')),
                 collectionDescription = $(document.createElement('div')),
+                dummyDot,
                 str,
                 text              = collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
 
@@ -330,11 +330,25 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
             }
 
-            //Make collection dot white and others gray
-            for(i = 0; i < visibleCollections.length; i++) { 
-                collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
-            }
-            collectionDots[collection.Identifier].css('background-color', 'white');
+            if (!collectionDots[collection.Identifier]){
+                //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
+                dummyDot = $(document.createElement('div'))
+                        .addClass('collectionDot')
+                        .css({
+                            "width": COLLECTION_DOT_WIDTH,
+                            "height":  COLLECTION_DOT_WIDTH,
+                            "border-radius": COLLECTION_DOT_WIDTH / 2,
+                            "margin": COLLECTION_DOT_WIDTH/4,
+                            "background-color":'white'
+                        });
+                collectionDotHolder.append(dummyDot);
+            } else {
+                //Make collection dot white and others gray
+                for(i = 0; i < visibleCollections.length; i++) { 
+                    collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
+                }
+                collectionDots[collection.Identifier].css('background-color', 'white');
+            }                
 
             // Add collection title
             collectionArea.empty();
@@ -1631,7 +1645,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         valuation  = sortValuation('yearKey');
         avlTree = new AVLTree(comparator, valuation);
         for (i = 0; i < artworks.length; i++) {
-            //TO-DO- should these default to null or just chill as empty strings??
             if (timelineDate){
                 artworkDate = getArtworkDate(artworks[i],true);
             } else {
@@ -1656,8 +1669,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         return avlTree;
     }
 
+    /* Get a date object representing temporal metadata for an artwork
+    * @method getArtworkDate
+    * @param {Object} artwork       artwork we care about
+    * @param {Boolean} timelineDate     whether we want the metadata date or the timeline date
+    * @return {Object} artworkDate      object containing year, month, day attributes
+    */
     function getArtworkDate(artwork, timelineDate){
         var artworkDate;
+        //second conditional checks to see if that metadata field exists in the server (backwards compatibility)
         if (timelineDate && (artwork.Metadata.TimelineYear||artwork.Metadata.TimelineYear==='')){
                 artworkDate = {
                     year : artwork.Metadata.TimelineYear,
@@ -1674,6 +1694,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         return artworkDate;
     }
 
+    /*Get the text to display based on a date object
+    * @method getDateText
+    * @param {Object} date     object containing year, month, day attributes
+    * @return {String} dateText    text to display in mm/dd/yyyy or mm/yyyy format (Note- would need to change for internationalization)
+    */   
     function getDateText(date){
         var yearText,
             neg = false,
