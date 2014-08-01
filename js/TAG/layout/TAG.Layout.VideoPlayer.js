@@ -37,6 +37,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         sourceOGG,
         videoElt = video[0],
         DURATION = parseFloat(videoSrc.Metadata.Duration),
+        bottomBar = root.find('#bottomBar'),
         play = root.find('#playPauseButton'),
         vol = root.find('#videoControlsButton'),
         loop = root.find('#loopButton'),
@@ -108,7 +109,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
             videoElt.currentTime = 0;
             videoElt.pause();
         }
-        play.attr('src', tagPath+'images/icons/PlayWhite.svg');
+        play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/play.png');
     }
 
     /**
@@ -117,7 +118,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      */
     function playVideo() {
         videoElt.play();
-        play.attr('src', tagPath+'images/icons/PauseWhite.svg');
+        play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/pause.png');
     }
 
     /**
@@ -126,7 +127,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      */
     function pauseVideo() {
         videoElt.pause();
-        play.attr('src', tagPath+'images/icons/PlayWhite.svg');
+        play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/play.png');
     }
 
     /**
@@ -145,14 +146,14 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         video.on('loadedmetadata', initSeekHandlers);
 
         // set up play button
-        play.attr('src', tagPath+'images/icons/PlayWhite.svg');
+        play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/play.png');
         play.on('click', toggleVideo);
 
         // set up mute button
-        vol.attr('src', tagPath+'images/icons/VolumeUpWhite.svg');
+        vol.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/volume.png');
         $(vol).on('click', function () {
             videoElt.muted = !videoElt.muted;
-            vol.attr('src', tagPath+'images/icons/Volume'+ (videoElt.muted ? 'Down' : 'Up') + 'White.svg');
+            vol.css("opacity", (videoElt.muted ? ".5" : "1"))
         });
 
         // when video ends, return to collections page after a short delay
@@ -291,6 +292,11 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         });
 
         backButton.on('click', goBack);
+
+        //add bottom fade
+        bottomBar.css({
+
+            });
 
         if(IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg');
