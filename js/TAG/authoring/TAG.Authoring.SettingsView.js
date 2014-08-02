@@ -846,6 +846,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} inputs       information from setting inputs
      */
     function saveSplashScreen(inputs) {
+        pCL = displayLoadingSettings();
         backButtonClicked && prepareNextView(false, null, null, "Saving...");
 		generalIsLoading = true;
         clearRight();
@@ -898,6 +899,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     loadGeneralView();
                 };
             }, error(loadGeneralView), null);
+            hideLoading();
+            hideLoadingSettings(pCL);
         }, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
     }
 
@@ -1471,12 +1474,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             desc = createSetting('Collection Description', descInput);
             bg = createSetting('Collection Background Image', bgInput);
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
+            sortOptions = createSetting('Sort Options', sortDropDown);
 
             settingsContainer.append(privateSetting);
             settingsContainer.append(name);
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
+            settingsContainer.append(sortOptions);
         }
 
         //Automatically save changes
@@ -1504,6 +1509,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 nameInput: nameInput,        //Collection name
                 descInput: descInput,        //Collection description
                 bgInput: bgInput,            //Collection background image
+                sortOptions: sortDropDown,
                 timelineInput: timelineShown,  //to-do make sure default is shown
             });
         }, {
@@ -1687,7 +1693,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
-            ollectionsIsLoading = false;
+            collectionsIsLoading = false;
             if (backButtonClicked && !(generalIsLoading || collectionsIsLoading ||
                 artworksIsLoading || associatedMediaIsLoading || toursIsLoading)) { //don't continue if more sections are still loading - wait for them to finish
                 backButtonClickHandler();
