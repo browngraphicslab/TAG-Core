@@ -1355,7 +1355,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //TO-DO: add in on server side from TAG.Worktop.Database.js changeExhibition() 
         var timelineShown;
-        if (exhibition.Metadata.Timeline === ("true"||"false")){
+        if (exhibition.Metadata.Timeline === "true" || exhibition.Metadata.Timeline === "false") {
             exhibition.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
         } else {
             //backwards compatibility
@@ -1495,7 +1495,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 nameInput: nameInput,
                 descInput: descInput,
                 bgInput: bgInput,
-                sortOptions: sortDropDown
+                sortOptions: sortDropDown,
+                timelineInput: timelineShown
             });
         };
 
@@ -1510,7 +1511,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 descInput: descInput,        //Collection description
                 bgInput: bgInput,            //Collection background image
                 sortOptions: sortDropDown,
-                timelineInput: timelineShown,  //to-do make sure default is shown
+                timelineInput: timelineShown  //to-do make sure default is shown
             });
         }, {
             'margin-right': '3%',
