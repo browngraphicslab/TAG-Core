@@ -881,7 +881,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             BaseFontSize: baseFontSize,
         };
         if (bgImg) options.Background = bgImg;
-        if (logo) options.Icon = logo;
+        //if (logo) options.Icon = logo;
         //Change the settings in the database
         TAG.Worktop.Database.changeMain(options, function () {
             generalIsLoading = false;
@@ -2310,13 +2310,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else {
                     holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, media.Metadata.Converted);
                 }
-                fixVolumeBar(holder);
                 break;
             case "audio":
                 holder = $(document.createElement('audio'));
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
                 holder.css({ 'width': '80%' });
+                fixVolumeBar(holder);
                 break;
             case "iframe":
                 holder = $(document.createElement('iframe'));
