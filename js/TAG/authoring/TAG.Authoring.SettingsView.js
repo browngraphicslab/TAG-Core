@@ -1358,7 +1358,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //backwards compatibility
             timelineShown = true;
         }
-        console.log(timelineShown);
         var showTimeline = createButton('Show Timeline', function(){
             timelineShown = true;
             showTimeline.css('background-color', 'white');
@@ -1394,14 +1393,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var name;
         var desc;
         var bg;
-        var preview;
         var sortOptions;
         var idLabel;
         var timeline;
         var nameInput;
         var descInput;
         var bgInput;
-        var previewInput;
         if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
                 var sortOptions = {
@@ -1454,13 +1451,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     });
                 });
             });
-            var previewInput = createButton('Change Image', function () {
-                uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
-                    var url = urls[0];
-                    previewInput.val(url);
-                    $('#img1')[0].src = TAG.Worktop.Database.fixPath(url);
-                });
-            });
 
             nameInput.focus(function () {
                 if (nameInput.val() === 'Collection')
@@ -1480,14 +1470,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             name = createSetting('Collection Name', nameInput);
             desc = createSetting('Collection Description', descInput);
             bg = createSetting('Collection Background Image', bgInput);
-            preview = createSetting('Collection Preview Image', previewInput);
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
 
             settingsContainer.append(privateSetting);
             settingsContainer.append(name);
             settingsContainer.append(desc);
             settingsContainer.append(bg);
-            settingsContainer.append(preview);
             settingsContainer.append(timeline);
         }
 
@@ -1502,7 +1490,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 nameInput: nameInput,
                 descInput: descInput,
                 bgInput: bgInput,
-                previewInput: previewInput,
                 sortOptions: sortDropDown
             });
         };
@@ -1517,7 +1504,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 nameInput: nameInput,        //Collection name
                 descInput: descInput,        //Collection description
                 bgInput: bgInput,            //Collection background image
-                previewInput: previewInput,  //Collection preview image
                 timelineInput: timelineShown,  //to-do make sure default is shown
             });
         }, {
@@ -1671,9 +1657,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var name = inputs.nameInput.val();
         var desc = inputs.descInput.val();
         var bg = inputs.bgInput.val();
-        var preview = inputs.previewInput.val();
         var priv = inputs.privateInput;
         var timeline = inputs.timelineInput;
+
         var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
         var option;
 
@@ -1696,10 +1682,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             Timeline: timeline
         }
 
-        if (bg)
+        if (bg){
             options.Background = bg;
-        if (preview)
-            options.Img1 = preview;
+        }
 
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
             ollectionsIsLoading = false;
