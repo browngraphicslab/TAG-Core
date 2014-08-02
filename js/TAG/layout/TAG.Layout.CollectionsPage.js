@@ -55,6 +55,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtwork   = options.backArtwork,         // the currently selected artwork
         currentTag       = options.backTag,             // current sort tag for collection
         multipleShown    = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
+        previewing       = options.previewing || false,          // whether we are loading for a preview in authoring (for dot styling)
         
         // misc initialized vars
         loadQueue            = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
@@ -80,10 +81,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         BASE_FONT_SIZE      = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH            = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
         MAX_YEAR            = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
-        EVENT_CIRCLE_WIDTH  = Math.max(20, $("#tagRoot").width() / 40),  // width of the circles for the timeline                                // pixel width of event circles
-        COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                                // pixel width of event circles
-        LEFT_SHIFT = 9,                                            // pixel shift of timeline event circles to center on ticks 
-        TILE_BUFFER         = $("#tagRoot").width() / 100,              // number of pixels between artwork tiles
+        EVENT_CIRCLE_WIDTH  =  Math.max(20, $("#tagRoot").width() / 40),  // width of the circles for the timeline                                
+        COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
+        LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
+        TILE_BUFFER         = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO   = 200,                                          //ratio between width and height of artwork tiles
         TILE_WIDTH_RATIO    = 255,
         ANIMATION_DURATION  = 800,                                         // duration of timeline zoom animation
@@ -111,6 +112,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         defaultTag;                     // default sort tag
 
         root[0].collectionsPage = this;
+       
     // get things rolling
     init();
 
@@ -240,7 +242,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             visibleCollections[i].prevCollectionIndex = visibleCollections[i - 1] ? i - 1 : lastCollectionIndex;
             visibleCollections[i].nextCollectionIndex = visibleCollections[i + 1] ? i + 1 : firstCollectionIndex;
-           
+            
+            if (previewing) {
+                COLLECTION_DOT_WIDTH = root.width() / 120; //for previewing collections page in authoring
+            }
             collectionDot = $(document.createElement('div'))
                         .addClass('collectionDot')
                         .css({
@@ -798,6 +803,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     * @param  {bool} selected             Whether or not circle is selected
     */
     function styleTimelineCircle(element, selected) {
+        if (previewing) {
+            EVENT_CIRCLE_WIDTH = root.width()/ 40; // for collections page preview in authoring
+        }
         if (selected) {
             element.css({
                 'height': EVENT_CIRCLE_WIDTH*3/2,

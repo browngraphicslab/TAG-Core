@@ -1621,7 +1621,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         function exhibitionView(exhibition) {
             rightQueue.add(function () {
                 var options = {
-                    backCollection : exhibition
+                    backCollection : exhibition,
+                    previewing : true
                 };
                 var exhibView = new TAG.Layout.CollectionsPage(options);
                 var exroot = exhibView.getRoot();
@@ -1672,9 +1673,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var preview = inputs.previewInput.val();
         var priv = inputs.privateInput;
         var timeline = inputs.timelineInput;
-
-        console.log(timeline);
-
         var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
         var option;
 
