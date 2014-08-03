@@ -2183,13 +2183,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var imagesrc;
                         switch (val.Metadata.ContentType.toLowerCase()) {
                             case 'video':
-                                imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg';
+                                imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath+'images/video_icon.svg';
                                 break;
                             case 'audio':
-                                imagesrc = tagPath + 'images/audio_icon.svg';
+                                imagesrc = tagPath + '/images/audio_icon.svg';
                                 break;
                             case 'iframe':
-                                imagesrc = tagPath + 'images/audio_icon.svg'; // TODO iframe replace icon
+                                imagesrc = tagPath + '/images/audio_icon.svg'; // TODO iframe replace icon
                                 break;
                             case 'image':
                                 imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';
@@ -2304,7 +2304,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (media.Extension !== ".mp4") {
                                 $("#videoErrorMsg").remove();
                                 $("#leftLoading").remove();
-                                var msg = "The video format has not been converted to formats supported in multiple browsers.";
+                                var msg = "This video format has not been converted to formats supported in multiple browsers.";
                                 viewer.append(LADS.Util.createConversionLoading(msg, true));
                             }
                         }
@@ -2785,7 +2785,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }
                         }, "Would you like to convert" + newFileName + "?", "Yes", true, function () {
                             if (fileExtension !== ".mp4") {
-                                var msg = "The video format is not supported.";
+                                var msg = "This video format has not been converted to formats supported in multiple browsers.";
                                 viewer.append(LADS.Util.createConversionLoading(msg, true));
                             }
                             $(".convertVideoBtn").show().data("disabled", false);
@@ -3038,7 +3038,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail);
                                 break;
                             case 'VideoArtwork':
-                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : TAG.Worktop.Database.fixPath("images/video_icon.svg");
+                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath+ "images/video_icon.svg";
                                 break
                             default:
                                 imagesrc = null;
@@ -3165,7 +3165,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (artwork.Extension !== ".mp4") {
                                 $("#videoErrorMsg").remove();
                                 $("#leftLoading").remove();
-                                var msg = "The video format is not supported.";
+                                var msg = "This video format has not been converted to formats supported in multiple browsers.";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
                             }
                         }
@@ -3493,7 +3493,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $(".convertVideoBtn").hide().data("disabled", true);
                     }, "Would you like to convert " + newFileName + "?", "Yes", true, function () {
                         if (fileExtension !== ".mp4") {
-                            var msg = "The video format has not been converted to formats supported in multiple browsers.";
+                            var msg = "This video format has not been converted to formats supported in multiple browsers.";
                             viewer.append(LADS.Util.createConversionLoading(msg, true));
                         }
                         $(".convertVideoBtn").show().data("disabled", false);
