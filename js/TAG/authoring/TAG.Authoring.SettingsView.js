@@ -651,7 +651,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         }
-        var startPage = previewStartPage();
 
         // Get DB Values
         /*var alpha = TAG.Worktop.Database.getMuseumOverlayTransparency();
@@ -706,7 +705,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
         var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Lobster', 'Pacifico', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
-        
+        var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
         // Handle changes
         /*onChangeUpdateNum(alphaInput, 0, 100, function (num) {
@@ -814,21 +813,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         
         // preview buttons
-        var previewStartPageButton = createButton('Splash Screen', previewStartPage, {
+        var previewStartPageButton = createButton('Splash Screen', function () { previewStartPage(primaryFontColorInput, secondaryFontColorInput) }, {
             'margin-left': '2%',
             'margin-top': '1%',
             'margin-right': '0%',
             'margin-bottom': '3%',
         });
 
-        var previewCollectionsPageButton = createButton('Collections Page', previewCollectionsPage, {
+        var previewCollectionsPageButton = createButton('Collections Page', function () {
+            previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
+            },
+            {
             'margin-left': '2%',
             'margin-top': '1%',
             'margin-right': '0%',
             'margin-bottom': '3%',
         });
 
-        var previewArtworkViewerButton = createButton('Artwork Viewer', previewArtworkViewer, {
+        var previewArtworkViewerButton = createButton('Artwork Viewer', function () { previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput) }, {
             'margin-left': '2%',
             'margin-top': '1%',
             'margin-right': '0%',
@@ -1003,9 +1005,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Preview splash screen
      * @method previewStartPage
      */
-    function previewStartPage() {
+    function previewStartPage(primaryFontInput, secondaryFontInput) {
         // Load the start page, the callback adds it to the viewer when it's done loading
-        var startPage = TAG.Layout.StartPage(null, function(startPage) {
+        var startPage = TAG.Layout.StartPage({primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val()}, function(startPage) {
             if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
                 return;
             }
@@ -1019,11 +1021,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Preview collections page
      * @method previewCollectionsPage
      */
-    function previewCollectionsPage() {
+    function previewCollectionsPage(primaryFontInput, secondaryFontInput) {
         // Load the collections page, the callback adds it to the viewer when it's done loading
-        var collectionsPage = TAG.Layout.CollectionsPage(null, null, viewer);
+        var collectionsPage = TAG.Layout.CollectionsPage({primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val()}, null, viewer);
         var croot = collectionsPage.getRoot();
         $(croot).css({ 'z-index': '1' });
+
         if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
             return;
         }
@@ -1035,9 +1038,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Preview artwork viewer
      * @method previewArtworkViewer
      */
-    function previewArtworkViewer() {
+    function previewArtworkViewer(primaryFontInput, secondaryFontInput) {
         // Load the artwork viewer, the callback adds it to the viewer when it's done loading
-        var artworkViewer = TAG.Layout.ArtworkViewer({ catalogState: {}, doq: artworkList[0] || null, split: 'L' }, viewer);
+        var artworkViewer = TAG.Layout.ArtworkViewer({ catalogState: {}, doq: artworkList[0] || null, split: 'L', primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val() }, viewer);
         var aroot = artworkViewer.getRoot();
         $(aroot).css('z-index', '-1');
         if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
@@ -3052,7 +3055,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 loadArtwork(val);
                                 currentIndex = i;
                             }, val.Identifier, false, function () {
-                                editArtwork(val);
+                                if (val.Metadata.Type === "Artwork") {
+                                    editArtwork(val);
+                                }
                             }, true, val.Extension), true));
 
 
@@ -3081,7 +3086,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 previousIdentifier = val.Identifier;
                                 currentIndex = i;
                             }, val.Identifier, false, function () {
-                                editArtwork(val);
+                                if (val.Metadata.Type === "Artwork") {
+                                    editArtwork(val);
+                                }
                             }, true, val.Extension));
                         }
                         // Hide if it doesn't match search criteria

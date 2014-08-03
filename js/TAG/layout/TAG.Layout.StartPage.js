@@ -529,8 +529,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             secondaryFontColor;
 
         
-        primaryFontColor = main.Metadata["PrimaryFontColor"];
-        secondaryFontColor = main.Metadata["SecondaryFontColor"];
+        primaryFontColor = options.primaryFontColor ? options.primaryFontColor : main.Metadata["PrimaryFontColor"];
+        secondaryFontColor = options.secondaryFontColor ? options.secondaryFontColor : main.Metadata["SecondaryFontColor"];
         museumName = root.find('#museumName');
         museumNameSpan = root.find('#museumNameSpan');
         tempName = main.Metadata["MuseumName"];
