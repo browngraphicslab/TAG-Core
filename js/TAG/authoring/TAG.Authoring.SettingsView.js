@@ -2304,7 +2304,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (media.Extension !== ".mp4") {
                                 $("#videoErrorMsg").remove();
                                 $("#leftLoading").remove();
-                                var msg = "The video format is not supported.";
+                                var msg = "The video format has not been converted to formats supported in multiple browsers.";
                                 viewer.append(LADS.Util.createConversionLoading(msg, true));
                             }
                         }
@@ -2461,10 +2461,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var deleteButton = createButton('Delete',
             function () {deleteAssociatedMedia(media); changesHaveBeenMade = true; },
             {
-                'margin-left': '2%',
-                'margin-top': '1%',
                 'margin-right': '0%',
+                'margin-top': '1%',
                 'margin-bottom': '3%',
+                'margin-left': '2%',
                 'float': 'left',
             });
 
@@ -2473,7 +2473,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 generateAssocMediaThumbnail(media);
                 changesHaveBeenMade = true;
             }, {
-                'margin-right': '0%',
+                'margin-right': '3%',
                 'margin-top': '1%',
                 'margin-bottom': '1%',
                 'margin-left': '2%',
@@ -2537,13 +2537,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             convertBtn.hide().data('disabled', true);
                         }
                     }, {
-                        'margin-right': '3%',
+                        'margin-right': '0%',
                         'margin-top': '1%',
-                        'margin-bottom': '1%',
-                        'margin-left': '0.5%',
-                        'float': 'right'
+                        'margin-bottom': '3%',
+                        'margin-left': '2%',
+                        'float': 'left'
                     })
-            convertBtn.attr('class', 'convertVideoBtn');
+            convertBtn.attr('class', 'button convertVideoButton');
             if (media.Metadata.Converted!=="True" && conversionVideos.indexOf(media.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
@@ -3038,7 +3038,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail);
                                 break;
                             case 'VideoArtwork':
-                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + "images/video_icon.svg";
+                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : TAG.Worktop.Database.fixPath("images/video_icon.svg");
                                 break
                             default:
                                 imagesrc = null;
@@ -3355,19 +3355,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             convertBtn.hide().data('disabled', true);
                         }
                     }, {
-                        'margin-right': '3%',
+                        'margin-right': '0%',
                         'margin-top': '1%',
-                        'margin-bottom': '1%',
-                        'margin-left': '1.5%',
-                        'float': 'right'
+                        'margin-bottom': '3%',
+                        'margin-left': '2%',
+                        'float': 'left'
                     })
-            convertBtn.attr('class', 'convertVideoBtn');
+            convertBtn.attr('class', 'button convertVideoBtn');
             if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
                 convertBtn.hide().data('disabled', true);
             }
-            buttonContainer.append(thumbnailButton).append(deleteArt).append(saveButton).append(convertBtn).append(xmluploaderbtn); //SAVE BUTTON//
+            buttonContainer.append(thumbnailButton).append(saveButton).append(convertBtn).append(xmluploaderbtn).append(deleteArt); //SAVE BUTTON//
         }
     }
 
@@ -3493,7 +3493,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $(".convertVideoBtn").hide().data("disabled", true);
                     }, "Would you like to convert " + newFileName + "?", "Yes", true, function () {
                         if (fileExtension !== ".mp4") {
-                            var msg = "The video format is not supported.";
+                            var msg = "The video format has not been converted to formats supported in multiple browsers.";
                             viewer.append(LADS.Util.createConversionLoading(msg, true));
                         }
                         $(".convertVideoBtn").show().data("disabled", false);
