@@ -94,7 +94,7 @@ TAG.Worktop.Database = (function () {
         getBaseFontSize: getBaseFontSize,
         getOptionalFeatures: getOptionalFeatures,
         getCustomFont: getCustomFont,
-        //getIdleTimerDuration: getTimerDuration,
+        getIdleTimerDuration: getIdleTimerDuration,
 
         asyncRequest: asyncRequest,
         convertToDocHandler: convertToDocHandler,
