@@ -211,9 +211,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var brownLogo = $(document.createElement('img'));
         var closeButton = createCloseButton();
 
-        microsoftLogo.attr('src', tagPath + 'images/microsoft_logo.png');
-        brownLogo.attr('src', tagPath + 'images/brown_log.png');
+        microsoftLogo.attr('src', tagPath + 'images/Microsoft-Logo-Black-small.png');
+        brownLogo.attr('src', tagPath + 'images/brown_logo.png');
         microsoftLogo.css({
+            'height': 'auto',
+            'width': '20%',
+            'margin-left': '50%'
+        });
+        brownLogo.css({
             'height': 'auto',
             'width': '20%',
             'margin-left': '50%'
