@@ -459,6 +459,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 titleBox          = $(document.createElement('div')),
                 collectionDescription = $(document.createElement('div')),
                 dummyDot,
+                dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR),
                 str,
                 text              = collection.Metadata && collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
 
@@ -614,10 +615,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
 
+                artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
+                assocMediaButton.css('color', dimmedColor);
+
             }
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
-            collection.Metadata && collection.Metadata.Description ? infoDiv.css('width', '25%') : infoDiv.css('width', '0');
+            if (collection.Metadata.Description && !onAssocMediaView) {
+                infoDiv.css('width', '25%'); 
+            } else { 
+                infoDiv.css('width', '0%');
+            }
 
             // Hide selected artwork container, as nothing is selected yet
             selectedArtworkContainer.css('display', 'none');
@@ -629,21 +637,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.append(infoDiv);
             timelineArea.empty();
 
+            //TO-DO: add in check here for all incompatible dates? would have to add extra check for assoc media view
             if (collection.Metadata.Timeline === ("true"||"false")){
                 collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
             }
-
-
-            //TO-DO: are off's neccesary?
-            //get colors right if there's customization.
+ 
             //if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === true){
                 artworksButton.off()
                               .css({
                                 'display' : 'block',
                                 })
                               .on('click', function(){
-                                    artworksButton.css('color','inherit');
-                                    assocMediaButton.css('color', 'rgb(85,85,85)');
+                                    artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
+                                    assocMediaButton.css('color', dimmedColor);
                                     if (onAssocMediaView){
                                         onAssocMediaView = false;
                                         loadCollection(currCollection)();
@@ -655,8 +661,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     'display' : 'block',
                                 })
                                 .on('click', function(){
-                                    artworksButton.css('color','rgb(85,85,85');
-                                    assocMediaButton.css('color','inherit');  
+                                    artworksButton.css('color', dimmedColor);
+                                    assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView){
                                         onAssocMediaView = true;
                                         loadCollection(currCollection)();
@@ -677,23 +683,34 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             applyCustomization();
 
+            /*Helper function to get all of the associated media in a collection
+             * @method getCollectionMedia
+             * @param  {Array} artworkDoqs          list of artwork doqs in the collection
+             */
             function getCollectionMedia(artworkDoqs){  
                 collectionLength = artworkDoqs.length;
                 for (i=0;i<artworkDoqs.length;i++){
                     TAG.Worktop.Database.getAssocMediaTo(artworkDoqs[i].Identifier, addAssocMedia, null, addAssocMedia);
                 }
+
+                /*Helper function to combine all the media for each artwork in the collection
+                * @method addAssocMedia
+                * @param {Array} mediaDoqs          associated media doqs passed in by getAssocMediaTo()
+                */
+                function addAssocMedia(mediaDoqs){
+                    counter = counter +1 ;
+                    for (i=0; i<mediaDoqs.length;i++){
+                        collectionMedia.push(mediaDoqs[i]);
+                    }
+                    //When all of the collections have been looped through (neccessary to deal with async)
+                    if (counter === collectionLength){
+                        collection.collectionMedia = collectionMedia;
+                    }
+                }  
             }
 
-            //TO-DO: see if collection.collectionMedia becomes permanent
-            function addAssocMedia(mediaDoqs){
-                counter = counter +1 ;
-                for (i=0; i<mediaDoqs.length;i++){
-                    collectionMedia.push(mediaDoqs[i]);
-                }
-                if (counter === collectionLength){
-                    collection.collectionMedia = collectionMedia;
-                }
-            }  
+            
+            
         }
     }
     this.loadCollection = loadCollection;
