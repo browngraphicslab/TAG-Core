@@ -15,6 +15,7 @@ TAG.Util = (function () {
         applyD3DataRec: applyD3DataRec,
         elementInDocument: elementInDocument,
         fitText: fitText,
+        multiLineEllipsis: multiLineEllipsis,
         encodeText: encodeText,
         disableDrag: disableDrag,
         getFontSize: getFontSize,
@@ -51,6 +52,35 @@ TAG.Util = (function () {
         hexToRGBA: hexToRGBA
     };
 
+    function multiLineEllipsis(textHolder) {
+        var text = textHolder.html();
+        var t = $(textHolder.clone(true))
+            .hide()
+            .css('position', 'absolute')
+            .css('overflow', 'visible')
+            .width(textHolder.width())
+            .height('auto');
+
+        function height() {
+            var bool = t.height() > textHolder.height();
+            return bool;
+        };
+        
+        if(textHolder.css("overflow") == "hidden")
+        {
+            textHolder.parent().append(t);
+            var func = height;
+
+            while (text.length > 0 && func())
+            {
+                text = text.substr(0, text.length - 1);
+                t.html(text + "...");
+            }
+
+            textHolder.html(t.html());
+            t.remove();
+        }
+    }
     /* 
     constrainAndPosition takes in a set of relative and absolute 
     constraints and positioning as well as an HTML element and 
@@ -2530,10 +2560,11 @@ TAG.Util.UI = (function () {
         $(messageLabel).css({
             color: 'white',
             'width': '80%',
-            'height': '15%',
+            'height': '50%',
             'left': '10%',
             'top': '12.5%',
             'font-size': '1.25em',
+            'overflow': 'hidden',
             'position': 'relative',
             'text-align': 'center',
             'text-overflow': 'ellipsis',

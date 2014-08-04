@@ -4102,6 +4102,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, "Are you sure you want to delete " + artwork.Name + "?", "Delete", true, function () { $(confirmationBox).hide() });
         root.append(confirmationBox);
         $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
     /**Save an artwork
