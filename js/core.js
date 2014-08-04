@@ -429,5 +429,11 @@
         });
 
         window.addEventListener('resize', handleResize);
+    } else {
+        setInterval(function () {
+            if (navigator.onLine) {
+                $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+            }
+        }, 250);
     }
 })();
