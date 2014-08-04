@@ -435,5 +435,21 @@
                 $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
             }
         }, 250);
+        var el = document.body;
+        if (el.addEventListener) {
+            el.addEventListener("offline", function () {
+                $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+            }, true);
+        }
+        else if (el.attachEvent) {
+            el.attachEvent("onoffline", function () {
+                $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+            });
+        }
+        else {
+            el.onoffline = function () {
+                $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+            };
+        }
     }
 })();
