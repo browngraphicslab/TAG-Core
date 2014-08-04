@@ -35,8 +35,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         THUMBNAIL_EDITOR = ThumbnailEditor(),                                             // ThumbnailEditor object to deal with setting up thumbnail editing
         LOCATION_HISTORY = RichLocationHistory(),                                         // RichLocationHistory object ................................
         MEDIA_EDITOR = AssocMediaEditor(),                                                // AssocMediaEditor object ................................
-       // currentKeyHandler = TAG.Util.UI.getStack()[0],
-
+       
         // misc uninitialized variables
         annotatedImage,               // AnnotatedImage object
         associatedMedia,
@@ -47,7 +46,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         editLocButton,                // "Edit Location History" button
         rightArrowEditLoc,            // right arrow in "Edit Location History" button
         sidebarHideButtonContainer;   // tab to expand/contract side bar
-        
+   
+    LADS.Util.UI.getStack()[0] = null;
         
 
     // get things rolling
