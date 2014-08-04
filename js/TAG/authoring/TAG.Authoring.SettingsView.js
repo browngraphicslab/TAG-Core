@@ -230,7 +230,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video. Please try again";
+                            var msg = "An error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             conversionVideos.remove(artwork);
                         }
@@ -651,7 +651,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         }
-        var startPage = previewStartPage();
 
         // Get DB Values
         /*var alpha = TAG.Worktop.Database.getMuseumOverlayTransparency();
@@ -708,7 +707,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
         var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Lobster', 'Pacifico', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
         var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false);
-
+        var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
         // Handle changes
         /*onChangeUpdateNum(alphaInput, 0, 100, function (num) {
             updateBGColor('.infoDiv', overlayColorInput.val(), num);
@@ -819,21 +818,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         
         // preview buttons
-        var previewStartPageButton = createButton('Splash Screen', previewStartPage, {
+        var previewStartPageButton = createButton('Splash Screen', function () { previewStartPage(primaryFontColorInput, secondaryFontColorInput) }, {
             'margin-left': '2%',
             'margin-top': '1%',
             'margin-right': '0%',
             'margin-bottom': '3%',
         });
 
-        var previewCollectionsPageButton = createButton('Collections Page', previewCollectionsPage, {
+        var previewCollectionsPageButton = createButton('Collections Page', function () {
+            previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
+            },
+            {
             'margin-left': '2%',
             'margin-top': '1%',
             'margin-right': '0%',
             'margin-bottom': '3%',
         });
 
-        var previewArtworkViewerButton = createButton('Artwork Viewer', previewArtworkViewer, {
+        var previewArtworkViewerButton = createButton('Artwork Viewer', function () { previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput) }, {
             'margin-left': '2%',
             'margin-top': '1%',
             'margin-right': '0%',
@@ -851,6 +853,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} inputs       information from setting inputs
      */
     function saveSplashScreen(inputs) {
+        pCL = displayLoadingSettings();
         backButtonClicked && prepareNextView(false, null, null, "Saving...");
 		generalIsLoading = true;
         clearRight();
@@ -888,7 +891,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             IdleTimerDuration: idleTimerDuration
         };
         if (bgImg) options.Background = bgImg;
-        if (logo) options.Icon = logo;
+        //if (logo) options.Icon = logo;
         //Change the settings in the database
         TAG.Worktop.Database.changeMain(options, function () {
             generalIsLoading = false;
@@ -905,6 +908,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     loadGeneralView();
                 };
             }, error(loadGeneralView), null);
+            hideLoading();
+            hideLoadingSettings(pCL);
         }, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
     }
 
@@ -1007,9 +1012,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Preview splash screen
      * @method previewStartPage
      */
-    function previewStartPage() {
+    function previewStartPage(primaryFontInput, secondaryFontInput) {
         // Load the start page, the callback adds it to the viewer when it's done loading
-        var startPage = TAG.Layout.StartPage(null, function(startPage) {
+        var startPage = TAG.Layout.StartPage({primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val()}, function(startPage) {
             if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
                 return;
             }
@@ -1023,11 +1028,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Preview collections page
      * @method previewCollectionsPage
      */
-    function previewCollectionsPage() {
+    function previewCollectionsPage(primaryFontInput, secondaryFontInput) {
         // Load the collections page, the callback adds it to the viewer when it's done loading
-        var collectionsPage = TAG.Layout.CollectionsPage(null, null, viewer);
+        var collectionsPage = TAG.Layout.CollectionsPage({primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val()}, null, viewer);
         var croot = collectionsPage.getRoot();
         $(croot).css({ 'z-index': '1' });
+
         if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
             return;
         }
@@ -1039,9 +1045,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Preview artwork viewer
      * @method previewArtworkViewer
      */
-    function previewArtworkViewer() {
+    function previewArtworkViewer(primaryFontInput, secondaryFontInput) {
         // Load the artwork viewer, the callback adds it to the viewer when it's done loading
-        var artworkViewer = TAG.Layout.ArtworkViewer({ catalogState: {}, doq: artworkList[0] || null, split: 'L' }, viewer);
+        var artworkViewer = TAG.Layout.ArtworkViewer({ catalogState: {}, doq: artworkList[0] || null, split: 'L', primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val() }, viewer);
         var aroot = artworkViewer.getRoot();
         $(aroot).css('z-index', '-1');
         if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
@@ -1359,7 +1365,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //TO-DO: add in on server side from TAG.Worktop.Database.js changeExhibition() 
         var timelineShown;
-        if (exhibition.Metadata.Timeline === ("true"||"false")){
+        if (exhibition.Metadata.Timeline === "true" || exhibition.Metadata.Timeline === "false") {
             exhibition.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
         } else {
             //backwards compatibility
@@ -1478,12 +1484,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             desc = createSetting('Collection Description', descInput);
             bg = createSetting('Collection Background Image', bgInput);
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
+            sortOptions = createSetting('Sort Options', sortDropDown);
 
             settingsContainer.append(privateSetting);
             settingsContainer.append(name);
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
+            settingsContainer.append(sortOptions);
         }
 
         //Automatically save changes
@@ -1497,7 +1505,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 nameInput: nameInput,
                 descInput: descInput,
                 bgInput: bgInput,
-                sortOptions: sortDropDown
+                sortOptions: sortDropDown,
+                timelineInput: timelineShown
             });
         };
 
@@ -1511,7 +1520,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 nameInput: nameInput,        //Collection name
                 descInput: descInput,        //Collection description
                 bgInput: bgInput,            //Collection background image
-                timelineInput: timelineShown,  //to-do make sure default is shown
+                sortOptions: sortDropDown,
+                timelineInput: timelineShown  //to-do make sure default is shown
             });
         }, {
             'margin-right': '3%',
@@ -1694,7 +1704,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
-            ollectionsIsLoading = false;
+            collectionsIsLoading = false;
             if (backButtonClicked && !(generalIsLoading || collectionsIsLoading ||
                 artworksIsLoading || associatedMediaIsLoading || toursIsLoading)) { //don't continue if more sections are still loading - wait for them to finish
                 backButtonClickHandler();
@@ -2183,13 +2193,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var imagesrc;
                         switch (val.Metadata.ContentType.toLowerCase()) {
                             case 'video':
-                                imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg';
+                                imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath+'images/video_icon.svg';
                                 break;
                             case 'audio':
-                                imagesrc = tagPath + 'images/audio_icon.svg';
+                                imagesrc = tagPath + '/images/audio_icon.svg';
                                 break;
                             case 'iframe':
-                                imagesrc = tagPath + 'images/audio_icon.svg'; // TODO iframe replace icon
+                                imagesrc = tagPath + '/images/audio_icon.svg'; // TODO iframe replace icon
                                 break;
                             case 'image':
                                 imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';
@@ -2288,6 +2298,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         addSourceToVideo(holder, sourceOGV, 'video/ogv');
                         $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
                     } else {
+                        convertBtn.show();
                         if (output === "False") {
                             $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
                             $("#videoErrorMsg").remove();
@@ -2298,13 +2309,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video. Please try again";
+                            var msg = "An error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
                             if (media.Extension !== ".mp4") {
                                 $("#videoErrorMsg").remove();
                                 $("#leftLoading").remove();
-                                var msg = "The video format is not supported.";
+                                var msg = "This video format has not been converted to formats supported in multiple browsers.";
                                 viewer.append(LADS.Util.createConversionLoading(msg, true));
                             }
                         }
@@ -2317,13 +2328,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else {
                     holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, media.Metadata.Converted);
                 }
-                fixVolumeBar(holder);
                 break;
             case "audio":
                 holder = $(document.createElement('audio'));
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
                 holder.css({ 'width': '80%' });
+                fixVolumeBar(holder);
                 break;
             case "iframe":
                 holder = $(document.createElement('iframe'));
@@ -2441,7 +2452,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             saveAssocMedia(media, {
                 titleInput: titleInput,
-                descInput: descInput
+                descInput: descInput,
+                yearInput: yearMetadataDivSpecs.yearInput,
+                monthInput: yearMetadataDivSpecs.monthInput,
+                dayInput: yearMetadataDivSpecs.dayInput,
+                timelineYearInput: yearMetadataDivSpecs.timelineYearInput,
+                timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,
+                timelineDayInput: yearMetadataDivSpecs.timelineDayInput
             });
         };
 
@@ -2461,10 +2478,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var deleteButton = createButton('Delete',
             function () {deleteAssociatedMedia(media); changesHaveBeenMade = true; },
             {
-                'margin-left': '2%',
-                'margin-top': '1%',
                 'margin-right': '0%',
+                'margin-top': '1%',
                 'margin-bottom': '3%',
+                'margin-left': '2%',
                 'float': 'left',
             });
 
@@ -2473,7 +2490,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 generateAssocMediaThumbnail(media);
                 changesHaveBeenMade = true;
             }, {
-                'margin-right': '0%',
+                'margin-right': '3%',
                 'margin-top': '1%',
                 'margin-bottom': '1%',
                 'margin-left': '2%',
@@ -2537,18 +2554,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             convertBtn.hide().data('disabled', true);
                         }
                     }, {
-                        'margin-right': '3%',
+                        'margin-right': '0%',
                         'margin-top': '1%',
-                        'margin-bottom': '1%',
-                        'margin-left': '0.5%',
-                        'float': 'right'
+                        'margin-bottom': '3%',
+                        'margin-left': '2%',
+                        'float': 'left'
                     })
-            convertBtn.attr('class', 'convertVideoBtn');
-            if (media.Metadata.Converted!=="True" && conversionVideos.indexOf(media.Identifier) === -1) {
-                convertBtn.show().data('disabled', false);
-            } else {
-                convertBtn.hide().data('disabled', true);
-            }
+            convertBtn.attr('class', 'button convertVideoButton');
+            convertBtn.attr("disabled", "");
             buttonContainer.append(thumbnailButton).append(convertBtn);
         } else if (media.Metadata.ContentType.toLowerCase() === 'image' && !media.Metadata.Thumbnail && media.Metadata.Source && media.Metadata.Source[0] === '/' && !source.match(/.mp3/)) {
             // hacky way to see if asset was imported recently enough to support thumbnailing (these are /Images/_____.__
@@ -2778,14 +2791,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             conversionVideos.push(newDoq.Identifier);
                             var mediaElement = $(document.getElementById("videoInPreview"));
                             if (mediaElement[0]) {
-                                var msg = "This video is being converted to compatible formats for different browsers";
-                                viewer.append(TAG.Util.createConversionLoading(msg));
                                 $("#videoErrorMsg").remove();
                                 $("#leftLoading").remove();
+                                var msg = "This video is being converted to compatible formats for different browsers";
+                                viewer.append(TAG.Util.createConversionLoading(msg));    
                             }
                         }, "Would you like to convert" + newFileName + "?", "Yes", true, function () {
                             if (fileExtension !== ".mp4") {
-                                var msg = "The video format is not supported.";
+                                var msg = "This video format has not been converted to formats supported in multiple browsers.";
                                 viewer.append(LADS.Util.createConversionLoading(msg, true));
                             }
                             $(".convertVideoBtn").show().data("disabled", false);
@@ -2837,7 +2850,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     localURL = localURLs[i];
                     if (file.contentType.match(/image/)) {
                         contentType = 'Image';
-                    } else if (file.contentType.match(/video/)) {
+                    } else if (file.contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
                         contentType = 'Video';
                     } else if (file.contentType.match(/audio/)) {
                         contentType = 'Audio';
@@ -3038,7 +3051,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail);
                                 break;
                             case 'VideoArtwork':
-                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + "images/video_icon.svg";
+                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath+ "images/video_icon.svg";
                                 break
                             default:
                                 imagesrc = null;
@@ -3052,7 +3065,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 loadArtwork(val);
                                 currentIndex = i;
                             }, val.Identifier, false, function () {
-                                editArtwork(val);
+                                if (val.Metadata.Type === "Artwork") {
+                                    editArtwork(val);
+                                }
                             }, true, val.Extension), true));
 
 
@@ -3081,7 +3096,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 previousIdentifier = val.Identifier;
                                 currentIndex = i;
                             }, val.Identifier, false, function () {
-                                editArtwork(val);
+                                if (val.Metadata.Type === "Artwork") {
+                                    editArtwork(val);
+                                }
                             }, true, val.Extension));
                         }
                         // Hide if it doesn't match search criteria
@@ -3159,20 +3176,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video. Please try again";
+                            var msg = "An error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
-                            if (artwork.Extension !== ".mp4") {
-                                $("#videoErrorMsg").remove();
-                                $("#leftLoading").remove();
-                                var msg = "The video format is not supported.";
-                                viewer.append(TAG.Util.createConversionLoading(msg, true));
-                            }
+                            //if (artwork.Extension !== ".mp4") {
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "This video format has not been converted to formats supported in multiple browsers.";
+                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            //}
                         }
                         mediaElement.attr('src', source);
                     }
                 }, null, artwork.Identifier);
             if (conversionVideos.indexOf(artwork.Identifier) > -1) {
+                $("#videoErrorMsg").remove();
+                $("#leftLoading").remove();
                 var msg = "This video is being converted to compatible formats for different browsers";
                 viewer.append(TAG.Util.createConversionLoading(msg));
             } else {
@@ -3260,11 +3279,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 titleInput.val("Untitled Artwork");
             }
             saveArtwork(artwork, {
-                artistInput: artistInput,
-                nameInput: titleInput,
-                yearInput: yearInput,
-                descInput: descInput,
-                customInputs: customInputs,
+                artistInput: artistInput,                                      //Artwork artist
+                nameInput: titleInput,                                         //Artwork title
+                yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
+                monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
+                dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
+                timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
+                timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
+                timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
+                descInput: descInput,                                          //Artwork description
+                customInputs: customInputs                                    //Artwork custom info fields
             });
         };
         // Create buttons
@@ -3296,7 +3320,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
             timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
             descInput: descInput,                                          //Artwork description
-            customInputs: customInputs,                                    //Artwork custom info fields
+            customInputs: customInputs                                    //Artwork custom info fields
         };
         var saveButton = createButton('Save Changes',
             function () {
@@ -3355,19 +3379,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             convertBtn.hide().data('disabled', true);
                         }
                     }, {
-                        'margin-right': '3%',
+                        'margin-right': '0%',
                         'margin-top': '1%',
-                        'margin-bottom': '1%',
-                        'margin-left': '1.5%',
-                        'float': 'right'
+                        'margin-bottom': '3%',
+                        'margin-left': '2%',
+                        'float': 'left'
                     })
-            convertBtn.attr('class', 'convertVideoBtn');
+            convertBtn.attr('class', 'button convertVideoBtn');
+            convertBtn.attr("disabled", "");
             if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
                 convertBtn.hide().data('disabled', true);
             }
-            buttonContainer.append(thumbnailButton).append(deleteArt).append(saveButton).append(convertBtn).append(xmluploaderbtn); //SAVE BUTTON//
+            buttonContainer.append(thumbnailButton).append(saveButton).append(convertBtn).append(xmluploaderbtn).append(deleteArt); //SAVE BUTTON//
         }
     }
 
@@ -3493,7 +3518,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $(".convertVideoBtn").hide().data("disabled", true);
                     }, "Would you like to convert " + newFileName + "?", "Yes", true, function () {
                         if (fileExtension !== ".mp4") {
-                            var msg = "The video format is not supported.";
+                            var msg = "This video format has not been converted to formats supported in multiple browsers.";
                             viewer.append(LADS.Util.createConversionLoading(msg, true));
                         }
                         $(".convertVideoBtn").show().data("disabled", false);
@@ -3504,7 +3529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.webm', '.ogv', '.mpeg', '.avi', '.flv', '.wmv', '.mov']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.webm', '.ogv']);
     }
     /*upload xml for single artwork
    artwork
@@ -4084,6 +4109,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, "Are you sure you want to delete " + artwork.Name + "?", "Delete", true, function () { $(confirmationBox).hide() });
         root.append(confirmationBox);
         $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
     /**Save an artwork
@@ -5388,7 +5414,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     names.push(files[i].displayName);
                     if (files[i].contentType.match(/image/)) {
                         contentTypes.push('Image');
-                    } else if (files[i].contentType.match(/video/)) {
+                    } else if (files[i].contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
                         contentTypes.push('Video');
                     } else if (files[i].contentType.match(/audio/)) {
                         contentTypes.push('Audio');

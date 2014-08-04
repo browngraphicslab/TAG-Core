@@ -345,4 +345,89 @@
             });
         }
     }
+
+    /*
+     * The checkServerConnectivity() method makes an ajax call to the server. If it receives a response,
+     * it does nothing since the computer is definitely connected to the internet. Otherwise, it appends the
+     * InternetFailurePage.
+     * 
+     * TODO: currently, the server URL is hardcoded since it cannot be fetched from the database since that
+     * hasn't been instantiated. This must be changed.
+     */
+    function checkServerConnectivity() {
+        var request = $.ajax({
+            url: "http://137.135.69.3:8080",
+            dataType: "text",
+            async: false,
+            error: function (err) {
+                $("body").append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+                return false;
+            },
+        });
+        return true;
+    }
+
+    var splitOverlay;
+    function handleResize(evt) {
+        var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
+        var newViewState = Windows.UI.ViewManagement.ApplicationView.value;
+        switch (newViewState) {
+            case viewStates.snapped:
+            case viewStates.filled:
+                if (!splitOverlay)
+                    $("body").append(splitOverlay = new LADS.Layout.MetroSplitscreenMessage().getRoot());
+                break;
+            case viewStates.fullScreenLandscape:
+                if (splitOverlay) {
+                    splitOverlay.detach();
+                    splitOverlay = null;
+                }
+                break;
+        }
+    }
+
+    if (IS_WINDOWS) {
+        WinJS.Application.start();
+        WinJS.Application.onsettings = function (args) {
+            args.detail.applicationcommands = {
+                "priv": {
+                    title: "Privacy Policy", href: "settings/privacy.html"
+                }
+            };
+            WinJS.UI.SettingsFlyout.populateSettings(args);
+        };
+
+        var networkInformation = Windows.Networking.Connectivity.NetworkInformation;
+        var lastOverlay;
+        var dataLimitPrompted = false;
+
+        Windows.Networking.Connectivity.NetworkInformation.addEventListener('networkstatuschanged', function (evt) {
+
+            if (localStorage.ip !== "127.0.0.1" && localStorage.ip !== "localhost") {
+                if (!networkInformation.getInternetConnectionProfile()) {
+                    if (lastOverlay) lastOverlay.getRoot().detach();
+                    $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                } else {
+                    switch (networkInformation.getInternetConnectionProfile().getNetworkConnectivityLevel()) {
+                        case Windows.Networking.Connectivity.NetworkConnectivityLevel.none:
+                        case Windows.Networking.Connectivity.NetworkConnectivityLevel.localAccess:
+                        case Windows.Networking.Connectivity.NetworkConnectivityLevel.constrainedInternetAccess:
+                            if (lastOverlay) lastOverlay.getRoot().detach();
+                            $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                            break;
+                        case Windows.Networking.Connectivity.NetworkConnectivityLevel.internetAccess:
+                            if (lastOverlay) lastOverlay.getRoot().detach();
+                            break;
+                    }
+                }
+            }
+
+            if (!dataLimitPrompted && !localStorage.acceptDataUsage && networkInformation.getInternetConnectionProfile() && networkInformation.getInternetConnectionProfile().getDataPlanStatus().dataLimitInMegabytes) {
+                dataLimitPrompted = true;
+                $("body").append(new LADS.Layout.InternetFailurePage("Data Limit", true).getRoot());
+            }
+        });
+
+        window.addEventListener('resize', handleResize);
+    }
 })();

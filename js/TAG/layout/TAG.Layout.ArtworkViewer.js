@@ -30,7 +30,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,
-        PRIMARY_FONT_COLOR = TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
         FONT = TAG.Worktop.Database.getMuseumFontFamily(),
 
         // input options
