@@ -1080,7 +1080,7 @@ TAG.Worktop.Database = (function () {
     }
 
     function getMuseumOverlayColor() {
-        return _main.Metadata["OverlayColor"];
+        return _main.Metadata["OverlayColor"] || '000000';
     }
 
     function getMuseumOverlayTransparency() {
