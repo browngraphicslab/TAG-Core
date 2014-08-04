@@ -1614,7 +1614,8 @@ TAG.Util = (function () {
                     msg = "Error: please see FAQs on the TAG website.";
                     break;
             }
-            console.log("video error: " + msg);
+            $("#videoErrorMsg").remove();
+            $("#leftLoading").remove();
             if (conversionFlag && conversionFlag === "False") {
                 container.append(createConversionLoading(msg));
             } else if (!document.getElementById("leftLoading")) {
@@ -2535,6 +2536,7 @@ TAG.Util.UI = (function () {
             'font-size': '1.25em',
             'position': 'relative',
             'text-align': 'center',
+            'text-overflow': 'ellipsis',
             'word-wrap': 'break-word'
         });
         $(messageLabel).text(message);
@@ -2544,6 +2546,7 @@ TAG.Util.UI = (function () {
             'height': '20%',
             'width': '100%',
             'position': 'absolute',
+            'color': 'white',
             'bottom': '10%',
             'right': '5%'
         });
@@ -2556,6 +2559,7 @@ TAG.Util.UI = (function () {
             'position': 'relative',
             'float': "left",
             'margin-left': '12%',
+            'color': 'white',
             'margin-top': '-1%'
 
         });
@@ -2583,6 +2587,7 @@ TAG.Util.UI = (function () {
             'position': 'relative',
             'float': "right",
             'margin-right': '3%',
+            'color': 'white',
             'margin-top': '-1%'
         });
         $(cancelButton).text('Cancel');

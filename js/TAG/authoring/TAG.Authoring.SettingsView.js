@@ -230,7 +230,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video. Please try again";
+                            var msg = "An error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             conversionVideos.remove(artwork);
                         }
@@ -2291,6 +2291,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         addSourceToVideo(holder, sourceOGV, 'video/ogv');
                         $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
                     } else {
+                        convertBtn.show();
                         if (output === "False") {
                             $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
                             $("#videoErrorMsg").remove();
@@ -2301,7 +2302,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video. Please try again";
+                            var msg = "An error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
                             if (media.Extension !== ".mp4") {
@@ -2444,7 +2445,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             saveAssocMedia(media, {
                 titleInput: titleInput,
-                descInput: descInput
+                descInput: descInput,
+                yearInput: yearMetadataDivSpecs.yearInput,
+                monthInput: yearMetadataDivSpecs.monthInput,
+                dayInput: yearMetadataDivSpecs.dayInput,
+                timelineYearInput: yearMetadataDivSpecs.timelineYearInput,
+                timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,
+                timelineDayInput: yearMetadataDivSpecs.timelineDayInput
             });
         };
 
@@ -2547,11 +2554,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         'float': 'left'
                     })
             convertBtn.attr('class', 'button convertVideoButton');
-            if (media.Metadata.Converted!=="True" && conversionVideos.indexOf(media.Identifier) === -1) {
-                convertBtn.show().data('disabled', false);
-            } else {
-                convertBtn.hide().data('disabled', true);
-            }
+            convertBtn.attr("disabled", "");
             buttonContainer.append(thumbnailButton).append(convertBtn);
         } else if (media.Metadata.ContentType.toLowerCase() === 'image' && !media.Metadata.Thumbnail && media.Metadata.Source && media.Metadata.Source[0] === '/' && !source.match(/.mp3/)) {
             // hacky way to see if asset was imported recently enough to support thumbnailing (these are /Images/_____.__
@@ -2781,10 +2784,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             conversionVideos.push(newDoq.Identifier);
                             var mediaElement = $(document.getElementById("videoInPreview"));
                             if (mediaElement[0]) {
-                                var msg = "This video is being converted to compatible formats for different browsers";
-                                viewer.append(TAG.Util.createConversionLoading(msg));
                                 $("#videoErrorMsg").remove();
                                 $("#leftLoading").remove();
+                                var msg = "This video is being converted to compatible formats for different browsers";
+                                viewer.append(TAG.Util.createConversionLoading(msg));    
                             }
                         }, "Would you like to convert" + newFileName + "?", "Yes", true, function () {
                             if (fileExtension !== ".mp4") {
@@ -2840,7 +2843,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     localURL = localURLs[i];
                     if (file.contentType.match(/image/)) {
                         contentType = 'Image';
-                    } else if (file.contentType.match(/video/)) {
+                    } else if (file.contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
                         contentType = 'Video';
                     } else if (file.contentType.match(/audio/)) {
                         contentType = 'Audio';
@@ -3166,20 +3169,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (output === "Error") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
-                            var msg = "There is an error occured when converting this video. Please try again";
+                            var msg = "An error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
-                            if (artwork.Extension !== ".mp4") {
-                                $("#videoErrorMsg").remove();
-                                $("#leftLoading").remove();
-                                var msg = "This video format has not been converted to formats supported in multiple browsers.";
-                                viewer.append(TAG.Util.createConversionLoading(msg, true));
-                            }
+                            //if (artwork.Extension !== ".mp4") {
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "This video format has not been converted to formats supported in multiple browsers.";
+                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            //}
                         }
                         mediaElement.attr('src', source);
                     }
                 }, null, artwork.Identifier);
             if (conversionVideos.indexOf(artwork.Identifier) > -1) {
+                $("#videoErrorMsg").remove();
+                $("#leftLoading").remove();
                 var msg = "This video is being converted to compatible formats for different browsers";
                 viewer.append(TAG.Util.createConversionLoading(msg));
             } else {
@@ -3267,11 +3272,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 titleInput.val("Untitled Artwork");
             }
             saveArtwork(artwork, {
-                artistInput: artistInput,
-                nameInput: titleInput,
-                yearInput: yearInput,
-                descInput: descInput,
-                customInputs: customInputs,
+                artistInput: artistInput,                                      //Artwork artist
+                nameInput: titleInput,                                         //Artwork title
+                yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
+                monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
+                dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
+                timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
+                timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
+                timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
+                descInput: descInput,                                          //Artwork description
+                customInputs: customInputs                                    //Artwork custom info fields
             });
         };
         // Create buttons
@@ -3303,7 +3313,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
             timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
             descInput: descInput,                                          //Artwork description
-            customInputs: customInputs,                                    //Artwork custom info fields
+            customInputs: customInputs                                    //Artwork custom info fields
         };
         var saveButton = createButton('Save Changes',
             function () {
@@ -3369,6 +3379,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         'float': 'left'
                     })
             convertBtn.attr('class', 'button convertVideoBtn');
+            convertBtn.attr("disabled", "");
             if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
@@ -3511,7 +3522,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.webm', '.ogv', '.mpeg', '.avi', '.flv', '.wmv', '.mov']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.webm', '.ogv']);
     }
     /*upload xml for single artwork
    artwork
@@ -5395,7 +5406,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     names.push(files[i].displayName);
                     if (files[i].contentType.match(/image/)) {
                         contentTypes.push('Image');
-                    } else if (files[i].contentType.match(/video/)) {
+                    } else if (files[i].contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
                         contentTypes.push('Video');
                     } else if (files[i].contentType.match(/audio/)) {
                         contentTypes.push('Audio');
