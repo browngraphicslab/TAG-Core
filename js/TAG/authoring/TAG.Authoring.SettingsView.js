@@ -1949,7 +1949,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Automatically save changes
         currentMetadataHandler = function () {
             if (nameInput.val() === undefined || nameInput.val() === "") {
-                nameInput.val() = "Untitled Tour";
+                nameInput.val("Untitled Tour");
             }
             saveTour(tour, {
                 privateInput: privateState,
