@@ -1122,9 +1122,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }, val.Identifier), true));
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
-                        if (middlebar.scrollTop() === 0 && label.offset().top - middlebar.height() > 0) {
-                            middlebar.animate({
-                                scrollTop: (label.offset().top - middlebar.height())
+                        if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
+                            middleLabelContainer.animate({
+                                scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
                             }, 1000);
                         }
                         prevSelectedMiddleLabel = label;
@@ -1844,9 +1844,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }), true));
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
-                        if (middlebar.scrollTop() === 0 && label.offset().top - middlebar.height() > 0) {
-                            middlebar.animate({
-                                scrollTop: (label.offset().top - middlebar.height())
+                        if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
+                            middleLabelContainer.animate({
+                                scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
                             }, 1000);
                         }
                         
@@ -2261,9 +2261,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }, val.Identifier, false), true));
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
-                            if (middlebar.scrollTop() === 0 && label.offset().top - middlebar.height() > 0) {
-                                middlebar.animate({
-                                    scrollTop: (label.offset().top - middlebar.height())
+                            if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
+                                middleLabelContainer.animate({
+                                    scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
                                 }, 1000);
                             }
 
@@ -3114,9 +3114,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
-                            if (middlebar.scrollTop() === 0 && label.offset().top - middlebar.height() > 0) {
-                                middlebar.animate({
-                                    scrollTop: (label.offset().top - middlebar.height() / 2)
+                            if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
+                                middleLabelContainer.animate({
+                                    scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
                                 }, 1000);
                             }
 
@@ -4263,9 +4263,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }, val.Identifier, true)));
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
-                        if (middlebar.scrollTop() === 0 && label.offset().top - middlebar.height() > 0) {
-                            middlebar.animate({
-                                scrollTop: (label.offset().top - middlebar.height())
+                        if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
+                            middleLabelContainer.animate({
+                                scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
                             }, 1000);
                         }
 

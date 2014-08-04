@@ -694,7 +694,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function createTourButton(container, tour) {
             return function() {
                 container.append(TAG.Util.Artwork.createThumbnailButton({
-                    title:       TAG.Util.htmlEntityDecode(tour.Name),
+                    title: TAG.Util.htmlEntityDecode(tour.Name),
+                    year: TAG.Util.htmlEntityDecode(tour.Year|| ""),
                     handler:     tourClicked(tour),
                     buttonClass: 'tourButton',
                     src:         (tour.Metadata.Thumbnail ? FIX_PATH(tour.Metadata.Thumbnail) : tagPath+'images/tour_icon.svg')
@@ -713,7 +714,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 var src = '',
                     metadata = media.doq.Metadata,
                     thumb = metadata.Thumbnail;
-
+                console.log("media:    " + media.doq.Year);
                 switch (metadata.ContentType) {
                     case 'Audio':
                         src = tagPath+'images/audio_icon.svg';
@@ -730,7 +731,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 }
 
                 container.append(TAG.Util.Artwork.createThumbnailButton({
-                    title:       TAG.Util.htmlEntityDecode(media.doq.Name),
+                    title: TAG.Util.htmlEntityDecode(media.doq.Name),
+                    year: TAG.Util.htmlEntityDecode(media.doq.Year || ""),
                     handler:     mediaClicked(media),
                     buttonClass: 'mediaButton',
                     buttonID:    'thumbnailButton-'+media.doq.Identifier,
