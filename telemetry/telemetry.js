@@ -78,7 +78,7 @@ TAG.Telemetry = (function() {
 
 		$.ajax({
 			type: 'POST',
-			url: 'http://127.0.0.1:9999/',
+			url: 'http://browntagserver.com:12043/',
 			data: data,
 			async: true, // this is the default, but just make it explicit
 			success: function() {

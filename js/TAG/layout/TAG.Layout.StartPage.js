@@ -19,6 +19,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     var root = TAG.Util.getHtmlAjax('StartPage.html'), // use AJAX to load html from .html file
         overlay = root.find('#overlay'),
         primaryFont = root.find('.primaryFont'),
+        secondaryFont = root.find('.secondaryFont'),
         serverTagBuffer = root.find('#serverTagBuffer'),
         serverSetUpContainer = root.find('#serverSetUpContainer'),
         authoringButtonContainer = root.find('#authoringButtonContainer'),
@@ -503,6 +504,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             'color': PRIMARY_FONT_COLOR,
             'font-family': 'Pacifico'
         });
+        $(secondaryFont).css({
+            'color': SECONDARY_FONT_COLOR,
+            'font-family': 'Pacifico'
+        });
     }
 
     /**
@@ -524,8 +529,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             secondaryFontColor;
 
         
-        primaryFontColor = main.Metadata["PrimaryFontColor"];
-        secondaryFontColor = main.Metadata["SecondaryFontColor"];
+        primaryFontColor = options.primaryFontColor ? options.primaryFontColor : main.Metadata["PrimaryFontColor"];
+        secondaryFontColor = options.secondaryFontColor ? options.secondaryFontColor : main.Metadata["SecondaryFontColor"];
         museumName = root.find('#museumName');
         museumNameSpan = root.find('#museumNameSpan');
         tempName = main.Metadata["MuseumName"];
@@ -563,7 +568,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             'color': '#' + primaryFontColor,
             'font-family': main.Metadata["FontFamily"]
             
-         });
+        });
+        $(secondaryFont).css({
+            'color': '#' + secondaryFontColor,
+            'font-family': main.Metadata["FontFamily"]
+
+        });
 
     }
 
