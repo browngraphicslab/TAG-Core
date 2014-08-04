@@ -51,7 +51,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description']
         },
         main: {
-            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'OptionalFeatures'],
+            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'IdleTimerDuration'],
             body: ['Info']
         }
     };
@@ -94,6 +94,7 @@ TAG.Worktop.Database = (function () {
         getBaseFontSize: getBaseFontSize,
         getOptionalFeatures: getOptionalFeatures,
         getCustomFont: getCustomFont,
+        getIdleTimerDuration: getIdleTimerDuration,
 
         asyncRequest: asyncRequest,
         convertToDocHandler: convertToDocHandler,
@@ -1144,6 +1145,10 @@ TAG.Worktop.Database = (function () {
     }
     function getOverlayTransparency() {
         return _main.Metadata["OverlayTransparency"];
+    }
+
+    function getIdleTimerDuration() {
+        return _main.Metadata["IdleTimer"] || '2';
     }
 
     function getMainGuid() {

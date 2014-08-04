@@ -188,9 +188,151 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
         } else {
             linkButton.remove();
+            infoButton.on('click', function () {
+                createInfoPopUp();
+            });
         }
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+    }
+
+    /**
+     * Create info pop-up for 'i' info icon on collections page
+     * @method createInfoPopUp
+     */
+    function createInfoPopUp() {
+        var infoOverlay = $(TAG.Util.UI.blockInteractionOverlay());
+        var infoBox = $(document.createElement('div'));
+        var infoTitle = $(document.createElement('div'));
+        var infoMain = $(document.createElement('div'));
+        var infoLogo = $(document.createElement('div'));
+        var infoTitleLeft = $(document.createElement('div'));
+        var infoTitleRight = $(document.createElement('div'));
+        var infoMainTop = $(document.createElement('div'));
+        var infoMainBottom = $(document.createElement('div'));
+        var microsoftLogo = $(document.createElement('img'));
+        var brownLogo = $(document.createElement('img'));
+        var closeButton = createCloseButton();
+
+        microsoftLogo.attr('src', tagPath + 'images/Microsoft-Logo-Black-small.png');
+        brownLogo.attr('src', tagPath + 'images/brown_logo.png');
+        microsoftLogo.css({
+            'height': 'auto',
+            'width': '20%',
+            'margin-left': '50%'
+        });
+        brownLogo.css({
+            'height': 'auto',
+            'width': '20%',
+            'margin-left': '50%'
+        });
+        
+        console.log(tagPath);
+
+        infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
+        infoOverlay.append(infoBox);
+        infoBox.css({
+            'background-color': 'black',
+            'color': 'white',
+            'height': '50%',
+            'width': '50%',
+            'margin-top': '15%',
+            'margin-left': '25%'
+        });
+        infoTitle.css({
+            'background-color': 'black',
+            'margin': '0%',
+            'display': 'block',
+            'color': 'white'
+        });
+        infoTitle.append(infoTitleLeft);
+        infoTitle.append(infoTitleRight);
+        infoTitle.append(closeButton);
+        infoTitleLeft.css({
+            'color': 'white',
+            'background-color': 'black',
+            'display': 'inline-block',
+            'font-weight': 'bold',
+            'font-size': '2em',
+            'margin-left': '5%',
+            'margin-top': '2%'
+        });
+        infoTitleLeft.text('TAG');
+
+        infoTitleRight.css({
+            'color': 'white',
+            'background-color': 'black',
+            'display': 'inline-block',
+            'font-size': '1.5em',
+            'margin-left': '3%'
+        });
+        infoTitleRight.text('Touch Art Gallery');
+
+        infoMain.css({
+            'background-color': 'black',
+            'display': 'block',
+            'color': 'white'
+        });
+        infoMainTop.css({
+            'color': 'white',
+            'background': 'black',
+            'display': 'block',
+            'font-size': '0.75em',
+            'margin-left': '5%',
+            'margin-top': '3%',
+            'margin-right': '6%'
+        });
+        infoMainBottom.css({
+            'color': 'white',
+            'background': 'black',
+            'display': 'block',
+            'font-size': '0.65em',
+            'margin-left': '5%',
+            'margin-top': '3%',
+            'margin-right': '6%'
+        });
+        infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag/.');
+        infoMainBottom.text('Andy van Dam, Alex Hills, Yudi Fu, Karishma Bhatia, Gregory Chatzinoff, John Connuck, David  Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Kaijan Gao, Jessica Herron, Ardra Hren, Hak Rim Kim, Lucy van Kleunen, Inna Komarovsky, Ryan Lester, Benjamin LeVeque, Josh Lewis, Jinqing Li, Jeffery Lu, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Jonathan Poon, Dhruv Rawat, Emily Reif, Surbhi Madan, Jacob Rosenfeld, Anqi Wen, Dan Zhang, Libby Zorn');
+        infoMain.append(infoMainTop);
+        infoMain.append(infoMainBottom);
+
+        infoLogo.css({
+            'background-color': 'blue',
+            'display': 'block',
+            'color': 'white',
+            'height': '15%',
+            'margin-top': '3%'
+        });
+        infoLogo.append(microsoftLogo);
+        infoLogo.append(brownLogo);
+
+        infoBox.append(infoTitle);
+        infoBox.append(infoMain);
+        infoBox.append(infoLogo);
+        root.append(infoOverlay);
+        infoOverlay.fadeIn();
+
+        closeButton.on('click', function () {
+            infoOverlay.fadeOut();
+        });
+    }
+
+    /**
+     * Create a closeButton for associated media
+     * @method createCloseButton
+     * @return {HTML element} the button as a 'div'
+     */
+    function createCloseButton() {
+        var closeButton = $(document.createElement('img'));
+        closeButton.attr('src', tagPath + 'images/icons/x.svg');
+        closeButton.text('X');
+        closeButton.css({
+            'height': '30px',
+            'width': '30px',
+            'margin-left': '39%',
+            'margin-bottom': '3.5%'
+        });
+        return closeButton;
     }
 
     /**
@@ -329,24 +471,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var counter = 0;
             var collectionLength;   
             if (!onAssocMediaView){
-            //if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === true){
-                TAG.Worktop.Database.getArtworksIn(collection.Identifier, getCollectionMedia, null, getCollectionMedia);     
-            //}
+                //if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === true){
+                    TAG.Worktop.Database.getArtworksIn(collection.Identifier, getCollectionMedia, null, getCollectionMedia);     
+                //}
 
-            // Clear search box
-            searchTxt.text("");
+                // Clear search box
+                searchTxt.text("");
 
-            // Clear catalog div (with info and artwork tiles)
-            catalogDiv.empty();
+                // Clear catalog div (with info and artwork tiles)
+                catalogDiv.empty();
 
-            //Set background image
-            if (collection.Metadata.BackgroundImage) {
-               bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
-            }
+                //Set background image
+                if (collection.Metadata.BackgroundImage) {
+                    bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
+                }
 
-            if (!collectionDots[collection.Identifier]){
-                //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
-                dummyDot = $(document.createElement('div'))
+                if (!collectionDots[collection.Identifier]){
+                    //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
+                    dummyDot = $(document.createElement('div'))
                         .addClass('collectionDot')
                         .css({
                             "width": COLLECTION_DOT_WIDTH,
@@ -355,123 +497,122 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "margin": COLLECTION_DOT_WIDTH/4,
                             "background-color":'white'
                         });
-                collectionDotHolder.append(dummyDot);
-            } else {
-                //Make collection dot white and others gray
-                for(i = 0; i < visibleCollections.length; i++) { 
-                    collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
-                }
-                collectionDots[collection.Identifier].css('background-color', 'white');
-            }                
+                    collectionDotHolder.append(dummyDot);
+                } else {
+                    //Make collection dot white and others gray
+                    for(i = 0; i < visibleCollections.length; i++) { 
+                        collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
+                    }
+                    collectionDots[collection.Identifier].css('background-color', 'white');
+                }                
 
-            // Add collection title
-            collectionArea.empty();
-            mainCollection.addClass('mainCollection')
-                          .attr({
-                            'id': 'collection-' + collection.Identifier,
-                           });
-            titleBox.attr('id' ,'collection-title-'+collection.Identifier)
-                    .addClass('collection-title')
-                    .html(title);
-            titleBox.addClass('primaryFont');
-           // titleBox.css({ 'color': '#'+PRIMARY_FONT_COLOR });
-            mainCollection.append(titleBox);
+                // Add collection title
+                collectionArea.empty();
+                mainCollection.addClass('mainCollection')
+                            .attr({
+                                'id': 'collection-' + collection.Identifier,
+                            });
+                titleBox.attr('id' ,'collection-title-'+collection.Identifier)
+                        .addClass('collection-title')
+                        .html(title);
+                titleBox.addClass('primaryFont');
+                // titleBox.css({ 'color': '#'+PRIMARY_FONT_COLOR });
+                mainCollection.append(titleBox);
             
-            // Add previous and next collection titles
-            if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
-                prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
-                backArrowArea.addClass('arrowArea');
-                backArrowArea.css('left', '0%')
-                             .on('click',function(){
+                // Add previous and next collection titles
+                if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
+                    prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
+                    backArrowArea.addClass('arrowArea');
+                    backArrowArea.css('left', '0%')
+                                .on('click',function(){
                                             return function(){
                                                 onAssocMediaView = false;
                                                 loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk)();
                                                 currentTag = null;   
                                             }
                                         }());
-                collectionArea.append(backArrowArea);
-                backArrow.attr('src', tagPath + 'images/icons/Close.svg');
-                backArrow.addClass('arrow');
-                prevCollection.addClass('nextPrevCollection')
-                              .addClass('primaryFont')
-                              .attr({
-                                'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
-                               })
-                              .css('left','3%')
-                              .html(prevTitle)
-                              .on('click', function(){
+                    collectionArea.append(backArrowArea);
+                    backArrow.attr('src', tagPath + 'images/icons/Close.svg');
+                    backArrow.addClass('arrow');
+                    prevCollection.addClass('nextPrevCollection')
+                                .addClass('primaryFont')
+                                .attr({
+                                    'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
+                                })
+                                .css('left','3%')
+                                .html(prevTitle)
+                                .on('click', function(){
                                             return function(){
                                                 onAssocMediaView = false;
                                                 loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk)();
                                                 currentTag = null;      
                                             }
                                         }());
-                TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
-                    tobj.custom_1 = prevTitle;
-                    tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
-                });
-                TAG.Telemetry.register(prevCollection, 'click', 'collection_title', function(tobj){
-                    tobj.custom_1 = prevTitle;
-                    tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
-                });
-                collectionArea.append(prevCollection);
-            };
+                    TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
+                        tobj.custom_1 = prevTitle;
+                        tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                    });
+                    TAG.Telemetry.register(prevCollection, 'click', 'collection_title', function(tobj){
+                        tobj.custom_1 = prevTitle;
+                        tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                    });
+                    collectionArea.append(prevCollection);
+                }
 
-            collectionArea.append(mainCollection);
-            if (prevCollection){
-                prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
-               // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
-            }
-            if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
-                nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
-                nextArrowArea.addClass('arrowArea');
-                nextArrowArea.css({
-                    'right': '0%'})
-                             .on('click', function(){
+                collectionArea.append(mainCollection);
+                if (prevCollection){
+                    prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
+                    // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
+                }
+                if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
+                    nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
+                    nextArrowArea.addClass('arrowArea');
+                    nextArrowArea.css({'right': '0%'})
+                                .on('click', function(){
                                             return function(){
                                                 onAssocMediaView = false;
                                                 loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
                                                 currentTag = null;                                          
                                             }
                                         }());
-                collectionArea.append(nextArrowArea);
-                nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
-                nextArrow.addClass('arrow');
-                nextCollection.addClass('nextPrevCollection')
-                              .addClass('primaryFont')
-                              .attr({
-                                'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
-                               })
-                              .html(nextTitle)
-                              .css({
-                                'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
-                                //'color': '#' + PRIMARY_FONT_COLOR
-                              })
-                              .on('click', function(){
+                    collectionArea.append(nextArrowArea);
+                    nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
+                    nextArrow.addClass('arrow');
+                    nextCollection.addClass('nextPrevCollection')
+                                  .addClass('primaryFont')
+                                  .attr({
+                                    'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
+                                    })
+                                  .html(nextTitle)
+                                  .css({
+                                    'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
+                                    //'color': '#' + PRIMARY_FONT_COLOR
+                                   })
+                                    .on('click', function(){
                                             return function(){
                                                 onAssocMediaView = false;
                                                 loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
                                                 currentTag = null;
                                             }
                                         }());
-                TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
-                    tobj.custom_1 = nextTitle;
-                    tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
-                });
-                TAG.Telemetry.register(nextCollection, 'click', 'collection_title', function(tobj){
-                    tobj.custom_1 = nextTitle;
-                    tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
-                });
-                collectionArea.append(nextCollection);
-            };
+                    TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
+                        tobj.custom_1 = nextTitle;
+                        tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                    });
+                    TAG.Telemetry.register(nextCollection, 'click', 'collection_title', function(tobj){
+                        tobj.custom_1 = nextTitle;
+                        tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                    });
+                    collectionArea.append(nextCollection);
+                }
 
-            collectionDescription.attr('id', 'collectionDescription');
-            collectionDescription.addClass('secondaryFont');
-            str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
-            collectionDescription.css({
-                'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
-            });
-            collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
+                collectionDescription.attr('id', 'collectionDescription');
+                collectionDescription.addClass('secondaryFont');
+                str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
+                collectionDescription.css({
+                    'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+                });
+                collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
 
             }
 
@@ -494,7 +635,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             //TO-DO: are off's neccesary?
-            //are the colors right? what about if theres customization.
+            //get colors right if there's customization.
             //if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === true){
                 artworksButton.off()
                               .css({
@@ -562,7 +703,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method loadFirstCollection
      */
     function loadFirstCollection() {
-        loadCollection(toShowFirst)(); // first collection selected by default
+        loadCollection(toShowFirst)(); 
     }
 
     /**
@@ -679,7 +820,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             drawHelper();
         }
 
-        // helper function to perform the actual drawing (to make sure we deal with async correctly)
+        /**
+         * helper function to perform the actual drawing (to make sure we deal with async correctly)
+         * @method drawHelper
+         */
         function drawHelper() {
             var sortedArtworks,
                 minOfSort,
@@ -715,7 +859,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileDiv.css({'margin-left':'0%'});
             }
             catalogDiv.append(tileDiv);
-    
+            clearTimeline();
+        }
+
+        /**
+         * helper function to reset and clear timeline
+         * @method drawHelper
+         */
+        function clearTimeline(){
             timelineEventCircles = [];
             timelineTicks = [];
             scaleTicks = [];
@@ -735,11 +886,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         'top' : '25%'
                     })
             } else {
-                bottomContainer.css({
-                    'height': '85%',
-                    'top' : '20%'
-                });
-            } 
+                bottomContainer.css('height', '85%');
+            }
         }
 
     }
@@ -786,7 +934,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
                 //TO-DO add panning here 
                 showArtwork(currentWork, false)();
-                zoomTimeline(TAG.Util.parseDateToYear(getArtworkDate(currentWork,true)), fullMinDisplayDate, fullMaxDisplayDate);
+                zoomTimeline(artworkCircles[currentWork.Identifier])
+                //zoomTimeline(TAG.Util.parseDateToYear(currentWork.Metadata.Year), fullMinDisplayDate, fullMaxDisplayDate);
                 justShowedArtwork = true;
             });
 
@@ -820,8 +969,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 yearTextBox.css('visibility','visible');
                 //TO-DO year text needs to be formatted in mm/dd/yyyy
                 yearText = getDateText(getArtworkDate(currentWork,true));
-                yearTextBox.text(currentWork.Type === 'Empty' ? '' :  yearText);
+                if (currentWork.Type === 'Empty'){
+                    yearTextBox.text('')
+                        .css('visibility','hidden');
+                } else {
+                    yearTextBox.text(yearText);
+                }
                 artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' :  TAG.Util.htmlEntityDecode(currentWork.Name));
+
             } else if (tag === 'Type') {
                 artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
             }
@@ -850,6 +1005,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .attr('src', tagPath+'images/icons/catalog_video_icon.svg');
                 main.append(videoLabel);
             }
+            for (var k = 10; k>0; k--){
+                console.log(k + ": " + Math.sqrt(k))
+            }
 
             tileDiv.append(main);
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
@@ -864,7 +1022,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         };
     }
 
-    /**styles a circle for the timeline
+    /** styles a circle for the timeline
     * @method styleTimelineCircle
     * @param  {HTML element} element      element to be styled
     * @param  {bool} selected             Whether or not circle is selected
@@ -881,6 +1039,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'top': -EVENT_CIRCLE_WIDTH*3 / 4,
                 'opacity': "1"
             });
+            element.timelineDateLabel.css({
+                    'visibility': 'visible',
+                    'color' : 'white',
+                    'font-size' : '120%' ,
+                    'top': -EVENT_CIRCLE_WIDTH,
+                    'left': "0"
+            })
+
         } else {
             element.css({
                 'height': EVENT_CIRCLE_WIDTH,
@@ -889,6 +1055,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'top': -EVENT_CIRCLE_WIDTH / 2,
                 'opacity': .5
             });
+            element.timelineDateLabel.css({
+                    'color' : 'rgb(170,170,170)',
+                    'font-size' : '100%' ,
+                    'top': -EVENT_CIRCLE_WIDTH,
+                    'left': "-20%"
+                });
         }
     }
 
@@ -931,10 +1103,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         //TO-DO: calculate and pass in numTicks based on number of years
         currentTimeline = prepTimelineArea(minDate, maxDate);
         currTimelineCircleArea = prepTimelineCircles(avlTree, minDate, maxDate);
-        if (currentArtwork){
-            zoomTimeline(TAG.Util.parseDateToYear(getArtworkDate(currentArtwork,true)), fullMinDisplayDate, fullMaxDisplayDate);
-        }
-     
+        setTimeout(function() {
+            currentArtwork && zoomTimeline(artworkCircles[currentArtwork.Identifier])
+        }, 100);
         /**Helper function to prepare timeline area including 'ticks'
         * @method prepTimelineArea
         * @param  {Integer} minDate          minimum artwork date
@@ -958,6 +1129,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tick.css({
                     'left' : i/(numTicks-1)*100 + '%'
                 });
+                tick.Offset = i/100;
                 timeline.append(tick);
                 timelineTicks.push(tick);
             }
@@ -984,7 +1156,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineDateLabel,
                 prevNode,
                 circleOverlap,
-                labelOverlap;
+                labelOverlap,
+                zoomLevel = 1,
+                currOffset;
 
             timeRange = maxDate - minDate;
 
@@ -999,10 +1173,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     positionOnTimeline = 100*(curr.yearKey - minDate)/timeRange;
 
                     //Create and append event circle
-                    eventCircle = $(document.createElement('div'));                
+                    eventCircle = $(document.createElement('div'));  
                     eventCircle.addClass('timelineEventCircle')
                                 .css('left', positionOnTimeline + '%')
-                                .on('click', (function(art) {
+                                .on('click', (function(art, eventCircle) {
                                     return function() {
                                     if (artworkShown === true && currentArtwork === art) {
                                         hideArtwork(art)();
@@ -1011,15 +1185,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                         if (!artworkTiles[art.Identifier]) {
                                             return;
                                         }
-
-                                        //TO-DO: make panning happen at first too if it makes sense 
-                                        //panTimeline(art.circle, minDate, maxDate);
-                                        zoomTimeline(artworkCircles[art.Identifier].yearKey, fullMinDisplayDate, fullMaxDisplayDate);
+                                        // console.log("______________________________________")
+                                        zoomTimeline(eventCircle)
                                         showArtwork(art,true)();
                                         artworkShown  = true;
                                         } 
                                     }      
-                                })(art));
+                                })(art, eventCircle));
                     timelineCircleArea.append(eventCircle);
 
                     //Shift circles left by half their width so they are centered on ticks
@@ -1036,288 +1208,133 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                     eventCircle.yearKey = curr.yearKey;
                     eventCircle.timelineDateLabel = timelineDateLabel;
-                    eventCircle.labelwidth = timelineDateLabel.width();
+                    eventCircle.Offset = positionOnTimeline/100;
                     eventCircle.artwork = art;                    
                     timelineEventCircles.push(eventCircle);
                     artworkCircles[curr.artwork.Identifier] = eventCircle;
+                    displayLabels(eventCircle);
                     
                     if (!artworkYears[yearText]){
                         artworkYears[yearText] = [curr.artwork];
                     } else {
                         artworkYears[yearText].push(curr.artwork);
                     }
-
-                    //Decide whether to display labels:
-                    if (avlTree.findPrevious(curr) && artworkCircles[avlTree.findPrevious(curr).artwork.Identifier]){
-                        prevNode = avlTree.findPrevious(curr);
-                        //Find the previous visible timeline label:
-                        while (avlTree.findPrevious(prevNode) && artworkCircles[prevNode.artwork.Identifier].timelineDateLabel.css('visibility')!=='visible'){
-                            prevNode = avlTree.findPrevious(prevNode);
-                        }
-                        //Check to see if the current circle is overlapping the circle of the last label: 
-                        circleOverlap = areOverlapping(artworkCircles[prevNode.artwork.Identifier].position().left, eventCircle.position().left);
-                        //Check to see if the label of the current circle would overlap that of the previously labelled artwork:
-                        labelOverlap = labelsAreOverlapping(artworkCircles[prevNode.artwork.Identifier].position().left, eventCircle.position().left, artworkCircles[prevNode.artwork.Identifier].labelwidth); 
-                        //Overlapping circles should only have 1 label: 
-                        if (artworkCircles[prevNode.artwork.Identifier] && !circleOverlap && !labelOverlap){
-                            timelineDateLabel.css('visibility', 'visible');
-                        } else{
-                            timelineDateLabel.css('visibility', 'hidden');
-                            if (curr.yearKey === fullMaxDisplayDate){
-                                timelineDateLabel.css('visibility','visible');
-                                if (circleOverlap){
-                                    artworkCircles[prevNode.artwork.Identifier].timelineDateLabel.css('visibility','hidden');
-                                }
-                            }               
-                        } 
-                    }
                 }
                 curr = avlTree.findNext(curr);
                 if(curr) { art = curr.artwork; }
+
             }
 
             //Set intitial style of timeline event circles
             for (var i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
+                timelineEventCircles[i].zoomLevel = getZoomLevel(timelineEventCircles[i]);
                 styleTimelineCircle(timelineEventCircles[i], false)
-                timelineEventCircles[i].timelineDateLabel.css({
-                    'color': 'rgb(170,170,170)'
-                });
             };
 
             return timelineCircleArea;
+
+            function getZoomLevel(circle){
+                var center = .5,
+                    nextCircle = timelineEventCircles[timelineEventCircles.indexOf(circle) + 1],
+                    prevCircle = timelineEventCircles[timelineEventCircles.indexOf(circle) - 1],
+                    lastCircle = timelineEventCircles[timelineEventCircles.length - 1],
+                    firstCircle = timelineEventCircles[0],
+                    spacing = .05;
+                    zoomLevel = 1;
+
+                currOffset = center - circle.Offset;
+                if ((location(lastCircle) - center) < center) { 
+                    zoomLevel = (center)/(lastCircle.Offset - circle.Offset)
+                }
+                if (center - (location(firstCircle)) < center) { 
+                    zoomLevel = (center)/(firstCircle.Offset - circle.Offset)
+                }
+                if(Math.abs(zoomLevel) === Infinity){
+                    zoomLevel = 1
+                };
+                if (nextCircle && ((location(nextCircle) - center) < spacing) && (location(nextCircle) - center) > 0) { 
+                    zoomLevel = (spacing)/(nextCircle.Offset - circle.Offset)
+                }
+                if (prevCircle && ((center - location(prevCircle)) < spacing) && (center - location(prevCircle)) > 0) { 
+                    zoomLevel = (spacing)/(prevCircle.Offset - circle.Offset)
+                }
+                return Math.abs(zoomLevel);
+            }
+            function location(dot){
+                return ((currOffset + dot.Offset)  - .5) * Math.abs(zoomLevel)  + .5;
+            }
         };
     };
 
+    function displayLabels(circ, selectedCircle){
+        var prevNode,
+            labelOverlap,
+            timelineDateLabel = circ.timelineDateLabel,
+            nextCircle = timelineEventCircles[timelineEventCircles.indexOf(circ) + 1],
+            prevCircle = timelineEventCircles[timelineEventCircles.indexOf(circ) - 1];
 
-    /** Zooms timeline to center on particular yearKey
-     * @methdd zoomTimeline
-     * @param  {Number} yearKey          yearKey of clicked artwork to zoom in on. (if null, zooms back out to initial state)
-     * @param  {Number} minDisplayDate   minimum date on timeline before (additional) zoom 
-     * @param  {Number} maxDisplayDate   maximum date on timeline before (additional) zoom
-     */
-    function zoomTimeline(yearKey, minDisplayDate, maxDisplayDate){
-        var initTimeRange,
-            width,
-            left,
-            originalScale,
-            newScale,
-            initTickSpacing,
-            newTickSpacing,
-            lastTickSpacing,
-            leftOffset,
-            shift,
-            minDatePos,
-            beforeDiff,
-            afterDiff,
-            buffer,
-            lastTimeRange,
-            timeRange,
-            numTicks=101,
-            i,
-            k,
-            j,
-            scaleTick,
-            positionOnTimeline,
-            first = true,
-            fullOverlap,
-            position1,
-            position2, 
-            labelwidth,
-            art;
-
-        if (yearKey===0||yearKey){
-
-            lastTimeRange = maxDisplayDate - minDisplayDate;
-
-            //Calculate new min and max display date. 
-            beforeDiff = Math.round(yearKey - minDisplayDate);
-            afterDiff = Math.round(maxDisplayDate - yearKey);
-            //Scale correctly if already zoomed in and clicking on first dot
-            buffer = (beforeDiff===0)? Math.max(afterDiff,1): Math.min(beforeDiff,afterDiff);
-            //If zoomed in to last marker, add a 1 year buffer for clear display
-            buffer = (afterDiff===0)? 1 : Math.min(buffer, afterDiff);
-            minDisplayDate = Math.round(yearKey- buffer);
-            maxDisplayDate = Math.round(yearKey + buffer);
-            //Don't allow minimum display date to be less than 1 year before full minimum display date
-            if (minDisplayDate<fullMinDisplayDate){
-                minDisplayDate = fullMinDisplayDate-1;
-                maxDisplayDate = yearKey +1
-            }
-            timeRange = maxDisplayDate - minDisplayDate;
-
-            //If less than 100 years each tick is a year. 
-            if (timeRange<100){
-                numTicks = timeRange + 1; 
-            }
-
-        }
-
-        //Info for zooming calculations
-        initTimeRange = fullMaxDisplayDate - fullMinDisplayDate;
-        originalScale = initTimeRange/100;
-        initTickSpacing = initTimelineWidth/100;
-        lastTickSpacing = currentTimeline.width()/(numTicks-1);
-        
-        //Caculate new left position and width of timeline and timelineCircleArea (may be a better way to do some of these calculations)
-        if (yearKey===null){
-            width = initTimelineWidth;
-            left = initTimelineLeft;
-        } else {
-            if (timeRange<100){
-                newTickSpacing = lastTickSpacing*(lastTimeRange/timeRange);
-            } else {
-                newScale = timeRange/100;
-                newTickSpacing = initTickSpacing*(originalScale/newScale);
-            }   
-                width = newTickSpacing*100;
-                positionOnTimeline = ((yearKey - fullMinDisplayDate)/initTimeRange)*width;
-                minDatePos = ((minDisplayDate- fullMinDisplayDate)/initTimeRange)*width;
-                leftOffset = positionOnTimeline - minDatePos;
-                shift = leftOffset - timelineArea.width()/2;               
-                if (timeRange<100){
-                    //TO-Do: there is an issue with the left position calcuation for this situation, probably a better way to do this
-                    left = initTimelineLeft - minDatePos - shift - EVENT_CIRCLE_WIDTH/2;
-                } else {
-                    left = initTimelineLeft - minDatePos;
-                }
-        }
-
-
-        if (scaleTicksAppended && newTickSpacing < initTickSpacing * EVENT_CIRCLE_WIDTH || !yearKey) {
-            for (k=0;k<scaleTicks.length;k++){
-                scaleTicks[k].remove();
-            }
-            scaleTicks = [];
-            scaleTicksAppended = false;
-        }
-
-        currentTimeline.stop(true,false);
-        currentTimeline.animate({
-            left: left + 'px',
-            width: width + 'px'},
-            ANIMATION_DURATION, "easeInOutQuint",function(){
-                if (newTickSpacing > initTickSpacing * EVENT_CIRCLE_WIDTH && yearKey) {
-                    for (k=0; k<timelineTicks.length; k++){
-                        //TO-DO add more scale ticks once zoomed in far 
-                        scaleTick = $(document.createElement('div'));
-                        scaleTick.addClass('timelineTick');
-                        var scaleTickPercent = (timelineTicks[k].position().left + newTickSpacing/2)/width*100;
-                        scaleTick.css({
-                            left: scaleTickPercent + '%',
-                            // For testing: 
-                            //'background-color' : 'red'
-                        });
-                        currentTimeline.append(scaleTick);
-                        scaleTicks.push(scaleTick);
-                    }
-                    scaleTicksAppended = true;
-                } 
-        });
-    
-        currTimelineCircleArea.overlapping = false;
-        currTimelineCircleArea.stop(true, false);
-        currTimelineCircleArea.animate({
-            left: left + 'px',
-            width: width + 'px'},
-            ANIMATION_DURATION, "easeInOutQuint", function(){
-                for (i=0; i<timelineEventCircles.length; i++){
-                if (first){
-                    timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
-                }
-                if (timelineEventCircles[i].yearKey>=minDisplayDate && timelineEventCircles[i].yearKey<=maxDisplayDate){
-                    first = false;
-                }
-
-                //Check for any overlaps:
-                j = i-1;
-                if (j>=0 && timelineEventCircles[j].yearKey>=minDisplayDate && timelineEventCircles[i].yearKey<=maxDisplayDate){
-                    position1 = timelineEventCircles[j].position().left;
-                    position2 = timelineEventCircles[i].position().left;
-                    labelwidth = timelineEventCircles[j].timelineDateLabel.width();
-                    fullOverlap = position1 === position2; 
-                    if (!fullOverlap && (areOverlapping(position1, position2)||labelsAreOverlapping(position1,position2,labelwidth))){
-                        currTimelineCircleArea.overlapping = true;
-                    } 
-                }
-                
-                //Decide whether to display labels:
-                while (j>0 && timelineEventCircles[j].timelineDateLabel.css('visibility')!=='visible' && timelineEventCircles[j].yearKey>= minDisplayDate){
-                    j = j-1;
-                }
-                if (j>=0 && !first && timelineEventCircles[j].yearKey>= minDisplayDate){
-                    position1 = timelineEventCircles[j].position().left;
-                    position2 = timelineEventCircles[i].position().left;
-                    labelwidth = timelineEventCircles[j].timelineDateLabel.width();
-                    fullOverlap = position1 === position2;
-                    if (!areOverlapping(position1, position2)&&!labelsAreOverlapping(position1, position2, labelwidth)){
-                        timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
-                    } else{
-                        timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
-                        if (timelineEventCircles[i].yearKey === yearKey){
-                            timelineEventCircles[i].timelineDateLabel.css('visibility','visible');
-                            if (fullOverlap){
-                                timelineEventCircles[j].timelineDateLabel.css('visibility','hidden');
-                            }
-                        }
-                        if (timelineEventCircles[i].yearKey === fullMaxDisplayDate){
-                            timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
-                            if (labelsAreOverlapping(position1,position2)){
-                                timelineEventCircles[j].timelineDateLabel.css('visibility', 'hidden');
-                            }
-                        }
-                    }
-                }
-
-                //Re-add on-click functions. TO-DO: factor out. 
-                timelineEventCircles[i].unbind();
-                art = timelineEventCircles[i].artwork;
-                timelineEventCircles[i].on('click', (function(art) {
-                                            return function() {
-                                                if (artworkShown === true && currentArtwork === art) {
-                                                    zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate);
-                                                    hideArtwork(art)();
-                                                    artworkShown = false;
-                                                } else {
-                                                    if (currTimelineCircleArea.overlapping || artworkTiles[art.Identifier]) {
-                                                        zoomTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate);
-                                                    } else {
-                                                        panTimeline(artworkCircles[art.Identifier].yearKey, minDisplayDate, maxDisplayDate);
-                                                    }
-                                                    showArtwork(art,true)();
-                                                    artworkShown  = true;
-                                                } 
-                                            }      
-                                        })(art));
-         
+        // Always show current circle, and if there are other circles with the same date, hide them
+        if (selectedCircle && circ.yearKey === selectedCircle.yearKey){
+            timelineDateLabel.css('visibility', 'hidden');
+                if (circ === selectedCircle){
+                    timelineDateLabel.css('visibility', 'visible');
                 };
-        }); 
-    }; 
+            return;
+        };
 
-    /* Pans timeline to specific yearKey while maintaining current zoom level.
-     * @param  {Number} yearKey         yearKey of circle/artwork to pan to
-     * @param  {Number} minDisplayDate  minimum display date of timeline before panning
-     * @param  {Number} maxDisplayDate  maximum display date of timeline before panning
-     */
-    function panTimeline(yearKey, minDisplayDate, maxDisplayDate){
-        var timeRange,
-            half;
-        timeRange = maxDisplayDate - minDisplayDate;
-        half = Math.round(timeRange/2);
-        yearKey - half < fullMinDisplayDate ? minDisplayDate = minDisplayDate : minDisplayDate = yearKey - half;
-        yearKey + half > fullMaxDisplayDate ? maxDisplayDate = maxDisplayDate : maxDisplayDate = yearKey + half;
-        //force zoomTimeline() to maintain same zoom level by passing in desired min and max date. 
-        zoomTimeline(yearKey, minDisplayDate, maxDisplayDate);
+        //Decide whether to display labels:
+        if (prevCircle){
+            //Find the previous visible timeline label:
+            while (timelineEventCircles[timelineEventCircles.indexOf(prevCircle) - 1] && prevCircle.timelineDateLabel.css('visibility')!=='visible'){
+                prevCircle = timelineEventCircles[timelineEventCircles.indexOf(prevCircle) - 1];
+            }
+            //Check to see if the label of the current circle would overlap that of the previously labelled artwork:
+            labelOverlap = labelsAreOverlapping(prevCircle.position().left, circ.position().left, prevCircle.timelineDateLabel.width()); 
+            //Overlapping circles should only have 1 label: 
+            if (prevCircle && !labelOverlap){
+                timelineDateLabel.css('visibility', 'visible');
+            } else{
+                timelineDateLabel.css('visibility', 'hidden');
+                if (timelineEventCircles.indexOf(circ) === 0 || timelineEventCircles.indexOf(circ) === timelineEventCircles.length){
+                    timelineDateLabel.css('visibility','visible');
+                }               
+            } 
+        }
     }
+    
+    function zoomTimeline(circle){
+        var i,
+            j,
+            tick,
+            tickTarget,
+            center = .5,
+            currOffset = circle ? center - circle.Offset : 0,
+            zoomLevel = circle ? circle.zoomLevel : 1,
+            circleTarget,
+            otherCircle;
 
-    /* Helper function to determine if two event circles are overlapping
-     * @method areOverlapping
-     * @param  {Number} position1     left pixel position of the circle that is further left
-     * @param  {Number}  position2    left pixel position of the circle that is further right
-     * @return {Boolean}              whether the circles are overlapping
-     */
-    function areOverlapping(position1, position2){
-        //TO-DO: add fullOverlap here
-        return Math.round(position2) - Math.round(position1) < EVENT_CIRCLE_WIDTH;
+        for (i = 0; i<timelineEventCircles.length ;i++){
+            otherCircle = timelineEventCircles[i]
+            circleTarget = location(otherCircle)
+            otherCircle.animate(
+                {"left" : parseInt(circleTarget*100) + "%"}, 1000,"easeInOutQuint", (function(otherCircle) {
+                    return function() {
+                        displayLabels(otherCircle, circle);
+                    };
+                })(otherCircle));
+        }
+
+        for (j = 0; j < timelineTicks.length; j++){
+            tick = timelineTicks[j]
+            // console.log(tick.Offset)
+            tickTarget = location(tick)
+            tick.animate(
+                {"left" : (tickTarget*100) + "%"}, 1000,"easeInOutQuint");
+        }
+        function location(dot){
+            var target =  ((currOffset + dot.Offset)  - center) * zoomLevel  + center;
+            return target;
+        }
     }
 
     /*Helper function to determine if the labels of two event cirlces are overlapping
@@ -1328,8 +1345,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @return {Boolean}                whether the labels of the two circles are overlapping
      */
     function labelsAreOverlapping(position1, position2, labelWidth){
-        //Hard-coded 2 pixel buffer between labels for clarity 
-        return Math.round(position1) + labelWidth + 2 > position2;
+        //Hard-coded 4 pixel buffer between labels for clarity 
+        return Math.round(position1) + labelWidth + 4 > position2;
     }
 
     /**
@@ -1342,15 +1359,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!artwork) {
                 return;
             }
-
             selectedArtworkContainer.css('display', 'none');
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
-                artworkCircles[artwork.Identifier].timelineDateLabel && artworkCircles[artwork.Identifier].timelineDateLabel.css({
-                    'color' : 'rgb(170,170,170)'  
-                });
             }
-            zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate);
+            zoomTimeline();
             catalogDiv.stop(true,false);
             catalogDiv.animate({scrollLeft: 0}, 1000);
             artworkShown = false;
@@ -1414,14 +1427,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         leftOffset = bottomContainer.width()/10;
                         shift = 0;
                     }
+                    // console.log("SHIFTING ARTWORK CONTAINER in showArtwork")
                     selectedArtworkContainer.css({
                         'display': 'inline',
                         'left' : leftOffset - shift
                     });
-
-                    if (!artwork.Metadata.Year){
-                        zoomTimeline(null, fullMinDisplayDate, fullMaxDisplayDate);
-                    }
             });
     
             // Set selected artwork to hide when anything else is clicked
@@ -1442,7 +1452,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // showAllAtYear is a boolean of of whether or not all artworks of a given year are shown, or just the artowrk selected.
             artworksForYear = artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()];
             if (showAllAtYear && artworksForYear){
-                    selectedArtworkContainer.css("left", "0px")
+                // console.log("SHIFTING ARTWORK CONTAINER in showArtwork (if multiple shown)")
+                   selectedArtworkContainer.css("left", "0px")
 
                 for (i = 0; i < artworksForYear.length; i++) {
                     newTile = createPreviewTile(artworksForYear[i]);
@@ -1458,6 +1469,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 containerWidth = previewWidth;
 
             }
+            // console.log("SAETTING ARTWORK CONTAINER WIDTH")
+
             selectedArtworkContainer.css({
                 width : containerWidth
             });
@@ -1551,23 +1564,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //Circle (with date) on timeline
             for (i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
                 styleTimelineCircle (timelineEventCircles[i], false)
-                timelineEventCircles[i].timelineDateLabel.css({
-                    'color' : 'rgb(170,170,170)',
-                    'font-size' : '100%' ,
-                    'top': -EVENT_CIRCLE_WIDTH
-                });
             };
 
             // Make current circle larger and white
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], true)
-                // Add label to current date
-                artworkCircles[artwork.Identifier].timelineDateLabel.css({
-                    'visibility': 'visible',
-                    'color' : 'white',
-                    'font-size' : '120%' ,
-                    'top': -EVENT_CIRCLE_WIDTH 
-                })
             };
 
             //Progress circle for loading

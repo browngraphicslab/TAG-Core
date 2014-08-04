@@ -673,6 +673,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColor = TAG.Worktop.Database.getPrimaryFontColor();
         var secondaryFontColor = TAG.Worktop.Database.getSecondaryFontColor();
         var fontFamily = TAG.Worktop.Database.getFontFamily();
+        var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration();
 
         // Create inputs
         //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
@@ -705,8 +706,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
         var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Lobster', 'Pacifico', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
+        var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
-
         // Handle changes
         /*onChangeUpdateNum(alphaInput, 0, 100, function (num) {
             updateBGColor('.infoDiv', overlayColorInput.val(), num);
@@ -740,6 +741,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColorSetting = createSetting('Primary Font Color', primaryFontColorInput);
         var secondaryFontColorSetting = createSetting('Secondary Font Color', secondaryFontColorInput);
         var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
+        var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
         settingsContainer.append(bgImage);
         /*settingsContainer.append(overlayColorSetting);
@@ -754,6 +756,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(primaryFontColorSetting);
         settingsContainer.append(secondaryFontColorSetting);
         settingsContainer.append(fontFamilySetting);
+        settingsContainer.append(idleTimerDurationSetting);
 		//automatically save General Settings - Customization
 
         currentMetadataHandler = function () {
@@ -777,6 +780,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 fontFamilyInput: fontFamilyInput,
+                idleTimerDurationInput: idleTimerDurationInput
             });
         };
 
@@ -803,6 +807,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 fontFamilyInput: fontFamilyInput,
+                idleTimerDurationInput: idleTimerDurationInput
             });
         }, {
             'margin-right': '3%',
@@ -868,6 +873,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
         var fontFamily = inputs.fontFamilyInput.val();
         var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
+        var idleTimerDuration = inputs.idleTimerDurationInput.val();
 
         var options = {
             /*Name: name,
@@ -882,6 +888,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             SecondaryFontColor: secondaryFontColor,
             FontFamily: fontFamily,
             BaseFontSize: baseFontSize,
+            IdleTimerDuration: idleTimerDuration
         };
         if (bgImg) options.Background = bgImg;
         //if (logo) options.Icon = logo;
@@ -3288,7 +3295,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         onChangeUpdateText(titleInput, null, 40);
         onChangeUpdateText(artistInput, null, 40);
         onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 40);
-        onChangeUpdateText(descInput, null, 40);
+        onChangeUpdateText(descInput, null, 5000);
 
         var title = createSetting('Title', titleInput);
         var artist = createSetting('Artist', artistInput);
@@ -5170,9 +5177,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @return {Object} input    newly creted text input
      */
     function createTextAreaInput(text, defaultval, hideOnClick) {
-        if (typeof text === 'string')
+        if (typeof text === 'string') {
             text = text.replace(/<br \/>/g, '\n').replace(/<br>/g, '\n').replace(/<br\/>/g, '\n');
-        var input = $(document.createElement('textarea')).val(text);
+        }
+         var input = $(document.createElement('textarea')).val(text);
         input.css('overflow-y', 'scroll');
         //input.autoSize();
         doWhenReady(input, function (elem) {
