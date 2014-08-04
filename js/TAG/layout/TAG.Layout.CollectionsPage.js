@@ -794,6 +794,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .attr('src', tagPath+'images/icons/catalog_video_icon.svg');
                 main.append(videoLabel);
             }
+            for (var k = 10; k>0; k--){
+                console.log(k + ": " + Math.sqrt(k))
+            }
 
             tileDiv.append(main);
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
