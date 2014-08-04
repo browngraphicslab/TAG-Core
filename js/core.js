@@ -432,8 +432,8 @@
     } else {
         setInterval(function () {
             if (!navigator.onLine) {
-                if (!$("#InternetFailureroot")[0]) {
-                    $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                if (!$("#InternetFailureroot")[0] && localStorage.ip !== "127.0.0.1" && localStorage.ip !== "localhost") {
+                    $(".rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
                 }
             }
             
@@ -441,22 +441,22 @@
         var el = document.body;
         if (el.addEventListener) {
             el.addEventListener("offline", function () {
-                if (!$("#InternetFailureroot")[0]) {
-                    $("#rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                if (!$("#InternetFailureroot")[0] && localStorage.ip !== "127.0.0.1" && localStorage.ip !== "localhost") {
+                    $(".rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
                 }
             }, true);
         }
         else if (el.attachEvent) {
             el.attachEvent("onoffline", function () {
-                if (!$("#InternetFailureroot")[0]) {
-                    $("rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                if (!$("#InternetFailureroot")[0] && localStorage.ip !== "127.0.0.1" && localStorage.ip !== "localhost") {
+                    $(".rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
                 }
             });
         }
         else {
             el.onoffline = function () {
-                if (!$("#InternetFailureroot")[0]) {
-                    $("rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                if (!$("#InternetFailureroot")[0] && localStorage.ip !== "127.0.0.1" && localStorage.ip !== "localhost") {
+                    $(".rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
                 }
             };
         }
