@@ -185,9 +185,146 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
         } else {
             linkButton.remove();
+            infoButton.on('click', function () {
+                createInfoPopUp();
+            });
         }
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+    }
+
+    /**
+     * Create info pop-up for 'i' info icon on collections page
+     * @method createInfoPopUp
+     */
+    function createInfoPopUp() {
+        var infoOverlay = $(TAG.Util.UI.blockInteractionOverlay());
+        var infoBox = $(document.createElement('div'));
+        var infoTitle = $(document.createElement('div'));
+        var infoMain = $(document.createElement('div'));
+        var infoLogo = $(document.createElement('div'));
+        var infoTitleLeft = $(document.createElement('div'));
+        var infoTitleRight = $(document.createElement('div'));
+        var infoMainTop = $(document.createElement('div'));
+        var infoMainBottom = $(document.createElement('div'));
+        var microsoftLogo = $(document.createElement('img'));
+        var brownLogo = $(document.createElement('img'));
+        var closeButton = createCloseButton();
+
+        microsoftLogo.attr('src', tagPath + 'images/microsoft_logo.png');
+        brownLogo.attr('src', tagPath + 'images/brown_log.png');
+        microsoftLogo.css({
+            'height': 'auto',
+            'width': '20%',
+            'margin-left': '50%'
+        });
+        
+        console.log(tagPath);
+
+        infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
+        infoOverlay.append(infoBox);
+        infoBox.css({
+            'background-color': 'black',
+            'color': 'white',
+            'height': '50%',
+            'width': '50%',
+            'margin-top': '15%',
+            'margin-left': '25%'
+        });
+        infoTitle.css({
+            'background-color': 'black',
+            'margin': '0%',
+            'display': 'block',
+            'color': 'white'
+        });
+        infoTitle.append(infoTitleLeft);
+        infoTitle.append(infoTitleRight);
+        infoTitle.append(closeButton);
+        infoTitleLeft.css({
+            'color': 'white',
+            'background-color': 'black',
+            'display': 'inline-block',
+            'font-weight': 'bold',
+            'font-size': '2em',
+            'margin-left': '5%',
+            'margin-top': '2%'
+        });
+        infoTitleLeft.text('TAG');
+
+        infoTitleRight.css({
+            'color': 'white',
+            'background-color': 'black',
+            'display': 'inline-block',
+            'font-size': '1.5em',
+            'margin-left': '3%'
+        });
+        infoTitleRight.text('Touch Art Gallery');
+
+        infoMain.css({
+            'background-color': 'black',
+            'display': 'block',
+            'color': 'white'
+        });
+        infoMainTop.css({
+            'color': 'white',
+            'background': 'black',
+            'display': 'block',
+            'font-size': '0.75em',
+            'margin-left': '5%',
+            'margin-top': '3%',
+            'margin-right': '6%'
+        });
+        infoMainBottom.css({
+            'color': 'white',
+            'background': 'black',
+            'display': 'block',
+            'font-size': '0.65em',
+            'margin-left': '5%',
+            'margin-top': '3%',
+            'margin-right': '6%'
+        });
+        infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag/.');
+        infoMainBottom.text('Andy van Dam, Alex Hills, Yudi Fu, Karishma Bhatia, Gregory Chatzinoff, John Connuck, David  Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Kaijan Gao, Jessica Herron, Ardra Hren, Hak Rim Kim, Lucy van Kleunen, Inna Komarovsky, Ryan Lester, Benjamin LeVeque, Josh Lewis, Jinqing Li, Jeffery Lu, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Jonathan Poon, Dhruv Rawat, Emily Reif, Surbhi Madan, Jacob Rosenfeld, Anqi Wen, Dan Zhang, Libby Zorn');
+        infoMain.append(infoMainTop);
+        infoMain.append(infoMainBottom);
+
+        infoLogo.css({
+            'background-color': 'blue',
+            'display': 'block',
+            'color': 'white',
+            'height': '15%',
+            'margin-top': '3%'
+        });
+        infoLogo.append(microsoftLogo);
+        infoLogo.append(brownLogo);
+
+        infoBox.append(infoTitle);
+        infoBox.append(infoMain);
+        infoBox.append(infoLogo);
+        root.append(infoOverlay);
+        infoOverlay.fadeIn();
+
+        closeButton.on('click', function () {
+            infoOverlay.fadeOut();
+        });
+    }
+
+    /**
+     * Create a closeButton for associated media
+     * @method createCloseButton
+     * @return {HTML element} the button as a 'div'
+     */
+    function createCloseButton() {
+        var closeButton = $(document.createElement('img'));
+        closeButton.attr('src', tagPath + 'images/icons/x.svg');
+        closeButton.text('X');
+        closeButton.css({
+            'height': '30px',
+            'width': '30px',
+            'margin-left': '39%',
+            'margin-bottom': '3.5%'
+        });
+        return closeButton;
     }
 
     /**
