@@ -128,39 +128,39 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @method checkVideoConverted
      */
     /**********************TRY VIDEO CONVERSION********************/
-    function checkVideoConverted() {
-        if (videos2Convert.length > 0) {
-            for (var i = 0; i < videos2Convert.length; i++) {
-                var track = videos2Convert[i];
-                var media = track.getMedia();
-                var videotag = $(document.createElement('video'));
-                videotag.attr('preload', 'metadata');
-                var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
-                TAG.Worktop.Database.getConvertedCheck(
-                    (function (i, track, media, videotag) {
-                        return function (output) {
-                            if (output !== "False") {
-                                console.log("converted: ");
-                                var mp4filepath = "/Images/" + output.substr(0, output.lastIndexOf('.')) + ".mp4";
-                                var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
-                                videotag.attr('src', mp4file);
-                                videotag.on('loadedmetadata', function () {
-                                    //remove from the video array and add display with the right duration
-                                    track.changeTrackColor('white');
-                                    track.addDisplay(0, this.duration);
-                                    videos2Convert.remove(track);
-                                });
+    //function checkVideoConverted() {
+    //    if (videos2Convert.length > 0) {
+    //        for (var i = 0; i < videos2Convert.length; i++) {
+    //            var track = videos2Convert[i];
+    //            var media = track.getMedia();
+    //            var videotag = $(document.createElement('video'));
+    //            videotag.attr('preload', 'metadata');
+    //            var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
+    //            TAG.Worktop.Database.getConvertedCheck(
+    //                (function (i, track, media, videotag) {
+    //                    return function (output) {
+    //                        if (output !== "False") {
+    //                            console.log("converted: ");
+    //                            var mp4filepath = "/Images/" + output.substr(0, output.lastIndexOf('.')) + ".mp4";
+    //                            var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
+    //                            videotag.attr('src', mp4file);
+    //                            videotag.on('loadedmetadata', function () {
+    //                                //remove from the video array and add display with the right duration
+    //                                track.changeTrackColor('white');
+    //                                track.addDisplay(0, this.duration);
+    //                                videos2Convert.remove(track);
+    //                            });
 
-                            } else {
-                                console.log("not converted: ");
-                            }
-                        }
-                    })(i, track, media, videotag), null, filename);
-            }
-        }
-    }
+    //                        } else {
+    //                            console.log("not converted: ");
+    //                        }
+    //                    }
+    //                })(i, track, media, videotag), null, filename);
+    //        }
+    //    }
+    //}
 
-    setInterval(checkVideoConverted, 1000 * 30);
+    //setInterval(checkVideoConverted, 1000 * 30);
 
 
     /**Display warning message if ink cannot be loaded
@@ -293,7 +293,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
         }
         track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
-        track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
+        track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy));
     }
 
     /**Deletes an ink track and all associated stuff
@@ -349,7 +349,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         track.setIsVisible(true);
         undoManager.logCommand(command);
         command.execute();
-        currentInkController.remove_all();
+        currentInkController.removeAll();
 
         //hide ink controls and removeinkcanv
         removeInkCanv();
@@ -381,11 +381,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function saveDraw(linked, linkedTrack, artname, track) {
         //first, check if the ink is empty
-        var datastr = currentInkController.update_datastring();
+        var datastr = currentInkController.updateDatastring();
         var oldDataStr = track.getInkPath();
         var confirmationBox;
 
-        if (currentInkController.isDatastringEmpty(currentInkController.update_datastring())) {
+        if (currentInkController.isDatastringEmpty(currentInkController.updateDatastring())) {
             confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
                 deleteInkTrack(track);
                 inkEditDraw.hide();
@@ -401,7 +401,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         if (linked) {
             updateInks(artname, linkedTrack, track);
         }
-        currentInkController.remove_all();
+        currentInkController.removeAll();
         editInks(track, datastr);
         inkDrawControls.hide();
     }
@@ -425,7 +425,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             //  brushSliderPoint.attr('value', 7.0);
             //  currentInkController.updatePenWidth("brushEditSlider");
 
-            currentInkController.remove_all();
+            currentInkController.removeAll();
             removeInkCanv();
             inkDrawControls.hide();
 
@@ -469,8 +469,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             keyframe,
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
-            inkdiv = createInkCanv(),
-            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+            inkdiv = createInkCanv();
+
+        currentInkController = new TAG.TourAuthoring.InkAuthoring({
+            spec: spec
+        });
 
         isEditingDraw = true;
 
@@ -512,45 +515,49 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
         inkAuthoring = p1;
-        p1.set_editable();
-        p1.set_mode(TAG.TourAuthoring.InkMode.draw);
+        currentInkController.setEditable();
+        currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
         ////// new ink draw stuff
 
-        //   p1.setPenColor(p1.get_attr(datastring, 'stroke', 's'));
-        //   p1.setPenOpacity(p1.get_attr(datastring, 'strokeo', 'f'));
-        //   p1.setPenWidth(p1.get_attr(datastring, 'strokew', 'f'));
+        //   p1.setPenColor(p1.getAttr(datastring, 'stroke', 's'));
+        //   p1.setPenOpacity(p1.getAttr(datastring, 'strokeo', 'f'));
+        //   p1.setPenWidth(p1.getAttr(datastring, 'strokew', 'f'));
         modeInput.updateMode();
         drawValues = {
-            color: p1.getPenColor(),
-            opacity: p1.getPenOpacity(),
-            width: p1.getPenWidth()
+            color: currentInkController.getPenColor(),
+            opacity: currentInkController.getPenOpacity(),
+            width: currentInkController.getPenWidth()
 
         };
-
         INITIAL_DRAW.createModeButton();
         INITIAL_DRAW.updateInputs();
 
         if (linked) {
             //if the ink is linked, need to figure out where to place it beyond loading in the original datastring
             initKeyframe = track.getInkInitKeyframe();
-            p1.setInitKeyframeData(initKeyframe);
-            p1.setArtName(artname);
-            p1.retrieveOrigDims();
-            p1.setEID(track.getTitle());
+            currentInkController.setInitKeyframeData(initKeyframe);
+            currentInkController.setArtName(artname);
+            currentInkController.retrieveOrigDims();
+            currentInkController.setExpId(track.getTitle());
         }
 
-        p1.loadInk(datastring); //load in the ink to be edited
+        currentInkController.loadInk(datastring); //load in the ink to be edited
 
         if (linked) {
             //now adjust viewbox so art is at the proper coordinates
-            p1.update_datastring();
-            p1.setOldOpac(1);
-            p1.adjustViewBoxDiv({ x: proxy.x, y: proxy.y, width: proxy.w, height: proxy.h });
-            p1.drawPaths();
-            p1.drawBezierPath();
+            currentInkController.updateDatastring();
+            //currentInkController.setOldOpac(1);
+            currentInkController.adjustViewBox({
+                x: proxy.x,
+                y: proxy.y,
+                width: proxy.w,
+                height: proxy.h
+            }, true);
+            // currentInkController.drawPaths();
+            currentInkController.drawBezierPath();
         }
 
-        currentInkController = p1;
+        
 
         // call onUpdate to remove the existing ink before reloading it in edit mode
         timeline.onUpdate(true);
@@ -584,7 +591,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             timeline.setEditInkOn(false);
             timeline.hideEditorOverlay();
 
-            currentInkController.remove_all();
+            currentInkController.removeAll();
             removeInkCanv();
             inkTransparencyControls.hide();
 
@@ -620,7 +627,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var datastr,
             confirmationBox;
 
-        if (currentInkController.isDatastringEmpty(currentInkController.update_datastring())) {         //first, check if the ink is empty
+        if (currentInkController.isDatastringEmpty(currentInkController.updateDatastring())) {         //first, check if the ink is empty
             confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
                 deleteInkTracks(track);
                 inkTransparencyControls.hide();
@@ -642,8 +649,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         //  }
 
         //need to convert rectangles/ellipses to paths before updating datastring
-        currentInkController.get_trans_shape_data();
-        datastr = currentInkController.update_datastring();
+        currentInkController.getTransShapeData();
+        datastr = currentInkController.updateDatastring();
         datastr += currentInkController.getBoundingShapes(); //save the rect/ellipse data in case we need to edit again
         editInks(track, datastr);
         inkTransparencyControls.hide();
@@ -678,7 +685,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
             inkdiv = createInkCanv(),
-            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
             currentMode,
             currOpacity,
             real_kfw,
@@ -687,6 +693,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             real_kfy;
         isEditingTransparency = true;
         playbackControls.undoRedoInkOnly.css({ 'display': 'inline-block' });
+
+        currentInkController = new TAG.TourAuthoring.InkAuthoring({
+            spec: spec
+        });
 
         if (linked) {
             initKeyframe = track.getInkInitKeyframe();
@@ -725,29 +735,28 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
         inkAuthoring = p1;
-        p1.set_mode(TAG.TourAuthoring.InkMode.shapes); //shape manipulation mode
-        p1.set_editable();
+        currentInkController.setMode(TAG.TourAuthoring.InkMode.shapes); //shape manipulation mode
+        currentInkController.setEditable();
 
 
         if (linked) {
             //get the inkController set to load ink in the correct position
-            p1.setInitKeyframeData(initKeyframe);
-            p1.setArtName(artname);
+            currentInkController.setInitKeyframeData(initKeyframe);
+            currentInkController.setArtName(artname);
             cw = $("#inkCanv").width();
             ch = $("#inkCanv").height();
-            p1.retrieveOrigDims();
-            p1.setEID(track.getTitle());
+            currentInkController.retrieveOrigDims();
+            currentInkController.setExpId(track.getTitle());
         }
         currentMode = datastring.split("mode")[1].split("[")[0].replace("]", "");
-        p1.setTransMode(p1.get_attr(datastring, 'mode', 's'));
-        p1.load_transparency_bounding_shapes(datastring);
-        p1.setMarqueeFillOpacity(p1.get_attr(datastring, 'opac', 'f'));
-
+        currentInkController.setTransMode(currentInkController.getAttr(datastring, 'mode', 's'));
+        currentInkController.loadTransparencyBoundingShapes(datastring);
+        currentInkController.setMarqueeFillOpacity(currentInkController.getAttr(datastring, 'opac', 'f'));
 
 
         INITIAL_TRANSPARENCY.createModeButtons();
-        INITIAL_TRANSPARENCY.updateInputs(p1.get_attr(datastring, 'opac', 'f'));
-        transMode.updateMode(p1.getTransMode());
+        INITIAL_TRANSPARENCY.updateInputs(currentInkController.getAttr(datastring, 'opac', 'f'));
+        transMode.updateMode(currentInkController.getTransMode());
         /*     if (currentMode === 'isolate') {
                  isolateEditLabel.css({ 'color': 'black' });
                  blockEditLabel.css({ 'color': 'gray' });
@@ -764,15 +773,20 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
              } */
         if (linked) {
             //now adjust viewbox so art is at the proper coordinates
-            real_kfw = p1.origPaperW / kfvw;
+            real_kfw = currentInkController.origPaperW / kfvw;
             real_kfh = real_kfw * proxy_h / proxy_w;
             real_kfx = -kfvx * real_kfw;
             real_kfy = -kfvy * real_kfw;
-            p1.update_datastring();
-            p1.setOldOpac(1);
-            p1.adjustViewBoxDiv({ x: proxy.x, y: proxy.y, width: proxy.w, height: proxy.h });
+            currentInkController.updateDatastring();
+            //currentInkController.setOldOpac(1);
+            currentInkController.adjustViewBox({
+                x: proxy.x,
+                y: proxy.y,
+                width: proxy.w,
+                height: proxy.h
+            }, true);
         }
-        currentInkController = p1;
+        //currentInkController = p1;
         //     currOpacity = currentInkController.getMarqueeFillOpacity();
         //    opacityEditTransparencyLabel1.text(Math.round(100 * currOpacity) + "%");
         //     opacityEditTransparencyLabel.append(opacityEditTransparencyLabel1);
@@ -800,7 +814,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             timeline.setEditInkOn(false);
             timeline.hideEditorOverlay();
             currentInkController.resetText();
-            currentInkController.remove_all();
+            currentInkController.removeAll();
             removeInkCanv();
             inkTextControls.hide();
             playbackControls.undoButton.off("click");
@@ -852,7 +866,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             updateInks(artname, linkedTrack, track);
         }
 
-        track.setInkPath(currentInkController.update_datastring()); //======== can call currentInkController.update_datastring here to get the most recent ink path (getDatastring assumes it's already been called)
+        track.setInkPath(currentInkController.updateDatastring()); //======== can call currentInkController.updateDatastring here to get the most recent ink path (getDatastring assumes it's already been called)
         removeInkCanv();
         inkTextControls.hide();
         track.setIsVisible(true);
@@ -899,7 +913,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             raTop = $("#resizableArea").offset().top,
             raHeight = $("#resizableArea").height(),
             inkdiv = createInkCanv(),
-            p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec),
             fontsize,
             line_breaks,
             num_lines,
@@ -912,6 +925,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             svgText,
             pointvalue,
             currentcolor;
+
+        currentInkController = new TAG.TourAuthoring.InkAuthoring({
+            spec: spec
+        });
 
         isEditingText = true;
 
@@ -950,10 +967,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkAuthoring = p1;
         cw = $("#inkCanv").width();
         ch = $("#inkCanv").height();
-        p1.set_mode(TAG.TourAuthoring.InkMode.text);
-        p1.set_editable();
+        currentInkController.setMode(TAG.TourAuthoring.InkMode.text);
+        currentInkController.setEditable();
 
-        //     fontsize = p1.get_attr(datastring, "fontsize", 'f') * ch;
+        //     fontsize = p1.getAttr(datastring, "fontsize", 'f') * ch;
         //     p1.setFontSize(fontsize);
        // maxFontSize = Math.max(48, fontsize);
 
@@ -963,9 +980,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
 
         try {
-            w = p1.get_attr(datastring, 'w', 'f');
+            w = currentInkController.getAttr(datastring, 'w', 'f');
             w = linked ? w * scaleFactor : w;
-            h = p1.get_attr(datastring, 'h', 'f');
+            h = currentInkController.getAttr(datastring, 'h', 'f');
             h = linked ? h * scaleFactor : h;
         } catch (err) {
             w = null;
@@ -973,35 +990,40 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         }
 
         if (linked) {
-            p1.setInitKeyframeData(initKeyframe);
-            p1.setArtName(artname);
-            p1.retrieveOrigDims();
-            p1.setEID(track.getTitle());
-            p1.loadInk(datastring);
-            p1.adjustViewBoxDiv({ x: proxy.x, y: proxy.y, width: proxy.w, height: proxy.h });
+            currentInkController.setInitKeyframeData(initKeyframe);
+            currentInkController.setArtName(artname);
+            currentInkController.retrieveOrigDims();
+            currentInkController.setExpId(track.getTitle());
+            currentInkController.loadInk(datastring);
+            currentInkController.adjustViewBox({
+                x: proxy.x,
+                y: proxy.y,
+                width: proxy.w,
+                height: proxy.h
+            }, true);
         }
-        textX = p1.getPannedPos().x || p1.get_attr(datastring, "x", "f") * cw;
-        textY = p1.getPannedPos().y || p1.get_attr(datastring, "y", "f") * ch;
-        p1.setFontFamily(p1.get_attr(datastring, "font", 's'));
-        p1.setFontColor(p1.get_attr(datastring, "color", 's'));
-        p1.setFontSize(p1.get_attr(datastring, "fontsize", 'f') * ch);
-        str = p1.get_attr(datastring, 'str', 's');
+        textX = currentInkController.getPannedPos().x || currentInkController.getAttr(datastring, "x", "f") * cw;
+        textY = currentInkController.getPannedPos().y || currentInkController.getAttr(datastring, "y", "f") * ch;
+        currentInkController.setFontFamily(currentInkController.getAttr(datastring, "font", 's'));
+        currentInkController.setFontColor(currentInkController.getAttr(datastring, "color", 's'));
+        currentInkController.setFontSize(currentInkController.getAttr(datastring, "fontsize", 'f') * ch);
+        str = currentInkController.getAttr(datastring, 'str', 's');
 
 
         values = {
-            color: p1.get_attr(datastring, 'color', 's'),
-            font: p1.get_attr(datastring, 'font', 's'),
-            text: p1.get_attr(datastring, 'str', 's'),
-            size: p1.get_attr(datastring, 'fontsize', 'f') * ch
+            color: currentInkController.getAttr(datastring, 'color', 's'),
+            font: currentInkController.getAttr(datastring, 'font', 's'),
+            text: currentInkController.getAttr(datastring, 'str', 's'),
+            size: currentInkController.getAttr(datastring, 'fontsize', 'f') * ch
         };
-
         INITIAL_INK_TEXT.createModeButton();
         INITIAL_INK_TEXT.updateInputs(values);
 
-        p1.remove_all();
+        currentInkController.removeAll();
 
-        p1.add_text_box(textX, textY, w, h, str);               // 5px seems to be standard textarea padding
-        svgText = p1.getSVGText();
+        currentInkController.addTextBox(textX, textY, str);               // 5px seems to be standard textarea padding
+        svgText = currentInkController.getSVGText();
+        svgText.data('str', str);
 
         //   currentFontSize = fontsize;
         //   textEditSizeLabel1.text(Math.round(fontsize) + "px");
@@ -1012,7 +1034,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         //    colorEditTextLabel1.text(currentcolor);
 
         //  myEditTextPicker.fromString(currentcolor);
-        currentInkController = p1;
+        //currentInkController = p1;
         //   firstUpdate();
         //   updateToggle(textArray, textArea);
         timeline.onUpdate(true);
@@ -1247,7 +1269,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             names = [],
             title = $(this).text(),
             initLoc = timeManager.getCurrentPx(),
-            mp42Convert = [],
+            toConvertDecisions = [],
             mediaLengths = [],
             i,
             upldr,
@@ -1379,20 +1401,20 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 var file,
                     total = files.length,
                     decided = 0,
-                    toConvert = [];
+                    decisions = [];
                 for (i = 0; i < files.length; i++) {
                     file = files[i];
                     names.push(file.displayName);
                     var toUpload = true;
                     if (file.fileType !== '.mp4') {
                         var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
+                            decisions.push(true);
                             if (++decided >= total) {
                                 confirmCallback && confirmCallback();
                             }
                         }, "This video is not in a compatible format. Would you like us to convert " + file.displayName + " for you?", "Yes", true, (function (curfile) {
                             return function () {
-                                files.remove(curfile);
-                                names.remove(curfile.displayName);
+                                decisions.push(false);
                                 if (++decided >= total) {
                                     confirmCallback && confirmCallback();
                                 }
@@ -1403,13 +1425,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     } else {//file is Mp4, ask users if they still want to convert it. Regardless, upload the video
                         var confirmBox = TAG.Util.UI.PopUpConfirmation((function (index) {
                             return function () {
-                                toConvert.push(index);
+                                decisions.push(true);
                                 if (++decided >= total) {
                                     confirmCallback && confirmCallback();
                                 }
                             };
-                        })(i), "Video " + file.displayName + " is already MP4. Would you like us to convert it to other formats for you?", "Yes", true, function () {
+                        })(i), "Video " + file.displayName + " is already MP4. Would you like us to convert it to other formats for different browsers for you?", "Yes", true, function () {
                             if (++decided >= total) {
+                                decisions.push(false);
                                 confirmCallback && confirmCallback();
                             }
                         });
@@ -1423,7 +1446,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 type = TAG.TourAuthoring.TrackType.video;
                 mediaFiles = files;
-                mp42Convert = toConvert;
+                toConvertDecisions = decisions;
                 return 'uploading test!';
             },
             function (urls) {
@@ -1441,7 +1464,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         url = urls[i];
                         name = names[i];
                         mediaLength = mediaLengths[i];
-                        if (mp42Convert.indexOf(i) > -1) {
+                        if (toConvertDecisions[i] === true) {
                             var newFileName = urls[i].slice(8, urls[i].length);
                             var index = newFileName.lastIndexOf(".");
                             var fileExtension = newFileName.slice(index);
@@ -1449,8 +1472,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             TAG.Worktop.Database.convertVideo(function () {
                             }, null, newFileName, fileExtension, baseFileName, null);
                         }
-                        var track = timeline.addVideoTrack(url, name, null, mediaLength);
-
+                        var track = timeline.addVideoTrack(url, name, null, mediaLength, toConvertDecisions[i], false);
                         var positionX = initLoc;
                         var displayLength = mediaLength;
                         if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {
@@ -1712,7 +1734,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     isEditingText = false;
                     //create an ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring({
+                        spec: spec
+                    });
                     currentInkController = p1;
 
                     //  INITIAL_INK_TEXT.createInputs();
@@ -1738,13 +1762,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                     inkAuthoring = p1;
                     p1.resetText();
-                    p1.remove_all();
-                    p1.add_text_box();
+                    p1.removeAll();
+                    p1.addTextBox();
                     // p1.setFontColor("FFFFFF");
                     // p1.setFontFamily("Times New Roman, serif");
                     // p1.setFontSize("12");
-                    p1.set_mode(TAG.TourAuthoring.InkMode.text);
-                    p1.set_editable();
+                    p1.setMode(TAG.TourAuthoring.InkMode.text);
+                    p1.setEditable();
                     currentInkController = p1;
                     $('#writeAnnotation').val("");
                     //  textBodyLabel1.text("");
@@ -1768,7 +1792,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
                     //create ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring({
+                        spec: spec
+                    });
                     currentInkController = p1;
 
                     INITIAL_DRAW.createModeButton();
@@ -1790,8 +1816,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     //  myPicker.fromString("000000"); //jscolor picker
                     $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                     inkAuthoring = p1;
-                    p1.set_mode(TAG.TourAuthoring.InkMode.draw);
-                    p1.set_editable(); // give the canvas pointer events
+                    p1.setMode(TAG.TourAuthoring.InkMode.draw);
+                    p1.setEditable(); // give the canvas pointer events
                     //   p1.updatePenWidth("brushSlider");
                     //   p1.updatePenColor("brushColorToggle");
                     //   p1.updatePenOpacity("opacitySlider");
@@ -1802,7 +1828,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 case "highlight":
                     //create an ink canvas and inkController
                     var inkdiv = createInkCanv();
-                    var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                    var p1 = new TAG.TourAuthoring.InkAuthoring({
+                        spec: spec
+                    });
                     var newHeight;
                     currentInkController = p1;
                     isEditingTransparency = false;
@@ -1824,8 +1852,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     //   initTrans();
                     $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                     inkAuthoring = p1;
-                    p1.set_mode(TAG.TourAuthoring.InkMode.shapes);
-                    p1.set_editable(); //in this case, we're just making sure that the artwork can't be manipulated
+                    p1.setMode(TAG.TourAuthoring.InkMode.shapes);
+                    p1.setEditable(); //in this case, we're just making sure that the artwork can't be manipulated
 
 
                     timeline.setEditInkOn(true);
@@ -3580,8 +3608,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
        function updateEditAreaText() {
            textA = currentInkController.getSVGText();
            textEditBodyLabel1.text(textEditArea.val()); // or .text()
-           currentInkController.remove_all();
-           currentInkController.add_text_box(textA.attrs.x, textA.attrs.y, -1, -1, textEditArea.val(), true);
+           currentInkController.removeAll();
+           currentInkController.addTextBox(textA.attrs.x, textA.attrs.y, -1, -1, textEditArea.val(), true);
            textA = currentInkController.getSVGText();
            textA.data('str', textEditArea.val());
        }
@@ -3589,7 +3617,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
        function firstUpdate() {
            textA = currentInkController.getSVGText();
            textEditBodyLabel1.text(textEditArea.val()); // or .text()
-           currentInkController.remove_all();
+           currentInkController.removeAll();
            lastEditText = textEditArea.val();
            switch (textA.attr('font-family')) {
                case "'Courier New', Courier, monospace":
@@ -3616,7 +3644,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                    break;
            
            }
-           currentInkController.add_text_box(textA.attrs.x, textA.attrs.y, -1, -1, textEditArea.val(), true);
+           currentInkController.addTextBox(textA.attrs.x, textA.attrs.y, -1, -1, textEditArea.val(), true);
            textA = currentInkController.getSVGText();
            textA.data('str', textEditArea.val());
        }
@@ -3859,7 +3887,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var sizeInput = createTextSizeInput(inkTextControls, function (size) {
             currentInkController.setFontSize(size)
         });
-        var linkTextDiv = getAttachDiv(inkTextControls, "Write");
+        var linkTextDiv = getAttachDiv(inkTextControls, true, false);
         var textInput = createInkTextInput(inkTextControls);
 
         /**Updates ink values when changed
@@ -4321,7 +4349,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          */
         function updateAreaText(txt) {
             var textA = currentInkController.getSVGText() || 'Your Text Here';
-            if (txt) {
+            if (txt || txt==='') {
                 textBodyLabel1.text(txt); // or .text()
                 $(textA).attr('text', txt);
                 $(textA).data('str', txt);
@@ -4329,9 +4357,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 lastText = textArea.val();
                 textArea.attr('value', txt);
                 textA = currentInkController.getSVGText();
-                currentInkController.remove_all();
-                currentInkController.add_text_box(textA.attrs.x, textA.attrs.y, -1, -1, textArea.val(), true);
-                textA.data('str', textArea.val());
+                currentInkController.removeAll();
+                if (textA) {
+                    currentInkController.addTextBox(textA.attrs.x, textA.attrs.y, textArea.val());
+                    textA.data('str', textArea.val());
+                }
             } else {
                 var string = "Your Text Here";
                 textArea.attr('value', '');
@@ -4339,7 +4369,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 $(textA).attr('text', string);
                 $(textA).data('str', string);
                 textArea.attr('text', string);
-                currentInkController.add_text_box();
+                currentInkController.addTextBox();
                 lastText = textArea.val();
                 textA = currentInkController.getSVGText();
                 textA.data('str', textArea.val());
@@ -4617,7 +4647,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                eraseLabel.css({ 'color': 'gray' });
                drawMode = 'draw';
                drawModeLabel1.text("Draw");
-               currentInkController.set_mode(1); // draw mode
+               currentInkController.setMode(1); // draw mode
            }
        });
 
@@ -4634,7 +4664,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                eraseLabel.css({ 'color': 'black' });
                drawMode = 'erase';
                drawModeLabel1.text("Erase");
-               currentInkController.set_mode(2); // erase mode
+               currentInkController.setMode(2); // erase mode
            }
        });
 
@@ -4675,7 +4705,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            brushLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, brushSlider);
-           //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+           //currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
        });
        
        // brush width slider drag handler
@@ -4689,7 +4719,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                }
                currentInkController.updatePenWidth("brushSlider");
                currentInkController.setEraserWidth(brushSliderPoint.attr('value'));
-               //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+               //currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                brushLabel1.text(Math.round(brushSliderPoint.attr('value')) + "px");
            },
            appendTo: 'body'
@@ -4718,7 +4748,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            colorLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, colorDiv);
-           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+           currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
            drawLabel.css({ 'color': 'black' });
            eraseLabel.css({ 'color': 'gray' });
            drawMode = 'draw';
@@ -4731,7 +4761,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
        $(item).attr('readonly', 'readonly');
        $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%'});
        item.onfocus = function () {
-           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+           currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
        };
        $(item).on('keyup', function (event) {
            event.stopPropagation();
@@ -4743,7 +4773,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                myPicker.fromString("000000");
                myPicker.onImmediateChange = function () {
                    currentInkController.updatePenColor("brushColorToggle");
-                   currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                   currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                    $('.changeColor1')[0].innerHTML = "#"+$("#brushColorToggle").attr("value");
                };
            }, false);
@@ -4785,7 +4815,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
            $(".thicknessLabel").css({ 'font-weight': 'normal' });
            opacityLabel.css({ 'font-weight': 'bold' });
            updateToggle(drawArray, opacitySlider);
-           currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+           currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
            drawLabel.css({ 'color': 'black' });
            eraseLabel.css({ 'color': 'gray' });
            drawMode = 'draw';
@@ -4875,7 +4905,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                  eraseEditLabel.css({ 'color': 'gray' });
                  drawEditMode = 'draw';
                  drawEditModeLabel1.text("Draw");
-                 currentInkController.set_mode(1); // draw mode
+                 currentInkController.setMode(1); // draw mode
              }
          });
  
@@ -4892,7 +4922,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                  eraseEditLabel.css({ 'color': 'black' });
                  drawEditMode = 'erase';
                  drawEditModeLabel1.text("Erase");
-                 currentInkController.set_mode(2); // erase mode
+                 currentInkController.setMode(2); // erase mode
              }
          });
  
@@ -4932,7 +4962,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
              $(".thicknessLabel").css({ 'font-weight': 'normal' });
              brushEditLabel.css({ 'font-weight': 'bold' });
              updateToggle(drawEditArray, brushEditSlider);
-             //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+             //currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
          });
  
          // brush width slider drag handler
@@ -4945,7 +4975,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                      brushEditSliderPoint.attr('value', 7.0);
                  }
                  currentInkController.updatePenWidth("brushEditSlider");
-                 //currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                 //currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                  brushEditLabel1.text(Math.round(brushEditSliderPoint.attr('value')) + "px");
              },
              appendTo: 'body'
@@ -4974,7 +5004,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
              $(".thicknessLabel").css({ 'font-weight': 'normal' });
              colorEditLabel.css({ 'font-weight': 'bold' });
              updateToggle(drawEditArray, colorEditDiv);
-             currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+             currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
              drawEditLabel.css({ 'color': 'black' });
              eraseEditLabel.css({ 'color': 'gray' });
              drawEditMode = 'draw';
@@ -4987,7 +5017,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          $(itemEdit).attr('readonly', 'readonly');
          $(itemEdit).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%' });
          itemEdit.onfocus = function () {
-             currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+             currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
              drawEditLabel.css({ 'color': 'black' });
              eraseEditLabel.css({ 'color': 'gray' });
              drawEditMode = 'draw';
@@ -5003,7 +5033,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                  myEditDrawPicker.fromString("000000");
                  myEditDrawPicker.onImmediateChange = function () {
                      currentInkController.updatePenColor("brushEditColorToggle");
-                     currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                     currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                      drawEditLabel.css({ 'color': 'black' });
                      eraseEditLabel.css({ 'color': 'gray' });
                      drawEditMode = 'draw';
@@ -5049,7 +5079,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
              $(".thicknessLabel").css({ 'font-weight': 'normal' });
              opacityEditLabel.css({ 'font-weight': 'bold' });
              updateToggle(drawEditArray, opacityEditSlider);
-             currentInkController.set_mode(1);
+             currentInkController.setMode(1);
              drawEditLabel.css({ 'color': 'black' });
              eraseEditLabel.css({ 'color': 'gray' });
              drawEditMode = 'draw';
@@ -5119,7 +5149,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
         var sizeInput = createBrushInput(inkDrawControls);
         var opacityInput = createDrawOpacityInput(inkDrawControls);
-        var linkDrawDiv = getAttachDiv(inkDrawControls, "Draw");
+        var linkDrawDiv = getAttachDiv(inkDrawControls, false, false);
 
         /**Updates inputs on change
          * @method updateInputs
@@ -5212,7 +5242,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 eraseLabel.css({ 'color': 'gray' });
                 drawModeLabel1.text("Draw");
                 drawMode = 'draw';
-                currentInkController.set_mode(1); // draw mode
+                currentInkController.setMode(1); // draw mode
             }
         });
 
@@ -5222,7 +5252,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 eraseLabel.css({ 'color': 'black' });
                 drawModeLabel1.text("Erase");
                 drawMode = 'erase';
-                currentInkController.set_mode(2); // erase mode
+                currentInkController.setMode(2); // erase mode
             }
         });
 
@@ -5231,7 +5261,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             eraseLabel.css({ 'color': 'gray' });
             drawModeLabel1.text("Draw");
             drawMode = 'draw';
-            currentInkController.set_mode(1); // draw mode
+            currentInkController.setMode(1); // draw mode
         }
 
         return {
@@ -5300,7 +5330,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 currentInkController.setPenWidth(brushSliderPoint.attr('value'));
                 currentInkController.setEraserWidth(brushSliderPoint.attr('value'));
-                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                 brushLabel1.text(Math.round(brushSliderPoint.attr('value')) + "px");
 
                 // switch to draw mode
@@ -5348,7 +5378,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             colorLabel.css({ 'font-weight': 'bold' });
 
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
             //  drawLabel.css({ 'color': 'black' });
             //  eraseLabel.css({ 'color': 'gray' });
 
@@ -5361,7 +5391,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(item).attr('readonly', 'readonly');
         $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%' });
         item.onfocus = function () {
-            currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
         };
 
         $(item).on('keyup', function (event) {
@@ -5374,7 +5404,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 myPicker.fromString("000000");
                 myPicker.onImmediateChange = function () {
                     colorLabel1.text($('#brushColorToggle').attr('value'));
-                    currentInkController.updatePenColor('brushColorToggle');
+                    currentInkController.setPenColor($('#brushColorToggle').attr('value'));
                     updateColor(currentInkController.getPenColor());
                 };
             }, false);
@@ -5391,7 +5421,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 $('#brushColorToggle').attr('value', color);
                 $('.changeColor1').text($("#brushColorToggle").attr('value'));
                 $(item).css({ 'background-color': color, 'text': color });
-                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+                currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
                 $('.changeColor1')[0].innerHTML = $("#brushColorToggle").attr("value");
                 $(item).css({ 'background-color': '#' + color, 'text': color });
 
@@ -5401,10 +5431,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 $(item).css({ 'background-color': '#000000', 'text': '#000000' });
                 colorLabel1.text("#000000");
                 $('#brushColorToggle').attr('value', "000000");
-                $('.changeColor1').text("#" + $("#brushColorToggle").attr('value'));
                 currentInkController.setPenColor("#000000");
-                currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
-                $('.changeColor1')[0].innerHTML = "#" + $("#brushColorToggle").attr("value");
+                currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
+                colorLabel1.text("#" + $("#brushColorToggle").attr("value"));
             }
         }
 
@@ -5587,7 +5616,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             addEllipseButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%', 'clear': 'left' });
             addEllipseButton.get(0).innerHTML = "Add Ellipse";
             addEllipseButton.on('click', function () {
-                currentInkController.add_ellipse();
+                currentInkController.addEllipse();
             });
             inkTransparencyControls.append(addEllipseButton);
     
@@ -5596,7 +5625,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             addRectButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%' });
             addRectButton.get(0).innerHTML = "Add Rectangle";
             addRectButton.on('click', function () {
-                currentInkController.add_rectangle();
+                currentInkController.addRectangle();
             });
             inkTransparencyControls.append(addRectButton);
     
@@ -5747,7 +5776,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
            addEditEllipseButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%', 'clear': 'left' });
            addEditEllipseButton.get(0).innerHTML = "Add Ellipse";
            addEditEllipseButton.on('click', function () {
-               currentInkController.add_ellipse();
+               currentInkController.addEllipse();
            });
            inkEditTransparency.append(addEditEllipseButton);
    
@@ -5756,7 +5785,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
            addEditRectButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%' });
            addEditRectButton.get(0).innerHTML = "Add Rectangle";
            addEditRectButton.on('click', function () {
-               currentInkController.add_rectangle();
+               currentInkController.addRectangle();
            });
            inkEditTransparency.append(addEditRectButton);
    
@@ -5906,7 +5935,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     function createInkTransparencyControls() {
         transMode = createTransparencyBlocks();
         var opacityInput = createTransparencyOpacityInput();
-        var linkTransDiv = getAttachDiv(inkTransparencyControls, 0, "trans");
+        var linkTransDiv = getAttachDiv(inkTransparencyControls, false, true);
 
         /**Appends editing controls to DOM at the left panel
          * @method showForm
@@ -5965,14 +5994,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         addEllipseButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%', 'clear': 'left' });
         addEllipseButton.get(0).innerHTML = "Add Ellipse";
         addEllipseButton.on('click', function () {
-            currentInkController.add_ellipse();
+            currentInkController.addEllipse();
         });
         inkTransparencyControls.append(addEllipseButton);
 
         addRectButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%' });
         addRectButton.get(0).innerHTML = "Add Rectangle";
         addRectButton.on('click', function () {
-            currentInkController.add_rectangle();
+            currentInkController.addRectangle();
         });
         inkTransparencyControls.append(addRectButton);
 
@@ -6293,7 +6322,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @param text
      * @pram trans
      */
-    function getAttachDiv(controls, text, trans) {
+    function getAttachDiv(controls, isText, isTrans) {
         // slightly different controls for text and transparency, since we can't call currentInkController.link directly
         var text_mode = false;
         var trans_mode = false;
@@ -6301,10 +6330,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var linkButton = $(document.createElement('button'));                   // attach button
         var freeInkButton = $(document.createElement('button'));                // create as unattached ink button
 
-        if (text && text !== 0) {
+        if (isText && isText !== 0) {
             text_mode = true;
         }
-        if (trans) {
+        if (isTrans) {
             trans_mode = true;
         }
 
@@ -6324,15 +6353,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             //  myPicker.fromString("000000");
             //  myPicker.onImmediateChange = function () {
             //     currentInkController.updatePenColor("brushColorToggle");
-            //    currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
+            //    currentInkController.setMode(TAG.TourAuthoring.InkMode.draw);
             //  $('.changeColor1')[0].innerHTML = "#" + $("#brushColorToggle").attr("value");
             //};
             var check = true; // if check becomes false, then a warning message appeared, do not proceed after trying to attach
             text_mode = false; // hacky temporary workaround
             if (text_mode) {
-                check = currentInkController.link_text();
+                check = currentInkController.linkText();
             } else if (trans_mode) {
-                check = currentInkController.link_trans();
+                check = currentInkController.linkTrans();
              } else {// draw
                 check = currentInkController.link();
             }
@@ -6372,9 +6401,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             //  currentInkController.updatePenWidth("brushSlider");
             var check = true;
             if (text_mode)  {
-                check = currentInkController.link_text_unattached();
+                check = currentInkController.linkTextUnattached();
             } else if (trans_mode) {
-                check = currentInkController.link_trans_unattached();
+                check = currentInkController.linkTransUnattached();
             } else {
                 check = currentInkController.linkUnattached();
             }

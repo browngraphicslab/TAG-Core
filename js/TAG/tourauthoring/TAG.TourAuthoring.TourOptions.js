@@ -505,23 +505,23 @@ TAG.TourAuthoring.TourOptions = function (options) {
         html_content += '    <html>\n';
         html_content += '    <head>\n';
         html_content += '        <title>TAG Tour Embedding</title>\n';
-        html_content += '        <script src="TAG-embed.js"></script>\n';
+        html_content += '        <script src="TAG-min.js"></script>\n';
         html_content += '        <script>\n';
         html_content += '            window.onload = load;\n';
         html_content += '            function load() {\n';
-        html_content += '                TAG_embed({\n';
+        html_content += '                TAG({\n';
         html_content += '                    path: "",\n';
         html_content += '                    containerId: "tagContainer",\n';
         html_content += '                    serverIp: "' + localStorage.ip + '",\n';
         html_content += '                    width: "1000px",\n';
         html_content += '                    height: "500px",\n';
-        html_content += '                    pageToLoad: "enter_url_here"\n';
+        html_content += '                    pageToLoad: "#tagpagename=tour&tagguid='+options.tour.Identifier+'&tagtouronly=false&tagserver='+localStorage.ip+'"\n';
         html_content += '                });\n';
         html_content += '            }\n';
         html_content += '        </script>\n';
         html_content += '    </head>\n';
-        html_content += '    <body style="height:2000px;width:1200px;">\n';
-        html_content += '        <div id="tagContainer" style="margin-left:100px;margin-top:50px"></div>\n';
+        html_content += '    <body style="height:1000px;width:1100px;">\n';
+        html_content += '        <div id="tagContainer" style="margin-left:50px;margin-top:50px"></div>\n';
         html_content += '    </body>\n';
         html_content += '</html>';
 

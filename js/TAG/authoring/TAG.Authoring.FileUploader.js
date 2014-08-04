@@ -155,7 +155,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
                                                     break;
                                                 case TAG.Authoring.FileUploadTypes.DeepZoom:
-                                                    if (file.contentType.match(/video/)) {
+                                                    if (file.contentType.match(/video/) || file.fileType.toLowerCase() === ".mp4" || file.fileType.toLowerCase() === ".webm" || file.fileType.toLowerCase() === ".ogv") {
                                                         uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
                                                     } else {
                                                         uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
@@ -225,9 +225,18 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 numFiles = files.length; // global
                                                 globalUriStrings = uriStrings;
                                                 globalUpload = upload;
+                                                var localResult = localCallback(files, localURLs,
+                                                    uploadStart(0, upload),
+                                                    function () {
+                                                        fileUploadError = uploadErrorAlert(null, "uploading canceled due to the unsupported format", null);
+                                                        $(fileUploadError).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                        $('body').append(fileUploadError);
+                                                        $(fileUploadError).fadeIn(500);
+                                                    });
 
-                                                uploadStart(0, upload)();
-                                                addLocalCallback(files, localURLs)();
+                                                if (localResult !== 'uploading test!') {
+                                                    uploadStart(0, upload)();
+                                                }
                                             });
                                         }
 
@@ -287,8 +296,13 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                        uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&Token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
                                                        break;
                                                    case TAG.Authoring.FileUploadTypes.DeepZoom:
-                                                       uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
+                                                       if (file.fileType.toLowerCase() === ".mp4" || file.fileType.toLowerCase() === ".webm" || file.fileType.toLowerCase() === ".ogv") {
+                                                           uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&Token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
+                                                       } else {
+                                                           uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
+                                                       }
                                                        break;
+                                                       
                                                }
 
                                                globalUriStrings = [uriString];
@@ -363,7 +377,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                 }
             },
             longbad); // error callback
-        } else if (file.fileType === '.mp4') {
+        } else if (file.contentType.match(/video/) || file.fileType.toLowerCase() === ".mp4" || file.fileType.toLowerCase() === ".webm" || file.fileType.toLowerCase() === ".ogv") {
             file.properties.getVideoPropertiesAsync().done(function (videoProperties) {
                 if (videoProperties.duration / 1000 > maxDuration) {
                     longbad();

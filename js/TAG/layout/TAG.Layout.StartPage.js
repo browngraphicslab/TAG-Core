@@ -19,6 +19,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     var root = TAG.Util.getHtmlAjax('StartPage.html'), // use AJAX to load html from .html file
         overlay = root.find('#overlay'),
         primaryFont = root.find('.primaryFont'),
+        secondaryFont = root.find('.secondaryFont'),
         serverTagBuffer = root.find('#serverTagBuffer'),
         serverSetUpContainer = root.find('#serverSetUpContainer'),
         authoringButtonContainer = root.find('#authoringButtonContainer'),
@@ -46,7 +47,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      *            internetURL     url of alternate site against which we'll test connectivity
      */
     function testConnection(options) {
-        var internetURL = (options && options.internetURL) || "http://www.google.com/";
+        var internetURL = (options && options.internetURL) || "http://www.google.com/",
+            connectionTimeout,
+            timedOut;
+
         console.log("checking server url: " + serverURL);
         $.ajax({
             url: serverURL,
@@ -54,26 +58,44 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             async: true,
             cache: false,
             success: function () {
-                console.log("success checking server url");
-                successConnecting();
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    console.log("success checking server url");
+                    successConnecting();
+                }
             },
             error: function (err) {
-                $.ajax({  // TODO: not a solid way to do this
-                    url: internetURL,
-                    dataType: "text",
-                    async: false,
-                    cache: false,
-                    success: function () {
-                        tagContainer.empty();
-                        tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
-                    },
-                    error: function (err) {
-                        tagContainer.empty();
-                        tagContainer.append((new TAG.Layout.InternetFailurePage("No Internet")).getRoot());
-                    }
-                });
+                if(!timedOut) {
+                    clearTimeout(connectionTimeout);
+                    $.ajax({  // TODO: not a solid way to do this
+                        url: internetURL,
+                        dataType: "text",
+                        async: false,
+                        cache: false,
+                        success: function () {
+                            if(!timedOut) {
+                                clearTimeout(connectionTimeout);
+                                tagContainer.empty();
+                                tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+                            }
+                        },
+                        error: function (err) {
+                            if(!timedOut) {
+                                clearTimeout(connectionTimeout);
+                                tagContainer.empty();
+                                tagContainer.append((new TAG.Layout.InternetFailurePage("No Internet")).getRoot());
+                            }
+                        }
+                    });
+                }
             }
         });
+
+        connectionTimeout = setTimeout(function() {
+            timedOut = true;
+            tagContainer.empty();
+            tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+        }, 10000); // 10 second timeout to show internet failure page
     }
 
     function successConnecting() {
@@ -311,11 +333,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 fontSizeSpan,
                 subheadingFont;
             if (TAG.Util.elementInDocument(museumName)) {
-                subheadingFont = parseInt(museumLoc.css('font-size'), 10);
-                nameDivSize = museumName.height();
-                fontSizeSpan = museumName.height();
-    
-                museumNameSpan.css('height', nameSpanSize);
+                subheadingFont = parseInt($(museumLoc).css('font-size'), 10);
+                nameDivSize = $(museumName).height();
+                fontSizeSpan = $(museumName).height();
+                
+                var museumNameSpan = document.getElementById("museumNameSpan"); //can't seem to find this variable in scope
+                $(museumNameSpan).css('height', nameSpanSize);               
             }
         }
 
@@ -481,6 +504,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             'color': PRIMARY_FONT_COLOR,
             'font-family': 'Pacifico'
         });
+        $(secondaryFont).css({
+            'color': SECONDARY_FONT_COLOR,
+            'font-family': 'Pacifico'
+        });
     }
 
     /**
@@ -502,8 +529,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             secondaryFontColor;
 
         
-        primaryFontColor = main.Metadata["PrimaryFontColor"];
-        secondaryFontColor = main.Metadata["SecondaryFontColor"];
+        primaryFontColor = options.primaryFontColor ? options.primaryFontColor : main.Metadata["PrimaryFontColor"];
+        secondaryFontColor = options.secondaryFontColor ? options.secondaryFontColor : main.Metadata["SecondaryFontColor"];
         museumName = root.find('#museumName');
         museumNameSpan = root.find('#museumNameSpan');
         tempName = main.Metadata["MuseumName"];
@@ -541,7 +568,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             'color': '#' + primaryFontColor,
             'font-family': main.Metadata["FontFamily"]
             
-         });
+        });
+        $(secondaryFont).css({
+            'color': '#' + secondaryFontColor,
+            'font-family': main.Metadata["FontFamily"]
+
+        });
 
     }
 
@@ -553,6 +585,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         if(localStorage.ip === 'tagtestserver.cloudapp.net') {
             $('#password').attr('value', 'Test1234');
+        } else if (localStorage.ip === 'localhost') {
+            $('#password').attr('value', 'admin');
         }
     }
 
