@@ -1364,6 +1364,40 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         visDiv.append(invisibilityInput).append(visibilityInput);
 
         //TO-DO: add in on server side from TAG.Worktop.Database.js changeExhibition() 
+        var assocMediaShown;
+        if (exhibition.Metadata.AssocMediaView === "true" || exhibition.Metadata.AssocMediaView === "false") {
+            exhibition.Metadata.AssocMediaView === "true" ? assocMediaShown = true: assocMediaShown = false;
+        } else {
+            //backwards compatibility
+            assocMediaShown = false;
+        }
+        var showAssocMedia = createButton('Show Associated Media View', function(){
+            assocMediaShown = true;
+            showAssocMedia.css('background-color', 'white');
+            hideAssocMedia.css('background-color','');
+        }, {
+            'min-height': '0px',
+            'margin-right': '4%',
+            'width':'48%',
+        });
+        showAssocMedia.attr('class','settingButton');
+        var hideAssocMedia = createButton('Hide Associated Media View', function(){
+            assocMediaShown = false;
+            hideAssocMedia.css('background-color','white');
+            showAssocMedia.css('background-color','');
+            }, {
+            'min-height': '0px',
+            'width': '48%'
+        });
+        hideAssocMedia.attr('class','settingButton');
+        if (assocMediaShown){
+            showAssocMedia.css('background-color','white');
+        }else{
+            hideAssocMedia.css('background-color','white');
+        }
+        var timelineOptionsDiv = $(document.createElement('div'));
+        timelineOptionsDiv.append(showTimeline).append(hideTimeline);
+
         var timelineShown;
         if (exhibition.Metadata.Timeline === "true" || exhibition.Metadata.Timeline === "false") {
             exhibition.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
@@ -1397,9 +1431,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }else{
             hideTimeline.css('background-color','white');
         }
+
         var timelineOptionsDiv = $(document.createElement('div'));
         timelineOptionsDiv.append(showTimeline).append(hideTimeline);
-
+        var assocMediaOptionsDiv = $(document.createElement('div'));
+        assocMediaOptionsDiv.append(showAssocMedia).append(hideAssocMedia);
         var sortDropDown;
         var privateSetting;
         var localVisibilitySetting;
@@ -1412,6 +1448,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var nameInput;
         var descInput;
         var bgInput;
+        var assocMedia;
         if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
                 var sortOptions = {
@@ -1484,6 +1521,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             desc = createSetting('Collection Description', descInput);
             bg = createSetting('Collection Background Image', bgInput);
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
+            assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
             sortOptions = createSetting('Sort Options', sortDropDown);
 
             settingsContainer.append(privateSetting);
@@ -1491,6 +1529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
+            settingsContainer.append(assocMedia);
             settingsContainer.append(sortOptions);
         }
 
@@ -1521,7 +1560,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 descInput: descInput,        //Collection description
                 bgInput: bgInput,            //Collection background image
                 sortOptions: sortDropDown,
-                timelineInput: timelineShown  //to-do make sure default is shown
+                timelineInput: timelineShown,  
+                assocMediaInput : assocMediaShown
             });
         }, {
             'margin-right': '3%',
@@ -1676,6 +1716,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bg = inputs.bgInput.val();
         var priv = inputs.privateInput;
         var timeline = inputs.timelineInput;
+        var assocMedia = inputs.assocMediaInput;
 
         var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
         var option;
@@ -1696,7 +1737,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             Private: priv,
             Description: desc,
             SortOptions: JSON.stringify(sortOptions),
-            Timeline: timeline
+            Timeline: timeline,
+            AssocMediaView: assocMedia
         }
 
         if (bg){

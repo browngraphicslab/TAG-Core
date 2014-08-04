@@ -695,7 +695,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             return function() {
                 container.append(TAG.Util.Artwork.createThumbnailButton({
                     title: TAG.Util.htmlEntityDecode(tour.Name),
-                    year: TAG.Util.htmlEntityDecode(tour.Year || 2014),
+                    year: TAG.Util.htmlEntityDecode(tour.Year|| ""),
                     handler:     tourClicked(tour),
                     buttonClass: 'tourButton',
                     src:         (tour.Metadata.Thumbnail ? FIX_PATH(tour.Metadata.Thumbnail) : tagPath+'images/tour_icon.svg')
@@ -732,7 +732,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
                 container.append(TAG.Util.Artwork.createThumbnailButton({
                     title: TAG.Util.htmlEntityDecode(media.doq.Name),
-                    year: TAG.Util.htmlEntityDecode(media.doq.Year) || 2014,
+                    year: TAG.Util.htmlEntityDecode(media.doq.Year || ""),
                     handler:     mediaClicked(media),
                     buttonClass: 'mediaButton',
                     buttonID:    'thumbnailButton-'+media.doq.Identifier,
