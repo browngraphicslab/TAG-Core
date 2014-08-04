@@ -442,21 +442,21 @@
         if (el.addEventListener) {
             el.addEventListener("offline", function () {
                 if (!$("#InternetFailureroot")[0]) {
-                    $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                    $("#rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
                 }
             }, true);
         }
         else if (el.attachEvent) {
             el.attachEvent("onoffline", function () {
                 if (!$("#InternetFailureroot")[0]) {
-                    $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                    $("rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
                 }
             });
         }
         else {
             el.onoffline = function () {
                 if (!$("#InternetFailureroot")[0]) {
-                    $("body").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
+                    $("rootPage").append((lastOverlay = new LADS.Layout.InternetFailurePage("Internet Lost", true)).getRoot());
                 }
             };
         }
