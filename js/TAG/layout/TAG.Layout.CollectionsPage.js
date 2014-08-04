@@ -860,7 +860,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentTimeline = prepTimelineArea(minDate, maxDate);
         currTimelineCircleArea = prepTimelineCircles(avlTree, minDate, maxDate);
         if (currentArtwork){
-            zoomTimeline(TAG.Util.parseDateToYear(getArtworkDate(currentWork,true)), fullMinDisplayDate, fullMaxDisplayDate);
+            zoomTimeline(TAG.Util.parseDateToYear(getArtworkDate(currentArtwork,true)), fullMinDisplayDate, fullMaxDisplayDate);
         }
      
         /**Helper function to prepare timeline area including 'ticks'
