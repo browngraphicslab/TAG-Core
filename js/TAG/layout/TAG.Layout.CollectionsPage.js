@@ -658,8 +658,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //If on associated media view and there are no associated media with valid dates, hide the timeline
             if (onAssocMediaView && collection.collectionMediaMinYear===Infinity){
                 timelineShown = false;
-                styleBottomContainer();
             }
+
+            styleBottomContainer();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
                 toggleRow.css('display','block');
@@ -692,6 +693,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             scrollPos = sPos || 0;
             if (!onAssocMediaView || !currCollection.collectionMedia){
+                console.log("here");
                 getCollectionContents(currCollection);
             } else {
                 createArtTiles(currCollection.collectionMedia);
