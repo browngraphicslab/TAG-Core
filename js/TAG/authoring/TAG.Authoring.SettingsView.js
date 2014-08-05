@@ -2483,7 +2483,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             convertBtn.hide().data('disabled', true);
                         }
                     })
-            convertBtn.attr('class', 'button convertVideoButton rightBarOptions');
+            convertBtn.attr('class', 'convertVideoBtn rightBarOptions');
             convertBtn.hide()
             if (media.Metadata.Converted !== "True" && conversionVideos.indexOf(media.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
@@ -3283,7 +3283,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             convertBtn.hide().data('disabled', true);
                         }
                     })
-            convertBtn.attr('class', 'button convertVideoBtn rightBarOptions');
+            convertBtn.attr('class', 'convertVideoBtn rightBarOptions');
             convertBtn.attr("disabled", "");
             if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
