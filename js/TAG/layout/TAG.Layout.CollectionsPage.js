@@ -32,6 +32,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         searchTxt                = root.find('#searchTxt'),
         artworksButton           = root.find('#artworksButton'),
         assocMediaButton         = root.find('#assocMediaButton'),
+        toggleRow                = root.find('#toggleRow'),
         selectedArtworkContainer = root.find('#selectedArtworkContainer'),
         titleSpan                = root.find('#titleSpan'),
         imgDiv                   = root.find('#imgDiv'),
@@ -635,18 +636,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.append(infoDiv);
             timelineArea.empty();
 
-            console.log("metadata: " + collection.Metadata.Timeline);
-            //TO-DO: add in check here for all incompatible dates? would have to add extra check for assoc media view
+            //TO-DO: add in check here for a collection with all incompatible dates and automatically switch to timelineShown = false? 
+            //^^^would have to add extra check for assoc media view because 'collection' refers to collection of artworks
             if (collection.Metadata.Timeline === "true"|| collection.Metadata.Timeline === "false"){
                 collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
             }
-            console.log("timelineShown " + timelineShown);
- 
-            //if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === true){
+            
+
+
+            if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
+                toggleRow.css('display','block');
                 artworksButton.off()
-                              .css({
-                                'display' : 'block',
-                                })
+                              //.css({
+                                //'display' : 'block',
+                                //})
                               .on('click', function(){
                                     artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
                                     assocMediaButton.css('color', dimmedColor);
@@ -657,9 +660,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                });
 
                 assocMediaButton.off()
-                                .css({
-                                    'display' : 'block',
-                                })
+                                //.css({
+                                    //'display' : 'block',
+                                //})
                                 .on('click', function(){
                                     artworksButton.css('color', dimmedColor);
                                     assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  
@@ -669,7 +672,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     }
                                 });
                                 
-            //}
+            } else {
+                toggleRow.css('display','none');
+            }
 
             currCollection = collection;
             currentArtwork = artwrk || null;
@@ -1100,7 +1105,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (avlTree.min().yearKey === Number.POSITIVE_INFINITY){
             return;
         }
-        x
+        
         //Skip before tours and artworks with incompatible dates
         while (maxNode.yearKey === Number.POSITIVE_INFINITY){
             maxNode = avlTree.findPrevious(maxNode);
