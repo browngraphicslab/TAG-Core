@@ -1442,14 +1442,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var name;
         var desc;
         var bg;
-        var sortOptions;
+        //var sortOptions;
         var idLabel;
         var timeline;
         var nameInput;
         var descInput;
         var bgInput;
         var assocMedia;
-        if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
+        /*if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
                 var sortOptions = {
                     "Title": true,
@@ -1485,8 +1485,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             sortDropDown = createSortOptions(JSON.parse(exhibition.Metadata.SortOptions));
             createCollectionSettings();
-        }
-
+        }*/
+        createCollectionSettings();
         function createCollectionSettings() {
 
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
@@ -1522,7 +1522,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             bg = createSetting('Collection Background Image', bgInput);
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
             assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
-            sortOptions = createSetting('Sort Options', sortDropDown);
+            //sortOptions = createSetting('Sort Options', sortDropDown);
 
             settingsContainer.append(privateSetting);
             settingsContainer.append(name);
@@ -1530,7 +1530,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
             settingsContainer.append(assocMedia);
-            settingsContainer.append(sortOptions);
+            //settingsContainer.append(sortOptions);
         }
 
         //Automatically save changes
@@ -1559,7 +1559,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 nameInput: nameInput,        //Collection name
                 descInput: descInput,        //Collection description
                 bgInput: bgInput,            //Collection background image
-                sortOptions: sortDropDown,
+                //sortOptions: sortDropDown,
                 timelineInput: timelineShown,  
                 assocMediaInput : assocMediaShown
             });
@@ -1718,10 +1718,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var timeline = inputs.timelineInput;
         var assocMedia = inputs.assocMediaInput;
 
-        var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
+        //var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
         var option;
 
-        sortOptions[$(inputs.sortOptions[0].children[0]).text()] = $(inputs.sortOptions[0].children[0]).attr("setSort"); //Title
+        /*sortOptions[$(inputs.sortOptions[0].children[0]).text()] = $(inputs.sortOptions[0].children[0]).attr("setSort"); //Title
         sortOptions[$(inputs.sortOptions[0].children[1]).text()] = $(inputs.sortOptions[0].children[1]).attr("setSort"); //ARtist
         sortOptions[$(inputs.sortOptions[0].children[2]).text()] = $(inputs.sortOptions[0].children[2]).attr("setSort"); //Year
         sortOptions[$(inputs.sortOptions[0].children[3]).text()] = $(inputs.sortOptions[0].children[3]).attr("setSort"); //Tour
@@ -1730,13 +1730,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (sortOptions.InfoFields[option.text()]) {
                 (sortOptions.InfoFields[option.text()])[1] = option.attr("setSort");
             }
-        }
+        }*/
 
         var options = {
             Name: name,
             Private: priv,
             Description: desc,
-            SortOptions: JSON.stringify(sortOptions),
+            //SortOptions: JSON.stringify(sortOptions),
             Timeline: timeline,
             AssocMediaView: assocMedia
         }
