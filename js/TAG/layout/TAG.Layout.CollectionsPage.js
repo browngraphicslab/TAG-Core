@@ -576,6 +576,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                   // })
                                   .html(nextTitle)
                                   .css({
+                                    'right': 0 + nextArrowArea.width()/2,
                                     'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
                                     //'color': '#' + PRIMARY_FONT_COLOR
                                    })
