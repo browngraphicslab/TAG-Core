@@ -663,7 +663,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             styleBottomContainer();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
-                toggleRow.css('display','block');
+                toggleRow.css({
+                    'display': 'block',
+                });
                 artworksButton.off()
                               .on('click', function(){
                                     artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
@@ -676,6 +678,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 assocMediaButton.off()
                                 .on('click', function(){
+                                    console.log("assocmediabutton");
                                     artworksButton.css('color', dimmedColor);
                                     assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView){
@@ -693,7 +696,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             scrollPos = sPos || 0;
             if (!onAssocMediaView || !currCollection.collectionMedia){
-                console.log("here");
                 getCollectionContents(currCollection);
             } else {
                 createArtTiles(currCollection.collectionMedia);
@@ -923,8 +925,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (currTimelineCircleArea){
                 currTimelineCircleArea.stop(true,true);
             }
-            if (timelineShown){   
-                artworks && initTimeline(artworks);
+            if (timelineShown && artworks){ 
+                if (onAssocMediaView){
+                    var loadAssocMediaTimeline;
+                    setTimeout(function(){initTimeline(artworks)},1000);
+                } else{ 
+                    initTimeline(artworks);
+                }
             }
             styleBottomContainer();
         }
@@ -938,10 +945,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         'height' : '69%',
                         'top' : '25%'
                     });
+                
             } else {
                 bottomContainer.css({
                     'height':'85%',
-                    'top':'15%'
+                    'top':'15%',
                 });
             }
         }
