@@ -31,8 +31,8 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
-            url: ['Name', 'Title', 'Artist', 'Year','Month','Day','TimelineYear','TimelineMonth','TimelineDay','Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted', 'RichLocationHistory'],
-            body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration']
+            url: ['Name', 'Title', 'Artist', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
+            body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration', 'RichLocationHistory', 'AddMaps', 'RemoveMaps']
         },
         tour: {
             url: ['Name', 'Thumbnail', 'Private'],
@@ -137,6 +137,7 @@ TAG.Worktop.Database = (function () {
         createArtwork: createArtwork,
         createHotspot: createHotspot,
         createIframeAssocMedia: createIframeAssocMedia,
+        createMap: createMap,
 
         // POST
         changeTour: changeTour,
@@ -565,6 +566,11 @@ TAG.Worktop.Database = (function () {
     function createHotspot(options, success, unauth, error, returnDoq) {
         _db = _db || new Worktop.Database();
         _db.putHotspot(options, { success: success, error: error, unauth: unauth }, returnDoq, strict);
+    }
+
+    function createMap(options, success, unauth, error, returnDoq) {
+        _db = _db || new Worktop.Database();
+        _db.putMap(options, { success: success, error: error, unauth: unauth }, returnDoq, strict);
     }
 
     ///////////////////
