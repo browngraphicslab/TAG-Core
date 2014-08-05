@@ -7,7 +7,8 @@ TAG.Authoring.FileUploadTypes = {
     Standard: 0,
     DeepZoom: 1,
     AssociatedMedia: 2,
-    VideoArtwork: 3
+    VideoArtwork: 3,
+    Map: 4
 };
 
 /**
@@ -138,6 +139,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 maxSize = maxFileSize;
                                                 break;
                                             case TAG.Authoring.FileUploadTypes.DeepZoom:
+                                            case TAG.Authoring.FileUploadTypes.Map:
                                                 maxSize = maxDeepZoomFileSize;
                                                 break;
                                         }
@@ -161,6 +163,10 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                         uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
                                                     }
                                                     break;
+                                                case TAG.Authoring.FileUploadTypes.Map:
+                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadMap&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
+                                                    break;
+
                                             }
                                         }
                                         else {                                            
@@ -269,6 +275,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                maxSize = maxFileSize;
                                                break;
                                            case TAG.Authoring.FileUploadTypes.DeepZoom:
+                                           case TAG.Authoring.FileUploadTypes.Map:
                                                maxSize = maxDeepZoomFileSize;
                                                break;
                                        }
@@ -302,7 +309,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                            uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
                                                        }
                                                        break;
-                                                       
+                                                   case TAG.Authoring.FileUploadTypes.Map:
+                                                       uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadMap&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
+                                                       break;
                                                }
 
                                                globalUriStrings = [uriString];

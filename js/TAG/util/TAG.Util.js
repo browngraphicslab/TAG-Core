@@ -6073,10 +6073,10 @@ TAG.Util.RLH = function (input) {
         }
 
         !input.noReload && showLoadingMessage();
-        LADS.Worktop.Database.changeArtwork(artwork.Identifier, options, success, error, error, error);
+        TAG.Worktop.Database.changeArtwork(artwork.Identifier, options, success, error, error, error);
 
         function success() {
-            LADS.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
+            TAG.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
                 artwork = newArtwork;
                 richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(artwork.Metadata.RichLocationHistory) : locationToRichLocation(artwork.Metadata.Location);
                 locations = richLocationData.locations || [];
@@ -6166,9 +6166,9 @@ TAG.Util.RLH = function (input) {
         var fileArray,
             i;
 
-        LADS.Authoring.FileUploader(
+        TAG.Authoring.FileUploader(
             root,
-            LADS.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to LADS.Authoring.FileUploadTypes.Map to test map uploading
+            TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to LADS.Authoring.FileUploadTypes.Map to test map uploading
             function (files) {
                 fileArray = files;
             },
@@ -6204,7 +6204,7 @@ TAG.Util.RLH = function (input) {
             ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
             false,
             function () {
-                root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
             false // batch upload disabled for now
         );
