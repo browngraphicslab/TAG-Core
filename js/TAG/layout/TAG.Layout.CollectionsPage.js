@@ -637,10 +637,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.append(infoDiv);
             timelineArea.empty();
 
+            console.log("metadata: " + collection.Metadata.Timeline);
             //TO-DO: add in check here for all incompatible dates? would have to add extra check for assoc media view
-            if (collection.Metadata.Timeline === ("true"||"false")){
+            if (collection.Metadata.Timeline === "true"|| collection.Metadata.Timeline === "false"){
                 collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
             }
+            console.log("timelineShown " + timelineShown);
  
             //if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === true){
                 artworksButton.off()
@@ -1023,7 +1025,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 main.append(videoLabel);
             }
             for (var k = 10; k>0; k--){
-                console.log(k + ": " + Math.sqrt(k))
+                //console.log(k + ": " + Math.sqrt(k))
             }
 
             tileDiv.append(main);
