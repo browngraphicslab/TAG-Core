@@ -638,18 +638,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             //TO-DO: add in check here for a collection with all incompatible dates and automatically switch to timelineShown = false? 
             //^^^would have to add extra check for assoc media view because 'collection' refers to collection of artworks
+            TAG.Worktop.Database.getArtworksIn(collection.Identifier, logyear,null,logyear);
+            function logyear(collection){
+                console.log(sortByYear(collection,true).min().yearKey);
+                if (onAssocMediaView){
+                    console.log(sortByYear(collection.collectionMedia,true).min().yearKey);
+                }
+            }
+
             if (collection.Metadata.Timeline === "true"|| collection.Metadata.Timeline === "false"){
                 collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
             }
             
-
+            console.log("timelineshown" + timelineShown)
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
                 toggleRow.css('display','block');
                 artworksButton.off()
-                              //.css({
-                                //'display' : 'block',
-                                //})
                               .on('click', function(){
                                     artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
                                     assocMediaButton.css('color', dimmedColor);
@@ -660,9 +665,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                });
 
                 assocMediaButton.off()
-                                //.css({
-                                    //'display' : 'block',
-                                //})
                                 .on('click', function(){
                                     artworksButton.css('color', dimmedColor);
                                     assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  

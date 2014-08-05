@@ -1718,7 +1718,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var timeline = inputs.timelineInput;
         var assocMedia = inputs.assocMediaInput;
 
-        var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
+        //var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
         var option;
 
         sortOptions[$(inputs.sortOptions[0].children[0]).text()] = $(inputs.sortOptions[0].children[0]).attr("setSort"); //Title
