@@ -1410,7 +1410,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bgInput;
         var assocMedia;
         if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
+            /*LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
                 var sortOptions = {
                     "Title": true,
                     "Artist": true,
@@ -1441,7 +1441,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 LADS.Worktop.Database.changeExhibition(exhibition.Identifier, { SortOptions: JSON.stringify(sortOptions) });
                 sortDropDown = createSortOptions(sortOptions);
                 createCollectionSettings();
-            });
+            });*/
         } else {
             sortDropDown = createSortOptions(JSON.parse(exhibition.Metadata.SortOptions));
             createCollectionSettings();

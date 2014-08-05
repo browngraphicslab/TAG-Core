@@ -1098,7 +1098,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (avlTree.min().yearKey === Number.POSITIVE_INFINITY){
             return;
         }
-
+        x
         //Skip before tours and artworks with incompatible dates
         while (maxNode.yearKey === Number.POSITIVE_INFINITY){
             maxNode = avlTree.findPrevious(maxNode);
