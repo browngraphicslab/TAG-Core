@@ -3420,7 +3420,7 @@ TAG.Util.UI = (function () {
             event.stopPropagation();
         });
         // TAG.Util.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
-        pickerSearchBar.attr("placeholder", "Search");
+        //pickerSearchBar.attr("placeholder", "Search");
         pickerSearchBar.keyup(function () {
             TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
         });
@@ -3429,6 +3429,23 @@ TAG.Util.UI = (function () {
                 TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
             }
         });
+
+
+        pickerSearchBar.css({
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+
+        pickerSearchBar.on('focus', function () { pickerSearchBar.css({ 'background-image': 'none' }); });
+        pickerSearchBar.on('focusout', function () {
+            if (!pickerSearchBar.val()) {
+                pickerSearchBar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            }
+        });
+
+
         searchTab.append(pickerSearchBar);
 
         // select all label
@@ -3586,6 +3603,7 @@ TAG.Util.UI = (function () {
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
                 pickerSearchBar.attr("value", "");
+                pickerSearchBar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
                 mainContainer.empty();
                 $(".tab").css({
                     'border-top': '1px solid black',

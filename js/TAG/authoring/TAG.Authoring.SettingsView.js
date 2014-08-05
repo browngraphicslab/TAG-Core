@@ -48,7 +48,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         CONTENT_HEIGHT = '92',
         HIGHLIGHT = 'white',
         BUTTON_HEIGHT = '40',
-        DEFAULT_SEARCH_TEXT = 'Search...',
+        DEFAULT_SEARCH_TEXT = '',
         PICKER_SEARCH_TEXT = 'Search by Name, Artist, or Year...',
 
         // Text for Navagation labels
@@ -445,6 +445,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar.append(nav[NAV_TEXT.media.text] = createNavLabel(NAV_TEXT.media, loadAssocMediaView)); // COMMENT!!!!!!!!
         navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView));
         navBar.append(nav[NAV_TEXT.feedback.text] = createNavLabel(NAV_TEXT.feedback, loadFeedbackView));
+
+        searchbar.css({
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+
+        searchbar.on('focus', function () { searchbar.css({ 'background-image': 'none' }); });
+        searchbar.on('focusout', function () {
+            if (!searchbar.val()) {
+                searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            }
+        });
+
         searchbar.keyup(function () {
             search(searchbar.val(), '.middleLabel', 'div');
         });
@@ -460,7 +475,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         
        // rootContainer.keydown(keyHandler);
-        searchbar.attr('placeholder', 'Search...');
+        //searchbar.attr('placeholder', 'Search...');
         newButton.text('New');
         secondaryButton.text('Video');
         label.text('Loading...');
@@ -4542,6 +4557,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             searchContainer.show();
             searchContainer.css('display', 'inline-block');
             searchbar.val("");
+            searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
         } else {
             searchContainer.hide();
         }
