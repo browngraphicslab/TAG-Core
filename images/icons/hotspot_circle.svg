@@ -3,14 +3,16 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="30px" height="30px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">
-<radialGradient id="SVGID_1_" cx="-309" cy="70" r="12.4375" gradientTransform="matrix(1 0 0 -1 324 85)" gradientUnits="userSpaceOnUse">
+<ellipse fill="#A54242" cx="-14.938" cy="57.562" rx="32.688" ry="27.562"/>
+<radialGradient id="SVGID_1_" cx="-956.8438" cy="-511.1562" r="13.2812" gradientTransform="matrix(1 0 0 -1 972 -496)" gradientUnits="userSpaceOnUse">
 	<stop  offset="0" style="stop-color:#FFFFFF;stop-opacity:0"/>
 	<stop  offset="0.3122" style="stop-color:#FFFFFF;stop-opacity:0"/>
 	<stop  offset="0.3636" style="stop-color:#FFFFFF;stop-opacity:0"/>
 	<stop  offset="1" style="stop-color:#FFFFFF"/>
 </radialGradient>
-<circle fill="url(#SVGID_1_)" cx="15" cy="15" r="12.438"/>
-<path d="M15,29.781c-8.202,0-14.875-6.674-14.875-14.875C0.125,6.704,6.798,0.031,15,0.031s14.875,6.673,14.875,14.875
-	C29.875,23.107,23.202,29.781,15,29.781z M15,3.069c-6.527,0-11.837,5.31-11.837,11.837c0,6.525,5.31,11.837,11.837,11.837
-	c6.525,0,11.837-5.312,11.837-11.837C26.837,8.379,21.525,3.069,15,3.069z"/>
+<circle fill="url(#SVGID_1_)" cx="15.156" cy="15.156" r="13.281"/>
+<path d="M14.865,30C6.531,30-0.25,23.327-0.25,15.125S6.531,0.25,14.865,0.25c8.334,0,15.115,6.673,15.115,14.875
+	S23.199,30,14.865,30z M14.865,2.539c-7.052,0-12.79,5.646-12.79,12.586c0,6.94,5.738,12.586,12.79,12.586
+	c7.052,0,12.79-5.646,12.79-12.586C27.654,8.185,21.917,2.539,14.865,2.539z"/>
+<circle fill="none" stroke="#000000" stroke-width="2.5" stroke-miterlimit="10" cx="-45" cy="15" r="15"/>
 </svg>

@@ -50,7 +50,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadingArea              = root.find('#loadingArea'),
         infoButton               = root.find('#infoButton'),
         linkButton               = root.find('#linkButton'),
-        splitscreenIcon          = root.find('#splitscreenIcon'),
+        // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay                  = root.find('#overlay'),
 
         // input options
@@ -165,8 +165,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 doSearch();
             }
         });
+        
+        searchInput.css({
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size' : '25px 25px',
+            'background-repeat': 'no-repeat',
+            'background-position':'5px center'
+        });
 
-        initSplitscreen();
+        searchInput.on('focus', function () { searchInput.css({ 'background-image': 'none' }); });
+        searchInput.on('focusout', function () { 
+            if (!searchInput.val()) {
+                searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            } 
+        });
+
+        // initSplitscreen();
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
             .addClass('bottomButton')
@@ -192,6 +206,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 createInfoPopUp();
             });
         }
+
+        if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
+            console.log("HERE WE GO")
+        }
+
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
     }
@@ -478,6 +497,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 // Clear search box
                 searchTxt.text("");
+
+                //re-display the magnifying glass icon
+                searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
 
                 // Clear catalog div (with info and artwork tiles)
                 catalogDiv.empty();
@@ -2099,44 +2121,45 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
     }
 
-        /**
-     * Initializes splitscreen functionality
-     * @method initSplitscreen
-     */
-    function initSplitscreen() {
-        splitscreenIcon.attr({
-                src: tagPath+'images/SplitWhite_dotted.svg'
-            })
-            .addClass('bottomButton')
-        if (TAG.Util.Splitscreen.isOn()) {
-            splitscreenIcon.css('display', 'none');
-        }
-        splitscreenIcon.on('click', function () {
-            var collectionsPage,
-                collectionsPageRoot,
-                newCollectionsPage,
-                newCollectionsPageRoot;
+    //UNCOMMENT IF WE EVER WANT SPLITSCREEN ACCESS FROM CATALOG
+    //     /**
+    //  * Initializes splitscreen functionality
+    //  * @method initSplitscreen
+    //  */
+    // function initSplitscreen() {
+    //     splitscreenIcon.attr({
+    //             src: tagPath+'images/SplitWhite_dotted.svg'
+    //         })
+    //         .addClass('bottomButton')
+    //     if (TAG.Util.Splitscreen.isOn()) {
+    //         splitscreenIcon.css('display', 'none');
+    //     }
+    //     splitscreenIcon.on('click', function () {
+    //         var collectionsPage,
+    //             collectionsPageRoot,
+    //             newCollectionsPage,
+    //             newCollectionsPageRoot;
 
-            if (!TAG.Util.Splitscreen.isOn()) {
-                TAG.Util.Splitscreen.setOn(true);
-                collectionsPage = TAG.Layout.CollectionsPage();
-                collectionsPageRoot = collectionsPage.getRoot();
-                collectionsPageRoot.data('split', 'R');
+    //         if (!TAG.Util.Splitscreen.isOn()) {
+    //             TAG.Util.Splitscreen.setOn(true);
+    //             collectionsPage = TAG.Layout.CollectionsPage();
+    //             collectionsPageRoot = collectionsPage.getRoot();
+    //             collectionsPageRoot.data('split', 'R');
 
-                newCollectionsPage = TAG.Layout.CollectionsPage();
-                newCollectionsPageRoot = newCollectionsPage.getRoot();
-                newCollectionsPageRoot.data('split', 'L');
-                setTimeout(function(){
-                    root.detach();
-                    root = newCollectionsPageRoot;
-                    newCollectionsPage.loadCollection(currCollection, scrollPos, currentArtwork)
-                    infoButton.css("float", "left");
-                    linkButton.css("float", "left");
-                }, 1000);
-                TAG.Util.Splitscreen.init(newCollectionsPageRoot, collectionsPageRoot);
-            }
-        });
-    }
+    //             newCollectionsPage = TAG.Layout.CollectionsPage();
+    //             newCollectionsPageRoot = newCollectionsPage.getRoot();
+    //             newCollectionsPageRoot.data('split', 'L');
+    //             setTimeout(function(){
+    //                 root.detach();
+    //                 root = newCollectionsPageRoot;
+    //                 newCollectionsPage.loadCollection(currCollection, scrollPos, currentArtwork)
+    //                 infoButton.css("float", "left");
+    //                 linkButton.css("float", "left");
+    //             }, 1000);
+    //             TAG.Util.Splitscreen.init(newCollectionsPageRoot, collectionsPageRoot);
+    //         }
+    //     });
+    // }
 
     /**
      * Gets the current state of the collections page
