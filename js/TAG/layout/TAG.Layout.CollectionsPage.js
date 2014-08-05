@@ -752,18 +752,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         searchInput[0].value = "";
         infoSource = [];
 
-        for (i = 0; i < contents.length; i++) {
-            cts = contents[i];
+        $.each(contents, function (i, cts) {
             if (!cts) {
-                continue;
+                return false;
             }
-            info = cts.Name + " " + cts.Metadata.Artist + " " + cts.Metadata.Year + " " + cts.Metadata.Description + " " + cts.Metadata.Type;
+            info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
+            if (cts.Metadata.InfoFields) {
+                $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+                    info += " " + field;
+                    info += " " + fieldText;
+                });
+            }
             infoSource.push({
                 "id": i,
                 "keys": info.toLowerCase()
             });
-            console.log("infoSource: " + infoSource[i]);
-        }
+        });
     }
 
     /**
