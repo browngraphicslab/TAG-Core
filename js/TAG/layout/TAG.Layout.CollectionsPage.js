@@ -451,10 +451,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 title             = TAG.Util.htmlEntityDecode(collection.Name),
                 nextTitle,
                 prevTitle,
-                mainCollection    = $(document.createElement('div')),
-                nextCollection    = $(document.createElement('div')),
-                prevCollection    = $(document.createElement('div')),
-                titleBox          = $(document.createElement('div')),
+                mainCollection    = $('#mainCollection'),
+                nextCollection    = $('#nextCollection'),
+                prevCollection    = $('#prevCollection'),
+                titleBox          = $('.collection-title'), 
                 collectionDescription = $(document.createElement('div')),
                 dummyDot,
                 dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR),
@@ -506,18 +506,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }                
 
                 // Add collection title
-                collectionArea.empty();
-                mainCollection.addClass('mainCollection')
-                            .attr({
-                                'id': 'collection-' + collection.Identifier,
-                            });
-                titleBox.attr('id' ,'collection-title-'+collection.Identifier)
-                        .addClass('collection-title')
-                        .html(title);
-                titleBox.addClass('primaryFont');
-                // titleBox.css({ 'color': '#'+PRIMARY_FONT_COLOR });
-                mainCollection.append(titleBox);
-            
+                mainCollection.addClass('mainCollection');
+                titleBox.addClass('collection-title primaryFont').html(title);
+
                 // Add previous and next collection titles
                 if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                     prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
@@ -530,14 +521,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                                 currentTag = null;   
                                             }
                                         }());
-                    collectionArea.append(backArrowArea);
                     backArrow.attr('src', tagPath + 'images/icons/Close.svg');
-                    backArrow.addClass('arrow');
+                    backArrow.addClass('arrow');    
+
                     prevCollection.addClass('nextPrevCollection')
                                 .addClass('primaryFont')
-                                .attr({
-                                    'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
-                                })
+                                //.attr({
+                                //   'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
+                                //})
                                 .css('left','3%')
                                 .html(prevTitle)
                                 .on('click', function(){
@@ -547,6 +538,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                                 currentTag = null;      
                                             }
                                         }());
+
                     TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = prevTitle;
                         tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
@@ -555,10 +547,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         tobj.custom_1 = prevTitle;
                         tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
                     });
-                    collectionArea.append(prevCollection);
                 }
 
-                collectionArea.append(mainCollection);
                 if (prevCollection){
                     prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
                     // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
@@ -574,14 +564,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                                 currentTag = null;                                          
                                             }
                                         }());
-                    collectionArea.append(nextArrowArea);
+                   // collectionArea.append(nextArrowArea);
                     nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
                     nextArrow.addClass('arrow');
                     nextCollection.addClass('nextPrevCollection')
                                   .addClass('primaryFont')
-                                  .attr({
-                                    'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
-                                    })
+                                  //.attr({
+                                  //   'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
+                                  // })
                                   .html(nextTitle)
                                   .css({
                                     'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
@@ -602,7 +592,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         tobj.custom_1 = nextTitle;
                         tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
                     });
-                    collectionArea.append(nextCollection);
+                   // collectionArea.append(nextCollection);
                 }
 
                 collectionDescription.attr('id', 'collectionDescription');
