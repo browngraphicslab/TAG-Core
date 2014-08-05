@@ -50,6 +50,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         infoButton               = root.find('#infoButton'),
         linkButton               = root.find('#linkButton'),
         splitscreenIcon          = root.find('#splitscreenIcon'),
+        overlay                  = root.find('#overlay'),
 
         // input options
         scrollPos        = options.backScroll || 0,     // horizontal position within collection's catalog
@@ -627,6 +628,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Hide selected artwork container, as nothing is selected yet
             selectedArtworkContainer.css('display', 'none');
+            overlay.css('z-index', '1');
       
             tileDiv.empty();
             catalogDiv.append(tileDiv);
@@ -1131,7 +1133,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var timeline = $(document.createElement('div')),
                 i,
                 dateRange = maxDate - minDate,
-                numTicks = getNumTicks(dateRange),
+                numTicks = 101,
                 tick;
 
             timeline.addClass('timeline');
@@ -1149,36 +1151,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineTicks.push(tick);
             }
             return timeline;
-        }
-
-        function getNumTicks(range){
-            var yearsPerTick = 1,
-                firstDigit = range.toString().charAt(0),
-                length = range.toString().length - 3,
-                total;
-            switch(firstDigit){
-                case '0':
-                    yearsPerTick = 1 * Math.pow(10, length);
-                    break;
-                case '1':
-                case '2':
-                    yearsPerTick = 2 * Math.pow(10, length);
-                    break;
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                    yearsPerTick = 5 * Math.pow(10, length);
-                    break;
-                default:
-                    yearsPerTick = 10 * Math.pow(10, length);
-                    break;
-            };
-            if (range <= 100){
-                yearsPerTick = 1
-            };
-            total = parseInt(range/yearsPerTick);
-            return total;
         }
 
         /**Helper function to prepare and append the timeline event circles
@@ -1402,9 +1374,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!artwork) {
                 return;
             }
-            selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/3, function(){
+            selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/2, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
+            overlay.css('z-index', '1');
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
@@ -1459,9 +1432,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             selectedArtworkContainer.children().stop();
             selectedArtworkContainer.children().animate(
-                {"opacity": 0}, ANIMATION_DURATION/2, function(){
+                {"opacity": 0}, ANIMATION_DURATION, function(){
                     fillSelectedArtworkContainer();
-                    selectedArtworkContainer.children().animate({"opacity": 1}, ANIMATION_DURATION/2)
+                    selectedArtworkContainer.children().animate({"opacity": 1}, ANIMATION_DURATION)
                 })
 
             // Set selected artwork to hide when anything else is clicked
@@ -1510,7 +1483,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'display': 'inline',
                     'left' : shift
                 })
-                selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/3);
+                selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/2);
+                overlay.css('z-index', '10000');
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
