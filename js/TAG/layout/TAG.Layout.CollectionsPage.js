@@ -676,11 +676,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!cts) {
                 continue;
             }
-            info = cts.Name + " " + cts.Metadata.Artist + " " + cts.Metadata.Year + " " + cts.Metadata.Type;
+            info = cts.Name + " " + cts.Metadata.Artist + " " + cts.Metadata.Year + " " + cts.Metadata.Description + " " + cts.Metadata.Type;
             infoSource.push({
                 "id": i,
                 "keys": info.toLowerCase()
             });
+            console.log("infoSource: " + infoSource[i]);
         }
     }
 
