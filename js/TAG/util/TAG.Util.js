@@ -6073,10 +6073,10 @@ TAG.Util.RLH = function (input) {
         }
 
         !input.noReload && showLoadingMessage();
-        LADS.Worktop.Database.changeArtwork(artwork.Identifier, options, success, error, error, error);
+        TAG.Worktop.Database.changeArtwork(artwork.Identifier, options, success, error, error, error);
 
         function success() {
-            LADS.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
+            TAG.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
                 artwork = newArtwork;
                 richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(artwork.Metadata.RichLocationHistory) : locationToRichLocation(artwork.Metadata.Location);
                 locations = richLocationData.locations || [];
@@ -6166,9 +6166,9 @@ TAG.Util.RLH = function (input) {
         var fileArray,
             i;
 
-        LADS.Authoring.FileUploader(
+        TAG.Authoring.FileUploader(
             root,
-            LADS.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to LADS.Authoring.FileUploadTypes.Map to test map uploading
+            TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to LADS.Authoring.FileUploadTypes.Map to test map uploading
             function (files) {
                 fileArray = files;
             },
@@ -6204,7 +6204,7 @@ TAG.Util.RLH = function (input) {
             ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
             false,
             function () {
-                root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
             false // batch upload disabled for now
         );
@@ -6341,7 +6341,8 @@ TAG.Util.Artwork = (function () {
      * Creates a thumbnail button to be used in a side bar list
      * @method createThumbnailButton
      * @param {Object} options      options for creating the thumbnail button:
-     *            title         title of the button, shown under the thumbnail
+     *            title         title of the button, shown above the thumbnail
+     *            year          year of the media, shown below the thumbnail
      *            handler       a click handler for the button
      *            buttonClass   an extra class to add to the button
      *            buttonID      an id to give to the button
@@ -6354,23 +6355,30 @@ TAG.Util.Artwork = (function () {
         options = options || {};
 
         var title       = options.title,
+            year        = options.year,
             handler     = options.handler,
             buttonClass = options.buttonClass,
             buttonID    = options.buttonID,
             src         = options.src,
             width       = options.width,
-            height      = options.height || 0.15 * $('#tagRoot').height() + 'px',
+            height      = options.height || 0.18 * $('#tagRoot').height() + 'px',
             holder               = $(document.createElement('div')).addClass('thumbnailButton'),
             thumbHolderDiv       = $(document.createElement('div')).addClass('thumbnailHolderDiv'),
             holderContainer      = $(document.createElement('div')).addClass('thumbnailButtonContainer'),
             holderInnerContainer = $(document.createElement('div')).addClass('thumbnailButtonInnerContainer'),
             thumbnailImage       = $(document.createElement('img')).addClass('thumbnailButtonImage'),
-            titleDiv             = $(document.createElement('div')).addClass('thumbnailButtonTitle');
+            titleDiv = $(document.createElement('div')).addClass('thumbnailButtonTitle'),
+            yearDiv = $(document.createElement('div')).addClass('thumbnailButtonYear');
+
+
 
         /********************************************\
 
-        ----------------------------------------------
-        |                                            |  <--- holder
+        ----------------------------------------------      <--- holder
+        | ------------------------------------------ |     
+        | |              NAME OF DOQ               | <--- titleDiv
+        | |                                        | |
+        | ------------------------------------------ |
         | ------------------------------------------ |
         | |                                        | |
         | |                                        | |
@@ -6388,13 +6396,12 @@ TAG.Util.Artwork = (function () {
         | |                                        | |
         | ------------------------------------------ |
         | ------------------------------------------ |
-        | |             NAME OF DOQ                | <--- titleDiv
+        | |                 YEAR                   | <--- yearDiv
         | |                                        | |
         | ------------------------------------------ |
         ----------------------------------------------
 
         \********************************************/
-
         
         buttonClass && holder.addClass(buttonClass);
         holder.css('height', height);
@@ -6402,6 +6409,8 @@ TAG.Util.Artwork = (function () {
 
         holder.on("click", handler);
 
+        titleDiv.text(title);
+        holder.append(titleDiv);
         holder.append(thumbHolderDiv);
         thumbHolderDiv.append(holderContainer);
         holderContainer.append(holderInnerContainer);
@@ -6418,8 +6427,8 @@ TAG.Util.Artwork = (function () {
 
         holderInnerContainer.append(thumbnailImage);
 
-        titleDiv.text(title);
-        holder.append(titleDiv);
+        yearDiv.text(year);
+        holder.append(yearDiv);
 
         return holder;
     }

@@ -760,12 +760,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 		//automatically save General Settings - Customization
 
         currentMetadataHandler = function () {
+            /*if (locInput === undefined) {
+                locInput = "";
+            }
+            if (infoInput === undefined) {
+                infoInput = "";
+            }*/
+            saveSplashScreen({
+                /*alphaInput: alphaInput,                             //Overlay Transparency
+                overlayColorInput: overlayColorInput,               //Overlay Color
+                nameInput: nameInput,                               //Museum Name
+                locInput: locInput,                                 //Museum Location
+                infoInput: infoInput,                               //Museum Info
+                logoColorInput: logoColorInput, */                    //Logo background color
+                bgImgInput: bgImgInput,                             //Background image
+                /*logoInput: logoInput,                               //Logo image
+                backgroundColorInput: backgroundColorInput,         //Background Color
+                backgroundOpacityInput: backgroundOpacityInput, */    //Background Opacity
+                primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
+                secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
+                fontFamilyInput: fontFamilyInput,
+                idleTimerDurationInput: idleTimerDurationInput
+            });
+        };
+
+        // Save button
+        var saveButton = createButton('Save Changes', function () {
             if (locInput === undefined) {
                 locInput = "";
             }
             if (infoInput === undefined) {
                 infoInput = "";
             }
+            //save Splash screen and pass in inputs with following keys:
             saveSplashScreen({
                 alphaInput: alphaInput,                             //Overlay Transparency
                 overlayColorInput: overlayColorInput,               //Overlay Color
@@ -776,34 +803,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 bgImgInput: bgImgInput,                             //Background image
                 logoInput: logoInput,                               //Logo image
                 backgroundColorInput: backgroundColorInput,         //Background Color
-                backgroundOpacityInput: backgroundOpacityInput,     //Background Opacity
-                primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
-                secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
-                fontFamilyInput: fontFamilyInput,
-                idleTimerDurationInput: idleTimerDurationInput
-            });
-        };
-
-        // Save button
-        var saveButton = createButton('Save Changes', function () {
-            /*if (locInput === undefined) {
-                locInput = "";
-            }
-            if (infoInput === undefined) {
-                infoInput = "";
-            }*/
-            //save Splash screen and pass in inputs with following keys:
-            saveSplashScreen({
-                /*alphaInput: alphaInput,                             //Overlay Transparency
-                overlayColorInput: overlayColorInput,               //Overlay Color
-                nameInput: nameInput,                               //Museum Name
-                locInput: locInput,                                 //Museum Location
-                infoInput: infoInput,                               //Museum Info
-                logoColorInput: logoColorInput,      */               //Logo background color
-                bgImgInput: bgImgInput,                             //Background image
-                /*logoInput: logoInput,                               //Logo image
-                backgroundColorInput: backgroundColorInput,         //Background Color
-                backgroundOpacityInput: backgroundOpacityInput, */    //Background Opacity
+                backgroundOpacityInput: backgroundOpacityInput,    //Background Opacity
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 fontFamilyInput: fontFamilyInput,
@@ -876,14 +876,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var idleTimerDuration = inputs.idleTimerDurationInput.val();
 
         var options = {
-            /*Name: name,
+            Name: name,
             OverlayColor: overlayColor,
             OverlayTrans: alpha,
             Location: loc,
             Info: info,
             IconColor: logoColor,
             BackgroundColor: backgroundColor,
-            BackgroundOpacity: backgroundOpacity,*/
+            BackgroundOpacity: backgroundOpacity,
             PrimaryFontColor: primaryFontColor,
             SecondaryFontColor: secondaryFontColor,
             FontFamily: fontFamily,
@@ -1364,6 +1364,40 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         visDiv.append(invisibilityInput).append(visibilityInput);
 
         //TO-DO: add in on server side from TAG.Worktop.Database.js changeExhibition() 
+        var assocMediaShown;
+        if (exhibition.Metadata.AssocMediaView === "true" || exhibition.Metadata.AssocMediaView === "false") {
+            exhibition.Metadata.AssocMediaView === "true" ? assocMediaShown = true: assocMediaShown = false;
+        } else {
+            //backwards compatibility
+            assocMediaShown = false;
+        }
+        var showAssocMedia = createButton('Show Associated Media View', function(){
+            assocMediaShown = true;
+            showAssocMedia.css('background-color', 'white');
+            hideAssocMedia.css('background-color','');
+        }, {
+            'min-height': '0px',
+            'margin-right': '4%',
+            'width':'48%',
+        });
+        showAssocMedia.attr('class','settingButton');
+        var hideAssocMedia = createButton('Hide Associated Media View', function(){
+            assocMediaShown = false;
+            hideAssocMedia.css('background-color','white');
+            showAssocMedia.css('background-color','');
+            }, {
+            'min-height': '0px',
+            'width': '48%'
+        });
+        hideAssocMedia.attr('class','settingButton');
+        if (assocMediaShown){
+            showAssocMedia.css('background-color','white');
+        }else{
+            hideAssocMedia.css('background-color','white');
+        }
+        var timelineOptionsDiv = $(document.createElement('div'));
+        timelineOptionsDiv.append(showTimeline).append(hideTimeline);
+
         var timelineShown;
         if (exhibition.Metadata.Timeline === "true" || exhibition.Metadata.Timeline === "false") {
             exhibition.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
@@ -1397,22 +1431,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }else{
             hideTimeline.css('background-color','white');
         }
+
         var timelineOptionsDiv = $(document.createElement('div'));
         timelineOptionsDiv.append(showTimeline).append(hideTimeline);
-
+        var assocMediaOptionsDiv = $(document.createElement('div'));
+        assocMediaOptionsDiv.append(showAssocMedia).append(hideAssocMedia);
         var sortDropDown;
         var privateSetting;
         var localVisibilitySetting;
         var name;
         var desc;
         var bg;
-        var sortOptions;
+        //var sortOptions;
         var idLabel;
         var timeline;
         var nameInput;
         var descInput;
         var bgInput;
-        if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
+        var assocMedia;
+        /*if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
                 var sortOptions = {
                     "Title": true,
@@ -1448,8 +1485,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             sortDropDown = createSortOptions(JSON.parse(exhibition.Metadata.SortOptions));
             createCollectionSettings();
-        }
-
+        }*/
+        createCollectionSettings();
         function createCollectionSettings() {
 
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
@@ -1484,14 +1521,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             desc = createSetting('Collection Description', descInput);
             bg = createSetting('Collection Background Image', bgInput);
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
-            sortOptions = createSetting('Sort Options', sortDropDown);
+            assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
+            //sortOptions = createSetting('Sort Options', sortDropDown);
 
             settingsContainer.append(privateSetting);
             settingsContainer.append(name);
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
-            settingsContainer.append(sortOptions);
+            settingsContainer.append(assocMedia);
+            //settingsContainer.append(sortOptions);
         }
 
         //Automatically save changes
@@ -1520,8 +1559,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 nameInput: nameInput,        //Collection name
                 descInput: descInput,        //Collection description
                 bgInput: bgInput,            //Collection background image
-                sortOptions: sortDropDown,
-                timelineInput: timelineShown  //to-do make sure default is shown
+                //sortOptions: sortDropDown,
+                timelineInput: timelineShown,  
+                assocMediaInput : assocMediaShown
             });
         }, {
             'margin-right': '3%',
@@ -1676,11 +1716,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bg = inputs.bgInput.val();
         var priv = inputs.privateInput;
         var timeline = inputs.timelineInput;
+        var assocMedia = inputs.assocMediaInput;
 
-        var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
+        //var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
         var option;
 
-        sortOptions[$(inputs.sortOptions[0].children[0]).text()] = $(inputs.sortOptions[0].children[0]).attr("setSort"); //Title
+        /*sortOptions[$(inputs.sortOptions[0].children[0]).text()] = $(inputs.sortOptions[0].children[0]).attr("setSort"); //Title
         sortOptions[$(inputs.sortOptions[0].children[1]).text()] = $(inputs.sortOptions[0].children[1]).attr("setSort"); //ARtist
         sortOptions[$(inputs.sortOptions[0].children[2]).text()] = $(inputs.sortOptions[0].children[2]).attr("setSort"); //Year
         sortOptions[$(inputs.sortOptions[0].children[3]).text()] = $(inputs.sortOptions[0].children[3]).attr("setSort"); //Tour
@@ -1689,14 +1730,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (sortOptions.InfoFields[option.text()]) {
                 (sortOptions.InfoFields[option.text()])[1] = option.attr("setSort");
             }
-        }
+        }*/
 
         var options = {
             Name: name,
             Private: priv,
             Description: desc,
-            SortOptions: JSON.stringify(sortOptions),
-            Timeline: timeline
+            //SortOptions: JSON.stringify(sortOptions),
+            Timeline: timeline,
+            AssocMediaView: assocMedia
         }
 
         if (bg){
@@ -1949,7 +1991,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Automatically save changes
         currentMetadataHandler = function () {
             if (nameInput.val() === undefined || nameInput.val() === "") {
-                nameInput.val() = "Untitled Tour";
+                nameInput.val("Untitled Tour");
             }
             saveTour(tour, {
                 privateInput: privateState,
@@ -2284,6 +2326,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
                 holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
+                mediaElement.attr("src", source);
                 TAG.Worktop.Database.getConvertedVideoCheck(
                 function (output) {
                     if (output !== "" && output !== "False" && output !== "Error") {
@@ -2435,7 +2478,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         onChangeUpdateText(titleInput, null, 40);
-        onChangeUpdateText(descInput, null, 40);
+        onChangeUpdateText(descInput, null, 5000);
 
         var title = createSetting('Title', titleInput);
         var desc = createSetting('Description', descInput);
@@ -3152,7 +3195,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.attr("controls", "");
             mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
-
+            mediaElement.attr("src", source);
             TAG.Worktop.Database.getConvertedVideoCheck(
                 function (output) {
                     if (output !== "" && output !== "False" && output !== "Error") {

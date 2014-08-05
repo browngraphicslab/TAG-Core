@@ -124,14 +124,13 @@ TAG.Auth = (function () {
 
     function authenticate(onSuccess, onCancel) {
         successFunction = onSuccess;
-        
         if (TAG.AuthToken) {
             TAG.Worktop.Database.checkToken(TAG.AuthToken, onSuccess, showForm, showForm);
         } else { 
             showForm(); 
         }
         function showForm() {
-            $('#startPageRoot').append(TAG.AuthOverlay);
+            $("#tagRoot").append(TAG.AuthOverlay);
             TAG.AuthInput.val('');
             TAG.AuthOverlay.fadeIn(500);
             TAG.AuthInput.focus();
