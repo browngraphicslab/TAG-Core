@@ -809,38 +809,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput
             });
-        }, {
-            'margin-right': '3%',
-            'margin-top': '1%',
-            'margin-bottom': '1%',
-            'margin-left': '.5%',
-            'float': 'right'
         });
-        
+        saveButton.attr("class", "saveChangesButton");
         // preview buttons
-        var previewStartPageButton = createButton('Splash Screen', function () { previewStartPage(primaryFontColorInput, secondaryFontColorInput) }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
+        var previewStartPageButton = createButton('Splash Screen', function () { previewStartPage(primaryFontColorInput, secondaryFontColorInput) });
+        previewStartPageButton.attr("class", "rightBarOptions");
 
-        var previewCollectionsPageButton = createButton('Collections Page', function () {
-            previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
-            },
-            {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
+        var previewCollectionsPageButton = createButton('Collections Page', function () {previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);});
+        previewCollectionsPageButton.attr("class", "rightBarOptions");
 
-        var previewArtworkViewerButton = createButton('Artwork Viewer', function () { previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput) }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
+        var previewArtworkViewerButton = createButton('Artwork Viewer', function () { previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput) });
+        previewArtworkViewerButton.attr("class", "rightBarOptions");
 
         buttonContainer.append(saveButton);
         buttonContainer.append(previewStartPageButton);
@@ -1311,21 +1290,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             privateState = true;
             privateInput.css('background-color', 'white');
             publicInput.css('background-color', '');
-        }, {
-            'min-height': '0px',
-            'margin-right': '4%',
-            'width': '48%',
         });
-        privateInput.attr('class', 'settingButton');
+
+        privateInput.attr('class', 'settingButton buttonLeft');
         var publicInput = createButton('Publish', function () {
             privateState = false;
             publicInput.css('background-color', 'white');
             privateInput.css('background-color', '');
-        }, {
-            'min-height': '0px',
-            'width': '48%',
         });
-        publicInput.attr('class', 'settingButton');
+
+        publicInput.attr('class', 'settingButton buttonRight');
         if (privateState) {
             privateInput.css('background-color', 'white');
         } else {
@@ -1341,20 +1315,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             localVisibility = false;
             invisibilityInput.css('background-color', 'white');
             visibilityInput.css('background-color', '');
-        }, {
-            'min-height': '0px',
-            'margin-right': '4%',
-            'width': '48%',
-        });
+        }).attr("class", "buttonLeft");
+
         var visibilityInput = createButton('Visible', function () {
             if (!localVisibility) { changesHaveBeenMade = true; };
             localVisibility = true;
             visibilityInput.css('background-color', 'white');
             invisibilityInput.css('background-color', '');
-        }, {
-            'min-height': '0px',
-            'width': '48%',
-        });
+        }).attr("class", "buttonRight");
+
         if (localVisibility) {
             visibilityInput.css('background-color', 'white');
         } else {
@@ -1371,25 +1340,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //backwards compatibility
             assocMediaShown = false;
         }
-        var showAssocMedia = createButton('Show Associated Media View', function(){
+        var showAssocMedia = createButton('Show Associated Media View', function () {
             assocMediaShown = true;
             showAssocMedia.css('background-color', 'white');
-            hideAssocMedia.css('background-color','');
-        }, {
-            'min-height': '0px',
-            'margin-right': '4%',
-            'width':'48%',
+            hideAssocMedia.css('background-color', '');
         });
-        showAssocMedia.attr('class','settingButton');
-        var hideAssocMedia = createButton('Hide Associated Media View', function(){
+
+        showAssocMedia.attr('class', 'settingButton buttonLeft');
+        var hideAssocMedia = createButton('Hide Associated Media View', function () {
             assocMediaShown = false;
-            hideAssocMedia.css('background-color','white');
-            showAssocMedia.css('background-color','');
-            }, {
-            'min-height': '0px',
-            'width': '48%'
+            hideAssocMedia.css('background-color', 'white');
+            showAssocMedia.css('background-color', '');
         });
-        hideAssocMedia.attr('class','settingButton');
+
+        hideAssocMedia.attr('class', 'settingButton buttonRight');
         if (assocMediaShown){
             showAssocMedia.css('background-color','white');
         }else{
@@ -1410,22 +1374,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             showTimeline.css('background-color', 'white');
             hideTimeline.css('background-color','');
         }, {
-            'min-height': '0px',
-            'margin-right': '4%',
-            'width':'48%',
             'padding-left': '10px',
             'padding-right': '10px'
         });
-        showTimeline.attr('class','settingButton');
-        var hideTimeline = createButton('Hide Timeline', function(){
+        showTimeline.attr('class', 'settingButton buttonLeft');
+
+        var hideTimeline = createButton('Hide Timeline', function () {
             timelineShown = false;
-            hideTimeline.css('background-color','white');
-            showTimeline.css('background-color','');
-            }, {
-            'min-height': '0px',
-            'width': '48%'
+            hideTimeline.css('background-color', 'white');
+            showTimeline.css('background-color', '');
         });
-        hideTimeline.attr('class','settingButton');
+
+        hideTimeline.attr('class','settingButton buttonRight');
         if (timelineShown){
             showTimeline.css('background-color','white');
         }else{
@@ -1523,8 +1483,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
             assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
             sortOptions = createSetting('Sort Options', sortDropDown);
+            localVisibilitySetting = createSetting('Change Local Visibility', visDiv);
 
             settingsContainer.append(privateSetting);
+            settingsContainer.append(localVisibilitySetting);
             settingsContainer.append(name);
             settingsContainer.append(desc);
             settingsContainer.append(bg);
@@ -1538,7 +1500,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (nameInput.val() === undefined || nameInput.val() === "") {
                 nameInput.val("Untitled Collection");
             }
-            LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
+            TAG.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
             saveExhibition(exhibition, {
                 privateInput: privateState,
                 nameInput: nameInput,
@@ -1554,6 +1516,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (nameInput.val() === undefined || nameInput.val() === "") {
                 nameInput.val("Untitled Collection");
             }
+            TAG.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
             saveExhibition(exhibition, {
                 privateInput: privateState,  //default set unpublished
                 nameInput: nameInput,        //Collection name
@@ -1563,22 +1526,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 timelineInput: timelineShown,  
                 assocMediaInput : assocMediaShown
             });
-        }, {
-            'margin-right': '3%',
-            'margin-top': '1%',
-            'margin-bottom': '1%',
-            'margin-left': '.5%',
-            'float': 'right',
         });
-
+        saveButton.attr("class", "saveChangesButton");
         var deleteButton = createButton('Delete Collection', function () {
             deleteExhibition(exhibition);
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0',
-            'margin-bottom': '3%',
-        });
+        }).attr("class", "rightBarOptions");
 
         var catalogNext = true;
         // Creates the button to toggle between views
@@ -1607,12 +1559,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 exhibitionView();
             }
             catalogNext = !catalogNext;
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
+        }).attr("class", "rightBarOptions");
 
         var artPickerButton = createButton('Manage Collection', function () {
             TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
@@ -1634,12 +1581,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     loadExhibitionsView(exhibition.Identifier);
                 });
 
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
+        }).attr("class", "rightBarOptions");
 
         leftButton = artPickerButton;
         // Sets the viewer to catalog view
@@ -1936,12 +1878,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             privateState = true;
             privateInput.css('background-color', 'white');
             publicInput.css('background-color', '');
-        }, {
-            'min-height': '0px',
-            'margin-right': '4%',
-            'width': '48%',
         });
-        privateInput.attr('class','settingButton');
+        privateInput.attr('class','settingButton buttonLeft');
         var publicInput = createButton('Publish', function () {
             if (privateState) { 
                 changesHaveBeenMade = true; 
@@ -1949,11 +1887,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             privateState = false;
             publicInput.css('background-color', 'white');
             privateInput.css('background-color', '');
-        }, {
-            'min-height': '0px',
-            'width': '48%',
         });
-        publicInput.attr('class','settingButton');
+        publicInput.attr('class','settingButton buttonRight');
         if (privateState) {
             privateInput.css('background-color', 'white');
         } else {
@@ -2002,21 +1937,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create buttons
         var editButton = createButton('Edit Tour',
-            function () { editTour(tour); },
-            {
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
-            });
+            function () { editTour(tour); });
+        editButton.attr("class", "rightBarOptions");
         var deleteButton = createButton('Delete Tour',
-            function () { deleteTour(tour); },
-            {
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
-            });
+            function () { deleteTour(tour); });
+        deleteButton.attr("class", "rightBarOptions");
         var duplicateButton = createButton('Duplicate Tour',
             function () {
                 duplicateTour(tour, {
@@ -2024,13 +1949,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     nameInput: nameInput,
                     descInput: descInput,
                 });
-            },
-            {
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
             });
+        duplicateButton.attr("class", "rightBarOptions");
         var saveButton = createButton('Save Changes',
             function () {
                 if (nameInput.val() === undefined || nameInput.val() === "") {
@@ -2041,14 +1961,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     nameInput: nameInput,
                     descInput: descInput,
                 });
-            }, {
-                'margin-right': '3%',
-                'margin-top': '1%',
-                'margin-bottom': '1%',
-                'margin-left': '.5%',
-                'float': 'right'
             });
-
+        saveButton.attr("class", "saveChangesButton");
         buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
     }
 
@@ -2326,45 +2240,47 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
                 holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
-                mediaElement.attr("src", source);
+                holder.attr("src", source);
                 TAG.Worktop.Database.getConvertedVideoCheck(
-                function (output) {
-                    if (output !== "" && output !== "False" && output !== "Error") {
-                        holder.removeAttr('src');
-                        var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
-                        var sourceMP4 = sourceWithoutExtension + ".mp4";
-                        var sourceWEBM = sourceWithoutExtension + ".webm";
-                        var sourceOGV = sourceWithoutExtension + ".ogv";
+                    function (output) {
+                        if (output !== "" && output !== "False" && output !== "Error") {
+                            holder.removeAttr('src');
+                            var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
+                            var sourceMP4 = sourceWithoutExtension + ".mp4";
+                            var sourceWEBM = sourceWithoutExtension + ".webm";
+                            var sourceOGV = sourceWithoutExtension + ".ogv";
 
-                        addSourceToVideo(holder, sourceMP4, 'video/mp4');
-                        addSourceToVideo(holder, sourceWEBM, 'video/webm');
-                        addSourceToVideo(holder, sourceOGV, 'video/ogv');
-                        $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
-                    } else {
-                        convertBtn.show();
-                        if (output === "False") {
+                            addSourceToVideo(holder, sourceMP4, 'video/mp4');
+                            addSourceToVideo(holder, sourceWEBM, 'video/webm');
+                            addSourceToVideo(holder, sourceOGV, 'video/ogv');
                             $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video is being converted to compatible formats for different browsers";
-                            viewer.append(TAG.Util.createConversionLoading(msg));
-                            conversionVideos.push(artwork.Identifier);
-                        } else if (output === "Error") {
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "An error occured when converting this video. Please try again";
-                            viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
-                            if (media.Extension !== ".mp4") {
+                        
+                            if (output === "False") {
+                                convertBtn.hide();
                                 $("#videoErrorMsg").remove();
                                 $("#leftLoading").remove();
-                                var msg = "This video format has not been converted to formats supported in multiple browsers.";
-                                viewer.append(LADS.Util.createConversionLoading(msg, true));
+                                var msg = "This video is being converted to compatible formats for different browsers";
+                                viewer.append(TAG.Util.createConversionLoading(msg));
+                                conversionVideos.push(media.Identifier);
+                            } else if (output === "Error") {
+                                convertBtn.show();
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "An error occured when converting this video. Please try again";
+                                viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            } else {
+                                convertBtn.show();
+                                //if (media.Extension !== ".mp4") {
+                                    $("#videoErrorMsg").remove();
+                                    $("#leftLoading").remove();
+                                    var msg = "This video format has not been converted to formats supported in multiple browsers.";
+                                    viewer.append(LADS.Util.createConversionLoading(msg, true));
+                                //}
                             }
+                            holder.attr('src', source);
                         }
-                        holder.attr('src', source);
-                    }
-                }, null, media.Identifier);
+                    }, null, media.Identifier);
                 if (conversionVideos.indexOf(media.Identifier) > -1) {
                     var msg = "This video is being converted to compatible formats for different browsers";
                     viewer.append(TAG.Util.createConversionLoading(msg));
@@ -2508,38 +2424,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // Create buttons
         
         var assocButton = createButton('Associate to Artworks',
-            function () { assocToArtworks(media); changesHaveBeenMade = true;},
-            {
-                'float': 'left',
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
-            });
-        
+            function () { assocToArtworks(media); changesHaveBeenMade = true;});
+        assocButton.attr("class", "rightBarOptions");
         leftButton = assocButton;
         var deleteButton = createButton('Delete',
-            function () {deleteAssociatedMedia(media); changesHaveBeenMade = true; },
-            {
-                'margin-right': '0%',
-                'margin-top': '1%',
-                'margin-bottom': '3%',
-                'margin-left': '2%',
-                'float': 'left',
-            });
+            function () { deleteAssociatedMedia(media); changesHaveBeenMade = true; });
+        deleteButton.attr("class", "rightBarOptions");
 
         var generateAssocMediaThumbnailButton = createButton('Generate Thumbnail',
             function () {
                 generateAssocMediaThumbnail(media);
                 changesHaveBeenMade = true;
-            }, {
-                'margin-right': '3%',
-                'margin-top': '1%',
-                'margin-bottom': '1%',
-                'margin-left': '2%',
-                'float': 'left'
             });
-
+        generateAssocMediaThumbnailButton.attr("class", "rightBarOptions");
         var saveButton = createButton('Save Changes',
             function () {
                 if (titleInput.val() === undefined || titleInput.val() === "") {
@@ -2556,25 +2453,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     timelineDayInput: yearMetadataDivSpecs.timelineDayInput   
 
                 });
-            }, {
-                'margin-right': '3%',
-                'margin-top': '1%',
-                'margin-bottom': '1%',
-                'margin-left': '.5%',
-                'float': 'right'
             });
-
+        saveButton.attr("class", "saveChangesButton");
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
                 saveThumbnail(media, false);
                 changesHaveBeenMade = true;
-            }, {
-                'margin-right': '0%',
-                'margin-top': '1%',
-                'margin-bottom': '3%',
-                'margin-left': '2%',
-                'float': 'left'
             });
+        thumbnailButton.attr("class", "rightBarOptions");
 
         buttonContainer.append(assocButton);
         if (media.Metadata.ContentType.toLowerCase() === 'video') {
@@ -2596,15 +2482,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, "False");
                             convertBtn.hide().data('disabled', true);
                         }
-                    }, {
-                        'margin-right': '0%',
-                        'margin-top': '1%',
-                        'margin-bottom': '3%',
-                        'margin-left': '2%',
-                        'float': 'left'
                     })
-            convertBtn.attr('class', 'button convertVideoButton');
-            convertBtn.attr("disabled", "");
+            convertBtn.attr('class', 'button convertVideoButton rightBarOptions');
+            convertBtn.hide()
+            if (media.Metadata.Converted !== "True" && conversionVideos.indexOf(media.Identifier) === -1) {
+                convertBtn.show().data('disabled', false);
+            } else {
+                convertBtn.hide().data('disabled', true);
+            }
             buttonContainer.append(thumbnailButton).append(convertBtn);
         } else if (media.Metadata.ContentType.toLowerCase() === 'image' && !media.Metadata.Thumbnail && media.Metadata.Source && media.Metadata.Source[0] === '/' && !source.match(/.mp3/)) {
             // hacky way to see if asset was imported recently enough to support thumbnailing (these are /Images/_____.__
@@ -3179,7 +3064,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearRight();
         deleteType = deleteArtwork;
         toDelete = artwork;
-
+        var convertBtn;
         // Create an img element to load the image
         var mediaElement;
         if (artwork.Metadata.Type !== 'VideoArtwork') {
@@ -3217,11 +3102,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             viewer.append(TAG.Util.createConversionLoading(msg));
                             conversionVideos.push(artwork.Identifier);
                         } else if (output === "Error") {
+                            convertBtn.show();
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
                             var msg = "An error occured when converting this video. Please try again";
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         } else {
+                            convertBtn.show();
                             //if (artwork.Extension !== ".mp4") {
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
@@ -3336,23 +3223,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         };
         // Create buttons
         editArt = createButton('Enter Artwork Editor',
-            function () { editArtwork(artwork); },
-            {
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
-            });
+            function () { editArtwork(artwork); });
+        editArt.attr("class", "rightBarOptions");
         leftButton = editArt;
         editArt.attr("id", "artworkEditorButton");
         var deleteArt = createButton('Delete Artwork',
-            function () { deleteArtwork(artwork); },
-            {
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
-            });
+            function () { deleteArtwork(artwork); });
+        deleteArt.attr("class", "rightBarOptions");
         var inputs = {
             artistInput: artistInput,                                      //Artwork artist
             nameInput: titleInput,                                         //Artwork title
@@ -3371,39 +3248,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     titleInput.val("Untitled Artwork");
                 }
                 saveArtwork(artwork, inputs);
-            }, {
-                'margin-right': '3%',
-                'margin-top': '1%',
-                'margin-bottom': '1%',
-                'margin-left': '.5%',
-                'float': 'right'
             });
+        saveButton.attr("class", "saveChangesButton");
         var xmluploaderbtn = createButton('Upload XML',
                         function () {
                             uploadXML(artwork, inputs, settingsContainer);
-                        },
-                        {
-                            'margin-left': '2%',
-                            'margin-top': '1%',
-                            'margin-right': '0%',
-                            'margin-bottom': '3%',
                         });
-
+        xmluploaderbtn.attr("class", "rightBarOptions");
 
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
                 saveThumbnail(artwork, true);
-            }, {
-                'margin-right': '0%',
-                'margin-top': '1%',
-                'margin-bottom': '1%',
-                'margin-left': '2%',
-                'float': 'left'
             });
+        thumbnailButton.attr("class", "rightBarOptions");
         if (artwork.Metadata.Type !== 'VideoArtwork') {
             buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
         } else {
-            var convertBtn = createButton('Convert Video',
+            convertBtn = createButton('Convert Video',
                     function () {
                         var source = artwork.Metadata.Source;
                         var newFileName = source.slice(8, source.length);
@@ -3421,14 +3282,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, "False");
                             convertBtn.hide().data('disabled', true);
                         }
-                    }, {
-                        'margin-right': '0%',
-                        'margin-top': '1%',
-                        'margin-bottom': '3%',
-                        'margin-left': '2%',
-                        'float': 'left'
                     })
-            convertBtn.attr('class', 'button convertVideoBtn');
+            convertBtn.attr('class', 'button convertVideoBtn rightBarOptions');
             convertBtn.attr("disabled", "");
             if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
@@ -4757,6 +4612,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'display': 'inline-block',
             'margin-left': labelLeft,
         });
+
         label.text(text);
 
         if (width) {
@@ -5594,15 +5450,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.css({ visibility: 'hidden' });
         var changeLabel = createLabel('Changes are being saved...');
         changeLabel.attr('id', 'changeLabel');
-        changeLabel.css({
-            'position': 'absolute',
-            'top': '15%',
-            'z-index': '50',
-            'height': 'auto',
-            'width': '33%',
-            'color': 'black',
-            'font-size': '140%'
-        });
         var progressCircCSS = {
             'position': 'absolute',
             'left': '40%',
