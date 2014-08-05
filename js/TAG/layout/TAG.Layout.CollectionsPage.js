@@ -165,6 +165,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 doSearch();
             }
         });
+        
+        searchInput.css({
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size' : '25px 25px',
+            'background-repeat': 'no-repeat',
+            'background-position':'5px center'
+        });
+
+        searchInput.on('focus', function () { searchInput.css({ 'background-image': 'none' }); });
+        searchInput.on('focusout', function () { 
+            if (!searchInput.val()) {
+                searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            } 
+        });
 
         // initSplitscreen();
 
@@ -483,6 +497,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 // Clear search box
                 searchTxt.text("");
+
+                //re-display the magnifying glass icon
+                searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
 
                 // Clear catalog div (with info and artwork tiles)
                 catalogDiv.empty();
