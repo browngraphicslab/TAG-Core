@@ -636,21 +636,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.append(infoDiv);
             timelineArea.empty();
 
-            //TO-DO: add in check here for a collection with all incompatible dates and automatically switch to timelineShown = false? 
-            //^^^would have to add extra check for assoc media view because 'collection' refers to collection of artworks
-            TAG.Worktop.Database.getArtworksIn(collection.Identifier, logyear,null,logyear);
-            function logyear(collection){
-                console.log(sortByYear(collection,true).min().yearKey);
-                if (onAssocMediaView){
-                    console.log(sortByYear(collection.collectionMedia,true).min().yearKey);
-                }
-            }
-
             if (collection.Metadata.Timeline === "true"|| collection.Metadata.Timeline === "false"){
-                collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
+                    collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
+            } 
+
+            //If on associated media view and there are no associated media with valid dates, hide the timeline
+            if (onAssocMediaView && collection.collectionMediaMinYear===Infinity){
+                timelineShown = false;
+                styleBottomContainer();
             }
-            
-            console.log("timelineshown" + timelineShown)
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
                 toggleRow.css('display','block');
@@ -712,6 +706,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     //When all of the collections have been looped through (neccessary to deal with async)
                     if (counter === collectionLength){
                         collection.collectionMedia = collectionMedia;
+                        if (sortByYear(collectionMedia,true).min()){
+                            collection.collectionMediaMinYear =  sortByYear(collectionMedia,true).min().yearKey;
+                        }
                     }
                 }  
             }
@@ -883,14 +880,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileDiv.css({'margin-left':'0%'});
             }
             catalogDiv.append(tileDiv);
-            clearTimeline();
+            clearTimeline(artworks);
         }
+    }
 
-        /**
+    /**
          * helper function to reset and clear timeline
          * @method drawHelper
          */
-        function clearTimeline(){
+        function clearTimeline(artworks){
             timelineEventCircles = [];
             timelineTicks = [];
             scaleTicks = [];
@@ -904,17 +902,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 currTimelineCircleArea.stop(true,true);
             }
             if (timelineShown){   
-                    initTimeline(artworks);
+                artworks && initTimeline(artworks);
+            }
+            styleBottomContainer();
+        }
+
+        /* Helper method to style bottom container based on if timeline is shown
+         * @method styleBottomContainer
+         */
+        function styleBottomContainer(){
+            if (timelineShown){   
                     bottomContainer.css({
                         'height' : '69%',
                         'top' : '25%'
-                    })
+                    });
             } else {
-                bottomContainer.css('height', '85%');
+                bottomContainer.css({
+                    'height':'85%',
+                    'top':'15%'
+                });
             }
         }
-
-    }
 
     /**
      * Creates an artwork tile in a collection's catalog
@@ -1103,8 +1111,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         avlTree = sortByYear(artworks, true);
         maxNode = avlTree.max();
 
-        //TO-DO: what if assoc media timeline is this situation (no compatible dates) but its collection had a timeline...should we change layout to mimic no timeline mode
+        //Hide timeline if there are no compatible dates
         if (avlTree.min().yearKey === Number.POSITIVE_INFINITY){
+            timelineShown = false;
+            clearTimeline();
             return;
         }
         
