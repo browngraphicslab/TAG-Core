@@ -50,7 +50,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadingArea              = root.find('#loadingArea'),
         infoButton               = root.find('#infoButton'),
         linkButton               = root.find('#linkButton'),
-        splitscreenIcon          = root.find('#splitscreenIcon'),
+        // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay                  = root.find('#overlay'),
 
         // input options
@@ -165,7 +165,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 doSearch();
             }
         });
-
+        
         searchInput.css({
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size' : '25px 25px',
@@ -180,7 +180,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } 
         });
 
-        initSplitscreen();
+        // initSplitscreen();
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
             .addClass('bottomButton')
@@ -206,6 +206,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 createInfoPopUp();
             });
         }
+
+        if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
+            console.log("HERE WE GO")
+        }
+
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
     }
@@ -646,20 +651,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.append(infoDiv);
             timelineArea.empty();
 
-            //TO-DO: add in check here for a collection with all incompatible dates and automatically switch to timelineShown = false? 
-            //^^^would have to add extra check for assoc media view because 'collection' refers to collection of artworks
             if (collection.Metadata.Timeline === "true"|| collection.Metadata.Timeline === "false"){
-                collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
-            }
-            
+                    collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
+            } 
 
+            //If on associated media view and there are no associated media with valid dates, hide the timeline
+            if (onAssocMediaView && collection.collectionMediaMinYear===Infinity){
+                timelineShown = false;
+            }
+
+            styleBottomContainer();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
                 toggleRow.css('display','block');
                 artworksButton.off()
-                              //.css({
-                                //'display' : 'block',
-                                //})
                               .on('click', function(){
                                     artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
                                     assocMediaButton.css('color', dimmedColor);
@@ -670,9 +675,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                });
 
                 assocMediaButton.off()
-                                //.css({
-                                    //'display' : 'block',
-                                //})
                                 .on('click', function(){
                                     artworksButton.css('color', dimmedColor);
                                     assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  
@@ -691,6 +693,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             scrollPos = sPos || 0;
             if (!onAssocMediaView || !currCollection.collectionMedia){
+                console.log("here");
                 getCollectionContents(currCollection);
             } else {
                 createArtTiles(currCollection.collectionMedia);
@@ -720,6 +723,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     //When all of the collections have been looped through (neccessary to deal with async)
                     if (counter === collectionLength){
                         collection.collectionMedia = collectionMedia;
+                        if (sortByYear(collectionMedia,true).min()){
+                            collection.collectionMediaMinYear =  sortByYear(collectionMedia,true).min().yearKey;
+                        }
                     }
                 }  
             }
@@ -772,17 +778,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         searchInput[0].value = "";
         infoSource = [];
 
-        for (i = 0; i < contents.length; i++) {
-            cts = contents[i];
+        $.each(contents, function (i, cts) {
             if (!cts) {
-                continue;
+                return false;
             }
-            info = cts.Name + " " + cts.Metadata.Artist + " " + cts.Metadata.Year + " " + cts.Metadata.Type;
+            info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
+            if (cts.Metadata.InfoFields) {
+                $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+                    info += " " + field;
+                    info += " " + fieldText;
+                });
+            }
             infoSource.push({
                 "id": i,
                 "keys": info.toLowerCase()
             });
-        }
+        });
     }
 
     /**
@@ -891,14 +902,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileDiv.css({'margin-left':'0%'});
             }
             catalogDiv.append(tileDiv);
-            clearTimeline();
+            clearTimeline(artworks);
         }
+    }
 
-        /**
+    /**
          * helper function to reset and clear timeline
          * @method drawHelper
          */
-        function clearTimeline(){
+        function clearTimeline(artworks){
             timelineEventCircles = [];
             timelineTicks = [];
             scaleTicks = [];
@@ -912,17 +924,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 currTimelineCircleArea.stop(true,true);
             }
             if (timelineShown){   
-                    initTimeline(artworks);
+                artworks && initTimeline(artworks);
+            }
+            styleBottomContainer();
+        }
+
+        /* Helper method to style bottom container based on if timeline is shown
+         * @method styleBottomContainer
+         */
+        function styleBottomContainer(){
+            if (timelineShown){   
                     bottomContainer.css({
                         'height' : '69%',
                         'top' : '25%'
-                    })
+                    });
             } else {
-                bottomContainer.css('height', '85%');
+                bottomContainer.css({
+                    'height':'85%',
+                    'top':'15%'
+                });
             }
         }
-
-    }
 
     /**
      * Creates an artwork tile in a collection's catalog
@@ -1111,8 +1133,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         avlTree = sortByYear(artworks, true);
         maxNode = avlTree.max();
 
-        //TO-DO: what if assoc media timeline is this situation (no compatible dates) but its collection had a timeline...should we change layout to mimic no timeline mode
+        //Hide timeline if there are no compatible dates
         if (avlTree.min().yearKey === Number.POSITIVE_INFINITY){
+            timelineShown = false;
+            clearTimeline();
             return;
         }
         
@@ -2104,44 +2128,45 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
     }
 
-        /**
-     * Initializes splitscreen functionality
-     * @method initSplitscreen
-     */
-    function initSplitscreen() {
-        splitscreenIcon.attr({
-                src: tagPath+'images/SplitWhite_dotted.svg'
-            })
-            .addClass('bottomButton')
-        if (TAG.Util.Splitscreen.isOn()) {
-            splitscreenIcon.css('display', 'none');
-        }
-        splitscreenIcon.on('click', function () {
-            var collectionsPage,
-                collectionsPageRoot,
-                newCollectionsPage,
-                newCollectionsPageRoot;
+    //UNCOMMENT IF WE EVER WANT SPLITSCREEN ACCESS FROM CATALOG
+    //     /**
+    //  * Initializes splitscreen functionality
+    //  * @method initSplitscreen
+    //  */
+    // function initSplitscreen() {
+    //     splitscreenIcon.attr({
+    //             src: tagPath+'images/SplitWhite_dotted.svg'
+    //         })
+    //         .addClass('bottomButton')
+    //     if (TAG.Util.Splitscreen.isOn()) {
+    //         splitscreenIcon.css('display', 'none');
+    //     }
+    //     splitscreenIcon.on('click', function () {
+    //         var collectionsPage,
+    //             collectionsPageRoot,
+    //             newCollectionsPage,
+    //             newCollectionsPageRoot;
 
-            if (!TAG.Util.Splitscreen.isOn()) {
-                TAG.Util.Splitscreen.setOn(true);
-                collectionsPage = TAG.Layout.CollectionsPage();
-                collectionsPageRoot = collectionsPage.getRoot();
-                collectionsPageRoot.data('split', 'R');
+    //         if (!TAG.Util.Splitscreen.isOn()) {
+    //             TAG.Util.Splitscreen.setOn(true);
+    //             collectionsPage = TAG.Layout.CollectionsPage();
+    //             collectionsPageRoot = collectionsPage.getRoot();
+    //             collectionsPageRoot.data('split', 'R');
 
-                newCollectionsPage = TAG.Layout.CollectionsPage();
-                newCollectionsPageRoot = newCollectionsPage.getRoot();
-                newCollectionsPageRoot.data('split', 'L');
-                setTimeout(function(){
-                    root.detach();
-                    root = newCollectionsPageRoot;
-                    newCollectionsPage.loadCollection(currCollection, scrollPos, currentArtwork)
-                    infoButton.css("float", "left");
-                    linkButton.css("float", "left");
-                }, 1000);
-                TAG.Util.Splitscreen.init(newCollectionsPageRoot, collectionsPageRoot);
-            }
-        });
-    }
+    //             newCollectionsPage = TAG.Layout.CollectionsPage();
+    //             newCollectionsPageRoot = newCollectionsPage.getRoot();
+    //             newCollectionsPageRoot.data('split', 'L');
+    //             setTimeout(function(){
+    //                 root.detach();
+    //                 root = newCollectionsPageRoot;
+    //                 newCollectionsPage.loadCollection(currCollection, scrollPos, currentArtwork)
+    //                 infoButton.css("float", "left");
+    //                 linkButton.css("float", "left");
+    //             }, 1000);
+    //             TAG.Util.Splitscreen.init(newCollectionsPageRoot, collectionsPageRoot);
+    //         }
+    //     });
+    // }
 
     /**
      * Gets the current state of the collections page
