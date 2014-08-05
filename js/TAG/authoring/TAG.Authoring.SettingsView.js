@@ -2478,7 +2478,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         onChangeUpdateText(titleInput, null, 40);
-        onChangeUpdateText(descInput, null, 40);
+        onChangeUpdateText(descInput, null, 5000);
 
         var title = createSetting('Title', titleInput);
         var desc = createSetting('Description', descInput);
