@@ -1269,7 +1269,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
 
             drawerContents.slideToggle();
-            drawerContents.css({'display':'inline-block'});
+            drawerContents.css({
+                'display':'inline-block',
+                'overflow-y': 'scroll'
+            });
         });
         
         drawer.contents = drawerContents;
