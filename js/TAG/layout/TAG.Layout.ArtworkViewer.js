@@ -41,6 +41,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevCollection = options.prevCollection,   // collection we came from, if any
         prevTag        = options.prevTag,          // sort tag of collection we came from, if any
         prevMult       = options.prevMult,      
+        previewing 	   = options.previewing, 	   // if we are previewing in authoring (for styling)
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -60,6 +61,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         manipulate;                                 // Manipulation method
                                   
     // get things rolling if doq is defined (it better be)
+    console.log("doq" + doq);
     doq && init();
 
     return {
@@ -203,7 +205,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'left': '0%'
             });
         }
-        container.css('min-width', 0.19 * screenWidth);
+        if (!previewing){
+        	container.css('min-width', 0.19 * screenWidth);
+        }
 
         slideButton.on('click', function () {
             count = 1 - count;
@@ -517,8 +521,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         } else {
             togglerImage.css('left', '0%');
         }
-        sideBar.css('min-width', 0.22 * screenWidth);
-        
+        if (!previewing){
+        	sideBar.css('min-width', 0.22 * screenWidth);
+        }
 
         // toggler to hide/show sidebar
         toggler.on('click', function () {
