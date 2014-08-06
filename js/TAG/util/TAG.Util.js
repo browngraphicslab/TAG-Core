@@ -325,6 +325,9 @@ TAG.Util = (function () {
             clear: function () {
                 clearTimeout(this._timer);
                 this._queue = [];
+            },
+            isEmpty: function () {
+                return (this._queue.length === 0);
             }
         };
     }
