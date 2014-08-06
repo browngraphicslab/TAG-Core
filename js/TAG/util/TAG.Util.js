@@ -2566,7 +2566,7 @@ TAG.Util.UI = (function () {
             'height': '50%',
             'left': '10%',
             'top': '12.5%',
-            'font-size': '1.25em',
+            'font-size': '1em',
             'overflow': 'hidden',
             'position': 'relative',
             'text-align': 'center',
