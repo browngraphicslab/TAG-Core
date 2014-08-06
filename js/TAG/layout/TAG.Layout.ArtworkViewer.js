@@ -24,6 +24,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         linkButtonContainer = root.find('#linkContainer'),
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
         info                = root.find('#info'),
+        loadingArea          = root.find('#loadingArea'),
         locHistoryToggle    = root.find('#locationHistoryToggle'),
         locHistory          = root.find('#locationHistory'),
         locHistoryContainer = root.find('#locationHistoryContainer'),
@@ -82,6 +83,27 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             idleTimer.start();
         }
 
+        var progressCircCSS = {
+            'position': 'absolute',
+            'z-index': '50',
+            'height': 'auto',
+            'width': '5%',
+            'left': '47.5%',
+            'top': '42.5%'
+        };
+        
+        TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
+        var loadingLabel = $(document.createElement('label'));
+        loadingLabel.css({
+            'position': 'absolute',
+            'left': '40%',
+            'top': '55%',
+            'font-size': '200%',
+            'color': 'white',
+        });
+        loadingLabel.text('Loading Viewer');
+        loadingArea.append(loadingLabel);
+
         // add script for displaying bing maps
         head = document.getElementsByTagName('head').item(0);
         script = document.createElement("script");
@@ -115,6 +137,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 initSplitscreen();
                 makeSidebar();
                 createSeadragonControls();
+                loadingArea.hide();
             },
             noMedia: false
         });

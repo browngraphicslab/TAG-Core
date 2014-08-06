@@ -1008,8 +1008,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             outerContainerPivot = {
                 x: w / 2 - (outerContainer.offset().left - root.offset().left),
                 y: h / 2 - (outerContainer.offset().top - root.offset().top)
-                //x: -outerContainer.offset().left + w, //+ root.offset().left,
-                //y: -outerContainer.offset().top + h
             };
             toManip = mediaManip;
             $('.mediaOuterContainer').css('z-index', 1000);
