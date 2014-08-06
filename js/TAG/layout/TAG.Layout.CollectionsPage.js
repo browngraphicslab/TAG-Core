@@ -678,7 +678,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 assocMediaButton.off()
                                 .on('click', function(){
-                                    console.log("assocmediabutton");
                                     artworksButton.css('color', dimmedColor);
                                     assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView){

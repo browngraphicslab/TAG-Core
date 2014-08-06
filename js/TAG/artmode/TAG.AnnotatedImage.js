@@ -116,7 +116,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function openArtwork(doq) {
         if(!viewer || !doq || !doq.Metadata || !doq.Metadata.DeepZoom) {
-            debugger;
+            //debugger;
             console.log("ERROR IN openDZI");
             return false;
         }

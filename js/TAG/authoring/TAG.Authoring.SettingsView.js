@@ -1029,9 +1029,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method previewCollectionsPage
      */
     function previewCollectionsPage(primaryFontInput, secondaryFontInput) {
-        // Load the collections page, the callback adds it to the viewer when it's done loading
-        var collectionsPage = TAG.Layout.CollectionsPage({primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val()}, null, viewer);
-        var croot = collectionsPage.getRoot();
+    	var collectionsPage,
+    		options,
+    		croot;
+    	options = {
+    		primaryFontColor: primaryFontInput.val(), 
+    		secondaryFontColor: secondaryFontInput.val(), 
+    		previewing:true
+    	}
+        collectionsPage = TAG.Layout.CollectionsPage(options);
+        croot = collectionsPage.getRoot();
         $(croot).css({ 'z-index': '1' });
 
         if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
@@ -1046,17 +1053,40 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method previewArtworkViewer
      */
     function previewArtworkViewer(primaryFontInput, secondaryFontInput) {
-        // Load the artwork viewer, the callback adds it to the viewer when it's done loading
-        var artworkViewer = TAG.Layout.ArtworkViewer({ catalogState: {}, doq: artworkList[0] || null, split: 'L', primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val() }, viewer);
-        var aroot = artworkViewer.getRoot();
-        $(aroot).css('z-index', '-1');
-        if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
-            return;
-        }
-        viewer.empty();
-        viewer.append(aroot);
-        // Don't allow the viewer to be clicked
-        preventClickthrough(viewer);
+        var doq,
+        	options,
+        	artworkViewer,
+        	aroot;
+
+        TAG.Worktop.Database.getArtworks(function(result){
+        	doq=result[0];
+        	var i;
+     		for (i=0;i<result.length;i++){
+     			//set the preview doq to the first artwork (not video or tour)
+     			if (!(result[i].Metadata.Medium === "Video")&& !(result[i].Type === "Empty")){
+     				doq = result[i];
+     				break;
+     			}
+     		}
+        	options = { 
+        		catalogState: {}, 
+        		doq: doq, 
+        		split: 'L', 
+        		primaryFontColor: primaryFontInput.val(), 
+        		secondaryFontColor: secondaryFontInput.val(),
+        		previewing: true,
+        	}
+        	artworkViewer = TAG.Layout.ArtworkViewer(options, viewer);
+        	aroot = artworkViewer.getRoot();
+        	$(aroot).css('z-index', '-1');
+        	if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
+            	return;
+        	}
+        	viewer.empty();
+        	viewer.append(aroot);
+        	// Don't allow the viewer to be clicked
+        	preventClickthrough(viewer);
+        });      
     }
 
     // Collection Functions:
