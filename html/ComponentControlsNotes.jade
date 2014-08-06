@@ -1,0 +1,131 @@
+#componentControlsRoot.rootPage
+	#component-controls          (this is the functionsPanel ID)
+	.catalogPicker
+	.associatedMediaPicker
+	#dropMain
+	#dropFile
+	#dropInk
+	#cancelTextButton				
+	#saveTextButton
+	#cancelDrawButton				
+	#saveDrawButton
+	#cancelTransButton				
+	#saveTransButton
+
+function createFunctionsPanel
+	label#addComponentLabel
+		img#addDropDownIconComponent
+	#fade.fade
+
+function _createAddComponentButton
+	label 			// add the class and stuff in the function itself.
+
+
+function createCatalogMediaPicker
+	.asscoiatedMediaPickerMedia
+		.associatedMediaPickerInfo
+			.associatedsearchbar
+		.associatedMediaPickerArtwork
+	
+
+function _associatedMediaPick
+	#associatedLoadingLabel				// appended to .associatedMediaPicker
+		img#circle
+	#allAssociatedMediaHolder			// appended to .associatedMediaPickerArtwork
+	button#associatedMediaPickerImport  // appended to .associatedMediaPicker
+	button#associatedMediaPickerCancel  // appended to .associatedMediaPicker
+
+function createMediaHolder
+	.mediaHolder 						// appended to .associatedMediaPickerMedia
+		.mediaHolderImageHolder
+			img.mediaHolderImage
+		.mediaHolderText
+
+function createCatalogPicker
+	.catalogPickerInfo					// appended to .catalogPicker - all 4 of these
+	input#searchbar						
+	.catalogPickerExhibitions
+	.catalogPickerArtworks
+
+function _catalogPick
+	.allArtworksHolder					// to .catalogPickerExhibitions
+	#loadingLabel 						// to .catalogPicker
+		img#progressCircle
+
+	TAG.Worktop.Database.getExhibitions(function (exhibitions)
+		.exhibHolder
+
+
+function createInitialInkControls
+	#inkTextControls
+
+function createColorInput
+	.thicknessLabel						// to #inkTextControls
+		.changeColor
+	#colorTextDiv						// to #inkTextControls
+		input#textColorToggle
+
+function createFontInput
+	.thicknessLabel
+		#fontLabel1
+	#fontSelector
+
+function createTextSizeInput
+	.thicknessLabel
+		#textSizeLabel1
+	#textSizeSlider
+		#textSliderPoint
+
+function createInkTextInput
+	.thicknessLabel
+		#textBodyLabel1
+	textarea#textArea
+
+function createDrawModeInput
+	.thicknessLabel
+		#drawModeLabel1
+	#drawModeDiv
+		label#drawLabel
+		label#eraseLabel
+
+function createBrushInput
+	.thicknessLabel
+		#brushLabel1
+	#brushSlider
+		#brushSliderPoint	
+
+function createDrawColorInput
+	.thicknessLabel
+		.changeColor1
+	#colorDiv
+		input#brushColorToggle
+
+function createDrawOpacityInput
+	.thicknessLabel
+		#opacityLabel1
+	#opacitySlider
+		#opacitySliderPoint
+
+function createInitialTransparencyControls
+	#inkTransControls
+
+function createTransparencyBlocks
+	button#elipseButton
+	button#rectangleButton
+	.thicknessLabel
+		#transModeLabel1
+	#transModeDiv
+		label#isolateLabel
+		label#blockLabel
+
+function createTransparencyOpacityInput
+	.thicknessLabel
+		#opacityTransparencyLabel1
+	#opacityTransparencySlider
+		#opacityTransparencySliderPoint
+
+
+function getAttachDiv
+	#newDiv
+		button#linkButton
+		button#freeInkButton
