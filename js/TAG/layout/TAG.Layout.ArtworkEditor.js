@@ -49,7 +49,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
    
     LADS.Util.UI.getStack()[0] = null;
         
-
+    root.attr("class", "rootPage");
     // get things rolling
     init();
 

@@ -7,6 +7,10 @@
 		#collectionArea
 			#backArrowArea
 				img#backArrow
+			#prevCollection
+			#mainCollection
+				.collection-title
+			#nextCollection
 			#nextArrowArea
 				img#nextArrow
 		#timelineArea
@@ -16,7 +20,7 @@
 		#catalogDivContainer
 			#sortRow.background
 				#searchFilter
-					input#searchInput(placeholder="Enter Keyword")
+					input#searchInput
 					#searchTxt
 				#yearButton.rowButton(tagName="Year")
 					|Year
@@ -26,11 +30,11 @@
 					|Artist
 				#typeButton.rowButton(tagName="Type")
 					|Type
-			#toggleRow.background
-				#artworksButton.toggleButton(tagName="Artworks")
-					|Artworks
-				#assetsButton.toggleButton(tagName="Assets")
-					|Assets	
+				#toggleRow.background
+					#artworksButton.toggleButton(tagName="Artworks")
+						|Artworks
+					#assocMediaButton.toggleButton(tagName="Associated Media")
+						|Associated Media	
 			#catalogDiv.background
 		#displayarea
 
@@ -54,7 +58,6 @@
 	#bottomButtonsContainer
 		img#infoButton
 		img#linkButton
-		img#splitscreenIcon
 
 	#loadingArea			
 	//- #feedbackContainer

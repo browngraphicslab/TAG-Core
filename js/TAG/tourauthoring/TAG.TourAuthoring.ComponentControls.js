@@ -87,7 +87,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     var saveDrawButton = createSaveButton();
     var cancelDrawButton = createCancelDrawButton();
 
-    var prevSelected = [];             
+    var prevSelected = [];
     var allowInk = false;
     var componentDropDown = false;
 
@@ -120,7 +120,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     var onCtrlZCalled = false;
     root.on('keydown', ctrlZHandler);
 
-   
+
 
 
 
@@ -405,7 +405,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         editInks(track, datastr);
         inkDrawControls.hide();
     }
-    
+
     /**Reset click and save handlers to deal with current datastring
      * @method resetDrawHandlers
      * @param {Boolean} linked
@@ -557,14 +557,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             currentInkController.drawBezierPath();
         }
 
-        
+
 
         // call onUpdate to remove the existing ink before reloading it in edit mode
         timeline.onUpdate(true);
         timeline.showEditorOverlay();
         timeline.setEditInkOn(true);
     }
-    
+
     /**Method called when "Edit Ink" is clicked on a block/isolate-type ink track.
      * See comments for showEditDraw.
      * @method getUndoManager
@@ -574,7 +574,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         if (inkAuthoring)
             return inkAuthoring.getInkUndoManager();
     }
-    
+
     /**Resets handlers for 'Highlighting' ink annotations to reflect current data
      * @method resetTransHandlers
      * @param {Boolean} linked
@@ -655,7 +655,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         editInks(track, datastr);
         inkTransparencyControls.hide();
     }
-    
+
     /**Method called when "Edit Ink" is clicked on a highlight-type ink track.
     * Creates a new InkController and loads in the datastring of the track.
     * Shows the edit highlighting controls.
@@ -796,7 +796,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         timeline.onUpdate(true);
         timeline.showEditorOverlay();
     }
-    
+
     /**Resets handlers for text-type ink annotations to reflect current data
      * @method resetTextHandlers
      * @param {Boolean} linked
@@ -891,7 +891,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         }
         timeline.onUpdate();
     }
-    
+
     /**Method called when "Edit Ink" is clicked on a text-type ink track.
      * See comments for showEditDraw.
      * @method showEditText
@@ -972,7 +972,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         //     fontsize = p1.getAttr(datastring, "fontsize", 'f') * ch;
         //     p1.setFontSize(fontsize);
-       // maxFontSize = Math.max(48, fontsize);
+        // maxFontSize = Math.max(48, fontsize);
 
         //    textEditArea.val(str);
         //    textEditBodyLabel1.text(str);
@@ -1040,7 +1040,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         timeline.onUpdate(true);
         timeline.showEditorOverlay();
     }
-   
+
     /***********************************************************************************************************************************************************************************/
     /***********************************************************************************************************************************************************************************/
 
@@ -1896,7 +1896,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         //if ink is currently being edited but is unattached, remove it if there are no artworks left
         removeInkCanv();
     }
-    
+
     /**Set componentDropDown state to true to force close
      * @method closeComponentMenu
      */
@@ -4154,7 +4154,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
         }
 
-        
+
         return {
             updateFont: updateFont,
         };
@@ -4349,7 +4349,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          */
         function updateAreaText(txt) {
             var textA = currentInkController.getSVGText() || 'Your Text Here';
-            if (txt || txt==='') {
+            if (txt || txt === '') {
                 textBodyLabel1.text(txt); // or .text()
                 $(textA).attr('text', txt);
                 $(textA).data('str', txt);
@@ -6143,10 +6143,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     opacityTransparencyLabel1.text("0%");
                 }
                 currentInkController.setMarqueeFillOpacity(opacityTransparencySliderPoint.attr('value'));
-               // var currOpacity = currentInkController.getMarqueeFillOpacity();
-               //opacityTransparencySliderPoint.attr('value', opacity);
+                // var currOpacity = currentInkController.getMarqueeFillOpacity();
+                //opacityTransparencySliderPoint.attr('value', opacity);
                 opacityTransparencyLabel1.text(Math.round(100 * currOpacity) + "%");
-                opacityTransparencySliderPoint.css("left", (currOpacity * opacityTransparencySlider.width()/ 1.28) + 'px');
+                opacityTransparencySliderPoint.css("left", (currOpacity * opacityTransparencySlider.width() / 1.28) + 'px');
             } else {
                 opacityTransparencySliderPoint.attr('value', 0.8);
                 currentInkController.setMarqueeFillOpacity(parseFloat(0.8));
@@ -6362,7 +6362,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 check = currentInkController.linkText();
             } else if (trans_mode) {
                 check = currentInkController.linkTrans();
-             } else {// draw
+            } else {// draw
                 check = currentInkController.link();
             }
 
@@ -6400,7 +6400,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             // brushSliderPoint.attr('value', 7.0);
             //  currentInkController.updatePenWidth("brushSlider");
             var check = true;
-            if (text_mode)  {
+            if (text_mode) {
                 check = currentInkController.linkTextUnattached();
             } else if (trans_mode) {
                 check = currentInkController.linkTransUnattached();
@@ -6441,7 +6441,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkTextControls.css({ 'display': 'none' });
         inkDrawControls.css({ 'display': 'none' });
     }
-    
+
     /**Removes the current ink canvas if there is one\
      * @method removeInkCanv
      */
@@ -6451,7 +6451,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         }
         $("#rinplayer").css({});
     }
-    
+
     /**Creates an ink canvas
      * @method createInkCanv
      * @return {HTML Element} inkdiv   a div on which we'll create a Raphael paper
@@ -6485,7 +6485,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     function addToDOM(container) {
         container.append(functionsPanelDocfrag);
     }
-    
+
     /**Adds the catalog overlays (for artwork and associated media import) to the inputted container element
      * Used in TourAuthoringNew
      * @method addCatalogToDOM
@@ -6495,7 +6495,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         container.appendChild(catalogPickerOverlay);
         container.appendChild(associatedMediaPickerOverlay);
     }
-    
+
     /**Returns the boolean specifying the state of uploading ink tracks
      * @method getIsUploading
      * @return {Booolean} isUploading
@@ -6503,6 +6503,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     function getIsUploading() {
         return isUploading;
     }
-    
+
     return that;
 };

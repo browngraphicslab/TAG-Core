@@ -3420,7 +3420,7 @@ TAG.Util.UI = (function () {
             event.stopPropagation();
         });
         // TAG.Util.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
-        pickerSearchBar.attr("placeholder", "Search");
+        //pickerSearchBar.attr("placeholder", "Search");
         pickerSearchBar.keyup(function () {
             TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
         });
@@ -3429,6 +3429,23 @@ TAG.Util.UI = (function () {
                 TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
             }
         });
+
+
+        pickerSearchBar.css({
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+
+        pickerSearchBar.on('focus', function () { pickerSearchBar.css({ 'background-image': 'none' }); });
+        pickerSearchBar.on('focusout', function () {
+            if (!pickerSearchBar.val()) {
+                pickerSearchBar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            }
+        });
+
+
         searchTab.append(pickerSearchBar);
 
         // select all label
@@ -3586,6 +3603,7 @@ TAG.Util.UI = (function () {
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
                 pickerSearchBar.attr("value", "");
+                pickerSearchBar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
                 mainContainer.empty();
                 $(".tab").css({
                     'border-top': '1px solid black',
@@ -4397,7 +4415,9 @@ TAG.Util.RLH = function (input) {
                         position: 'absolute',
                         width: '80%',
                         height: '100%',
-                        left: '10%'
+                        left: '10%',
+                        'border': '1px solid white',
+                        'background-color': 'rgba(0,0,0,0.8)'
                     })
                     .appendTo(mapRegion);
 
@@ -4463,7 +4483,7 @@ TAG.Util.RLH = function (input) {
                         .text('Add Location');
             sortLocationsByTitleButton = $(document.createElement('button'))
                         .attr({
-                            'id': 'locationHistorySortLocationsButton',
+                            'id': 'locationHistorySortLocationsByTitleButton',
                             'type': 'button'
                         })
                         .css({
@@ -4475,7 +4495,7 @@ TAG.Util.RLH = function (input) {
                         .text('Sort By Title');
             sortLocationsByDateButton = $(document.createElement('button'))
                         .attr({
-                            'id': 'locationHistorySortLocationsButton',
+                            'id': 'locationHistorySortLocationsByDateButton',
                             'type': 'button'
                         })
                         .css({
@@ -4710,8 +4730,8 @@ TAG.Util.RLH = function (input) {
             holder = $(document.createElement('div'))
                         .addClass('locationHistoryMapHolder')
                         .css({
-                            'background-color': 'rgba(0,0,0,0.8)',
-                            'border': '1px solid white',
+                            //'background-color': 'rgba(0,0,0,0.8)',
+                            //'border': '1px solid white',
                             position: 'absolute',
                             width: '100%',
                             height: '100%',
@@ -6057,6 +6077,9 @@ TAG.Util.RLH = function (input) {
      *              callback       a callback function to be called after saving and reloading artwork is done
      */
     function saveRichLocationHistory(input) {
+
+        disableButtons();
+
         var options = {
             RichLocationHistory: generateRichLocationData()
         };
@@ -6073,20 +6096,22 @@ TAG.Util.RLH = function (input) {
         }
 
         !input.noReload && showLoadingMessage();
-        LADS.Worktop.Database.changeArtwork(artwork.Identifier, options, success, error, error, error);
+        TAG.Worktop.Database.changeArtwork(artwork.Identifier, options, success, error, error, error);
 
         function success() {
-            LADS.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
+            TAG.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
                 artwork = newArtwork;
                 richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(artwork.Metadata.RichLocationHistory) : locationToRichLocation(artwork.Metadata.Location);
                 locations = richLocationData.locations || [];
                 !input.noReload && getMaps(input.callback);
+                enableButtons();
             }, error, error);
             //input.sort && input.callback();
         }
 
         function error() {
             console.log('An error occured while saving.');
+            enableButtons();
         }
     }
 
@@ -6166,9 +6191,9 @@ TAG.Util.RLH = function (input) {
         var fileArray,
             i;
 
-        LADS.Authoring.FileUploader(
+        TAG.Authoring.FileUploader(
             root,
-            LADS.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to LADS.Authoring.FileUploadTypes.Map to test map uploading
+            TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to LADS.Authoring.FileUploadTypes.Map to test map uploading
             function (files) {
                 fileArray = files;
             },
@@ -6204,7 +6229,7 @@ TAG.Util.RLH = function (input) {
             ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
             false,
             function () {
-                root.append(LADS.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
             false // batch upload disabled for now
         );
@@ -6255,6 +6280,33 @@ TAG.Util.RLH = function (input) {
             pushpin && pushpin.attr('src', tagPath+'images/icons/locationPin2.svg');
         }
     };
+
+    /**
+    * Disables the buttons below the map.  Used when saving is in progress.
+    * @method disableButtons()
+    */
+
+    function disableButtons() {
+        document.getElementById('locationHistoryAddLocationButton').disabled = true;
+        document.getElementById('locationHistorySortLocationsByTitleButton').disabled = true;
+        document.getElementById('locationHistorySortLocationsByDateButton').disabled = true;
+        document.getElementById('locationHistoryDeleteButton').disabled = true;
+        document.getElementById('locationHistoryImportMapButton').disabled = true;
+    }
+
+    /**
+    * Re-enables the buttons below the map.  Called when saving is complete.
+    * @method enableButtons()
+    */
+
+    function enableButtons() {
+        document.getElementById('locationHistoryAddLocationButton').disabled = false;
+        document.getElementById('locationHistorySortLocationsByTitleButton').disabled = false;
+        document.getElementById('locationHistorySortLocationsByDateButton').disabled = false;
+        document.getElementById('locationHistoryDeleteButton').disabled = false;
+        document.getElementById('locationHistoryImportMapButton').disabled = false;
+    }
+
 
     /**
      * Built-in object extensions
@@ -6341,7 +6393,8 @@ TAG.Util.Artwork = (function () {
      * Creates a thumbnail button to be used in a side bar list
      * @method createThumbnailButton
      * @param {Object} options      options for creating the thumbnail button:
-     *            title         title of the button, shown under the thumbnail
+     *            title         title of the button, shown above the thumbnail
+     *            year          year of the media, shown below the thumbnail
      *            handler       a click handler for the button
      *            buttonClass   an extra class to add to the button
      *            buttonID      an id to give to the button
@@ -6354,23 +6407,30 @@ TAG.Util.Artwork = (function () {
         options = options || {};
 
         var title       = options.title,
+            year        = options.year,
             handler     = options.handler,
             buttonClass = options.buttonClass,
             buttonID    = options.buttonID,
             src         = options.src,
             width       = options.width,
-            height      = options.height || 0.15 * $('#tagRoot').height() + 'px',
+            height      = options.height || 0.18 * $('#tagRoot').height() + 'px',
             holder               = $(document.createElement('div')).addClass('thumbnailButton'),
             thumbHolderDiv       = $(document.createElement('div')).addClass('thumbnailHolderDiv'),
             holderContainer      = $(document.createElement('div')).addClass('thumbnailButtonContainer'),
             holderInnerContainer = $(document.createElement('div')).addClass('thumbnailButtonInnerContainer'),
             thumbnailImage       = $(document.createElement('img')).addClass('thumbnailButtonImage'),
-            titleDiv             = $(document.createElement('div')).addClass('thumbnailButtonTitle');
+            titleDiv = $(document.createElement('div')).addClass('thumbnailButtonTitle'),
+            yearDiv = $(document.createElement('div')).addClass('thumbnailButtonYear');
+
+
 
         /********************************************\
 
-        ----------------------------------------------
-        |                                            |  <--- holder
+        ----------------------------------------------      <--- holder
+        | ------------------------------------------ |     
+        | |              NAME OF DOQ               | <--- titleDiv
+        | |                                        | |
+        | ------------------------------------------ |
         | ------------------------------------------ |
         | |                                        | |
         | |                                        | |
@@ -6388,13 +6448,12 @@ TAG.Util.Artwork = (function () {
         | |                                        | |
         | ------------------------------------------ |
         | ------------------------------------------ |
-        | |             NAME OF DOQ                | <--- titleDiv
+        | |                 YEAR                   | <--- yearDiv
         | |                                        | |
         | ------------------------------------------ |
         ----------------------------------------------
 
         \********************************************/
-
         
         buttonClass && holder.addClass(buttonClass);
         holder.css('height', height);
@@ -6402,6 +6461,8 @@ TAG.Util.Artwork = (function () {
 
         holder.on("click", handler);
 
+        titleDiv.text(title);
+        holder.append(titleDiv);
         holder.append(thumbHolderDiv);
         thumbHolderDiv.append(holderContainer);
         holderContainer.append(holderInnerContainer);
@@ -6418,8 +6479,8 @@ TAG.Util.Artwork = (function () {
 
         holderInnerContainer.append(thumbnailImage);
 
-        titleDiv.text(title);
-        holder.append(titleDiv);
+        yearDiv.text(year);
+        holder.append(yearDiv);
 
         return holder;
     }

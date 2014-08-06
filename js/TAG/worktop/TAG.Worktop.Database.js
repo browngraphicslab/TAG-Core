@@ -31,8 +31,8 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
-            url: ['Name', 'Title', 'Artist', 'Year','Month','Day','TimelineYear','TimelineMonth','TimelineDay','Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
-            body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration']
+            url: ['Name', 'Title', 'Artist', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
+            body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration', 'RichLocationHistory', 'AddMaps', 'RemoveMaps']
         },
         tour: {
             url: ['Name', 'Thumbnail', 'Private'],
@@ -137,6 +137,7 @@ TAG.Worktop.Database = (function () {
         createArtwork: createArtwork,
         createHotspot: createHotspot,
         createIframeAssocMedia: createIframeAssocMedia,
+        createMap: createMap,
 
         // POST
         changeTour: changeTour,
@@ -565,6 +566,11 @@ TAG.Worktop.Database = (function () {
     function createHotspot(options, success, unauth, error, returnDoq) {
         _db = _db || new Worktop.Database();
         _db.putHotspot(options, { success: success, error: error, unauth: unauth }, returnDoq, strict);
+    }
+
+    function createMap(options, success, unauth, error, returnDoq) {
+        _db = _db || new Worktop.Database();
+        _db.putMap(options, { success: success, error: error, unauth: unauth }, returnDoq, strict);
     }
 
     ///////////////////
@@ -1080,7 +1086,7 @@ TAG.Worktop.Database = (function () {
     }
 
     function getMuseumOverlayColor() {
-        return _main.Metadata["OverlayColor"];
+        return _main.Metadata["OverlayColor"] || '000000';
     }
 
     function getMuseumOverlayTransparency() {
@@ -1557,122 +1563,6 @@ TAG.Worktop.Database = (function () {
     function getDoqByName(name) {
         return _db.getDoqByName(name);
     }
-
-    //function getArtworks(exhibit, force) {
-    //function getArtworks(exhibit, callback){
-    //    if (callback) {
-
-    //        var guid = exhibit.Identifier;
-
-    //        var doq;
-    //        var url;
-    //        if (_db.useServer)
-    //            url = _db.getURL() + "/?Type=DoqsInFolder&Guid=" + guid;
-    //        else
-    //            url = "testXML/" + guid + "_Content.xml";
-    //        var request = $.ajax({
-    //            url: url,
-    //            dataType: "text",
-    //            cache: false, // forces browser to not cache the data
-    //            async: true,
-    //            success: function () {
-    //                console.log("artwork success");
-    //                if (request.responseText) {
-    //                    try {
-    //                        var artworks = new Worktop.Doq(request.responseText);
-    //                    }
-    //                    catch (err) {
-    //                        console.log("error in getArtworks: " + err.message);
-    //                        //getArtworks(exhibit, callback);
-    //                    }
-    //                }
-
-    //                if (artworks && artworks[0]) { // Check that there is actually something in the array
-    //                    $.each(artworks, function (i, artwork) {
-    //                        if (artwork.Type == "Artwork") {
-    //                            artworks.push(artwork);
-    //                        }
-    //                    });
-    //                    exhibit.artworks = artworks || [];
-    //                    // add sort function to each exhibit
-    //                    var compare = function (a, b) { return a == b ? 0 : a > b ? 1 : -1; };
-    //                    exhibit.sort = function (sortBy) {
-    //                        exhibit.artworks.sort(function (a, b) {
-    //                            if (typeof sortBy === "string") {
-    //                                if (sortBy === "Title") {
-    //                                    return compare(a.Name, b.Name);
-    //                                } else {
-    //                                    return compare(a.Metadata[sortBy], b.Metadata[sortBy]);
-    //                                }
-    //                            }
-    //                            for (var field in sortBy) {
-    //                                sortField = sortBy[field];
-    //                                if (sortField === "Title") {
-    //                                    if (!a.Name) return -1;
-    //                                    if (!b.Name) return 1;
-    //                                    var comp = compare(a.Name, b.Name);
-    //                                    if (comp !== 0) return comp;
-    //                                }
-    //                                else {
-    //                                    if (!a.metadataGet(sortField)) return -1;
-    //                                    if (!b.metadataGet(sortField)) return 1;
-    //                                    var comp = compare(a.metadataGet(sortField), b.metadataGet(sortField));
-    //                                    if (comp !== 0) return comp;
-    //                                }
-    //                            }
-    //                            return 0;
-    //                        });
-    //                    }
-    //                }
-    //                callback(artworks);
-    //            },
-    //            error: function (err) {
-    //                return;
-    //            }
-    //        });
-
-    //    } else {
-    //        var artworks = _db.getDoqsInFolderByGUID(exhibit.Identifier);
-    //        if (artworks && artworks[0]) { // Check that there is actually something in the array
-    //            $.each(artworks, function (i, artwork) {
-    //                if (artwork.Type == "Artwork") {
-    //                    artworks.push(artwork);
-    //                }
-    //            });
-    //            exhibit.artworks = artworks || [];
-    //            // add sort function to each exhibit
-    //            var compare = function (a, b) { return a == b ? 0 : a > b ? 1 : -1; };
-    //            exhibit.sort = function (sortBy) {
-    //                exhibit.artworks.sort(function (a, b) {
-    //                    if (typeof sortBy === "string") {
-    //                        if (sortBy === "Title") {
-    //                            return compare(a.Name, b.Name);
-    //                        } else {
-    //                            return compare(a.Metadata[sortBy], b.Metadata[sortBy]);
-    //                        }
-    //                    }
-    //                    for (var field in sortBy) {
-    //                        sortField = sortBy[field];
-    //                        if (sortField === "Title") {
-    //                            if (!a.Name) return -1;
-    //                            if (!b.Name) return 1;
-    //                            var comp = compare(a.Name, b.Name);
-    //                            if (comp !== 0) return comp;
-    //                        }
-    //                        else {
-    //                            if (!a.metadataGet(sortField)) return -1;
-    //                            if (!b.metadataGet(sortField)) return 1;
-    //                            var comp = compare(a.metadataGet(sortField), b.metadataGet(sortField));
-    //                            if (comp !== 0) return comp;
-    //                        }
-    //                    }
-    //                    return 0;
-    //                });
-    //            }
-    //        }
-    //        return artworks;
-    //    }
-    //}
 
     function updateCache(guid, xml) {
 
