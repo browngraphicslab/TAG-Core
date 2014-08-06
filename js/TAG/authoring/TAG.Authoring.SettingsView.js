@@ -5120,11 +5120,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @return {Boolean}               whether input string represents single year
          */
         function isSingleYear(dateString){
+            //remove characters that are okay and white space
             dateString = dateString.replace(/bce?/gi,'')
                                    .replace(/ce/gi, '')
                                    .replace(/ad/gi,'')
                                    .replace(/\s/gi,'');
-            if (dateString.search(/[^0-9||-]/)>=0 || dateString.length===0){
+            //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
+            if (dateString.search(/[^0-9]/)>0 || dateString.length===0 || dateString[0].search(/[0-9||-]/)<0){
                 return false;
             } else {
                 return true;
