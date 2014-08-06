@@ -208,7 +208,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
-            console.log("HERE WE GO")
         }
 
         applyCustomization();
@@ -246,8 +245,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'margin-left': '50%'
         });
         
-        console.log(tagPath);
-
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         infoOverlay.append(infoBox);
         infoBox.css({
@@ -417,12 +414,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "height":  COLLECTION_DOT_WIDTH,
                             "border-radius": COLLECTION_DOT_WIDTH / 2,
                             "margin": COLLECTION_DOT_WIDTH/4
-                        }).on('click', //function(){
-                            //return function(){
-                                loadCollection(visibleCollections[i])//();
-                                //currentTag = null;
-                            //}
-                        );//}());
+                        }).on('click', function(j){
+                            return function(){
+                                loadCollection(visibleCollections[j])();
+                                currentTag = null;
+                            }
+                        }(i));
             collectionDotHolder.append(collectionDot);
 
             collectionDots[visibleCollections[i].Identifier] = collectionDot;
@@ -539,13 +536,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
                     backArrowArea.addClass('arrowArea');
                     backArrowArea.css('left', '0%')
-                                .on('click',function(){
-                                            return function(){
-                                                onAssocMediaView = false;
-                                                loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk)();
-                                                currentTag = null;   
-                                            }
-                                        }());
+                        .off()
+                        .on('click', function(j){
+                                return function(){
+                                    loadCollection(visibleCollections[j.prevCollectionIndex])();
+                                    currentTag = null;
+                                }
+                            }(collection));
                     backArrow.attr('src', tagPath + 'images/icons/Close.svg');
                     backArrow.addClass('arrow');    
 
@@ -556,13 +553,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 //})
                                 .css('left','3%')
                                 .html(prevTitle)
-                                .on('click', function(){
-                                            return function(){
-                                                onAssocMediaView = false;
-                                                loadCollection(visibleCollections[collection.prevCollectionIndex], sPos, artwrk)();
-                                                currentTag = null;      
-                                            }
-                                        }());
+                                .off()
+                                .on('click', function(j){
+                                        return function(){
+                                            onAssocMediaView = false
+                                            loadCollection(visibleCollections[j.prevCollectionIndex])();
+                                            currentTag = null;
+                                        }
+                                    }(collection));
 
                     TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = prevTitle;
@@ -582,13 +580,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
                     nextArrowArea.addClass('arrowArea');
                     nextArrowArea.css({'right': '0%'})
-                                .on('click', function(){
-                                            return function(){
-                                                onAssocMediaView = false;
-                                                loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
-                                                currentTag = null;                                          
-                                            }
-                                        }());
+                                .off()
+                                .on('click', function(j){
+                                        return function(){
+                                            loadCollection(visibleCollections[j.nextCollectionIndex])();
+                                            currentTag = null;
+                                        }
+                                    }(collection));
+
                    // collectionArea.append(nextArrowArea);
                     nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
                     nextArrow.addClass('arrow');
@@ -603,13 +602,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
                                     //'color': '#' + PRIMARY_FONT_COLOR
                                    })
-                                    .on('click', function(){
-                                            return function(){
-                                                onAssocMediaView = false;
-                                                loadCollection(visibleCollections[collection.nextCollectionIndex], sPos, artwrk)();
-                                                currentTag = null;
-                                            }
-                                        }());
+                                .off()
+                                .on('click', function(j){
+                                        return function(){
+                                            onAssocMediaView = false
+                                            loadCollection(visibleCollections[j.prevCollectionIndex])();
+                                            currentTag = null;
+                                        }
+                                    }(collection));
+
                     TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = nextTitle;
                         tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
@@ -894,9 +895,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             for (j = 0; j < works.length; j++) {
                 loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j));
             }
-            loadQueue.add(function(){
+            //loadQueue.add(function(){
                 showArtwork(currentArtwork,multipleShown && multipleShown)();
-            });
+           // });
             tileDiv.css({'left': infoDiv.width()});
             if (infoDiv.width()===0){
                 tileDiv.css({'margin-left':'2%'});

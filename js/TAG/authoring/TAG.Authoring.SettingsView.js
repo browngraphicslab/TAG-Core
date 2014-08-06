@@ -759,7 +759,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacityInput = createTextInput(backgroundOpacity, true);*/
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
-        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Lobster', 'Pacifico', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
+        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
         var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
@@ -932,7 +932,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColor = inputs.primaryFontColorInput.val();
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
         var fontFamily = inputs.fontFamilyInput.val();
-        var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
+        //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val();
 
         var options = {
@@ -947,7 +947,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             PrimaryFontColor: primaryFontColor,
             SecondaryFontColor: secondaryFontColor,
             FontFamily: fontFamily,
-            BaseFontSize: baseFontSize,
+            //BaseFontSize: baseFontSize,
             IdleTimerDuration: idleTimerDuration
         };
         if (bgImg) { options.Background = bgImg; }
@@ -2574,7 +2574,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 descInput.select();
         });
 
-        onChangeUpdateText(titleInput, null, 40);
+        onChangeUpdateText(titleInput, null, 2000);
         onChangeUpdateText(descInput, null, 5000);
 
         var title = createSetting('Title', titleInput);
@@ -3390,9 +3390,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 descInput.select();
         });
 
-        onChangeUpdateText(titleInput, null, 40);
-        onChangeUpdateText(artistInput, null, 40);
-        onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 40);
+        onChangeUpdateText(titleInput, null, 500);
+        onChangeUpdateText(artistInput, null, 150);
+        onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 100);
         onChangeUpdateText(descInput, null, 5000);
 
         var title = createSetting('Title', titleInput);
@@ -5176,11 +5176,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @return {Boolean}               whether input string represents single year
          */
         function isSingleYear(dateString){
+            //remove characters that are okay and white space
             dateString = dateString.replace(/bce?/gi,'')
                                    .replace(/ce/gi, '')
                                    .replace(/ad/gi,'')
                                    .replace(/\s/gi,'');
-            if (dateString.search(/[^0-9||-]/)>=0 || dateString.length===0){
+            //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
+            if (dateString.search(/[^0-9]/)>0 || dateString.length===0 || dateString[0].search(/[0-9||-]/)<0){
                 return false;
             } else {
                 return true;
