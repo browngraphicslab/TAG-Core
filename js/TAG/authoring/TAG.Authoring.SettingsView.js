@@ -5026,16 +5026,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-bottom': '4%',
             'padding-top':'2%'
         });
-        timelineYear = createSetting('Timeline Year', timelineYearInput, 40);
+        timelineYear = createSetting('Date on Timeline', timelineYearInput, 40);
         timelineYear.css({
-            width: '40%',
+            width: '44%',
             display: 'inline-block',
             position: 'relative',
             'float': 'left'
         });
         timelineMonth = createSetting('Month', timelineMonthInput, 50);
         timelineMonth.css({
-            width: '27%',
+            width: '25%',
             'padding-left': '1%',
             'position': 'relative',
             display: 'inline-block',
@@ -5044,7 +5044,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         toggleAllow(timelineMonthInput);
         timelineDay = createSetting('Day', timelineDayInput, 60);
         timelineDay.css({
-            width: '27%',
+            width: '25%',
             'padding-left': '2%',
             'position': 'relative',
             display: 'inline-block',
