@@ -1097,7 +1097,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             sortAZ(result);
             currentList = result;
             currentIndex = 0;
-            
+            initSearch(currentList);
             $.each(result, function (i, val) {
                 if (cancel) { 
                     return;
@@ -1823,6 +1823,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             sortAZ(result);
             currentList = result;
             currentIndex = 0;
+            initSearch(currentList);
             $.each(result, function (i, val) {
                 if (cancel) return false;
                 // Add each label as a separate function to the queue so the UI doesn't lock up
@@ -2221,7 +2222,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             sortAZ(result);
             currentList = result;
             currentIndex = 0;
-
+            initSearch(currentList);
             if (result[0] && result[0].Metadata) {
                 $.each(result, function (i, val) {
                     if (cancel) return;
@@ -3040,6 +3041,69 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
     }
 
+
+
+    /**
+     * Store the search strings for each artwork/tour
+     * @method initSearch
+     * @param {Array} contents    the contents of this collection (array of doqs)
+     */
+    function initSearch(contents) {
+        var info,
+            i,
+            cts;
+
+        searchbar[0].value = "";
+        infoSource = [];
+
+        $.each(contents, function (i, cts) {
+            if (!cts) {
+                return false;
+            }
+            info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
+            if (cts.Metadata.InfoFields) {
+                $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+                    info += " " + field;
+                    info += " " + fieldText;
+                });
+            }
+            infoSource.push({
+                "id": i,
+                "keys": info.toLowerCase()
+            });
+        });
+    }
+
+    /**
+     * Search collection using string in search input box
+     * @method doSearch
+     */
+    function doSearch() {
+        var content = searchbar.val().toLowerCase(),
+            matchedArts = [],
+            unmatchedArts = [],
+            i;
+
+        if (!content) {
+            //searchTxt.text("");
+            //drawCatalog(currentArtworks, currentTag, 0, false);
+            return;
+        }
+
+        for (i = 0; i < infoSource.length; i++) {
+            if (infoSource[i].keys.indexOf(content) > -1) {
+                matchedArts.push(currentArtworks[i]);
+            } else {
+                unmatchedArts.push(currentArtworks[i]);
+            }
+        }
+
+        //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
+
+    }
+
+
+
     // Art Functions:
 
     /**Loads art view
@@ -3076,6 +3140,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             currentList = result;
             currentIndex = 0;
             artworkList = result;
+            initSearch(artworkList);
             if (result[0] && result[0].Metadata) {
                 $.each(result, function (i, val) {
                     if (cancel) return;

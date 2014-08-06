@@ -1025,7 +1025,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Styling for searches
             if (!onSearch && searchInput.val() !== '') {
-                tileImage.css({ 'opacity': '0.3' });
+                main.css({ 'opacity': '0.2' });
                 main.css('border', '1px solid black');
             } else if (onSearch) {
                 tileImage.css({ 'opacity': '1.0'});
