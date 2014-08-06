@@ -214,7 +214,7 @@ module.exports = function(grunt) {
 					'html/VideoPlayer.html':         'html/VideoPlayer.jade',         // TAGCORE
 					'html/SettingsView.html':        'html/SettingsView.jade',        // TAGCORE
 					'html/TourPlayer.html':          'html/TourPlayer.jade',          // TAGCORE
-					'html/ComponentControls.html':	 'html/ComponentControls.jade'	  // TAGCORE
+					//'html/ComponentControls.html':	 'html/ComponentControls.jade'	  // TAGCORE
 				}
 			}
 		},

@@ -51,7 +51,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             connectionTimeout,
             timedOut;
 
-        console.log("checking server url: " + serverURL);
+        //console.log("checking server url: " + serverURL);
         $.ajax({
             url: serverURL,
             dataType: "text",
@@ -60,7 +60,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             success: function () {
                 if(!timedOut) {
                     clearTimeout(connectionTimeout);
-                    console.log("success checking server url");
+                    //console.log("success checking server url");
                     successConnecting();
                 }
             },
@@ -170,9 +170,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @return true if the browser is compatible with TAG, false if it isn't
     */
     function isBrowserCompatible() {
-        console.log("\n///// Browser Compatibility /////")
+        //console.log("\n///// Browser Compatibility /////")
         var userAgent = navigator.userAgent.toLowerCase();
-        console.log("userAgent: " + navigator.userAgent);
+        //console.log("userAgent: " + navigator.userAgent);
 
         // Android and iOS are incompatible
         if(userAgent.indexOf('android') >= 0 || userAgent.indexOf('iphone') >= 0 || userAgent.indexOf('ipad') >= 0 || userAgent.indexOf('ipod') >= 0) {
@@ -188,7 +188,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             return false;
         } else {
             var browser = getBrowserVersion();
-            console.log("Browser Version: " + browser);
+            //console.log("Browser Version: " + browser);
 
             browser = browser.toLowerCase();
             var version = 0;
@@ -220,7 +220,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             // Internet Explorer 10+
             else if(browser.indexOf('msie') >= 0 || browser.indexOf('ie') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
-                console.log("Detected IE Version: " + version);
+                //console.log("Detected IE Version: " + version);
                 return(version >= 10);
             } 
             // Other browsers are incompatible
