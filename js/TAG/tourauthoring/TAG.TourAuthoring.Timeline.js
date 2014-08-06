@@ -1050,7 +1050,7 @@ TAG.TourAuthoring.Timeline = function (spec) {
             });
         var labelFontSize = TAG.Util.getMaxFontSizeEM("Ink is being edited...", 0, overlayLabelSpec.width - 10, overlayLabelSpec.height, 0.01);
 
-        $('#resizeButton').attr('src', 'images/icons/Ellipsis_gray.svg'); // TODO need a new icon here
+       // $('#resizeButton').attr('src', 'images/icons/dragTourWindowTwoBars.svg'); // TODO need a new icon here
         setEditInkOn(true);
         $('#multiSelButton').css({
             'color': 'gray',
