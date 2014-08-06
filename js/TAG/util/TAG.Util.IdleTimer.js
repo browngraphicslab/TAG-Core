@@ -128,7 +128,8 @@ TAG.Util.IdleTimer = (function() {
             kill:         kill,
             isStopped:    isStopped,
             restart:      restart,
-            reinitialize: reinitialize
+            reinitialize: reinitialize,
+            s1d:          s1d
         };
     }
 

@@ -652,10 +652,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * including the viewer, buttons, and settings container.
      * @method loadSplashScreen
      */
-     /*
-      * TODO: refactor this to be loadCustomization(), so it is extensible to have previews
-      * for the collections and artwork viewer pages too.
-      */
     function loadSplashScreen() {
         prepareViewer(true);
         clearRight();
@@ -720,9 +716,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacityInput = createTextInput(backgroundOpacity, true);*/
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
-        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
-        var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false);
+        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
+        var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false, true);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
+
+        
         // Handle changes
         /*onChangeUpdateNum(alphaInput, 0, 100, function (num) {
             updateBGColor('.infoDiv', overlayColorInput.val(), num);
@@ -742,6 +740,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         onChangeUpdateNum(backgroundOpacityInput, 0, 100, function(num) {
             updateBGColor('.background', backgroundColorInput.val(), num);
         })*/
+
+
 
         var bgImage = createSetting('Background Image', bgImgInput);
         /*var overlayAlpha = createSetting('Overlay Transparency (0-100)', alphaInput);
@@ -773,6 +773,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(fontFamilySetting);
         settingsContainer.append(idleTimerDurationSetting);
 		//automatically save General Settings - Customization
+        onChangeUpdateText(idleTimerDurationInput, null, 3);
+        //TAG.Util.IdleTimer.TwoStageTimer().s1d = idleTimerDurationInput.val();
 
         currentMetadataHandler = function () {
             /*if (locInput === undefined) {
@@ -795,7 +797,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 fontFamilyInput: fontFamilyInput,
-                idleTimerDurationInput: idleTimerDurationInput
+                //idleTimerDurationInput: idleTimerDurationInput
             });
         };
 
@@ -808,6 +810,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 infoInput = "";
             }*/
             //save Splash screen and pass in inputs with following keys:
+            //idleTimerDurationInput.text(idleTimerDurationInput.val());
+            saveIdleTimerDuration(idleTimerDurationInput);
             saveSplashScreen({
                 //alphaInput: alphaInput,                             //Overlay Transparency
                 //overlayColorInput: overlayColorInput,               //Overlay Color
@@ -822,7 +826,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 fontFamilyInput: fontFamilyInput,
-                idleTimerDurationInput: idleTimerDurationInput
+                //idleTimerDurationInput: idleTimerDurationInput
             });
         }, {
             'margin-right': '3%',
@@ -863,6 +867,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewArtworkViewerButton);
     }
 
+    function saveIdleTimerDuration(input) {
+        var currDuration = input.val();
+        TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(currDuration);
+    }
+
     /**Saves the splash screen settings
      * @method saveSplashScreen
      * @param {Object} inputs       information from setting inputs
@@ -888,8 +897,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
         var fontFamily = inputs.fontFamilyInput.val();
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
-        var idleTimerDuration = inputs.idleTimerDurationInput.val();
-
+       // var idleTimerDuration = inputs.idleTimerDurationInput.val();
+        
+        //inputs.idleTimerDurationInput.val(idleTimerDuration);
+        //TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(idleTimerDuration);
         var options = {
             //Name: name,
             //OverlayColor: overlayColor,
@@ -903,7 +914,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             SecondaryFontColor: secondaryFontColor,
             FontFamily: fontFamily,
             //BaseFontSize: baseFontSize,
-            IdleTimerDuration: idleTimerDuration
+            //IdleTimerDuration: idleTimerDuration
         };
         if (bgImg) options.Background = bgImg;
         //if (logo) options.Icon = logo;
@@ -5234,8 +5245,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param hideOnClick
      * @return input                newly created input
      */
-    function createTextInput(text, defaultval, maxlength, hideOnClick, readonly) {
+    function createTextInput(text, defaultval, maxlength, hideOnClick, readonly, onlyNumbers) {
         var input = $(document.createElement('input')).val(text);
+        onlyNumbers = onlyNumbers || false;
+        
+        if (onlyNumbers) {
+            input.on('keypress', function (event) {
+                return (event.charCode >= 48 && event.charCode <= 57);
+            });
+        }
         input.attr('autocomplete', 'off');
         input.attr('spellcheck', 'false');
         input.attr({
