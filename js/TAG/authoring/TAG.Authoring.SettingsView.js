@@ -720,7 +720,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacityInput = createTextInput(backgroundOpacity, true);*/
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
-        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Lobster', 'Pacifico', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
+        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily);
         var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
         // Handle changes
@@ -801,24 +801,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Save button
         var saveButton = createButton('Save Changes', function () {
-            if (locInput === undefined) {
+           /* if (locInput === undefined) {
                 locInput = "";
             }
             if (infoInput === undefined) {
                 infoInput = "";
-            }
+            }*/
             //save Splash screen and pass in inputs with following keys:
             saveSplashScreen({
-                alphaInput: alphaInput,                             //Overlay Transparency
-                overlayColorInput: overlayColorInput,               //Overlay Color
-                nameInput: nameInput,                               //Museum Name
-                locInput: locInput,                                 //Museum Location
-                infoInput: infoInput,                               //Museum Info
-                logoColorInput: logoColorInput,                     //Logo background color
+                //alphaInput: alphaInput,                             //Overlay Transparency
+                //overlayColorInput: overlayColorInput,               //Overlay Color
+                //nameInput: nameInput,                               //Museum Name
+                //locInput: locInput,                                 //Museum Location
+                //infoInput: infoInput,                               //Museum Info
+                //logoColorInput: logoColorInput,                     //Logo background color
                 bgImgInput: bgImgInput,                             //Background image
-                logoInput: logoInput,                               //Logo image
-                backgroundColorInput: backgroundColorInput,         //Background Color
-                backgroundOpacityInput: backgroundOpacityInput,    //Background Opacity
+                //logoInput: logoInput,                               //Logo image
+                //backgroundColorInput: backgroundColorInput,         //Background Color
+                //backgroundOpacityInput: backgroundOpacityInput,    //Background Opacity
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 fontFamilyInput: fontFamilyInput,
@@ -887,22 +887,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColor = inputs.primaryFontColorInput.val();
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
         var fontFamily = inputs.fontFamilyInput.val();
-        var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
+        //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val();
 
         var options = {
-            Name: name,
-            OverlayColor: overlayColor,
-            OverlayTrans: alpha,
-            Location: loc,
-            Info: info,
-            IconColor: logoColor,
-            BackgroundColor: backgroundColor,
-            BackgroundOpacity: backgroundOpacity,
+            //Name: name,
+            //OverlayColor: overlayColor,
+            //OverlayTrans: alpha,
+            //Location: loc,
+            //Info: info,
+           // IconColor: logoColor,
+           // BackgroundColor: backgroundColor,
+           // BackgroundOpacity: backgroundOpacity,
             PrimaryFontColor: primaryFontColor,
             SecondaryFontColor: secondaryFontColor,
             FontFamily: fontFamily,
-            BaseFontSize: baseFontSize,
+            //BaseFontSize: baseFontSize,
             IdleTimerDuration: idleTimerDuration
         };
         if (bgImg) options.Background = bgImg;
