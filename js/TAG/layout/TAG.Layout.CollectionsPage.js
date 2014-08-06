@@ -476,6 +476,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextCollection    = $('#nextCollection'),
                 prevCollection    = $('#prevCollection'),
                 titleBox          = $('.collection-title'), 
+                collectionMedia   = [],
+                counter           = 0,
+                collectionLength,
                 collectionDescription = $(document.createElement('div')),
                 dummyDot,
                 dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR),
@@ -487,13 +490,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                 idleTimer.start();
             }
-            var collectionMedia =[];
-            var counter = 0;
-            var collectionLength;   
+
             if (!onAssocMediaView){
-                //if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === true){
+                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === true){
                     TAG.Worktop.Database.getArtworksIn(collection.Identifier, getCollectionMedia, null, getCollectionMedia);     
-                //}
+                }
 
                 // Clear search box
                 searchTxt.text("");
@@ -942,13 +943,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (timelineShown){   
                     bottomContainer.css({
                         'height' : '69%',
-                        'top' : '25%'
+                        'top' : '25%',
+                        'z-index': '',
                     });
                 
             } else {
                 bottomContainer.css({
                     'height':'85%',
                     'top':'15%',
+                    'z-index':'100005',
                 });
             }
         }
@@ -1528,7 +1531,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'left' : shift
                 })
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/2);
-                overlay.css('z-index', '10000');
+                overlay.css('z-index', '100002');
+                topBar.css('z-index','100003');
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
