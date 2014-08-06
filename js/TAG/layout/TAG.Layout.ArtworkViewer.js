@@ -24,6 +24,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         linkButtonContainer = root.find('#linkContainer'),
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
         info                = root.find('#info'),
+        loadingArea          = root.find('#loadingArea'),
         locHistoryToggle    = root.find('#locationHistoryToggle'),
         locHistory          = root.find('#locationHistory'),
         locHistoryContainer = root.find('#locationHistoryContainer'),
@@ -41,6 +42,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevCollection = options.prevCollection,   // collection we came from, if any
         prevTag        = options.prevTag,          // sort tag of collection we came from, if any
         prevMult       = options.prevMult,      
+        previewing 	   = options.previewing, 	   // if we are previewing in authoring (for styling)
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -60,6 +62,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         manipulate;                                 // Manipulation method
                                   
     // get things rolling if doq is defined (it better be)
+    console.log("doq" + doq);
     doq && init();
 
     return {
@@ -79,6 +82,27 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
             idleTimer.start();
         }
+
+        var progressCircCSS = {
+            'position': 'absolute',
+            'z-index': '50',
+            'height': 'auto',
+            'width': '5%',
+            'left': '47.5%',
+            'top': '42.5%'
+        };
+        
+        TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
+        var loadingLabel = $(document.createElement('label'));
+        loadingLabel.css({
+            'position': 'absolute',
+            'left': '40%',
+            'top': '55%',
+            'font-size': '200%',
+            'color': 'white',
+        });
+        loadingLabel.text('Loading Viewer');
+        loadingArea.append(loadingLabel);
 
         // add script for displaying bing maps
         head = document.getElementsByTagName('head').item(0);
@@ -113,6 +137,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 initSplitscreen();
                 makeSidebar();
                 createSeadragonControls();
+                loadingArea.hide();
             },
             noMedia: false
         });
@@ -203,7 +228,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'left': '0%'
             });
         }
-        container.css('min-width', 0.19 * screenWidth);
+        if (!previewing){
+        	container.css('min-width', 0.19 * screenWidth);
+        }
 
         slideButton.on('click', function () {
             count = 1 - count;
@@ -517,8 +544,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         } else {
             togglerImage.css('left', '0%');
         }
-        sideBar.css('min-width', 0.22 * screenWidth);
-        
+        if (!previewing){
+        	sideBar.css('min-width', 0.22 * screenWidth);
+        }
 
         // toggler to hide/show sidebar
         toggler.on('click', function () {

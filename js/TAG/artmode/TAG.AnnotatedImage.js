@@ -116,7 +116,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function openArtwork(doq) {
         if(!viewer || !doq || !doq.Metadata || !doq.Metadata.DeepZoom) {
-            debugger;
+            //debugger;
             console.log("ERROR IN openDZI");
             return false;
         }
@@ -634,8 +634,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.hide();
             } else {
                 // set up divs for the associated media
-                outerContainer.css('width', '29%')
-                               .css('min-width', 0.29*rootWidth);
+                outerContainer.css('width', '29%');
                 innerContainer.css('backgroundColor', 'rgba(0,0,0,0.65)');
 
                 if (TITLE) {
@@ -942,6 +941,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         height: 'auto'
                     });
                     mediaContainer.append(img);
+                    outerContainer.css('min-width', '');
                 } else if (CONTENT_TYPE === 'Video') {
                     mediaElt = document.createElement('video');
                     $mediaElt = $(mediaElt);
@@ -953,6 +953,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         type: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"',
                         controls: false
                     });
+
+                    outerContainer.css('min-width', 0.29*rootWidth);
 
                     // TODO need to use <source> tags rather than setting the source and type of the
                     //      video in the <video> tag's attributes; see video player code
@@ -979,6 +981,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     $mediaElt.on('error', function () {
                         console.log("Here's an error ");
                     });
+                    outerContainer.css('min-width', 0.29*rootWidth);
                 } else if (CONTENT_TYPE === 'iframe') {
                     iframe = $(document.createElement('iframe'));
                     iframe.attr({
@@ -1003,12 +1006,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var w = outerContainer.width(),
                 h = outerContainer.height();
             outerContainerPivot = {
-                //x: w / 2 - (outerContainer.offset().left - root.offset().left),
-                //y: h / 2 - (outerContainer.offset().top - root.offset().top)
-                x: -outerContainer.offset().left + w, //+ root.offset().left,
-                y: -outerContainer.offset().top + h
+                x: w / 2 - (outerContainer.offset().left - root.offset().left),
+                y: h / 2 - (outerContainer.offset().top - root.offset().top)
             };
-            console.log(outerContainerPivot);
             toManip = mediaManip;
             $('.mediaOuterContainer').css('z-index', 1000);
             outerContainer.css('z-index', 1001);
@@ -1030,6 +1030,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @param {Object} res     object containing hammer event info
          */
         function mediaManip(res) {
+
             if (currentlySeeking || !res) {
                 return;
             }
@@ -1073,10 +1074,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 minW = 250;
             }
 
-            // constrain new width
-            if(newW < minW || maxW < newW) {
-                newW = Math.min(maxW, Math.max(minW, newW));
-                scale = newW / w;
+            //constrain new width
+            if (newW < minW){
+                newW = minW;
+                scale = newW/w;
+            }
+            else if (newW > maxW){
+                newW = maxW;
+                scale = newW/w;
             }
 
            //Manipulation for touch and drag events
@@ -1133,8 +1138,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     return;
                 }
             } else{ // zoom from touch point: change width and height of outerContainer
-                outerContainer.css("top", (t + trans.y + (1 - scale) * (pivot.y + isWinFactor*t)) + "px");
-                outerContainer.css("left", (l + trans.x + (1 - scale) * (pivot.x + isWinFactor * l)) + "px");
+                outerContainer.css('top', t - (newW - w)/2);
+                outerContainer.css('left', l- (newW - w)/2);
                 outerContainer.css("width", newW + "px");
                 outerContainer.css("height", "auto"); 
             }
