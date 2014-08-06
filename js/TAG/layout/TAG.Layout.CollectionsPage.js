@@ -80,7 +80,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         artworkShown         = false,                            // whether an artwork pop-up is currently displayed
         timelineShown        = true,                             // whether current collection has a timeline
         onAssocMediaView     = false,                            // whether current collection is on assoc media view
-
+        previouslyClicked    = null,
 
         // constants
         BASE_FONT_SIZE      = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
@@ -606,7 +606,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .on('click', function(j){
                                         return function(){
                                             onAssocMediaView = false
-                                            loadCollection(visibleCollections[j.prevCollectionIndex])();
+                                            loadCollection(visibleCollections[j.nextCollectionIndex])();
                                             currentTag = null;
                                         }
                                     }(collection));
@@ -895,9 +895,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             for (j = 0; j < works.length; j++) {
                 loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j));
             }
-            //loadQueue.add(function(){
+            loadQueue.add(function(){
                 showArtwork(currentArtwork,multipleShown && multipleShown)();
-           // });
+           });
             tileDiv.css({'left': infoDiv.width()});
             if (infoDiv.width()===0){
                 tileDiv.css({'margin-left':'2%'});
@@ -997,11 +997,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                     idleTimer.start();
                 }
-                //TO-DO add panning here 
                 showArtwork(currentWork, false)();
                 zoomTimeline(artworkCircles[currentWork.Identifier])
                 justShowedArtwork = true;
-            });
+            })
+            .on('click', doubleClickHandler)
+            //For double click
+            function doubleClickHandler(){
+                if(previouslyClicked === main){
+                    switchPage(currentArtwork);
+                };
+                previouslyClicked = main;
+
+                setTimeout(function(){previouslyClicked = null}, 1000)
+            }
 
             TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
@@ -1361,6 +1370,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }               
             } 
         }
+        if (circ === timelineEventCircles[0]){
+            timelineDateLabel.css('visibility', 'visible');
+        }
     }
     
     function zoomTimeline(circle){
@@ -1379,7 +1391,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             circleTarget = location(otherCircle)
             otherCircle.stop();
             otherCircle.animate(
-                {"left" : parseInt(circleTarget*100) + "%"}, 1000,"easeInOutQuint", (function(otherCircle) {
+                {"left" : parseInt(circleTarget*otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH*15/20}, 1000,"easeInOutQuint", (function(otherCircle) {
                     return function() {
                         displayLabels(otherCircle, circle);
                     };
@@ -1422,7 +1434,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!artwork) {
                 return;
             }
-            selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/2, function(){
+            selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
             overlay.css('z-index', '1');
@@ -1431,7 +1443,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             zoomTimeline();
             catalogDiv.stop(true,false);
-            catalogDiv.animate({scrollLeft: 0}, 1000);
             artworkShown = false;
         };
     }
@@ -1463,27 +1474,49 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 return;
             }
 
-            currentArtwork = artwork;
-            artworkSelected = true;
-            artworkShown = true;
-            multipleShown = showAllAtYear;
-
             //scroll catalogDiv to center the current artwork
             catalogDiv.stop(true,false);
             rootWidth = root.width();
             infoWidth = infoDiv.width();
             tileWidth = artworkTiles[artwork.Identifier].width();
+
             catalogDiv.stop();
             catalogDiv.animate({
                 scrollLeft: artworkTiles[artwork.Identifier].position().left - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER
             }, ANIMATION_DURATION/2, "easeInOutQuint");
 
-            selectedArtworkContainer.children().stop();
-            selectedArtworkContainer.children().animate(
-                {"opacity": 0}, ANIMATION_DURATION, function(){
-                    fillSelectedArtworkContainer();
-                    selectedArtworkContainer.children().animate({"opacity": 1}, ANIMATION_DURATION)
-                })
+            //Stop any previously-running animations
+            selectedArtworkContainer.stop();
+            if (artworkShown){
+                selectedArtworkContainer.animate(
+                        {"opacity": 0}, 
+                        ANIMATION_DURATION, 
+                        function(){
+                            fillSelectedArtworkContainer();
+                            selectedArtworkContainer.children().animate(
+                                {"opacity": 1},
+                                ANIMATION_DURATION
+                            )
+                        }
+                )
+            } else {
+                selectedArtworkContainer.animate(
+                    {"opacity": 0}, 
+                    ANIMATION_DURATION/2, 
+                    function(){
+                        fillSelectedArtworkContainer();
+                        selectedArtworkContainer.children().animate(
+                            {"opacity": 1},
+                            ANIMATION_DURATION*2
+                        )
+                    }
+                )
+            }
+
+            currentArtwork = artwork;
+            artworkSelected = true;
+            artworkShown = true;
+            multipleShown = showAllAtYear;
 
             // Set selected artwork to hide when anything else is clicked
             root.on('mouseup', function(e) {
@@ -1520,16 +1553,30 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
 
                 //center selectedArtworkContainer over current artwork thumbnail
-                shift = rootWidth/2 - containerWidth/2;
+                shift = (containerWidth-tileWidth)/2;
+                console.log("shift: " + shift)
+                leftOffset = artworkTiles[artwork.Identifier].position().left + infoWidth - catalogDiv.scrollLeft();
+
+                //if artwork tile at beginning of window
+                if (leftOffset < shift){
+                    shift = 0;
+                }
+                //if artwork tile at end of window
+                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
+                    shift = shift * 2;
+                }
+
 
                 //if there are more than 3 artworks associated with the date year
                 if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
-                    shift = rootWidth/10;
+                    leftOffset = bottomContainer.width()/10
+                    shift = 0;
+                    //shift = rootWidth/10;
                 }
                 selectedArtworkContainer.css({
                     'width' : containerWidth,
                     'display': 'inline',
-                    'left' : shift
+                    'left' : leftOffset - shift
                 })
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/2);
                 overlay.css('z-index', '100002');
@@ -1563,7 +1610,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //Explore div
                 exploreTab = $(document.createElement('div'))
                     .addClass('exploreTab')
-                    .on('click', switchPage(artwork));
+                    .on('click', switchPage(artwork))
 
                 //Explore icon
                 exploreIcon = $(document.createElement('img'))
