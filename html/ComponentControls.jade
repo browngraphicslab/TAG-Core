@@ -1,0 +1,120 @@
+#componentControlsRoot.rootPage
+	#component-controls          
+	.catalogPicker
+		.catalogPickerInfo					
+		input#searchbar						
+		.catalogPickerExhibitions
+			.allArtworksHolder					
+		.catalogPickerArtworks
+		#loadingLabel 						
+			img#progressCircle
+		button#catalogPickerImport
+			| Import
+		button#catalogPickerCancel
+			| Cancel
+	.associatedMediaPicker
+		#associatedLoadingLabel				
+			img#circle
+		button#associatedMediaPickerImport  
+		button#associatedMediaPickerCancel 
+	#dropMain
+	#dropFile
+	#dropInk
+	#cancelTextButton				
+	#saveTextButton
+	#cancelDrawButton				
+	#saveDrawButton
+	#cancelTransButton				
+	#saveTransButton
+
+	label#addComponentLabel
+		img#addDropDownIconComponent
+	#fade.fade
+
+	label.componentButton			
+
+
+	.associatedMediaPickerMedia
+		.associatedMediaPickerInfo
+			.associatedsearchbar
+		.associatedMediaPickerArtwork
+			#allAssociatedMediaHolder			
+		.mediaHolder 						
+			.mediaHolderImageHolder
+				img.mediaHolderImage
+			.mediaHolderText
+
+
+	
+
+
+
+	#inkTextControls
+		.thicknessLabel#colorTextLabel					
+			.changeColor
+		#colorTextDiv						
+			input#textColorToggle
+
+
+		.thicknessLabel#fontLabel
+			#fontLabel1
+		select#fontSelector.fontSelector
+
+
+		.thicknessLabel#textSizeLabel
+			#textSizeLabel1
+		#textSizeSlider
+			#textSliderPoint
+
+
+		.thicknessLabel#textBodyLabel
+			#textBodyLabel1
+		textarea#textArea
+
+	#inkDrawControls
+		.thicknessLabel#drawModeLabel
+			#drawModeLabel1
+		#drawModeDiv
+			label#drawLabel
+			label#eraseLabel
+
+
+		.thicknessLabel#brushLabel
+			#brushLabel1
+		#brushSlider
+			#brushSliderPoint	
+
+
+		.thicknessLabel#colorLabel
+			.changeColor1
+		#colorDiv
+			input#brushColorToggle
+
+
+		.thicknessLabel#opacityLabel
+			#opacityLabel1
+		#opacitySlider
+			#opacitySliderPoint
+
+
+	#inkTransControls
+
+
+		button#elipseButton
+		button#rectangleButton
+		.thicknessLabel#transModeLabel
+			#transModeLabel1
+		#transModeDiv
+			label#isolateLabel
+			label#blockLabel
+
+
+		.thicknessLabel#opacityTransparencyLabel
+			#opacityTransparencyLabel1
+		#opacityTransparencySlider
+			#opacityTransparencySliderPoint
+
+
+	#newDiv
+		button#linkButton
+		button#freeInkButton

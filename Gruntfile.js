@@ -195,7 +195,8 @@ module.exports = function(grunt) {
 						'css/TourPlayer.styl',           // TAGCORE
 						'css/General.styl',              // TAGCORE
 						'css/SettingsView.styl',         // TAGCORE
-						'css/Util.styl'                  // TAGCORE
+						'css/Util.styl',                 // TAGCORE
+						//'css/ComponentControls.styl'	 // TAGCORE
 					]
 				}
 			}
@@ -212,7 +213,8 @@ module.exports = function(grunt) {
 					'html/NewCatalog.html':          'html/NewCatalog.jade',          // TAGCORE
 					'html/VideoPlayer.html':         'html/VideoPlayer.jade',         // TAGCORE
 					'html/SettingsView.html':        'html/SettingsView.jade',        // TAGCORE
-					'html/TourPlayer.html':          'html/TourPlayer.jade'           // TAGCORE
+					'html/TourPlayer.html':          'html/TourPlayer.jade',          // TAGCORE
+					'html/ComponentControls.html':	 'html/ComponentControls.jade'	  // TAGCORE
 				}
 			}
 		},

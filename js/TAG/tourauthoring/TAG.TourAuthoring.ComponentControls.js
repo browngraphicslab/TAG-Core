@@ -11,11 +11,29 @@ TAG.Util.makeNamespace('TAG.TourAuthoring.ComponentControls');
  */
 TAG.TourAuthoring.ComponentControls = function (spec, my) {
     "use strict";
+    var // DOM- related
+        root                            = TAG.Util.getHtmlAjax('ComponentControls.html'),
+        functionsPanel                  = root.find('#component-controls'),
+        catalogPicker                   = root.find('.catalogPicker'),
+        associatedMediaPicker           = root.find('.associatedMediaPicker'),
+        dropMain                        = root.find('#dropMain'),
+        dropFile                        = root.find('#dropFile'),
+        dropInk                         = root.find('#dropInk'),
+        inkTextControls                 = root.find('#inkTextControls'),
+        inkDrawControls                 = root.find('#inkDrawControls'),
+        inkTransparencyControls         = root.find('#inkTransControls'),
+        cancelTextButton                = root.find('#cancelTextButton'),
+        saveTextButton                  = root.find('#saveTextButton'),
+        cancelDrawButton                = root.find('#cancelDrawButton'),
+        saveDrawButton                  = root.find('#saveDrawButton'),
+        cancelTransButton               = root.find('#cancelTransButton'),
+        saveTransButton                 = root.find('#saveTransButton');
 
-    var functionsPanel = $(document.createElement('div')),
+
+    var //functionsPanel = $(document.createElement('div')),
         functionsPanelDocfrag = document.createDocumentFragment(),
-        catalogPicker = $(document.createElement('div')),
-        associatedMediaPicker = $(document.createElement('div')),
+        //catalogPicker = $(document.createElement('div')),
+       // associatedMediaPicker = $(document.createElement('div')),
         that = {
             saveDraw: saveDraw,
             showEditDraw: showEditDraw,
@@ -31,7 +49,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             addCatalogToDOM: addCatalogToDOM,
             getIsUploading: getIsUploading
         },
-        root = spec.root,
+        //root = spec.root,
         playbackControls = spec.playbackControls,
         timeManager = spec.timeManager,
         timeline = spec.timeline,
@@ -39,9 +57,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         tourobj = spec.tourobj,
         undoManager = spec.undoManager,
         inkAuthoring,
-        inkTransparencyControls,
-        inkTextControls,
-        inkDrawControls,
+        //inkTransparencyControls,
+        //inkTextControls,
+        //inkDrawControls,
         addCompButtonHeight,
         myPicker,
         resizableHeight,
@@ -56,9 +74,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         textArray = [],
         videos2Convert = [];
 
-    var dropMain = $(document.createElement('div'));
-    var dropFile = $(document.createElement('div'));
-    var dropInk = $(document.createElement('div'));
+    //var dropMain = $(document.createElement('div'));
+   // var dropFile = $(document.createElement('div'));
+   // var dropInk = $(document.createElement('div'));
     var inkTextDocfrag = document.createDocumentFragment();
 
     functionsPanelDocfrag.appendChild(functionsPanel[0]);
@@ -84,8 +102,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     var drawValues = {};
     createInitialDrawControls();
     var INITIAL_DRAW = createInkDrawControls();
-    var saveDrawButton = createSaveButton();
-    var cancelDrawButton = createCancelDrawButton();
+    createSaveDrawButton();
+    createCancelDrawButton();
 
     var prevSelected = [];             
     var allowInk = false;
@@ -106,20 +124,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     var transArray = []; // array of transparency controls
     var isEditingTransparency = false;
     createInitialTransparencyControls();
-    var cancelTransButton = createTransparencyCancelButton();
-    var saveTransButton = createSaveTransparencyButton();
+    createTransparencyCancelButton();
+    createSaveTransparencyButton();
     var INITIAL_TRANSPARENCY = createInkTransparencyControls();
 
     // text stuff
     createInitialInkControls();
-    var cancelButton = createCancelTextButton();
-    var saveButton = createSaveButton();
+    createCancelTextButton();
+    createSaveTextButton();
     var INITIAL_INK_TEXT = createInkTextControls();
 
     //code to handle undo-redo using ctrl-z
     var onCtrlZCalled = false;
     root.on('keydown', ctrlZHandler);
-
    
 
 
@@ -1047,12 +1064,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     /**Creates the function panel to edit tours
      * @method createFunctionsPanel
      */
-    (function createFunctionsPanel() {
+    function createFunctionsPanel() {
         // creating components for functions panel
-        var addDropDownIconComponent = $(document.createElement('img'));
+        var addDropDownIconComponent = root.find('#addDropDownIconComponent');
         var menuOffsetL = '13%';
-        var addComponentLabel = $(document.createElement('label'));
-        var fade = $(document.createElement('div'));
+        var addComponentLabel = root.find('#addComponentLabel');
+        var fade = root.find('#fade');
 
         // create the buttons to add various components
         var artButton = _createAddComponentButton("Artwork", dropMain);
@@ -1072,7 +1089,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         videoButton.attr('id', 'videoButton');
         imageButton.attr('id', 'imageButton');
 
-        functionsPanel.attr('id', 'component-controls');
+        //functionsPanel.attr('id', 'component-controls');
         functionsPanel.css({
             "background-color": "rgb(219,218,199)",
             "height": "48px",
@@ -1084,7 +1101,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         // setting attributes/CSS of the components
-        addDropDownIconComponent.attr('id', 'addDropDownIconComponent');
+        //addDropDownIconComponent.attr('id', 'addDropDownIconComponent');
         addDropDownIconComponent.attr('src', tagPath + 'images/icons/Down.png');
         addDropDownIconComponent.css({
             'width': '10%',
@@ -1093,7 +1110,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         addComponentLabel.text("Add Track");
-        addComponentLabel.attr('id', 'addComponentLabel');
+        //addComponentLabel.attr('id', 'addComponentLabel');
         addComponentLabel.css({
             "left": menuOffsetL, "top": "5%", "position": "relative",
             "font-size": TAG.Util.getFontSize(70), "color": "rgb(256, 256, 256)",
@@ -1181,7 +1198,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             left: '0px',
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 18
         });
-        fade.attr("class", "fade");
+        //fade.attr("class", "fade");
         fade.on('mousedown', function (evt) {
             fade.hide();
             componentDropDown = false;
@@ -1241,7 +1258,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         dropFile.hide();
         functionsPanel.append(dropInk);
         dropInk.hide();
-    })();
+    }
+    createFunctionsPanel();
 
     /**Disables functionality on exiting ink track display timeframe
      * @method exitInk
@@ -1909,12 +1927,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @method createCatalogPicker
      */
     (function createCatalogMediaPicker() {
-        var associatedMediaPickerHeader = document.createElement('div');
-        var associatedsearchbar = $(document.createElement('input'));
-        var associatedMediaPickerArtwork = document.createElement('div');
-        var associatedMediaPickerMedia = document.createElement('div');
+        var associatedMediaPickerHeader = root.find('#associatedMediaPickerHeader');
+        var associatedsearchbar = root.find('.associatedsearchbar');
+        var associatedMediaPickerArtwork = root.find('.associatedMediaPickerArtwork');
+        var associatedMediaPickerMedia = root.find('.associatedMediaPickerMedia');
 
-        associatedMediaPicker.addClass("associatedMediaPicker");
+        //associatedMediaPicker.addClass("associatedMediaPicker");
         associatedMediaPicker.css({
             position: 'absolute',
             width: '49%',
@@ -1928,14 +1946,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(associatedMediaPickerOverlay).append(associatedMediaPicker);
 
         // heading
-        $(associatedMediaPickerHeader).addClass('associatedMediaPickerInfo');
+       // $(associatedMediaPickerHeader).addClass('associatedMediaPickerInfo');
         $(associatedMediaPickerHeader).text("Select media to import");
         $(associatedMediaPickerHeader).css({
             'font-size': '200%',
         });
 
         associatedsearchbar.attr('type', 'text');
-        associatedsearchbar.addClass('associatesearchbar');
+        //associatedsearchbar.addClass('associatesearchbar');
         $(associatedsearchbar).css({
             'float': 'right',
             'margin-right': '3%',
@@ -1953,12 +1971,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         associatedsearchbar.change(function () {
             TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
-        $(associatedMediaPickerHeader).append(associatedsearchbar);
+        //$(associatedMediaPickerHeader).append(associatedsearchbar);
 
-        associatedMediaPicker.append(associatedMediaPickerHeader);
+        //associatedMediaPicker.append(associatedMediaPickerHeader);
 
         // list of artworks in tour that have associated media
-        $(associatedMediaPickerArtwork).addClass('associatedMediaPickerArtwork');
+        //$(associatedMediaPickerArtwork).addClass('associatedMediaPickerArtwork');
         $(associatedMediaPickerArtwork).css({
             position: 'absolute',
             'border-right': '1px solid white',
@@ -1968,10 +1986,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             width: '28%',
             overflow: 'auto',
         });
-        associatedMediaPicker.append(associatedMediaPickerArtwork);
+        //associatedMediaPicker.append(associatedMediaPickerArtwork);
 
         // list of associated media
-        $(associatedMediaPickerMedia).addClass('associatedMediaPickerMedia');
+        //$(associatedMediaPickerMedia).addClass('associatedMediaPickerMedia');
         $(associatedMediaPickerMedia).css({
             position: 'absolute',
             left: '33%',
@@ -1981,7 +1999,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             width: '62%',
             overflow: 'auto',
         });
-        associatedMediaPicker.append(associatedMediaPickerMedia);
+        //associatedMediaPicker.append(associatedMediaPickerMedia);
     })();
 
     /**Helper function for audio/video associated media double click
@@ -2009,15 +2027,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @method _associatedMediaPick
      */
     function _associatedMediaPick() {
-        var loading = $(document.createElement('div'));
-        var circle = $(document.createElement('img'));
+        var loading = root.find('#associatedLoadingLabel');
+        var circle = root.find('#circle');
         var myArtwork = timeline.getRelatedArtworks();
-        var allAssociatedMediaHolder = document.createElement('div');                // draw "All Associated Media" Label
+        var allAssociatedMediaHolder = root.find('#llAssociatedMediaHolder');                // draw "All Associated Media" Label
         var mediaCache = {};
         var myFilteredArtwork = [];
         var unique;
-        var associatedMediaPickerImport = document.createElement('button');
-        var associatedMediaPickerCancel = document.createElement('button');
+        var associatedMediaPickerImport = root.find('#associatedMediaPickerImport');
+        var associatedMediaPickerCancel = root.find('#associatedMediaPickerCancel');
 
 
         isUploading = true;
@@ -2031,7 +2049,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'bottom': '2%',
         });
         loading.text('Loading...');
-        loading.attr('id', 'associatedLoadingLabel');
+        //loading.attr('id', 'associatedLoadingLabel');
 
         circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
         circle.css({
@@ -2042,7 +2060,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
 
-        $(allAssociatedMediaHolder).addClass('allAssociatedMediaHolder');
+       // $(allAssociatedMediaHolder).addClass('allAssociatedMediaHolder');
         $(allAssociatedMediaHolder).css({
             width: '100%',
             height: '9%',
@@ -2053,9 +2071,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
         $(allAssociatedMediaHolder).text('All Associated Media');
 
-        loading.append(circle);
-        associatedMediaPicker.append(loading);
-        $('.associatedMediaPickerArtwork').append(allAssociatedMediaHolder);
+        //loading.append(circle);
+       // associatedMediaPicker.append(loading);
+       // $('.associatedMediaPickerArtwork').append(allAssociatedMediaHolder);
 
         for (var i = 0; i < myArtwork.length ; i++) {
             unique = true;
@@ -2102,8 +2120,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
             }
         }
-
-
 
         /**Double clicking on associated media will import all selected media
          * @method mediadoubleClick
@@ -2261,7 +2277,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                         'padding-top': '3%',
                                     });
                                     $(artworkHolder).text(name);
-                                    $(associatedMediaPickerArtwork).append(artworkHolder);
+                                    $('.associatedMediaPickerArtwork').append(artworkHolder);
                                     artworkHolderClick($(artworkHolder));
                                 });
                             }
@@ -2494,7 +2510,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 container.track.updatePos(i);
             });
         });
-        associatedMediaPicker.append(associatedMediaPickerImport);
+        //associatedMediaPicker.append(associatedMediaPickerImport);
 
 
         // cancel button
@@ -2514,7 +2530,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $('.associatedsearchbar').val("");
             return undefined;
         });
-        associatedMediaPicker.append(associatedMediaPickerCancel);
+        //associatedMediaPicker.append(associatedMediaPickerCancel);
 
         /**Detach picker elements
          * @method _clearAssMedia
@@ -2549,16 +2565,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function createMediaHolder(media, applyClick) {
         return function () {
-            var mediaHolder = $(document.createElement('div'));
-            var mediaHolderImageHolder = $(document.createElement('div'));
-            var mediaHolderImage = $(document.createElement('img'));
-            var mediaHolderText = $(document.createElement('div'));
+            var mediaHolder = root.find('.mediaHolder');
+            var mediaHolderImageHolder = root.find('.mediaHolderImageHolder');
+            var mediaHolderImage = root.find('.mediaHolderImage');
+            var mediaHolderText = root.find('.mediaHolderText');
             var isSelected;
             var name = media.Name;
             var hasSpace = false;
             var scanLength = Math.min(name.length, 24);
 
-            mediaHolder.addClass("mediaHolder");
+            //mediaHolder.addClass("mediaHolder");
             mediaHolder.attr('id', media.Identifier);                                   // unique identifier for this media
             mediaHolder.data('type', media.Metadata.ContentType);
             mediaHolder.data('url', media.Metadata.Source);                             // store url as data
@@ -2575,7 +2591,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 margin: '1px',
             });
 
-            mediaHolderImageHolder.addClass('mediaHolderImageHolder');
+           // mediaHolderImageHolder.addClass('mediaHolderImageHolder');
             mediaHolderImageHolder.css({
                 float: 'left',
                 position: 'relative',
@@ -2585,7 +2601,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 'overflow': 'hidden'
             });
 
-            mediaHolderImage.addClass('mediaHolderImage');                              // create the thumbnail to show in the media holder
+            //mediaHolderImage.addClass('mediaHolderImage');                              // create the thumbnail to show in the media holder
             if (media.Metadata.ContentType === 'Audio') {
                 mediaHolderImage.attr('src', tagPath + 'images/audio_icon.svg');
             } else if (media.Metadata.ContentType === 'Video') {
@@ -2609,7 +2625,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 'text-align': 'center'
             });
             mediaHolderImage.removeAttr('width');
-            mediaHolderText.addClass('mediaHolderText');                                // create the text to show in the media holder
+            //mediaHolderText.addClass('mediaHolderText');                                // create the text to show in the media holder
 
             //trims off long names
             if (name.length > 15) {
@@ -2639,10 +2655,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 'word-wrap': 'break-word',
             });
 
-            $(associatedMediaPickerMedia).append(mediaHolder);
-            mediaHolder.append(mediaHolderImageHolder);
-            mediaHolderImageHolder.append(mediaHolderImage);
-            mediaHolder.append(mediaHolderText);
+            //$(associatedMediaPickerMedia).append(mediaHolder);
+           // mediaHolder.append(mediaHolderImageHolder);
+           // mediaHolderImageHolder.append(mediaHolderImage);
+           // mediaHolder.append(mediaHolderText);
             applyClick(mediaHolder);
         }
     }
@@ -2651,12 +2667,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @method createCatalogPicker
      */
     (function createCatalogPicker() {
-        var catalogPickerHeader = document.createElement('div');							// creates the header for the artwork catalog picker
-        var searchbar = $(document.createElement('input'));
-        var catalogPickerExhibitions = document.createElement('div');						// creates the exhibitions panel in the artwork catalog picker
-        var catalogPickerArtworks = document.createElement('div');							// creates the artwork panel in the artwork catalog picker
+        var catalogPickerHeader = root.find('catalogPickerInfo');							// creates the header for the artwork catalog picker
+        var searchbar = root.find('#searchbar');
+        var catalogPickerExhibitions = root.find('.catalogPickerExhibitions');						// creates the exhibitions panel in the artwork catalog picker
+        var catalogPickerArtworks = root.find('.catalogPickerArtworks');							// creates the artwork panel in the artwork catalog picker
 
-        catalogPicker.addClass("catalogPicker");
+        //catalogPicker.addClass("catalogPicker");
         catalogPicker.css({
             position: 'absolute',
             width: '49%',
@@ -2667,14 +2683,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             top: '25%',
             left: '25%',
         });
-        $(catalogPickerHeader).addClass('catalogPickerInfo');
+        //$(catalogPickerHeader).addClass('catalogPickerInfo');
         $(catalogPickerHeader).text("Select artwork to import");
         $(catalogPickerHeader).css({
             'font-size': '200%',
             'float': 'left',
         });
 
-        searchbar.attr('id', 'searchbar');
+        //searchbar.attr('id', 'searchbar');
         $(searchbar).css({
             'float': 'right',
             'margin-right': '3%',
@@ -2684,7 +2700,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(searchbar).on('keyup', function (event) {
             event.stopPropagation();
         });
-        searchbar.attr('type', 'text');
+        //searchbar.attr('type', 'text');
         searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
         searchbar.keyup(function () {
             TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
@@ -2693,7 +2709,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
         });
 
-        $(catalogPickerExhibitions).addClass('catalogPickerExhibitions');
+       // $(catalogPickerExhibitions).addClass('catalogPickerExhibitions');
         $(catalogPickerExhibitions).css({
             position: 'absolute',
             'border-right': '1px solid white',
@@ -2704,7 +2720,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             overflow: 'auto',
         });
 
-        $(catalogPickerArtworks).addClass('catalogPickerArtworks');
+       // $(catalogPickerArtworks).addClass('catalogPickerArtworks');
         $(catalogPickerArtworks).css({
             position: 'absolute',
             left: '33%',
@@ -2716,10 +2732,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         $(catalogPickerOverlay).append(catalogPicker);
-        catalogPicker.append(catalogPickerHeader);
-        catalogPicker.append(searchbar);
-        catalogPicker.append(catalogPickerExhibitions);
-        catalogPicker.append(catalogPickerArtworks);
+       // catalogPicker.append(catalogPickerHeader);
+       // catalogPicker.append(searchbar);
+       // catalogPicker.append(catalogPickerExhibitions);
+       // catalogPicker.append(catalogPickerArtworks);
     })();
 
     /**Gets artwork from server, displays catalogPicker
@@ -2728,10 +2744,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function _catalogPick() {
         var selectedExhib;
-        var allArtworksHolder = document.createElement('div');
-        var loading = $(document.createElement('div'));
-        var circle = $(document.createElement('img'));
-        var catalogPickerCancel = document.createElement('button');
+        var allArtworksHolder = root.find('.allArtworksHolder');
+        var loading = root.find('#loadingLabel');
+        var circle = root.find('#progressCircle');
+        var catalogPickerCancel = root.find('#catalogPickerCancel');
 
         selectedArtworks = [];
         selectedArtworksUrls = {};
@@ -2739,7 +2755,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         isUploading = true;
         artQueue.clear();
 
-        $(allArtworksHolder).addClass('allArtworksHolder');
+       // $(allArtworksHolder).addClass('allArtworksHolder');
         $(allArtworksHolder).css({
             width: '100%',
             height: '9%',
@@ -2749,7 +2765,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'padding-top': '3%',
         });
         $(allArtworksHolder).text('All Artworks');
-        $('.catalogPickerExhibitions').append(allArtworksHolder);
+       // $('.catalogPickerExhibitions').append(allArtworksHolder);
 
         loading.css({
             'display': 'inline-block',
@@ -2758,7 +2774,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'bottom': '2%',
         });
         loading.text('Loading...');
-        loading.attr('id', 'loadingLabel');
+       // loading.attr('id', 'loadingLabel');
 
         circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
         circle.css({
@@ -2767,7 +2783,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'margin-left': '20px',
             'float': 'right',
         });
-        loading.append(circle);
+       // loading.append(circle);
 
         TAG.Worktop.Database.getExhibitions(function (exhibitions) {
             var origName;
@@ -3108,10 +3124,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         catalogPicker.append(loading);
 
         // create artwork import button
-        var catalogPickerImport = document.createElement('button');
+        var catalogPickerImport = root.find('#catalogPickerImport');
         catalogPickerImport.disabled = true;
-        $(catalogPickerImport).text("Import");
-        $(catalogPickerImport).css({
+        catalogPickerImport.text("Import");
+        catalogPickerImport.css({
             position: 'absolute',
             bottom: '2%',
             right: '22%',
@@ -3172,11 +3188,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 container.track.updatePos(i);
             });
         });
-        catalogPicker.append(catalogPickerImport);
+       // catalogPicker.append(catalogPickerImport);
 
         // cancel button
 
-        $(catalogPickerCancel).text("Cancel");
+        catalogPickerCancel.text("Cancel");
         $(catalogPickerCancel).css({
             position: 'absolute',
             bottom: '2%',
@@ -3184,7 +3200,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         // cancel button click handler
-        $(catalogPickerCancel).click(function () {
+        catalogPickerCancel.click(function () {
             $(catalogPickerOverlay).fadeOut();
             _clearCatalog();
             catalogPickerImport.disabled = true;
@@ -3192,7 +3208,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             searchbar.val("");
             return undefined;
         });
-        catalogPicker.append(catalogPickerCancel);
+       // catalogPicker.append(catalogPickerCancel);
     }
 
     /**Checks if a string 'val' contains 'str
@@ -3924,7 +3940,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 inkTextControls.append(saveButton);
                 linkTextDiv.detach();
             } else {
-                saveButton.detach();
+                saveTextButton.detach();
                 inkTextControls.append(linkTextDiv);
             }
         }
@@ -3957,18 +3973,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function createColorInput(form, handler) {
         var handle = handler;
-        var colorTextLabel = $(document.createElement('div'));
-        var colorTextLabel1 = $(document.createElement('div'));
-        var colorTextDiv = $(document.createElement('div'));
-        var itemText = $(document.createElement('input'));
+        var colorTextLabel = root.find('#colorTextLabel');
+        var colorTextLabel1 = root.find('.changeColor');
+        var colorTextDiv = root.find('#colorTextDiv');
+        var itemText = root.find('#textColorToggle');
 
 
-        colorTextLabel.addClass('thicknessLabel');
-        colorTextLabel1.addClass('changeColor');
+       // colorTextLabel.addClass('thicknessLabel');
+       // colorTextLabel1.addClass('changeColor');
         colorTextLabel.text("Color: ");
         colorTextLabel1.text("#FFFFFF");
-        colorTextLabel.append(colorTextLabel1);
-        form.append(colorTextLabel);
+       // colorTextLabel.append(colorTextLabel1);
+       // form.append(colorTextLabel);
 
         colorTextLabel.css(labelCSS());
         colorTextLabel1.css({
@@ -3976,9 +3992,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'display': 'inline',
             'padding-left': '2%'
         });
-        colorTextDiv.attr("id", "colorTextDiv");
+       // colorTextDiv.attr("id", "colorTextDiv");
         colorTextDiv.css('display', 'none');
-        form.append(colorTextDiv);
+        //form.append(colorTextDiv);
         textArray.push(colorTextDiv);
 
         //click handler to open the color picker when we click on the color label
@@ -3988,7 +4004,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             updateToggle(textArray, colorTextDiv);
         });
 
-        $(itemText).attr('id', 'textColorToggle');
+       // $(itemText).attr('id', 'textColorToggle');
         $(itemText).attr('readonly', 'readonly');
         $(itemText).css({
             'margin-left': '8%',
@@ -3997,15 +4013,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'width': '40%'
         });
 
-        itemText.attr('id', 'textColorToggle');
+       // itemText.attr('id', 'textColorToggle');
 
         itemText.on('keyup', function (event) {
             event.stopPropagation();
         });
 
-        if (itemText[0].addEventListener) {
-            itemText[0].addEventListener('DOMNodeInserted', function () {
-                myPicker = new jscolor.color(itemText[0], {});
+        if (itemText.addEventListener) {
+            itemText.addEventListener('DOMNodeInserted', function () {
+                myPicker = new jscolor.color(itemText, {});
                 myPicker.fromString("FFFFFF");
                 myPicker.onImmediateChange = function () {
                     updateColor($("#textColorToggle").attr('value'));
@@ -4013,7 +4029,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }, false);
         }
 
-        colorTextDiv.append(itemText[0]);
+       // colorTextDiv.append(itemText[0]);
 
         /**Updates the color in all relevant places on change
          * @method updateColor
@@ -4047,19 +4063,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object} public method to update font type
      */
     function createFontInput(form, handler) {
-        var fontLabel = $(document.createElement('div'));
-        var fontLabel1 = $(document.createElement('div'));
-        var fontSelector = $(document.createElement("select")).addClass('fontSelector');
+        var fontLabel = root.find('#fontLabel');
+        var fontLabel1 = root.find('#fontLabel1');
+        var fontSelector = root.find('#fontSelector');
         var timesOption = createFontOption("Times New Roman");
         var georgiaOption = createFontOption("Georgia");
         var verdanaOption = createFontOption("Verdana");
         var courierOption = createFontOption("Courier");
 
-        fontLabel.addClass('thicknessLabel');
+        //fontLabel.addClass('thicknessLabel');
         fontLabel.text("Font:");
         fontLabel1.text("Times New Roman");
-        fontLabel.append(fontLabel1);
-        form.append(fontLabel);
+        ///fontLabel.append(fontLabel1);
+       // form.append(fontLabel);
         fontLabel1.css({
             'color': 'green',
             'display': 'inline',
@@ -4068,8 +4084,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         fontLabel.css(labelCSS());
 
-        fontSelector.addClass('fontSelector');
-        fontSelector.attr('id', 'fontSelector');
+        //fontSelector.addClass('fontSelector');
+       // fontSelector.attr('id', 'fontSelector');
         fontSelector.css({
             color: "white",
             'float': 'left',
@@ -4082,7 +4098,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             "background-color": 'rgba(0,0,0,0.5)'
         });
         textArray.push(fontSelector);
-        form.append(fontSelector);
+        //form.append(fontSelector);
 
         fontLabel.click(function () {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
@@ -4118,7 +4134,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         /**Updates font on change
          * @method updateFont
-         * @pram font
+         * @param font
          */
         function updateFont(font) {
             if (font) {
@@ -4167,17 +4183,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object} public method to update fotn size
      */
     function createTextSizeInput(form, handler) {
-        var textSizeLabel = $(document.createElement('div'));
-        var textSizeLabel1 = $(document.createElement('div'));
-        var textSizeSlider = $(document.createElement('div'));                      // create slider for font size
-        var textSliderPoint = $(document.createElement('div'));
+        var textSizeLabel = root.find('#textSizeLabel');
+        var textSizeLabel1 = root.find('#textSizeLabel1');
+        var textSizeSlider = root.find('#textSizeSlider');                     // create slider for font size
+        var textSliderPoint = root.find('#textSliderPoint');
 
-        textSizeLabel.addClass('thicknessLabel');
+        //textSizeLabel.addClass('thicknessLabel');
         textSizeLabel.text("Text Size: ");
         textSizeLabel1.text("12px");
-        textSizeLabel.append(textSizeLabel1);
-        textSizeSlider.attr('id', 'textSizeSlider');
-        form.append(textSizeLabel);
+       // textSizeLabel.append(textSizeLabel1);
+       // textSizeSlider.attr('id', 'textSizeSlider');
+        //form.append(textSizeLabel);
         textSizeLabel1.css({
             'color': 'green',
             'display': 'inline',
@@ -4214,9 +4230,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             "left": "50px"
         });
 
-        textSizeSlider.append(textSliderPoint);
+       // textSizeSlider.append(textSliderPoint);
         textSizeSlider.attr("value", "12px");
-        form.append(textSizeSlider);
+       // form.append(textSizeSlider);
 
         // drag functionality for font size slider point
         textSliderPoint.draggable({
@@ -4278,14 +4294,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object} public method to update fotn size
      */
     function createInkTextInput(form, handler) {
-        var textBodyLabel = $(document.createElement('div'));
-        var textBodyLabel1 = $(document.createElement('div'));
-        var textArea = $(document.createElement('textarea'));
+        var textBodyLabel = root.find('#textBodyLabel');
+        var textBodyLabel1 = root.find('#textBodyLabel1');
+        var textArea = root.find('#textArea');
 
-        textBodyLabel.addClass('thicknessLabel');
+        //textBodyLabel.addClass('thicknessLabel');
         textBodyLabel.text("Text:");
-        textBodyLabel.append(textBodyLabel1);
-        form.append(textBodyLabel);
+        //textBodyLabel.append(textBodyLabel1);
+        //form.append(textBodyLabel);
         textBodyLabel1.css({
             'position': 'relative',
             'top': '2px',
@@ -4341,7 +4357,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             animateDuration: 300,
             extraSpace: 40
         });
-        form.append(textArea);
+       // form.append(textArea);
 
         /**Updates text on change
          * @method updateAreaText
@@ -4441,7 +4457,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @method createInitialInkControls
      */
     function createInitialInkControls() {
-        inkTextControls = $(document.createElement('div'));
+        //inkTextControls = $(document.createElement('div'));
         inkTextControls.css({
             'height': '425%',
             'width': '100%',
@@ -4453,7 +4469,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'margin-top': '8%',
             "display": "none"
         });
-        inkTextControls.attr('id', 'inkTextControls');
+        //inkTextControls.attr('id', 'inkTextControls');
         inkTextDocfrag.appendChild(inkTextControls[0]);
     }
 
@@ -4462,7 +4478,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {HTML Element} cancelTextButton
      */
     function createCancelTextButton() {
-        var cancelTextButton = $(document.createElement('button'));
         cancelTextButton.css({
             'font-size': '100%',
             'color': 'black',
@@ -4498,15 +4513,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             playbackControls.undoRedoInkOnly.css({ 'display': 'none' });
         });
         inkTextControls.append(cancelTextButton);
-        return cancelTextButton;
     }
 
     /**Creates cancel button
     * @method createSaveButton
     * @return {HTML Element} saveTextButton
     */
-    function createSaveButton() {
-        var saveTextButton = $(document.createElement('button'));
+    function createSaveTextButton() {
         // save edited ink button
         saveTextButton.css({
             'font-size': '100%',
@@ -4519,7 +4532,20 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'width': '80%'
         });
         saveTextButton.get(0).innerHTML = "Save";
-        return saveTextButton;
+    }
+
+    function createSaveDrawButton() {
+        saveDrawButton.css({
+            'font-size': '100%',
+            'color': 'black',
+            'margin-top': '3%',
+            'margin-left': '8%',
+            'margin-bottom': '10px',
+            'font-weight': 'bold',
+            'float': 'left',
+            'width': '80%'
+        });
+        saveDrawButton.get(0).innerHTML = "Save";
     }
 
     var lastText = "";
@@ -5129,8 +5155,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function createInitialDrawControls() {
         inkDrawDocfrag = document.createDocumentFragment();
-        inkDrawControls = $(document.createElement('div'));
-        inkDrawControls.attr("id", "inkDrawControls");
+        //inkDrawControls = root.find('#inkDrawControls');
+       // inkDrawControls.attr("id", "inkDrawControls");
         inkDrawControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         inkDrawDocfrag.appendChild(inkDrawControls[0]);
         inkDrawControls.css({ "display": "none" });
@@ -5202,20 +5228,20 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object} public method to update values
      */
     function createDrawModeInput(form, handler) {
-        var drawModeLabel = $(document.createElement('div'));
-        var drawModeLabel1 = $(document.createElement('div'));
-        var drawModeDiv = $(document.createElement('div'));
-        var drawLabel = $(document.createElement('label'));
-        var eraseLabel = $(document.createElement('label'));
+        var drawModeLabel = root.find('#drawModeLabel')
+        var drawModeLabel1 = root.find('#drawModeLabel1');
+        var drawModeDiv = root.find('#drawModeDiv');
+        var drawLabel = root.find('#drawLabel');
+        var eraseLabel = root.find('#eraseLabel');
         drawMode = 'draw';
 
         drawModeDiv.css({ "height": '10%', 'width': '80%', 'clear': 'both', 'margin-left': '8%', 'margin-top': '3%', 'display': 'none' });
-        drawModeLabel.addClass('thicknessLabel');
+        //drawModeLabel.addClass('thicknessLabel');
 
 
         drawModeLabel.text("Mode: ");
         drawModeLabel1.text("Draw");
-        drawModeLabel.append(drawModeLabel1);
+        //drawModeLabel.append(drawModeLabel1);
         eraseLabel.text("Erase");
         drawLabel.text("Draw");
 
@@ -5228,13 +5254,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             drawModeLabel.css({ 'font-weight': 'bold' });
             updateToggle(drawArray, drawModeDiv);
         });
-        form.append(drawModeLabel);
-        form.append(drawModeDiv);
+        //form.append(drawModeLabel);
+       // form.append(drawModeDiv);
         drawArray.push(drawModeDiv);
         drawLabel.css({ 'font-size': '120%', 'color': 'black', 'margin-left': '8%', 'font-weight': 'bold', 'float': 'left' });
         eraseLabel.css({ 'font-size': '120%', 'color': 'gray', 'margin-right': '9%', 'font-weight': 'bold', 'float': 'right' });
-        drawModeDiv.append(drawLabel);
-        drawModeDiv.append(eraseLabel);
+       // drawModeDiv.append(drawLabel);
+       // drawModeDiv.append(eraseLabel);
 
         drawLabel.on('click', function () {
             if (drawMode === 'erase') {
@@ -5275,17 +5301,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object} public methods
      */
     function createBrushInput(form) {
-        var brushLabel = $(document.createElement('div'));
-        var brushLabel1 = $(document.createElement('div'));
-        var brushSlider = $(document.createElement('div'));
-        var brushSliderPoint = $(document.createElement('div'));
+        var brushLabel = root.find('#brushLabel');
+        var brushLabel1 = root.find('#brushLabel1');
+        var brushSlider = root.find('#brushSlider');
+        var brushSliderPoint = root.find('#brushSliderPoint');
 
-        brushLabel.addClass('thicknessLabel');
+        //brushLabel.addClass('thicknessLabel');
         brushLabel.text("Width: ");
         brushLabel1.text("7px");
-        brushLabel.append(brushLabel1);
+       // brushLabel.append(brushLabel1);
         brushSliderPoint.attr('id', 'brushSlider');
-        form.append(brushLabel);
+       // form.append(brushLabel);
         brushLabel1.css({ 'color': 'green', 'display': 'inline', 'padding-left': '2%' });
         brushLabel.css(labelCSS());
 
@@ -5297,8 +5323,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'background-color': 'white', 'height': '115%', 'width': '9.25%', 'position': "relative",
             'border': '1px', 'border-style': 'solid', 'border-color': 'gray', "border-radius": "50%", "top": "-5%"
         });
-        brushSlider.append(brushSliderPoint);
-        form.append(brushSlider);
+       // brushSlider.append(brushSliderPoint);
+       // form.append(brushSlider);
 
         brushLabel.on('click', function () {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
@@ -5356,22 +5382,22 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object} public methods
      */
     function createDrawColorInput(form, handler) {
-        var colorLabel = $(document.createElement('div'));
-        var colorLabel1 = $(document.createElement('div'));
-        var colorDiv = $(document.createElement('div'));
-        var item = $(document.createElement('input'));
+        var colorLabel = root.find('#colorLabel');
+        var colorLabel1 = root.find('#changeColor1');
+        var colorDiv = root.find('#colorDiv');
+        var item = root.find('#brushColorToggle');
 
-        colorLabel.addClass('thicknessLabel');
-        colorLabel1.addClass('changeColor1');
+       // colorLabel.addClass('thicknessLabel');
+       // colorLabel1.addClass('changeColor1');
         colorLabel.text("Color: ");
         colorLabel1.text("#000000");
-        colorLabel.append(colorLabel1);
-        form.append(colorLabel);
+       // colorLabel.append(colorLabel1);
+       // form.append(colorLabel);
 
         colorLabel.css(labelCSS());
         colorLabel1.css({ 'color': 'green', 'display': 'inline', 'padding-left': '2%' });
 
-        form.append(colorDiv);
+      //  form.append(colorDiv);
         drawArray.push(colorDiv);
 
         colorLabel.on('click', function () {
@@ -5387,7 +5413,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             //  drawModeLabel1.text("Draw");
         });
 
-        $(item).attr('id', 'brushColorToggle');
+       // $(item).attr('id', 'brushColorToggle');
         $(item).attr('readonly', 'readonly');
         $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%' });
         item.onfocus = function () {
@@ -5397,10 +5423,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(item).on('keyup', function (event) {
             event.stopPropagation();
         });
-        if (item[0].addEventListener) {
-            item[0].addEventListener('DOMNodeInserted', function () {
+        if (item.addEventListener) {
+            item.addEventListener('DOMNodeInserted', function () {
                 //initialize colorpicker object on current element
-                myPicker = new jscolor.color(item[0], {});
+                myPicker = new jscolor.color(item, {});
                 myPicker.fromString("000000");
                 myPicker.onImmediateChange = function () {
                     colorLabel1.text($('#brushColorToggle').attr('value'));
@@ -5409,7 +5435,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 };
             }, false);
         }
-        colorDiv.append(item);
+      //  colorDiv.append(item);
 
         /**Updates brush stroke color
          * @method updateColor
@@ -5449,16 +5475,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object} public methods
      */
     function createDrawOpacityInput(form, handler) {
-        var opacityLabel = $(document.createElement('div'));
-        var opacityLabel1 = $(document.createElement('div'));
-        var opacitySlider = $(document.createElement('div'));
-        var opacitySliderPoint = $(document.createElement('div'));
+        var opacityLabel = root.find('#opacityLabel');
+        var opacityLabel1 = root.find('#opacityLabel1');
+        var opacitySlider = root.find('#opacitySlider');
+        var opacitySliderPoint = root.find('#opacitySliderPoint');
 
-        opacityLabel.addClass('thicknessLabel');
+        //opacityLabel.addClass('thicknessLabel');
         opacityLabel.text("Opacity: ");
         opacityLabel1.text("100%");
-        opacityLabel.append(opacityLabel1);
-        form.append(opacityLabel);
+       // opacityLabel.append(opacityLabel1);
+       // form.append(opacityLabel);
         opacityLabel1.css({ 'color': 'green', 'display': 'inline', 'padding-left': '2%' });
         opacityLabel.css(labelCSS());
         opacitySlider.css({
@@ -5471,8 +5497,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'background-color': 'white', 'height': '115%', 'width': '9.25%', 'position': 'relative',
             'border': '1px', 'border-style': 'solid', 'border-color': 'gray', "border-radius": "50%", "top": "-5%", "margin-top": "-0.57%"
         });
-        opacitySlider.append(opacitySliderPoint);
-        form.append(opacitySlider);
+       // opacitySlider.append(opacitySliderPoint);
+       // form.append(opacitySlider);
         opacityLabel.on('click', function () {
             $(".thicknessLabel").css({ 'font-weight': 'normal' });
             opacityLabel.css({ 'font-weight': 'bold' });
@@ -5527,7 +5553,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function createCancelDrawButton() {
         // draw cancel button
-        var cancelDrawButton = $(document.createElement('button'));
         cancelDrawButton.css({ 'font-size': '100%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', /*'width': '25%'*/ 'width': '80%' });
         cancelDrawButton.get(0).innerHTML = "Cancel";
         cancelDrawButton.click(function () {
@@ -5553,7 +5578,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             playbackControls.undoRedoInkOnly.css({ 'display': 'none' });
         });
         inkDrawControls.append(cancelDrawButton);
-        return cancelDrawButton;
     }
 
 
@@ -5919,8 +5943,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @method createInitialTransparencyControls
      */
     function createInitialTransparencyControls() {
-        inkTransparencyControls = $(document.createElement('div'));
-        inkTransparencyControls.attr("id", "inkTransControls");
+       // inkTransparencyControls = $(document.createElement('div'));
+       // inkTransparencyControls.attr("id", "inkTransControls");
         inkTransparencyControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         inkTransparencyDocfrag.appendChild(inkTransparencyControls[0]);
         inkTransparencyControls.css({ "display": "none" });
@@ -5981,40 +6005,40 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object}         public properties
      */
     function createTransparencyBlocks() {
-        var addEllipseButton = $(document.createElement('button'));
-        var addRectButton = $(document.createElement('button'));
-        var transModeDiv = $(document.createElement('div'));
-        var transModeLabel = $(document.createElement('div'));
-        var transModeLabel1 = $(document.createElement('div'));
+        var addEllipseButton = root.find('#ellipseButton');
+        var addRectButton = root.find('#rectangleButton');
+        var transModeDiv = root.find('#transModeDiv');
+        var transModeLabel = root.find('#transModeLabel');
+        var transModeLabel1 = root.find('#transModeLabel1');
         var transparencyMode = 'isolate';
-        var isolateLabel = $(document.createElement('label'));
-        var blockLabel = $(document.createElement('label'));
+        var isolateLabel = root.find('#isolateLabel');
+        var blockLabel = root.find('#blockLabel');
 
 
         addEllipseButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%', 'clear': 'left' });
-        addEllipseButton.get(0).innerHTML = "Add Ellipse";
+        addEllipseButton.get().innerHTML = "Add Ellipse";
         addEllipseButton.on('click', function () {
             currentInkController.addEllipse();
         });
-        inkTransparencyControls.append(addEllipseButton);
+        //inkTransparencyControls.append(addEllipseButton);
 
         addRectButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%' });
-        addRectButton.get(0).innerHTML = "Add Rectangle";
+        addRectButton.get().innerHTML = "Add Rectangle";
         addRectButton.on('click', function () {
             currentInkController.addRectangle();
         });
-        inkTransparencyControls.append(addRectButton);
+       // inkTransparencyControls.append(addRectButton);
 
         transModeDiv.css({ "height": '10%', 'width': '80%', 'clear': 'both', 'margin-left': '8%', 'margin-top': '3%', 'display': 'none' });
 
-        transModeLabel.addClass('thicknessLabel');
+       // transModeLabel.addClass('thicknessLabel');
         transModeLabel.text("Mode: ");
         transModeLabel1.text("Isolate");
-        transModeLabel.append(transModeLabel1);
+        //transModeLabel.append(transModeLabel1);
         transModeLabel1.css({ 'color': 'green', 'display': 'inline', 'padding-left': '2%' });
         transModeLabel.css(labelCSS());
-        inkTransparencyControls.append(transModeLabel);
-        inkTransparencyControls.append(transModeDiv);
+       // inkTransparencyControls.append(transModeLabel);
+       // inkTransparencyControls.append(transModeDiv);
         transArray.push(transModeDiv);
 
         transModeLabel.on('click', function () {
@@ -6026,7 +6050,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // isolate label
         isolateLabel.css({ 'font-size': '120%', 'color': 'black', 'margin-left': '8%', 'font-weight': 'bold', 'float': 'left' });
         isolateLabel.text("Isolate");
-        transModeDiv.append(isolateLabel);
+       // transModeDiv.append(isolateLabel);
 
         // isolate label click handler
         isolateLabel.on('click', function () {
@@ -6042,7 +6066,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // block label
         blockLabel.css({ 'font-size': '120%', 'color': 'gray', 'margin-right': '9%', 'font-weight': 'bold', 'float': 'right' });
         blockLabel.text("Block");
-        transModeDiv.append(blockLabel);
+       // transModeDiv.append(blockLabel);
 
         // block label click handler
         blockLabel.on('click', function () {
@@ -6085,15 +6109,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      * @return {Object}   public properties of the input
      */
     function createTransparencyOpacityInput() {
-        var opacityTransparencyLabel = $(document.createElement('div'));
-        var opacityTransparencyLabel1 = $(document.createElement('div'));
-        var opacityTransparencySlider = $(document.createElement('div'));
-        var opacityTransparencySliderPoint = $(document.createElement('div'));
+        var opacityTransparencyLabel = root.find('#opacityTransparencyLabel');
+        var opacityTransparencyLabel1 = root.find('#opacityTransparencyLabel1');
+        var opacityTransparencySlider = root.find('#opacityTransparencySlider');
+        var opacityTransparencySliderPoint = root.find('#opacityTransparencySliderPoitn');
 
-        opacityTransparencyLabel.addClass('thicknessLabel');
+       // opacityTransparencyLabel.addClass('thicknessLabel');
         opacityTransparencyLabel.text("Opacity: ");
-        opacityTransparencyLabel.append(opacityTransparencyLabel1);
-        inkTransparencyControls.append(opacityTransparencyLabel);
+      //  opacityTransparencyLabel.append(opacityTransparencyLabel1);
+       // inkTransparencyControls.append(opacityTransparencyLabel);
         opacityTransparencyLabel1.css({ 'color': 'green', 'display': 'inline', 'padding-left': '2%' });
         opacityTransparencyLabel.css(labelCSS());
         opacityTransparencySlider.css({
@@ -6101,13 +6125,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
         });
 
-        opacityTransparencySliderPoint.attr("id", "opacityTransparencySliderPoint");
+       // opacityTransparencySliderPoint.attr("id", "opacityTransparencySliderPoint");
         opacityTransparencySliderPoint.css({
             'background-color': 'white', 'height': '115%', 'width': '9.25%', 'position': 'relative',
             'border': '1px', 'border-style': 'solid', 'border-color': 'gray', "border-radius": "50%", "top": "-5%", "margin-top": "-0.57%"
         });
-        opacityTransparencySlider.append(opacityTransparencySliderPoint);
-        inkTransparencyControls.append(opacityTransparencySlider);
+       // opacityTransparencySlider.append(opacityTransparencySliderPoint);
+       // inkTransparencyControls.append(opacityTransparencySlider);
 
         // trans opacity label click handler
         opacityTransparencyLabel.on('click', function () {
@@ -6166,7 +6190,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function createTransparencyCancelButton() {
         // trans cancel button
-        var cancelTransButton = $(document.createElement('button'));
         cancelTransButton.css({ 'font-size': '100%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%' });
         cancelTransButton.get(0).innerHTML = "Cancel";
         cancelTransButton.on('click', function () {
@@ -6191,7 +6214,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             playbackControls.undoRedoInkOnly.css({ 'display': 'none' });
         });
         inkTransparencyControls.append(cancelTransButton);
-        return cancelTransButton;
     }
 
     /**creates save button for highlighting ink 
@@ -6200,11 +6222,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function createSaveTransparencyButton() {
         // edit trans save button
-        var saveTransButton = $(document.createElement('button'));
         saveTransButton.css({ 'font-size': '100%', 'color': 'black', 'margin-top': '3%', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%' });
         saveTransButton.get(0).innerHTML = "Save";
         inkTransparencyControls.append(saveTransButton);
-        return saveTransButton;
     }
 
     ////////////////////////
@@ -6326,9 +6346,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // slightly different controls for text and transparency, since we can't call currentInkController.link directly
         var text_mode = false;
         var trans_mode = false;
-        var newDiv = $(document.createElement('div'));                          // div to contain buttons
-        var linkButton = $(document.createElement('button'));                   // attach button
-        var freeInkButton = $(document.createElement('button'));                // create as unattached ink button
+        var newDiv = root.find('#newDiv');                       // div to contain buttons
+        var linkButton = root.find('linkButton');                   // attach button
+        var freeInkButton = root.find('#freeInkButton');                // create as unattached ink button
 
         if (isText && isText !== 0) {
             text_mode = true;
@@ -6342,7 +6362,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         newDiv.css('margin-top', '2%');
 
         linkButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '5%', 'clear': 'left' });
-        linkButton.get(0).innerHTML = "Attach to Selected";
+        linkButton.get().innerHTML = "Attach to Selected";
 
         // attach button click handler -- reset to default values, call link, link_text, or link_trans or their unattached equivalents
         linkButton.on('click', function () {
@@ -6390,10 +6410,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             timeline.setModifyingInk(false);
             timeline.setEditInkOn(false);
         });
-        newDiv.append(linkButton);
+       // newDiv.append(linkButton);
 
         freeInkButton.css({ 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '5%' });
-        freeInkButton.get(0).innerHTML = "Create as Unattached";
+        freeInkButton.get().innerHTML = "Create as Unattached";
 
         // unattached button click handler
         freeInkButton.on('click', function () {
@@ -6429,7 +6449,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             timeline.setModifyingInk(false);
             timeline.setEditInkOn(false);
         });
-        newDiv.append(freeInkButton);
+       // newDiv.append(freeInkButton);
         return newDiv;
     }
 
