@@ -530,6 +530,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         };
         INITIAL_DRAW.createModeButton();
+        INITIAL_DRAW.showForm();
         INITIAL_DRAW.updateInputs();
 
         if (linked) {
@@ -755,6 +756,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
 
         INITIAL_TRANSPARENCY.createModeButtons();
+        INITIAL_TRANSPARENCY.showForm();
         INITIAL_TRANSPARENCY.updateInputs(currentInkController.getAttr(datastring, 'opac', 'f'));
         transMode.updateMode(currentInkController.getTransMode());
         /*     if (currentMode === 'isolate') {
@@ -1017,6 +1019,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             size: currentInkController.getAttr(datastring, 'fontsize', 'f') * ch
         };
         INITIAL_INK_TEXT.createModeButton();
+        INITIAL_INK_TEXT.showForm();
         INITIAL_INK_TEXT.updateInputs(values);
 
         currentInkController.removeAll();
