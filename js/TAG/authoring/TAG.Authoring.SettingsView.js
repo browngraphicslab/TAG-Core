@@ -2522,7 +2522,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 descInput.select();
         });
 
-        onChangeUpdateText(titleInput, null, 40);
+        onChangeUpdateText(titleInput, null, 2000);
         onChangeUpdateText(descInput, null, 5000);
 
         var title = createSetting('Title', titleInput);
@@ -3338,9 +3338,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 descInput.select();
         });
 
-        onChangeUpdateText(titleInput, null, 40);
-        onChangeUpdateText(artistInput, null, 40);
-        onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 40);
+        onChangeUpdateText(titleInput, null, 500);
+        onChangeUpdateText(artistInput, null, 150);
+        onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 100);
         onChangeUpdateText(descInput, null, 5000);
 
         var title = createSetting('Title', titleInput);
