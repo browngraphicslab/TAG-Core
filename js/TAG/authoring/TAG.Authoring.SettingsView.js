@@ -406,50 +406,53 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         backButton.click(function () {
-            changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-            changesHaveBeenMade = false;
+            if (!changesHaveBeenMade) {
+                TAG.Auth.clearToken();
+                rightQueue.clear();
+                middleQueue.clear();
+                backButton.off('click');
+                if (backPage) {
+                    var bpage = backPage();
+                    TAG.Util.UI.slidePageRight(bpage);
+                } else {
+                    TAG.Layout.StartPage(null, function (page) {
+                        TAG.Util.UI.slidePageRight(page);
+                    });
+                }
+                TAG.Util.UI.getStack()[0] = null;
+            } else {
 
-            backButtonClicked = true;
+                changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                changesHaveBeenMade = false;
 
-            settingsContainer.css({ visibility: 'hidden' });
-            settings.css({ overflow: 'hidden' });
-            buttonContainer.css({ visibility: 'hidden' });
-            var changeLabel = createLabel('Changes are being saved...');
-            changeLabel.attr('id', 'changeLabel');
-            changeLabel.css({
-                'position': 'absolute',
-                'top': '30%',
-                'left': '10%',
-                'z-index': '50',
-                'height': 'auto',
-                'width': '33%',
-                'color': 'black',
-                'font-size': '80%'
-            });
-            var progressCircCSS = {
-                'position': 'absolute',
-                'left': '50%',
-                'top': '30%',
-                'z-index': '50',
-                'height': 'auto',
-                'width': '10%'
-            };
-            var progressCL = TAG.Util.showProgressCircle(settings, progressCircCSS, '0px', '0px', true);
-            settings.append(changeLabel);
+                backButtonClicked = true;
 
-            //TAG.Auth.clearToken();
-            //rightQueue.clear();
-            //middleQueue.clear();
-            //backButton.off('click');
-            //if (backPage) {
-            //    var bpage = backPage();
-            //    TAG.Util.UI.slidePageRight(bpage);
-            //} else {
-            //    TAG.Layout.StartPage(null, function (page) {
-            //        TAG.Util.UI.slidePageRight(page);
-            //    });
-            //}
-            //TAG.Util.UI.getStack()[0] = null;
+                settingsContainer.css({ visibility: 'hidden' });
+                settings.css({ overflow: 'hidden' });
+                buttonContainer.css({ visibility: 'hidden' });
+                var changeLabel = createLabel('Changes are being saved...');
+                changeLabel.attr('id', 'changeLabel');
+                changeLabel.css({
+                    'position': 'absolute',
+                    'top': '30%',
+                    'left': '10%',
+                    'z-index': '50',
+                    'height': 'auto',
+                    'width': '33%',
+                    'color': 'black',
+                    'font-size': '80%'
+                });
+                var progressCircCSS = {
+                    'position': 'absolute',
+                    'left': '50%',
+                    'top': '30%',
+                    'z-index': '50',
+                    'height': 'auto',
+                    'width': '10%'
+                };
+                var progressCL = TAG.Util.showProgressCircle(settings, progressCircCSS, '0px', '0px', true);
+                settings.append(changeLabel);
+            }
             
         });
 
@@ -3422,8 +3425,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
         settingsContainer.append(title);
         settingsContainer.append(artist);
-        settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
         settingsContainer.append(desc);
+        settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
 
         $.each(customSettings, function (key, val) {
             settingsContainer.append(val);
@@ -4917,8 +4920,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineYearJustChanged = false,
             timelineMonthInput,
             timelineDayInput,
-            timelineYearDiv = $(document.createElement('div')),
-            yearDiv = $(document.createElement('div')),
+            timelineYearDiv = $(document.createElement('div')).addClass('timelineYearDiv'),
+            yearDiv = $(document.createElement('div')).addClass('yearDiv'),
             year,
             month,
             day,
@@ -4927,7 +4930,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay,
             timelineYearAutofilled = false,
             timelineYearAllowed = true,
-            yearMetadataDiv= $(document.createElement('div')),
+            yearMetadataDiv= $(document.createElement('div')).addClass('yearMetadataDiv'),
             yearMetadataDivSpecs;
 
         //Create input boxes: 
@@ -4993,16 +4996,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             position: 'relative',
             'float': 'left'
         });
-        yearDescriptionDiv.css({
-            'width' : '60%',
-            'height':'10px',
-            'position': 'relative',
-            'left':'3%',
-            'font-size':'85%',
-            'white-space': 'nowrap'     
-        });
-        yearDescriptionDiv.text("Ej: 2013, 800 BC, 17th century, 1415-1450");
-        year.append(yearDescriptionDiv);
         month = createSetting('Month', monthInput, 60);
         month.css({
             width: '32%',
@@ -5033,37 +5026,47 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-bottom': '4%',
             'padding-top':'2%'
         });
-        timelineYear = createSetting('Date on Timeline', timelineYearInput, 40);
+        timelineYear = createSetting('Timeline Year', timelineYearInput, 40);
         timelineYear.css({
-            width: '47%',
+            width: '40%',
             display: 'inline-block',
-            'position': 'absolute',
-            'left' : '2%',
-            'float':'left'
+            position: 'relative',
+            'float': 'left'
         });
         timelineMonth = createSetting('Month', timelineMonthInput, 50);
         timelineMonth.css({
             width: '27%',
             'padding-left': '1%',
+            'position': 'relative',
             display: 'inline-block',
-            'left':'15%',
-            'position':'relative',
-            'float':'left'
+            'float': 'left'
         });
         toggleAllow(timelineMonthInput);
         timelineDay = createSetting('Day', timelineDayInput, 60);
         timelineDay.css({
-            width : '20%',
+            width: '27%',
             'padding-left': '2%',
+            'position': 'relative',
             display: 'inline-block',
-            'position':'relative',
-            'left' : '15%',
             'float': 'left'
         });
         toggleAllow(timelineDayInput);
         timelineYearDiv.append(timelineYear)
                        .append(timelineMonth)
                        .append(timelineDay);
+
+        yearDescriptionDiv.css({
+            'width': '60%',
+            'height': '25px',
+            'position': 'absolute',
+            'left': '0%',
+            'margin-bottom':'1%',
+            'margin-left': '2%',
+            'font-size': '70%',
+            'white-space': 'nowrap',
+            'display':'inline-block'
+        });
+        yearDescriptionDiv.text("Year format examples: 2013, 800 BC, 17th century, 1415-1450");
 
         //Link input values of date fields to dynamically change/disable               
         yearInput.on('input', function(){
@@ -5137,7 +5140,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         yearMetadataDiv.append(yearDiv)
-                       .append(timelineYearDiv); 
+                       .append(yearDescriptionDiv)
+                       .append(timelineYearDiv);
 
         yearMetadataDivSpecs = {
             yearMetadataDiv : yearMetadataDiv,
