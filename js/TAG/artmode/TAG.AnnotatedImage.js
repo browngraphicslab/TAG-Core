@@ -26,7 +26,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         artworkName     = doq.Name,        // artwork's title
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
-                                           //   also contains an array of GUIDs for cleaner iteration
+                                           // also contains an array of GUIDs for cleaner iteration
         toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
         rootHeight = $('#tagRoot').height(), //tag root height
         rootWidth = $('#tagRoot').width(),  //total tag root width for manipulation (use root.width() instead for things that matter for splitscreen styling)
@@ -634,8 +634,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.hide();
             } else {
                 // set up divs for the associated media
-                outerContainer.css('width', '29%')
-                               .css('min-width', 0.29*rootWidth);
+                outerContainer.css('width', '29%');
                 innerContainer.css('backgroundColor', 'rgba(0,0,0,0.65)');
 
                 if (TITLE) {
@@ -942,6 +941,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         height: 'auto'
                     });
                     mediaContainer.append(img);
+                    outerContainer.css('min-width', '');
                 } else if (CONTENT_TYPE === 'Video') {
                     mediaElt = document.createElement('video');
                     $mediaElt = $(mediaElt);
@@ -953,6 +953,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         type: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"',
                         controls: false
                     });
+
+                    outerContainer.css('min-width', 0.29*rootWidth);
 
                     // TODO need to use <source> tags rather than setting the source and type of the
                     //      video in the <video> tag's attributes; see video player code
@@ -979,7 +981,22 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     $mediaElt.on('error', function () {
                         console.log("Here's an error ");
                     });
+                    outerContainer.css({
+                        'min-width': 0.29*rootWidth,
+                        'height' : 'auto'
+                    });
                 } else if (CONTENT_TYPE === 'iframe') {
+                    //TO-DO make sure this doesn't mess up future other media containers, should add to stylus??
+                    outerContainer.css({
+                        'width':'30%',
+                    });
+                    outerContainer.css('height', outerContainer.width()*1.15);
+                    innerContainer.css({
+                        'height':'100%'
+                    });
+                    mediaContainer.css({
+                        'height': '75%'
+                    });
                     iframe = $(document.createElement('iframe'));
                     iframe.attr({
                         src: SOURCE,
@@ -987,8 +1004,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     });
                     iframe.css({
                         width: '100%',
-                        height: '500px' // TODO iframe -- this is just for testing
+                        height: '100%'
                     });
+                    descDiv
                     mediaContainer.append(iframe);
                 }
             }
@@ -1003,12 +1021,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var w = outerContainer.width(),
                 h = outerContainer.height();
             outerContainerPivot = {
-                //x: w / 2 - (outerContainer.offset().left - root.offset().left),
-                //y: h / 2 - (outerContainer.offset().top - root.offset().top)
-                x: -outerContainer.offset().left + w, //+ root.offset().left,
-                y: -outerContainer.offset().top + h
+                x: w / 2 - (outerContainer.offset().left - root.offset().left),
+                y: h / 2 - (outerContainer.offset().top - root.offset().top)
             };
-            console.log(outerContainerPivot);
             toManip = mediaManip;
             $('.mediaOuterContainer').css('z-index', 1000);
             outerContainer.css('z-index', 1001);
@@ -1030,6 +1045,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @param {Object} res     object containing hammer event info
          */
         function mediaManip(res) {
+
             if (currentlySeeking || !res) {
                 return;
             }
@@ -1067,16 +1083,23 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 minW = 200;
             } else if (CONTENT_TYPE === 'Video') {
                 maxW = 1000;
-                minW = 250;
+                minW = parseFloat(outerContainer.css('min-width'));
             } else if (CONTENT_TYPE === 'Audio') {
                 maxW = 800;
+                minW = parseFloat(outerContainer.css('min-width'));
+            } else if(CONTENT_TYPE === 'iframe'){
                 minW = 250;
+                maxW = rootWidth*0.8;
             }
 
-            // constrain new width
-            if(newW < minW || maxW < newW) {
-                newW = Math.min(maxW, Math.max(minW, newW));
-                scale = newW / w;
+            //constrain new width
+            if (newW < minW){
+                newW = minW;
+                scale = newW/w;
+            }
+            else if (newW > maxW){
+                newW = maxW;
+                scale = newW/w;
             }
 
            //Manipulation for touch and drag events
@@ -1126,25 +1149,28 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     //Recursive function to move object between start location and final location with proper physics
                     move(initialVelocity, initialPosition, finalPosition, timestepConstant/50);
                     viewer.viewport.applyConstraints();
+                    mediaManipPreprocessing(); //updateDimensions, etc
 
                 } else { //If object isn't within bounds, hide and reset it.
                     hideMediaObject();
                     pauseResetMediaObject();
+                    mediaManipPreprocessing(); //updateDimensions, etc
                     return;
                 }
             } else{ // zoom from touch point: change width and height of outerContainer
-                outerContainer.css("top", (t + trans.y + (1 - scale) * (pivot.y + isWinFactor*t)) + "px");
-                outerContainer.css("left", (l + trans.x + (1 - scale) * (pivot.x + isWinFactor * l)) + "px");
+                if (minW != newW){
+                outerContainer.css('left', l- (newW - w)/2);
                 outerContainer.css("width", newW + "px");
-                outerContainer.css("height", "auto"); 
+                if (CONTENT_TYPE === 'Audio'){
+                    outerContainer.css('height','auto');
+                } else {
+                var newH = (newW*h)/w;
+                outerContainer.css('height',newH + 'px');
+                }
+                outerContainer.css('top', t - (outerContainer.height() - h)/2);
+                mediaManipPreprocessing(); //Update dimensions since they've changed, and keep this media as active (if say an inactive media was dragged/pinch-zoomed)
+                }
             }
-
-            mediaManipPreprocessing();      //Update dimensions since they've changed, and keep this media as active (if say an inactive media was dragged/pinch-zoomed)
-
-            // TODO this shouldn't be necessary; style of controls should take care of it
-            // if ((CONTENT_TYPE === 'Video' || CONTENT_TYPE === 'Audio') && scale !== 1) {
-            //     resizeControlElements();
-            // }
         }
 
 

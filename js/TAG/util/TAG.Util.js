@@ -325,6 +325,9 @@ TAG.Util = (function () {
             clear: function () {
                 clearTimeout(this._timer);
                 this._queue = [];
+            },
+            isEmpty: function () {
+                return (this._queue.length === 0);
             }
         };
     }
@@ -2563,7 +2566,7 @@ TAG.Util.UI = (function () {
             'height': '50%',
             'left': '10%',
             'top': '12.5%',
-            'font-size': '1.25em',
+            'font-size': '1em',
             'overflow': 'hidden',
             'position': 'relative',
             'text-align': 'center',
@@ -3755,9 +3758,9 @@ TAG.Util.UI = (function () {
                 compHolderImage.css({
                     'max-height': '100%',
                     'position': 'absolute',
-                    // 'left': '0',
-                    // 'right': '0',
-                    // 'top': '0',
+                    'left': '0',
+                    'right': '0',
+                    'top': '0',
                     'bottom': '0',
                     'margin': 'auto',
                     'max-width': '100%',
