@@ -19,17 +19,17 @@
     top 25%
     left 25%
 
-.catalogPickerInfo
+.catalogPicker .catalogPickerInfo
 	font-size 200%
     float left
 
-#searchbar
+.catalogPicker #searchbar
 	float right
     margin-right 3%
     margin-top 0.75%
     width 38%
 
-.catalogPickerExhibitions
+.catalogPicker .catalogPickerExhibitions
 	position absolute
     border-right 1px solid white
     top 13%
@@ -38,7 +38,7 @@
     width 28%
     overflow auto
 
-.catalogPickerExhibitions .allArtworksHolder
+.catalogPicker .catalogPickerExhibitions .allArtworksHolder
  	width 100%
     height 9%
     margin 1px 0px 1px 0px
@@ -46,7 +46,7 @@
     padding-left 3%
     padding-top 3%
 
-.catalogPickerArtworks
+.catalogPicker .catalogPickerArtworks
  	position absolute
     left 33%
     top 13%
@@ -55,24 +55,347 @@
     width 62%
     overflow auto
 
-#loadingLabel
+.catalogPicker .catalogPickerArtworks #loadingLabel
 	display inline-block
     position absolute
     left 3%
     bottom 2%
 
-#loadingLabel #progressCircle
+.catalogPicker .catalogPickerArtworks #loadingLabel #progressCircle
 	height 12px
     width auto
     margin-left 20px
     float right
 
-#catalogPickerImport
+.catalogPicker #catalogPickerImport
  	position absolute
     bottom 2%
     right 22%
 
-#catalogPickerCancel
+.catalogPicker #catalogPickerCancel
  	position absolute
     bottom 2%
 	right 5%
+
+.associatedMediaPicker
+	position: absolute
+    width 49%
+    height 49%
+    padding 1%
+    background-color black
+    border 3px double white
+    top 25%
+    left 25%
+
+.associatedMediaPicker #associatedLoadingLabel
+	display inline-block
+    position absolute
+    left 3%
+    bottom 2%
+
+.associatedMediaPicker #associatedLoadingLabel #circle
+	height 12px
+    width auto
+    margin-left 20px
+    float right
+
+.associatedMediaPicker #associatedMediaPickerImport
+	position absolute
+    bottom 1%
+    right 22%
+
+.associatedMediaPicker #associatedMediaPickerCancel
+	position absolute
+	bottom 1%
+	right 5%
+
+#dropMain
+	left menuOffsetL
+    position relative
+    color rgb(256, 256, 256)
+    width 74%
+    background-color rgba(0,0,0,0.95)
+    float left
+    clear left
+    z-index TAG.TourAuthoring.Constants.aboveRinZIndex + 19
+
+#dropFile
+	left 87%
+    position relative
+    color rgb(256, 256, 256)
+    width 74%
+    margin-top -33%
+    background-color rgba(0,0,0,0.95)
+    float left
+    z-index TAG.TourAuthoring.Constants.aboveRinZIndex + 19
+
+#dropInk
+	left 87%
+    position relative
+    margin-top -16.5%
+    color rgb(256, 256, 256)
+    width 74%
+    background-color rgba(0,0,0,0.95)
+    float left
+    z-index TAG.TourAuthoring.Constants.aboveRinZIndex + 19
+
+#inkTextControls
+	height 425%
+    width 100%
+    top 130%
+    position absolute
+    z-index 0
+    overflow-x none
+    overflow-y auto
+    margin-top 8%
+    display none
+
+#inkTextControls #cancelTextButton
+	font-size 100%
+    color black
+    margin-left 8% 
+    margin-bottom 10px
+    font-weight bold
+    float left
+    width 80%
+
+#inkTextControls #saveTextButton
+	font-size 100%
+    color black
+    margin-top 3%
+    margin-left 8% 
+    margin-bottom 10px
+    font-weight bold
+    float left
+    width 80%
+
+#inkDrawControls
+	height 425%
+    width 100%
+    top 130%
+    position absolute
+    z-index 0
+    overflow-x none
+    overflow-y auto
+    margin-top 8%
+    display none
+
+#inkDrawControls #cancelDrawButton
+	font-size 100%
+    color black
+    margin-left 8% 
+    margin-bottom 10px
+    font-weight bold
+    float left
+    width 80%
+
+#inkDrawControls #saveDrawButton
+	font-size 100%
+    color black
+    margin-top 3%
+    margin-left 8% 
+    margin-bottom 10px
+    font-weight bold
+    float left
+    width 80%
+
+#inkTransControls
+	height 425%
+    width 100%
+    top 130%
+    position absolute
+    z-index 0
+    overflow-x none
+    overflow-y auto
+    margin-top 8%
+    display none
+
+#inkTransControls #cancelTransButton
+	font-size 100%
+    color black
+    margin-left 8% 
+    margin-bottom 10px
+    font-weight bold
+    float left
+    width 80%
+
+#inkTransControls #saveTransButton
+	font-size 100%
+    color black
+    margin-top 3%
+    margin-left 8% 
+    margin-bottom 10px
+    font-weight bold
+    float left
+    width 80%
+
+#addComponentLabel
+	left menuOffsetL
+	top 5% 
+	position relative
+    font-size TAG.Util.getFontSize(70) 
+    color rgb(256, 256, 256)
+    background-color rgb(63, 55, 53)
+    padding 3% 2% 4% 2%'
+    width 70%
+    float left
+
+#addComponentLabel #addDropDownIconComponent
+	width 10%
+	margin-left 35%
+	height 10%
+
+#fade
+ 	width 100%
+    height 100%
+    position fixed
+    top 0px
+    left 0px
+    z-index TAG.TourAuthoring.Constants.aboveRinZIndex + 18
+
+#inkTextControls #colorTextLabel
+	font-size 130%
+    color black
+    margin-left 8%
+    font-weight normal'
+    margin-top 3%
+    margin-right 12%
+    margin-bottom 1%
+    float left
+    clear both
+    display inline
+    border-bottom-width 2px
+    border-bottom-style solid
+    border-bottom-color white
+    width 80%
+
+#inkTextControls #colorTextLabel #colorTextLabel1
+	color green
+	display inline
+	padding-left 2%
+
+#inkTextControls #colorTextDiv
+	display none
+
+#inkTextControls #colorTextDiv #textColorToggle
+	margin-left 8%
+    margin-top 3%
+    clear left
+    width 40%
+
+#inkTextControls #fontLabel
+	font-size 130%
+    color black
+    margin-left 8%
+    font-weight normal'
+    margin-top 3%
+    margin-right 12%
+    margin-bottom 1%
+    float left
+    clear both
+    display inline
+    border-bottom-width 2px
+    border-bottom-style solid
+    border-bottom-color white
+    width 80%
+
+#inkTextControls #fontLabel #fontLabel1
+	color green
+	display inline
+	padding-left 2%
+
+#inkTextControls #fontSelector
+	color white
+    float left
+    clear both
+    display none
+    border solid 3px rgba(255,255,255,1)
+    width: "72%"
+    margin-left 8%
+    margin-top 2%
+    background-color rgba(0,0,0,0.5)
+
+#inkTextControls #textSizeLabel
+	font-size 130%
+    color black
+    margin-left 8%
+    font-weight normal'
+    margin-top 3%
+    margin-right 12%
+    margin-bottom 1%
+    float left
+    clear both
+    display inline
+    border-bottom-width 2px
+    border-bottom-style solid
+    border-bottom-color white
+    width 80%
+
+#inkTextControls #textSizeLabel #textSizeLabel1
+	color green
+	display inline
+	padding-left 2%
+
+#inkTextControls #textSizeSlider
+	clear both
+    background-color rgb(136, 134, 134)
+    border-radius 25px
+    -ms-touch-action none
+    border 1px solid gray
+    width 70%
+    height 21px
+    margin-top 3%
+    margin-left 8%
+    display none
+    position relative
+    float left
+
+#inkTextControls #textSizeSlider #textSliderPoint
+	background-color white
+    height 115%
+    width 9.25%
+    position relative
+    border 1px
+    border-style solid
+    border-color gray
+    border-radius 50%
+    top -5%
+    margin-top -0.57%
+    left 50px
+
+#inkTextControls #textBodyLabel
+	font-size 130%
+    color black
+    margin-left 8%
+    font-weight normal'
+    margin-top 3%
+    margin-right 12%
+    margin-bottom 1%
+    float left
+    clear both
+    display inline
+    border-bottom-width 2px
+    border-bottom-style solid
+    border-bottom-color white
+    width 80%
+
+#inkTextControls #textBodyLabel #textBodyLabel1
+	position relative
+    top 2px
+    width 65%
+    color green
+    display inline-block
+    margin-left 2%
+    text-overflow ellipsis
+    overflow hidden
+    white-space nowrap
+    margin-bottom 0
+
+#inkTextControls #textArea
+	width 72%
+    min-width 0px
+    margin-left 8%
+    margin-top 2%
+    overflow-x hidden
+    position relative
+

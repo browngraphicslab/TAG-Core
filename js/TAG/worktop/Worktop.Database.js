@@ -177,7 +177,7 @@ Worktop.Database = function (mainID) {
         getRequest(
             "Linq",
             safeCache('linqs', guid1, guid2, 'linq'),
-            safeCache('linqs', guid1, guid2, 'Count'),
+            safeCache(false, false, 'linqs', guid1, guid2, 'Count'),
             handlers,
             { "Guid1": guid1, "Guid2": guid2 });
     }
@@ -405,9 +405,17 @@ Worktop.Database = function (mainID) {
             200: _static.convertToDocHandler(_util.multiFnHandler(handlers.success, cacheFn, doqCache), handlers.error),
             304: _util.safeCallHandler(handlers.success, cacheLoc.get()),
             401: handleAuth(handlers.unauth),
-            error: _util.multiFnHandler(handlers.error, _util.safeCallHandler(handlers.errorCache, cacheLoc.get()))
+            error: _util.multiFnHandler(handlers.error, errorCacheHandler(handlers.errorCache, cacheLoc.get()))
         };
         _static.asyncRequest('GET', type, urlOptions, null, ajaxHandlers, secure);
+    }
+
+    function errorCacheHandler(fn, cacheVal) {
+        if (cacheVal) {
+            return _util.safeCallHandler(fn, cacheVal);
+        } else {
+            return function () { };
+        }
     }
 
     /*

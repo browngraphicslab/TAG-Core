@@ -63,10 +63,10 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
 
         var resizeButton = $(document.createElement('img'));
         resizeButton.addClass("resizeButton");
-        resizeButton.attr('src', tagPath + 'images/icons/dragTourWindow.svg');
+        resizeButton.attr('src', tagPath + 'images/icons/dragTourWindowTwoBars.svg');
         resizeButton.attr('id', 'resizeButton');
         resizeButton.css({
-            'cursor': 'pointer', 'height': 'auto', 'width': '30%', 'position': 'absolute', 'top': '2%', 'left': '40%'
+            'cursor': 'pointer', 'height': 'auto', 'width': '30%', 'position': 'absolute', 'top': '-20%', 'left': '40%'
         });
 
         var prevLocationY;

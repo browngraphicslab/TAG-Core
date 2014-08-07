@@ -156,7 +156,11 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             var authoringHub,
                 editingMediamsg;
             if (MEDIA_EDITOR.isOpen()) {
-                editingMediamsg = $(TAG.Util.UI.popUpMessage(null, "You are currently editing a Hotspot or Media", "OK", false));
+                editingMediamsg = $(TAG.Util.UI.PopUpConfirmation(function () {
+                    backButton.off('click');
+                    authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+                    TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+                }, "You are currently editing an associated media. Exit anyway?", "OK", false, null, null, null));
                 root.append(editingMediamsg);
                 editingMediamsg.show();
                 TAG.Util.UI.cgBackColor("backButton", backButton, true);
@@ -487,7 +491,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             top: '0%,',
             'margin-top': '2%',
             padding: '0px 4% 0px 12%',
+            'overflow-x': 'hidden',
             'overflow-y': 'auto',
+            'text-overflow': 'ellipsis',
+            'word-wrap': 'break-word',
             height: '60%'
         });
         assetContainer.addClass('assetContainer');
@@ -1488,7 +1495,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .css({
                         'margin': '5% 8%',
                         'color': 'white',
-                        'font-size': '150%',
+                        'font-size': '100%',
                         'float': 'left',
                         'position': 'relative',
                     })

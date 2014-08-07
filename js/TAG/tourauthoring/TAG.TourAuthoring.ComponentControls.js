@@ -83,9 +83,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     var drawArray = [];
     var drawValues = {};
     createInitialDrawControls();
-    var INITIAL_DRAW = createInkDrawControls();
     var saveDrawButton = createSaveButton();
     var cancelDrawButton = createCancelDrawButton();
+    var INITIAL_DRAW = createInkDrawControls();
+
 
     var prevSelected = [];
     var allowInk = false;
@@ -496,7 +497,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         hideInkControls();
         //var newHeight = functionsPanel.parent().height() - addComponentLabel.offset().top - 10;
         inkDrawControls.css({ 'display': 'block' });
-        inkDrawControls.css("height", raTop + raHeight - inkDrawControls.offset().top - 10);                                            //make sure the initial size of the panel is the full height of the resizable area
+        inkDrawControls.css("height", raTop + raHeight - 204);                                            //make sure the initial size of the panel is the full height of the resizable area
 
         //  drawEditLabel.css({ 'color': 'black' });
         //  eraseEditLabel.css({ 'color': 'gray' });
@@ -530,6 +531,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         };
         INITIAL_DRAW.createModeButton();
+        INITIAL_DRAW.showForm();
         INITIAL_DRAW.updateInputs();
 
         if (linked) {
@@ -723,7 +725,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         hideInkControls();
         inkTransparencyControls.show();
         inkTransparencyControls.css({
-            "height": raTop + raHeight - inkTransparencyControls.offset().top - 10
+            "height": raTop + raHeight - 204
         });
 
         //  opacityEditTransparencyLabel.text("Opacity: ");
@@ -755,6 +757,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
 
         INITIAL_TRANSPARENCY.createModeButtons();
+        INITIAL_TRANSPARENCY.showForm();
         INITIAL_TRANSPARENCY.updateInputs(currentInkController.getAttr(datastring, 'opac', 'f'));
         transMode.updateMode(currentInkController.getTransMode());
         /*     if (currentMode === 'isolate') {
@@ -952,7 +955,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // inkEditText.show();
         inkTextControls.show();
         inkTextControls.css({
-            "height": raTop + raHeight - inkTextControls.offset().top - 10
+            "height": raTop + raHeight - 204
         });
 
         // fontEditLabel.text("Font: ");
@@ -1017,6 +1020,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             size: currentInkController.getAttr(datastring, 'fontsize', 'f') * ch
         };
         INITIAL_INK_TEXT.createModeButton();
+        INITIAL_INK_TEXT.showForm();
         INITIAL_INK_TEXT.updateInputs(values);
 
         currentInkController.removeAll();
@@ -1088,7 +1092,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         addDropDownIconComponent.attr('src', tagPath + 'images/icons/Down.png');
         addDropDownIconComponent.css({
             'width': '10%',
-            'margin-left': '35%',
+            'margin-left': '52%',
             'height': '10%'
         });
 
@@ -1934,7 +1938,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'font-size': '200%',
         });
 
-        associatedsearchbar.attr('type', 'text');
+        $(associatedsearchbar).attr('type', 'text');
         associatedsearchbar.addClass('associatesearchbar');
         $(associatedsearchbar).css({
             'float': 'right',
@@ -1945,13 +1949,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(associatedsearchbar).on('keyup', function (event) {
             event.stopPropagation();
         });
-        associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
-        associatedsearchbar.val("");
+        $(associatedsearchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+        $(associatedsearchbar).val("");
         associatedsearchbar.keyup(function () {
-            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            TAG.Util.searchData($(associatedsearchbar).val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
         associatedsearchbar.change(function () {
-            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            TAG.Util.searchData($(associatedsearchbar).val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
         $(associatedMediaPickerHeader).append(associatedsearchbar);
 
@@ -2261,7 +2265,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                         'padding-top': '3%',
                                     });
                                     $(artworkHolder).text(name);
-                                    $(associatedMediaPickerArtwork).append(artworkHolder);
+                                    $(".associatedMediaPickerArtwork").append(artworkHolder);
                                     artworkHolderClick($(artworkHolder));
                                 });
                             }
@@ -2282,9 +2286,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 drawAssociatedMedia(mediaCache[myFilteredArtwork[i]], assMediasingleDoubleclick, allAMDocfrag);
             }
             associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
-            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            TAG.Util.searchData($(associatedsearchbar).val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
 
+        /*
         function loadInArtworks(artworks) {
             var i;
             var artHolderImageHolder = document.createElement('div');
@@ -2345,7 +2350,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         margin: '1px',
                     });
                     $(catalogPickerArtworks).append(artHolder);
-                    TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+                    TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
 
                     $(artHolderImageHolder).addClass('artHolderImageHolder');
                     $(artHolderImageHolder).css({
@@ -2412,7 +2417,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             artQueue.add(function () {
                 loading.hide();
             });
-        }
+        }*/
 
 
         /**Click handlers for all artwork name buttons
@@ -2639,7 +2644,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 'word-wrap': 'break-word',
             });
 
-            $(associatedMediaPickerMedia).append(mediaHolder);
+            $('.associatedMediaPickerMedia').append(mediaHolder);
             mediaHolder.append(mediaHolderImageHolder);
             mediaHolderImageHolder.append(mediaHolderImage);
             mediaHolder.append(mediaHolderText);
@@ -2670,7 +2675,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(catalogPickerHeader).addClass('catalogPickerInfo');
         $(catalogPickerHeader).text("Select artwork to import");
         $(catalogPickerHeader).css({
-            'font-size': '200%',
+            'font-size': '100%',
             'float': 'left',
         });
 
@@ -2684,13 +2689,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(searchbar).on('keyup', function (event) {
             event.stopPropagation();
         });
-        searchbar.attr('type', 'text');
-        searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
+        $(searchbar).attr('type', 'text');
+        $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
         searchbar.keyup(function () {
-            TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+            TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
         });
         searchbar.change(function () {
-            TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+            TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
         });
 
         $(catalogPickerExhibitions).addClass('catalogPickerExhibitions');
@@ -2831,7 +2836,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     catalogPickerImport.disabled = selectedArtworks.length ? false : true;
                     $('.artButton').hide().data('visible', false);
                     $('.' + selected).show().data('visible', true);
-                    TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+                    TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
                     TAG.Worktop.Database.getArtworksIn(exhibHolder.attr('id'), loadInArtworks, function () {
                         console.log("error");
                     }, function () {
@@ -2916,6 +2921,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $(artHolderImageHolder).addClass('artHolderImageHolder');
                     $(artHolderImageHolder).css({
                         float: 'left',
+                        position: 'relative',
                         width: '40%',
                         margin: '3.5%',
                         height: '80%',
@@ -2927,9 +2933,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $(artHolderImage).addClass('artHolderImage');
                     $(artHolderImage).attr('src', TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
                     $(artHolderImage).css({
-                        width: '100%',
-                        height: '100%',
+                        position: 'absolute',
+                        'width': 'auto',
+                        'height': 'auto',
+                        'max-width': '100%',
                         'max-height': '100%',
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        margin: 'auto',
                     });
                     $(artHolderImageHolder).append(artHolderImage);
 
@@ -2958,7 +2971,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         floar: 'left',
                         'padding-left': '3%',
                         'padding-right': '4.5%',
-                        'font-size': '100%',
+                        'font-size': '80%',
                         'margin': '5% 0 5% 2%',
                         'overflow': 'hidden',
                         'word-wrap': 'break-word',
@@ -3027,8 +3040,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
             $(catalogPickerOverlay).fadeOut();
             _clearCatalog();
-            searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
-            searchbar.val("");
+            $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+            $(searchbar).val("");
             // add the artwork track to the timeline
             for (i = 0; i < selectedArtworks.length; i++) {
                 selectedArt = selectedArtworks[i];
@@ -3088,7 +3101,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             catalogPickerImport.disabled = selectedArtworks.length ? false : true;
             $('.catalogPickerArtworks').empty();
             $('.artButton').show().data('visible', true);
-            TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
+            TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
             selectedExhib = null;
             if (allArtworks) {
                 loadInArtworks(allArtworks);
@@ -3188,8 +3201,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(catalogPickerOverlay).fadeOut();
             _clearCatalog();
             catalogPickerImport.disabled = true;
-            searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
-            searchbar.val("");
+            $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+            $(searchbar).val("");
             return undefined;
         });
         catalogPicker.append(catalogPickerCancel);
@@ -4401,7 +4414,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function labelCSS() {
         var css = {
-            'font-size': '130%',
+            'font-size': '70%',
             'color': 'black',
             'margin-left': '8%',
             'font-weight': 'normal',
@@ -4464,13 +4477,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     function createCancelTextButton() {
         var cancelTextButton = $(document.createElement('button'));
         cancelTextButton.css({
-            'font-size': '100%',
+            'font-size': '70%',
             'color': 'black',
             'margin-left': '8%',
             'margin-bottom': '10px',
             'font-weight': 'bold',
             'float': 'left',
-            'width': '80%'
+            'width': '80%',
+            'height': '20%'
         });
         cancelTextButton.get(0).innerHTML = "Cancel";
         cancelTextButton.click(function () {
@@ -4509,14 +4523,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var saveTextButton = $(document.createElement('button'));
         // save edited ink button
         saveTextButton.css({
-            'font-size': '100%',
+            'font-size': '70%',
             'color': 'black',
             'margin-top': '3%',
             'margin-left': '8%',
             'margin-bottom': '10px',
             'font-weight': 'bold',
             'float': 'left',
-            'width': '80%'
+            'width': '80%',
+            'height': '20%'
         });
         saveTextButton.get(0).innerHTML = "Save";
         return saveTextButton;
@@ -5231,8 +5246,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         form.append(drawModeLabel);
         form.append(drawModeDiv);
         drawArray.push(drawModeDiv);
-        drawLabel.css({ 'font-size': '120%', 'color': 'black', 'margin-left': '8%', 'font-weight': 'bold', 'float': 'left' });
-        eraseLabel.css({ 'font-size': '120%', 'color': 'gray', 'margin-right': '9%', 'font-weight': 'bold', 'float': 'right' });
+        drawLabel.css({ 'font-size': '70%', 'color': 'black', 'margin-left': '8%', 'font-weight': 'bold', 'float': 'left' });
+        eraseLabel.css({ 'font-size': '70%', 'color': 'gray', 'margin-right': '9%', 'font-weight': 'bold', 'float': 'right' });
         drawModeDiv.append(drawLabel);
         drawModeDiv.append(eraseLabel);
 
@@ -5528,7 +5543,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     function createCancelDrawButton() {
         // draw cancel button
         var cancelDrawButton = $(document.createElement('button'));
-        cancelDrawButton.css({ 'font-size': '100%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', /*'width': '25%'*/ 'width': '80%' });
+        cancelDrawButton.css({ 'font-size': '70%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', /*'width': '25%'*/ 'width': '80%' , 'height': '20%' });
         cancelDrawButton.get(0).innerHTML = "Cancel";
         cancelDrawButton.click(function () {
             // brushSliderPoint.attr('value', 7.0);
@@ -6024,7 +6039,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         // isolate label
-        isolateLabel.css({ 'font-size': '120%', 'color': 'black', 'margin-left': '8%', 'font-weight': 'bold', 'float': 'left' });
+        isolateLabel.css({ 'font-size': '70%', 'color': 'black', 'margin-left': '8%', 'font-weight': 'bold', 'float': 'left' });
         isolateLabel.text("Isolate");
         transModeDiv.append(isolateLabel);
 
@@ -6040,7 +6055,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         // block label
-        blockLabel.css({ 'font-size': '120%', 'color': 'gray', 'margin-right': '9%', 'font-weight': 'bold', 'float': 'right' });
+        blockLabel.css({ 'font-size': '70%', 'color': 'gray', 'margin-right': '9%', 'font-weight': 'bold', 'float': 'right' });
         blockLabel.text("Block");
         transModeDiv.append(blockLabel);
 
@@ -6167,7 +6182,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     function createTransparencyCancelButton() {
         // trans cancel button
         var cancelTransButton = $(document.createElement('button'));
-        cancelTransButton.css({ 'font-size': '100%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%' });
+        cancelTransButton.css({ 'font-size': '70%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%', 'height': '20%' });
         cancelTransButton.get(0).innerHTML = "Cancel";
         cancelTransButton.on('click', function () {
             removeInkCanv();
@@ -6201,7 +6216,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
     function createSaveTransparencyButton() {
         // edit trans save button
         var saveTransButton = $(document.createElement('button'));
-        saveTransButton.css({ 'font-size': '100%', 'color': 'black', 'margin-top': '3%', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%' });
+        saveTransButton.css({ 'font-size': '70%', 'color': 'black', 'margin-top': '3%', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%', 'height': '20%' });
         saveTransButton.get(0).innerHTML = "Save";
         inkTransparencyControls.append(saveTransButton);
         return saveTransButton;
