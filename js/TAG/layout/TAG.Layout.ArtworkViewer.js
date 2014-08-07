@@ -568,8 +568,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         TAG.Util.UI.setUpBackButton(backButton, goBack);
         TAG.Telemetry.register(backButton, 'click', 'artwork_to_collections', function(tobj) {
+
             tobj.custom_1 = doq.Name;
             tobj.custom_2 = doq.Identifier;
+ 
         });
         
         if(IS_WEBAPP) {
