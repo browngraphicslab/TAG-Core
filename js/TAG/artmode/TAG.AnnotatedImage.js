@@ -608,7 +608,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             circle,
             position,
             mediaLoaded,
-            mediaHidden,
             mediaElt,
             titleDiv,
             descDiv,

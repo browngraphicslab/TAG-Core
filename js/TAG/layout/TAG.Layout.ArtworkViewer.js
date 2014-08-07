@@ -36,13 +36,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         FONT = TAG.Worktop.Database.getMuseumFontFamily(),
 
         // input options
-        doq            = options.doq,              // the artwork doq
-        prevPage       = options.prevPage,         // the page we came from (string)
-        prevScroll     = options.prevScroll || 0,  // scroll position where we came from
-        prevCollection = options.prevCollection,   // collection we came from, if any
-        prevTag        = options.prevTag,          // sort tag of collection we came from, if any
-        prevMult       = options.prevMult,      
-        previewing 	   = options.previewing, 	   // if we are previewing in authoring (for styling)
+        doq                 = options.doq,              // the artwork doq
+        prevPage            = options.prevPage,         // the page we came from (string)
+        prevScroll          = options.prevScroll || 0,  // scroll position where we came from
+        prevCollection      = options.prevCollection,   // collection we came from, if any
+        prevTag             = options.prevTag,          // sort tag of collection we came from, if any
+        prevMult            = options.prevMult,      
+        previewing 	        = options.previewing, 	   // if we are previewing in authoring (for styling)
+        assocMediaToShow    = options.assocMediaToShow,
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -62,7 +63,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         manipulate;                                 // Manipulation method
                                   
     // get things rolling if doq is defined (it better be)
-    console.log("doq" + doq);
     doq && init();
 
     return {
@@ -135,7 +135,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 }
                 TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                 initSplitscreen();
-                makeSidebar();
+                makeSidebar(assocMediaToShow);
                 createSeadragonControls();
                 loadingArea.hide();
             },
@@ -742,7 +742,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 var src = '',
                     metadata = media.doq.Metadata,
                     thumb = metadata.Thumbnail;
-                console.log("media:    " + media.doq.Year);
                 switch (metadata.ContentType) {
                     case 'Audio':
                         src = tagPath+'images/audio_icon.svg';
@@ -765,21 +764,21 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     buttonClass: 'mediaButton',
                     buttonID:    'thumbnailButton-'+media.doq.Identifier,
                     src:         src
-                }));
+                }))
             }
         }
 
         /**
          * Generates a click handler for a specific associated media object
+         * Also used when entering from collections page to open a specific associated media (hence the error check for evt)
          * @method mediaClicked
          * @param {Object} media       the associated media object (from AnnotatedImage)
          */
         function mediaClicked(media) {
             //var toggleFunction = toggleLocationPanel;
             return function (evt) {
-                evt.stopPropagation();
+                evt && evt.stopPropagation();
                 locHistoryActive = true;
-                
                 media.create(); // returns if already created
                 media.toggle();
                 TAG.Util.IdleTimer.restartTimer();
@@ -1149,7 +1148,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
         }
         annotatedImage.addAnimateHandler(dzMoveHandler);
-         
+
+        assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]))
+
         /*
          * END MINIMAP CODE
          ******************/
