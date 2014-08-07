@@ -2264,9 +2264,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                         'padding-top': '3%',
                                     });
                                     $(artworkHolder).text(name);
-                                    $('.associatedMediaPickerArtwork').append(artworkHolder);
-                                    artworkHolderClick($(artworkHolder));
-                                });
+                                   $('.associatedMediaPickerArtwork').append(artworkHolder);
+                               });
                             }
                         }
                     }
@@ -2288,6 +2287,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             TAG.Util.searchData($('.associatedsearchbar').val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
 
+        /*
         function loadInArtworks(artworks) {
             var i;
             var artHolderImageHolder = document.createElement('div');
@@ -2415,7 +2415,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             artQueue.add(function () {
                 loading.hide();
             });
-        }
+        }*/
 
 
         /**Click handlers for all artwork name buttons
@@ -2858,8 +2858,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          */
         function loadInArtworks(artworks) {
             var i;
-            var artHolderImageHolder = document.createElement('div');
-            var artHolderImage = document.createElement('img');
 
             for (i = 0; i < artworks.length; i++) {
                 if (artworks[i].Type === 'Empty') {
@@ -2877,6 +2875,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var exhibits = [];
                     var ids = "";
                     var artHolderText = document.createElement('div');
+                    var artHolderImageHolder = document.createElement('div');
+                    var artHolderImage = document.createElement('img');
                     var name = artwork.Name;
                     var hasSpace = false;
                     var scanLength;
@@ -2921,6 +2921,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $(artHolderImageHolder).addClass('artHolderImageHolder');
                     $(artHolderImageHolder).css({
                         float: 'left',
+                        position: 'relative',
                         width: '40%',
                         margin: '3.5%',
                         height: '80%',
@@ -2932,9 +2933,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $(artHolderImage).addClass('artHolderImage');
                     $(artHolderImage).attr('src', TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
                     $(artHolderImage).css({
-                        width: '100%',
-                        height: '100%',
+                        position: 'absolute',
+                        'width': 'auto',
+                        'height': 'auto',
+                        'max-width': '100%',
                         'max-height': '100%',
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        margin: 'auto',
                     });
                     $(artHolderImageHolder).append(artHolderImage);
 

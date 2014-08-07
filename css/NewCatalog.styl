@@ -24,8 +24,9 @@
 
 #newCatalogRoot .artistInfo
 	color white
-	float left
-	position relative
+	position absolute
+	left 0
+	bottom 0
 	overflow hidden          
 	text-overflow ellipsis
 	white-space nowrap
@@ -132,7 +133,8 @@
 	color white
 
 #newCatalogRoot .currentThumbnail
-	wh 100%
+	width 100%
+	height auto
 	border-radius 2%
 
 #newCatalogRoot .descSpan
@@ -147,9 +149,9 @@
 	word-wrap break-word
 	position absolute
 	width 90%
-	height 20%
-	margin 5%
-	bottom 0
+	height 50%
+	left 5%
+	top 0
 
 #newCatalogRoot #displayHelp
 	background-color rgba(0,0,0,0.5)
@@ -183,13 +185,14 @@
 	width auto
 
 #newCatalogRoot .exploreTab
-	background-color rgba(0,0,0,0.4)
+	background-color rgba(0,0,0,0.6)
 	color white
 	display inline-block
-	height 16%
+	height 14%
 	overflow hidden 
 	position absolute
 	left 0
+	bottom 0
 	width 100%  
 
 #newCatalogRoot .exploreText
@@ -216,11 +219,13 @@
 	width auto
 
 #newCatalogRoot .imgDiv
-	width 90%
-	height 55%
+	width 85%
+	height 80%
+	border-radius 2%
 	position absolute
+	overflow hidden
 	top 10%
-	left 5%
+	left 7.2%
 
 #newCatalogRoot #infoDiv
 	position absolute
@@ -229,10 +234,11 @@
 	width 25%
 
 #newCatalogRoot .infoText
-	display inline-block
-	float top
-	top 100%        
-	width 100%
+	position absolute
+	bottom 2%
+	left 5%
+	height auto
+	width 90%
 
 #newCatalogRoot #infoTilesContainer
 	position absolute
@@ -287,7 +293,7 @@
 	cursor pointer
 
 #newCatalogRoot #overlay
-	background-color rgba(10, 10, 10, 0.7)
+	background-color rgba(10, 10, 10, 0.6)
 	position absolute
 	wh 100%
 	pointer-events none
@@ -344,14 +350,29 @@
 	width 25%
 
 #newCatalogRoot #selectedArtworkContainer
+	-moz-box-shadow    15px 15px 5px 3px rgba(0,0,0,0.3);	
+	-webkit-box-shadow 15px 15px 5px 3px rgba(0,0,0,0.3);	
+	box-shadow       15px 15px 5px 3px rgba(0,0,0,0.3);	
 	position absolute
 	overflow-x scroll
 	background-color rgba(0,0,0,0.9)
-	top 5%
-	height 100%
+	bottom -5%
+	height 110%
 	z-index 200000
 	display none
 	border-radius 2%
+
+#newCatalogRoot .tileTop
+	width 100%
+	height 60%
+	top 0
+	position absolute
+
+#newCatalogRoot .tileBottom
+	width 100%
+	height 40%
+	bottom 0
+	position absolute
 
 #newCatalogRoot .tile
 	border 1px solid rgba(0,0,0,0.85)
@@ -394,7 +415,7 @@
 	position absolute
 	font-size 100%
 	height 100%
-	top -100%
+	top -150%
 	white-space nowrap
 
 #newCatalogRoot .timelineEventCircle
@@ -411,7 +432,8 @@
 	top 0%
 
 #newCatalogRoot .titleSpan
-	margin 2.5%
+	top 2%
+	position absolute
 	height 10%
 	text-align center
 	text-overflow ellipsis
@@ -466,8 +488,9 @@
 
 #newCatalogRoot .yearInfo
 	color white
-	float right
-	position relative
+	position absolute
+	right 0
+	bottom 0 
 	text-align right
 	width 30%
 
