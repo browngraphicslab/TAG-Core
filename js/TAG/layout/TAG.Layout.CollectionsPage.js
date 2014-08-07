@@ -1046,9 +1046,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                     idleTimer.start();
                 }
-                showArtwork(currentWork, false)();
                 //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
-                setTimeout(function(){zoomTimeline(artworkCircles[currentWork.Identifier])}, 1000)
+                setTimeout(function(){showArtwork(currentWork, false)()}, 10)
+                zoomTimeline(artworkCircles[currentWork.Identifier])
                 justShowedArtwork = true;
             })
 
