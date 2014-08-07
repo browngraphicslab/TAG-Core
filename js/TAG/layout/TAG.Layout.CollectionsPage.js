@@ -222,6 +222,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 linkOverlay.fadeIn(500, function () {
                     linkOverlay.find('.linkDialogInput').select();
                 });
+                        });
+            infoButton.on('click', function () {
+                createInfoPopUp();
             });
         } else {
             linkButton.remove();
