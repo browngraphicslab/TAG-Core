@@ -1570,8 +1570,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
-            });
-         
+            });         
         }
 
         function createCollectionSettings() {
@@ -1812,7 +1811,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia = inputs.assocMediaInput;
 
         var sortOptionChanges = {};
-        if (intpus.sortOptions) {
+        if (inputs.sortOptions) {
             for (var i = 0; i < inputs.sortOptions[0].children.length; i++) {
                 var option = $(inputs.sortOptions[0].children[i]);
                 var setSort = option.attr("setSort");
