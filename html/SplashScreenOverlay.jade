@@ -1,0 +1,26 @@
+#splashScreenRoot.rootPage
+	#innerContainer
+	#overlay
+	#title
+		span.titleone TAG
+		span.titletwo   Seattle Art Museum
+	#description
+		span.bodyDescone 
+			|Welcome to Touch Art Gallery! To change servers, put in the address below. <br />
+			|To access authoring for the current server, put in your authoring password. <br/>
+		span.bodyDesctwo
+			|By tapping the button below, you'll enter the TAG kiosk mode and <br />
+			|not be able to return to this splash screen until TAG is restarted.
+	#inputRow
+		input#serverInput(placeholder='server address')
+		input#passwordInput(placeholder='authoring password')		
+		#serverSubmit submit
+		#passwordSubmit submit
+		#serverError Server connection failed. Contact the server administrator.
+		#passwordError Incorrect password. 
+	#goToCollectionsButton Go to Collections
+	#logoRow
+		img#msLogo
+		img#brownLogo
+
+
