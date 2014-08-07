@@ -1564,18 +1564,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia;
         var sortOptionsObj;
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            console.log("HOLY SHIT");
+            createCollectionSettings();
         } else {
             TAG.Worktop.Database.getDoq(exhibition.Metadata.SortOptionsGuid, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
             });
-            /*TAG.Worktop.Database.getAssocMediaIn(exhibition.Identifier, function (artworks) {
-                console.log(artworks);
-            });*/
-
-            
+         
         }
 
         function createCollectionSettings() {
@@ -1614,7 +1610,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             bg = createSetting('Collection Background Image', bgInput);
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
             assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
-            sortOptions = createSetting('Sort Options', sortDropDown);
+
+            if (sortDropDown){
+                sortOptions = createSetting('Sort Options', sortDropDown);
+            }
 
             settingsContainer.append(privateSetting);
             settingsContainer.append(name);
@@ -1622,7 +1621,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
             settingsContainer.append(assocMedia);
-            settingsContainer.append(sortOptions);
+            if (sortOptions){
+                settingsContainer.append(sortOptions);
+            }
         }
 
         //Automatically save changes
@@ -1813,17 +1814,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia = inputs.assocMediaInput;
 
         var sortOptionChanges = {};
-
-        for (var i = 0; i < inputs.sortOptions[0].children.length; i++) {
-            var option = $(inputs.sortOptions[0].children[i]);
-            var setSort = option.attr("setSort");
-            if (i > 2) {
-                sortOptionChanges["?" + option.text()] = setSort;
-            } else {
-                sortOptionChanges[option.text()] = setSort;
-            } 
+        if (intpus.sortOptions) {
+            for (var i = 0; i < inputs.sortOptions[0].children.length; i++) {
+                var option = $(inputs.sortOptions[0].children[i]);
+                var setSort = option.attr("setSort");
+                if (i > 2) {
+                    sortOptionChanges["?" + option.text()] = setSort;
+                } else {
+                    sortOptionChanges[option.text()] = setSort;
+                }
+            }
         }
-
         var options = {
             Name: name,
             Private: priv,
