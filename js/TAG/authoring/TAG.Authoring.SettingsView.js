@@ -1566,14 +1566,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             console.log("HOLY SHIT");
         } else {
-            /*TAG.Worktop.Database.getDoq(exhibition.Metadata.SortOptionsGuid, function (sortOptionsDoq) {
+            TAG.Worktop.Database.getDoq(exhibition.Metadata.SortOptionsGuid, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
-            });*/
-            TAG.Worktop.Database.getAssocMediaIn(exhibition.Identifier, function (artworks) {
-                console.log(artworks);
             });
+            /*TAG.Worktop.Database.getAssocMediaIn(exhibition.Identifier, function (artworks) {
+                console.log(artworks);
+            });*/
 
             
         }
