@@ -1318,7 +1318,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     };
 
     //CREATE SORT OPTIONS DIV
-    function createSortOptions(sortOptions) {
+    function createSortOptions(sortOptionsObj) {
         var sortOptionsDiv = $(document.createElement("div"))
             .css({
                 'width': "50%",
@@ -1331,64 +1331,35 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         var sortObj, sortDiv;
-
+        var sortOptions = sortOptionsObj.Metadata;
         if (sortOptions) {
-            for (sortObj in sortOptions) {
-                if (sortObj !== "InfoFields" && sortOptions.hasOwnProperty(sortObj)) {
-                    sortDiv = $(document.createElement("div"))
-                                .text(sortObj)
-                                .css({
-                                    "width": "90%",
-                                    //'font-size': INPUT_FONTSIZE,
-                                    'box-sizing': 'border-box',
-                                    "border": "2px solid black",
-                                    "background-color": "white",
-                                    "margin-bottom": "1%",
-                                    "text-align": "center",
-                                    "color": "black",
-                                    'text-overflow': 'ellipsis'
-                                });
-                    sortDiv.attr("setSort", false);
-                    if ((sortOptions[sortObj]) == true || (sortOptions[sortObj]) == "true") {
+            for (var sortObj in sortOptions) {
+                if (sortOptions.hasOwnProperty(sortObj) && sortObj != "__Created" && sortObj != "Count") {
+                    var key = "";
+                    if (sortObj.charAt(0) == '?') {
+                        key = sortObj.substr(1);
+                    } else {
+                        key = sortObj;
+                    }
+                    var sortObjArray = sortOptions[sortObj].split(",");
+                    if (sortObjArray.length == 2 && sortObjArray[0] == "0" && sortObjArray[1] == "false") {
+                        continue;
+                    }
+                    var sortDiv = $(document.createElement("div"))
+                        .text(key)
+                        .addClass("sortOptionDiv");
+                    var setSort = sortObjArray[sortObjArray.length - 1];
+                    sortDiv.attr("setSort", setSort);
+                    if (setSort == true || setSort == "true") {
                         sortDiv.css({
                             "background-color": "#0040FF",
                             "color": "white",
                             "border": "2px solid white"
                         });
-                        sortDiv.attr("setSort", true);
                     }
-
                     sortDiv.click(clickCallback(sortDiv));
                     sortOptionsDiv.append(sortDiv);
-                }
-            }
-            for (sortObj in sortOptions.InfoFields) {
-                if (sortOptions.InfoFields.hasOwnProperty(sortObj)) {
-                    sortDiv = $(document.createElement("div"))
-                                .text(sortObj)
-                                .css({
-                                    "width": "90%",
-                                    //'font-size': INPUT_FONTSIZE,
-                                    'box-sizing': 'border-box',
-                                    "border": "2px solid black",
-                                    "background-color": "white",
-                                    "margin-bottom": "1%",
-                                    "text-align": "center",
-                                    "color": "black",
-                                    'text-overflow': 'ellipsis'
-                                });
-                    sortDiv.attr("setSort", false);
-                    if ((sortOptions.InfoFields[sortObj])[1] == true || (sortOptions.InfoFields[sortObj])[1] == "true") {
-                        sortDiv.css({
-                            "background-color": "#0040FF",
-                            "color": "white",
-                            "border": "2px solid white"
-                        });
-                        sortDiv.attr("setSort", true);
-                    }
 
-                    sortDiv.click(clickCallback(sortDiv));
-                    sortOptionsDiv.append(sortDiv);
                 }
             }
         }
@@ -1583,51 +1554,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var name;
         var desc;
         var bg;
-        //var sortOptions;
+        var sortDropDown;
+        var sortOptions;
         var idLabel;
         var timeline;
         var nameInput;
         var descInput;
         var bgInput;
         var assocMedia;
-        /*if (!exhibition.Metadata.SortOptions) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
-                var sortOptions = {
-                    "Title": true,
-                    "Artist": true,
-                    "Year": true,
-                    "Tour": false,
-                    "InfoFields": {}
-                };
-                var item;
-                if (!artworks || !artworks[0]) {
-
-                } else {
-                    for (var i = 0; i < artworks.length; i++) {
-                        if (artworks[i].Metadata.RelatedArtworks) {
-                            (sortOptions["Tour"])[0]++;
-                        } else if (artworks[i].Metadata.InfoFields) {
-                            for (var info in artworks[i].Metadata.InfoFields) {
-                                if (artworks[i].Metadata.InfoFields.hasOwnProperty(info)) {
-                                    if (sortOptions.InfoFields[info]) {
-                                        (sortOptions.InfoFields[info])[0]++;
-                                    } else {
-                                        sortOptions.InfoFields[info] = [1, false];
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                LADS.Worktop.Database.changeExhibition(exhibition.Identifier, { SortOptions: JSON.stringify(sortOptions) });
-                sortDropDown = createSortOptions(sortOptions);
-                createCollectionSettings();
-            });
+        var sortOptionsObj;
+        if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
+            console.log("HOLY SHIT");
         } else {
-            sortDropDown = createSortOptions(JSON.parse(exhibition.Metadata.SortOptions));
-            createCollectionSettings();
-        }*/
-        createCollectionSettings();
+            /*TAG.Worktop.Database.getDoq(exhibition.Metadata.SortOptionsGuid, function (sortOptionsDoq) {
+                sortOptionsObj = sortOptionsDoq;
+                sortDropDown = createSortOptions(sortOptionsObj);
+                createCollectionSettings();
+            });*/
+            TAG.Worktop.Database.getAssocMediaIn(exhibition.Identifier, function (artworks) {
+                console.log(artworks);
+            });
+
+            
+        }
+
         function createCollectionSettings() {
 
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
@@ -1664,7 +1614,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             bg = createSetting('Collection Background Image', bgInput);
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
             assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
-            //sortOptions = createSetting('Sort Options', sortDropDown);
+            sortOptions = createSetting('Sort Options', sortDropDown);
 
             settingsContainer.append(privateSetting);
             settingsContainer.append(name);
@@ -1672,7 +1622,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
             settingsContainer.append(assocMedia);
-            //settingsContainer.append(sortOptions);
+            settingsContainer.append(sortOptions);
         }
 
         //Automatically save changes
@@ -1860,25 +1810,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var timeline = inputs.timelineInput;
         var assocMedia = inputs.assocMediaInput;
 
-        //var sortOptions = JSON.parse(exhibition.Metadata.SortOptions);
-        var option;
+        var sortOptionChanges = {};
 
-        /*sortOptions[$(inputs.sortOptions[0].children[0]).text()] = $(inputs.sortOptions[0].children[0]).attr("setSort"); //Title
-        sortOptions[$(inputs.sortOptions[0].children[1]).text()] = $(inputs.sortOptions[0].children[1]).attr("setSort"); //ARtist
-        sortOptions[$(inputs.sortOptions[0].children[2]).text()] = $(inputs.sortOptions[0].children[2]).attr("setSort"); //Year
-        sortOptions[$(inputs.sortOptions[0].children[3]).text()] = $(inputs.sortOptions[0].children[3]).attr("setSort"); //Tour
-        for (var i = 4; i < inputs.sortOptions[0].children.length; i++) { //start at 4 because filter by 4 main fields
+        for (var i = 0; i < inputs.sortOptions[0].children.length; i++) {
             var option = $(inputs.sortOptions[0].children[i]);
-            if (sortOptions.InfoFields[option.text()]) {
-                (sortOptions.InfoFields[option.text()])[1] = option.attr("setSort");
-            }
-        }*/
+            var setSort = option.attr("setSort");
+            if (i > 2) {
+                sortOptionChanges["?" + option.text()] = setSort;
+            } else {
+                sortOptionChanges[option.text()] = setSort;
+            } 
+        }
 
         var options = {
             Name: name,
             Private: priv,
             Description: desc,
-            //SortOptions: JSON.stringify(sortOptions),
+            SortOptions: JSON.stringify(sortOptionChanges),
             Timeline: timeline,
             AssocMediaView: assocMedia
         }

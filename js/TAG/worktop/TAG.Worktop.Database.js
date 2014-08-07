@@ -117,6 +117,7 @@ TAG.Worktop.Database = (function () {
         getAssocMediaTo: getAssocMediaTo,
         getArtworksAssocTo: getArtworksAssocTo,
         getArtworksIn: getArtworksIn,
+        getAssocMediaIn: getAssocMediaIn,
         getMaps: getMaps,
         getSalt: getSalt,
         getAuth: getAuth,
@@ -347,6 +348,10 @@ TAG.Worktop.Database = (function () {
         _db.getArtworksIn(guid, { success: success, error: error, errorCache: errorCache });
     }
 
+    function getAssocMediaIn(guid, success, error, errorCache) {
+        _db = _db || new Worktop.Database();
+        _db.getAssocMediaIn(guid, { success: success, error: error, errorCache: errorCache });
+    }
     /*
         Gets maps related to given artwork
             guid: artowork guid
@@ -1154,7 +1159,7 @@ TAG.Worktop.Database = (function () {
     }
 
     function getIdleTimerDuration() {
-        return _main.Metadata["IdleTimerDu"] || '2';
+        return _main.Metadata["IdleTimer"] || '2';
     }
 
     function getMainGuid() {

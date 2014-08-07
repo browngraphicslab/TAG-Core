@@ -73,6 +73,7 @@ Worktop.Database = function (mainID) {
         getArtworksAssocTo: getArtworksAssocTo,
         getLinq: getLinq,
         getArtworksIn: getArtworksIn,
+        getAssocMediaIn: getAssocMediaIn,
         getMaps: getMaps,
 
         putTour: putTour,
@@ -201,6 +202,14 @@ Worktop.Database = function (mainID) {
             { "Guid": guid });
     }
 
+    function getAssocMediaIn(guid, handlers) {
+        getRequest(
+            "AssocMediaIn",
+            safeCache('assocMediaIn', guid, 'assocMedia'),
+            safeCache('assocMediaIn', guid, 'Count'),
+            handlers,
+            { "Guid": guid });
+    }
 
     function postTour(guid, options, handlers, throwOnWarn) {
         options = options || {};
