@@ -2858,8 +2858,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          */
         function loadInArtworks(artworks) {
             var i;
-            var artHolderImageHolder = document.createElement('div');
-            var artHolderImage = document.createElement('img');
 
             for (i = 0; i < artworks.length; i++) {
                 if (artworks[i].Type === 'Empty') {
@@ -2877,6 +2875,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var exhibits = [];
                     var ids = "";
                     var artHolderText = document.createElement('div');
+                    var artHolderImageHolder = document.createElement('div');
+                    var artHolderImage = document.createElement('img');
                     var name = artwork.Name;
                     var hasSpace = false;
                     var scanLength;
