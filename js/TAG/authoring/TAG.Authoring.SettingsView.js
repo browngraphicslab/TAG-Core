@@ -507,24 +507,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-repeat': 'no-repeat',
             'background-position': '2% center'
         });
-        searchbar.on('click', function () { searchbar.css({ 'background-image': 'none' }); });
-        searchbar.on('focus', function () { searchbar.css({ 'background-image': 'none' }); });
+
+        searchbar.on('click focus', function () {
+            searchbar.css({ 'background-image': 'none' });
+        });
         searchbar.on('focusout', function () {
             if (!searchbar.val()) {
                 searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             }
         });
         searchbar.keyup(function () {
-            if (!searchbar.val()) {
+            if (!searchbar.val()) {  
                 resetView();
             }
         });
         searchbar.keypress(function (e) {
-                if (e.which === 13 && searchbar.val()) {
-                    doSearch();            
-                } else if (e.which === 13 && !searchbar.val()) {
-                    resetView();
-                }
+            if (e.which === 13 && searchbar.val()) {
+                doSearch();            
+            } else if (e.which === 13 && !searchbar.val()) {
+                resetView();
+            }
+            searchbar.css({ 'background-image': 'none' }); ////////////
             
         });
 
@@ -3177,6 +3180,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var info;
 
         searchbar[0].value = "";
+        $(searchbar).blur(); //////////
         infoSource = [];
         
         $.each(currentList, function (i, cts) {
