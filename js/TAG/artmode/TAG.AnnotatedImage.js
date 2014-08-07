@@ -26,7 +26,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         artworkName     = doq.Name,        // artwork's title
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
-                                           //   also contains an array of GUIDs for cleaner iteration
+                                           // also contains an array of GUIDs for cleaner iteration
         toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
         rootHeight = $('#tagRoot').height(), //tag root height
         rootWidth = $('#tagRoot').width(),  //total tag root width for manipulation (use root.width() instead for things that matter for splitscreen styling)
