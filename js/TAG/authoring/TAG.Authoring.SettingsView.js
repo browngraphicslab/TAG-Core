@@ -3800,11 +3800,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
    settingsContainer
    */
     function uploadXML(artwork, inputs, settingsContainer) {
-        var parsingOverlay = $(TAG.Util.UI.blockInteractionOverlay()),
-            parsingOverlayText = $(document.createElement('label')),
-            parsingPicker = $(document.createElement('div')),
-            parsingPickerHeader = $(document.createElement('div')),
-            parsingInfo = $(document.createElement('div')),
+        var parsingOverlay = $(TAG.Util.UI.blockInteractionOverlay()).addClass("parsingOverlay"),
+            parsingOverlayText = $(document.createElement('label')).addClass("parsingOverlayText").text('Parsing Metadata File now. Please wait.'),
+            parsingPicker = $(document.createElement('div')).addClass("parsingPicker"),
+            parsingPickerHeader = $(document.createElement('div')).addClass("parsingPickerHeader").text("Please update the input fields below to match the input fields in your XML file."),
+            parsingInfo = $(document.createElement('div')).addClass("parsingInfo"),
+            parsingPickerConfirm = $(document.createElement('button')).attr("id", "parsingPickerConfirm").text("Confirm"),
+            parsingPickerCancel = $(document.createElement('button')).attr("id", "parsingPickerCancel").text("Cancel"),
             curtitle = artwork.Name,
             curdata,
             isrightdata = false,
@@ -3823,74 +3825,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             extra3: customFields[2] || "",
             extra4: customFields[3] || "",
         };
-        parsingOverlay.addClass('parsingOverlay');
+
         parsingOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
-        parsingOverlayText.css({ 'color': 'white', 'width': '10%', 'height': '5%', 'top': '38%', 'left': '35%', 'position': 'relative', 'font-size': '250%' });
-        parsingOverlayText.text('Parsing Metadata File now. Please wait.');
         parsingOverlay.append(parsingOverlayText);
         parsingOverlayText.hide();
-        root.append(parsingOverlay);
-        parsingPicker.addClass("parsingPicker");
-        parsingPicker.css({
-            position: 'absolute',
-            width: '29%',
-            height: '49%',
-            padding: '1%',
-            'background-color': 'black',
-            'border': '3px double white',
-            top: '25%',
-            left: '35%',
-        });
-        parsingOverlay.append(parsingPicker);
-        parsingOverlay.fadeIn();
-        parsingPickerHeader.addClass('parsingPickerHeader');
-        parsingPickerHeader.text("Please change if you have different names for the metadata fields below in your xml file.");
-        parsingPickerHeader.css({
-            'font-size': '160%',
-            'width': '100%',
-            'float': 'left',
-            'color': 'white',
-            'background-color': 'black',
-        });
+
         parsingPicker.append(parsingPickerHeader);
-        parsingInfo.css({
-            position: 'absolute',
-            left: '3%',
-            top: '17%',
-            padding: '1%',
-            height: '66%',
-            width: '94%',
-            overflow: 'auto',
-        });
         parsingPicker.append(parsingInfo);
+        parsingPicker.append(parsingPickerConfirm);
+        parsingPicker.append(parsingPickerCancel);
+
+        parsingOverlay.append(parsingPicker);
+
+        root.append(parsingOverlay);
+
+        parsingOverlay.fadeIn();
+
         $.each(metadataspec, function (key, val) {
             var input = createTextInput(val, null, null, false, false);
             var field = createSetting(key, input, null, '7px');
             field.addClass("metadataspec");
-            field.css('color', 'white');
-            field.css({
-                float: 'left',
-                background: '#222',
-                width: '96%',
-                height: '11%',
-                padding: '2px',
-                margin: '1px',
-            });
+            $(field).css({ 'margin': '1px' });
+            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align':'top'});
             mtinputs[key] = input;// { field: field, input: input };
             field.show().data('visible', true);
             parsingInfo.append(field);
         });
 
-        //buttons
-        var parsingPickerConfirm = $(document.createElement('button'));
-        parsingPickerConfirm.attr("id", "parsingPickerConfirm");
-        //parsingPickerConfirm.attr('disabled', true);
-        parsingPickerConfirm.text("Confirm");
-        parsingPickerConfirm.css({
-            position: 'absolute',
-            bottom: '2%',
-            right: '22%',
-        });
+        //Confirm button
         parsingPickerConfirm.click(function () {
             //parsingPickerOverlay.fadeOut();
             $.each(metadataspec, function (key, val) {
@@ -3904,23 +3866,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             parsingOverlayText.fadeIn();
             initFilepicker(metadataspec);
         });
-        parsingPicker.append(parsingPickerConfirm);
 
-        var parsingPickerCancel = document.createElement('button');
-        var $parsingPickerCancel = $(parsingPickerCancel);
-        $parsingPickerCancel.text("Cancel");
-        $parsingPickerCancel.css({
-            position: 'absolute',
-            bottom: '2%',
-            right: '5%',
-        });
-
-        // cancel button click handler
-        $parsingPickerCancel.click(function () {
+        //Cancel button
+        parsingPickerCancel.click(function () {
             parsingOverlay.fadeOut();
             parsingPickerCancel.disabled = true;
         });
-        parsingPicker.append($parsingPickerCancel);
+
         function initFilepicker(spec) {
             var filepicker = new Windows.Storage.Pickers.FileOpenPicker();
             filepicker.fileTypeFilter.replaceAll([".xml"]);
