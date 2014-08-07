@@ -700,15 +700,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      * @method openDialog
      */
     function openDialog() {
-         if (TAG.Auth.getToken()){
-             TAG.Worktop.Database.checkToken(TAG.AuthToken, authClick, authClick);
-             
-             console.log("authtoken true");
-          }
-
-         else{
-            authClick();
-         }
+         authClick();
 
          if(localStorage.ip === 'tagtestserver.cloudapp.net') {
              $('#authoringInput').attr('value', 'Test1234');
