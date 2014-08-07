@@ -207,6 +207,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
             .addClass('bottomButton')
+        infoButton.on('click', function () {
+            createInfoPopUp();
+        });
+
 
         if (IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg')
@@ -222,15 +226,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 linkOverlay.fadeIn(500, function () {
                     linkOverlay.find('.linkDialogInput').select();
                 });
-                        });
-            infoButton.on('click', function () {
-                createInfoPopUp();
             });
+            
         } else {
             linkButton.remove();
-            infoButton.on('click', function () {
-                createInfoPopUp();
-            });
         }
 
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
