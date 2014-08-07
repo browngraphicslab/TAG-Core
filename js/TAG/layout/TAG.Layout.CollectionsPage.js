@@ -256,23 +256,38 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var infoTitleRight = $(document.createElement('div'));
         var infoMainTop = $(document.createElement('div'));
         var infoMainBottom = $(document.createElement('div'));
+        var microsoftLogoDiv = $(document.createElement('div'));
+        var brownLogoDiv = $(document.createElement('div'));
         var microsoftLogo = $(document.createElement('img'));
         var brownLogo = $(document.createElement('img'));
         var closeButton = createCloseButton();
-
-        microsoftLogo.attr('src', tagPath + 'images/Microsoft-Logo-Black-small.png');
-        brownLogo.attr('src', tagPath + 'images/brown_logo.png');
+        var string = 'cs.brown.edu/research/ptc/tag';
+        microsoftLogo.attr('src', tagPath + 'images/microsoft_logo_transparent.png');
+        brownLogo.attr('src', tagPath + 'images/brown_logo_transparent.png');
+        microsoftLogoDiv.css({
+            'background': 'transparent',
+            'width': '20%',
+            'height': '100%',
+            'margin-left': '70%',
+            'float': 'left'
+        });
+        brownLogoDiv.css({
+            'background': 'transparent',
+            'width': '10%',
+            'height': '100%',
+            'float': 'right'
+        });
         microsoftLogo.css({
             'height': 'auto',
-            'width': '20%',
-            'margin-left': '50%'
+            'width': '100%',
+            'margin-top': '5%'
         });
         brownLogo.css({
             'height': 'auto',
-            'width': '20%',
-            'margin-left': '50%'
+            'width': '80%',
+            'margin-top': '-5%'
         });
-        
+       
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         infoOverlay.append(infoBox);
         infoBox.css({
@@ -335,20 +350,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'margin-top': '3%',
             'margin-right': '6%'
         });
-        infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag/.');
+        infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag.');
         infoMainBottom.text('Andy van Dam, Alex Hills, Yudi Fu, Karishma Bhatia, Gregory Chatzinoff, John Connuck, David  Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Kaijan Gao, Jessica Herron, Ardra Hren, Hak Rim Kim, Lucy van Kleunen, Inna Komarovsky, Ryan Lester, Benjamin LeVeque, Josh Lewis, Jinqing Li, Jeffery Lu, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Jonathan Poon, Dhruv Rawat, Emily Reif, Surbhi Madan, Jacob Rosenfeld, Anqi Wen, Dan Zhang, Libby Zorn');
         infoMain.append(infoMainTop);
         infoMain.append(infoMainBottom);
 
         infoLogo.css({
-            'background-color': 'blue',
+            'background-color': 'black',
             'display': 'block',
             'color': 'white',
             'height': '15%',
             'margin-top': '3%'
         });
-        infoLogo.append(microsoftLogo);
-        infoLogo.append(brownLogo);
+        infoLogo.append(microsoftLogoDiv);
+        infoLogo.append(brownLogoDiv);
+
+        brownLogoDiv.append(brownLogo);
+        microsoftLogoDiv.append(microsoftLogo);
 
         infoBox.append(infoTitle);
         infoBox.append(infoMain);
