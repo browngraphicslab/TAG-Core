@@ -700,7 +700,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      */
     function openDialog() {
          if (TAG.Auth.getToken()){
-             TAG.Worktop.Database.checkToken(TAG.AuthToken, enterAuthoringMode, authClick, authClick);
+             TAG.Worktop.Database.checkToken(TAG.AuthToken, authClick, authClick);
              
              console.log("authtoken true");
           }
