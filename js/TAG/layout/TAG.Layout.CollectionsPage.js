@@ -127,7 +127,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var progressCircCSS,
             circle,
             oldSearchTerm;
-
+        
         progressCircCSS = {
             'position': 'absolute',
             'z-index': '50',
