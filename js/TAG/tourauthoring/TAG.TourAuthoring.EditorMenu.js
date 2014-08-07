@@ -65,13 +65,14 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
         menu.css({
             "position": "fixed",
             "color": "rgb(256, 256, 256)",
-            'width': width,
+            //'width': width,
             'background-color': 'rgba(0,0,0,' + OPACITY + ')',
             'padding-top': '3px',
             'padding-left': '2px',
             'padding-right': '2px',
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 7,
-            'border-radius': '15px'
+            'border-radius': '15px',
+            'width': '13%'
         });
 
         // set width according to menu type
@@ -288,9 +289,9 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
         input.attr('type', 'text');
         input.val(convertToString(accessCallback(), format)); // TODO: ??? do I need to parse to proper format?
         input.css({
-            width: '15%',
+            width: '23%',
             position: 'absolute',
-            right: '40%'
+            right: '27%'
         });
         input.on('click', function (ev) {
             input.select();
@@ -311,7 +312,7 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
             'position': 'absolute',
             'float': 'right',
             'font-size': '80%',
-            'right': '15px'
+            'right': '10px'
         });
 
         // change text when for different formats of an input

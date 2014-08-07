@@ -1935,7 +1935,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(associatedMediaPickerHeader).addClass('associatedMediaPickerInfo');
         $(associatedMediaPickerHeader).text("Select media to import");
         $(associatedMediaPickerHeader).css({
-            'font-size': '200%',
+            'font-size': '100%',
         });
 
         $(associatedsearchbar).attr('type', 'text');
@@ -2027,7 +2027,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         isUploading = true;
         $(associatedMediaPickerOverlay).fadeIn();
         mediaQueue.clear();
-
+        $('.mediaHolder').css('background-color', 'rgb(34, 34, 34)');
         loading.css({
             'display': 'inline-block',
             'position': 'absolute',
@@ -2054,6 +2054,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             background: '#999',
             'padding-left': '3%',
             'padding-top': '3%',
+            'font-size': '70%'
         });
         $(allAssociatedMediaHolder).text('All Associated Media');
 
@@ -2095,9 +2096,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     selectedArtworksUrls[mediaHolder.data('url')] = false;
                     associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
                 } else {
-                    mediaHolder.data({
-                        "selected": true
-                    });
+                    mediaHolder.data({ "selected": true });
                     mediaHolder.css('background', '#999');
                     selectedArtworks.push({ 'url': mediaHolder.data('url'), 'name': mediaHolder.data('name'), 'id': mediaHolder.attr('id'), 'type': mediaHolder.data('type'), 'duration': mediaHolder.data('duration') });
                     artworkIndicesViaURL.push(mediaHolder.data('url'));
@@ -2260,14 +2259,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                         width: '100%',
                                         height: '9%',
                                         margin: '1px 0px 1px 0px',
-                                        'font-size': '100%',
+                                        'font-size': '70%',
                                         'padding-left': '3%',
                                         'padding-top': '3%',
                                     });
                                     $(artworkHolder).text(name);
-                                    $(".associatedMediaPickerArtwork").append(artworkHolder);
-                                    artworkHolderClick($(artworkHolder));
-                                });
+                                   $('.associatedMediaPickerArtwork').append(artworkHolder);
+                               });
                             }
                         }
                     }
@@ -2286,7 +2284,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 drawAssociatedMedia(mediaCache[myFilteredArtwork[i]], assMediasingleDoubleclick, allAMDocfrag);
             }
             associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
-            TAG.Util.searchData($(associatedsearchbar).val(), '.mediaHolder', IGNORE_IN_SEARCH);
+            TAG.Util.searchData($('.associatedsearchbar').val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
 
         /*
@@ -2517,6 +2515,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             associatedMediaPickerImport.disabled = true;
             $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             $('.associatedsearchbar').val("");
+            $('.mediaHolder').data('selected', 'false');
+            $('.mediaHolder').css('background-color', 'rgb(34,34,34)');
             return undefined;
         });
         associatedMediaPicker.append(associatedMediaPickerCancel);
@@ -2858,8 +2858,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          */
         function loadInArtworks(artworks) {
             var i;
-            var artHolderImageHolder = document.createElement('div');
-            var artHolderImage = document.createElement('img');
 
             for (i = 0; i < artworks.length; i++) {
                 if (artworks[i].Type === 'Empty') {
@@ -2877,6 +2875,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var exhibits = [];
                     var ids = "";
                     var artHolderText = document.createElement('div');
+                    var artHolderImageHolder = document.createElement('div');
+                    var artHolderImage = document.createElement('img');
                     var name = artwork.Name;
                     var hasSpace = false;
                     var scanLength;
