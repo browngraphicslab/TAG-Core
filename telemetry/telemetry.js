@@ -55,11 +55,12 @@ TAG.Telemetry = (function() {
 				ret = true;
 
 			// if preHandler returns true, return
-			if(preHandler && preHandler(tobj, evt)) {
+			if((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH==='off') {
 				return;
 			}
 
 			requests.push(tobj);
+			console.log(requests);
 
 			if(requests.length >= sendFreq - 1) { // tweak this later
 				postTelemetryRequests();

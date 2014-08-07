@@ -97,7 +97,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currTimelineCircleArea,         // current timeline circle area
         toShowFirst,                    // first collection to be shown (by default)
         toursIn,                        // tours in current collection
-        currentThumbnail,               // img tag for current thumbnail image
         imgDiv,                         // container for thumbnail image
         descriptiontext,                // description of current collection or artwork
         loadingArea,                    // container for progress circle
@@ -221,7 +220,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 tagcollectionid: currCollection.Identifier,
                                 tagartworkid: currentArtwork ? currentArtwork.Identifier : ''
                             });
-
                 root.append(linkOverlay);
                 linkOverlay.fadeIn(500, function () {
                     linkOverlay.find('.linkDialogInput').select();
@@ -1042,26 +1040,33 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'font-family': FONT
             });
             main.on('click', function () {
-
+                doubleClickHandler()
                 // if the idle timer hasn't started already, start it
                 if(!idleTimer) {
                     idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                     idleTimer.start();
                 }
                 showArtwork(currentWork, false)();
-                zoomTimeline(artworkCircles[currentWork.Identifier])
+                //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
+                setTimeout(function(){zoomTimeline(artworkCircles[currentWork.Identifier])}, 1000)
                 justShowedArtwork = true;
             })
-            .on('click', doubleClickHandler)
-            //For double click
-            function doubleClickHandler(){
-                if(previouslyClicked === main){
-                    switchPage(currentArtwork);
-                };
-                previouslyClicked = main;
 
-                setTimeout(function(){previouslyClicked = null}, 1000)
-            }
+            /* @function doubleClickHandler
+            * Opens artwork directly on double click
+            * Basically, sets a timeout during which the artwork can be clicked again to be opened
+            * @returns handler function
+            */
+            function doubleClickHandler(){
+                return function(){
+                    if(previouslyClicked === main){
+                        switchPage(currentArtwork)();
+                    } else {
+                        previouslyClicked = main;
+                        setTimeout(function(){previouslyClicked = null}, 1000)                        
+                    }
+                }()
+            };
 
             TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
@@ -1519,8 +1524,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 circle,
                 artworksForYear,
                 i,
-                descText = $(document.createElement('div')),
-                currentThumbnail = $(document.createElement('img'));
+                descSpan = $(document.createElement('div')),
+                currentThumbnail;
 
             if (!artwork) {
                 return;
@@ -1620,6 +1625,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //if there are more than 3 artworks associated with the date year
                 if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
+                    selectedArtworkContainer.css("overflow-x", "scroll")
                     leftOffset = bottomContainer.width()/10
                     shift = 0;
                     //shift = rootWidth/10;
@@ -1641,6 +1647,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
              */
             function createOnePreviewTile(artwork){
                 var previewTile,
+                    miniTilesLabel,
                     tileTop,
                     tileBottom,
                     titleSpan,
@@ -1651,7 +1658,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     infoText,
                     artistInfo,
                     yearInfo,
-                    descSpan;
+                    descText,
+                    miniTilesHolder,
+                    miniTile;
 
 
 
@@ -1669,7 +1678,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                          .text(TAG.Util.htmlEntityDecode(artwork.Name))
                     .css({
                         'color': '#' + SECONDARY_FONT_COLOR,
-                        'font-family': FONT
+                        'font-family': FONT,
+                        'font-size': "120%"
                     });
 
                 //Image div
@@ -1696,9 +1706,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                           .append(exploreText);
 
                 //Thumbnail image
-                currentThumbnail.addClass('currentThumbnail')
+                currentThumbnail = $(document.createElement('img'))
+                    .addClass('currentThumbnail')
                     .attr('src', artwork.Metadata.Thumbnail ? FIX_PATH(artwork.Metadata.Thumbnail) : (tagPath+'images/no_thumbnail.svg'))
-                    .on('click', switchPage(artwork));
+                    .on('click', switchPage(artwork))
+                    .on('load', function () {
+                        TAG.Util.removeProgressCircle(circle);
+                    });
 
                 //Telemetry stuff
                 TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'click', '', function(tobj) {
@@ -1746,40 +1760,82 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('tileBottom');
 
                 //Description of art
-                descText.addClass('descText');
+                descSpan.addClass('descSpan');
 
                 //Div for above description
-                descSpan = $(document.createElement('div'))
-                    .addClass('descSpan')
+                descText = $(document.createElement('div'))
+                    .addClass('descText')
                     .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
                     .css({
                     'color': '#' + SECONDARY_FONT_COLOR,
-                    'font-family': FONT
+                    'font-family': FONT,
+                    'font-size': "80%"
                 });
+
+                miniTilesLabel = $(document.createElement('div'))
+                    .addClass("miniTilesLabel")
+                    .text("Associated Media")
+
+                miniTilesHolder = $(document.createElement('div'))
+                    .addClass('miniTilesHolder')
+
+                loadQueue.add(function(){
+                    TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMediaMiniTiles, null, addMediaMiniTiles);
+                });
+
+                /**
+                * @method addMediaMiniTiles
+                * @param {Array} mediaDoqs    array of media doqs to with which the mini tiles are created
+                */
+                function addMediaMiniTiles(mediaDoqs){
+
+                    //Loop through media doqs and create tiles from them
+                    for (i=0; i<mediaDoqs.length;i++){
+                        mediaDoqs[i].artwork = artwork;
+                        miniTile = $(document.createElement('img'))
+                            .addClass('miniTile')
+                            .css({
+                                'width': miniTilesHolder.height()
+                            })
+                            .on('click', 
+                                    switchPage(artwork, mediaDoqs[i])
+                                )
+                        miniTile.css('left', i*(miniTile.width() + miniTilesHolder.height()/10));
+
+                        // Set tileImage to thumbnail image, if it exists
+                        if(mediaDoqs[i].Metadata.Thumbnail) {
+                            miniTile.attr("src", FIX_PATH(mediaDoqs[i].Metadata.Thumbnail));
+                        } else {
+                            miniTile.attr("src", tagPath+'images/no_thumbnail.svg');
+                        }
+
+                        miniTilesHolder.append(miniTile)
+                    }                    
+                }
 
                 //Append everything
                 infoText.append(artistInfo)
                         .append(yearInfo);
 
-                imgDiv.append(exploreTab)
-                      .append(currentThumbnail)
-                      .append(infoText);
+                imgDiv.append(currentThumbnail)
+                    .append(exploreTab)  
+                    .append(infoText);
 
                 tileTop.append(imgDiv)
                     .append(titleSpan)
                     .append(infoText);
 
-                descText.append(descSpan);
+                descSpan.append(descText);
 
-                tileBottom.append(descText)
+                tileBottom.append(descSpan)
+                    .append(miniTilesHolder)
+                    .append(miniTilesLabel)
 
                 previewTile.append(tileTop)
                     .append(tileBottom);
 
                 selectedArtworkContainer.append(previewTile);
 
-
-                createThumbnailsForSelectedArtworkContainer(artwork)
                 return previewTile;
             }
 
@@ -1805,16 +1861,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'top'     : '22%',
             };
 
-            circle = TAG.Util.showProgressCircle(descText, progressCircCSS, '0px', '0px', false);
-
-            currentThumbnail.on('load', function () {
-                TAG.Util.removeProgressCircle(circle);
-            });
+            circle = TAG.Util.showProgressCircle(descSpan, progressCircCSS, '0px', '0px', false);
         };
-    }
-
-
-    function createThumbnailsForSelectedArtworkContainer(artwork){
     }
 
 
@@ -2196,7 +2244,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method switchPage
      * @param {Object} artwork      artwork to return to after switching
      */
-    function switchPage(artwork) {
+    function switchPage(artwork, associatedMedia) {
         return function() {
             var artworkViewer,
                 newPageRoot,
@@ -2257,7 +2305,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     prevScroll: catalogDiv.scrollLeft(),
                     prevCollection: currCollection,
                     prevPage: 'catalog',
-                    prevMult: multipleShown
+                    prevMult: multipleShown,
+                    assocMediaToShow: associatedMedia
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');

@@ -499,6 +499,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         fullScreen = root.find('#innerContainer');
         fullScreen.css('background-image', "url(" + TAG.Worktop.Database.fixPath(main.Metadata["BackgroundImage"]) + ")");
+        fullScreen.css({'opacity':'0.6'});
 
         overlayColor = main.Metadata["OverlayColor"];
         overlayTransparency = main.Metadata["OverlayTransparency"];
@@ -699,15 +700,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      * @method openDialog
      */
     function openDialog() {
-         if (TAG.Auth.getToken()){
-             TAG.Worktop.Database.checkToken(TAG.AuthToken, authClick, authClick);
-             
-             console.log("authtoken true");
-          }
-
-         else{
-            authClick();
-         }
+         authClick();
 
          if(localStorage.ip === 'tagtestserver.cloudapp.net') {
              $('#authoringInput').attr('value', 'Test1234');
