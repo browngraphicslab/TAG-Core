@@ -761,9 +761,36 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }  
             }
 
-            
-            
-        }
+            //Incomplete:
+            /**
+            function loadSortTags(collection){
+                var sortOptions = [],
+                    sortOptionsGuid,
+                    sortButton,
+                if (collection.Metadata.SortOptionsGuid){
+                    sortOptionsGuid = collection.Metadata.SortOptionsGuid;
+                    TAG.Worktop.Database.getDoq(sortOptionsGuid, getSortOptions, null, getSortOptions);
+                    function getSortOptions(sortOptionsDoq){
+                        //append into sortOptions
+                    }
+                } else {
+                    //TO-DO- change this based on format of server sort options
+                    sortOptions = ["Year","Title","Artist","Tours"];
+                }
+                for (i=0;i<sortOptions.length;i++){
+                    sortButton = (document.createElement('div'));
+                    //to-do change to 'tag'
+                    sortButton.tagName = sortOptions[i].???
+                    sortButton.addClass('rowButton')
+                              .attr('id', sortOptions[i].???)
+                              .on('click', function(){
+                                 changeDisplayTag(currentArtworks,sortButton);
+                              });
+                    //To-do add 'button row' div to make styling work. 
+                    sortRow.append(sortButton);
+                }
+            }
+            **/
     }
     this.loadCollection = loadCollection;
 
