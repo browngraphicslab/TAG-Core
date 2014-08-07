@@ -391,8 +391,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         closeButton.attr('src', tagPath + 'images/icons/x.svg');
         closeButton.text('X');
         closeButton.css({
-            'height': '30px',
-            'width': '30px',
+            'height': '3%',
+            'width': '3%',
             'margin-left': '39%',
             'margin-bottom': '3.5%'
         });
