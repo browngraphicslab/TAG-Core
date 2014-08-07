@@ -16,7 +16,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
-    var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html file
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html file
         overlay = root.find('#overlay'),
         //primaryFont = root.find('.primaryFont'),
         //secondaryFont = root.find('.secondaryFont'),

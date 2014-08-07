@@ -30,6 +30,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         sortRow                  = root.find('#sortRow'),
         searchInput              = root.find('#searchInput'),
         searchTxt                = root.find('#searchTxt'),
+        yearButton               = root.find('#yearButton'),
+        titleButton              = root.find('#titleButton'),
+        artistButton             = root.find('#artistButton'),
+        typeButton               = root.find('#typeButton'),
         artworksButton           = root.find('#artworksButton'),
         assocMediaButton         = root.find('#assocMediaButton'),
         toggleRow                = root.find('#toggleRow'),
@@ -128,9 +132,39 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
 
-        root.find('.rowButton').on('click', function() {
-            changeDisplayTag(currentArtworks, $(this).attr('tagName'));
+        yearButton.tagName = "Year";
+        yearButton.addClass('rowButton');
+        yearButton.on('click', function () {
+            changeDisplayTag(currentArtworks, yearButton);
         });
+        titleButton.tagName = "Title";
+        titleButton.addClass('rowButton');
+        titleButton.on('click', function () {
+            changeDisplayTag(currentArtworks, titleButton);
+        });
+        artistButton.tagName = "Artist";
+        artistButton.addClass('rowButton');
+        artistButton.on('click', function () {
+            changeDisplayTag(currentArtworks, artistButton);
+        });
+        typeButton.tagName = "Type";
+        typeButton.addClass('rowButton');
+        typeButton.on('click', function () {
+            changeDisplayTag(currentArtworks, typeButton);
+        });
+
+        /**
+        root.find('.rowButton').on('click', function() {
+            //changeDisplayTag(currentArtworks, $(this).attr('tagName'));
+            changeDisplayTag(currentArtworks, $(this));
+        });
+        **/
+        /**
+        $('.rowButton').on('click', function () {
+            //changeDisplayTag(currentArtworks, $(this).attr('tagName'));
+            changeDisplayTag(currentArtworks, $(this));
+        });
+        **/
 
         TAG.Telemetry.register(root.find('#artistButton'), 'click', '', function(tobj) {
             tobj.ttype = 'sort_by_artist';
@@ -173,6 +207,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
             .addClass('bottomButton')
+        infoButton.on('click', function () {
+            createInfoPopUp();
+        });
+
 
         if (IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg')
@@ -189,11 +227,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     linkOverlay.find('.linkDialogInput').select();
                 });
             });
+            
         } else {
             linkButton.remove();
-            infoButton.on('click', function () {
-                createInfoPopUp();
-            });
         }
 
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
@@ -222,23 +258,38 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var infoTitleRight = $(document.createElement('div'));
         var infoMainTop = $(document.createElement('div'));
         var infoMainBottom = $(document.createElement('div'));
+        var microsoftLogoDiv = $(document.createElement('div'));
+        var brownLogoDiv = $(document.createElement('div'));
         var microsoftLogo = $(document.createElement('img'));
         var brownLogo = $(document.createElement('img'));
         var closeButton = createCloseButton();
-
-        microsoftLogo.attr('src', tagPath + 'images/Microsoft-Logo-Black-small.png');
-        brownLogo.attr('src', tagPath + 'images/brown_logo.png');
+        var string = 'cs.brown.edu/research/ptc/tag';
+        microsoftLogo.attr('src', tagPath + 'images/microsoft_logo_transparent.png');
+        brownLogo.attr('src', tagPath + 'images/brown_logo_transparent.png');
+        microsoftLogoDiv.css({
+            'background': 'transparent',
+            'width': '20%',
+            'height': '100%',
+            'margin-left': '70%',
+            'float': 'left'
+        });
+        brownLogoDiv.css({
+            'background': 'transparent',
+            'width': '10%',
+            'height': '100%',
+            'float': 'right'
+        });
         microsoftLogo.css({
             'height': 'auto',
-            'width': '20%',
-            'margin-left': '50%'
+            'width': '100%',
+            'margin-top': '5%'
         });
         brownLogo.css({
             'height': 'auto',
-            'width': '20%',
-            'margin-left': '50%'
+            'width': '80%',
+            'margin-top': '-5%'
         });
-        
+       
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         infoOverlay.append(infoBox);
         infoBox.css({
@@ -301,20 +352,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'margin-top': '3%',
             'margin-right': '6%'
         });
-        infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag/.');
+        infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag.');
         infoMainBottom.text('Andy van Dam, Alex Hills, Yudi Fu, Karishma Bhatia, Gregory Chatzinoff, John Connuck, David  Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Kaijan Gao, Jessica Herron, Ardra Hren, Hak Rim Kim, Lucy van Kleunen, Inna Komarovsky, Ryan Lester, Benjamin LeVeque, Josh Lewis, Jinqing Li, Jeffery Lu, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Jonathan Poon, Dhruv Rawat, Emily Reif, Surbhi Madan, Jacob Rosenfeld, Anqi Wen, Dan Zhang, Libby Zorn');
         infoMain.append(infoMainTop);
         infoMain.append(infoMainBottom);
 
         infoLogo.css({
-            'background-color': 'blue',
+            'background-color': 'black',
             'display': 'block',
             'color': 'white',
             'height': '15%',
             'margin-top': '3%'
         });
-        infoLogo.append(microsoftLogo);
-        infoLogo.append(brownLogo);
+        infoLogo.append(microsoftLogoDiv);
+        infoLogo.append(brownLogoDiv);
+
+        brownLogoDiv.append(brownLogo);
+        microsoftLogoDiv.append(microsoftLogo);
 
         infoBox.append(infoTitle);
         infoBox.append(infoMain);
@@ -337,8 +391,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         closeButton.attr('src', tagPath + 'images/icons/x.svg');
         closeButton.text('X');
         closeButton.css({
-            'height': '30px',
-            'width': '30px',
+            'height': '3%',
+            'width': '3%',
             'margin-left': '39%',
             'margin-bottom': '3.5%'
         });
@@ -830,10 +884,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function createArtTiles(artworks) {
         currentArtworks = artworks;
+        var currentButton;
         if (!currentTag){
             //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
-            timelineShown ? currentTag = "Year" : currentTag = "Title";
-        } 
+            //timelineShown ? currentTag = "Year" : currentTag = "Title";
+            timelineShown ? currentTag = yearButton : currentTag = titleButton;
+        }
         colorSortTags(currentTag);
         drawCatalog(currentArtworks, currentTag, 0);
     }
@@ -846,7 +902,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Number} start      starting at start-th artwork total (note NOT start-th artwork in artworks)
      * @param {Boolean} onSearch  whether the list of artworks is a list of works matching a search term
      */
-    function drawCatalog(artworks, tag, start, onSearch) {
+    function drawCatalog(artworks, tagButton, start, onSearch) {
 
         if (!currCollection) {
             return;
@@ -875,7 +931,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 return;
             }
 
-            sortedArtworks = sortCatalog(artworks, tag);
+            sortedArtworks = sortCatalog(artworks, tagButton.tagName);
+            //minOfSort = sortCatalog(artworks,tag).min();
             minOfSort      = sortedArtworks.min();
             currentWork    = minOfSort ? minOfSort.artwork : null;
             i = start;
@@ -887,7 +944,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             works = sortedArtworks.getContents();
             for (j = 0; j < works.length; j++) {
-                loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j));
+                loadQueue.add(drawArtworkTile(works[j].artwork, tagButton.tagName, onSearch, i + j));
             }
             loadQueue.add(function(){
                 showArtwork(currentArtwork,multipleShown && multipleShown)();
@@ -1034,7 +1091,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' : currentWork.Metadata.Artist);
             } else if (tag === 'Year') {
                 yearTextBox.css('visibility','visible');
-                //TO-DO year text needs to be formatted in mm/dd/yyyy
                 yearText = getDateText(getArtworkDate(currentWork,true));
                 if (currentWork.Type === 'Empty'){
                     yearTextBox.text('')
@@ -1998,12 +2054,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method colorSortTags
      * @param {String} tag    the name of the sort tag
      */
-    function colorSortTags(tag) {
+    function colorSortTags(tagButton) {
         //$('.rowButton').css('color', 'rgb(170,170,170)');
        // $('[tagName="'+tag+'"]').css('color', 'white');
        var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR);
        $('.rowButton').css('color', unselectedColor);
-       $('[tagName="'+tag+'"]').css('color', '#' + SECONDARY_FONT_COLOR);
+       tagButton.css('color', '#' + SECONDARY_FONT_COLOR);
+       //$('[tagName="' + tag + '"]').css('color', '#' + SECONDARY_FONT_COLOR);
     }
 
     /**
@@ -2012,15 +2069,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Array} artworks     the array of artwork doqs to sort
      * @param {String} tag         the name of the sort tag
      */
-    function changeDisplayTag(artworks, tag) {
-        var guidsSeen   = [],
+    function changeDisplayTag(artworks, tagButton) {
+        var tag = tagButton.tagName,
+            guidsSeen = [],
             toursArray  = [],
             artsArray   = [],
             videosArray = [],
             bigArray    = [],
             i;
 
-        currentTag = tag;
+        currentTag = tagButton;
+        //colorSortTags(currentTag);
         colorSortTags(currentTag);
         if (tag !== 'Type') {
             drawCatalog(artworks, currentTag, 0, false);
@@ -2042,7 +2101,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // draw tours, artworks, then videos
             bigArray.concat(toursArray).concat(artsArray).concat(videosArray);
-            drawCatalog(bigArray, "Title", 0, false);
+            //drawCatalog(bigArray, "Title", 0, false);
+            drawCatalog(bigArray, titleButton , 0, false);
         }
         doSearch(); // search with new tag
     }
