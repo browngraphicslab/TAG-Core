@@ -2265,7 +2265,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                         'padding-top': '3%',
                                     });
                                     $(artworkHolder).text(name);
-                                    $(associatedMediaPickerArtwork).append(artworkHolder);
+                                    $(".associatedMediaPickerArtwork").append(artworkHolder);
                                     artworkHolderClick($(artworkHolder));
                                 });
                             }
