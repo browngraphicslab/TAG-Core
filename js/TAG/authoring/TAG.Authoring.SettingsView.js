@@ -1567,7 +1567,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia;
         var sortOptionsObj;
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            TAG.Worktop.Database.addSortOptions(exhibition.Metadata, function (sortOptionsDoq) {
+            TAG.Worktop.Database.addSortOptions(exhibition.Metadata, null, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
