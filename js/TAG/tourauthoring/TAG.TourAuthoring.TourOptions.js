@@ -455,10 +455,9 @@ TAG.TourAuthoring.TourOptions = function (options) {
             'padding': '1%',
             'border': '1px solid white',
             'width': 'auto',
-            'position': 'relative',
-            'float': "right",
-            'margin-right': '-3%',
-            'margin-top': '15%'
+            'position': 'absolute',
+            'float': "left",
+            'margin-top': '5%'
         });
         
         cancelButton.attr('type', 'button');
@@ -467,10 +466,9 @@ TAG.TourAuthoring.TourOptions = function (options) {
             'padding': '1%',
             'border': '1px solid white',
             'width': 'auto',
-            'position': 'absolute',
-            'margin-left': '-3%',
-            'float': "left",
-            'margin-top': '15%',
+            'position': 'relative',
+            'float': "right",
+            'margin-top': '5%',
             'bottom': '1%'
         });
         buttonRow.append(cancelButton);
