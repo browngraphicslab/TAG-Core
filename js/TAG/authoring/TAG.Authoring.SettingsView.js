@@ -464,7 +464,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'position': 'absolute',
                     'left': '50%',
                     'top': '30%',
-                    'z-index': '50',
+                    'z-index': '50', 
                     'height': 'auto',
                     'width': '10%'
                 };
@@ -2859,12 +2859,73 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, unauth, conflict, error);
     }
 
-    // TODO document
+    /**Generate iframe asset
+     * @method createIframeAsset
+     * @param {String} src        URL to embed
+     */
     function createIframeAsset(src) { //TODO IFRAME ASSOC MEDIA: iframe asset creation would look something like this
-        var options = {
-            Source: src,
-            Name: src
-        };
+        var modifiedURL = src,
+        popup,
+        id,
+        validURL = true;
+        if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
+
+            if (modifiedURL.indexOf("?v=") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("?v=") + 3);
+                if (id && !/^[a-zA-Z0-9- ]*$/.test(id)) {
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
+                    modifiedURL = modifiedURL.replace("http://", "https://");
+                } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
+                    modifiedURL = "https://" + modifiedURL;
+                }
+                modifiedURL = modifiedURL.replace("watch?v=", "embed/");
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
+
+            if (modifiedURL.indexOf("vimeo.com") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
+                if (id && !/^\d+$/.test(id)) {		//No special characters or characters
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else {
+            popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
+            $('body').append(popup);
+            $(popup).show();
+            validURL = false;
+        }
+
+        if (validURL) {
+            var options = {
+                Source: modifiedURL,
+                Name: modifiedURL
+            };
+            TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
+        }
+
         function onSuccess(doqData) {
             var newDoq = new Worktop.Doq(doqData.responseText);
             function done() {
@@ -2873,7 +2934,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
 
         };
-        TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
+
     }
 
     /**
@@ -2884,7 +2945,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var overlay = TAG.Util.UI.popupInputBox({
             confirmAction: createIframeAsset,
             container: root,
-            message: 'Enter URL for your embedded web asset',
+            message: 'Enter a YouTube or Vimeo URL',
             //placeholder: 'E.g., http://www.youtube.com/embed/g794oDdc1l0',
             confirmText: 'Save'
         });
