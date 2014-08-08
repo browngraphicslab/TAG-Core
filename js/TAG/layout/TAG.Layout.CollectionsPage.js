@@ -766,7 +766,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             sortText,
                             sortObjArray;
                         if (sortObjects){
-                            for (sortObj in sortObjects){
+                            for (var sortObj in sortObjects){
                                 if (sortObjects.hasOwnProperty(sortObj) && sortObj != "__Created" && sortObj != "Count") {
                                     if (sortObj.charAt(0) == '?') {
                                         sortText = sortObj.substr(1);
@@ -777,7 +777,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     if (sortObjArray.length == 2 && sortObjArray[0] == "0" && sortObjArray[1] == "false") {
                                         continue;
                                     }
-                                    sortOptions.append(sortText);
+                                    sortOptions.push(sortText);
                                 }
                             }
                         }
