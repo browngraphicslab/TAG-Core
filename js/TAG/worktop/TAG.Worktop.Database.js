@@ -147,6 +147,7 @@ TAG.Worktop.Database = (function () {
         changeHotspot: changeHotspot,
         changeMap: changeMap,
         changeMain: changeMain,
+        addSortOptions: addSortOptions,
         uploadImage: uploadImage,
     }
 
@@ -630,6 +631,11 @@ TAG.Worktop.Database = (function () {
         _db.postExhibition(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
 
+    function addSortOptions(guid, options, success, unauth, conflict, error) {
+        _db = _db || new Worktop.Database();
+        if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
+        _db.addSortOptions(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
+    }
     /*
     Change an artwork
         options: New values for the artwork in a dictionary:
