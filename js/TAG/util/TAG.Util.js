@@ -1607,9 +1607,13 @@ TAG.Util = (function () {
             var circle = $(document.createElement('img'));
             circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
             circle.css({
-                'height': '80px',
+                'height': '50px',
                 'width': 'auto',
-                'left': '50%'
+                'left': '45%',
+                display: 'block',
+                position: 'relative',
+                'top': '30%',
+                'margin-bottom':'5%'
             });
             container.append(circle);
         }
