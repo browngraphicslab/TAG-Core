@@ -52,7 +52,8 @@ Worktop.Database = function (mainID) {
 
     // writeCache function debounces calls to write the cache to disk
     var writeCache = $.debounce(250, function () {
-        localStorage[CACHE_PREFIX + _baseURL] = JSON.stringify(_cache);
+        //COMMENTED OUT FOR AUG15 RELEASE MUST FIGURE OUT WHY CACHE IS FILLING UP SO FAST?!?
+       // localStorage[CACHE_PREFIX + _baseURL] = JSON.stringify(_cache);
     });
 
     return {
@@ -236,6 +237,7 @@ Worktop.Database = function (mainID) {
             true);
     }
 
+    // TODO: PLEASE NO - bmost
     function addSortOptions(guid, options, handlers, throwOnWarn) {
         options = options || {};
         var sortedOptions = checkKeys(options, _static.params.exhibition, "ChangeExhibition", throwOnWarn);
