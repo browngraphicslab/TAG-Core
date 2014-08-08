@@ -6055,6 +6055,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             showDropdown = !showDropdown;
         });
+        addMenuLabel.on('focusout', function () {
+            addMenuLabel.click();
+        });
         var fromFile = $(document.createElement('label'))
             .attr('id', 'fromFile')
             .text('From File')
