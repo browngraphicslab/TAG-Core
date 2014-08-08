@@ -353,6 +353,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
     }
 
+    function prepareNextView(){
+        onAssocMediaView = false;
+        currentTag = null;
+        currentArtwork = null;
+        loadQueue.clear();
+        comingBack = false;
+    }
+
     /**
      * Create a closeButton for associated media
      * @method createCloseButton
@@ -436,8 +444,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "margin": COLLECTION_DOT_WIDTH/4
                         }).on('click', function(j){
                             return function(){
+                                prepareNextView();
                                 loadCollection(visibleCollections[j])();
-                                currentTag = null;
                             }
                         }(i));
             collectionDotHolder.append(collectionDot);
@@ -584,8 +592,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         .off()
                         .on('click', function(j){
                                 return function(){
+                                    prepareNextView();
                                     loadCollection(visibleCollections[j.prevCollectionIndex])();
-                                    currentTag = null;
                                 }
                             }(collection));
                     backArrow.attr('src', tagPath + 'images/icons/Close.svg');
@@ -601,9 +609,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .off()
                                 .on('click', function(j){
                                         return function(){
-                                            onAssocMediaView = false
+                                            prepareNextView();
                                             loadCollection(visibleCollections[j.prevCollectionIndex])();
-                                            currentTag = null;
                                         }
                                     }(collection));
 
@@ -628,8 +635,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .off()
                                 .on('click', function(j){
                                         return function(){
+                                            prepareNextView();
                                             loadCollection(visibleCollections[j.nextCollectionIndex])();
-                                            currentTag = null;
                                         }
                                     }(collection));
 
@@ -650,9 +657,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .off()
                                 .on('click', function(j){
                                         return function(){
-                                            onAssocMediaView = false
+                                            prepareNextView();
                                             loadCollection(visibleCollections[j.nextCollectionIndex])();
-                                            currentTag = null;
                                         }
                                     }(collection));
 
