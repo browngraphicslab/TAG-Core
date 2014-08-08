@@ -17,7 +17,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options.tagContainer = $("#tagRoot");
 
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html file
-        overlay = root.find('#overlay'),
+        //overlay = root.find('#overlay'),
         //primaryFont = root.find('.primaryFont'),
         //secondaryFont = root.find('.secondaryFont'),
         //serverTagBuffer = root.find('#serverTagBuffer'),
@@ -621,11 +621,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     function applyCustomization() {
         $(primaryFont).css({ 
             'color': PRIMARY_FONT_COLOR,
-            'font-family': 'Pacifico'
+            'font-family': FONT
         });
         $(secondaryFont).css({
             'color': SECONDARY_FONT_COLOR,
-            'font-family': 'Pacifico'
+            'font-family': FONT
         });
     }
 

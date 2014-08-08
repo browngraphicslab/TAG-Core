@@ -3911,8 +3911,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var input = createTextInput(val, null, null, false, false);
             var field = createSetting(key, input, null, '7px');
             field.addClass("metadataspec");
-            $(field).css({ 'margin': '1px' });
-            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align':'top'});
+            $(field).css({
+                'margin': '0px 0px 2px 0px',
+                padding: '1% 7% 1% 1%',
+                width:'92%',
+            });
+            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'top' });
+            $(field).children().eq(1).css({margin:'0%'});
             mtinputs[key] = input;// { field: field, input: input };
             field.show().data('visible', true);
             parsingInfo.append(field);
@@ -4137,6 +4142,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         metadataPickerOverlay.append(metadataPicker);
 
         metadataPicker.append(metadataPickerHeader);
+
+        //searchbar
+        searchbar.css({
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+        searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
+        searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
+
         metadataPicker.append(searchbar);
 
         //search function in terms of titles
@@ -4233,7 +4249,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         if (!fields[rest]) {
                             var input = createTextInput(selectedmetadata[rest], null, null, false, true);
                             var field = createSetting(rest, input, null, '7px').addClass("metadataField").attr('title', rest);
-                            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'top' });
+                            field.css({
+                                margin:  '0%',
+                                padding: '1%',
+                                width:   '98%'
+                            });
+                            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'middle' });
                             fields[rest] = { field: field, input: input };
                             field.show().data('visible', true);
                             metadataholder.append(field);
@@ -4243,17 +4264,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
 
-        var metadataPickerImport = $(document.createElement('button'));
-        metadataPickerImport.attr("id", "metadataPickerImport");
+        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport");
         metadataPickerImport.attr('disabled', true);
         if (selectedmetadata)
             metadataPickerImport.attr('disabled', false);
         metadataPickerImport.text("Import");
-        metadataPickerImport.css({
-            position: 'absolute',
-            bottom: '2%',
-            right: '22%',
-        });
+        
         metadataPickerImport.click(function () {
             updateArtwork(artwork, inputs, selectedmetadata, settingsContainer, spec);
             $('.metadataInfos').empty();
@@ -4261,17 +4277,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         metadataPicker.append(metadataPickerImport);
 
-        var metadataPickerCancel = document.createElement('button');
-        var $metadataPickerCancel = $(metadataPickerCancel);
-        $metadataPickerCancel.text("Cancel");
-        $metadataPickerCancel.css({
-            position: 'absolute',
-            bottom: '2%',
-            right: '5%',
-        });
+        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel");
+        metadataPickerCancel.text("Cancel");
+        
 
         // cancel button click handler
-        $metadataPickerCancel.click(function () {
+        metadataPickerCancel.click(function () {
             metadataPickerOverlay.fadeOut();
             $('.metadataInfos').empty();
             metadataPickerCancel.disabled = true;
