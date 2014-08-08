@@ -6476,8 +6476,12 @@ TAG.Util.Artwork = (function () {
         thumbnailImage.removeAttr('height');
 
         thumbnailImage.css({ // TODO fix this
-            'max-height': 0.15 * 0.7 * $("#tagRoot").height() + "px",
-            'max-width': 0.22 * 0.89 * 0.95 * 0.40 * 0.92 * $("#tagRoot").width() + "px"
+           // 'max-height': 0.15 * 0.7 * $("#tagRoot").height() + "px",
+            //'max-width': 0.22 * 0.89 * 0.95 * 0.40 * 0.92 * $("#tagRoot").width() + "px"
+            height: 'auto',
+            width: 'auto',
+            'max-width': '70%',
+            'max-height': '70%'
         });
 
         holderInnerContainer.append(thumbnailImage);

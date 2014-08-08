@@ -621,11 +621,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     function applyCustomization() {
         $(primaryFont).css({ 
             'color': PRIMARY_FONT_COLOR,
-            'font-family': 'Pacifico'
+            'font-family': FONT
         });
         $(secondaryFont).css({
             'color': SECONDARY_FONT_COLOR,
-            'font-family': 'Pacifico'
+            'font-family': FONT
         });
     }
 
