@@ -34,14 +34,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit = root.find('#passwordSubmit'),
         serverURL,
         tagContainer;
-<<<<<<< Updated upstream
-
-    
-        
-=======
-    
->>>>>>> Stashed changes
-    // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
+  // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
 
     if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
