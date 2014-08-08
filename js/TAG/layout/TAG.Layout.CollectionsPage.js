@@ -767,56 +767,59 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             sortObjArray;
                         if (sortObjects){
                             for (var sortObj in sortObjects){
-                                if (sortObjects.hasOwnProperty(sortObj) && sortObj != "__Created" && sortObj != "Count") {
-                                    if (sortObj.charAt(0) == '?') {
+                                if (sortObjects.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj !== "Count") {
+                                    if (sortObj.charAt(0) === '?') {
                                         sortText = sortObj.substr(1);
                                     } else {
                                         sortText = sortObj;
                                     }
                                     sortObjArray = sortObjects[sortObj].split(",");
-                                    if (sortObjArray.length == 2 && sortObjArray[0] == "0" && sortObjArray[1] == "false") {
-                                        continue;
+                                    if ((sortObjArray.length === 2 && sortObjArray[1] === "true" || sortObjArray[1] === true)
+                                        || (sortObjArray[0] === true || sortObjArray[0] === "true")) {
+                                        sortOptions.push(sortText);
                                     }
-                                    sortOptions.push(sortText);
                                 }
                             }
                         }
-
+                        appendTags();
                     });
                 } else {
                     //TO-DO-"Type" to  "Tours" (saved as "Tour" on server)
-                    sortOptions = ["Date","Title","Artist","Type"];
+                    sortOptions = ["Date", "Title", "Artist", "Type"];
+                    appendTags();
                 }
-                for (i=0;i<sortOptions.length;i++){
-                    sortButton = $(document.createElement('div'));
-                    sortButton.addClass('rowButton')
-                              .text(sortOptions[i])
-                              .attr('id', sortOptions[i].toLowerCase() + "Button")
-                              .off()
-                              .on('click', function(){
-                                currentArtwork = null;
-                                changeDisplayTag(currentArtworks,sortButtonTags[$(this).attr('id')]);
-                              });
-                    buttonRow.append(sortButton);
-                    sortButtonTags[sortButton.attr('id')] = sortOptions[i];
-                    //TO-DO: test this telemetry handler
-                    TAG.Telemetry.register(sortButton , 'click', '', function(tobj) {
-                        tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
-                    });
-                }
-                if (!comingBack){
-                    //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
-                    if (timelineShown && $('#dateButton')){
-                        currentTag = "Date";
-                    } else if ($('#titleButton')){
-                        currentTag = "Title";
-                    } else {
-                        //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
-                        currentTag = sortOptions[0] || null;
-                        currentDefaultTag = currentTag;
+                function appendTags() {
+                    for (i = 0; i < sortOptions.length; i++) {
+                        sortButton = $(document.createElement('div'));
+                        sortButton.addClass('rowButton')
+                                  .text(sortOptions[i])
+                                  .attr('id', sortOptions[i].toLowerCase() + "Button")
+                                  .off()
+                                  .on('click', function () {
+                                      currentArtwork = null;
+                                      changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
+                                  });
+                        buttonRow.append(sortButton);
+                        sortButtonTags[sortButton.attr('id')] = sortOptions[i];
+                        //TO-DO: test this telemetry handler
+                        TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
+                            tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                        });
                     }
+                    if (!comingBack) {
+                        //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
+                        if (timelineShown && $('#dateButton')) {
+                            currentTag = "Date";
+                        } else if ($('#titleButton')) {
+                            currentTag = "Title";
+                        } else {
+                            //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
+                            currentTag = sortOptions[0] || null;
+                            currentDefaultTag = currentTag;
+                        }
+                    }
+                    colorSortTags(currentTag);
                 }
-                colorSortTags(currentTag);
             }
         }
     }
@@ -2091,7 +2094,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artNode = {
                     artwork: artworks[i],
                     sortKeyMetadataType: tag,
-                    sortKey: artworks[i].Metadata.infoFields[tag] || null
+                    sortKey: artworks[i].Metadata.InfoFields[tag] || null
                 };
                 avlTree.add(artNode);
             }

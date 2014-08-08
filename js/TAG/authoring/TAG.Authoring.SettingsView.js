@@ -1307,7 +1307,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //CLICK HANDLER FOR SORT OPTIONS
     function clickCallback(sortDiv) {
         return function () {
-            if (sortDiv.attr("setSort") == "true" || sortDiv.attr("setSort") == true) {
+            if (sortDiv.attr("setSort") === "true" || sortDiv.attr("setSort") === true) {
                 if (sortOptionsCount>0){
                     sortOptionsCount--;
                 }
@@ -1349,15 +1349,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var sortOptions = sortOptionsObj.Metadata;
         if (sortOptions) {
             for (var sortObj in sortOptions) {
-                if (sortOptions.hasOwnProperty(sortObj) && sortObj != "__Created" && sortObj != "Count") {
+                if (sortOptions.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj != "Count") {
                     var key = "";
-                    if (sortObj.charAt(0) == '?') {
+                    if (sortObj.charAt(0) === '?') {
                         key = sortObj.substr(1);
                     } else {
                         key = sortObj;
                     }
                     var sortObjArray = sortOptions[sortObj].split(",");
-                    if (sortObjArray.length == 2 && sortObjArray[0] == "0" && sortObjArray[1] == "false") {
+                    if (sortObjArray.length === 2 && sortObjArray[0] === "0" && sortObjArray[1] == "false") {
                         continue;
                     }
                     var sortDiv = $(document.createElement("div"))
@@ -1365,7 +1365,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         .addClass("sortOptionDiv");
                     var setSort = sortObjArray[sortObjArray.length - 1];
                     sortDiv.attr("setSort", setSort);
-                    if (setSort == true || setSort == "true") {
+                    if (setSort === true || setSort === "true") {
                         sortOptionsCount++;
                         sortDiv.css({
                             "background-color": "#0040FF",
