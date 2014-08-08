@@ -1829,7 +1829,7 @@ TAG.Util.UI = (function () {
      */
     function keyHandler(event) {
         if (globalKeyHandler && globalKeyHandler[0] && globalKeyHandler[0][event.which]) {
-            globalKeyHandler[0][event.which]();
+            globalKeyHandler[0][event.which](event);
         }
       }
 
