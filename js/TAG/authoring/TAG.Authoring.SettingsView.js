@@ -791,7 +791,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
         var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
-        var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false, true);
+        var idleTimerDurationInput = createTextInput(idleDuration/60000, false, 3, false, false, true);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
         var font = fontFamilyInput.find(":selected").text();
@@ -897,6 +897,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //save Splash screen and pass in inputs with following keys:
             //idleTimerDurationInput.text(idleTimerDurationInput.val());
             saveIdleTimerDuration(idleTimerDurationInput);
+            idleTimerDurationInput.text(idleDuration);
             saveSplashScreen({
                 //alphaInput: alphaInput,                             //Overlay Transparency
                 //overlayColorInput: overlayColorInput,               //Overlay Color
@@ -953,9 +954,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewArtworkViewerButton);
     }
 
+    /**Changes idle timer stageOne duration from the customization settings
+     * input.val() is in minutes, and idleDuration needs to be set in milliseconds
+     * hence the conversion factor of 60000
+     * @method saveIdleTimerDuration
+     * @param {HTML Element} input      
+     */
     function saveIdleTimerDuration(input) {
-        var currDuration = input.val();
-        TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(currDuration);
+        idleDuration = parseInt(input.val())*60000;
     }
 
     /**Saves the splash screen settings
@@ -5427,6 +5433,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Boolean} defaultval  if true, reset to default text if empty and loses focus
      * @param maxlength             max length of the input in characters
      * @param hideOnClick
+     * @param {Boolean} onlyNumbers only numeric characters are allowed
      * @return input                newly created input
      */
     function createTextInput(text, defaultval, maxlength, hideOnClick, readonly, onlyNumbers) {
