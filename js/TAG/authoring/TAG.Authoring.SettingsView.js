@@ -794,7 +794,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false, true);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
-
+        var font = fontFamilyInput.find(":selected").text();
+        $('.primaryFont').css('font-family', font);
+        $('.secondaryFont').css('font-family', font);
         
         // Handle changes
 
@@ -1590,6 +1592,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Worktop.Database.addSortOptions(exhibition.Metadata, null, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
+                createCollectionSettings();
+            },null, null, function () {
                 createCollectionSettings();
             });
         } else {
@@ -5472,6 +5476,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             selectElt.append(option);
             options[i].selected = true;
         }
+        selectElt.change(function () {
+            $('.primaryFont').css('font-family', selectElt.find(":selected").text());
+            $('.secondaryFont').css('font-family', selectElt.find(":selected").text());
+        });
         selectElt.attr('value', value);
         //selectElt.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
         return selectElt;

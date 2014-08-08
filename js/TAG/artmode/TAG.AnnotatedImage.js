@@ -650,7 +650,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     descDiv = $(document.createElement('div'));
                     descDiv.addClass('annotatedImageMediaDescription');
                     descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
-
+                    if (IS_WINDOWS) {
+                        var links = descDiv.find('a');
+                        links.each(function (index, element) {
+                            $(element).replaceWith(function () {
+                                return $.text([this]);
+                            });
+                        });
+                    }
                     innerContainer.append(descDiv);
                 }
 

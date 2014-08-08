@@ -145,13 +145,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-position':'2% center'
         });
 
-        searchInput.on('focus', function () { searchInput.css({ 'background-image': 'none' }); });
+        
+        searchInput.on('click', function(){
+            console.log("clicked");
+            searchInput.triggerHandler("focus");
+        });
+        searchInput.on('focusin', function () { 
+            console.log("focusin");
+            searchInput.css({ 'background-image': 'none' }); 
+        });
         searchInput.on('focusout', function () { 
+            console.log("focusout");
             if (!searchInput.val()) {
                 searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             } 
         });
-
+        
         // initSplitscreen();
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
@@ -510,6 +519,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineShown = false;
             }
 
+            applyCustomization();
             buttonRow.empty();
             loadSortTags(collection);
             comingBack = false;
@@ -655,7 +665,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
                 });
                 collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
-
+                if (IS_WINDOWS) {
+                    var links = collectionDescription.find('a');
+                    links.each(function (index, element) {
+                        $(element).replaceWith(function () {
+                            return $.text([this]);
+                        });
+                    });
+                }
                 artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
                 assocMediaButton.css('color', dimmedColor);
 
@@ -720,7 +737,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 createArtTiles(currCollection.collectionMedia);
                 initSearch(currCollection.collectionMedia);
             }
-            applyCustomization();
 
             /*Helper function to get all of the associated media in a collection
              * @method getCollectionMedia
@@ -808,6 +824,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
                         });
                     }
+                    console.log("comingBack" + comingBack);
                     if (!comingBack) {
                         //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
                         if (timelineShown && $('#dateButton')) {
@@ -819,8 +836,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             currentTag = sortOptions[0] || null;
                             currentDefaultTag = currentTag;
                         }
-                        colorSortTags(currentTag);
                     }
+                    console.log("currentTag" + currentTag);
+                    colorSortTags(currentTag);
                 }
             }
         }
@@ -1835,6 +1853,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'font-family': FONT,
                     'font-size': "80%"
                 });
+                if (IS_WINDOWS) {
+                    var links = descText.find('a');
+                    links.each(function (index, element) {
+                        $(element).replaceWith(function () {
+                            return $.text([this]);
+                        });
+                    });
+                }
 
                 miniTilesLabel = $(document.createElement('div'))
                     .addClass("miniTilesLabel")
@@ -2237,6 +2263,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
        var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR);
        $('.rowButton').css('color', unselectedColor);
        if (tag){
+            console.log("coloring");
             $('#' + tag.toLowerCase() + 'Button').css('color', '#' + SECONDARY_FONT_COLOR);
        }
        //$('[tagName="' + tag + '"]').css('color', '#' + SECONDARY_FONT_COLOR);
