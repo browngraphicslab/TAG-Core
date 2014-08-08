@@ -281,7 +281,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Handles enter key press on the SettingsView page
      * @ method enterKeyHandlerSettingsView
      */
-    function enterKeyHandlerSettingsView() {
+    function enterKeyHandlerSettingsView(event) {
+        if (searchbar.is(':focus')) {
+            if (!searchbar.val()) {
+                resetView();
+                searchbar.css({ 'background-image': 'none' });
+            } else {
+                doSearch();
+            }
+            event.stopPropagation();
+            event.preventDefault();
+        }
         if (!$("input, textarea").is(":focus")) {
             if (inCollectionsView) { manageCollection(currentList[currentIndex]);  }
             if (inArtworkView) { editArtwork(currentList[currentIndex]);  }
@@ -289,6 +299,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (inToursView) { editTour(currentList[currentIndex]); }
             if (inFeedbackView) { deleteFeedback(currentList[currentIndex]); }
         }
+        
     }
 
     /**Handles delete key press on the SettingsView page
@@ -516,19 +527,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             }
         });
-        searchbar.keyup(function () {
-            if (!searchbar.val()) {  
+        
+        searchbar.keyup(function (e) {
+
+            if (!searchbar.val()) {
                 resetView();
+                searchbar.css({ 'background-image': 'none' });
             }
-        });
-        searchbar.keypress(function (e) {
-            if (e.which === 13 && searchbar.val()) {
-                doSearch();            
-            } else if (e.which === 13 && !searchbar.val()) {
-                resetView();
-            }
-            searchbar.css({ 'background-image': 'none' }); ////////////
-            
         });
 
        // rootContainer.keydown(keyHandler);
@@ -2874,9 +2879,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         validURL = true;
         if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
 
-            if (modifiedURL.indexOf("?v=") > -1) {
-                id = modifiedURL.substring(modifiedURL.indexOf("?v=") + 3);
-                if (id && !/^[a-zA-Z0-9- ]*$/.test(id)) {
+            if (modifiedURL.indexOf("watch?v=") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
+                
+                if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
                     validURL = false;
                 }
             } else {
