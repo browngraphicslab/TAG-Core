@@ -294,7 +294,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         if (!$("input, textarea").is(":focus")) {
             if (inCollectionsView) { manageCollection(currentList[currentIndex]);  }
-            if (inArtworkView) { editArtwork(currentList[currentIndex]);  }
+            if (inArtworkView) {
+                if ($(document.getElementById('artworkEditorButton')).length) {
+                    editArtwork(currentList[currentIndex]);
+                }
+                if ($(document.getElementById('thumbnailButton')).length) {
+                    saveThumbnail(currentList[currentIndex], false);
+                }
+             }
             if (inAssociatedView) { assocToArtworks(currentList[currentIndex]); }
             if (inToursView) { editTour(currentList[currentIndex]); }
             if (inFeedbackView) { deleteFeedback(currentList[currentIndex]); }
@@ -2714,7 +2721,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '2%',
                 'float': 'left'
             });
-
+        thumbnailButton.attr('id', 'thumbnailButton');
         buttonContainer.append(assocButton);
         if (media.Metadata.ContentType.toLowerCase() === 'video') {
             var convertBtn = createButton('Convert Video',
@@ -3699,6 +3706,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '2%',
                 'float': 'left'
             });
+        thumbnailButton.attr('id', 'thumbnailButton');
         if (artwork.Metadata.Type !== 'VideoArtwork') {
             buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
         } else {
