@@ -729,6 +729,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             styleBottomContainer();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
+
                 toggleRow.css({
                     'display': 'block',
                 });
@@ -1161,7 +1162,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             main.css({
                 'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER), 
                 'top' : Math.floor(i % 2) * (main.height() + TILE_BUFFER)
-            });       
+            });
+
+            //Add scrollbar to catalog div if needed
+            if (main.position().left + main.width() > main.parent().width()) {
+                catalogDiv.css("overflow-x", "scroll")
+            }      
         };
     }
 
