@@ -17,9 +17,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options.tagContainer = $("#tagRoot");
 
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html file
-        overlay = root.find('#overlay'),
-        primaryFont = root.find('.primaryFont'),
-        secondaryFont = root.find('.secondaryFont'),
+        //overlay = root.find('#overlay'),
+        //primaryFont = root.find('.primaryFont'),
+        //secondaryFont = root.find('.secondaryFont'),
         //serverTagBuffer = root.find('#serverTagBuffer'),
         //serverSetUpContainer = root.find('#serverSetUpContainer'),
         //authoringButtonContainer = root.find('#authoringButtonContainer'),
@@ -34,15 +34,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit = root.find('#passwordSubmit'),
         serverURL,
         tagContainer;
-  // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
 
-    if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
+  // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
+ if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
     }
     
     serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
     tagContainer = options.tagContainer || $('body');
-    
 
     testConnection();
     //applyCustomization();
@@ -143,9 +142,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         setImagePaths(main);
         setUpCredits();
         setUpInfo(main);
-        applyCustomization(main);
         initializeHandlers();
-        applyCustomization(main);
+
         openDialog();
         // authoringButtonBuffer.on('click', function (evt) {
         //     evt.stopPropagation();
@@ -617,14 +615,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * Applying Customization Changes
     * @method applyCustomization
     */
-    function applyCustomization(main) {
-        $('.primaryFont').css({ 
-            'color': '#' + main.Metadata["PrimaryFontColor"],
-            'font-family': main.Metadata["FontFamily"]
+    function applyCustomization() {
+        $(primaryFont).css({ 
+            'color': PRIMARY_FONT_COLOR,
+            'font-family': FONT
         });
-        $('.secondaryFont').css({
-            'color': '#' + main.Metadata["SecondaryFontColor"],
-            'font-family': main.Metadata["FontFamily"]
+        $(secondaryFont).css({
+            'color': SECONDARY_FONT_COLOR,
+            'font-family': FONT
         });
     }
 
