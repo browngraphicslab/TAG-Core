@@ -167,6 +167,7 @@ module.exports = function(grunt) {
 					        \n        urlToParse           = tagInput.urlToParse, \
 					        \n        pageToLoad           = {}, // a specific page to load \
 					        \n        TELEMETRY_SESSION_ID = null, \
+					        \n        TELEMETRY_SWITCH     = "off", \
                             \n        IS_WINDOWS           = (typeof Windows !== "undefined"), \
                             \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
 					        \n        idleTimer, \
@@ -196,6 +197,7 @@ module.exports = function(grunt) {
 						'css/General.styl',              // TAGCORE
 						'css/SettingsView.styl',         // TAGCORE
 						'css/Util.styl',                 // TAGCORE
+						'css/SplashScreenOverlay.styl'   // TAGCORE
 						//'css/ComponentControls.styl'	 // TAGCORE
 					]
 				}
@@ -214,7 +216,8 @@ module.exports = function(grunt) {
 					'html/VideoPlayer.html':         'html/VideoPlayer.jade',         // TAGCORE
 					'html/SettingsView.html':        'html/SettingsView.jade',        // TAGCORE
 					'html/TourPlayer.html':          'html/TourPlayer.jade',          // TAGCORE
-					//'html/ComponentControls.html':	 'html/ComponentControls.jade'	  // TAGCORE
+					'html/ComponentControls.html':	 'html/ComponentControls.jade',	  // TAGCORE
+					'html/SplashScreenOverlay.html': 'html/SplashScreenOverlay.jade'  // TAGCORE
 				}
 			}
 		},

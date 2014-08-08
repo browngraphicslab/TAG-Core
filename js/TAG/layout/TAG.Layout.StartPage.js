@@ -16,17 +16,25 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
-    var root = TAG.Util.getHtmlAjax('StartPage.html'), // use AJAX to load html from .html file
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html file
         overlay = root.find('#overlay'),
-        primaryFont = root.find('.primaryFont'),
-        secondaryFont = root.find('.secondaryFont'),
-        serverTagBuffer = root.find('#serverTagBuffer'),
-        serverSetUpContainer = root.find('#serverSetUpContainer'),
-        authoringButtonContainer = root.find('#authoringButtonContainer'),
-        authoringButtonBuffer = root.find('#authoringButtonBuffer'),
-        loginDialog = root.find('#loginDialog'),
+        //primaryFont = root.find('.primaryFont'),
+        //secondaryFont = root.find('.secondaryFont'),
+        //serverTagBuffer = root.find('#serverTagBuffer'),
+        //serverSetUpContainer = root.find('#serverSetUpContainer'),
+        //authoringButtonContainer = root.find('#authoringButtonContainer'),
+        //authoringButtonBuffer = root.find('#authoringButtonBuffer'),
+        //loginDialog = root.find('#loginDialog'),
+        goToCollectionsButton = root.find('#goToCollectionsButton'),
+        serverInput = root.find('#serverInput'),
+        authoringInput = root.find('#passwordInput'),
+        serverError = root.find('#serverError'),
+        passwordError = root.find('#passwordError'),
+        serverSubmit = root.find('#serverSubmit'),
+        passwordSubmit = root.find('#passwordSubmit'),
         serverURL,
         tagContainer;
+
 
         
     // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
@@ -124,31 +132,31 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         }
 
         TAG.Util.Constants.set("START_PAGE_SPLASH", tagPath+"images/birdtextile.jpg");
-        if(!allowServerChange) {
-            $('#serverTagBuffer').remove();
-        }
+        //if(!allowServerChange) {
+          //  $('#serverTagBuffer').remove();
+        //}
     
-        if(!allowAuthoringMode){
-            $('#authoringButtonBuffer').remove();
-        }
+        // if(!allowAuthoringMode){
+        //     $('#authoringButtonBuffer').remove();
+        // }
         
-        overlay.on('click', switchPage);
+        goToCollectionsButton.on('click', switchPage);
         
         setImagePaths(main);
         setUpCredits();
         setUpInfo(main);
         initializeHandlers();
 
-        authoringButtonContainer.on('click', openDialog);
-        authoringButtonBuffer.on('click', function (evt) {
-            evt.stopPropagation();
-        });
+        openDialog();
+        // authoringButtonBuffer.on('click', function (evt) {
+        //     evt.stopPropagation();
+        // });
 
         //opens the collections page on touch/click
         function switchPage() {
             var collectionsPage;
 
-            overlay.off('click');
+            goToCollectionsButton.off('click');
             collectionsPage = TAG.Layout.CollectionsPage(); // TODO merging
             TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
 
@@ -160,8 +168,113 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         if(!isBrowserCompatible()) {
             handleIncompatibleBrowser();
         }
+    }   
+    
+    function saveClick() {
+            var address = serverInput.val();
+            switch(address) {
+                case 'tagunicorn':
+                    var unicorn = $(document.createElement('img'));
+                    unicorn.attr('src', tagPath+'images/unicorn.jpg');
+                    unicorn.css({
+                        width: '100%',
+                        height: '100%',
+                        'z-index': 2147483647, // we really want this unicorn to show up
+                        display: 'none',
+                        position: 'absolute',
+                    });
+                    tagContainer.append(unicorn);
+                    unicorn.fadeIn(500);
+                    setTimeout(function () {
+                        $('img').attr('src', tagPath+'images/unicorn.jpg');
+                        $('.background').css('background-image', 'url('+tagPath+'"images/unicorn.jpg")');
+                        unicorn.fadeOut(500, function () { unicorn.remove(); });
+                    }, 5000);
+                    return;
+                case 'tagtest':
+                    address = 'tagtestserver.cloudapp.net';
+                    break;
+                case 'tagdemo':
+                    address = 'tagdemo.cloudapp.net';
+                    break;
+                case 'taglive':
+                    address = 'browntagserver.com';
+                    break;
+                case 'taglocal':
+                    address = '10.116.71.58';
+                    break;
+                case 'sam':
+                case 'seattleartmuseum':
+                    address = 'tag.seattleartmuseum.org'
+                    break;
+                default:
+                    break;
+            }
+            serverError.html('Connecting...');
+            serverError.css({"visibility":"visible"});
+            TAG.Worktop.Database.changeServer(address, false, function () {
+                TAG.Layout.StartPage(null, function (page) {
+                    TAG.Util.UI.slidePageRight(page);
+                });
+            }, function () {
+                serverError.html('Server connection failed. Contact the server administrator.');
+                serverError.css({"visibility":"visible"});       
+            });
     }
 
+    serverSubmit.on('click', saveClick);
+    serverInput.keypress(function(e){
+        if(e.which===13){
+            saveClick();
+        }
+    });
+
+    function authClick(){
+        passwordSubmit.on('click',function () {
+            console.log('passwordSubmit clicked');
+            TAG.Auth.checkPassword(authoringInput.val(), function () { 
+                enterAuthoringMode();
+            }, function () {
+                passwordError.html('Invalid Password. Please try again...');
+                passwordError.css({'visibility':'visible'});
+            }, function () {
+                passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
+                passwordError.css({'visibility':'visible'});
+            });
+        });
+    
+    //Enter can be pressed to submit the password form...
+        authoringInput.keypress(function(e){
+            if (e.which===13) {  // enter key press
+            console.log('enter pressed on authoringInput');
+            TAG.Auth.checkPassword(authoringInput.val(), function () {
+                enterAuthoringMode()
+            }, function () {
+                passwordError.html('Invalid Password. Please try again...');
+                passwordError.css({'visibility':'visible'});
+            }, function () {
+                passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
+                passwordError.css({'visibility':'visible'});
+                });
+            }
+        });
+    }
+
+      
+    var serverCircle = $(document.createElement('img'));
+    serverCircle.css({
+        'width': '20px',
+        'height': 'auto',
+        'display': 'none',
+        'margin-right': '3%',
+        'margin-top': '2.5%',
+        'float': 'right'
+    });
+    serverCircle.attr('src', tagPath+'images/icons/progress-circle.gif');
+
+
+
+       
     /**
     * Checks if TAG is compatible with the current browser.
     *
@@ -351,15 +464,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             evt.stopPropagation();
         });
 
-        serverSetUpContainer.on('click', function() {
-            TAG.Util.UI.ChangeServerDialog();
-        });
+        // serverSetUpContainer.on('click', function() {
+        //     TAG.Util.UI.ChangeServerDialog();
+        // });
 
-        serverTagBuffer.on('click', function (evt) {
-            evt.stopPropagation();
-        });
+        // serverTagBuffer.on('click', function (evt) {
+        //     evt.stopPropagation();
+        // });
 
-        overlay.on('click', 'a', function (evt) {
+        goToCollectionsButton.on('click', 'a', function (evt) {
             // this === the link that was clicked
             var href = $(this).attr("href");
             evt.stopPropagation();
@@ -381,11 +494,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             
             
         // set image paths
-        root.find('#expandImage').attr('src', tagPath+'images/icons/Left.png');
-        root.find('#handGif').attr('src', tagPath+'images/RippleNewSmall.gif');
+        // root.find('#expandImage').attr('src', tagPath+'images/icons/Left.png');
+        // root.find('#handGif').attr('src', tagPath+'images/RippleNewSmall.gif');
 
-        fullScreen = root.find('#background');
+        fullScreen = root.find('#innerContainer');
         fullScreen.css('background-image', "url(" + TAG.Worktop.Database.fixPath(main.Metadata["BackgroundImage"]) + ")");
+        fullScreen.css({'opacity':'0.6'});
 
         overlayColor = main.Metadata["OverlayColor"];
         overlayTransparency = main.Metadata["OverlayTransparency"];
@@ -393,11 +507,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         backgroundColor = TAG.Util.UI.hexToRGB(overlayColor) + overlayTransparency + ')';
 
         imageBgColor = '#' + main.Metadata["IconColor"];
-        logoContainer = root.find('#logoContainer');
-        logoContainer.css({ 'background-color': imageBgColor });
+        logoContainer = root.find('#logoRow');
+        logoContainer.css({ 'background-color': 'transparent' });
 
-        logo = root.find('#logo');
-        logo.attr('src', TAG.Worktop.Database.fixPath(main.Metadata["Icon"]));
+        // logo = root.find('#logo');
+        // logo.attr('src', TAG.Worktop.Database.fixPath(main.Metadata["Icon"]));
     }
 
     
@@ -414,63 +528,68 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             infoExpanded,
             brownPeople,
             sponsoredText,
-            microsoftLogo;
+            microsoftLogo,
+            brownLogo;
 
-        brownInfoBox = root.find('#brownInfoBox');
-        brownInfoBox.on('click', expandInfo);
+        // brownInfoBox = root.find('#brownInfoBox');
+        // brownInfoBox.on('click', expandInfo);
 
-        expandInfoButton = root.find('#expandInfoButton');
-        expandImage = root.find('#expandImage');
-        tagName = root.find('#tagName');
-        fullTag = root.find('#fullTag');
+        // expandInfoButton = root.find('#expandInfoButton');
+        // expandImage = root.find('#expandImage');
+        // tagName = root.find('#tagName');
+        // fullTag = root.find('#fullTag');
 
-        infoExpanded = false; //used to expand/collapse info
-        brownPeople = $(document.createElement('div'));
-        brownPeople.attr('id', 'brownPeople');
-        brownPeople.text('Brown University \nHello');
+        // infoExpanded = false; //used to expand/collapse info
+        // brownPeople = $(document.createElement('div'));
+        // brownPeople.attr('id', 'brownPeople');
+        // brownPeople.text('Brown University \nHello');
 
-        sponsoredText = $(document.createElement('label'));
-        sponsoredText.attr('id', 'sponsoredText');
-        sponsoredText.css('overflow', 'hidden');
-        sponsoredText.css('white-space', 'pre');
-        sponsoredText.text('Sponsored by');
+        // sponsoredText = $(document.createElement('label'));
+        // sponsoredText.attr('id', 'sponsoredText');
+        // sponsoredText.css('overflow', 'hidden');
+        // sponsoredText.css('white-space', 'pre');
+        // sponsoredText.text('Sponsored by');
 
-        microsoftLogo = $(document.createElement('img'));
-        microsoftLogo.attr('id', 'microsoftLogo');
-        microsoftLogo.attr('src', tagPath+'images/icons/MicrosoftLogo.png');
+        microsoftLogo = root.find('#msLogo');
+        // microsoftLogo.attr('id', 'microsoftLogo');
+        microsoftLogo.attr('src', tagPath+'images/microsoft_logo_transparent.png');
+
+        brownLogo = root.find('#brownLogo');
+        brownLogo.attr('src', tagPath + 'images/brown_logo_transparent.png');
+
 
         /**
         * animation of credits when user clicks 
         * @method expandInfo
         * @param {Object} event     the trigger event for animation, in this case a click
         */
-        function expandInfo(event) {
-            event.stopPropagation();
-            if (infoExpanded) {
-                infoExpanded = false;
-                expandImage.css({ 'transform': 'scaleX(1)' });
-                expandInfoButton.animate({ width: '15%', 'border-top-left-radius': '0px' }, 700);
-                brownInfoBox.animate({ width: '20%', height: '10%', right: "0%", 'border-top-left-radius': '0px' }, 700);
-                sponsoredText.remove();
-                microsoftLogo.remove();
-                fullTag.animate({ left: '20%', top: '60%', 'font-size': '90%' }, 700);
-                tagName.animate({ left: '20%', top: '10%', 'font-size': '200%' }, 700);
-                brownPeople.animate({ "left": "75%", "top": "75%", 'font-size': '0%' }, 500);
-            }
-            else {
-                infoExpanded = true;
-                expandInfoButton.animate({ width: '8%', 'border-top-left-radius': '20px' }, 700);
-                brownInfoBox.animate({ width: '60%', height: '25%', right: "0%", 'border-top-left-radius': '20px' }, 700);
-                brownInfoBox.append(brownPeople);
-                brownInfoBox.append(sponsoredText);
-                brownInfoBox.append(microsoftLogo);
-                expandImage.css({ 'transform': 'scaleX(-1)' });
-                brownPeople.css({ "right": "0%", "bottom": "0%", "position": "absolute", "font-size": "0%" });
-                brownPeople.animate({ "left": "12%", "top": "51%", "position": "absolute", "font-size": "61%" }, 700, 'swing', function () { $(brownPeople).fitText(5); });
-                tagName.animate({ left: '12%', top: '3%', 'font-size': '300%' }, 700);
-                fullTag.animate({ left: '12%', top: '35%', 'font-size': '130%' }, 700);
-            }
-        }
+        // function expandInfo(event) {
+        //     event.stopPropagation();
+        //     if (infoExpanded) {
+        //         infoExpanded = false;
+        //         expandImage.css({ 'transform': 'scaleX(1)' });
+        //         expandInfoButton.animate({ width: '15%', 'border-top-left-radius': '0px' }, 700);
+        //         brownInfoBox.animate({ width: '20%', height: '10%', right: "0%", 'border-top-left-radius': '0px' }, 700);
+        //         sponsoredText.remove();
+        //         microsoftLogo.remove();
+        //         fullTag.animate({ left: '20%', top: '60%', 'font-size': '90%' }, 700);
+        //         tagName.animate({ left: '20%', top: '10%', 'font-size': '200%' }, 700);
+        //         brownPeople.animate({ "left": "75%", "top": "75%", 'font-size': '0%' }, 500);
+        //     }
+        //     else {
+        //         infoExpanded = true;
+        //         expandInfoButton.animate({ width: '8%', 'border-top-left-radius': '20px' }, 700);
+        //         brownInfoBox.animate({ width: '60%', height: '25%', right: "0%", 'border-top-left-radius': '20px' }, 700);
+        //         brownInfoBox.append(brownPeople);
+        //         brownInfoBox.append(sponsoredText);
+        //         brownInfoBox.append(microsoftLogo);
+        //         expandImage.css({ 'transform': 'scaleX(-1)' });
+        //         brownPeople.css({ "right": "0%", "bottom": "0%", "position": "absolute", "font-size": "0%" });
+        //         brownPeople.animate({ "left": "12%", "top": "51%", "position": "absolute", "font-size": "61%" }, 700, 'swing', function () { $(brownPeople).fitText(5); });
+        //         tagName.animate({ left: '12%', top: '3%', 'font-size': '300%' }, 700);
+        //         fullTag.animate({ left: '12%', top: '35%', 'font-size': '130%' }, 700);
+        //     }
+        // }
     }
 
     
@@ -480,19 +599,19 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @param {Object} main    contains all the museum information
     */
     function setUpInfo(main){
-        var infoTextHolder,
-            infoDiv;
+        // var infoTextHolder,
+        //     infoDiv;
         
-        infoTextHolder = root.find('#infoTextHolder');
-        infoDiv = root.find('#infoDiv');
-        infoDiv.css({
-            'background-color': backgroundColor
-        });
+        // infoTextHolder = root.find('#infoTextHolder');
+        // infoDiv = root.find('#infoDiv');
+        // infoDiv.css({
+        //     'background-color': backgroundColor
+        // });
 
-        touchHint = root.find('#touchHint');
-        handGif = root.find('#handGif');
+        // touchHint = root.find('#touchHint');
+        // handGif = root.find('#handGif');
 
-        setUpMuseumInfo(main);
+        // setUpMuseumInfo(main);
     }
 
     /**
@@ -516,64 +635,64 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @param {Object} main     contains all the museum information
     */
     function setUpMuseumInfo(main){
-        var museumName,
-            museumNameSpan,
-            tempName,
-            museumLoc,
-            museumLocSpan,
-            tempLoc,
-            museumInfoDiv,
-            museumInfoSpan,
-            tempInfo,
-            primaryFontColor,
-            secondaryFontColor;
+        // var museumName,
+        //     museumNameSpan,
+        //     tempName,
+        //     museumLoc,
+        //     museumLocSpan,
+        //     tempLoc,
+        //     museumInfoDiv,
+        //     museumInfoSpan,
+        //     tempInfo,
+        //     primaryFontColor,
+        //     secondaryFontColor;
 
         
-        primaryFontColor = options.primaryFontColor ? options.primaryFontColor : main.Metadata["PrimaryFontColor"];
-        secondaryFontColor = options.secondaryFontColor ? options.secondaryFontColor : main.Metadata["SecondaryFontColor"];
-        museumName = root.find('#museumName');
-        museumNameSpan = root.find('#museumNameSpan');
-        tempName = main.Metadata["MuseumName"];
-        if (tempName === undefined) {
-            tempName = "";
-        }
-        museumNameSpan.text(tempName);
+        // primaryFontColor = options.primaryFontColor ? options.primaryFontColor : main.Metadata["PrimaryFontColor"];
+        // secondaryFontColor = options.secondaryFontColor ? options.secondaryFontColor : main.Metadata["SecondaryFontColor"];
+        // museumName = root.find('#museumName');
+        // museumNameSpan = root.find('#museumNameSpan');
+        // tempName = main.Metadata["MuseumName"];
+        // if (tempName === undefined) {
+        //     tempName = "";
+        // }
+        // museumNameSpan.text(tempName);
 
-        museumLoc = root.find('#museumLoc');
-        museumLocSpan = root.find('#museumLocSpan');
-        tempLoc = main.Metadata["MuseumLoc"];
-        if (tempLoc === undefined) {
-            tempLoc = "";
-        }
+        // museumLoc = root.find('#museumLoc');
+        // museumLocSpan = root.find('#museumLocSpan');
+        // tempLoc = main.Metadata["MuseumLoc"];
+        // if (tempLoc === undefined) {
+        //     tempLoc = "";
+        // }
 
-        museumLocSpan.text(tempLoc);
+        // museumLocSpan.text(tempLoc);
 
-        that.fixText = fixText;
+        // that.fixText = fixText;
 
-        museumInfoDiv = root.find('#museumInfoDiv');
+        // museumInfoDiv = root.find('#museumInfoDiv');
 
-        museumInfoSpan = root.find('#museumInfoSpan');
-        tempInfo = main.Metadata["MuseumInfo"];
-        if (!tempInfo) {
-            tempInfo = "";
-        }
+        // museumInfoSpan = root.find('#museumInfoSpan');
+        // tempInfo = main.Metadata["MuseumInfo"];
+        // if (!tempInfo) {
+        //     tempInfo = "";
+        // }
 
-        if (IS_WINDOWS) {
-            museumInfoSpan.html(tempInfo);
-        } else {
-            museumInfoSpan.html(Autolinker.link(tempInfo , {email: false, twitter: false}));
-        }
+        // if (IS_WINDOWS) {
+        //     museumInfoSpan.html(tempInfo);
+        // } else {
+        //     museumInfoSpan.html(Autolinker.link(tempInfo , {email: false, twitter: false}));
+        // }
         
-        $(primaryFont).css({ 
-            'color': '#' + primaryFontColor,
-            'font-family': main.Metadata["FontFamily"]
+        // $(primaryFont).css({ 
+        //     'color': '#' + primaryFontColor,
+        //     'font-family': main.Metadata["FontFamily"]
             
-        });
-        $(secondaryFont).css({
-            'color': '#' + secondaryFontColor,
-            'font-family': main.Metadata["FontFamily"]
+        // });
+        // $(secondaryFont).css({
+        //     'color': '#' + secondaryFontColor,
+        //     'font-family': main.Metadata["FontFamily"]
 
-        });
+        // });
 
     }
 
@@ -581,21 +700,21 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      * @method openDialog
      */
     function openDialog() {
-        TAG.Auth.authenticate(enterAuthoringMode);
+         authClick();
 
-        if(localStorage.ip === 'tagtestserver.cloudapp.net') {
-            $('#password').attr('value', 'Test1234');
+         if(localStorage.ip === 'tagtestserver.cloudapp.net') {
+             $('#authoringInput').attr('value', 'Test1234');
         } else if (localStorage.ip === 'localhost') {
-            $('#password').attr('value', 'admin');
-        }
+             $('#authoringInput').attr('value', 'admin');
+         }
     }
 
     /**Loads authoring mode Settings View
      * @method enterAuthoringMode
      */
     function enterAuthoringMode() {
-        overlay.on('click', function() {;});
-        authoringButtonContainer.off('click');
+        goToCollectionsButton.on('click', function() {;});
+        // authoringButtonContainer.off('click');
         var authoringMode = new TAG.Authoring.SettingsView();
         TAG.Util.UI.slidePageLeft(authoringMode.getRoot());
     }

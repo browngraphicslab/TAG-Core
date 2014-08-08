@@ -20,6 +20,7 @@ TAG.Auth = (function () {
         clearToken: clearToken,
         authenticate: authenticate,
         hashPass: hashPass,
+        checkPassword: checkPassword,
         changePassword: changePassword,
     };
 
@@ -213,6 +214,7 @@ TAG.Auth = (function () {
             });
         }
     }
+
 
     function generateOverlay(onSuccess, onCancel) {
        

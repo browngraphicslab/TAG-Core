@@ -38,7 +38,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         "width": "100%" 
     });
     root.attr("class", "rootPage");
-
+    TAG.Util.UI.getStack()[0] = null;
     /**
     *Second row on screen, contains ComponentControls and Viewer
     **/
