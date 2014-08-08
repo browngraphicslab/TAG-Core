@@ -6080,8 +6080,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 addMenuLabel.click();
             });
         var iFrameAsset = $(document.createElement('label'))
-            .attr('id', 'iFrameAsset')
-            .text('iFrame Asset')
+            .attr('id', 'Embed Video')
+            .text('Embed Video')
             .css({
                 "display": "block",
                 'padding-left':'10px'
