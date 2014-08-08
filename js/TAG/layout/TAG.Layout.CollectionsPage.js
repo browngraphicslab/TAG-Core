@@ -555,6 +555,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "background-color":'white'
                         });
                     collectionDotHolder.append(dummyDot);
+                    backArrowArea.css('display', 'none');
                 } else {
                     //Make collection dot white and others gray
                     for(i = 0; i < visibleCollections.length; i++) { 
