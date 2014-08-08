@@ -360,7 +360,8 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             width: saveButtonSpecs.width + 'px',
             height: saveButtonSpecs.height + 'px',
             'top': saveButtonSpecs.y + 'px',
-            'font-size': fontsize,
+            //'font-size': fontsize,
+            'font-size': '0.5em',
             'left': parseInt(titleTextArea.css('left'), 10) + titleTextArea.width() + 45 + ($(window).width() * 0.022) + 'px',
         });
         saveButton.click(function () {
@@ -370,6 +371,12 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
                 titleTextArea.val('Untitled Tour');
             }
             dialogTitle.text('Save changes to ' + titleTextArea.val() + '?');
+            submitButton.css({
+                'color': 'white',
+                'border': '1px solid white',
+                'cursor': 'pointer'
+            });
+            submitButton.attr('disabled', false);
         });
 
         /*save button dialog code*/
@@ -405,7 +412,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             'height': '15%',
             'left': '10%',
             'top': '12.5%',
-            'font-size': '1.25em',
+            'font-size': '1em',
             'position': 'relative',
             'text-align': 'center',
             'word-wrap': 'break-word',
@@ -425,17 +432,21 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
-            'margin-top': '1%',
+            'margin-top': '4.5%',
         });
         submitButton.text('Save');
-        submitButton.click(function () { save(true); });
+        submitButton.click(function () {
+            save(true);
+            submitButton.attr('disabled', true);
+            submitButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+        });
 
         cancelButton.css({
             'padding': '1%',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
-            'margin-top': '1%',
+            'margin-top': '5%',
             'float': 'right'
         });
         cancelButton.text('Cancel');
@@ -446,7 +457,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         topbar.append(saveButton);
         dialogOverlay.append(saveDialog);
         saveDialog.append(dialogTitle);
-        saveDialog.append(document.createElement('br'));
+        //saveDialog.append(document.createElement('br'));
         saveDialog.append(buttonRow);
         buttonRow.append(submitButton);
         buttonRow.append(cancelButton);

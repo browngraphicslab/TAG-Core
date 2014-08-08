@@ -18,8 +18,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html file
         overlay = root.find('#overlay'),
-        //primaryFont = root.find('.primaryFont'),
-        //secondaryFont = root.find('.secondaryFont'),
+        primaryFont = root.find('.primaryFont'),
+        secondaryFont = root.find('.secondaryFont'),
         //serverTagBuffer = root.find('#serverTagBuffer'),
         //serverSetUpContainer = root.find('#serverSetUpContainer'),
         //authoringButtonContainer = root.find('#authoringButtonContainer'),
@@ -34,9 +34,13 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit = root.find('#passwordSubmit'),
         serverURL,
         tagContainer;
+<<<<<<< Updated upstream
 
     
         
+=======
+    
+>>>>>>> Stashed changes
     // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
 
     if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
@@ -45,6 +49,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
     tagContainer = options.tagContainer || $('body');
+    
 
     testConnection();
     //applyCustomization();
@@ -147,7 +152,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         setUpInfo(main);
         applyCustomization(main);
         initializeHandlers();
-
+        applyCustomization(main);
         openDialog();
         // authoringButtonBuffer.on('click', function (evt) {
         //     evt.stopPropagation();

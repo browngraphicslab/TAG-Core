@@ -136,7 +136,9 @@ TAG.TourAuthoring.Display = function (spec, my) {
         setInStart: setInStart,
         setOutStart: setOutStart,
         setLoc: setLoc,
-        getTranslation: getTranslation
+        getTranslation: getTranslation,
+        setMainStart: setMainStart,
+        getTrackFromDisplay: getTrackFromDisplay
     };
 
    var menu = TAG.TourAuthoring.EditorMenu({
