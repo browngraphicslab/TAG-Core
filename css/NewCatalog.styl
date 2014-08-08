@@ -65,6 +65,15 @@
 	position absolute
 	left 0%
 
+#newCatalogRoot #buttonRow
+	top 0%
+	z-index 1000
+	position absolute
+	left 15.5%
+	width 50%
+	height 100%
+	display inline-block
+
 #newCatalogRoot #catalogDiv
 	height 90%
 	overflow-x hidden
@@ -177,19 +186,11 @@
 	text-align center
 	width 60%
 
-#newCatalogRoot .exploreIcon
-	float right
-	height 50%
-	margin-right 32%
-	position relative
-	top 25%
-	width auto
-
 #newCatalogRoot .exploreTab
 	background-color rgba(0,0,0,0.6)
 	color white
 	display inline-block
-	height 14%
+	height 15%
 	overflow hidden 
 	position absolute
 	left 0
@@ -197,9 +198,14 @@
 	width 100%  
 
 #newCatalogRoot .exploreText
-	float right
 	margin-right 3% 
 	position relative
+	text-overflow ellipsis
+	word-wrap break-word
+	color white
+	white-space normal
+	word-wrap break-word
+	text-align center
 	top 8%         
 
 #newCatalogRoot #feedbackContainer
@@ -319,6 +325,13 @@
 	padding-right 2%
 	cursor pointer
 
+#newCatalogRoot .miniTilesArrow
+	width 5%
+	height auto
+	position absolute
+	left 1%
+	bottom 20%
+
 #newCatalogRoot #overlay
 	background-color rgba(10, 10, 10, 0.6)
 	position absolute
@@ -353,6 +366,15 @@
 	z-index 1000
 	display block
 
+#newCatalogRoot #searchFilter
+	height 100%
+	width 11.5%
+	top 10%
+	position absolute
+	display inline-block
+	float left
+	margin-left 2%
+
 #newCatalogRoot #searchInput
 	background-color white
 	border-color rgb(167,180,174)
@@ -362,7 +384,7 @@
 	color rgb(120,128,119)
 	float left
 	font-size 80%
-	max-width 20%
+	width 100%
 	margin-top 0.5%
 	position relative
 	margin-left 1.5%

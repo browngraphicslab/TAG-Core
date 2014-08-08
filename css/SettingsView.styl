@@ -64,27 +64,29 @@
     color white
     float left
     background: #222
-    width 96%
-    height 25%
-    padding 2px
-    margin 1px
+    width 98%
+    height 22%
+    padding 2%
 
 #setViewRoot .metadataInfos
     position absolute
-    left 33%
-    top 13%
-    padding 1%
-    height 73%
-    width 62%
+    left 32%
+    top 25%
+    margin 1%
+    height 60%
+    width 64%
     overflow auto
+    border 1px solid white
 
 #setViewRoot .metadataLists
-    position absolute
-    border-right 1px solid white
-    top 13%
-    padding 1%
-    height 73%
+    display block
+    float left
+    margin 1%
     width 28%
+    position absolute
+    top 25%
+    border 1px solid white
+    height 60%
     overflow auto
 
 #setViewRoot .metadataPicker
@@ -97,17 +99,47 @@
     top 17%
     left 14%
 
+#setViewRoot #metadataPickerCancel
+    position relative
+    float right
+    display inline-block
+    bottom 4%
+    right 2%
+    margin 50% 0% 0% 0%
+    color white
+    border 1px solid white
+    
+
 #setViewRoot .metadataPickerHeader
-    font-size 100%
-    width 100%
+    display block
     float left
+    margin 1%
+    position absolute
+    top 3%
+    font-size 100%
+    width 95%
     color white
     background-color black
+    text-overflow ellipsis
+
+#setViewRoot #metadataPickerImport
+    position relative
+    float right
+    display inline-block
+    bottom 4%
+    right 3%
+    margin 50% 0% 0% 0%
+    border 1px solid white
+    color white
 
 #setViewRoot .metadataPickerSearchbar
-    margin-left 1%
-    margin-top 1%
-    width 29%
+    display block
+    float left
+    margin 1%
+    width 27%
+    position absolute
+    top 15% 
+    border 1px solid white
 
 #setViewRoot .metadataspec
     float left
@@ -115,19 +147,17 @@
     width 96%
     height 11%
     padding 2px
-    margin 1px
     color white
 
 #setViewRoot .mtHolder
-    width 100%
+    width 94%
     height 9%
     text-overflow ellipsis
-    margin 1px 0px 1px 0px
-    font-size 120%
-    padding-left 3%
-    padding-top 3%
+    font-size 100%
+    padding 3%
     color white
     background-color black
+    vertical-align middle
 
 #setViewRoot .parsingInfo
     position absolute
@@ -135,7 +165,8 @@
     top 17%
     height 66%
     width 94%
-    overflow hidden
+    overflow auto
+    display block
 
 #setViewRoot .parsingOverlayText
     color white
@@ -156,18 +187,23 @@
     left 35%
 
 #setViewRoot #parsingPickerCancel
-    position absolute
-    bottom 2%
-    right 5%
+    position relative
+    float right
+    display inline-block
+    bottom 3%
     color white
     border 1px solid white
+    margin 80% 0% 0% 0%
 
 #setViewRoot #parsingPickerConfirm
-    position absolute
-    bottom 2%
-    right 22%
+    position relative
+    float right
+    display inline-block
+    bottom 3%
     color white
     border 1px solid white
+    margin 80% 0% 0% 0%
+    right 3%
 
 #setViewRoot .parsingPickerHeader
     font-size 70%
@@ -175,6 +211,7 @@
     float left
     color white
     background-color black
+    display block
 
 #setViewRoot #setViewTopBar
     height 8%

@@ -2039,7 +2039,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
         circle.css({
-            'height': '12px',
+            'height': '30px',
             'width': 'auto',
             'margin-left': '20px',
             'float': 'right',
@@ -2602,8 +2602,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
             mediaHolderImage.css({
                 position: 'absolute',
-                'width': 'auto',
-                'height': 'auto',
+                'width': '40%',
+                'height': '80%',
                 'max-width': '100%',
                 'max-height': '100%',
                 top: 0,
@@ -2638,7 +2638,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 floar: 'left',
                 'padding-left': '3%',
                 'padding-right': '4.5%',
-                'font-size': '100%',
+                'font-size': '70%',
                 'margin': '5% 0 5% 2%',
                 'overflow': 'hidden',
                 'word-wrap': 'break-word',
@@ -2752,6 +2752,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             background: '#999',
             'padding-left': '3%',
             'padding-top': '3%',
+            'font-size': '70%'
         });
         $(allArtworksHolder).text('All Artworks');
         $('.catalogPickerExhibitions').append(allArtworksHolder);
@@ -2767,7 +2768,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
         circle.css({
-            'height': '12px',
+            'height': '30px',
             'width': 'auto',
             'margin-left': '20px',
             'float': 'right',
@@ -2811,7 +2812,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     height: '9%',
                     'text-overflow': 'ellipsis',
                     margin: '1px 0px 1px 0px',
-                    'font-size': '100%',
+                    'font-size': '70%',
                     'padding-left': '3%',
                     'padding-top': '3%',
                 });
@@ -2971,7 +2972,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         floar: 'left',
                         'padding-left': '3%',
                         'padding-right': '4.5%',
-                        'font-size': '80%',
+                        'font-size': '70%',
                         'margin': '5% 0 5% 2%',
                         'overflow': 'hidden',
                         'word-wrap': 'break-word',

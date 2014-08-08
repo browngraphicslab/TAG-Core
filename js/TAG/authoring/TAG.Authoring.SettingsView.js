@@ -104,7 +104,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         generalProgressCircle = null,*/
         labelOne,
         labelTwo,
-
+        sortOptionsCount = 0,
         settingsViewKeyHandler = {
             13: enterKeyHandlerSettingsView,
             46: deleteKeyHandlerSettingsView,
@@ -281,14 +281,32 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Handles enter key press on the SettingsView page
      * @ method enterKeyHandlerSettingsView
      */
-    function enterKeyHandlerSettingsView() {
+    function enterKeyHandlerSettingsView(event) {
+        if (searchbar.is(':focus')) {
+            if (!searchbar.val()) {
+                resetView();
+                searchbar.css({ 'background-image': 'none' });
+            } else {
+                doSearch();
+            }
+            event.stopPropagation();
+            event.preventDefault();
+        }
         if (!$("input, textarea").is(":focus")) {
             if (inCollectionsView) { manageCollection(currentList[currentIndex]);  }
-            if (inArtworkView) { editArtwork(currentList[currentIndex]);  }
+            if (inArtworkView) {
+                if ($(document.getElementById('artworkEditorButton')).length) {
+                    editArtwork(currentList[currentIndex]);
+                }
+                if ($(document.getElementById('thumbnailButton')).length) {
+                    saveThumbnail(currentList[currentIndex], false);
+                }
+             }
             if (inAssociatedView) { assocToArtworks(currentList[currentIndex]); }
             if (inToursView) { editTour(currentList[currentIndex]); }
             if (inFeedbackView) { deleteFeedback(currentList[currentIndex]); }
         }
+        
     }
 
     /**Handles delete key press on the SettingsView page
@@ -516,19 +534,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             }
         });
-        searchbar.keyup(function () {
-            if (!searchbar.val()) {  
+        
+        searchbar.keyup(function (e) {
+
+            if (!searchbar.val()) {
                 resetView();
+                searchbar.css({ 'background-image': 'none' });
             }
-        });
-        searchbar.keypress(function (e) {
-            if (e.which === 13 && searchbar.val()) {
-                doSearch();            
-            } else if (e.which === 13 && !searchbar.val()) {
-                resetView();
-            }
-            searchbar.css({ 'background-image': 'none' }); ////////////
-            
         });
 
        // rootContainer.keydown(keyHandler);
@@ -1302,7 +1314,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //CLICK HANDLER FOR SORT OPTIONS
     function clickCallback(sortDiv) {
         return function () {
-            if (sortDiv.attr("setSort") == "true" || sortDiv.attr("setSort") == true) {
+            if (sortDiv.attr("setSort") === "true" || sortDiv.attr("setSort") === true) {
+                if (sortOptionsCount>0){
+                    sortOptionsCount--;
+                }
+
                 sortDiv.attr("setSort", false);
                 sortDiv.css({
                     "background-color": "white",
@@ -1310,18 +1326,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "border": "2px solid black"
                 });
             } else {
-                sortDiv.attr("setSort", true);
-                sortDiv.css({
-                    "background-color": "#0040FF",
-                    "color": "white",
-                    "border": "2px solid white"
-                });
+                if (sortOptionsCount < 4) {
+                    sortOptionsCount++;
+                    sortDiv.attr("setSort", true);
+                    sortDiv.css({
+                        "background-color": "#0040FF",
+                        "color": "white",
+                        "border": "2px solid white"
+                    });
+                }
             }
         };
     };
 
     //CREATE SORT OPTIONS DIV
     function createSortOptions(sortOptionsObj) {
+        sortOptionsCount = 0;
         var sortOptionsDiv = $(document.createElement("div"))
             .css({
                 'width': "50%",
@@ -1332,20 +1352,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "overflow-x": "hidden"
             });
 
-
         var sortObj, sortDiv;
         var sortOptions = sortOptionsObj.Metadata;
         if (sortOptions) {
             for (var sortObj in sortOptions) {
-                if (sortOptions.hasOwnProperty(sortObj) && sortObj != "__Created" && sortObj != "Count") {
+                if (sortOptions.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj != "Count") {
                     var key = "";
-                    if (sortObj.charAt(0) == '?') {
+                    if (sortObj.charAt(0) === '?') {
                         key = sortObj.substr(1);
                     } else {
                         key = sortObj;
                     }
                     var sortObjArray = sortOptions[sortObj].split(",");
-                    if (sortObjArray.length == 2 && sortObjArray[0] == "0" && sortObjArray[1] == "false") {
+                    if (sortObjArray.length === 2 && sortObjArray[0] === "0" && sortObjArray[1] == "false") {
                         continue;
                     }
                     var sortDiv = $(document.createElement("div"))
@@ -1353,7 +1372,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         .addClass("sortOptionDiv");
                     var setSort = sortObjArray[sortObjArray.length - 1];
                     sortDiv.attr("setSort", setSort);
-                    if (setSort == true || setSort == "true") {
+                    if (setSort === true || setSort === "true") {
+                        sortOptionsCount++;
                         sortDiv.css({
                             "background-color": "#0040FF",
                             "color": "white",
@@ -1567,7 +1587,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia;
         var sortOptionsObj;
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            createCollectionSettings();
+            TAG.Worktop.Database.addSortOptions(exhibition.Metadata, null, function (sortOptionsDoq) {
+                sortOptionsObj = sortOptionsDoq;
+                sortDropDown = createSortOptions(sortOptionsObj);
+                createCollectionSettings();
+            });
         } else {
             TAG.Worktop.Database.getDoq(exhibition.Metadata.SortOptionsGuid, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
@@ -2310,7 +2334,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         currentIndex = 0;
 
-        prepareNextView(true, "Import", createAsset);
+        prepareNextView(true, "Add", createAsset);
         prepareViewer(true);
         clearRight();
         var cancel = false;
@@ -2697,7 +2721,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '2%',
                 'float': 'left'
             });
-
+        thumbnailButton.attr('id', 'thumbnailButton');
         buttonContainer.append(assocButton);
         if (media.Metadata.ContentType.toLowerCase() === 'video') {
             var convertBtn = createButton('Convert Video',
@@ -2870,9 +2894,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         validURL = true;
         if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
 
-            if (modifiedURL.indexOf("?v=") > -1) {
-                id = modifiedURL.substring(modifiedURL.indexOf("?v=") + 3);
-                if (id && !/^[a-zA-Z0-9- ]*$/.test(id)) {
+            if (modifiedURL.indexOf("watch?v=") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
+                
+                if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
                     validURL = false;
                 }
             } else {
@@ -3681,6 +3706,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '2%',
                 'float': 'left'
             });
+        thumbnailButton.attr('id', 'thumbnailButton');
         if (artwork.Metadata.Type !== 'VideoArtwork') {
             buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
         } else {
@@ -3880,8 +3906,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         parsingPicker.append(parsingPickerHeader);
         parsingPicker.append(parsingInfo);
-        parsingPicker.append(parsingPickerConfirm);
         parsingPicker.append(parsingPickerCancel);
+        parsingPicker.append(parsingPickerConfirm);
 
         parsingOverlay.append(parsingPicker);
 
@@ -3907,8 +3933,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var input = createTextInput(val, null, null, false, false);
             var field = createSetting(key, input, null, '7px');
             field.addClass("metadataspec");
-            $(field).css({ 'margin': '1px' });
-            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align':'top'});
+            $(field).css({
+                'margin': '0px 0px 2px 0px',
+                padding: '1% 7% 1% 1%',
+                width:'92%',
+            });
+            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'top' });
+            $(field).children().eq(1).css({ margin: '0 auto', 'font-size':'60%'});
             mtinputs[key] = input;// { field: field, input: input };
             field.show().data('visible', true);
             parsingInfo.append(field);
@@ -4133,6 +4164,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         metadataPickerOverlay.append(metadataPicker);
 
         metadataPicker.append(metadataPickerHeader);
+
+        //searchbar
+        searchbar.css({
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+        searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
+        searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
+
         metadataPicker.append(searchbar);
 
         //search function in terms of titles
@@ -4229,7 +4271,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         if (!fields[rest]) {
                             var input = createTextInput(selectedmetadata[rest], null, null, false, true);
                             var field = createSetting(rest, input, null, '7px').addClass("metadataField").attr('title', rest);
-                            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'top' });
+                            field.css({
+                                margin:  '0%',
+                                padding: '1%',
+                                width:   '98%'
+                            });
+                            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'middle' });
                             fields[rest] = { field: field, input: input };
                             field.show().data('visible', true);
                             metadataholder.append(field);
@@ -4239,40 +4286,36 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
 
-        var metadataPickerImport = $(document.createElement('button'));
-        metadataPickerImport.attr("id", "metadataPickerImport");
-        metadataPickerImport.attr('disabled', true);
-        if (selectedmetadata)
-            metadataPickerImport.attr('disabled', false);
-        metadataPickerImport.text("Import");
-        metadataPickerImport.css({
-            position: 'absolute',
-            bottom: '2%',
-            right: '22%',
-        });
-        metadataPickerImport.click(function () {
-            updateArtwork(artwork, inputs, selectedmetadata, settingsContainer, spec);
-            $('.metadataInfos').empty();
-            metadataPickerOverlay.fadeOut();
-        });
-        metadataPicker.append(metadataPickerImport);
 
-        var metadataPickerCancel = document.createElement('button');
-        var $metadataPickerCancel = $(metadataPickerCancel);
-        $metadataPickerCancel.text("Cancel");
-        $metadataPickerCancel.css({
-            position: 'absolute',
-            bottom: '2%',
-            right: '5%',
-        });
 
+
+        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel");
+        metadataPickerCancel.text("Cancel");
+        
         // cancel button click handler
-        $metadataPickerCancel.click(function () {
+        metadataPickerCancel.click(function () {
             metadataPickerOverlay.fadeOut();
             $('.metadataInfos').empty();
             metadataPickerCancel.disabled = true;
         });
         metadataPicker.append(metadataPickerCancel);
+
+
+        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport");
+        metadataPickerImport.attr('disabled', true);
+        if (selectedmetadata)
+            metadataPickerImport.attr('disabled', false);
+        metadataPickerImport.text("Import");
+
+        //import button click handler
+        metadataPickerImport.click(function () {
+            updateArtwork(artwork, inputs, selectedmetadata, settingsContainer, spec);
+            $('.metadataInfos').empty();
+            metadataPickerOverlay.fadeOut();
+        });
+
+        metadataPicker.append(metadataPickerImport);
+
         root.append(metadataPickerOverlay);
         $(".parsingOverlay").fadeOut();
         metadataPickerOverlay.fadeIn();
@@ -5935,6 +5978,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //        TAG.Util.UI.getStack()[0] = null;
     //    });
     //}
+
+    function createDropdownAssocMediaMenu() {
+        var MenuLabel = $(document.createElement('label')).attr('id', 'addComponentLabel').css({
+            "left": '10%',
+            "top": "5%",
+            "position": "relative",
+            "font-size": "100%",
+            "color": "rgb(256, 256, 256)",
+            'background-color': "rgb(63, 55, 53)",
+            'padding': '3% 2% 4% 2%',
+            'width': '70%',
+        });
+    }
 
     return that;
 };
