@@ -1713,6 +1713,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tileBottom,
                     titleSpan,
                     imgDiv,
+                    prevArrow,
+                    nextArrow,
                     exploreTab,
                     exploreText,
                     exploreIcon,
@@ -1834,6 +1836,25 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 miniTilesHolder = $(document.createElement('div'))
                     .addClass('miniTilesHolder')
 
+                prevArrow = $(document.createElement('img'))
+                    .addClass("miniTilesArrow")
+                    .attr('src', tagPath + 'images/icons/Close.svg')
+                    .on('click', function(){
+                        miniTilesHolder.animate({
+                            scrollLeft: miniTilesHolder.scrollLeft() - 50
+                        }, ANIMATION_DURATION/2)
+                    });
+
+                nextArrow = $(document.createElement('img'))
+                    .addClass("miniTilesArrow")
+                    .attr('src', tagPath + 'images/icons/Open.svg')
+                    .css('left', "94%")
+                    .on('click', function(){
+                        miniTilesHolder.animate({
+                            scrollLeft: miniTilesHolder.scrollLeft() + 50
+                        }, ANIMATION_DURATION/2)
+                    });
+
                 loadQueue.add(function(){
                     onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                     !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
@@ -1908,8 +1929,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 descSpan.append(descText);
 
                 tileBottom.append(descSpan)
+                    .append(prevArrow)
+                    .append(nextArrow)
                     .append(miniTilesHolder)
                     .append(miniTilesLabel)
+
 
                 previewTile.append(tileTop)
                     .append(tileBottom);
