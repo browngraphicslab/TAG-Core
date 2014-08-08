@@ -483,7 +483,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} artwrk                if undefined, set currentArtwork to null, otherwise, use this
      */
     function loadCollection(collection, sPos, artwrk) {
-        return function(evt) {
+        return function (evt) {
+            
             var i,
                 title             = TAG.Util.htmlEntityDecode(collection.Name),
                 nextTitle,
