@@ -63,7 +63,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         uploadingOverlay.attr("id", "uploadingOverlay");
         uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100 });
 
-        uploadOverlayText.css({ 'color': 'white', 'width': '10%', 'height': '5%', 'top': '38%', 'left': '40%', 'position': 'relative', 'font-size': '250%' });
+        uploadOverlayText.css({ 'color': 'white', 'width': '10%', 'height': '5%', 'top': '38%', 'left': '40%', 'position': 'relative', 'font-size': '100%' });
         uploadOverlayText.text('Uploading file(s). Please wait.');
 
         progressIcon.css({

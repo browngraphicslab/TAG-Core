@@ -90,6 +90,7 @@ Worktop.Database = function (mainID) {
         postIframeAssocMedia: postIframeAssocMedia,
         postMap: postMap,
         postMain: postMain,
+        addSortOptions: addSortOptions,
 
         deleteDoq: deleteDoq,
         deleteLinq: deleteLinq,
@@ -229,6 +230,18 @@ Worktop.Database = function (mainID) {
         sortedOptions.urlOptions.Guid = guid;
         postRequest(
             'ChangeExhibition',
+            handlers,
+            sortedOptions.urlOptions,
+            sortedOptions.bodyOptions,
+            true);
+    }
+
+    function addSortOptions(guid, options, handlers, throwOnWarn) {
+        options = options || {};
+        var sortedOptions = checkKeys(options, _static.params.exhibition, "ChangeExhibition", throwOnWarn);
+        sortedOptions.urlOptions.Guid = guid;
+        postRequest(
+            'AddSortOptions',
             handlers,
             sortedOptions.urlOptions,
             sortedOptions.bodyOptions,

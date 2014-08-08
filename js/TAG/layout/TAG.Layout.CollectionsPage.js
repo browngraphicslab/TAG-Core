@@ -203,9 +203,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }, false);
         };
 
-
-
-
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
     }
@@ -477,7 +474,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} artwrk                if undefined, set currentArtwork to null, otherwise, use this
      */
     function loadCollection(collection, sPos, artwrk) {
-
         return function(evt) {
             var i,
                 title             = TAG.Util.htmlEntityDecode(collection.Name),
@@ -770,57 +766,62 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             sortText,
                             sortObjArray;
                         if (sortObjects){
-                            for (sortObj in sortObjects){
-                                if (sortObjects.hasOwnProperty(sortObj) && sortObj != "__Created" && sortObj != "Count") {
-                                    if (sortObj.charAt(0) == '?') {
+                            for (var sortObj in sortObjects){
+                                if (sortObjects.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj !== "Count") {
+                                    if (sortObj.charAt(0) === '?') {
                                         sortText = sortObj.substr(1);
                                     } else {
                                         sortText = sortObj;
                                     }
                                     sortObjArray = sortObjects[sortObj].split(",");
-                                    if (sortObjArray.length == 2 && sortObjArray[0] == "0" && sortObjArray[1] == "false") {
-                                        continue;
+                                    if ((sortObjArray.length === 2 && sortObjArray[1] === "true" || sortObjArray[1] === true)
+                                        || (sortObjArray[0] === true || sortObjArray[0] === "true")) {
+                                        sortOptions.push(sortText);
                                     }
-                                    sortOptions.append(sortText);
                                 }
                             }
                         }
-
+                        appendTags();
                     });
                 } else {
                     //TO-DO-"Type" to  "Tours" (saved as "Tour" on server)
-                    sortOptions = ["Date","Title","Artist","Type"];
+                    sortOptions = ["Date", "Title", "Artist", "Type"];
+                    appendTags();
                 }
-                for (i=0;i<sortOptions.length;i++){
-                    sortButton = $(document.createElement('div'));
-                    sortButton.addClass('rowButton')
-                              .text(sortOptions[i])
-                              .attr('id', sortOptions[i].toLowerCase() + "Button")
-                              .off()
-                              .on('click', function(){
-                                currentArtwork = null;
-                                changeDisplayTag(currentArtworks,sortButtonTags[$(this).attr('id')]);
-                              });
-                    buttonRow.append(sortButton);
-                    sortButtonTags[sortButton.attr('id')] = sortOptions[i];
-                    //TO-DO: test this telemetry handler
-                    TAG.Telemetry.register(sortButton , 'click', '', function(tobj) {
-                        tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
-                    });
-                }
-                if (!comingBack){
-                    //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
-                    if (timelineShown && $('#dateButton')){
-                        currentTag = "Date";
-                    } else if ($('#titleButton')){
-                        currentTag = "Title";
-                    } else {
-                        //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
-                        currentTag = sortOptions[0] || null;
-                        currentDefaultTag = currentTag;
+                function appendTags() {
+                    for (i = 0; i < sortOptions.length; i++) {
+                        sortButton = $(document.createElement('div'));
+                        sortButton.addClass('secondaryFont');
+
+                        sortButton.addClass('rowButton')
+                                 .text(sortOptions[i])
+                                  .attr('id', sortOptions[i].toLowerCase() + "Button")
+                                  .off()
+                                  .on('click', function () {
+                                      currentArtwork = null;
+                                      changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
+                                  });
+                        buttonRow.append(sortButton);
+                        sortButtonTags[sortButton.attr('id')] = sortOptions[i];
+                        //TO-DO: test this telemetry handler
+                        TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
+                            tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                        });
+                    }
+                    if (!comingBack) {
+                        //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
+                        if (timelineShown && $('#dateButton')) {
+                            currentTag = "Date";
+                        } else if ($('#titleButton')) {
+                            currentTag = "Title";
+                        } else {
+                            //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
+                            currentTag = sortOptions[0] || null;
+                            currentDefaultTag = currentTag;
+                        }
+                        colorSortTags(currentTag);
                     }
                 }
-                colorSortTags(currentTag);
             }
         }
     }
@@ -1076,11 +1077,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tileImage.addClass('tileImage');
             artTitle.addClass('artTitle');
             artText.addClass('artText');
+            artText.addClass('secondaryFont');
             artText.css({
                 'color': '#' + SECONDARY_FONT_COLOR,
                 'font-family': FONT
             });
             yearTextBox.addClass('yearTextBox');
+            yearTextBox.addClass('secondaryFont');
             yearTextBox.css({
                 'color': '#' + SECONDARY_FONT_COLOR,
                 'font-family': FONT
@@ -1717,6 +1720,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tileBottom,
                     titleSpan,
                     imgDiv,
+                    prevArrow,
+                    nextArrow,
                     exploreTab,
                     exploreText,
                     exploreIcon,
@@ -1726,8 +1731,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     descText,
                     miniTilesHolder,
                     miniTile;
-
-
 
                 //Entire tile
                 previewTile = $(document.createElement('div'))
@@ -1753,31 +1756,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Explore div
                 exploreTab = $(document.createElement('div'))
-                    .addClass('exploreTab')
-                    .on('click', switchPage(artwork))
-
-                //Explore icon
-                exploreIcon = $(document.createElement('img'))
-                    .addClass('exploreIcon')
-                    .attr('src', tagPath+'images/icons/ExploreIcon.svg');
+                    .addClass('exploreTab');
+                if (!onAssocMediaView){
+                    exploreTab.on('click', switchPage(artwork))
+                } 
 
                 //Explore text
                 exploreText = $(document.createElement('div'))
                     .addClass('exploreText')
                     .css("font-size",  BASE_FONT_SIZE*2/3 + 'em')
-                    .text("Tap to Explore");
+                    .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Tap to Explore");
 
-                exploreTab.append(exploreIcon)
-                          .append(exploreText);
+                exploreTab.append(exploreText)
 
                 //Thumbnail image
                 currentThumbnail = $(document.createElement('img'))
                     .addClass('currentThumbnail')
                     .attr('src', artwork.Metadata.Thumbnail ? FIX_PATH(artwork.Metadata.Thumbnail) : (tagPath+'images/no_thumbnail.svg'))
-                    .on('click', switchPage(artwork))
                     .on('load', function () {
                         TAG.Util.removeProgressCircle(circle);
                     });
+                !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
 
                 //Telemetry stuff
                 TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'click', '', function(tobj) {
@@ -1839,44 +1838,90 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 miniTilesLabel = $(document.createElement('div'))
                     .addClass("miniTilesLabel")
-                    .text("Associated Media")
+                    .text(onAssocMediaView ? "Artworks" : "Associated Media")
 
                 miniTilesHolder = $(document.createElement('div'))
                     .addClass('miniTilesHolder')
 
+                prevArrow = $(document.createElement('img'))
+                    .addClass("miniTilesArrow")
+                    .attr('src', tagPath + 'images/icons/Close.svg')
+                    .on('click', function(){
+                        miniTilesHolder.stop();
+                        miniTilesHolder.animate({
+                            scrollLeft: miniTilesHolder.scrollLeft() - 50
+                        }, ANIMATION_DURATION/2)
+                    });
+
+                nextArrow = $(document.createElement('img'))
+                    .addClass("miniTilesArrow")
+                    .attr('src', tagPath + 'images/icons/Open.svg')
+                    .css('left', "94%")
+                    .on('click', function(){
+                        miniTilesHolder.stop();
+                        miniTilesHolder.animate({
+                            scrollLeft: miniTilesHolder.scrollLeft() + 50
+                        }, ANIMATION_DURATION/2)
+                    });
+
                 loadQueue.add(function(){
-                    TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMediaMiniTiles, null, addMediaMiniTiles);
+                    onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
+                    !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                 });
 
                 /**
                 * @method addMediaMiniTiles
-                * @param {Array} mediaDoqs    array of media doqs to with which the mini tiles are created
+                * @param {Array} doqs    array of media or artworks doqs to with which the mini tiles are created
                 */
-                function addMediaMiniTiles(mediaDoqs){
-
+                function addMiniTiles(doqs){
+                    var src,
+                        metadata,
+                        thumb;
                     //Loop through media doqs and create tiles from them
-                    for (i=0; i<mediaDoqs.length;i++){
-                        mediaDoqs[i].artwork = artwork;
+                    for (i=0; i<doqs.length;i++){
+                        src = '';
+                        metadata = doqs[i].Metadata;
+                        thumb = metadata.Thumbnail;
+
+                        !onAssocMediaView && (doqs[i].artwork = artwork);
                         miniTile = $(document.createElement('img'))
                             .addClass('miniTile')
                             .css({
                                 'width': miniTilesHolder.height()
                             })
                             .on('click', 
-                                    switchPage(artwork, mediaDoqs[i])
+                                    onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
                                 )
                         miniTile.css('left', i*(miniTile.width() + miniTilesHolder.height()/10));
 
-                        // Set tileImage to thumbnail image, if it exists
-                        if(mediaDoqs[i].Metadata.Thumbnail) {
-                            miniTile.attr("src", FIX_PATH(mediaDoqs[i].Metadata.Thumbnail));
-                        } else {
-                            miniTile.attr("src", tagPath+'images/no_thumbnail.svg');
+                        switch (metadata.ContentType) {
+                            case 'Audio':
+                                src = tagPath+'images/audio_icon.svg';
+                                break;
+                            case 'Video':
+                                src = (thumb && !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : tagPath + 'images/video_icon.svg';
+                                break;
+                            case 'Image':
+                                src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);
+                                break;
+                            case 'Text':
+                                src = tagPath + 'images/text_icon.svg';
+                            default:
+                                src = tagPath + 'images/no_thumbnail.svg';
+                                break;
                         }
 
+                        // Set tileImage to thumbnail image, if it exists
+                        if(doqs[i].Metadata.Thumbnail) {
+                            miniTile.attr("src", src);
+                        } else {
+                            miniTile.attr("src", tagPath + 'images/no_thumbnail.svg');
+                        }
                         miniTilesHolder.append(miniTile)
                     }                    
                 }
+
+
 
                 //Append everything
                 infoText.append(artistInfo)
@@ -1893,8 +1938,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 descSpan.append(descText);
 
                 tileBottom.append(descSpan)
+                    .append(prevArrow)
+                    .append(nextArrow)
                     .append(miniTilesHolder)
                     .append(miniTilesLabel)
+
 
                 previewTile.append(tileTop)
                     .append(tileBottom);
@@ -2050,7 +2098,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artNode = {
                     artwork: artworks[i],
                     sortKeyMetadataType: tag,
-                    sortKey: artworks[i].Metadata.infoFields[tag] || null
+                    sortKey: artworks[i].Metadata.InfoFields[tag] || null
                 };
                 avlTree.add(artNode);
             }

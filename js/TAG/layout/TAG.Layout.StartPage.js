@@ -17,7 +17,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options.tagContainer = $("#tagRoot");
 
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html file
-        overlay = root.find('#overlay'),
+        //overlay = root.find('#overlay'),
         //primaryFont = root.find('.primaryFont'),
         //secondaryFont = root.find('.secondaryFont'),
         //serverTagBuffer = root.find('#serverTagBuffer'),
@@ -35,11 +35,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverURL,
         tagContainer;
 
-
-        
-    // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
-
-    if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
+  // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
+ if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
     }
     
@@ -145,6 +142,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         setImagePaths(main);
         setUpCredits();
         setUpInfo(main);
+        applyCustomization(main);
         initializeHandlers();
 
         openDialog();
@@ -247,14 +245,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         authoringInput.keypress(function(e){
             if (e.which===13) {  // enter key press
             console.log('enter pressed on authoringInput');
-            TAG.Auth.checkPassword(authoringInput.val(), function () {
-                enterAuthoringMode()
-            }, function () {
-                passwordError.html('Invalid Password. Please try again...');
-                passwordError.css({'visibility':'visible'});
-            }, function () {
-                passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
-                passwordError.css({'visibility':'visible'});
+                TAG.Auth.checkPassword(authoringInput.val(), function () {
+                    enterAuthoringMode()
+                }, function () {
+                    passwordError.html('Invalid Password. Please try again...');
+                    passwordError.css({'visibility':'visible'});
+                }, function () {
+                    passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
+                    passwordError.css({'visibility':'visible'});
                 });
             }
         });
@@ -618,14 +616,23 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * Applying Customization Changes
     * @method applyCustomization
     */
-    function applyCustomization() {
-        $(primaryFont).css({ 
-            'color': PRIMARY_FONT_COLOR,
-            'font-family': FONT
+    function applyCustomization(main) {
+        var color = '#' + main.Metadata["PrimaryFontColor"];
+        $('.primaryFont').css({ 
+            'color': color,
+            'font-family': main.Metadata["FontFamily"]
         });
-        $(secondaryFont).css({
-            'color': SECONDARY_FONT_COLOR,
-            'font-family': FONT
+        serverInput.css({
+            'border-color': color
+        });
+        serverSubmit.css({
+            'border-color': color
+        });
+        authoringInput.css({
+            'border-color': color
+        });
+        passwordSubmit.css({
+            'border-color': color
         });
     }
 

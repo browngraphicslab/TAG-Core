@@ -1566,6 +1566,11 @@ TAG.TourAuthoring.Timeline = function (spec) {
      * @param {Display} currentDisplay       the one user is dragging. 
      */
     function moveSelect(res, currentDisplay) {
+
+        //turn off multi-select once any kind of edit is made to the selection
+        turnOffMS();
+        getMSBounds(currentDisplay);
+
         var leftDist = dataHolder._leftExternal.peek().bound,                                                                               //boundArray[0],
             rightDist = dataHolder._rightExternal.peek().bound,                                                                             //boundArray[1],
             fadeInRightDist = dataHolder._leftInternal.peek().bound,                                                                        //boundArray[2],
@@ -1581,10 +1586,6 @@ TAG.TourAuthoring.Timeline = function (spec) {
             fadeoutleftbound,
             offset = currentDisplay.getOffset();                                                                                            //distance from the main to fadein that user clicks on
 
-        //turn off multi-select once any kind of edit is made to the selection
-        turnOffMS();
-        getMSBounds(currentDisplay);
-        
         if (data[0] === null || data[0] === undefined) {//update the data for undo at the moment mouse is down, no need to update if user keeps the mouse down and drag multi times.
             data = new Array(getMultiSelectionArray().length);
             for (var i = 0; i < selectDisplays.length; i++) {
