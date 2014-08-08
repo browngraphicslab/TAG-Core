@@ -83,7 +83,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
                     if (!(annotatedImage.openArtwork(artwork))) { // if artwork load is unsuccessful...
                         var popup = TAG.Util.UI.popUpMessage(function () {
-                            TAG.Authoring.NewSettingsView("Artworks", function (settingsView) {
+                            TAG.Authoring.SettingsView("Artworks", function (settingsView) {
                                 TAG.Util.UI.slidePageRight(settingsView.getRoot());
                             }, null, artwork.Identifier);
                         }, "There was an error loading the image.", "Go Back", true);
@@ -153,6 +153,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         });
         backButton.on('click', function () {
            // TAG.Util.UI.getStack()[0] = currentKeyHandler;
+           /*
             var authoringHub,
                 editingMediamsg;
             if (MEDIA_EDITOR.isOpen()) {
@@ -169,6 +170,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
                 TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             }
+            */
+            var authoringHub;
+
+            MEDIA_EDITOR.close();
+            backButton.off('click');
+            authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
         });
  
         topBarLabel.css({ // TODO STYL (see constrainAndPosition comment above)
@@ -224,6 +232,41 @@ TAG.Layout.ArtworkEditor = function (artwork) {
     }
 
     /**
+     * Reloads the specified associate media in the associate media list
+     * @method reloadAssocMedia
+     * @param {String} assocMediaIdentifier       the identifier string for the associate media to be reloaded
+     */
+    function reloadAssocMedia(assocMediaIdentifier) {
+        annotatedImage.loadAssociatedMedia(function(mediaList) {
+            var assocMediaHolder = $('#' + assocMediaIdentifier);
+            mediaList = annotatedImage.getAssociatedMedia();
+            for (var i = 0; i < mediaList.guids.length; i++) {
+                var mediadoq = mediaList[mediaList.guids[i]].doq;
+                if (mediadoq.Identifier == assocMediaIdentifier) {
+                    loadQueue.add(reloadMediaHolder(assocMediaHolder, mediadoq));
+                    assocMediaHolder.on('click', thumbnailButtonClick(mediaList[mediaList.guids[i]]));
+                }
+            }
+
+        });
+    }
+
+    /**
+    * Returns a function that refreshes the title of the specified associate media in the associate media list
+    * @method reloadMediaHolder
+    * @param {jQuery obj} container         the holder element containing the element for the title of the associate media
+    * @parem {Object} asset         the asset of info about the associate media 
+    * @return {Function}        the function that refreshes the title of the specified associate media in the associate media list
+    */
+    function reloadMediaHolder(container, asset) { 
+        return function () {
+            var $holder = container;
+            var $title = $holder.find('.thumbnailButtonTitle');
+            $title.text(LADS.Util.htmlEntityDecode(asset.Name));
+        };
+    }
+
+    /**
      * Creates associated media list in left panel
      * @method createMediaList
      * @param {jQuery obj} container        the element containing this list
@@ -259,12 +302,14 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         break;
                 }
                 loadQueue.add((function (j) {
-                    container.append(TAG.Util.Artwork.createThumbnailButton({
+                     var thumbnailButton = TAG.Util.Artwork.createThumbnailButton({
                         title: mediadoq.Name,
                         handler: thumbnailButtonClick(mediaList[mediaList.guids[j]]),
                         buttonClass: "assetHolder",
                         src: src
-                    }));
+                    });
+                    thumbnailButton.attr("id", mediadoq.Identifier);
+                    container.append(thumbnailButton);
                 })(i));
             }
         });
@@ -937,7 +982,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleLayerButton,
             activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
             isHotspot = false, // whether the current media is a hotspot
-            isLayer = false;
+            isLayer = false,
+            oldTitle, //title text when the editor is opened
+            oldDescription, // description text when the editor is opened
+            positionChanged = false; // whether the hotspot is added, moved, or deleted
 
         /**
          * Initialize a reusible hotspot circle div and store it in the variable hotspotAnchor
@@ -1000,6 +1048,11 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             }).appendTo(hotspotAnchor);
 
             TAG.Util.disableDrag(root);
+
+            // detect whether the hotspot is moved
+            hotspotCircle.get(0).addEventListener('mouseup', function () {
+                positionChanged = true;
+            }, false);
 
             // TODO use makeManipulatable here for web app (and for win8 app... some dragging issues right now, though)
             TAG.Util.makeManipulatableWin(hotspotCircle[0], {
@@ -1392,6 +1445,48 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             }
         }
 
+         /**
+        * Saves the current settings for the opened associate media
+        * @method saveAssocMedia
+        */
+        function saveAssocMedia() {
+            var titleTextVal,
+                descriptionTextVal,
+                assetType;
+
+            $('.assetHolder').css('background-color', '');
+
+            if (getActiveMediaMetadata('ContentType') === 'Video') { // TODO see comments in the delete button's click handler
+              //  $('.rightbar').find('video')[0].pause();
+            } else if (getActiveMediaMetadata('ContentType') === 'Audio') { // TODO see comments in the delete button's click handler
+              //  $('.rightbar').find('audio')[0].pause();
+            }
+
+            titleTextVal = $('.title').val() || 'Untitled';
+            descriptionTextVal = $('.description').val() || 'Untitled';
+            oldTitle = oldTitle || 'Untitled';
+            oldDescription = oldDescription || 'Untitled';
+
+
+            assetType = isHotspot ? 'Hotspot' : (isLayer ? 'Layer' : 'Asset');
+
+            if (titleTextVal != oldTitle || descriptionTextVal != oldDescription || positionChanged) {
+                console.log(titleTextVal + " " + oldTitle + " " + descriptionTextVal + " " + oldDescription + " " + positionChanged);
+                updateAssocMedia({
+                    title: TAG.Util.encodeXML(titleTextVal),
+                    desc: TAG.Util.encodeXML($('.description').val()),
+                    pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
+                    rect: isLayer ? getLayerRect() : null,
+                    contentType: activeAssocMedia.doq.Metadata.ContentType,
+                    contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
+                    assetType: assetType,
+                    metadata: {
+                        assetDoqID: activeAssocMedia.doq.Identifier
+                    }
+                });
+            }
+        }
+
         /**
          * Wrapper around TAG.Worktop.Database.changeHotspot to update assoc media after
          * editing in the right pane.
@@ -1409,6 +1504,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 //dzPos = info.pos ? annotatedImage.viewer.viewport.pointFromPixel(info.pos) : { x: 0, y: 0 },
                 coords,
                 rightbarLoadingSave,
+                thumbnailLoadingSave,
                 options;
 
             if (info.pos) {
@@ -1426,6 +1522,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 };
             }
 
+            /*
             rightbarLoadingSave = $(document.createElement('div'));
             rightbarLoadingSave.css({
                 'width': '20%',
@@ -1438,8 +1535,28 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             });
             mainPanel.append(rightbarLoadingSave);
 
+
             TAG.Util.showLoading(rightbarLoadingSave, '20%');
             rightbarLoadingSave.attr('class', 'rightbarLoadingSave');
+            */
+
+            // add loading overlay to the thumbnail of the associate media which has been modified
+            var top = 
+            $('#' + worktopInfo.assetDoqID).find('.thumbnailButtonTitle').height() +
+            $('#' + worktopInfo.assetDoqID).find('.thumbnailHolderDiv').height();
+            thumbnailLoadingSave = $(document.createElement('div'));
+            thumbnailLoadingSave.css({
+                'width': '100%',
+                'height': '100%',
+                'position': 'relative',
+                'background-color': 'rgba(0,0,0,.85)',
+                'top': '-' + top + 'px',
+                'z-index': 100
+            });
+            $('#' + worktopInfo.assetDoqID).append(thumbnailLoadingSave);
+        
+            TAG.Util.showLoading(thumbnailLoadingSave, '5%');
+            thumbnailLoadingSave.attr('class', 'thumbnailLoadingSave');
 
             options = {
                 Name: title,
@@ -1463,9 +1580,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
              * @method updateSuccess
              */
             function updateSuccess() {
+                /*
                 close();
                 createMediaList();
                 rightbarLoadingSave.fadeOut();
+                */
+                reloadAssocMedia(worktopInfo.assetDoqID);
+                thumbnailLoadingSave.fadeOut();
             }
 
             function no_op() { // TODO I think TAG.Worktop.Database functions can just accept null callbacks, since they use the safeCall util function. if so, use null
@@ -1527,8 +1648,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 $toggleModeContainer = $(document.createElement('div'))
                     .addClass('toggleModeContainer')
                     .css({
-                        'width': '60%',
-                        'left': '20%',
+                        'width': '88%',
+                        'left': '8%',
                         'position': 'relative',
                     })
                     .appendTo($rightbar),
@@ -1556,7 +1677,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 $titleContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
                     .css({
-                        'width': '100%',
+                        'width': '86%',
                         'padding': '5% 8%',
                         'margin-top': '5%',
                     })
@@ -1566,7 +1687,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .attr('placeholder', ' Title')
                     .attr('title', 'Title')
                     .css({
-                        'width': '64%',
+                        'width': '100%',
                         'font-size': '11pt'
                     })
                     .appendTo($titleContainer),
@@ -1584,8 +1705,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .attr('placeholder', ' Description')
                     .css({
                         'background-color': 'white',
-                        'width': '92.5%',
-                        'min-width': '92.5%',
+                        'width': '100%',
+                        'min-width': '100%',
                         'height': '90%'
                     })
                     .appendTo($descContainer),
@@ -1597,13 +1718,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'position': 'relative'
                     })
                     .appendTo($rightbar),
-                $deleteAssocMediaButton = $(document.createElement('button'))
-                    .addClass('asscmediabutton deletebutton')
-                    .text('Delete')
+                $unassociateAssocMediaButton = $(document.createElement('button'))
+                    .addClass('asscmediabutton unassociatebutton')
+                    .text('Unassociate Media')
                     .css({
                         'float': 'left',
                         'border': '2px solid white',
-                        'width': '45%'
+                        'width': '100%'
                     })
                     .attr('type', 'button')
                     .appendTo($assocMediaButtonContainer),
@@ -1614,7 +1735,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .css({
                         'float': 'right',
                         'border': '2px solid white',
-                        'width': '45%'
+                        'width': '45%',
+                        'display': 'none'
                     })
                     .appendTo($assocMediaButtonContainer),
                 closeButton = $(document.createElement('img'))
@@ -1632,6 +1754,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             // makeLayerContainer(); -- called in toggleToLayer now
 
             $toggleHotspot.on('click', function () {
+                positionChanged = true;
                 isHotspot ? toggleFromHotspot() : toggleToHotspot();
             });
 
@@ -1642,7 +1765,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleHotspotButton = $toggleHotspot; // get rid of these intermediate variables...
             toggleLayerButton = $toggleLayer;
 
-            $deleteAssocMediaButton.on('click', function () {
+            $unassociateAssocMediaButton.on('click', function () {
                 var assetDoqID = getActiveMediaMetadata('assetDoqID'); // TODO see comment below about AnnotatedImage
 
                 if (getActiveMediaMetadata('contentType') === 'Video') { // TODO when this file is better integrated with the new AnnotatedImage, should store the current active media in a 'global' variable and just access its contentType rather than going through a helper function
@@ -1734,6 +1857,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @param {Function} callback    a callback function to call after the editing pane has opened
          */
         function open(asset, content, callback) {
+            /*
             var editingMediamsg;
 
             if (editingMedia) {
@@ -1742,6 +1866,11 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 editingMediamsg.show();
                 return;
             }
+            */
+            if (isOpen) {
+                saveAssocMedia();
+            }
+
             editingMedia = false;
 
             TAG.Worktop.Database.getLinq(artwork.Identifier, asset.doq.Identifier, linqCallback, function () { }, function () { });
@@ -1762,13 +1891,15 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     point,
                     enableLayering = asset.doq.Metadata.ContentType === 'Image' && linq.Dimensions,
                     rect,
-                    oldtitle,
                     key,
-                    oldDescription,
                     rightbar = $('.rightbar'); // TODO get this from JADE, store as a 'global' variable at top of file
 
                 isHotspot = linq.Metadata.Type === "Hotspot";
                 isLayer = linq.Metadata.Type === "Layer";
+
+                oldTitle = title;
+                oldDescription = description;
+                positionChanged = false;
 
                 if (enableLayering) {
                     currSource = LADS.Worktop.Database.fixPath(asset.doq.Metadata.Source);
@@ -1830,6 +1961,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function close() {
             var rightbar;
             if (isOpen) {
+                saveAssocMedia();
                 rightbar = $('.rightbar');
                 hotspotAnchor.fadeOut(100);
                 if (layerContainer) {
