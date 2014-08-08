@@ -233,10 +233,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
         }
 
-        bottomContainer.on('scroll', function(){ 
-            hideArtwork(currentArtwork)
-        })
-        
+        //Scrolling closes popup
+        if (bottomContainer[0].addEventListener) {
+            // IE9, Chrome, Safari, Opera
+            bottomContainer[0].addEventListener("mousewheel", 
+                function(){
+                    currentArtwork && hideArtwork(currentArtwork)()
+                }, false);
+            // Firefox
+            bottomContainer[0].addEventListener("DOMMouseScroll", 
+                function(){
+                    currentArtwork && hideArtwork(currentArtwork)()
+                }, false);
+        } else { 
+            // IE 6/7/8
+            bottomContainer[0].attachEvent("onmousewheel",
+                function(){
+                    currentArtwork && hideArtwork(currentArtwork)()
+                }, false);
+        };
+
+
+
 
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
@@ -515,10 +533,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 title             = TAG.Util.htmlEntityDecode(collection.Name),
                 nextTitle,
                 prevTitle,
-                mainCollection    = $('#mainCollection'),
-                nextCollection    = $('#nextCollection'),
-                prevCollection    = $('#prevCollection'),
-                titleBox          = $('.collection-title'), 
+                mainCollection    = root.find('#mainCollection'),
+                nextCollection    = root.find('#nextCollection'),
+                prevCollection    = root.find('#prevCollection'),
+                titleBox          = root.find('.collection-title'), 
                 collectionMedia   = [],
                 counter           = 0,
                 collectionLength,
@@ -711,6 +729,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             styleBottomContainer();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
+
                 toggleRow.css({
                     'display': 'block',
                 });
@@ -1143,7 +1162,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             main.css({
                 'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER), 
                 'top' : Math.floor(i % 2) * (main.height() + TILE_BUFFER)
-            });       
+            });
+
+            //Add scrollbar to catalog div if needed
+            if (main.position().left + main.width() > main.parent().width()) {
+                catalogDiv.css("overflow-x", "scroll")
+            }      
         };
     }
 
@@ -1486,6 +1510,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
       */
     function hideArtwork(artwork) {
         return function () {
+            currentArtwork = null;
             if (!artwork) {
                 return;
             }
