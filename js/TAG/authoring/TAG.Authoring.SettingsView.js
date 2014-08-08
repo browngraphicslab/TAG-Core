@@ -2310,7 +2310,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         currentIndex = 0;
 
-        prepareNextView(true, "Import", createAsset);
+        prepareNextView(true, "Add", createAsset);
         prepareViewer(true);
         clearRight();
         var cancel = false;
@@ -3880,8 +3880,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         parsingPicker.append(parsingPickerHeader);
         parsingPicker.append(parsingInfo);
-        parsingPicker.append(parsingPickerConfirm);
         parsingPicker.append(parsingPickerCancel);
+        parsingPicker.append(parsingPickerConfirm);
 
         parsingOverlay.append(parsingPicker);
 
@@ -3913,7 +3913,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 width:'92%',
             });
             $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'top' });
-            $(field).children().eq(1).css({margin:'0%'});
+            $(field).children().eq(1).css({ margin: '0 auto', 'font-size':'60%'});
             mtinputs[key] = input;// { field: field, input: input };
             field.show().data('visible', true);
             parsingInfo.append(field);
@@ -4260,23 +4260,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
 
-        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport");
-        metadataPickerImport.attr('disabled', true);
-        if (selectedmetadata)
-            metadataPickerImport.attr('disabled', false);
-        metadataPickerImport.text("Import");
-        
-        metadataPickerImport.click(function () {
-            updateArtwork(artwork, inputs, selectedmetadata, settingsContainer, spec);
-            $('.metadataInfos').empty();
-            metadataPickerOverlay.fadeOut();
-        });
-        metadataPicker.append(metadataPickerImport);
+
+
 
         var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel");
         metadataPickerCancel.text("Cancel");
         
-
         // cancel button click handler
         metadataPickerCancel.click(function () {
             metadataPickerOverlay.fadeOut();
@@ -4284,6 +4273,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             metadataPickerCancel.disabled = true;
         });
         metadataPicker.append(metadataPickerCancel);
+
+
+        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport");
+        metadataPickerImport.attr('disabled', true);
+        if (selectedmetadata)
+            metadataPickerImport.attr('disabled', false);
+        metadataPickerImport.text("Import");
+
+        //import button click handler
+        metadataPickerImport.click(function () {
+            updateArtwork(artwork, inputs, selectedmetadata, settingsContainer, spec);
+            $('.metadataInfos').empty();
+            metadataPickerOverlay.fadeOut();
+        });
+
+        metadataPicker.append(metadataPickerImport);
+
         root.append(metadataPickerOverlay);
         $(".parsingOverlay").fadeOut();
         metadataPickerOverlay.fadeIn();
@@ -5946,6 +5952,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //        TAG.Util.UI.getStack()[0] = null;
     //    });
     //}
+
+    function createDropdownAssocMediaMenu() {
+        var MenuLabel = $(document.createElement('label')).attr('id', 'addComponentLabel').css({
+            "left": '10%',
+            "top": "5%",
+            "position": "relative",
+            "font-size": "100%",
+            "color": "rgb(256, 256, 256)",
+            'background-color': "rgb(63, 55, 53)",
+            'padding': '3% 2% 4% 2%',
+            'width': '70%',
+        });
+    }
 
     return that;
 };
