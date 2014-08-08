@@ -573,6 +573,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "background-color":'white'
                         });
                     collectionDotHolder.append(dummyDot);
+                    backArrowArea.css('display', 'none');
                 } else {
                     //Make collection dot white and others gray
                     for(i = 0; i < visibleCollections.length; i++) { 
@@ -683,7 +684,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
                 });
                 collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
-
+                if (IS_WINDOWS) {
+                    var links = collectionDescription.find('a');
+                    links.each(function (index, element) {
+                        $(element).replaceWith(function () {
+                            return $.text([this]);
+                        });
+                    });
+                }
                 artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
                 assocMediaButton.css('color', dimmedColor);
 
@@ -1878,6 +1886,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'font-family': FONT,
                     'font-size': "80%"
                 });
+                if (IS_WINDOWS) {
+                    var links = descText.find('a');
+                    links.each(function (index, element) {
+                        $(element).replaceWith(function () {
+                            return $.text([this]);
+                        });
+                    });
+                }
 
                 miniTilesLabel = $(document.createElement('div'))
                     .addClass("miniTilesLabel")
