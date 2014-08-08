@@ -1266,10 +1266,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (avlTree.min().yearKey === Number.POSITIVE_INFINITY){
             timelineShown = false;
             clearTimeline();
-            if ($('#titleButton')){
-                currentTag = "Title";
-            } else {
-                currentTag = currentDefaultTag || null;
+            //TO-DO coming back isn't right here, so coming back from artwork viewer fails in this specific case
+            if (!comingBack){
+                if ($('#titleButton')){
+                    currentTag = "Title";
+                } else {
+                    currentTag = currentDefaultTag || null;
+                }
             }
             changeDisplayTag(artworks,currentTag);
             colorSortTags(currentTag);
