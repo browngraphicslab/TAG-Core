@@ -1473,8 +1473,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             if (titleTextVal != oldTitle || descriptionTextVal != oldDescription || positionChanged) {
                 console.log(titleTextVal + " " + oldTitle + " " + descriptionTextVal + " " + oldDescription + " " + positionChanged);
                 updateAssocMedia({
-                    title: TAG.Util.encodeXML(titleTextVal),
-                    desc: TAG.Util.encodeXML($('.description').val()),
+                    title: TAG.Util.htmlEntityEncode(titleTextVal),
+                    desc: TAG.Util.htmlEntityEncode($('.description').val()),
                     pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
                     rect: isLayer ? getLayerRect() : null,
                     contentType: activeAssocMedia.doq.Metadata.ContentType,
@@ -1834,8 +1834,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 assetType = isHotspot ? 'Hotspot' : (isLayer ? 'Layer' : 'Asset');
 
                 updateAssocMedia({
-                    title: TAG.Util.encodeXML(titleTextVal),
-                    desc: TAG.Util.encodeXML($descArea.val()),
+                    title: TAG.Util.htmlEntityEncode(titleTextVal),
+                    desc: TAG.Util.htmlEntityEncode($descArea.val()),
                     pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
                     rect: isLayer ? getLayerRect() : null,
                     contentType: activeAssocMedia.doq.Metadata.ContentType,
