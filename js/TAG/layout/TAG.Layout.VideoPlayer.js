@@ -41,6 +41,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         play = root.find('#playPauseButton'),
         vol = root.find('#videoControlsButton'),
         loop = root.find('#loopButton'),
+        sliderPoint = root.find("#sliderPoint"),
         sliderContainer = root.find('#sliderContainer'),
         currTime,
         poster = (videoSrc.Metadata.Thumbnail && !videoSrc.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(videoSrc.Metadata.Thumbnail) : '',
@@ -175,7 +176,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
 
             // Calculate the slider value and update the slider value
             value = ($('#sliderContainer').width() / videoElt.duration) * videoElt.currentTime;
-            $('#sliderPoint').css('width',value);
+            sliderPoint.css('width',value);
 
             minutes = Math.floor(videoElt.currentTime / 60);
             seconds = Math.floor(videoElt.currentTime % 60);
@@ -186,6 +187,25 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
             }
             currentTimeDisplay.text(adjMin + ":" + (seconds < 10 ? "0" : "") + seconds);
         });
+
+        if (!IS_WEBAPP){
+            bottomBar.css({
+                'height': '7%',
+                'background-color': "rgba(0, 0, 0, .5)"
+            });
+            sliderPoint.css('background-color','white');
+
+            sliderContainer.css({
+                "border" : "1px solid rgb(250,250,250)",
+                "width": "70%",
+                "left": '15%',
+                "height": "20%",
+                "bottom":"40%"
+            })
+
+
+
+        }
     }
 
     /**
@@ -237,7 +257,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
                 if (!isNaN(currTime)) {
                     $('#currentTimeDisplay').text(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
                     videoElt.currentTime = currTime;
-                    $('#sliderPoint').css('width', currPx);
+                    sliderPoint.css('width', currPx);
                 }
 
             });
@@ -249,7 +269,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
                 $('body').off('mouseleave.seek');
 		        $('#currentTimeDisplay').text(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
                 videoElt.currentTime = currTime;
-		        $('#sliderPoint').css('width', currPx);
+		        sliderPoint.css('width', currPx);
             });
         });
     }
