@@ -6,17 +6,17 @@
 		span.titleone.primaryFont TAG
 		span.titletwo.primaryFont   Brown Graphics Lab Demo
 	#description
-		span.bodyDescone.secondaryFont
+		span.bodyDescone.primaryFont
 			|Welcome to Touch Art Gallery! To change servers, put in the address below. <br />
 			|To access authoring for the current server, put in your authoring password. <br/>
-		span.bodyDesctwo.secondaryFont
+		span.bodyDesctwo.primaryFont
 			|By tapping the button below, you'll enter the TAG kiosk mode and <br />
 			|not be able to return to this splash screen until TAG is restarted.
 	#inputRow
-		input#serverInput(placeholder='server address')
-		input#passwordInput(placeholder='authoring password', type='password')		
-		#serverSubmit submit
-		#passwordSubmit submit
+		input#serverInput(placeholder='server address').primaryFont
+		input#passwordInput(placeholder='authoring password', type='password').primaryFont	
+		#serverSubmit.primaryFont submit
+		#passwordSubmit.primaryFont submit
 		#serverError Server connection failed. Contact the server administrator.
 		#passwordError Incorrect password. 
 	#goToCollectionsButton Go to Collections

@@ -1225,6 +1225,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             drawerContents  = $(document.createElement('div')).addClass("drawerContents"),
             i;
        
+        label.addClass('primaryFont');
         label.text(title);
         label.css({
             'color': '#' + PRIMARY_FONT_COLOR,

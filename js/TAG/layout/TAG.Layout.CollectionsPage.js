@@ -789,8 +789,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
                 for (i=0;i<sortOptions.length;i++){
                     sortButton = $(document.createElement('div'));
+                    sortButton.addClass('secondaryFont');
+
                     sortButton.addClass('rowButton')
-                              .text(sortOptions[i])
+                             .text(sortOptions[i])
                               .attr('id', sortOptions[i].toLowerCase() + "Button")
                               .off()
                               .on('click', function(){
@@ -1072,11 +1074,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tileImage.addClass('tileImage');
             artTitle.addClass('artTitle');
             artText.addClass('artText');
+            artText.addClass('secondaryFont');
             artText.css({
                 'color': '#' + SECONDARY_FONT_COLOR,
                 'font-family': FONT
             });
             yearTextBox.addClass('yearTextBox');
+            yearTextBox.addClass('secondaryFont');
             yearTextBox.css({
                 'color': '#' + SECONDARY_FONT_COLOR,
                 'font-family': FONT
