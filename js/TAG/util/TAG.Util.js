@@ -1535,12 +1535,13 @@ TAG.Util = (function () {
         return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
     }
 
+    //decodeURIComponent was causing internal errors
     function htmlEntityDecode(str) {
-        try {
-            return str ? decodeURIComponent($('<div />').html(str).text()) : '';
-        } catch (e) {
+        //try {
+            //return str ? decodeURIComponent($('<div />').html(str).text()) : '';
+        //} catch (e) {
             return str ? unescape($('<div />').html(str).text()) : '';
-        }
+        //}
     }
 
     /**
