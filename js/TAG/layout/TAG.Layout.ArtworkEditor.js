@@ -978,8 +978,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             hotspotAnchor,
             layerContainer,
             currSource,
-            toggleHotspotButton,
-            toggleLayerButton,
+            toggleHotspotButton = $('.toggleHotspot'),
+            toggleLayerButton = $('.toggleLayer'),
             activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
             isHotspot = false, // whether the current media is a hotspot
             isLayer = false,
