@@ -525,8 +525,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             comingBack = false;
 
             if (!onAssocMediaView){
-                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
-                    TAG.Worktop.Database.getArtworksIn(collection.Identifier, getCollectionMedia, null, getCollectionMedia);     
+                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
+                    TAG.Worktop.Database.getAssocMediaTo(collection.Identifier, function(mediaDoqs){
+                        for (i=0;i<mediaDoqs.length;i++){
+                            collectionMedia.push(mediaDoqs[i]);
+                        }
+                        collection.collectionMedia = collectionMedia;
+                        if (sortByYear(collectionMedia,true).min()){
+                            collection.collectionMediaMinYear = sortByYear(collectionMedia,true).min().yearKey;
+                        }
+                    })   
                 }
 
                 // Clear search box
@@ -737,35 +745,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else {
                 createArtTiles(currCollection.collectionMedia);
                 initSearch(currCollection.collectionMedia);
-            }
-
-            /*Helper function to get all of the associated media in a collection
-             * @method getCollectionMedia
-             * @param  {Array} artworkDoqs          list of artwork doqs in the collection
-             */
-            function getCollectionMedia(artworkDoqs){  
-                collectionLength = artworkDoqs.length;
-                for (i=0;i<artworkDoqs.length;i++){
-                    TAG.Worktop.Database.getAssocMediaTo(artworkDoqs[i].Identifier, addAssocMedia, null, addAssocMedia);
-                }
-
-                /*Helper function to combine all the media for each artwork in the collection
-                * @method addAssocMedia
-                * @param {Array} mediaDoqs          associated media doqs passed in by getAssocMediaTo()
-                */
-                function addAssocMedia(mediaDoqs){
-                    counter = counter +1 ;
-                    for (i=0; i<mediaDoqs.length;i++){
-                        collectionMedia.push(mediaDoqs[i]);
-                    }
-                    //When all of the collections have been looped through (neccessary to deal with async)
-                    if (counter === collectionLength){
-                        collection.collectionMedia = collectionMedia;
-                        if (sortByYear(collectionMedia,true).min()){
-                            collection.collectionMediaMinYear =  sortByYear(collectionMedia,true).min().yearKey;
-                        }
-                    }
-                }  
             }
 
             /*helper function to load sort tags
