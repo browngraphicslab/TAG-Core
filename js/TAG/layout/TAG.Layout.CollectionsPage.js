@@ -353,6 +353,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
     }
 
+    function prepareNextView(){
+        onAssocMediaView = false;
+        currentTag = null;
+        currentArtwork = null;
+        loadQueue.clear();
+        comingBack = false;
+    }
+
     /**
      * Create a closeButton for associated media
      * @method createCloseButton
@@ -436,8 +444,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "margin": COLLECTION_DOT_WIDTH/4
                         }).on('click', function(j){
                             return function(){
+                                prepareNextView();
                                 loadCollection(visibleCollections[j])();
-                                currentTag = null;
                             }
                         }(i));
             collectionDotHolder.append(collectionDot);
@@ -526,8 +534,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             comingBack = false;
 
             if (!onAssocMediaView){
-                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
-                    TAG.Worktop.Database.getArtworksIn(collection.Identifier, getCollectionMedia, null, getCollectionMedia);     
+                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
+                    TAG.Worktop.Database.getAssocMediaTo(collection.Identifier, function(mediaDoqs){
+                        for (i=0;i<mediaDoqs.length;i++){
+                            collectionMedia.push(mediaDoqs[i]);
+                        }
+                        collection.collectionMedia = collectionMedia;
+                        if (sortByYear(collectionMedia,true).min()){
+                            collection.collectionMediaMinYear = sortByYear(collectionMedia,true).min().yearKey;
+                        }
+                    })   
                 }
 
                 // Clear search box
@@ -556,6 +572,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "background-color":'white'
                         });
                     collectionDotHolder.append(dummyDot);
+                    backArrowArea.css('display', 'none');
                 } else {
                     //Make collection dot white and others gray
                     for(i = 0; i < visibleCollections.length; i++) { 
@@ -576,8 +593,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         .off()
                         .on('click', function(j){
                                 return function(){
+                                    prepareNextView();
                                     loadCollection(visibleCollections[j.prevCollectionIndex])();
-                                    currentTag = null;
                                 }
                             }(collection));
                     backArrow.attr('src', tagPath + 'images/icons/Close.svg');
@@ -593,9 +610,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .off()
                                 .on('click', function(j){
                                         return function(){
-                                            onAssocMediaView = false
+                                            prepareNextView();
                                             loadCollection(visibleCollections[j.prevCollectionIndex])();
-                                            currentTag = null;
                                         }
                                     }(collection));
 
@@ -620,8 +636,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .off()
                                 .on('click', function(j){
                                         return function(){
+                                            prepareNextView();
                                             loadCollection(visibleCollections[j.nextCollectionIndex])();
-                                            currentTag = null;
                                         }
                                     }(collection));
 
@@ -642,9 +658,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .off()
                                 .on('click', function(j){
                                         return function(){
-                                            onAssocMediaView = false
+                                            prepareNextView();
                                             loadCollection(visibleCollections[j.nextCollectionIndex])();
-                                            currentTag = null;
                                         }
                                     }(collection));
 
@@ -666,7 +681,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
                 });
                 collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
-
+                if (IS_WINDOWS) {
+                    var links = collectionDescription.find('a');
+                    links.each(function (index, element) {
+                        $(element).replaceWith(function () {
+                            return $.text([this]);
+                        });
+                    });
+                }
                 artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
                 assocMediaButton.css('color', dimmedColor);
 
@@ -730,35 +752,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else {
                 createArtTiles(currCollection.collectionMedia);
                 initSearch(currCollection.collectionMedia);
-            }
-
-            /*Helper function to get all of the associated media in a collection
-             * @method getCollectionMedia
-             * @param  {Array} artworkDoqs          list of artwork doqs in the collection
-             */
-            function getCollectionMedia(artworkDoqs){  
-                collectionLength = artworkDoqs.length;
-                for (i=0;i<artworkDoqs.length;i++){
-                    TAG.Worktop.Database.getAssocMediaTo(artworkDoqs[i].Identifier, addAssocMedia, null, addAssocMedia);
-                }
-
-                /*Helper function to combine all the media for each artwork in the collection
-                * @method addAssocMedia
-                * @param {Array} mediaDoqs          associated media doqs passed in by getAssocMediaTo()
-                */
-                function addAssocMedia(mediaDoqs){
-                    counter = counter +1 ;
-                    for (i=0; i<mediaDoqs.length;i++){
-                        collectionMedia.push(mediaDoqs[i]);
-                    }
-                    //When all of the collections have been looped through (neccessary to deal with async)
-                    if (counter === collectionLength){
-                        collection.collectionMedia = collectionMedia;
-                        if (sortByYear(collectionMedia,true).min()){
-                            collection.collectionMediaMinYear =  sortByYear(collectionMedia,true).min().yearKey;
-                        }
-                    }
-                }  
             }
 
             /*helper function to load sort tags
@@ -1847,6 +1840,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'font-family': FONT,
                     'font-size': "80%"
                 });
+                if (IS_WINDOWS) {
+                    var links = descText.find('a');
+                    links.each(function (index, element) {
+                        $(element).replaceWith(function () {
+                            return $.text([this]);
+                        });
+                    });
+                }
 
                 miniTilesLabel = $(document.createElement('div'))
                     .addClass("miniTilesLabel")

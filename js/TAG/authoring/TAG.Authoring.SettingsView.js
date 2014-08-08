@@ -152,7 +152,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         inArtworkView = false,
         inAssociatedView = false,
         inToursView = false,
-        inFeedbackView = false;
+        inFeedbackView = false,
+
+        //dropdown associated media menu
+        menuLabel = createDropdownAssocMediaMenu();
 
         //window.addEventListener('keydown', keyHandler),
         TAG.Util.UI.initKeyHandler();
@@ -492,10 +495,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
         });
 
-        iframeAssetCreateButton.on('click', function () { // TODO iframe -- change styling and location in styl and jade files
-            createIframeSourceDialog();
-        });
-
         var topBarLabel = root.find('#setViewTopBarLabel');
         var topBarLabelSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
         {
@@ -679,14 +678,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function loadGeneralView() {
 
-        prepareNextView(false);
-
-		inGeneralView = true;
+        inGeneralView = true;
         inCollectionsView = false;
         inArtworkView = false;
         inAssociatedView = false;
         inToursView = false;
         inFeedbackView = false;
+
+        prepareNextView(false);
+
         // Add this to our queue so the UI doesn't lock up
         middleQueue.add(function () {
             var label;
@@ -791,7 +791,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
         var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
-        var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false, true);
+        var idleTimerDurationInput = createTextInput(idleDuration/60000, false, 3, false, false, true);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
         var font = fontFamilyInput.find(":selected").text();
@@ -897,6 +897,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //save Splash screen and pass in inputs with following keys:
             //idleTimerDurationInput.text(idleTimerDurationInput.val());
             saveIdleTimerDuration(idleTimerDurationInput);
+            idleTimerDurationInput.text(idleDuration);
             saveSplashScreen({
                 //alphaInput: alphaInput,                             //Overlay Transparency
                 //overlayColorInput: overlayColorInput,               //Overlay Color
@@ -953,9 +954,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewArtworkViewerButton);
     }
 
+    /**Changes idle timer stageOne duration from the customization settings
+     * input.val() is in minutes, and idleDuration needs to be set in milliseconds
+     * hence the conversion factor of 60000
+     * @method saveIdleTimerDuration
+     * @param {HTML Element} input      
+     */
     function saveIdleTimerDuration(input) {
-        var currDuration = input.val();
-        TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(currDuration);
+        idleDuration = parseInt(input.val())*60000;
     }
 
     /**Saves the splash screen settings
@@ -1211,6 +1217,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id       id of middle label to start on
      */
     function loadExhibitionsView(id, matches) {
+
+        inGeneralView = false;
+        inCollectionsView = true;
+        inArtworkView = false;
+        inAssociatedView = false;
+        inToursView = false;
+        inFeedbackView = false;
+
         var list;
         var cancel = false;
         currentIndex = 0;
@@ -1229,13 +1243,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //collectionsIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
-
-        inGeneralView = false;
-        inCollectionsView = true;
-        inArtworkView = false;
-        inAssociatedView = false;
-        inToursView = false;
-        inFeedbackView = false;
 
         if (typeof matches !== "undefined") {
             list = matches;
@@ -1923,6 +1930,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadTourView(id, matches) {
+
+        inGeneralView = false;
+        inCollectionsView = false;
+        inArtworkView = false;
+        inAssociatedView = false;
+        inToursView = true;
+        inFeedbackView = false;
+
         var list;
         currentIndex = 0;
 
@@ -1940,12 +1955,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //toursIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
 
-        inGeneralView = false;
-        inCollectionsView = false;
-        inArtworkView = false;
-        inAssociatedView = false;
-        inToursView = true;
-        inFeedbackView = false;
 
         if (typeof matches !== "undefined") {
             list = matches;
@@ -2335,6 +2344,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadAssocMediaView(id, matches) {
+
+        inGeneralView = false;
+        inCollectionsView = false;
+        inArtworkView = false;
+        inAssociatedView = true;
+        inToursView = false;
+        inFeedbackView = false;
+
         var list;
         currentIndex = 0;
 
@@ -2351,13 +2368,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //associatedMediaIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
-
-        inGeneralView = false;
-        inCollectionsView = false;
-        inArtworkView = false;
-        inAssociatedView = true;
-        inToursView = false;
-        inFeedbackView = false;
 
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
@@ -3337,6 +3347,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadArtView(id, matches) {
+
+        inGeneralView = false;
+        inCollectionsView = false;
+        inArtworkView = true;
+        inAssociatedView = false;
+        inToursView = false;
+        inFeedbackView = false;
+
         var list;
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork);
@@ -3352,13 +3370,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //artworksIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
-
-        inGeneralView = false;
-        inCollectionsView = false;
-        inArtworkView = true;
-        inAssociatedView = false;
-        inToursView = false;
-        inFeedbackView = false;
 
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
@@ -4444,6 +4455,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadFeedbackView(id, matches) {
+
+        inGeneralView = false;
+        inCollectionsView = false;
+        inArtworkView = false;
+        inAssociatedView = false;
+        inToursView = false;
+        inFeedbackView = true;
+
         var list;
         currentIndex = 0;
 
@@ -4458,13 +4477,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //    hideLoadingSettings(pCL);
         //};
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
-
-        inGeneralView = false;
-        inCollectionsView = false;
-        inArtworkView = false;
-        inAssociatedView = false;
-        inToursView = false;
-        inFeedbackView = true;
 
         if (typeof matches !== "undefined") {
             list = matches;
@@ -4763,10 +4775,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleLabelContainer.append(middleLoading);
         middleLoading.show();
         secondaryButton.css("display", "none");
-        newButton.text(newText);
-        newButton.unbind('click').click(newBehavior);
-        if (!newText) newButton.hide();
-        else newButton.show();
+
+        if (!inAssociatedView) {
+            menuLabel.hide();
+            newButton.text(newText);
+            newButton.unbind('click').click(newBehavior);
+            if (!newText) newButton.hide();
+            else newButton.show();
+        } else {
+            newButton.hide();
+            menuLabel.show();
+        }
+
         prevSelectedMiddleLabel = null;
         if (cancelLastSetting) cancelLastSetting();
 
@@ -5425,6 +5445,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Boolean} defaultval  if true, reset to default text if empty and loses focus
      * @param maxlength             max length of the input in characters
      * @param hideOnClick
+     * @param {Boolean} onlyNumbers only numeric characters are allowed
      * @return input                newly created input
      */
     function createTextInput(text, defaultval, maxlength, hideOnClick, readonly, onlyNumbers) {
@@ -6000,16 +6021,114 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //}
 
     function createDropdownAssocMediaMenu() {
-        var MenuLabel = $(document.createElement('label')).attr('id', 'addComponentLabel').css({
-            "left": '10%',
-            "top": "5%",
-            "position": "relative",
-            "font-size": "100%",
-            "color": "rgb(256, 256, 256)",
-            'background-color': "rgb(63, 55, 53)",
-            'padding': '3% 2% 4% 2%',
-            'width': '70%',
+        var showDropdown = false;
+        var addMenuLabel = $(document.createElement('button'))
+            .attr('id', 'addMenuLabel')
+            .text('Add ')
+            .appendTo(searchContainer)
+            .css({
+                "color": "rgb(256, 256, 256)",
+                'background-color': "rgb(63, 55, 53)",
+                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
+                'float':'right',
+                'font-size':'85%',
+                'height':'70%',
+                'margin-top':'1%',
+                'padding-bottom':'1%',
+                'width': '30%',
+                'border': '1px solid white',
+            });
+        var addMenuArrowIcon = $(document.createElement('img'))
+            .attr('id', 'addMenuArrowIcon')
+            .attr('src', tagPath + 'images/icons/Down.png')
+            .css({
+                width: '25%',
+                height: 'auto',
+                'padding-left':'10%'
+            })
+            .appendTo(addMenuLabel);
+        var dropDown = $(document.createElement('div'))
+            .attr('id', 'dropDown')
+            .appendTo(searchContainer)
+            .css({
+                "left": '70%',
+                "display":"inline-block",
+                "position": "relative",
+                "color": "rgb(256, 256, 256)",
+                'width': '50%',
+                'background-color': 'rgba(0,0,0,0.95)',
+                'float': 'left',
+                'clear': 'left',
+                'z-index': 10000000 - 100,
+                'margin-top': '2%',
+                'border':'1px solid white'
+            });
+        dropDown.hide();
+        addMenuLabel.click(function () {
+            if (showDropdown) {
+                addMenuArrowIcon.css('transform', 'scaleY(1)');
+                dropDown.hide();
+            } else {
+                addMenuArrowIcon.css('transform', 'scaleY(-1)');
+                dropDown.show();
+            }
+            showDropdown = !showDropdown;
         });
+        addMenuLabel.on('focusout', function () {
+            if (showDropdown) {
+                addMenuLabel.click();
+            }
+        });
+        var fromFile = $(document.createElement('label'))
+            .attr('id', 'fromFile')
+            .text('From File')
+            .css({
+                "display": "block",
+                'border-bottom': '1px solid white',
+                'padding-left': '10px'
+            })
+            .on('mouseenter', function () {
+                fromFile.css({
+                    'background-color': 'white',
+                    'color': 'black',
+                });
+            })
+            .on('mouseleave', function () {
+                fromFile.css({
+                    'background-color': 'black',
+                    'color': 'white',
+                });
+            })
+            .click(function () {
+                createAsset();
+                addMenuLabel.click();
+            });
+        var iFrameAsset = $(document.createElement('label'))
+            .attr('id', 'Embed Video')
+            .text('Embed Video')
+            .css({
+                "display": "block",
+                'padding-left':'10px'
+            })
+            .on('mouseenter', function () {
+                iFrameAsset.css({
+                    'background-color': 'white',
+                    'color': 'black',
+                });
+            })
+            .on('mouseleave', function () {
+                iFrameAsset.css({
+                    'background-color': 'black',
+                    'color': 'white',
+                });
+            })
+            .click(function () {
+                createIframeSourceDialog();
+                addMenuLabel.click();
+            });
+        dropDown.append(fromFile);
+        dropDown.append(iFrameAsset);
+        return addMenuLabel;
     }
 
     return that;
