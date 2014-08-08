@@ -1840,6 +1840,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass("miniTilesArrow")
                     .attr('src', tagPath + 'images/icons/Close.svg')
                     .on('click', function(){
+                        miniTilesHolder.stop();
                         miniTilesHolder.animate({
                             scrollLeft: miniTilesHolder.scrollLeft() - 50
                         }, ANIMATION_DURATION/2)
@@ -1850,6 +1851,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .attr('src', tagPath + 'images/icons/Open.svg')
                     .css('left', "94%")
                     .on('click', function(){
+                        miniTilesHolder.stop();
                         miniTilesHolder.animate({
                             scrollLeft: miniTilesHolder.scrollLeft() + 50
                         }, ANIMATION_DURATION/2)
