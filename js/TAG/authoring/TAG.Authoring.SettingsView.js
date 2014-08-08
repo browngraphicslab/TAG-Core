@@ -104,7 +104,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         generalProgressCircle = null,*/
         labelOne,
         labelTwo,
-
+        sortOptionsCount = 0,
         settingsViewKeyHandler = {
             13: enterKeyHandlerSettingsView,
             46: deleteKeyHandlerSettingsView,
@@ -1308,6 +1308,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function clickCallback(sortDiv) {
         return function () {
             if (sortDiv.attr("setSort") == "true" || sortDiv.attr("setSort") == true) {
+                if (sortOptionsCount>0){
+                    sortOptionsCount--;
+                }
+
                 sortDiv.attr("setSort", false);
                 sortDiv.css({
                     "background-color": "white",
@@ -1315,18 +1319,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "border": "2px solid black"
                 });
             } else {
-                sortDiv.attr("setSort", true);
-                sortDiv.css({
-                    "background-color": "#0040FF",
-                    "color": "white",
-                    "border": "2px solid white"
-                });
+                if (sortOptionsCount < 4) {
+                    sortOptionsCount++;
+                    sortDiv.attr("setSort", true);
+                    sortDiv.css({
+                        "background-color": "#0040FF",
+                        "color": "white",
+                        "border": "2px solid white"
+                    });
+                }
             }
         };
     };
 
     //CREATE SORT OPTIONS DIV
     function createSortOptions(sortOptionsObj) {
+        sortOptionsCount = 0;
         var sortOptionsDiv = $(document.createElement("div"))
             .css({
                 'width': "50%",
@@ -1336,7 +1344,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "overflow": "scroll",
                 "overflow-x": "hidden"
             });
-
 
         var sortObj, sortDiv;
         var sortOptions = sortOptionsObj.Metadata;
@@ -1359,6 +1366,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     var setSort = sortObjArray[sortObjArray.length - 1];
                     sortDiv.attr("setSort", setSort);
                     if (setSort == true || setSort == "true") {
+                        sortOptionsCount++;
                         sortDiv.css({
                             "background-color": "#0040FF",
                             "color": "white",
