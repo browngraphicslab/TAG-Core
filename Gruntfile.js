@@ -167,6 +167,7 @@ module.exports = function(grunt) {
 					        \n        urlToParse           = tagInput.urlToParse, \
 					        \n        pageToLoad           = {}, // a specific page to load \
 					        \n        TELEMETRY_SESSION_ID = null, \
+					        \n        TELEMETRY_SWITCH     = "off", \
                             \n        IS_WINDOWS           = (typeof Windows !== "undefined"), \
                             \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
 					        \n        idleTimer, \

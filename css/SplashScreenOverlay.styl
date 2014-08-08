@@ -1,159 +1,166 @@
 @import 'common.styl'
 
+infoBgColor = rgba(0,0,0,1)
+
 #splashScreenRoot
-    position relative
-    left 50% 
-    margin-left -467px
-    top 0px 
-    width 934px
-    height 482px
-    overflow hidden
+    position absolute
+    wh 100%
 
 #splashScreenRoot #innerContainer
-    background-color black
+    background-position center
+    background-size cover
     position absolute
-    left 0px
-    right 0px
-    width 934px
-    height 482px
+    wh 100%
 
 #splashScreenRoot #title
     position relative
-    left 137px
-    top 54px
+    left 16%
+    top 11%
 
 #splashScreenRoot #description
     position relative
-    left 127.00px
-    top 62px
+    left 14.5%
+    top 12%
 
 #splashScreenRoot #serverInput
-    position relative
-    left 160px
-    width 22.5%
+    position absolute
+    left 18.7%
+    width 58%
     background-color transparent
     border 1px solid white
     border-radius 3.5px
     color white
+    height 140%
+    top 22%
+    font-size 100%
 
 #splashScreenRoot #serverSubmit
-    position relative
-    left -43px
+    position absolute
+    left 82%
     border 1px solid white
     color white
-    width auto
-    margin-top 1%
+    width 15%
     display inline-block
-    padding-left 1%
-    padding-right 1%
+    padding-left 2%
+    padding-right 2%
     font-family "Segoe UI",serif
-    font-size 13.1px
+    font-size 90%
     background-color transparent
     cursor pointer
     border-radius 3.5px
+    height 140%
+    top 22%
 
 #splashScreenRoot #passwordInput
-    position relative
-    left 260px
-    width 22.5%
+    position absolute
+    left 115%
+    width 58%
     background-color transparent
     border 1px solid white
     border-radius 3.5px
     color white
+    height 140%
+    top 22%
+    font-size 100%
 
 #splashScreenRoot #passwordSubmit
-    position relative
-    left 204px
+    position absolute
+    left 178%
     border 1px solid white
     color white
-    width auto
-    margin-top 1%
+    width 15%
     display inline-block
-    padding-left 1%
-    padding-right 1%
+    padding-left 2%
+    padding-right 2%
     font-family "Segoe UI",serif
-    font-size 13.1px
+    font-size 90%
     background-color transparent
     cursor pointer
     border-radius 3.5px
+    height 140%
+    top 22%
 
 #splashScreenRoot #serverError
     position relative
-    left 157px
+    left 18.2%
     color rgb(132,133,136)
     font-family "Segoe UI",serif
-    font-size 11.1px
+    font-size 74%
     font-style normal
     font-weight normal
     text-decoration none
     visibility hidden
+    top 22px
 
 #splashScreenRoot #passwordError
-    position relative
-    left 473px
+    position absolute
+    left 130%
     color rgb(132,133,136)
     font-family "Segoe UI",serif
-    font-size 11.1px
+    font-size 74%
     font-style normal
     font-weight normal
     text-decoration none
     visibility hidden
-    top -13px
+    bottom -180%
+    width 50%
 
 #splashScreenRoot #inputRow
-    position relative
-    left -10px
-    top 45px
+    position absolute
+    left 10%
+    top 37.5%
 
 #splashScreenRoot #goToCollectionsButton
-    position relative
-    top 160px
-    left 360px
-    width 115px
-    height 27px
-    padding-left 2%
-    padding-right 2%
+    position absolute
+    top 34.5%
+    left 40.5%
+    width 17%
+    height 5%
+    padding-left 3%
     padding-top 0.4%
     background-color white
     font-weight bold
     font-family "Segoe UI",serif
     color black
     cursor pointer
+    border-radius 3.5px
+    font-size 100%
+    top 65%
 
 #splashScreenRoot #msLogo
     height 55px
-    left 725px
-    position relative
+    left 45px
+    position absolute
 
 #splashScreenRoot #brownLogo
     height 55px
-    left 730px
+    left 200px
     position relative
 
 #splashScreenRoot #logoRow
-    position relative
-    top 180px
-    left -40px
+    position absolute
+    top 85%
+    left 70%
 
 #splashScreenRoot span
     &.titleone
         color rgb(255,255,255)
         font-family "Segoe UI Bold",serif
-        font-size 45.0px
+        font-size 300%
         font-style normal
         font-weight bold
         text-decoration none
     &.titletwo
         color rgb(255,255,255)
         font-family "Segoe UI",serif
-        font-size 30.1px
+        font-size 200%
         font-style normal
         font-weight normal
         text-decoration none
     &.bodyDescone
         color rgb(255,255,255)
         font-family "Segoe UI",serif
-        font-size 20.1px
+        font-size 133%
         font-style normal
         font-weight normal
         position relative
@@ -162,32 +169,32 @@
     &.bodyDesctwo
         color rgb(255,255,255)
         font-family "Segoe UI",serif
-        font-size 20.1px
+        font-size 133%
         font-style normal
         font-weight normal
-        position relative
-        top 110px
+        position absolute
+        bottom -280%
         text-decoration none
         line-height 120%
-        left 20.5px
+        left 2.25%
     &.submit
         color rgb(255,255,255)
         font-family "Segoe UI",serif
-        font-size 13.1px
+        font-size 90%
         font-style normal
         font-weight normal
         text-decoration none
     &.placeHolder
         color rgb(132,133,136)
         font-family "Segoe UI",serif
-        font-size 13.1px
+        font-size 90%
         font-style normal
         font-weight normal
         text-decoration none
     &.error
         color rgb(132,133,136)
         font-family "Segoe UI",serif
-        font-size 11.1px
+        font-size 74%
         font-style normal
         font-weight normal
         text-decoration none

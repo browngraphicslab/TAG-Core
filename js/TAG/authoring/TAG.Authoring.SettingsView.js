@@ -83,15 +83,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             getRoot: getRoot,
         },
 
+        //AUTOSAVING HAS BEEN REMOVED - SAVE BUTTONS ARE BACK!
         //global vars for automatic saving
-        currentMetadataHandler,                     //the save function for the current item (collection/artwork/assocmedia/tour); added to the queue when navigation occurs
-        saveQueue = TAG.Util.createQueue(),         //async queue that handles save operations (when multiple items have been edited in a short amount of time)
+        //currentMetadataHandler,                     //the save function for the current item (collection/artwork/assocmedia/tour); added to the queue when navigation occurs
+        //saveQueue = TAG.Util.createQueue(),         //async queue that handles save operations (when multiple items have been edited in a short amount of time)
         previousIdentifier,                         //refers to the current middle label selected to prevent redundant save operations
-        changesHaveBeenMade = false,                //keeps track of whether the current collection/artwork/assocmedia/tour has been edited to prevent redundant save operations
-        autosaveData = {                            //Used to refresh the display before the database has actually been updated
-
-        },
-        backButtonClicked = false,
+        //changesHaveBeenMade = false,                //keeps track of whether the current collection/artwork/assocmedia/tour has been edited to prevent redundant save operations
+        //autosaveData = {},                          //Used to refresh the display before the database has actually been updated
+        //backButtonClicked = false,
         backButton,
         /*saveArray = [],
         pCL = null, 
@@ -425,7 +424,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         backButton.click(function () {
-            if (!changesHaveBeenMade) {
+            //if (!changesHaveBeenMade) {
                 TAG.Auth.clearToken();
                 rightQueue.clear();
                 middleQueue.clear();
@@ -439,39 +438,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     });
                 }
                 TAG.Util.UI.getStack()[0] = null;
-            } else {
+            //} else {
 
-                changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                changesHaveBeenMade = false;
+            //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+            //    changesHaveBeenMade = false;
 
-                backButtonClicked = true;
+            //    backButtonClicked = true;
 
-                settingsContainer.css({ visibility: 'hidden' });
-                settings.css({ overflow: 'hidden' });
-                buttonContainer.css({ visibility: 'hidden' });
-                var changeLabel = createLabel('Changes are being saved...');
-                changeLabel.attr('id', 'changeLabel');
-                changeLabel.css({
-                    'position': 'absolute',
-                    'top': '30%',
-                    'left': '10%',
-                    'z-index': '50',
-                    'height': 'auto',
-                    'width': '33%',
-                    'color': 'black',
-                    'font-size': '80%'
-                });
-                var progressCircCSS = {
-                    'position': 'absolute',
-                    'left': '50%',
-                    'top': '30%',
-                    'z-index': '50',
-                    'height': 'auto',
-                    'width': '10%'
-                };
-                var progressCL = TAG.Util.showProgressCircle(settings, progressCircCSS, '0px', '0px', true);
-                settings.append(changeLabel);
-            }
+            //    settingsContainer.css({ visibility: 'hidden' });
+            //    settings.css({ overflow: 'hidden' });
+            //    buttonContainer.css({ visibility: 'hidden' });
+            //    var changeLabel = createLabel('Changes are being saved...');
+            //    changeLabel.attr('id', 'changeLabel');
+            //    changeLabel.css({
+            //        'position': 'absolute',
+            //        'top': '30%',
+            //        'left': '10%',
+            //        'z-index': '50',
+            //        'height': 'auto',
+            //        'width': '33%',
+            //        'color': 'black',
+            //        'font-size': '80%'
+            //    });
+            //    var progressCircCSS = {
+            //        'position': 'absolute',
+            //        'left': '50%',
+            //        'top': '30%',
+            //        'z-index': '50',
+            //        'height': 'auto',
+            //        'width': '10%'
+            //    };
+            //    var progressCL = TAG.Util.showProgressCircle(settings, progressCircCSS, '0px', '0px', true);
+            //    settings.append(changeLabel);
+            //}
             
         });
 
@@ -508,24 +507,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-repeat': 'no-repeat',
             'background-position': '2% center'
         });
-        searchbar.on('click', function () { searchbar.css({ 'background-image': 'none' }); });
-        searchbar.on('focus', function () { searchbar.css({ 'background-image': 'none' }); });
+
+        searchbar.on('click focus', function () {
+            searchbar.css({ 'background-image': 'none' });
+        });
         searchbar.on('focusout', function () {
             if (!searchbar.val()) {
                 searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             }
         });
         searchbar.keyup(function () {
-            if (!searchbar.val()) {
+            if (!searchbar.val()) {  
                 resetView();
             }
         });
         searchbar.keypress(function (e) {
-                if (e.which === 13 && searchbar.val()) {
-                    doSearch();            
-                } else if (e.which === 13 && !searchbar.val()) {
-                    resetView();
-                }
+            if (e.which === 13 && searchbar.val()) {
+                doSearch();            
+            } else if (e.which === 13 && !searchbar.val()) {
+                resetView();
+            }
+            searchbar.css({ 'background-image': 'none' }); ////////////
             
         });
 
@@ -629,12 +631,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         container.click(function () {
             // If a label is clicked return if its already selected.
-            if (prevSelectedSetting === container) {
-                return;
-            } else {
-                changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                changesHaveBeenMade = false;
-            }
+            //if (prevSelectedSetting === container) {
+            //    return;
+            //} else {
+            //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+            //    changesHaveBeenMade = false;
+            //}
             // Reset all labels and then select this one
             resetLabels('.navContainer');
             selectLabel(container);
@@ -749,7 +751,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // Create inputs
         //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
         var bgImgInput = createButton('Change Image', function () {
-            changesHaveBeenMade = true;
+            //changesHaveBeenMade = true;
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                 var url = urls[0];
                 bgImgInput.val(url);
@@ -844,30 +846,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         onChangeUpdateText(idleTimerDurationInput, null, 3);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = idleTimerDurationInput.val();
 
-        currentMetadataHandler = function () {
-            /*if (locInput === undefined) {
-                locInput = "";
-            }
-            if (infoInput === undefined) {
-                infoInput = "";
-            }*/
-            saveSplashScreen({
-                /*alphaInput: alphaInput,                             //Overlay Transparency
-                overlayColorInput: overlayColorInput,               //Overlay Color
-                nameInput: nameInput,                               //Museum Name
-                locInput: locInput,                                 //Museum Location
-                infoInput: infoInput,                               //Museum Info
-                logoColorInput: logoColorInput, */                    //Logo background color
-                bgImgInput: bgImgInput,                             //Background image
-                /*logoInput: logoInput,                               //Logo image
-                backgroundColorInput: backgroundColorInput,         //Background Color
-                backgroundOpacityInput: backgroundOpacityInput, */    //Background Opacity
-                primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
-                secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
-                fontFamilyInput: fontFamilyInput,
-                //idleTimerDurationInput: idleTimerDurationInput
-            });
-        };
+        //currentMetadataHandler = function () {
+        //    /*if (locInput === undefined) {
+        //        locInput = "";
+        //    }
+        //    if (infoInput === undefined) {
+        //        infoInput = "";
+        //    }*/
+        //    saveSplashScreen({
+        //        /*alphaInput: alphaInput,                             //Overlay Transparency
+        //        overlayColorInput: overlayColorInput,               //Overlay Color
+        //        nameInput: nameInput,                               //Museum Name
+        //        locInput: locInput,                                 //Museum Location
+        //        infoInput: infoInput,                               //Museum Info
+        //        logoColorInput: logoColorInput, */                    //Logo background color
+        //        bgImgInput: bgImgInput,                             //Background image
+        //        /*logoInput: logoInput,                               //Logo image
+        //        backgroundColorInput: backgroundColorInput,         //Background Color
+        //        backgroundOpacityInput: backgroundOpacityInput, */    //Background Opacity
+        //        primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
+        //        secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
+        //        fontFamilyInput: fontFamilyInput,
+        //        //idleTimerDurationInput: idleTimerDurationInput
+        //    });
+        //};
 
         // Save button
 
@@ -931,7 +933,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-bottom': '3%',
         });
 
-        //buttonContainer.append(saveButton);
+        buttonContainer.append(saveButton);
         buttonContainer.append(previewStartPageButton);
         buttonContainer.append(previewCollectionsPageButton);
         buttonContainer.append(previewArtworkViewerButton);
@@ -950,8 +952,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //pCL = displayLoadingSettings();
         //backButtonClicked && prepareNextView(false, null, null, "Saving...");
 		//generalIsLoading = true;
-        //clearRight();
-        //prepareViewer(true);
+        clearRight();
+        prepareViewer(true);
+        prepareNextView(false, null, null, "Saving...");
 
         /*var alpha = inputs.alphaInput.val()/100;
         var overlayColor = inputs.overlayColorInput.val();
@@ -991,21 +994,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //Change the settings in the database
         TAG.Worktop.Database.changeMain(options, function () {
-            refreshSplashScreen();
+            //refreshSplashScreen();
             //generalIsLoading = false;
             //if (!(generalIsLoading || collectionsIsLoading ||
             //    artworksIsLoading || associatedMediaIsLoading || toursIsLoading)) { //don't continue if more sections are still loading - wait for them to finish
             //    backButtonClicked && backButtonClickHandler();
             //};
-            //if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
-            //    LADS.Worktop.Database.getMain();
-            //    return;
-            //};
-            //LADS.Worktop.Database.getMain(function () {
-            //    if (!(prevSelectedMiddleLabel && (prevSelectedMiddleLabel.text() === "Password Settings"))) {
-            //        loadGeneralView();
-            //    };
-            //}, error(loadGeneralView), null);
+            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
+                LADS.Worktop.Database.getMain();
+                return;
+            };
+            LADS.Worktop.Database.getMain(function () {
+                if (!(prevSelectedMiddleLabel && (prevSelectedMiddleLabel.text() === "Password Settings"))) {
+                    loadGeneralView();
+                };
+            }, error(loadGeneralView), null);
             //hideLoading();
             //hideLoadingSettings(pCL);
         }, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
@@ -1272,11 +1275,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         loadExhibition(val);
                     } else {
                         middleLoading.before(label = createMiddleLabel(val.Name, null, function () {
-                            if (changesHaveBeenMade) {
-                                //saveArray.push(previousIdentifier);
-                                currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                                changesHaveBeenMade = false;
-                            }
+                            //if (changesHaveBeenMade) {
+                            //    //saveArray.push(previousIdentifier);
+                            //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                            //    //changesHaveBeenMade = false;
+                            //}
                             loadExhibition(val);
                             previousIdentifier = val.Identifier;
                             currentIndex = i;
@@ -1414,7 +1417,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             privateState = false;
         }
         var privateInput = createButton('Unpublish', function () {
-            (!privateState) && function () { changesHaveBeenMade = true;}();
+            //(!privateState) && function () { changesHaveBeenMade = true;}();
             privateState = true;
             privateInput.css('background-color', 'white');
             publicInput.css('background-color', '');
@@ -1425,7 +1428,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         privateInput.attr('class', 'settingButton');
         var publicInput = createButton('Publish', function () {
-            (privateState) && function () { changesHaveBeenMade = true; }();
+            //(privateState) && function () { changesHaveBeenMade = true; }();
             privateState = false;
             publicInput.css('background-color', 'white');
             privateInput.css('background-color', '');
@@ -1445,7 +1448,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // local visibility
         var localVisibility = LADS.Util.localVisibility(exhibition.Identifier);
         var invisibilityInput = createButton('Hidden', function () {
-            if (localVisibility) { changesHaveBeenMade = true; };
+            //if (localVisibility) { changesHaveBeenMade = true; };
             localVisibility = false;
             invisibilityInput.css('background-color', 'white');
             visibilityInput.css('background-color', '');
@@ -1455,7 +1458,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width': '48%',
         });
         var visibilityInput = createButton('Visible', function () {
-            if (!localVisibility) { changesHaveBeenMade = true; };
+            //if (!localVisibility) { changesHaveBeenMade = true; };
             localVisibility = true;
             visibilityInput.css('background-color', 'white');
             invisibilityInput.css('background-color', '');
@@ -1480,7 +1483,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
         }
         var showAssocMedia = createButton('Show Associated Media View', function () {
-            (!assocMediaShown) && function () { changesHaveBeenMade = true; }();
+            //(!assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = true;
             showAssocMedia.css('background-color', 'white');
             hideAssocMedia.css('background-color','');
@@ -1491,7 +1494,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         showAssocMedia.attr('class','settingButton');
         var hideAssocMedia = createButton('Hide Associated Media View', function () {
-            (assocMediaShown) && function () { changesHaveBeenMade = true; }();
+            //(assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
@@ -1516,7 +1519,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = true;
         }
         var showTimeline = createButton('Show Timeline', function () {
-            (!timelineShown) && function () { changesHaveBeenMade = true; }();
+            //(!timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = true;
             showTimeline.css('background-color', 'white');
             hideTimeline.css('background-color','');
@@ -1529,7 +1532,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         showTimeline.attr('class','settingButton');
         var hideTimeline = createButton('Hide Timeline', function () {
-            (timelineShown) && function () { changesHaveBeenMade = true; }();
+            //(timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = false;
             hideTimeline.css('background-color','white');
             showTimeline.css('background-color','');
@@ -1570,8 +1573,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
-            });
-         
+            });         
         }
 
         function createCollectionSettings() {
@@ -1579,7 +1581,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
             descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false);
             bgInput = createButton('Change Background Image', function () {
-                changesHaveBeenMade = true;
+                //changesHaveBeenMade = true;
                 uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                     var url = urls[0];
                     bgInput.val(url);
@@ -1627,42 +1629,43 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         //Automatically save changes
-        currentMetadataHandler = function () {
+        //currentMetadataHandler = function () {
+        //    if (nameInput.val() === undefined || nameInput.val() === "") {
+        //        nameInput.val("Untitled Collection");
+        //    }
+        //    LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
+        //    saveExhibition(exhibition, {
+        //        privateInput: privateState,
+        //        nameInput: nameInput,
+        //        descInput: descInput,
+        //        bgInput: bgInput,
+        //        sortOptions: sortDropDown,
+        //        timelineInput: timelineShown
+        //    });
+        //};
+
+        // Buttons
+        var saveButton = createButton('Save Changes', function () {
             if (nameInput.val() === undefined || nameInput.val() === "") {
                 nameInput.val("Untitled Collection");
             }
             LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
             saveExhibition(exhibition, {
-                privateInput: privateState,
-                nameInput: nameInput,
-                descInput: descInput,
-                bgInput: bgInput,
+                privateInput: privateState,  //default set unpublished
+                nameInput: nameInput,        //Collection name
+                descInput: descInput,        //Collection description
+                bgInput: bgInput,            //Collection background image
                 sortOptions: sortDropDown,
-                timelineInput: timelineShown
+                timelineInput: timelineShown,  
+                assocMediaInput : assocMediaShown
             });
-        };
-
-        // Buttons
-        //var saveButton = createButton('Save Changes', function () {
-        //    if (nameInput.val() === undefined || nameInput.val() === "") {
-        //        nameInput.val("Untitled Collection");
-        //    }
-        //    saveExhibition(exhibition, {
-        //        privateInput: privateState,  //default set unpublished
-        //        nameInput: nameInput,        //Collection name
-        //        descInput: descInput,        //Collection description
-        //        bgInput: bgInput,            //Collection background image
-        //        //sortOptions: sortDropDown,
-        //        timelineInput: timelineShown,  
-        //        assocMediaInput : assocMediaShown
-        //    });
-        //}, {
-        //    'margin-right': '3%',
-        //    'margin-top': '1%',
-        //    'margin-bottom': '1%',
-        //    'margin-left': '.5%',
-        //    'float': 'right',
-        //});
+        }, {
+            'margin-right': '3%',
+            'margin-top': '1%',
+            'margin-bottom': '1%',
+            'margin-left': '.5%',
+            'float': 'right',
+        });
 
         var deleteButton = createButton('Delete Collection', function () {
             deleteExhibition(exhibition);
@@ -1769,7 +1772,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
 
-        buttonContainer.append(artPickerButton).append(deleteButton);//.append(saveButton);
+        buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
     }
 
     /**Create an exhibition
@@ -1801,8 +1804,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function saveExhibition(exhibition, inputs) {
         //pCL = displayLoadingSettings();
         //prepareNextView(false, null, null, "Saving...");
-        //clearRight();
-        //prepareViewer(true);
+        clearRight();
+        prepareViewer(true);
+        prepareNextView(false, null, null, "Saving...");
 
         var name = inputs.nameInput.val();
         var desc = inputs.descInput.val();
@@ -1812,7 +1816,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia = inputs.assocMediaInput;
 
         var sortOptionChanges = {};
-        if (intpus.sortOptions) {
+        if (inputs.sortOptions) {
             for (var i = 0; i < inputs.sortOptions[0].children.length; i++) {
                 var option = $(inputs.sortOptions[0].children[i]);
                 var setSort = option.attr("setSort");
@@ -1837,7 +1841,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
-            refreshExhibition(exhibition);
+            //refreshExhibition(exhibition);
             //collectionsIsLoading = false;
             //if (backButtonClicked && !(generalIsLoading || collectionsIsLoading ||
             //    artworksIsLoading || associatedMediaIsLoading || toursIsLoading)) { //don't continue if more sections are still loading - wait for them to finish
@@ -1849,10 +1853,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //hideLoading();
             //hideLoadingSettings(pCL);
             //saveArray.splice(saveArray.indexOf(exhibition.Identifier), 1); //removes identifier from save array
-            //if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
-            //    LADS.Worktop.Database.getExhibitions();
-            //    return;
-            //}
+            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
+                LADS.Worktop.Database.getExhibitions();
+                return;
+            }
+            if (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.exhib.text]) {
+                loadExhibitionsView(exhibition.Identifier);
+                return;
+            }
         }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
     }
 
@@ -1962,11 +1970,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     } else {
 
                         middleLoading.before(label = createMiddleLabel(val.Name, null, function () {
-                            if (changesHaveBeenMade) {
-                                //saveArray.push(previousIdentifier);
-                                currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                                changesHaveBeenMade = false;
-                            }
+                            //if (changesHaveBeenMade) {
+                            //    //saveArray.push(previousIdentifier);
+                            //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                            //    //changesHaveBeenMade = false;
+                            //}
                             loadTour(val);
                             previousIdentifier = val.Identifier;
                             currentIndex = i;
@@ -2034,7 +2042,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             privateState = false;
         }
         var privateInput = createButton('Unpublish', function () {
-            (!privateState) && function () { changesHaveBeenMade = true;}();
+            //(!privateState) && function () { changesHaveBeenMade = true;}();
             privateState = true;
             privateInput.css('background-color', 'white');
             publicInput.css('background-color', '');
@@ -2045,7 +2053,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         privateInput.attr('class','settingButton');
         var publicInput = createButton('Publish', function () {
-            (privateState) && function () { changesHaveBeenMade = true; }();
+            //(privateState) && function () { changesHaveBeenMade = true; }();
             privateState = false;
             publicInput.css('background-color', 'white');
             privateInput.css('background-color', '');
@@ -2089,16 +2097,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(tourIdLabel);
 
         //Automatically save changes
-        currentMetadataHandler = function () {
-            if (nameInput.val() === undefined || nameInput.val() === "") {
-                nameInput.val("Untitled Tour");
-            }
-            saveTour(tour, {
-                privateInput: privateState,
-                nameInput: nameInput,
-                descInput: descInput,
-            });
-        };
+        //currentMetadataHandler = function () {
+        //    if (nameInput.val() === undefined || nameInput.val() === "") {
+        //        nameInput.val("Untitled Tour");
+        //    }
+        //    saveTour(tour, {
+        //        privateInput: privateState,
+        //        nameInput: nameInput,
+        //        descInput: descInput,
+        //    });
+        //};
 
         // Create buttons
         var editButton = createButton('Edit Tour',
@@ -2131,25 +2139,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-        //var saveButton = createButton('Save Changes',
-        //    function () {
-        //        if (nameInput.val() === undefined || nameInput.val() === "") {
-        //            nameInput.val("Untitled Tour");
-        //        }
-        //        saveTour(tour, {
-        //            privateInput: privateState,
-        //            nameInput: nameInput,
-        //            descInput: descInput,
-        //        });
-        //    }, {
-        //        'margin-right': '3%',
-        //        'margin-top': '1%',
-        //        'margin-bottom': '1%',
-        //        'margin-left': '.5%',
-        //        'float': 'right'
-        //    });
+        var saveButton = createButton('Save Changes',
+            function () {
+                if (nameInput.val() === undefined || nameInput.val() === "") {
+                    nameInput.val("Untitled Tour");
+                }
+                saveTour(tour, {
+                    privateInput: privateState,
+                    nameInput: nameInput,
+                    descInput: descInput,
+                });
+            }, {
+                'margin-right': '3%',
+                'margin-top': '1%',
+                'margin-bottom': '1%',
+                'margin-left': '.5%',
+                'float': 'right'
+            });
 
-        buttonContainer.append(editButton).append(duplicateButton).append(deleteButton);//.append(saveButton);
+        buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
     }
 
     /** Create a tour
@@ -2260,16 +2268,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             return;
         }
 
-        //prepareNextView(false, null, null, "Saving...");
-        //clearRight();
-        //prepareViewer(true);
+        prepareNextView(false, null, null, "Saving...");
+        clearRight();
+        prepareViewer(true);
 
         TAG.Worktop.Database.changeTour(tour.Identifier, {
             Name: name,
             Description: desc,
             Private: inputs.privateInput,
         }, function () {
-            refreshTour(tour);
+            //refreshTour(tour);
             //toursIsLoading = false;
             //if (backButtonClicked && !(generalIsLoading || collectionsIsLoading ||
             //    artworksIsLoading || associatedMediaIsLoading || toursIsLoading)) { //don't continue if more sections are still loading - wait for them to finish
@@ -2281,10 +2289,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //hideLoading();
             //hideLoadingSettings(pCL);
             //saveArray.splice(saveArray.indexOf(tour.Identifier), 1); //removes identifier from save array
-            //if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
-            //    LADS.Worktop.Database.getTours();
-            //    return;
-            //}
+            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
+                LADS.Worktop.Database.getTours();
+                return;
+            }
+            if (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.tour.text]) {
+                loadTourView(previousIdentifier);
+                return;
+            }
         }, authError, conflict(tour, "Update", loadTourView), error(loadTourView));
     }
 
@@ -2387,11 +2399,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             loadAssocMedia(val);
                         } else {
                             middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
-                                if (changesHaveBeenMade) {
-                                    //saveArray.push(previousIdentifier);
-                                    currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                                    changesHaveBeenMade = false;
-                                }
+                                //if (changesHaveBeenMade) {
+                                //    //saveArray.push(previousIdentifier);
+                                //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                                //    //changesHaveBeenMade = false;
+                                //}
                                 loadAssocMedia(val);
                                 previousIdentifier = val.Identifier;
                                 currentIndex = i;
@@ -2600,26 +2612,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
 
         //Automatically save changes
-        currentMetadataHandler = function () {
-            if (titleInput.val() === undefined || titleInput.val() === "") {
-                titleInput.val("Untitled Asset");
-            }
-            saveAssocMedia(media, {
-                titleInput: titleInput,
-                descInput: descInput,
-                yearInput: yearMetadataDivSpecs.yearInput,
-                monthInput: yearMetadataDivSpecs.monthInput,
-                dayInput: yearMetadataDivSpecs.dayInput,
-                timelineYearInput: yearMetadataDivSpecs.timelineYearInput,
-                timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,
-                timelineDayInput: yearMetadataDivSpecs.timelineDayInput
-            });
-        };
+        //currentMetadataHandler = function () {
+        //    if (titleInput.val() === undefined || titleInput.val() === "") {
+        //        titleInput.val("Untitled Asset");
+        //    }
+        //    saveAssocMedia(media, {
+        //        titleInput: titleInput,
+        //        descInput: descInput,
+        //        yearInput: yearMetadataDivSpecs.yearInput,
+        //        monthInput: yearMetadataDivSpecs.monthInput,
+        //        dayInput: yearMetadataDivSpecs.dayInput,
+        //        timelineYearInput: yearMetadataDivSpecs.timelineYearInput,
+        //        timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,
+        //        timelineDayInput: yearMetadataDivSpecs.timelineDayInput
+        //    });
+        //};
 
         // Create buttons
         
         var assocButton = createButton('Associate to Artworks',
-            function () { assocToArtworks(media); changesHaveBeenMade = true;},
+            function () { assocToArtworks(media); /*changesHaveBeenMade = true;*/ },
             {
                 'float': 'left',
                 'margin-left': '2%',
@@ -2630,7 +2642,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
         leftButton = assocButton;
         var deleteButton = createButton('Delete',
-            function () {deleteAssociatedMedia(media); changesHaveBeenMade = true; },
+            function () { deleteAssociatedMedia(media); /*changesHaveBeenMade = true;*/ },
             {
                 'margin-right': '0%',
                 'margin-top': '1%',
@@ -2642,7 +2654,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var generateAssocMediaThumbnailButton = createButton('Generate Thumbnail',
             function () {
                 generateAssocMediaThumbnail(media);
-                changesHaveBeenMade = true;
+                //changesHaveBeenMade = true;
             }, {
                 'margin-right': '3%',
                 'margin-top': '1%',
@@ -2651,34 +2663,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left'
             });
 
-        //var saveButton = createButton('Save Changes',
-        //    function () {
-        //        if (titleInput.val() === undefined || titleInput.val() === "") {
-        //            titleInput.val("Untitled Asset");
-        //        }
-        //        saveAssocMedia(media, {
-        //            titleInput: titleInput,
-        //            descInput: descInput,
-        //            yearInput: yearMetadataDivSpecs.yearInput,                     
-        //            monthInput: yearMetadataDivSpecs.monthInput,                  
-        //            dayInput: yearMetadataDivSpecs.dayInput,                       
-        //            timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     
-        //            timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,  
-        //            timelineDayInput: yearMetadataDivSpecs.timelineDayInput   
-
-        //        });
-        //    }, {
-        //        'margin-right': '3%',
-        //        'margin-top': '1%',
-        //        'margin-bottom': '1%',
-        //        'margin-left': '.5%',
-        //        'float': 'right'
-        //    });
+        var saveButton = createButton('Save Changes',
+            function () {
+                if (titleInput.val() === undefined || titleInput.val() === "") {
+                    titleInput.val("Untitled Asset");
+                }
+                saveAssocMedia(media, {
+                    titleInput: titleInput,
+                    descInput: descInput,
+                    yearInput: yearMetadataDivSpecs.yearInput,
+                    monthInput: yearMetadataDivSpecs.monthInput,
+                    dayInput: yearMetadataDivSpecs.dayInput,
+                    timelineYearInput: yearMetadataDivSpecs.timelineYearInput,
+                    timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,
+                    timelineDayInput: yearMetadataDivSpecs.timelineDayInput
+                });
+            }, {
+                'margin-right': '3%',
+                'margin-top': '1%',
+                'margin-bottom': '1%',
+                'margin-left': '.5%',
+                'float': 'right'
+            });
 
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
                 saveThumbnail(media, false);
-                changesHaveBeenMade = true;
+                //changesHaveBeenMade = true;
             }, {
                 'margin-right': '0%',
                 'margin-top': '1%',
@@ -2722,7 +2733,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             // rather than http:// _______/Images/_______.__
             buttonContainer.append(generateAssocMediaThumbnailButton);
         }
-        buttonContainer.append(deleteButton);//.append(saveButton); //SAVE BUTTON//
+        buttonContainer.append(deleteButton).append(saveButton); //SAVE BUTTON//
     }
 
     /**Save an associated media
@@ -2741,8 +2752,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             desc = inputs.descInput.val();
 
         //pCL = displayLoadingSettings();
-        //prepareNextView(false, null, null, "Saving...");
-        //clearRight();
+        clearRight();
+        prepareViewer(true);
+        prepareNextView(false, null, null, "Saving...");
 
         var name = inputs.titleInput.val();
         var desc = inputs.descInput.val();
@@ -2758,7 +2770,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TimelineMonth: timelineMonth,
             TimelineDay: timelineDay,
         }, function () {
-            refreshAssocMedia(media);
+            //refreshAssocMedia(media);
             //associatedMediaIsLoading = false;
             //if (backButtonClicked && !(generalIsLoading || collectionsIsLoading ||
             //    artworksIsLoading || associatedMediaIsLoading || toursIsLoading)) { //don't continue if more sections are still loading - wait for them to finish
@@ -2772,10 +2784,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //hideLoading();
             //hideLoadingSettings(pCL);
             //saveArray.splice(saveArray.indexOf(media.Identifier), 1); //removes identifier from save array
-            //if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.media.text]) {
-            //    LADS.Worktop.Database.getAssocMedia();
-            //    return;
-            //}
+            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.media.text]) {
+                LADS.Worktop.Database.getAssocMedia();
+                return;
+            }
+            if (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text]) {
+                loadAssocMediaView(previousIdentifier);
+                return;
+            }
         }, authError, conflict(media, "Update", loadAssocMediaView), error(loadAssocMediaView));
     }
 
@@ -2843,12 +2859,73 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, unauth, conflict, error);
     }
 
-    // TODO document
+    /**Generate iframe asset
+     * @method createIframeAsset
+     * @param {String} src        URL to embed
+     */
     function createIframeAsset(src) { //TODO IFRAME ASSOC MEDIA: iframe asset creation would look something like this
-        var options = {
-            Source: src,
-            Name: src
-        };
+        var modifiedURL = src,
+        popup,
+        id,
+        validURL = true;
+        if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
+
+            if (modifiedURL.indexOf("?v=") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("?v=") + 3);
+                if (id && !/^[a-zA-Z0-9- ]*$/.test(id)) {
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
+                    modifiedURL = modifiedURL.replace("http://", "https://");
+                } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
+                    modifiedURL = "https://" + modifiedURL;
+                }
+                modifiedURL = modifiedURL.replace("watch?v=", "embed/");
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
+
+            if (modifiedURL.indexOf("vimeo.com") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
+                if (id && !/^\d+$/.test(id)) {		//No special characters or characters
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else {
+            popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
+            $('body').append(popup);
+            $(popup).show();
+            validURL = false;
+        }
+
+        if (validURL) {
+            var options = {
+                Source: modifiedURL,
+                Name: modifiedURL
+            };
+            TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
+        }
+
         function onSuccess(doqData) {
             var newDoq = new Worktop.Doq(doqData.responseText);
             function done() {
@@ -2857,7 +2934,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
 
         };
-        TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
+
     }
 
     /**
@@ -2868,7 +2945,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var overlay = TAG.Util.UI.popupInputBox({
             confirmAction: createIframeAsset,
             container: root,
-            message: 'Enter URL for your embedded web asset',
+            message: 'Enter a YouTube or Vimeo URL',
             //placeholder: 'E.g., http://www.youtube.com/embed/g794oDdc1l0',
             confirmText: 'Save'
         });
@@ -3163,6 +3240,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var info;
 
         searchbar[0].value = "";
+        $(searchbar).blur(); //////////
         infoSource = [];
         
         $.each(currentList, function (i, cts) {
@@ -3323,11 +3401,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else {
                             middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
-                                if (changesHaveBeenMade) {
-                                    //saveArray.push(previousIdentifier);
-                                    currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                                    changesHaveBeenMade = false;
-                                }
+                                //if (changesHaveBeenMade) {
+                                //    //saveArray.push(previousIdentifier);
+                                //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                                //    //changesHaveBeenMade = false;
+                                //}
                                 loadArtwork(val);
                                 previousIdentifier = val.Identifier;
                                 currentIndex = i;
@@ -3506,24 +3584,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         $.each(customSettings, function (key, val) {
             settingsContainer.append(val);
         });
+
         //Automatically save changes
-        currentMetadataHandler = function () {
-            if (titleInput.val() === undefined || titleInput.val() === "") {
-                titleInput.val("Untitled Artwork");
-            }
-            saveArtwork(artwork, {
-                artistInput: artistInput,                                      //Artwork artist
-                nameInput: titleInput,                                         //Artwork title
-                yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
-                monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
-                dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
-                timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
-                timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
-                timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
-                descInput: descInput,                                          //Artwork description
-                customInputs: customInputs                                    //Artwork custom info fields
-            });
-        };
+        //currentMetadataHandler = function () {
+        //    if (titleInput.val() === undefined || titleInput.val() === "") {
+        //        titleInput.val("Untitled Artwork");
+        //    }
+        //    saveArtwork(artwork, {
+        //        artistInput: artistInput,                                      //Artwork artist
+        //        nameInput: titleInput,                                         //Artwork title
+        //        yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
+        //        monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
+        //        dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
+        //        timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
+        //        timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
+        //        timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
+        //        descInput: descInput,                                          //Artwork description
+        //        customInputs: customInputs                                    //Artwork custom info fields
+        //    });
+        //};
+
         // Create buttons
         editArt = createButton('Enter Artwork Editor',
             function () { editArtwork(artwork); },
@@ -3555,19 +3635,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             descInput: descInput,                                          //Artwork description
             customInputs: customInputs                                    //Artwork custom info fields
         };
-        //var saveButton = createButton('Save Changes',
-        //    function () {
-        //        if (titleInput.val() === undefined || titleInput.val() === "") {
-        //            titleInput.val("Untitled Artwork");
-        //        }
-        //        saveArtwork(artwork, inputs);
-        //    }, {
-        //        'margin-right': '3%',
-        //        'margin-top': '1%',
-        //        'margin-bottom': '1%',
-        //        'margin-left': '.5%',
-        //        'float': 'right'
-        //    });
+        var saveButton = createButton('Save Changes',
+            function () {
+                if (titleInput.val() === undefined || titleInput.val() === "") {
+                    titleInput.val("Untitled Artwork");
+                }
+                saveArtwork(artwork, {
+                    artistInput: artistInput,                                      //Artwork artist
+                    nameInput: titleInput,                                         //Artwork title
+                    yearInput: $(yearMetadataDivSpecs.yearInput),                  //Artwork year or era
+                    monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
+                    dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
+                    timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
+                    timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
+                    timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
+                    descInput: descInput,                                          //Artwork description
+                    customInputs: customInputs                                     //Artwork custom info fields
+                });
+            }, {
+                'margin-right': '3%',
+                'margin-top': '1%',
+                'margin-bottom': '1%',
+                'margin-left': '.5%',
+                'float': 'right'
+            });
         var xmluploaderbtn = createButton('Upload XML',
                         function () {
                             uploadXML(artwork, inputs, settingsContainer);
@@ -3591,7 +3682,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left'
             });
         if (artwork.Metadata.Type !== 'VideoArtwork') {
-            buttonContainer.append(editArt).append(deleteArt);//.append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
+            buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
         } else {
             var convertBtn = createButton('Convert Video',
                     function () {
@@ -3625,7 +3716,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             } else {
                 convertBtn.hide().data('disabled', true);
             }
-            buttonContainer.append(thumbnailButton).append(convertBtn).append(xmluploaderbtn).append(deleteArt);//.append(saveButton); //SAVE BUTTON//
+            buttonContainer.append(thumbnailButton).append(convertBtn).append(xmluploaderbtn).append(deleteArt).append(saveButton); //SAVE BUTTON//
         }
     }
 
@@ -3770,16 +3861,35 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
    settingsContainer
    */
     function uploadXML(artwork, inputs, settingsContainer) {
-        var parsingOverlay = $(TAG.Util.UI.blockInteractionOverlay()),
-            parsingOverlayText = $(document.createElement('label')),
-            parsingPicker = $(document.createElement('div')),
-            parsingPickerHeader = $(document.createElement('div')),
-            parsingInfo = $(document.createElement('div')),
+        var parsingOverlay = $(TAG.Util.UI.blockInteractionOverlay()).addClass("parsingOverlay"),
+            parsingOverlayText = $(document.createElement('label')).addClass("parsingOverlayText").text('Parsing Metadata file now. Please wait.'),
+            parsingPicker = $(document.createElement('div')).addClass("parsingPicker"),
+            parsingPickerHeader = $(document.createElement('div')).addClass("parsingPickerHeader").text("Please update the input fields below to match the input fields in your XML file."),
+            parsingInfo = $(document.createElement('div')).addClass("parsingInfo"),
+            parsingPickerConfirm = $(document.createElement('button')).attr("id", "parsingPickerConfirm").text("Confirm"),
+            parsingPickerCancel = $(document.createElement('button')).attr("id", "parsingPickerCancel").text("Cancel"),
             curtitle = artwork.Name,
             curdata,
             isrightdata = false,
             customFields = [],
             mtinputs = {};
+
+        parsingOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
+        parsingOverlay.append(parsingOverlayText);
+        parsingOverlayText.hide();
+
+        parsingPicker.append(parsingPickerHeader);
+        parsingPicker.append(parsingInfo);
+        parsingPicker.append(parsingPickerConfirm);
+        parsingPicker.append(parsingPickerCancel);
+
+        parsingOverlay.append(parsingPicker);
+
+        root.append(parsingOverlay);
+
+        parsingOverlay.fadeIn();
+
+        //Metadata input fields
         if (artwork.Metadata.InfoFields) {
             customFields = Object.keys(artwork.Metadata.InfoFields);
         };
@@ -3793,74 +3903,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             extra3: customFields[2] || "",
             extra4: customFields[3] || "",
         };
-        parsingOverlay.addClass('parsingOverlay');
-        parsingOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
-        parsingOverlayText.css({ 'color': 'white', 'width': '10%', 'height': '5%', 'top': '38%', 'left': '35%', 'position': 'relative', 'font-size': '250%' });
-        parsingOverlayText.text('Parsing Metadata File now. Please wait.');
-        parsingOverlay.append(parsingOverlayText);
-        parsingOverlayText.hide();
-        root.append(parsingOverlay);
-        parsingPicker.addClass("parsingPicker");
-        parsingPicker.css({
-            position: 'absolute',
-            width: '29%',
-            height: '49%',
-            padding: '1%',
-            'background-color': 'black',
-            'border': '3px double white',
-            top: '25%',
-            left: '35%',
-        });
-        parsingOverlay.append(parsingPicker);
-        parsingOverlay.fadeIn();
-        parsingPickerHeader.addClass('parsingPickerHeader');
-        parsingPickerHeader.text("Please change if you have different names for the metadata fields below in your xml file.");
-        parsingPickerHeader.css({
-            'font-size': '160%',
-            'width': '100%',
-            'float': 'left',
-            'color': 'white',
-            'background-color': 'black',
-        });
-        parsingPicker.append(parsingPickerHeader);
-        parsingInfo.css({
-            position: 'absolute',
-            left: '3%',
-            top: '17%',
-            padding: '1%',
-            height: '66%',
-            width: '94%',
-            overflow: 'auto',
-        });
-        parsingPicker.append(parsingInfo);
         $.each(metadataspec, function (key, val) {
             var input = createTextInput(val, null, null, false, false);
             var field = createSetting(key, input, null, '7px');
             field.addClass("metadataspec");
-            field.css('color', 'white');
-            field.css({
-                float: 'left',
-                background: '#222',
-                width: '96%',
-                height: '11%',
-                padding: '2px',
-                margin: '1px',
-            });
+            $(field).css({ 'margin': '1px' });
+            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align':'top'});
             mtinputs[key] = input;// { field: field, input: input };
             field.show().data('visible', true);
             parsingInfo.append(field);
         });
 
-        //buttons
-        var parsingPickerConfirm = $(document.createElement('button'));
-        parsingPickerConfirm.attr("id", "parsingPickerConfirm");
-        //parsingPickerConfirm.attr('disabled', true);
-        parsingPickerConfirm.text("Confirm");
-        parsingPickerConfirm.css({
-            position: 'absolute',
-            bottom: '2%',
-            right: '22%',
-        });
+        //Confirm button
         parsingPickerConfirm.click(function () {
             //parsingPickerOverlay.fadeOut();
             $.each(metadataspec, function (key, val) {
@@ -3871,32 +3925,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //}
             });
             parsingPicker.fadeOut();
-            parsingOverlayText.fadeIn();
             initFilepicker(metadataspec);
         });
-        parsingPicker.append(parsingPickerConfirm);
 
-        var parsingPickerCancel = document.createElement('button');
-        var $parsingPickerCancel = $(parsingPickerCancel);
-        $parsingPickerCancel.text("Cancel");
-        $parsingPickerCancel.css({
-            position: 'absolute',
-            bottom: '2%',
-            right: '5%',
-        });
-
-        // cancel button click handler
-        $parsingPickerCancel.click(function () {
+        //Cancel button
+        parsingPickerCancel.click(function () {
             parsingOverlay.fadeOut();
             parsingPickerCancel.disabled = true;
         });
-        parsingPicker.append($parsingPickerCancel);
+
         function initFilepicker(spec) {
             var filepicker = new Windows.Storage.Pickers.FileOpenPicker();
             filepicker.fileTypeFilter.replaceAll([".xml"]);
             filepicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.desktop;
             filepicker.pickSingleFileAsync().then(function (file) {
+                if (!file) {
+                    parsingOverlay.fadeOut();
+                }
                 if (file) {
+                    parsingOverlayText.fadeIn();
                     var size;
                     var maxFileSize = 30 * 1024 * 1024;
                     var toparse;
@@ -4066,54 +4113,28 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     */
     function _metadatapicker(artwork, inputs, settingsContainer, metadatalist, spec) {
         var allTitles = {};
-        var metadataPickerOverlay = $(TAG.Util.UI.blockInteractionOverlay());
-        var metadataPicker = $(document.createElement('div'));
-        var metadataPickerHeader = $(document.createElement('div'));
-        var searchbar = $(document.createElement('input'));
-        //var searchresults;
-        var metadataLists = $(document.createElement('div'));
-        var metadataInfos = $(document.createElement('div'));
-        var metadataholder = $(document.createElement('div'));
+        var metadataPickerOverlay   = $(TAG.Util.UI.blockInteractionOverlay())  .addClass('metadataPickerOverlay');
+        var metadataPicker          = $(document.createElement('div'))          .addClass("metadataPicker");
+        var metadataPickerHeader    = $(document.createElement('div'))          .addClass('metadataPickerHeader')       .text("No match found. Please select the metadata you would like to import for '" + artwork.Name + "'.");
+        var searchbar               = $(document.createElement('input'))        .addClass('metadataPickerSearchbar')    .attr('type', 'text');
+        var metadataLists           = $(document.createElement('div'))          .addClass('metadataLists');
+        var metadataInfos           = $(document.createElement('div'))          .addClass('metadataInfos');
+        var metadataholder          = $(document.createElement('div'))          .addClass('metadataHolder');
         var fields = {};//fields to store all the metadata elements
+
         //get all metadata titles from metadatalist.
         var selectedmetadata;
         var i;
         var counter = 0;
         var curlast;
         var curlist = metadatalist;
-        metadataPickerOverlay.addClass('metadataPickerOverlay');
+
         metadataPickerOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
-
-        metadataPicker.addClass("metadataPicker");
-        metadataPicker.css({
-            position: 'absolute',
-            width: '71%',
-            height: '65%',
-            padding: '1%',
-            'background-color': 'black',
-            'border': '3px double white',
-            top: '17%',
-            left: '14%',
-        });
         metadataPickerOverlay.append(metadataPicker);
-        metadataPickerHeader.addClass('metadataPickerHeader');
-        metadataPickerHeader.text("No match found. Please select the metadata you would like to import for " + artwork.Name);
-        metadataPickerHeader.css({
-            'font-size': '160%',
-            'width': '100%',
-            'float': 'left',
-            'color': 'white',
-            'background-color': 'black',
-        });
-        metadataPicker.append(metadataPickerHeader);
 
-        searchbar.css({
-            'margin-left': '1%',
-            'margin-top': '1%',
-            'width': '29%',
-        });
-        searchbar.attr('type', 'text');
+        metadataPicker.append(metadataPickerHeader);
         metadataPicker.append(searchbar);
+
         //search function in terms of titles
         function searchtitles(tofind, alltitles, container) {
             var searchresults = [];
@@ -4141,17 +4162,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     titlediv.click();
             }
         }
+
         // creates a panel for all the metadata objects
-        metadataLists.addClass('metadataLists');
-        metadataLists.css({
-            position: 'absolute',
-            'border-right': '1px solid white',
-            top: '13%',
-            padding: '1%',
-            height: '73%',
-            width: '28%',
-            overflow: 'auto',
-        });
         metadataPicker.append(metadataLists);
         metadataLists.bind('scroll', function () {
             if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
@@ -4166,19 +4178,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }
             }
         })
+
         // creates a panel for all metadata's detailed info
-        metadataInfos.addClass('metadataInfos');
-        metadataInfos.css({
-            position: 'absolute',
-            left: '33%',
-            top: '13%',
-            padding: '1%',
-            height: '73%',
-            width: '62%',
-            overflow: 'auto',
-        });
         metadataPicker.append(metadataInfos);
-        metadataholder.attr('class', 'metadataHolder');
         metadataInfos.append(metadataholder);
 
         for (i = 0; i < metadatalist.length; i++) {
@@ -4198,25 +4200,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         };
 
         function makemtholder(ttl, index) {
-            var mtHolder = $(document.createElement('div'));
-            mtHolder.addClass('mtHolder');
-            mtHolder.attr('id', index);
-            mtHolder.css({
-                width: '100%',
-                height: '9%',
-                'text-overflow': 'ellipsis',
-                margin: '1px 0px 1px 0px',
-                'font-size': '120%',
-                'padding-left': '3%',
-                'padding-top': '3%',
-                'color': 'white',
-                'background-color': 'black'
-            });
-            mtHolder.text(ttl);
+            var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl);
             metadataLists.append(mtHolder);
             makemtClickable(mtHolder);
             return mtHolder;
         }
+
         //click function for each metadata element
         function makemtClickable(mtholder) {
             mtholder.click(function () {
@@ -4239,18 +4228,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         //if there are extra fields, add them
                         if (!fields[rest]) {
                             var input = createTextInput(selectedmetadata[rest], null, null, false, true);
-                            var field = createSetting(rest, input, null, '7px');
-                            field.addClass("metadataField");
-                            field.attr('title', rest);
-                            field.css('color', 'white');
-                            field.css({
-                                float: 'left',
-                                background: '#222',
-                                width: '96%',
-                                height: '25%',
-                                padding: '2px',
-                                margin: '1px',
-                            });
+                            var field = createSetting(rest, input, null, '7px').addClass("metadataField").attr('title', rest);
+                            $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'top' });
                             fields[rest] = { field: field, input: input };
                             field.show().data('visible', true);
                             metadataholder.append(field);
@@ -4358,8 +4337,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //pCL = displayLoadingSettings();
         //prepareNextView(false, null, null, "Saving...");
-        //clearRight();
-        //prepareViewer(true);
+        clearRight();
+        prepareViewer(true);
+        prepareNextView(false, null, null, "Saving...");
         
         TAG.Worktop.Database.changeArtwork(artwork, {
             Name: name,
@@ -4373,7 +4353,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             Description: description,
             InfoFields: JSON.stringify(infoFields),
         }, function () {
-            refreshArtwork(artwork);
+            //refreshArtwork(artwork);
             //artworksIsLoading = false;
             //if (backButtonClicked && !(generalIsLoading || collectionsIsLoading ||
             //    artworksIsLoading || associatedMediaIsLoading || toursIsLoading)) { //don't continue if more sections are still loading - wait for them to finish
@@ -4387,10 +4367,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //hideLoading();
             //hideLoadingSettings(pCL);
             //saveArray.splice(saveArray.indexOf(artwork.Identifier), 1); //removes identifier from save array
-            //if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
-            //    LADS.Worktop.Database.getMain();
-            //    return;
-            //}
+            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
+                LADS.Worktop.Database.getMain();
+                return;
+            }
+            if (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.art.text]) {
+                loadArtView(previousIdentifier);
+                return;
+            }
         }, authError, conflict(artwork, "Update", loadArtView), error(loadArtView)); 
     }
 
@@ -4638,12 +4622,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         });
         container.click(function () {
-            if (prevSelectedMiddleLabel == container) {
-                return;
-            } else {
-                changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                changesHaveBeenMade = false;
-            }
+            //if (prevSelectedMiddleLabel == container) {
+            //    return;
+            //} else {
+            //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+            //    changesHaveBeenMade = false;
+            //}
             //autosave for general settings - switching between customization and password settings
             //if (inGeneralView && changesHaveBeenMade) {
             //    currentMetadataHandler && saveQueue.add(currentMetadataHandler());
@@ -5400,7 +5384,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'maxlength': maxlength,
             'readonly': !!readonly
         });
-        input.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
+        //input.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
         return input;
     }
 
@@ -5422,7 +5406,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var realHeight = input[0].scrollHeight;
             $(input).css('height', realHeight + 'px');
         });
-        input.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
+        //input.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
         return input;
     }
 
@@ -5446,7 +5430,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             options[i].selected = true;
         }
         selectElt.attr('value', value);
-        selectElt.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
+        //selectElt.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
         return selectElt;
     }
 
@@ -5477,7 +5461,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 updateBGColor(selectorBackground, container.val(), getTransValue());
             }
         };
-        container.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
+        //container.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
         return container;
     }
 
@@ -5889,68 +5873,68 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //    }
     //};
 
-    function refreshSplashScreen() {
-        //console.log('\nsaveSplashScreen has finished.');
-        TAG.Worktop.Database.getMain(function () {
-            //console.log('reloading... ' + (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.general.text]));
-            if (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.general.text]) {
-                if (!(prevSelectedMiddleLabel && (prevSelectedMiddleLabel.text() === "Password Settings"))) {
-                    loadGeneralView(); //refreshes the general settings
-                };
-            };
-        });
-        saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
-    }
+    //function refreshSplashScreen() {
+    //    //console.log('\nsaveSplashScreen has finished.');
+    //    TAG.Worktop.Database.getMain(function () {
+    //        //console.log('reloading... ' + (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.general.text]));
+    //        if (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.general.text]) {
+    //            if (!(prevSelectedMiddleLabel && (prevSelectedMiddleLabel.text() === "Password Settings"))) {
+    //                loadGeneralView(); //refreshes the general settings
+    //            };
+    //        };
+    //    });
+    //    saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
+    //}
 
-    function refreshExhibition(exhibition) {
-        //console.log('\nsaveExhibition has finished.');
-        TAG.Worktop.Database.getDoq(exhibition.Identifier, function (doq) {
-            exhibition.label.text(doq.Name);
-        });
-        saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
-    }
+    //function refreshExhibition(exhibition) {
+    //    //console.log('\nsaveExhibition has finished.');
+    //    TAG.Worktop.Database.getDoq(exhibition.Identifier, function (doq) {
+    //        exhibition.label.text(doq.Name);
+    //    });
+    //    saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
+    //}
 
-    function refreshTour(tour) {
-        //console.log('\nsaveTour has finished.');
-        TAG.Worktop.Database.getDoq(tour.Identifier, function (doq) {
-            tour.label.text(doq.Name);
-        });
-        saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
-    }
+    //function refreshTour(tour) {
+    //    //console.log('\nsaveTour has finished.');
+    //    TAG.Worktop.Database.getDoq(tour.Identifier, function (doq) {
+    //        tour.label.text(doq.Name);
+    //    });
+    //    saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
+    //}
 
-    function refreshAssocMedia(media) {
-        //console.log('\nsaveAssocMedia has finished.');
-        //TAG.Worktop.Database.getDoq(media.Identifier, function (doq) {
-        //    media.label.text(doq.Name);
-        //});
-        saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
-    }
+    //function refreshAssocMedia(media) {
+    //    //console.log('\nsaveAssocMedia has finished.');
+    //    //TAG.Worktop.Database.getDoq(media.Identifier, function (doq) {
+    //    //    media.label.text(doq.Name);
+    //    //});
+    //    saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
+    //}
 
-    function refreshArtwork(artwork) {
-        //console.log('\nsaveArtwork has finished.');
-        //TAG.Worktop.Database.getDoq(artwork.Identifier, function (doq) {
-        //    artwork.label.text(doq.Name);
-        //});
-        saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
-    }
+    //function refreshArtwork(artwork) {
+    //    //console.log('\nsaveArtwork has finished.');
+    //    //TAG.Worktop.Database.getDoq(artwork.Identifier, function (doq) {
+    //    //    artwork.label.text(doq.Name);
+    //    //});
+    //    saveQueue.isEmpty() && backButtonClicked && handleBackButtonClick();
+    //}
 
-    function handleBackButtonClick() {
-        TAG.Worktop.Database.getMain(function () {
-            TAG.Auth.clearToken();
-            rightQueue.clear();
-            middleQueue.clear();
-            backButton.off('click');
-            if (backPage) {
-                var bpage = backPage();
-                TAG.Util.UI.slidePageRight(bpage);
-            } else {
-                TAG.Layout.StartPage(null, function (page) {
-                    TAG.Util.UI.slidePageRight(page);
-                });
-            }
-            TAG.Util.UI.getStack()[0] = null;
-        });
-    }
+    //function handleBackButtonClick() {
+    //    TAG.Worktop.Database.getMain(function () {
+    //        TAG.Auth.clearToken();
+    //        rightQueue.clear();
+    //        middleQueue.clear();
+    //        backButton.off('click');
+    //        if (backPage) {
+    //            var bpage = backPage();
+    //            TAG.Util.UI.slidePageRight(bpage);
+    //        } else {
+    //            TAG.Layout.StartPage(null, function (page) {
+    //                TAG.Util.UI.slidePageRight(page);
+    //            });
+    //        }
+    //        TAG.Util.UI.getStack()[0] = null;
+    //    });
+    //}
 
     return that;
 };
