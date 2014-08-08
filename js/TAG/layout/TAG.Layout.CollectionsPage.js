@@ -203,9 +203,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }, false);
         };
 
-
-
-
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
     }
@@ -477,7 +474,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} artwrk                if undefined, set currentArtwork to null, otherwise, use this
      */
     function loadCollection(collection, sPos, artwrk) {
-
         return function(evt) {
             var i,
                 title             = TAG.Util.htmlEntityDecode(collection.Name),
@@ -1727,8 +1723,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     miniTilesHolder,
                     miniTile;
 
-
-
                 //Entire tile
                 previewTile = $(document.createElement('div'))
                     .addClass('previewTile');
@@ -1753,31 +1747,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Explore div
                 exploreTab = $(document.createElement('div'))
-                    .addClass('exploreTab')
-                    .on('click', switchPage(artwork))
-
-                //Explore icon
-                exploreIcon = $(document.createElement('img'))
-                    .addClass('exploreIcon')
-                    .attr('src', tagPath+'images/icons/ExploreIcon.svg');
+                    .addClass('exploreTab');
+                if (!onAssocMediaView){
+                    exploreTab.on('click', switchPage(artwork))
+                } 
 
                 //Explore text
                 exploreText = $(document.createElement('div'))
                     .addClass('exploreText')
                     .css("font-size",  BASE_FONT_SIZE*2/3 + 'em')
-                    .text("Tap to Explore");
+                    .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Tap to Explore");
 
-                exploreTab.append(exploreIcon)
-                          .append(exploreText);
+                exploreTab.append(exploreText)
 
                 //Thumbnail image
                 currentThumbnail = $(document.createElement('img'))
                     .addClass('currentThumbnail')
                     .attr('src', artwork.Metadata.Thumbnail ? FIX_PATH(artwork.Metadata.Thumbnail) : (tagPath+'images/no_thumbnail.svg'))
-                    .on('click', switchPage(artwork))
                     .on('load', function () {
                         TAG.Util.removeProgressCircle(circle);
                     });
+                !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
 
                 //Telemetry stuff
                 TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'click', '', function(tobj) {
@@ -1839,44 +1829,69 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 miniTilesLabel = $(document.createElement('div'))
                     .addClass("miniTilesLabel")
-                    .text("Associated Media")
+                    .text(onAssocMediaView ? "Artworks" : "Associated Media")
 
                 miniTilesHolder = $(document.createElement('div'))
                     .addClass('miniTilesHolder')
 
                 loadQueue.add(function(){
-                    TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMediaMiniTiles, null, addMediaMiniTiles);
+                    onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
+                    !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                 });
 
                 /**
                 * @method addMediaMiniTiles
-                * @param {Array} mediaDoqs    array of media doqs to with which the mini tiles are created
+                * @param {Array} doqs    array of media or artworks doqs to with which the mini tiles are created
                 */
-                function addMediaMiniTiles(mediaDoqs){
-
+                function addMiniTiles(doqs){
+                    var src,
+                        metadata,
+                        thumb;
                     //Loop through media doqs and create tiles from them
-                    for (i=0; i<mediaDoqs.length;i++){
-                        mediaDoqs[i].artwork = artwork;
+                    for (i=0; i<doqs.length;i++){
+                        src = '';
+                        metadata = doqs[i].Metadata;
+                        thumb = metadata.Thumbnail;
+
+                        !onAssocMediaView && (doqs[i].artwork = artwork);
                         miniTile = $(document.createElement('img'))
                             .addClass('miniTile')
                             .css({
                                 'width': miniTilesHolder.height()
                             })
                             .on('click', 
-                                    switchPage(artwork, mediaDoqs[i])
+                                    onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
                                 )
                         miniTile.css('left', i*(miniTile.width() + miniTilesHolder.height()/10));
 
-                        // Set tileImage to thumbnail image, if it exists
-                        if(mediaDoqs[i].Metadata.Thumbnail) {
-                            miniTile.attr("src", FIX_PATH(mediaDoqs[i].Metadata.Thumbnail));
-                        } else {
-                            miniTile.attr("src", tagPath+'images/no_thumbnail.svg');
+                        switch (metadata.ContentType) {
+                            case 'Audio':
+                                src = tagPath+'images/audio_icon.svg';
+                                break;
+                            case 'Video':
+                                src = (thumb && !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : tagPath + 'images/video_icon.svg';
+                                break;
+                            case 'Image':
+                                src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);
+                                break;
+                            case 'Text':
+                                src = tagPath + 'images/text_icon.svg';
+                            default:
+                                src = tagPath + 'images/no_thumbnail.svg';
+                                break;
                         }
 
+                        // Set tileImage to thumbnail image, if it exists
+                        if(doqs[i].Metadata.Thumbnail) {
+                            miniTile.attr("src", src);
+                        } else {
+                            miniTile.attr("src", tagPath + 'images/no_thumbnail.svg');
+                        }
                         miniTilesHolder.append(miniTile)
                     }                    
                 }
+
+
 
                 //Append everything
                 infoText.append(artistInfo)
