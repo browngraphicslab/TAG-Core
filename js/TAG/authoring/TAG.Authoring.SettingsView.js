@@ -1594,8 +1594,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
             },null, null, function () {
-                sortOptionsObj = sortOptionsDoq;
-                sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
             });
         } else {
