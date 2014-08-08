@@ -681,9 +681,10 @@ TAG.TourAuthoring.Track = function (spec, my) {
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
-            'float': "right",
-            'margin-right': '7%',
+            'margin-left': '7%',
+            'float': "left",
             'margin-top': '5%',
+
                         
 
         });
@@ -692,12 +693,13 @@ TAG.TourAuthoring.Track = function (spec, my) {
         cancel.attr('type', 'button');
         cancel.text("Cancel");
         cancel.css({
+           
             'padding': '1%',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
-            'margin-left': '7%',
-            'float': "left",
+            'float': "right",
+            'margin-right': '7%',
             'margin-top': '5%',
         });
         buttonDiv.append(emptyDiv);

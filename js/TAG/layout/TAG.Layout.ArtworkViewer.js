@@ -641,6 +641,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (doq.Metadata.Description) {
             descriptionDrawer = createDrawer("Description");
             descriptionDrawer.contents.html(Autolinker.link(doq.Metadata.Description.replace(/\n/g, "<br />"), {email: false, twitter: false}));
+            if (IS_WINDOWS) {
+                var links = descriptionDrawer.find('a');
+                links.each(function (index, element) {
+                    $(element).replaceWith(function () {
+                        return $.text([this]);
+                    });
+                });
+            }
             assetContainer.append(descriptionDrawer);
             currBottom = descriptionDrawer.height();
         }
