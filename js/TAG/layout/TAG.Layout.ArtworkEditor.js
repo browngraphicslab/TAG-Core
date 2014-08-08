@@ -1626,7 +1626,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 $assocMediaContainer = $(document.createElement('div'))
                     .css({
                         'position': 'relative',
-                        'margin': '15% 8%',
+                        'margin': '10% 8%', 
                         'margin-top': '20%',
                         'border': '2px solid white',
                         'width': '86%',
@@ -1651,6 +1651,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'width': '88%',
                         'left': '8%',
                         'position': 'relative',
+                        'height': 'auto', 
+                        'max-height': '10%'
                     })
                     .appendTo($rightbar),
                 $toggleHotspot = $(document.createElement('button'))
@@ -1658,8 +1660,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .css({ // css for this and toggleLayer should be defined as a class rule
                         'width': '100%',
                         'height': 'auto',
+                        'max-height': '45%', 
                         'border': '2px solid white',
-                        'position': 'relative'
+                        'position': 'relative',
+                        'font-size': '100%' 
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
@@ -1668,9 +1672,11 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .css({
                         'width': '100%',
                         'height': 'auto',
-                        'margin-top': '10px',
+                        'max-height': '45%', 
+                        'margin-top': '5%', 
                         'border': '2px solid white',
-                        'position': 'relative'
+                        'position': 'relative',
+                        'font-size': '100%'
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
@@ -1680,6 +1686,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'width': '86%',
                         'padding': '5% 8%',
                         'margin-top': '5%',
+                        'height': '5%'
                     })
                     .appendTo($rightbar),
                 $titleText = $(document.createElement('input'))
@@ -1688,7 +1695,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .attr('title', 'Title')
                     .css({
                         'width': '100%',
-                        'font-size': '11pt'
+                        'font-size': '100%' 
                     })
                     .appendTo($titleContainer),
                 $descContainer = $(document.createElement('div'))
@@ -1697,7 +1704,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'width': '87%',
                         'height': '12%',
                         'position': 'relative',
-                        'padding': '5% 8%'
+                        'padding': '0% 8%',
                     })
                     .appendTo($rightbar),
                 $descArea = $(document.createElement('textarea'))
@@ -1715,7 +1722,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .css({
                         'width': '87%',
                         'padding': '5% 8%',
-                        'position': 'relative'
+                        'position': 'relative',
+                        'height': '5%' 
                     })
                     .appendTo($rightbar),
                 $unassociateAssocMediaButton = $(document.createElement('button'))
@@ -1724,7 +1732,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .css({
                         'float': 'left',
                         'border': '2px solid white',
-                        'width': '100%'
+                        'width': '100%',
+                        'font-size': '90%'
                     })
                     .attr('type', 'button')
                     .appendTo($assocMediaButtonContainer),
@@ -1743,12 +1752,14 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .attr('src', tagPath + 'images/icons/x.svg')
                     .css({
                         'position': 'absolute',
-                        'top': ($(window).height() - ($(window).height() * topbarHeight / 100)) * 0.95 - 15 + 'px',
+                        'top': '85%',
+                        //'top': ($(window).height() - ($(window).height() * topbarHeight / 100)) * 0.95 - 15 + 'px',
                         'left': '8%',
                         'width': '11%',
-                        'height': 'auto',
+                        'height': '5%',//
                     })
                     .appendTo($rightbar);
+
 
             makeHotspotAnchor();
             // makeLayerContainer(); -- called in toggleToLayer now
