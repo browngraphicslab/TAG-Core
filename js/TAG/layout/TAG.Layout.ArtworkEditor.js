@@ -83,7 +83,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
                     if (!(annotatedImage.openArtwork(artwork))) { // if artwork load is unsuccessful...
                         var popup = TAG.Util.UI.popUpMessage(function () {
-                            TAG.Authoring.NewSettingsView("Artworks", function (settingsView) {
+                            TAG.Authoring.SettingsView("Artworks", function (settingsView) {
                                 TAG.Util.UI.slidePageRight(settingsView.getRoot());
                             }, null, artwork.Identifier);
                         }, "There was an error loading the image.", "Go Back", true);
