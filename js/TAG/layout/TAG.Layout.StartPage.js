@@ -497,7 +497,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         fullScreen = root.find('#innerContainer');
         fullScreen.css('background-image', "url(" + TAG.Worktop.Database.fixPath(main.Metadata["BackgroundImage"]) + ")");
-        fullScreen.css({'opacity':'0.6'});
+        //fullScreen.css({'opacity':'0.6'});
 
         overlayColor = main.Metadata["OverlayColor"];
         overlayTransparency = main.Metadata["OverlayTransparency"];
