@@ -354,13 +354,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                 }
             }
-			if (inGeneralView) {
-                if (currentSelected === labelTwo) {
-                    resetLabels('.leftLabel');
-                    selectLabel(labelOne);
-                    currentSelected = labelOne;
-                    loadCustomization();
-                }
+			
+        }
+        if (inGeneralView) {
+            if (currentSelected === labelTwo) {
+                resetLabels('.leftLabel');
+                selectLabel(labelOne);
+                currentSelected = labelOne;
+                loadSplashScreen();
+            } else if (currentSelected === labelOne) {
+                resetLabels('.leftLabel');
+                selectLabel(labelTwo);
+                currentSelected = labelTwo;
+                loadPasswordScreen();
             }
         }
     }
@@ -370,39 +376,46 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function downKeyHandlerSettingsView() {
         
-        if (!$("input, textarea").is(":focus")) {
+        if (!$("input, textarea").is(":focus") && !inGeneralView) {
             if (prevSelectedMiddleLabel && prevSelectedMiddleLabel === currentSelected) {
                 if (currentSelected.next()) {
-                    if(currentIndex < (currentList.length - 1)) {
+                    if (currentIndex < (currentList.length - 1)) {
                         resetLabels('.middleLabel');
                         selectLabel(currentSelected.next());
                         currentSelected = currentSelected.next();
                         prevSelectedMiddleLabel = currentSelected;
                         currentIndex++;
-                        
-                        if (inCollectionsView) { 
-                            loadExhibition(currentList[currentIndex]); 
+
+                        if (inCollectionsView) {
+                            loadExhibition(currentList[currentIndex]);
                         }
-                        if (inArtworkView) { 
-                            loadArtwork(currentList[currentIndex]); 
+                        if (inArtworkView) {
+                            loadArtwork(currentList[currentIndex]);
                         }
-                        if (inAssociatedView) { 
-                            loadAssocMedia(currentList[currentIndex]); }
-                        if (inToursView) { loadTour(currentList[currentIndex]); 
+                        if (inAssociatedView) {
+                            loadAssocMedia(currentList[currentIndex]);
                         }
-                        if (inFeedbackView) { 
-                            loadFeedback(currentList[currentIndex]); 
+                        if (inToursView) {
+                            loadTour(currentList[currentIndex]);
+                        }
+                        if (inFeedbackView) {
+                            loadFeedback(currentList[currentIndex]);
                         }
                     }
                 }
             }
-			if (inGeneralView) {
-                if (currentSelected === labelOne) {
-                    resetLabels('.leftLabel');
-                    selectLabel(labelTwo);
-                    currentSelected = labelTwo;
-                    loadPasswordScreen();
-                }
+        }
+        if (inGeneralView) {
+            if (currentSelected === labelOne) {
+                resetLabels('.leftLabel');
+                selectLabel(labelTwo);
+                currentSelected = labelTwo;
+                loadPasswordScreen();
+            } else if (currentSelected === labelTwo) {
+                resetLabels('.leftLabel');
+                selectLabel(labelOne);
+                currentSelected = labelOne;
+                loadSplashScreen();
             }
         }
     }
@@ -692,11 +705,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var label;
             // Add the Splash Screen label and set it as previously selected because its our default
             middleLoading.before(label = selectLabel(createMiddleLabel('Splash Screen', null, loadSplashScreen), true));
+            labelOne = label;
+            labelOne.addClass('leftLabel');
             prevSelectedMiddleLabel = label;
             // Default to loading the splash screen
             loadSplashScreen();
             // Add the Password Settings label
-            middleLoading.before(createMiddleLabel('Password Settings', null, loadPasswordScreen).attr('id', 'password'));
+            labelTwo = createMiddleLabel('Password Settings', null, loadPasswordScreen).attr('id', 'password');
+            labelTwo.addClass('leftLabel');
+            middleLoading.before(labelTwo);
             middleLoading.hide();
         });
         cancelLastSetting = null;
