@@ -125,6 +125,16 @@ Worktop.Database = function (mainID) {
             handlers);
     }
 
+    // TODO: PLEASE NO - bmost //TODO: PLEASE YES - jjfu :P
+    function addSortOptions(guid, options, handlers, throwOnWarn) {
+        getRequest(
+            "AddSortOptions",
+            safeCache('doqs', guid),
+            safeCache(false, false, 'doqs', guid, 'Metadata', 'Count'),
+            handlers,
+            { "Guid": guid });
+    }
+
     function getAssocMedia(handlers) {
         getRequest(
             "AllAssociatedMedia",
@@ -231,19 +241,6 @@ Worktop.Database = function (mainID) {
         sortedOptions.urlOptions.Guid = guid;
         postRequest(
             'ChangeExhibition',
-            handlers,
-            sortedOptions.urlOptions,
-            sortedOptions.bodyOptions,
-            true);
-    }
-
-    // TODO: PLEASE NO - bmost
-    function addSortOptions(guid, options, handlers, throwOnWarn) {
-        options = options || {};
-        var sortedOptions = checkKeys(options, _static.params.exhibition, "ChangeExhibition", throwOnWarn);
-        sortedOptions.urlOptions.Guid = guid;
-        postRequest(
-            'AddSortOptions',
             handlers,
             sortedOptions.urlOptions,
             sortedOptions.bodyOptions,
