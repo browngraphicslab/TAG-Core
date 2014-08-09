@@ -2264,7 +2264,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                         'padding-top': '3%',
                                     });
                                     $(artworkHolder).text(name);
-                                   $('.associatedMediaPickerArtwork').append(artworkHolder);
+                                    $('.associatedMediaPickerArtwork').append(artworkHolder);
+                                    $(artworkHolder).on('click', function () {
+                                        var selected = $(artworkHolder).attr('id');
+                                        var artworkAMDocfrag = document.createDocumentFragment();
+                                        mediaQueue.clear();
+                                        $(".allAssociatedMediaHolder").css('background', 'black');
+                                        $(artworkHolder).css('background', 'black');
+                                        $(artworkHolder).css('background', '#999');
+                                        $(".mediaHolder").detach();
+                                        drawAssociatedMedia(mediaCache[selected], assMediasingleDoubleclick, artworkAMDocfrag);
+                                        associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
+                                        TAG.Util.searchData($('.associatedsearchbar').val(), '.mediaHolder', IGNORE_IN_SEARCH);
+                                    });
                                });
                             }
                         }
@@ -2286,6 +2298,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
             TAG.Util.searchData($('.associatedsearchbar').val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
+
+
+        
+
 
         /*
         function loadInArtworks(artworks) {
@@ -2415,28 +2431,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             artQueue.add(function () {
                 loading.hide();
             });
-        }*/
-
+        }
+        */
 
         /**Click handlers for all artwork name buttons
          * @method artworkHolderClick
          * @param artworkHolder
          */
-        function artworkHolderClick(artworkHolder) {
-            artworkHolder.off('click');
-            artworkHolder.on('click', function () {
-                var selected = artworkHolder.attr('id');
-                var artworkAMDocfrag = document.createDocumentFragment();
-                mediaQueue.clear();
-                $(".allAssociatedMediaHolder").css('background', 'black');
-                $(".artworkHolder").css('background', 'black');
-                artworkHolder.css('background', '#999');
-                $(".mediaHolder").detach();
-                drawAssociatedMedia(mediaCache[selected], assMediasingleDoubleclick, artworkAMDocfrag);
-                associatedMediaPickerImport.disabled = selectedArtworks.length ? false : true;
-                TAG.Util.searchData($('.associatedsearchbar').val(), '.mediaHolder', IGNORE_IN_SEARCH);
-            });
-        }
+        //(function artworkHolderClick(artworkHolder) {
+            //$('.artworkHolder').off('click');
+            
+        //})();
 
         // create import button
         associatedMediaPickerImport.disabled = true;

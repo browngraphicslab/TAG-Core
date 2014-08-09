@@ -1324,7 +1324,7 @@ TAG.Util = (function () {
                 event.position.y = evt.pageY - $element.offset().top;
                 functions.onTappedRight(event);
             };
-            element.addEventListener("MSPointerDown", function (evt) {
+            element.addEventListener("MSPointerEvent", function (evt) {
                 console.log(evt);
                 if (stopNextClick) {
                     console.log("STOPPING CLICK");
