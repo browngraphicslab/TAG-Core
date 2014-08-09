@@ -42,6 +42,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         linkButton               = root.find('#linkButton'),
         // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay                  = root.find('#overlay'),
+        tileLoadingArea 	     = root.find('#tileLoadingArea'),
 
         // input options
         scrollPos        = options.backScroll || 0,     // horizontal position within collection's catalog
@@ -213,6 +214,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }, false);
         };
 
+        var progressCircCSS = {
+            'position': 'absolute',
+            'float'   : 'left',
+            'left'    : '40%',
+            'z-index' : '50',
+            'height'  : '10%',
+            'width'   : 'auto',
+            'top'     : '22%',
+        };
+        var tileCircle = TAG.Util.showProgressCircle(tileDiv, progressCircCSS, '0px', '0px', false);
+        tileLoadingArea.append(tileCircle);
+
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
     }
@@ -360,6 +373,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtwork = null;
         loadQueue.clear();
         comingBack = false;
+        tileLoadingArea.show();
         if (cancelLoadCollection) cancelLoadCollection();
     }
 
@@ -971,6 +985,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 minOfSort,
                 currentWork,
                 works,
+                progressCircCSS,
+                circle,
                 i, h, w, j;
 
             if (!artworks || artworks.length === 0){
@@ -1003,9 +1019,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                    loadQueue.add(drawArtworkTile(works[j], null, onSearch, i + j)); 
                 }
             }
+            loadQueue.add(function(){
+            	tileLoadingArea.hide();
+            })
             loadQueue.add(function () {
                 showArtwork(currentArtwork,multipleShown && multipleShown)();
-           });
+           	});
             tileDiv.css({'left': infoDiv.width()});
             if (infoDiv.width()===0){
                 tileDiv.css({'margin-left':'2%'});
