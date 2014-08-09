@@ -27,7 +27,7 @@ TAG.Worktop.Database = (function () {
     // the appropriate parameters into the body.
     var params = {
         exhibition: {
-            url: ['Name', 'Sub1', 'Sub2', 'Background', 'Img1', 'Img2', 'Private', 'Font', 'SortOptions', 'Timeline','AssocMediaView'],
+            url: ['Name', 'Sub1', 'Sub2', 'Background', 'Img1', 'Img2', 'Private', 'Font', 'SortOptions', 'Timeline','AssocMediaView', 'AddSortOptions'],
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
@@ -631,10 +631,9 @@ TAG.Worktop.Database = (function () {
         _db.postExhibition(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
 
-    function addSortOptions(guid, options, success, unauth, conflict, error) {
+    function addSortOptions(guid, success, unauth, conflict, error) {
         _db = _db || new Worktop.Database();
-        if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
-        _db.addSortOptions(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
+        _db.addSortOptions(guid, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
     /*
     Change an artwork

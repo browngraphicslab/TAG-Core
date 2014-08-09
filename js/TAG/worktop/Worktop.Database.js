@@ -126,7 +126,7 @@ Worktop.Database = function (mainID) {
     }
 
     // TODO: PLEASE NO - bmost //TODO: PLEASE YES - jjfu :P
-    function addSortOptions(guid, options, handlers, throwOnWarn) {
+    function addSortOptions(guid, handlers, throwOnWarn) {
         getRequest(
             "AddSortOptions",
             safeCache('doqs', guid),

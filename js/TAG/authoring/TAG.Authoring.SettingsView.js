@@ -1613,15 +1613,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia;
         var sortOptionsObj = null;
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            TAG.Worktop.Database.addSortOptions(exhibition.Identifier, null, function (sortOptionsDoq) {
-                sortOptionsObj = sortOptionsDoq;
-                sortDropDown = createSortOptions(sortOptionsObj);
-                createCollectionSettings();
-            }, null, null, function () {
-                sortOptionsObj = null;
-                sortDropDown = null;
-                createCollectionSettings();
-            });
+            TAG.Worktop.Database.changeExhibition(exhibition.Identifier, {AddSortOptions: true}, function (sortOptionsDoq) {
+                TAG.Worktop.Database.getDoq(sortOptionsDoq.statusText, function (sortOptionsDoq) {
+                    sortOptionsObj = sortOptionsDoq;
+                    sortDropDown = createSortOptions(sortOptionsObj);
+                    createCollectionSettings();
+                });
+            }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
         } else {
             TAG.Worktop.Database.getDoq(exhibition.Metadata.SortOptionsGuid, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
