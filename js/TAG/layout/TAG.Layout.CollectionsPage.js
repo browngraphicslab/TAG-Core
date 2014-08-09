@@ -531,7 +531,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             applyCustomization();
             buttonRow.empty();
             loadSortTags(collection);
-            comingBack = false;
 
             if (!onAssocMediaView) {
                 if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
@@ -763,7 +762,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     sortButton,
                     sortButtonTags = {}; 
                 //TO-DO: test with custom sorts
-                if (collection.Metadata.SortOptionsGuid){ 
+                if (collection.Metadata.SortOptionsGuid && !onAssocMediaView){ 
                     TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
                         var sortObjects = sortOptionsDoq.Metadata,
                             sortText,
@@ -786,6 +785,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         }
                         appendTags();
                     });
+                } else if (onAssocMediaView){
+                	sortOptions = ['Date','Title'];
+                	appendTags();
                 } else {
                     //TO-DO-"Type" to  "Tours" (saved as "Tour" on server)
                     sortOptions = ["Date", "Title", "Artist", "Type"];
@@ -795,7 +797,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     for (i = 0; i < sortOptions.length; i++) {
                         sortButton = $(document.createElement('div'));
                         sortButton.addClass('secondaryFont');
-
                         sortButton.addClass('rowButton')
                                  .text(sortOptions[i])
                                   .attr('id', sortOptions[i].toLowerCase() + "Button")
@@ -811,7 +812,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
                         });
                     }
-                    console.log("comingBack" + comingBack);
                     if (!comingBack) {
                         //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
                         if (timelineShown && $('#dateButton')) {
@@ -824,7 +824,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             currentDefaultTag = currentTag;
                         }
                     }
-                    console.log("currentTag" + currentTag);
                     colorSortTags(currentTag);
                 }
             }
@@ -2250,7 +2249,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
        var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR);
        $('.rowButton').css('color', unselectedColor);
        if (tag){
-            console.log("coloring");
             $('#' + tag.toLowerCase() + 'Button').css('color', '#' + SECONDARY_FONT_COLOR);
        }
        //$('[tagName="' + tag + '"]').css('color', '#' + SECONDARY_FONT_COLOR);

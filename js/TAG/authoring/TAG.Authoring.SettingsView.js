@@ -1845,6 +1845,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(true);
         prepareNextView(false, null, null, "Saving...");
 
+        //To-Do add in encoding here:
         var name = inputs.nameInput.val();
         var desc = inputs.descInput.val();
         var bg = inputs.bgInput.val();
@@ -3175,8 +3176,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // uploads hotspot hotspot i to artwork j in its list
         var activeMM = mediaMetadata[i];
         uploadHotspot(artworkAssociations[i][j], { // this info isn't changing, so maybe we can do this more easily in uploadHotspot
-            title: TAG.Util.encodeXML(activeMM.title || 'Untitled media'),
-            desc: TAG.Util.encodeXML(''),
+            title: TAG.Util.htmlEntityEncode(activeMM.title || 'Untitled media'),
+            desc: TAG.Util.htmlEntityEncode(''),
             pos: null, // bogus entry for now -- should set it to {x: 0, y: 0} in uploadHotspot
             contentType: activeMM.contentType,
             contentUrl: activeMM.contentUrl,
