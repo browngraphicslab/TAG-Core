@@ -409,9 +409,16 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
         }
 
         menu.append(buttondiv);
-        TAG.Util.makeManipulatable(buttondiv[0], {
-            onTapped: callback
-        });
+        if (IS_WINDOWS) {
+            TAG.Util.makeManipulatableWin(buttondiv[0], {
+                onTapped: callback
+            });
+        } else {
+            TAG.Util.makeManipulatable(buttondiv[0], {
+                onTapped: callback
+            });
+        }
+        
         return buttondiv;
     }
     
