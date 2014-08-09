@@ -1390,14 +1390,27 @@ TAG.TourAuthoring.Track = function (spec, my) {
     
     // Interaction code
     // Track title manipulations
-    TAG.Util.makeManipulatable(titlediv[0], {
-        onManipulate: onManipTrackTitleWrapper,
-        onTapped: tappedTitle,
-        onTappedRight: tapRightTitle,
-        onRelease: trackTitleReleased,
-        onScroll: scrollTitleWrapper,
-        onDoubleTapped: toggleMinimized,
-    }, false, true);
+    if (IS_WINDOWS) {
+        TAG.Util.makeManipulatableWin(titlediv[0], {
+            onManipulate: onManipTrackTitleWrapper,
+            onTapped: tappedTitle,
+            onTappedRight: tapRightTitle,
+            onRelease: trackTitleReleased,
+            onScroll: scrollTitleWrapper,
+            onDoubleTapped: toggleMinimized,
+        }, false);
+    } else {
+        TAG.Util.makeManipulatable(titlediv[0], {
+            onManipulate: onManipTrackTitleWrapper,
+            onTapped: tappedTitle,
+            onTappedRight: tapRightTitle,
+            onRelease: trackTitleReleased,
+            onScroll: scrollTitleWrapper,
+            onDoubleTapped: toggleMinimized,
+        }, false, true);
+    }
+
+    
 
     /**Handles long press on the title
      * @method tapRightTitle
@@ -1642,22 +1655,40 @@ TAG.TourAuthoring.Track = function (spec, my) {
     }
 
     // makes the track manipulatable 
-    grTrack = TAG.Util.makeManipulatable(my.track[0], {
-        onManipulate: onManipTrack,
-        onTappedRight: tapRight,
-        onScroll: scrollTitle,
-        onTapped: trackTapped,
-        onDoubleTapped: doubleTapped,
-        onRelease: function () {
-            my.inRightTap = false;
-            vertLock = false;
-            sideLock = false;
-            xMoved = 0;
-            yMoved = 0;
-            dragEvents = 0;
-        }
-    });
-
+    if (IS_WINDOWS) {
+        grTrack = TAG.Util.makeManipulatableWin(my.track[0], {
+            onManipulate: onManipTrack,
+            onTappedRight: tapRight,
+            onScroll: scrollTitle,
+            onTapped: trackTapped,
+            onDoubleTapped: doubleTapped,
+            onRelease: function () {
+                my.inRightTap = false;
+                vertLock = false;
+                sideLock = false;
+                xMoved = 0;
+                yMoved = 0;
+                dragEvents = 0;
+            }
+        });
+    } else {
+        grTrack = TAG.Util.makeManipulatable(my.track[0], {
+            onManipulate: onManipTrack,
+            onTappedRight: tapRight,
+            onScroll: scrollTitle,
+            onTapped: trackTapped,
+            onDoubleTapped: doubleTapped,
+            onRelease: function () {
+                my.inRightTap = false;
+                vertLock = false;
+                sideLock = false;
+                xMoved = 0;
+                yMoved = 0;
+                dragEvents = 0;
+            }
+        });
+    }
+    
     /** <Description>
      * @method released
      * @param {Event} evt

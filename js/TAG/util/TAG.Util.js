@@ -1518,7 +1518,7 @@ TAG.Util = (function () {
         // long-press, i.e. right-click
         var rightTapHandlerWin = null;
         if (typeof functions.onTappedRight === "function") {
-            rightTapHandler = function (evt) {
+            rightTapHandlerWin = function (evt) {
                 var event = {};
                 event.position = {};
                 event.position.x = evt.position.x;

@@ -14,34 +14,41 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     
 
     var // input options
-        root     = options.root,           // root of the artwork viewing page
-        doq      = options.doq,            // doq for the artwork
+        root = options.root,           // root of the artwork viewing page
+        doq = options.doq,            // doq for the artwork
         callback = options.callback,       // called after associated media are retrieved from server
-        noMedia  = options.noMedia,        // should we not have assoc media? (set to true in artwork editor)
+        noMedia = options.noMedia,        // should we not have assoc media? (set to true in artwork editor)
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,   // prepend server address to given path
 
         // misc initialized variables
 
-        artworkName     = doq.Name,        // artwork's title
+        artworkName = doq.Name,        // artwork's title
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
                                            // also contains an array of GUIDs for cleaner iteration
-        toManip         = dzManip,         // media to manipulate, i.e. artwork or associated media
+        toManip = dzManip,         // media to manipulate, i.e. artwork or associated media
         rootHeight = $('#tagRoot').height(), //tag root height
         rootWidth = $('#tagRoot').width(),  //total tag root width for manipulation (use root.width() instead for things that matter for splitscreen styling)
         outerContainerPivot = {
-            x: rootHeight/2,
-            y: rootWidth/2
+            x: rootHeight / 2,
+            y: rootWidth / 2
         },
         doManipulation = true,      //used in RLH to prevent manipulation of image in certain cases
         aspectRatio = 1, //TODO - how to find this
         artworkFrozen = false,
-        
+
         // misc uninitialized variables
         viewerelt,
         viewer,
-        assetCanvas;
+        assetCanvas,
+        makeManip;
+
+    if (IS_WINDOWS) {
+        makeManip = TAG.Util.makeManipulatableWin;
+    } else {
+        makeManip = TAG.Util.makeManipulatable;
+    }
 
     // get things rolling
     init();
@@ -485,19 +492,34 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         canvas = $(viewer.canvas);
         canvas.addClass('artworkCanvasTesting');
-
-        TAG.Util.makeManipulatable(canvas[0], {
-            onScroll: function (delta, pivot) {
-                dzScroll(delta, pivot);
-            },
-            onManipulate: function (res) {
-                if (doManipulation) {
-                    res.translation.x = -res.translation.x;        //Flip signs for dragging
-                    res.translation.y = -res.translation.y;
-                    dzManip(res);
+        if (IS_WINDOWS) {
+            TAG.Util.makeManipulatableWin(canvas[0], {
+                onScroll: function (delta, pivot) {
+                    dzScroll(delta, pivot);
+                },
+                onManipulate: function (res) {
+                    if (doManipulation) {
+                        res.translation.x = -res.translation.x;        //Flip signs for dragging
+                        res.translation.y = -res.translation.y;
+                        dzManip(res);
+                    }
                 }
-            }
-        }, null, true); // NO ACCELERATION FOR NOW
+            }, null); // NO ACCELERATION FOR NOW
+        } else {
+            TAG.Util.makeManipulatable(canvas[0], {
+                onScroll: function (delta, pivot) {
+                    dzScroll(delta, pivot);
+                },
+                onManipulate: function (res) {
+                    if (doManipulation) {
+                        res.translation.x = -res.translation.x;        //Flip signs for dragging
+                        res.translation.y = -res.translation.y;
+                        dzManip(res);
+                    }
+                }
+            }, null, true); // NO ACCELERATION FOR NOW
+        }
+        
 
         assetCanvas = $(document.createElement('div'));
         assetCanvas.attr('id', 'annotatedImageAssetCanvas');
