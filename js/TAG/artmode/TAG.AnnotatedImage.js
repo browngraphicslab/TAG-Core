@@ -682,10 +682,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 TAG.Util.disableDrag(outerContainer);
 
                 // register handlers
-                TAG.Util.makeManipulatable(outerContainer[0], {
-                    onManipulate: mediaManip,
-                    onScroll: mediaScroll
-                }, null, true); // NO ACCELERATION FOR NOW
+                if (IS_WINDOWS) {
+                    TAG.Util.makeManipulatableWin(outerContainer[0], {
+                        onManipulate: mediaManipWin,
+                        onScroll: mediaScrollWin
+                    });
+                } else {
+                    TAG.Util.makeManipulatable(outerContainer[0], {
+                        onManipulate: mediaManip,
+                        onScroll: mediaScroll
+                    }, null, true); // NO ACCELERATION FOR NOW
+                }
             }
         }
 
@@ -1263,6 +1270,72 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 }
             });
         }
+
+        function mediaManipWin(res) {
+                var t = outerContainer.css('top');
+                var l = outerContainer.css('left');
+                var w = outerContainer.css('width');
+                var h = outerContainer.css('height');
+                var neww = parseFloat(w) * res.scale;
+
+                var minConstraint;
+                if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio') {
+                    minConstraint = 450;
+                } else {
+                    minConstraint = 200;
+                }
+
+                //if the new width is in the right range, scale from the point of contact and translate properly; otherwise, just translate and clamp
+                var newClone;
+                if ((neww >= minConstraint) && (neww <= 800)) {
+                    if (0 < parseFloat(t) + parseFloat(h) && parseFloat(t) < rootHeight && 0 < parseFloat(l) + parseFloat(w) && parseFloat(l) < rootWidth && res) {
+                        outerContainer.css("top", (parseFloat(t) + res.translation.y + (1.0 - res.scale) * (res.pivot.y)) + "px");
+                        outerContainer.css("left", (parseFloat(l) + res.translation.x + (1.0 - res.scale) * (res.pivot.x)) + "px");
+                    }
+                } else {
+                    if (0 < parseFloat(t) + parseFloat(h) && parseFloat(t) < rootHeight && 0 < parseFloat(l) + parseFloat(w) && parseFloat(l) < rootWidth && res) {
+                        outerContainer.css("top", (parseFloat(t) + res.translation.y) + "px");
+                        outerContainer.css("left", (parseFloat(l) + res.translation.x) + "px");
+                        neww = Math.min(Math.max(neww, minConstraint), 800);
+                    } 
+                }
+
+                outerContainer.css("width", neww + "px");
+                outerContainer.css("height", "auto");
+                mediaManipPreprocessing();
+            }
+
+        function mediaScrollWin(res, pivot) {
+            mediaManipPreprocessing();
+            //here, res is the scale factor
+            var t = outerContainer.css('top');
+            var l = outerContainer.css('left');
+            var w = outerContainer.css('width');
+            var neww = parseFloat(w) * res;
+            outerContainer.css("width", neww + "px");
+
+            var minConstraint;
+            if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio') {
+                minConstraint = 450;
+            } else {
+                minConstraint = 200;
+            }
+
+            if ((neww >= minConstraint) && (neww <= 800)) {
+                outerContainer.css("top", (parseFloat(t) + (1.0 - res) * (pivot.y)) + "px");
+                outerContainer.css("left", (parseFloat(l) + (1.0 - res) * (pivot.x)) + "px");
+            }
+            else {
+                neww = Math.min(Math.max(neww, minConstraint), 800);
+            }
+
+            outerContainer.css("width", neww + "px");
+            outerContainer.css("height", "auto");
+            mediaManipPreprocessing();
+        }
+
+
+
         
         /**
          * Create a closeButton for associated media

@@ -355,7 +355,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
 
     function prepareNextView() {
-        
         onAssocMediaView = false;
         currentTag = null;
         currentArtwork = null;
@@ -446,7 +445,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "border-radius": COLLECTION_DOT_WIDTH / 2,
                             "margin": COLLECTION_DOT_WIDTH/4
                         }).on('click', function(j){
-                            return function(){
+                           return function(){
                                 prepareNextView();
                                 loadCollection(visibleCollections[j])();
                             }
@@ -497,21 +496,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         return function (evt) {
             var cancelLoad = false;
             var i,
-                title             = TAG.Util.htmlEntityDecode(collection.Name),
+                title = TAG.Util.htmlEntityDecode(collection.Name),
                 nextTitle,
                 prevTitle,
-                mainCollection    = root.find('#mainCollection'),
-                nextCollection    = root.find('#nextCollection'),
-                prevCollection    = root.find('#prevCollection'),
-                titleBox          = root.find('.collection-title'), 
-                collectionMedia   = [],
-                counter           = 0,
+                mainCollection = root.find('#mainCollection'),
+                nextCollection = root.find('#nextCollection'),
+                prevCollection = root.find('#prevCollection'),
+                titleBox = root.find('.collection-title'),
+                collectionMedia = [],
+                counter = 0,
                 collectionLength,
                 collectionDescription = $(document.createElement('div')),
                 dummyDot,
                 dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR),
                 str,
-                text              = collection.Metadata && collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
+                text = collection.Metadata && collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
+
+            console.log(collection.Name);
 
             // if the idle timer hasn't started already, start it
             if(!idleTimer && evt) { // loadCollection is called without an event to show the first collection
@@ -520,12 +521,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             //Change timeline shown based on saved metadata
-            if (collection.Metadata.Timeline === "true"|| collection.Metadata.Timeline === "false"){
-                    collection.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
+            if (collection.Metadata.Timeline === "true" || collection.Metadata.Timeline === "false") {
+                collection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
             } else {
                 timelineShown = true; //default to true for backwards compatibility
             }
-
             //If on associated media view and there are no associated media with valid dates, hide the timeline
             if (onAssocMediaView && collection.collectionMediaMinYear===Infinity){
                 timelineShown = false;
@@ -534,6 +534,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             applyCustomization();
             buttonRow.empty();
             loadSortTags(collection);
+
 
             if (!onAssocMediaView) {
                 if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
@@ -595,9 +596,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     backArrowArea.css('left', '0%')
                         .off()
                         .on('click', function(j){
-                                return function(){
-                                    prepareNextView();
-                                    loadCollection(visibleCollections[j.prevCollectionIndex])();
+                            return function () {
+                                prepareNextView();
+                                loadCollection(visibleCollections[j.prevCollectionIndex])();
                                 }
                             }(collection));
                     backArrow.attr('src', tagPath + 'images/icons/Close.svg');
@@ -612,9 +613,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .html(prevTitle)
                                 .off()
                                 .on('click', function(j){
-                                        return function(){
-                                            prepareNextView();
-                                            loadCollection(visibleCollections[j.prevCollectionIndex])();
+                                    return function () {
+                                        prepareNextView();
+                                        loadCollection(visibleCollections[j.prevCollectionIndex])();
                                         }
                                     }(collection));
 
@@ -638,9 +639,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     nextArrowArea.css({'right': '0%'})
                                 .off()
                                 .on('click', function(j){
-                                        return function(){
-                                            prepareNextView();
-                                            loadCollection(visibleCollections[j.nextCollectionIndex])();
+                                    return function () {
+                                        prepareNextView();
+                                        loadCollection(visibleCollections[j.nextCollectionIndex])();
                                         }
                                     }(collection));
 
