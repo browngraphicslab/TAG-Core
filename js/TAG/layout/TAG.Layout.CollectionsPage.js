@@ -325,7 +325,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'margin-right': '6%'
         });
         infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag.');
-        infoMainBottom.text('Andy van Dam, Alex Hills, Yudi Fu, Karishma Bhatia, Gregory Chatzinoff, John Connuck, David  Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Kaijan Gao, Jessica Herron, Ardra Hren, Hak Rim Kim, Lucy van Kleunen, Inna Komarovsky, Ryan Lester, Benjamin LeVeque, Josh Lewis, Jinqing Li, Jeffery Lu, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Jonathan Poon, Dhruv Rawat, Emily Reif, Surbhi Madan, Jacob Rosenfeld, Anqi Wen, Dan Zhang, Libby Zorn');
+        infoMainBottom.text('Andy van Dam, Alex Hills, Yudi Fu, Benjamin LeVeque, Karthik Battula, Karishma Bhatia, Gregory Chatzinoff, John Connuck, David  Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Kaijan Gao, Jessica Herron, Ardra Hren, Hak Rim Kim, Lucy van Kleunen, Inna Komarovsky, Ryan Lester, Josh Lewis, Jinqing Li, Jeffery Lu, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Jonathan Poon, Dhruv Rawat, Emily Reif, Surbhi Madan, Tanay Padhi, Jacob Rosenfeld, Qingyun Wan, David Weinberger, Anqi Wen, Dan Zhang, Libby Zorn');
         infoMain.append(infoMainTop);
         infoMain.append(infoMainBottom);
 
@@ -353,7 +353,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
     }
 
-    function prepareNextView() {
+
+    function prepareNextView(){
         onAssocMediaView = false;
         currentTag = null;
         currentArtwork = null;
@@ -443,7 +444,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "border-radius": COLLECTION_DOT_WIDTH / 2,
                             "margin": COLLECTION_DOT_WIDTH/4
                         }).on('click', function(j){
-                            return function () {
+                           return function(){
                                 prepareNextView();
                                 loadCollection(visibleCollections[j])();
                             }
@@ -491,7 +492,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} artwrk                if undefined, set currentArtwork to null, otherwise, use this
      */
     function loadCollection(collection, sPos, artwrk) {
-        return function(evt) {
+        return function (evt) {
+            var cancel = false;
             var i,
                 title = TAG.Util.htmlEntityDecode(collection.Name),
                 nextTitle,
@@ -531,20 +533,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             applyCustomization();
             buttonRow.empty();
             loadSortTags(collection);
-            comingBack = false;
 
-            if (!onAssocMediaView){
-                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true" && !collection.collectionMedia) {
-                //TAG.Worktop.Database.getArtworksIn(collection.Identifier, getCollectionMedia, null, getCollectionMedia);
-                TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
-                    for (i=0;i<mediaDoqs.length; i++) {
-                        collectionMedia.push(mediaDoqs[i]);
-                    }
-                    collection.collectionMedia = collectionMedia;
-                    if (sortByYear(collectionMedia, true).min()) {
-                        collection.collectionMediaMinYear = sortByYear(collectionMedia, true).min().yearKey;
-                    }
-                });
+
+            if (!onAssocMediaView) {
+                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
+                    TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function(mediaDoqs){
+                        for (i=0;i<mediaDoqs.length;i++){
+                            collectionMedia.push(mediaDoqs[i]);
+                        }
+                        collection.collectionMedia = collectionMedia;
+                        if (sortByYear(collectionMedia,true).min()){
+                            collection.collectionMediaMinYear = sortByYear(collectionMedia,true).min().yearKey;
+                        }
+                    })   
                 }
 
                 // Clear search box
@@ -596,7 +597,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             return function () {
                                 prepareNextView();
                                 loadCollection(visibleCollections[j.prevCollectionIndex])();
-
                                 }
                             }(collection));
                     backArrow.attr('src', tagPath + 'images/icons/Close.svg');
@@ -660,8 +660,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .off()
                                 .on('click', function(j){
                                         return function(){
-                                            //prepareNextView();
-                                            console.log("clicked");
+                                            prepareNextView();
                                             loadCollection(visibleCollections[j.nextCollectionIndex])();
                                         }
                                     }(collection));
@@ -757,51 +756,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 initSearch(currCollection.collectionMedia);
             }
 
-            
-            /*Helper function to get all of the associated media in a collection
-             * @method getCollectionMedia
-             * @param  {Array} artworkDoqs          list of artwork doqs in the collection
-             */
-            /**
-            function getCollectionMedia(artworkDoqs) {
-                collectionLength = artworkDoqs.length;
-                for (i=0;i<artworkDoqs.length;i++){
-                    TAG.Worktop.Database.getAssocMediaTo(artworkDoqs[i].Identifier, addAssocMedia, null, addAssocMedia);
-                }
-
-                /*Helper function to combine all the media for each artwork in the collection
-                * @method addAssocMedia
-                * @param {Array} mediaDoqs          associated media doqs passed in by getAssocMediaTo()
-                */
-            /**
-                function addAssocMedia(mediaDoqs) {
-                    counter = counter +1 ;
-                    for (i=0; i<mediaDoqs.length;i++){
-                        collectionMedia.push(mediaDoqs[i]);
-                    }
-                    //When all of the collections have been looped through (neccessary to deal with async)
-                    if (counter === collectionLength){
-                        collection.collectionMedia = collectionMedia;
-                        if (sortByYear(collectionMedia,true).min()){
-                            collection.collectionMediaMinYear =  sortByYear(collectionMedia,true).min().yearKey;
-                        }
-                    }
-                }  
-            }
-            **/
-            /**
-            function getCollectionMedia(mediaDoqs) {
-                console.log("mediaDoqs" + mediaDoqs);
-                for (mediaDoq in mediaDoqs) {
-                    collectionMedia.push(mediaDoq);
-                }
-                collection.collectionMedia = collectionMedia;
-                if (sortByYear(collectionMedia, true).min()) {
-                    collection.collectionMediaMinYear = sortByYear(collectionMedia, true).min().yearKey;
-                }
-            }
-            **/
-
             /*helper function to load sort tags
             * @method loadSortTags
             * @param {Object} collection
@@ -811,7 +765,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     sortButton,
                     sortButtonTags = {}; 
                 //TO-DO: test with custom sorts
-                if (collection.Metadata.SortOptionsGuid){ 
+                if (collection.Metadata.SortOptionsGuid && !onAssocMediaView){ 
                     TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
                         var sortObjects = sortOptionsDoq.Metadata,
                             sortText,
@@ -834,6 +788,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         }
                         appendTags();
                     });
+                } else if (onAssocMediaView){
+                	sortOptions = ['Date','Title'];
+                	appendTags();
                 } else {
                     //TO-DO-"Type" to  "Tours" (saved as "Tour" on server)
                     sortOptions = ["Date", "Title", "Artist", "Type"];
@@ -843,7 +800,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     for (i = 0; i < sortOptions.length; i++) {
                         sortButton = $(document.createElement('div'));
                         sortButton.addClass('secondaryFont');
-
                         sortButton.addClass('rowButton')
                                  .text(sortOptions[i])
                                   .attr('id', sortOptions[i].toLowerCase() + "Button")

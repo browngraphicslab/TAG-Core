@@ -249,7 +249,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 })(i, artwork), null, conversionVideos[i]);
         }
     }
-    setInterval(checkConversion, 1000 * 60);
+    //setInterval(checkConversion, 1000 * 60);
 
     /** Reload the video when conversion is done
     * @ param: videoInPreview element
@@ -758,7 +758,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColor = TAG.Worktop.Database.getPrimaryFontColor();
         var secondaryFontColor = TAG.Worktop.Database.getSecondaryFontColor();
         var fontFamily = TAG.Worktop.Database.getFontFamily();
-        var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration();
+        var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration()/60000;
 
         // Create inputs
         //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
@@ -791,7 +791,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
         var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
-        var idleTimerDurationInput = createTextInput(idleTimerDuration, true, 3, false, false, true);
+        var idleTimerDurationInput = createTextInput(idleTimerDuration, false, 3, false, false, true);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
         var font = fontFamilyInput.find(":selected").text();
@@ -897,6 +897,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //save Splash screen and pass in inputs with following keys:
             //idleTimerDurationInput.text(idleTimerDurationInput.val());
             saveIdleTimerDuration(idleTimerDurationInput);
+            //idleTimerDurationInput.text(idleDuration);
             saveSplashScreen({
                 //alphaInput: alphaInput,                             //Overlay Transparency
                 //overlayColorInput: overlayColorInput,               //Overlay Color
@@ -911,7 +912,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 fontFamilyInput: fontFamilyInput,
-                //idleTimerDurationInput: idleTimerDurationInput
+                idleTimerDurationInput: idleTimerDurationInput
             });
         }, {
             'margin-right': '3%',
@@ -953,9 +954,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewArtworkViewerButton);
     }
 
+    /**Changes idle timer stageOne duration from the customization settings
+     * input.val() is in minutes, and idleDuration needs to be set in milliseconds
+     * hence the conversion factor of 60000
+     * @method saveIdleTimerDuration
+     * @param {HTML Element} input      
+     */
     function saveIdleTimerDuration(input) {
-        var currDuration = input.val();
-        TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(currDuration);
+        idleDuration = parseInt(input.val())*60000;
     }
 
     /**Saves the splash screen settings
@@ -984,7 +990,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
         var fontFamily = inputs.fontFamilyInput.val();
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
-       // var idleTimerDuration = inputs.idleTimerDurationInput.val();
+        var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
         
         //inputs.idleTimerDurationInput.val(idleTimerDuration);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(idleTimerDuration);
@@ -1001,7 +1007,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             SecondaryFontColor: secondaryFontColor,
             FontFamily: fontFamily,
             //BaseFontSize: baseFontSize,
-            //IdleTimerDuration: idleTimerDuration
+            IdleTimerDuration: idleTimerDuration
         };
         if (bgImg) { options.Background = bgImg; }
         //if (logo) options.Icon = logo;
@@ -1574,27 +1580,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         timelineOptionsDiv.append(showTimeline).append(hideTimeline);
         var assocMediaOptionsDiv = $(document.createElement('div'));
         assocMediaOptionsDiv.append(showAssocMedia).append(hideAssocMedia);
-        var sortDropDown;
+
         var privateSetting;
         var localVisibilitySetting;
         var name;
         var desc;
         var bg;
-        var sortDropDown;
-        var sortOptions;
+        var sortDropDown = null;
+        var sortOptions = null;
         var idLabel;
         var timeline;
         var nameInput;
         var descInput;
         var bgInput;
         var assocMedia;
-        var sortOptionsObj;
+        var sortOptionsObj = null;
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             TAG.Worktop.Database.addSortOptions(exhibition.Metadata, null, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
-            },null, null, function () {
+            }, null, null, function () {
+                sortOptionsObj = null;
+                sortDropDown = null;
                 createCollectionSettings();
             });
         } else {
@@ -1837,6 +1845,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(true);
         prepareNextView(false, null, null, "Saving...");
 
+        //To-Do add in encoding here:
         var name = inputs.nameInput.val();
         var desc = inputs.descInput.val();
         var bg = inputs.bgInput.val();
@@ -3167,8 +3176,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // uploads hotspot hotspot i to artwork j in its list
         var activeMM = mediaMetadata[i];
         uploadHotspot(artworkAssociations[i][j], { // this info isn't changing, so maybe we can do this more easily in uploadHotspot
-            title: TAG.Util.encodeXML(activeMM.title || 'Untitled media'),
-            desc: TAG.Util.encodeXML(''),
+            title: TAG.Util.htmlEntityEncode(activeMM.title || 'Untitled media'),
+            desc: TAG.Util.htmlEntityEncode(''),
             pos: null, // bogus entry for now -- should set it to {x: 0, y: 0} in uploadHotspot
             contentType: activeMM.contentType,
             contentUrl: activeMM.contentUrl,
@@ -3497,11 +3506,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.attr("controls", "");
             mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
-            mediaElement.attr("src", source);
+            var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
+            var sourceExt = source.substring(source.lastIndexOf('.'));
+            var videoErrorDiv = $(document.createElement('div'));
+            videoErrorDiv.addClass("videoErrorDiv");
+
+            mediaElement.attr("fileName", artwork.Metadata.Source.substring(0, source.lastIndexOf('.')));
             TAG.Worktop.Database.getConvertedVideoCheck(
                 function (output) {
                     if (output !== "" && output !== "False" && output !== "Error") {
-                        var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
+                        
                         var sourceMP4 = sourceWithoutExtension + ".mp4";
                         var sourceWEBM = sourceWithoutExtension + ".webm";
                         var sourceOGV = sourceWithoutExtension + ".ogv";
@@ -3509,28 +3523,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         addSourceToVideo(mediaElement, sourceMP4, 'video/mp4');
                         addSourceToVideo(mediaElement, sourceWEBM, 'video/webm');
                         addSourceToVideo(mediaElement, sourceOGV, 'video/ogv');
-                        $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
                     } else {
-                        if (output === "False") {
-                            $(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video is being converted to compatible formats for different browsers";
-                            viewer.append(TAG.Util.createConversionLoading(msg));
-                            conversionVideos.push(artwork.Identifier);
-                        } else if (output === "Error") {
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "An error occured when converting this video. Please try again";
-                            viewer.append(TAG.Util.createConversionLoading(msg, true));
+                        if (sourceExt === ".mp4") { //IN WIN8APP ONLY BECAUSE AUTHORING IN WIN8
+
+                            if (output === "False") {
+                                $(document.getElementsByClassName("convertVideoBtn")[0]).hide();
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "This video is being converted to compatible formats for different browsers";
+                                viewer.append(TAG.Util.createConversionLoading(msg));
+                                conversionVideos.push(artwork.Identifier);
+                            } else if (output === "Error") {
+                                $(document.getElementsByClassName("convertVideoBtn")[0]).show();
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "An error occured when converting this video. Please try again";
+                                viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            } else {
+                                $(document.getElementsByClassName("convertVideoBtn")[0]).show();
+                                //if (artwork.Extension !== ".mp4") {
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "This video format has not been converted to formats supported in multiple browsers.";
+                                viewer.append(TAG.Util.createConversionLoading(msg, true));
+                            }
                         } else {
-                            //if (artwork.Extension !== ".mp4") {
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video format has not been converted to formats supported in multiple browsers.";
-                            viewer.append(TAG.Util.createConversionLoading(msg, true));
-                            //}
+
                         }
+                    
                         mediaElement.attr('src', source);
                     }
                 }, null, artwork.Identifier);
@@ -3726,17 +3746,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var index = newFileName.lastIndexOf(".");
                         var fileExtension = newFileName.slice(index);
                         var baseFileName = newFileName.slice(0, index);
-                        if (artwork.Metadata.Converted !== "True") {
-                            TAG.Worktop.Database.convertVideo(function () {
-                            }, null, newFileName, fileExtension, baseFileName, artwork.Identifier);
-                            conversionVideos.push(artwork.Identifier);
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video is being converted to compatible formats for different browsers";
-                            viewer.append(TAG.Util.createConversionLoading(msg));
-                            mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, "False");
-                            convertBtn.hide().data('disabled', true);
-                        }
+
+                        TAG.Worktop.Database.convertVideo(function () {
+                        }, null, newFileName, fileExtension, baseFileName, artwork.Identifier);
+                        //conversionVideos.push(artwork.Identifier);
+                        //$("#videoErrorMsg").remove();
+                        //$("#leftLoading").remove();
+                        //var msg = "This video is being converted to compatible formats for different browsers";
+                        //viewer.append(TAG.Util.createConversionLoading(msg));
+                        mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, "False");
+                        //convertBtn.hide().data('disabled', true);
+                        convertBtn.hide();
                     }, {
                         'margin-right': '0%',
                         'margin-top': '1%',
@@ -3745,12 +3765,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         'float': 'left'
                     })
             convertBtn.attr('class', 'button convertVideoBtn');
-            convertBtn.attr("disabled", "");
-            if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
+            //convertBtn.attr("disabled", "");
+            convertBtn.hide();
+            /*if (artwork.Metadata.Converted!=="True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
                 convertBtn.show().data('disabled', false);
             } else {
                 convertBtn.hide().data('disabled', true);
-            }
+            }*/
             buttonContainer.append(thumbnailButton).append(convertBtn).append(xmluploaderbtn).append(deleteArt).append(saveButton); //SAVE BUTTON//
         }
     }
@@ -5427,6 +5448,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Boolean} defaultval  if true, reset to default text if empty and loses focus
      * @param maxlength             max length of the input in characters
      * @param hideOnClick
+     * @param {Boolean} onlyNumbers only numeric characters are allowed
      * @return input                newly created input
      */
     function createTextInput(text, defaultval, maxlength, hideOnClick, readonly, onlyNumbers) {
