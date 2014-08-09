@@ -260,6 +260,7 @@ html, body, .rinPlayer
     position:absolute;
     left:10%;
     top:35%;
+    margin-top:-0.7%;
 }
 
 .rin_Button
