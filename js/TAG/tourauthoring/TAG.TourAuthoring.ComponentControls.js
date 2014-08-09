@@ -2780,8 +2780,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             var name;
             var hasSpace = false;
             var scanLength;
-            var exhibHolder = $(document.createElement('div'));
+            var exhibHolder;
+            var write;
 
+            
             // draw exhibition holders for each exhibition
             for (var i = 0; i < exhibitions.length; i++) {
                 origName = exhibitions[i].Name;
@@ -2802,9 +2804,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         name = origName.substr(0, 25) + "...";
                     }
                 } else {
-                    name = exhibitions[i].Name;
+                    name = origName;
                 }
-
+                if (origName.length > 25) {
+                    write = origName.substr(0, 25) + "...";
+                } else {
+                    write = origName;
+                }
+                
+                exhibHolder = $(document.createElement('div'));
                 exhibHolder.addClass('exhibHolder');
                 exhibHolder.attr('id', exhibitions[i].Identifier);
                 exhibHolder.css({
@@ -2816,7 +2824,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     'padding-left': '3%',
                     'padding-top': '3%',
                 });
-                exhibHolder.text(name);
+                exhibHolder.text(write);
                 $('.catalogPickerExhibitions').append(exhibHolder);
                 // click handler for general exhibition button
                 makeExhibClickable(exhibHolder);
