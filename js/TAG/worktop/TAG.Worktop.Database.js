@@ -1165,7 +1165,7 @@ TAG.Worktop.Database = (function () {
     }
 
     function getIdleTimerDuration() {
-        return _main.Metadata["IdleTimer"] || '2';
+        return _main.Metadata["IdleTimerDuration"] || '2';
     }
 
     function getMainGuid() {
