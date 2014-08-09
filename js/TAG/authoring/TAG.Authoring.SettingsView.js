@@ -1580,27 +1580,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         timelineOptionsDiv.append(showTimeline).append(hideTimeline);
         var assocMediaOptionsDiv = $(document.createElement('div'));
         assocMediaOptionsDiv.append(showAssocMedia).append(hideAssocMedia);
-        var sortDropDown;
+
         var privateSetting;
         var localVisibilitySetting;
         var name;
         var desc;
         var bg;
-        var sortDropDown;
-        var sortOptions;
+        var sortDropDown = null;
+        var sortOptions = null;
         var idLabel;
         var timeline;
         var nameInput;
         var descInput;
         var bgInput;
         var assocMedia;
-        var sortOptionsObj;
+        var sortOptionsObj = null;
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             TAG.Worktop.Database.addSortOptions(exhibition.Metadata, null, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
-            },null, null, function () {
+            }, null, null, function () {
+                sortOptionsObj = null;
+                sortDropDown = null;
                 createCollectionSettings();
             });
         } else {

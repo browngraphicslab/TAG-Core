@@ -533,9 +533,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             loadSortTags(collection);
             comingBack = false;
 
-            if (!onAssocMediaView){
+            if (!onAssocMediaView) {
                 if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
-                    TAG.Worktop.Database.getAssocMediaTo(collection.Identifier, function(mediaDoqs){
+                    TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function(mediaDoqs){
                         for (i=0;i<mediaDoqs.length;i++){
                             collectionMedia.push(mediaDoqs[i]);
                         }
