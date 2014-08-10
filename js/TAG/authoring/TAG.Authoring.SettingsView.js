@@ -6084,47 +6084,56 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
-                'z-index': 10000000 - 100,
-                'margin-top': '2%',
+                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 1000,
                 'border':'1px solid white'
             });
         dropDown.hide();
         addMenuLabel.click(function () {
             if (showDropdown) {
                 addMenuArrowIcon.css('transform', 'scaleY(1)');
+                dropDown.hide();
             } else {
                 addMenuArrowIcon.css('transform', 'scaleY(-1)');
                 dropDown.show();
             }
             showDropdown = !showDropdown;
         });
-        addMenuLabel.on('focusout', function () {
-            if (showDropdown) {
-                addMenuLabel.click();
-            }
-        });
+        //addMenuLabel.on('blur', function (e) {
+        //    if (showDropdown) {
+        //        addMenuLabel.click();
+        //    }
+        //});
         var fromFile = $(document.createElement('label'))
             .attr('id', 'fromFile')
             .text('From File')
             .css({
                 "display": "block",
-                'border-bottom': '1px solid white',
-                'padding-left': '10px'
+                'border-color': 'black',
+                'color': 'black',
+                'background-color': 'rgb(238, 238, 238)',
+                'border-style': 'solid',
+                'border-width': 'thin',
+                'border-bottom-style': 'none',
+                'padding-left': '15px',
+                'font-size': '85%',
+                'font-weight': '600',
+                'padding-bottom':'5%',
+                'padding-top':'5%',
             })
             .on('mouseenter', function () {
-                fromFile.css({
-                    'background-color': 'white',
-                    'color': 'black',
-                });
-            })
-            .on('mouseleave', function () {
                 fromFile.css({
                     'background-color': 'black',
                     'color': 'white',
                 });
             })
+            .on('mouseleave', function () {
+                fromFile.css({
+                    'background-color': 'rgb(238, 238, 238)',
+                    'color': 'black',
+                });
+            })
             .click(function () {
-                dropDown.hide();
+                addMenuLabel.click();
                 createAsset();
             });
         var iFrameAsset = $(document.createElement('label'))
@@ -6132,22 +6141,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .text('Embed Video')
             .css({
                 "display": "block",
-                'padding-left':'10px'
+                'border-color': 'black',
+                'color': 'black',
+                'background-color': 'rgb(238, 238, 238)',
+                'border-style': 'solid',
+                'border-width': 'thin',
+                'padding-left': '15px',
+                'font-size': '85%',
+                'font-weight': '600',
+                'padding-bottom': '5%',
+                'padding-top': '5%',
             })
             .on('mouseenter', function () {
-                iFrameAsset.css({
-                    'background-color': 'white',
-                    'color': 'black',
-                });
-            })
-            .on('mouseleave', function () {
                 iFrameAsset.css({
                     'background-color': 'black',
                     'color': 'white',
                 });
             })
+            .on('mouseleave', function () {
+                iFrameAsset.css({
+                    'background-color': 'rgb(238, 238, 238)',
+                    'color': 'black',
+                });
+            })
             .click(function () {
-                dropDown.hide();
+                addMenuLabel.click();
                 createIframeSourceDialog();
             });
         dropDown.append(fromFile);
