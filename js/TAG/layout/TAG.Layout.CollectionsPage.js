@@ -42,6 +42,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         linkButton               = root.find('#linkButton'),
         // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay                  = root.find('#overlay'),
+        tileLoadingArea 	     = root.find('#tileLoadingArea'),
 
         // input options
         scrollPos        = options.backScroll || 0,     // horizontal position within collection's catalog
@@ -213,6 +214,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }, false);
         };
 
+        var progressCircCSS = {
+            'position': 'absolute',
+            'float'   : 'left',
+            'left'    : '40%',
+            'z-index' : '50',
+            'height'  : '10%',
+            'width'   : 'auto',
+            'top'     : '22%',
+        };
+        var tileCircle = TAG.Util.showProgressCircle(tileDiv, progressCircCSS, '0px', '0px', false);
+        tileLoadingArea.append(tileCircle);
+
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
     }
@@ -360,6 +373,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtwork = null;
         loadQueue.clear();
         comingBack = false;
+        tileLoadingArea.show();
         if (cancelLoadCollection) cancelLoadCollection();
     }
 
@@ -971,6 +985,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 minOfSort,
                 currentWork,
                 works,
+                progressCircCSS,
+                circle,
                 i, h, w, j;
 
             if (!artworks || artworks.length === 0){
@@ -1003,9 +1019,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                    loadQueue.add(drawArtworkTile(works[j], null, onSearch, i + j)); 
                 }
             }
+            loadQueue.add(function(){
+            	tileLoadingArea.hide();
+            })
             loadQueue.add(function () {
                 showArtwork(currentArtwork,multipleShown && multipleShown)();
-           });
+           	});
             tileDiv.css({'left': infoDiv.width()});
             if (infoDiv.width()===0){
                 tileDiv.css({'margin-left':'2%'});
@@ -1196,6 +1215,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('videoLabel')
                     .attr('src', tagPath+'images/icons/catalog_video_icon.svg');
                 main.append(videoLabel);
+            } else if (currentWork.Metadata.ContentType === "Audio" ){
+            	var audioLabel = $(document.createElement('img'))
+                    .addClass('audioLabel')
+                    .attr('src', tagPath+'images/audio_icon.svg');
+                main.append(audioLabel);
             }
 
             tileDiv.append(main);
@@ -1901,6 +1925,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     for (i=0; i<doqs.length;i++){
                         src = '';
                         metadata = doqs[i].Metadata;
+                        console.log(metadata);
                         thumb = metadata.Thumbnail;
 
                         !onAssocMediaView && (doqs[i].artwork = artwork);
@@ -1913,6 +1938,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
                                 )
                         miniTile.css('left', i*(miniTile.width() + miniTilesHolder.height()/10));
+
 
                         switch (metadata.ContentType) {
                             case 'Audio':
@@ -1929,6 +1955,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             default:
                                 src = tagPath + 'images/no_thumbnail.svg';
                                 break;
+                        }
+                        if (onAssocMediaView && metadata.Type === "Artwork"){
+                        	src = thumb ? FIX_PATH(thumb) : tagPath + 'images/no_thumbnail.svg';
                         }
 
                         // Set tileImage to thumbnail image, if it exists

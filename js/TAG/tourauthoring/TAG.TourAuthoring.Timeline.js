@@ -400,8 +400,16 @@ TAG.TourAuthoring.Timeline = function (spec) {
         var _timeRulerSize = function (ev) {
             timeRuler.css('width', timeManager.timeToPx(ev.end) + 'px');
         };
+        var manip;
 
-        manipObjects.ruler = (TAG.Util.makeManipulatable(wrap[0], {
+        if (IS_WINDOWS) {
+            manip = TAG.Util.makeManipulatableWin;
+        } else {
+            manip = TAG.Util.makeManipulatable;
+        }
+
+        manipObjects.ruler = (
+           manip(wrap[0], {
             onManipulate: function (res) {
                 wrap.scrollLeft(wrap.scrollLeft() - res.translation.x);
                 manipObjects.track.cancelAccel();
@@ -428,7 +436,7 @@ TAG.TourAuthoring.Timeline = function (spec) {
             }
         }));
 
-        manipObjects.track = (TAG.Util.makeManipulatable(trackBody[0], {
+        manipObjects.track = (manip(trackBody[0], {
             onManipulate: function (res) {
                 var newY;
                 manipObjects.ruler.cancelAccel();

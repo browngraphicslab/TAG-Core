@@ -1055,15 +1055,28 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             }, false);
 
             // TODO use makeManipulatable here for web app (and for win8 app... some dragging issues right now, though)
-            TAG.Util.makeManipulatableWin(hotspotCircle[0], {
-                onManipulate: function (res) {
-                    var t = hotspotAnchor.css('top'),
-                        l = hotspotAnchor.css('left');
-                    hotspotAnchor.css("top", (parseInt(t, 10) + res.pivot.y - 20) + "px");
-                    hotspotAnchor.css("left", (parseInt(l, 10) + res.pivot.x - 20) + "px");
-                    annotatedImage.updateOverlay(hotspotAnchor[0], Seadragon.OverlayPlacement.TOP_LEFT);
-                }
-            });
+            if (IS_WINDOWS) {
+                TAG.Util.makeManipulatableWin(hotspotCircle[0], {
+                    onManipulate: function (res) {
+                        var t = hotspotAnchor.css('top'),
+                            l = hotspotAnchor.css('left');
+                        hotspotAnchor.css("top", (parseInt(t, 10) + res.pivot.y - 20) + "px");
+                        hotspotAnchor.css("left", (parseInt(l, 10) + res.pivot.x - 20) + "px");
+                        annotatedImage.updateOverlay(hotspotAnchor[0], Seadragon.OverlayPlacement.TOP_LEFT);
+                    }
+                });
+            } else {
+                TAG.Util.makeManipulatable(hotspotCircle[0], {
+                    onManipulate: function (res) {
+                        var t = hotspotAnchor.css('top'),
+                            l = hotspotAnchor.css('left');
+                        hotspotAnchor.css("top", (parseInt(t, 10) + res.pivot.y - 20) + "px");
+                        hotspotAnchor.css("left", (parseInt(l, 10) + res.pivot.x - 20) + "px");
+                        annotatedImage.updateOverlay(hotspotAnchor[0], Seadragon.OverlayPlacement.TOP_LEFT);
+                    }
+                });
+            }
+            
 
             hotspotAnchor.appendTo(root);
         }

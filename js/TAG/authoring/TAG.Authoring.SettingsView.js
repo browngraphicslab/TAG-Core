@@ -5564,6 +5564,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if(selectorBackground) {
                 updateBGColor(selectorBackground, container.val(), getTransValue());
             }
+            if (selectorText != ".secondaryFont") {
+                $('#serverInput').css('border-color', '#' + container.val());
+                $('#passwordInput').css('border-color', '#' + container.val());
+                $('#serverSubmit').css('border-color', '#' + container.val());
+                $('#passwordSubmit').css('border-color', '#' + container.val());
+            }
+
         };
         //container.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
         return container;
