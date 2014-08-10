@@ -1174,7 +1174,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (tag === 'Title') {
                 artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
             } else if (tag === 'Artist') {
-                artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' : currentWork.Metadata.Artist);
+                artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' : TAG.Util.htmlEntityDecode(currentWork.Name) ); 
+                yearTextBox.css('visibility', 'visible');
+                yearText = currentWork.Metadata.Artist;
+                if (!yearText) {
+                    yearTextBox.text('')
+                        .css('visibility', 'hidden');
+                } else {
+                    yearTextBox.text(yearText);
+                }
             } else if (tag === 'Date') {
                 yearTextBox.css('visibility','visible');
                 yearText = getDateText(getArtworkDate(currentWork,true));
