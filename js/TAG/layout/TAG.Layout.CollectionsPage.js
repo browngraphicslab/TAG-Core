@@ -1703,14 +1703,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 closeButton.text('X');
                 closeButton.css({
                     'position': 'absolute',
-                    'top': '2%',
+                    'top': '1.5%',
                     'width': '4%',
                     'height': '4%',
                     'min-height': '15px',
                     'min-width': '15px',
-                    'z-index': '1',
                     'background-color': '',
-                    'left': '2%'
+                    'left': '1.5%'
                 });
                 closeButton.on('click', function () {
                     hideArtwork(currentArtwork)();
