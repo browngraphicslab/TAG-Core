@@ -651,8 +651,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'background': 'rgba(0,0,0,0)',
                     'position': 'absolute'
                 });
-                assetCanvas.append(outerContainer);
-                outerContainer.hide();
+                //assetCanvas.append(outerContainer);
+                //outerContainer.hide();
             } else {
                 // set up divs for the associated media
                 outerContainer.css('width', '29%');
@@ -688,8 +688,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 }
 
                 outerContainer.append(innerContainer);
-                assetCanvas.append(outerContainer);
-                outerContainer.hide();
+                //assetCanvas.append(outerContainer);
+                //outerContainer.hide();
 
                 // create hotspot circle if need be
                 if (IS_HOTSPOT) {
@@ -1395,7 +1395,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
 
             if (IS_XFADE) {
-                outerContainer.show();
+                assetCanvas.append(outerContainer);
+                //outerContainer.show();
             } else {
                 //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
                 if (IS_HOTSPOT) {
@@ -1417,7 +1418,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'pointer-events': 'all'
                 });
 
-                outerContainer.show();
+                //outerContainer.show();
                 assetCanvas.append(outerContainer);
             }
 
@@ -1444,11 +1445,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function hideMediaObject() {
             if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
-                outerContainer.hide();
+                //outerContainer.hide();
+                outerContainer.remove();
             } else {
                 pauseResetMediaObject();
                 IS_HOTSPOT && removeOverlay(circle[0]);
-                outerContainer.hide();
+                outerContainer.remove();
+                //outerContainer.hide();
             }
 
             mediaHidden = true;
