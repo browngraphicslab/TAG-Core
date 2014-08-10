@@ -3732,7 +3732,7 @@ TAG.Util.UI = (function () {
                 if (comp.Metadata.ContentType === 'Audio') {
                     compHolderImage.attr('src', tagPath+'images/audio_icon.svg');
                 } else if (comp.Metadata.ContentType === 'Video' || comp.Type === 'Video' || comp.Metadata.Type === 'VideoArtwork') {
-                    compHolderImage.attr('src', (comp.Metadata.Thumbnail && !comp.Metadata.Thumbnail.match(/.mp4/)) ? FIXPATH(comp.Metadata.Thumbnail) : 'images/video_icon.svg');
+                    compHolderImage.attr('src', (comp.Metadata.Thumbnail && !comp.Metadata.Thumbnail.match(/.mp4/)) ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/video_icon.svg');
                     shouldAppendTII = true;
                     typeIndicatorImage.attr('src', tagPath+'images/icons/catalog_video_icon.svg');
                 } else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
