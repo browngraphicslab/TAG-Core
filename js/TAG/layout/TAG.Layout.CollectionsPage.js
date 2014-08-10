@@ -1628,6 +1628,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineDateLabel,
                 circle,
                 artworksForYear,
+                closeButton,
                 i,
                 descSpan = $(document.createElement('div')),
                 currentThumbnail;
@@ -1697,6 +1698,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 selectedArtworkContainer.empty();
 
+                closeButton = $(document.createElement('img'));
+                closeButton.attr('src', tagPath + 'images/icons/x.svg');
+                closeButton.text('X');
+                closeButton.css({
+                    'position': 'absolute',
+                    'top': '2%',
+                    'width': '4%',
+                    'height': '4%',
+                    'min-height': '15px',
+                    'min-width': '15px',
+                    'z-index': '1',
+                    'background-color': '',
+                    'left': '2%'
+                });
+                closeButton.on('click', function () {
+                    hideArtwork(currentArtwork)();
+                });
+                
                 artworksForYear = artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()];
                
                 //If there are multiple artworks that should all be shown, selectedArtworkContainer will contain all of them and be larger
@@ -1707,11 +1726,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             'left': (i * previewWidth) + 'px',
                             'width': previewWidth
                         });
+                        if (i===0){
+                            newTile.append(closeButton);
+                        }
                     }
                     containerWidth = Math.min(($("#tagRoot").width()*.80), (artworksForYear.length) * previewWidth);
                 } else {
                     newTile = createOnePreviewTile(artwork);
                     newTile.css('left', '0%');
+                    newTile.append(closeButton);
                     containerWidth = previewWidth;
                 }
 
@@ -1732,6 +1755,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //if there are more than 3 artworks associated with the date year
                 if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
                     selectedArtworkContainer.css("overflow-x", "scroll")
+                    closeButton.on('scroll',function(){
+
+                    });
                     leftOffset = bottomContainer.width()/10
                     shift = 0;
                     //shift = rootWidth/10;
@@ -1744,7 +1770,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 //At end (sometimes not caught by 'shift' due to animations)
                 if (containerLeft >= root.width() - containerWidth){
-                	console.log("hurr");
                 	selectedArtworkContainer.css('left', root.width()-containerWidth-TILE_BUFFER);
                 }
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/5);
