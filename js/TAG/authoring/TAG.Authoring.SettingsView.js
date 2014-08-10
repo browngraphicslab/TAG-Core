@@ -1613,8 +1613,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia;
         var sortOptionsObj = null;
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            TAG.Worktop.Database.changeExhibition(exhibition.Identifier, {AddSortOptions: true}, function (sortOptionsDoq) {
-                TAG.Worktop.Database.getDoq(sortOptionsDoq.statusText, function (sortOptionsDoq) {
+            TAG.Worktop.Database.changeExhibition(exhibition.Identifier, {AddSortOptions: true}, function (doqGuid) {
+                TAG.Worktop.Database.getDoq(doqGuid.statusText, function (sortOptionsDoq) {
                     sortOptionsObj = sortOptionsDoq;
                     sortDropDown = createSortOptions(sortOptionsObj);
                     createCollectionSettings();
@@ -6092,7 +6092,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         addMenuLabel.click(function () {
             if (showDropdown) {
                 addMenuArrowIcon.css('transform', 'scaleY(1)');
-                dropDown.hide();
             } else {
                 addMenuArrowIcon.css('transform', 'scaleY(-1)');
                 dropDown.show();
@@ -6125,8 +6124,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             })
             .click(function () {
+                dropDown.hide();
                 createAsset();
-                addMenuLabel.click();
             });
         var iFrameAsset = $(document.createElement('label'))
             .attr('id', 'Embed Video')
@@ -6148,8 +6147,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             })
             .click(function () {
+                dropDown.hide();
                 createIframeSourceDialog();
-                addMenuLabel.click();
             });
         dropDown.append(fromFile);
         dropDown.append(iFrameAsset);
