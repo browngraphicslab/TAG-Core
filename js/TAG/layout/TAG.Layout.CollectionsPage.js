@@ -1215,6 +1215,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('videoLabel')
                     .attr('src', tagPath+'images/icons/catalog_video_icon.svg');
                 main.append(videoLabel);
+            } else if (currentWork.Metadata.ContentType === "Audio" ){
+            	var audioLabel = $(document.createElement('img'))
+                    .addClass('audioLabel')
+                    .attr('src', tagPath+'images/audio_icon.svg');
+                main.append(audioLabel);
             }
 
             tileDiv.append(main);
@@ -1920,6 +1925,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     for (i=0; i<doqs.length;i++){
                         src = '';
                         metadata = doqs[i].Metadata;
+                        console.log(metadata);
                         thumb = metadata.Thumbnail;
 
                         !onAssocMediaView && (doqs[i].artwork = artwork);
@@ -1932,6 +1938,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
                                 )
                         miniTile.css('left', i*(miniTile.width() + miniTilesHolder.height()/10));
+
 
                         switch (metadata.ContentType) {
                             case 'Audio':
@@ -1948,6 +1955,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             default:
                                 src = tagPath + 'images/no_thumbnail.svg';
                                 break;
+                        }
+                        if (onAssocMediaView && metadata.Type === "Artwork"){
+                        	src = thumb ? FIX_PATH(thumb) : tagPath + 'images/no_thumbnail.svg';
                         }
 
                         // Set tileImage to thumbnail image, if it exists
