@@ -1613,15 +1613,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var assocMedia;
         var sortOptionsObj = null;
         if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            TAG.Worktop.Database.addSortOptions(exhibition.Identifier, null, function (sortOptionsDoq) {
-                sortOptionsObj = sortOptionsDoq;
-                sortDropDown = createSortOptions(sortOptionsObj);
-                createCollectionSettings();
-            }, null, null, function () {
-                sortOptionsObj = null;
-                sortDropDown = null;
-                createCollectionSettings();
-            });
+            TAG.Worktop.Database.changeExhibition(exhibition.Identifier, {AddSortOptions: true}, function (doqGuid) {
+                TAG.Worktop.Database.getDoq(doqGuid.statusText, function (sortOptionsDoq) {
+                    sortOptionsObj = sortOptionsDoq;
+                    sortDropDown = createSortOptions(sortOptionsObj);
+                    createCollectionSettings();
+                });
+            }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
         } else {
             TAG.Worktop.Database.getDoq(exhibition.Metadata.SortOptionsGuid, function (sortOptionsDoq) {
                 sortOptionsObj = sortOptionsDoq;
@@ -6094,7 +6092,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         addMenuLabel.click(function () {
             if (showDropdown) {
                 addMenuArrowIcon.css('transform', 'scaleY(1)');
-                dropDown.hide();
             } else {
                 addMenuArrowIcon.css('transform', 'scaleY(-1)');
                 dropDown.show();
@@ -6127,8 +6124,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             })
             .click(function () {
+                dropDown.hide();
                 createAsset();
-                addMenuLabel.click();
             });
         var iFrameAsset = $(document.createElement('label'))
             .attr('id', 'Embed Video')
@@ -6150,8 +6147,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             })
             .click(function () {
+                dropDown.hide();
                 createIframeSourceDialog();
-                addMenuLabel.click();
             });
         dropDown.append(fromFile);
         dropDown.append(iFrameAsset);
