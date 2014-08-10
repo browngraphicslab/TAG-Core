@@ -1736,11 +1736,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     shift = 0;
                     //shift = rootWidth/10;
                 }
+                var containerLeft = leftOffset - shift;
                 selectedArtworkContainer.css({
                     'width' : containerWidth,
                     'display': 'inline',
-                    'left' : leftOffset - shift
-                })
+                    'left' : containerLeft
+                });
+                //At end (sometimes not caught by 'shift' due to animations)
+                if (containerLeft >= root.width() - containerWidth){
+                	console.log("hurr");
+                	selectedArtworkContainer.css('left', root.width()-containerWidth-TILE_BUFFER);
+                }
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/5);
                 overlay.css('z-index', '100002');
                 topBar.css('z-index','100003');
@@ -1785,7 +1791,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({
                         'color': '#' + SECONDARY_FONT_COLOR,
                         'font-family': FONT,
-                        'font-size': "120%"
                     });
 
                 //Image div
@@ -2009,6 +2014,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                  
                 return previewTile;         
             }
+
             for (i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
                 styleTimelineCircle (timelineEventCircles[i], false)
             };
