@@ -2282,7 +2282,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                         var artworkAMDocfrag = document.createDocumentFragment();
                                         mediaQueue.clear();
                                         $(".allAssociatedMediaHolder").css('background', 'black');
-                                        $(artworkHolder).css('background', 'black');
+                                        $(".artworkHolder").css('background', 'black');
                                         $(artworkHolder).css('background', '#999');
                                         $(".mediaHolder").detach();
                                         drawAssociatedMedia(mediaCache[selected], assMediasingleDoubleclick, artworkAMDocfrag);

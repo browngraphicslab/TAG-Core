@@ -1566,6 +1566,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = true;
             showAssocMedia.css('background-color', 'white');
             hideAssocMedia.css('background-color','');
+            $('#toggleRow').css('display','block');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -1577,6 +1578,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
+            $('#toggleRow').css('display','none');
             }, {
             'min-height': '0px',
             'width': '48%'
@@ -1602,6 +1604,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = true;
             showTimeline.css('background-color', 'white');
             hideTimeline.css('background-color','');
+            $('#timelineArea').css('display','block');
+            $('#bottomContainer').css({
+                'height': '69%',
+                'top':'25%'
+               });
+            //$('#dateButton') &&
+            //$('#yearButton') &&
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -1616,6 +1625,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = false;
             hideTimeline.css('background-color','white');
             showTimeline.css('background-color','');
+            $('#timelineArea').css('display','none');
+            $('#bottomContainer').css({
+                'height': '85%',
+                'top':'15%'
+               });
+            //$('#dateButton') &&
+            //$('#yearButton') &&
             }, {
             'min-height': '0px',
             'width': '48%'
