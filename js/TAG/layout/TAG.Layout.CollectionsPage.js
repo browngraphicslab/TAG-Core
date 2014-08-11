@@ -133,9 +133,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
 
-        //root.off();
-        //searchInput.off();
-        console.log("off");
         // search on keyup
         searchInput.on('keyup', function (e) {
             if(e.which === 13) {
@@ -150,6 +147,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-position':'2% center'
         });
 
+        searchInput.on('click', function(){
+            console.log("clicked");
+            searchInput.focus();
+        })
     
         searchInput.on('focusin', function () { 
             console.log("focusin");
@@ -158,6 +159,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         searchInput.on('focusout', function () { 
             console.log("focusout");
+            console.log("active: " + document.activeElement);
             if (!searchInput.val()) {
                 searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             } 
