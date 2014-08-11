@@ -309,6 +309,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 searchbar.css({ 'background-image': 'none' });
             } else {
                 doSearch();
+                searchbar.css({ 'background-image': 'none' });
             }
             event.stopPropagation();
             event.preventDefault();
@@ -565,13 +566,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
         });
         
-        searchbar.keyup(function (e) {
+        //searchbar.keyup(function (e) {
 
-            if (!searchbar.val()) {
-                resetView();
-                searchbar.css({ 'background-image': 'none' });
-            }
-        });
+        //    if (!searchbar.val()) {
+        //        resetView();
+        //        searchbar.css({ 'background-image': 'none' });
+        //    }
+        //});
 
        // rootContainer.keydown(keyHandler);
         //searchbar.attr('placeholder', 'Search...');
@@ -3343,7 +3344,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var info;
 
         searchbar[0].value = "";
-        $(searchbar).blur(); //////////
+        //$(searchbar).blur(); //////////
         infoSource = [];
         
         $.each(currentList, function (i, cts) {
