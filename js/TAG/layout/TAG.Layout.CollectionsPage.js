@@ -1223,7 +1223,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else if (currentWork.Metadata.Medium === "Video") {
                 videoLabel = $(document.createElement('img'))
                     .addClass('videoLabel')
-                    .attr('src', tagPath+'images/icons/catalog_video_icon.svg');
+                    .attr('src', tagPath + 'images/icons/catalog_video_icon.svg');
+                if (tag === 'Date' && getDateText(getArtworkDate(currentWork, true))) {
+                    videoLabel.css('bottom', '10%');
+                } else if (tag === 'Artist' && currentWork.Metadata.Artist) {
+                    videoLabel.css('bottom', '10%');
+                } else {
+                    videoLabel.css('bottom', '0%');
+                }
                 main.append(videoLabel);
             } else if (currentWork.Metadata.ContentType === "Audio" ){
             	var audioLabel = $(document.createElement('img'))
