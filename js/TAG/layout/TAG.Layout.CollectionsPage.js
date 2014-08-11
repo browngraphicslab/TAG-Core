@@ -133,6 +133,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
 
+        //root.off();
+        //searchInput.off();
+        console.log("off");
         // search on keyup
         searchInput.on('keyup', function (e) {
             if(e.which === 13) {
@@ -147,21 +150,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-position':'2% center'
         });
 
-        
-        searchInput.on('click', function(){
-            console.log("clicked");
-            searchInput.triggerHandler("focus");
-        });
+    
         searchInput.on('focusin', function () { 
             console.log("focusin");
             searchInput.css({ 'background-image': 'none' }); 
         });
+        
         searchInput.on('focusout', function () { 
             console.log("focusout");
             if (!searchInput.val()) {
                 searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             } 
         });
+    
         
         // initSplitscreen();
 
@@ -195,7 +196,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         //Scrolling closes popup
-  		//should be that as soon as you scroll from edge the pop-up closes, not mousewheel scroll
         if (bottomContainer[0].addEventListener) {
             // IE9, Chrome, Safari, Opera
             bottomContainer[0].addEventListener("mousewheel", 
@@ -214,6 +214,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     currentArtwork && hideArtwork(currentArtwork)()
                 }, false);
         };
+
 
         var progressCircCSS = {
             'position': 'absolute',
@@ -527,7 +528,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 str,
                 text = collection.Metadata && collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
 
-            console.log(collection.Name);
 
             // if the idle timer hasn't started already, start it
             if(!idleTimer && evt) { // loadCollection is called without an event to show the first collection
@@ -991,6 +991,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 i, h, w, j;
 
             if (!artworks || artworks.length === 0){
+                tileLoadingArea.hide();
                 return;
             }
 
@@ -1692,7 +1693,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // Set selected artwork to hide when anything else is clicked
             root.on('mouseup', function(e) {
                 var subject = selectedArtworkContainer;
-                if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length) {    
+                console.log("mouseupp");
+                if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length){    
                     overlay.css('z-index', '1'); //In case artwork taking a while to load for some reason, to prevent freeze up
                     if (artworkShown){
                         hideArtwork(currentArtwork)();
