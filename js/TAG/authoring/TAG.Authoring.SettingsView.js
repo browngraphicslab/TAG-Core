@@ -566,13 +566,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
         });
         
-        //searchbar.keyup(function (e) {
+        searchbar.keyup(function (e) {
 
-        //    if (!searchbar.val()) {
-        //        resetView();
-        //        searchbar.css({ 'background-image': 'none' });
-        //    }
-        //});
+            if (!searchbar.val()) {
+                resetView();
+                searchbar.css({ 'background-image': 'none' });
+            }
+        });
 
        // rootContainer.keydown(keyHandler);
         //searchbar.attr('placeholder', 'Search...');
