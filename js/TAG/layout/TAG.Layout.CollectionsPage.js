@@ -1622,7 +1622,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 selectedArtworkContainer.css('display', 'none')
                 });
             overlay.css('z-index', '100000');
-            topBar.css('z-index','initial');
+            topBar.css('z-index','100000');
+            styleBottomContainer();
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
@@ -1801,6 +1802,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/5);
                 overlay.css('z-index', '100006');
                 topBar.css('z-index','100007');
+                bottomContainer.css('z-index','');
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
