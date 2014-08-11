@@ -1173,7 +1173,7 @@ TAG.TourAuthoring.Timeline = function (spec) {
         });
         downArrowBox.append(downArrow);
         greenBoxInSlider.css({
-            'background-color': 'DarkGreen',
+            'background-color': 'rgb(63, 55, 53)',
             'top': '0%',
             'left': '15%',
             'height': '100%',
@@ -1182,8 +1182,8 @@ TAG.TourAuthoring.Timeline = function (spec) {
             'border': '2px solid',
         });
 
-        greenBoxInSlider.append(upArrowBox);
-        greenBoxInSlider.append(downArrowBox);
+        //greenBoxInSlider.append(upArrowBox);
+        //greenBoxInSlider.append(downArrowBox);
         verticalScroller.append(greenBoxInSlider);
         return elements;
     }
