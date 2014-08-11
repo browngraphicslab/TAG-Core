@@ -258,14 +258,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background': 'transparent',
             'width': '20%',
             'height': '100%',
-            'margin-left': '70%',
-            'float': 'left'
+            'float': 'right',
+            'display':'inline-block'
         });
         brownLogoDiv.css({
             'background': 'transparent',
             'width': '10%',
             'height': '100%',
-            'float': 'right'
+            'float': 'right',
+            'display': 'inline-block'
         });
         microsoftLogo.css({
             'height': 'auto',
@@ -275,7 +276,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         brownLogo.css({
             'height': 'auto',
             'width': '80%',
-            'margin-top': '-5%'
+            'margin-top': '-38%'
         });
        
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
@@ -352,8 +353,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'height': '15%',
             'margin-top': '3%'
         });
-        infoLogo.append(microsoftLogoDiv);
         infoLogo.append(brownLogoDiv);
+        infoLogo.append(microsoftLogoDiv);
 
         brownLogoDiv.append(brownLogo);
         microsoftLogoDiv.append(microsoftLogo);
