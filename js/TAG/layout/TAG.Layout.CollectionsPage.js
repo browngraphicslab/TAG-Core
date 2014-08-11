@@ -134,6 +134,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
 
+        //Or else the search bar loses focus immediately when you come back from artwork viewer
+        $('#tagContainer').off();
+        
         // search on keyup
         searchInput.on('keyup', function (e) {
             if(e.which === 13) {
@@ -148,25 +151,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-position':'2% center'
         });
 
-        searchInput.on('click', function(){
-            console.log("clicked");
-            searchInput.focus();
-        })
-    
         searchInput.on('focusin', function () { 
-            console.log("focusin");
             searchInput.css({ 'background-image': 'none' }); 
         });
         
         searchInput.on('focusout', function () { 
-            console.log("focusout");
-            console.log("active: " + document.activeElement);
             if (!searchInput.val()) {
                 searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             } 
         });
-    
-        
+          
         // initSplitscreen();
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
@@ -1621,7 +1615,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
-            overlay.css('z-index', '100000');
+            overlay.css('z-index', '1');
             topBar.css('z-index','100000');
             styleBottomContainer();
             if (artworkCircles[artwork.Identifier]){
@@ -1709,6 +1703,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             multipleShown = showAllAtYear;
 
             // Set selected artwork to hide when anything else is clicked
+            console.log("changed");
             root.on('mouseup', function(e) {
                 var subject = selectedArtworkContainer;
                 console.log("mouseupp");
