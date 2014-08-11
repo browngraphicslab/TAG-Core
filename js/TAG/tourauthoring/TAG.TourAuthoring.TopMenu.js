@@ -227,6 +227,8 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             'width': 'auto',
             'position': 'relative',
             'margin-top': '1%',
+            float: 'right',
+            display:'inline-block'
         });
         backSaveButton.text('Save');
         backSaveButton.click(function () {
@@ -240,7 +242,8 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             'width': 'auto',
             'position': 'relative',
             'margin-top': '1%',
-            'left': '20%'
+            float: 'left',
+            display: 'inline-block'
 
         });
         backDontSaveButton.text('Don\'t Save');

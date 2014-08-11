@@ -517,9 +517,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     name: "currently associated",
                     getObjs: TAG.Worktop.Database.getAssocMediaTo,
                     args: [artwork.Identifier]
-                }, {
-                    name: "recently associated",
-                    getObjs: TAG.Util.UI.getRecentlyAssociated
                 }], {
                     getObjs: TAG.Worktop.Database.getAssocMediaTo,
                     args: [artwork.Identifier]
