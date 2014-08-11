@@ -1798,7 +1798,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 	selectedArtworkContainer.css('left', root.width()-containerWidth-TILE_BUFFER);
                 }
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/5);
-                overlay.css('z-index', '100002');
+                overlay.css('z-index', '100006');
                 topBar.css('z-index','100003');
             }
 
