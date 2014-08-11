@@ -1627,7 +1627,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 createCollectionSettings();
             });         
         }
-
         function createCollectionSettings() {
 
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
@@ -1874,7 +1873,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var option = $(inputs.sortOptions[0].children[i]);
                 var setSort = option.attr("setSort");
                 if (i > 2) {
-                    sortOptionChanges["?" + option.text()] = setSort;
+                    if (option.text() === "Tour" && i == 3) {
+                        sortOptionChanges[option.text()] = setSort;
+                    } else {
+                        sortOptionChanges["?" + option.text()] = setSort;
+                    }
                 } else {
                     sortOptionChanges[option.text()] = setSort;
                 }
