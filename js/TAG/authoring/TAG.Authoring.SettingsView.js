@@ -155,7 +155,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         inFeedbackView = false,
 
         //dropdown associated media menu
-        menuLabel = createDropdownAssocMediaMenu();
+        menuLabel = createDropdownAssocMediaMenu(),
+        showDropdown = false;
 
         //window.addEventListener('keydown', keyHandler),
         TAG.Util.UI.initKeyHandler();
@@ -2396,6 +2397,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var list;
         currentIndex = 0;
+
+        if (showDropdown) {
+            menuLabel.click();
+        }
 
         prepareNextView(true, "Add", createAsset);
         prepareViewer(true);
@@ -4818,6 +4823,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleLoading.show();
         secondaryButton.css("display", "none");
 
+        if (showDropdown) {
+            menuLabel.click();
+        }
+
         if (!inAssociatedView) {
             menuLabel.hide();
             newButton.text(newText);
@@ -6070,7 +6079,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //}
 
     function createDropdownAssocMediaMenu() {
-        var showDropdown = false;
         var addMenuLabel = $(document.createElement('button'))
             .attr('id', 'addMenuLabel')
             .text('Add ')
@@ -6108,7 +6116,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
-                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 1000,
+                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 100000,
                 'border':'1px solid white'
             });
         dropDown.hide();
@@ -6122,11 +6130,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             showDropdown = !showDropdown;
         });
-        //addMenuLabel.on('blur', function (e) {
-        //    if (showDropdown) {
-        //        addMenuLabel.click();
-        //    }
-        //});
         var fromFile = $(document.createElement('label'))
             .attr('id', 'fromFile')
             .text('From File')
