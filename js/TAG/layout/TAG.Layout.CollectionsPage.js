@@ -1079,13 +1079,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'top' : '25%',
                     'z-index': '',
                 });
-                
+                selectedArtworkContainer.css({
+                    'height' :'110%',
+                    'bottom' : '-5%'
+                });
         } else {
             bottomContainer.css({
                 'height':'85%',
                 'top':'15%',
                 'z-index':'100005',
             });
+            selectedArtworkContainer.css({
+                'height': '100%',
+                'bottom':'2%'
+            })
         }
     }
 
@@ -1168,11 +1175,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
 
             // Set tileImage to thumbnail image, if it exists
-            if(currentWork.Metadata.Thumbnail) {
+            if(currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio" ) {
                 tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
+            } else if (currentWork.Metadata.ContentType === "Audio" ){
+                tileImage.attr('src', tagPath+'images/audio_icon.svg');
             } else {
                 tileImage.attr("src", tagPath+'images/no_thumbnail.svg');
-            }
+            } 
 
             // Add title
             if (tag === 'Title') {
@@ -1235,11 +1244,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     videoLabel.css('bottom', '0%');
                 }
                 main.append(videoLabel);
-            } else if (currentWork.Metadata.ContentType === "Audio" ){
-            	var audioLabel = $(document.createElement('img'))
-                    .addClass('audioLabel')
-                    .attr('src', tagPath+'images/audio_icon.svg');
-                main.append(audioLabel);
             }
 
             tileDiv.append(main);
@@ -1936,12 +1940,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
 
                 function addAssociationRow(numberAssociatedDoqs){
+                    var tileSpacing;
                 	if (numberAssociatedDoqs === 0){
                 		miniTilesLabel.hide();
                 		miniTilesHolder.hide();
                 		return;
                 	}
-                	if (numberAssociatedDoqs*miniTilesHolder.height() > selectedArtworkContainer.width()){
+                    tileSpacing = miniTilesHolder.height()/10;
+                	if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
                 		prevArrow = $(document.createElement('img'))
                     			.addClass("miniTilesArrow")
                     			.attr('src', tagPath + 'images/icons/Close.svg')
