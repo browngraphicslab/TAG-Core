@@ -160,7 +160,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //window.addEventListener('keydown', keyHandler),
         TAG.Util.UI.initKeyHandler();
         TAG.Util.UI.getStack()[0] = settingsViewKeyHandler;
-
+        var timelineShown;
     loadHelper();
     if (callback) {
         callback(that);
@@ -1351,6 +1351,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "color": "black",
                     "border": "2px solid black"
                 });
+                if (sortDiv.text() === "Date") {
+                    timelineShown = false;
+
+                    $("#showTimelineBttn").css('background-color', '');
+                    $("#hideTimelineBttn").css('background-color', 'white');
+
+                    $("#showTimelineBttn").attr("disabled","true");
+                }
             } else {
                 if (sortOptionsCount < 4) {
                     sortOptionsCount++;
@@ -1360,6 +1368,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         "color": "white",
                         "border": "2px solid white"
                     });
+                }
+                if (sortDiv.text() === "Date") {
+                    $("#showTimelineBttn").removeAttr('disabled');
                 }
             }
         };
@@ -1388,6 +1399,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         key = sortObj.substr(1);
                     } else {
                         key = sortObj;
+                        if (key==="Date"){
+                            timelineShown = false;
+
+                            $("#showTimelineBttn").css('background-color', '');
+                            $("#hideTimelineBttn").css('background-color', 'white');
+
+                            $("#showTimelineBttn").attr("disabled","true");
+                        }
                     }
                     var sortObjArray = sortOptions[sortObj].split(",");
                     if (sortObjArray.length === 2 && sortObjArray[0] === "0" && sortObjArray[1] == "false") {
@@ -1557,7 +1576,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var timelineOptionsDiv = $(document.createElement('div'));
         timelineOptionsDiv.append(showTimeline).append(hideTimeline);
 
-        var timelineShown;
+        
         if (exhibition.Metadata.Timeline === "true" || exhibition.Metadata.Timeline === "false") {
             exhibition.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
         } else {
@@ -1576,6 +1595,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'padding-left': '10px',
             'padding-right': '10px'
         });
+        showTimeline.attr("id","showTimelineBttn");
         showTimeline.attr('class','settingButton');
         var hideTimeline = createButton('Hide Timeline', function () {
             //(timelineShown) && function () { changesHaveBeenMade = true; }();
@@ -1585,7 +1605,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, {
             'min-height': '0px',
             'width': '48%'
-        });
+            });
+        hideTimeline.attr("id","hideTimelineBttn");
         hideTimeline.attr('class','settingButton');
         if (timelineShown){
             showTimeline.css('background-color','white');
