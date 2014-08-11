@@ -309,6 +309,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 searchbar.css({ 'background-image': 'none' });
             } else {
                 doSearch();
+                searchbar.css({ 'background-image': 'none' });
             }
             event.stopPropagation();
             event.preventDefault();
@@ -3362,7 +3363,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var info;
 
         searchbar[0].value = "";
-        $(searchbar).blur(); //////////
+        //$(searchbar).blur(); //////////
         infoSource = [];
         
         $.each(currentList, function (i, cts) {
