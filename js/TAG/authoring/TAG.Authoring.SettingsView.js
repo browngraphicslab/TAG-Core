@@ -303,6 +303,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @ method enterKeyHandlerSettingsView
      */
     function enterKeyHandlerSettingsView(event) {
+        if (event.target.className == "metadataPickerSearchbar") {
+            console.log('searching metadata');
+            event.stopPropagation();
+            event.preventDefault();
+        }
         if (searchbar.is(':focus')) {
             if (!searchbar.val()) {
                 resetView();
@@ -4336,6 +4341,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
 
+
         metadataPicker.append(searchbar);
 
         //search function in terms of titles
@@ -5336,10 +5342,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearDescriptionDiv.css({
             'width': '60%',
             'height': '25px',
-            'position': 'absolute',
+            'position': 'relative',
             'left': '0%',
-            'margin-bottom':'1%',
-            'margin-left': '2%',
+            'margin-bottom': '1%',
             'font-size': '70%',
             'white-space': 'nowrap',
             'display':'inline-block'
