@@ -1944,12 +1944,24 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'float': 'right',
             'margin-right': '3%',
             'margin-top': '0.75%',
-            'width': '38%'
+            'width': '38%',
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+        $(associatedsearchbar).on('focus', function () {
+            $(associatedsearchbar).css({ 'background-image': 'none' });
+        });
+        $(associatedsearchbar).on('focusout', function () {
+            if (!$(associatedsearchbar).val()) {
+                $(associatedsearchbar).css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            }
         });
         $(associatedsearchbar).on('keyup', function (event) {
             event.stopPropagation();
         });
-        $(associatedsearchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+        //$(associatedsearchbar).attr('placeholder', PICKER_SEARCH_TEXT);
         $(associatedsearchbar).val("");
         associatedsearchbar.keyup(function () {
             TAG.Util.searchData($(associatedsearchbar).val(), '.mediaHolder', IGNORE_IN_SEARCH);
@@ -2133,7 +2145,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 _clearAssMedia();
                 $(associatedMediaPickerOverlay).fadeOut();
                 associatedMediaPickerImport.disabled = true;
-                $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+                //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
                 if (selectedArtworks && selectedArtworks.length) {
                     for (i = 0; i < selectedArtworks.length; i++) {
                         selectedArt = selectedArtworks[i];
@@ -2164,7 +2176,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     undoManager.combineLast(2 * selectedArtworks.length);
                 }
             }
-            $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+            //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             $('.associatedsearchbar').val("");
             isUploading = false;
             timeline.getDataHolder().mapTracks(function (container, i) {
@@ -2465,7 +2477,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             _clearAssMedia();
             $(associatedMediaPickerOverlay).fadeOut();
             associatedMediaPickerImport.disabled = true;
-            $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+            //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             if (selectedArtworks && selectedArtworks.length) {
                 for (i = 0; i < selectedArtworks.length; i++) {
                     selectedArt = selectedArtworks[i];
@@ -2495,7 +2507,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 undoManager.combineLast(2 * selectedArtworks.length);
             }
-            $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+            //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             $('.associatedsearchbar').val("");
             isUploading = false;
             timeline.getDataHolder().mapTracks(function (container, i) {
@@ -2518,7 +2530,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             _clearAssMedia();
             $(associatedMediaPickerOverlay).fadeOut();
             associatedMediaPickerImport.disabled = true;
-            $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+            //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             $('.associatedsearchbar').val("");
             $('.mediaHolder').data('selected', 'false');
             $('.mediaHolder').css('background-color', 'rgb(34,34,34)');
@@ -2689,13 +2701,25 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'float': 'right',
             'margin-right': '3%',
             'margin-top': '0.75%',
-            'width': '38%'
+            'width': '38%',
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+        $(searchbar).on('focus', function () {
+            $(searchbar).css({ 'background-image': 'none' });
+        });
+        $(searchbar).on('focusout', function () {
+            if (!$(searchbar).val()) {
+                $(searchbar).css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            }
         });
         $(searchbar).on('keyup', function (event) {
             event.stopPropagation();
         });
         $(searchbar).attr('type', 'text');
-        $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+        //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
         searchbar.keyup(function () {
             TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
         });
@@ -3054,7 +3078,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
             $(catalogPickerOverlay).fadeOut();
             _clearCatalog();
-            $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+            //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
             $(searchbar).val("");
             // add the artwork track to the timeline
             for (i = 0; i < selectedArtworks.length; i++) {
@@ -3192,7 +3216,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 _clearCatalog();
                 $(catalogPickerOverlay).fadeOut();
             }
-            $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+            //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
             $(searchbar).val("");
             isUploading = false;
             timeline.getDataHolder().mapTracks(function (container, i) {
@@ -3215,7 +3239,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(catalogPickerOverlay).fadeOut();
             _clearCatalog();
             catalogPickerImport.disabled = true;
-            $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+            //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
             $(searchbar).val("");
             return undefined;
         });
