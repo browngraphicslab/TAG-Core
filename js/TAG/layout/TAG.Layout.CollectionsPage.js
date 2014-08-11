@@ -45,12 +45,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileLoadingArea 	     = root.find('#tileLoadingArea'),
 
         // input options
-        scrollPos        = options.backScroll || 0,     // horizontal position within collection's catalog
-        currCollection   = options.backCollection,      // the currently selected collection
-        currentArtwork   = options.backArtwork,         // the currently selected artwork
-        currentTag       = options.backTag,             // current sort tag for collection
-        multipleShown    = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
-        previewing       = options.previewing || false,          // whether we are loading for a preview in authoring (for dot styling)
+        scrollPos               = options.backScroll || 0,     // horizontal position within collection's catalog
+        currCollection          = options.backCollection,      // the currently selected collection
+        currentArtwork          = options.backArtwork,         // the currently selected artwork
+        currentTag              = options.backTag,             // current sort tag for collection
+        multipleShown           = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
+        //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
+        previewing              = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
         
         // misc initialized vars
         loadQueue            = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
@@ -70,7 +71,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileDivHeight        = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
         artworkShown         = false,                            // whether an artwork pop-up is currently displayed
         timelineShown        = true,                             // whether current collection has a timeline
-        onAssocMediaView     = false,                            // whether current collection is on assoc media view
+        onAssocMediaView     = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked    = null,
 
         // constants
@@ -378,6 +379,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtwork = null;
         loadQueue.clear();
         comingBack = false;
+        tileDiv.empty();
         tileLoadingArea.show();
         if (cancelLoadCollection) cancelLoadCollection();
     }
@@ -553,9 +555,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             buttonRow.empty();
             loadSortTags(collection);
 
-
-            if (!onAssocMediaView) {
-                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
+             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
                     TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
                         if (cancelLoad) return;
                         for (i=0;i<mediaDoqs.length;i++){
@@ -711,10 +711,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         });
                     });
                 }
-                artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
-                assocMediaButton.css('color', dimmedColor);
-
-            }
+                if (!onAssocMediaView){
+                    artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
+                    assocMediaButton.css('color', dimmedColor);
+                } else {
+                    assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);
+                    artworksButton.css('color', dimmedColor);
+                }
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
             if (collection.Metadata.Description && !onAssocMediaView) {
@@ -769,13 +772,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             scrollPos = sPos || 0;
             //comingBack = false;
+            //console.log("2: " + wasOnAssocMediaView);
+            //to-do change to just onasmv, or revert to false
+          
             if (!onAssocMediaView || !currCollection.collectionMedia) {
                 getCollectionContents(currCollection);
             } else {
                 createArtTiles(currCollection.collectionMedia);
                 initSearch(currCollection.collectionMedia);
             }
-
+            
             /*helper function to load sort tags
             * @method loadSortTags
             * @param {Object} collection
@@ -1615,7 +1621,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
-            overlay.css('z-index', '1');
+            overlay.css('z-index', '100000');
+            topBar.css('z-index','initial');
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
@@ -1792,8 +1799,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 	selectedArtworkContainer.css('left', root.width()-containerWidth-TILE_BUFFER);
                 }
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/5);
-                overlay.css('z-index', '100002');
-                topBar.css('z-index','100003');
+                overlay.css('z-index', '100006');
+                topBar.css('z-index','100007');
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
@@ -1977,7 +1984,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     for (i=0; i<doqs.length;i++){
                         src = '';
                         metadata = doqs[i].Metadata;
-                        console.log(metadata);
                         thumb = metadata.Thumbnail;
 
                         !onAssocMediaView && (doqs[i].artwork = artwork);
@@ -2535,12 +2541,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 scrollPos = catalogDiv.scrollLeft();
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
+                    prevPreview: currentArtwork,
                     prevTag : currentTag,
                     prevScroll: catalogDiv.scrollLeft(),
                     prevCollection: currCollection,
                     prevPage: 'catalog',
                     prevMult: multipleShown,
-                    assocMediaToShow: associatedMedia
+                    assocMediaToShow: associatedMedia,
+                    onAssocMediaView : onAssocMediaView
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');

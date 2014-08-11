@@ -1366,9 +1366,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 sortDiv.attr("setSort", false);
                 sortDiv.css({
-                    "background-color": "white",
-                    "color": "black",
-                    "border": "2px solid black"
+                    "background-color": "black",
+                    "background": "transparent",
+                    "color": "black"
                 });
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
@@ -1383,9 +1383,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     sortOptionsCount++;
                     sortDiv.attr("setSort", true);
                     sortDiv.css({
-                        "background-color": "#0040FF",
-                        "color": "white",
-                        "border": "2px solid white"
+                        "background-color": "white"
                     });
                 }
                 if (sortDiv.text() === "Date") {
@@ -1439,9 +1437,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (setSort === true || setSort === "true") {
                         sortOptionsCount++;
                         sortDiv.css({
-                            "background-color": "#0040FF",
-                            "color": "white",
-                            "border": "2px solid white"
+                            "background-color": "white",
+                            "border": "1px solid black"
                         });
                     }
                     sortDiv.click(clickCallback(sortDiv));
@@ -1485,13 +1482,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} exhibition   exhibition to load
      */
     function loadExhibition(exhibition) {
-        prepareViewer(true);
-        clearRight();
+        
         deleteType = deleteExhibition;
         toDelete = exhibition;
-
-        // Set the viewer to exhibition view (see function below)
-        exhibitionView(exhibition);
 
         // Create inputs
         var privateState;
@@ -1526,8 +1519,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             publicInput.css('background-color', 'white');
         }
-        var pubPrivDiv = $(document.createElement('div'));
-        pubPrivDiv.append(privateInput).append(publicInput);
+        /*var pubPrivDiv = $(document.createElement('div'));
+        pubPrivDiv.append(privateInput).append(publicInput);*/
 
         // local visibility
         var localVisibility = LADS.Util.localVisibility(exhibition.Identifier);
@@ -1555,8 +1548,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             invisibilityInput.css('background-color', 'white');
         }
-        var visDiv = $(document.createElement('div'));
-        visDiv.append(invisibilityInput).append(visibilityInput);
+        /*var visDiv = $(document.createElement('div'));
+        visDiv.append(invisibilityInput).append(visibilityInput);*/
 
         //TO-DO: add in on server side from TAG.Worktop.Database.js changeExhibition() 
         var assocMediaShown;
@@ -1571,6 +1564,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = true;
             showAssocMedia.css('background-color', 'white');
             hideAssocMedia.css('background-color','');
+            $('#toggleRow').css('display','block');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -1582,6 +1576,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
+            $('#toggleRow').css('display','none');
             }, {
             'min-height': '0px',
             'width': '48%'
@@ -1592,8 +1587,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }else{
             hideAssocMedia.css('background-color','white');
         }
-        var timelineOptionsDiv = $(document.createElement('div'));
-        timelineOptionsDiv.append(showTimeline).append(hideTimeline);
+        /*var timelineOptionsDiv = $(document.createElement('div'));
+        timelineOptionsDiv.append(showTimeline).append(hideTimeline);*/
 
         
         if (exhibition.Metadata.Timeline === "true" || exhibition.Metadata.Timeline === "false") {
@@ -1607,6 +1602,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = true;
             showTimeline.css('background-color', 'white');
             hideTimeline.css('background-color','');
+            $('#timelineArea').css('display','block');
+            $('#bottomContainer').css({
+                'height': '69%',
+                'top':'25%'
+               });
+            //$('#dateButton') &&
+            //$('#yearButton') &&
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -1621,6 +1623,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = false;
             hideTimeline.css('background-color','white');
             showTimeline.css('background-color','');
+            $('#timelineArea').css('display','none');
+            $('#bottomContainer').css({
+                'height': '85%',
+                'top':'15%'
+               });
+            //$('#dateButton') &&
+            //$('#yearButton') &&
             }, {
             'min-height': '0px',
             'width': '48%'
@@ -1633,10 +1642,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             hideTimeline.css('background-color','white');
         }
 
-        var timelineOptionsDiv = $(document.createElement('div'));
-        timelineOptionsDiv.append(showTimeline).append(hideTimeline);
-        var assocMediaOptionsDiv = $(document.createElement('div'));
-        assocMediaOptionsDiv.append(showAssocMedia).append(hideAssocMedia);
+
 
         var privateSetting;
         var localVisibilitySetting;
@@ -1668,7 +1674,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });         
         }
         function createCollectionSettings() {
-
+            prepareViewer(true);
+            clearRight();
+            // Set the viewer to exhibition view (see function below)
+            exhibitionView(exhibition);
+            var pubPrivDiv = $(document.createElement('div'));
+            pubPrivDiv.append(privateInput).append(publicInput);
+            var visDiv = $(document.createElement('div'));
+            visDiv.append(invisibilityInput).append(visibilityInput);
+            var timelineOptionsDiv = $(document.createElement('div'));
+            timelineOptionsDiv.append(showTimeline).append(hideTimeline);
+            var assocMediaOptionsDiv = $(document.createElement('div'));
+            assocMediaOptionsDiv.append(showAssocMedia).append(hideAssocMedia);
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
             descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false);
             bgInput = createButton('Change Background Image', function () {
@@ -1697,6 +1714,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             onChangeUpdateText(nameInput, '#exhibition-title', 40);
             onChangeUpdateText(descInput, '#description-text', 1790);
 
+            localVisibilitySetting = createSetting('Visiblity on Machine', visDiv);
             privateSetting = createSetting('Change Publish Setting', pubPrivDiv);
             name = createSetting('Collection Name', nameInput);
             desc = createSetting('Collection Description', descInput);
@@ -1704,166 +1722,167 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
             assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
 
-            if (sortDropDown){
+            if (sortDropDown) {
                 sortOptions = createSetting('Sort Options', sortDropDown);
             }
 
             settingsContainer.append(privateSetting);
+            settingsContainer.append(localVisibilitySetting);
             settingsContainer.append(name);
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
             settingsContainer.append(assocMedia);
-            if (sortOptions){
+            if (sortOptions) {
                 settingsContainer.append(sortOptions);
             }
-        }
 
-        //Automatically save changes
-        //currentMetadataHandler = function () {
-        //    if (nameInput.val() === undefined || nameInput.val() === "") {
-        //        nameInput.val("Untitled Collection");
-        //    }
-        //    LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
-        //    saveExhibition(exhibition, {
-        //        privateInput: privateState,
-        //        nameInput: nameInput,
-        //        descInput: descInput,
-        //        bgInput: bgInput,
-        //        sortOptions: sortDropDown,
-        //        timelineInput: timelineShown
-        //    });
-        //};
+            //Automatically save changes
+            //currentMetadataHandler = function () {
+            //    if (nameInput.val() === undefined || nameInput.val() === "") {
+            //        nameInput.val("Untitled Collection");
+            //    }
+            //    LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
+            //    saveExhibition(exhibition, {
+            //        privateInput: privateState,
+            //        nameInput: nameInput,
+            //        descInput: descInput,
+            //        bgInput: bgInput,
+            //        sortOptions: sortDropDown,
+            //        timelineInput: timelineShown
+            //    });
+            //};
 
-        // Buttons
-        var saveButton = createButton('Save Changes', function () {
-            if (nameInput.val() === undefined || nameInput.val() === "") {
-                nameInput.val("Untitled Collection");
-            }
-            LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
-            saveExhibition(exhibition, {
-                privateInput: privateState,  //default set unpublished
-                nameInput: nameInput,        //Collection name
-                descInput: descInput,        //Collection description
-                bgInput: bgInput,            //Collection background image
-                sortOptions: sortDropDown,
-                timelineInput: timelineShown,  
-                assocMediaInput : assocMediaShown
-            });
-        }, {
-            'margin-right': '3%',
-            'margin-top': '1%',
-            'margin-bottom': '1%',
-            'margin-left': '.5%',
-            'float': 'right',
-        });
-
-        var deleteButton = createButton('Delete Collection', function () {
-            deleteExhibition(exhibition);
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0',
-            'margin-bottom': '3%',
-        });
-
-        var catalogNext = true;
-        // Creates the button to toggle between views
-        var switchViewButton = createButton('Preview Catalog', function () {
-            viewer.empty();
-            if (catalogNext) {
-                // If there is no art the program crashes when entering catalog mode
-                // Show a message and return if thats the case (would prefer not having
-                // to request all the artwork)
-                LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
-                    if (!artworks || !artworks[0]) {
-                        var messageBox = LADS.Util.UI.popUpMessage(null, "Cannot view in catalog mode because there is no artwork in this exhibit.", null, true);
-                        root.append(messageBox);
-                        $(messageBox).show();
-                        exhibitionView();
-                    } else {
-                        switchViewButton.text('Preview Collection');
-                        catalogView();
-                        catalogNext = !catalogNext;
-                    }
-                });
-
-                return;
-            } else {
-                switchViewButton.text('Preview Catalog');
-                exhibitionView();
-            }
-            catalogNext = !catalogNext;
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
-
-        var artPickerButton = createButton('Manage Collection', function () {
-            TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
-                { comp: exhibition, type: 'exhib' },
-                'exhib', [{
-                    name: 'All Artworks',
-                    getObjs: TAG.Worktop.Database.getArtworksAndTours,
-                }, {
-                    name: 'Artworks in this Collection',
-                    getObjs: TAG.Worktop.Database.getArtworksIn,
-                    args: [exhibition.Identifier]
-                }], {
-                    getObjs: TAG.Worktop.Database.getArtworksIn,
-                    args: [exhibition.Identifier]
-                }, function () {
-                    prepareNextView(true, "New", createExhibition);
-                    clearRight();
-                    prepareViewer(true);
-                    loadExhibitionsView(exhibition.Identifier);
-                });
-
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
-
-        leftButton = artPickerButton;
-        // Sets the viewer to catalog view
-        function catalogView() {
-            rightQueue.add(function () {
-                var catalog;
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
-                    return;
+            // Buttons
+            var saveButton = createButton('Save Changes', function () {
+                if (nameInput.val() === undefined || nameInput.val() === "") {
+                    nameInput.val("Untitled Collection");
                 }
-                LADS.Layout.Catalog(exhibition, null, function (catalog) {
-                    viewer.append(catalog.getRoot());
-                    catalog.loadInteraction();
-                    preventClickthrough(viewer);
-
+                LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
+                saveExhibition(exhibition, {
+                    privateInput: privateState,  //default set unpublished
+                    nameInput: nameInput,        //Collection name
+                    descInput: descInput,        //Collection description
+                    bgInput: bgInput,            //Collection background image
+                    sortOptions: sortDropDown,
+                    timelineInput: timelineShown,
+                    assocMediaInput: assocMediaShown
                 });
+            }, {
+                'margin-right': '3%',
+                'margin-top': '1%',
+                'margin-bottom': '1%',
+                'margin-left': '.5%',
+                'float': 'right',
             });
-        }
 
-        /**Helper method to set the viewer to exhibition view
-         * @method exhibitionView
-         * @param {Object} exhibition    exhibition to load
-         */
-        function exhibitionView(exhibition) {
-            rightQueue.add(function () {
-                var options = {
-                    backCollection : exhibition,
-                    previewing : true
-                };
-                var exhibView = new TAG.Layout.CollectionsPage(options);
-                var exroot = exhibView.getRoot();
-                $(exroot).css('z-index','-1'); // otherwise, you can use the search box and sorting tabs!
-                viewer.append(exroot);
-                preventClickthrough(viewer);
+            var deleteButton = createButton('Delete Collection', function () {
+                deleteExhibition(exhibition);
+            }, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0',
+                'margin-bottom': '3%',
             });
-        }
 
-        buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
+            var catalogNext = true;
+            // Creates the button to toggle between views
+            var switchViewButton = createButton('Preview Catalog', function () {
+                viewer.empty();
+                if (catalogNext) {
+                    // If there is no art the program crashes when entering catalog mode
+                    // Show a message and return if thats the case (would prefer not having
+                    // to request all the artwork)
+                    LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
+                        if (!artworks || !artworks[0]) {
+                            var messageBox = LADS.Util.UI.popUpMessage(null, "Cannot view in catalog mode because there is no artwork in this exhibit.", null, true);
+                            root.append(messageBox);
+                            $(messageBox).show();
+                            exhibitionView();
+                        } else {
+                            switchViewButton.text('Preview Collection');
+                            catalogView();
+                            catalogNext = !catalogNext;
+                        }
+                    });
+
+                    return;
+                } else {
+                    switchViewButton.text('Preview Catalog');
+                    exhibitionView();
+                }
+                catalogNext = !catalogNext;
+            }, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0%',
+                'margin-bottom': '3%',
+            });
+
+            var artPickerButton = createButton('Manage Collection', function () {
+                TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
+                    { comp: exhibition, type: 'exhib' },
+                    'exhib', [{
+                        name: 'All Artworks',
+                        getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                    }, {
+                        name: 'Artworks in this Collection',
+                        getObjs: TAG.Worktop.Database.getArtworksIn,
+                        args: [exhibition.Identifier]
+                    }], {
+                        getObjs: TAG.Worktop.Database.getArtworksIn,
+                        args: [exhibition.Identifier]
+                    }, function () {
+                        prepareNextView(true, "New", createExhibition);
+                        clearRight();
+                        prepareViewer(true);
+                        loadExhibitionsView(exhibition.Identifier);
+                    });
+
+            }, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0%',
+                'margin-bottom': '3%',
+            });
+
+            leftButton = artPickerButton;
+            // Sets the viewer to catalog view
+            function catalogView() {
+                rightQueue.add(function () {
+                    var catalog;
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
+                        return;
+                    }
+                    LADS.Layout.Catalog(exhibition, null, function (catalog) {
+                        viewer.append(catalog.getRoot());
+                        catalog.loadInteraction();
+                        preventClickthrough(viewer);
+
+                    });
+                });
+            }
+
+            /**Helper method to set the viewer to exhibition view
+             * @method exhibitionView
+             * @param {Object} exhibition    exhibition to load
+             */
+            function exhibitionView(exhibition) {
+                rightQueue.add(function () {
+                    var options = {
+                        backCollection: exhibition,
+                        previewing: true
+                    };
+                    var exhibView = new TAG.Layout.CollectionsPage(options);
+                    var exroot = exhibView.getRoot();
+                    $(exroot).css('z-index', '-1'); // otherwise, you can use the search box and sorting tabs!
+                    viewer.append(exroot);
+                    preventClickthrough(viewer);
+                });
+            }
+
+            buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
+        }
     }
 
     /**Create an exhibition
@@ -3651,7 +3670,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $("#leftLoading").remove();
                             var msg = "This video is being converted to a compatible format";
                             viewer.append(TAG.Util.createConversionLoading(msg));
-                            checkConTimerId = setInterval(function () { conversionVideos.push(artwork.Identifier); }, 5 * 1000);
+                            checkConTimerId = setInterval(function () { checkConversion(artwork.Identifier); }, 5 * 1000);
                         } else if (output === "Error") {
                             $(document.getElementsByClassName("convertVideoBtn")[0]).show();
                             $("#videoErrorMsg").remove();
