@@ -142,7 +142,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 doSearch();
             }
 
-
         });
         
         searchInput.css({
