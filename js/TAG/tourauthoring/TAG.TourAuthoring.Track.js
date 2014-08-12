@@ -172,13 +172,13 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
     my.that = that;                                                                                 // object w/ all public methods of this class
     
-    //checkVideoConverted();
     function checkVideoConverted() {
        if (my.converted === false&&my.toConvert===true) {
             var videotag = $(document.createElement('video'));
             videotag.attr('preload', 'metadata');
             var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
             var basefilename = filename.substr(0, filename.lastIndexOf('.'));
+            var fileExt = filename.substr(filename.lastIndexOf('.'));
             TAG.Worktop.Database.getConvertedCheck(
                 (function (videotag) {
                     return function (output) {
@@ -190,12 +190,17 @@ TAG.TourAuthoring.Track = function (spec, my) {
                             videotag.on('loadedmetadata', function () {
                                 //remove from the video array and add display with the right duration
                                 changeTrackColor('white');
-                                addDisplay(0, this.duration);
+                                if (fileExt !== ".mp4") {
+                                    addDisplay(0, this.duration);
+                                }
                                 my.converted = true;
+                                my.toConvert = true;
                                 //convertbtn.remove();
                                 titleConversionMsg.text("");
-                                titleText.css('font-style','normal');
+                                titleText.css('font-style', 'normal');
+                                titlediv.css("opacity","1");
                                 clearInterval(chkIntervalVal);
+                                
                             });
                         } if (output === "Error") {
                             my.converted = false;
