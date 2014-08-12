@@ -2898,7 +2898,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     }
 
 
-    //TODO Doc: method to check whether a given URL is a valid YouTube/Vimeo URL and if so, return the parsed embed URL
+    /**Helper method to check URLs of videos to be embedded (standard YouTube or Vimeo URLs only) and return parsed URL for embed
+     * @method checkEmbeddedURL
+     * @param {String} url    URL to check and parse
+     * @return {string} validURL   parsed URL if valid, empty string otherwise
+     */
     function checkEmbeddedURL(url) {
         var modifiedURL = url,
                                 popup,
