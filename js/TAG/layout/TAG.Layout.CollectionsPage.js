@@ -1871,6 +1871,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .on('load', function () {
                        TAG.Util.removeProgressCircle(circle);
                    	});
+                console.log("currentThumbnail" + currentThumbnail);
                 !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
 
                 //Telemetry stuff
