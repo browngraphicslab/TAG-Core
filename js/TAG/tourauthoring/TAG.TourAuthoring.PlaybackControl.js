@@ -136,7 +136,8 @@ TAG.TourAuthoring.PlaybackControl = function (spec) {
         locationLabel.text('Timeline Overview');
         locationLabel.css({
             'font-weight': '600',
-            'font-size': TAG.Util.getFontSize(45)
+            //'font-size': TAG.Util.getFontSize(45)
+            'font-size': '70%'
         });
         playheadLocContainer.append(locationLabel);
 
@@ -259,7 +260,8 @@ TAG.TourAuthoring.PlaybackControl = function (spec) {
             'color': 'black',
             'display': 'inline-block',
             'font-weight': '600',
-            'font-size': TAG.Util.getFontSize(45)
+            //'font-size': TAG.Util.getFontSize(45)
+            'font-size': '70%'
         });
         sliderLabel.text('0:00/1:00');
 

@@ -303,12 +303,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @ method enterKeyHandlerSettingsView
      */
     function enterKeyHandlerSettingsView(event) {
+        if (event.target.className == "metadataPickerSearchbar") {
+            console.log('searching metadata');
+            event.stopPropagation();
+            event.preventDefault();
+        }
         if (searchbar.is(':focus')) {
             if (!searchbar.val()) {
                 resetView();
                 searchbar.css({ 'background-image': 'none' });
             } else {
                 doSearch();
+                searchbar.css({ 'background-image': 'none' });
             }
             event.stopPropagation();
             event.preventDefault();
@@ -1365,9 +1371,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 sortDiv.attr("setSort", false);
                 sortDiv.css({
-                    "background-color": "white",
-                    "color": "black",
-                    "border": "2px solid black"
+                    "background-color": "black",
+                    "background": "transparent",
+                    "color": "black"
                 });
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
@@ -1382,9 +1388,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     sortOptionsCount++;
                     sortDiv.attr("setSort", true);
                     sortDiv.css({
-                        "background-color": "#0040FF",
-                        "color": "white",
-                        "border": "2px solid white"
+                        "background-color": "white"
                     });
                 }
                 if (sortDiv.text() === "Date") {
@@ -1438,9 +1442,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (setSort === true || setSort === "true") {
                         sortOptionsCount++;
                         sortDiv.css({
-                            "background-color": "#0040FF",
-                            "color": "white",
-                            "border": "2px solid white"
+                            "background-color": "white",
+                            "border": "1px solid black"
                         });
                     }
                     sortDiv.click(clickCallback(sortDiv));
@@ -3455,7 +3458,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var info;
 
         searchbar[0].value = "";
-        $(searchbar).blur(); //////////
+        //$(searchbar).blur(); //////////
         infoSource = [];
         
         $.each(currentList, function (i, cts) {
@@ -4427,6 +4430,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
+
 
         metadataPicker.append(searchbar);
 
@@ -5428,10 +5432,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearDescriptionDiv.css({
             'width': '60%',
             'height': '25px',
-            'position': 'absolute',
+            'position': 'relative',
             'left': '0%',
-            'margin-bottom':'1%',
-            'margin-left': '2%',
+            'margin-bottom': '1%',
             'font-size': '70%',
             'white-space': 'nowrap',
             'display':'inline-block'

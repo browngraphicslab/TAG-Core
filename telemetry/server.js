@@ -5,6 +5,7 @@
  */
 
 (function Telemetry() {
+	console.log("Start");
 	// node modules
 	var http  = require('http'),
 	    fs    = require('fs'),
@@ -12,7 +13,7 @@
 	    qs    = require('querystring');
 
 	// some constants
-	var PORT = 9999,
+	var PORT = 12043,
 		NOT_AVAIL = "_",
 	    MAX_BODY_LENGTH = Math.pow(10,6),
 	    WRITE_DATA = writeTDataToFile,
@@ -22,6 +23,7 @@
 	
 	// create server
 	http.createServer(function (request, response) {
+		console.log("server created");
 		switch(request.method.toLowerCase()) {
 			case 'post':
 				handlePost(request, response);
@@ -33,7 +35,8 @@
 				console.log('======= UNSUPPORTED REQUEST TYPE =======');
 				console.log('sent at: '+(new Date().toString()));
 		}
-	}).listen(PORT, '127.0.0.1');
+		
+	}).listen(PORT);
 
 	/**
 	 * Handles a post request to the server. Generally, writes data to log file.
@@ -46,14 +49,15 @@
 	 var config = {
 		userName: 'sa',
 		password: 'telemetrydb',
-		server : '127.0.0.1',
+		server : 'localhost',
 
-		options: {database : "telemetrydb"}
+		options: {database : "telemetrydb", encrypt: true}
 	};
 
     var Request = require('tedious').Request;
 
 	function handlePost(request, response) {
+		console.log("Post request" + request);
 		var requestBody = '',
 			parsedBody,
 			date = new Date(),
@@ -82,13 +86,16 @@
 			for(i=0; i<parsedBody.length; i++) {
 				tobj = parsedBody[i];
                 var connection = new Connection(config); //create a new tedious connection to connect to the database mentioned in config
+console.log("reaches here");
 			    connection.on("connect", function(err){
+                                console.log("reaches2");
 			        if (err){
 			        	console.log(err);
 			        }
 			        else {
+                        console.log("connection created");
                         var type = tobj.ttype;
-			        	var req = new Request("INSERT INTO tmetrytesttable (ttype,tagserver,browser,platform,time_stamp,time_human,session_id,custom_1,custom_2,custom_3,custom_4,custom_5) VALUES ('"+tobj.ttype+"','"+tobj.tagserver+"','"+tobj.browser+"','"+tobj.platform+"','"+tobj.time_stamp+"','"+tobj.time_human+"','"+tobj.session_id+"','"+tobj.custom_1+"','"+tobj.custom_2+"','"+tobj.custom_3+"','"+tobj.custom_4+"','"+tobj.custom_5+"')",function(err, rowCount){
+			        	var req = new Request("INSERT INTO tmetrytesttable (ttype,tagserver,browser,platform,time_stamp,time_human,machine_id,session_id,custom_1,custom_2,custom_3,custom_4,custom_5) VALUES ('"+tobj.ttype+"','"+tobj.tagserver+"','"+tobj.browser+"','"+tobj.platform+"','"+tobj.time_stamp+"','"+tobj.time_human+"','"+tobj.machine_id+"','"+tobj.session_id+"','"+tobj.custom_1+"','"+tobj.custom_2+"','"+tobj.custom_3+"','"+tobj.custom_4+"','"+tobj.custom_5+"')",function(err, rowCount){
 			    		if (err){              //insert each tobj into each row of the table
 			    			console.log(err);
 			    		}
