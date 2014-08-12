@@ -35,6 +35,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverURL,
         tagContainer;
 
+    serverInput.attr('placeholder',localStorage.ip);
   // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
  if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
@@ -190,19 +191,24 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     }, 5000);
                     return;
                 case 'tagtest':
+                case 'tagtestserver.cloudapp.net':
                     address = 'tagtestserver.cloudapp.net';
                     break;
                 case 'tagdemo':
+                case 'tagdemo.cloudapp.net':
                     address = 'tagdemo.cloudapp.net';
                     break;
                 case 'taglive':
+                case 'browntagserver.com':
                     address = 'browntagserver.com';
                     break;
                 case 'taglocal':
+                case '10.116.71.58':
                     address = '10.116.71.58';
                     break;
                 case 'sam':
                 case 'seattleartmuseum':
+                case 'tag.seattleartmuseum.org':
                     address = 'tag.seattleartmuseum.org'
                     break;
                 default:
