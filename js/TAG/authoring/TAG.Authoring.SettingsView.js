@@ -2905,9 +2905,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function checkEmbeddedURL(url) {
         var modifiedURL = url,
-                                popup,
-                                id,
-                                validURL = true;
+                        popup,
+                        id,
+                        validURL = true;
         if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
 
             if (modifiedURL.indexOf("watch?v=") > -1) {
