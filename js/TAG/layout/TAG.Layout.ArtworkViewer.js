@@ -203,7 +203,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         splitscreenContainer.append(splitscreenIcon);
 
-        var splitScreenLabel = $(document.createElement('div')).css({'font-size':'60%', 'bottom':'0%'}).text('Splitscreen Mode').appendTo(splitscreenContainer);
+        var splitScreenLabel = $(document.createElement('div')).css({'font-size':'40%', 'bottom':'0%', 'margin-top':'-2%'}).text('Splitscreen Mode').appendTo(splitscreenContainer);
 
         root.append(splitscreenContainer);
         if (TAG.Util.Splitscreen.isOn()) {

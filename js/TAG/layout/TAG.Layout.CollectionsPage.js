@@ -141,6 +141,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // search on keyup
         searchInput.on('keyup', function (e) {
             if (!searchInput.val()) {
+                searchTxt.text("");
                 drawCatalog(currentArtworks, currentTag, 0, false);
             }
             else if (e.which === 13) {
@@ -1293,7 +1294,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'left': "-2"
                 }); 
             } else { 
-                element.timelineDateLabel.css({
+                    element.timelineDateLabel.css({
                     'visibility': 'visible',
                     'color' : 'white',
                     'font-size' : '120%' ,
@@ -1685,6 +1686,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             //Stop any previously-running animations
             selectedArtworkContainer.stop();
+
+            if (selectedArtworkContainer[0].addEventListener) {
+                // IE9, Chrome, Safari, Opera
+                selectedArtworkContainer[0].addEventListener("mousewheel", 
+                    function(e){
+                        e.stopPropagation();
+                    }, false);
+                // Firefox
+                selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
+                    function(e){
+                        e.stopPropagation();
+                    }, false);
+            } else { 
+                // IE 6/7/8
+                selectedArtworkContainer[0].attachEvent("onmousewheel",
+                function(e){
+                    e.stopPropagation();
+                }, false);
+           };
+
             if (artworkShown) {
                 selectedArtworkContainer.animate(
                         {"opacity": 0}, 

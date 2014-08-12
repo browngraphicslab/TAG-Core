@@ -964,6 +964,12 @@ TAG.Util = (function () {
                         startEvent: evt.gesture.startEvent
                     }, evt);
                 };
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    var dir = getDir(evt);
+                    if (evt.gesture.pointerType !== "mouse" && !noAccel)
+                        accel(30 * dir.vx, 30 * dir.vy, null, currentAccelId);
+                }, 5);
                 //if ((evt.type === "pinch" || evt.type === "pinchin" || evt.type === "pinchout") && typeof functions.onScroll === "function")
                 //    functions.onScroll(1 + scale, pivot);
             } else {
@@ -1069,7 +1075,7 @@ TAG.Util = (function () {
             currentAccelId++;
             resetDir();
             clearTimeout(timer);
-            manipulationHandler(evt);
+            //manipulationHandler(evt);
         }
 
         // mouse move
@@ -1128,7 +1134,7 @@ TAG.Util = (function () {
             timer = setTimeout(function () {
                 accel(vx * 0.95, vy * 0.95, delay, id);
             }, delay);
-            timer = window.requestAnimationFrame(accel(vx * .95, vy * .95, delay, id), $element);
+            //timer = window.requestAnimationFrame(accel(vx * .95, vy * .95, delay, id), $element);
         }
 
         // mouse release
@@ -1593,7 +1599,7 @@ TAG.Util = (function () {
     /*create video conversion loading message and circle for 
 	  when imported videos are converting
 	  O/P: the div containing the loading circle and message*/
-    function createConversionLoading(msg, nocircle) {
+    function createConversionLoading(msg, nocircle, isMp4) {
         var container = $(document.createElement('div'));
         container.attr('id', 'leftLoading');
         container.css({
@@ -1604,7 +1610,7 @@ TAG.Util = (function () {
             'color': 'white',
             'text-align': 'center',
         });
-
+        
         var label = $(document.createElement('label'));
         label.text(msg);
         label.css({
@@ -1612,6 +1618,12 @@ TAG.Util = (function () {
             'width': '50%',
             'font-size': '250%'
         });
+        if (isMp4) {
+            container.css({
+                'top': '1%',
+            });
+            label.css('background-color','black');
+        }
         if (!nocircle) {
             var circle = $(document.createElement('img'));
             circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
@@ -1624,6 +1636,13 @@ TAG.Util = (function () {
                 'top': '30%',
                 'margin-bottom':'5%'
             });
+            if (isMp4) {
+                circle.css({
+                    'height':'25px',
+                    'top': '1%',
+                    //'left':'',
+                })
+            }
             container.append(circle);
         }
         container.append(label);
