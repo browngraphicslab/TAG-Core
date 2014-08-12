@@ -46,6 +46,7 @@ TAG.Util.IdleTimer = (function() {
             if(idleDuration !== 0) { // default is no idle timer
                 s1TimeoutID = setTimeout(fireS1, s1d);
                 started = true;
+
             }
         }
 
@@ -256,10 +257,7 @@ TAG.Util.IdleTimer = (function() {
      */
     function returnHome() {
         TAG.Util.Splitscreen.setOn(false);
-        TELEMETRY_SESSION_ID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+        TELEMETRY_SESSION_ID = TAG.Util.IdCreator();
 
         if(currentPage.name !== TAG.Util.Constants.pages.COLLECTIONS_PAGE || !currentPage.obj || !currentPage.obj.loadFirstCollection) {
             catalog = new TAG.Layout.CollectionsPage();
