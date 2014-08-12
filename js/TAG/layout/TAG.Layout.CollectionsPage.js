@@ -722,7 +722,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Hide selected artwork container, as nothing is selected yet
             selectedArtworkContainer.css('display', 'none');
-            overlay.css('z-index', '1');
       
             tileDiv.empty();
             catalogDiv.append(tileDiv);
@@ -765,10 +764,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             currentArtwork = artwrk || null;
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             scrollPos = sPos || 0;
-            //comingBack = false;
-            //console.log("2: " + wasOnAssocMediaView);
-            //to-do change to just onasmv, or revert to false
-          
             if (!onAssocMediaView || !currCollection.collectionMedia) {
                 getCollectionContents(currCollection);
             } else {
@@ -1619,9 +1614,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
-            overlay.css('z-index', '1');
-            topBar.css('z-index','100000');
-            styleBottomContainer();
+            $('.tile').css('opacity','1');
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
@@ -1707,12 +1700,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             multipleShown = showAllAtYear;
 
             // Set selected artwork to hide when anything else is clicked
-            console.log("changed");
             root.on('mouseup', function(e) {
                 var subject = selectedArtworkContainer;
-                console.log("mouseupp");
                 if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length){    
-                    overlay.css('z-index', '1'); //In case artwork taking a while to load for some reason, to prevent freeze up
                     if (artworkShown){
                         hideArtwork(currentArtwork)();
                     }
@@ -1799,9 +1789,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 	selectedArtworkContainer.css('left', root.width()-containerWidth-TILE_BUFFER);
                 }
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/5);
-                overlay.css('z-index', '100006');
-                topBar.css('z-index','100007');
-                bottomContainer.css('z-index','');
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
@@ -1871,7 +1858,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .on('load', function () {
                        TAG.Util.removeProgressCircle(circle);
                    	});
-                console.log("currentThumbnail" + currentThumbnail);
                 !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
 
                 //Telemetry stuff
@@ -2059,7 +2045,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 previewTile.append(tileTop)
                     	   .append(tileBottom);
 				selectedArtworkContainer.append(previewTile);
-                
+                $('.tile').css('opacity','0.5');
+  
                 var numberAssociatedDoqs = 0;
                 loadQueue.add(function(){
                     onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);

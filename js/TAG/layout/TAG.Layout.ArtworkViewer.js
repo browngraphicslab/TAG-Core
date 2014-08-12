@@ -1,4 +1,4 @@
-﻿TAG.Util.makeNamespace("TAG.Layout.ArtworkViewer");
+TAG.Util.makeNamespace("TAG.Layout.ArtworkViewer");
 
 /**
  * The artwork viewer, which contains a sidebar with tools and thumbnails as well
@@ -139,7 +139,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 initSplitscreen();
                 makeSidebar();
                 createSeadragonControls();
-                //assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
                 loadingArea.hide();
             },
             noMedia: false
