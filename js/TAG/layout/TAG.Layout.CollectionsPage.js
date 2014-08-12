@@ -88,7 +88,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         PRIMARY_FONT_COLOR  = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
         FONT                = TAG.Worktop.Database.getMuseumFontFamily(),
-
+        
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
         fullMaxDisplayDate,             // maximum display date of full timeline
@@ -121,7 +121,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var progressCircCSS,
             circle,
             oldSearchTerm;
-
+        
         cancelLoadCollection = null;
         progressCircCSS = {
             'position': 'absolute',
