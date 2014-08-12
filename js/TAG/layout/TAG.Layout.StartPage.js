@@ -629,13 +629,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             'font-family': main.Metadata["FontFamily"]
         });
         serverInput.css({
-            'border-color': color
+            'border-color': color,
+            'color' : color
         });
         serverSubmit.css({
             'border-color': color
         });
         authoringInput.css({
-            'border-color': color
+            'border-color': color,
+            'color' : color
         });
         passwordSubmit.css({
             'border-color': color
@@ -714,7 +716,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      */
     function openDialog() {
          authClick();
-         
 
          if(localStorage.ip === 'tagtestserver.cloudapp.net') {
              $('#authoringInput').attr('value', 'Test1234');

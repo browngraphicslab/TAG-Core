@@ -45,6 +45,7 @@ TAG.Telemetry = (function() {
 					platform:   platform,
 					time_stamp: date.getTime(),
 					time_human: date.toString(),
+					machine_id : localStorage.machId,
 					session_id : TELEMETRY_SESSION_ID,
 					custom_1: null,
 					custom_2: null,
@@ -60,7 +61,6 @@ TAG.Telemetry = (function() {
 			}
 
 			requests.push(tobj);
-			console.log(requests);
 
 			if(requests.length >= sendFreq - 1) { // tweak this later
 				postTelemetryRequests();

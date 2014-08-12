@@ -157,13 +157,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         splitscreenContainer.css({
             'background-color': 'rgba(0,0,0,0.6)',
             'border-top-left-radius': '10px',
-            'height': '5%',
+            'height': '10%',
             'position': 'absolute',
             'right': '0%',
             'text-align': 'center',
-            'top': '95%',
+            'top': '90%',
             'vertical-align': 'center',
-            'width': '5%',
+            'width': '10%',
             'z-index': '500'
         });
 
@@ -172,11 +172,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             src: tagPath+'images/SplitWhite_dotted.svg'
         });
         splitscreenIcon.css({
-            height: '60%',
+            height: '50%',
             left: '2%',
             opacity: '0.6',
-            position: 'absolute',
-            top: '10%',
+            //position: 'absolute',
+            'margin-top': '8%',
             width: '75%'
         });
 
@@ -202,6 +202,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
 
         splitscreenContainer.append(splitscreenIcon);
+
+        var splitScreenLabel = $(document.createElement('div')).css({'font-size':'60%', 'bottom':'0%'}).text('Splitscreen Mode').appendTo(splitscreenContainer);
+
         root.append(splitscreenContainer);
         if (TAG.Util.Splitscreen.isOn()) {
             splitscreenContainer.css('display', 'none');
@@ -794,6 +797,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 locHistoryActive = true;
                 media.create(); // returns if already created
                 media.toggle();
+                console.log("media toggled");
                 TAG.Util.IdleTimer.restartTimer();
                 (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
                 media.pauseReset();
@@ -833,8 +837,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             maxHeight = Math.max(1, assetContainer.height() - currBottom ); //to account for the height of the drawerLabel of the current drawer.
             
             root.find(".drawerContents").css({
-                "max-height": maxHeight + "px",
-
+                //"max-height": maxHeight + "px", //TODO this
+                'max-height':2*0.19 * $('#tagRoot').height() + 'px', //height of two thumbnails
             });
         });
 
@@ -891,6 +895,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         });
 
+        var minimapDescription = $(document.createElement('div'))
+            .addClass('minimapDescription')
+            .css({
+                'font-size': '80%',
+                'margin-top':'-13%'
+            })
+            .text('Interactive Minimap');
+        minimapContainer.append(minimapDescription);
        
 
     

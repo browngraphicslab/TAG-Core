@@ -2736,6 +2736,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         settingsContainer.append(title);
         settingsContainer.append(desc);
+        if (type === 'iframe') {
+            var rawSource = media.Metadata.Source;
+            var visibleSource;
+            if (rawSource.indexOf('youtube') > -1) {
+                if (rawSource.indexOf('embed') > -1) {
+                    visibleSource = rawSource.substring(rawSource.indexOf('embed') + 6);
+                    visibleSource = "https://www.youtube.com/watch?v=" + visibleSource;
+                }                
+            }
+            else if (rawSource.indexOf('vimeo')) {
+                if (rawSource.indexOf('video') > -1) {
+                    visibleSource = rawSource.substring(rawSource.indexOf('video') + 6, rawSource.indexOf("?"));
+                    visibleSource = "https://www.vimeo.com/" + visibleSource;
+                }    
+            }
+            var sourceInput = createTextInput(visibleSource);
+            sourceInput.focus(function () {
+                if (descInput.val() === 'Source')
+                    descInput.select();
+            });
+            onChangeUpdateText(sourceInput, null, 5000);
+            var source = createSetting('Source', sourceInput);
+            settingsContainer.append(source);
+        }
         settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
 
         //Automatically save changes
@@ -2795,7 +2819,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (titleInput.val() === undefined || titleInput.val() === "") {
                     titleInput.val("Untitled Asset");
                 }
-                saveAssocMedia(media, {
+                var updatedMetadata = {
                     titleInput: titleInput,
                     descInput: descInput,
                     yearInput: yearMetadataDivSpecs.yearInput,
@@ -2804,7 +2828,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     timelineYearInput: yearMetadataDivSpecs.timelineYearInput,
                     timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,
                     timelineDayInput: yearMetadataDivSpecs.timelineDayInput
-                });
+                };
+
+
+                if (type === 'iframe') {
+                    var validURL = checkEmbeddedURL(sourceInput.val());
+                    if (validURL) {
+                        saveAssocMedia(media, updatedMetadata, validURL);
+                    }
+                } else {
+                    saveAssocMedia(media, updatedMetadata);
+                }
             }, {
                 'margin-right': '3%',
                 'margin-top': '1%',
@@ -2863,12 +2897,81 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(deleteButton).append(saveButton); //SAVE BUTTON//
     }
 
+
+    /**Helper method to check URLs of videos to be embedded (standard YouTube or Vimeo URLs only) and return parsed URL for embed
+     * @method checkEmbeddedURL
+     * @param {String} url    URL to check and parse
+     * @return {string} validURL   parsed URL if valid, empty string otherwise
+     */
+    function checkEmbeddedURL(url) {
+        var modifiedURL = url,
+                                popup,
+                                id,
+                                validURL = true;
+        if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
+
+            if (modifiedURL.indexOf("watch?v=") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
+
+                if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
+                    modifiedURL = modifiedURL.replace("http://", "https://");
+                } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
+                    modifiedURL = "https://" + modifiedURL;
+                }
+                modifiedURL = modifiedURL.replace("watch?v=", "embed/");
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
+
+            if (modifiedURL.indexOf("vimeo.com") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
+                if (id && !/^\d+$/.test(id)) {		//No special characters or characters
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else {
+            popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
+            $('body').append(popup);
+            $(popup).show();
+            validURL = false;
+        }
+        if (validURL) {
+            return modifiedURL;
+        } else {
+            return "";
+        }
+    }
+
+
     /**Save an associated media
      * @method saveAssocMedia
      * @param {Object} media    associated media to save
      * @param {Object} inputs   keys for media title and description
      */
-    function saveAssocMedia(media, inputs) {
+    function saveAssocMedia(media, inputs, embeddedURL) {
         var name = inputs.titleInput.val(),
             year = inputs.yearInput.val(),
             month = inputs.monthInput.val(),
@@ -2876,8 +2979,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineYear = inputs.timelineYearInput.val(),
             timelineMonth = inputs.timelineMonthInput.val(),
             timelineDay = inputs.timelineDayInput.val(),
-            desc = inputs.descInput.val();
-
+            desc = inputs.descInput.val(),
+            source = embeddedURL || "";
+            
         //pCL = displayLoadingSettings();
         clearRight();
         prepareViewer(true);
@@ -2890,6 +2994,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Worktop.Database.changeHotspot(media, {
             Name: name,
             Description: desc,
+            Source: source,
             Year: year,
             Month: month,
             Day: day,
@@ -2991,65 +3096,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} src        URL to embed
      */
     function createIframeAsset(src) { //TODO IFRAME ASSOC MEDIA: iframe asset creation would look something like this
-        var modifiedURL = src,
-        popup,
-        id,
-        validURL = true;
-        if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
-
-            if (modifiedURL.indexOf("watch?v=") > -1) {
-                id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
-                
-                if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
-                    validURL = false;
-                }
-            } else {
-                validURL = false;
-            }
-
-            if (validURL && id) {
-                if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
-                    modifiedURL = modifiedURL.replace("http://", "https://");
-                } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
-                    modifiedURL = "https://" + modifiedURL;
-                }
-                modifiedURL = modifiedURL.replace("watch?v=", "embed/");
-            } else {
-                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
-                $('body').append(popup);
-                $(popup).show();
-            }
-
-        } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
-
-            if (modifiedURL.indexOf("vimeo.com") > -1) {
-                id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
-                if (id && !/^\d+$/.test(id)) {		//No special characters or characters
-                    validURL = false;
-                }
-            } else {
-                validURL = false;
-            }
-
-            if (validURL && id) {
-                modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
-            } else {
-                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
-                $('body').append(popup);
-                $(popup).show();
-            }
-
-        } else {
-            popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
-            $('body').append(popup);
-            $(popup).show();
-            validURL = false;
-        }
-
+        
+        var validURL = checkEmbeddedURL(src);
         if (validURL) {
             var options = {
-                Source: modifiedURL,
-                Name: modifiedURL
+                Source: validURL,
+                Name: "Untitled Embedded Video"
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
         }
