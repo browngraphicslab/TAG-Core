@@ -141,6 +141,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // search on keyup
         searchInput.on('keyup', function (e) {
             if (!searchInput.val()) {
+                searchTxt.text("");
                 drawCatalog(currentArtworks, currentTag, 0, false);
             }
             else if (e.which === 13) {
