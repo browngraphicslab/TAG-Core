@@ -203,6 +203,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // IE9, Chrome, Safari, Opera
             bottomContainer[0].addEventListener("mousewheel", 
                 function(){
+                    console.log(document.activeElement);
                     currentArtwork && hideArtwork(currentArtwork)()
                 }, false);
             // Firefox

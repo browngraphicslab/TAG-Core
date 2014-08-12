@@ -849,13 +849,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacityInput = createTextInput(backgroundOpacity, true);*/
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
-        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
+        //var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
         var idleTimerDurationInput = createTextInput(idleTimerDuration, false, 3, false, false, true);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
-        var font = fontFamilyInput.find(":selected").text();
-        $('.primaryFont').css('font-family', font);
-        $('.secondaryFont').css('font-family', font);
+        //var font = fontFamilyInput.find(":selected").text();
+        $('.primaryFont').css('font-family', fontFamily);
+        $('.secondaryFont').css('font-family', fontFamily);
         
         // Handle changes
 
@@ -898,7 +898,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacitySetting = createSetting('Background Opacity (0-100)', backgroundOpacityInput);*/
         var primaryFontColorSetting = createSetting('Primary Font Color', primaryFontColorInput);
         var secondaryFontColorSetting = createSetting('Secondary Font Color', secondaryFontColorInput);
-        var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
+        //var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
         var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
         settingsContainer.append(bgImage);
@@ -913,7 +913,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(backgroundOpacitySetting);*/
         settingsContainer.append(primaryFontColorSetting);
         settingsContainer.append(secondaryFontColorSetting);
-        settingsContainer.append(fontFamilySetting);
+        //settingsContainer.append(fontFamilySetting);
         settingsContainer.append(idleTimerDurationSetting);
 		//automatically save General Settings - Customization
         onChangeUpdateText(idleTimerDurationInput, null, 3);
@@ -970,7 +970,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //backgroundOpacityInput: backgroundOpacityInput,    //Background Opacity
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
-                fontFamilyInput: fontFamilyInput,
+                //fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput
             });
         }, {
@@ -1047,7 +1047,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacity = inputs.backgroundOpacityInput.val();*/
         var primaryFontColor = inputs.primaryFontColorInput.val();
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
-        var fontFamily = inputs.fontFamilyInput.val();
+        //var fontFamily = inputs.fontFamilyInput.val();
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
         
@@ -1064,7 +1064,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //BackgroundOpacity: backgroundOpacity,
             PrimaryFontColor: primaryFontColor,
             SecondaryFontColor: secondaryFontColor,
-            FontFamily: fontFamily,
+            //FontFamily: fontFamily,
             //BaseFontSize: baseFontSize,
             IdleTimerDuration: idleTimerDuration
         };
