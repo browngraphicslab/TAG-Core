@@ -6230,8 +6230,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .text('Add ')
             .appendTo(searchContainer)
             .css({
-                "color": "rgb(256, 256, 256)",
-                'background-color': "rgb(63, 55, 53)",
+                "color": "black",
+                //'background-color': "rgb(256, 256, 256)",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'float':'right',
                 'font-size':'85%',
@@ -6239,15 +6239,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-top':'1%',
                 'padding-bottom':'1%',
                 'width': '30%',
-                'border': '1px solid white',
+                'border': '1px solid black',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
-            .attr('src', tagPath + 'images/icons/Down.png')
+            .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '25%',
+                width: '20%',
                 height: 'auto',
-                'padding-left':'10%'
+                'margin-left': '15%',
+                '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)'
             })
             .appendTo(addMenuLabel);
         var dropDown = $(document.createElement('div'))
