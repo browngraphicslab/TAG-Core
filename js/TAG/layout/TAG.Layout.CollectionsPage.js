@@ -78,7 +78,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         BASE_FONT_SIZE      = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH            = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
         MAX_YEAR            = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
-        EVENT_CIRCLE_WIDTH  =  Math.max(20, $("#tagRoot").width() / 50),  // width of the circles for the timeline                                
+        EVENT_CIRCLE_WIDTH  =  Math.min(40,Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
         TILE_BUFFER         = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
@@ -1292,7 +1292,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'left': "-2"
                 }); 
             } else { 
-                element.timelineDateLabel.css({
+                    element.timelineDateLabel.css({
                     'visibility': 'visible',
                     'color' : 'white',
                     'font-size' : '120%' ,
@@ -1684,6 +1684,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             //Stop any previously-running animations
             selectedArtworkContainer.stop();
+
+            if (selectedArtworkContainer[0].addEventListener) {
+                // IE9, Chrome, Safari, Opera
+                selectedArtworkContainer[0].addEventListener("mousewheel", 
+                    function(e){
+                        e.stopPropagation();
+                    }, false);
+                // Firefox
+                selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
+                    function(e){
+                        e.stopPropagation();
+                    }, false);
+            } else { 
+                // IE 6/7/8
+                selectedArtworkContainer[0].attachEvent("onmousewheel",
+                function(e){
+                    e.stopPropagation();
+                }, false);
+           };
+
             if (artworkShown) {
                 selectedArtworkContainer.animate(
                         {"opacity": 0}, 
