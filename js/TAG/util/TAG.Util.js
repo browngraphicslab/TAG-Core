@@ -3810,7 +3810,8 @@ TAG.Util.UI = (function () {
                     //'overflow-y': 'visible',
                     'text-overflow': 'ellipsis',
                     'white-space': 'nowrap',
-                    'height': '22%'
+                    'height': '22%',
+                    'color':'white'
                 });
                 compHolder.append(compHolderText);
                 applyClick(compHolder); // binds handlers
@@ -6488,11 +6489,20 @@ TAG.Util.Artwork = (function () {
 
         thumbnailImage.css({ // TODO fix this
            // 'max-height': 0.15 * 0.7 * $("#tagRoot").height() + "px",
-            //'max-width': 0.22 * 0.89 * 0.95 * 0.40 * 0.92 * $("#tagRoot").width() + "px"
-            height: 'auto',
-            width: 'auto',
-            'max-width': '70%',
-            'max-height': '70%'
+           //'max-width': 0.22 * 0.89 * 0.95 * 0.40 * 0.92 * $("#tagRoot").width() + "px"
+            bottom:'0px',
+            height:'auto',
+            left:'0px',
+            'margin-bottom':'auto',
+            'margin-left':'auto',
+            'margin-right':'auto',
+            'margin-top':'auto',
+            'max-height':'100%',
+            'max-width':'100%',
+            position:'absolute',
+            right:'0px',
+            top:'0px',
+            width:'auto',
         });
 
         holderInnerContainer.append(thumbnailImage);
