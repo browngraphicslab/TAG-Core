@@ -452,13 +452,13 @@ TAG.Worktop.Database = (function () {
             'ConvertedVideoCheck',
             { "guid": guid },
             null,
-            { success: convertToTextHandler(success), error: error });
+            { success: convertToStatusHandler(success), error: error });
     }
-    function convertVideo(success, error, newFileName, fileExtension, baseFileName, doq) {
+    function convertVideo(success, error, newFileName, fileExtension, baseFileName, doq,forTour) {
         asyncRequest(
             'GET',
             'ConvertVideo',
-            { "FileName": newFileName, "Extension": fileExtension, "BaseFileName": baseFileName, "Identifier": doq },
+            { "FileName": newFileName, "Extension": fileExtension, "BaseFileName": baseFileName, "Identifier": doq,"ForTour":forTour },
             null,
             { success: convertToTextHandler(success), error: error });
     }

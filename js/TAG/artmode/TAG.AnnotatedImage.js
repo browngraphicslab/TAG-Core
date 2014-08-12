@@ -667,7 +667,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 }
 
                 innerContainer.append(mediaContainer);
-
+                /**
                 if (DESCRIPTION) {
                     descDiv = $(document.createElement('div'));
                     descDiv.addClass('annotatedImageMediaDescription');
@@ -680,8 +680,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             });
                         });
                     }
+                    descDiv.css({
+                        'top' : innerContainer.height() + 'px';
+                    });
                     innerContainer.append(descDiv);
                 }
+                **/
 
                 if (RELATED_ARTWORK) {
                     // TODO append related artwork button here
@@ -938,7 +942,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 return;
             }
 
-            console.log(CONTENT_TYPE);
             if (IS_XFADE) {
                 $mediaElt = $(document.createElement('img')).addClass('xfadeImg');
                 $mediaElt.attr({
@@ -1048,6 +1051,24 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         height: '100%'
                     });
                     mediaContainer.append(iframe);
+                }
+                if (DESCRIPTION) {
+                    console.log("desc");
+                    descDiv = $(document.createElement('div'));
+                    descDiv.addClass('annotatedImageMediaDescription');
+                    descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
+                    if (IS_WINDOWS) {
+                        var links = descDiv.find('a');
+                        links.each(function (index, element) {
+                            $(element).replaceWith(function () {
+                                return $.text([this]);
+                            });
+                        });
+                    }
+                    //descDiv.css({
+                       // 'top' : '100%'
+                    //});
+                    outerContainer.append(descDiv);
                 }
             }
         }
