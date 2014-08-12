@@ -714,6 +714,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      */
     function openDialog() {
          authClick();
+         
 
          if(localStorage.ip === 'tagtestserver.cloudapp.net') {
              $('#authoringInput').attr('value', 'Test1234');
