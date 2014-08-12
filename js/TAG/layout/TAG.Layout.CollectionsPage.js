@@ -1283,14 +1283,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'top': -EVENT_CIRCLE_WIDTH*3 / 4,
                 'opacity': "1"
             });
-            element.timelineDateLabel.css({
+            if (IS_WINDOWS){
+               element.timelineDateLabel.css({
+                    'visibility': 'visible',
+                    'color' : 'white',
+                    'font-size' : '110%' ,
+                    'top': -element.width()-2+ 'px',
+                    'left': "-2"
+                }); 
+            } else { 
+                element.timelineDateLabel.css({
                     'visibility': 'visible',
                     'color' : 'white',
                     'font-size' : '120%' ,
                     'top': -EVENT_CIRCLE_WIDTH ,
                     'left': "0"
-            })
-
+                });
+            }
         } else {
             element.css({
                 'height': EVENT_CIRCLE_WIDTH,

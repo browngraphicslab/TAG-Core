@@ -3094,7 +3094,6 @@ TAG.Util.UI = (function () {
             g,
             b;
 
-        console.log('k '+k);
         k = k || 3;
 
         inColor = inColor.replace(/\#/g, '');
