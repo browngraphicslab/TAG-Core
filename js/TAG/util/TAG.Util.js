@@ -4657,6 +4657,12 @@ TAG.Util.RLH = function (input) {
             })
             .text('Bing Map')
             .appendTo(metadataContainer);
+        if (!input.authoring) {
+            $('#bingMapNameHolder').css({
+                top: '0%',
+                'margin-top': '-1%'
+            });
+        }
     }
 
     /**
