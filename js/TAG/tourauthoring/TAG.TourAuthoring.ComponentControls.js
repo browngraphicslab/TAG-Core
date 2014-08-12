@@ -2945,6 +2945,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $(artHolder).data('name', artwork.Name);
                     $(artHolder).data('type', artwork.Metadata.Type);
                     $(artHolder).data('description', artwork.Metadata.Description);
+                    if (artwork.Metadata.InfoFields) {
+                        $.each(artwork.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+                            $(artHolder).data(field, fieldText);
+                        });
+                    }
 
                     if (artwork.Metadata.Duration) { //for videos
                         $(artHolder).data('duration', artwork.Metadata.Duration);
