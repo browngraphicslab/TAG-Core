@@ -964,6 +964,12 @@ TAG.Util = (function () {
                         startEvent: evt.gesture.startEvent
                     }, evt);
                 };
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    var dir = getDir(evt);
+                    if (evt.gesture.pointerType !== "mouse" && !noAccel)
+                        accel(30 * dir.vx, 30 * dir.vy, null, currentAccelId);
+                }, 5);
                 //if ((evt.type === "pinch" || evt.type === "pinchin" || evt.type === "pinchout") && typeof functions.onScroll === "function")
                 //    functions.onScroll(1 + scale, pivot);
             } else {
@@ -1069,7 +1075,7 @@ TAG.Util = (function () {
             currentAccelId++;
             resetDir();
             clearTimeout(timer);
-            manipulationHandler(evt);
+            //manipulationHandler(evt);
         }
 
         // mouse move
@@ -1128,7 +1134,7 @@ TAG.Util = (function () {
             timer = setTimeout(function () {
                 accel(vx * 0.95, vy * 0.95, delay, id);
             }, delay);
-            timer = window.requestAnimationFrame(accel(vx * .95, vy * .95, delay, id), $element);
+            //timer = window.requestAnimationFrame(accel(vx * .95, vy * .95, delay, id), $element);
         }
 
         // mouse release

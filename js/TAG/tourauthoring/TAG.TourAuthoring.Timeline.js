@@ -403,7 +403,7 @@ TAG.TourAuthoring.Timeline = function (spec) {
         var manip;
 
         if (IS_WINDOWS) {
-            manip = TAG.Util.makeManipulatableWin;
+            manip = TAG.Util.makeManipulatable;
         } else {
             manip = TAG.Util.makeManipulatable;
         }
