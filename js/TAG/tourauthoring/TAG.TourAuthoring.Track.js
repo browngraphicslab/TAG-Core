@@ -1391,7 +1391,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
     // Interaction code
     // Track title manipulations
     if (IS_WINDOWS) {
-        TAG.Util.makeManipulatableWin(titlediv[0], {
+        TAG.Util.makeManipulatable(titlediv[0], {
             onManipulate: onManipTrackTitleWrapper,
             onTapped: tappedTitle,
             onTappedRight: tapRightTitle,
@@ -1656,7 +1656,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
     // makes the track manipulatable 
     if (IS_WINDOWS) {
-        grTrack = TAG.Util.makeManipulatableWin(my.track[0], {
+        grTrack = TAG.Util.makeManipulatable(my.track[0], {
             onManipulate: onManipTrack,
             onTappedRight: tapRight,
             onScroll: scrollTitle,
