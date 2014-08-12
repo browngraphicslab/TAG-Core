@@ -1092,18 +1092,23 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         addDropDownIconComponent.attr('src', tagPath + 'images/icons/Down.png');
         addDropDownIconComponent.css({
             'width': '10%',
-            'margin-left': '52%',
-            'height': '10%'
+            'height': '10%',
+            'display': 'inline-block',
+            'float': 'right',
+            'margin-top': '3%',
+            'margin-right':'3%'
         });
 
         addComponentLabel.text("Add Track");
         addComponentLabel.attr('id', 'addComponentLabel');
         addComponentLabel.css({
             "left": menuOffsetL, "top": "5%", "position": "relative",
-            "font-size": TAG.Util.getFontSize(70), "color": "rgb(256, 256, 256)",
+            //"font-size": TAG.Util.getFontSize(70),
+            "font-size": '70%',
+            "color": "rgb(256, 256, 256)",
             //Using the current background color value multiplied by the ( 1- alpha value )
             'background-color': "rgb(63, 55, 53)",
-            'padding': '3% 2% 4% 2%',
+            'padding': '3% 1% 4% 3%',
             'width': '70%',
             'float': 'left',
         });
@@ -1571,10 +1576,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         addComponentButton.css({
             "left": "0%",
             "position": "relative",
-            "font-size": TAG.Util.getFontSize(55),
+            "font-size": '80%',
             "color": "rgb(256, 256, 256)",
             "display": "block",
-            'padding': '4% 0 5% 0',
+            'padding': '2% 0 2% 0',
             'text-indent': '4%',
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         });
@@ -1945,12 +1950,24 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'float': 'right',
             'margin-right': '3%',
             'margin-top': '0.75%',
-            'width': '38%'
+            'width': '38%',
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+        $(associatedsearchbar).on('focus', function () {
+            $(associatedsearchbar).css({ 'background-image': 'none' });
+        });
+        $(associatedsearchbar).on('focusout', function () {
+            if (!$(associatedsearchbar).val()) {
+                $(associatedsearchbar).css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            }
         });
         $(associatedsearchbar).on('keyup', function (event) {
             event.stopPropagation();
         });
-        $(associatedsearchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+        //$(associatedsearchbar).attr('placeholder', PICKER_SEARCH_TEXT);
         $(associatedsearchbar).val("");
         associatedsearchbar.keyup(function () {
             TAG.Util.searchData($(associatedsearchbar).val(), '.mediaHolder', IGNORE_IN_SEARCH);
@@ -2134,7 +2151,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 _clearAssMedia();
                 $(associatedMediaPickerOverlay).fadeOut();
                 associatedMediaPickerImport.disabled = true;
-                $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+                //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
                 if (selectedArtworks && selectedArtworks.length) {
                     for (i = 0; i < selectedArtworks.length; i++) {
                         selectedArt = selectedArtworks[i];
@@ -2165,7 +2182,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     undoManager.combineLast(2 * selectedArtworks.length);
                 }
             }
-            $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+            //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             $('.associatedsearchbar').val("");
             isUploading = false;
             timeline.getDataHolder().mapTracks(function (container, i) {
@@ -2271,7 +2288,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                         var artworkAMDocfrag = document.createDocumentFragment();
                                         mediaQueue.clear();
                                         $(".allAssociatedMediaHolder").css('background', 'black');
-                                        $(artworkHolder).css('background', 'black');
+                                        $(".artworkHolder").css('background', 'black');
                                         $(artworkHolder).css('background', '#999');
                                         $(".mediaHolder").detach();
                                         drawAssociatedMedia(mediaCache[selected], assMediasingleDoubleclick, artworkAMDocfrag);
@@ -2466,7 +2483,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             _clearAssMedia();
             $(associatedMediaPickerOverlay).fadeOut();
             associatedMediaPickerImport.disabled = true;
-            $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+            //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             if (selectedArtworks && selectedArtworks.length) {
                 for (i = 0; i < selectedArtworks.length; i++) {
                     selectedArt = selectedArtworks[i];
@@ -2496,7 +2513,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 undoManager.combineLast(2 * selectedArtworks.length);
             }
-            $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+            //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             $('.associatedsearchbar').val("");
             isUploading = false;
             timeline.getDataHolder().mapTracks(function (container, i) {
@@ -2519,7 +2536,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             _clearAssMedia();
             $(associatedMediaPickerOverlay).fadeOut();
             associatedMediaPickerImport.disabled = true;
-            $('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
+            //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             $('.associatedsearchbar').val("");
             $('.mediaHolder').data('selected', 'false');
             $('.mediaHolder').css('background-color', 'rgb(34,34,34)');
@@ -2575,6 +2592,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             mediaHolder.data('url', media.Metadata.Source);                             // store url as data
             mediaHolder.data('name', media.Name);
             mediaHolder.data('duration', media.Metadata.Duration);
+            mediaHolder.data('description', media.Metadata.Description);
             isSelected = selectedArtworksUrls[media.Metadata.Source] ? true : false;
             mediaHolder.data('selected', isSelected);
             mediaHolder.css({
@@ -2690,13 +2708,25 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'float': 'right',
             'margin-right': '3%',
             'margin-top': '0.75%',
-            'width': '38%'
+            'width': '38%',
+            'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
+            'background-size': 'auto 50%',
+            'background-repeat': 'no-repeat',
+            'background-position': '2% center'
+        });
+        $(searchbar).on('focus', function () {
+            $(searchbar).css({ 'background-image': 'none' });
+        });
+        $(searchbar).on('focusout', function () {
+            if (!$(searchbar).val()) {
+                $(searchbar).css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+            }
         });
         $(searchbar).on('keyup', function (event) {
             event.stopPropagation();
         });
         $(searchbar).attr('type', 'text');
-        $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+        //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
         searchbar.keyup(function () {
             TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
         });
@@ -2915,6 +2945,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $(artHolder).attr('id', artwork.Identifier); // unique artwork identifier
                     $(artHolder).data('name', artwork.Name);
                     $(artHolder).data('type', artwork.Metadata.Type);
+                    $(artHolder).data('description', artwork.Metadata.Description);
+                    if (artwork.Metadata.InfoFields) {
+                        $.each(artwork.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+                            $(artHolder).data(field, fieldText);
+                        });
+                    }
 
                     if (artwork.Metadata.Duration) { //for videos
                         $(artHolder).data('duration', artwork.Metadata.Duration);
@@ -3055,7 +3091,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
             $(catalogPickerOverlay).fadeOut();
             _clearCatalog();
-            $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+            //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
             $(searchbar).val("");
             // add the artwork track to the timeline
             for (i = 0; i < selectedArtworks.length; i++) {
@@ -3193,7 +3229,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 _clearCatalog();
                 $(catalogPickerOverlay).fadeOut();
             }
-            $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+            //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
             $(searchbar).val("");
             isUploading = false;
             timeline.getDataHolder().mapTracks(function (container, i) {
@@ -3216,7 +3252,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             $(catalogPickerOverlay).fadeOut();
             _clearCatalog();
             catalogPickerImport.disabled = true;
-            $(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
+            //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
             $(searchbar).val("");
             return undefined;
         });

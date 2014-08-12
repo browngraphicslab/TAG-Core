@@ -45,12 +45,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileLoadingArea 	     = root.find('#tileLoadingArea'),
 
         // input options
-        scrollPos        = options.backScroll || 0,     // horizontal position within collection's catalog
-        currCollection   = options.backCollection,      // the currently selected collection
-        currentArtwork   = options.backArtwork,         // the currently selected artwork
-        currentTag       = options.backTag,             // current sort tag for collection
-        multipleShown    = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
-        previewing       = options.previewing || false,          // whether we are loading for a preview in authoring (for dot styling)
+        scrollPos               = options.backScroll || 0,     // horizontal position within collection's catalog
+        currCollection          = options.backCollection,      // the currently selected collection
+        currentArtwork          = options.backArtwork,         // the currently selected artwork
+        currentTag              = options.backTag,             // current sort tag for collection
+        multipleShown           = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
+        //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
+        previewing              = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
         
         // misc initialized vars
         loadQueue            = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
@@ -70,24 +71,25 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileDivHeight        = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
         artworkShown         = false,                            // whether an artwork pop-up is currently displayed
         timelineShown        = true,                             // whether current collection has a timeline
-        onAssocMediaView     = false,                            // whether current collection is on assoc media view
+        onAssocMediaView     = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked    = null,
 
         // constants
         BASE_FONT_SIZE      = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH            = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
         MAX_YEAR            = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
-        EVENT_CIRCLE_WIDTH  =  Math.max(20, $("#tagRoot").width() / 50),  // width of the circles for the timeline                                
+        EVENT_CIRCLE_WIDTH  =  Math.min(40,Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
         TILE_BUFFER         = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO   = 200,                                          //ratio between width and height of artwork tiles
         TILE_WIDTH_RATIO    = 255,
         ANIMATION_DURATION  = 800,                                         // duration of timeline zoom animation
+        DIMMING_FACTOR      = 1.7,                                          //dimming of unhighlighted text
         PRIMARY_FONT_COLOR  = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
         FONT                = TAG.Worktop.Database.getMuseumFontFamily(),
-
+        
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
         fullMaxDisplayDate,             // maximum display date of full timeline
@@ -120,7 +122,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var progressCircCSS,
             circle,
             oldSearchTerm;
-
+        
         cancelLoadCollection = null;
         progressCircCSS = {
             'position': 'absolute',
@@ -133,14 +135,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
 
-        //root.off();
-        //searchInput.off();
-        console.log("off");
+        //Or else the search bar loses focus immediately when you come back from artwork viewer
+        $('#tagContainer').off();
+        
         // search on keyup
         searchInput.on('keyup', function (e) {
-            if(e.which === 13) {
+            if (!searchInput.val()) {
+                searchTxt.text("");
+                drawCatalog(currentArtworks, currentTag, 0, false);
+            }
+            else if (e.which === 13) {
                 doSearch();
             }
+
         });
         
         searchInput.css({
@@ -150,20 +157,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-position':'2% center'
         });
 
-    
         searchInput.on('focusin', function () { 
-            console.log("focusin");
             searchInput.css({ 'background-image': 'none' }); 
         });
         
         searchInput.on('focusout', function () { 
-            console.log("focusout");
             if (!searchInput.val()) {
                 searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             } 
         });
-    
-        
+          
         // initSplitscreen();
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
@@ -258,14 +261,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background': 'transparent',
             'width': '20%',
             'height': '100%',
-            'margin-left': '70%',
-            'float': 'left'
+            'float': 'right',
+            'display':'inline-block'
         });
         brownLogoDiv.css({
             'background': 'transparent',
             'width': '10%',
             'height': '100%',
-            'float': 'right'
+            'float': 'right',
+            'display': 'inline-block'
         });
         microsoftLogo.css({
             'height': 'auto',
@@ -275,7 +279,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         brownLogo.css({
             'height': 'auto',
             'width': '80%',
-            'margin-top': '-5%'
+            'margin-top': '-38%'
         });
        
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
@@ -352,8 +356,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'height': '15%',
             'margin-top': '3%'
         });
-        infoLogo.append(microsoftLogoDiv);
         infoLogo.append(brownLogoDiv);
+        infoLogo.append(microsoftLogoDiv);
 
         brownLogoDiv.append(brownLogo);
         microsoftLogoDiv.append(microsoftLogo);
@@ -375,6 +379,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtwork = null;
         loadQueue.clear();
         comingBack = false;
+        tileDiv.empty();
         tileLoadingArea.show();
         if (cancelLoadCollection) cancelLoadCollection();
     }
@@ -486,7 +491,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method applyCustomization
      */
     function applyCustomization() {
-        var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR);
+        var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR,DIMMING_FACTOR);
         $('.primaryFont').css({
             'color': dimmedColor,
             'font-family': FONT
@@ -524,7 +529,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionLength,
                 collectionDescription = $(document.createElement('div')),
                 dummyDot,
-                dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR),
+                dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR),
                 str,
                 text = collection.Metadata && collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
 
@@ -550,9 +555,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             buttonRow.empty();
             loadSortTags(collection);
 
-
-            if (!onAssocMediaView) {
-                if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
+             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
                     TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
                         if (cancelLoad) return;
                         for (i=0;i<mediaDoqs.length;i++){
@@ -708,10 +711,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         });
                     });
                 }
-                artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
-                assocMediaButton.css('color', dimmedColor);
-
-            }
+                if (!onAssocMediaView){
+                    artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
+                    assocMediaButton.css('color', dimmedColor);
+                } else {
+                    assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);
+                    artworksButton.css('color', dimmedColor);
+                }
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
             if (collection.Metadata.Description && !onAssocMediaView) {
@@ -722,7 +728,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Hide selected artwork container, as nothing is selected yet
             selectedArtworkContainer.css('display', 'none');
-            overlay.css('z-index', '1');
       
             tileDiv.empty();
             catalogDiv.append(tileDiv);
@@ -765,14 +770,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             currentArtwork = artwrk || null;
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             scrollPos = sPos || 0;
-            //comingBack = false;
             if (!onAssocMediaView || !currCollection.collectionMedia) {
                 getCollectionContents(currCollection);
             } else {
                 createArtTiles(currCollection.collectionMedia);
                 initSearch(currCollection.collectionMedia);
             }
-
+            
             /*helper function to load sort tags
             * @method loadSortTags
             * @param {Object} collection
@@ -1076,13 +1080,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'top' : '25%',
                     'z-index': '',
                 });
-                
+                selectedArtworkContainer.css({
+                    'height' :'110%',
+                    'bottom' : '-5%'
+                });
         } else {
             bottomContainer.css({
                 'height':'85%',
                 'top':'15%',
                 'z-index':'100005',
             });
+            selectedArtworkContainer.css({
+                'height': '100%',
+                'bottom':'2%'
+            })
         }
     }
 
@@ -1103,7 +1114,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 yearTextBox  = $(document.createElement('div')),
                 yearText,
                 tourLabel,
-                videoLabel;
+                videoLabel,
+                showLabel = true;
   
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
@@ -1165,11 +1177,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
 
             // Set tileImage to thumbnail image, if it exists
-            if(currentWork.Metadata.Thumbnail) {
+            if(currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio" ) {
                 tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
+            } else if (currentWork.Metadata.ContentType === "Audio" ){
+                tileImage.css('background-color','black');
+                tileImage.attr('src', tagPath+'images/audio_icon.svg');
             } else {
-                tileImage.attr("src", tagPath+'images/no_thumbnail.svg');
+                if (currentWork.Metadata.Medium === "Video"){
+                    showLabel = false;
+                    tileImage.css('background-color','black');
+                    tileImage.attr('src',tagPath + 'images/icons/catalog_video_icon.svg');
+                } else {
+                    tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); //shouldn't ever get to this
+                } 
             }
+            
 
             // Add title
             if (tag === 'Title') {
@@ -1220,16 +1242,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('tourLabel')
                     .attr('src', tagPath+'images/icons/catalog_tour_icon.svg');
                 main.append(tourLabel);
-            } else if (currentWork.Metadata.Medium === "Video") {
+            } else if (currentWork.Metadata.Medium === "Video" && showLabel) {
                 videoLabel = $(document.createElement('img'))
                     .addClass('videoLabel')
-                    .attr('src', tagPath+'images/icons/catalog_video_icon.svg');
+                    .attr('src', tagPath + 'images/icons/catalog_video_icon.svg');
                 main.append(videoLabel);
-            } else if (currentWork.Metadata.ContentType === "Audio" ){
-            	var audioLabel = $(document.createElement('img'))
-                    .addClass('audioLabel')
-                    .attr('src', tagPath+'images/audio_icon.svg');
-                main.append(audioLabel);
             }
 
             tileDiv.append(main);
@@ -1267,14 +1284,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'top': -EVENT_CIRCLE_WIDTH*3 / 4,
                 'opacity': "1"
             });
-            element.timelineDateLabel.css({
+            if (IS_WINDOWS){
+               element.timelineDateLabel.css({
+                    'visibility': 'visible',
+                    'color' : 'white',
+                    'font-size' : '110%' ,
+                    'top': -element.width()-2+ 'px',
+                    'left': "-2"
+                }); 
+            } else { 
+                    element.timelineDateLabel.css({
                     'visibility': 'visible',
                     'color' : 'white',
                     'font-size' : '120%' ,
                     'top': -EVENT_CIRCLE_WIDTH ,
                     'left': "0"
-            })
-
+                });
+            }
         } else {
             element.css({
                 'height': EVENT_CIRCLE_WIDTH,
@@ -1605,7 +1631,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
-            overlay.css('z-index', '1');
+            $('.tile').css('opacity','1');
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
@@ -1659,6 +1685,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             //Stop any previously-running animations
             selectedArtworkContainer.stop();
+
+            if (selectedArtworkContainer[0].addEventListener) {
+                // IE9, Chrome, Safari, Opera
+                selectedArtworkContainer[0].addEventListener("mousewheel", 
+                    function(e){
+                        e.stopPropagation();
+                    }, false);
+                // Firefox
+                selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
+                    function(e){
+                        e.stopPropagation();
+                    }, false);
+            } else { 
+                // IE 6/7/8
+                selectedArtworkContainer[0].attachEvent("onmousewheel",
+                function(e){
+                    e.stopPropagation();
+                }, false);
+           };
+
             if (artworkShown) {
                 selectedArtworkContainer.animate(
                         {"opacity": 0}, 
@@ -1693,9 +1739,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // Set selected artwork to hide when anything else is clicked
             root.on('mouseup', function(e) {
                 var subject = selectedArtworkContainer;
-                console.log("mouseupp");
                 if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length){    
-                    overlay.css('z-index', '1'); //In case artwork taking a while to load for some reason, to prevent freeze up
                     if (artworkShown){
                         hideArtwork(currentArtwork)();
                     }
@@ -1782,8 +1826,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 	selectedArtworkContainer.css('left', root.width()-containerWidth-TILE_BUFFER);
                 }
                 selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/5);
-                overlay.css('z-index', '100002');
-                topBar.css('z-index','100003');
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
@@ -1922,12 +1964,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
 
                 function addAssociationRow(numberAssociatedDoqs){
+                    var tileSpacing;
                 	if (numberAssociatedDoqs === 0){
                 		miniTilesLabel.hide();
                 		miniTilesHolder.hide();
                 		return;
                 	}
-                	if (numberAssociatedDoqs*miniTilesHolder.height() > selectedArtworkContainer.width()){
+                    tileSpacing = miniTilesHolder.height()/10;
+                	if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
                 		prevArrow = $(document.createElement('img'))
                     			.addClass("miniTilesArrow")
                     			.attr('src', tagPath + 'images/icons/Close.svg')
@@ -1967,7 +2011,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     for (i=0; i<doqs.length;i++){
                         src = '';
                         metadata = doqs[i].Metadata;
-                        console.log(metadata);
                         thumb = metadata.Thumbnail;
 
                         !onAssocMediaView && (doqs[i].artwork = artwork);
@@ -2039,7 +2082,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 previewTile.append(tileTop)
                     	   .append(tileBottom);
 				selectedArtworkContainer.append(previewTile);
-                
+                $('.tile').css('opacity','0.5');
+  
                 var numberAssociatedDoqs = 0;
                 loadQueue.add(function(){
                     onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
@@ -2326,7 +2370,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function colorSortTags(tag) {
         //$('.rowButton').css('color', 'rgb(170,170,170)');
        // $('[tagName="'+tag+'"]').css('color', 'white');
-       var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR);
+       var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR);
        $('.rowButton').css('color', unselectedColor);
        if (tag){
             $('#' + tag.toLowerCase() + 'Button').css('color', '#' + SECONDARY_FONT_COLOR);
@@ -2525,12 +2569,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 scrollPos = catalogDiv.scrollLeft();
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
+                    prevPreview: currentArtwork,
                     prevTag : currentTag,
                     prevScroll: catalogDiv.scrollLeft(),
                     prevCollection: currCollection,
                     prevPage: 'catalog',
                     prevMult: multipleShown,
-                    assocMediaToShow: associatedMedia
+                    assocMediaToShow: associatedMedia,
+                    onAssocMediaView : onAssocMediaView
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');

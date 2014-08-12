@@ -35,6 +35,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverURL,
         tagContainer;
 
+    serverInput.attr('placeholder',localStorage.ip);
   // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
  if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
@@ -190,19 +191,24 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     }, 5000);
                     return;
                 case 'tagtest':
+                case 'tagtestserver.cloudapp.net':
                     address = 'tagtestserver.cloudapp.net';
                     break;
                 case 'tagdemo':
+                case 'tagdemo.cloudapp.net':
                     address = 'tagdemo.cloudapp.net';
                     break;
                 case 'taglive':
+                case 'browntagserver.com':
                     address = 'browntagserver.com';
                     break;
                 case 'taglocal':
+                case '10.116.71.58':
                     address = '10.116.71.58';
                     break;
                 case 'sam':
                 case 'seattleartmuseum':
+                case 'tag.seattleartmuseum.org':
                     address = 'tag.seattleartmuseum.org'
                     break;
                 default:
@@ -497,7 +503,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         fullScreen = root.find('#innerContainer');
         fullScreen.css('background-image', "url(" + TAG.Worktop.Database.fixPath(main.Metadata["BackgroundImage"]) + ")");
-        //fullScreen.css({'opacity':'0.6'});
+        //fullScreen.css({'opacity':'0.9'});
 
         overlayColor = main.Metadata["OverlayColor"];
         overlayTransparency = main.Metadata["OverlayTransparency"];
@@ -623,13 +629,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             'font-family': main.Metadata["FontFamily"]
         });
         serverInput.css({
-            'border-color': color
+            'border-color': color,
+            'color' : color
         });
         serverSubmit.css({
             'border-color': color
         });
         authoringInput.css({
-            'border-color': color
+            'border-color': color,
+            'color' : color
         });
         passwordSubmit.css({
             'border-color': color

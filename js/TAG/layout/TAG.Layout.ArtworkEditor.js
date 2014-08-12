@@ -324,11 +324,18 @@ TAG.Layout.ArtworkEditor = function (artwork) {
      */
     function thumbnailButtonClick(asset) { // TODO in the web app, pass this in to TAG.Util.Artwork.createThumbnailButton
         return function (evt) {
-            closeAllPanels();
-            MEDIA_EDITOR.open(asset, MEDIA_EDITOR.createMediaWrapper(asset), function () {
+            if (!($(document.getElementById(asset.doq.Identifier)).css('background-color') === 'rgba(255, 255, 255, 0.4)')) {
+                closeAllPanels();
+                MEDIA_EDITOR.open(asset, MEDIA_EDITOR.createMediaWrapper(asset), function () {
+                    $('.assetHolder').css('background-color', '');
+                    $(document.getElementById(asset.doq.Identifier)).css({
+                        'background-color': 'rgba(255, 255, 255, 0.4)',
+                    });
+                });
+            } else {
                 $('.assetHolder').css('background-color', '');
-                $(evt.target).css('background-color', 'rgba(255, 255, 255, 0.75)');
-            });
+                $('.closeEditAssocMedia').click();
+            }
         };
     }
 
@@ -532,7 +539,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             position: 'relative',
             top: '0%,',
             'margin-top': '2%',
-            padding: '0px 4% 0px 12%',
+            padding: '0px 8% 0px 4%',
+            width:'82%',
+            left:'5%',
             'overflow-x': 'hidden',
             'overflow-y': 'auto',
             'text-overflow': 'ellipsis',
@@ -1758,7 +1767,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'display': 'none'
                     })
                     .appendTo($assocMediaButtonContainer),
-                closeButton = $(document.createElement('img'))
+                closeButton = $(document.createElement('img')).addClass('closeEditAssocMedia')
                     .attr('src', tagPath + 'images/icons/x.svg')
                     .css({
                         'position': 'absolute',

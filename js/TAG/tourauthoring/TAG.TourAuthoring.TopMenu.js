@@ -364,7 +364,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             height: saveButtonSpecs.height + 'px',
             'top': saveButtonSpecs.y + 'px',
             //'font-size': fontsize,
-            'font-size': '0.5em',
+            'font-size': '70%',
             'left': parseInt(titleTextArea.css('left'), 10) + titleTextArea.width() + 45 + ($(window).width() * 0.022) + 'px',
         });
         saveButton.click(function () {

@@ -321,12 +321,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @ method enterKeyHandlerSettingsView
      */
     function enterKeyHandlerSettingsView(event) {
+        if (event.target.className == "metadataPickerSearchbar") {
+            console.log('searching metadata');
+            event.stopPropagation();
+            event.preventDefault();
+        }
         if (searchbar.is(':focus')) {
             if (!searchbar.val()) {
                 resetView();
                 searchbar.css({ 'background-image': 'none' });
             } else {
                 doSearch();
+                searchbar.css({ 'background-image': 'none' });
             }
             event.stopPropagation();
             event.preventDefault();
@@ -1383,9 +1389,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 sortDiv.attr("setSort", false);
                 sortDiv.css({
-                    "background-color": "white",
-                    "color": "black",
-                    "border": "2px solid black"
+                    "background-color": "black",
+                    "background": "transparent",
+                    "color": "black"
                 });
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
@@ -1400,9 +1406,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     sortOptionsCount++;
                     sortDiv.attr("setSort", true);
                     sortDiv.css({
-                        "background-color": "#0040FF",
-                        "color": "white",
-                        "border": "2px solid white"
+                        "background-color": "white"
                     });
                 }
                 if (sortDiv.text() === "Date") {
@@ -1456,9 +1460,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (setSort === true || setSort === "true") {
                         sortOptionsCount++;
                         sortDiv.css({
-                            "background-color": "#0040FF",
-                            "color": "white",
-                            "border": "2px solid white"
+                            "background-color": "white",
+                            "border": "1px solid black"
                         });
                     }
                     sortDiv.click(clickCallback(sortDiv));
@@ -1502,13 +1505,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} exhibition   exhibition to load
      */
     function loadExhibition(exhibition) {
-        prepareViewer(true);
-        clearRight();
+        
         deleteType = deleteExhibition;
         toDelete = exhibition;
-
-        // Set the viewer to exhibition view (see function below)
-        exhibitionView(exhibition);
 
         // Create inputs
         var privateState;
@@ -1543,8 +1542,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             publicInput.css('background-color', 'white');
         }
-        var pubPrivDiv = $(document.createElement('div'));
-        pubPrivDiv.append(privateInput).append(publicInput);
+        /*var pubPrivDiv = $(document.createElement('div'));
+        pubPrivDiv.append(privateInput).append(publicInput);*/
 
         // local visibility
         var localVisibility = LADS.Util.localVisibility(exhibition.Identifier);
@@ -1572,8 +1571,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             invisibilityInput.css('background-color', 'white');
         }
-        var visDiv = $(document.createElement('div'));
-        visDiv.append(invisibilityInput).append(visibilityInput);
+        /*var visDiv = $(document.createElement('div'));
+        visDiv.append(invisibilityInput).append(visibilityInput);*/
 
         //TO-DO: add in on server side from TAG.Worktop.Database.js changeExhibition() 
         var assocMediaShown;
@@ -1588,6 +1587,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = true;
             showAssocMedia.css('background-color', 'white');
             hideAssocMedia.css('background-color','');
+            $('#toggleRow').css('display','block');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -1599,6 +1599,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
+            $('#toggleRow').css('display','none');
             }, {
             'min-height': '0px',
             'width': '48%'
@@ -1609,8 +1610,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }else{
             hideAssocMedia.css('background-color','white');
         }
-        var timelineOptionsDiv = $(document.createElement('div'));
-        timelineOptionsDiv.append(showTimeline).append(hideTimeline);
+        /*var timelineOptionsDiv = $(document.createElement('div'));
+        timelineOptionsDiv.append(showTimeline).append(hideTimeline);*/
 
         
         if (exhibition.Metadata.Timeline === "true" || exhibition.Metadata.Timeline === "false") {
@@ -1624,6 +1625,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = true;
             showTimeline.css('background-color', 'white');
             hideTimeline.css('background-color','');
+            $('#timelineArea').css('display','block');
+            $('#bottomContainer').css({
+                'height': '69%',
+                'top':'25%'
+               });
+            //$('#dateButton') &&
+            //$('#yearButton') &&
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -1638,6 +1646,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = false;
             hideTimeline.css('background-color','white');
             showTimeline.css('background-color','');
+            $('#timelineArea').css('display','none');
+            $('#bottomContainer').css({
+                'height': '85%',
+                'top':'15%'
+               });
+            //$('#dateButton') &&
+            //$('#yearButton') &&
             }, {
             'min-height': '0px',
             'width': '48%'
@@ -1650,10 +1665,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             hideTimeline.css('background-color','white');
         }
 
-        var timelineOptionsDiv = $(document.createElement('div'));
-        timelineOptionsDiv.append(showTimeline).append(hideTimeline);
-        var assocMediaOptionsDiv = $(document.createElement('div'));
-        assocMediaOptionsDiv.append(showAssocMedia).append(hideAssocMedia);
+
 
         var privateSetting;
         var localVisibilitySetting;
@@ -1685,7 +1697,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });         
         }
         function createCollectionSettings() {
-
+            prepareViewer(true);
+            clearRight();
+            // Set the viewer to exhibition view (see function below)
+            exhibitionView(exhibition);
+            var pubPrivDiv = $(document.createElement('div'));
+            pubPrivDiv.append(privateInput).append(publicInput);
+            var visDiv = $(document.createElement('div'));
+            visDiv.append(invisibilityInput).append(visibilityInput);
+            var timelineOptionsDiv = $(document.createElement('div'));
+            timelineOptionsDiv.append(showTimeline).append(hideTimeline);
+            var assocMediaOptionsDiv = $(document.createElement('div'));
+            assocMediaOptionsDiv.append(showAssocMedia).append(hideAssocMedia);
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
             descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false);
             bgInput = createButton('Change Background Image', function () {
@@ -1714,6 +1737,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             onChangeUpdateText(nameInput, '#exhibition-title', 40);
             onChangeUpdateText(descInput, '#description-text', 1790);
 
+            localVisibilitySetting = createSetting('Visiblity on Machine', visDiv);
             privateSetting = createSetting('Change Publish Setting', pubPrivDiv);
             name = createSetting('Collection Name', nameInput);
             desc = createSetting('Collection Description', descInput);
@@ -1721,166 +1745,167 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
             assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
 
-            if (sortDropDown){
+            if (sortDropDown) {
                 sortOptions = createSetting('Sort Options', sortDropDown);
             }
 
             settingsContainer.append(privateSetting);
+            settingsContainer.append(localVisibilitySetting);
             settingsContainer.append(name);
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
             settingsContainer.append(assocMedia);
-            if (sortOptions){
+            if (sortOptions) {
                 settingsContainer.append(sortOptions);
             }
-        }
 
-        //Automatically save changes
-        //currentMetadataHandler = function () {
-        //    if (nameInput.val() === undefined || nameInput.val() === "") {
-        //        nameInput.val("Untitled Collection");
-        //    }
-        //    LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
-        //    saveExhibition(exhibition, {
-        //        privateInput: privateState,
-        //        nameInput: nameInput,
-        //        descInput: descInput,
-        //        bgInput: bgInput,
-        //        sortOptions: sortDropDown,
-        //        timelineInput: timelineShown
-        //    });
-        //};
+            //Automatically save changes
+            //currentMetadataHandler = function () {
+            //    if (nameInput.val() === undefined || nameInput.val() === "") {
+            //        nameInput.val("Untitled Collection");
+            //    }
+            //    LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
+            //    saveExhibition(exhibition, {
+            //        privateInput: privateState,
+            //        nameInput: nameInput,
+            //        descInput: descInput,
+            //        bgInput: bgInput,
+            //        sortOptions: sortDropDown,
+            //        timelineInput: timelineShown
+            //    });
+            //};
 
-        // Buttons
-        var saveButton = createButton('Save Changes', function () {
-            if (nameInput.val() === undefined || nameInput.val() === "") {
-                nameInput.val("Untitled Collection");
-            }
-            LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
-            saveExhibition(exhibition, {
-                privateInput: privateState,  //default set unpublished
-                nameInput: nameInput,        //Collection name
-                descInput: descInput,        //Collection description
-                bgInput: bgInput,            //Collection background image
-                sortOptions: sortDropDown,
-                timelineInput: timelineShown,  
-                assocMediaInput : assocMediaShown
-            });
-        }, {
-            'margin-right': '3%',
-            'margin-top': '1%',
-            'margin-bottom': '1%',
-            'margin-left': '.5%',
-            'float': 'right',
-        });
-
-        var deleteButton = createButton('Delete Collection', function () {
-            deleteExhibition(exhibition);
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0',
-            'margin-bottom': '3%',
-        });
-
-        var catalogNext = true;
-        // Creates the button to toggle between views
-        var switchViewButton = createButton('Preview Catalog', function () {
-            viewer.empty();
-            if (catalogNext) {
-                // If there is no art the program crashes when entering catalog mode
-                // Show a message and return if thats the case (would prefer not having
-                // to request all the artwork)
-                LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
-                    if (!artworks || !artworks[0]) {
-                        var messageBox = LADS.Util.UI.popUpMessage(null, "Cannot view in catalog mode because there is no artwork in this exhibit.", null, true);
-                        root.append(messageBox);
-                        $(messageBox).show();
-                        exhibitionView();
-                    } else {
-                        switchViewButton.text('Preview Collection');
-                        catalogView();
-                        catalogNext = !catalogNext;
-                    }
-                });
-
-                return;
-            } else {
-                switchViewButton.text('Preview Catalog');
-                exhibitionView();
-            }
-            catalogNext = !catalogNext;
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
-
-        var artPickerButton = createButton('Manage Collection', function () {
-            TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
-                { comp: exhibition, type: 'exhib' },
-                'exhib', [{
-                    name: 'All Artworks',
-                    getObjs: TAG.Worktop.Database.getArtworksAndTours,
-                }, {
-                    name: 'Artworks in this Collection',
-                    getObjs: TAG.Worktop.Database.getArtworksIn,
-                    args: [exhibition.Identifier]
-                }], {
-                    getObjs: TAG.Worktop.Database.getArtworksIn,
-                    args: [exhibition.Identifier]
-                }, function () {
-                    prepareNextView(true, "New", createExhibition);
-                    clearRight();
-                    prepareViewer(true);
-                    loadExhibitionsView(exhibition.Identifier);
-                });
-
-        }, {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
-
-        leftButton = artPickerButton;
-        // Sets the viewer to catalog view
-        function catalogView() {
-            rightQueue.add(function () {
-                var catalog;
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
-                    return;
+            // Buttons
+            var saveButton = createButton('Save Changes', function () {
+                if (nameInput.val() === undefined || nameInput.val() === "") {
+                    nameInput.val("Untitled Collection");
                 }
-                LADS.Layout.Catalog(exhibition, null, function (catalog) {
-                    viewer.append(catalog.getRoot());
-                    catalog.loadInteraction();
-                    preventClickthrough(viewer);
-
+                LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
+                saveExhibition(exhibition, {
+                    privateInput: privateState,  //default set unpublished
+                    nameInput: nameInput,        //Collection name
+                    descInput: descInput,        //Collection description
+                    bgInput: bgInput,            //Collection background image
+                    sortOptions: sortDropDown,
+                    timelineInput: timelineShown,
+                    assocMediaInput: assocMediaShown
                 });
+            }, {
+                'margin-right': '3%',
+                'margin-top': '1%',
+                'margin-bottom': '1%',
+                'margin-left': '.5%',
+                'float': 'right',
             });
-        }
 
-        /**Helper method to set the viewer to exhibition view
-         * @method exhibitionView
-         * @param {Object} exhibition    exhibition to load
-         */
-        function exhibitionView(exhibition) {
-            rightQueue.add(function () {
-                var options = {
-                    backCollection : exhibition,
-                    previewing : true
-                };
-                var exhibView = new TAG.Layout.CollectionsPage(options);
-                var exroot = exhibView.getRoot();
-                $(exroot).css('z-index','-1'); // otherwise, you can use the search box and sorting tabs!
-                viewer.append(exroot);
-                preventClickthrough(viewer);
+            var deleteButton = createButton('Delete Collection', function () {
+                deleteExhibition(exhibition);
+            }, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0',
+                'margin-bottom': '3%',
             });
-        }
 
-        buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
+            var catalogNext = true;
+            // Creates the button to toggle between views
+            var switchViewButton = createButton('Preview Catalog', function () {
+                viewer.empty();
+                if (catalogNext) {
+                    // If there is no art the program crashes when entering catalog mode
+                    // Show a message and return if thats the case (would prefer not having
+                    // to request all the artwork)
+                    LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
+                        if (!artworks || !artworks[0]) {
+                            var messageBox = LADS.Util.UI.popUpMessage(null, "Cannot view in catalog mode because there is no artwork in this exhibit.", null, true);
+                            root.append(messageBox);
+                            $(messageBox).show();
+                            exhibitionView();
+                        } else {
+                            switchViewButton.text('Preview Collection');
+                            catalogView();
+                            catalogNext = !catalogNext;
+                        }
+                    });
+
+                    return;
+                } else {
+                    switchViewButton.text('Preview Catalog');
+                    exhibitionView();
+                }
+                catalogNext = !catalogNext;
+            }, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0%',
+                'margin-bottom': '3%',
+            });
+
+            var artPickerButton = createButton('Manage Collection', function () {
+                TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
+                    { comp: exhibition, type: 'exhib' },
+                    'exhib', [{
+                        name: 'All Artworks',
+                        getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                    }, {
+                        name: 'Artworks in this Collection',
+                        getObjs: TAG.Worktop.Database.getArtworksIn,
+                        args: [exhibition.Identifier]
+                    }], {
+                        getObjs: TAG.Worktop.Database.getArtworksIn,
+                        args: [exhibition.Identifier]
+                    }, function () {
+                        prepareNextView(true, "New", createExhibition);
+                        clearRight();
+                        prepareViewer(true);
+                        loadExhibitionsView(exhibition.Identifier);
+                    });
+
+            }, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0%',
+                'margin-bottom': '3%',
+            });
+
+            leftButton = artPickerButton;
+            // Sets the viewer to catalog view
+            function catalogView() {
+                rightQueue.add(function () {
+                    var catalog;
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
+                        return;
+                    }
+                    LADS.Layout.Catalog(exhibition, null, function (catalog) {
+                        viewer.append(catalog.getRoot());
+                        catalog.loadInteraction();
+                        preventClickthrough(viewer);
+
+                    });
+                });
+            }
+
+            /**Helper method to set the viewer to exhibition view
+             * @method exhibitionView
+             * @param {Object} exhibition    exhibition to load
+             */
+            function exhibitionView(exhibition) {
+                rightQueue.add(function () {
+                    var options = {
+                        backCollection: exhibition,
+                        previewing: true
+                    };
+                    var exhibView = new TAG.Layout.CollectionsPage(options);
+                    var exroot = exhibView.getRoot();
+                    $(exroot).css('z-index', '-1'); // otherwise, you can use the search box and sorting tabs!
+                    viewer.append(exroot);
+                    preventClickthrough(viewer);
+                });
+            }
+
+            buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
+        }
     }
 
     /**Create an exhibition
@@ -2748,6 +2773,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         settingsContainer.append(title);
         settingsContainer.append(desc);
+        if (type === 'iframe') {
+            var rawSource = media.Metadata.Source;
+            var visibleSource;
+            if (rawSource.indexOf('youtube') > -1) {
+                if (rawSource.indexOf('embed') > -1) {
+                    visibleSource = rawSource.substring(rawSource.indexOf('embed') + 6);
+                    visibleSource = "https://www.youtube.com/watch?v=" + visibleSource;
+                }                
+            }
+            else if (rawSource.indexOf('vimeo')) {
+                if (rawSource.indexOf('video') > -1) {
+                    visibleSource = rawSource.substring(rawSource.indexOf('video') + 6, rawSource.indexOf("?"));
+                    visibleSource = "https://www.vimeo.com/" + visibleSource;
+                }    
+            }
+            var sourceInput = createTextInput(visibleSource);
+            sourceInput.focus(function () {
+                if (descInput.val() === 'Source')
+                    descInput.select();
+            });
+            onChangeUpdateText(sourceInput, null, 5000);
+            var source = createSetting('Source', sourceInput);
+            settingsContainer.append(source);
+        }
         settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
 
         //Automatically save changes
@@ -2807,7 +2856,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (titleInput.val() === undefined || titleInput.val() === "") {
                     titleInput.val("Untitled Asset");
                 }
-                saveAssocMedia(media, {
+                var updatedMetadata = {
                     titleInput: titleInput,
                     descInput: descInput,
                     yearInput: yearMetadataDivSpecs.yearInput,
@@ -2816,7 +2865,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     timelineYearInput: yearMetadataDivSpecs.timelineYearInput,
                     timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,
                     timelineDayInput: yearMetadataDivSpecs.timelineDayInput
-                });
+                };
+
+
+                if (type === 'iframe') {
+                    var validURL = checkEmbeddedURL(sourceInput.val());
+                    if (validURL) {
+                        saveAssocMedia(media, updatedMetadata, validURL);
+                    }
+                } else {
+                    saveAssocMedia(media, updatedMetadata);
+                }
             }, {
                 'margin-right': '3%',
                 'margin-top': '1%',
@@ -2875,12 +2934,81 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(deleteButton).append(saveButton); //SAVE BUTTON//
     }
 
+
+    /**Helper method to check URLs of videos to be embedded (standard YouTube or Vimeo URLs only) and return parsed URL for embed
+     * @method checkEmbeddedURL
+     * @param {String} url    URL to check and parse
+     * @return {string} validURL   parsed URL if valid, empty string otherwise
+     */
+    function checkEmbeddedURL(url) {
+        var modifiedURL = url,
+                        popup,
+                        id,
+                        validURL = true;
+        if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
+
+            if (modifiedURL.indexOf("watch?v=") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
+
+                if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
+                    modifiedURL = modifiedURL.replace("http://", "https://");
+                } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
+                    modifiedURL = "https://" + modifiedURL;
+                }
+                modifiedURL = modifiedURL.replace("watch?v=", "embed/");
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
+
+            if (modifiedURL.indexOf("vimeo.com") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
+                if (id && !/^\d+$/.test(id)) {		//No special characters or characters
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else {
+            popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
+            $('body').append(popup);
+            $(popup).show();
+            validURL = false;
+        }
+        if (validURL) {
+            return modifiedURL;
+        } else {
+            return "";
+        }
+    }
+
+
     /**Save an associated media
      * @method saveAssocMedia
      * @param {Object} media    associated media to save
      * @param {Object} inputs   keys for media title and description
      */
-    function saveAssocMedia(media, inputs) {
+    function saveAssocMedia(media, inputs, embeddedURL) {
         var name = inputs.titleInput.val(),
             year = inputs.yearInput.val(),
             month = inputs.monthInput.val(),
@@ -2888,8 +3016,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineYear = inputs.timelineYearInput.val(),
             timelineMonth = inputs.timelineMonthInput.val(),
             timelineDay = inputs.timelineDayInput.val(),
-            desc = inputs.descInput.val();
-
+            desc = inputs.descInput.val(),
+            source = embeddedURL || "";
+            
         //pCL = displayLoadingSettings();
         clearRight();
         prepareViewer(true);
@@ -2902,6 +3031,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Worktop.Database.changeHotspot(media, {
             Name: name,
             Description: desc,
+            Source: source,
             Year: year,
             Month: month,
             Day: day,
@@ -3003,65 +3133,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} src        URL to embed
      */
     function createIframeAsset(src) { //TODO IFRAME ASSOC MEDIA: iframe asset creation would look something like this
-        var modifiedURL = src,
-        popup,
-        id,
-        validURL = true;
-        if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
-
-            if (modifiedURL.indexOf("watch?v=") > -1) {
-                id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
-                
-                if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
-                    validURL = false;
-                }
-            } else {
-                validURL = false;
-            }
-
-            if (validURL && id) {
-                if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
-                    modifiedURL = modifiedURL.replace("http://", "https://");
-                } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
-                    modifiedURL = "https://" + modifiedURL;
-                }
-                modifiedURL = modifiedURL.replace("watch?v=", "embed/");
-            } else {
-                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
-                $('body').append(popup);
-                $(popup).show();
-            }
-
-        } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
-
-            if (modifiedURL.indexOf("vimeo.com") > -1) {
-                id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
-                if (id && !/^\d+$/.test(id)) {		//No special characters or characters
-                    validURL = false;
-                }
-            } else {
-                validURL = false;
-            }
-
-            if (validURL && id) {
-                modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
-            } else {
-                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
-                $('body').append(popup);
-                $(popup).show();
-            }
-
-        } else {
-            popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
-            $('body').append(popup);
-            $(popup).show();
-            validURL = false;
-        }
-
+        
+        var validURL = checkEmbeddedURL(src);
         if (validURL) {
             var options = {
-                Source: modifiedURL,
-                Name: modifiedURL
+                Source: validURL,
+                Name: "Untitled Embedded Video"
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
         }
@@ -3389,7 +3466,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var info;
 
         searchbar[0].value = "";
-        $(searchbar).blur(); //////////
+        //$(searchbar).blur(); //////////
         infoSource = [];
         
         $.each(currentList, function (i, cts) {
@@ -4380,6 +4457,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
+
 
         metadataPicker.append(searchbar);
 
@@ -5381,10 +5459,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearDescriptionDiv.css({
             'width': '60%',
             'height': '25px',
-            'position': 'absolute',
+            'position': 'relative',
             'left': '0%',
-            'margin-bottom':'1%',
-            'margin-left': '2%',
+            'margin-bottom': '1%',
             'font-size': '70%',
             'white-space': 'nowrap',
             'display':'inline-block'
