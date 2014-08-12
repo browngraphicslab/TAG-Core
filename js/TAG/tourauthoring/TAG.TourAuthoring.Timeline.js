@@ -2615,7 +2615,7 @@ TAG.TourAuthoring.Timeline = function (spec) {
                 track = addImageTrack(resources[r].uriReference, trackname, e);
             } else if (type === 'VideoES') {
                 mediaLength = exp.data.mediaLength;
-                var toConvert = exp.data.toConvert || false;
+                var toConvert = exp.data.toConvert;
                 var converted = exp.data.converted || false;
                 track = addVideoTrack(resources[r].uriReference, trackname, e, mediaLength, toConvert, converted);
             } else if (type === 'AES') {

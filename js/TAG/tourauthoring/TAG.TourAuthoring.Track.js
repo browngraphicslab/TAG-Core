@@ -67,6 +67,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
     my.inRightTap = false;                                                                          // checks for long press on the title div                                                                
     my.converted = spec.converted;                                                                  // boolean to check if a video track is converted or not
     my.toConvert = spec.toConvert;                                                                  // boolean to check if the user want to convert a video track right after uploading
+    var chkIntervalVal;
     // Title for header
     var titledivPlaceholder,                                                                        // div holding the title div                                     
         titleText,                                                                                  // div holding the track title 
@@ -74,7 +75,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         compOpsOpen = false,                                                                        // keeps track of when the 'component options' menu which appears on right clicking on  track is open or not
         eventsPaused = false,                                                                       // checks for pausing of a track on the timeline
         menu;                                                                                       // creates an instance of the editor menu
-
+    var titleConversionMsg;
     // variables used by the onManipTrackTitleWrapper class to keep track of the 
     // top, bottom and total movement along the y axis of the tracks
     var prevZIndex = 0,                                                                             // inits track title to be dragged
@@ -171,9 +172,9 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
     my.that = that;                                                                                 // object w/ all public methods of this class
     
-    checkVideoConverted();
+    //checkVideoConverted();
     function checkVideoConverted() {
-        if (my.converted === false) {
+       if (my.converted === false&&my.toConvert===true) {
             var videotag = $(document.createElement('video'));
             videotag.attr('preload', 'metadata');
             var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
@@ -191,11 +192,22 @@ TAG.TourAuthoring.Track = function (spec, my) {
                                 changeTrackColor('white');
                                 addDisplay(0, this.duration);
                                 my.converted = true;
-                                convertbtn.remove();
+                                //convertbtn.remove();
+                                titleConversionMsg.text("");
+                                titleText.css('font-style','normal');
+                                clearInterval(chkIntervalVal);
                             });
-
                         } if (output === "Error") {
                             my.converted = false;
+                            titleText.css('font-style', 'italic');
+                            titleConversionMsg.text("Conversion Error");
+                            titlediv.css('opacity', '0.7');
+                            //pop up message 
+                            var popup = TAG.Util.UI.popUpMessage(null, "An error occurred when converting video "+filename+". Please try to import it again.","OK", null,null,null,true);
+                            $('body').append(popup);
+                            $(popup).css('z-index', 1000000);
+                            $(popup).show();
+                            clearInterval(chkIntervalVal);
                             console.log("Error ocurred when converting");
                         }
                         else {
@@ -205,7 +217,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                 })(videotag), null, filename, basefilename);
         }
     }
-    setInterval(checkVideoConverted, 1000 * 30);
+    chkIntervalVal=setInterval(checkVideoConverted,5000);
 
     /**Creates the title div for a track
      * @method _initTitle
@@ -243,7 +255,26 @@ TAG.TourAuthoring.Track = function (spec, my) {
             'width': 0.115*$(window).width() + 'px',
         });
         titlediv.append(titleText);
-
+        titleConversionMsg = $(document.createElement('div'));
+        titleConversionMsg.addClass("track-conversion");
+        titleConversionMsg.css({
+            'font-size': '0.4em',
+            'color': 'white',
+            'top': '16%',
+            'left': '3%',
+            'position': 'relative',
+            'overflow': 'hidden',
+            'text-overflow': 'ellipsis',
+            'white-space': 'nowrap',
+            'display': 'block',
+            'width': 0.115 * $(window).width() + 'px',
+        });
+        if (my.toConvert === true && my.converted !== true) {
+            titleText.css('font-style', 'italic');
+            titleConversionMsg.text("Converting video...");
+            titlediv.css('opacity','0.7');
+        }
+        titlediv.append(titleConversionMsg);
         //call add icon function here
         addIconToTitle(my.type);
     })();
@@ -425,15 +456,16 @@ TAG.TourAuthoring.Track = function (spec, my) {
         if (my.type === TAG.TourAuthoring.TrackType.ink) {
             menu.addButton('Edit Ink', 'left', componentOptionEditInk);
         }
-        if (my.type === TAG.TourAuthoring.TrackType.video && my.converted !== true) {
+        if (my.type === TAG.TourAuthoring.TrackType.video && !my.toConvert) {
             convertbtn = menu.addButton('Convert', 'left', componentOptionConvertVideo);
-            if (my.toConvert === true) {
-                convertbtn.text("Converting");
-                convertbtn.css({
-                    'color': 'gray'
-                })
-                convertbtn.data('disabled', true);
-            }
+            
+            //if (my.toConvert === true) {
+            //    convertbtn.text("Converting");
+            //    convertbtn.css({
+            //        'color': 'gray'
+            //    })
+            //    convertbtn.data('disabled', true);
+            //}
         }
         menu.addButton('Duplicate', 'left', componentOptionDuplicate);
         menu.addButton('Delete', 'left', componentOptionDelete);
@@ -878,16 +910,19 @@ TAG.TourAuthoring.Track = function (spec, my) {
         var fileExtension = newFileName.slice(index);
         var baseFileName = newFileName.slice(0, index);
         TAG.Worktop.Database.convertVideo(function () {
-        }, null, newFileName, fileExtension, baseFileName, null);
-        //videoConvert.push(curtrack);
+        }, null, newFileName, fileExtension, baseFileName, null,"True");
         my.toConvert = true;
-
         //disable the button
-        convertbtn.text("Converting");
-        convertbtn.css({
-            'color': 'gray'
-        })
-        convertbtn.data('disabled', true);
+        convertbtn.remove();
+        
+        titleConversionMsg.text("Converting...");
+        titlediv.css('opacity', '0.7');
+        titleText.css('font-style', 'italic');
+        //convertbtn.text("Converting");
+        //convertbtn.css({
+        //    'color': 'gray'
+        //})
+        //convertbtn.data('disabled', true);
         var currSelection = dataHolder.getSelectedTrack();
         if (currSelection) {
             currSelection.setDeselected();
