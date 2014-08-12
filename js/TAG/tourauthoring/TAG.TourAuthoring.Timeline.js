@@ -1363,7 +1363,7 @@ TAG.TourAuthoring.Timeline = function (spec) {
         function createTimeLabel(i) {
             var time = Math.min(i, ev.end),
                 timeString = timeManager.formatTime(i),
-                fontsize = TAG.Util.getFontSize(40),
+                //fontsize = TAG.Util.getFontSize(40),
                 markLoc = timeManager.timeToPx(i),
                 timeLabel = $(document.createElement('div'))
                             .addClass('time-label')
@@ -1375,7 +1375,7 @@ TAG.TourAuthoring.Timeline = function (spec) {
                                 'position': 'absolute',
                                 'left': markLoc + 'px',
                                 'padding-left': '5px',
-                                'font-size': fontsize,
+                                'font-size': '70%',
                                 'color': 'black',
                                 'height': '100%',
                             });

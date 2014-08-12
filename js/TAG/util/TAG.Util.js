@@ -2491,6 +2491,7 @@ TAG.Util.UI = (function () {
             'float': "right",
             'margin-right': '3%',
             'margin-top': '-3%',
+            color: 'white',
         });
         buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
         $(confirmButton).text(buttonText);

@@ -651,8 +651,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'background': 'rgba(0,0,0,0)',
                     'position': 'absolute'
                 });
-                //assetCanvas.append(outerContainer);
-                //outerContainer.hide();
+                assetCanvas.append(outerContainer);
+                outerContainer.hide();
             } else {
                 // set up divs for the associated media
                 outerContainer.css('width', '29%');
@@ -688,8 +688,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 }
 
                 outerContainer.append(innerContainer);
-                //assetCanvas.append(outerContainer);
-                //outerContainer.hide();
+                assetCanvas.append(outerContainer);
+                outerContainer.hide();
 
                 // create hotspot circle if need be
                 if (IS_HOTSPOT) {
@@ -938,6 +938,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 return;
             }
 
+            console.log(CONTENT_TYPE);
             if (IS_XFADE) {
                 $mediaElt = $(document.createElement('img')).addClass('xfadeImg');
                 $mediaElt.attr({
@@ -963,8 +964,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 closeButton = createCloseButton();
                 mediaContainer.append(closeButton[0]);
                 closeButton.on('click', function (evt) {
-                    evt.stopPropagation();
-                    hideMediaObject();
+                        evt.stopPropagation();
+                        hideMediaObject();
                 });
 
                 if (CONTENT_TYPE === 'Image') {
@@ -1021,16 +1022,21 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         'height' : 'auto'
                     });
                 } else if (CONTENT_TYPE === 'iframe') {
-                    //TO-DO make sure this doesn't mess up future other media containers, should add to stylus??
                     outerContainer.css({
                         'width':'30%',
                     });
-                    outerContainer.css('height', outerContainer.width()*1.15);
+                    if (descDiv){
+                        outerContainer.css('height', outerContainer.width()*1.15);
+                    }else{
+                        outerContainer.css('height',outerContainer.width()*0.89);
+                    }
                     innerContainer.css({
                         'height':'100%'
                     });
+                    var mediaHeight;
+                    descDiv ? mediaHeight = '75%' : mediaHeight ='100%';
                     mediaContainer.css({
-                        'height': '75%'
+                        'height': mediaHeight
                     });
                     iframe = $(document.createElement('iframe'));
                     iframe.attr({
@@ -1041,7 +1047,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         width: '100%',
                         height: '100%'
                     });
-                    descDiv
                     mediaContainer.append(iframe);
                 }
             }
@@ -1396,7 +1401,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             if (IS_XFADE) {
                 assetCanvas.append(outerContainer);
-                //outerContainer.show();
+                outerContainer.show();
             } else {
                 //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
                 if (IS_HOTSPOT) {
@@ -1418,8 +1423,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'pointer-events': 'all'
                 });
 
-                //outerContainer.show();
                 assetCanvas.append(outerContainer);
+                outerContainer.show();
             }
 
             if (!thumbnailButton) {
@@ -1445,13 +1450,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function hideMediaObject() {
             if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
-                //outerContainer.hide();
-                outerContainer.remove();
+                outerContainer.detach();
             } else {
                 pauseResetMediaObject();
                 IS_HOTSPOT && removeOverlay(circle[0]);
-                outerContainer.remove();
-                //outerContainer.hide();
+                outerContainer.detach();
             }
 
             mediaHidden = true;
