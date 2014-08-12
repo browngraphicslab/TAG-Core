@@ -2832,63 +2832,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
                 if (type === 'iframe') {
-                    var modifiedURL = sourceInput.val(),
-                                popup,
-                                id,
-                                validURL = true;
-                    if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
-
-                        if (modifiedURL.indexOf("watch?v=") > -1) {
-                            id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
-
-                            if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
-                                validURL = false;
-                            }
-                        } else {
-                            validURL = false;
-                        }
-
-                        if (validURL && id) {
-                            if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
-                                modifiedURL = modifiedURL.replace("http://", "https://");
-                            } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
-                                modifiedURL = "https://" + modifiedURL;
-                            }
-                            modifiedURL = modifiedURL.replace("watch?v=", "embed/");
-                        } else {
-                            popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
-                            $('body').append(popup);
-                            $(popup).show();
-                        }
-
-                    } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
-
-                        if (modifiedURL.indexOf("vimeo.com") > -1) {
-                            id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
-                            if (id && !/^\d+$/.test(id)) {		//No special characters or characters
-                                validURL = false;
-                            }
-                        } else {
-                            validURL = false;
-                        }
-
-                        if (validURL && id) {
-                            modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
-                        } else {
-                            popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
-                            $('body').append(popup);
-                            $(popup).show();
-                        }
-
-                    } else {
-                        popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
-                        $('body').append(popup);
-                        $(popup).show();
-                        validURL = false;
-                    }
-
+                    var validURL = checkEmbeddedURL(sourceInput.val());
                     if (validURL) {
-                        saveAssocMedia(media, updatedMetadata, modifiedURL);
+                        saveAssocMedia(media, updatedMetadata, validURL);
                     }
                 } else {
                     saveAssocMedia(media, updatedMetadata);
@@ -2950,6 +2896,71 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         buttonContainer.append(deleteButton).append(saveButton); //SAVE BUTTON//
     }
+
+
+    //TODO Doc: method to check whether a given URL is a valid YouTube/Vimeo URL and if so, return the parsed embed URL
+    function checkEmbeddedURL(url) {
+        var modifiedURL = url,
+                                popup,
+                                id,
+                                validURL = true;
+        if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
+
+            if (modifiedURL.indexOf("watch?v=") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
+
+                if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
+                    modifiedURL = modifiedURL.replace("http://", "https://");
+                } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
+                    modifiedURL = "https://" + modifiedURL;
+                }
+                modifiedURL = modifiedURL.replace("watch?v=", "embed/");
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
+
+            if (modifiedURL.indexOf("vimeo.com") > -1) {
+                id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
+                if (id && !/^\d+$/.test(id)) {		//No special characters or characters
+                    validURL = false;
+                }
+            } else {
+                validURL = false;
+            }
+
+            if (validURL && id) {
+                modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
+            } else {
+                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
+                $('body').append(popup);
+                $(popup).show();
+            }
+
+        } else {
+            popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
+            $('body').append(popup);
+            $(popup).show();
+            validURL = false;
+        }
+        if (validURL) {
+            return modifiedURL;
+        } else {
+            return "";
+        }
+    }
+
 
     /**Save an associated media
      * @method saveAssocMedia
@@ -3081,64 +3092,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} src        URL to embed
      */
     function createIframeAsset(src) { //TODO IFRAME ASSOC MEDIA: iframe asset creation would look something like this
-        var modifiedURL = src,
-        popup,
-        id,
-        validURL = true;
-        if (modifiedURL.toLowerCase().indexOf('youtube') > -1) {
-
-            if (modifiedURL.indexOf("watch?v=") > -1) {
-                id = modifiedURL.substring(modifiedURL.indexOf("watch?v=") + 8);
-                
-                if (id && !/^[a-zA-Z0-9_-]*$/.test(id)) {
-                    validURL = false;
-                }
-            } else {
-                validURL = false;
-            }
-
-            if (validURL && id) {
-                if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") > -1) {
-                    modifiedURL = modifiedURL.replace("http://", "https://");
-                } else if (modifiedURL.indexOf("https://") < 0 && modifiedURL.indexOf("http://") < 0) {
-                    modifiedURL = "https://" + modifiedURL;
-                }
-                modifiedURL = modifiedURL.replace("watch?v=", "embed/");
-            } else {
-                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given YouTube URL. The URL should be in the format http://www.youtube.com/watch?v=JozMHAWq0TA");
-                $('body').append(popup);
-                $(popup).show();
-            }
-
-        } else if (modifiedURL.toLowerCase().indexOf('vimeo') > -1) {
-
-            if (modifiedURL.indexOf("vimeo.com") > -1) {
-                id = modifiedURL.substring(modifiedURL.indexOf("vimeo.com") + 10);
-                if (id && !/^\d+$/.test(id)) {		//No special characters or characters
-                    validURL = false;
-                }
-            } else {
-                validURL = false;
-            }
-
-            if (validURL && id) {
-                modifiedURL = "https://player.vimeo.com/video/" + id + "?title=0&amp;byline=0&amp;portrait=0";
-            } else {
-                popup = TAG.Util.UI.popUpMessage(null, "There was a problem embedding the given Vimeo URL. The URL should be in the format http://vimeo.com/11088764 ");
-                $('body').append(popup);
-                $(popup).show();
-            }
-
-        } else {
-            popup = TAG.Util.UI.popUpMessage(null, "Please enter a valid YouTube or Vimeo URL.");
-            $('body').append(popup);
-            $(popup).show();
-            validURL = false;
-        }
-
+        
+        var validURL = checkEmbeddedURL(src);
         if (validURL) {
             var options = {
-                Source: modifiedURL,
+                Source: validURL,
                 Name: "Untitled Embedded Video"
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
