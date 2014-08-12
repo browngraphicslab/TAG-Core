@@ -85,6 +85,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         TILE_HEIGHT_RATIO   = 200,                                          //ratio between width and height of artwork tiles
         TILE_WIDTH_RATIO    = 255,
         ANIMATION_DURATION  = 800,                                         // duration of timeline zoom animation
+        DIMMING_FACTOR      = 1.7,                                          //dimming of unhighlighted text
         PRIMARY_FONT_COLOR  = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
         FONT                = TAG.Worktop.Database.getMuseumFontFamily(),
@@ -489,7 +490,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method applyCustomization
      */
     function applyCustomization() {
-        var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR);
+        var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR,DIMMING_FACTOR);
         $('.primaryFont').css({
             'color': dimmedColor,
             'font-family': FONT
@@ -527,7 +528,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionLength,
                 collectionDescription = $(document.createElement('div')),
                 dummyDot,
-                dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR),
+                dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR),
                 str,
                 text = collection.Metadata && collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
 
@@ -1112,7 +1113,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 yearTextBox  = $(document.createElement('div')),
                 yearText,
                 tourLabel,
-                videoLabel;
+                videoLabel,
+                showLabel = true;
   
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
@@ -1177,10 +1179,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if(currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio" ) {
                 tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
             } else if (currentWork.Metadata.ContentType === "Audio" ){
+                tileImage.css('background-color','black');
                 tileImage.attr('src', tagPath+'images/audio_icon.svg');
             } else {
-                tileImage.attr("src", tagPath+'images/no_thumbnail.svg');
-            } 
+                if (currentWork.Metadata.Medium === "Video"){
+                    showLabel = false;
+                    tileImage.css('background-color','black');
+                    tileImage.attr('src',tagPath + 'images/icons/catalog_video_icon.svg');
+                } else {
+                    tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); //shouldn't ever get to this
+                } 
+            }
+            
 
             // Add title
             if (tag === 'Title') {
@@ -1231,17 +1241,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('tourLabel')
                     .attr('src', tagPath+'images/icons/catalog_tour_icon.svg');
                 main.append(tourLabel);
-            } else if (currentWork.Metadata.Medium === "Video") {
+            } else if (currentWork.Metadata.Medium === "Video" && showLabel) {
                 videoLabel = $(document.createElement('img'))
                     .addClass('videoLabel')
                     .attr('src', tagPath + 'images/icons/catalog_video_icon.svg');
-                if (tag === 'Date' && getDateText(getArtworkDate(currentWork, true))) {
-                    videoLabel.css('bottom', '10%');
-                } else if (tag === 'Artist' && currentWork.Metadata.Artist) {
-                    videoLabel.css('bottom', '10%');
-                } else {
-                    videoLabel.css('bottom', '0%');
-                }
                 main.append(videoLabel);
             }
 
@@ -1280,14 +1283,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'top': -EVENT_CIRCLE_WIDTH*3 / 4,
                 'opacity': "1"
             });
-            element.timelineDateLabel.css({
+            if (IS_WINDOWS){
+               element.timelineDateLabel.css({
+                    'visibility': 'visible',
+                    'color' : 'white',
+                    'font-size' : '110%' ,
+                    'top': -element.width()-2+ 'px',
+                    'left': "-2"
+                }); 
+            } else { 
+                element.timelineDateLabel.css({
                     'visibility': 'visible',
                     'color' : 'white',
                     'font-size' : '120%' ,
                     'top': -EVENT_CIRCLE_WIDTH ,
                     'left': "0"
-            })
-
+                });
+            }
         } else {
             element.css({
                 'height': EVENT_CIRCLE_WIDTH,
@@ -2337,7 +2349,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function colorSortTags(tag) {
         //$('.rowButton').css('color', 'rgb(170,170,170)');
        // $('[tagName="'+tag+'"]').css('color', 'white');
-       var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR);
+       var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR);
        $('.rowButton').css('color', unselectedColor);
        if (tag){
             $('#' + tag.toLowerCase() + 'Button').css('color', '#' + SECONDARY_FONT_COLOR);
