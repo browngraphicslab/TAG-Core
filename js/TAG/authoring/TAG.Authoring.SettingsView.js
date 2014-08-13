@@ -4589,8 +4589,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "title": metadatalist[i].title
                 });
                 var mt = metadatalist[i];
-                var title = mt["title"];
-                if (!mt['title'])
+                var title = mt[spec["title"]];
+                if (!title)
                     title = "Untitled";
                 allTitles[i] = title;                                          
                 if (i < 30) {
