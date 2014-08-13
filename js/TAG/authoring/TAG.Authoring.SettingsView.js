@@ -2146,7 +2146,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearRight();
         deleteType = deleteTour;
         toDelete = tour;
-
+        clearInterval(checkConTimerId);
         // Create an img element just to load the image
         var img = $(document.createElement('img'));
         img.attr('src', TAG.Worktop.Database.fixPath(tour.Metadata.Thumbnail));
@@ -2623,6 +2623,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else if (output === "Error") {
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
+                            } else if (output === null) {
+                                TAG.Worktop.Database.convertVideo(function () {
+                                }, null, source, sourceExt, sourceWithoutExtension, media.Identifier);
+                                checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
                             }
                         }
                     } else {
@@ -2646,16 +2650,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if(output ===null) {
                             TAG.Worktop.Database.convertVideo(function () {
                             }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
+                            checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
                         }
                         //holder.attr('src', source);
                     }
                 }, null, media.Identifier);
-                //if (conversionVideos.indexOf(media.Identifier) > -1) {
-                //    var msg = "This video is being converted to compatible formats for different browsers";
-                //    viewer.append(TAG.Util.createConversionLoading(msg));
-                //} else {
-                //    holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, media.Metadata.Converted);
-                //}
+                if (conversionVideos.indexOf(media.Identifier) > -1) {
+                    var msg = "This video is being converted to compatible formats for different browsers";
+                    viewer.append(TAG.Util.createConversionLoading(msg));
+                } else {
+                    holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, media.Metadata.Converted);
+                }
                 break;
             case "audio":
                 holder = $(document.createElement('audio'));
@@ -3774,6 +3779,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else if (output === "Error") {
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
+                            } else if (output === null) {
+                                TAG.Worktop.Database.convertVideo(function () {
+                                }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
+                                checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
                             }
                         }
                     } else {
@@ -3797,6 +3806,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if(output ===null) {
                             TAG.Worktop.Database.convertVideo(function () {
                             }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
+                            checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
                         }
                     }
                 }, null, artwork.Identifier);
