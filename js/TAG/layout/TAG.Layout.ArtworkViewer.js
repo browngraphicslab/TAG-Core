@@ -264,8 +264,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         container.append(createButton('zinControl',   tagPath+'images/icons/zoom_plus.svg'));
         container.append(createButton('zoutControl',  tagPath+'images/icons/zoom_minus.svg'));
 
-        /////////////////////////// RAPID PROTOTYPING /////////////////////////////
-
         var crossfadeSlider = $(document.createElement('input')).attr({
             'id': 'crossfadeSlider',
             'type': 'range',
@@ -278,10 +276,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         crossfadeSlider.on('change mousemove', function() {
             $('.mediaOuterContainer').css('opacity', crossfadeSlider.val());
         });
-        // container.append(crossfadeSlider);
-
-        ///////////////////////////////////////////////////////////////////////////
-
+        crossfadeSlider.on('touchmove', function(e) {
+            e.preventDefault();
+            $('.mediaOuterContainer').css('opacity', crossfadeSlider.val());
+        });
 
 
         /**
