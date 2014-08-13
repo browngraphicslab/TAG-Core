@@ -199,8 +199,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (output === "True") {
                     console.log("converted: ");
                     clearInterval(checkConTimerId);
+                    var source = doq.Metadata.Source;
+                    var ext = source.substr(source.lastIndexOf('.'));
                     if (currDoq === doq.Identifier) {
-                        reloadVideo(doq)
+                        if (ext === ".mp4") {
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                        } else {
+                            reloadVideo(doq)
+                        }
                     }
                 } else if (output === "Error") {
                     clearInterval(checkConTimerId);
@@ -578,7 +585,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '4% center'
+            'background-position': '2% center'
         });
 
         searchbar.on('click focus', function () {
@@ -1013,8 +1020,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewCollectionsPageButton);
         buttonContainer.append(previewArtworkViewerButton);
 
-        /**
-
         TAG.Telemetry.register(saveButton,'click','general_set_save',function(tobj){
             tobj.mode = 'authoring'
         });
@@ -1023,15 +1028,38 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.mode = 'authoring'
         });
 
-        /**
-        TAG.Telemetry.register(previewCollectionsPage,'click','collectionspage_preview',function(tobj){
+        TAG.Telemetry.register(previewCollectionsPageButton,'click','collectionspage_preview',function(tobj){
             tobj.mode = 'authoring'
         });
 
-        TAG.Telemetry.register(previewArtworkViewer,'click','artworkviewer_preview',function(tobj){
+        TAG.Telemetry.register(previewArtworkViewerButton,'click','artworkviewer_preview',function(tobj){
             tobj.mode = 'authoring'
         });
-        **/
+
+        TAG.Telemetry.register(root.find('#nav-General Settings'),'click','settings_general',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Collections'),'click','settings_collections',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Artworks'),'click','settings_artworks',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Associated Media'),'click','settings_asscmedia',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Tours'),'click','settings_tours',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#artworkEditorButtont'),'click','settings_to_artworkeditor',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
     }
 
     /**Changes idle timer stageOne duration from the customization settings
@@ -1529,7 +1557,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
         deleteType = deleteExhibition;
         toDelete = exhibition;
-        
 
         // Create inputs
         var privateState;
@@ -1919,8 +1946,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         previewing: true
                     };
                     var exhibView = new TAG.Layout.CollectionsPage(options);
-                    
-               
                     var exroot = exhibView.getRoot();
                     $(exroot).css('z-index', '-1'); // otherwise, you can use the search box and sorting tabs!
                     viewer.append(exroot);
@@ -1929,7 +1954,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
-            /***
             TAG.Telemetry.register(artPickerButton,'click','art-selected_collections',function(tobj){
                 tobj.mode = 'authoring';
             });
@@ -1941,7 +1965,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
              TAG.Telemetry.register(savedButton,'click','art-saved_collections',function(tobj){
                 tobj.mode = 'authoring';
             });
-            **/
         }
     }
 
@@ -2183,7 +2206,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearRight();
         deleteType = deleteTour;
         toDelete = tour;
-        clearInterval(checkConTimerId);
+
         // Create an img element just to load the image
         var img = $(document.createElement('img'));
         img.attr('src', TAG.Worktop.Database.fixPath(tour.Metadata.Thumbnail));
@@ -2335,7 +2358,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
         buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
-        /**
+
          TAG.Telemetry.register(editButton,'click','tour_edit',function(tobj){
                 tobj.mode = 'authoring';
             });
@@ -2351,7 +2374,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Telemetry.register(saveButton,'click','tour_save',function(tobj){
                 tobj.mode = 'authoring';
             });
-            **/
     }
 
     /** Create a tour
@@ -2654,8 +2676,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("src", source);
                 var source = TAG.Worktop.Database.fixPath(media.Metadata.Source);
                 var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
-                var filenamewithoutpath = media.Metadata.Source.substring(8);
-                var basefilename = filenamewithoutpath.substr(0, filenamewithoutpath.lastIndexOf('.'));
                 sourceExt = source.substring(source.lastIndexOf('.'));
                 TAG.Worktop.Database.getConvertedVideoCheck(
                 function (output) {
@@ -2679,14 +2699,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else if (output === "Error") {
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
-                            } else if (!media.Metadata.Converted) {
-                                TAG.Worktop.Database.convertVideo(function () {
-                                }, null, filenamewithoutpath, sourceExt, basefilename, media.Identifier);
-                                $("#videoErrorMsg").remove();
-                                $("#leftLoading").remove();
-                                var msg = "This video is being converted to compatible formats for different browsers";
-                                viewer.append(TAG.Util.createConversionLoading(msg));
-                                checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
                             }
                         }
                     } else {
@@ -2707,24 +2719,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else {
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
                             }
-                        } else if (!media.Metadata.Converted) {
+                        } else if(output ===null) {
                             TAG.Worktop.Database.convertVideo(function () {
-                            }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video is being converted to compatible formats for different browsers";
-                            viewer.append(TAG.Util.createConversionLoading(msg));
-                            checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
+                            }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
                         }
                         //holder.attr('src', source);
                     }
                 }, null, media.Identifier);
-                if (conversionVideos.indexOf(media.Identifier) > -1) {
-                    var msg = "This video is being converted to compatible formats for different browsers";
-                    viewer.append(TAG.Util.createConversionLoading(msg));
-                } else {
-                    holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, media.Metadata.Converted);
-                }
+                //if (conversionVideos.indexOf(media.Identifier) > -1) {
+                //    var msg = "This video is being converted to compatible formats for different browsers";
+                //    viewer.append(TAG.Util.createConversionLoading(msg));
+                //} else {
+                //    holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, media.Metadata.Converted);
+                //}
                 break;
             case "audio":
                 holder = $(document.createElement('audio'));
@@ -3817,8 +3824,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
             var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
-            var filenamewithoutpath = artwork.Metadata.Source.substring(8);
-            var basefilename = filenamewithoutpath.substr(0, filenamewithoutpath.lastIndexOf('.'));
             var sourceExt = source.substring(source.lastIndexOf('.'));
             var videoErrorDiv = $(document.createElement('div'));
             videoErrorDiv.addClass("videoErrorDiv");
@@ -3845,14 +3850,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else if (output === "Error") {
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
-                            } else if (!artwork.Metadata.Converted) {
-                                TAG.Worktop.Database.convertVideo(function () {
-                                }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
-                                $("#videoErrorMsg").remove();
-                                $("#leftLoading").remove();
-                                var msg = "This video is being converted to compatible formats for different browsers";
-                                viewer.append(TAG.Util.createConversionLoading(msg));
-                                checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
                             }
                         }
                     } else {
@@ -3873,14 +3870,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else {
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
                             } 
-                        } else if (!artwork.Metadata.Converted) {
+                        } else if(output ===null) {
                             TAG.Worktop.Database.convertVideo(function () {
-                            }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video is being converted to compatible formats for different browsers";
-                            viewer.append(TAG.Util.createConversionLoading(msg));
-                            checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
+                            }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
                         }
                     }
                 }, null, artwork.Identifier);
@@ -4537,7 +4529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '4% center'
+            'background-position': '2% center'
         });
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
@@ -6387,9 +6379,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function createDropdownAssocMediaMenu() {
         var addMenuLabel = $(document.createElement('button'))
             .attr('id', 'addMenuLabel')
+            .text('Add ')
             .appendTo(searchContainer)
             .css({
                 "color": "black",
+                //'background-color': "rgb(256, 256, 256)",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'float':'right',
                 'font-size':'85%',
@@ -6398,24 +6392,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-bottom':'1%',
                 'width': '30%',
                 'border': '1px solid black',
-                'padding':'2% 0px 0px 0px',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
-            .attr('src', tagPath + 'images/icons/Down.png')
+            .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '25%',
+                width: '20%',
                 height: 'auto',
-                display:'inline-block',
-                'margin-left':'10%',
+                'margin-left': '15%',
+                '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)'
             })
-        var addMenuLabelDiv = $(document.createElement('div'))
-            .css({
-                width:'100%',
-                height:'100%',
-            })
-            .append($(document.createElement('div')).text('Add').css({'display':'inline-block'}))
-            .append(addMenuArrowIcon)
             .appendTo(addMenuLabel);
         var dropDown = $(document.createElement('div'))
             .attr('id', 'dropDown')
