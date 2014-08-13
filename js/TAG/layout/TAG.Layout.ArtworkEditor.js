@@ -1419,6 +1419,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             } else if (type === 'Audio') {
                 audio = $(document.createElement('audio'));
                 fixVolumeBar(audio);
+                
                 audio.attr({
                     'preload': 'none',
                     'controls': 'controls'
