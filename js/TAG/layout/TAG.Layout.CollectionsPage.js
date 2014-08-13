@@ -234,6 +234,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+
     }
 
     /**

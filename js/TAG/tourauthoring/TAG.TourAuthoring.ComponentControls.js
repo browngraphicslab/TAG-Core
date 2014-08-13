@@ -2028,7 +2028,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '2% center'
+            'background-position': '4% center'
         });
         $(associatedsearchbar).on('focus', function () {
             $(associatedsearchbar).css({ 'background-image': 'none' });
@@ -2786,7 +2786,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '2% center'
+            'background-position': '4% center'
         });
         $(searchbar).on('focus', function () {
             $(searchbar).css({ 'background-image': 'none' });

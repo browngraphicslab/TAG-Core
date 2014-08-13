@@ -263,7 +263,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         titleConversionMsg = $(document.createElement('div'));
         titleConversionMsg.addClass("track-conversion");
         titleConversionMsg.css({
-            'font-size': '0.4em',
+            'font-size': '0.5em',
             'color': 'white',
             'top': '16%',
             'left': '3%',
@@ -2897,12 +2897,14 @@ TAG.TourAuthoring.Track = function (spec, my) {
         if (Math.ceil(titlediv.height()) === TAG.TourAuthoring.Constants.trackHeight) {
             titlediv.height(TAG.TourAuthoring.Constants.minimizedTrackHeight);
             my.track.height(TAG.TourAuthoring.Constants.minimizedTrackHeight);
+            titleConversionMsg.hide();
             if (mygroup) {
                 mygroup.style('display', 'none');
             }
         } else {
             titlediv.height(TAG.TourAuthoring.Constants.trackHeight);
             my.track.height(TAG.TourAuthoring.Constants.trackHeight);
+            titleConversionMsg.show();
             if (mygroup) {
                 mygroup.style('display', null);
             }
