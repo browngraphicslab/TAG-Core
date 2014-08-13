@@ -1240,15 +1240,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         collectionsPage = TAG.Layout.CollectionsPage(options);
         croot = collectionsPage.getRoot();
         $(croot).css({ 'z-index': '1' });
-        console.log("loaded");
-        $('.primaryFont').each(function () {
-            console.log(this);
-            var primary = $(this);
-            // if (parseInt(primary.css("fontSize")) < 20) {
-            //primary.css('font-size', '20px');
-            primary.css('color', 'black');
-            // }
-        });
 
         if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
             return;
