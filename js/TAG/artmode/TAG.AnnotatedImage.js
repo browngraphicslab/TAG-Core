@@ -1347,42 +1347,29 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         neww = Math.min(Math.max(neww, minConstraint), 800);
                     } 
                 }
-
                 outerContainer.css("width", neww + "px");
-                outerContainer.css("height", "auto");
+                if (CONTENT_TYPE === 'Audio') {
+                     outerContainer.css('height', 'auto');
+                } else {
+                     var newH = (neww * h) / w;
+                     outerContainer.css('height', newH + 'px');
+                }
                 mediaManipPreprocessing();
             }
 
         function mediaScrollWin(res, pivot) {
-            mediaManipPreprocessing();
-            //here, res is the scale factor
-            var t = outerContainer.css('top');
-            var l = outerContainer.css('left');
-            var w = outerContainer.css('width');
-            var neww = parseFloat(w) * res;
-            outerContainer.css("width", neww + "px");
-
-            var minConstraint;
-            if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio') {
-                minConstraint = 450;
-            } else {
-                minConstraint = 200;
-            }
-
-            if ((neww >= minConstraint) && (neww <= 800)) {
-                outerContainer.css("top", (parseFloat(t) + (1.0 - res) * (pivot.y)) + "px");
-                outerContainer.css("left", (parseFloat(l) + (1.0 - res) * (pivot.x)) + "px");
-            }
-            else {
-                neww = Math.min(Math.max(neww, minConstraint), 800);
-            }
-
-            outerContainer.css("width", neww + "px");
-            outerContainer.css("height", "auto");
-            mediaManipPreprocessing();
+            mediaManip({
+                scale: res,
+                translation: {
+                    x: 0,
+                    y: 0
+                },
+                pivot: {
+                    x: pivot.x + root.offset().left,// + (outerContainer.offset().left - root.offset().left),
+                    y: pivot.y + root.offset().top// + (outerContainer.offset().top - root.offset().top)
+                }
+            });
         }
-
-
 
         
         /**
