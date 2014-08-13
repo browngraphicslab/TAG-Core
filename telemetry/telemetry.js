@@ -47,6 +47,7 @@ TAG.Telemetry = (function() {
 					time_human: date.toString(),
 					machine_id : localStorage.machId,
 					session_id : TELEMETRY_SESSION_ID,
+					mode : null,
 					custom_1: null,
 					custom_2: null,
 					custom_3: null,

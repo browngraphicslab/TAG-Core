@@ -190,7 +190,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 })(i, artwork), null, conversionVideos[i]);
         }
     }*/
-
+    
+    TAG.Util.IdleTimer.restartTimer();
     function checkConversion(doq) { //WIN8 AUG 15 RELEASE ONLY
         //if(
         LADS.Worktop.Database.getConvertedVideoCheck(
@@ -1011,6 +1012,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewStartPageButton);
         buttonContainer.append(previewCollectionsPageButton);
         buttonContainer.append(previewArtworkViewerButton);
+
+        /**
+
+        TAG.Telemetry.register(saveButton,'click','general_set_save',function(tobj){
+            tobj.mode = 'authoring'
+        });
+        
+        TAG.Telemetry.register(previewStartPageButton,'click','startpage_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        /**
+        TAG.Telemetry.register(previewCollectionsPage,'click','collectionspage_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(previewArtworkViewer,'click','artworkviewer_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+        **/
     }
 
     /**Changes idle timer stageOne duration from the customization settings
@@ -1508,6 +1529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
         deleteType = deleteExhibition;
         toDelete = exhibition;
+        
 
         // Create inputs
         var privateState;
@@ -1897,6 +1919,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         previewing: true
                     };
                     var exhibView = new TAG.Layout.CollectionsPage(options);
+                    
+               
                     var exroot = exhibView.getRoot();
                     $(exroot).css('z-index', '-1'); // otherwise, you can use the search box and sorting tabs!
                     viewer.append(exroot);
@@ -1905,6 +1929,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
+            /***
+            TAG.Telemetry.register(artPickerButton,'click','art-selected_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+            TAG.Telemetry.register(deleteButton,'click','art-deleted_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+             TAG.Telemetry.register(savedButton,'click','art-saved_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
+            **/
         }
     }
 
@@ -2298,6 +2335,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
         buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
+        /**
+         TAG.Telemetry.register(editButton,'click','tour_edit',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+          TAG.Telemetry.register(duplicateButton,'click','tour_duplicate',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+           TAG.Telemetry.register(deleteButton,'click','tour_delete',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+            TAG.Telemetry.register(saveButton,'click','tour_save',function(tobj){
+                tobj.mode = 'authoring';
+            });
+            **/
     }
 
     /** Create a tour
@@ -5478,15 +5532,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         yearDescriptionDiv.css({
             'width': '60%',
-            'height': '25px',
-            'position': 'relative',
-            'left': '0%',
-            'margin-bottom': '1%',
-            'font-size': '70%',
+            'height': '10px',
+            'position': 'absolute',
+            'left': '2.5%',
+            'bottom': '-5%',
+            'font-size': '75%',
+            'font-style': 'italic',
             'white-space': 'nowrap',
             'display':'inline-block'
         });
-        yearDescriptionDiv.text("Year format examples: 2013, 800 BC, 17th century, 1415-1450");
+        yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
 
         //Link input values of date fields to dynamically change/disable               
         yearInput.on('input', function(){

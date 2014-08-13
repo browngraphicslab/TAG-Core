@@ -254,6 +254,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         TAG.Telemetry.register(slideButton,'click','seadragon_button_panel_toggled',function(tobj){
             tobj.custom_1 = doq.Name;
             tobj.custom_2 = doq.Identifier;
+            tobj.mode = 'Kiosk';
         });
         container.append(slideButton);
         container.append(createButton('leftControl',  tagPath+'images/icons/zoom_left.svg'));
@@ -322,6 +323,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         TAG.Telemetry.register(root.find("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"), 'click', 'seadragon_control_clicked', function (tobj) {
             tobj.custom_1 = doq.Name;
             tobj.custom_2 = doq.Identifier;
+            tobj.mode = 'Kiosk';
         });
         
         /**
@@ -472,6 +474,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
              tobj.custom_1 = doq.Name;
              tobj.custom_2 = doq.Identifier;
+             tobj.mode = 'Kiosk';
         });
     }
 
@@ -576,6 +579,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             tobj.custom_1 = doq.Name;
             tobj.custom_2 = doq.Identifier;
+            tobj.mode = 'Kiosk';
  
         });
         
@@ -797,7 +801,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 locHistoryActive = true;
                 media.create(); // returns if already created
                 media.toggle();
-                console.log("media toggled");
                 TAG.Util.IdleTimer.restartTimer();
                 (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
                 media.pauseReset();

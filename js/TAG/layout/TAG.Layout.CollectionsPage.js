@@ -234,6 +234,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+
     }
 
     /**
@@ -641,10 +642,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = prevTitle;
                         tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                        tobj.mode = 'Kiosk';
+
                     });
                     TAG.Telemetry.register(prevCollection, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = prevTitle;
                         tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                        tobj.mode = 'Kiosk';
                     });
                 }
 
@@ -689,10 +693,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = nextTitle;
                         tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                        tobj.mode = 'Kiosk';
                     });
                     TAG.Telemetry.register(nextCollection, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = nextTitle;
                         tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                        tobj.mode = 'Kiosk';
                     });
                    // collectionArea.append(nextCollection);
                 }
@@ -837,6 +843,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         //TO-DO: test this telemetry handler
                         TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
                             tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                            tobj.mode = 'Kiosk';
                         });
                     }
                     if (!comingBack) {
@@ -1174,6 +1181,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //tobj.artwork_guid = currentWork.Identifier;
                 tobj.custom_1 = currentWork.Name;
                 tobj.custom_2 = currentWork.Identifier;
+                tobj.mode = 'Kiosk';
                 justShowedArtwork = false;
             });
 
@@ -1262,9 +1270,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
 
             //Add scrollbar to catalog div if needed
+            /**
             if (main.position().left + main.width() > main.parent().width()) {
                 catalogDiv.css("overflow-x", "scroll")
             }      
+            **/
         };
     }
 
@@ -1658,6 +1668,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 leftOffset,
                 previewWidth,
                 containerWidth,
+                containerLeft,
                 newTile,
                 previewTile,
                 progressCircCSS,
@@ -1678,10 +1689,40 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             rootWidth = root.width();
             infoWidth = infoDiv.width();
             tileWidth = artworkTiles[artwork.Identifier].width();
-
             catalogDiv.stop();
             catalogDiv.animate({
                 scrollLeft: artworkTiles[artwork.Identifier].position().left - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER
+            }, ANIMATION_DURATION/2, "easeInOutQuint", function(){
+                //center selectedArtworkContainer over current artwork thumbnail
+                shift = (containerWidth-tileWidth)/2;
+                leftOffset = artworkTiles[artwork.Identifier].position().left + infoWidth - catalogDiv.scrollLeft();
+                //if artwork tile at beginning of window
+                if (leftOffset < shift){
+                    shift = 0;
+                }
+                //if artwork tile at end of window
+                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
+                    shift = shift * 2;
+                }
+                //if there are more than 3 artworks associated with the date year
+                if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
+                    selectedArtworkContainer.css("overflow-x", "scroll")
+                    leftOffset = bottomContainer.width()/10
+                    shift = 0;
+                    //shift = rootWidth/10;
+                }
+                containerLeft = leftOffset - shift;
+                selectedArtworkContainer.css({
+                    'width' : containerWidth,
+                    'display': 'inline',
+                    'left' : containerLeft
+                });
+                selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/10);
+            });
+            
+            selectedArtworkContainer.animate({
+                'left' : containerLeft,
+                'opacity' : 1
             }, ANIMATION_DURATION/2, "easeInOutQuint");
 
             //Stop any previously-running animations
@@ -1721,7 +1762,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else {
                 selectedArtworkContainer.animate(
                     {"opacity": 0},
-                    0, 
+                    ANIMATION_DURATION/5, 
                     function () {
                         fillSelectedArtworkContainer();
                         selectedArtworkContainer.children().animate(
@@ -1791,42 +1832,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     newTile.append(closeButton);
                     containerWidth = previewWidth;
                 }
-
-                //center selectedArtworkContainer over current artwork thumbnail
-                shift = (containerWidth-tileWidth)/2;
-                leftOffset = artworkTiles[artwork.Identifier].position().left + infoWidth - catalogDiv.scrollLeft();
-
-                //if artwork tile at beginning of window
-                if (leftOffset < shift){
-                    shift = 0;
-                }
-                //if artwork tile at end of window
-                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
-                    shift = shift * 2;
-                }
-
-
-                //if there are more than 3 artworks associated with the date year
-                if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
-                    selectedArtworkContainer.css("overflow-x", "scroll")
-                    closeButton.on('scroll',function(){
-
-                    });
-                    leftOffset = bottomContainer.width()/10
-                    shift = 0;
-                    //shift = rootWidth/10;
-                }
-                var containerLeft = leftOffset - shift;
-                selectedArtworkContainer.css({
-                    'width' : containerWidth,
-                    'display': 'inline',
-                    'left' : containerLeft
-                });
-                //At end (sometimes not caught by 'shift' due to animations)
-                if (containerLeft >= root.width() - containerWidth){
-                	selectedArtworkContainer.css('left', root.width()-containerWidth-TILE_BUFFER);
-                }
-                selectedArtworkContainer.animate({'opacity': 1}, ANIMATION_DURATION/5);
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
@@ -1893,9 +1898,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 currentThumbnail = $(document.createElement('img'))
                     .addClass('currentThumbnail')
                     .attr('src', artwork.Metadata.Thumbnail ? FIX_PATH(artwork.Metadata.Thumbnail) : (tagPath+'images/no_thumbnail.svg'))
-                    .on('load', function () {
-                       TAG.Util.removeProgressCircle(circle);
-                   	});
+                    //.on('load', function () {
+                      // TAG.Util.removeProgressCircle(circle);
+                   	//});
                 !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
 
                 //Telemetry stuff
@@ -1905,7 +1910,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }
                     tobj.custom_1 = artwork.Name;
                     tobj.custom_2 = artwork.Identifier;
-                    tobj.ttype     = 'collection_to_' + getWorkType(artwork); 
+                    tobj.ttype     = 'collection_to_' + getWorkType(artwork);
+                    tobj.mode = 'Kiosk'; 
                 });
 
                 //Div for artist and year info, directly below image thumbnail
@@ -2054,7 +2060,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         }
                         miniTilesHolder.append(miniTile)
                     }   
-                	addAssociationRow(numberAssociatedDoqs);                  
+                	addAssociationRow(numberAssociatedDoqs); 
+                    TAG.Util.removeProgressCircle(circle);                 
                 }
 
                 //Append everything
