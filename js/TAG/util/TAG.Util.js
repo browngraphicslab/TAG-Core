@@ -964,6 +964,12 @@ TAG.Util = (function () {
                         startEvent: evt.gesture.startEvent
                     }, evt);
                 };
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    var dir = getDir(evt);
+                    if (evt.gesture.pointerType !== "mouse" && !noAccel)
+                        accel(30 * dir.vx, 30 * dir.vy, null, currentAccelId);
+                }, 5);
                 //if ((evt.type === "pinch" || evt.type === "pinchin" || evt.type === "pinchout") && typeof functions.onScroll === "function")
                 //    functions.onScroll(1 + scale, pivot);
             } else {
@@ -1069,7 +1075,7 @@ TAG.Util = (function () {
             currentAccelId++;
             resetDir();
             clearTimeout(timer);
-            manipulationHandler(evt);
+            //manipulationHandler(evt);
         }
 
         // mouse move
@@ -1128,7 +1134,7 @@ TAG.Util = (function () {
             timer = setTimeout(function () {
                 accel(vx * 0.95, vy * 0.95, delay, id);
             }, delay);
-            timer = window.requestAnimationFrame(accel(vx * .95, vy * .95, delay, id), $element);
+            //timer = window.requestAnimationFrame(accel(vx * .95, vy * .95, delay, id), $element);
         }
 
         // mouse release
@@ -1541,7 +1547,12 @@ TAG.Util = (function () {
     }
 
     function htmlEntityEncode(str) {
-        return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
+        try {
+            return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
+        } catch (e){
+            //use our deprecated function for now if error thrown
+            return encodeXML(str);
+        }
     }
 
     function htmlEntityDecode(str) {
@@ -1593,7 +1604,7 @@ TAG.Util = (function () {
     /*create video conversion loading message and circle for 
 	  when imported videos are converting
 	  O/P: the div containing the loading circle and message*/
-    function createConversionLoading(msg, nocircle) {
+    function createConversionLoading(msg, nocircle, isMp4) {
         var container = $(document.createElement('div'));
         container.attr('id', 'leftLoading');
         container.css({
@@ -1604,7 +1615,7 @@ TAG.Util = (function () {
             'color': 'white',
             'text-align': 'center',
         });
-
+        
         var label = $(document.createElement('label'));
         label.text(msg);
         label.css({
@@ -1612,6 +1623,12 @@ TAG.Util = (function () {
             'width': '50%',
             'font-size': '250%'
         });
+        if (isMp4) {
+            container.css({
+                'top': '1%',
+            });
+            label.css('background-color','black');
+        }
         if (!nocircle) {
             var circle = $(document.createElement('img'));
             circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
@@ -1624,6 +1641,13 @@ TAG.Util = (function () {
                 'top': '30%',
                 'margin-bottom':'5%'
             });
+            if (isMp4) {
+                circle.css({
+                    'height':'25px',
+                    'top': '1%',
+                    //'left':'',
+                })
+            }
             container.append(circle);
         }
         container.append(label);
@@ -6496,23 +6520,76 @@ TAG.Util.Artwork = (function () {
         thumbnailImage.removeAttr('width');
         thumbnailImage.removeAttr('height');
 
-        thumbnailImage.css({ // TODO fix this
-           // 'max-height': 0.15 * 0.7 * $("#tagRoot").height() + "px",
-           //'max-width': 0.22 * 0.89 * 0.95 * 0.40 * 0.92 * $("#tagRoot").width() + "px"
-            bottom:'0px',
-            height:'auto',
-            left:'0px',
-            'margin-bottom':'auto',
-            'margin-left':'auto',
-            'margin-right':'auto',
-            'margin-top':'auto',
-            'max-height':'100%',
-            'max-width':'100%',
-            position:'absolute',
-            right:'0px',
-            top:'0px',
-            width:'auto',
-        });
+        if (buttonClass && buttonClass === 'assetHolder') { //Artwork Editor TODO J/S
+            holder.css({
+                border: '1px solid rgba(255,255,255,0.4)',
+            });
+            titleDiv.css({
+                margin: '1% 2% 0% 2%',
+                top: '80%',
+	            height: '20%',
+	            'white-space': 'nowrap',
+                overflow: 'hidden',
+                'text-overflow': 'ellipsis',
+                'text-align': 'center',
+                'font-size': '75%',
+                padding: '0% 3% 0% 3%'
+            });
+            thumbHolderDiv.css({
+                height: '70%',
+                position: 'relative',
+	            width: '92%',
+	            margin: '-2% 4% 4% 4%',
+	            display: 'block',
+            });
+            holderContainer.css({
+                display: 'table',
+	            position: 'relative',
+	            width: '100%',
+	            height: '100%',
+	            'margin-top': '5%',
+            });
+            holderInnerContainer.css({
+                display: 'table-cell',
+	            'max-height': '100%',
+	            'max-width': '100%',
+	            'vertical-align': 'middle',
+                'text-align': 'center',
+            });
+            thumbnailImage.css({
+                bottom: '0px',
+                height: 'auto',
+                left: '0px',
+                'margin-bottom': 'auto',
+                'margin-left': 'auto',
+                'margin-right': 'auto',
+                'margin-top': 'auto',
+                'max-height': '100%',
+                'max-width': '100%',
+                position: 'absolute',
+                right: '0px',
+                top: '0px',
+                width: 'auto',
+            });
+        } else {
+            thumbnailImage.css({ // TODO fix this
+                // 'max-height': 0.15 * 0.7 * $("#tagRoot").height() + "px",
+                //'max-width': 0.22 * 0.89 * 0.95 * 0.40 * 0.92 * $("#tagRoot").width() + "px"
+                bottom: '0px',
+                height: 'auto',
+                left: '0px',
+                'margin-bottom': 'auto',
+                'margin-left': 'auto',
+                'margin-right': 'auto',
+                'margin-top': 'auto',
+                'max-height': '100%',
+                'max-width': '100%',
+                position: 'absolute',
+                right: '0px',
+                top: '0px',
+                width: 'auto',
+            });
+        }
 
         holderInnerContainer.append(thumbnailImage);
 

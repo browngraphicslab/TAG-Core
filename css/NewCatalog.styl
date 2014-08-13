@@ -59,6 +59,9 @@
 	position absolute
 	right 5px
 	width 20%
+
+#newCatalogRoot .audioThumbnail
+	top 
                 
 #newCatalogRoot	#bgimage
 	background-position center
@@ -83,7 +86,7 @@
 
 #newCatalogRoot #catalogDiv
 	height 90%
-	overflow-x hidden
+	overflow-x auto
 	overflow-y hidden
 	position absolute
 	bottom 0
@@ -94,7 +97,7 @@
 #newCatalogRoot #collectionArea
 	height 40%
 	width 100%
-	overflow-x auto
+	overflow-x hidden
 	overflow-y hidden
 	text-align center
 	position absolute
@@ -145,7 +148,6 @@
 	overflow hidden
 	text-overflow ellipsis
 	white-space nowrap
-	font-size 1.1em
 	color white
 
 #newCatalogRoot .currentThumbnail
@@ -344,7 +346,7 @@
 	position absolute
 	wh 100%
 	pointer-events none
-	z-index 500000
+	z-index 1
 
 #newCatalogRoot .previewTile
 	background-color rgba(0,0,0,0.9)
@@ -485,6 +487,8 @@
 	position absolute
 	background-color white
 	cursor pointer
+	max-width 40px
+	max-height 40px
 
 #newCatalogRoot .timelineTick
 	position absolute
@@ -538,17 +542,15 @@
 	width 100%
 
 #newCatalogRoot .tourLabel
-	bottom 0px
-	margin-right -7%
+	bottom 1%
 	position absolute
-	right 5px
 	wh 30%
 
 #newCatalogRoot .videoLabel
-	bottom 0px
+	bottom -5%
 	height 35%
 	position absolute
-	right 5px
+	left 2%
 	width 20%
 
 #newCatalogRoot .yearInfo

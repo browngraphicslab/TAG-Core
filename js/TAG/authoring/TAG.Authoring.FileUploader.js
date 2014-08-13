@@ -181,6 +181,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 var mins, secs;
                                                 removeOverlay();
                                                 addLocalCallback([], [])();
+                                                //if(file.fileType.substr(1)!==".mp4")
                                                 if (files.length === 0 && largeFiles !== '') { //no > time-limit files
                                                     //alert that all files failed.
                                                     fileUploadError = uploadErrorAlert(null, "The selected file(s) could not be uploaded because they exceed the 50MB file limit.", null);
@@ -189,7 +190,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     $(fileUploadError).fadeIn(500);
                                                     return;
                                                 }
-                                                else if (files.length === 0 && longFiles.length > 0) { // no > 50MB files
+                                                else if (files.length === 0 && longFiles.length > 0 && file.fileType !== ".webm" && file.fileType !== ".ogv") { // no > 50MB files
                                                     mins = Math.floor(maxDuration / 60);
                                                     secs = maxDuration % 60;
                                                     if (secs === 0) secs = '00';
@@ -202,7 +203,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     $(fileUploadError).fadeIn(500);
                                                     return;
                                                 }
-                                                else if (files.length === 0 && shortFiles.length > 0) { // no > 50MB files
+                                                else if (files.length === 0 && shortFiles.length > 0 && file.fileType !== ".webm"&&file.fileType !== ".ogv") { // no > 50MB files
                                                     mins = Math.floor(minDuration / 60);
                                                     secs = minDuration % 60;
                                                     if (secs === 0) secs = '00';
@@ -215,7 +216,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     $(fileUploadError).fadeIn(500);
                                                     return;
                                                 }
-                                                else if (files.length === 0) {
+                                                else if (files.length === 0 && file.fileType !== ".webm" && file.fileType !== ".ogv") {
                                                     mins = Math.floor(maxDuration / 60);
                                                     secs = maxDuration % 60;
                                                     if (secs === 0) secs = '00';
@@ -386,7 +387,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                 }
             },
             longbad); // error callback
-        } else if (file.contentType.match(/video/) || file.fileType.toLowerCase() === ".mp4" || file.fileType.toLowerCase() === ".webm" || file.fileType.toLowerCase() === ".ogv") {
+        } else if (file.fileType.toLowerCase() === ".mp4") {
             file.properties.getVideoPropertiesAsync().done(function (videoProperties) {
                 if (videoProperties.duration / 1000 > maxDuration) {
                     longbad();
