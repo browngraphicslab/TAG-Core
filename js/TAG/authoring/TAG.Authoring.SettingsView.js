@@ -585,7 +585,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '4% center'
+            'background-position': '8px center'
         });
 
         searchbar.on('click focus', function () {
@@ -4532,7 +4532,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '4% center'
+            'background-position': '8px center'
         });
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
