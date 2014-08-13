@@ -801,7 +801,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 locHistoryActive = true;
                 media.create(); // returns if already created
                 media.toggle();
-                console.log("media toggled");
                 TAG.Util.IdleTimer.restartTimer();
                 (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
                 media.pauseReset();
