@@ -1414,48 +1414,49 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 for (i = 0; i < files.length; i++) {
                     file = files[i];
                     names.push(file.displayName);
-                    var toUpload = true;
-                    if (file.fileType !== '.mp4') {
-                        var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
-                            decisions.push(true);
-                            if (++decided >= total) {
-                                confirmCallback && confirmCallback();
-                            }
-                        }, "This video is not in a compatible format. Would you like us to convert " + file.displayName + " for you?", "Yes", true, (function (curfile) {
-                            return function () {
-                                decisions.push(false);
-                                if (++decided >= total) {
-                                    confirmCallback && confirmCallback();
-                                }
-                            };
-                        })(file));
-                        root.append(confirmBox);
-                        $(confirmBox).show();
-                    } else {//file is Mp4, ask users if they still want to convert it. Regardless, upload the video
-                        var confirmBox = TAG.Util.UI.PopUpConfirmation((function (index) {
-                            return function () {
-                                decisions.push(true);
-                                if (++decided >= total) {
-                                    confirmCallback && confirmCallback();
-                                }
-                            };
-                        })(i), "Video " + file.displayName + " is already MP4. Would you like us to convert it to other formats for different browsers for you?", "Yes", true, function () {
-                            if (++decided >= total) {
-                                decisions.push(false);
-                                confirmCallback && confirmCallback();
-                            }
-                        });
-                        root.append(confirmBox);
-                        $(confirmBox).show();
+                    //var toUpload = true;
+                    //if (file.fileType !== '.mp4') {
+                        //var confirmBox = TAG.Util.UI.PopUpConfirmation(function () {
+                        //    decisions.push(true);
+                        //    if (++decided >= total) {
+                        //        confirmCallback && confirmCallback();
+                        //    }
+                        //}, "This video is not in a compatible format. Would you like us to convert " + file.displayName + " for you?", "Yes", true, (function (curfile) {
+                        //    return function () {
+                        //        decisions.push(false);
+                        //        if (++decided >= total) {
+                        //            confirmCallback && confirmCallback();
+                        //        }
+                        //    };
+                        //})(file));
+                        //root.append(confirmBox);
+                        //$(confirmBox).show();
+                    //} else {//file is Mp4, ask users if they still want to convert it. Regardless, upload the video
+                        //var confirmBox = TAG.Util.UI.PopUpConfirmation((function (index) {
+                        //    return function () {
+                        //        decisions.push(true);
+                        //        if (++decided >= total) {
+                        //            confirmCallback && confirmCallback();
+                        //        }
+                        //    };
+                        //})(i), "Video " + file.displayName + " is already MP4. Would you like us to convert it to other formats for different browsers for you?", "Yes", true, function () {
+                        //    if (++decided >= total) {
+                        //        decisions.push(false);
+                        //        confirmCallback && confirmCallback();
+                        //    }
+                        //});
+                        //root.append(confirmBox);
+                        //$(confirmBox).show();
                     }
                     //return toUpload;
-                }
-                if (decided >= total) {
-                    confirmCallback && confirmCallback();
-                }
+                //}
+                //if (decided >= total) {
+                //    confirmCallback && confirmCallback();
+                //}
+                confirmCallback&&confirmCallback();
                 type = TAG.TourAuthoring.TrackType.video;
                 mediaFiles = files;
-                toConvertDecisions = decisions;
+                //toConvertDecisions = decisions;
                 return 'uploading test!';
             },
             function (urls) {
@@ -1473,15 +1474,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         url = urls[i];
                         name = names[i];
                         mediaLength = mediaLengths[i];
-                        if (toConvertDecisions[i] === true) {
+                        //if (toConvertDecisions[i] === true) {
                             var newFileName = urls[i].slice(8, urls[i].length);
                             var index = newFileName.lastIndexOf(".");
                             var fileExtension = newFileName.slice(index);
                             var baseFileName = newFileName.slice(0, index);
                             TAG.Worktop.Database.convertVideo(function () {
-                            }, null, newFileName, fileExtension, baseFileName, null);
-                        }
-                        var track = timeline.addVideoTrack(url, name, null, mediaLength, toConvertDecisions[i], false);
+                            }, null, newFileName, fileExtension, baseFileName, null,"True");
+                        //}
+                        var track = timeline.addVideoTrack(url, name, null, mediaLength,true, false);
                         var positionX = initLoc;
                         var displayLength = mediaLength;
                         if (timeManager.getDuration().end < displayLength + timeManager.pxToTime(positionX)) {

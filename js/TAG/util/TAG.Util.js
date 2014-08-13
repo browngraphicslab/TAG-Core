@@ -1599,7 +1599,7 @@ TAG.Util = (function () {
     /*create video conversion loading message and circle for 
 	  when imported videos are converting
 	  O/P: the div containing the loading circle and message*/
-    function createConversionLoading(msg, nocircle) {
+    function createConversionLoading(msg, nocircle, isMp4) {
         var container = $(document.createElement('div'));
         container.attr('id', 'leftLoading');
         container.css({
@@ -1610,7 +1610,7 @@ TAG.Util = (function () {
             'color': 'white',
             'text-align': 'center',
         });
-
+        
         var label = $(document.createElement('label'));
         label.text(msg);
         label.css({
@@ -1618,6 +1618,12 @@ TAG.Util = (function () {
             'width': '50%',
             'font-size': '250%'
         });
+        if (isMp4) {
+            container.css({
+                'top': '1%',
+            });
+            label.css('background-color','black');
+        }
         if (!nocircle) {
             var circle = $(document.createElement('img'));
             circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
@@ -1630,6 +1636,13 @@ TAG.Util = (function () {
                 'top': '30%',
                 'margin-bottom':'5%'
             });
+            if (isMp4) {
+                circle.css({
+                    'height':'25px',
+                    'top': '1%',
+                    //'left':'',
+                })
+            }
             container.append(circle);
         }
         container.append(label);

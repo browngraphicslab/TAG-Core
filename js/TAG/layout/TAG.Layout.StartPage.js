@@ -35,7 +35,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverURL,
         tagContainer;
 
-    serverInput.attr('placeholder',localStorage.ip);
+    serverInput.attr('placeholder', localStorage.ip);
+    serverInput.attr('value', localStorage.ip);
+
   // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
  if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
@@ -230,6 +232,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     serverInput.keypress(function(e){
         if(e.which===13){
             saveClick();
+        }
+    });
+    serverInput.focusout(function () {
+        if (!serverInput.val()) {
+            serverInput.attr('value', localStorage.ip);
         }
     });
 
@@ -641,6 +648,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
         passwordSubmit.css({
             'border-color': color
+        });
+        serverError.css({
+            'color': color
+        });
+        passwordError.css({
+            'color': color
         });
     }
 
