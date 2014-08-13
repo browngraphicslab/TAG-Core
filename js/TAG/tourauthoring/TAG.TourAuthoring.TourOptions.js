@@ -226,6 +226,7 @@ TAG.TourAuthoring.TourOptions = function (options) {
                     //gets dataurl from tmpcanvas, ready to send to server!
                     var dataurl = canvas.toDataURL();
                     TAG.Worktop.Database.uploadImage(dataurl, function (imageURL) {
+                        console.log("imageURL: " + imageURL);
                         TAG.Worktop.Database.changeTour(tour.Identifier, { Thumbnail: imageURL }, function () {
                             setTimeout(function () {
                                 thumbnailcaptured.fadeOut();//alert msg disappear
