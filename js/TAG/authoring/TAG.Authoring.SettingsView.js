@@ -190,7 +190,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 })(i, artwork), null, conversionVideos[i]);
         }
     }*/
-
+    
+    TAG.Util.IdleTimer.restartTimer();
     function checkConversion(doq) { //WIN8 AUG 15 RELEASE ONLY
         //if(
         LADS.Worktop.Database.getConvertedVideoCheck(
@@ -198,8 +199,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (output === "True") {
                     console.log("converted: ");
                     clearInterval(checkConTimerId);
+                    var source = doq.Metadata.Source;
+                    var ext = source.substr(source.lastIndexOf('.'));
                     if (currDoq === doq.Identifier) {
-                        reloadVideo(doq)
+                        if (ext === ".mp4") {
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                        } else {
+                            reloadVideo(doq);
+                        }
                     }
                 } else if (output === "Error") {
                     clearInterval(checkConTimerId);
@@ -1011,6 +1019,47 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewStartPageButton);
         buttonContainer.append(previewCollectionsPageButton);
         buttonContainer.append(previewArtworkViewerButton);
+
+        TAG.Telemetry.register(saveButton,'click','general_set_save',function(tobj){
+            tobj.mode = 'authoring'
+        });
+        
+        TAG.Telemetry.register(previewStartPageButton,'click','startpage_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(previewCollectionsPageButton,'click','collectionspage_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(previewArtworkViewerButton,'click','artworkviewer_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-General Settings'),'click','settings_general',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Collections'),'click','settings_collections',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Artworks'),'click','settings_artworks',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Associated Media'),'click','settings_asscmedia',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Tours'),'click','settings_tours',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#artworkEditorButtont'),'click','settings_to_artworkeditor',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
     }
 
     /**Changes idle timer stageOne duration from the customization settings
@@ -1905,6 +1954,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
+            TAG.Telemetry.register(artPickerButton,'click','art-selected_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+            TAG.Telemetry.register(deleteButton,'click','art-deleted_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+             TAG.Telemetry.register(savedButton,'click','art-saved_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
         }
     }
 
@@ -2298,6 +2358,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
         buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
+
+         TAG.Telemetry.register(editButton,'click','tour_edit',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+          TAG.Telemetry.register(duplicateButton,'click','tour_duplicate',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+           TAG.Telemetry.register(deleteButton,'click','tour_delete',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+            TAG.Telemetry.register(saveButton,'click','tour_save',function(tobj){
+                tobj.mode = 'authoring';
+            });
     }
 
     /** Create a tour
@@ -4161,7 +4237,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }*/
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.webm', '.ogv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv']);
     }
     /*upload xml for single artwork
    artwork
@@ -5468,15 +5544,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         yearDescriptionDiv.css({
             'width': '60%',
-            'height': '25px',
-            'position': 'relative',
-            'left': '0%',
-            'margin-bottom': '1%',
-            'font-size': '70%',
+            'height': '10px',
+            'position': 'absolute',
+            'left': '2.5%',
+            'bottom': '-5%',
+            'font-size': '75%',
+            'font-style': 'italic',
             'white-space': 'nowrap',
             'display':'inline-block'
         });
-        yearDescriptionDiv.text("Year format examples: 2013, 800 BC, 17th century, 1415-1450");
+        yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
 
         //Link input values of date fields to dynamically change/disable               
         yearInput.on('input', function(){
@@ -6338,7 +6415,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "display":"inline-block",
                 "position": "relative",
                 "color": "rgb(256, 256, 256)",
-                'width': '50%',
+                'width': '60%',
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
@@ -6368,6 +6445,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'border-width': 'thin',
                 'border-bottom-style': 'none',
                 'padding-left': '15px',
+                'padding-right': '15px',
                 'font-size': '85%',
                 'font-weight': '600',
                 'padding-bottom':'5%',
@@ -6400,6 +6478,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'border-style': 'solid',
                 'border-width': 'thin',
                 'padding-left': '15px',
+                'padding-right': '15px',
                 'font-size': '85%',
                 'font-weight': '600',
                 'padding-bottom': '5%',

@@ -38,7 +38,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
-  // TODO merging TAG.Telemetry.register(overlay, 'click', 'start_to_collections');
+  // TODO merging TAG.Telemetry.register(goToCollectionsButton, 'click', 'start_to_collections');
+  //                     tobj.mode = 'Kiosk';
  if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
     }

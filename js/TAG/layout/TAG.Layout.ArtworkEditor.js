@@ -229,7 +229,35 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         // TODO JADE
         topbar.append(topBarLabel);
         root.append(topbar);
-    }
+        TAG.Telemetry.register(root.find('.artworkInfoLabel'),'click','artworkeditor_info',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+         TAG.Telemetry.register(root.find('.addRemoveMedia'),'click','artworkeditor_media_addremove',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('#locationHistoryAddLocationButton'),'click','artworkeditor_addlocation',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('#locationHistorySortLocationsByTitleButton'),'click','artworkeditor_sort_title',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('#locationHistorySortLocationsByDateButton'),'click','artworkeditor_sort_date',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('#locationHistoryDeleteButton'),'click','artworkeditor_sort_title',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('#locationHistoryImportMapButton'),'click','artworkeditor_sort_title',function(tobj){
+            tobj.mode = 'authoring';
+        });
+    }   
+
 
     /**
      * Reloads the specified associate media in the associate media list
@@ -1136,7 +1164,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 height = layerContainer.height(),
                 topLeft = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left, offset.top)),
                 bottomRight = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left + width, offset.top + height));
-
             return new Seadragon.Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
         }
 
@@ -1207,14 +1234,31 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             //    });
             //});
 
-            layerContainer.on('mouseup', function () {
-                annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
-            });
-
+           
+            /**
             layerContainer.hover(function () {
+                console.log("freezing");
                 annotatedImage.freezeArtwork();
             }, function () {
+                console.log("unfreezing");
                 annotatedImage.unfreezeArtwork();
+            });
+            **/
+
+            //Not sure why this is the combo of handlers that works, probably should refine at some point 
+            layerContainer.on("mousedown", function () {
+                annotatedImage.freezeArtwork();
+            });
+            //Mouse up doesn't seem to work...added on click
+            layerContainer.on("mouseup", function () {
+                positionChanged = true;
+                annotatedImage.unfreezeArtwork();
+                annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
+            });
+            layerContainer.on("click", function () {
+                positionChanged = true;
+                annotatedImage.unfreezeArtwork();
+                annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
             });
         }
 
@@ -1428,6 +1472,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             } else if (type === 'Audio') {
                 audio = $(document.createElement('audio'));
                 fixVolumeBar(audio);
+                
                 audio.attr({
                     'preload': 'none',
                     'controls': 'controls'
@@ -1472,7 +1517,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             var titleTextVal,
                 descriptionTextVal,
                 assetType;
-
             $('.assetHolder').css('background-color', '');
 
             if (getActiveMediaMetadata('ContentType') === 'Video') { // TODO see comments in the delete button's click handler
@@ -1540,7 +1584,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     height: 0
                 };
             }
-
             /*
             rightbarLoadingSave = $(document.createElement('div'));
             rightbarLoadingSave.css({
