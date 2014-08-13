@@ -190,7 +190,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 })(i, artwork), null, conversionVideos[i]);
         }
     }*/
-
+    
+    TAG.Util.IdleTimer.restartTimer();
     function checkConversion(doq) { //WIN8 AUG 15 RELEASE ONLY
         //if(
         LADS.Worktop.Database.getConvertedVideoCheck(
@@ -1016,7 +1017,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.mode = 'authoring'
         });
         
-        TAG.Telemetry.register(previewStartPAgeButton,'click','startpage_preview',function(tobj){
+        TAG.Telemetry.register(previewStartPageButton,'click','startpage_preview',function(tobj){
             tobj.mode = 'authoring'
         });
 
