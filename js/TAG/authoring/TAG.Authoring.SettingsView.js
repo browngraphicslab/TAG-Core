@@ -585,7 +585,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '2% center'
+            'background-position': '4% center'
         });
 
         searchbar.on('click focus', function () {
@@ -1962,7 +1962,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 tobj.mode = 'authoring';
             });
 
-             TAG.Telemetry.register(savedButton,'click','art-saved_collections',function(tobj){
+             TAG.Telemetry.register(saveButton,'click','art-saved_collections',function(tobj){
                 tobj.mode = 'authoring';
             });
         }
@@ -4529,7 +4529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '2% center'
+            'background-position': '4% center'
         });
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
