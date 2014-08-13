@@ -1250,6 +1250,80 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         dropFile.hide();
         functionsPanel.append(dropInk);
         dropInk.hide();
+
+        TAG.Telemetry.register(addComponentLabel,'click','tour_components_added',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('#multiSelButton'),'click','tour_multisel',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.displayMenu'),'click','tour_displaymenu',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.time-label'),'click','tour_timeline_timelabel',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.titlediv'),'click','tour_timeline_track_selected',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.inHandle'),'click','tour_timeline_inhandle',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.outHandle'),'click','tour_timeline_outhandle',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.keyframeInnerCirc'),'click','tour_timeline_keyframeinnercirc',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.mainRect'),'click','tour_timeline_mainrect',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.seaDragonClipContents'),'click','tour_previewclick',function(tobj){
+            tobj.mode = 'authoring';
+        });
+        
+        TAG.Telemetry.register(root.find('.#playButton'),'click','tour_timeline_play',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.#fader'),'click','tour_timeline_overviewdrag',function(tobj){
+            tobj.mode = 'authoring';
+        });
+        
+        TAG.Telemetry.register(root.find('#zoomPoint'),'click','tour_timeline_zoomdrag',function(tobj){
+            tobj.mode = 'authoring';
+        });
+        
+        TAG.Telemetry.register(root.find('#lensSmall'),'click','tour_timeline_zoomout',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('#lensBig'),'click','tour_timeline_zoomin',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.undoButton'),'click','tour_timeline_undo',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('.redoButton'),'click','tour_timeline_redo',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        TAG.Telemetry.register(root.find('#tour-options'),'click','tour_options',function(tobj){
+            tobj.mode = 'authoring';
+        });
+
+        
     })();
 
     /**Disables functionality on exiting ink track display timeframe
