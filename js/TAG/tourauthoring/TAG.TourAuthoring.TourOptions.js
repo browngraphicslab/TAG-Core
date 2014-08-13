@@ -84,7 +84,7 @@ TAG.TourAuthoring.TourOptions = function (options) {
         item.css({
             "left": "0%",
             "position": "relative",
-            "font-size": TAG.Util.getFontSize(48),
+            "font-size": '80%'//TAG.Util.getFontSize(48),
             "color": "rgb(256, 256, 256)",
             "display": "block",
             'padding': '4% 0 5% 0',
