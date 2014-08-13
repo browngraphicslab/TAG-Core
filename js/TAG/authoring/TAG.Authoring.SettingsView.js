@@ -6401,17 +6401,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-bottom':'1%',
                 'width': '30%',
                 'border': '1px solid black',
-                'padding': '2% 0px 0px 0px',
+                'padding': '1% 0px 0px 0px',
                 'display': 'block',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
-            .attr('src', tagPath + 'images/icons/Down.png')
+            .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '25%',
+                width: '15%',
                 height: 'auto',
                 display:'inline-block',
-                'margin-left':'10%',
+                'margin-left': '10%',
+                '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)',
+                'padding-left': '10%',
+                'padding-right':'0%'
             })
         var addMenuLabelDiv = $(document.createElement('div'))
             .css({
@@ -6433,16 +6440,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
-                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 1000000,
+                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'border': '1px solid white',
             });
         dropDown.hide();
         addMenuLabel.click(function () {
             if (showDropdown) {
-                addMenuArrowIcon.css('transform', 'scaleY(1)');
+                $("#setViewMiddleLabelContainer").css('overflow','auto');
+                addMenuArrowIcon.css({
+                    '-webkit-transform': 'rotate(90deg)',
+                    '-moz-transform': 'rotate(90deg)',
+                    '-o-transform': 'rotate(90deg)',
+                    '-ms-transform': 'rotate(90deg)',
+                    'transform': 'rotate(90deg)',
+                    'padding-left': '10%',
+                    'padding-right': '0%'
+                });
                 dropDown.hide();
             } else {
-                addMenuArrowIcon.css('transform', 'scaleY(-1)');
+                $("#setViewMiddleLabelContainer").css('overflow', 'hidden');
+                addMenuArrowIcon.css({
+                    '-webkit-transform': 'rotate(270deg)',
+                    '-moz-transform': 'rotate(270deg)',
+                    '-o-transform': 'rotate(270deg)',
+                    '-ms-transform': 'rotate(270deg)',
+                    'transform': 'rotate(270deg)',
+                    'padding-left': '0%',
+                    'padding-right':'10%'
+                });
                 dropDown.show();
             }
             showDropdown = !showDropdown;
