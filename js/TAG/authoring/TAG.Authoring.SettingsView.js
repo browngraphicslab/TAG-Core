@@ -206,7 +206,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $("#videoErrorMsg").remove();
                             $("#leftLoading").remove();
                         } else {
-                            reloadVideo(doq)
+                            reloadVideo(doq);
                         }
                     }
                 } else if (output === "Error") {
@@ -4237,7 +4237,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }*/
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.webm', '.ogv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv']);
     }
     /*upload xml for single artwork
    artwork
