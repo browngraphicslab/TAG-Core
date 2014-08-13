@@ -232,6 +232,9 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         });
         backSaveButton.text('Save');
         backSaveButton.click(function () {
+            backSaveButton.attr("disabled", true);
+            backSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+            backDontSaveButton.attr("disabled", true);
             save();
         });
         backButtonRow.append(backSaveButton);
@@ -248,6 +251,9 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         });
         backDontSaveButton.text('Don\'t Save');
         backDontSaveButton.click(function () {
+            backDontSaveButton.attr("disabled", true);
+            backDontSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+            backSaveButton.attr("disabled",true);
             goBack();
         });
 
