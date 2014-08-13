@@ -1029,6 +1029,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.mode = 'authoring'
         });
 
+        TAG.Telemetry.register(root.find('#nav-General Settings'),'click','settings_general',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Collections'),'click','settings_collections',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Artworks'),'click','settings_artworks',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Associated Media'),'click','settings_asscmedia',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#nav-Tours'),'click','settings_tours',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(root.find('#artworkEditorButtont'),'click','settings_to_artworkeditor',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
     }
 
     /**Changes idle timer stageOne duration from the customization settings
