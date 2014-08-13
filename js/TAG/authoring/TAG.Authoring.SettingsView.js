@@ -585,7 +585,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '8px center'
+            'background-position': '12px center'
         });
 
         searchbar.on('click focus', function () {
@@ -3354,7 +3354,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     alphaName = names[j];
                 }
             }
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.mp4', '.webm', '.ogv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.mp4', '.webm', '.ogv','.mov','.avi','.wmv']);
     }
 
     /**Create an associated media (import), possibly more than one
@@ -4240,7 +4240,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }*/
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv']);
     }
     /*upload xml for single artwork
    artwork
@@ -4409,6 +4409,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                             $(".parsingOverlay").remove();
 
                                         }
+                                    },
+                                    error: function () {
+                                        $(".parsingOverlay").remove();
+                                        var popupmsg = TAG.Util.UI.popUpMessage(null, "Error occured when parsing xml. Please double check your file", "OK", null, null, null, true);
+                                        $(popupmsg).show();
+                                        root.append(popupmsg);
                                     }
                                 });
                             }
@@ -4583,8 +4589,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "title": metadatalist[i].title
                 });
                 var mt = metadatalist[i];
-                var title = mt["title"];
-                if (!mt['title'])
+                var title = mt[spec["title"]];
+                if (!title)
                     title = "Untitled";
                 allTitles[i] = title;                                          
                 if (i < 30) {
@@ -5017,7 +5023,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         if (inArtMode) {
-            if(extension.match(/mp4/) || extension.match(/ogv/) || extension.match(/webm/)) {
+            if (extension.match(/mp4/) || extension.match(/ogv/) || extension.match(/webm/) || extension.match(/avi/) || extension.match(/mov/)) {
                 container.data('isVideoArtwork', true);
             } else {
                 container.data('isStaticArtwork', true);
@@ -6122,9 +6128,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 fileArray = files;
                 for (i = 0; i < files.length; i++) {
                     names.push(files[i].displayName);
+                    var ext=files[i].fileType.toLowerCase();
                     if (files[i].contentType.match(/image/)) {
                         contentTypes.push('Image');
-                    } else if (files[i].contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
+                    } else if (files[i].contentType.match(/video/) || ext === ".avi" || ext === ".wmv" || ext === ".mov" || ext === ".mp4" || ext === ".webm" || ext === ".ogv") {
                         contentTypes.push('Video');
                     } else if (files[i].contentType.match(/audio/)) {
                         contentTypes.push('Audio');

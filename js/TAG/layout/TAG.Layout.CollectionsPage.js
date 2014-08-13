@@ -154,7 +154,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size' : 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position':'2% center'
+            'background-position':'8px center'
         });
 
         searchInput.on('focusin', function () { 

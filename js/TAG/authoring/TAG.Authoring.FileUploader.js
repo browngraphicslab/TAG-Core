@@ -146,6 +146,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                         if (size < maxSize) {
                                             files.push(file);
                                             localURLs.push(window.URL.createObjectURL(file, { oneTimeOnly: true }));
+                                            var ext = file.fileType.toLowerCase();
                                             switch (type) {
                                                 case TAG.Authoring.FileUploadTypes.VideoArtwork:
                                                     uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
@@ -157,7 +158,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
                                                     break;
                                                 case TAG.Authoring.FileUploadTypes.DeepZoom:
-                                                    if (file.contentType.match(/video/) || file.fileType.toLowerCase() === ".mp4" || file.fileType.toLowerCase() === ".avi" || file.fileType.toLowerCase() === ".webm" || file.fileType.toLowerCase() === ".ogv") {
+                                                    if (ext === ".mp4" || ext === ".webm" || ext === ".avi" || ext === ".mov" || ext === ".ogv" || ext === ".wmv" ) {
                                                         uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
                                                     } else {
                                                         uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
@@ -291,7 +292,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                numFiles = 1;
 
                                                localURL = window.URL.createObjectURL(file, { oneTimeOnly: true });
-
+                                               var ext = file.fileType.toLowerCase();
                                                // Set specifics of request by type
                                                switch (type) {
                                                    case TAG.Authoring.FileUploadTypes.VideoArtwork:
@@ -304,7 +305,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                        uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&Token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
                                                        break;
                                                    case TAG.Authoring.FileUploadTypes.DeepZoom:
-                                                       if (file.fileType.toLowerCase() === ".mp4" || file.fileType.toLowerCase() === ".webm" || file.fileType.toLowerCase() === ".ogv") {
+                                                       if (ext === ".mp4" ||ext === ".webm" || ext === ".avi" || ext === ".mov" || ext === ".ogv"||ext === ".wmv") {
                                                            uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&Token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
                                                        } else {
                                                            uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
