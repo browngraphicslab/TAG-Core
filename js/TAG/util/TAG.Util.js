@@ -1547,7 +1547,12 @@ TAG.Util = (function () {
     }
 
     function htmlEntityEncode(str) {
-        return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
+        try {
+            return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
+        } catch (e){
+            //use our deprecated function for now if error thrown
+            return encodeXML(str);
+        }
     }
 
     function htmlEntityDecode(str) {
