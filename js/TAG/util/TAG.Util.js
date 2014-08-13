@@ -3769,8 +3769,8 @@ TAG.Util.UI = (function () {
                     compHolderImage.attr('src', tagPath+'images/audio_icon.svg');
                 } else if (comp.Metadata.ContentType === 'Video' || comp.Type === 'Video' || comp.Metadata.Type === 'VideoArtwork') {
                     compHolderImage.attr('src', (comp.Metadata.Thumbnail && !comp.Metadata.Thumbnail.match(/.mp4/)) ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/video_icon.svg');
-                    shouldAppendTII = true;
-                    typeIndicatorImage.attr('src', tagPath+'images/icons/catalog_video_icon.svg');
+                    //shouldAppendTII = true;
+                    //typeIndicatorImage.attr('src', tagPath+'images/icons/catalog_video_icon.svg');
                 } else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/image_icon.svg');
                 } else if (comp.Metadata.ContentType === 'iframe') {
@@ -3803,9 +3803,10 @@ TAG.Util.UI = (function () {
                     'top': '0',
                     'bottom': '0',
                     'margin': 'auto',
+                    'display':'block',
                     'max-width': '100%',
                     width: 'auto',
-                    height: 'auto'
+                    //height: 'auto'
                 });
                 // compHolderImage.removeAttr('width');
                 // compHolderImage.removeAttr('height');
