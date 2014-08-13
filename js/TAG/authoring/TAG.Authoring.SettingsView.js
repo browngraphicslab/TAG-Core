@@ -2223,6 +2223,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'height': viewer.height() / 2 + 'px',
             'width': 'auto'
         };
+
         var circle = TAG.Util.showProgressCircle(viewer, progressCircCSS, '0px', '0px', false);
         var selectedLabel = prevSelectedMiddleLabel;
         img.load(function () {
@@ -2236,6 +2237,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             viewer.css('background', 'black url(' + TAG.Worktop.Database.fixPath(tour.Metadata.Thumbnail) + ') no-repeat center / contain');
         });
 
+        if (tour.Metadata.Thumbnail === "/Images/default.jpg") {
+            TAG.Util.removeProgressCircle(circle);
+        }
         // Create inputs
         // inputs
         var privateState;
