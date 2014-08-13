@@ -2699,17 +2699,27 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 mediaHolderImage.attr('src', tagPath + 'images/text_icon.svg');
             }
             mediaHolderImage.css({
-                position: 'absolute',
-                'width': '40%',
-                'height': '80%',
-                'max-width': '100%',
                 'max-height': '100%',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                margin: 'auto',
-                'text-align': 'center'
+                'position': 'absolute',
+                'left': '0',
+                'right': '0',
+                'top': '0',
+                'bottom': '0',
+                'margin': 'auto',
+                'display': 'block',
+                'max-width': '100%',
+                width: 'auto',
+                //position: 'absolute',
+                //'width': '40%',
+                //'height': '80%',
+                //'max-width': '100%',
+                //'max-height': '100%',
+                //top: 0,
+                //bottom: 0,
+                //left: 0,
+                //right: 0,
+                //margin: 'auto',
+                //'text-align': 'center'
             });
             mediaHolderImage.removeAttr('width');
             mediaHolderText.addClass('mediaHolderText');                                // create the text to show in the media holder

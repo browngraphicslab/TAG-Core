@@ -4240,7 +4240,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }*/
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi']);
     }
     /*upload xml for single artwork
    artwork
