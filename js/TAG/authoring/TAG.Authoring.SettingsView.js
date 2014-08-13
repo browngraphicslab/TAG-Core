@@ -2227,7 +2227,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var selectedLabel = prevSelectedMiddleLabel;
         img.load(function () {
             // If the selection has changed since we started loading return
-            if (prevSelectedMiddleLabel && prevSelectedMiddleLabel.text() !== tour.Name) {
+            if (prevSelectedMiddleLabel && prevSelectedMiddleLabel.text() !== TAG.Util.htmlEntityDecode(tour.Name)) {
                 TAG.Util.removeProgressCircle(circle);
                 return;
             }
