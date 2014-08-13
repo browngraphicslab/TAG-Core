@@ -217,7 +217,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             pivot = res.pivot;
 
         dzManipPreprocessing();
-        
+
         if (!artworkFrozen) {
             viewer.viewport.zoomBy(scale, viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)), false);
             viewer.viewport.panBy(viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(trans.x, trans.y)), false);
