@@ -646,9 +646,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function initMediaObject() {
             if (IS_XFADE && linq.Offset && linq.Dimensions) {
+                console.log("initing");
                 outerContainer.css({
                     'border': '1px solid rgba(255,255,255,0.4)',
                     'background': 'rgba(0,0,0,0)',
+                    'width' : parseFloat(linq.Dimensions._x || 50),
+                    'height' : parseFloat(linq.Dimensions._y || 50),
                     'position': 'absolute'
                 });
                 assetCanvas.append(outerContainer);
@@ -1053,7 +1056,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     mediaContainer.append(iframe);
                 }
                 if (DESCRIPTION) {
-                    console.log("desc");
                     descDiv = $(document.createElement('div'));
                     descDiv.addClass('annotatedImageMediaDescription');
                     descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
@@ -1065,9 +1067,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             });
                         });
                     }
-                    //descDiv.css({
-                       // 'top' : '100%'
-                    //});
                     outerContainer.append(descDiv);
                 }
             }
@@ -1408,7 +1407,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
 
             if (IS_XFADE) {
-                assetCanvas.append(outerContainer);
+                //console.log(appending);
+                //assetCanvas.append(outerContainer);
                 outerContainer.show();
             } else {
                 //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
@@ -1458,7 +1458,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function hideMediaObject() {
             if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
-                outerContainer.detach();
+                outerContainer.hide();
             } else {
                 pauseResetMediaObject();
                 IS_HOTSPOT && removeOverlay(circle[0]);

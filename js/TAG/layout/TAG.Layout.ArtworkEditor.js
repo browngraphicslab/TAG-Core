@@ -1164,6 +1164,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 height = layerContainer.height(),
                 topLeft = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left, offset.top)),
                 bottomRight = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left + width, offset.top + height));
+            console.log("width" + width);
+            console.log("height" + height);
             return new Seadragon.Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
         }
 

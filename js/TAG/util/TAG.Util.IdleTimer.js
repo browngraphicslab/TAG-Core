@@ -274,7 +274,7 @@ TAG.Util.IdleTimer = (function() {
      */
     function restartTimer() {
         idleTimer && idleTimer.restart();
-        console.log('idle timer started');
+        //console.log('idle timer started');
     }
 
     return {
