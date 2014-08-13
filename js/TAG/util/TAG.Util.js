@@ -1547,7 +1547,12 @@ TAG.Util = (function () {
     }
 
     function htmlEntityEncode(str) {
-        return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
+        try {
+            return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
+        } catch (e){
+            //use our deprecated function for now if error thrown
+            return encodeXML(str);
+        }
     }
 
     function htmlEntityDecode(str) {
@@ -2081,6 +2086,7 @@ TAG.Util.UI = (function () {
             }
             tobj.custom_3 = localStorage.ip;
             tobj.custom_4 = serverDialogInput.val();
+            tobj.custom_5 = 'Kiosk';
         });
         */
 
@@ -2197,6 +2203,7 @@ TAG.Util.UI = (function () {
         TAG.Telemetry.register(serverSaveButton, 'click', 'change_server', function(tobj, evt) {
             tobj.custom_3 = localStorage.ip;
             tobj.custom_4 = serverDialogInput.val();
+            tobj.custom_5 = 'Kiosk';
         });
         */
 

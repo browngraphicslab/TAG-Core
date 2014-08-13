@@ -1011,6 +1011,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewStartPageButton);
         buttonContainer.append(previewCollectionsPageButton);
         buttonContainer.append(previewArtworkViewerButton);
+
+        TAG.Telemetry.register(saveButton,'click','general_set_save',function(tobj){
+            tobj.mode = 'authoring'
+        });
+        
+        TAG.Telemetry.register(previewStartPAgeButton,'click','startpage_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(previewCollectionsPage,'click','collectionspage_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
+        TAG.Telemetry.register(previewArtworkViewer,'click','artworkviewer_preview',function(tobj){
+            tobj.mode = 'authoring'
+        });
+
     }
 
     /**Changes idle timer stageOne duration from the customization settings
@@ -1905,6 +1922,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
+            TAG.Telemetry.register(artPickerButton,'click','art-selected_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+            TAG.Telemetry.register(deleteButton,'click','art-deleted_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+             TAG.Telemetry.register(savedButton,'click','art-saved_collections',function(tobj){
+                tobj.mode = 'authoring';
+            });
         }
     }
 
@@ -2298,6 +2326,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
         buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
+
+         TAG.Telemetry.register(editButton,'click','tour_edit',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+          TAG.Telemetry.register(duplicateButton,'click','tour_duplicate',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+           TAG.Telemetry.register(deleteButton,'click','tour_delete',function(tobj){
+                tobj.mode = 'authoring';
+            });
+
+            TAG.Telemetry.register(saveButton,'click','tour_save',function(tobj){
+                tobj.mode = 'authoring';
+            });
     }
 
     /** Create a tour
@@ -4457,37 +4501,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
-
+        searchbar.on('keyup', function (event) {
+            if (!searchbar.val()) {
+                init();
+            }
+            if (event.which === 13) {
+                doSearch();
+            }
+        });
 
         metadataPicker.append(searchbar);
-
-        //search function in terms of titles
-        function searchtitles(tofind, alltitles, container) {
-            var searchresults = [];
-            curlist = [];
-            var title, ind;
-            for (ind in alltitles) {
-                title = alltitles[ind];
-                if (TAG.Util.searchString(title, tofind)) {
-                    searchresults.push(ind);
-                    curlist.push(metadatalist[ind]);
-                }
-            }
-            //generate mtholders for the results
-            metadataLists.empty();
-            for (var mtfield in fields) {
-                fields[mtfield].field.hide();
-            }
-            counter = 0;
-            var num = searchresults.length < 30 ? searchresults.length : 30;
-            for (var j = 0; j < num; j++) {
-                var curtitle = alltitles[searchresults[j]];
-                var titlediv = makemtholder(curtitle, searchresults[j]);
-                counter++;
-                if (j === 0)
-                    titlediv.click();
-            }
-        }
 
         // creates a panel for all the metadata objects
         metadataPicker.append(metadataLists);
@@ -4508,23 +4531,54 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // creates a panel for all metadata's detailed info
         metadataPicker.append(metadataInfos);
         metadataInfos.append(metadataholder);
+        var infoSource = [];
+        var info = "";
+        init();
 
-        for (i = 0; i < metadatalist.length; i++) {
-            var mt = metadatalist[i];
-            var title = mt["title"];
-            if (!mt['title'])
-                title = "Untitled";
-            allTitles[i] = title;
-            if (i < 30) {
-                var mtHolder = makemtholder(title, i);
-                //set the first one selected once we firstly open the picker
-                if (i === 0) {
-                    mtHolder.click();
+        //Method to display reset the metadata list and search information
+        function init() {
+            for (i = 0; i < metadatalist.length; i++) {
+                info = "";
+                $.each(metadatalist[i], function(index, element) {
+                    info += element + " ";          //Put all the metadata in one string for searching purposes
+                });
+                infoSource.push({
+                    "id": i,
+                    "keys": info.toLowerCase(),
+                    "title": metadatalist[i].title
+                });
+                var mt = metadatalist[i];
+                var title = mt["title"];
+                if (!mt['title'])
+                    title = "Untitled";
+                allTitles[i] = title;                                          
+                if (i < 30) {
+                    var mtHolder = makemtholder(title, i);
+                    //set the first one selected once we firstly open the picker
+                    if (i === 0) {
+                        mtHolder.click();
+                    }
+                    counter++;
                 }
-                counter++;
+            };
+        }
+        
+        //Actual search method
+        function doSearch() {
+            var content = searchbar.val();
+            var searchResults = [];
+            if(content){
+                metadataLists.empty();
+                $.each(infoSource, function(index, element) {
+                    if (element.keys.indexOf(content) > -1) {
+                        makemtholder(element.title, element.id);
+                    }
+                });
+            } else {
+                init();
             }
-        };
-
+            
+        }
         function makemtholder(ttl, index) {
             var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl);
             metadataLists.append(mtHolder);
@@ -5458,15 +5512,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         yearDescriptionDiv.css({
             'width': '60%',
-            'height': '25px',
-            'position': 'relative',
-            'left': '0%',
-            'margin-bottom': '1%',
-            'font-size': '70%',
+            'height': '10px',
+            'position': 'absolute',
+            'left': '2.5%',
+            'bottom': '-5%',
+            'font-size': '75%',
+            'font-style': 'italic',
             'white-space': 'nowrap',
             'display':'inline-block'
         });
-        yearDescriptionDiv.text("Year format examples: 2013, 800 BC, 17th century, 1415-1450");
+        yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
 
         //Link input values of date fields to dynamically change/disable               
         yearInput.on('input', function(){
