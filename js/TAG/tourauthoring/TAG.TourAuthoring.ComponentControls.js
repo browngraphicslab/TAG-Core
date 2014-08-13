@@ -2028,7 +2028,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '4% center'
+            'background-position': '8px center'
         });
         $(associatedsearchbar).on('focus', function () {
             $(associatedsearchbar).css({ 'background-image': 'none' });
@@ -2699,17 +2699,27 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 mediaHolderImage.attr('src', tagPath + 'images/text_icon.svg');
             }
             mediaHolderImage.css({
-                position: 'absolute',
-                'width': '40%',
-                'height': '80%',
-                'max-width': '100%',
                 'max-height': '100%',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                margin: 'auto',
-                'text-align': 'center'
+                'position': 'absolute',
+                'left': '0',
+                'right': '0',
+                'top': '0',
+                'bottom': '0',
+                'margin': 'auto',
+                'display': 'block',
+                'max-width': '100%',
+                width: 'auto',
+                //position: 'absolute',
+                //'width': '40%',
+                //'height': '80%',
+                //'max-width': '100%',
+                //'max-height': '100%',
+                //top: 0,
+                //bottom: 0,
+                //left: 0,
+                //right: 0,
+                //margin: 'auto',
+                //'text-align': 'center'
             });
             mediaHolderImage.removeAttr('width');
             mediaHolderText.addClass('mediaHolderText');                                // create the text to show in the media holder
@@ -2786,7 +2796,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '4% center'
+            'background-position': '8px center'
         });
         $(searchbar).on('focus', function () {
             $(searchbar).css({ 'background-image': 'none' });
@@ -3057,17 +3067,31 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     // create image for artwork holder
                     $(artHolderImage).addClass('artHolderImage');
                     $(artHolderImage).attr('src', TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
+                    if (artwork.Metadata.ContentType === 'Video' || artwork.Type === 'Video' || artwork.Metadata.Type === 'VideoArtwork') {
+                        $(artHolderImage).attr('src', (artwork.Metadata.Thumbnail && !artwork.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg');
+                    }
                     $(artHolderImage).css({
-                        position: 'absolute',
-                        'width': 'auto',
-                        'height': 'auto',
-                        'max-width': '100%',
                         'max-height': '100%',
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        margin: 'auto',
+                        'position': 'absolute',
+                        'left': '0',
+                        'right': '0',
+                        'top': '0',
+                        'bottom': '0',
+                        'margin': 'auto',
+                        'display': 'block',
+                        'max-width': '100%',
+                        width: 'auto',
+                        //position: 'absolute',
+                        //'width': 'auto',
+                        ////'height': 'auto',
+                        //'max-width': '100%',
+                        //'max-height': '100%',
+                        //display:'block',
+                        //top: 0,
+                        //bottom: 0,
+                        //left: 0,
+                        //right: 0,
+                        //margin: 'auto',
                     });
                     $(artHolderImageHolder).append(artHolderImage);
 

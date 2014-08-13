@@ -157,7 +157,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
                                                     break;
                                                 case TAG.Authoring.FileUploadTypes.DeepZoom:
-                                                    if (file.contentType.match(/video/) || file.fileType.toLowerCase() === ".mp4" || file.fileType.toLowerCase() === ".webm" || file.fileType.toLowerCase() === ".ogv") {
+                                                    if (file.contentType.match(/video/) || file.fileType.toLowerCase() === ".mp4" || file.fileType.toLowerCase() === ".avi" || file.fileType.toLowerCase() === ".webm" || file.fileType.toLowerCase() === ".ogv") {
                                                         uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
                                                     } else {
                                                         uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
