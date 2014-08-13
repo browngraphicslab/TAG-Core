@@ -849,13 +849,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacityInput = createTextInput(backgroundOpacity, true);*/
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function() { return 100; });
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function() { return 100; });
-        var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
+        //var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
         var idleTimerDurationInput = createTextInput(idleTimerDuration, false, 3, false, false, true);
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
-        var font = fontFamilyInput.find(":selected").text();
-        $('.primaryFont').css('font-family', font);
-        $('.secondaryFont').css('font-family', font);
+        //var font = fontFamilyInput.find(":selected").text();
+        $('.primaryFont').css('font-family', fontFamily);
+        $('.secondaryFont').css('font-family', fontFamily);
         
         // Handle changes
 
@@ -898,7 +898,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacitySetting = createSetting('Background Opacity (0-100)', backgroundOpacityInput);*/
         var primaryFontColorSetting = createSetting('Primary Font Color', primaryFontColorInput);
         var secondaryFontColorSetting = createSetting('Secondary Font Color', secondaryFontColorInput);
-        var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
+        //var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
         var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
         settingsContainer.append(bgImage);
@@ -913,7 +913,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(backgroundOpacitySetting);*/
         settingsContainer.append(primaryFontColorSetting);
         settingsContainer.append(secondaryFontColorSetting);
-        settingsContainer.append(fontFamilySetting);
+        //settingsContainer.append(fontFamilySetting);
         settingsContainer.append(idleTimerDurationSetting);
 		//automatically save General Settings - Customization
         onChangeUpdateText(idleTimerDurationInput, null, 3);
@@ -970,7 +970,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //backgroundOpacityInput: backgroundOpacityInput,    //Background Opacity
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
-                fontFamilyInput: fontFamilyInput,
+                //fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput
             });
         }, {
@@ -1047,7 +1047,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacity = inputs.backgroundOpacityInput.val();*/
         var primaryFontColor = inputs.primaryFontColorInput.val();
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
-        var fontFamily = inputs.fontFamilyInput.val();
+        //var fontFamily = inputs.fontFamilyInput.val();
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
         
@@ -1064,7 +1064,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //BackgroundOpacity: backgroundOpacity,
             PrimaryFontColor: primaryFontColor,
             SecondaryFontColor: secondaryFontColor,
-            FontFamily: fontFamily,
+            //FontFamily: fontFamily,
             //BaseFontSize: baseFontSize,
             IdleTimerDuration: idleTimerDuration
         };
@@ -4208,8 +4208,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             artist: "artist",
             extra1: customFields[0] || "",
             extra2: customFields[1] || "",
-            extra3: customFields[2] || "",
-            extra4: customFields[3] || "",
+            //extra3: customFields[2] || "",
+            //extra4: customFields[3] || "",
         };
         $.each(metadataspec, function (key, val) {
             var input = createTextInput(val, null, null, false, false);
@@ -4388,7 +4388,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 counter++;
             });
             for (ele in data) {
-                if (counter < 4) {
+                if (counter < 2) {
                     infoFields[ele] = data[ele];
                     // create input field for new cus field
                     inputs.customInputs[ele] = createTextInput(TAG.Util.htmlEntityDecode(data[ele]), true);
@@ -4457,37 +4457,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
-
+        searchbar.on('keyup', function (event) {
+            if (!searchbar.val()) {
+                init();
+            }
+            if (event.which === 13) {
+                doSearch();
+            }
+        });
 
         metadataPicker.append(searchbar);
-
-        //search function in terms of titles
-        function searchtitles(tofind, alltitles, container) {
-            var searchresults = [];
-            curlist = [];
-            var title, ind;
-            for (ind in alltitles) {
-                title = alltitles[ind];
-                if (TAG.Util.searchString(title, tofind)) {
-                    searchresults.push(ind);
-                    curlist.push(metadatalist[ind]);
-                }
-            }
-            //generate mtholders for the results
-            metadataLists.empty();
-            for (var mtfield in fields) {
-                fields[mtfield].field.hide();
-            }
-            counter = 0;
-            var num = searchresults.length < 30 ? searchresults.length : 30;
-            for (var j = 0; j < num; j++) {
-                var curtitle = alltitles[searchresults[j]];
-                var titlediv = makemtholder(curtitle, searchresults[j]);
-                counter++;
-                if (j === 0)
-                    titlediv.click();
-            }
-        }
 
         // creates a panel for all the metadata objects
         metadataPicker.append(metadataLists);
@@ -4508,23 +4487,54 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // creates a panel for all metadata's detailed info
         metadataPicker.append(metadataInfos);
         metadataInfos.append(metadataholder);
+        var infoSource = [];
+        var info = "";
+        init();
 
-        for (i = 0; i < metadatalist.length; i++) {
-            var mt = metadatalist[i];
-            var title = mt["title"];
-            if (!mt['title'])
-                title = "Untitled";
-            allTitles[i] = title;
-            if (i < 30) {
-                var mtHolder = makemtholder(title, i);
-                //set the first one selected once we firstly open the picker
-                if (i === 0) {
-                    mtHolder.click();
+        //Method to display reset the metadata list and search information
+        function init() {
+            for (i = 0; i < metadatalist.length; i++) {
+                info = "";
+                $.each(metadatalist[i], function(index, element) {
+                    info += element + " ";          //Put all the metadata in one string for searching purposes
+                });
+                infoSource.push({
+                    "id": i,
+                    "keys": info.toLowerCase(),
+                    "title": metadatalist[i].title
+                });
+                var mt = metadatalist[i];
+                var title = mt["title"];
+                if (!mt['title'])
+                    title = "Untitled";
+                allTitles[i] = title;                                          
+                if (i < 30) {
+                    var mtHolder = makemtholder(title, i);
+                    //set the first one selected once we firstly open the picker
+                    if (i === 0) {
+                        mtHolder.click();
+                    }
+                    counter++;
                 }
-                counter++;
+            };
+        }
+        
+        //Actual search method
+        function doSearch() {
+            var content = searchbar.val();
+            var searchResults = [];
+            if(content){
+                metadataLists.empty();
+                $.each(infoSource, function(index, element) {
+                    if (element.keys.indexOf(content) > -1) {
+                        makemtholder(element.title, element.id);
+                    }
+                });
+            } else {
+                init();
             }
-        };
-
+            
+        }
         function makemtholder(ttl, index) {
             var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl);
             metadataLists.append(mtHolder);
@@ -6295,8 +6305,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .text('Add ')
             .appendTo(searchContainer)
             .css({
-                "color": "rgb(256, 256, 256)",
-                'background-color': "rgb(63, 55, 53)",
+                "color": "black",
+                //'background-color': "rgb(256, 256, 256)",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'float':'right',
                 'font-size':'85%',
@@ -6304,15 +6314,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-top':'1%',
                 'padding-bottom':'1%',
                 'width': '30%',
-                'border': '1px solid white',
+                'border': '1px solid black',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
-            .attr('src', tagPath + 'images/icons/Down.png')
+            .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '25%',
+                width: '20%',
                 height: 'auto',
-                'padding-left':'10%'
+                'margin-left': '15%',
+                '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)'
             })
             .appendTo(addMenuLabel);
         var dropDown = $(document.createElement('div'))
