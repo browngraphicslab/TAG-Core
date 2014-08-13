@@ -5468,15 +5468,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         yearDescriptionDiv.css({
             'width': '60%',
-            'height': '25px',
-            'position': 'relative',
-            'left': '0%',
-            'margin-bottom': '1%',
-            'font-size': '70%',
+            'height': '10px',
+            'position': 'absolute',
+            'left': '2.5%',
+            'bottom': '-5%',
+            'font-size': '75%',
+            'font-style': 'italic',
             'white-space': 'nowrap',
             'display':'inline-block'
         });
-        yearDescriptionDiv.text("Year format examples: 2013, 800 BC, 17th century, 1415-1450");
+        yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
 
         //Link input values of date fields to dynamically change/disable               
         yearInput.on('input', function(){
