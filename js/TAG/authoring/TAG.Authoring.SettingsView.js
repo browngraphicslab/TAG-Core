@@ -585,7 +585,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '8px center'
+            'background-position': '12px center'
         });
 
         searchbar.on('click focus', function () {
