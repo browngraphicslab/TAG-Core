@@ -712,6 +712,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    changesHaveBeenMade = false;
             //}
             // Reset all labels and then select this one
+
+            searchbar[0].value = "";
+
             resetLabels('.navContainer');
             selectLabel(container);
             // Do the onclick function
@@ -5114,6 +5117,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} loadingText      Text to display while middle bar loading
      */
     function prepareNextView(showSearch, newText, newBehavior, loadingText) {
+
         clearInterval(checkConTimerId);
         middleQueue.clear();
         middleLabelContainer.empty();
@@ -6391,6 +6395,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'width': '30%',
                 'border': '1px solid black',
                 'padding': '2% 0px 0px 0px',
+                'display': 'block',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
@@ -6414,15 +6419,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .appendTo(searchContainer)
             .css({
                 "left": '70%',
-                "display":"inline-block",
+                "display":"block",
                 "position": "relative",
                 "color": "rgb(256, 256, 256)",
-                'width': '50%',
+                'width': '60%',
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
-                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 100000,
-                'border':'1px solid white'
+                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 1000000,
+                'border': '1px solid white',
             });
         dropDown.hide();
         addMenuLabel.click(function () {
@@ -6459,7 +6464,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'color': 'white',
                 });
             })
-            .on('mouseleave', function () {
+            .on('mouseleave', function (e) {
                 fromFile.css({
                     'background-color': 'rgb(238, 238, 238)',
                     'color': 'black',
@@ -6492,7 +6497,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'color': 'white',
                 });
             })
-            .on('mouseleave', function () {
+            .on('mouseleave', function (e) {
                 iFrameAsset.css({
                     'background-color': 'rgb(238, 238, 238)',
                     'color': 'black',
