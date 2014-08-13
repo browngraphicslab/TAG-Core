@@ -5161,6 +5161,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.empty();
         buttonContainer.empty();
         rightQueue.clear();
+        $(".leftLoading").remove();
     }
 
     /**Prepares the viewer on the right side
