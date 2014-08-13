@@ -1082,7 +1082,7 @@ TAG.TourAuthoring.Timeline = function (spec) {
      * @method hideEditorOverlay
      */
     function hideEditorOverlay() {
-        $('#resizeButton').attr('src', tagPath + 'images/icons/dragTourWindow.svg');
+        $('#resizeButton').attr('src', tagPath + 'images/icons/dragTourWindowTwoBars.svg');
         setEditInkOn(false);
         $('#multiSelButton').css({
             'color': 'black',
