@@ -641,10 +641,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = prevTitle;
                         tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                        tobj.mode = 'Kiosk';
+
                     });
                     TAG.Telemetry.register(prevCollection, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = prevTitle;
                         tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                        tobj.mode = 'Kiosk';
                     });
                 }
 
@@ -689,10 +692,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = nextTitle;
                         tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                        tobj.mode = 'Kiosk';
                     });
                     TAG.Telemetry.register(nextCollection, 'click', 'collection_title', function(tobj){
                         tobj.custom_1 = nextTitle;
                         tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                        tobj.mode = 'Kiosk';
                     });
                    // collectionArea.append(nextCollection);
                 }
@@ -837,6 +842,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         //TO-DO: test this telemetry handler
                         TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
                             tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                            tobj.mode = 'Kiosk';
                         });
                     }
                     if (!comingBack) {
@@ -1174,6 +1180,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //tobj.artwork_guid = currentWork.Identifier;
                 tobj.custom_1 = currentWork.Name;
                 tobj.custom_2 = currentWork.Identifier;
+                tobj.mode = 'Kiosk';
                 justShowedArtwork = false;
             });
 
@@ -1902,7 +1909,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }
                     tobj.custom_1 = artwork.Name;
                     tobj.custom_2 = artwork.Identifier;
-                    tobj.ttype     = 'collection_to_' + getWorkType(artwork); 
+                    tobj.ttype     = 'collection_to_' + getWorkType(artwork);
+                    tobj.mode = 'Kiosk'; 
                 });
 
                 //Div for artist and year info, directly below image thumbnail
