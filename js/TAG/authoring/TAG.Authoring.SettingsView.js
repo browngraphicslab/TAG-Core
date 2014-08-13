@@ -585,7 +585,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '8px center'
+            'background-position': '12px center'
         });
 
         searchbar.on('click focus', function () {
@@ -3354,7 +3354,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     alphaName = names[j];
                 }
             }
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.mp4', '.webm', '.ogv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.mp4', '.webm', '.ogv','.mov','.avi','.wmv']);
     }
 
     /**Create an associated media (import), possibly more than one
@@ -4240,7 +4240,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }*/
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv']);
     }
     /*upload xml for single artwork
    artwork
@@ -5023,7 +5023,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         if (inArtMode) {
-            if(extension.match(/mp4/) || extension.match(/ogv/) || extension.match(/webm/)) {
+            if (extension.match(/mp4/) || extension.match(/ogv/) || extension.match(/webm/) || extension.match(/avi/) || extension.match(/mov/)) {
                 container.data('isVideoArtwork', true);
             } else {
                 container.data('isStaticArtwork', true);
@@ -6128,9 +6128,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 fileArray = files;
                 for (i = 0; i < files.length; i++) {
                     names.push(files[i].displayName);
+                    var ext=files[i].fileType.toLowerCase();
                     if (files[i].contentType.match(/image/)) {
                         contentTypes.push('Image');
-                    } else if (files[i].contentType.match(/video/) || files[i].fileType.toLowerCase() === ".avi" || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
+                    } else if (files[i].contentType.match(/video/) || ext === ".avi" || ext === ".wmv" || ext === ".mov" || ext === ".mp4" || ext === ".webm" || ext === ".ogv") {
                         contentTypes.push('Video');
                     } else if (files[i].contentType.match(/audio/)) {
                         contentTypes.push('Audio');
@@ -6401,17 +6402,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-bottom':'1%',
                 'width': '30%',
                 'border': '1px solid black',
-                'padding': '2% 0px 0px 0px',
+                'padding': '1% 0px 0px 0px',
                 'display': 'block',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
-            .attr('src', tagPath + 'images/icons/Down.png')
+            .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '25%',
+                width: '15%',
                 height: 'auto',
                 display:'inline-block',
-                'margin-left':'10%',
+                'margin-left': '10%',
+                '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)',
+                'padding-left': '10%',
+                'padding-right':'0%'
             })
         var addMenuLabelDiv = $(document.createElement('div'))
             .css({
@@ -6433,16 +6441,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
-                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 1000000,
+                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'border': '1px solid white',
             });
         dropDown.hide();
         addMenuLabel.click(function () {
             if (showDropdown) {
-                addMenuArrowIcon.css('transform', 'scaleY(1)');
+                $("#setViewMiddleLabelContainer").css('overflow','auto');
+                addMenuArrowIcon.css({
+                    '-webkit-transform': 'rotate(90deg)',
+                    '-moz-transform': 'rotate(90deg)',
+                    '-o-transform': 'rotate(90deg)',
+                    '-ms-transform': 'rotate(90deg)',
+                    'transform': 'rotate(90deg)',
+                    'padding-left': '10%',
+                    'padding-right': '0%'
+                });
                 dropDown.hide();
             } else {
-                addMenuArrowIcon.css('transform', 'scaleY(-1)');
+                $("#setViewMiddleLabelContainer").css('overflow', 'hidden');
+                addMenuArrowIcon.css({
+                    '-webkit-transform': 'rotate(270deg)',
+                    '-moz-transform': 'rotate(270deg)',
+                    '-o-transform': 'rotate(270deg)',
+                    '-ms-transform': 'rotate(270deg)',
+                    'transform': 'rotate(270deg)',
+                    'padding-left': '0%',
+                    'padding-right':'10%'
+                });
                 dropDown.show();
             }
             showDropdown = !showDropdown;
