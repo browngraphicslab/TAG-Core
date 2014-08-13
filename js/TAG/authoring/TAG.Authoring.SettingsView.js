@@ -199,8 +199,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (output === "True") {
                     console.log("converted: ");
                     clearInterval(checkConTimerId);
+                    var source = doq.Metadata.Source;
+                    var ext = source.substr(source.lastIndexOf('.'));
                     if (currDoq === doq.Identifier) {
-                        reloadVideo(doq)
+                        if (ext === ".mp4") {
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                        } else {
+                            reloadVideo(doq)
+                        }
                     }
                 } else if (output === "Error") {
                     clearInterval(checkConTimerId);
