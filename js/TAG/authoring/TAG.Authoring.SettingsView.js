@@ -6379,11 +6379,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function createDropdownAssocMediaMenu() {
         var addMenuLabel = $(document.createElement('button'))
             .attr('id', 'addMenuLabel')
-            .text('Add ')
             .appendTo(searchContainer)
             .css({
                 "color": "black",
-                //'background-color': "rgb(256, 256, 256)",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'float':'right',
                 'font-size':'85%',
@@ -6392,20 +6390,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-bottom':'1%',
                 'width': '30%',
                 'border': '1px solid black',
+                'padding': '2% 0px 0px 0px',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
-            .attr('src', tagPath + 'images/icons/RightB.png')
+            .attr('src', tagPath + 'images/icons/Down.png')
             .css({
-                width: '20%',
+                width: '25%',
                 height: 'auto',
-                'margin-left': '15%',
-                '-webkit-transform': 'rotate(90deg)',
-                '-moz-transform': 'rotate(90deg)',
-                '-o-transform': 'rotate(90deg)',
-                '-ms-transform': 'rotate(90deg)',
-                'transform': 'rotate(90deg)'
+                display:'inline-block',
+                'margin-left':'10%',
             })
+        var addMenuLabelDiv = $(document.createElement('div'))
+            .css({
+                width:'100%',
+                height: '100%',
+            })
+            .append($(document.createElement('div')).text('Add').css({'display':'inline-block'}))
+            .append(addMenuArrowIcon)
             .appendTo(addMenuLabel);
         var dropDown = $(document.createElement('div'))
             .attr('id', 'dropDown')
@@ -6415,7 +6417,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "display":"inline-block",
                 "position": "relative",
                 "color": "rgb(256, 256, 256)",
-                'width': '60%',
+                'width': '50%',
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
