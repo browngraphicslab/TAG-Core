@@ -4392,37 +4392,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         searchbar.on('click focus', function () { searchbar.css({ 'background-image': 'none' }); });
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
-
+        searchbar.on('keyup', function (event) {
+            if (!searchbar.val()) {
+                init();
+            }
+            if (event.which === 13) {
+                doSearch();
+            }
+        });
 
         metadataPicker.append(searchbar);
-
-        //search function in terms of titles
-        function searchtitles(tofind, alltitles, container) {
-            var searchresults = [];
-            curlist = [];
-            var title, ind;
-            for (ind in alltitles) {
-                title = alltitles[ind];
-                if (TAG.Util.searchString(title, tofind)) {
-                    searchresults.push(ind);
-                    curlist.push(metadatalist[ind]);
-                }
-            }
-            //generate mtholders for the results
-            metadataLists.empty();
-            for (var mtfield in fields) {
-                fields[mtfield].field.hide();
-            }
-            counter = 0;
-            var num = searchresults.length < 30 ? searchresults.length : 30;
-            for (var j = 0; j < num; j++) {
-                var curtitle = alltitles[searchresults[j]];
-                var titlediv = makemtholder(curtitle, searchresults[j]);
-                counter++;
-                if (j === 0)
-                    titlediv.click();
-            }
-        }
 
         // creates a panel for all the metadata objects
         metadataPicker.append(metadataLists);
@@ -4443,23 +4422,54 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // creates a panel for all metadata's detailed info
         metadataPicker.append(metadataInfos);
         metadataInfos.append(metadataholder);
+        var infoSource = [];
+        var info = "";
+        init();
 
-        for (i = 0; i < metadatalist.length; i++) {
-            var mt = metadatalist[i];
-            var title = mt["title"];
-            if (!mt['title'])
-                title = "Untitled";
-            allTitles[i] = title;
-            if (i < 30) {
-                var mtHolder = makemtholder(title, i);
-                //set the first one selected once we firstly open the picker
-                if (i === 0) {
-                    mtHolder.click();
+        //Method to display reset the metadata list and search information
+        function init() {
+            for (i = 0; i < metadatalist.length; i++) {
+                info = "";
+                $.each(metadatalist[i], function(index, element) {
+                    info += element + " ";          //Put all the metadata in one string for searching purposes
+                });
+                infoSource.push({
+                    "id": i,
+                    "keys": info.toLowerCase(),
+                    "title": metadatalist[i].title
+                });
+                var mt = metadatalist[i];
+                var title = mt["title"];
+                if (!mt['title'])
+                    title = "Untitled";
+                allTitles[i] = title;                                          
+                if (i < 30) {
+                    var mtHolder = makemtholder(title, i);
+                    //set the first one selected once we firstly open the picker
+                    if (i === 0) {
+                        mtHolder.click();
+                    }
+                    counter++;
                 }
-                counter++;
+            };
+        }
+        
+        //Actual search method
+        function doSearch() {
+            var content = searchbar.val();
+            var searchResults = [];
+            if(content){
+                metadataLists.empty();
+                $.each(infoSource, function(index, element) {
+                    if (element.keys.indexOf(content) > -1) {
+                        makemtholder(element.title, element.id);
+                    }
+                });
+            } else {
+                init();
             }
-        };
-
+            
+        }
         function makemtholder(ttl, index) {
             var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl);
             metadataLists.append(mtHolder);
