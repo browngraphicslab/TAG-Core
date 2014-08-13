@@ -361,8 +361,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     });
                 });
             } else {
-                $('.assetHolder').css('background-color', '');
-                $('.closeEditAssocMedia').click();
+                //$('.assetHolder').css('background-color', '');
+                //$('.closeEditAssocMedia').click();
             }
         };
     }
@@ -1606,15 +1606,14 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             // add loading overlay to the thumbnail of the associate media which has been modified
             var top = 
-            $('#' + worktopInfo.assetDoqID).find('.thumbnailButtonTitle').height() +
-            $('#' + worktopInfo.assetDoqID).find('.thumbnailHolderDiv').height();
+            $(document.getElementById(worktopInfo.assetDoqID)).height();
             thumbnailLoadingSave = $(document.createElement('div'));
             thumbnailLoadingSave.css({
                 'width': '100%',
                 'height': '100%',
                 'position': 'relative',
                 'background-color': 'rgba(0,0,0,.85)',
-                'top': '-' + top + 'px',
+                'top': '-' + top -4 + 'px',
                 'z-index': 100
             });
             $('#' + worktopInfo.assetDoqID).append(thumbnailLoadingSave);
