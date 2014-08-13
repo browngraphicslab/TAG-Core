@@ -3057,17 +3057,31 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     // create image for artwork holder
                     $(artHolderImage).addClass('artHolderImage');
                     $(artHolderImage).attr('src', TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail));
+                    if (artwork.Metadata.ContentType === 'Video' || artwork.Type === 'Video' || artwork.Metadata.Type === 'VideoArtwork') {
+                        $(artHolderImage).attr('src', (artwork.Metadata.Thumbnail && !artwork.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(artwork.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg');
+                    }
                     $(artHolderImage).css({
-                        position: 'absolute',
-                        'width': 'auto',
-                        'height': 'auto',
-                        'max-width': '100%',
                         'max-height': '100%',
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        margin: 'auto',
+                        'position': 'absolute',
+                        'left': '0',
+                        'right': '0',
+                        'top': '0',
+                        'bottom': '0',
+                        'margin': 'auto',
+                        'display': 'block',
+                        'max-width': '100%',
+                        width: 'auto',
+                        //position: 'absolute',
+                        //'width': 'auto',
+                        ////'height': 'auto',
+                        //'max-width': '100%',
+                        //'max-height': '100%',
+                        //display:'block',
+                        //top: 0,
+                        //bottom: 0,
+                        //left: 0,
+                        //right: 0,
+                        //margin: 'auto',
                     });
                     $(artHolderImageHolder).append(artHolderImage);
 
