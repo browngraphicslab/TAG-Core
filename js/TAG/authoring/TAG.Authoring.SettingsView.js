@@ -1021,11 +1021,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.mode = 'authoring'
         });
 
-        TAG.Telemetry.register(previewCollectionsPage,'click','collectionspage_preview',function(tobj){
+        TAG.Telemetry.register(previewCollectionsPageButton,'click','collectionspage_preview',function(tobj){
             tobj.mode = 'authoring'
         });
 
-        TAG.Telemetry.register(previewArtworkViewer,'click','artworkviewer_preview',function(tobj){
+        TAG.Telemetry.register(previewArtworkViewerButton,'click','artworkviewer_preview',function(tobj){
             tobj.mode = 'authoring'
         });
 
