@@ -4409,6 +4409,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                             $(".parsingOverlay").remove();
 
                                         }
+                                    },
+                                    error: function () {
+                                        $(".parsingOverlay").remove();
+                                        var popupmsg = TAG.Util.UI.popUpMessage(null, "Error occured when parsing xml. Please double check your file", "OK", null, null, null, true);
+                                        $(popupmsg).show();
+                                        root.append(popupmsg);
                                     }
                                 });
                             }
@@ -4583,8 +4589,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "title": metadatalist[i].title
                 });
                 var mt = metadatalist[i];
-                var title = mt["title"];
-                if (!mt['title'])
+                var title = mt[spec["title"]];
+                if (!title)
                     title = "Untitled";
                 allTitles[i] = title;                                          
                 if (i < 30) {
@@ -6124,7 +6130,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     names.push(files[i].displayName);
                     if (files[i].contentType.match(/image/)) {
                         contentTypes.push('Image');
-                    } else if (files[i].contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
+                    } else if (files[i].contentType.match(/video/) || files[i].fileType.toLowerCase() === ".avi" || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
                         contentTypes.push('Video');
                     } else if (files[i].contentType.match(/audio/)) {
                         contentTypes.push('Audio');

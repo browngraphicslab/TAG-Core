@@ -2024,7 +2024,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         miniTile = $(document.createElement('img'))
                             .addClass('miniTile')
                             .css({
-                                'width': miniTilesHolder.height()
+                                'width': .35*(.45*selectedArtworkContainer.height())
                             })
                             .on('click', 
                                     onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
