@@ -3478,7 +3478,7 @@ TAG.Util.UI = (function () {
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size': 'auto 50%',
             'background-repeat': 'no-repeat',
-            'background-position': '2% center'
+            'background-position': '4% center'
         });
 
         pickerSearchBar.on('focus', function () { pickerSearchBar.css({ 'background-image': 'none' }); });
