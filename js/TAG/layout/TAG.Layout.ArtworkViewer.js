@@ -839,7 +839,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             maxHeight = Math.max(1, assetContainer.height() - currBottom ); //to account for the height of the drawerLabel of the current drawer.
 
             root.find(".drawerContents").css({
-                "max-height": maxHeight - 150 + "px", //TODO this
+                "max-height": maxHeight*.8 + "px", //TODO this
                 //'max-height':2*0.19 * $('#tagRoot').height() + 'px', //height of two thumbnails
             });
         });
@@ -856,6 +856,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             tourClicked(tour)();
+                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
                         },
                         "By opening this tour, you will exit splitscreen mode. Would you like to continue?",
                         "Continue",
@@ -901,9 +902,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             .addClass('minimapDescription')
             .css({
                 'font-size': '80%',
-                'margin-top':'-13%'
+                'margin-top': '-13%',
+                'text-align':'center'
             })
-            .text('Interactive Minimap');
+            .text('Navigation');
         minimapContainer.append(minimapDescription);
        
 

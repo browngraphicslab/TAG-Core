@@ -837,7 +837,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                 var url = urls[0];
                 bgImgInput.val(url);
-                $('#background').css({
+                $('#innerContainer').css({
                     'background-image': 'url("' + TAG.Worktop.Database.fixPath(url) + '")',
                     'background-size': 'cover',
                 });
@@ -1779,12 +1779,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (nameInput.val() === 'Collection')
                     nameInput.select();
             });
-
+            nameInput.keyup(function () {
+               $('.collection-title').text(nameInput.val());
+            });
             descInput.focus(function () {
                 if (descInput.val() === 'Description')
                     descInput.select();
             });
-
+            descInput.keyup(function () {
+                $("#collectionDescription").text(descInput.val());
+            });
             // Handle Changes
             onChangeUpdateText(nameInput, '#exhibition-title', 40);
             onChangeUpdateText(descInput, '#description-text', 1790);
@@ -2086,6 +2090,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, "Are you sure you want to delete " + exhibition.Name + "?", "Delete", true, function() { $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
 
@@ -2209,7 +2214,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearRight();
         deleteType = deleteTour;
         toDelete = tour;
-
+        clearInterval(checkConTimerId);
         // Create an img element just to load the image
         var img = $(document.createElement('img'));
         img.attr('src', TAG.Worktop.Database.fixPath(tour.Metadata.Thumbnail));
@@ -2223,11 +2228,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'height': viewer.height() / 2 + 'px',
             'width': 'auto'
         };
+
         var circle = TAG.Util.showProgressCircle(viewer, progressCircCSS, '0px', '0px', false);
         var selectedLabel = prevSelectedMiddleLabel;
         img.load(function () {
             // If the selection has changed since we started loading return
-            if (prevSelectedMiddleLabel && prevSelectedMiddleLabel.text() !== tour.Name) {
+            if (prevSelectedMiddleLabel && prevSelectedMiddleLabel.text() !== TAG.Util.htmlEntityDecode(tour.Name)) {
                 TAG.Util.removeProgressCircle(circle);
                 return;
             }
@@ -2236,6 +2242,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             viewer.css('background', 'black url(' + TAG.Worktop.Database.fixPath(tour.Metadata.Thumbnail) + ') no-repeat center / contain');
         });
 
+        if (tour.Metadata.Thumbnail === "/Images/default.jpg") {
+            TAG.Util.removeProgressCircle(circle);
+        }
         // Create inputs
         // inputs
         var privateState;
@@ -2438,6 +2447,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         root.append(confirmationBox);
         $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
     /**Duplicate a tour
@@ -2679,6 +2689,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("src", source);
                 var source = TAG.Worktop.Database.fixPath(media.Metadata.Source);
                 var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
+                var filenamewithoutpath = media.Metadata.Source.substring(8);
+                var basefilename = filenamewithoutpath.substr(0, filenamewithoutpath.lastIndexOf('.'));
                 sourceExt = source.substring(source.lastIndexOf('.'));
                 TAG.Worktop.Database.getConvertedVideoCheck(
                 function (output) {
@@ -2702,6 +2714,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else if (output === "Error") {
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
+                            } else if (!media.Metadata.Converted) {
+                                if (output === "True") {
+                                    TAG.Worktop.Database.changeArtwork(media.Identifier, { Converted: "True" });
+                                } else {
+                                    TAG.Worktop.Database.convertVideo(function () {
+                                    }, null, filenamewithoutpath, sourceExt, basefilename, media.Identifier);
+                                    $("#videoErrorMsg").remove();
+                                    $("#leftLoading").remove();
+                                    var msg = "This video is being converted to compatible formats for different browsers";
+                                    viewer.append(TAG.Util.createConversionLoading(msg,null,true));
+                                    checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
+                                }
                             }
                         }
                     } else {
@@ -2722,9 +2746,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else {
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
                             }
-                        } else if(output ===null) {
+                        } else if (!media.Metadata.Converted) {
                             TAG.Worktop.Database.convertVideo(function () {
-                            }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
+                            }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "This video is being converted to compatible formats for different browsers";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
                         }
                         //holder.attr('src', source);
                     }
@@ -3176,6 +3205,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, "Are you sure you want to delete " + media.Name + "?", "Delete", true, function () { $(confirmationBox).hide(); });
             root.append(confirmationBox);
             $(confirmationBox).show();
+            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
     /**Brings up an artwork chooser for a particular associated media
@@ -3827,6 +3857,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
             var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
+            var filenamewithoutpath = artwork.Metadata.Source.substring(8);
+            var basefilename = filenamewithoutpath.substr(0, filenamewithoutpath.lastIndexOf('.'));
             var sourceExt = source.substring(source.lastIndexOf('.'));
             var videoErrorDiv = $(document.createElement('div'));
             videoErrorDiv.addClass("videoErrorDiv");
@@ -3853,6 +3885,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else if (output === "Error") {
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
+                            } else if (!artwork.Metadata.Converted) {
+                                if (output === "True") {
+                                    TAG.Worktop.Database.changeArtwork(artwork.Identifier, {Converted:"True"});
+                                } else {
+                                    TAG.Worktop.Database.convertVideo(function () {
+                                    }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
+                                    $("#videoErrorMsg").remove();
+                                    $("#leftLoading").remove();
+                                    var msg = "This video is being converted to compatible formats for different browsers";
+                                    viewer.append(TAG.Util.createConversionLoading(msg,null,true));
+                                    checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
+                                }
                             }
                         }
                     } else {
@@ -3873,9 +3917,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else {
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
                             } 
-                        } else if(output ===null) {
+                        } else if (!artwork.Metadata.Converted) {
                             TAG.Worktop.Database.convertVideo(function () {
-                            }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
+                            }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
+                            $("#videoErrorMsg").remove();
+                            $("#leftLoading").remove();
+                            var msg = "This video is being converted to compatible formats for different browsers";
+                            viewer.append(TAG.Util.createConversionLoading(msg));
+                            checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
                         }
                     }
                 }, null, artwork.Identifier);
@@ -4355,6 +4404,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 });
                                 root.append(warningBox);
                                 $(warningBox).show();
+                                TAG.Util.multiLineEllipsis($($($(warningBox).children()[0]).children()[0]));
                             }
 
                             //picked the xml file and parse the strings
@@ -5137,12 +5187,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (!inAssociatedView) {
             menuLabel.hide();
+            searchbar.css({ width: '55%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
             if (!newText) newButton.hide();
             else newButton.show();
         } else {
             newButton.hide();
+            searchbar.css({width:'40%'});
             menuLabel.show();
         }
 
@@ -5843,7 +5895,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         input.css('overflow-y', 'scroll');
         //input.autoSize();
         doWhenReady(input, function (elem) {
-            var realHeight = input[0].scrollHeight;
+            if (input[0].scrollHeight<=(root.find('#setViewSettingsContainer').height() * 0.5)){
+                var realHeight = input[0].scrollHeight;
+            }
+            else{
+                var realHeight= root.find('#setViewSettingsContainer').height() * 0.5;
+            }
             $(input).css('height', realHeight + 'px');
         });
         //input.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
@@ -6258,6 +6315,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, "Your version of " + doq.Name + " is not up to date.  Are you sure you want to change " + doq.Name + "?", text, true, fail);
             root.append(confirmationBox);
             $(confirmationBox).show();
+            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
         }
     }
 
@@ -6399,51 +6457,82 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'font-size':'85%',
                 'height':'70%',
                 'margin-top':'1%',
-                'padding-bottom':'1%',
-                'width': '30%',
+                //'padding-bottom':'1%',
+                'width': '48%',
                 'border': '1px solid black',
-                'padding': '2% 0px 0px 0px',
+                'padding': '1.5% 0px 0px 0px',
                 'display': 'block',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
-            .attr('src', tagPath + 'images/icons/Down.png')
+            .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '25%',
+                width: '10%',
                 height: 'auto',
                 display:'inline-block',
-                'margin-left':'10%',
+                'margin-right': '5%',
+                '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)',
+                'padding-left': '5%',
+                'padding-right':'0%'
             })
         var addMenuLabelDiv = $(document.createElement('div'))
             .css({
-                width:'100%',
+                width:'80%',
                 height: '100%',
+                'text-align': 'center',
+                'vertical-align': 'middle',
+                'padding':'0px 10% 0px 10%'
             })
-            .append($(document.createElement('div')).text('Add').css({'display':'inline-block'}))
+            .append($(document.createElement('div')).text('Add').css({
+                'display': 'inline-block',
+                'margin-right': '40%',
+            }))
             .append(addMenuArrowIcon)
             .appendTo(addMenuLabel);
         var dropDown = $(document.createElement('div'))
             .attr('id', 'dropDown')
             .appendTo(searchContainer)
             .css({
-                "left": '70%',
+                "left": '52%',
                 "display":"block",
                 "position": "relative",
                 "color": "rgb(256, 256, 256)",
-                'width': '60%',
+                'width': '48%',
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
-                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 1000000,
+                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'border': '1px solid white',
             });
         dropDown.hide();
         addMenuLabel.click(function () {
             if (showDropdown) {
-                addMenuArrowIcon.css('transform', 'scaleY(1)');
+                $("#setViewMiddleLabelContainer").css('overflow','auto');
+                addMenuArrowIcon.css({
+                    '-webkit-transform': 'rotate(90deg)',
+                    '-moz-transform': 'rotate(90deg)',
+                    '-o-transform': 'rotate(90deg)',
+                    '-ms-transform': 'rotate(90deg)',
+                    'transform': 'rotate(90deg)',
+                    'padding-left': '5%',
+                    'padding-right': '0%'
+                });
                 dropDown.hide();
             } else {
-                addMenuArrowIcon.css('transform', 'scaleY(-1)');
+                $("#setViewMiddleLabelContainer").css('overflow', 'hidden');
+                addMenuArrowIcon.css({
+                    '-webkit-transform': 'rotate(270deg)',
+                    '-moz-transform': 'rotate(270deg)',
+                    '-o-transform': 'rotate(270deg)',
+                    '-ms-transform': 'rotate(270deg)',
+                    'transform': 'rotate(270deg)',
+                    'padding-left': '0%',
+                    'padding-right':'5%'
+                });
                 dropDown.show();
             }
             showDropdown = !showDropdown;
@@ -6453,10 +6542,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .text('From File')
             .css({
                 "display": "block",
-                'border-color': 'black',
-                'color': 'black',
-                'background-color': 'rgb(238, 238, 238)',
-                'border-style': 'solid',
+                'border-color': 'white',
+                'color': 'white',
+                'background-color': 'black',
+                //'border-style': 'solid',
                 'border-width': 'thin',
                 'border-bottom-style': 'none',
                 'padding-left': '15px',
@@ -6468,14 +6557,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .on('mouseenter', function () {
                 fromFile.css({
-                    'background-color': 'black',
-                    'color': 'white',
+                    'background-color': 'white',
+                    'color': 'black',
+                    'border-color': 'black',
                 });
             })
             .on('mouseleave', function (e) {
                 fromFile.css({
-                    'background-color': 'rgb(238, 238, 238)',
-                    'color': 'black',
+                    'background-color': 'black',
+                    'color': 'white',
+                    'border-color': 'white',
                 });
             })
             .click(function () {
@@ -6487,10 +6578,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .text('Embed Video')
             .css({
                 "display": "block",
-                'border-color': 'black',
-                'color': 'black',
-                'background-color': 'rgb(238, 238, 238)',
-                'border-style': 'solid',
+                'border-color': 'white',
+                'color': 'white',
+                'background-color': 'black',
+                //'border-style': 'solid',
                 'border-width': 'thin',
                 'padding-left': '15px',
                 'padding-right': '15px',
@@ -6501,14 +6592,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .on('mouseenter', function () {
                 iFrameAsset.css({
-                    'background-color': 'black',
-                    'color': 'white',
+                    'background-color': 'white',
+                    'color': 'black',
+                    'border-color': 'black',
                 });
             })
             .on('mouseleave', function (e) {
                 iFrameAsset.css({
-                    'background-color': 'rgb(238, 238, 238)',
-                    'color': 'black',
+                    'background-color': 'black',
+                    'color': 'white',
+                    'border-color': 'white',
                 });
             })
             .click(function () {

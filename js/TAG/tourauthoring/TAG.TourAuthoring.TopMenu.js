@@ -196,7 +196,9 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             border: '3px double white',
             'background-color': 'black',
         });
+        
         backDialogOverlay.append(backDialog);
+
 
         backDialogTitle.attr('id', 'backDialogTitle');
         backDialogTitle.css({
@@ -232,6 +234,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         });
         backSaveButton.text('Save');
         backSaveButton.click(function () {
+            backSaveButton.text('Saving...');
             backSaveButton.attr("disabled", true);
             backSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
             backDontSaveButton.attr("disabled", true);
@@ -284,6 +287,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         });
         backButtonArea.append(backButton);
         topbar.append(backButtonArea);
+        TAG.Util.multiLineEllipsis(backDialog);
     }
 
     /**Creating and positioning the title text area
@@ -359,7 +363,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
                max_width: 560,
                max_height: 200,
            });
-        
+
         saveButton.text("Save Changes");
         saveButton.attr('type', 'button');
         saveButton.css({
@@ -413,6 +417,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             border: '3px double white',
             'background-color': 'black',
         });
+        TAG.Util.multiLineEllipsis(saveDialog);
         
         dialogTitle.attr('id', 'dialogTitle');
         dialogTitle.css({
@@ -445,6 +450,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         });
         submitButton.text('Save');
         submitButton.click(function () {
+            submitButton.text('Saving...');
             save(true);
             submitButton.attr('disabled', true);
             submitButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });

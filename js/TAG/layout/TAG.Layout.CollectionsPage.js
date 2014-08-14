@@ -555,155 +555,159 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             applyCustomization();
             buttonRow.empty();
 
-             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
-                    TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
-                        if (cancelLoad) return;
-                        for (i=0;i<mediaDoqs.length;i++){
-                            collectionMedia.push(mediaDoqs[i]);
-                        }
-                        collection.collectionMedia = collectionMedia;
-                        if (sortByYear(collectionMedia,true).min()){
-                            collection.collectionMediaMinYear = sortByYear(collectionMedia,true).min().yearKey;
-                        }
-                    })   
-                }
-
-                // Clear search box
-                searchTxt.text("");
-
-                //re-display the magnifying glass icon
-                searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
-
-                // Clear catalog div (with info and artwork tiles)
-                catalogDiv.empty();
-                catalogDiv.stop();
-
-                //Set background image
-                if (collection.Metadata.BackgroundImage) {
-                    bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
-                }
-
-                if (!collectionDots[collection.Identifier]){
-                    //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
-                    dummyDot = $(document.createElement('div'))
-                        .addClass('collectionDot')
-                        .css({
-                            "width": COLLECTION_DOT_WIDTH,
-                            "height":  COLLECTION_DOT_WIDTH,
-                            "border-radius": COLLECTION_DOT_WIDTH / 2,
-                            "margin": COLLECTION_DOT_WIDTH/4,
-                            "background-color":'white'
-                        });
-                    collectionDotHolder.append(dummyDot);
-                    backArrowArea.css('display', 'none');
-                } else {
-                    //Make collection dot white and others gray
-                    for(i = 0; i < visibleCollections.length; i++) { 
-                        collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
+            if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
+                TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
+                    if (cancelLoad) return;
+                    for (i=0;i<mediaDoqs.length;i++){
+                        collectionMedia.push(mediaDoqs[i]);
                     }
-                    collectionDots[collection.Identifier].css('background-color', 'white');
-                }                
+                    collection.collectionMedia = collectionMedia;
+                    if (sortByYear(collectionMedia,true).min()){
+                        collection.collectionMediaMinYear = sortByYear(collectionMedia,true).min().yearKey;
+                    }
+                })   
+            }
 
-                // Add collection title
-                mainCollection.addClass('mainCollection');
-                titleBox.addClass('collection-title primaryFont').html(title);
+            // Clear search box
+            searchTxt.text("");
 
-                // Add previous and next collection titles
-                if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
-                    prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
-                    backArrowArea.addClass('arrowArea');
-                    backArrowArea.css('left', '0%')
-                        .off()
-                        .on('click', function(j){
-                            return function () {
-                                prepareNextView();
-                                loadCollection(visibleCollections[j.prevCollectionIndex])();
+            //re-display the magnifying glass icon
+            searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
+
+            // Clear catalog div (with info and artwork tiles)
+            catalogDiv.empty();
+            catalogDiv.stop();
+
+            //Set background image
+            if (collection.Metadata.BackgroundImage) {
+                bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
+            }
+
+            if (!collectionDots[collection.Identifier]){
+                //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
+                dummyDot = $(document.createElement('div'))
+                    .addClass('collectionDot')
+                    .css({
+                        "width": COLLECTION_DOT_WIDTH,
+                        "height":  COLLECTION_DOT_WIDTH,
+                        "border-radius": COLLECTION_DOT_WIDTH / 2,
+                        "margin": COLLECTION_DOT_WIDTH/4,
+                        "background-color":'white'
+                    });
+                collectionDotHolder.append(dummyDot);
+                backArrowArea.css('display', 'none');
+            } else {
+                //Make collection dot white and others gray
+                for(i = 0; i < visibleCollections.length; i++) { 
+                    collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
+                }
+                collectionDots[collection.Identifier].css('background-color', 'white');
+            }                
+
+            // Add collection title
+            mainCollection.addClass('mainCollection');
+            titleBox.addClass('collection-title primaryFont').html(title);
+
+            // Add previous and next collection titles
+            if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
+                prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
+                backArrowArea.addClass('arrowArea');
+                backArrowArea.css('left', '0%')
+                    .off()
+                    .on('click', function(j){
+                        return function () {
+                            prepareNextView();
+                            loadCollection(visibleCollections[j.prevCollectionIndex])();
+                        }
+                    }(collection));
+                backArrow.attr('src', tagPath + 'images/icons/Close.svg');
+                backArrow.addClass('arrow');    
+
+                prevCollection.addClass('nextPrevCollection')
+                            .addClass('primaryFont')
+                            //.attr({
+                            //   'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
+                            //})
+                            .css('left','3%')
+                            .html(prevTitle)
+                            .off()
+                            .on('click', function(j){
+                                return function () {
+                                    prepareNextView();
+                                    loadCollection(visibleCollections[j.prevCollectionIndex])();
                                 }
                             }(collection));
-                    backArrow.attr('src', tagPath + 'images/icons/Close.svg');
-                    backArrow.addClass('arrow');    
 
-                    prevCollection.addClass('nextPrevCollection')
-                                .addClass('primaryFont')
-                                //.attr({
-                                //   'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
-                                //})
-                                .css('left','3%')
-                                .html(prevTitle)
-                                .off()
-                                .on('click', function(j){
-                                    return function () {
-                                        prepareNextView();
-                                        loadCollection(visibleCollections[j.prevCollectionIndex])();
-                                        }
-                                    }(collection));
+                TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
+                    tobj.custom_1 = prevTitle;
+                    tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                    tobj.mode = 'Kiosk';
 
-                    TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
-                        tobj.custom_1 = prevTitle;
-                        tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
-                        tobj.mode = 'Kiosk';
+                });
+                TAG.Telemetry.register(prevCollection, 'click', 'collection_title', function(tobj){
+                    tobj.custom_1 = prevTitle;
+                    tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                    tobj.mode = 'Kiosk';
+                });
+            }
 
-                    });
-                    TAG.Telemetry.register(prevCollection, 'click', 'collection_title', function(tobj){
-                        tobj.custom_1 = prevTitle;
-                        tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
-                        tobj.mode = 'Kiosk';
-                    });
-                }
+            if (prevCollection){
+                prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
+                // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
+            }
+            if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
+                nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
+                nextArrowArea.addClass('arrowArea');
+                nextArrowArea.css({'right': '0%'})
+                            .off()
+                            .on('click', function(j){
+                                return function () {
+                                    prepareNextView();
+                                    loadCollection(visibleCollections[j.nextCollectionIndex])();
+                                }
+                            }(collection));
 
-                if (prevCollection){
-                    prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
-                    // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
-                }
-                if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
-                    nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
-                    nextArrowArea.addClass('arrowArea');
-                    nextArrowArea.css({'right': '0%'})
-                                .off()
-                                .on('click', function(j){
-                                    return function () {
-                                        prepareNextView();
-                                        loadCollection(visibleCollections[j.nextCollectionIndex])();
-                                        }
-                                    }(collection));
+                // collectionArea.append(nextArrowArea);
+                nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
+                nextArrow.addClass('arrow');
+                nextCollection.addClass('nextPrevCollection')
+                              .addClass('primaryFont')
+                              //.attr({
+                              //   'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
+                              // })
+                              .html(nextTitle)
+                              .css({
+                                  'right': 0 + nextArrowArea.width()/2,
+                                  'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
+                                  //'color': '#' + PRIMARY_FONT_COLOR
+                              })
+                            .off()
+                            .on('click', function(j){
+                                return function(){
+                                    prepareNextView();
+                                    loadCollection(visibleCollections[j.nextCollectionIndex])();
+                                }
+                            }(collection));
 
-                   // collectionArea.append(nextArrowArea);
-                    nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
-                    nextArrow.addClass('arrow');
-                    nextCollection.addClass('nextPrevCollection')
-                                  .addClass('primaryFont')
-                                  //.attr({
-                                  //   'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
-                                  // })
-                                  .html(nextTitle)
-                                  .css({
-                                    'right': 0 + nextArrowArea.width()/2,
-                                    'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
-                                    //'color': '#' + PRIMARY_FONT_COLOR
-                                   })
-                                .off()
-                                .on('click', function(j){
-                                        return function(){
-                                            prepareNextView();
-                                            loadCollection(visibleCollections[j.nextCollectionIndex])();
-                                        }
-                                    }(collection));
-
-                    TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
-                        tobj.custom_1 = nextTitle;
-                        tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
-                        tobj.mode = 'Kiosk';
-                    });
-                    TAG.Telemetry.register(nextCollection, 'click', 'collection_title', function(tobj){
-                        tobj.custom_1 = nextTitle;
-                        tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
-                        tobj.mode = 'Kiosk';
-                    });
-                   // collectionArea.append(nextCollection);
-                }
-
-                collectionDescription.attr('id', 'collectionDescription');
-                collectionDescription.addClass('secondaryFont');
+                TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
+                    tobj.custom_1 = nextTitle;
+                    tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                    tobj.mode = 'Kiosk';
+                });
+                TAG.Telemetry.register(nextCollection, 'click', 'collection_title', function(tobj){
+                    tobj.custom_1 = nextTitle;
+                    tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                    tobj.mode = 'Kiosk';
+                });
+                // collectionArea.append(nextCollection);
+            }
+            if (!collection.prevCollectionIndex && !collection.nextCollectionIndex) {
+                backArrowArea.hide();
+                nextArrowArea.hide();
+            }
+            collectionDescription.attr('id', 'collectionDescription');
+            collectionDescription.addClass('secondaryFont');
+            collectionDescription.css({'word-wrap': 'break-word'});
                 str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
                 collectionDescription.css({
                     'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
@@ -2480,6 +2484,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             tourClicked(tour)();
+                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
                         },
                         "By opening this tour, you will exit splitscreen mode. Would you like to continue?",
                         "Continue",
@@ -2567,6 +2572,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             switchPageTour(artwork);
+                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
                         },
                         "By opening this tour, you will exit split screen mode. Would you like to continue?",
                         "Continue",
@@ -2587,6 +2593,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             switchPageVideo(artwork);
+                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
                         },
                         "By opening this video, you will exit split screen mode. Would you like to continue?",
                         "Continue",
