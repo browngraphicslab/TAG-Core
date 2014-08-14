@@ -778,7 +778,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             //scrollPos = sPos || 0;
             if (!onAssocMediaView || !currCollection.collectionMedia) {
-                getCollectionContents(currCollection);
+                getCollectionContents(currCollection, null, function () { return cancelLoad;});
             } else {
                 createArtTiles(currCollection.collectionMedia);
                 initSearch(currCollection.collectionMedia);
@@ -880,7 +880,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} collecion         the collection whose contents we want
      * @param {Function} callback     a function to call when the contents have been retrieved
      */
-    function getCollectionContents(collection, callback) {
+    function getCollectionContents(collection, callback, cancel) {
         TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
 
         /**
@@ -889,6 +889,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @param {Array} contents     array of doq objects for each of the contents of this collection
          */
         function contentsHelper(contents) {
+            if (cancel()) return;
             createArtTiles(contents);
             initSearch(contents);
             callback && callback();
