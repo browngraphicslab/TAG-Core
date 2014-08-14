@@ -2214,7 +2214,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearRight();
         deleteType = deleteTour;
         toDelete = tour;
-        clearInterval(checkConTimerId);
+
         // Create an img element just to load the image
         var img = $(document.createElement('img'));
         img.attr('src', TAG.Worktop.Database.fixPath(tour.Metadata.Thumbnail));
@@ -2689,8 +2689,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("src", source);
                 var source = TAG.Worktop.Database.fixPath(media.Metadata.Source);
                 var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
-                var filenamewithoutpath = media.Metadata.Source.substring(8);
-                var basefilename = filenamewithoutpath.substr(0, filenamewithoutpath.lastIndexOf('.'));
                 sourceExt = source.substring(source.lastIndexOf('.'));
                 TAG.Worktop.Database.getConvertedVideoCheck(
                 function (output) {
@@ -2714,18 +2712,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else if (output === "Error") {
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
-                            } else if (!media.Metadata.Converted) {
-                                if (output === "True") {
-                                    TAG.Worktop.Database.changeArtwork(media.Identifier, { Converted: "True" });
-                                } else {
-                                    TAG.Worktop.Database.convertVideo(function () {
-                                    }, null, filenamewithoutpath, sourceExt, basefilename, media.Identifier);
-                                    $("#videoErrorMsg").remove();
-                                    $("#leftLoading").remove();
-                                    var msg = "This video is being converted to compatible formats for different browsers";
-                                    viewer.append(TAG.Util.createConversionLoading(msg,null,true));
-                                    checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
-                                }
                             }
                         }
                     } else {
@@ -2746,14 +2732,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else {
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
                             }
-                        } else if (!media.Metadata.Converted) {
+                        } else if(output ===null) {
                             TAG.Worktop.Database.convertVideo(function () {
-                            }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video is being converted to compatible formats for different browsers";
-                            viewer.append(TAG.Util.createConversionLoading(msg));
-                            checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
+                            }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
                         }
                         //holder.attr('src', source);
                     }
@@ -3857,8 +3838,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
             var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
-            var filenamewithoutpath = artwork.Metadata.Source.substring(8);
-            var basefilename = filenamewithoutpath.substr(0, filenamewithoutpath.lastIndexOf('.'));
             var sourceExt = source.substring(source.lastIndexOf('.'));
             var videoErrorDiv = $(document.createElement('div'));
             videoErrorDiv.addClass("videoErrorDiv");
@@ -3885,18 +3864,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else if (output === "Error") {
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
-                            } else if (!artwork.Metadata.Converted) {
-                                if (output === "True") {
-                                    TAG.Worktop.Database.changeArtwork(artwork.Identifier, {Converted:"True"});
-                                } else {
-                                    TAG.Worktop.Database.convertVideo(function () {
-                                    }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
-                                    $("#videoErrorMsg").remove();
-                                    $("#leftLoading").remove();
-                                    var msg = "This video is being converted to compatible formats for different browsers";
-                                    viewer.append(TAG.Util.createConversionLoading(msg,null,true));
-                                    checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
-                                }
                             }
                         }
                     } else {
@@ -3917,14 +3884,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else {
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
                             } 
-                        } else if (!artwork.Metadata.Converted) {
+                        } else if(output ===null) {
                             TAG.Worktop.Database.convertVideo(function () {
-                            }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video is being converted to compatible formats for different browsers";
-                            viewer.append(TAG.Util.createConversionLoading(msg));
-                            checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
+                            }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
                         }
                     }
                 }, null, artwork.Identifier);
@@ -6476,7 +6438,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 '-o-transform': 'rotate(90deg)',
                 '-ms-transform': 'rotate(90deg)',
                 'transform': 'rotate(90deg)',
-                'padding-left': '5%',
+                'padding-left': '7%',
                 'padding-right':'0%'
             })
         var addMenuLabelDiv = $(document.createElement('div'))
@@ -6489,7 +6451,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .append($(document.createElement('div')).text('Add').css({
                 'display': 'inline-block',
-                'margin-right': '40%',
+                'margin-right': '5%',
             }))
             .append(addMenuArrowIcon)
             .appendTo(addMenuLabel);
@@ -6518,7 +6480,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     '-o-transform': 'rotate(90deg)',
                     '-ms-transform': 'rotate(90deg)',
                     'transform': 'rotate(90deg)',
-                    'padding-left': '5%',
+                    'padding-left': '7%',
                     'padding-right': '0%'
                 });
                 dropDown.hide();
@@ -6531,7 +6493,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     '-ms-transform': 'rotate(270deg)',
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
-                    'padding-right':'5%'
+                    'padding-right':'7%'
                 });
                 dropDown.show();
             }
