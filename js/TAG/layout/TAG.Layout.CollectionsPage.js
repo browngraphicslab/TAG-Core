@@ -260,7 +260,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         brownLogo.attr('src', tagPath + 'images/brown_logo_transparent.png');
         microsoftLogoDiv.css({
             'background': 'transparent',
-            'width': '20%',
+            'width': '25%',
+            'min-width':'150px',
             'height': '100%',
             'float': 'right',
             'display':'inline-block'
@@ -268,6 +269,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         brownLogoDiv.css({
             'background': 'transparent',
             'width': '10%',
+            'min-width': '50px',
             'height': '100%',
             'float': 'right',
             'display': 'inline-block'
@@ -275,12 +277,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         microsoftLogo.css({
             'height': 'auto',
             'width': '100%',
-            'margin-top': '5%'
+            'min-width':'150px',
+            'margin-top': '10%'
         });
         brownLogo.css({
             'height': 'auto',
             'width': '80%',
-            'margin-top': '-38%'
+            'min-width': '50px',
+            'margin-top': '-10%'
         });
        
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
@@ -301,7 +305,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
         infoTitle.append(infoTitleLeft);
         infoTitle.append(infoTitleRight);
-        infoTitle.append(closeButton);
+
+        closeButton.css({
+            'height': '4%',
+            'width': '4%',
+            'min-height': '20px',
+            'min-width':'20px',
+            'margin-left': '0%',
+            'margin-bottom': '0%',
+            'margin-top': '1%',
+            'margin-right':'1%',
+            'top':'0%',
+            'display': 'block',
+            'float':'right'
+        });
+
+        infoBox.append(closeButton);
         infoTitleLeft.css({
             'color': 'white',
             'background-color': 'black',
@@ -354,8 +373,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-color': 'black',
             'display': 'block',
             'color': 'white',
-            'height': '15%',
-            'margin-top': '3%'
+            'height': '12%',
+            'padding':'5%'
         });
         infoLogo.append(brownLogoDiv);
         infoLogo.append(microsoftLogoDiv);
