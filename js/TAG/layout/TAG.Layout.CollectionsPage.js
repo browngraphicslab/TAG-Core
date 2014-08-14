@@ -781,7 +781,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             //scrollPos = sPos || 0;
             if (!onAssocMediaView || !currCollection.collectionMedia) {
-                getCollectionContents(currCollection);
+                getCollectionContents(currCollection, null, function () { return cancelLoad;});
             } else {
                 createArtTiles(currCollection.collectionMedia);
                 initSearch(currCollection.collectionMedia);
@@ -805,7 +805,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} collecion         the collection whose contents we want
      * @param {Function} callback     a function to call when the contents have been retrieved
      */
-    function getCollectionContents(collection, callback) {
+    function getCollectionContents(collection, callback, cancel) {
         TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
 
         /**
@@ -814,6 +814,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @param {Array} contents     array of doq objects for each of the contents of this collection
          */
         function contentsHelper(contents) {
+            if (cancel()) return;
             loadSortTags(collection,contents);
             createArtTiles(contents);
             initSearch(contents);
@@ -826,7 +827,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         * @param {Object} contents (of collection, to check for tours)
         */
         function loadSortTags(collection,contents) {
-        //if (cancelLoad) return;
             var sortOptions = [],
                 sortButton,
                 sortButtonTags = {}; 
@@ -858,7 +858,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 appendTags();
             } else {
                 sortOptions = ["Date", "Title", "Artist"];
-                console.log(sortCatalog(contents,"Tour"));
                 if (!sortCatalog(contents,"Tour").isEmpty()){
                     sortOptions.push("Tour");
                 }
@@ -868,7 +867,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             * @method appendTags
             */
             function appendTags() {
-                //if (cancelLoad) return;
                 var i,
                     text;
                 for (i = 0; i < sortOptions.length; i++) {
