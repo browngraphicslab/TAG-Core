@@ -2715,13 +2715,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
                             } else if (!media.Metadata.Converted) {
-                                TAG.Worktop.Database.convertVideo(function () {
-                                }, null, filenamewithoutpath, sourceExt, basefilename, media.Identifier);
-                                $("#videoErrorMsg").remove();
-                                $("#leftLoading").remove();
-                                var msg = "This video is being converted to compatible formats for different browsers";
-                                viewer.append(TAG.Util.createConversionLoading(msg));
-                                checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
+                                if (output === "True") {
+                                    TAG.Worktop.Database.changeArtwork(media.Identifier, { Converted: "True" });
+                                } else {
+                                    TAG.Worktop.Database.convertVideo(function () {
+                                    }, null, filenamewithoutpath, sourceExt, basefilename, media.Identifier);
+                                    $("#videoErrorMsg").remove();
+                                    $("#leftLoading").remove();
+                                    var msg = "This video is being converted to compatible formats for different browsers";
+                                    viewer.append(TAG.Util.createConversionLoading(msg,null,true));
+                                    checkConTimerId = setInterval(function () { checkConversion(media) }, 2000);
+                                }
                             }
                         }
                     } else {
@@ -3882,13 +3886,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 var msg = "An error occured when converting this video. Please try to upload again";
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
                             } else if (!artwork.Metadata.Converted) {
-                                TAG.Worktop.Database.convertVideo(function () {
-                                }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
-                                $("#videoErrorMsg").remove();
-                                $("#leftLoading").remove();
-                                var msg = "This video is being converted to compatible formats for different browsers";
-                                viewer.append(TAG.Util.createConversionLoading(msg));
-                                checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
+                                if (output === "True") {
+                                    TAG.Worktop.Database.changeArtwork(artwork.Identifier, {Converted:"True"});
+                                } else {
+                                    TAG.Worktop.Database.convertVideo(function () {
+                                    }, null, filenamewithoutpath, sourceExt, basefilename, artwork.Identifier);
+                                    $("#videoErrorMsg").remove();
+                                    $("#leftLoading").remove();
+                                    var msg = "This video is being converted to compatible formats for different browsers";
+                                    viewer.append(TAG.Util.createConversionLoading(msg,null,true));
+                                    checkConTimerId = setInterval(function () { checkConversion(artwork) }, 2000);
+                                }
                             }
                         }
                     } else {
