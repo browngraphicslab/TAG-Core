@@ -204,6 +204,7 @@
             TAG.Util.IdleTimer.restartTimer();
         });
 
+        
         // // if the user specified the tourData API parameter, load into the corresponding tour
         // if(INPUT_TOUR_ID) {
         //     currentPage.name = TAG.Util.Constants.pages.START_PAGE;
