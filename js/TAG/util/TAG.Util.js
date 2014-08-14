@@ -4313,7 +4313,7 @@ TAG.Util.RLH = function (input) {
                             top: '12%',
                             left: input.authoring?'20%':'22%',
                             width: '70%',
-                            height: '80%',
+                            height: '85%',
                             display: 'none',
                             'z-index': '51'
                         })
@@ -4348,9 +4348,10 @@ TAG.Util.RLH = function (input) {
                         .css({
                             position: 'absolute',
                             'width': '80%',
-                            'height': '90%',
-                            'top': '5%',
-                            'left': '10%'
+                            'height': '80%',
+                            'top': '10%',
+                            'left': '10%',
+                            'display':'block'
                         })
                         .appendTo(topRegion);
 
@@ -4363,8 +4364,9 @@ TAG.Util.RLH = function (input) {
                     .css({
                         position: 'relative',
                         width: '35%',
-                        height: '52%',
-                        top: '8px'
+                        height: '80%',
+                        top: '10%',
+                        'font-size':'130%'
                     })
                     .appendTo(metadataContainer);
 
@@ -4377,8 +4379,9 @@ TAG.Util.RLH = function (input) {
                             position: 'relative',
                             'margin-left': '10px',
                             width: '20%',
-                            height: '52%',
-                            top: '8px'
+                            height: '80%',
+                            top: '10%',
+                            'font-size': '130%'
                         })
                         .appendTo(metadataContainer);
 
@@ -4390,7 +4393,8 @@ TAG.Util.RLH = function (input) {
                             .css({
                                 position: 'relative',
                                 'margin-left': '10px',
-                                top: '8px'
+                                top: '10%',
+                                height:'80%'
                             })
                             .text('Save')
                             .appendTo(metadataContainer);
@@ -4404,7 +4408,12 @@ TAG.Util.RLH = function (input) {
                         'font-size': '2.5em',
                         position: 'absolute',
                         top: '15%',
-                        height: '90%'
+                        height: '90%',
+                        width:'100%',
+                        'text-overflow': 'ellipsis',
+                        'overflow': 'hidden',
+                        'white-space': 'nowrap',
+                        'display':'block'
                     })
                     .appendTo(metadataContainer);
 
@@ -4427,7 +4436,7 @@ TAG.Util.RLH = function (input) {
                     .css({
                         position: 'relative',
                         width: '100%',
-                        height: '50%'
+                        height: '49%'
                     })
                     .appendTo(locationPanel);
 
@@ -4503,15 +4512,33 @@ TAG.Util.RLH = function (input) {
                     })
                     .text('Bing map is disabled.');
 
+        if (input.authoring) {
+
+            dotsContainer = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryDotsContainer')
+                    .css({
+                        'margin-left': 'auto',
+                        'margin-right': 'auto',
+                        'margin-top': '10px',
+                        'width': '30%',
+                        'height': '30px',
+                        'top': '100%',
+                        'text-align': 'center',
+                        display: 'block',
+                    })
+                    .appendTo(locationPanel);
+
+        }
+
         buttonsRegion = $(document.createElement('div'))
                     .attr('id', 'locationHistoryButtonsRegion')
                     .css({
                         position: 'relative',
                         left: '10%',
                         width: '80%',
-                        top: '3%',
+                        top: '0%',
                         height: '6%',
-                        'margin-bottom': '1%'
+                        'margin-bottom': '0%'
                     })
                     .appendTo(locationPanel);
         if (input.authoring) {
@@ -4575,24 +4602,14 @@ TAG.Util.RLH = function (input) {
                         })
                         .appendTo(buttonsRegion);
 
-            dotsContainer = $(document.createElement('div'))
-                            .attr('id', 'locationHistoryDotsContainer')
-                            .css({
-                                'margin-left': 'auto',
-                                'margin-right': 'auto',
-                                'width': '30%',
-                                'height': '50%',
-                                'top': '0%',
-                                'text-align': 'center'
-                            })
-                            .appendTo(buttonsRegion);
+
 
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
                 var mapName = function () {
                     if (mapGuids[currentIndex]) {
-                        if (mapDoqs[mapGuids[currentIndex]].Name.length > 20) {
-                            return "'" + mapDoqs[mapGuids[currentIndex]].Name.substring(0, 20) + '...' + "'";
+                        if (mapDoqs[mapGuids[currentIndex]].Name.length > 14) {
+                            return "'" + mapDoqs[mapGuids[currentIndex]].Name.substring(0, 14) + '...' + "'";
                         } else {
                             return "'" + mapDoqs[mapGuids[currentIndex]].Name + "'";
                         }
@@ -4621,7 +4638,7 @@ TAG.Util.RLH = function (input) {
                                 position: 'absolute',
                                 'width': '40%',
                                 'height': '50%',
-                                'top': '0%',
+                                'top': '50%',
                                 'left': '30%',
                                 'text-align': 'center'
                             })
@@ -4635,7 +4652,7 @@ TAG.Util.RLH = function (input) {
                         position: 'relative',
                         width: '80%',
                         left: '10%',
-                        height: '32%',
+                        height: '28%',
                         color: 'white',
                         'font-size': '11',
                         'font-weight': '300',
@@ -4644,6 +4661,13 @@ TAG.Util.RLH = function (input) {
                     })
                     .appendTo(locationPanel)
                     .text("No locations to display...");
+
+        if (!(input.authoring)) {
+            locationsRegion.css({
+                top: '2%',
+                height: '32%'
+            });
+        }
 
         // set up click handlers, etc
         leftArrowButton.on('click', function () {
@@ -4684,7 +4708,7 @@ TAG.Util.RLH = function (input) {
                 id: 'bingMapNameHolder'
             })
             .css({
-                'font-size': '40px',
+                'font-size': '2.5em',
                 'vertical-align':'middle',
                 position: 'absolute',
                 top: '15%',
@@ -4696,8 +4720,12 @@ TAG.Util.RLH = function (input) {
             .appendTo(metadataContainer);
         if (!input.authoring) {
             $('#bingMapNameHolder').css({
-                top: '0%',
-                'margin-top': '-1%'
+                //top: '0%',
+                //'margin-top': '-1%'
+            });
+        } else {
+            $('#bingMapNameHolder').css({
+                //'font-size': '210%',
             });
         }
     }
@@ -4828,8 +4856,8 @@ TAG.Util.RLH = function (input) {
             }, function () {
                 var mapName = function () {
                     if (nameInput.val()) {
-                        if (nameInput.val().length > 20) {
-                            return "'" + nameInput.val().substring(0, 20) + '...' + "'";
+                        if (nameInput.val().length > 14) {
+                            return "'" + nameInput.val().substring(0, 14) + '...' + "'";
                         } else {
                             return "'" + nameInput.val() + "'";
                         }
@@ -4894,8 +4922,8 @@ TAG.Util.RLH = function (input) {
         currentIndex = mapGuids.indexOf(guid);
 
         // style map dots
-        $('.locationHistoryMapDot').css('background-color', 'black'); //resets all dots to the unselected state
-        $('#dot-' + guid).css('background-color', 'white'); //selects the correct dot
+        $('.locationHistoryMapDot').css('opacity', '0.4'); //resets all dots to the unselected state
+        $('#dot-' + guid).css('opacity', '1'); //selects the correct dot
 
         // show the correct map holder
         $('.locationHistoryMapHolder').css('display', 'none');
@@ -4922,8 +4950,8 @@ TAG.Util.RLH = function (input) {
         } else {
             var mapName = function () {
                 if (mapDoqs[guid].Name) {
-                    if (mapDoqs[guid].Name.length > 20) {
-                        return "'" + mapDoqs[guid].Name.substring(0, 20) + '...' + "'";
+                    if (mapDoqs[guid].Name.length > 14) {
+                        return "'" + mapDoqs[guid].Name.substring(0, 14) + '...' + "'";
                     } else {
                         return "'" + mapDoqs[guid].Name + "'";
                     }
@@ -4985,9 +5013,10 @@ TAG.Util.RLH = function (input) {
                         'border': '3px solid white',
                         'border-radius': '20px',
                         'border-color': 'white',
-                        width: '8px',
-                        height: '8px',
+                        width: '6px',
+                        height: '6px',
                         'margin-left': '5px',
+                        opacity:'1'
                     })
                     .appendTo(dotsContainer);
             dot.on('click', dotClickHelper(i));
@@ -6193,7 +6222,7 @@ TAG.Util.RLH = function (input) {
     function toggleDefaultMap() {   
         defaultMapShown = !defaultMapShown;
         disabledOverlay.appendTo(mapHolders[null]);
-        disabledOverlay.text("Loading");
+        disabledOverlay.text("Loading...");
         deleteButton.text(defaultMapShown ? 'Hide Bing Map' : 'Show Bing Map');
     }
 
@@ -6354,7 +6383,10 @@ TAG.Util.RLH = function (input) {
         $('#locationHistorySortLocationsByDateButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
 
         $('#locationHistoryImportMapButton').disabled = true;
-        $('#locationHistoryImportMapButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+        $('#locationHistoryImportMapButton').css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+
+        $('#locationHistoryDeleteButton').disabled = true;
+        $('#locationHistoryDeleteButton').css({ 'color': 'rgba(255, 255, 255, 0.5)' });
     }
 
     /**
@@ -6373,9 +6405,11 @@ TAG.Util.RLH = function (input) {
         $('#locationHistorySortLocationsByDateButton').disabled = false;
         $('#locationHistorySortLocationsByDateButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
 
-
         $('#locationHistoryImportMapButton').disabled = false;
-        $('#locationHistoryImportMapButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+        $('#locationHistoryImportMapButton').css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+
+        $('#locationHistoryDeleteButton').disabled = false;
+        $('#locationHistoryDeleteButton').css({ 'color': 'rgba(255, 255, 255, 1.0)' });
     }
 
 
