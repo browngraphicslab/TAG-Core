@@ -4270,6 +4270,7 @@ TAG.Util.RLH = function (input) {
         rightArrowButton,    // shows next map if any
 
         buttonsRegion,       // contains buttons
+        buttonsRegionDisabled,
         addLocationButton,   // button for adding new location
         sortLocationsByTitleButton, // sorts the locations by title
         sortLocationsByDateButton, // sorts the locations by date
@@ -4541,6 +4542,21 @@ TAG.Util.RLH = function (input) {
                         'margin-bottom': '0%'
                     })
                     .appendTo(locationPanel);
+
+        buttonsRegionDisabled = $(document.createElement('div'))
+                    .attr('id', 'locationHistoryButtonsRegionDisabled')
+                    .css({
+                        position: 'absolute',
+                        left: '0',
+                        width: '100%',
+                        top: '0%',
+                        height: '100%',
+                        'z-index': '100000',
+                        'display': 'none',
+                        'background-color': 'rgba(0,0,0,0.01)',
+                    })
+                    .appendTo(buttonsRegion);
+
         if (input.authoring) {
             addLocationButton = $(document.createElement('button'))
                         .attr({
@@ -6373,6 +6389,8 @@ TAG.Util.RLH = function (input) {
     */
 
     function disableButtons() {
+        buttonsRegionDisabled.css({ display: 'block' });
+
         $('#locationHistoryAddLocationButton').disabled = true;
         $('#locationHistoryAddLocationButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
 
@@ -6396,6 +6414,8 @@ TAG.Util.RLH = function (input) {
 
     function enableButtons() {
         
+        buttonsRegionDisabled.css({ display: 'none' });
+
         $('#locationHistoryAddLocationButton').disabled = false;
         $('#locationHistoryAddLocationButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
 
