@@ -6128,7 +6128,6 @@ TAG.Util.RLH = function (input) {
      *              callback       a callback function to be called after saving and reloading artwork is done
      */
     function saveRichLocationHistory(input) {
-
         disableButtons();
 
         var options = {
@@ -6156,6 +6155,11 @@ TAG.Util.RLH = function (input) {
                 locations = richLocationData.locations || [];
                 !input.noReload && getMaps(input.callback);
                 enableButtons();
+                if (defaultMapShown) {
+                    disabledOverlay.remove();
+                } else {
+                    disabledOverlay.text("Bing Map is disabled.");
+                }
             }, error, error);
             //input.sort && input.callback();
         }
@@ -6163,6 +6167,7 @@ TAG.Util.RLH = function (input) {
         function error() {
             console.log('An error occured while saving.');
             enableButtons();
+            disabledOverlay.remove();
         }
     }
 
@@ -6185,9 +6190,10 @@ TAG.Util.RLH = function (input) {
      * to do so.
      * @method toggleDefaultMap
      */
-    function toggleDefaultMap() {
+    function toggleDefaultMap() {   
         defaultMapShown = !defaultMapShown;
-        defaultMapShown ? disabledOverlay.remove() : disabledOverlay.appendTo(mapHolders[null]);
+        disabledOverlay.appendTo(mapHolders[null]);
+        disabledOverlay.text("Loading");
         deleteButton.text(defaultMapShown ? 'Hide Bing Map' : 'Show Bing Map');
     }
 
@@ -6338,11 +6344,13 @@ TAG.Util.RLH = function (input) {
     */
 
     function disableButtons() {
+        
         document.getElementById('locationHistoryAddLocationButton').disabled = true;
         document.getElementById('locationHistorySortLocationsByTitleButton').disabled = true;
         document.getElementById('locationHistorySortLocationsByDateButton').disabled = true;
-        document.getElementById('locationHistoryDeleteButton').disabled = true;
+        //document.getElementById('locationHistoryDeleteButton').disabled = true;
         document.getElementById('locationHistoryImportMapButton').disabled = true;
+        
     }
 
     /**
@@ -6351,11 +6359,13 @@ TAG.Util.RLH = function (input) {
     */
 
     function enableButtons() {
+        
         document.getElementById('locationHistoryAddLocationButton').disabled = false;
         document.getElementById('locationHistorySortLocationsByTitleButton').disabled = false;
         document.getElementById('locationHistorySortLocationsByDateButton').disabled = false;
-        document.getElementById('locationHistoryDeleteButton').disabled = false;
+        //document.getElementById('locationHistoryDeleteButton').disabled = false;
         document.getElementById('locationHistoryImportMapButton').disabled = false;
+        
     }
 
 
