@@ -6550,8 +6550,8 @@ TAG.Util.Artwork = (function () {
             titleDiv.css({
                 margin: '1% 2% 0% 2%',
                 top: '80%',
-	            height: '20%',
-	            'white-space': 'nowrap',
+                height: '20%',
+                'white-space': 'nowrap',
                 overflow: 'hidden',
                 'text-overflow': 'ellipsis',
                 'text-align': 'center',
@@ -6561,43 +6561,64 @@ TAG.Util.Artwork = (function () {
             thumbHolderDiv.css({
                 height: '70%',
                 position: 'relative',
-	            width: '92%',
-	            margin: '-2% 4% 4% 4%',
-	            display: 'block',
+                width: '92%',
+                margin: '-2% 4% 4% 4%',
+                display: 'block',
             });
             holderContainer.css({
-                display: 'table',
-	            position: 'relative',
-	            width: '100%',
-	            height: '100%',
-	            'margin-top': '5%',
+                display: 'block',
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                'margin-top': '5%',
             });
             holderInnerContainer.css({
-                display: 'table-cell',
-	            'max-height': '100%',
-	            'max-width': '100%',
-	            'vertical-align': 'middle',
+                display: 'block',
+                'height': '100%',
+                'width': '100%',
+                'vertical-align': 'middle',
                 'text-align': 'center',
+                'position': 'relative',
+                'top':'0%',
+                'left':'0%',
             });
-            thumbnailImage.css({
-                bottom: '0px',
-                height: 'auto',
-                left: '0px',
-                'margin-bottom': 'auto',
-                'margin-left': 'auto',
-                'margin-right': 'auto',
-                'margin-top': 'auto',
-                'max-height': '100%',
-                'max-width': '100%',
-                position: 'absolute',
-                right: '0px',
-                top: '0px',
-                width: 'auto',
-            });
+            if (src.indexOf('svg') > -1) {
+                thumbnailImage.css({
+                    bottom: '0px',
+                    display: 'block',
+                    height: '100%',
+                    left: '0px',
+                    'margin-bottom': 'auto',
+                    'margin-left': 'auto',
+                    'margin-right': 'auto',
+                    'margin-top': 'auto',
+                    'max-height': '100%',
+                    'max-width': '100%',
+                    position: 'absolute',
+                    right: '0px',
+                    top: '0px',
+                    width: 'auto',
+                });
+            } else {
+                thumbnailImage.css({
+                    bottom: '0px',
+                    display: 'block',
+                    height: 'auto',
+                    left: '0px',
+                    'margin-bottom': 'auto',
+                    'margin-left': 'auto',
+                    'margin-right': 'auto',
+                    'margin-top': 'auto',
+                    'max-height': '100%',
+                    'max-width': '100%',
+                    position: 'absolute',
+                    right: '0px',
+                    top: '0px',
+                    width: 'auto',
+                });
+            }
         } else {
-            thumbnailImage.css({ // TODO fix this
-                // 'max-height': 0.15 * 0.7 * $("#tagRoot").height() + "px",
-                //'max-width': 0.22 * 0.89 * 0.95 * 0.40 * 0.92 * $("#tagRoot").width() + "px"
+            thumbnailImage.css({
                 bottom: '0px',
                 height: 'auto',
                 left: '0px',
