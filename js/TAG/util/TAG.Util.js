@@ -6344,13 +6344,17 @@ TAG.Util.RLH = function (input) {
     */
 
     function disableButtons() {
-        
-        document.getElementById('locationHistoryAddLocationButton').disabled = true;
-        document.getElementById('locationHistorySortLocationsByTitleButton').disabled = true;
-        document.getElementById('locationHistorySortLocationsByDateButton').disabled = true;
-        //document.getElementById('locationHistoryDeleteButton').disabled = true;
-        document.getElementById('locationHistoryImportMapButton').disabled = true;
-        
+        $('#locationHistoryAddLocationButton').disabled = true;
+        $('#locationHistoryAddLocationButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+
+        $('#locationHistorySortLocationsByTitleButton').disabled = true;
+        $('#locationHistorySortLocationsByTitleButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+
+        $('#locationHistorySortLocationsByDateButton').disabled = true;
+        $('#locationHistorySortLocationsByDateButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+
+        $('#locationHistoryImportMapButton').disabled = true;
+        $('#locationHistoryImportMapButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
     }
 
     /**
@@ -6360,12 +6364,18 @@ TAG.Util.RLH = function (input) {
 
     function enableButtons() {
         
-        document.getElementById('locationHistoryAddLocationButton').disabled = false;
-        document.getElementById('locationHistorySortLocationsByTitleButton').disabled = false;
-        document.getElementById('locationHistorySortLocationsByDateButton').disabled = false;
-        //document.getElementById('locationHistoryDeleteButton').disabled = false;
-        document.getElementById('locationHistoryImportMapButton').disabled = false;
-        
+        $('#locationHistoryAddLocationButton').disabled = false;
+        $('#locationHistoryAddLocationButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+
+        $('#locationHistorySortLocationsByTitleButton').disabled = false;
+        $('#locationHistorySortLocationsByTitleButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+
+        $('#locationHistorySortLocationsByDateButton').disabled = false;
+        $('#locationHistorySortLocationsByDateButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+
+
+        $('#locationHistoryImportMapButton').disabled = false;
+        $('#locationHistoryImportMapButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
     }
 
 
