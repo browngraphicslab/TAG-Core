@@ -1683,6 +1683,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 previewWidth,
                 containerWidth,
                 containerLeft,
+                duration,
                 newTile,
                 previewTile,
                 progressCircCSS,
@@ -1699,6 +1700,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 return;
             }
 
+            selectedArtworkContainer.off();
+
             if (artworkShown) {
                 selectedArtworkContainer.animate(
                         {"opacity": 0}, 
@@ -1711,35 +1714,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             else {
                 animateCatalogDiv();
             }
-            /**
-            else {
-                selectedArtworkContainer.animate(
-                    {"opacity": 0},
-                    ANIMATION_DURATION/5, 
-                    function () {
-                        fillSelectedArtworkContainer();
-                        selectedArtworkContainer.children().animate(
-                            {"opacity": 1},
-                            ANIMATION_DURATION/5
-                        )
-                    }
-                )
-            }
-            **/
+                
 
         function animateCatalogDiv(){
             //scroll catalogDiv to center the current artwork
             catalogDiv.stop(true,false);
             rootWidth = root.width();
             infoWidth = infoDiv.width();
-            tileWidth = artworkTiles[artwork.Identifier].width();
-            tilePos = artworkTiles[artwork.Identifier].position().left;
+            tileWidth = artworkTiles[artwork.Identifier].width();       
             if (comingBack){
                 tilePos = scrollPos;
+                duration = ANIMATION_DURATION;
+            } else {
+                tilePos = artworkTiles[artwork.Identifier].position().left;
+                duration = ANIMATION_DURATION/3;
             }
             catalogDiv.animate({
                 scrollLeft: tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER
-            }, ANIMATION_DURATION, "easeInOutQuint", function(){
+            }, duration, "easeInOutQuint", function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
                 shift = (containerWidth-tileWidth)/2;
@@ -1757,40 +1749,39 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     selectedArtworkContainer.css("overflow-x", "scroll")
                     leftOffset = bottomContainer.width()/10
                     shift = 0;
-                    //shift = rootWidth/10;
                 }
                 containerLeft = leftOffset - shift;
                 selectedArtworkContainer.css({
                     'width' : containerWidth,
                     'display': 'inline',
-                    'left' : containerLeft
+                    'left' : containerLeft,
+                    'opacity':1
                 });
-                selectedArtworkContainer.css('opacity','1');
-                selectedArtworkContainer.children().animate({"opacity": 1},ANIMATION_DURATION/5);
+
+                //add back handlers
+                if (selectedArtworkContainer[0].addEventListener) {
+                    // IE9, Chrome, Safari, Opera
+                    selectedArtworkContainer[0].addEventListener("mousewheel", 
+                        function(e){
+                            e.stopPropagation();
+                        }, false);
+                    // Firefox
+                    selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
+                        function(e){
+                            e.stopPropagation();
+                        }, false);
+                } else { 
+                    // IE 6/7/8
+                    selectedArtworkContainer[0].attachEvent("onmousewheel",
+                        function(e){
+                            e.stopPropagation();
+                        }, false);
+                }
+                //selectedArtworkContainer.children().animate({"opacity": 1},ANIMATION_DURATION/5);
                 scrollPos = tilePos;
                 comingBack = false;
             });
         }
-
-            if (selectedArtworkContainer[0].addEventListener) {
-                // IE9, Chrome, Safari, Opera
-                selectedArtworkContainer[0].addEventListener("mousewheel", 
-                    function(e){
-                        e.stopPropagation();
-                    }, false);
-                // Firefox
-                selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
-                    function(e){
-                        e.stopPropagation();
-                    }, false);
-            } else { 
-                // IE 6/7/8
-                selectedArtworkContainer[0].attachEvent("onmousewheel",
-                function(e){
-                    e.stopPropagation();
-                }, false);
-           };
-
             currentArtwork = artwork;
             artworkSelected = true;
             artworkShown = true;
