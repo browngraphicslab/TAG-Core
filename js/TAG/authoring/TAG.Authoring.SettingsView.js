@@ -837,7 +837,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                 var url = urls[0];
                 bgImgInput.val(url);
-                $('#background').css({
+                $('#innerContainer').css({
                     'background-image': 'url("' + TAG.Worktop.Database.fixPath(url) + '")',
                     'background-size': 'cover',
                 });
@@ -1779,12 +1779,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (nameInput.val() === 'Collection')
                     nameInput.select();
             });
-
+            nameInput.keyup(function () {
+               $('.collection-title').text(nameInput.val());
+            });
             descInput.focus(function () {
                 if (descInput.val() === 'Description')
                     descInput.select();
             });
-
+            descInput.keyup(function () {
+                $("#collectionDescription").text(descInput.val());
+            });
             // Handle Changes
             onChangeUpdateText(nameInput, '#exhibition-title', 40);
             onChangeUpdateText(descInput, '#description-text', 1790);
