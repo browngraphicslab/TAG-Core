@@ -2086,6 +2086,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, "Are you sure you want to delete " + exhibition.Name + "?", "Delete", true, function() { $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
 
@@ -2442,6 +2443,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         root.append(confirmationBox);
         $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
     /**Duplicate a tour
@@ -3180,6 +3182,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, "Are you sure you want to delete " + media.Name + "?", "Delete", true, function () { $(confirmationBox).hide(); });
             root.append(confirmationBox);
             $(confirmationBox).show();
+            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
     /**Brings up an artwork chooser for a particular associated media
@@ -4359,6 +4362,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 });
                                 root.append(warningBox);
                                 $(warningBox).show();
+                                TAG.Util.multiLineEllipsis($($($(warningBox).children()[0]).children()[0]));
                             }
 
                             //picked the xml file and parse the strings
@@ -5847,7 +5851,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         input.css('overflow-y', 'scroll');
         //input.autoSize();
         doWhenReady(input, function (elem) {
-            var realHeight = input[0].scrollHeight;
+            if (input[0].scrollHeight<=(root.find('#setViewSettingsContainer').height() * 0.5)){
+                var realHeight = input[0].scrollHeight;
+            }
+            else{
+                var realHeight= root.find('#setViewSettingsContainer').height() * 0.5;
+            }
             $(input).css('height', realHeight + 'px');
         });
         //input.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
@@ -6262,6 +6271,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, "Your version of " + doq.Name + " is not up to date.  Are you sure you want to change " + doq.Name + "?", text, true, fail);
             root.append(confirmationBox);
             $(confirmationBox).show();
+            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
         }
     }
 

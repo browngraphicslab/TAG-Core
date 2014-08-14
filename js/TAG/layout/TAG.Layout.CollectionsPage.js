@@ -2453,6 +2453,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             tourClicked(tour)();
+                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
                         },
                         "By opening this tour, you will exit splitscreen mode. Would you like to continue?",
                         "Continue",
@@ -2540,6 +2541,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             switchPageTour(artwork);
+                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
                         },
                         "By opening this tour, you will exit split screen mode. Would you like to continue?",
                         "Continue",
@@ -2560,6 +2562,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             switchPageVideo(artwork);
+                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
                         },
                         "By opening this video, you will exit split screen mode. Would you like to continue?",
                         "Continue",

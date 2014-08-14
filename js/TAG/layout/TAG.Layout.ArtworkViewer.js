@@ -856,6 +856,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             tourClicked(tour)();
+                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
                         },
                         "By opening this tour, you will exit splitscreen mode. Would you like to continue?",
                         "Continue",
