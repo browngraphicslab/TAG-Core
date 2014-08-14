@@ -554,7 +554,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             applyCustomization();
             buttonRow.empty();
-            loadSortTags(collection);
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
                 TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
@@ -782,88 +781,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             //scrollPos = sPos || 0;
             if (!onAssocMediaView || !currCollection.collectionMedia) {
-                getCollectionContents(currCollection);
+                getCollectionContents(currCollection, null, function () { return cancelLoad;});
             } else {
                 createArtTiles(currCollection.collectionMedia);
                 initSearch(currCollection.collectionMedia);
-            }
-            
-            /*helper function to load sort tags
-            * @method loadSortTags
-            * @param {Object} collection
-            */
-            function loadSortTags(collection) {
-                if (cancelLoad) return;
-                var sortOptions = [],
-                    sortButton,
-                    sortButtonTags = {}; 
-                //TO-DO: test with custom sorts
-                if (collection.Metadata.SortOptionsGuid && !onAssocMediaView){ 
-                    TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
-                        var sortObjects = sortOptionsDoq.Metadata,
-                            sortText,
-                            sortObjArray;
-                        if (sortObjects){
-                            for (var sortObj in sortObjects){
-                                if (sortObjects.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj !== "Count") {
-                                    if (sortObj.charAt(0) === '?') {
-                                        sortText = sortObj.substr(1);
-                                    } else {
-                                        sortText = sortObj;
-                                    }
-                                    sortObjArray = sortObjects[sortObj].split(",");
-                                    if ((sortObjArray.length === 2 && sortObjArray[1] === "true" || sortObjArray[1] === true)
-                                        || (sortObjArray[0] === true || sortObjArray[0] === "true")) {
-                                        sortOptions.push(sortText);
-                                    }
-                                }
-                            }
-                        }
-                        appendTags();
-                    });
-                } else if (onAssocMediaView){
-                	sortOptions = ['Date','Title'];
-                	appendTags();
-                } else {
-                    //TO-DO-"Type" to  "Tours" (saved as "Tour" on server)
-                    sortOptions = ["Date", "Title", "Artist", "Type"];
-                    appendTags();
-                }
-                function appendTags() {
-                    if (cancelLoad) return;
-                    for (i = 0; i < sortOptions.length; i++) {
-                        sortButton = $(document.createElement('div'));
-                        sortButton.addClass('secondaryFont');
-                        sortButton.addClass('rowButton')
-                                 .text(sortOptions[i])
-                                  .attr('id', sortOptions[i].toLowerCase() + "Button")
-                                  .off()
-                                  .on('click', function () {
-                                      currentArtwork = null;
-                                      changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
-                                  });
-                        buttonRow.append(sortButton);
-                        sortButtonTags[sortButton.attr('id')] = sortOptions[i];
-                        //TO-DO: test this telemetry handler
-                        TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
-                            tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
-                            tobj.mode = 'Kiosk';
-                        });
-                    }
-                    if (!comingBack) {
-                        //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
-                        if (timelineShown && $('#dateButton')) {
-                            currentTag = "Date";
-                        } else if ($('#titleButton')) {
-                            currentTag = "Title";
-                        } else {
-                            //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
-                            currentTag = sortOptions[0] || null;
-                            currentDefaultTag = currentTag;
-                        }
-                    }
-                    colorSortTags(currentTag);
-                }
             }
             cancelLoadCollection = function () { cancelLoad = true; };
         }
@@ -884,7 +805,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} collecion         the collection whose contents we want
      * @param {Function} callback     a function to call when the contents have been retrieved
      */
-    function getCollectionContents(collection, callback) {
+    function getCollectionContents(collection, callback, cancel) {
         TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
 
         /**
@@ -893,10 +814,97 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @param {Array} contents     array of doq objects for each of the contents of this collection
          */
         function contentsHelper(contents) {
+            if (cancel()) return;
+            loadSortTags(collection,contents);
             createArtTiles(contents);
             initSearch(contents);
             callback && callback();
         }
+
+        /*helper function to load sort tags
+        * @method loadSortTags
+        * @param {Object} collection
+        * @param {Object} contents (of collection, to check for tours)
+        */
+        function loadSortTags(collection,contents) {
+            var sortOptions = [],
+                sortButton,
+                sortButtonTags = {}; 
+            if (collection.Metadata.SortOptionsGuid && !onAssocMediaView){ 
+                TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
+                var sortObjects = sortOptionsDoq.Metadata,
+                    sortText,
+                    sortObjArray;
+                if (sortObjects){
+                    for (var sortObj in sortObjects){
+                        if (sortObjects.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj !== "Count") {
+                            if (sortObj.charAt(0) === '?') {
+                                sortText = sortObj.substr(1);
+                            } else {
+                                sortText = sortObj;
+                            }
+                            sortObjArray = sortObjects[sortObj].split(",");
+                            if ((sortObjArray.length === 2 && sortObjArray[1] === "true" || sortObjArray[1] === true)
+                                            || (sortObjArray[0] === true || sortObjArray[0] === "true")) {
+                                sortOptions.push(sortText);
+                            }
+                        }
+                    }
+                }
+                appendTags();
+                });
+            } else if (onAssocMediaView){
+                sortOptions = ['Date','Title'];
+                appendTags();
+            } else {
+                sortOptions = ["Date", "Title", "Artist"];
+                if (!sortCatalog(contents,"Tour").isEmpty()){
+                    sortOptions.push("Tour");
+                }
+                appendTags();
+            }
+            /**Callback function to create the sort tag buttons
+            * @method appendTags
+            */
+            function appendTags() {
+                var i,
+                    text;
+                for (i = 0; i < sortOptions.length; i++) {
+                    sortButton = $(document.createElement('div'));
+                    //Because stored on server as "Tour" but should be displayed as "Tours"
+                    sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
+                    sortButton.addClass('secondaryFont');
+                    sortButton.addClass('rowButton')
+                                .text(text)
+                                .attr('id', sortOptions[i].toLowerCase() + "Button")
+                                .off()
+                                .on('click', function () {
+                                    currentArtwork = null;
+                                    changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
+                                });
+                    buttonRow.append(sortButton);
+                    sortButtonTags[sortButton.attr('id')] = sortOptions[i];
+                    //TO-DO: test this telemetry handler
+                    TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
+                        tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                        tobj.mode = 'Kiosk';
+                    });
+                }
+                if (!comingBack) {
+                    //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
+                    if (timelineShown && $('#dateButton')) {
+                        currentTag = "Date";
+                    } else if ($('#titleButton')) {
+                        currentTag = "Title";
+                    } else {
+                        //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
+                        currentTag = sortOptions[0] || null;
+                        currentDefaultTag = currentTag;
+                        }
+                    }
+                    colorSortTags(currentTag);
+                }
+            }
     }
 
     /**
@@ -968,7 +976,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function createArtTiles(artworks) {
         currentArtworks = artworks;
         currentTag && colorSortTags(currentTag);
-        drawCatalog(currentArtworks, currentTag, 0);
+        //drawCatalog(currentArtworks, currentTag, 0);
+        drawCatalog(artworks, currentTag, 0);
     }
 
     /**
@@ -1016,6 +1025,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 minOfSort      = sortedArtworks.min();
                 currentWork    = minOfSort ? minOfSort.artwork : null;
                 works = sortedArtworks.getContents();
+                //console.log("works" + works);
             } else {
                 //If no sort options
                 works = artworks;
@@ -1196,7 +1206,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileImage.css('background-color','black');
                 tileImage.attr('src', tagPath+'images/audio_icon.svg');
             } else {
-                if (currentWork.Metadata.Medium === "Video"){
+                if (currentWork.Metadata.Medium === "Video"){ //||currentWork.Metadata.Type ="iframe"){
                     showLabel = false;
                     tileImage.css('background-color','black');
                     tileImage.attr('src',tagPath + 'images/icons/catalog_video_icon.svg');
@@ -2226,7 +2236,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         } else if (tag === 'Date') {
             return sortByYear(artworks,false);
 
-        } else if (tag === 'Type') {  //TO-DO change to 'Tours'
+        } else if (tag === 'Type') { 
             comparator = sortComparator('typeKey', 'nameKey');
             valuation  = sortValuation('nameKey');
 
@@ -2241,6 +2251,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             return avlTree;
         } 
+        else if (tag === 'Tour'){
+            comparator = sortComparator('nameKey');
+            valuation  = sortValuation('nameKey');
+            avlTree = new AVLTree(comparator, valuation);
+            for (i = 0; i < artworks.length; i++) {
+                if (artworks[i].Type === 'Empty'){
+                    console.log(artworks[i]);
+                    artNode = {
+                        artwork: artworks[i],
+                        nameKey: artworks[i].Name,
+                    };
+                    avlTree.add(artNode);
+                }
+            }
+            //console.log(avlTree);
+            return avlTree;
+        }
         //For custom sort tags
         else if (tag){
             comparator = sortComparator('sortKey');
@@ -2385,14 +2412,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {String} tag    the name of the sort tag
      */
     function colorSortTags(tag) {
-        //$('.rowButton').css('color', 'rgb(170,170,170)');
-       // $('[tagName="'+tag+'"]').css('color', 'white');
        var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR);
        $('.rowButton').css('color', unselectedColor);
        if (tag){
             $('#' + tag.toLowerCase() + 'Button').css('color', '#' + SECONDARY_FONT_COLOR);
        }
-       //$('[tagName="' + tag + '"]').css('color', '#' + SECONDARY_FONT_COLOR);
     }
 
     /**
@@ -2412,6 +2436,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentTag = tag;
         colorSortTags(currentTag);
         if (tag !== 'Type') {
+            console.log("here");
             drawCatalog(artworks, currentTag, 0, false);
         } else {
             for (i = 0; i < artworks.length; i++) {
