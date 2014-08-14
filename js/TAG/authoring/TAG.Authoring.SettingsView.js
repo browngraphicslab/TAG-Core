@@ -5149,12 +5149,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (!inAssociatedView) {
             menuLabel.hide();
+            searchbar.css({ width: '55%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
             if (!newText) newButton.hide();
             else newButton.show();
         } else {
             newButton.hide();
+            searchbar.css({width:'40%'});
             menuLabel.show();
         }
 
@@ -6417,45 +6419,51 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'font-size':'85%',
                 'height':'70%',
                 'margin-top':'1%',
-                'padding-bottom':'1%',
-                'width': '30%',
+                //'padding-bottom':'1%',
+                'width': '48%',
                 'border': '1px solid black',
-                'padding': '1% 0px 0px 0px',
+                'padding': '1.5% 0px 0px 0px',
                 'display': 'block',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
             .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '15%',
+                width: '10%',
                 height: 'auto',
                 display:'inline-block',
-                'margin-left': '10%',
+                'margin-right': '5%',
                 '-webkit-transform': 'rotate(90deg)',
                 '-moz-transform': 'rotate(90deg)',
                 '-o-transform': 'rotate(90deg)',
                 '-ms-transform': 'rotate(90deg)',
                 'transform': 'rotate(90deg)',
-                'padding-left': '10%',
+                'padding-left': '5%',
                 'padding-right':'0%'
             })
         var addMenuLabelDiv = $(document.createElement('div'))
             .css({
-                width:'100%',
+                width:'80%',
                 height: '100%',
+                'text-align': 'center',
+                'vertical-align': 'middle',
+                'padding':'0px 10% 0px 10%'
             })
-            .append($(document.createElement('div')).text('Add').css({'display':'inline-block'}))
+            .append($(document.createElement('div')).text('Add').css({
+                'display': 'inline-block',
+                'margin-right': '40%',
+            }))
             .append(addMenuArrowIcon)
             .appendTo(addMenuLabel);
         var dropDown = $(document.createElement('div'))
             .attr('id', 'dropDown')
             .appendTo(searchContainer)
             .css({
-                "left": '70%',
+                "left": '52%',
                 "display":"block",
                 "position": "relative",
                 "color": "rgb(256, 256, 256)",
-                'width': '60%',
+                'width': '48%',
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
                 'clear': 'left',
@@ -6472,7 +6480,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     '-o-transform': 'rotate(90deg)',
                     '-ms-transform': 'rotate(90deg)',
                     'transform': 'rotate(90deg)',
-                    'padding-left': '10%',
+                    'padding-left': '5%',
                     'padding-right': '0%'
                 });
                 dropDown.hide();
@@ -6485,7 +6493,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     '-ms-transform': 'rotate(270deg)',
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
-                    'padding-right':'10%'
+                    'padding-right':'5%'
                 });
                 dropDown.show();
             }
@@ -6496,10 +6504,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .text('From File')
             .css({
                 "display": "block",
-                'border-color': 'black',
-                'color': 'black',
-                'background-color': 'rgb(238, 238, 238)',
-                'border-style': 'solid',
+                'border-color': 'white',
+                'color': 'white',
+                'background-color': 'black',
+                //'border-style': 'solid',
                 'border-width': 'thin',
                 'border-bottom-style': 'none',
                 'padding-left': '15px',
@@ -6511,14 +6519,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .on('mouseenter', function () {
                 fromFile.css({
-                    'background-color': 'black',
-                    'color': 'white',
+                    'background-color': 'white',
+                    'color': 'black',
+                    'border-color': 'black',
                 });
             })
             .on('mouseleave', function (e) {
                 fromFile.css({
-                    'background-color': 'rgb(238, 238, 238)',
-                    'color': 'black',
+                    'background-color': 'black',
+                    'color': 'white',
+                    'border-color': 'white',
                 });
             })
             .click(function () {
@@ -6530,10 +6540,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .text('Embed Video')
             .css({
                 "display": "block",
-                'border-color': 'black',
-                'color': 'black',
-                'background-color': 'rgb(238, 238, 238)',
-                'border-style': 'solid',
+                'border-color': 'white',
+                'color': 'white',
+                'background-color': 'black',
+                //'border-style': 'solid',
                 'border-width': 'thin',
                 'padding-left': '15px',
                 'padding-right': '15px',
@@ -6544,14 +6554,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .on('mouseenter', function () {
                 iFrameAsset.css({
-                    'background-color': 'black',
-                    'color': 'white',
+                    'background-color': 'white',
+                    'color': 'black',
+                    'border-color': 'black',
                 });
             })
             .on('mouseleave', function (e) {
                 iFrameAsset.css({
-                    'background-color': 'rgb(238, 238, 238)',
-                    'color': 'black',
+                    'background-color': 'black',
+                    'color': 'white',
+                    'border-color': 'white',
                 });
             })
             .click(function () {
