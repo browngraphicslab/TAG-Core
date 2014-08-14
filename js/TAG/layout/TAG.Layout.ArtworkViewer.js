@@ -902,9 +902,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             .addClass('minimapDescription')
             .css({
                 'font-size': '80%',
-                'margin-top':'-13%'
+                'margin-top': '-13%',
+                'text-align':'center'
             })
-            .text('Interactive Minimap');
+            .text('Navigation');
         minimapContainer.append(minimapDescription);
        
 
