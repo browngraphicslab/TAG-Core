@@ -4365,9 +4365,10 @@ TAG.Util.RLH = function (input) {
                     .css({
                         position: 'relative',
                         width: '35%',
-                        height: '80%',
-                        top: '10%',
-                        'font-size':'130%'
+                        height: '60%',
+                        'max-height':'60px',
+                        top: '20%',
+                        'font-size':'110%'
                     })
                     .appendTo(metadataContainer);
 
@@ -4380,9 +4381,10 @@ TAG.Util.RLH = function (input) {
                             position: 'relative',
                             'margin-left': '10px',
                             width: '20%',
-                            height: '80%',
-                            top: '10%',
-                            'font-size': '130%'
+                            height: '60%',
+                            'max-height': '60px',
+                            top: '20%',
+                            'font-size': '110%'
                         })
                         .appendTo(metadataContainer);
 
@@ -4394,8 +4396,9 @@ TAG.Util.RLH = function (input) {
                             .css({
                                 position: 'relative',
                                 'margin-left': '10px',
-                                top: '10%',
-                                height:'80%'
+                                top: '20%',
+                                height: '60%',
+                                'max-height': '60px',
                             })
                             .text('Save')
                             .appendTo(metadataContainer);
