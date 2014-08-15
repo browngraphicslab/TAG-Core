@@ -1881,6 +1881,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     exploreIcon,
                     infoText,
                     artistInfo,
+                    artText,
                     yearInfo,
                     descText,
                     miniTilesHolder,
@@ -1966,7 +1967,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Set texts of labels
                 if (artwork.Type !== "Empty") {
-                    artistInfo.text("Artist: " + (artwork.Metadata.Artist || "Unknown"));
+                    artwork.Metadata.Artist ? artText = artwork.Metadata.Artist : artText = ' ';
+                    artistInfo.text(artText);
                     yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
                 } else {
                     artistInfo.text("(Interactive Tour)" );
@@ -2244,7 +2246,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             return avlTree;
         } else if (tag === 'Date') {
-            return sortByYear(artworks,false);
+            return sortByYear(artworks,true);
 
         } else if (tag === 'Type') { 
             comparator = sortComparator('typeKey', 'nameKey');
@@ -2303,7 +2305,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * years for their display. 
      * @method sortByYear
      * @param  {Object} artworks      list of artworks to sort9
-     * @param {Boolean} timelineDate  whether you are sorting by timeline date (vs metadata date for thumbnail sorting)
+     * @param {Boolean} timelineDate  whether you are sorting by timeline date (for now both timeline and tiles do)
      * @return {AVLTree} avlTree      sorted tree so order can be easily accessed
     **/
     function sortByYear(artworks, timelineDate){
