@@ -1739,6 +1739,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     sortOptionsObj = sortOptionsDoq;
                     sortDropDown = createSortOptions(sortOptionsObj);
                     createCollectionSettings();
+                }, function () {
+                    createCollectionSettings();
                 });
             }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
         } else {
@@ -1746,7 +1748,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
-            });         
+            });
         }
         function createCollectionSettings() {
             prepareViewer(true);
