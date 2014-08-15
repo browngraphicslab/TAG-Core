@@ -2585,8 +2585,8 @@ TAG.Util.UI = (function () {
                 center_v: true,
                 width: 0.5,
                 height: 0.25,
-                max_width: 560,
-                max_height: 200,
+                max_width: 600,
+                max_height: 280,
             });
 
         $(confirmBox).css({
@@ -2606,7 +2606,7 @@ TAG.Util.UI = (function () {
             'height': '50%',
             'left': '10%',
             'top': '12.5%',
-            'font-size': '1em',
+            'font-size': '0.8em',
             'overflow': 'hidden',
             'position': 'relative',
             'text-align': 'center',
