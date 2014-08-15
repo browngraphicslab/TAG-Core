@@ -6378,7 +6378,6 @@ TAG.Util.RLH = function (input) {
     */
     function importLoadingOverlay() {
         locationPanel.append(importDisabledOverlay);
-        console.log('appended');
     }
 
     /**
@@ -6387,7 +6386,6 @@ TAG.Util.RLH = function (input) {
     */
     function removeLoadingOverlay() {
         importDisabledOverlay.remove();
-        console.log('removed');
     }
 
     
