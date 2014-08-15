@@ -264,7 +264,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         microsoftLogoDiv.css({
             'background': 'transparent',
             'width': '25%',
-            'min-width':'150px',
+            'min-width':'120px',
             'height': '100%',
             'float': 'right',
             'display':'inline-block'
@@ -272,7 +272,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         brownLogoDiv.css({
             'background': 'transparent',
             'width': '10%',
-            'min-width': '50px',
+            'min-width': '40px',
             'height': '100%',
             'float': 'right',
             'display': 'inline-block'
@@ -280,14 +280,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         microsoftLogo.css({
             'height': 'auto',
             'width': '100%',
-            'min-width':'150px',
-            'margin-top': '10%'
+            'min-width':'120px',
+            'margin-top': '4%'
         });
         brownLogo.css({
             'height': 'auto',
             'width': '80%',
-            'min-width': '50px',
-            'margin-top': '-10%'
+            'min-width': '40px',
+            'margin-top': '-16%'
         });
        
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
@@ -376,7 +376,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-color': 'black',
             'display': 'block',
             'color': 'white',
-            'height': '12%',
+            'height': '17%',
             'padding':'5%'
         });
         infoLogo.append(brownLogoDiv);
