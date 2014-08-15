@@ -1970,7 +1970,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Set texts of labels
                 if (artwork.Type !== "Empty") {
-                    artwork.Metadata.Artist ? artText = artwork.Metadata.Artist : artText = ' ';
+                    artwork.Metadata.Artist ? artText = "Artist:  " + artwork.Metadata.Artist : artText = ' ';
                     artistInfo.text(artText);
                     yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
                 } else {
