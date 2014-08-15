@@ -264,7 +264,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         microsoftLogoDiv.css({
             'background': 'transparent',
             'width': '25%',
-            'min-width':'150px',
+            'min-width':'120px',
             'height': '100%',
             'float': 'right',
             'display':'inline-block'
@@ -272,7 +272,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         brownLogoDiv.css({
             'background': 'transparent',
             'width': '10%',
-            'min-width': '50px',
+            'min-width': '40px',
             'height': '100%',
             'float': 'right',
             'display': 'inline-block'
@@ -280,14 +280,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         microsoftLogo.css({
             'height': 'auto',
             'width': '100%',
-            'min-width':'150px',
-            'margin-top': '10%'
+            'min-width':'120px',
+            'margin-top': '4%'
         });
         brownLogo.css({
             'height': 'auto',
             'width': '80%',
-            'min-width': '50px',
-            'margin-top': '-10%'
+            'min-width': '40px',
+            'margin-top': '-16%'
         });
        
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
@@ -376,7 +376,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'background-color': 'black',
             'display': 'block',
             'color': 'white',
-            'height': '12%',
+            'height': '17%',
             'padding':'5%'
         });
         infoLogo.append(brownLogoDiv);
@@ -451,21 +451,29 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function getCollectionsHelper(collections) {
         var i,
-            privateState,   // Is collection private?
-            c,
-            j,
-            lastCollectionIndex,
-            firstCollectionIndex,
-            collectionDot;
-
+           privateState,   // Is collection private?
+           c,
+           j,
+           lastCollectionIndex,
+           firstCollectionIndex,
+           collectionDot,
+           collectionsToShow = false;
         // Iterate through entire list of collections to to determine which are visible/not private/published.  Also set toShowFirst
-        for(i=0; i<collections.length; i++) {
+        for (i = 0; i < collections.length; i++) {
             c = collections[i];
             privateState = c.Metadata.Private ? (/^true$/i).test(c.Metadata.Private) : false;
-            if(!privateState && TAG.Util.localVisibility(c.Identifier)) {
+            if (!privateState && TAG.Util.localVisibility(c.Identifier)) {
+                collectionsToShow = ((collectionsToShow) ? collectionsToShow : true);
                 toShowFirst = toShowFirst || c;
                 visibleCollections.push(collections[i]);
             }
+        }
+        if (!collectionsToShow) {
+            var infoOverlay = $(document.createElement('div'));
+            infoOverlay.text("No collections to display");
+            infoOverlay.css({ "text-align": "center", "font-size": "200%", "margin-top": "20%" });
+            $('#catalogDivContainer').append(infoOverlay);
+            TAG.Util.hideLoading(bottomContainer);
         }
 
         // Iterate through visible/not private/published collections, and set their prev and next values
@@ -840,6 +848,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @param {Array} contents     array of doq objects for each of the contents of this collection
          */
         function contentsHelper(contents) {
+            if (!contents.length) {
+                var emptyCollectionDiv = $(document.createElement('div'));
+                emptyCollectionDiv.text("There are no artworks in this collection at present.");
+                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%" });
+                catalogDiv.append(emptyCollectionDiv);
+            }
             if (cancel()) return;
             loadSortTags(collection,contents);
             createArtTiles(contents);

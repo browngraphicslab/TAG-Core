@@ -456,11 +456,12 @@ TAG.Worktop.Database = (function () {
     }
     function convertVideo(success, error, newFileName, fileExtension, baseFileName, doq,forTour) {
         asyncRequest(
-            'GET',
+            'POST',
             'ConvertVideo',
             { "FileName": newFileName, "Extension": fileExtension, "BaseFileName": baseFileName, "Identifier": doq,"ForTour":forTour },
             null,
-            { success: convertToTextHandler(success), error: error });
+            { success: convertToTextHandler(success), error: error }
+            , true);
     }
 
     //////////////////
