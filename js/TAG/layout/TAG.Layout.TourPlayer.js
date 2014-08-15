@@ -56,7 +56,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     idleTimer && idleTimer.kill();
     idleTimer = null;
 
-    backButton.attr('src', tagPath+'images/icons/Back.svg');
+    backButton.attr('src', tagPath+'images/Back_wshadow.svg');
 
     //clicked effect for back button
     backButton.on('mousedown', function(){

@@ -1228,10 +1228,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if(currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio" ) {
                 tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
             } else if (currentWork.Metadata.ContentType === "Audio" ){
+                tileIma.css('background-color','black');
                 tileImage.attr('src', tagPath+'images/audio_thumbnail.svg');
             } else {
-                if (currentWork.Metadata.Medium === "Video" ||currentWork.Metadata.ContentType ==="iframe"){
+                if (currentWork.Metadata.Medium=== "Video"|| currentWork.Metadata.ContentType==="Video"||currentWork.Metadata.ContentType ==="iframe"){
                     showLabel = false;
+                    tileImage.css('background-color','black');
                     tileImage.attr('src',tagPath + 'images/video_thumbnail.svg');
                 } else {
                     tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
@@ -1294,11 +1296,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('tourLabel')
                     .attr('src', tagPath+'images/icons/catalog_tour_icon.svg');
                 main.append(tourLabel);
-            } else if (currentWork.Metadata.Medium === "Video" && showLabel) {
-                videoLabel = $(document.createElement('img'))
-                    .addClass('videoLabel')
-                    .attr('src', tagPath + 'images/icons/catalog_video_icon.svg');
-                main.append(videoLabel);
+            } else if (currentWork.Metadata.Medium === "Video"|| currentWork.Metadata.ContentType==="Video") {
+                if (showLabel){
+                    videoLabel = $(document.createElement('img'))
+                        .addClass('videoLabel')
+                        .attr('src', tagPath + 'images/icons/catalog_video_icon.svg');
+                    main.append(videoLabel);
+                }
             }
 
             tileDiv.append(main);
