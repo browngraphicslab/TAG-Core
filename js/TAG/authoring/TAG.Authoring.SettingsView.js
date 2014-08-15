@@ -4672,7 +4672,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
         }
         function makemtholder(ttl, index) {
-            var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl);
+            var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl)
+                            .css({'word-wrap':'break-word','text-overflow':'ellipsis','font-size':'0.9em'});
             metadataLists.append(mtHolder);
             makemtClickable(mtHolder);
             return mtHolder;
@@ -4718,8 +4719,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
 
-
-        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel");
+        var metadataPickerButtons = $(document.createElement('div')).attr("id", "metadataPickerButtons")
+                                    .css({'height':'5%','bottom':'7%','width':'100%','position':'absolute'});
+        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel").css({ 'float': 'right', 'position':'absolute','margin-right':'9%'});
         metadataPickerCancel.text("Cancel");
         
         // cancel button click handler
@@ -4728,10 +4730,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             $('.metadataInfos').empty();
             metadataPickerCancel.disabled = true;
         });
-        metadataPicker.append(metadataPickerCancel);
+        metadataPickerButtons.append(metadataPickerCancel);
 
 
-        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport");
+        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport").css({ 'float': 'right', 'position': 'absolute', 'margin-right': '2%' });
         metadataPickerImport.attr('disabled', true);
         if (selectedmetadata)
             metadataPickerImport.attr('disabled', false);
@@ -4744,8 +4746,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             metadataPickerOverlay.fadeOut();
         });
 
-        metadataPicker.append(metadataPickerImport);
-
+        metadataPickerButtons.append(metadataPickerImport);
+        metadataPicker.append(metadataPickerButtons);
         root.append(metadataPickerOverlay);
         $(".parsingOverlay").fadeOut();
         metadataPickerOverlay.fadeIn();
