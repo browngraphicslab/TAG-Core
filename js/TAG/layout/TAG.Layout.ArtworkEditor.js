@@ -1588,7 +1588,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     height: 0
                 };
             }
-            /*
+            
             rightbarLoadingSave = $(document.createElement('div'));
             rightbarLoadingSave.css({
                 'width': '20%',
@@ -1602,9 +1602,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             mainPanel.append(rightbarLoadingSave);
 
 
-            TAG.Util.showLoading(rightbarLoadingSave, '20%');
+            TAG.Util.showLoading(rightbarLoadingSave, '20%', '40%', '40%');
             rightbarLoadingSave.attr('class', 'rightbarLoadingSave');
-            */
+            
 
             // add loading overlay to the thumbnail of the associate media which has been modified
             var top = 
@@ -1647,9 +1647,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             function updateSuccess() {
                 /*
                 close();
-                createMediaList();
+                createMediaList();*/
                 rightbarLoadingSave.fadeOut();
-                */
+                
                 reloadAssocMedia(worktopInfo.assetDoqID);
                 thumbnailLoadingSave.fadeOut();
             }
@@ -1713,7 +1713,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 $toggleModeContainer = $(document.createElement('div'))
                     .addClass('toggleModeContainer')
                     .css({
-                        'width': '88%',
+                        'width': '87%',
                         'left': '8%',
                         'position': 'relative',
                         'height': 'auto', 
@@ -1727,8 +1727,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'height': 'auto',
                         'max-height': '45%', 
                         'border': '2px solid white',
-                        'position': 'relative',
-                        'font-size': '100%' 
+                        'position': 'relative', 
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
@@ -1741,17 +1740,18 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'margin-top': '5%', 
                         'border': '2px solid white',
                         'position': 'relative',
-                        'font-size': '100%'
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
                 $titleContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
                     .css({
-                        'width': '86%',
-                        'padding': '5% 8%',
+                        'width': '87%',
+                        'left': '8%',
+                        'position': 'relative',
+                        'height': 'auto', 
+                        'max-height': '10%',
                         'margin-top': '5%',
-                        'height': '5%'
                     })
                     .appendTo($rightbar),
                 $titleText = $(document.createElement('input'))
@@ -1760,16 +1760,19 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .attr('title', 'Title')
                     .css({
                         'width': '100%',
-                        'font-size': '100%' 
+                        '-webkit-box-sizing': 'border-box', /* Safari/Chrome, other WebKit */
+                        '-moz-box-sizing': 'border-box',    /* Firefox, other Gecko */
+                        'box-sizing': 'border-box',        /* Opera/IE 8+ */
                     })
                     .appendTo($titleContainer),
                 $descContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
                     .css({
                         'width': '87%',
-                        'height': '12%',
+                        'left': '8%',
                         'position': 'relative',
-                        'padding': '0% 8%',
+                        'height': '16%', 
+                        'margin-top': '5%',
                     })
                     .appendTo($rightbar),
                 $descArea = $(document.createElement('textarea'))
@@ -1779,7 +1782,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'background-color': 'white',
                         'width': '100%',
                         'min-width': '100%',
-                        'height': '90%'
+                        'height': '90%',
+                        '-webkit-box-sizing': 'border-box', /* Safari/Chrome, other WebKit */
+                        '-moz-box-sizing': 'border-box',    /* Firefox, other Gecko */
+                        'box-sizing': 'border-box',        /* Opera/IE 8+ */
                     })
                     .appendTo($descContainer),
                 $assocMediaButtonContainer = $(document.createElement('div'))
@@ -1788,17 +1794,20 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'width': '87%',
                         'padding': '5% 8%',
                         'position': 'relative',
-                        'height': '5%' 
+                        'height': '5%',
+                        'display': 'block'
                     })
                     .appendTo($rightbar),
                 $unassociateAssocMediaButton = $(document.createElement('button'))
                     .addClass('asscmediabutton unassociatebutton')
-                    .text('Unassociate Media')
+                    .text('Unassociate')
                     .css({
                         'float': 'left',
                         'border': '2px solid white',
-                        'width': '100%',
-                        'font-size': '90%'
+                        'width': '45%',
+                        'display': 'inline-block',
+                        'text-align': 'center',
+                        'padding': '4px 4px 4px 4px'
                     })
                     .attr('type', 'button')
                     .appendTo($assocMediaButtonContainer),
@@ -1810,7 +1819,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'float': 'right',
                         'border': '2px solid white',
                         'width': '45%',
-                        'display': 'none'
+                        'display': 'inline-block',
+                        'text-align': 'center',
+                        'padding':'4px 4px 4px 4px'
                     })
                     .appendTo($assocMediaButtonContainer),
                 closeButton = $(document.createElement('img')).addClass('closeEditAssocMedia')
@@ -1886,7 +1897,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 var titleTextVal,
                     assetType;
 
-                $('.assetHolder').css('background-color', '');
+                //$('.assetHolder').css('background-color', '');
 
                 if (getActiveMediaMetadata('ContentType') === 'Video') { // TODO see comments in the delete button's click handler
                     $('.rightbar').find('video')[0].pause();
@@ -1944,7 +1955,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             }
             */
             if (isOpen) {
-                saveAssocMedia();
+                //saveAssocMedia();
             }
 
             editingMedia = false;
@@ -2037,7 +2048,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function close() {
             var rightbar;
             if (isOpen) {
-                saveAssocMedia();
+                //saveAssocMedia();
                 rightbar = $('.rightbar');
                 hotspotAnchor.fadeOut(100);
                 if (layerContainer) {
