@@ -613,9 +613,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 backCollection: prevCollection,
                 backTag : prevTag,
                 backMult : prevMult,
-                wasOnAssocMediaView : wasOnAssocMediaView
+                wasOnAssocMediaView: wasOnAssocMediaView,
+                splitscreen: root.data('split')
             });
+            //if (root.data('split') === 'R') {
 
+            //}
             collectionsPageRoot = collectionsPage.getRoot();
             collectionsPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
 
