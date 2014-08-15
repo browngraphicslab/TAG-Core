@@ -444,21 +444,29 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function getCollectionsHelper(collections) {
         var i,
-            privateState,   // Is collection private?
-            c,
-            j,
-            lastCollectionIndex,
-            firstCollectionIndex,
-            collectionDot;
-
+           privateState,   // Is collection private?
+           c,
+           j,
+           lastCollectionIndex,
+           firstCollectionIndex,
+           collectionDot,
+           collectionsToShow = false;
         // Iterate through entire list of collections to to determine which are visible/not private/published.  Also set toShowFirst
-        for(i=0; i<collections.length; i++) {
+        for (i = 0; i < collections.length; i++) {
             c = collections[i];
             privateState = c.Metadata.Private ? (/^true$/i).test(c.Metadata.Private) : false;
-            if(!privateState && TAG.Util.localVisibility(c.Identifier)) {
+            if (!privateState && TAG.Util.localVisibility(c.Identifier)) {
+                collectionsToShow = ((collectionsToShow) ? collectionsToShow : true);
                 toShowFirst = toShowFirst || c;
                 visibleCollections.push(collections[i]);
             }
+        }
+        if (!collectionsToShow) {
+            var infoOverlay = $(document.createElement('div'));
+            infoOverlay.text("No collections to display");
+            infoOverlay.css({ "text-align": "center", "font-size": "200%", "margin-top": "20%" });
+            $('#catalogDivContainer').append(infoOverlay);
+            TAG.Util.hideLoading(bottomContainer);
         }
 
         // Iterate through visible/not private/published collections, and set their prev and next values
@@ -833,6 +841,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @param {Array} contents     array of doq objects for each of the contents of this collection
          */
         function contentsHelper(contents) {
+            if (!contents.length) {
+                var emptyCollectionDiv = $(document.createElement('div'));
+                emptyCollectionDiv.text("There are no artworks in this collection at present.");
+                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%" });
+                catalogDiv.append(emptyCollectionDiv);
+            }
             if (cancel()) return;
             loadSortTags(collection,contents);
             createArtTiles(contents);
