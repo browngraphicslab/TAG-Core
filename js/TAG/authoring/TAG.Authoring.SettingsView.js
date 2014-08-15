@@ -1733,11 +1733,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bgInput;
         var assocMedia;
         var sortOptionsObj = null;
-        if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
+        createCollectionSettings();
+        /*if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             TAG.Worktop.Database.changeExhibition(exhibition.Identifier, {AddSortOptions: true}, function (doqGuid) {
                 TAG.Worktop.Database.getDoq(doqGuid.statusText, function (sortOptionsDoq) {
                     sortOptionsObj = sortOptionsDoq;
                     sortDropDown = createSortOptions(sortOptionsObj);
+                    createCollectionSettings();
+                }, function () {
                     createCollectionSettings();
                 });
             }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
@@ -1746,8 +1749,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptionsObj = sortOptionsDoq;
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
-            });         
-        }
+            });
+        }*/
         function createCollectionSettings() {
             prepareViewer(true);
             clearRight();
@@ -4539,7 +4542,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var counter = 0;
         var curlast;
         var curlist = metadatalist;
-
+        var infoSource = [];
+        var info = "";
+        init();
         metadataPickerOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         metadataPickerOverlay.append(metadataPicker);
 
@@ -4556,7 +4561,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
         searchbar.on('keyup', function (event) {
             if (!searchbar.val()) {
-                init();
+                //init();
+                metadataLists.empty();
+                for (var i = 0; i < 30; i++) {
+                    if (i < infoSource.length) {
+                        var mtHolder = makemtholder(infoSource[i].title || "Untitled", i);
+                    } else {
+                        break;
+                    }//set the first one selected once we firstly open the picker
+                    if (i === 0) {
+                        mtHolder.click();
+                    }
+                    counter++;
+                }
             }
             if (event.which === 13) {
                 doSearch();
@@ -4572,8 +4589,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (counter < curlist.length) {
                     var num = counter + 30 <= curlist.length ? 30 : curlist.length - counter;
                     for (var k = 0; k < num; k++) {
-                        if (counter + k < curlist.length) {
-                            makemtholder(allTitles[counter + k], counter + k);
+                        if (counter < curlist.length) {
+                            makemtholder(allTitles[counter], counter);
                             counter++;
                         }
                     }
@@ -4584,24 +4601,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // creates a panel for all metadata's detailed info
         metadataPicker.append(metadataInfos);
         metadataInfos.append(metadataholder);
-        var infoSource = [];
-        var info = "";
-        init();
+        
 
         //Method to display reset the metadata list and search information
         function init() {
+            metadataLists.empty();
+            infoSource = [];
+            curlist = metadatalist;
             for (i = 0; i < metadatalist.length; i++) {
                 info = "";
                 $.each(metadatalist[i], function(index, element) {
                     info += element + " ";          //Put all the metadata in one string for searching purposes
                 });
+                var mt = metadatalist[i];
+                var title = mt[spec["title"]];
                 infoSource.push({
                     "id": i,
                     "keys": info.toLowerCase(),
-                    "title": metadatalist[i].title
+                    "title": title||"Untitled",
                 });
-                var mt = metadatalist[i];
-                var title = mt[spec["title"]];
                 if (!title)
                     title = "Untitled";
                 allTitles[i] = title;                                          
@@ -4622,18 +4640,43 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var searchResults = [];
             if(content){
                 metadataLists.empty();
-                $.each(infoSource, function(index, element) {
-                    if (element.keys.indexOf(content) > -1) {
-                        makemtholder(element.title, element.id);
+                counter = 0;
+                content = content.toLowerCase();
+                curlist = [];
+                $.each(infoSource, function (index, element) {
+                    if (element.keys.indexOf(content) > -1 || element.title.toLowerCase().indexOf(content) > -1) {
+                        curlist.push(metadatalist[element.id])
+                        if (counter < 30) {
+                            var mtHolder = makemtholder(element.title, element.id);
+                            if (counter === 0) {
+                                mtHolder.click();
+                            }
+                            counter++
+                        }
                     }
                 });
             } else {
-                init();
+                //init();
+                metadataLists.empty();
+                counter = 0;
+                curlist = metadatalist;
+                for (var i = 0; i < 30; i++) {
+                    if (i < infoSource.length) {
+                        var mtHolder = makemtholder(infoSource[i].title || "Untitled", i);
+                    } else {
+                        break;
+                    }//set the first one selected once we firstly open the picker
+                    if (i === 0) {
+                        mtHolder.click();
+                    }
+                    counter++;
+                }
             }
             
         }
         function makemtholder(ttl, index) {
-            var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl);
+            var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl)
+                            .css({'word-wrap':'break-word','text-overflow':'ellipsis','font-size':'0.9em'});
             metadataLists.append(mtHolder);
             makemtClickable(mtHolder);
             return mtHolder;
@@ -4679,8 +4722,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
 
-
-        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel");
+        var metadataPickerButtons = $(document.createElement('div')).attr("id", "metadataPickerButtons")
+                                    .css({'height':'5%','bottom':'7%','width':'100%','position':'absolute'});
+        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel").css({ 'float': 'right', 'position':'absolute','margin-right':'9%'});
         metadataPickerCancel.text("Cancel");
         
         // cancel button click handler
@@ -4689,10 +4733,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             $('.metadataInfos').empty();
             metadataPickerCancel.disabled = true;
         });
-        metadataPicker.append(metadataPickerCancel);
+        metadataPickerButtons.append(metadataPickerCancel);
 
 
-        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport");
+        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport").css({ 'float': 'right', 'position': 'absolute', 'margin-right': '2%' });
         metadataPickerImport.attr('disabled', true);
         if (selectedmetadata)
             metadataPickerImport.attr('disabled', false);
@@ -4705,8 +4749,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             metadataPickerOverlay.fadeOut();
         });
 
-        metadataPicker.append(metadataPickerImport);
-
+        metadataPickerButtons.append(metadataPickerImport);
+        metadataPicker.append(metadataPickerButtons);
         root.append(metadataPickerOverlay);
         $(".parsingOverlay").fadeOut();
         metadataPickerOverlay.fadeIn();

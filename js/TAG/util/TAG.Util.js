@@ -2585,8 +2585,8 @@ TAG.Util.UI = (function () {
                 center_v: true,
                 width: 0.5,
                 height: 0.25,
-                max_width: 560,
-                max_height: 200,
+                max_width: 600,
+                max_height: 280,
             });
 
         $(confirmBox).css({
@@ -2606,7 +2606,7 @@ TAG.Util.UI = (function () {
             'height': '50%',
             'left': '10%',
             'top': '12.5%',
-            'font-size': '1em',
+            'font-size': '0.8em',
             'overflow': 'hidden',
             'position': 'relative',
             'text-align': 'center',
@@ -4248,6 +4248,7 @@ TAG.Util.RLH = function (input) {
         annotImgs = {},      // object of annotated images corresponding to custom map deepzoom images (keyed by map guid)
         map,                 // bing map
         disabledOverlay,     // overlay on default (bing) map holder if it's disabled
+        importDisabledOverlay,
         formIsEnabled,       // form is currently being displayed
         isEditForm,          // edit location form is open (as opposed to add location form)
         importingMap,        // used to show the correct map after importing 
@@ -4516,6 +4517,31 @@ TAG.Util.RLH = function (input) {
                     })
                     .text('Bing map is disabled.');
 
+        importDisabledOverlay = $(document.createElement('div'))
+                    .attr('id', 'importDisabledOverlay')
+                    .css({
+                        'background-color': 'rgba(0,0,0,0.5)',
+                        'color': 'white',
+                        'font-size': '30px',
+                        'height': '100%',
+                        'position': 'absolute',
+                        'vertical-align':'middle',
+                        'text-align': 'center',
+                        'top': '0%',
+                        'z-index': '1000',
+                        'display': 'block',
+                        width: '100%',
+                        height: '100%',
+                        left: '0%',
+                    })
+                    .append($(document.createElement('div'))
+                        .css({
+                            'top': '30%',
+                            'position':'relative'
+                        })
+                        .text('Loading...')
+                    );
+
         if (input.authoring) {
 
             dotsContainer = $(document.createElement('div'))
@@ -4619,6 +4645,7 @@ TAG.Util.RLH = function (input) {
                             'margin-right': '10px',
                             float: 'right'
                         })
+                        .text('Delete Map')
                         .appendTo(buttonsRegion);
 
 
@@ -4777,6 +4804,7 @@ TAG.Util.RLH = function (input) {
             } else { //display the last one instead
                 importingMap = false;
                 showMap(mapGuids[mapGuids.length - 1]);
+                removeLoadingOverlay();
             }
         };
         mapGuids = (defaultMapShown || input.authoring) ? [null] : [];
@@ -6318,6 +6346,9 @@ TAG.Util.RLH = function (input) {
 
                 mapDoqs[newDoq.Identifier] = newDoq;
                 //update changeartwork and linq the map and artwork
+
+                importLoadingOverlay();
+
                 saveRichLocationHistory({
                     toadd: newDoq.Identifier,
                 });
@@ -6341,7 +6372,23 @@ TAG.Util.RLH = function (input) {
 
     }
 
+    /**
+    * Append a loading message over the map region to indicate loading while a map is being uploaded
+    * @method importLoadingOverlay()
+    */
+    function importLoadingOverlay() {
+        locationPanel.append(importDisabledOverlay);
+    }
 
+    /**
+    * Remove the loading message over the map region to indicate loading while a map is being uploaded
+    * @method removeLoadingOverlay()
+    */
+    function removeLoadingOverlay() {
+        importDisabledOverlay.remove();
+    }
+
+    
     /**
      * De-select a location pin and the corresponding location list item
      * @method deselect
