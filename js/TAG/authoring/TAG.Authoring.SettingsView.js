@@ -1733,7 +1733,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bgInput;
         var assocMedia;
         var sortOptionsObj = null;
-        if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
+        createCollectionSettings();
+        /*if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
             TAG.Worktop.Database.changeExhibition(exhibition.Identifier, {AddSortOptions: true}, function (doqGuid) {
                 TAG.Worktop.Database.getDoq(doqGuid.statusText, function (sortOptionsDoq) {
                     sortOptionsObj = sortOptionsDoq;
@@ -1749,7 +1750,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortDropDown = createSortOptions(sortOptionsObj);
                 createCollectionSettings();
             });
-        }
+        }*/
         function createCollectionSettings() {
             prepareViewer(true);
             clearRight();
