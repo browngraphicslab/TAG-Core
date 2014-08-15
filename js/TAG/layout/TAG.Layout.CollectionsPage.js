@@ -108,7 +108,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         comingBack,                      // if you are coming back from a viewer
         defaultTag;                     // default sort tag
 
-        root[0].collectionsPage = this;
+    root[0].collectionsPage = this;
+    root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
     var cancelLoadCollection = null;
     // get things rolling
@@ -197,7 +198,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
         }
-
+        if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
+            infoButton.hide();
+        }
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
             // IE9, Chrome, Safari, Opera
