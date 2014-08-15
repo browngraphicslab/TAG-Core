@@ -4586,8 +4586,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (counter < curlist.length) {
                     var num = counter + 30 <= curlist.length ? 30 : curlist.length - counter;
                     for (var k = 0; k < num; k++) {
-                        if (counter + k < curlist.length) {
-                            makemtholder(allTitles[counter + k], counter + k);
+                        if (counter < curlist.length) {
+                            makemtholder(allTitles[counter], counter);
                             counter++;
                         }
                     }
@@ -4604,6 +4604,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         function init() {
             metadataLists.empty();
             infoSource = [];
+            curlist = metadatalist;
             for (i = 0; i < metadatalist.length; i++) {
                 info = "";
                 $.each(metadatalist[i], function(index, element) {
@@ -4641,7 +4642,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 curlist = [];
                 $.each(infoSource, function (index, element) {
                     if (element.keys.indexOf(content) > -1 || element.title.toLowerCase().indexOf(content) > -1) {
-                        curlist.push(metadataLists[element.id])
+                        curlist.push(metadatalist[element.id])
                         if (counter < 30) {
                             var mtHolder = makemtholder(element.title, element.id);
                             if (counter === 0) {
@@ -4655,7 +4656,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //init();
                 metadataLists.empty();
                 counter = 0;
-                curlist = metadataLists;
+                curlist = metadatalist;
                 for (var i = 0; i < 30; i++) {
                     if (i < infoSource.length) {
                         var mtHolder = makemtholder(infoSource[i].title || "Untitled", i);
