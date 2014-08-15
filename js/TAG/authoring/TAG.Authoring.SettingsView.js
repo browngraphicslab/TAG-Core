@@ -4539,7 +4539,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var counter = 0;
         var curlast;
         var curlist = metadatalist;
-
+        var infoSource = [];
+        var info = "";
+        init();
         metadataPickerOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         metadataPickerOverlay.append(metadataPicker);
 
@@ -4556,7 +4558,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         searchbar.on('blur focusout', function () { (!searchbar.val()) && searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' }); });
         searchbar.on('keyup', function (event) {
             if (!searchbar.val()) {
-                init();
+                //init();
+                metadataLists.empty();
+                for (var i = 0; i < 30; i++) {
+                    if (i < infoSource.length) {
+                        var mtHolder = makemtholder(infoSource[i].title || "Untitled", i);
+                    } else {
+                        break;
+                    }//set the first one selected once we firstly open the picker
+                    if (i === 0) {
+                        mtHolder.click();
+                    }
+                    counter++;
+                }
             }
             if (event.which === 13) {
                 doSearch();
@@ -4584,24 +4598,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // creates a panel for all metadata's detailed info
         metadataPicker.append(metadataInfos);
         metadataInfos.append(metadataholder);
-        var infoSource = [];
-        var info = "";
-        init();
+        
 
         //Method to display reset the metadata list and search information
         function init() {
+            metadataLists.empty();
+            infoSource = [];
             for (i = 0; i < metadatalist.length; i++) {
                 info = "";
                 $.each(metadatalist[i], function(index, element) {
                     info += element + " ";          //Put all the metadata in one string for searching purposes
                 });
+                var mt = metadatalist[i];
+                var title = mt[spec["title"]];
                 infoSource.push({
                     "id": i,
                     "keys": info.toLowerCase(),
-                    "title": metadatalist[i].title
+                    "title": title||"Untitled",
                 });
-                var mt = metadatalist[i];
-                var title = mt[spec["title"]];
                 if (!title)
                     title = "Untitled";
                 allTitles[i] = title;                                          
@@ -4622,13 +4636,37 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var searchResults = [];
             if(content){
                 metadataLists.empty();
-                $.each(infoSource, function(index, element) {
-                    if (element.keys.indexOf(content) > -1) {
-                        makemtholder(element.title, element.id);
+                counter = 0;
+                content = content.toLowerCase();
+                curlist = [];
+                $.each(infoSource, function (index, element) {
+                    if (element.keys.indexOf(content) > -1 || element.title.toLowerCase().indexOf(content) > -1) {
+                        curlist.push(metadataLists[element.id])
+                        if (counter < 30) {
+                            var mtHolder = makemtholder(element.title, element.id);
+                            if (counter === 0) {
+                                mtHolder.click();
+                            }
+                            counter++
+                        }
                     }
                 });
             } else {
-                init();
+                //init();
+                metadataLists.empty();
+                counter = 0;
+                curlist = metadataLists;
+                for (var i = 0; i < 30; i++) {
+                    if (i < infoSource.length) {
+                        var mtHolder = makemtholder(infoSource[i].title || "Untitled", i);
+                    } else {
+                        break;
+                    }//set the first one selected once we firstly open the picker
+                    if (i === 0) {
+                        mtHolder.click();
+                    }
+                    counter++;
+                }
             }
             
         }
