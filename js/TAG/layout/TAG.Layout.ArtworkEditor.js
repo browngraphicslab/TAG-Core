@@ -300,6 +300,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
      * @param {jQuery obj} container        the element containing this list
      */
     function createMediaList(container) {
+        TAG.Util.showLoading(container || $('.assetContainer'), '20%', '40%', '40%');
         annotatedImage.loadAssociatedMedia(function (mediaList) {
             container = container || $('.assetContainer');
             container.empty();
@@ -340,6 +341,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     container.append(thumbnailButton);
                 })(i));
             }
+            TAG.Util.hideLoading(container);
         });
 
     }
@@ -1618,7 +1620,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             });
             $('#' + worktopInfo.assetDoqID).append(thumbnailLoadingSave);
         
-            TAG.Util.showLoading(thumbnailLoadingSave, '5%');
+            TAG.Util.showLoading(thumbnailLoadingSave, '20%', '40%', '40%');
             thumbnailLoadingSave.attr('class', 'thumbnailLoadingSave');
 
             options = {

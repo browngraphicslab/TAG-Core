@@ -311,7 +311,7 @@ TAG.Util.Splitscreen = (function () {
                 root.find('#exhibition-label').css({
                     'display': 'block'
                 });
-
+                root.find('#infoButton').show();
 
 
                 //$('.exhibition-selection').css('font-size', '200%');//LADS.Util.getMaxFontSizeEM(root.find('.exhibition-selection .exhibition-title').text(), 1.5, $(window).width() * 0.75 * 0.8, .2 * root.find(".exhibition-selection").height()));

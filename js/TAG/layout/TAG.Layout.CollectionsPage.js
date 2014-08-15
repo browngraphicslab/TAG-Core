@@ -108,7 +108,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         comingBack,                      // if you are coming back from a viewer
         defaultTag;                     // default sort tag
 
-        root[0].collectionsPage = this;
+    root[0].collectionsPage = this;
+    root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
     var cancelLoadCollection = null;
     // get things rolling
@@ -197,7 +198,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
         }
-
+        if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
+            infoButton.hide();
+        }
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
             // IE9, Chrome, Safari, Opera
@@ -429,8 +432,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @return {String}        a string describing type of work ('artwork', 'video', or 'tour')
      */
     function getWorkType(work) {
-        if (currentArtwork.Type === 'Empty') {
-            return 'tour';
+        if (currentArtwork.Type === "Empty") {
+            if (currentArtwork.Metadata.ContentType === "iframe"){
+                return 'iframe';
+            } else {
+                return 'tour';
+            }
         } else if (currentArtwork.Metadata.Type === 'VideoArtwork') {
             return 'video';
         }
@@ -1044,7 +1051,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 minOfSort      = sortedArtworks.min();
                 currentWork    = minOfSort ? minOfSort.artwork : null;
                 works = sortedArtworks.getContents();
-                //console.log("works" + works);
             } else {
                 //If no sort options
                 works = artworks;
@@ -1222,15 +1228,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if(currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio" ) {
                 tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
             } else if (currentWork.Metadata.ContentType === "Audio" ){
-                tileImage.css('background-color','black');
-                tileImage.attr('src', tagPath+'images/audio_icon.svg');
+                tileImage.attr('src', tagPath+'images/audio_thumbnail.svg');
             } else {
-                if (currentWork.Metadata.Medium === "Video"){ //||currentWork.Metadata.Type ="iframe"){
+                if (currentWork.Metadata.Medium === "Video" ||currentWork.Metadata.ContentType ==="iframe"){
                     showLabel = false;
-                    tileImage.css('background-color','black');
-                    tileImage.attr('src',tagPath + 'images/icons/catalog_video_icon.svg');
+                    tileImage.attr('src',tagPath + 'images/video_thumbnail.svg');
                 } else {
-                    tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); //shouldn't ever get to this
+                    tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
                 } 
             }
             
@@ -1257,9 +1261,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 } else {
                     yearTextBox.text(yearText);
                 }
-                artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' :  TAG.Util.htmlEntityDecode(currentWork.Name));
+                var nameText;
+                if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe"){
+                    nameText = '(Interactive Tour)'
+                } else {
+                    nameText = TAG.Util.htmlEntityDecode(currentWork.Name);
+                }
+                artText.text(nameText);
 
-            } else if (tag === 'Type') { //TO-DO change to 'Tours'
+            } else if (tag === 'Tour') {
                 artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
             } else {
                 //If using custom tag or are no sort tags
@@ -1279,7 +1289,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .append(artTitle)
                 .append(yearTextBox);
 
-            if (currentWork.Type === "Empty") {
+            if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe") {
                 tourLabel = $(document.createElement('img'))
                     .addClass('tourLabel')
                     .attr('src', tagPath+'images/icons/catalog_tour_icon.svg');
@@ -1881,6 +1891,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     exploreIcon,
                     infoText,
                     artistInfo,
+                    artText,
                     yearInfo,
                     descText,
                     miniTilesHolder,
@@ -1966,7 +1977,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Set texts of labels
                 if (artwork.Type !== "Empty") {
-                    artistInfo.text("Artist: " + (artwork.Metadata.Artist || "Unknown"));
+                    artwork.Metadata.Artist ? artText = "Artist:  " + artwork.Metadata.Artist : artText = ' ';
+                    artistInfo.text(artText);
                     yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
                 } else {
                     artistInfo.text("(Interactive Tour)" );
@@ -2067,6 +2079,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             case 'Video':
                                 src = (thumb && !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : tagPath + 'images/video_icon.svg';
                                 break;
+                            case 'iframe':
+                                src = tagPath + 'images/video_icon.svg';
+                                break;
                             case 'Image':
                                 src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);
                                 break;
@@ -2081,7 +2096,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         }
 
                         // Set tileImage to thumbnail image, if it exists
-                        if(doqs[i].Metadata.Thumbnail) {
+                        if(doqs[i].Metadata.Thumbnail || metadata.ContentType === "iframe") {
                             miniTile.attr("src", src);
                         } else {
                             miniTile.attr("src", tagPath + 'images/no_thumbnail.svg');
@@ -2244,30 +2259,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             return avlTree;
         } else if (tag === 'Date') {
-            return sortByYear(artworks,false);
+            return sortByYear(artworks,true);
 
-        } else if (tag === 'Type') { 
-            comparator = sortComparator('typeKey', 'nameKey');
-            valuation  = sortValuation('nameKey');
-
-            avlTree = new AVLTree(comparator, valuation);
-            for (i = 0; i < artworks.length; i++) {
-                artNode = {
-                    artwork: artworks[i],
-                    nameKey: artworks[i].Name,
-                    typeKey: artworks[i].Type === 'Empty' ? 1 : (artworks[i].Metadata.Type === 'Artwork' ? 2 : 3)
-                };
-                avlTree.add(artNode);
-            }
-            return avlTree;
-        } 
-        else if (tag === 'Tour'){
+        } else if (tag === 'Tour'){
             comparator = sortComparator('nameKey');
             valuation  = sortValuation('nameKey');
             avlTree = new AVLTree(comparator, valuation);
             for (i = 0; i < artworks.length; i++) {
                 if (artworks[i].Type === 'Empty'){
-                    console.log(artworks[i]);
                     artNode = {
                         artwork: artworks[i],
                         nameKey: artworks[i].Name,
@@ -2275,7 +2274,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     avlTree.add(artNode);
                 }
             }
-            //console.log(avlTree);
             return avlTree;
         }
         //For custom sort tags
@@ -2303,7 +2301,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * years for their display. 
      * @method sortByYear
      * @param  {Object} artworks      list of artworks to sort9
-     * @param {Boolean} timelineDate  whether you are sorting by timeline date (vs metadata date for thumbnail sorting)
+     * @param {Boolean} timelineDate  whether you are sorting by timeline date (for now both timeline and tiles do)
      * @return {AVLTree} avlTree      sorted tree so order can be easily accessed
     **/
     function sortByYear(artworks, timelineDate){
@@ -2445,33 +2443,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         currentTag = tag;
         colorSortTags(currentTag);
-        if (tag !== 'Type') {
-            console.log("here");
-            drawCatalog(artworks, currentTag, 0, false);
-        } else {
-            for (i = 0; i < artworks.length; i++) {
-                if (guidsSeen.indexOf(artworks[i].Identifier) < 0) {
-                    guidsSeen.push(artworks[i].Identifier);
-                } else {
-                    continue;
-                }
-                if (artworks[i].Type === "Empty") {
-                    toursArray.push(artworks[i]);
-                } else if (artworks[i].Metadata.Type === "Artwork") {
-                    artsArray.push(artworks[i]);
-                } else {
-                    videosArray.push(artworks[i]);
-                }
-            }
-
-            // draw tours, artworks, then videos
-            bigArray.concat(toursArray).concat(artsArray).concat(videosArray);
-            if ($('#titleButton')){
-                drawCatalog(bigArray, "Title" , 0, false);
-            } else {
-                drawCatalog(bigArray,currentDefaultTag,0,false);
-            }
-        }
+        drawCatalog(artworks, currentTag, 0, false);
         doSearch(); // search with new tag
     }
 
