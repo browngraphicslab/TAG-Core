@@ -1051,7 +1051,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 minOfSort      = sortedArtworks.min();
                 currentWork    = minOfSort ? minOfSort.artwork : null;
                 works = sortedArtworks.getContents();
-                //console.log("works" + works);
             } else {
                 //If no sort options
                 works = artworks;
@@ -2092,7 +2091,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 src = tagPath + 'images/no_thumbnail.svg';
                                 break;
                         }
-                        console.log(src);
                         if (onAssocMediaView && metadata.Type === "Artwork"){
                         	src = thumb ? FIX_PATH(thumb) : tagPath + 'images/no_thumbnail.svg';
                         }
@@ -2269,7 +2267,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             avlTree = new AVLTree(comparator, valuation);
             for (i = 0; i < artworks.length; i++) {
                 if (artworks[i].Type === 'Empty'){
-                    console.log(artworks[i]);
                     artNode = {
                         artwork: artworks[i],
                         nameKey: artworks[i].Name,
@@ -2277,7 +2274,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     avlTree.add(artNode);
                 }
             }
-            //console.log(avlTree);
             return avlTree;
         }
         //For custom sort tags
@@ -2551,7 +2547,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 return;
             }
 
-            if (artwork.Metadata.Type === "Empty") { // tour
+            if (artwork.Type === "Empty") { // tour
                 if (TAG.Util.Splitscreen.isOn()) {
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
