@@ -2039,6 +2039,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 	if (numberAssociatedDoqs === 0){
                 		miniTilesLabel.hide();
                 		miniTilesHolder.hide();
+                		descSpan.css({"height": "100%"});
                 		return;
                 	}
                     tileSpacing = miniTilesHolder.height()/10;
