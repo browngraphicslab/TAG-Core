@@ -209,7 +209,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                             titleConversionMsg.text("Conversion Error");
                             titlediv.css('opacity', '0.7');
                             //pop up message 
-                            var popup = TAG.Util.UI.popUpMessage(null, "An error occurred when converting video "+filename+". Please try to import it again.","OK", null,null,null,true);
+                            var popup = TAG.Util.UI.popUpMessage(null, "An error occurred when converting video "+my.title+". Please try to import it again.","OK", null,null,null,true);
                             $('body').append(popup);
                             $(popup).css('z-index', 1000000);
                             $(popup).show();

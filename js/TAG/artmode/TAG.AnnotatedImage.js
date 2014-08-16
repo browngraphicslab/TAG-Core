@@ -1324,11 +1324,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         }
 
         function mediaManipWin(res) {
-                var t = outerContainer.css('top');
-                var l = outerContainer.css('left');
-                var w = outerContainer.css('width');
-                var h = outerContainer.css('height');
-                var neww = parseFloat(w) * res.scale;
+            var t     = parseFloat(outerContainer.css('top')),
+                l     = parseFloat(outerContainer.css('left')),
+                w     = outerContainer.width(),
+                h     = outerContainer.height(),
+                neww = w * res.scale;
 
                 var minConstraint;
                 if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio') {
@@ -1340,14 +1340,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 //if the new width is in the right range, scale from the point of contact and translate properly; otherwise, just translate and clamp
                 var newClone;
                 if ((neww >= minConstraint) && (neww <= 800)) {
-                    if (0 < parseFloat(t) + parseFloat(h) && parseFloat(t) < rootHeight && 0 < parseFloat(l) + parseFloat(w) && parseFloat(l) < rootWidth && res) {
-                        outerContainer.css("top", (parseFloat(t) + res.translation.y + (1.0 - res.scale) * (res.pivot.y)) + "px");
-                        outerContainer.css("left", (parseFloat(l) + res.translation.x + (1.0 - res.scale) * (res.pivot.x)) + "px");
+                    if (0 < t+h && t < rootHeight && 0 < l + w && l < rootWidth && res) {
+                        outerContainer.css("top", (t + res.translation.y + (1.0 - res.scale) * (res.pivot.y)) + "px");
+                        outerContainer.css("left", (l + res.translation.x + (1.0 - res.scale) * (res.pivot.x)) + "px");
                     }
                 } else {
-                    if (0 < parseFloat(t) + parseFloat(h) && parseFloat(t) < rootHeight && 0 < parseFloat(l) + parseFloat(w) && parseFloat(l) < rootWidth && res) {
-                        outerContainer.css("top", (parseFloat(t) + res.translation.y) + "px");
-                        outerContainer.css("left", (parseFloat(l) + res.translation.x) + "px");
+                    if (0 < t + h && t < rootHeight && 0 < l + w && l < rootWidth && res) {
+                        outerContainer.css("top", (t + res.translation.y) + "px");
+                        outerContainer.css("left", (l + res.translation.x) + "px");
                         neww = Math.min(Math.max(neww, minConstraint), 800);
                     } 
                 }
