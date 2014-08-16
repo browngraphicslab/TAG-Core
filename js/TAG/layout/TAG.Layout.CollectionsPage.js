@@ -1022,8 +1022,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function createArtTiles(artworks) {
         currentArtworks = artworks;
         currentTag && colorSortTags(currentTag);
-        //drawCatalog(currentArtworks, currentTag, 0);
-        drawCatalog(artworks, currentTag, 0);
+        drawCatalog(currentArtworks, currentTag, 0);
+        //drawCatalog(artworks, currentTag, 0);
     }
 
     /**
