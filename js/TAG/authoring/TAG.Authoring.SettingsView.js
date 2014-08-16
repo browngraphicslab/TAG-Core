@@ -105,6 +105,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         labelOne,
         labelTwo,
         sortOptionsCount = 0,
+        sortOptionsObj = {},
         settingsViewKeyHandler = {
             13: enterKeyHandlerSettingsView,
             46: deleteKeyHandlerSettingsView,
@@ -1445,6 +1446,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "background": "transparent",
                     "color": "black"
                 });
+                sortOptionsObj[sortDiv.text()] = false;
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
 
@@ -1454,16 +1456,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     $("#showTimelineBttn").attr("disabled","true");
                 }
             } else {
+
                 if (sortOptionsCount < 4) {
                     sortOptionsCount++;
                     sortDiv.attr("setSort", true);
                     sortDiv.css({
                         "background-color": "white"
                     });
+                    if (sortDiv.text() === "Date") {
+                        $("#showTimelineBttn").removeAttr('disabled');
+                    }
+                    sortOptionsObj[sortDiv.text()] = true;
                 }
-                if (sortDiv.text() === "Date") {
-                    $("#showTimelineBttn").removeAttr('disabled');
-                }
+                
             }
         };
     };
@@ -1482,46 +1487,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
         var sortObj, sortDiv;
-        var sortOptions = sortOptionsObj.Metadata;
-        if (sortOptions) {
-            for (var sortObj in sortOptions) {
-                if (sortOptions.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj != "Count") {
-                    var key = "";
-                    if (sortObj.charAt(0) === '?') {
-                        key = sortObj.substr(1);
-                    } else {
-                        key = sortObj;
-                        if (key==="Date"){
-                            timelineShown = false;
+        for (sortObj in sortOptionsObj) {
+            if (sortOptionsObj.hasOwnProperty(sortObj)) {
+                if (sortObj === "Date") {
+                    timelineShown = false;
 
-                            $("#showTimelineBttn").css('background-color', '');
-                            $("#hideTimelineBttn").css('background-color', 'white');
+                    $("#showTimelineBttn").css('background-color', '');
+                    $("#hideTimelineBttn").css('background-color', 'white');
 
-                            $("#showTimelineBttn").attr("disabled","true");
-                        }
-                    }
-                    var sortObjArray = sortOptions[sortObj].split(",");
-                    if (sortObjArray.length === 2 && sortObjArray[0] === "0" && sortObjArray[1] == "false") {
-                        continue;
-                    }
-                    var sortDiv = $(document.createElement("div"))
-                        .text(key)
-                        .addClass("sortOptionDiv");
-                    var setSort = sortObjArray[sortObjArray.length - 1];
-                    sortDiv.attr("setSort", setSort);
-                    if (setSort === true || setSort === "true") {
-                        sortOptionsCount++;
-                        sortDiv.css({
-                            "background-color": "white",
-                            "border": "1px solid black"
-                        });
-                    }
-                    sortDiv.click(clickCallback(sortDiv));
-                    sortOptionsDiv.append(sortDiv);
-
+                    $("#showTimelineBttn").attr("disabled","true");
                 }
+                   
+                var sortDiv = $(document.createElement("div"))
+                    .text(sortObj)
+                    .addClass("sortOptionDiv");
+                var setSort = sortOptionsObj[sortObj];
+                sortDiv.attr("setSort", setSort);
+                if (setSort === true) {
+                    sortOptionsCount++;
+                    sortDiv.css({
+                        "background-color": "white",
+                        "border": "1px solid black"
+                    });
+                }
+                sortDiv.click(clickCallback(sortDiv));
+                sortOptionsDiv.append(sortDiv);
             }
         }
+        
         return sortOptionsDiv;
     }    
 
@@ -1725,32 +1718,59 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var desc;
         var bg;
         var sortDropDown = null;
-        var sortOptions = null;
         var idLabel;
         var timeline;
         var nameInput;
         var descInput;
         var bgInput;
         var assocMedia;
-        var sortOptionsObj = null;
-        createCollectionSettings();
-        /*if (!exhibition.Metadata.SortOptionsGuid) { //NEEDS T OBE CHANGESEDFDJAKLSDJF
-            TAG.Worktop.Database.changeExhibition(exhibition.Identifier, {AddSortOptions: true}, function (doqGuid) {
-                TAG.Worktop.Database.getDoq(doqGuid.statusText, function (sortOptionsDoq) {
-                    sortOptionsObj = sortOptionsDoq;
-                    sortDropDown = createSortOptions(sortOptionsObj);
-                    createCollectionSettings();
-                }, function () {
-                    createCollectionSettings();
-                });
-            }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
+        var sortOptions = null;
+        var curSortOptions = JSON.parse(exhibition.Metadata.SortOptions || {} );
+        sortOptionsObj = {
+            "Title": curSortOptions.Title,
+            "Date": curSortOptions.Date,
+            "Artist": curSortOptions.Artist};
+        var key;
+
+        if (curSortOptions.Title === false) {
+            sortOptionsObj.Title = false;
         } else {
-            TAG.Worktop.Database.getDoq(exhibition.Metadata.SortOptionsGuid, function (sortOptionsDoq) {
-                sortOptionsObj = sortOptionsDoq;
+            sortOptionsObj.Title = true;
+        }
+        if (curSortOptions.Date === false) {
+            sortOptionsObj.Date = false;
+        } else {
+            sortOptionsObj.Date = true;
+        }
+        if (curSortOptions.Artist === false) {
+            sortOptionsObj.Artist = false;
+        } else {
+            sortOptionsObj.Artist = true;
+        }
+
+
+        TAG.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
+            for (var i = 0; i < artworks.length; i++) {
+                if (artworks[i].Extension === "tour") {
+                    sortOptionsObj["Tours"] = curSortOptions["Tours"] || false;
+                } else {
+                    var infoFields = artworks[i].Metadata.InfoFields;
+                    for (key in infoFields) {
+                        var val = curSortOptions[key];
+                        if (val===null) {
+                            sortOptionsObj[key] = false;
+                        } else {
+                            sortOptionsObj[key] = val;
+                        }
+                    }
+                }
+            }
+            if (sortOptionsObj && sortOptionsObj != {}) {
                 sortDropDown = createSortOptions(sortOptionsObj);
-                createCollectionSettings();
-            });
-        }*/
+            }
+            createCollectionSettings();
+        }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
+
         function createCollectionSettings() {
             prepareViewer(true);
             clearRight();
@@ -2019,7 +2039,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var timeline = inputs.timelineInput;
         var assocMedia = inputs.assocMediaInput;
 
-        var sortOptionChanges = {};
+        /*var sortOptionChanges = {};
         if (inputs.sortOptions) {
             for (var i = 0; i < inputs.sortOptions[0].children.length; i++) {
                 var option = $(inputs.sortOptions[0].children[i]);
@@ -2034,12 +2054,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     sortOptionChanges[option.text()] = setSort;
                 }
             }
-        }
+        }*/
         var options = {
             Name: name,
             Private: priv,
             Description: desc,
-            SortOptions: JSON.stringify(sortOptionChanges),
+            SortOptions: JSON.stringify(sortOptionsObj),
             Timeline: timeline,
             AssocMediaView: assocMedia
         }

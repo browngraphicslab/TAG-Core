@@ -870,8 +870,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var sortOptions = [],
                 sortButton,
                 sortButtonTags = {}; 
-            if (collection.Metadata.SortOptionsGuid && !onAssocMediaView){ 
-                TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
+            if (!onAssocMediaView) {
+                var sortOptionsObj = JSON.parse(collection.Metadata.SortOptions) || {};
+                /*TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
                 var sortObjects = sortOptionsDoq.Metadata,
                     sortText,
                     sortObjArray;
@@ -890,17 +891,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             }
                         }
                     }
+                }*/
+                for (var sortTag in sortOptionsObj){
+                    if (sortOptionsObj[sortTag] === true) {
+                        sortOptions.push(sortTag);
+                    }
                 }
                 appendTags();
-                });
+                //});
             } else if (onAssocMediaView){
                 sortOptions = ['Date','Title'];
                 appendTags();
             } else {
                 sortOptions = ["Date", "Title", "Artist"];
-                if (!sortCatalog(contents,"Tour").isEmpty()){
+                /*if (!sortCatalog(contents,"Tour").isEmpty()){
                     sortOptions.push("Tour");
-                }
+                }*/
                 appendTags();
             }
             /**Callback function to create the sort tag buttons
@@ -2304,7 +2310,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artNode = {
                     artwork: artworks[i],
                     sortKeyMetadataType: tag,
-                    sortKey: artworks[i].Metadata.InfoFields[tag] || null
+                    sortKey: artworks[i].Metadata.InfoFields ? artworks[i].Metadata.InfoFields[tag] : null
                 };
                 avlTree.add(artNode);
             }
