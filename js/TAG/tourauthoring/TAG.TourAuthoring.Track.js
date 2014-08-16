@@ -190,11 +190,12 @@ TAG.TourAuthoring.Track = function (spec, my) {
                             videotag.on('loadedmetadata', function () {
                                 //remove from the video array and add display with the right duration
                                 changeTrackColor('white');
+                                my.converted = true;
+                                my.toConvert = true;
+                                my.mediaLength = this.duration
                                 if (fileExt !== ".mp4") {
                                     addDisplay(0, this.duration);
                                 }
-                                my.converted = true;
-                                my.toConvert = true;
                                 //convertbtn.remove();
                                 titleConversionMsg.text("");
                                 titleText.css('font-style', 'normal');
@@ -2500,6 +2501,9 @@ TAG.TourAuthoring.Track = function (spec, my) {
      * @return newDisplay                 
      */
     function addDisplay(x, length) {
+        if (my.mediaLength === 0) {
+            return;
+        }
         var index,
             i,
             parentDisplays,
