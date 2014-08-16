@@ -4692,7 +4692,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         function makemtholder(ttl, index) {
             var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl)
-                            .css({'word-wrap':'break-word','text-overflow':'ellipsis','font-size':'0.9em'});
+                            .css({'white-space':'nowrap','overflow':'hidden','text-overflow':'ellipsis','font-size':'0.9em'});
             metadataLists.append(mtHolder);
             makemtClickable(mtHolder);
             return mtHolder;
