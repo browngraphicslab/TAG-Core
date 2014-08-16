@@ -1854,7 +1854,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             $unassociateAssocMediaButton.on('click', function () {
                 var assetDoqID = getActiveMediaMetadata('assetDoqID'); // TODO see comment below about AnnotatedImage
-
+                $saveAssocMediaButton.attr('disabled', true);
                 if (getActiveMediaMetadata('contentType') === 'Video') { // TODO when this file is better integrated with the new AnnotatedImage, should store the current active media in a 'global' variable and just access its contentType rather than going through a helper function
                     $('.rightbar').find('video')[0].pause();
                 } else if (getActiveMediaMetadata('contentType') === 'Audio') {
