@@ -3597,6 +3597,7 @@ TAG.Util.UI = (function () {
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            $('.compHolder').off();
             progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
             finalizeAssociations();
             globalKeyHandler[0] = currentKeyHandler;
@@ -3626,6 +3627,7 @@ TAG.Util.UI = (function () {
         });
         cancelButton.text('Cancel');
         cancelButton.on('click', function () {
+            $('.compHolder').off();
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             pickerOverlay.fadeOut(function () { 
