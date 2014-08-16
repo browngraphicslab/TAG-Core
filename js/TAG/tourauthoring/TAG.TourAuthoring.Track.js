@@ -223,7 +223,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                 })(videotag), null, filename, basefilename);
         }
     }
-    chkIntervalVal=setInterval(checkVideoConverted,5000);
+    chkIntervalVal=setInterval(checkVideoConverted,10000);
 
     /**Creates the title div for a track
      * @method _initTitle

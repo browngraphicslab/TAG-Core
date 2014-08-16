@@ -2555,7 +2555,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 displayLength,
                 diff;
             _clearAssMedia();
-            $(associatedMediaPickerOverlay).fadeOut();
+            $(associatedMediaPickerOverlay).fadeOut().css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             associatedMediaPickerImport.disabled = true;
             //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             if (selectedArtworks && selectedArtworks.length) {
@@ -2608,7 +2608,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // cancel button click handler
         $(associatedMediaPickerCancel).click(function () {
             _clearAssMedia();
-            $(associatedMediaPickerOverlay).fadeOut();
+            $(associatedMediaPickerOverlay).fadeOut().css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             associatedMediaPickerImport.disabled = true;
             //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             $('.associatedsearchbar').val("");
@@ -2856,7 +2856,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var allArtworksHolder = document.createElement('div');
         var loading = $(document.createElement('div'));
         var circle = $(document.createElement('img'));
-        var catalogPickerCancel = document.createElement('button');
+        var catalogPickerCancel = $(document.createElement('button'));
 
         selectedArtworks = [];
         selectedArtworksUrls = {};
@@ -2962,7 +2962,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     exhibHolder.css('background', '#999');
                     selectedExhib = selected;
                     $('.catalogPickerArtworks').empty();
-                    catalogPickerImport.disabled = selectedArtworks.length ? false : true;
+                    catalogPickerImport.attr('disabled', true);
+                    if(selectedArtworks.length)
+                        catalogPickerImport.attr('disabled',false);
                     $('.artButton').hide().data('visible', false);
                     $('.' + selected).show().data('visible', true);
                     TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
@@ -3149,7 +3151,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 selectedArtworks.splice(urlindex, 1);
                 artworkIndicesViaURL.splice(urlindex, 1);
                 selectedArtworksUrls[artHolder.data('url')] = false;
-                catalogPickerImport.disabled = selectedArtworks.length ? false : true;
+                catalogPickerImport.attr('disabled', true);
+                if(selectedArtworks.length)
+                    catalogPickerImport.attr('disabled', false);
             } else {
                 artHolder.css('background', '#999');
                 artHolder.data({
@@ -3160,7 +3164,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     artworkIndicesViaURL.push(artHolder.data('url'));
                     selectedArtworksUrls[artHolder.data('url')] = true;
                 }
-                catalogPickerImport.disabled = false;
+                catalogPickerImport.attr('disabled', false);
             }
         }
 
@@ -3178,7 +3182,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 newDisplay;
 
             // get artwork selected
-            catalogPickerImport.disabled = false;
+            catalogPickerImport.attr('disabled', false);
             artHolder.css('background', '#999');
             if (!selectedArtworksUrls[artHolder.data('url')] && artHolder.data('selected') !== true) {
                 selectedArtworks.push({ 'url': artHolder.data('url'), 'name': artHolder.data('name'), 'id': artHolder.attr('id'), 'type': artHolder.data('type'), 'duration': artHolder.data('duration') });
@@ -3247,7 +3251,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(allArtworksHolder).on('click', function () {
             $(".exhibHolder").css('background', 'black');
             $(this).css('background', '#999');
-            catalogPickerImport.disabled = selectedArtworks.length ? false : true;
+            catalogPickerImport.attr('disabled', true);
+            if (selectedArtwork.length)
+                catalogPickerImport.attr('disabled',false)
+            //catalogPickerImport.disabled = selectedArtworks.length ? false : true;
             $('.catalogPickerArtworks').empty();
             $('.artButton').show().data('visible', true);
             TAG.Util.searchData($(searchbar).val(), '.artButton', IGNORE_IN_SEARCH);
@@ -3270,10 +3277,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         catalogPicker.append(loading);
 
         // create artwork import button
-        var catalogPickerImport = document.createElement('button');
-        catalogPickerImport.disabled = true;
-        $(catalogPickerImport).text("Import");
-        $(catalogPickerImport).css({
+        var catalogPickerImport = $(document.createElement('button'));
+        catalogPickerImport.attr('disabled', true);
+        (catalogPickerImport).text("Import");
+        (catalogPickerImport).css({
             position: 'absolute',
             bottom: '2%',
             right: '22%',
@@ -3281,10 +3288,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         // in here, deal with multiple selected artworks
         // artwork import button click handler
-        $(catalogPickerImport).click(function () {
+        catalogPickerImport.click(function () {
             var i;
             // if an artwork is selected, add an artwork track and a display (and combine these commands in undo manager)
-            catalogPickerImport.disabled = true;
+            //catalogPickerImport.disabled = true;
+            (catalogPickerImport).css({ 'color': 'rgba(255, 255, 255, 0.5)' }).attr('disabled', true);
             function importHelper(j) {
                 var selectedArt = selectedArtworks[j];
                 var track;
@@ -3313,8 +3321,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 artQueue.clear();
                 loading.text('Importing...');
                 loading.show();
-                $(catalogPickerImport).hide();
-                $(catalogPickerCancel).hide();
+                (catalogPickerImport).hide();
+                (catalogPickerCancel).hide();
                 for (i = 0; i < selectedArtworks.length; i++) {
                     importHelper(i);
                 }
@@ -3338,18 +3346,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         // cancel button
 
-        $(catalogPickerCancel).text("Cancel");
-        $(catalogPickerCancel).css({
+        (catalogPickerCancel).text("Cancel");
+        (catalogPickerCancel).css({
             position: 'absolute',
             bottom: '2%',
             right: '5%',
         });
 
         // cancel button click handler
-        $(catalogPickerCancel).click(function () {
-            $(catalogPickerOverlay).fadeOut();
+        (catalogPickerCancel).click(function () {
+            (catalogPickerCancel).css({ 'color': 'rgba(255, 255, 255, 0.5)' }).attr('disabled',true);
+            (catalogPickerOverlay).fadeOut();
             _clearCatalog();
-            catalogPickerImport.disabled = true;
+            catalogPickerImport.attr('disabled',true);
             //$(searchbar).attr('placeholder', PICKER_SEARCH_TEXT);
             $(searchbar).val("");
             return undefined;
