@@ -1727,7 +1727,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var sortOptions = null;
         var curSortOptions = JSON.parse(exhibition.Metadata.SortOptions || "{}" );
         var key;
-
+        sortOptionsObj = {};
         if (curSortOptions.Title === false) {
             sortOptionsObj.Title = false;
         } else {
