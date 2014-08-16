@@ -663,7 +663,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
                 if (TITLE) {
                     titleDiv = $(document.createElement('div'));
-                    titleDiv.addClass('annotatedImageMediaTitle');
+                    titleDiv.addClass('annotatedImageMediaTitle').css({'text-overflow':'ellipsis','white-space':'nowrap'});
                     titleDiv.text(TITLE);
 
                     innerContainer.append(titleDiv);
