@@ -864,14 +864,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         /*helper function to load sort tags
         * @method loadSortTags
         * @param {Object} collection
-        * @param {Object} contents (of collection, to check for tours)
+        * @param {Object} contents (of collection, to check for tours)  
         */
         function loadSortTags(collection,contents) {
             var sortOptions = [],
                 sortButton,
                 sortButtonTags = {}; 
-            if (!onAssocMediaView) {
-                var sortOptionsObj = JSON.parse(collection.Metadata.SortOptions) || {};
+            if (!onAssocMediaView && collection.Metadata.SortOptions) {
+                var sortOptionsObj = JSON.parse(collection.Metadata.SortOptions || "{}");
                 /*TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
                 var sortObjects = sortOptionsDoq.Metadata,
                     sortText,

@@ -1725,11 +1725,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bgInput;
         var assocMedia;
         var sortOptions = null;
-        var curSortOptions = JSON.parse(exhibition.Metadata.SortOptions || {} );
-        sortOptionsObj = {
-            "Title": curSortOptions.Title,
-            "Date": curSortOptions.Date,
-            "Artist": curSortOptions.Artist};
+        var curSortOptions = JSON.parse(exhibition.Metadata.SortOptions || "{}" );
         var key;
 
         if (curSortOptions.Title === false) {
