@@ -3625,6 +3625,7 @@ TAG.Util.UI = (function () {
         });
         cancelButton.text('Cancel');
         cancelButton.on('click', function () {
+            cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             pickerOverlay.fadeOut(function () { 
                 pickerOverlay.empty(); 
                 pickerOverlay.remove(); 
