@@ -3595,6 +3595,7 @@ TAG.Util.UI = (function () {
         });
         confirmButton.text("Save Changes");
         confirmButton.on('click', function () {
+            confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
             finalizeAssociations();
             globalKeyHandler[0] = currentKeyHandler;
