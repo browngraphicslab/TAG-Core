@@ -1135,6 +1135,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     x: l,
                     y: t
                 };
+            } else if (!startLocation) {
+                startLocation = {
+                    x: l,
+                    y: t
+                };
             }
 
             // these values are somewhat arbitrary; TODO determine good values
