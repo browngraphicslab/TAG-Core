@@ -2860,7 +2860,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         // Create labels
-        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(media.Name) || "", true, 2000);
+        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(media.Name) || "", true, 100);
         var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(media.Metadata.Description).replace(/\n/g,'<br />') || "", true);
 
         titleInput.focus(function () {
@@ -2872,7 +2872,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 descInput.select();
         });
 
-        onChangeUpdateText(titleInput, null, 2000);
+        onChangeUpdateText(titleInput, null, 100);
         onChangeUpdateText(descInput, null, 5000);
 
         var title = createSetting('Title', titleInput);
@@ -3941,8 +3941,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
         }
 
-        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), true, 55);
-        var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), true, 55);
+        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), true, 100);
+        var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), true, 100);
         var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Description).replace(/\n/g, '<br />') || "", "", false);
         var customInputs = {};
         var customSettings = {};
@@ -3962,8 +3962,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 descInput.select();
         });
 
-        onChangeUpdateText(titleInput, null, 500);
-        onChangeUpdateText(artistInput, null, 150);
+        onChangeUpdateText(titleInput, null, 100);
+        onChangeUpdateText(artistInput, null, 100);
         onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 100);
         onChangeUpdateText(descInput, null, 5000);
 
@@ -4692,7 +4692,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         function makemtholder(ttl, index) {
             var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl)
-                            .css({'word-wrap':'break-word','text-overflow':'ellipsis','font-size':'0.9em'});
+                            .css({'white-space':'nowrap','overflow':'hidden','text-overflow':'ellipsis','font-size':'0.9em'});
             metadataLists.append(mtHolder);
             makemtClickable(mtHolder);
             return mtHolder;
