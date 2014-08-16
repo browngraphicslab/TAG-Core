@@ -2560,6 +2560,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             associatedMediaPickerImport.disabled = true;
             associatedMediaPickerCancel.disabled = true;
             $(".mediaHolder").off();
+            $(".allAssociatedMediaHolder").off();
+            $(".artworkHolder").off();
             //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
             if (selectedArtworks && selectedArtworks.length) {
                 for (i = 0; i < selectedArtworks.length; i++) {
@@ -3301,6 +3303,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             (catalogPickerImport).text("Importing").css({ 'color': 'rgba(255, 255, 255, 0.5)' }).attr('disabled', true);
             catalogPickerCancel.css({ 'color': 'rgba(255, 255, 255, 0.5)' }).attr('disabled', true);
             $(".artButton").off();
+            $(".exhiHolder").off();
+            $(".allArtworksHolder").off();
             function importHelper(j) {
                 var selectedArt = selectedArtworks[j];
                 var track;
@@ -3366,6 +3370,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             (catalogPickerImport).css({ 'color': 'rgba(255, 255, 255, 0.5)' }).attr('disabled', true);
             catalogPickerCancel.css({ 'color': 'rgba(255, 255, 255, 0.5)' }).attr('disabled', true);
             $(".artButton").off();
+            $(".exhiHolder").off();
+            $(".allArtworksHolder").off();
             $(catalogPickerOverlay).fadeOut();
             _clearCatalog();
             //catalogPickerImport.attr('disabled',true);
