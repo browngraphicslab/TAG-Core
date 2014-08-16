@@ -1049,7 +1049,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 'left': '-50px'
             })
             .attr('on', null)
-            .appendTo(hotspotAnchor);
+            .appendTo(hotspotAnchor)
+            .addClass('hotspotCircle');
 
             innerCircle.css({ // TODO JADE/STYL
                 'display': 'block',
@@ -1854,7 +1855,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             $unassociateAssocMediaButton.on('click', function () {
                 var assetDoqID = getActiveMediaMetadata('assetDoqID'); // TODO see comment below about AnnotatedImage
-                $saveAssocMediaButton.attr('disabled', true);
+                $saveAssocMediaButton.attr('disabled', true).css('color', 'rgba(255,255,255,0.5)');
                 if (getActiveMediaMetadata('contentType') === 'Video') { // TODO when this file is better integrated with the new AnnotatedImage, should store the current active media in a 'global' variable and just access its contentType rather than going through a helper function
                     $('.rightbar').find('video')[0].pause();
                 } else if (getActiveMediaMetadata('contentType') === 'Audio') {
@@ -1872,6 +1873,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 });
                 mainPanel.append(rightbarLoadingDelete);
                 TAG.Util.showLoading(rightbarLoadingDelete, '20%');
+                $unassociateAssocMediaButton.attr('disabled', true).css('color', 'rgba(255,255,255,0.5)');
 
                 // remove the associated media's linq to this artwork
                 if (assetDoqID) {
@@ -1891,6 +1893,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     createMediaList();
                     rightbarLoadingDelete.fadeOut();
                 }
+
             });
 
             $saveAssocMediaButton.on('click', function () {
@@ -1957,7 +1960,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             if (isOpen) {
                 //saveAssocMedia();
             }
-
+            $(".asscmediabutton").attr('disabled', false).css('color', 'rgba(255,255,255,1)');
             editingMedia = false;
 
             TAG.Worktop.Database.getLinq(artwork.Identifier, asset.doq.Identifier, linqCallback, function () { }, function () { });
