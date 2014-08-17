@@ -1828,6 +1828,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             descInput.keyup(function () {
                 $("#collectionDescription").text(descInput.val());
+                var infoDiv = $("#infoDiv"),
+                    titleDiv = $("#tileDiv");
+                if (descInput.val() === "") {
+                    infoDiv.css("width", "0%");
+                    titleDiv.css({ 'margin-left': '2%' });
+                } else {
+                    infoDiv.css("width", "25%");
+                    titleDiv.css({ 'margin-left': '0%' });
+                }
+                titleDiv.css({'left': infoDiv.width()});
             });
             // Handle Changes
             onChangeUpdateText(nameInput, '#exhibition-title', 40);

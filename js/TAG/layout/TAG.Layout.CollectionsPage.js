@@ -736,6 +736,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 // collectionArea.append(nextCollection);
             }
+
             if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
                 backArrowArea.hide();
                 nextArrowArea.hide();
