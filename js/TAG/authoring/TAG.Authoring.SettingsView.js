@@ -1439,7 +1439,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (sortOptionsCount>0){
                     sortOptionsCount--;
                 }
-
+                
                 sortDiv.attr("setSort", false);
                 sortDiv.css({
                     "background-color": "black",
@@ -1447,9 +1447,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "color": "black"
                 });
                 sortOptionsObj[sortDiv.text()] = false;
+                //TODO:set the sort tag to white in previewer
+                if(sortDiv.text()==="Title"){
+                    $("#titleButton").hide();
+                }
+                if(sortDiv.text()==="Artist"){
+                    $("#artistButton").hide();
+                }
+                if(sortDiv.text()==="Tours"){
+                    $("#toursButton").hide();
+                }
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
-
+                    $("#dateButton").hide();
                     $("#showTimelineBttn").css('background-color', '');
                     $("#hideTimelineBttn").css('background-color', 'white');
 
@@ -1465,6 +1475,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     });
                     if (sortDiv.text() === "Date") {
                         $("#showTimelineBttn").removeAttr('disabled');
+                        $("#dateButton").show();
+                    }
+                    if(sortDiv.text()==="Title"){
+                        $("#titleButton").show();
+                    }
+                    if(sortDiv.text()==="Artist"){
+                        $("#artistButton").show();
+                    }
+                    if(sortDiv.text()==="Tours"){
+                        $("#toursButton").show();
                     }
                     sortOptionsObj[sortDiv.text()] = true;
                 }
@@ -1670,7 +1690,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = true;
             showTimeline.css('background-color', 'white');
             hideTimeline.css('background-color','');
-            $('#timelineArea').css('display','block');
+            if($('#timelineArea').children().length()>0)
+                $('#timelineArea').css('display','block');
             $('#bottomContainer').css({
                 'height': '69%',
                 'top':'25%'
