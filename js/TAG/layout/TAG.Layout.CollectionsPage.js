@@ -735,10 +735,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 // collectionArea.append(nextCollection);
             }
-            if (!collection.prevCollectionIndex && !collection.nextCollectionIndex) {
-                backArrowArea.hide();
-                nextArrowArea.hide();
-            }
+            //if (!collection.prevCollectionIndex && !collection.nextCollectionIndex) {
+            //    backArrowArea.hide();
+            //    nextArrowArea.hide();
+            //}
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
             collectionDescription.css({'word-wrap': 'break-word'});
