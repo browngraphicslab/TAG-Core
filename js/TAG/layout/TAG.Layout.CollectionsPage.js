@@ -646,6 +646,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
                 backArrowArea.addClass('arrowArea');
+                
                 backArrowArea.css('left', '0%')
                     .off()
                     .on('click', function(j){
@@ -656,7 +657,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }(collection));
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 backArrow.addClass('arrow');    
-
+                backArrowArea.show();
                 prevCollection.addClass('nextPrevCollection')
                             .addClass('primaryFont')
                             //.attr({
@@ -671,7 +672,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     loadCollection(visibleCollections[j.prevCollectionIndex])();
                                 }
                             }(collection));
-
+                prevCollection.show();
                 TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
                     tobj.custom_1 = prevTitle;
                     tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
@@ -700,7 +701,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     loadCollection(visibleCollections[j.nextCollectionIndex])();
                                 }
                             }(collection));
-
+                nextArrowArea.show();
                 // collectionArea.append(nextArrowArea);
                 nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
                 nextArrow.addClass('arrow');
@@ -722,7 +723,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     loadCollection(visibleCollections[j.nextCollectionIndex])();
                                 }
                             }(collection));
-
+                nextCollection.show();
                 TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
                     tobj.custom_1 = nextTitle;
                     tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
@@ -735,9 +736,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 // collectionArea.append(nextCollection);
             }
-            if (!collection.prevCollectionIndex && !collection.nextCollectionIndex) {
+            if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
                 backArrowArea.hide();
                 nextArrowArea.hide();
+            } else if (collection.prevCollectionIndex === null) {
+                backArrowArea.hide();
+                prevCollection.hide();
+            } else if (collection.nextCollectionIndex === null) {
+                nextArrowArea.hide();
+                nextCollection.hide();
             }
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
