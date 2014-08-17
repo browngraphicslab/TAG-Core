@@ -1650,8 +1650,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var showAssocMedia = createButton('Show Associated Media View', function () {
             //(!assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = true;
-            showAssocMedia.css('background-color', 'white');
-            hideAssocMedia.css('background-color','');
+            showAssocMedia.css({'background-color':'white'});
+            hideAssocMedia.css({'background-color':''});
             $('#toggleRow').css('display','block');
         }, {
             'min-height': '0px',
@@ -1690,7 +1690,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = true;
             showTimeline.css('background-color', 'white');
             hideTimeline.css('background-color','');
-            if($('#timelineArea').children().length()>0)
+            if($('#timelineArea').children().length>0)
                 $('#timelineArea').css('display','block');
             $('#bottomContainer').css({
                 'height': '69%',
