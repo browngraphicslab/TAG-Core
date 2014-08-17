@@ -407,6 +407,7 @@ TAG.Worktop.Database = (function () {
             error: See above
     */
     function getVersion(success, error) {
+        _db = _db || new Worktop.Database();
         asyncRequest(
             'GET',
             'CheckVersion',

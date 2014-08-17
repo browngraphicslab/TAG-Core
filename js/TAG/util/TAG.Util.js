@@ -2074,7 +2074,8 @@ TAG.Util.UI = (function () {
         });
         serverDialog.append(serverDialogInput);
         serverDialogInput.on('keydown', function(evt) {
-            if(evt.which === 13 && !serverDialog.length) {
+            if (evt.which === 13 && serverDialog.length>0) {
+                serverDialogOverlay.remove();
                 saveClick();
             }
         });
@@ -3812,7 +3813,7 @@ TAG.Util.UI = (function () {
                 } else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/image_icon.svg');
                 } else if (comp.Metadata.ContentType === 'iframe') {
-                    compHolderImage.attr('src', tagPath + 'images/audio_icon.svg'); // TODO iframe fix this with new icon
+                    compHolderImage.attr('src', tagPath + 'images/video_icon.svg'); // TODO iframe fix this with new icon
                 } else if (comp.Type === 'Empty') { // tours....don't know why the type is 'Empty'
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;

@@ -67,9 +67,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             async: true,
             cache: false,
             success: function () {
-                if(!timedOut) {
+                if (!timedOut) {
                     clearTimeout(connectionTimeout);
-                    //console.log("success checking server url");
                     successConnecting();
                 }
             },
@@ -82,7 +81,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                         async: false,
                         cache: false,
                         success: function () {
-                            if(!timedOut) {
+                            if (!timedOut) {
                                 clearTimeout(connectionTimeout);
                                 tagContainer.empty();
                                 tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
@@ -108,7 +107,17 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     }
 
     function successConnecting() {
-        TAG.Worktop.Database.getMain(loadHelper, function () {
+        TAG.Worktop.Database.getVersion(function (ver) {
+            if (parseFloat(ver) < 1.5) {
+                tagContainer.empty();
+                tagContainer.append((new TAG.Layout.InternetFailurePage("Old Server")).getRoot());
+            } else {
+                TAG.Worktop.Database.getMain(loadHelper, function () {
+                    tagContainer.empty();
+                    tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+                });
+            }
+        }, function () {
             tagContainer.empty();
             tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
         });

@@ -28,8 +28,8 @@ TAG.Layout.InternetFailurePage = function (errorType, detach) {
         DATA_LIMIT = "Data Limit",
         SERVER_DOWN = "Server Down",
         NO_INTERNET = "No Internet",
-        INTERNET_LOST = "Internet Lost";
-
+        INTERNET_LOST = "Internet Lost",
+        OLD_SERVER = "Old Server";
     init();
 
     /**
@@ -90,7 +90,9 @@ TAG.Layout.InternetFailurePage = function (errorType, detach) {
         else if (errorType === SERVER_DOWN) {
             reconnectButton.text('Reconnect');
             //reconnectButton.css({ 'font-size': '150%', 'position': 'relative', 'left': '30%', 'top': '5%' });
-        } else {
+        } else if (OLD_SERVER) {
+            reconnectButton.hide();
+        }else {
             reconnectButton.text('Reconnect');
             //reconnectButton.css({ 'font-size': '150%', 'position': 'relative', 'left': '53%', 'top': '5%' });
         }
@@ -174,6 +176,8 @@ TAG.Layout.InternetFailurePage = function (errorType, detach) {
                 return 'No internet connection was detected. The TAG application requires internet connectivity. Please ensure that you are connected to the internet and try again.';
             else if (error === INTERNET_LOST)
                 return 'Internet connection lost. The TAG application requires internet connectivity. Please ensure that you are connected to the internet and try again.';
+            else if (error === OLD_SERVER)
+                return "The server you are trying to connect to is not compatible with this version of the Touch Art Gallery client";
             else if (error === DATA_LIMIT)
                 return 'We have detected that you are on a limited data connection. TAG downloads large images, audio, and videos that can significantly increase your data usage.  By clicking "I Agree" you agree to allow TAG to download images, audio, and videos.  Clicking "I Disagree" will exit TAG.';
             return "";

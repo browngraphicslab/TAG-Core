@@ -2652,7 +2652,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = tagPath + '/images/audio_icon.svg';
                                 break;
                             case 'iframe':
-                                imagesrc = tagPath + '/images/audio_icon.svg'; // TODO iframe replace icon
+                                imagesrc = tagPath + '/images/video_icon.svg'; // TODO iframe replace icon
                                 break;
                             case 'image':
                                 imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';

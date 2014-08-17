@@ -773,6 +773,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     case 'Image':
                         src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);
                         break;
+                    case 'iframe':
+                        src = tagPath + 'images/video_icon.svg';
+                        break;
                     default:
                         src = tagPath + 'images/text_icon.svg';
                         break;
