@@ -2224,7 +2224,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 _clearAssMedia();
                 $(associatedMediaPickerOverlay).fadeOut();
+                $(associatedMediaPickerImport).text("Importing").css({ 'color': 'rgba(255, 255, 255, 0.5)' });
                 associatedMediaPickerImport.disabled = true;
+                associatedMediaPickerCancel.disabled = true;
+                $(".mediaHolder").off();
+                $(".allAssociatedMediaHolder").off();
+                $(".artworkHolder").off();
                 //$('.associatedsearchbar').attr('placeholder', PICKER_SEARCH_TEXT);
                 if (selectedArtworks && selectedArtworks.length) {
                     for (i = 0; i < selectedArtworks.length; i++) {

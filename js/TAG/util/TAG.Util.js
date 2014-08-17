@@ -2434,7 +2434,12 @@ TAG.Util.UI = (function () {
 
     // generate a popup message with specified text and button
     function popUpMessage(clickAction, message, buttonText, noFade, useHTML, onDialogClick) {
-        var overlay = blockInteractionOverlay();
+        var overlay;
+        if(document.getElementById("blockInteractionOverlay")){
+            overlay = $(document.getElementById("blockInteractionOverlay"));
+        }else{
+            overlay = blockInteractionOverlay();
+        }
         var confirmBox = document.createElement('div');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
            {
@@ -2569,7 +2574,12 @@ TAG.Util.UI = (function () {
     
     // popup message to ask for user confirmation of an action e.g. deleting a tour
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown) {
-        var overlay = blockInteractionOverlay();
+        var overlay;
+        if(document.getElementById("blockInteractionOverlay")){
+            overlay = $(document.getElementById("blockInteractionOverlay"));
+        }else{
+            overlay = blockInteractionOverlay();
+        }
         container = container || window;
         var confirmBox = document.createElement('div');
         var popUpHandler = {

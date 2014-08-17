@@ -223,7 +223,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                 })(videotag), null, filename, basefilename);
         }
     }
-    chkIntervalVal=setInterval(checkVideoConverted,10000);
+    chkIntervalVal=setInterval(checkVideoConverted,8000);
 
     /**Creates the title div for a track
      * @method _initTitle
@@ -275,11 +275,11 @@ TAG.TourAuthoring.Track = function (spec, my) {
             'display': 'block',
             'width': 0.115 * $(window).width() + 'px',
         });
-        if (my.toConvert === true && my.converted !== true) {
-            titleText.css('font-style', 'italic');
-            titleConversionMsg.text("Converting video...");
-            titlediv.css('opacity','0.7');
-        }
+//        if (my.toConvert === true && my.converted !== true) {
+//            titleText.css('font-style', 'italic');
+//            titleConversionMsg.text("Converting video...");
+//            titlediv.css('opacity','0.7');
+//        }
         titlediv.append(titleConversionMsg);
         //call add icon function here
         addIconToTitle(my.type);

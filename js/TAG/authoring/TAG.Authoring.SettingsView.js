@@ -1479,10 +1479,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var sortOptionsDiv = $(document.createElement("div"))
             .css({
                 'width': "50%",
-                "height": "100px",
+                "height": "auto",
                 'float': 'right',
                 'margin-right': '3%',
-                "overflow": "scroll",
+                "overflow": "hidden",
                 "overflow-x": "hidden"
             });
 
