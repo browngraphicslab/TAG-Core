@@ -171,9 +171,9 @@ TAG.TourAuthoring.Track = function (spec, my) {
      };
 
     my.that = that;                                                                                 // object w/ all public methods of this class
-    
     function checkVideoConverted() {
-       if (my.converted === false&&my.toConvert===true) {
+        var retstring;
+        if (my.converted === false && my.toConvert === true) {
             var videotag = $(document.createElement('video'));
             videotag.attr('preload', 'metadata');
             var filename = media.slice(8, media.length);//get rid of /Images/ before the filename
@@ -182,6 +182,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             TAG.Worktop.Database.getConvertedCheck(
                 (function (videotag) {
                     return function (output) {
+                        retstring = output;
                         if (output !== "False" && output !== "Error") {
                             console.log("converted: ");
                             var mp4filepath = "/Images/" + basefilename + ".mp4";
@@ -209,10 +210,12 @@ TAG.TourAuthoring.Track = function (spec, my) {
                             titleConversionMsg.text("Conversion Error");
                             titlediv.css('opacity', '0.7');
                             //pop up message 
-                            var popup = TAG.Util.UI.popUpMessage(null, "An error occurred when converting video "+my.title+". Please try to import it again.","OK", null,null,null,true);
-                            $('body').append(popup);
-                            $(popup).css('z-index', 1000000);
-                            $(popup).show();
+                            //if (first!==0) {
+                                var popup = TAG.Util.UI.popUpMessage(null, "An error occurred when converting video " + my.title + ". Please try to import it again.", "OK", null, null, null, true);
+                                $('body').append(popup);
+                                $(popup).css('z-index', 1000000);
+                                $(popup).show();
+                            //}
                             clearInterval(chkIntervalVal);
                             console.log("Error ocurred when converting");
                         }
@@ -222,6 +225,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                     }
                 })(videotag), null, filename, basefilename);
         }
+        return retstring;
     }
     chkIntervalVal=setInterval(checkVideoConverted,8000);
 
@@ -279,7 +283,18 @@ TAG.TourAuthoring.Track = function (spec, my) {
 //            titleText.css('font-style', 'italic');
 //            titleConversionMsg.text("Converting video...");
 //            titlediv.css('opacity','0.7');
-//        }
+        //        }
+        var status = checkVideoConverted();
+        if (status === "Error") {
+            titleText.css('font-style', 'italic');
+            titleConversionMsg.text("Conversion Error");
+            titlediv.css('opacity','0.7');
+        }
+        if (status === "False") {
+            titleText.css('font-style', 'italic');
+            titleConversionMsg.text("Converting video...");
+            titlediv.css('opacity','0.7');
+        }
         titlediv.append(titleConversionMsg);
         //call add icon function here
         addIconToTitle(my.type);
