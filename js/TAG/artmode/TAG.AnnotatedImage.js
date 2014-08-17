@@ -1067,6 +1067,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             });
                         });
                     }
+                    if(CONTENT_TYPE === 'iframe'){
+                        descDiv.css({top:'110%'});
+                    }
                     outerContainer.append(descDiv);
                 }
             }
