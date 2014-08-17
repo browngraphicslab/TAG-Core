@@ -818,6 +818,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 getCollectionContents(currCollection, null, function () { return cancelLoad;});
             } else {
                 createArtTiles(currCollection.collectionMedia);
+                loadSortTags(currCollection, currCollection.collectionMedia)
                 initSearch(currCollection.collectionMedia);
             }
             cancelLoadCollection = function () { cancelLoad = true; };
@@ -833,6 +834,97 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadCollection(toShowFirst)();
     }
 
+    /*helper function to load sort tags
+        * @method loadSortTags
+        * @param {Object} collection
+        * @param {Object} contents (of collection, to check for tours)  
+        */
+    function loadSortTags(collection,contents) {
+        var sortOptions = [],
+            sortButton,
+            sortButtonTags = {}; 
+        if (!onAssocMediaView && collection.Metadata.SortOptions) {
+            var sortOptionsObj = JSON.parse(collection.Metadata.SortOptions || "{}");
+            /*TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
+            var sortObjects = sortOptionsDoq.Metadata,
+                sortText,
+                sortObjArray;
+            if (sortObjects){
+                for (var sortObj in sortObjects){
+                    if (sortObjects.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj !== "Count") {
+                        if (sortObj.charAt(0) === '?') {
+                            sortText = sortObj.substr(1);
+                        } else {
+                            sortText = sortObj;
+                        }
+                        sortObjArray = sortObjects[sortObj].split(",");
+                        if ((sortObjArray.length === 2 && sortObjArray[1] === "true" || sortObjArray[1] === true)
+                                        || (sortObjArray[0] === true || sortObjArray[0] === "true")) {
+                            sortOptions.push(sortText);
+                        }
+                    }
+                }
+            }*/
+            for (var sortTag in sortOptionsObj){
+                if (sortOptionsObj[sortTag] === true) {
+                    sortOptions.push(sortTag);
+                }
+            }
+            appendTags();
+            //});
+        } else if (onAssocMediaView){
+            sortOptions = ['Date','Title'];
+            appendTags();
+        } else {
+            sortOptions = ["Date", "Title", "Artist"];
+            /*if (!sortCatalog(contents,"Tour").isEmpty()){
+                sortOptions.push("Tour");
+            }*/
+            appendTags();
+        }
+        /**Callback function to create the sort tag buttons
+        * @method appendTags
+        */
+        function appendTags() {
+            var i,
+                text;
+            for (i = 0; i < sortOptions.length; i++) {
+                sortButton = $(document.createElement('div'));
+                //Because stored on server as "Tour" but should be displayed as "Tours"
+                sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
+                sortButton.addClass('secondaryFont');
+                sortButton.addClass('rowButton')
+                            .text(text)
+                            .attr('id', sortOptions[i].toLowerCase() + "Button")
+                            .off()
+                            .on('click', function () {
+                                currentArtwork = null;
+                                changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
+                            });
+                buttonRow.append(sortButton);
+                sortButtonTags[sortButton.attr('id')] = sortOptions[i];
+                //TO-DO: test this telemetry handler
+                TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
+                    tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                    tobj.mode = 'Kiosk';
+                });
+            }
+            if (!comingBack) {
+                //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
+                if (timelineShown && $('#dateButton')) {
+                    currentTag = "Date";
+                } else if ($('#titleButton')) {
+                    currentTag = "Title";
+                } else {
+                    //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
+                    currentTag = sortOptions[0] || null;
+                    currentDefaultTag = currentTag;
+                }
+            }
+            colorSortTags(currentTag);
+        }
+
+    }
     /**
      * Get contents (artworks, videos, tours) in the specified collection and make catalog
      * @method getCollectionContents
@@ -861,96 +953,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             callback && callback();
         }
 
-        /*helper function to load sort tags
-        * @method loadSortTags
-        * @param {Object} collection
-        * @param {Object} contents (of collection, to check for tours)  
-        */
-        function loadSortTags(collection,contents) {
-            var sortOptions = [],
-                sortButton,
-                sortButtonTags = {}; 
-            if (!onAssocMediaView && collection.Metadata.SortOptions) {
-                var sortOptionsObj = JSON.parse(collection.Metadata.SortOptions || "{}");
-                /*TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
-                var sortObjects = sortOptionsDoq.Metadata,
-                    sortText,
-                    sortObjArray;
-                if (sortObjects){
-                    for (var sortObj in sortObjects){
-                        if (sortObjects.hasOwnProperty(sortObj) && sortObj !== "__Created" && sortObj !== "Count") {
-                            if (sortObj.charAt(0) === '?') {
-                                sortText = sortObj.substr(1);
-                            } else {
-                                sortText = sortObj;
-                            }
-                            sortObjArray = sortObjects[sortObj].split(",");
-                            if ((sortObjArray.length === 2 && sortObjArray[1] === "true" || sortObjArray[1] === true)
-                                            || (sortObjArray[0] === true || sortObjArray[0] === "true")) {
-                                sortOptions.push(sortText);
-                            }
-                        }
-                    }
-                }*/
-                for (var sortTag in sortOptionsObj){
-                    if (sortOptionsObj[sortTag] === true) {
-                        sortOptions.push(sortTag);
-                    }
-                }
-                appendTags();
-                //});
-            } else if (onAssocMediaView){
-                sortOptions = ['Date','Title'];
-                appendTags();
-            } else {
-                sortOptions = ["Date", "Title", "Artist"];
-                /*if (!sortCatalog(contents,"Tour").isEmpty()){
-                    sortOptions.push("Tour");
-                }*/
-                appendTags();
-            }
-            /**Callback function to create the sort tag buttons
-            * @method appendTags
-            */
-            function appendTags() {
-                var i,
-                    text;
-                for (i = 0; i < sortOptions.length; i++) {
-                    sortButton = $(document.createElement('div'));
-                    //Because stored on server as "Tour" but should be displayed as "Tours"
-                    sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
-                    sortButton.addClass('secondaryFont');
-                    sortButton.addClass('rowButton')
-                                .text(text)
-                                .attr('id', sortOptions[i].toLowerCase() + "Button")
-                                .off()
-                                .on('click', function () {
-                                    currentArtwork = null;
-                                    changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
-                                });
-                    buttonRow.append(sortButton);
-                    sortButtonTags[sortButton.attr('id')] = sortOptions[i];
-                    //TO-DO: test this telemetry handler
-                    TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
-                        tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
-                        tobj.mode = 'Kiosk';
-                    });
-                }
-                if (!comingBack) {
-                    //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
-                    if (timelineShown && $('#dateButton')) {
-                        currentTag = "Date";
-                    } else if ($('#titleButton')) {
-                        currentTag = "Title";
-                    } else {
-                        //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
-                        currentTag = sortOptions[0] || null;
-                        currentDefaultTag = currentTag;
-                        }
-                    }
-                    colorSortTags(currentTag);
-                }
-            }
+        
     }
 
     /**
