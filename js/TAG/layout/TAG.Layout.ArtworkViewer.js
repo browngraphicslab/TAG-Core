@@ -1220,19 +1220,24 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         function locationOpen() { //TODO why isn't this sliding open?
             if (!isOpen) {
+                
                 locHistoryToggle.css({'display':'none'});
                 toggler.css('display', 'none');
                 locationPanelDiv.show("slide", { direction: 'left' }, 500);
                 locationPanelDiv.css({ display: 'inline' });
+                locHistory.text("Close Related Maps");
                 isOpen = true;
             }
         }
 
         function locationClose() {
             if (isOpen) {
+                
                 locationPanelDiv.hide("slide", { direction: 'left' }, 500, function () {
                     toggler.css('display', 'block');
+                    locHistory.text("Related Maps");
                 });
+                
                 isOpen = false;
             }
         }
