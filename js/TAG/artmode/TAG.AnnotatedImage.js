@@ -610,18 +610,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             // constants
             IS_HOTSPOT = linq.Metadata.Type ? (linq.Metadata.Type === "Hotspot") : false,
-            IS_XFADE   = linq.Metadata.Type ? (linq.Metadata.Type === "Layer") : false,
-            X               = parseFloat(linq.Offset._x),
-            Y               = parseFloat(linq.Offset._y),
-            TITLE           = TAG.Util.htmlEntityDecode(mdoq.Name),
-            CONTENT_TYPE    = mdoq.Metadata.ContentType,
-            SOURCE          = mdoq.Metadata.Source,
-            DESCRIPTION     = TAG.Util.htmlEntityDecode(mdoq.Metadata.Description),
-            THUMBNAIL       = mdoq.Metadata.Thumbnail,
+            IS_XFADE = linq.Metadata.Type ? (linq.Metadata.Type === "Layer") : false,
+            X = parseFloat(linq.Offset._x),
+            Y = parseFloat(linq.Offset._y),
+            TITLE = TAG.Util.htmlEntityDecode(mdoq.Name),
+            CONTENT_TYPE = mdoq.Metadata.ContentType,
+            SOURCE = mdoq.Metadata.Source,
+            DESCRIPTION = TAG.Util.htmlEntityDecode(mdoq.Metadata.Description),
+            THUMBNAIL = mdoq.Metadata.Thumbnail,
             RELATED_ARTWORK = false,
 
             // misc initialized variables
-            mediaHidden      = true,
+            mediaHidden = true,
+            outerContainerhidden = true,
             currentlySeeking = false,
             movementTimeouts = [],
             circleRadius = 60,
@@ -704,6 +705,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     position = new Seadragon.Point(X, Y);
                     circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
                     circle.addClass('annotatedImageHotspotCircle');
+                    circle.click(function () {
+                        toggleHotspot();
+                    });
                     root.append(circle);
                 }
 
@@ -1051,7 +1055,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     });
                     iframe.css({
                         width: '100%',
-                        height: '100%'
+                        height: '90%'
                     });
                     mediaContainer.append(iframe);
                 }
@@ -1067,9 +1071,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             });
                         });
                     }
-                    if(CONTENT_TYPE === 'iframe'){
-                        descDiv.css({top:'110%'});
-                    }
+                    //if(CONTENT_TYPE === 'iframe'){
+                    //    descDiv.css({top:'110%'});
+                    //}
                     outerContainer.append(descDiv);
                 }
             }
@@ -1493,6 +1497,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function toggleMediaObject() {
             mediaHidden ? showMediaObject() : hideMediaObject();
+            outerContainerhidden = mediaHidden;
         }
 
         /**
@@ -1503,7 +1508,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function isVisible() {
             return !mediaHidden;
         }
-
+        function toggleHotspot() {
+            if (outerContainerhidden) {
+                outerContainer.show();
+                outerContainerhidden = false;
+            } else {
+                outerContainer.hide();
+                outerContainerhidden = true;
+            }
+        }
         /**
          * Pauses and resets (to time 0) the media if the content type is video or audio
          * @pauseResetMediaObject
