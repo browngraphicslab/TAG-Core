@@ -1914,8 +1914,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         console.log("error 3");
                     });
                 } else {
-                    rightbarLoadingSave.fadeOut();
-                    thumbnailLoadingSave.fadeOut();
                     close();
                     createMediaList();
                     rightbarLoadingDelete.fadeOut();
