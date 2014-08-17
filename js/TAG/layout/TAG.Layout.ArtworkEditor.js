@@ -326,6 +326,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     case 'Image':
                         src = (mediadoq.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg');
                         break;
+                    case 'iframe':
+                        src = tagPath + 'images/video_icon.svg';
+                        break;
                     default:
                         src = tagPath + 'images/text_icon.svg';
                         break;
