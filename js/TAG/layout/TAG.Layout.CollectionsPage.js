@@ -1668,6 +1668,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             circleTarget = location(otherCircle)
             otherCircle.stop();
             otherCircle.css({ "transition-property": "left", "transition-duration": "1s", "transition-timing-function": "ease-in-out" });
+            otherCircle.css({ "-webkit-transition-property": "left", "-webkit-transition-duration": "1s", "-webkit-transition-timing-function": "ease-in-out" });
             otherCircle.css(            //ANIMATEALERT
                 { "left": parseInt(circleTarget * otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH * 15 / 20 });
             displayLabels(otherCircle, circle);
@@ -1678,6 +1679,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tickTarget = location(tick)
             tick.stop()
             tick.css({ "transition-property": "left", "transition-duration": "1s", "transition-timing-function": "ease-in-out" });
+            tick.css({ "-webkit-transition-property": "left", "-webkit-transition-duration": "1s", "-webkit-transition-timing-function": "ease-in-out" });
             tick.css(               //ANIMATEALERT
                 { "left": (tickTarget * 100) + "%" });
         }
