@@ -2434,11 +2434,13 @@ TAG.Util.UI = (function () {
 
     // generate a popup message with specified text and button
     function popUpMessage(clickAction, message, buttonText, noFade, useHTML, onDialogClick) {
-        var overlay;
-        if(document.getElementById("blockInteractionOverlay")){
-            overlay = $(document.getElementById("blockInteractionOverlay"));
+        var overlay,first;
+        if(document.getElementById("popupblockInteractionOverlay")){
+            overlay = $(document.getElementById("popupblockInteractionOverlay"));
         }else{
             overlay = blockInteractionOverlay();
+            first = true;
+            $(overlay).attr('id', 'popupblockInteractionOverlay');
         }
         var confirmBox = document.createElement('div');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
@@ -2539,7 +2541,11 @@ TAG.Util.UI = (function () {
             if (clickAction) {
                 clickAction();
             }
-            removeAll();
+            if (first) {
+                removeAll();
+            } else {
+                $(confirmBox).remove();
+            }
         };
 
         function onEnter() {
@@ -2575,12 +2581,13 @@ TAG.Util.UI = (function () {
     // popup message to ask for user confirmation of an action e.g. deleting a tour
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown) {
         var overlay;
-        var origin=true;
-        if(document.getElementById("blockInteractionOverlay")){
-            origin = false;
-            overlay = $(document.getElementById("blockInteractionOverlay"));
-        }else{
+        var origin;
+        if (document.getElementById("popupblockInteractionOverlay")) {
+            overlay = $(document.getElementById("popupblockInteractionOverlay"));
+        } else {
+            origin = true;
             overlay = blockInteractionOverlay();
+            $(overlay).attr('id', 'popupblockInteractionOverlay');
         }
         container = container || window;
         var confirmBox = document.createElement('div');
@@ -2653,7 +2660,11 @@ TAG.Util.UI = (function () {
         $(confirmButton).text(confirmButtonText);
         
         confirmButton.onclick = function () {
-            removeAll();
+            if (origin) {
+                removeAll();
+            } else {
+                $(confirmBox).remove()
+            }
             confirmAction();
         };
 
@@ -2678,7 +2689,7 @@ TAG.Util.UI = (function () {
         });
         $(cancelButton).text('Cancel');
         cancelButton.onclick = function () {
-            if(origin===true){
+            if(origin){
                 removeAll();
             }else{
                 $(confirmBox).remove();
