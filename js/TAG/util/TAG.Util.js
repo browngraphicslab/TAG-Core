@@ -2434,11 +2434,13 @@ TAG.Util.UI = (function () {
 
     // generate a popup message with specified text and button
     function popUpMessage(clickAction, message, buttonText, noFade, useHTML, onDialogClick) {
-        var overlay;
-        if(document.getElementById("blockInteractionOverlay")){
-            overlay = $(document.getElementById("blockInteractionOverlay"));
+        var overlay,first;
+        if(document.getElementById("popupblockInteractionOverlay")){
+            overlay = $(document.getElementById("popupblockInteractionOverlay"));
         }else{
             overlay = blockInteractionOverlay();
+            first = true;
+            $(overlay).attr('id', 'popupblockInteractionOverlay');
         }
         var confirmBox = document.createElement('div');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
@@ -2447,7 +2449,7 @@ TAG.Util.UI = (function () {
                center_v: true,
                width: 0.5,
                height: 0.35,
-               max_width: 560,
+               max_width: 600,
                max_height: 200,
            });
 		var leftPos = ($('#tagRoot').width() - confirmBoxSpecs.width) * 0.5;
@@ -2539,7 +2541,11 @@ TAG.Util.UI = (function () {
             if (clickAction) {
                 clickAction();
             }
-            removeAll();
+            if (first) {
+                removeAll();
+            } else {
+                $(confirmBox).remove();
+            }
         };
 
         function onEnter() {
@@ -2573,14 +2579,15 @@ TAG.Util.UI = (function () {
 
     
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack) {
         var overlay;
-        var origin=true;
-        if(document.getElementById("blockInteractionOverlay")){
-            origin = false;
-            overlay = $(document.getElementById("blockInteractionOverlay"));
-        }else{
+        var origin;
+        if (document.getElementById("popupblockInteractionOverlay")) {
+            overlay = $(document.getElementById("popupblockInteractionOverlay"));
+        } else {
+            origin = true;
             overlay = blockInteractionOverlay();
+            $(overlay).attr('id', 'popupblockInteractionOverlay');
         }
         container = container || window;
         var confirmBox = document.createElement('div');
@@ -2596,7 +2603,7 @@ TAG.Util.UI = (function () {
                 center_h: true,
                 center_v: true,
                 width: 0.5,
-                height: 0.25,
+                height: 0.35,
                 max_width: 600,
                 max_height: 280,
             });
@@ -2626,6 +2633,7 @@ TAG.Util.UI = (function () {
             'word-wrap': 'break-word'
         });
         $(messageLabel).text(message);
+        TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
         $(optionButtonDiv).addClass('optionButtonDiv');
         $(optionButtonDiv).css({
@@ -2648,12 +2656,16 @@ TAG.Util.UI = (function () {
             'color': 'white',
             'margin-top': '-1%'
 
-        });
+        }).attr('id', 'popupConfirmButton');
         confirmButtonText = (!confirmButtonText || confirmButtonText === "") ? "Confirm" : confirmButtonText;
         $(confirmButton).text(confirmButtonText);
         
         confirmButton.onclick = function () {
-            removeAll();
+            if (origin) {
+                removeAll();
+            } else {
+                $(confirmBox).remove()
+            }
             confirmAction();
         };
 
@@ -2675,10 +2687,13 @@ TAG.Util.UI = (function () {
             'margin-right': '3%',
             'color': 'white',
             'margin-top': '-1%'
-        });
+        }).attr('id', 'popupCancelButton');
         $(cancelButton).text('Cancel');
+        if (forTourBack) {
+            $(cancelButton).text('Don\'t Save');
+        }
         cancelButton.onclick = function () {
-            if(origin===true){
+            if(origin){
                 removeAll();
             }else{
                 $(confirmBox).remove();
