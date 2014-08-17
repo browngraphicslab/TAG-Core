@@ -18,7 +18,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         topbar = $(document.createElement('div')),                  // get via root.find(...) in web app, set up in JADE
         mainPanel = $(document.createElement('div')),
         titleArea = $(document.createElement('div')),
-        rightbarLoadingDelete = $(document.createElement('div')),
+        //rightbarLoadingDelete = $(document.createElement('div')),
 
         // misc initialized variables
         helpText = "To select a location, type into the search field or \
@@ -1857,6 +1857,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleLayerButton = $toggleLayer;
 
             $unassociateAssocMediaButton.on('click', function () {
+
                 var assetDoqID = getActiveMediaMetadata('assetDoqID'); // TODO see comment below about AnnotatedImage
                 $saveAssocMediaButton.attr('disabled', true).css('color', 'rgba(255,255,255,0.5)');
                 if (getActiveMediaMetadata('contentType') === 'Video') { // TODO when this file is better integrated with the new AnnotatedImage, should store the current active media in a 'global' variable and just access its contentType rather than going through a helper function
@@ -1865,6 +1866,26 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     $('.rightbar').find('audio')[0].pause();
                 }
 
+
+                var thumbnailLoadingUnassoc;
+                var top =
+                $(document.getElementById(assetDoqID)).height();
+                thumbnailLoadingUnassoc = $(document.createElement('div'));
+                thumbnailLoadingUnassoc.css({
+                    'width': '100%',
+                    'height': '100%',
+                    'position': 'relative',
+                    'background-color': 'rgba(0,0,0,.85)',
+                    'top': '-' + top - 4 + 'px',
+                    'z-index': 100
+                });
+                $('#' + assetDoqID).append(thumbnailLoadingUnassoc);
+
+                TAG.Util.showLoading(thumbnailLoadingUnassoc, '20%', '40%', '40%');
+                thumbnailLoadingUnassoc.attr('class', 'thumbnailLoadingUnassoc');
+
+
+                var rightbarLoadingDelete = $(document.createElement('div'));
                 rightbarLoadingDelete.css({ // TODO STYL
                     'width': '20%',
                     'height': '100%',
@@ -1875,13 +1896,14 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'z-index': 100
                 });
                 mainPanel.append(rightbarLoadingDelete);
-                TAG.Util.showLoading(rightbarLoadingDelete, '20%');
+                TAG.Util.showLoading(rightbarLoadingDelete, '20%', '40%', '40%');
                 $unassociateAssocMediaButton.attr('disabled', true).css('color', 'rgba(255,255,255,0.5)');
 
                 // remove the associated media's linq to this artwork
                 if (assetDoqID) {
                     TAG.Worktop.Database.changeArtwork(artwork.Identifier, { RemoveIDs: assetDoqID }, function () {
                         close();
+                        $('.assetContainer').empty();
                         createMediaList();
                         rightbarLoadingDelete.fadeOut();
                     }, function () {
@@ -1892,6 +1914,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         console.log("error 3");
                     });
                 } else {
+                    rightbarLoadingSave.fadeOut();
+                    thumbnailLoadingSave.fadeOut();
                     close();
                     createMediaList();
                     rightbarLoadingDelete.fadeOut();

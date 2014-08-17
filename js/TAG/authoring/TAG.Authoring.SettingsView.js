@@ -1855,6 +1855,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptions = createSetting('Sort Options', sortDropDown);
             }
 
+            //$('.settingsViewTextarea').css({
+            //    'resize': 'vertical',
+            //    'height':'60px'
+            //});
+
             settingsContainer.append(privateSetting);
             settingsContainer.append(localVisibilitySetting);
             settingsContainer.append(name);
@@ -5944,8 +5949,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (typeof text === 'string') {
             text = text.replace(/<br \/>/g, '\n').replace(/<br>/g, '\n').replace(/<br\/>/g, '\n');
         }
-         var input = $(document.createElement('textarea')).val(text);
-        input.css('overflow-y', 'scroll');
+         var input = $(document.createElement('textarea')).val(text).attr('id','settingsViewTextarea');
+         input.css({
+             'overflow-y': 'scroll',
+             'resize': 'vertical',
+         });
         //input.autoSize();
         doWhenReady(input, function (elem) {
             if (input[0].scrollHeight<=(root.find('#setViewSettingsContainer').height() * 0.5)){
