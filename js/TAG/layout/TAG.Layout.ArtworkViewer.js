@@ -102,6 +102,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'top': '55%',
             'font-size': '200%',
             'color': 'white',
+            'opacity': '1'
         });
         loadingLabel.text('Loading Viewer');
         loadingArea.append(loadingLabel);
