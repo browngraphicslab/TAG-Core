@@ -457,7 +457,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         metadataButton.append(rightArrow);
 
         metaDataLabel = $(document.createElement('label')); // TODO J/S
-        metaDataLabel.text("Information");
+        metaDataLabel.text("Metadata");
         metaDataLabel.css({
             "width": "100%",
             "height": "100%",
@@ -2260,7 +2260,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             metadataForm.append(textFieldContainer);
 
             addInfoButton = $(document.createElement('button'));
-            addInfoButton.text('Add Information Field'); // TODO JADE/STYL
+            addInfoButton.text('Add Metadata Field'); // TODO JADE/STYL
             addInfoButton.attr('type', 'button');
             addInfoButton.css({
                 'left': '10%',
