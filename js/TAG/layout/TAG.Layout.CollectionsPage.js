@@ -10,7 +10,7 @@ TAG.Util.makeNamespace("TAG.Layout.CollectionsPage");
 TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, container, forSplitscreen) {
     "use strict";
 
-    options = options || {}; // cut down on null checks later
+    options = options || {}; // cut down on null checks latert
 
     var // DOM-related
         root                     = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
@@ -528,17 +528,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function applyCustomization() {
         var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR,DIMMING_FACTOR);
         $('.primaryFont').css({
-            'color': dimmedColor,
-            'font-family': FONT
+            'color': dimmedColor
+            //'font-family': FONT
         });
         $('.secondaryFont').css({
-            'color': '#' + SECONDARY_FONT_COLOR,
-            'font-family': FONT
+            'color': '#' + SECONDARY_FONT_COLOR
+            //'font-family': FONT
         });
         $('.collection-title').css({ 
-            'color': '#' + PRIMARY_FONT_COLOR,
-            'font-family': FONT
+            'color': '#' + PRIMARY_FONT_COLOR
+            //'font-family': FONT
         });
+
     }
 
     /**
@@ -586,7 +587,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineShown = false;
             }
 
-            applyCustomization();
+            //applyCustomization();
             buttonRow.empty();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
@@ -830,6 +831,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 initSearch(currCollection.collectionMedia);
             }
             cancelLoadCollection = function () { cancelLoad = true; };
+            applyCustomization();
         }
     }
     this.loadCollection = loadCollection;
@@ -948,16 +950,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @param {Array} contents     array of doq objects for each of the contents of this collection
          */
         function contentsHelper(contents) {
+            if (cancel()) return;
             if (!contents.length) {
                 var emptyCollectionDiv = $(document.createElement('div'));
+                emptyCollectionDiv.addClass("primaryFont");
                 emptyCollectionDiv.text("There are no artworks in this collection at present.");
-                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%" });
+                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": '#' + PRIMARY_FONT_COLOR});
                 catalogDiv.append(emptyCollectionDiv);
+                
+            } else {
+                loadSortTags(collection, contents);
             }
-            if (cancel()) return;
-            loadSortTags(collection,contents);
-            createArtTiles(contents);
+
             initSearch(contents);
+            createArtTiles(contents);
             callback && callback();
         }
 

@@ -3143,6 +3143,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     });
                     $(artHolder).append(artHolderText);
                     singleDoubleclick($(artHolder));
+                    TAG.Util.multiLineEllipsis($(artHolderText));
                 });
             });
             artQueue.add(function () {
