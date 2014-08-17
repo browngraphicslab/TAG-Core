@@ -5914,6 +5914,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         input.attr('autocomplete', 'off');
         input.attr('spellcheck', 'false');
+        input.addClass("searchBar");
         input.attr({
             'type': 'text',
             'maxlength': maxlength,

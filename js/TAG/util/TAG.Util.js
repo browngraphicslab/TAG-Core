@@ -3469,6 +3469,7 @@ TAG.Util.UI = (function () {
 
         // search bar
         pickerSearchBar = $(document.createElement('input'));
+        pickerSearchBar.addClass("searchBar");
         pickerSearchBar.attr('type', 'text');
         pickerSearchBar.css({
             'margin-left': '1%',

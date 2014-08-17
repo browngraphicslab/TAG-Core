@@ -2019,7 +2019,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         $(associatedsearchbar).attr('type', 'text');
-        associatedsearchbar.addClass('associatesearchbar');
+        associatedsearchbar.addClass('associatesearchbar searchBar');
         $(associatedsearchbar).css({
             'float': 'right',
             'margin-right': '3%',
@@ -2800,6 +2800,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'float': 'left',
         });
 
+        searchbar.addClass("searchBar");
         searchbar.attr('id', 'searchbar');
         $(searchbar).css({
             'float': 'right',
