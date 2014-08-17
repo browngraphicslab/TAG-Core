@@ -70,7 +70,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     return {
         getRoot: getRoot
     };
-
+    root.attr('unselectable','on');
+    root.css({'-moz-user-select':'-moz-none',
+           '-o-user-select':'none',
+           '-khtml-user-select':'none', 
+           '-webkit-user-select':'none',
+           '-ms-user-select':'none',
+           'user-select':'none'
+        });
+    root.bind('selectstart', function(){ return false; });
+    sideBar.disableSelection();
+    sideBar.attr('unselectable','on');
+    sideBar.css({'-moz-user-select':'-moz-none',
+           '-o-user-select':'none',
+           '-khtml-user-select':'none', 
+           '-webkit-user-select':'none',
+           '-ms-user-select':'none',
+           'user-select':'none'
+        });
+    sideBar.bind('selectstart', function(){ return false; });
     /**
      * Initiate artmode with a root, artwork image and a sidebar on the left
      * @method init

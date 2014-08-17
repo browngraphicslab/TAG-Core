@@ -3398,14 +3398,14 @@ TAG.Util.UI = (function () {
         picker.addClass("picker");
         picker.css({
             position: 'absolute',
-            width: '70%',
-            height: '60%',
+            width: '60%',
+            height: '55%',
             padding: '1%',
             'padding-left': '2%',
             'background-color': 'black',
             'border': '3px double white',
-            top: '19%',
-            left: '19%',
+            top: '22%',
+            left: '20%',
         });
         pickerOverlay.append(picker);
 
@@ -3414,14 +3414,16 @@ TAG.Util.UI = (function () {
         pickerHeader.addClass('pickerHeading');
         pickerHeader.text(title);
         pickerHeader.css({
-            'width': '100%',
+            'width': '97%',
             'color': 'white',
             'font-size': '120%',
-            'height': '8%',
+            'height': '7%',
             'margin-bottom': '10px'
         });
-        picker.append(pickerHeader);
 
+        picker.append(pickerHeader);
+        var fontsize = TAG.Util.getMaxFontSizeEM(title,0.7,pickerHeader.width(),pickerHeader.height());
+        pickerHeader.css('font-size', fontsize);
         // tab container
         if( tabs.length >= 2) {
             tabBanner = $(document.createElement('div'));
@@ -3530,9 +3532,11 @@ TAG.Util.UI = (function () {
         selectAllLabel.css({
             'color': '#aaaaaa',
             'display': 'inline-block',
-            'margin-left': '5%'
+            'margin-left': '5%',
+            'font-size':'0.8em',
         });
         selectAllLabel.text('Select All');
+        
         selectAllLabel.on('click', function () {
             var holder, guid, index;
             $.each($('.compHolder'), function (ind, holderElt) {
@@ -3559,7 +3563,8 @@ TAG.Util.UI = (function () {
         deselectAllLabel.css({
             'color': '#aaaaaa',
             'display': 'inline-block',
-            'margin-left': '5%'
+            'margin-left': '5%',
+            'font-size': '0.8em',
         });
         deselectAllLabel.text('Deselect All');
         deselectAllLabel.on('click', function () {
