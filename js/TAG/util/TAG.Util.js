@@ -3813,7 +3813,7 @@ TAG.Util.UI = (function () {
                 } else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/image_icon.svg');
                 } else if (comp.Metadata.ContentType === 'iframe') {
-                    compHolderImage.attr('src', tagPath + 'images/audio_icon.svg'); // TODO iframe fix this with new icon
+                    compHolderImage.attr('src', tagPath + 'images/video_icon.svg'); // TODO iframe fix this with new icon
                 } else if (comp.Type === 'Empty') { // tours....don't know why the type is 'Empty'
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;
@@ -4341,6 +4341,12 @@ TAG.Util.RLH = function (input) {
         locations = richLocationData.locations || [];
         defaultMapShown = richLocationData.defaultMapShown;
         currentIndex = 0;
+        if (!IS_WINDOWS) {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&onscriptload=DrawMap';
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
         bingMapHelper = BingMapHelper();
         customMapHelper = CustomMapHelper();
         importingMap = false;
@@ -5246,9 +5252,16 @@ TAG.Util.RLH = function (input) {
         function init(input) {
 
             // load bing map
-            Microsoft.Maps.loadModule('Microsoft.Maps.Map', {
-                callback: initMap
-            });
+            
+            if (IS_WINDOWS) {
+                Microsoft.Maps.loadModule('Microsoft.Maps.Map', {
+                    callback: initMap
+                });
+            } else {
+                Microsoft.Maps.loadModule('Microsoft.Maps.Themes.BingTheme', {
+                    callback: initMap
+                });
+            }
 
             /**
              * Callback function to initiailize bing map
