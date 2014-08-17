@@ -4340,6 +4340,12 @@ TAG.Util.RLH = function (input) {
         locations = richLocationData.locations || [];
         defaultMapShown = richLocationData.defaultMapShown;
         currentIndex = 0;
+        if (!IS_WINDOWS) {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&onscriptload=DrawMap';
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
         bingMapHelper = BingMapHelper();
         customMapHelper = CustomMapHelper();
         importingMap = false;
@@ -5245,9 +5251,16 @@ TAG.Util.RLH = function (input) {
         function init(input) {
 
             // load bing map
-            Microsoft.Maps.loadModule('Microsoft.Maps.Map', {
-                callback: initMap
-            });
+            
+            if (IS_WINDOWS) {
+                Microsoft.Maps.loadModule('Microsoft.Maps.Map', {
+                    callback: initMap
+                });
+            } else {
+                Microsoft.Maps.loadModule('Microsoft.Maps.Themes.BingTheme', {
+                    callback: initMap
+                });
+            }
 
             /**
              * Callback function to initiailize bing map
