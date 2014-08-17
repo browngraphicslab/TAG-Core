@@ -3304,9 +3304,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // artwork import button click handler
         catalogPickerImport.click(function () {
             var i;
-            // if an artwork is selected, add an artwork track and a display (and combine these commands in undo manager)
-            //catalogPickerImport.disabled = true;
-            (catalogPickerImport).text("Importing").css({ 'color': 'rgba(255, 255, 255, 0.5)' }).attr('disabled', true);
+            catalogPickerImport.val("Importing...");
+            catalogPickerImport.css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            catalogPickerImport.attr('disabled', "disabled");
             catalogPickerCancel.css({ 'color': 'rgba(255, 255, 255, 0.5)' }).attr('disabled', true);
             $(".artButton").off();
             $(".exhiHolder").off();
@@ -3341,14 +3341,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 loading.show();
                 (catalogPickerImport).hide();
                 (catalogPickerCancel).hide();
+                _clearCatalog();
+                $(catalogPickerOverlay).fadeOut();
                 for (i = 0; i < selectedArtworks.length; i++) {
                     importHelper(i);
                 }
                 undoManager.combineLast(2 * selectedArtworks.length);
                 $('#inkButton').css({ 'background-color': 'transparent', 'color': 'white' });
                 allowInk = true;
-                _clearCatalog();
-                $(catalogPickerOverlay).fadeOut();
+
             } else {
                 _clearCatalog();
                 $(catalogPickerOverlay).fadeOut();

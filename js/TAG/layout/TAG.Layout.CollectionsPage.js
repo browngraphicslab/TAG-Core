@@ -1965,11 +1965,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Thumbnail image
                 currentThumbnail = $(document.createElement('img'))
-                    .addClass('currentThumbnail')
-                    .attr('src', artwork.Metadata.Thumbnail ? FIX_PATH(artwork.Metadata.Thumbnail) : (tagPath+'images/no_thumbnail.svg'))
-                    //.on('load', function () {
-                      // TAG.Util.removeProgressCircle(circle);
-                   	//});
+                    .addClass('currentThumbnail');
+                if (artwork.Metadata.Thumbnail && artwork.Metadata.ContentType !== "Audio") {
+                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+                } else if (artwork.Metadata.ContentType === "Audio") {
+                    currentThumbnail.css('background-color', 'black');
+                    currentThumbnail.attr('src', tagPath + 'images/audio_thumbnail.svg');
+                } else {
+                    if (artwork.Metadata.Medium === "Video" || artwork.Metadata.ContentType === "Video" || artwork.Metadata.ContentType === "iframe") {
+                        currentThumbnail.css('background-color', 'black');
+                        currentThumbnail.attr('src', tagPath + 'images/video_thumbnail.svg');
+                    } else {
+                        currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
+                    }
+                }
+
+
                 !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
 
                 //Telemetry stuff
