@@ -1265,7 +1265,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (tag === 'Title') {
                 artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
             } else if (tag === 'Artist') {
-                artText.text(currentWork.Type === 'Empty' ? '(Interactive Tour)' : TAG.Util.htmlEntityDecode(currentWork.Name) ); 
+                artText.text(TAG.Util.htmlEntityDecode(currentWork.Name) ); 
                 yearTextBox.css('visibility', 'visible');
                 yearText = currentWork.Metadata.Artist;
                 if (!yearText) {
@@ -1283,12 +1283,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 } else {
                     yearTextBox.text(yearText);
                 }
-                var nameText;
-                if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe"){
-                    nameText = '(Interactive Tour)'
-                } else {
-                    nameText = TAG.Util.htmlEntityDecode(currentWork.Name);
-                }
+                var nameText = TAG.Util.htmlEntityDecode(currentWork.Name);
                 artText.text(nameText);
 
             } else if (tag === 'Tour') {
