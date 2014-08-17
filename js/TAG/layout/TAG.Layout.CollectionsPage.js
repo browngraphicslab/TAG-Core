@@ -1713,7 +1713,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!artwork) {
                 return;
             }
-            selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
+            selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/2, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
             $('.tile').css('opacity','1');
@@ -1784,10 +1784,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tileWidth = artworkTiles[artwork.Identifier].width();       
             if (comingBack){
                 tilePos = scrollPos;
-                duration = ANIMATION_DURATION;
+                duration = ANIMATION_DURATION/2;
             } else {
                 tilePos = artworkTiles[artwork.Identifier].position().left;
-                duration = ANIMATION_DURATION/3;
+                duration = ANIMATION_DURATION/2;
             }
             catalogDiv.animate({
                 scrollLeft: tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER
