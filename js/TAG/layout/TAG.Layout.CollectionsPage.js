@@ -1663,24 +1663,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             circleTarget,
             otherCircle;
 
-        for (i = 0; i<timelineEventCircles.length ;i++){
+        for (i = 0; i < timelineEventCircles.length ; i++) {
             otherCircle = timelineEventCircles[i]
             circleTarget = location(otherCircle)
             otherCircle.stop();
-            otherCircle.animate(
-                {"left" : parseInt(circleTarget*otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH*15/20}, 1000,"easeInOutQuint", (function(otherCircle) {
-                    return function() {
-                        displayLabels(otherCircle, circle);
-                    };
-                })(otherCircle));
+            otherCircle.css({ "transition-property": "left", "transition-duration": "1s", "transition-timing-function": "ease-in-out" });
+            otherCircle.css(            //ANIMATEALERT
+                { "left": parseInt(circleTarget * otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH * 15 / 20 });
+            displayLabels(otherCircle, circle);
         }
 
-        for (j = 0; j < timelineTicks.length; j++){
+        for (j = 0; j < timelineTicks.length; j++) {
             tick = timelineTicks[j]
             tickTarget = location(tick)
             tick.stop()
-            tick.animate(
-                {"left" : (tickTarget*100) + "%"}, 1000,"easeInOutQuint");
+            tick.css({ "transition-property": "left", "transition-duration": "1s", "transition-timing-function": "ease-in-out" });
+            tick.css(               //ANIMATEALERT
+                { "left": (tickTarget * 100) + "%" });
         }
 
         function location(dot){
