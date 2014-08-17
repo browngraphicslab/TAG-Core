@@ -2575,7 +2575,9 @@ TAG.Util.UI = (function () {
     // popup message to ask for user confirmation of an action e.g. deleting a tour
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown) {
         var overlay;
+        var origin=true;
         if(document.getElementById("blockInteractionOverlay")){
+            origin = false;
             overlay = $(document.getElementById("blockInteractionOverlay"));
         }else{
             overlay = blockInteractionOverlay();
@@ -2676,7 +2678,11 @@ TAG.Util.UI = (function () {
         });
         $(cancelButton).text('Cancel');
         cancelButton.onclick = function () {
-            removeAll();
+            if(origin===true){
+                removeAll();
+            }else{
+                $(confirmBox).remove();
+            }
             cancelAction && cancelAction();
         }
 
@@ -3394,7 +3400,7 @@ TAG.Util.UI = (function () {
         pickerHeader.css({
             'width': '100%',
             'color': 'white',
-            'font-size': '150%',
+            'font-size': '120%',
             'height': '8%',
             'margin-bottom': '10px'
         });

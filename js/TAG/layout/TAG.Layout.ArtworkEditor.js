@@ -2125,12 +2125,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             fieldTitle.css({ // TODO STYL
                 'display': 'inline-block',
                 'color': isAdditionalField ? 'black' : 'white',
-                'margin-right': '14px',
-                'width': '15%',
+                'margin-right': '12px',
+                'width': '18%',
                 'text-align': 'right',
                 'vertical-align': isAdditionalField ? '' : 'top',
                 'padding-top': isAdditionalField ? '0px' : '5px',
-                'overflow': 'auto',
+                'overflow': 'hidden',
                 'border': "0px solid black",
             });
 
@@ -2227,7 +2227,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 'background': 'rgba(0, 0, 0, 0.85)',
                 'border-radius': '0px 10px 10px 0px',
                 'left': '20%',
-                'width': '38%',
+                'width': '45%',
                 'position': 'absolute',
                 'display': 'none',
                 'color': 'white',
