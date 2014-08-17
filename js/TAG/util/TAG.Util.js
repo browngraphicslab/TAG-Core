@@ -2449,7 +2449,7 @@ TAG.Util.UI = (function () {
                center_v: true,
                width: 0.5,
                height: 0.35,
-               max_width: 560,
+               max_width: 600,
                max_height: 200,
            });
 		var leftPos = ($('#tagRoot').width() - confirmBoxSpecs.width) * 0.5;
@@ -2579,7 +2579,7 @@ TAG.Util.UI = (function () {
 
     
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack) {
         var overlay;
         var origin;
         if (document.getElementById("popupblockInteractionOverlay")) {
@@ -2603,7 +2603,7 @@ TAG.Util.UI = (function () {
                 center_h: true,
                 center_v: true,
                 width: 0.5,
-                height: 0.25,
+                height: 0.35,
                 max_width: 600,
                 max_height: 280,
             });
@@ -2633,6 +2633,7 @@ TAG.Util.UI = (function () {
             'word-wrap': 'break-word'
         });
         $(messageLabel).text(message);
+        TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
         $(optionButtonDiv).addClass('optionButtonDiv');
         $(optionButtonDiv).css({
@@ -2655,7 +2656,7 @@ TAG.Util.UI = (function () {
             'color': 'white',
             'margin-top': '-1%'
 
-        });
+        }).attr('id', 'popupConfirmButton');
         confirmButtonText = (!confirmButtonText || confirmButtonText === "") ? "Confirm" : confirmButtonText;
         $(confirmButton).text(confirmButtonText);
         
@@ -2686,8 +2687,11 @@ TAG.Util.UI = (function () {
             'margin-right': '3%',
             'color': 'white',
             'margin-top': '-1%'
-        });
+        }).attr('id', 'popupCancelButton');
         $(cancelButton).text('Cancel');
+        if (forTourBack) {
+            $(cancelButton).text('Don\'t Save');
+        }
         cancelButton.onclick = function () {
             if(origin){
                 removeAll();

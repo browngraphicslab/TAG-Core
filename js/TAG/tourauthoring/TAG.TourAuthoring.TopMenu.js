@@ -137,23 +137,24 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
      * @method createBackDialog
      */
     function createBackDialog() {
-        var backSaveButton = $(document.createElement('button'));
-        var backDontSaveButton = $(document.createElement('button'));
-        var backCancelButton = $(document.createElement('button'));
+
+        //var backSaveButton = $(document.createElement('button'));
+        //var backDontSaveButton = $(document.createElement('button'));
+        //var backCancelButton = $(document.createElement('button'));
         var backButtonArea = $(document.createElement('div'));
-        var backButtonRow = $(document.createElement('div'));
-        var backDialog = $(document.createElement('div'));
-        var backDialogTitle = $(document.createElement('div'));
+        //var backButtonRow = $(document.createElement('div'));
+        //var backDialog = $(document.createElement('div'));
+        //var backDialogTitle = $(document.createElement('div'));
         var buttonHeight = $(window).height() * 0.0504;
-        var backDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
-         {
-             center_h: true,
-             center_v: true,
-             width: 0.5,
-             height: 0.35,
-             max_width: 560,
-             max_height: 200,
-         });
+        //var backDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+         //{
+         //    center_h: true,
+         //    center_v: true,
+         //    width: 0.5,
+         //    height: 0.35,
+         //    max_width: 560,
+         //    max_height: 200,
+         //});
 
         backButtonArea.css({
             "top": "18.5%",
@@ -174,94 +175,94 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         backButton.mouseleave(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
-        backDialogOverlay.attr('id', 'backDialogOverlay');
-        backDialogOverlay.css({
-            display: 'none',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            'background-color': 'rgba(0,0,0,0.6)',
-            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-        });
+        //backDialogOverlay.attr('id', 'backDialogOverlay');
+        //backDialogOverlay.css({
+        //    display: 'none',
+        //    position: 'absolute',
+        //    top: 0,
+        //    left: 0,
+        //    width: '100%',
+        //    height: '100%',
+        //    'background-color': 'rgba(0,0,0,0.6)',
+        //    'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
+        //});
 
-        backDialog.attr('id', 'backDialog');
-        backDialog.css({
-            position: 'absolute',
-            left: backDialogSpecs.x + 'px',
-            top: backDialogSpecs.y + 'px',
-            width: backDialogSpecs.width + 'px',
-            height: backDialogSpecs.height + 'px',
-            border: '3px double white',
-            'background-color': 'black',
-        });
+        //backDialog.attr('id', 'backDialog');
+        //backDialog.css({
+        //    position: 'absolute',
+        //    left: backDialogSpecs.x + 'px',
+        //    top: backDialogSpecs.y + 'px',
+        //    width: backDialogSpecs.width + 'px',
+        //    height: backDialogSpecs.height + 'px',
+        //    border: '3px double white',
+        //    'background-color': 'black',
+        //});
         
-        backDialogOverlay.append(backDialog);
+        //backDialogOverlay.append(backDialog);
 
 
-        backDialogTitle.attr('id', 'backDialogTitle');
-        backDialogTitle.css({
-            color: 'white',
-            'width': '80%',
-            'height': '15%',
-            'left': '10%',
-            'top': '12.5%',
-            'font-size': '1.25em',
-            'position': 'relative',
-            'text-align': 'center',
-            'word-wrap': 'break-word',
-        });
-        backDialog.append(backDialogTitle);
-        backDialog.append(document.createElement('br'));
+        //backDialogTitle.attr('id', 'backDialogTitle');
+        //backDialogTitle.css({
+        //    color: 'white',
+        //    'width': '80%',
+        //    'height': '15%',
+        //    'left': '10%',
+        //    'top': '12.5%',
+        //    'font-size': '1.25em',
+        //    'position': 'relative',
+        //    'text-align': 'center',
+        //    'word-wrap': 'break-word',
+        //});
+        //backDialog.append(backDialogTitle);
+        //backDialog.append(document.createElement('br'));
 
-        backButtonRow.css({
-            'position': 'relative',
-            'display': 'block',
-            'width': '80%',
-            'left': '10%',
-            'top': '40%'
-        });
+        //backButtonRow.css({
+        //    'position': 'relative',
+        //    'display': 'block',
+        //    'width': '80%',
+        //    'left': '10%',
+        //    'top': '40%'
+        //});
 
-        backSaveButton.css({
-            'padding': '1%',
-            'border': '1px solid white',
-            'width': 'auto',
-            'position': 'relative',
-            'margin-top': '1%',
-            float: 'right',
-            display:'inline-block'
-        });
-        backSaveButton.text('Save');
-        backSaveButton.click(function () {
-            backSaveButton.text('Saving...');
-            backSaveButton.attr("disabled", true);
-            backSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-            backDontSaveButton.attr("disabled", true);
-            save();
-        });
-        backButtonRow.append(backSaveButton);
+        //backSaveButton.css({
+        //    'padding': '1%',
+        //    'border': '1px solid white',
+        //    'width': 'auto',
+        //    'position': 'relative',
+        //    'margin-top': '1%',
+        //    float: 'right',
+        //    display:'inline-block'
+        //});
+        //backSaveButton.text('Save');
+        //backSaveButton.click(function () {
+        //    backSaveButton.text('Saving...');
+        //    backSaveButton.attr("disabled", true);
+        //    backSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+        //    backDontSaveButton.attr("disabled", true);
+        //    save();
+        //});
+        //backButtonRow.append(backSaveButton);
 
-        backDontSaveButton.css({
-            'padding': '1%',
-            'border': '1px solid white',
-            'width': 'auto',
-            'position': 'relative',
-            'margin-top': '1%',
-            float: 'left',
-            display: 'inline-block'
+        //backDontSaveButton.css({
+        //    'padding': '1%',
+        //    'border': '1px solid white',
+        //    'width': 'auto',
+        //    'position': 'relative',
+        //    'margin-top': '1%',
+        //    float: 'left',
+        //    display: 'inline-block'
 
-        });
-        backDontSaveButton.text('Don\'t Save');
-        backDontSaveButton.click(function () {
-            backDontSaveButton.attr("disabled", true);
-            backDontSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-            backSaveButton.attr("disabled",true);
-            goBack();
-        });
+        //});
+        //backDontSaveButton.text('Don\'t Save');
+        //backDontSaveButton.click(function () {
+        //    backDontSaveButton.attr("disabled", true);
+        //    backDontSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+        //    backSaveButton.attr("disabled",true);
+        //    goBack();
+        //});
 
-        backButtonRow.append(backDontSaveButton);
-        backDialog.append(backButtonRow);
+        //backButtonRow.append(backDontSaveButton);
+        //backDialog.append(backButtonRow);
 
         backButton.click(function () {
             var messageBox;
@@ -276,18 +277,29 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
 
             if (nameChanged || (undoManager.dirtyStateGetter() === false) || 
                 (componentControls.getInkUndoManager() && (componentControls.getInkUndoManager().dirtyStateGetter() === false))) {
-                backDialogOverlay.fadeIn(500);
+                //backDialogOverlay.fadeIn(500);
                 if (titleTextArea.val().length === 0) {
                     titleTextArea.val('Untitled Tour');
                 }
-                backDialogTitle.text('Save changes to ' + $(titleTextArea).val() + ' before leaving?');
+                //backDialogTitle.text('Save changes to ' + $(titleTextArea).val() + ' before leaving?');
+                var backDialog = TAG.Util.UI.PopUpConfirmation(function () {
+                    $("#popupConfirmButton").text('Saving...').attr('disabled', true);
+                    save();
+                }, 'Save changes to ' + $(titleTextArea).val() + ' before leaving?', "Save", false, function () {
+                    goBack();
+                    $("#popupConfirmButton").attr('disabled', true);//.css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+                    $("#popupCancelButton").attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+                }, null, null, true);
+                root.append(backDialog);
+
+                $(backDialog).css('z-index', 1000000);
+                $(backDialog).show();
             } else {
                 goBack(); 
             }
         });
         backButtonArea.append(backButton);
         topbar.append(backButtonArea);
-        TAG.Util.multiLineEllipsis(backDialog);
     }
 
     /**Creating and positioning the title text area
@@ -373,109 +385,117 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             width: saveButtonSpecs.width + 'px',
             height: saveButtonSpecs.height + 'px',
             'top': saveButtonSpecs.y + 'px',
-            //'font-size': fontsize,
-            'font-size': '70%',
+            'font-size': fontsize,
+            //'font-size': '1em',
             'left': parseInt(titleTextArea.css('left'), 10) + titleTextArea.width() + 45 + ($(window).width() * 0.022) + 'px',
         });
         saveButton.click(function () {
             $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
-            dialogOverlay.fadeIn(500);
+            //dialogOverlay.fadeIn(500);
             if (titleTextArea.val().length === 0) {
                 titleTextArea.val('Untitled Tour');
             }
-            dialogTitle.text('Save changes to ' + titleTextArea.val() + '?');
-            submitButton.css({
-                'color': 'white',
-                'border': '1px solid white',
-                'cursor': 'pointer'
-            });
-            submitButton.attr('disabled', false);
+            var saveDialog = TAG.Util.UI.PopUpConfirmation(function () {
+                $("#popupConfirmButton").text('Saving...').attr('disabled', true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+                save(true);
+            }, 'Save changes to ' + $(titleTextArea).val(), "Save", false);
+            root.append(saveDialog);
+            $(saveDialog).css('z-index', 1000000);
+            $(saveDialog).show();
+            //dialogTitle.text('Save changes to ' + titleTextArea.val() + '?');
+            //submitButton.css({
+            //    'color': 'white',
+            //    'border': '1px solid white',
+            //    'cursor': 'pointer'
+            //});
+            //submitButton.attr('disabled', false);
+
         });
 
         /*save button dialog code*/
         // Overlay to darken out main UI
-        dialogOverlay.attr('id', 'dialogOverlay');
-        dialogOverlay.css({
-            display: 'none',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            'background-color': 'rgba(0,0,0,0.6)',
-            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-        });
+        //dialogOverlay.attr('id', 'dialogOverlay');
+        //dialogOverlay.css({
+        //    display: 'none',
+        //    position: 'absolute',
+        //    top: 0,
+        //    left: 0,
+        //    width: '100%',
+        //    height: '100%',
+        //    'background-color': 'rgba(0,0,0,0.6)',
+        //    'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
+        //});
 
-        // Actual dialog container
-        saveDialog.attr('id', 'saveDialog');
-        saveDialog.css({
-            position: 'absolute',
-            left: saveDialogSpecs.x + 'px',
-            top: saveDialogSpecs.y + 'px',
-            width: saveDialogSpecs.width + 'px',
-            height: saveDialogSpecs.height + 'px',
-            border: '3px double white',
-            'background-color': 'black',
-        });
-        TAG.Util.multiLineEllipsis(saveDialog);
+        //// Actual dialog container
+        //saveDialog.attr('id', 'saveDialog');
+        //saveDialog.css({
+        //    position: 'absolute',
+        //    left: saveDialogSpecs.x + 'px',
+        //    top: saveDialogSpecs.y + 'px',
+        //    width: saveDialogSpecs.width + 'px',
+        //    height: saveDialogSpecs.height + 'px',
+        //    border: '3px double white',
+        //    'background-color': 'black',
+        //});
+        //TAG.Util.multiLineEllipsis(saveDialog);
         
-        dialogTitle.attr('id', 'dialogTitle');
-        dialogTitle.css({
-            color: 'white',
-            'width': '80%',
-            'height': '15%',
-            'left': '10%',
-            'top': '12.5%',
-            'font-size': '1em',
-            'position': 'relative',
-            'text-align': 'center',
-            'word-wrap': 'break-word',
-        });
+        //dialogTitle.attr('id', 'dialogTitle');
+        //dialogTitle.css({
+        //    color: 'white',
+        //    'width': '80%',
+        //    'height': '15%',
+        //    'left': '10%',
+        //    'top': '12.5%',
+        //    'font-size': '1em',
+        //    'position': 'relative',
+        //    'text-align': 'center',
+        //    'word-wrap': 'break-word',
+        //});
 
-        // Container for "save / cancel" buttons
-        buttonRow.css({
-            'position': 'relative',
-            'display': 'block',
-            'width': '80%',
-            'left': '10%',
-            'top': '40%'
-        });
+        //// Container for "save / cancel" buttons
+        //buttonRow.css({
+        //    'position': 'relative',
+        //    'display': 'block',
+        //    'width': '80%',
+        //    'left': '10%',
+        //    'top': '40%'
+        //});
         
-        submitButton.css({
-            'padding': '1%',
-            'border': '1px solid white',
-            'width': 'auto',
-            'position': 'relative',
-            'margin-top': '4.5%',
-        });
-        submitButton.text('Save');
-        submitButton.click(function () {
-            submitButton.text('Saving...');
-            save(true);
-            submitButton.attr('disabled', true);
-            submitButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-        });
+        //submitButton.css({
+        //    'padding': '1%',
+        //    'border': '1px solid white',
+        //    'width': 'auto',
+        //    'position': 'relative',
+        //    'margin-top': '4.5%',
+        //});
+        //submitButton.text('Save');
+        //submitButton.click(function () {
+        //    submitButton.text('Saving...');
+        //    save(true);
+        //    submitButton.attr('disabled', true);
+        //    submitButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+        //});
 
-        cancelButton.css({
-            'padding': '1%',
-            'border': '1px solid white',
-            'width': 'auto',
-            'position': 'relative',
-            'margin-top': '5%',
-            'float': 'right'
-        });
-        cancelButton.text('Cancel');
-        cancelButton.click(function () { dialogOverlay.fadeOut(500); });
+        //cancelButton.css({
+        //    'padding': '1%',
+        //    'border': '1px solid white',
+        //    'width': 'auto',
+        //    'position': 'relative',
+        //    'margin-top': '5%',
+        //    'float': 'right'
+        //});
+        //cancelButton.text('Cancel');
+        //cancelButton.click(function () { dialogOverlay.fadeOut(500); });
         
         
         // appending stuff
         topbar.append(saveButton);
-        dialogOverlay.append(saveDialog);
-        saveDialog.append(dialogTitle);
-        //saveDialog.append(document.createElement('br'));
-        saveDialog.append(buttonRow);
-        buttonRow.append(submitButton);
-        buttonRow.append(cancelButton);
+        //dialogOverlay.append(saveDialog);
+        //saveDialog.append(dialogTitle);
+        ////saveDialog.append(document.createElement('br'));
+        //saveDialog.append(buttonRow);
+        //buttonRow.append(submitButton);
+        //buttonRow.append(cancelButton);
     }
     
     /**Handles creating the tour options menu on the top bar
