@@ -253,7 +253,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
         }
         if (!previewing){
-        	container.css('min-width', 0.125 * screenWidth);
+        	container.css('min-width', 0.14 * screenWidth);
         }
 
         slideButton.on('click', function () {
