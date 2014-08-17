@@ -108,7 +108,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     function successConnecting() {
         TAG.Worktop.Database.getVersion(function (ver) {
-            if (parseFloat(ver) < 1.5) {
+            if (parseFloat(ver) < 1.0) {
                 tagContainer.empty();
                 tagContainer.append((new TAG.Layout.InternetFailurePage("Old Server")).getRoot());
             } else {
