@@ -2515,7 +2515,7 @@ TAG.Util.UI = (function () {
             'height': '10%',
             'width': '100%',
             'position': 'absolute',
-            'bottom': '12%',
+            'bottom': '6%',
             'right': '2%',
         });
 
@@ -2533,7 +2533,7 @@ TAG.Util.UI = (function () {
             //'margin-top': '1%',
             'float': "right",
             'margin-right': '3%',
-            'margin-top': '-3%',
+            'margin-top': '-1%',
             color: 'white',
         });
         buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
@@ -2620,6 +2620,7 @@ TAG.Util.UI = (function () {
         });
 
         var messageLabel = document.createElement('div');
+        
         $(messageLabel).css({
             color: 'white',
             'width': '80%',
@@ -2633,6 +2634,8 @@ TAG.Util.UI = (function () {
             'text-overflow': 'ellipsis',
             'word-wrap': 'break-word'
         });
+        var fontsize = TAG.Util.getMaxFontSizeEM(message,0.8, $(messageLabel).width(), $(messageLabel).height());
+        $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message);
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
@@ -2642,7 +2645,7 @@ TAG.Util.UI = (function () {
             'width': '100%',
             'position': 'absolute',
             'color': 'white',
-            'bottom': '10%',
+            'bottom': '5%',
             'right': '5%'
         });
 
@@ -2655,7 +2658,7 @@ TAG.Util.UI = (function () {
             'float': "left",
             'margin-left': '12%',
             'color': 'white',
-            'margin-top': '-1%'
+            'margin-top': '1%'
 
         }).attr('id', 'popupConfirmButton');
         confirmButtonText = (!confirmButtonText || confirmButtonText === "") ? "Confirm" : confirmButtonText;
@@ -2687,7 +2690,7 @@ TAG.Util.UI = (function () {
             'float': "right",
             'margin-right': '3%',
             'color': 'white',
-            'margin-top': '-1%'
+            'margin-top': '1%'
         }).attr('id', 'popupCancelButton');
         $(cancelButton).text('Cancel');
         if (forTourBack) {
@@ -3442,7 +3445,7 @@ TAG.Util.UI = (function () {
                 tab.attr('id', 'tab' + i);
                 tab.css({
                     'display': 'inline-block',
-                    'min-width': '20%',
+                    'min-width': '18%',
                     'width': 'auto',
                     'padding-left': '2%',
                     'padding-right': '2%',
@@ -3454,7 +3457,7 @@ TAG.Util.UI = (function () {
                     'border-left': '1px solid ' + ((i === 0) ? 'white' : 'black'), // repeated computation
                     'border-bottom': '1px solid ' + ((i === 0) ? 'black' : 'white'),
                     'text-align': 'center',
-
+                    'font-size':'0.8em'
                 });
                 tab.text(tabs[i].name);
                 tab.on('click', tabHelper(i));
@@ -3751,12 +3754,12 @@ TAG.Util.UI = (function () {
                     return (a.Name.toLowerCase() < b.Name.toLowerCase()) ? -1 : 1;
                 });
                 for (var i = 0; i < compArray.length; i++) {
-                    loadQueue.add(drawComp(compArray[i], applyClick));
+                    loadQueue.add(drawComp(compArray[i], applyClick),i);
                 }
             }
         }
 
-        function drawComp(comp, applyClick) {
+        function drawComp(comp, applyClick,i) {
             return function () {
                 var compHolder = $(document.createElement('div'));
                 compHolder.addClass("compHolder");
@@ -3838,7 +3841,6 @@ TAG.Util.UI = (function () {
                 //         'width': '100%',
                 //     });
                 // }
-
                 compHolderImage.css({
                     'max-height': '100%',
                     'position': 'absolute',
@@ -3847,11 +3849,25 @@ TAG.Util.UI = (function () {
                     'top': '0',
                     'bottom': '0',
                     'margin': 'auto',
-                    'display':'block',
+                    'display': 'block',
                     'max-width': '100%',
                     width: 'auto',
-                    //height: 'auto'
                 });
+                if (i < 30) {
+                    $(".compHolderImage").css({
+                        'max-height': '100%',
+                        //'position': 'absolute',
+                        //'left': '0',
+                        //'right': '0',
+                        //'top': '0',
+                        //'bottom': '0',
+                        //'margin': 'auto',
+                        //'display': 'block',
+                        'max-width': '100%',
+                        width: 'auto',
+                        //height: 'auto'
+                    });
+                }
                 // compHolderImage.removeAttr('width');
                 // compHolderImage.removeAttr('height');
                 imgHolderDiv.append(compHolderImage);
