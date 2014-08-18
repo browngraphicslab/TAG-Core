@@ -921,11 +921,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
                 if (timelineShown && $('#dateButton')) {
                     currentTag = "Date";
+                    currentDefaultTag = "Date";
                 } else if ($('#titleButton')) {
                     currentTag = "Title";
+                    currentDefaultTag = "Title";
                 } else {
                     //if no year or title sort currentTag is first sortButton, or null if there are no sortOptions.
-                    currentTag = sortOptions[0] || null;
+                    sortOptions[0] ? currentTag = sortOptions[0] : currentTag = null;
                     currentDefaultTag = currentTag;
                 }
             }
@@ -1745,6 +1747,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 previewWidth,
                 containerWidth,
                 containerLeft,
+                newScrollPos,
                 duration,
                 newTile,
                 previewTile,
@@ -1791,8 +1794,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tilePos = artworkTiles[artwork.Identifier].position().left;
                 duration = ANIMATION_DURATION/3;
             }
+            newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
+            if (newScrollPos<0){
+                newScrollPos = 0;
+            }
+            if (parseInt(newScrollPos) === catalogDiv.scrollLeft()){
+                duration = 0;
+            }
             catalogDiv.animate({
-                scrollLeft: tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER
+                scrollLeft: newScrollPos
             }, duration, "easeInOutQuint", function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
