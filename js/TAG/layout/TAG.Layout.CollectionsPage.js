@@ -231,9 +231,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'width'   : 'auto',
             'top'     : '22%',
         };
+        /*
         var tileCircle = TAG.Util.showProgressCircle(tileDiv, progressCircCSS, '0px', '0px', false);
         tileLoadingArea.append(tileCircle);
-
+        */
+        searchInput.hide();
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
 
@@ -517,8 +519,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         } else if (toShowFirst) {
             loadFirstCollection();
         }
-
         loadingArea.hide();
+        searchInput.show();
     }
 
     /**
