@@ -767,7 +767,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'height': '45%',
                 'width': '10%',
                 'min-height': '20px',
-                'top':    '0%',
+                'top':    '5%',
                 'display':  'inline-block',
                 'margin':   '2px 1% 0px 1%',
             });
@@ -801,13 +801,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'min-height' : '20px',
                 'position': 'absolute',
                 'width': '8%',
-                'right':    '2%',
+                'right':    '1%',
                 'top':      '10%'
             });
 
             timeContainer.css({
                 'height': '45%',
-                'top': '0%',
+                'top': '5%',
                 'width' : '15%',
                 'right':  volHolder.width() + 10 + 'px',
                 'position': 'absolute',
@@ -1399,14 +1399,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             closeButton.text('X');
             closeButton.css({
                 'position': 'absolute',
-                'top': '2%',
+                'top': '5px',
                 'width': '4%',
                 'height': '4%',
-                'min-height': '15px',
-                'min-width': '15px',
+                'min-height': '20px',
+                'min-width': '20px',
                 'z-index': '1',
                 'background-color': '',
-                'right': '2%'
+                'right': '5px'
             });
             return closeButton;
         }
