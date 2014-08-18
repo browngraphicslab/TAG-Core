@@ -231,9 +231,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'width'   : 'auto',
             'top'     : '22%',
         };
+        /*
         var tileCircle = TAG.Util.showProgressCircle(tileDiv, progressCircCSS, '0px', '0px', false);
         tileLoadingArea.append(tileCircle);
-
+        */
+        searchInput.hide();
         applyCustomization();
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
 
@@ -517,8 +519,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         } else if (toShowFirst) {
             loadFirstCollection();
         }
-
         loadingArea.hide();
+        searchInput.show();
     }
 
     /**
@@ -1261,7 +1263,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if(currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio" ) {
                 tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
             } else if (currentWork.Metadata.ContentType === "Audio" ){
-                tileIma.css('background-color','black');
+                tileImage.css('background-color','black');
                 tileImage.attr('src', tagPath+'images/audio_thumbnail.svg');
             } else {
                 if (currentWork.Metadata.Medium=== "Video"|| currentWork.Metadata.ContentType==="Video"||currentWork.Metadata.ContentType ==="iframe"){
@@ -1332,6 +1334,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     main.append(videoLabel);
                 }
             }
+
+            console.log(currentWork.Metadata.ContentType);
 
             tileDiv.append(main);
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
