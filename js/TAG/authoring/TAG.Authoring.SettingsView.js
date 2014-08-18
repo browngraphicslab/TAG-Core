@@ -2470,7 +2470,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function editTour(tour) {
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
-        loadingOverlay('Loading Tour...');
+        loadingOverlay('Loading Tour...', 1);
         middleQueue.clear();
         rightQueue.clear();
         setTimeout(function () {
@@ -4812,7 +4812,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function editArtwork(artwork) {
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
-        loadingOverlay('Loading Artwork...');
+        loadingOverlay('Loading Artwork...', 1);
         middleQueue.clear();
         clearTimeout(checkConTimerId);
         rightQueue.clear();
@@ -5669,7 +5669,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'position': 'relative',
             'font-size': '70%',
             'font-style': 'italic',
-            'top': '-25px',
+            'top': '-10px',
             'white-space': 'nowrap',
             'display': 'inline-block',
             'color': "#808080"
@@ -6285,16 +6285,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadingOverlay
      * @param {String} text     Text defaults to 'Loading...' if not specified. 
      */
-    function loadingOverlay(text) {
+    function loadingOverlay(text, opacity) {
         text = text || "Loading...";
         var overlay = $(document.createElement('div'));
+        var opacity = opacity || 0.5;
         overlay.css({
             'position': 'absolute',
             'left': '0px',
             'top': '0px',
             'width': '100%',
             'height': '100%',
-            'background-color': 'rgba(0,0,0,0.5)',
+            'background-color': 'rgba(0,0,0,' + opacity + ')',
             'z-index': '1000',
         });
         root.append(overlay);

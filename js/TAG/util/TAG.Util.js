@@ -2533,7 +2533,7 @@ TAG.Util.UI = (function () {
             //'margin-top': '1%',
             'float': "right",
             'margin-right': '3%',
-            'margin-top': '-3%',
+            'margin-top': '-1%',
             color: 'white',
         });
         buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
@@ -2658,7 +2658,7 @@ TAG.Util.UI = (function () {
             'float': "left",
             'margin-left': '12%',
             'color': 'white',
-            'margin-top': '-1%'
+            'margin-top': '1%'
 
         }).attr('id', 'popupConfirmButton');
         confirmButtonText = (!confirmButtonText || confirmButtonText === "") ? "Confirm" : confirmButtonText;
@@ -2690,7 +2690,7 @@ TAG.Util.UI = (function () {
             'float': "right",
             'margin-right': '3%',
             'color': 'white',
-            'margin-top': '-1%'
+            'margin-top': '1%'
         }).attr('id', 'popupCancelButton');
         $(cancelButton).text('Cancel');
         if (forTourBack) {
