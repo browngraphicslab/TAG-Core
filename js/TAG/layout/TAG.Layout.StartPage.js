@@ -352,8 +352,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not supported in Firefox on touch sreen by default. Please go to about:config if you want to disable the default touch setting"),"OK");
                 root.append(popupMsg);
                 popupMsg.show();
-                document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
-                $('meta[name=viewport]').attr('content','width='+$(window).width()+',user-scalable=no');
+                //document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
+                //$('meta[name=viewport]').attr('content','width='+$(window).width()+',user-scalable=no, maximum-scale=1.0');
                 return(version >= 28);
             } 
             // Internet Explorer 10+
