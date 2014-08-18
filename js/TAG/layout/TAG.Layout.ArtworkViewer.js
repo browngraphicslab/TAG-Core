@@ -534,21 +534,21 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         infoYear.text(doq.Metadata.Year);
         infoTitle.css({
             'color': '#' + PRIMARY_FONT_COLOR,
-            'font-family': FONT
+            //'font-family': FONT
         });
 
         infoArtist.css({
             'color': '#' + PRIMARY_FONT_COLOR,
-            'font-family': FONT
+            //'font-family': FONT
         });
 
         infoYear.css({
             'color': '#' + PRIMARY_FONT_COLOR,
-            'font-family': FONT
+            //'font-family': FONT
         });
         locHistory && locHistory.css({
             'color': '#' + PRIMARY_FONT_COLOR,
-            'font-family': FONT
+            //'font-family': FONT
         });
 
         // splitscreen
@@ -658,7 +658,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 infoCustom.text(fieldTitle + ': ' + fieldValue);
                 infoCustom.css({
                     'color': '#' + PRIMARY_FONT_COLOR,
-                    'font-family': FONT
+                    //'font-family': FONT
                 });
                 infoCustom.appendTo(info);
             }
@@ -1286,7 +1286,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         label.text(title);
         label.css({
             'color': '#' + PRIMARY_FONT_COLOR,
-            'font-family': FONT
+            //'font-family': FONT
         });
         toggle.attr({
             src: tagPath+'images/icons/plus.svg',

@@ -866,8 +866,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
         //var font = fontFamilyInput.find(":selected").text();
-        $('.primaryFont').css('font-family', fontFamily);
-        $('.secondaryFont').css('font-family', fontFamily);
+        //$('.primaryFont').css('font-family', fontFamily);
+        //$('.secondaryFont').css('font-family', fontFamily);
         
         // Handle changes
 
@@ -5989,8 +5989,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             options[i].selected = true;
         }
         selectElt.change(function () {
-            $('.primaryFont').css('font-family', selectElt.find(":selected").text());
-            $('.secondaryFont').css('font-family', selectElt.find(":selected").text());
+            //$('.primaryFont').css('font-family', selectElt.find(":selected").text());
+            //$('.secondaryFont').css('font-family', selectElt.find(":selected").text());
         });
         selectElt.attr('value', value);
         //selectElt.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
