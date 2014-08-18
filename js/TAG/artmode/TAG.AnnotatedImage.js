@@ -626,7 +626,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             currentlySeeking = false,
             movementTimeouts = [],
             circleRadius = 60,
-            currentlyZooming = false,
             // misc uninitialized variables
             circle,
             position,
@@ -1169,7 +1168,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             }
 
            //Manipulation for touch and drag events
-            if (newW === w && !currentlyZooming){ //If media object is being dragged (not resized)
+            if (newW === w){ //If media object is being dragged (not resized)
                 if ((0 < t + h) && (t < rootHeight) && (0 < l + w) && (l< rootWidth)) { // and is still on screen
                     
                     currentTime = Date.now();
@@ -1233,7 +1232,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     return;
                 }
             } else{ // zoom from touch point: change width and height of outerContainer
-                currentlyZooming = true;
                 if (minW != newW){
                 outerContainer.css('left', l- (newW - w)/2);
                 outerContainer.css("width", newW + "px");
@@ -1247,7 +1245,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 mediaManipPreprocessing(); //Update dimensions since they've changed, and keep this media as active (if say an inactive media was dragged/pinch-zoomed)
                 }                
             }
-            currentlyZooming = false;
         }
 
 
