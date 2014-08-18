@@ -353,6 +353,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 root.append(popupMsg);
                 popupMsg.show();
                 document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
+                $('meta[name=viewport]').attr('content','width='+$(window).width()+',user-scalable=no');
                 return(version >= 28);
             } 
             // Internet Explorer 10+
