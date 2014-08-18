@@ -587,8 +587,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (onAssocMediaView && collection.collectionMediaMinYear===Infinity){
                 timelineShown = false;
             }
-
-            applyCustomization();
             buttonRow.empty();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
@@ -831,6 +829,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 loadSortTags(currCollection, currCollection.collectionMedia)
                 initSearch(currCollection.collectionMedia);
             }
+            applyCustomization();
             cancelLoadCollection = function () { cancelLoad = true; };
         }
     }
@@ -955,7 +954,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!contents.length) {
                 var emptyCollectionDiv = $(document.createElement('div'));
                 emptyCollectionDiv.text("There are no artworks in this collection at present.");
-                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%" });
+                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": PRIMARY_FONT_COLOR });
                 catalogDiv.append(emptyCollectionDiv);
             }
             if (cancel()) return;
