@@ -1343,7 +1343,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     maxConstraint = 800;
                 } else {
                     minConstraint = 200;
-                    maxConstaint = 2500;
+                    maxConstaint = 800;
                 }
                 if (CONTENT_TYPE === "iframe") {
                     minConstraint = rootWidth * 0.33;
