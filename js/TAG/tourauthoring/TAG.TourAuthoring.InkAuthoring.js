@@ -561,7 +561,7 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         svgText.attr({
             'alignment-baseline': 'before-edge',
             "text-anchor": "start",
-            'font-family': fontFamily,
+            //'font-family': fontFamily,
             'font-size': size ? size : fontSize,
             'fill': fontColor,
             text: str
@@ -570,7 +570,7 @@ TAG.TourAuthoring.InkAuthoring = function (options) {
         svgText.data({ // TODO DOC is this data really necessary?
             type: 'text',
             str: str,
-            font: fontFamily,
+            //font: fontFamily,
             fontsize: size ? size : fontSize,
             color: fontColor,
         });
