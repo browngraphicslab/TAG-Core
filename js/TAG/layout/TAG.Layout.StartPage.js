@@ -349,7 +349,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             else if(browser.indexOf('firefox') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
                 console.log("Detected Firefox Version: " + version);
-                var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use the provided controls in the right corner"),"OK");
+                var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use two-finger scroll."),"OK");
                 root.append(popupMsg);
                 popupMsg.show();
                 //document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
