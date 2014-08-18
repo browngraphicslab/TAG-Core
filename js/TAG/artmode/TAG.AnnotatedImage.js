@@ -626,7 +626,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             currentlySeeking = false,
             movementTimeouts = [],
             circleRadius = 60,
-
             // misc uninitialized variables
             circle,
             position,
@@ -767,7 +766,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'height': '45%',
                 'width': '10%',
                 'min-height': '20px',
-                'top':    '5%',
+                'top':    '0%',
                 'display':  'inline-block',
                 'margin':   '2px 1% 0px 1%',
             });
@@ -801,13 +800,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'min-height' : '20px',
                 'position': 'absolute',
                 'width': '8%',
-                'right':    '1%',
+                'right':    '2%',
                 'top':      '10%'
             });
 
             timeContainer.css({
                 'height': '45%',
-                'top': '5%',
+                'top': '0%',
                 'width' : '15%',
                 'right':  volHolder.width() + 10 + 'px',
                 'position': 'absolute',
@@ -1118,12 +1117,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             if (currentlySeeking || !res) {
                 return;
             }
-            var descscroll = false;
-            if (descDiv) {
-                descDiv.scroll(function () {
-                    descscroll = true;
-                })
-            }
+            
             if (descscroll===true) {
                 return;
             }
@@ -1152,17 +1146,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     x: l,
                     y: t
                 };
-            } else if (!startLocation) {
-                startLocation = {
-                    x: l,
-                    y: t
-                };
-            }
-
+            } 
             // these values are somewhat arbitrary; TODO determine good values
             if (CONTENT_TYPE === 'Image') {
                 maxW = 2500;
                 minW = 200;
+                minW = 200; 
             } else if (CONTENT_TYPE === 'Video') {
                 maxW = rootWidth*0.75;
                 minW = parseFloat(outerContainer.css('min-width'));
@@ -1205,10 +1194,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
                     //Where object should be moved to
                     if (res.center) { //As above, if movement is caused by mouse or touch event (hammer):
-                        finalPosition = {
-                            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
-                            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-                        };
+                        if(startLocation) {
+                            finalPosition = {
+                                x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+                                y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+                            };
+                        } else {
+                            finalPosition = {
+                                x: res.center.pageX - (res.startEvent.center.pageX - parseFloat(outerContainer.css('left'))),
+                                y: res.center.pageY - (res.startEvent.center.pageY - parseFloat(outerContainer.css('top')))
+                            };
+                        }
+                        
+
                     } else { //Or if it was set with seadragon controls or key touches:
                         finalPosition = {
                             x: initialPosition.x + res.translation.x,
@@ -1251,7 +1249,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 }
                 outerContainer.css('top', t - (outerContainer.height() - h)/2);
                 mediaManipPreprocessing(); //Update dimensions since they've changed, and keep this media as active (if say an inactive media was dragged/pinch-zoomed)
-                }
+                }                
             }
         }
 
@@ -1352,6 +1350,16 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 h     = outerContainer.height(),
                 neww = w * res.scale;
 
+                if (!(
+                (0 < outerContainer.position().top + outerContainer.height())
+                && (outerContainer.position().top < rootHeight)
+                && (0 < outerContainer.position().left + outerContainer.width())
+                && (outerContainer.position().left < rootWidth))) {
+                    hideMediaObject();
+                    pauseResetMediaObject();
+                    return;
+                };
+
                 var minConstraint,maxConstraint;
                 if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
                     minConstraint = 450;
@@ -1418,14 +1426,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             closeButton.text('X');
             closeButton.css({
                 'position': 'absolute',
-                'top': '5px',
+                'top': '2%',
                 'width': '4%',
                 'height': '4%',
-                'min-height': '20px',
-                'min-width': '20px',
+                'min-height': '15px',
+                'min-width': '15px',
                 'z-index': '1',
                 'background-color': '',
-                'right': '5px'
+                'right': '2%'
             });
             return closeButton;
         }
