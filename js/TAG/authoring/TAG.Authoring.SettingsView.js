@@ -1867,7 +1867,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
-            //settingsContainer.append(assocMedia);
+            settingsContainer.append(assocMedia);
             if (sortOptions) {
                 settingsContainer.append(sortOptions);
             }
