@@ -1339,6 +1339,16 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 h     = outerContainer.height(),
                 neww = w * res.scale;
 
+                if (!(
+                (0 < outerContainer.position().top + outerContainer.height())
+                && (outerContainer.position().top < rootHeight)
+                && (0 < outerContainer.position().left + outerContainer.width())
+                && (outerContainer.position().left < rootWidth))) {
+                    hideMediaObject();
+                    pauseResetMediaObject();
+                    return;
+                };
+
                 var minConstraint,maxConstraint;
                 if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
                     minConstraint = 450;
