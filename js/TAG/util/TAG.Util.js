@@ -4307,6 +4307,7 @@ TAG.Util.RLH = function (input) {
         mapHolders = {},     // dictionary of map holder divs, keyed by mapguid
         annotImgs = {},      // object of annotated images corresponding to custom map deepzoom images (keyed by map guid)
         map,                 // bing map
+        pushpins = [],       // used to iterate through pushpins
         disabledOverlay,     // overlay on default (bing) map holder if it's disabled
         importDisabledOverlay,
         formIsEnabled,       // form is currently being displayed
@@ -5182,6 +5183,8 @@ TAG.Util.RLH = function (input) {
      * @method sortLocations
      */
     function sortLocationsByTitle() {
+        var l;
+        var ind;
         if (!formIsEnabled) {
 
             //sort
@@ -5189,16 +5192,21 @@ TAG.Util.RLH = function (input) {
                 return (a.title.toLowerCase() < b.title.toLowerCase()) ? -1 : 1;
             });
 
-            //remove all location pins (prevents duplicate pins bug)
-            $('.locationPushpin').remove();
-            $('.MapPushpinBase').remove();
+            //hides all location pins (prevents duplicate pins bug)
+            for (l = 0; l < map.entities.getLength() ; l++) { //iterates through bing map pushpins
+                map.entities.get(l).setOptions({ visible: false });
+            }
+            for (ind = 0; ind < pushpins.length; ind++) {
+                pushpins[ind].css({display:'none'});
+                //pushpins[ind].remove();
+            }
 
             //re-creates list (for now)
             createLocationList();
 
             //save
             LADS.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
-            function success() { }
+            function success() {}
             function error() { console.log('An error occured while saving.'); }
         }
     }
@@ -5208,6 +5216,8 @@ TAG.Util.RLH = function (input) {
      * @method sortLocations
      */
     function sortLocationsByDate() {
+        var l;
+        var ind;
         if (!formIsEnabled) {
 
             //sort
@@ -5215,9 +5225,14 @@ TAG.Util.RLH = function (input) {
                 return (a.date < b.date) ? -1 : 1;
             });
 
-            //remove all location pins (prevents duplicate pins bug)
-            $('.locationPushpin').remove();
-            $('.MapPushpinBase').remove();
+            //hides all location pins (prevents duplicate pins bug)
+            for (l = 0; l < map.entities.getLength() ; l++) { //iterates through bing map pushpins
+                map.entities.get(l).setOptions({ visible: false });
+            }
+            for (ind = 0; ind < pushpins.length; ind++) {
+                pushpins[ind].css({ display: 'none' });
+                //pushpins[ind].remove();
+            }
 
             //re-creates list (for now)
             createLocationList();
@@ -5585,6 +5600,8 @@ TAG.Util.RLH = function (input) {
 
             pushpin.addClass('locationPushpin');
 
+            pushpins.push(pushpin);
+
             if (editing) {
                 pushpin.attr({
                     src: tagPath+'images/icons/locationPin2.svg'
@@ -5775,6 +5792,8 @@ TAG.Util.RLH = function (input) {
         });
 
         pushpin['container'] = container;
+
+        //pushpins.push(pushpin);
 
         container.css({
             margin: '0px 0px 10px 0px',
