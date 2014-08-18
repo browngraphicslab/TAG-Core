@@ -46,7 +46,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
     tagContainer = options.tagContainer || $('body');
-
+    if (!IS_WINDOWS) {
+        authoringInput.prop('disabled', true);
+        authoringInput.css('opacity', '0.5');
+        passwordSubmit.css('opacity', '0.5');
+    }
     testConnection();
     //applyCustomization();
 
@@ -252,16 +256,22 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     function authClick(){
         passwordSubmit.on('click',function () {
-            console.log('passwordSubmit clicked');
-            TAG.Auth.checkPassword(authoringInput.val(), function () { 
-                enterAuthoringMode();
-            }, function () {
-                passwordError.html('Invalid Password. Please try again...');
+            if(IS_WINDOWS) {
+                TAG.Auth.checkPassword(authoringInput.val(), function () { 
+                    enterAuthoringMode();
+                    }, function () {
+                    passwordError.html('Invalid Password. Please try again...');
+                    passwordError.css({'visibility':'visible'});
+                    }, function () {
+                    passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
+                    passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
+                });       
+            } else {
+                passwordError.html('Authoring mode is only accessible from the Windows 8 app');
                 passwordError.css({'visibility':'visible'});
-            }, function () {
-                passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
-                passwordError.css({'visibility':'visible'});
-            });
+                passwordError.css({'color':'rgba(255, 255, 255, 1)'});
+            }
+            
         });
     
     //Enter can be pressed to submit the password form...
