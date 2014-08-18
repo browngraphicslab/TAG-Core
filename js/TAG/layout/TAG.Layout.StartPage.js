@@ -352,8 +352,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use the provided controls in the right corner"),"OK");
                 root.append(popupMsg);
                 popupMsg.show();
-//                document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
-//                $('meta[name=viewport]').attr('content','width='+$(window).width()+',user-scalable=no');
+                //document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
+                //$('meta[name=viewport]').attr('content','width='+$(window).width()+',user-scalable=no, maximum-scale=1.0');
                 return(version >= 28);
             } 
             // Internet Explorer 10+
