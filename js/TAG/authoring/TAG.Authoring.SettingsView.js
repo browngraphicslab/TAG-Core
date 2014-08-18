@@ -5669,7 +5669,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'position': 'relative',
             'font-size': '70%',
             'font-style': 'italic',
-            'top': '-25px',
+            'top': '-10px',
             'white-space': 'nowrap',
             'display': 'inline-block',
             'color': "#808080"
