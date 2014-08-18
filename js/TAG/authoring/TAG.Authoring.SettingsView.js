@@ -5468,11 +5468,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param width             if not falsey then assumed to be number represengint percent, must be less than 95
      * @return container        container of new setting
      */
-    function createSetting(text, input, width, labelLeft) {
+    function createSetting(text, input, width, labelLeft, timeline) {
         var container = $(document.createElement('div'));
+        var mb = "4%";
+        if (timeline){
+            mb = "0%";
+        }
         container.css({
             'width': '100%',
-            'margin-bottom': '4%',
+            'margin-bottom': mb
         });
 
         var label = $(document.createElement('div'));
@@ -5594,17 +5598,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //TO-DO: add (?) icon w/ pop-up
         yearDiv.css({
             width : '100%',
-            height : '20px',
-            'margin-bottom' : '4%'
+            height : '20px'
         });
-        year = createSetting('Year', yearInput, 60);
+        year = createSetting('Year', yearInput, 60, null, true);
         year.css({
             width: '32%',
             display: 'inline-block',
             position: 'relative',
             'float': 'left'
         });
-        month = createSetting('Month', monthInput, 60);
+        month = createSetting('Month', monthInput, 60, null, true);
         month.css({
             width: '32%',
             'padding-left': '1%',
@@ -5613,7 +5616,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'float': 'left'
         });
         toggleAllow(monthInput);
-        day = createSetting('Day', dayInput, 70);
+        day = createSetting('Day', dayInput, 70, null, true);
         day.css({
             width: '30%',
             'padding-left': '2%',
@@ -5631,7 +5634,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         timelineYearDiv.css({
             width: '100%',
             height: '20px',
-            'margin-bottom': '4%',
             'padding-top':'2%'
         });
         timelineYear = createSetting('Date on Timeline', timelineYearInput, 40);
@@ -5665,11 +5667,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         yearDescriptionDiv.css({
             'width': '60%',
-            'height': '10px',
-            'position': 'absolute',
-            'left': '2.5%',
-            'bottom': '-5%',
-            'font-size': '75%',
+            'height': '10%',
+            'position': 'relative',
+            'font-size': '70%',
             'font-style': 'italic',
             'top': '-10px',
             'white-space': 'nowrap',
