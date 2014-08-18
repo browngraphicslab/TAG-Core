@@ -1151,7 +1151,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             // these values are somewhat arbitrary; TODO determine good values
             if (CONTENT_TYPE === 'Image') {
-                maxW = 2500;
+                maxW = 800;
                 minW = 200;
             } else if (CONTENT_TYPE === 'Video') {
                 maxW = rootWidth*0.75;
