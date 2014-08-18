@@ -2155,6 +2155,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 'text-align': 'right',
                 'vertical-align': isAdditionalField ? '' : 'top',
                 'padding-top': isAdditionalField ? '0px' : '5px',
+                'font-size':'0.8em',
                 'overflow': 'hidden',
                 'border': "0px solid black",
             });
