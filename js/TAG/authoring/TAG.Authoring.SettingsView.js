@@ -1690,12 +1690,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineShown = true;
             showTimeline.css('background-color', 'white');
             hideTimeline.css('background-color','');
-            if($('#timelineArea').children().length>0)
-                $('#timelineArea').css('display','block');
-            $('#bottomContainer').css({
-                'height': '69%',
-                'top':'25%'
-               });
+            if ($('#timelineArea').children().length > 0) {
+                $('#timelineArea').css('display', 'block');
+                $('#bottomContainer').css({
+                    'height': '69%',
+                    'top': '25%'
+                });
+            }
             //$('#dateButton') &&
             //$('#yearButton') &&
         }, {
@@ -5244,7 +5245,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (!inAssociatedView) {
             menuLabel.hide();
-            searchbar.css({ width: '55%' });
+            searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
             if (!newText) newButton.hide();
@@ -5469,13 +5470,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createSetting(text, input, width, labelLeft, timeline) {
         var container = $(document.createElement('div'));
-        var marginBottom = "4%";
+        var mb = "4%";
         if (timeline){
-            marginBottom = "0%";
+            mb = "0%";
         }
         container.css({
             'width': '100%',
-            'margin-bottom': marginBottom
+            'margin-bottom': mb
         });
 
         var label = $(document.createElement('div'));
@@ -5545,11 +5546,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             yearMetadataDivSpecs;
 
         //Create input boxes: 
-        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 20, true);
+        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 20);
         var yearDescriptionDiv = $(document.createElement('div'));
-        monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month, true);
+        monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month);
         monthInput.css('margin-right', '0%');
-        dayInput = createSelectInput(getDayOptions(monthInput.attr('value'),yearInput,monthInput), work.Metadata.Day, true);
+        dayInput = createSelectInput(getDayOptions(monthInput.attr('value'),yearInput,monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
         timelineYearInput = createTextInput(timelineInputText, true, 20);
@@ -5608,7 +5609,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         month = createSetting('Month', monthInput, 60, null, true);
         month.css({
-            'width': '32%',
+            width: '32%',
             'padding-left': '1%',
             'position':'relative',
             display: 'inline-block',
@@ -5617,10 +5618,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         toggleAllow(monthInput);
         day = createSetting('Day', dayInput, 70, null, true);
         day.css({
-            'width': '30%',
+            width: '30%',
             'padding-left': '2%',
             'position': 'relative',
-            'display': 'inline-block',
+            display: 'inline-block',
             'float': 'left'
         });
         toggleAllow(dayInput);
@@ -5631,22 +5632,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Set up timeline year div:
         //TO-DO add (?) icon w/ pop-up
         timelineYearDiv.css({
-            'width': '100%',
-            'height': '20px',
+            width: '100%',
+            height: '20px',
+            'padding-top':'2%'
         });
         timelineYear = createSetting('Date on Timeline', timelineYearInput, 40);
         timelineYear.css({
-            'width': '44%',
-            'display': 'inline-block',
-            'position': 'relative',
+            width: '44%',
+            display: 'inline-block',
+            position: 'relative',
             'float': 'left'
         });
         timelineMonth = createSetting('Month', timelineMonthInput, 50);
         timelineMonth.css({
-            'width': '25%',
+            width: '25%',
             'padding-left': '1%',
             'position': 'relative',
-            'display': 'inline-block',
+            display: 'inline-block',
             'float': 'left'
         });
         toggleAllow(timelineMonthInput);
@@ -5655,7 +5657,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             width: '25%',
             'padding-left': '2%',
             'position': 'relative',
-            'display': 'inline-block',
+            display: 'inline-block',
             'float': 'left'
         });
         toggleAllow(timelineDayInput);
@@ -5664,15 +5666,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                        .append(timelineDay);
 
         yearDescriptionDiv.css({
-            'width': '100%',
+            'width': '60%',
             'height': '10%',
             'position': 'relative',
             'font-size': '70%',
             'font-style': 'italic',
-            'top': '-25px',
+            'top': '-10px',
             'white-space': 'nowrap',
-            'display': 'inline-block',
-            'color': "#808080"
+            'display':'inline-block'
         });
         yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
 

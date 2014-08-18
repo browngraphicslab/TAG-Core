@@ -4615,8 +4615,9 @@ TAG.Util.RLH = function (input) {
                     .css({
                         'margin-left': 'auto',
                         'margin-right': 'auto',
-                        'margin-top': '10px',
-                        'width': '30%',
+                        'margin-top': '5px',
+                        'margin-bottom': '5px',
+                        //'width': '30%',
                         'height': '30px',
                         'top': '100%',
                         'text-align': 'center',
@@ -5188,6 +5189,10 @@ TAG.Util.RLH = function (input) {
                 return (a.title.toLowerCase() < b.title.toLowerCase()) ? -1 : 1;
             });
 
+            //remove all location pins (prevents duplicate pins bug)
+            $('.locationPushpin').remove();
+            $('.MapPushpinBase').remove();
+
             //re-creates list (for now)
             createLocationList();
 
@@ -5209,6 +5214,10 @@ TAG.Util.RLH = function (input) {
             locations.sort(function (a, b) {
                 return (a.date < b.date) ? -1 : 1;
             });
+
+            //remove all location pins (prevents duplicate pins bug)
+            $('.locationPushpin').remove();
+            $('.MapPushpinBase').remove();
 
             //re-creates list (for now)
             createLocationList();
