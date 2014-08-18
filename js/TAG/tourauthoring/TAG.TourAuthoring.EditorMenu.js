@@ -72,7 +72,7 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
             'padding-right': '2px',
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 7,
             'border-radius': '15px',
-            'width': '13%'
+            'width': '18%'
         });
 
         // set width according to menu type
@@ -332,8 +332,8 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
             width: "95%",
             'margin-left': 'auto',
             'margin-right': 'auto',
-            'font-size': TAG.Util.getFontSize(57),
-            'padding-top': '3%',
+            'font-size': "70%",//TAG.Util.getFontSize(67),
+            'padding-top': '10%',
         });
         inputContainer.append(name);
         inputContainer.append(input);
@@ -381,10 +381,10 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
             "left": "0%",
             "position": "relative",
             "top": "5%",
-            "font-size": TAG.Util.getFontSize(57),
+            "font-size": "70%",
             "color": "rgb(256, 256, 256)",
             "display": "block",
-            'padding': '10px 0',
+            'padding': '20px 0',
             'text-align': 'center',
             'margin-left': '3%',
             'margin-right': '3%',
