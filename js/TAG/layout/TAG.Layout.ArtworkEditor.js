@@ -1506,7 +1506,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             } else if (type === 'iframe') {
                 iframe = $(document.createElement('iframe'));
                 iframe.attr({
-                    src: src,
+                    src: src + "?modestbranding=1&showinfo=0&fs=0",
                     frameborder: '0'
                 });
                 iframe.css({

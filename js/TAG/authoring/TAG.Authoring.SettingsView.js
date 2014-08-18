@@ -2812,7 +2812,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             case "iframe":
                 holder = $(document.createElement('iframe'));
                 holder.attr({
-                    src: source,
+                    src: source + "?modestbranding=1&showinfo=0&fs=0",
                     frameborder: '0'
                 });
                 holder.css({
@@ -2834,7 +2834,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.crossOrigin = "";
                 break;
         }
-        (source && type !== 'text') && holder.attr('src', source);
+        (source && type !== 'text' && type!== "iframe") && holder.attr('src', source);
 
         // Create a progress circle
         var progressCircCSS = {

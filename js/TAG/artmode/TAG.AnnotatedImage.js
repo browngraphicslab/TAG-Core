@@ -1050,7 +1050,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     });
                     iframe = $(document.createElement('iframe'));
                     iframe.attr({
-                        src: SOURCE,
+                        src: SOURCE + "?modestbranding=1&showinfo=0&fs=0",
                         frameborder: '0'
                     });
                     iframe.css({
