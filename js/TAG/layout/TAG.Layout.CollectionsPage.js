@@ -531,15 +531,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR,DIMMING_FACTOR);
         $('.primaryFont').css({
             'color': dimmedColor,
-            'font-family': FONT
+            //'font-family': FONT
         });
         $('.secondaryFont').css({
             'color': '#' + SECONDARY_FONT_COLOR,
-            'font-family': FONT
+            //'font-family': FONT
         });
         $('.collection-title').css({ 
             'color': '#' + PRIMARY_FONT_COLOR,
-            'font-family': FONT
+            //'font-family': FONT
         });
     }
 
@@ -1206,13 +1206,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             artText.addClass('secondaryFont');
             artText.css({
                 'color': '#' + SECONDARY_FONT_COLOR,
-                'font-family': FONT
+                //'font-family': FONT
             });
             yearTextBox.addClass('yearTextBox');
             yearTextBox.addClass('secondaryFont');
             yearTextBox.css({
                 'color': '#' + SECONDARY_FONT_COLOR,
-                'font-family': FONT
+                //'font-family': FONT
             });
             main.on('click', function () {
                 doubleClickHandler()
@@ -1955,7 +1955,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                          .text(TAG.Util.htmlEntityDecode(artwork.Name))
                     .css({
                         'color': '#' + SECONDARY_FONT_COLOR,
-                        'font-family': FONT,
+                        //'font-family': FONT,
                     });
 
                 //Image div
@@ -2018,7 +2018,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({ 
                     'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
                     'color': '#' + SECONDARY_FONT_COLOR,
-                    'font-family': FONT
+                    //'font-family': FONT
                 });
 
                 //Year of creation
@@ -2027,7 +2027,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({ 
                     'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
                     'color': '#' + SECONDARY_FONT_COLOR,
-                    'font-family': FONT
+                    //'font-family': FONT
                 });
 
                 //Set texts of labels
@@ -2053,7 +2053,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
                     .css({
                     'color': '#' + SECONDARY_FONT_COLOR,
-                    'font-family': FONT,
+                    //'font-family': FONT,
                     'font-size': "80%"
                 });
                 if (IS_WINDOWS) {
