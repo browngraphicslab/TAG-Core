@@ -272,8 +272,13 @@ TAG.Util.Splitscreen = (function () {
                     "display" : "block"
                 });
                 root.find('.nextPrevCollection').css({
-                                'width': (.95 * root.find("#collectionArea").width() - root.find('.mainCollection').width())/2 - root.find(".arrow").width(),
-                              })
+                    'width': (.95 * root.find("#collectionArea").width() - root.find('.mainCollection').width()) / 2 - root.find(".arrow").width(),
+                });
+                root.find('#infoButton').show();
+                if (root.find('#infoDiv').width() !== 0) {
+                    root.find('#infoDiv').css('width', '25%');
+                    root.find("#tileDiv").css({ 'margin-left': '0%', 'left': root.find('#infoDiv').width() });
+                }
             } else if (root.hasClass('videoPlayer')) {
                 root.find('#playPauseButton').attr('src', 'images/icons/PlayWhite.svg');
             } else if (root.hasClass('exhibition')) { // Restore defaults to exhibition
@@ -312,7 +317,10 @@ TAG.Util.Splitscreen = (function () {
                     'display': 'block'
                 });
                 root.find('#infoButton').show();
-
+                //if (root.find('#infoDiv').width() !== 0) {
+                //    root.find('#infoDiv').css('width', '25%');
+                //    root.find("#tileDiv").css({ 'margin-left': '0%' ,'left': infoDiv.width()});
+                //}
 
                 //$('.exhibition-selection').css('font-size', '200%');//LADS.Util.getMaxFontSizeEM(root.find('.exhibition-selection .exhibition-title').text(), 1.5, $(window).width() * 0.75 * 0.8, .2 * root.find(".exhibition-selection").height()));
 
