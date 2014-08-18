@@ -642,8 +642,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     function applyCustomization(main) {
         var color = '#' + main.Metadata["PrimaryFontColor"];
         $('.primaryFont').css({ 
-            'color': color,
-            'font-family': main.Metadata["FontFamily"]
+            'color': color
+            //'font-family': main.Metadata["FontFamily"]
         });
         serverInput.css({
             'border-color': color,
