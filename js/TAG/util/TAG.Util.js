@@ -2450,8 +2450,8 @@ TAG.Util.UI = (function () {
                center_v: true,
                width: 0.5,
                height: 0.35,
-               max_width: 600,
-               max_height: 200,
+               max_width: 650,
+               max_height: 300,
            });
 		var leftPos = ($('#tagRoot').width() - confirmBoxSpecs.width) * 0.5;
         var currentKeyHandler = globalKeyHandler[0];
@@ -2504,6 +2504,9 @@ TAG.Util.UI = (function () {
             'word-wrap': 'break-word',
 
         });
+        var fontsize = TAG.Util.getMaxFontSizeEM(message, 0.8, $(messageLabel).width(), $(messageLabel).height());
+        $(messageLabel).css('font-size', fontsize);
+        TAG.Util.multiLineEllipsis($(messageLabel));
         if (useHTML) {
             $(messageLabel).html(message);
         } else {
