@@ -5245,7 +5245,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (!inAssociatedView) {
             menuLabel.hide();
-            searchbar.css({ width: '55%' });
+            searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
             if (!newText) newButton.hide();
