@@ -4599,7 +4599,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         init();
         metadataPickerOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         metadataPickerOverlay.append(metadataPicker);
-
+        metadataPickerHeader.css({
+            'text-overflow': 'ellipsis',
+            'white-space': 'nowrap',
+            'overflow':'hidden'
+        });
+        TAG.Util.multiLineEllipsis(metadataPickerHeader);
         metadataPicker.append(metadataPickerHeader);
 
         //searchbar
