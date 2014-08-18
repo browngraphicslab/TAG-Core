@@ -4781,7 +4781,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var metadataPickerButtons = $(document.createElement('div')).attr("id", "metadataPickerButtons")
                                     .css({'height':'5%','bottom':'7%','width':'100%','position':'absolute'});
-        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel").css({ 'float': 'right', 'position':'absolute','margin-right':'9%'});
+        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel").css({ 'float': 'right', 'position':'absolute','margin-right':'12%'});
         metadataPickerCancel.text("Cancel");
         
         // cancel button click handler
