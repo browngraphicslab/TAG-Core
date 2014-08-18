@@ -1044,7 +1044,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         'height':'100%'
                     });
                     var mediaHeight;
-                    descDiv ? mediaHeight = '75%' : mediaHeight ='100%';
+                    DESCRIPTION ? mediaHeight = '85%' : mediaHeight ='100%';
                     mediaContainer.css({
                         'height': mediaHeight
                     });
@@ -1055,7 +1055,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     });
                     iframe.css({
                         width: '100%',
-                        height: '90%'
+                        height: '100%'
                     });
                     mediaContainer.append(iframe);
                 }
@@ -1151,17 +1151,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             // these values are somewhat arbitrary; TODO determine good values
             if (CONTENT_TYPE === 'Image') {
-                maxW = 3000;
+                maxW = 2500;
                 minW = 200;
             } else if (CONTENT_TYPE === 'Video') {
-                maxW = 1000;
+                maxW = rootWidth*0.75;
                 minW = parseFloat(outerContainer.css('min-width'));
             } else if (CONTENT_TYPE === 'Audio') {
                 maxW = 800;
                 minW = parseFloat(outerContainer.css('min-width'));
             } else if(CONTENT_TYPE === 'iframe'){
-                minW = 250;
-                maxW = rootWidth*0.8;
+                minW = rootWidth*0.33;
+                maxW = rootWidth*0.75;
             }
 
             //constrain new width
@@ -1337,16 +1337,21 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 h     = outerContainer.height(),
                 neww = w * res.scale;
 
-                var minConstraint;
-                if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio') {
+                var minConstraint,maxConstraint;
+                if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
                     minConstraint = 450;
+                    maxConstraint = 800;
                 } else {
                     minConstraint = 200;
+                    maxConstaint = 2500;
                 }
-
+                if (CONTENT_TYPE === "iframe") {
+                    minConstraint = rootWidth * 0.33;
+                    maxConstraint = rootWidth * 0.75;
+                }
                 //if the new width is in the right range, scale from the point of contact and translate properly; otherwise, just translate and clamp
                 var newClone;
-                if ((neww >= minConstraint) && (neww <= 800)) {
+                if ((neww >= minConstraint) && (neww <= maxConstraint)) {
                     if (0 < t+h && t < rootHeight && 0 < l + w && l < rootWidth && res) {
                         outerContainer.css("top", (t + res.translation.y + (1.0 - res.scale) * (res.pivot.y)) + "px");
                         outerContainer.css("left", (l + res.translation.x + (1.0 - res.scale) * (res.pivot.x)) + "px");
