@@ -1457,14 +1457,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if(sortDiv.text()==="Tours"){
                     $("#toursButton").hide();
                 }
-                if (sortDiv.text() === "Date") {
+                /*if (sortDiv.text() === "Date") {
                     timelineShown = false;
                     $("#dateButton").hide();
                     $("#showTimelineBttn").css('background-color', '');
                     $("#hideTimelineBttn").css('background-color', 'white');
 
                     $("#showTimelineBttn").attr("disabled","true");
-                }
+                }*/
             } else {
 
                 if (sortOptionsCount < 4) {
@@ -1509,14 +1509,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var sortObj, sortDiv;
         for (sortObj in sortOptionsObj) {
             if (sortOptionsObj.hasOwnProperty(sortObj)) {
-                if (sortObj === "Date") {
+                /*if (sortObj === "Date" && sortOptionsObj[sortObj] === false) {
                     timelineShown = false;
 
                     $("#showTimelineBttn").css('background-color', '');
                     $("#hideTimelineBttn").css('background-color', 'white');
 
                     $("#showTimelineBttn").attr("disabled","true");
-                }
+                }*/
                    
                 var sortDiv = $(document.createElement("div"))
                     .text(sortObj)
