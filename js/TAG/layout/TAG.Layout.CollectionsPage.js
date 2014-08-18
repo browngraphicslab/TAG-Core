@@ -576,7 +576,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                 idleTimer.start();
             }
-
+            //Set background image
+            if (collection.Metadata.BackgroundImage) {
+                bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
+            }
             //Change timeline shown based on saved metadata
             if (collection.Metadata.Timeline === "true" || collection.Metadata.Timeline === "false") {
                 collection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
@@ -612,10 +615,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.empty();
             catalogDiv.stop();
 
-            //Set background image
-            if (collection.Metadata.BackgroundImage) {
-                bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
-            }
+            
 
             if (!collectionDots[collection.Identifier]){
                 //For previewing unpublished collections in authoring: add a collection dot and highlight it. 

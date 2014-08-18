@@ -37,7 +37,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         doManipulation = true,      //used in RLH to prevent manipulation of image in certain cases
         aspectRatio = 1, //TODO - how to find this
         artworkFrozen = false,
-
+        descscroll=false,
         // misc uninitialized variables
         viewerelt,
         viewer,
@@ -1071,6 +1071,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             });
                         });
                     }
+                    descDiv.mouseover(function () { descscroll = true });
+                    descDiv.mouseleave(function () { descscroll = false; });
                     //if(CONTENT_TYPE === 'iframe'){
                     //    descDiv.css({top:'110%'});
                     //}
@@ -1116,7 +1118,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             if (currentlySeeking || !res) {
                 return;
             }
-            
+            var descscroll = false;
+            if (descDiv) {
+                descDiv.scroll(function () {
+                    descscroll = true;
+                })
+            }
+            if (descscroll===true) {
+                return;
+            }
             var scale = res.scale,
                 trans = res.translation,
                 pivot = res.pivot,
@@ -1151,7 +1161,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             // these values are somewhat arbitrary; TODO determine good values
             if (CONTENT_TYPE === 'Image') {
-                maxW = 800;
+                maxW = 2500;
                 minW = 200;
             } else if (CONTENT_TYPE === 'Video') {
                 maxW = rootWidth*0.75;
@@ -1331,6 +1341,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         }
 
         function mediaManipWin(res) {
+           
+            
+            if (descscroll===true) {
+                return;
+            }
             var t     = parseFloat(outerContainer.css('top')),
                 l     = parseFloat(outerContainer.css('left')),
                 w     = outerContainer.width(),
@@ -1343,7 +1358,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     maxConstraint = 800;
                 } else {
                     minConstraint = 200;
-                    maxConstaint = 800;
+                    maxConstraint = 800;
                 }
                 if (CONTENT_TYPE === "iframe") {
                     minConstraint = rootWidth * 0.33;
@@ -1374,6 +1389,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             }
 
         function mediaScrollWin(res, pivot) {
+
+            if (descscroll === true) {
+                return;
+            }
             mediaManip({
                 scale: res,
                 translation: {
