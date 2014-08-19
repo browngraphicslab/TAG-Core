@@ -873,6 +873,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         primaryFontColorInput.focus(function () {
             $('#tagContainer').off().unbind();
         });
+        secondaryFontColorInput.focus(function () {
+            $('#tagContainer').off().unbind();
+        });
         // Handle changes for autosaving
         //primaryFontColorInput.on('change', function () { changesHaveBeenMade = true; });
         //secondaryFontColorInput.on('change', function () { changesHaveBeenMade = true; });
