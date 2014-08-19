@@ -534,11 +534,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //'font-family': FONT
         });
         $('.secondaryFont').css({
-            'color': '#' + SECONDARY_FONT_COLOR,
+            'color': SECONDARY_FONT_COLOR,
             //'font-family': FONT
         });
         $('.collection-title').css({ 
-            'color': '#' + PRIMARY_FONT_COLOR,
+            'color': PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
     }
@@ -829,7 +829,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 loadSortTags(currCollection, currCollection.collectionMedia)
                 initSearch(currCollection.collectionMedia);
             }
-            applyCustomization();
             cancelLoadCollection = function () { cancelLoad = true; };
         }
     }
@@ -959,6 +958,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             if (cancel()) return;
             loadSortTags(collection,contents);
+            applyCustomization();
             createArtTiles(contents);
             initSearch(contents);
             callback && callback();
@@ -1333,8 +1333,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     main.append(videoLabel);
                 }
             }
-
-            console.log(currentWork.Metadata.ContentType);
 
             tileDiv.append(main);
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
@@ -2479,7 +2477,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
        var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR);
        $('.rowButton').css('color', unselectedColor);
        if (tag){
-            $('#' + tag.toLowerCase() + 'Button').css('color', '#' + SECONDARY_FONT_COLOR);
+            $('#' + tag.toLowerCase() + 'Button').css('color', SECONDARY_FONT_COLOR);
        }
     }
 
