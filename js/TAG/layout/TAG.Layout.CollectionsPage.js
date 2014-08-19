@@ -1595,7 +1595,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 styleTimelineCircle(timelineEventCircles[i], false);
                 //Label of last circle should always be shown
                 if (i === timelineEventCircles.length-1){
-                    console.log("hiding on init");
                     displayLabels(timelineEventCircles[i],null,i);
                 }
             };
@@ -1664,9 +1663,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineDateLabel.css('visibility', 'visible');
             } else{
                 timelineDateLabel.css('visibility', 'hidden');    
-                console.log(numCircles);
                 if (numCircles && timelineEventCircles.indexOf(circ) === numCircles){
-                    console.log("showing last")
                     timelineDateLabel.css('visibility','visible');
                     prevCircle.timelineDateLabel.css('visibility','hidden');
                 }          
