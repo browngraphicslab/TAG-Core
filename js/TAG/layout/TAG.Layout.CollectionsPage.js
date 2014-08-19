@@ -473,7 +473,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (!collectionsToShow) {
             var infoOverlay = $(document.createElement('div'));
             infoOverlay.text("No collections to display");
-            infoOverlay.css({ "text-align": "center", "font-size": "200%", "margin-top": "20%" });
+            infoOverlay.css({ "color": "white", "text-align": "center", "font-size": "200%", "margin-top": "20%" });
             root.append(infoOverlay);
             $('#catalogDivContainer').hide();
             TAG.Util.hideLoading(bottomContainer);
@@ -830,6 +830,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 loadSortTags(currCollection, currCollection.collectionMedia)
                 initSearch(currCollection.collectionMedia);
             }
+            applyCustomization();
             cancelLoadCollection = function () { cancelLoad = true; };
         }
     }
@@ -959,7 +960,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             if (cancel()) return;
             loadSortTags(collection,contents);
-            applyCustomization();
             createArtTiles(contents);
             initSearch(contents);
             callback && callback();
