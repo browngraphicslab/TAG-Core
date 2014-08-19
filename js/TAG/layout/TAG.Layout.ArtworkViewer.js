@@ -1247,7 +1247,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 toggler.css('display', 'none');
                 locationPanelDiv.show("slide", { direction: 'left' }, 500);
                 locationPanelDiv.css({ display: 'inline' });
+                locHistoryContainer.css({ "background-color": "white" });
                 locHistory.text("Close Related Maps");
+                locHistory.css({ "color": "black"});
                 isOpen = true;
             }
         }
@@ -1258,6 +1260,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 locationPanelDiv.hide("slide", { direction: 'left' }, 500, function () {
                     toggler.css('display', 'block');
                     locHistory.text("Related Maps");
+                    locHistoryContainer.css({ "background-color": "transparent" });
+                    locHistory.css({ "color": "white"});
                 });
                 
                 isOpen = false;
