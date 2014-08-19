@@ -1578,7 +1578,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //Set intitial style of timeline event circles and set their zoomLevel
             for (var i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
                 timelineEventCircles[i].zoomLevel = getZoomLevel(timelineEventCircles[i]);
-                styleTimelineCircle(timelineEventCircles[i], false)
+                styleTimelineCircle(timelineEventCircles[i], false);
+                //Label of last circle should always be shown
+                if (i === timelineEventCircles.length-1){
+                    console.log("hiding on init");
+                    displayLabels(timelineEventCircles[i],null,i);
+                }
             };
 
             return timelineCircleArea;
@@ -1616,7 +1621,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         };
     };
 
-    function displayLabels(circ, selectedCircle){
+    function displayLabels(circ, selectedCircle, numCircles){
         var prevNode,
             labelOverlap,
             timelineDateLabel = circ.timelineDateLabel,
@@ -1644,10 +1649,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (prevCircle && !labelOverlap){
                 timelineDateLabel.css('visibility', 'visible');
             } else{
-                timelineDateLabel.css('visibility', 'hidden');
-                if (timelineEventCircles.indexOf(circ) === 0 || timelineEventCircles.indexOf(circ) === timelineEventCircles.length){
+                timelineDateLabel.css('visibility', 'hidden');    
+                console.log(numCircles);
+                if (numCircles && timelineEventCircles.indexOf(circ) === numCircles){
+                    console.log("showing last")
                     timelineDateLabel.css('visibility','visible');
-                }               
+                    prevCircle.timelineDateLabel.css('visibility','hidden');
+                }          
             } 
         }
         if (circ === timelineEventCircles[0]){
@@ -1658,6 +1666,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function zoomTimeline(circle) {
         var i,
             j,
+            k,
             tick,
             tickTarget,
             center = .5,
@@ -1674,7 +1683,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             otherCircle.css({ "-webkit-transition-property": "left", "-webkit-transition-duration": "1s", "-webkit-transition-timing-function": "ease-in-out" });
             otherCircle.css(            //ANIMATEALERT
                 { "left": parseInt(circleTarget * otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH * 15 / 20 });
-            displayLabels(otherCircle, circle);
+            //When last animation done, loop through and hide/show date labels
+            if (i === timelineEventCircles.length-1){
+                setTimeout(function() {
+                for (k=0; k < timelineEventCircles.length; k++){
+                        displayLabels(timelineEventCircles[k], circle);
+                        if (k===timelineEventCircles.length -1){
+                           displayLabels(timelineEventCircles[k],null,k); 
+                        }
+                    }
+                },1000); //would need to be changed if animation time changed (can't use transitionend event because sometimes last dot doesn't move)
+            }
         }
 
         for (j = 0; j < timelineTicks.length; j++) {
