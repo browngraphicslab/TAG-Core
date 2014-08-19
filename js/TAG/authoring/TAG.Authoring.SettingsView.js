@@ -4353,8 +4353,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             artist: "artist",
             extra1: customFields[0] || "",
             extra2: customFields[1] || "",
-            //extra3: customFields[2] || "",
-            //extra4: customFields[3] || "",
+            extra3: customFields[2] || "",
+            extra4: customFields[3] || "",
         };
         $.each(metadataspec, function (key, val) {
             var input = createTextInput(val, null, null, false, false);

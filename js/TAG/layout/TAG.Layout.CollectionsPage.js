@@ -474,8 +474,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var infoOverlay = $(document.createElement('div'));
             infoOverlay.text("No collections to display");
             infoOverlay.css({ "text-align": "center", "font-size": "200%", "margin-top": "20%" });
-            $('#catalogDivContainer').append(infoOverlay);
+            root.append(infoOverlay);
+            $('#catalogDivContainer').hide();
             TAG.Util.hideLoading(bottomContainer);
+            infoButton.hide();
         }
 
         // Iterate through visible/not private/published collections, and set their prev and next values
