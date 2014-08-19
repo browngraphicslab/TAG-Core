@@ -1323,7 +1323,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 toggle.attr({
                     src: tagPath+'images/icons/plus.svg',
                     expanded: false
-                });         
+                });          
+
             }
 
             drawerContents.slideToggle();
