@@ -5551,14 +5551,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             yearMetadataDivSpecs;
 
         //Create input boxes: 
-        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 20);
+        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 100);
         var yearDescriptionDiv = $(document.createElement('div'));
         monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month);
         monthInput.css('margin-right', '0%');
         dayInput = createSelectInput(getDayOptions(monthInput.attr('value'),yearInput,monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
-        timelineYearInput = createTextInput(timelineInputText, true, 20);
+        timelineYearInput = createTextInput(timelineInputText, true, 100);
         if (timelineYearInput.val()===''){
             timelineYearInput.attr('placeholder', 'Type valid year');
         }
