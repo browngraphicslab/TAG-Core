@@ -152,31 +152,14 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
         backButton.on('click', function () {
-           // TAG.Util.UI.getStack()[0] = currentKeyHandler;
-           /*
-            var authoringHub,
-                editingMediamsg;
-            if (MEDIA_EDITOR.isOpen()) {
-                editingMediamsg = $(TAG.Util.UI.PopUpConfirmation(function () {
-                    backButton.off('click');
-                    authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
-                    TAG.Util.UI.slidePageRight(authoringHub.getRoot());
-                }, "You are currently editing an associated media. Exit anyway?", "OK", false, null, null, null));
-                root.append(editingMediamsg);
-                editingMediamsg.show();
-                TAG.Util.UI.cgBackColor("backButton", backButton, true);
-            } else {
-                backButton.off('click');
-                authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
-                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
-            }
-            */
             var authoringHub;
-
+            var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0));
+            $("#tagRoot").append(transOverlay);
+            transOverlay.show();
             MEDIA_EDITOR.close();
             backButton.off('click');
-            authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
-            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            saveMetadata();
+            
         });
  
         topBarLabel.css({ // TODO STYL (see constrainAndPosition comment above)
@@ -536,6 +519,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         addRemoveMedia.text('Add/Remove Media');
         addRemoveMedia.attr('type', 'button');
         addRemoveMedia.css(buttonCSS);
+        addRemoveMedia.css({'font-size':TAG.Util.getMaxFontSizeEM("Add/Remove Media", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height)});
         buttonContainer.append(addRemoveMedia);
 
         // open media picker on button click
@@ -1731,7 +1715,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'height': 'auto',
                         'max-height': '45%', 
                         'border': '2px solid white',
-                        'position': 'relative', 
+                        'position': 'relative',
+                        'font-size': $('.addRemoveMedia').css('font-size')
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
@@ -1744,6 +1729,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'margin-top': '5%', 
                         'border': '2px solid white',
                         'position': 'relative',
+                        'font-size': $('.addRemoveMedia').css('font-size')
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
@@ -1767,6 +1753,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         '-webkit-box-sizing': 'border-box', /* Safari/Chrome, other WebKit */
                         '-moz-box-sizing': 'border-box',    /* Firefox, other Gecko */
                         'box-sizing': 'border-box',        /* Opera/IE 8+ */
+                        'font-size': '0.7em'
                     })
                     .appendTo($titleContainer),
                 $descContainer = $(document.createElement('div'))
@@ -1790,6 +1777,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         '-webkit-box-sizing': 'border-box', /* Safari/Chrome, other WebKit */
                         '-moz-box-sizing': 'border-box',    /* Firefox, other Gecko */
                         'box-sizing': 'border-box',        /* Opera/IE 8+ */
+                        'font-size': '0.7em'
                     })
                     .appendTo($descContainer),
                 $assocMediaButtonContainer = $(document.createElement('div'))
@@ -1811,7 +1799,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'width': '45%',
                         'display': 'inline-block',
                         'text-align': 'center',
-                        'padding': '4px 4px 4px 4px'
+                        'padding': '4px 4px 4px 4px',
+                        'font-size': $('.addRemoveMedia').css('font-size')
                     })
                     .attr('type', 'button')
                     .appendTo($assocMediaButtonContainer),
@@ -1825,7 +1814,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'width': '45%',
                         'display': 'inline-block',
                         'text-align': 'center',
-                        'padding':'4px 4px 4px 4px'
+                        'padding': '4px 4px 4px 4px',
+                        'font-size': $('.addRemoveMedia').css('font-size')
                     })
                     .appendTo($assocMediaButtonContainer),
                 closeButton = $(document.createElement('img')).addClass('closeEditAssocMedia')
@@ -2110,6 +2100,64 @@ TAG.Layout.ArtworkEditor = function (artwork) {
     }
 
     /**
+    * Save artwork metadata
+    * @method save
+    */
+    function saveMetadata() {
+        var i,
+            additionalFields = $('.additionalField'),
+            infoFields = {};        
+        //saveMetadataButton.text('Saving...');
+        //saveMetadataButton.attr('disabled', 'true');
+
+        for (i = 0; i < additionalFields.length; i++) {
+            infoFields[$(additionalFields[i]).attr("value")] = $(additionalFields[i]).attr('entry');
+        }
+
+        TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
+            Name: $(artworkMetadata.Title).val(),
+            Artist: $(artworkMetadata.Artist).val(),
+            Year: $(artworkMetadata.Year).val(),
+            Location: JSON.stringify(locationList),
+            Description: $(artworkMetadata.Description).val(),
+            InfoFields: JSON.stringify(infoFields)
+        }, saveSuccess, saveFail,conflict, saveError);
+
+        // success handler for save button
+        function saveSuccess() {
+            titleArea.text(artworkMetadata.Title.val());
+            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            //saveMetadataButton.text('Save Changes');
+            //saveMetadataButton[0].removeAttribute('disabled');
+        }
+
+        // general failure callback for save button
+        function saveFail() {
+            var popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  You must log in to save changes."));
+            $('body').append(popup);
+            popup.show();
+            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            //saveMetadataButton.text('Save Changes');
+            //saveMetadataButton[0].removeAttribute('disabled');
+        }
+
+        // error handler for save button
+        function saveError() {
+            var popup;
+            popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  There was an error contacting the server."));
+            $('body').append(popup); // TODO ('body' might not be quite right in web app)
+            popup.show();
+            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+
+            //saveMetadataButton.text('Save Changes');
+            //saveMetadataButton[0].removeAttribute('disabled');
+        }
+    }
+
+    /**
      * Artwork metadata editor. Contains methods for initializing the metadata form, saving metadata, adding additional
      * metadata fields, etc...
      * @method MetadataEditor
@@ -2237,7 +2285,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @return {Boolean}         whether or not we should disable the button
          */
         function shouldDisableAddButton() {
-            return $('.additionalField').length >= 2;
+            return $('.additionalField').length >= 4;
         }
 
         /**
@@ -2307,7 +2355,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 'margin-bottom': '3%',
                 'position': 'relative'
             });
-            metadataForm.append(saveMetadataButton);
+            //metadataForm.append(saveMetadataButton);
 
             createMetadataTextArea({ field: 'Title', entry: artwork.Name }); // TODO a lot of this can be factored to J/S
             createMetadataTextArea({ field: 'Artist', entry: artwork.Metadata.Artist });
@@ -2326,60 +2374,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 }
             });
 
-            saveMetadataButton.on('click', save);
+            //saveMetadataButton.on('click', save);
         }
 
-        /**
-         * Save artwork metadata
-         * @method save
-         */
-        function save() {
-            var i,
-                additionalFields = $('.additionalField'),
-                infoFields = {};
-
-            saveMetadataButton.text('Saving...');
-            saveMetadataButton.attr('disabled', 'true');
-
-            for (i = 0; i < additionalFields.length; i++) {
-                infoFields[$(additionalFields[i]).attr("value")] = $(additionalFields[i]).attr('entry');
-            }
-
-            TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
-                Name: $(artworkMetadata.Title).val(),
-                Artist: $(artworkMetadata.Artist).val(),
-                Year: $(artworkMetadata.Year).val(),
-                Location: JSON.stringify(locationList),
-                Description: $(artworkMetadata.Description).val(),
-                InfoFields: JSON.stringify(infoFields)
-            }, saveSuccess, saveFail, conflict, saveError);
-            
-            // success handler for save button
-            function saveSuccess() {
-                titleArea.text(artworkMetadata.Title.val());
-                saveMetadataButton.text('Save Changes');
-                saveMetadataButton[0].removeAttribute('disabled');
-            }
-
-            // general failure callback for save button
-            function saveFail() {
-                popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  You must log in to save changes."));
-                $('body').append(popup);
-                popup.show();
-                saveMetadataButton.text('Save Changes');
-                saveMetadataButton[0].removeAttribute('disabled');
-            }
-
-            // error handler for save button
-            function saveError() {
-                var popup;
-                popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  There was an error contacting the server."));
-                $('body').append(popup); // TODO ('body' might not be quite right in web app)
-                popup.show();
-                saveMetadataButton.text('Save Changes');
-                saveMetadataButton[0].removeAttribute('disabled');
-            }
-        }
+        
 
         /**
          * Open the metadata editor
@@ -2401,7 +2399,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @method close
          */
         function close() {
-            if (isOpen) {
+            if (isOpen) {                
                 metadataForm.toggle();
                 metadataButton.css({ 'background-color': 'transparent', 'color': 'white' });
                 rightArrow.attr('src', tagPath+'images/icons/Right.png');
@@ -2430,7 +2428,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         return {
             init: init,
-            save: save,
             open: open,
             close: close,
             toggle: toggle,

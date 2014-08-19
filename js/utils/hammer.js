@@ -194,11 +194,7 @@ Hammer.Instance.prototype = {
         if(Hammer.utils.hasParent(eventData.target, element)) {
             element = eventData.target;
         }
-
-        if(gesture === 'drag') {
-            console.log('drag');
-        }
-
+        
         element.dispatchEvent(event);
         return this;
     },
