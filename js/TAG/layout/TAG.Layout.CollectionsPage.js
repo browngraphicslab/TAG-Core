@@ -120,6 +120,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method init
      */
     function init() {
+        if (previewing && idleTimer) {
+            idleTimer.kill();
+        }
         var progressCircCSS,
             circle,
             oldSearchTerm;
@@ -573,7 +576,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             // if the idle timer hasn't started already, start it
-            if(!idleTimer && evt) { // loadCollection is called without an event to show the first collection
+            if (!idleTimer && evt && !previewing) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                 idleTimer.start();
             }
@@ -1220,7 +1223,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     doubleClickHandler()
 
                     // if the idle timer hasn't started already, start it
-                    if (!idleTimer) {
+                    if (!idleTimer && !previewing) {
                         idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                         idleTimer.start();
                     }
@@ -1229,7 +1232,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     zoomTimeline(artworkCircles[currentWork.Identifier])
                     justShowedArtwork = true;
                 } else {
-                    if (!idleTimer) {
+                    if (!idleTimer && !previewing) {
                         idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                         idleTimer.start();
                     }

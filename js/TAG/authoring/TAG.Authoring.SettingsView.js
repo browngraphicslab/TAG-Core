@@ -870,7 +870,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //$('.secondaryFont').css('font-family', fontFamily);
         
         // Handle changes
-
+        primaryFontColorInput.focus(function () {
+            $('#tagContainer').off().unbind();
+        });
         // Handle changes for autosaving
         //primaryFontColorInput.on('change', function () { changesHaveBeenMade = true; });
         //secondaryFontColorInput.on('change', function () { changesHaveBeenMade = true; });
@@ -1284,7 +1286,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     	    secondaryFontColor: secondaryFontInput.val(),
     		previewing:true
     	}
-        collectionsPage = TAG.Layout.CollectionsPage(options);
+    	collectionsPage = TAG.Layout.CollectionsPage(options);
+    	$(collectionsPage).find("*").off();;
         croot = collectionsPage.getRoot();
         $(croot).css({ 'z-index': '1' });
 
@@ -1330,9 +1333,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             	return;
         	}
         	viewer.empty();
+        	
         	viewer.append(aroot);
         	// Don't allow the viewer to be clicked
         	preventClickthrough(viewer);
+        	
         });      
     }
 
