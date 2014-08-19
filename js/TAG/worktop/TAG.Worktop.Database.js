@@ -1123,11 +1123,11 @@ TAG.Worktop.Database = (function () {
     }
 
     function getMuseumPrimaryFontColor() {
-        return _main.Metadata["PrimaryFontColor"] || 'FFFFFF';
+        return _main.Metadata["PrimaryFontColor"] || '#FFFFFF';
     }
 
     function getMuseumSecondaryFontColor() {
-        return _main.Metadata["SecondaryFontColor"] || 'FFFFFF';
+        return _main.Metadata["SecondaryFontColor"] || '#FFFFFF';
     }
 
     function getMuseumFontFamily() {
