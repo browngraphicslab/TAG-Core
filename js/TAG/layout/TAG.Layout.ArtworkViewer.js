@@ -98,9 +98,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             script,
             meta;
 
-        if (!idleTimer) {
+        if (!idleTimer && !previewing) {
             idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
             idleTimer.start();
+        }
+        if (idleTimer && previewing) {
+            idleTimer.kill();
         }
 
         var progressCircCSS = {
