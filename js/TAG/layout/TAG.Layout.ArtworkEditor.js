@@ -536,6 +536,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         addRemoveMedia.text('Add/Remove Media');
         addRemoveMedia.attr('type', 'button');
         addRemoveMedia.css(buttonCSS);
+        addRemoveMedia.css({'font-size':TAG.Util.getMaxFontSizeEM("Add/Remove Media", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height)});
         buttonContainer.append(addRemoveMedia);
 
         // open media picker on button click
@@ -1731,7 +1732,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'height': 'auto',
                         'max-height': '45%', 
                         'border': '2px solid white',
-                        'position': 'relative', 
+                        'position': 'relative',
+                        'font-size': $('.addRemoveMedia').css('font-size')
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
@@ -1744,6 +1746,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'margin-top': '5%', 
                         'border': '2px solid white',
                         'position': 'relative',
+                        'font-size': $('.addRemoveMedia').css('font-size')
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
@@ -1767,6 +1770,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         '-webkit-box-sizing': 'border-box', /* Safari/Chrome, other WebKit */
                         '-moz-box-sizing': 'border-box',    /* Firefox, other Gecko */
                         'box-sizing': 'border-box',        /* Opera/IE 8+ */
+                        'font-size': '0.7em'
                     })
                     .appendTo($titleContainer),
                 $descContainer = $(document.createElement('div'))
@@ -1790,6 +1794,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         '-webkit-box-sizing': 'border-box', /* Safari/Chrome, other WebKit */
                         '-moz-box-sizing': 'border-box',    /* Firefox, other Gecko */
                         'box-sizing': 'border-box',        /* Opera/IE 8+ */
+                        'font-size': '0.7em'
                     })
                     .appendTo($descContainer),
                 $assocMediaButtonContainer = $(document.createElement('div'))
@@ -1811,7 +1816,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'width': '45%',
                         'display': 'inline-block',
                         'text-align': 'center',
-                        'padding': '4px 4px 4px 4px'
+                        'padding': '4px 4px 4px 4px',
+                        'font-size': $('.addRemoveMedia').css('font-size')
                     })
                     .attr('type', 'button')
                     .appendTo($assocMediaButtonContainer),
@@ -1825,7 +1831,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'width': '45%',
                         'display': 'inline-block',
                         'text-align': 'center',
-                        'padding':'4px 4px 4px 4px'
+                        'padding': '4px 4px 4px 4px',
+                        'font-size': $('.addRemoveMedia').css('font-size')
                     })
                     .appendTo($assocMediaButtonContainer),
                 closeButton = $(document.createElement('img')).addClass('closeEditAssocMedia')
