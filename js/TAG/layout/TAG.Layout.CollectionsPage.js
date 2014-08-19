@@ -477,7 +477,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             root.append(infoOverlay);
             $('#catalogDivContainer').hide();
             TAG.Util.hideLoading(bottomContainer);
-            infoButton.hide();
         }
 
         // Iterate through visible/not private/published collections, and set their prev and next values
