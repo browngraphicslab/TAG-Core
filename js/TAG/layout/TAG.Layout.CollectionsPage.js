@@ -13,83 +13,83 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     options = options || {}; // cut down on null checks later
 
     var // DOM-related
-        root                     = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
-        infoDiv                  = root.find('#infoDiv'),
-        tileDiv                  = root.find('#tileDiv'),
-        collectionArea           = root.find('#collectionArea'),
-        backArrowArea            = root.find('#backArrowArea'),
-        backArrow                = root.find('#backArrow'),
-        nextArrowArea            = root.find('#nextArrowArea'),
-        nextArrow                = root.find('#nextArrow'),
-        collectionHeader         = root.find('#collectionHeader'),
-        collectionDotHolder      = root.find('#collectionDotHolder'),
-        bgimage                  = root.find('#bgimage'),
-        bottomContainer          = root.find('#bottomContainer'),
-        catalogDiv               = root.find('#catalogDiv'),
-        infoTilesContainer       = root.find('#infoTilesContainer'),
-        sortRow                  = root.find('#sortRow'),
-        searchInput              = root.find('#searchInput'),
-        searchTxt                = root.find('#searchTxt'),
-        buttonRow                = root.find('#buttonRow'),
-        artworksButton           = root.find('#artworksButton'),
-        assocMediaButton         = root.find('#assocMediaButton'),
-        toggleRow                = root.find('#toggleRow'),
+        root = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
+        infoDiv = root.find('#infoDiv'),
+        tileDiv = root.find('#tileDiv'),
+        collectionArea = root.find('#collectionArea'),
+        backArrowArea = root.find('#backArrowArea'),
+        backArrow = root.find('#backArrow'),
+        nextArrowArea = root.find('#nextArrowArea'),
+        nextArrow = root.find('#nextArrow'),
+        collectionHeader = root.find('#collectionHeader'),
+        collectionDotHolder = root.find('#collectionDotHolder'),
+        bgimage = root.find('#bgimage'),
+        bottomContainer = root.find('#bottomContainer'),
+        catalogDiv = root.find('#catalogDiv'),
+        infoTilesContainer = root.find('#infoTilesContainer'),
+        sortRow = root.find('#sortRow'),
+        searchInput = root.find('#searchInput'),
+        searchTxt = root.find('#searchTxt'),
+        buttonRow = root.find('#buttonRow'),
+        artworksButton = root.find('#artworksButton'),
+        assocMediaButton = root.find('#assocMediaButton'),
+        toggleRow = root.find('#toggleRow'),
         selectedArtworkContainer = root.find('#selectedArtworkContainer'),
-        timelineArea             = root.find('#timelineArea'),
-        topBar                   = root.find('#topBar'),
-        loadingArea              = root.find('#loadingArea'),
-        infoButton               = root.find('#infoButton'),
-        linkButton               = root.find('#linkButton'),
+        timelineArea = root.find('#timelineArea'),
+        topBar = root.find('#topBar'),
+        loadingArea = root.find('#loadingArea'),
+        infoButton = root.find('#infoButton'),
+        linkButton = root.find('#linkButton'),
         // splitscreenIcon          = root.find('#splitscreenIcon'),
-        overlay                  = root.find('#overlay'),
-        tileLoadingArea 	     = root.find('#tileLoadingArea'),
+        overlay = root.find('#overlay'),
+        tileLoadingArea = root.find('#tileLoadingArea'),
 
         // input options
-        scrollPos               = options.backScroll || null,     // horizontal position within collection's catalog
-        currCollection          = options.backCollection,      // the currently selected collection
-        currentArtwork          = options.backArtwork,         // the currently selected artwork
-        currentTag              = options.backTag,             // current sort tag for collection
-        multipleShown           = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
+        scrollPos = options.backScroll || null,     // horizontal position within collection's catalog
+        currCollection = options.backCollection,      // the currently selected collection
+        currentArtwork = options.backArtwork,         // the currently selected artwork
+        currentTag = options.backTag,             // current sort tag for collection
+        multipleShown = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
-        previewing              = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
-        
+        previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
+
         // misc initialized vars
-        loadQueue            = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
-        artworkSelected      = false,                            // whether an artwork is selected
-        visibleCollections   = [],                               // array of collections that are visible and published
-        collectionDots       = {},                               // dict of collection dots, keyed by collection id
-        artworkCircles       = {},                               // dict of artwork circles in timeline, keyed by artwork id                  
-        artworkTiles         = {},                               // dict of artwork tiles in bottom region, keyed by artwork id
-        firstLoad            = true,                             // TODO is this necessary? what is it doing?
-        currentArtworks      = [],                               // array of artworks in current collection
-        infoSource           = [],                               // array to hold sorting/searching information
+        loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
+        artworkSelected = false,                            // whether an artwork is selected
+        visibleCollections = [],                               // array of collections that are visible and published
+        collectionDots = {},                               // dict of collection dots, keyed by collection id
+        artworkCircles = {},                               // dict of artwork circles in timeline, keyed by artwork id                  
+        artworkTiles = {},                               // dict of artwork tiles in bottom region, keyed by artwork id
+        firstLoad = true,                             // TODO is this necessary? what is it doing?
+        currentArtworks = [],                               // array of artworks in current collection
+        infoSource = [],                               // array to hold sorting/searching information
         timelineEventCircles = [],                               // circles for timeline
-        timelineTicks        = [],                               // timeline ticks
-        scaleTicks           = [],                               // timeline scale ticks
-        artworkYears         = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
-        scaleTicksAppended   = false,                            // if scale ticks have been appended
-        tileDivHeight        = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
-        artworkShown         = false,                            // whether an artwork pop-up is currently displayed
-        timelineShown        = true,                             // whether current collection has a timeline
-        onAssocMediaView     = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
-        previouslyClicked    = null,
+        timelineTicks = [],                               // timeline ticks
+        scaleTicks = [],                               // timeline scale ticks
+        artworkYears = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
+        scaleTicksAppended = false,                            // if scale ticks have been appended
+        tileDivHeight = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
+        artworkShown = false,                            // whether an artwork pop-up is currently displayed
+        timelineShown = true,                             // whether current collection has a timeline
+        onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
+        previouslyClicked = null,
 
         // constants
-        BASE_FONT_SIZE      = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
-        FIX_PATH            = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
-        MAX_YEAR            = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
-        EVENT_CIRCLE_WIDTH  =  Math.min(40,Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
+        BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
+        FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
+        MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
+        EVENT_CIRCLE_WIDTH = Math.min(40, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
-        TILE_BUFFER         = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
-        TILE_HEIGHT_RATIO   = 200,                                          //ratio between width and height of artwork tiles
-        TILE_WIDTH_RATIO    = 255,
-        ANIMATION_DURATION  = 800,                                         // duration of timeline zoom animation
-        DIMMING_FACTOR      = 1.7,                                          //dimming of unhighlighted text
-        PRIMARY_FONT_COLOR  = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        TILE_BUFFER = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
+        TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
+        TILE_WIDTH_RATIO = 255,
+        ANIMATION_DURATION = 800,                                         // duration of timeline zoom animation
+        DIMMING_FACTOR = 1.7,                                          //dimming of unhighlighted text
+        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
-        FONT                = TAG.Worktop.Database.getMuseumFontFamily(),
-        
+        FONT = TAG.Worktop.Database.getMuseumFontFamily(),
+
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
         fullMaxDisplayDate,             // maximum display date of full timeline
@@ -106,8 +106,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         yearInfo,                       // year tombstone info div
         justShowedArtwork,              // for telemetry; helps keep track of artwork tile clicks
         comingBack,                      // if you are coming back from a viewer
-        defaultTag;                     // default sort tag
-
+        defaultTag,                     // default sort tag
+        debounceShowArtwork;
     root[0].collectionsPage = this;
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
@@ -1216,16 +1216,33 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //'font-family': FONT
             });
             main.on('click', function () {
-                doubleClickHandler()
-                // if the idle timer hasn't started already, start it
-                if(!idleTimer) {
-                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-                    idleTimer.start();
+                if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.Type === "Tour" || currentWork.Metadata.Type === "VideoArtwork") {
+                    doubleClickHandler()
+
+                    // if the idle timer hasn't started already, start it
+                    if (!idleTimer) {
+                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                        idleTimer.start();
+                    }
+                    //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
+                    setTimeout(function () { showArtwork(currentWork, false)() }, 10)
+                    zoomTimeline(artworkCircles[currentWork.Identifier])
+                    justShowedArtwork = true;
+                } else {
+                    if (!idleTimer) {
+                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                        idleTimer.start();
+                    }
+
+                    
+                    if (debounceShowArtwork !== currentWork) {
+                        debounceShowArtwork = currentWork;
+                        showArtwork(currentWork, false)();
+                    }
+                    
+                    zoomTimeline(artworkCircles[currentWork.Identifier])
+                    justShowedArtwork = true;
                 }
-                //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
-                setTimeout(function(){showArtwork(currentWork, false)()}, 10)
-                zoomTimeline(artworkCircles[currentWork.Identifier])
-                justShowedArtwork = true;
             })
 
             /* @function doubleClickHandler
@@ -2220,7 +2237,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             circle = TAG.Util.showProgressCircle(descSpan, progressCircCSS, '0px', '0px', false);    
         };
     }
-
 
 
     /**
