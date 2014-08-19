@@ -2068,11 +2068,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 function addAssociationRow(numberAssociatedDoqs){
                     var tileSpacing;
                 	if (numberAssociatedDoqs === 0){
-                		miniTilesLabel.hide();
                 		miniTilesHolder.hide();
                 		descSpan.css({"height": "100%"});
                 		return;
-                	}
+                	} else {
+                        miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
+                    }
                     tileSpacing = miniTilesHolder.height()/10;
                 	if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
                 		prevArrow = $(document.createElement('img'))
@@ -2179,8 +2180,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileBottom.append(descSpan);
 
                 miniTilesLabel = $(document.createElement('div'))
-                    				.addClass("miniTilesLabel")
-                    				.text(onAssocMediaView ? "Artworks" : "Associated Media");
+                    				.addClass("miniTilesLabel");
 				miniTilesHolder = $(document.createElement('div'))
                     				.addClass('miniTilesHolder');
                 tileBottom.append(miniTilesHolder)

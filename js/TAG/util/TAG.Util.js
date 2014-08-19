@@ -1075,7 +1075,7 @@ TAG.Util = (function () {
             currentAccelId++;
             resetDir();
             clearTimeout(timer);
-            //manipulationHandler(evt);
+            manipulationHandler(evt);
         }
 
         // mouse move

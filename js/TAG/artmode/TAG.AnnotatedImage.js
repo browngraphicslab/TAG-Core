@@ -1106,237 +1106,105 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             mediaManipPreprocessing();
         });
 
-     
-        /**
-         * Drag/manipulation handler for associated media
-         * @method mediaManip
-         * @param {Object} res     object containing hammer event info
-         */
-        function mediaManip(res) {
+    /**
+     * I/P {Object} res     object containing hammer event info
+     * Drag/manipulation handler for associated media
+     * Manipulation for touch and drag events
+     */
+    function mediaManip(res) {
+        var top         = outerContainer.position().top,
+            left        = outerContainer.position().left,
+            width       = outerContainer.width(),
+            height      = outerContainer.height(),
+            finalPosition;
 
-            if (currentlySeeking || !res) {
-                return;
-            }
-            
-            if (descscroll===true) {
-                return;
-            }
-            var scale = res.scale,
-                trans = res.translation,
-                pivot = res.pivot,
-                t     = parseFloat(outerContainer.css('top')),
-                l     = parseFloat(outerContainer.css('left')),
-                w     = outerContainer.width(),
-                h     = outerContainer.height(),
-                timestepConstant = 50,
-                newW = w * scale,
-                isWinFactor = IS_WINDOWS ? 1 : 0,
-                maxW,
-                minW,
-                timer,
-                initialPosition,
-                deltaPosition,
-                finalPosition,
-                currentTime,
-                initialVelocity;
-
-            // If event is initial touch on artwork, save current position of media object to use in movement method
-            if (res.eventType === 'start') {
-                startLocation = {
-                    x: l,
-                    y: t
-                };
-            } 
-            // these values are somewhat arbitrary; TODO determine good values
-            if (CONTENT_TYPE === 'Image') {
-                maxW = 2500;
-                minW = 200;
-                minW = 200; 
-            } else if (CONTENT_TYPE === 'Video') {
-                maxW = rootWidth*0.75;
-                minW = parseFloat(outerContainer.css('min-width'));
-            } else if (CONTENT_TYPE === 'Audio') {
-                maxW = 800;
-                minW = parseFloat(outerContainer.css('min-width'));
-            } else if(CONTENT_TYPE === 'iframe'){
-                minW = rootWidth*0.33;
-                maxW = rootWidth*0.75;
-            }
-
-            //constrain new width
-            if (newW < minW){
-                newW = minW;
-                scale = newW/w;
-            }
-            else if (newW > maxW){
-                newW = maxW;
-                scale = newW/w;
-            }
-
-           //Manipulation for touch and drag events
-            if (newW === w){ //If media object is being dragged (not resized)
-                if ((0 < t + h) && (t < rootHeight) && (0 < l + w) && (l< rootWidth)) { // and is still on screen
-                    
-                    currentTime = Date.now();
-
-                    //Position of object on manipulation
-                    if (res.eventType) { //If initial values were set with a mouseDown or touch event
-                        initialPosition = {
-                            x: l, 
-                            y: t
-                        };
-                    } else { //If initial values were set with seadragon controls or key touches
-                        initialPosition = {
-                            x: outerContainer.position().left,
-                            y: outerContainer.position().top
-                        };
-                    }
-
-                    //Where object should be moved to
-                    if (res.center) { //As above, if movement is caused by mouse or touch event (hammer):
-                        if(startLocation) {
-                            finalPosition = {
-                                x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
-                                y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-                            };
-                        } else {
-                            finalPosition = {
-                                x: res.center.pageX - (res.startEvent.center.pageX - parseFloat(outerContainer.css('left'))),
-                                y: res.center.pageY - (res.startEvent.center.pageY - parseFloat(outerContainer.css('top')))
-                            };
-                        }
-                        
-
-                    } else { //Or if it was set with seadragon controls or key touches:
-                        finalPosition = {
-                            x: initialPosition.x + res.translation.x,
-                            y: initialPosition.y + res.translation.y,                            
-                        };
-                    }
-
-                    //Total distance to travel
-                    deltaPosition = {
-                        x: finalPosition.x - initialPosition.x,
-                        y: finalPosition.y - initialPosition.y
-                    },
-
-                    //Initial velocity is proportional to distance traveled
-                    initialVelocity = {
-                        x: deltaPosition.x/timestepConstant,
-                        y: deltaPosition.y/timestepConstant
-                    };
-                    
-                    //Recursive function to move object between start location and final location with proper physics
-                    move(initialVelocity, initialPosition, finalPosition, timestepConstant/50);
-                    viewer.viewport.applyConstraints();
-                    mediaManipPreprocessing(); //updateDimensions, etc
-
-                } else { //If object isn't within bounds, hide and reset it.
-                    hideMediaObject();
-                    pauseResetMediaObject();
-                    mediaManipPreprocessing(); //updateDimensions, etc
-                    return;
-                }
-            } else{ // zoom from touch point: change width and height of outerContainer
-                if (minW != newW){
-                outerContainer.css('left', l- (newW - w)/2);
-                outerContainer.css("width", newW + "px");
-                if (CONTENT_TYPE === 'Audio'){
-                    outerContainer.css('height','auto');
-                } else {
-                var newH = (newW*h)/w;
-                outerContainer.css('height',newH + 'px');
-                }
-                outerContainer.css('top', t - (outerContainer.height() - h)/2);
-                mediaManipPreprocessing(); //Update dimensions since they've changed, and keep this media as active (if say an inactive media was dragged/pinch-zoomed)
-                }                
-            }
+        if (!res.eventType){
+            return
         }
 
+        // If event is initial touch on artwork, save current position of media object to use for animation
+        if (res.eventType === 'start') {
+            startLocation = {
+                x: left,
+                y: top
+            };
+        }   
+        // Target location (where object should be moved to)
+        finalPosition = {
+            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+        };   
 
-        /**
-         * Recursive helper function for mediaManip.
-         * Moves object between start location and final location with proper physics.
-         * @method move
-         * @param {Object} res              object containing hammer event info
-         * @param {Object} prevVelocity     velocity of object on release
-         * @param {Object} prevLocation     location of object
-         * @param {Object} finalPos         target location of object
-         * @param {Object} delay            delay (for timer)
-         */
-        function move(prevVelocity, prevLocation, finalPos, delay){
-            var currentPosition,
-                newVelocity,
-                top = parseFloat(outerContainer.css('top')),
-                left = parseFloat(outerContainer.css('left')),
-                timer;
-
-            if (mediaHidden) {
-                return;
-            }
-
+        // Animate to target location
+        outerContainer.stop()
+        outerContainer.animate({
+            top: finalPosition.y,
+            left: finalPosition.x
+        }, 800, function() {
             //If object is not on screen, reset and hide it
             if (!(
-                (0 < outerContainer.position().top+ outerContainer.height()) 
-                && (outerContainer.position().top < rootHeight) 
-                && (0 < outerContainer.position().left + outerContainer.width()) 
-                && (outerContainer.position().left < rootWidth))) 
+                (0 < finalPosition.y + outerContainer.height()) 
+                && (finalPosition.y < rootHeight) 
+                && (0 < finalPosition.x + outerContainer.width()) 
+                && (finalPosition.x < rootWidth))) 
                 {
                     hideMediaObject();
                     pauseResetMediaObject();
                     return;
-            };
+            };    
+        });  
+    }
 
-            //If velocity is almost 0, stop movement
-            if ((Math.abs(prevVelocity.x) < .1) && (Math.abs(prevVelocity.y) < .1)) {
-                return;
-            };
+    /**
+     * I/P {Number} scale     scale factor
+     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
+     * Zoom handler for associated media (e.g., for mousewheel scrolling)
+     */
+    function mediaScroll(scale, pivot) {
+        var t       = outerContainer.position().top,
+            l       = outerContainer.position().left,
+            w       = outerContainer.width(),
+            h       = outerContainer.height(),
+            newW    = w * scale,
+            newH,
+            maxW,
+            minW,
+            newX,
+            newY;
 
-            //Current position is previous position + movement from velocity * time
-            currentPosition = { 
-                x: left + delay*prevVelocity.x,
-                y: top + delay*prevVelocity.y   
-            };
 
-            // New velocity is proportional to distance left to travel
-            newVelocity = {
-                x: (finalPos.x - currentPosition.x)/(delay*50),
-                y: (finalPos.y - currentPosition.y)/(delay*50)
-            };
-            
-            outerContainer.css({'left': currentPosition.x, 'top': currentPosition.y});
-
-            //Clear all previously-set timers used for movement on this object
-            for (var i = 0; i < movementTimeouts.length; i++) {
-                clearTimeout(movementTimeouts[i]);
-            }
-            movementTimeouts = [];
-            movementTimeouts.push( 
-                setTimeout(function () {
-                move(newVelocity, currentPosition, finalPos, delay);
-                }, 1)
-            );
+        if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
+            minW = 450;
+            maxW = 800;
+        } else {
+            minW = 200;
+            maxW = 800;
+        }
+        if (CONTENT_TYPE === "iframe") {
+            minW = rootWidth * 0.33;
+            maxW = rootWidth * 0.75;
         }
 
-        /**
-         * Zoom handler for associated media (e.g., for mousewheel scrolling)
-         * @method mediaScroll
-         * @param {Number} scale     scale factor
-         * @param {Object} pivot     point of contact
-         */
-        function mediaScroll(scale, pivot) {
-            mediaManip({
-                scale: scale,
-                translation: {
-                    x: 0,
-                    y: 0
-                },
-                pivot: {
-                    x: pivot.x + root.offset().left,// + (outerContainer.offset().left - root.offset().left),
-                    y: pivot.y + root.offset().top// + (outerContainer.offset().top - root.offset().top)
-                }
-            });
-        }
+        // Constrain new width
+        if((newW < minW) || (newW > maxW)) {
+            newW    = Math.min(maxW, Math.max(minW, newW));
+        };
+
+        // Update scale, new X and new Y according to newly constrained values.
+        scale   = newW / w;
+        newH    = h * scale;
+        newX    = l + pivot.x*(1-scale);
+        newY    = t + pivot.y*(1-scale); 
+
+        //Animate outerContainer to this new position
+        outerContainer.stop()
+        outerContainer.animate({
+            top: newY,
+            left: newX,
+            width: newW,
+            height: newH
+        }, 10); 
+    }
 
         function mediaManipWin(res) {
            
@@ -1344,6 +1212,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             if (descscroll===true) {
                 return;
             }
+            
             var t     = parseFloat(outerContainer.css('top')),
                 l     = parseFloat(outerContainer.css('left')),
                 w     = outerContainer.width(),
