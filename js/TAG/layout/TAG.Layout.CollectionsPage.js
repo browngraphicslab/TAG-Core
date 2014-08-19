@@ -236,9 +236,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileLoadingArea.append(tileCircle);
         */
         searchInput.hide();
-        applyCustomization();
-        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
 
+        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+        applyCustomization();
     }
 
     /**
@@ -531,7 +531,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function applyCustomization() {
         var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR,DIMMING_FACTOR);
         $('.primaryFont').css({
-            'color': dimmedColor,
+            'color': PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
         $('.secondaryFont').css({
@@ -830,7 +830,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 loadSortTags(currCollection, currCollection.collectionMedia)
                 initSearch(currCollection.collectionMedia);
             }
-            applyCustomization();
             cancelLoadCollection = function () { cancelLoad = true; };
         }
     }
@@ -954,8 +953,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         function contentsHelper(contents) {
             if (!contents.length) {
                 var emptyCollectionDiv = $(document.createElement('div'));
+                emptyCollectionDiv.addClass("primaryFont");
                 emptyCollectionDiv.text("There are no artworks in this collection at present.");
-                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": "#"+PRIMARY_FONT_COLOR });
+                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": PRIMARY_FONT_COLOR });
                 catalogDiv.append(emptyCollectionDiv);
             }
             if (cancel()) return;
