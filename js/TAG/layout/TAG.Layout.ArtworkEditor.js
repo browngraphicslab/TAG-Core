@@ -1796,11 +1796,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .css({
                         'float': 'left',
                         'border': '2px solid white',
-                        'width': '45%',
+                        'max-width': '43%',
+                        'width': '43%',
                         'display': 'inline-block',
                         'text-align': 'center',
                         'padding': '4px 4px 4px 4px',
-                        'font-size': $('.addRemoveMedia').css('font-size')
+                        'font-size': $('.addRemoveMedia').css('font-size'),
                     })
                     .attr('type', 'button')
                     .appendTo($assocMediaButtonContainer),
@@ -1811,11 +1812,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .css({
                         'float': 'right',
                         'border': '2px solid white',
-                        'width': '45%',
+                        'max-width': '43%',
+                        'width': '43%',
                         'display': 'inline-block',
                         'text-align': 'center',
                         'padding': '4px 4px 4px 4px',
-                        'font-size': $('.addRemoveMedia').css('font-size')
+                        'font-size': $('.addRemoveMedia').css('font-size'),
                     })
                     .appendTo($assocMediaButtonContainer),
                 closeButton = $(document.createElement('img')).addClass('closeEditAssocMedia')
