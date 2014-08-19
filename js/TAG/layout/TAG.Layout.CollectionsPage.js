@@ -107,7 +107,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         justShowedArtwork,              // for telemetry; helps keep track of artwork tile clicks
         comingBack,                      // if you are coming back from a viewer
         defaultTag,                     // default sort tag
-        debounceShowArtwork;
+        showArtworkTimeout;
     root[0].collectionsPage = this;
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
@@ -1216,7 +1216,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //'font-family': FONT
             });
             main.on('click', function () {
-                if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.Type === "Tour" || currentWork.Metadata.Type === "VideoArtwork") {
+                if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
                     doubleClickHandler()
 
                     // if the idle timer hasn't started already, start it
@@ -1233,13 +1233,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                         idleTimer.start();
                     }
+                    clearTimeout(showArtworkTimeout);
+                    showArtworkTimeout = setTimeout(function () { showArtwork(currentWork, false)(); }, 230);
 
-                    
-                    if (debounceShowArtwork !== currentWork) {
-                        debounceShowArtwork = currentWork;
-                        showArtwork(currentWork, false)();
-                    }
-                    
                     zoomTimeline(artworkCircles[currentWork.Identifier])
                     justShowedArtwork = true;
                 }
@@ -1787,7 +1783,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (artworkShown) {
                 selectedArtworkContainer.animate(
                         {"opacity": 0}, 
-                        ANIMATION_DURATION/5, 
+                        0, //JessF: took out animation fade in and out because it causes problems with double clicks
                         function () {
                             animateCatalogDiv();
                         }
