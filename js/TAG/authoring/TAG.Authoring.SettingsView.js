@@ -191,8 +191,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 })(i, artwork), null, conversionVideos[i]);
         }
     }*/
-    
-    TAG.Util.IdleTimer.restartTimer();
     function checkConversion(doq) { //WIN8 AUG 15 RELEASE ONLY
         //if(
         LADS.Worktop.Database.getConvertedVideoCheck(

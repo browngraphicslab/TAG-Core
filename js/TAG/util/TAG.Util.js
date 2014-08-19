@@ -2377,7 +2377,8 @@ TAG.Util.UI = (function () {
     // overlay that "absorbs" interactions with elements below it, used to isolate popup forms etc.
     function blockInteractionOverlay(opac) {
 
-        opac = opac ? Math.max(Math.min(parseFloat(opac), 1), 0) : 0.6;
+        opac = (opac || opac===0) ? Math.max(Math.min(parseFloat(opac), 1), 0) : 0.6;
+        
         var overlay = document.createElement('div');
         $(overlay).attr('id', 'blockInteractionOverlay');
 
