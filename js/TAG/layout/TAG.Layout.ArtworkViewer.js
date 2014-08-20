@@ -98,9 +98,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             script,
             meta;
 
-        if (!idleTimer) {
+        if (!idleTimer && !previewing) {
             idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
             idleTimer.start();
+        }
+        if (idleTimer && previewing) {
+            idleTimer.kill();
         }
 
         var progressCircCSS = {
@@ -1323,13 +1326,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 toggle.attr({
                     src: tagPath+'images/icons/plus.svg',
                     expanded: false
-                });
-
-                for(i=0; i<associatedMedia.guids.length; i++) {
-                    if(associatedMedia[associatedMedia.guids[i]].isVisible()) {
-                        associatedMedia[associatedMedia.guids[i]].hide();
-                    }
-                }
+                });          
 
             }
 
