@@ -203,6 +203,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
             infoButton.hide();
+            linkButton.css("float", "left")
         }
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
@@ -1753,7 +1754,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
-            $('.tile').css('opacity','1');
+            root.find('.tile').css('opacity','1');
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
@@ -2221,7 +2222,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 previewTile.append(tileTop)
                     	   .append(tileBottom);
 				selectedArtworkContainer.append(previewTile);
-                $('.tile').css('opacity','0.5');
+                root.find('.tile').css('opacity','0.5');
   
                 var numberAssociatedDoqs = 0;
                 var tileLoadQueue = TAG.Util.createQueue();
