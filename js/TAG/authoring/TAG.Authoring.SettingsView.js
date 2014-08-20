@@ -5833,7 +5833,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (!isSingleYear(year)){
                 return [''];
             } else {
-                return ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+                return ['','01','02','03','04','05','06','07','08','09','10','11','12'];
             }
         }
 
@@ -6012,8 +6012,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
          var input = $(document.createElement('textarea')).val(text).attr('id','settingsViewTextarea');
          input.css({
-             'overflow-y': 'scroll',
-             'resize': 'vertical',
+             'overflow': 'hidden',
          });
         //input.autoSize();
         doWhenReady(input, function (elem) {
@@ -6022,6 +6021,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             else{
                 var realHeight= root.find('#setViewSettingsContainer').height() * 0.5;
+            }
+            $(input).css('height', realHeight + 'px');
+        });
+        input.on('keyup', function () {
+            if (input[0].scrollHeight <= (root.find('#setViewSettingsContainer').height() * 0.5)) {
+                var realHeight = input[0].scrollHeight;
+            }
+            else {
+                var realHeight = root.find('#setViewSettingsContainer').height() * 0.5;
             }
             $(input).css('height', realHeight + 'px');
         });

@@ -68,7 +68,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         scaleTicks = [],                               // timeline scale ticks
         artworkYears = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
         scaleTicksAppended = false,                            // if scale ticks have been appended
-        tileDivHeight = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
+        tileDivHeight = 0,                                // Height of tile div (before scroll bar added, should equal height of catalogDiv)
         artworkShown = false,                            // whether an artwork pop-up is currently displayed
         timelineShown = true,                             // whether current collection has a timeline
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
@@ -1173,13 +1173,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
         } else {
             bottomContainer.css({
-                'height':'85%',
+                'height':'79%',
                 'top':'15%',
                 'z-index':'100005',
             });
             selectedArtworkContainer.css({
                 'height': '100%',
-                'bottom':'2%'
+                'bottom':'-4%'
             })
         }
     }
@@ -1206,6 +1206,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
   
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
+            main.attr("id", currentWork.Identifier);
             tileImage.addClass('tileImage');
             artTitle.addClass('artTitle');
             artText.addClass('artText');
@@ -1220,8 +1221,41 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'color': '#' + SECONDARY_FONT_COLOR,
                 //'font-family': FONT
             });
-            main.on('click', function () {
-                if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
+
+            /* @function doubleClickHandler
+                * Opens artwork directly on double click
+                * Basically, sets a timeout during which the artwork can be clicked again to be opened
+                * @returns handler function
+                */
+            function doubleClickHandler() {
+                return function () {
+                    if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
+
+                        if (previouslyClicked === main) {
+                            switchPage(currentWork)();
+                        } else {
+                            previouslyClicked = main;
+                            setTimeout(function () { previouslyClicked = null }, 1000)
+                        }
+                    } else {
+                        TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                            if (previouslyClicked === main) {
+                                switchPage(doqs[0], currentWork)();
+                            } else {
+                                previouslyClicked = main;
+                                setTimeout(function () { previouslyClicked = null }, 1000);
+                            }
+                        }, function () {
+                            
+                        }, function () {
+                            
+                        });
+                    }
+
+                }();
+            }
+                   
+                main.on('click', function () {
                     doubleClickHandler()
 
                     // if the idle timer hasn't started already, start it
@@ -1233,35 +1267,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     setTimeout(function () { showArtwork(currentWork, false)() }, 10)
                     zoomTimeline(artworkCircles[currentWork.Identifier])
                     justShowedArtwork = true;
-                } else {
-                    if (!idleTimer && !previewing) {
-                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-                        idleTimer.start();
-                    }
-                    clearTimeout(showArtworkTimeout);
-                    showArtworkTimeout = setTimeout(function () { showArtwork(currentWork, false)(); }, 230);
-
-                    zoomTimeline(artworkCircles[currentWork.Identifier])
-                    justShowedArtwork = true;
-                }
-            })
-
-            /* @function doubleClickHandler
-            * Opens artwork directly on double click
-            * Basically, sets a timeout during which the artwork can be clicked again to be opened
-            * @returns handler function
-            */
-            function doubleClickHandler(){
-                return function(){
-                    if(previouslyClicked === main){
-                        switchPage(currentArtwork)();
-                    } else {
-                        previouslyClicked = main;
-                        setTimeout(function(){previouslyClicked = null}, 1000)                        
-                    }
-                }()
-            };
-
+                })                
+            
             TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
                 //if (currentThumbnail.attr('guid') === currentWork.Identifier && !justShowedArtwork) {
@@ -1283,15 +1290,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else if (currentWork.Metadata.ContentType === "Audio" ){
                 tileImage.css('background-color','black');
                 tileImage.attr('src', tagPath+'images/audio_thumbnail.svg');
-            } else {
-                if (currentWork.Metadata.Medium=== "Video"|| currentWork.Metadata.ContentType==="Video"||currentWork.Metadata.ContentType ==="iframe"){
-                    showLabel = false;
-                    tileImage.css('background-color','black');
-                    tileImage.attr('src',tagPath + 'images/video_thumbnail.svg');
+            } else if (currentWork.Metadata.Medium=== "Video"|| currentWork.Metadata.ContentType==="Video"||currentWork.Metadata.ContentType ==="iframe"){
+                showLabel = false;
+                tileImage.css('background-color','black');
+                tileImage.attr('src', tagPath + 'images/video_thumbnail.svg');
+            } else if (currentWork.Metadata.ContentType === "Image") {
+                if (currentWork.Metadata.Thumbnail) {
+                    tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
+                } else if (currentWork.Metadata.Source) {
+                    tileImage.attr("src", FIX_PATH(currentWork.Metadata.Source));
                 } else {
-                    tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
-                } 
-            }
+                    tileImage.attr("src", tagPath + 'images/image_icon.svg');
+                }
+            } else if (currentWork.Type === "Empty" || currentWork.Type === "Tour" || currentWork.Metadata.Type === "Tour" || currentWork.Metadata.ContentType === "Tour") {
+                tileImage.css('background-color', 'black');
+                if (currentWork.Metadata.Thumbnail) {
+                    tileImage.attr('src', FIX_PATH(currentWork.Metadata.Thumbnail));
+                } else {
+                    tileImage.attr('src', FIX_PATH("/Images/default.jpg"));
+                }
+            }else{
+                tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
+            } 
             
 
             // Add title
@@ -2011,6 +2031,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 exploreTab.append(exploreText)
 
                 //Thumbnail image
+
                 currentThumbnail = $(document.createElement('img'))
                     .addClass('currentThumbnail');
                 if (artwork.Metadata.Thumbnail && artwork.Metadata.ContentType !== "Audio") {
@@ -2018,16 +2039,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 } else if (artwork.Metadata.ContentType === "Audio") {
                     currentThumbnail.css('background-color', 'black');
                     currentThumbnail.attr('src', tagPath + 'images/audio_thumbnail.svg');
-                } else {
-                    if (artwork.Metadata.Medium === "Video" || artwork.Metadata.ContentType === "Video" || artwork.Metadata.ContentType === "iframe") {
+                } else if (artwork.Metadata.Medium === "Video" || artwork.Metadata.ContentType === "Video" || artwork.Metadata.ContentType === "iframe") {
                         currentThumbnail.css('background-color', 'black');
                         currentThumbnail.attr('src', tagPath + 'images/video_thumbnail.svg');
+                } else if (artwork.Metadata.ContentType === "Image") {
+                    if (artwork.Metadata.Thumbnail) {
+                        currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+                    } else if (artwork.Metadata.Source) {
+                        currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Source));
                     } else {
-                        currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
+                        currentThumbnail.attr("src", tagPath + 'images/image_icon.svg');
                     }
+                } else if (artwork.Type === "Empty" || artwork.Type === "Tour" || artwork.Metadata.Type === "Tour" || artwork.Metadata.ContentType === "Tour") {
+                    currentThumbnail.css('background-color', 'black');
+                    if (artwork.Metadata.Thumbnail) {
+                        currentThumbnail.attr('src', FIX_PATH(artwork.Metadata.Thumbnail));
+                    } else {
+                        currentThumbnail.attr('src', FIX_PATH("/Images/default.jpg"));
+                    }
+                }else {
+                    currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
                 }
-
-
                 !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
 
                 //Telemetry stuff
@@ -2173,24 +2205,37 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 src = tagPath + 'images/video_icon.svg';
                                 break;
                             case 'Image':
-                                src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);
+                                if (thumb) {
+                                    src = FIX_PATH(thumb);
+                                } else if (metadata.Source) {
+                                    src = FIX_PATH(metadata.Source);
+                                } else {
+                                    src = tagPath + 'images/no_thumbnail.svg';
+                                }
                                 break;
                             case 'Text':
                                 src = tagPath + 'images/text_icon.svg';
                             default:
-                                src = tagPath + 'images/no_thumbnail.svg';
+                                if (thumb) {
+                                    src = FIX_PATH(thumb);
+                                } else if (metadata.Source) {
+                                    src = FIX_PATH(metadata.Source);
+                                } else {
+                                    src = tagPath + 'images/no_thumbnail.svg';
+                                }
                                 break;
                         }
-                        if (onAssocMediaView && metadata.Type === "Artwork"){
-                        	src = thumb ? FIX_PATH(thumb) : tagPath + 'images/no_thumbnail.svg';
+                        if (onAssocMediaView && metadata.Type === "Artwork") {
+                            if (thumb) {
+                                src = FIX_PATH(thumb);
+                            } else if (metadata.Source) {
+                                src = FIX_PATH(metadata.Source);
+                            } else {
+                                src = tagPath + 'images/no_thumbnail.svg';
+                            }
+                        	
                         }
-
-                        // Set tileImage to thumbnail image, if it exists
-                        if(doqs[i].Metadata.Thumbnail || metadata.ContentType === "iframe") {
-                            miniTile.attr("src", src);
-                        } else {
-                            miniTile.attr("src", tagPath + 'images/no_thumbnail.svg');
-                        }
+                        miniTile.attr("src", src);
                         miniTilesHolder.append(miniTile)
                     }   
                 	addAssociationRow(numberAssociatedDoqs); 

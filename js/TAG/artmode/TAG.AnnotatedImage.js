@@ -737,7 +737,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 controlPanel = $(document.createElement('div')).addClass('annotatedImageMediaControlPanel'),
                 vol = $(document.createElement('img')).addClass('mediaVolButton'),
                 timeContainer = $(document.createElement('div')).addClass('mediaTimeContainer'),
-                currentTimeDisplay = $(document.createElement('span')).addClass('mediaTimeDisplay'),
+                currentTimeDisplay = $(document.createElement('div')).addClass('mediaTimeDisplay'),
                 playHolder = $(document.createElement('div')).addClass('mediaPlayHolder'),
                 volHolder = $(document.createElement('div')).addClass('mediaVolHolder'),
                 sliderContainer = $(document.createElement('div')).addClass('mediaSliderContainer'),
@@ -754,25 +754,29 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             // TODO move this css to styl file
             play.css({
                 'position': 'absolute',
-                'height':   '100%',
-                'width':    '100%',
-                'display':  'inline-block',
+                'height': '1%',
+                'min-height': '20px',
+                'max-height':   '30px',
+                'width':    'auto',
+                'display': 'block',
+                'padding':'3px 3px 3px 3px'
             });
 
-            playHolder.css({
-                'position': 'absolute',
-                'height': '45%',
-                'width': '10%',
-                'min-height': '20px',
-                'top':    '0%',
-                'display':  'inline-block',
-                'margin':   '2px 1% 0px 1%',
-            });
+            //playHolder.css({
+            //    'position': 'absolute',
+            //    'height': '45%',
+            //    'width': '10%',
+            //    'min-height': '20px',
+            //    'top':    '0%',
+            //    'display':  'inline-block',
+            //    'margin':   '2px 1% 0px 1%',
+            //});
 
             sliderContainer.css({
                 'position': 'absolute',
                 'height': '20%',
-                'min-height' :'10px',
+                'min-height': '15px',
+                'max-height' :'25px',
                 'width':    '100%',
                 'left':     '0px',
                 'bottom':   '0px'
@@ -787,42 +791,53 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             });
 
             vol.css({
-                'height':   '100%',
-                'width':    '100%',
                 'position': 'absolute',
-                'display':  'inline-block',
+                'height': '1%',
+                'min-height': '20px',
+                'max-height': '30px',
+                'width': 'auto',
+                'display': 'block',
+                'padding': '2px 3px 2px 3px',
+                'right':'0%'
             });
 
-            volHolder.css({
-                'height': '45%',
-                'min-height' : '20px',
-                'position': 'absolute',
-                'width': '8%',
-                'right':    '2%',
-                'top':      '10%'
-            });
+            //volHolder.css({
+            //    'height': '45%',
+            //    'min-height' : '20px',
+            //    'position': 'absolute',
+            //    'width': '8%',
+            //    'right':    '2%',
+            //    'top':      '10%'
+            //});
 
-            timeContainer.css({
-                'height': '45%',
-                'top': '0%',
-                'width' : '15%',
-                'right':  volHolder.width() + 10 + 'px',
-                'position': 'absolute',
-                'vertical-align': 'top',
-                'padding':  '0',
-                'display':  'inline-block',
-            });
+            //timeContainer.css({
+            //    'height': '45%',
+            //    'top': '0%',
+            //    'width' : '15%',
+            //    'right':  volHolder.width() + 10 + 'px',
+            //    'position': 'absolute',
+            //    'vertical-align': 'top',
+            //    'padding':  '0',
+            //    'display':  'inline-block',
+            //});
 
             currentTimeDisplay.css({
-                'height': '100%',
+                //'height': '1%',
+                //'min-height': '30px',
+                //'max-height':'40px',
                 'top': '0%',
                 'position': 'absolute',
-                'font-size': '70%'
+                'display':'block',
+                'font-size': '70%',
+                'right': '50px',
+                'vertical-align': 'middle',
+                'margin':'0',
+                'padding':'0',
             });
 
-            playHolder.append(play);
+            //playHolder.append(play);
             sliderContainer.append(sliderPoint);
-            volHolder.append(vol);
+            //volHolder.append(vol);
             
             // set up handlers
             play.on('click', function () {
@@ -917,11 +932,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             mediaContainer.append(elt);
             mediaContainer.append(controlPanel);
 
-            controlPanel.append(playHolder);
+            controlPanel.append(play);
             controlPanel.append(sliderContainer);
             timeContainer.append(currentTimeDisplay);
             controlPanel.append(timeContainer);
-            controlPanel.append(volHolder);
+            controlPanel.append(vol);
         }
 
         /**
