@@ -473,7 +473,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 visibleCollections.push(collections[i]);
             }
         }
-        if (!collectionsToShow) {
+        if (!collectionsToShow && !previewing) {
             var infoOverlay = $(document.createElement('div'));
             infoOverlay.text("No collections to display");
             infoOverlay.css({ "color": "white", "text-align": "center", "font-size": "200%", "margin-top": "20%" });
