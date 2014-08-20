@@ -1206,6 +1206,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
   
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
+            main.attr("id", currentWork.Identifier);
             tileImage.addClass('tileImage');
             artTitle.addClass('artTitle');
             artText.addClass('artText');
@@ -1220,8 +1221,41 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'color': '#' + SECONDARY_FONT_COLOR,
                 //'font-family': FONT
             });
-            main.on('click', function () {
-                if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
+
+            /* @function doubleClickHandler
+                * Opens artwork directly on double click
+                * Basically, sets a timeout during which the artwork can be clicked again to be opened
+                * @returns handler function
+                */
+            function doubleClickHandler() {
+                return function () {
+                    if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
+
+                        if (previouslyClicked === main) {
+                            switchPage(currentWork)();
+                        } else {
+                            previouslyClicked = main;
+                            setTimeout(function () { previouslyClicked = null }, 1000)
+                        }
+                    } else {
+                        TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                            if (previouslyClicked === main) {
+                                switchPage(doqs[0], currentWork)();
+                            } else {
+                                previouslyClicked = main;
+                                setTimeout(function () { previouslyClicked = null }, 1000);
+                            }
+                        }, function () {
+                            
+                        }, function () {
+                            
+                        });
+                    }
+
+                }();
+            }
+                   
+                main.on('click', function () {
                     doubleClickHandler()
 
                     // if the idle timer hasn't started already, start it
@@ -1233,35 +1267,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     setTimeout(function () { showArtwork(currentWork, false)() }, 10)
                     zoomTimeline(artworkCircles[currentWork.Identifier])
                     justShowedArtwork = true;
-                } else {
-                    if (!idleTimer && !previewing) {
-                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-                        idleTimer.start();
-                    }
-                    clearTimeout(showArtworkTimeout);
-                    showArtworkTimeout = setTimeout(function () { showArtwork(currentWork, false)(); }, 230);
-
-                    zoomTimeline(artworkCircles[currentWork.Identifier])
-                    justShowedArtwork = true;
-                }
-            })
-
-            /* @function doubleClickHandler
-            * Opens artwork directly on double click
-            * Basically, sets a timeout during which the artwork can be clicked again to be opened
-            * @returns handler function
-            */
-            function doubleClickHandler(){
-                return function(){
-                    if(previouslyClicked === main){
-                        switchPage(currentArtwork)();
-                    } else {
-                        previouslyClicked = main;
-                        setTimeout(function(){previouslyClicked = null}, 1000)                        
-                    }
-                }()
-            };
-
+                })                
+            
             TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
                 //if (currentThumbnail.attr('guid') === currentWork.Identifier && !justShowedArtwork) {
