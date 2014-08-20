@@ -3309,14 +3309,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
         }
-        var progressCircCSS = {
-            'position': 'absolute',
-            'left': '10%',
-            'top': '40%',
-            'z-index': '50',
-            'height': 'auto',
-            'width': '20%'
-        };
         middleLoading.show();
         function onSuccess(doqData) {
             var newDoq = new Worktop.Doq(doqData.responseText);
