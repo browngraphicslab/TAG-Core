@@ -2024,6 +2024,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 exploreTab.append(exploreText)
 
                 //Thumbnail image
+
                 currentThumbnail = $(document.createElement('img'))
                     .addClass('currentThumbnail');
                 if (artwork.Metadata.Thumbnail && artwork.Metadata.ContentType !== "Audio") {
@@ -2031,16 +2032,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 } else if (artwork.Metadata.ContentType === "Audio") {
                     currentThumbnail.css('background-color', 'black');
                     currentThumbnail.attr('src', tagPath + 'images/audio_thumbnail.svg');
-                } else {
-                    if (artwork.Metadata.Medium === "Video" || artwork.Metadata.ContentType === "Video" || artwork.Metadata.ContentType === "iframe") {
+                } else if (artwork.Metadata.Medium === "Video" || artwork.Metadata.ContentType === "Video" || artwork.Metadata.ContentType === "iframe") {
                         currentThumbnail.css('background-color', 'black');
                         currentThumbnail.attr('src', tagPath + 'images/video_thumbnail.svg');
+                } else if (artwork.Metadata.ContentType === "Image") {
+                    if (artwork.Metadata.Thumbnail) {
+                        currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+                    } else if (artwork.Metadata.Source) {
+                        currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Source));
                     } else {
-                        currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
+                        currentThumbnail.attr("src", tagPath + 'images/image_icon.svg');
                     }
+                } else if (artwork.Type === "Empty" || artwork.Type === "Tour" || artwork.Metadata.Type === "Tour" || artwork.Metadata.ContentType === "Tour") {
+                    currentThumbnail.css('background-color', 'black');
+                    if (artwork.Metadata.Thumbnail) {
+                        currentThumbnail.attr('src', FIX_PATH(artwork.Metadata.Thumbnail));
+                    } else {
+                        currentThumbnail.attr('src', FIX_PATH("/Images/default.jpg"));
+                    }
+                }else {
+                    currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
                 }
-
-
                 !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
 
                 //Telemetry stuff
