@@ -38,6 +38,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         aspectRatio = 1, //TODO - how to find this
         artworkFrozen = false,
         descscroll = false,
+        scrollingMedia = false,
+
         // misc uninitialized variables
         viewerelt,
         viewer,
@@ -1074,61 +1076,60 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         }
 
         //When the associated media is clicked, set it to active(see mediaManipPreprocessing() above )
-        outerContainer.on('click', function (event) {
+        outerContainer.on('click mousedown', function (event) {
             event.stopPropagation();            //Prevent the click going through to the main container
             event.preventDefault();
             TAG.Util.IdleTimer.restartTimer();
             mediaManipPreprocessing();
+
+            // If event is initial touch on artwork, save current position of media object to use for animation
+            outerContainer.startLocation = {
+                    x: outerContainer.position().left,
+                    y: outerContainer.position().top
+                };
         });
+
 
     /**
      * I/P {Object} res     object containing hammer event info
      * Drag/manipulation handler for associated media
      * Manipulation for touch and drag events
      */
-    function mediaManip(res) {
-        var top         = outerContainer.position().top,
-            left        = outerContainer.position().left,
-            width       = outerContainer.width(),
-            height      = outerContainer.height(),
-            finalPosition;
+        function mediaManip(res) {
+            if (!res.eventType || scrollingMedia) {
+                return
+            }
+            var top         = outerContainer.position().top,
+                left        = outerContainer.position().left,
+                width       = outerContainer.width(),
+                height      = outerContainer.height(),
+                finalPosition;
 
-        if (!res.eventType){
-            return
-        }
-
-        // If event is initial touch on artwork, save current position of media object to use for animation
-        if (res.eventType === 'start') {
-            startLocation = {
-                x: left,
-                y: top
-            };
-        }   
-        // Target location (where object should be moved to)
-        finalPosition = {
-            x: (res.center.pageX - res.startEvent.center.pageX)*1.5 + startLocation.x, //the constant is to give it a little acceleration 
-            y: (res.center.pageY - res.startEvent.center.pageY)*1.5 + startLocation.y
-        };   
-
-        // Animate to target location
-        outerContainer.stop()
-        outerContainer.animate({
-            top: finalPosition.y,
-            left: finalPosition.x
-        }, 800, function() {
-            //If object is not on screen, reset and hide it
-            if (!(
-                (0 < finalPosition.y + outerContainer.height()) 
-                && (finalPosition.y < rootHeight) 
-                && (0 < finalPosition.x + outerContainer.width()) 
-                && (finalPosition.x < rootWidth))) 
-                {
-                    hideMediaObject();
-                    pauseResetMediaObject();
-                    return;
+            // Target location (where object should be moved to)
+            finalPosition = {
+                x: (res.center.pageX - res.startEvent.center.pageX) + outerContainer.startLocation.x, //the constant is to give it a little acceleration 
+                y: (res.center.pageY - res.startEvent.center.pageY) + outerContainer.startLocation.y
             };    
-        });  
-    }
+
+            // Animate to target location
+            outerContainer.stop()
+            outerContainer.animate({
+                top: finalPosition.y,
+                left: finalPosition.x
+            }, 800, function() {
+                //If object is not on screen, reset and hide it
+                if (!(
+                    (0 < finalPosition.y + height*1/2) 
+                    && (finalPosition.y + innerContainer.height()/2 < rootHeight) 
+                    && (0 < finalPosition.x + width*1/2) 
+                    && (finalPosition.x + width/2 < rootWidth))) 
+                    {
+                        hideMediaObject();
+                        pauseResetMediaObject();
+                        return;
+                };    
+            });  
+        }
 
     /**
      * I/P {Number} scale     scale factor
@@ -1146,6 +1147,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             minW,
             newX,
             newY;
+        scrollingMedia = true;
         if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
             minW = 450;
             maxW = 800;
@@ -1180,7 +1182,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             left: newX,
             width: newW,
             height: newH
-        }); 
+        })
+        setTimeout(function () {
+            scrollingMedia = false;
+        }, 100);
     }
         
         /**
