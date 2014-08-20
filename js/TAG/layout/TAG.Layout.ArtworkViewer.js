@@ -254,6 +254,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'right': 'auto',
                 'left': '0%'
             });
+            slideButton.css({ //fix the rounded edge to be on the correct side
+                'border-bottom-left-radius': '0px',
+                'border-bottom-right-radius': '10px',
+            });
         }
         if (!previewing){
         	container.css('min-width', 0.14 * screenWidth);
