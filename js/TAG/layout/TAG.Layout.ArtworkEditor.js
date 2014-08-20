@@ -153,8 +153,17 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         });
         backButton.on('click', function () {
             var authoringHub;
-            var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0));
+            var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0.6));
             $("#tagRoot").append(transOverlay);
+            var vert = $("#tagRoot").height() / 2;
+            var horz = $("#tagRoot").width() / 2;
+            var progressCircCSS = {
+                'position': 'absolute',
+                'z-index': '50',
+                'height': 'auto',
+                'width': ($("#tagRoot").width() * 0.1) +"px"
+            };
+            var circle = TAG.Util.showProgressCircle(transOverlay, progressCircCSS, horz, vert, true);
             transOverlay.show();
             MEDIA_EDITOR.close();
             backButton.off('click');
@@ -2230,7 +2239,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'border': "0px solid black",
                 });
             } else {
-                textarea.focus(function () {
+                textarea.change(function () {
                     shouldSave = true;
                 })
             }
@@ -2264,6 +2273,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'display': 'inline-block'
                 });
                 deleteFieldIcon.bind("click", { Param1: field, }, function (event) {
+                    shouldSave = true;
                     textareaContainer.remove();
                     if (!shouldDisableAddButton()) {
                         addInfoButton.removeAttr('disabled');
@@ -2385,6 +2395,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             }
 
             addInfoButton.on('click', function () {
+                shouldSave = true;
                 createMetadataTextArea({ field: "new", entry: "metadata field", animate: true, isAdditionalField: true });
                 if (shouldDisableAddButton()) {
                     addInfoButton.attr('disabled', 'disabled');
