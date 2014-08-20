@@ -472,7 +472,8 @@ TAG.Util = (function () {
             }
             yearString = yearString.replace(/ad/gi,'')
                                    .replace(/ce(?!n)/gi,'')
-                                   .replace(/\s/g,'');
+                                   .replace(/\s/g, '')
+                                   .replace(/,/g,'');
             //Catch 'century', 'c', and 'c.' and return mid year of that century (17th c --> 1650)
             if (yearString.search(/c.?/i)>=0 || yearString.search(/century/i)>=0){
                 yearString.replace(/[a-z]\w/gi,'')
