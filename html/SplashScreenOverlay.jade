@@ -5,23 +5,23 @@
 		#title
 			span.titleone.primaryFont Touch Art Gallery-TAG
 			span.titletwo.primaryFont   
-		#description
+		#topDesc.description
 			span.bodyDescone.primaryFont
 				|Welcome to Touch Art Gallery! To change servers, put in the address below. <br />
 				|To access authoring for the current server, put in your authoring password. <br/>
-			span.bodyDesctwo.primaryFont
-				|By tapping the button below, you'll enter the TAG kiosk mode and will <br />
-				|not be able to return to this splash screen until TAG is restarted.
 		#inputRow
 			#serverInputDiv
 				input#serverInput.primaryFont
 				#serverError Server error. 
-				#serverSubmit.primaryFont submit
+				button#serverSubmit.primaryFont submit
 			#passwordInputDiv
 				input#passwordInput(placeholder='authoring password', type='password').primaryFont
 				#passwordError Incorrect password.
-				#passwordSubmit.primaryFont submit
-			
+				button#passwordSubmit.primaryFont submit
+		#bottomDesc.description
+			span.bodyDesctwo.primaryFont
+				|By tapping the button below, you'll enter the TAG kiosk mode and will <br />
+				|not be able to return to this splash screen until TAG is restarted.
 		#goToCollectionsButton Go to Collections
 		#logoRow
 			img#msLogo

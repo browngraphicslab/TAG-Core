@@ -1,85 +1,49 @@
 ﻿ TAG.Util.makeNamespace('TAG.TourAuthoring.Keyframe');
 
-/**Makes a keyframe
+/**
+ * Makes a keyframe
  * Associated with a display (keyframe sequence)
  * Maps to keyframe in RIN (duh)
- * @class TAG.TourAuthoring.Keyframe
- * @constructor
  * @param spec      location (loc - x,y if audio, just x if visual), keyframe svg group (gkey) attrs
  * @param my        Update currentKeyframe param for touch handling, contains timeManager, undoManager, and svg
  */
 TAG.TourAuthoring.Keyframe = function (spec, my) {
     "use strict";
 
-    var that = {                                                                                                    // object holding public methods of the class
-            restoreHandlers: restoreHandlers,
-            resetVisuals: resetVisuals,
-            removeHelper: removeHelper,
-            remove: remove,
-            reactivateKeyframe: reactivateKeyframe,
-            updatePosition: updatePosition,
-            getPosition: getPosition,
-            getCaptureData: getCaptureData,
-            closeMenu: closeMenu,
-            rightTapped: rightTapped,
-            tapped: tapped,
-            setSelected: setSelected,
-            setDeselected: setDeselected,
-            getTime: getTime,
-            setTime: setTime,
-            getVolumePx: getVolumePx,
-            getVolume: getVolume,
-            setVolume: setVolume,
-            isRemoved: isRemoved,
-            getContainingDisplay: getContainingDisplay,
-            move: move,
-            internalMove: internalMove,
-            translate: translate,
-            scale: scale,
-            toRIN: toRIN,
-            loadRIN: loadRIN
-        },
+    var that = {},
         _data = spec.data || { viewport: { region: { center: { x: 0, y: 0 }, span: { x: 1, y: 1 } } } },
-        loc = spec.loc,                                                                                             // location in seconds - {x,y}
-        gkey = spec.gkey,                                                                                           // SVG group containing keyframe
-        display = spec.display,                                                                                     // containing display
-        displayDiv = spec.displayDiv,                                                                               // div of containing display (we'll append the keyframe divs to this)
-        position = 0,                                                                                               // initial position of the keyframe
-        captureData,                                                                                                // stores keyframe RIN data
-        menu = TAG.TourAuthoring.EditorMenu({                                                                      // creates an instance of the EditorMenu for the keyframe
+        loc = spec.loc, // location in seconds - {x,y}
+        gkey = spec.gkey, // SVG group containing keyframe
+        display = spec.display, // containing display
+        displayDiv = spec.displayDiv, // div of containing display (we'll append the keyframe divs to this)
+        position = 0,
+        captureData,
+        menu = TAG.TourAuthoring.EditorMenu({
             type: TAG.TourAuthoring.MenuType.keyframe,
             parent: that
         }, my),
 
         // svg/div variables
-        circle,                                                                                                     // the keyframe circles
-        line,                                                                                                       // keyframe lines
-        innerCircle,                                                                                                // the inner circle sen on the keyframe
-        offsetx,                                                                                                    // difference of x value from the window
-        offsety,                                                                                                    // difference of y value fromt he window
-        hidden = false,
+        circle, line, innerCircle, offsetx, offsety, hidden = false,
 
         // keyframe edit command logging functionality
-        _updateKeyFrameCommand,                                                                                     
-        needsLogging;
+        _updateKeyFrameCommand, needsLogging;
 
-    // UI variables
-    var KEYFRAME_COLOR = TAG.TourAuthoring.Constants.keyframeColor,                                                // colour of the keyframe
-        KEYFRAME_LINE_W = TAG.TourAuthoring.Constants.keyframeLineW,                                               // width of the keyframe lines
-        KEYFRAME_STROKE_W = TAG.TourAuthoring.Constants.keyframeStrokeW,                                           // width of < >
-        KEYFRAME_SIZE = TAG.TourAuthoring.Constants.keyframeSize,                                                  // size of the keyframe
-        T2P = my.timeManager.timeToPx,                                                                              // converts time scale to pixel scale on the screen
-        P2T = my.timeManager.pxToTime;                                                                              // converts pixels on screen to time scale in seconds
+    var KEYFRAME_COLOR = TAG.TourAuthoring.Constants.keyframeColor,
+        KEYFRAME_LINE_W = TAG.TourAuthoring.Constants.keyframeLineW,
+        KEYFRAME_STROKE_W = TAG.TourAuthoring.Constants.keyframeStrokeW,
+        KEYFRAME_SIZE = TAG.TourAuthoring.Constants.keyframeSize,
+        T2P = my.timeManager.timeToPx,
+        P2T = my.timeManager.pxToTime;
 
-    
-   /**Initializes the visual elements and their event handlers
-     * @method initVisuals
-     */
+    //that.openMenu = false;
+    that.position = 0; 
+    that.removed = false;
+
     function initVisuals() {
         var px_x = my.timeManager.timeToPx(loc.x);
         var px_y = (my.type !== TAG.TourAuthoring.TrackType.audio) ? 48 : loc.y;
         var keyframeDivs = TAG.Util.UI.createKeyframe({ container: my.track, x: px_x, y: px_y });
-       
         line = keyframeDivs.line,
         circle = keyframeDivs.circ,
         innerCircle = keyframeDivs.innerCirc;
@@ -96,9 +60,6 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             _keyframeMousedown(offsetX, offsetY);
         });
 
-        /**Toggles between displaying and hiding keyframe circles
-         * @method toggleCircle
-         */
         function toggleCircle() {
             hidden = !hidden;
             if (hidden) {
@@ -111,11 +72,8 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         }
         that.toggleCircle = toggleCircle;
     }
-    initVisuals(); 
+    initVisuals(); // replacing call to initSVG
 
-    /**Resets event handlers on keyframe circles
-     * @method restoreHandlers
-     */
     function restoreHandlers() {
         circle.off('mousedown');
         innerCircle.off('mousedown');
@@ -132,26 +90,21 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             _keyframeMousedown(offsetX, offsetY);
         });
     }
-    
-    /**Function called when mouse is pressed on a keyframe circle
-     * @method _keyframeMousedown
-     * @param {Number} mouseoffsetX
-     * @param {Number} mouseoffsetY
-     */
+    that.restoreHandlers = restoreHandlers;
+
     function _keyframeMousedown(mouseoffsetx, mouseoffsety) {
-        var oldlocx = loc.x,                        // for command logging
+        var oldlocx = loc.x, // for command logging
             oldlocy = loc.y;
 
-        my.timeManager.stop();                      // Stop playback on mousedown
+        // Stop playback on mousedown
+        my.timeManager.stop();
 
         // Setting movement related vars
         offsetx = mouseoffsetx;
         offsety = mouseoffsety;
         my.currentKeyframe = that;
         $('body').on('mouseup.keyframe', function () {
-            var command,
-                newlocx,
-                newlocy;
+            var command, newlocx, newlocy;
             my.currentKeyframe = null;
             offsetx = null;
             offsety = null;
@@ -180,9 +133,6 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         });
     }
 
-    /**Resets the visual elements of the keyframe
-     * @method resetVisuals
-     */
     function resetVisuals() {
         var px_x = T2P(loc.x);
         circle.css({
@@ -195,9 +145,12 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         });
         line.css("left", px_x - 3 / 2 + "px");
     }
-    
-   /* function initSVG() {
+    that.resetVisuals = resetVisuals;
+
+    function initSVG() {
         var timex = my.timeManager.timeToPx(loc.x);
+
+        // Remember: svg height is just 100%!
 
         // middle marking line
         line = gkey.append('line')
@@ -209,19 +162,23 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         circle = gkey.append('circle')
                      .attr('style', 'stroke:' + TAG.TourAuthoring.Constants.keyframeColor
                      + '; fill:white; stroke-width:' + TAG.TourAuthoring.Constants.keyframeStrokeW + ';');
-       
+        //circle.on('mousedown', function (d, i) {
+        //    var mouse = d3.mouse(circle[0][0]);
+        //    _keyframeMousedown(mouse[0] - parseInt(this.getAttribute('cx')), mouse[1] - parseInt(this.getAttribute('cy')));
+        //});
+
         $(circle[0][0]).on('mousedown', function (e) {
+            console.log("using new events");
             var offsetX = e.offsetX;
             var offsetY = e.offsetY;
-            console.log("using new events");
             _keyframeMousedown(offsetX - parseInt(circle.attr('cx'), 10), offsetY - parseInt(circle.attr('cy'), 10));
         });
 
-        if (my.type !== TAG.TourAuthoring.TrackType.audio) {                                // set vertical positioning of non-audio keyframes
+        if (my.type !== TAG.TourAuthoring.TrackType.audio) { // set vertical positioning of non-audio keyframes
             loc.y = 48;
         }
         circle.attr('cx', timex)
-                  .attr('cy', loc.y)                                                         // TODO: convert linear scale to dBFS (logarithmic for even fades)
+                  .attr('cy', loc.y) // TODO: convert linear scale to dBFS (logarithmic for even fades)
                   .attr('r', TAG.TourAuthoring.Constants.keyframeSize);
 
         innerCircle = gkey.append('circle')
@@ -229,6 +186,10 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                         .attr('cy', loc.y)
                         .attr('r', TAG.TourAuthoring.Constants.innerKeyframeSize)
                         .attr('style', 'display:none; stroke:' + TAG.TourAuthoring.Constants.keyframeColor + '; fill:' + TAG.TourAuthoring.Constants.keyframeColor + '; stroke-width:0;');
+        //innerCircle.on('mousedown', function (d, i) {
+        //    var mouse = d3.mouse(circle[0][0]);
+        //    _keyframeMousedown(mouse[0] - parseInt(this.getAttribute('cx')), mouse[1] - parseInt(this.getAttribute('cy')));
+        //});
 
         $(innerCircle[0][0]).on('mousedown', function (e) {
             console.log("using new events");
@@ -247,12 +208,12 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 innerCircle.attr('display', null);
             }
         }
-        that.toggleCircle = toggleCircle; */
+        that.toggleCircle = toggleCircle;
 
         /**
          * Helper function to set currentKeyframe and other vars in prep for movement
          */
-       /* function _keyframeMousedown(mouseoffsetx, mouseoffsety) {
+        function _keyframeMousedown(mouseoffsetx, mouseoffsety) {
             var oldlocx = loc.x, // for command logging
                 oldlocy = loc.y;
 
@@ -292,12 +253,9 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 }
             });
         }
-    } */
+    }
     //initSVG();
 
-    /**Changing audio track settings
-     * @method initMenu
-     */
     (function initMenu() {
         menu.addInput('Time', TAG.TourAuthoring.MenuInputFormats.minSec,
             getTime, setTime);
@@ -306,21 +264,22 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 getVolume, setVolume);
         }
         menu.addButton('Delete', 'left', removeHelper);
+        //menu.addButton('Duplicate', 'left', duplicate);
         menu.addButton('Close', 'right', menu.forceClose);
     })();
 
-    /**Helper function for the delete button in audio track menu
-     * @method removeHelper
-     */
+    //function duplicate() {
+    //    var copyTo = Math.min(display.getEnd(), loc.x + TAG.TourAuthoring.Constants.epsilon),
+    //        newKey = display.addKeyframe(copyTo);
+
+    //    newKey.loadRIN({ state: _data });
+    //}
+
     function removeHelper() {
         remove(true);
     }
-    
-    /**Removes a keyframe
-     * @method remove 
-     * @param {Boolean} displayRemoved
-     * @param {Boolean} preventClose
-     */
+    that.removeHelper = removeHelper;
+
     function remove(displayRemoved, preventClose) {
         closeMenu(preventClose);
         var index,
@@ -347,99 +306,72 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             my.undoManager.logCommand(command);
         }
     }
-    
-    /**Recreates a removed keyframe
-     * @method reactivateKeyframe
-     */
+    that.remove = remove;
+
     function reactivateKeyframe() {
         that.removed = false;
-        initVisuals();
+        initVisuals();//initSVG();
     }
-    
-    /**Updates keyframe position
-     * @method updatePosition
-     * @param newpos
-     */
+    that.reactivateKeyframe = reactivateKeyframe;
+
     function updatePosition(newpos) {
         position = newpos;
     }
-    
-    /**Returns keframe position
-     * @method getPosition
-     * @return position
-     */
+    that.updatePosition = updatePosition;
+
 	function getPosition() {
 		return position;
 	}
-	
-    /**Returns RIN data stored in keyframe
-     * @method getCaptureData
-     * @return captureData
-     */
+	that.getPosition = getPosition;
+
 	function getCaptureData() {
 	    return captureData;
 	}
-	
-    /**Closes the editing menu 
-     * @method closeMenu
-     * @param {Boolean} preventClose
-     */
+	that.getCaptureData = getCaptureData;
+
     function closeMenu(preventClose) {
         menu.close(preventClose);
     }
-    
-    /**Chakcs if the editing menu of a keyframe is open
-     * @method menuIsOpen
-     * @return {Boolean} 
-     */
+    that.closeMenu = closeMenu;
+
     function menuIsOpen() {
         return menu.menuCloseable;
     }
 
-    /**Sets the state of the editing menu as a boolean
-     * @method setMenuCloseable
-     * @param {Boolean} state
-     */
     function setMenuCloseable(state) {
         menu.menuCloseable = state;
     }
 
-    /**Handles long press on a keyframe
-     * @method rightTapped
-     * @param {Event} evt
-     */
+    // handles long press on a keyframe
     function rightTapped(evt) {
         menu.open(evt);
     }
-    
-    /**Handles tapping a keyframe
-     * @method tapped
-     * @param {Event} evt
-     */
+    that.rightTapped = rightTapped;
+
     function tapped(evt) {
         my.timeManager.seek(loc.x);
         setSelected();
     }
-    
-    /**Puts the keyframe selecting function as a debounce function 
-     * @method 
-     */
+    that.tapped = tapped;
+
     var setSelectedDebounced = $.debounce(250, function () {
-        var currData,
-            command;
         if (my.type !== TAG.TourAuthoring.TrackType.audio) {
             my.selectedKeyframe = that;
             $('.keyframeInnerCirc').css('background-color', '#ffffff');
             circle.css({ 'background-color': 'white' });
             innerCircle.css('background-color', '#296b2f');
-            currData = _data;
-            command = createKeyframeCommand();
+
+            var currData = _data;
+            var command = createKeyframeCommand();
+            //my.undoManager.logCommand(command);
             _updateKeyFrameCommand = command;
         }
 
         function createKeyframeCommand() {
             return TAG.TourAuthoring.Command({
-                execute: function () { },
+                execute: function () {
+
+                },
                 unexecute: function () {
                     _data = currData;
                     my.update();
@@ -449,22 +381,33 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                         needsLogging = true;
                     }
                 }
-           });
+            });
         }
     });
 
     /**
-     * Functions for changing keyframe style based on selected/deselected status of keyframes
-     */
-
-    /**Sets a selected keyframe to the required state
-     * @method setSelected
-     * @param {Boolean} forceInstant            selects a keyframe instantly
+     * functions for changing keyframe style based on selected status
      */
     function setSelected(forceInstant) {
+        //if (my.type !== TAG.TourAuthoring.TrackType.audio) {
+        //    my.selectedKeyframe = that;
+        //    $("circle").css({ 'fill': 'white' });
+        //    innerCircle.attr('style', 'display: inherit; fill: #296b2f');
+
+        //    var currData = _data;
+        //    var command = createKeyframeCommand();
+        //    if (!delayLogging) {
+        //        my.undoManager.logCommand(command);
+        //    }
+        //    needsLogging = !!delayLogging; // convert null or undefined to false
+        //    _updateKeyFrameCommand = command;
+        //}
+
         function createKeyframeCommand() {
             return TAG.TourAuthoring.Command({
-                execute: function () { },
+                execute: function () {
+
+                },
                 unexecute: function () {
                     _data = currData;
                     my.update();
@@ -485,28 +428,23 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             setSelectedDebounced();
         }
     }
-    
-    /**Deselects a keyframe
-     * @method setDeselected
-     */
+    that.setSelected = setSelected;
+
     function setDeselected() {
         _updateKeyFrameCommand = null;
         my.selectedKeyframe = null;
         innerCircle.css('background-color', 'white');
     }
+    that.setDeselected = setDeselected;
+
+
     
-    /**Gets x location (time in px) of keyframe
-     * @method getTime
-     * @return {Time} loc.x
-     */
+    // Gets x location (time in px) of keyframe
     function getTime() {
         return loc.x;
     }
-    
-    /**Sets the time coordinates of a keyframe
-     * @method setTime
-     * @param newTime
-     */
+    that.getTime = getTime;
+
     function setTime(newtime) {
         var timex,
             keyframes = display.getKeyframes(),
@@ -522,33 +460,31 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                                 rightbound + TAG.TourAuthoring.Constants.epsilon);
 
         timex = my.timeManager.timeToPx(loc.x);
-        circle.css('left', (timex - 26)+"px");                  
+        circle.css('left', (timex - 21 - 5)+"px"); // DON'T HARDCODE
         line.css('left', (timex - 3/2)+"px");
         innerCircle.css('left', (timex - 17)+"px");
         if (my.type === TAG.TourAuthoring.TrackType.audio) {
             display.getTrack().drawLines();
         }
+
         setDeselected();
     }
-    
-    /**Gets y location (volume in px) of keyframe
-     * @method getVolumePx
-     * @return {Number} loc.y
-     */
+    that.setTime = setTime;
+
+    // Gets y location (volume in px) of keyframe
     function getVolumePx() {
         return loc.y;
     }
-    
-    /**Gets volume (in percent) of keyframe
-     * @method getVolume
-     * @return {Number}  % of loc.y
-     */
+    that.getVolumePx = getVolumePx;
+
+    // Gets volume (in percent) of keyframe
     function getVolume() {
         return heightToPercent(loc.y);
     }
-    
-    /**Sets keyframe volume
-     * @method setVolume
+    that.getVolume = getVolume;
+
+    /**
+     * Sets keyframe volume
      * @param newvolume     new volume in percent
      */
     function setVolume(newvolume) {
@@ -557,47 +493,36 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         innerCircle.css('top', (loc.y - 17)+"px");
         my.that.drawLines();
     }
-    
-    /**Generate vertical fader value out of 100% based on track height constant
-     * @method heightToPercent
-     * @param {Number} height
-     * @return {Number}
-     */
+    that.setVolume = setVolume;
+
+    // generate vertical fader value out of 100% based on track height constant
     function heightToPercent(height) {
         //rounds to 2 decimal places
         return (Math.round(((TAG.TourAuthoring.Constants.trackHeight - height) * 100 / TAG.TourAuthoring.Constants.trackHeight) * 100) / 100);
     }
 
-    /**Generate raw height value from percentage vertical fader value
-     * @method percentToHeight
-     * @param {Number} percent
-     * @return {Number}
-     */
+    // generate raw height value from percentage vertical fader value
     function percentToHeight(percent) {
         return TAG.TourAuthoring.Constants.trackHeight - (percent * TAG.TourAuthoring.Constants.trackHeight / 100);
     }
 
-    /**Gets containing display
-     * @method getContaining Display
-     * @return {Display object} display
-     */
+    // Gets containing display
     function getContainingDisplay() {
         return display;
     }
 
-    /**Gets whether the keyframe has been removed
-     * @method isRemoved
-     * @return {Boolean} that.removed
-     */
+    // Gets whether the keyframe has been removed
     function isRemoved() {
         return that.removed;
     }
-   
-    /**Logic for manipulation + dragging of keyframes
+    that.isRemoved = isRemoved;
+    that.getContainingDisplay = getContainingDisplay;
+
+    /**   
+     * Logic for manipulation + dragging of keyframes
      * Moves keyframe to an absolute position given in res
      * currentKeyframe and offsets should be set, see initSVG / _keyframeMousedown for details
      * Automatically bounds keyframe movement to associated display
-     * @method move
      * @param res           event from makeManipulable, onManipulate
      * @param leftbound     leftmost position keyframe can move to (not required)
      * @param rightbound    rightmost position keyframe can move to (not required)
@@ -612,7 +537,9 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         // error checking
         if ((!offsetx && offsetx !== 0) || (!offsety && offsety !== 0) || !my.currentKeyframe) {
             console.log('Move keyframe called when no keyframe is selected!');
-        } else {                                                                                                                // Editing
+        }
+        // Editing
+        else {
             loc.x = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offsetx),
                                     Math.max(leftbound, display.getStart()) + my.timeManager.pxToTime(TAG.TourAuthoring.Constants.fadeBtnSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.keyframeSize),
                                     Math.min(rightbound, display.getEnd()) - my.timeManager.pxToTime(TAG.TourAuthoring.Constants.fadeBtnSize + TAG.TourAuthoring.Constants.keyframeStrokeW + TAG.TourAuthoring.Constants.keyframeSize));
@@ -626,30 +553,30 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 loc.x = rightbound;
             }
             timex = my.timeManager.timeToPx(loc.x);
-            circle.css('left', (timex - 26)+"px"); 
+            circle.css('left', (timex - 21 - 5)+"px"); // DON'T HARDCODE
             line.css('left', (timex-3/2)+"px");
             innerCircle.css('left', (timex - 17)+"px");
-            if (my.type === TAG.TourAuthoring.TrackType.audio) {                                                               // Change y loc only if keyframe is audio
-                loc.y = Math.constrain(res.pivot.y - offsety, 0, TAG.TourAuthoring.Constants.trackHeight);                     // bound y movement to svg!
+            if (my.type === TAG.TourAuthoring.TrackType.audio) { // Change y loc only if keyframe is audio
+                loc.y = Math.constrain(res.pivot.y - offsety, 0, TAG.TourAuthoring.Constants.trackHeight); // bound y movement to svg!
                 circle.css('top', (loc.y - 21 - 5) + "px");
                 innerCircle.css('top', (loc.y - 17) + "px");
                 display.getTrack().drawLines();
-            } else {                                                                                                            // leave as pixel value
+                // leave as pixel values
+            } else {
                 loc.y = 48;
             }
             setDeselected();
+            //my.update();
+            // TODO: command logging
         }
     }
-    
-    /**Used to debug move from command line
+    that.move = move;
+
+    /**
+     * Used to debug move from command line
      * Flips internal state to simulate clicks
      * Resets state when finished
      * Use only in test code or functions inside display
-     * @method internalMove
-     * @param x
-     * @param y
-     * @param leftbound
-     * @param rightbound
      */
     function internalMove(x, y, leftbound, rightbound) {
         var res = {
@@ -667,24 +594,29 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         offsety = null;
         my.currentKeyframe = null;
     }
-    
-    /**Translates keyframe by t secs
-     * @method translate 
+    that.internalMove = internalMove;
+
+    /**
+     * Translates keyframe by t secs
      * @param t     amount of translation
      */
     function translate(t) {
         var timex;
+        //loc.x = !isNaN(loc.x) ? Math.constrain(loc.x + t, display.getStart(), display.getEnd()) : Math.constrain(t, display.getStart(), display.getEnd());
         loc.x = Math.constrain(loc.x + t, display.getStart(), display.getEnd());
         timex = my.timeManager.timeToPx(loc.x);
         circle.css('left',( timex - 21 - 5)+"px");
         line.css('left', (timex - 3/2)+"px");
         innerCircle.css('left', (timex - 17)+"px");
         setDeselected();
+        //newVal.val(createminsec(loc.x));
+        //my.update();
     }
-    
-    /**Called when ratio of time to pixels is changed
+    that.translate = translate;
+
+    /**
+     * Called when ratio of time to pixels is changed
      * Just resets positioning of keyframes
-     * @method scale
      */
     function scale() {
         var timex = my.timeManager.timeToPx(loc.x);
@@ -695,20 +627,20 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             display.getTrack().drawLines();
         }
     }
-    
-    /**Converts the y location of the keyframe onto scale from 0 to 1
+    that.scale = scale;
+
+    /**
+     * Converts the y location of the keyframe onto scale from 0 to 1
      * 0 is bottom of timeline, 1 is top
      * Scale is linear
      * Used for audio keyframes only
-     * @method ypixToVolume
-     * @return {Number}
      */
     function ypixToVolume() {
         return Math.constrain((TAG.TourAuthoring.Constants.trackHeight - loc.y) / TAG.TourAuthoring.Constants.trackHeight, 0, 1);
     }
 
-    /**Maps keyframe to RIN keyframe
-     * @method toRIN
+    /**
+     * Maps keyframe to RIN keyframe
      */
     function toRIN() {
         var keyframe;
@@ -719,6 +651,12 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                     init: false,
                     holdDuration: 0,
                     state: _data
+                    /*data: { // Need to determine where keyframe info is getting stored, also why does it need a media source?
+                        'default': _data,
+                        TransitionTime: "<TransitionTime>3</TransitionTime>",
+                        PauseDuration: "<PauseDuration>1</PauseDuration>",
+                        keyframeThumbnail: "<Thumbnail></Thumbnail>"
+                    }*/
                 };
                 break;
             case TAG.TourAuthoring.TrackType.image:
@@ -734,7 +672,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                     offset: loc.x - display.getStart(),
                     init: false,
                     holdDuration: 0,
-                    state: { 
+                    state: { // Need to determine where keyframe info is getting stored, also why does it need a media source?
                         'sound': {
                             'volume': ypixToVolume()
                         }
@@ -747,18 +685,19 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         }
         return keyframe;
     }
-    
-    /**Initializes keyframe using RIN data
-     * @method loadRIN
+    that.toRIN = toRIN;
+
+    /**
+     * Initializes keyframe using RIN data
      * @param data      keyframe in RIN xml format
      */ 
     function loadRIN(data) {
-        var xml;
         captureData = data;
         if (data.state) {
             _data = data.state;
-        } else if (data.data) {
-            xml = data.data.default,
+        }
+        else if (data.data) {
+            var xml = data.data.default,
             center = {
                 x: Number((/Viewport_X='([^']+)'/.exec(xml))[1]),
                 y: Number((/Viewport_Y='([^']+)'/.exec(xml))[1])
@@ -775,8 +714,9 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                     }
                 }
             };
+            // parse into new format
         }
-        if (_updateKeyFrameCommand) {           // parse into new format
+        if (_updateKeyFrameCommand) {
             (function (command) {
                 command.execute = function () {
                     _data = data;
@@ -792,6 +732,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             }
         }
     }
-    
+    that.loadRIN = loadRIN;
+
     return that;
 };

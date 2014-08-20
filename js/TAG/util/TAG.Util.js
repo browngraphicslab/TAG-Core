@@ -1077,7 +1077,7 @@ TAG.Util = (function () {
             currentAccelId++;
             resetDir();
             clearTimeout(timer);
-            manipulationHandler(evt);
+            //manipulationHandler(evt);
         }
 
         // mouse move
@@ -1545,20 +1545,22 @@ TAG.Util = (function () {
     }
 
     function htmlEntityEncode(str) {
-        try {
+        /*try {
             return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
         } catch (e){
             //use our deprecated function for now if error thrown
             return encodeXML(str);
-        }
+        }*/
+        return str || "";
     }
 
     function htmlEntityDecode(str) {
-        try {
+        /*try {
             return str ? decodeURIComponent($('<div />').html(str).text()) : '';
         } catch (e) {
             return str ? unescape($('<div />').html(str).text()) : '';
-        }
+        }*/
+        return str || "";
     }
 
     /**
@@ -2636,7 +2638,7 @@ TAG.Util.UI = (function () {
             'text-overflow': 'ellipsis',
             'word-wrap': 'break-word'
         });
-        var fontsize = TAG.Util.getMaxFontSizeEM(message,0.8, $(messageLabel).width(), $(messageLabel).height());
+        var fontsize = TAG.Util.getMaxFontSizeEM(message,1, $(messageLabel).width(), $(messageLabel).height());
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message);
         TAG.Util.multiLineEllipsis($(messageLabel));
@@ -3821,10 +3823,18 @@ TAG.Util.UI = (function () {
                     //shouldAppendTII = true;
                     //typeIndicatorImage.attr('src', tagPath+'images/icons/catalog_video_icon.svg');
                 } else if (comp.Metadata.ContentType === 'Image' || comp.Type === 'Image') {
-                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath+'images/image_icon.svg');
+                    var imageSrc;
+                    if (comp.Metadata.Thumbnail) {
+                        imageSrc=FIXPATH(comp.Metadata.Thumbnail)
+                    } else if (comp.Metadata.Source) {
+                        imageSrc = FIXPATH(comp.Metadata.Source)
+                    } else {
+                        imageSrc = tagPath + 'images/image_icon.svg';
+                    }
+                    compHolderImage.attr('src', imageSrc);
                 } else if (comp.Metadata.ContentType === 'iframe') {
                     compHolderImage.attr('src', tagPath + 'images/video_icon.svg'); // TODO iframe fix this with new icon
-                } else if (comp.Type === 'Empty') { // tours....don't know why the type is 'Empty'
+                } else if (comp.Type === 'Empty' || comp.Metadata.ContentType === "Tour") { // tours....don't know why the type is 'Empty'
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;
                     typeIndicatorImage.attr('src', tagPath + 'images/icons/catalog_tour_icon.svg');

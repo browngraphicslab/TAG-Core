@@ -123,6 +123,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleQueue = TAG.Util.createQueue(),  //used to add things to the middle label container
         rightQueue = TAG.Util.createQueue(), //used to add things to the right panel
         cancelLastSetting,
+        cancelLastView,
         artPickerOpen = false,
         nav = [],
         artworks = [],
@@ -967,7 +968,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Save button
 
-        var saveButton = createButton('Save Changes', function () {
+        var saveButton = createButton('Save', function () {
            /* if (locInput === undefined) {
                 locInput = "";
             }
@@ -1266,7 +1267,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function previewStartPage(primaryFontInput, secondaryFontInput) {
         // Load the start page, the callback adds it to the viewer when it's done loading
-        var startPage = TAG.Layout.StartPage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val() }, function (startPage) {
+        var startPage = TAG.Layout.StartPage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val(), isPreview:true}, function (startPage) {
             if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
                 return;
             }
@@ -1414,6 +1415,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         // Select the first one or the specified id
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
                             previousIdentifier = val.Identifier;
+                            if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
                         }, val.Identifier), true));
@@ -1427,6 +1429,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         prevSelectedMiddleLabel = label;
                         currentSelected = prevSelectedMiddleLabel;
                         currentIndex = i;
+                        if (cancelLastView) cancelLastView();
                         loadExhibition(val);
                     } else {
                         middleLoading.before(label = createMiddleLabel(val.Name, null, function () {
@@ -1435,6 +1438,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
                             //    //changesHaveBeenMade = false;
                             //}
+                            if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             previousIdentifier = val.Identifier;
                             currentIndex = i;
@@ -1595,6 +1599,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
         deleteType = deleteExhibition;
         toDelete = exhibition;
+        var cancelView = false;
+        clearRight();
+        viewer.empty();
+        viewer.css('background', 'black');
+        var progressCircCSS = {
+            'position': 'absolute',
+            'left': '5%',
+            'z-index': '50',
+            'height': 'auto',
+            'width': '10%',
+            'top': '20%',
+        };
+        var vert = viewer.height() / 2;
+        var horz = viewer.width() / 2;
+
+        var circle = TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
 
         // Create inputs
         var privateState;
@@ -1790,6 +1810,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         TAG.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
+            if (cancelView) return;
             for (var i = 0; i < artworks.length; i++) {
                 if (artworks[i].Extension === "tour") {
                     sortOptionsObj["Tours"] = curSortOptions["Tours"] || false;
@@ -1812,6 +1833,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
 
         function createCollectionSettings() {
+            if (cancelView) return;
             prepareViewer(true);
             clearRight();
             // Set the viewer to exhibition view (see function below)
@@ -1911,7 +1933,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //};
 
             // Buttons
-            var saveButton = createButton('Save Changes', function () {
+            var saveButton = createButton('Save', function () {
                 if (nameInput.val() === undefined || nameInput.val() === "") {
                     nameInput.val("Untitled Collection");
                 }
@@ -1951,6 +1973,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     // Show a message and return if thats the case (would prefer not having
                     // to request all the artwork)
                     LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
+                        if (cancelView) return;
                         if (!artworks || !artworks[0]) {
                             var messageBox = LADS.Util.UI.popUpMessage(null, "Cannot view in catalog mode because there is no artwork in this exhibit.", null, true);
                             root.append(messageBox);
@@ -2007,6 +2030,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             // Sets the viewer to catalog view
             function catalogView() {
                 rightQueue.add(function () {
+                    if (cancelView) return;
                     var catalog;
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                         return;
@@ -2026,6 +2050,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
              */
             function exhibitionView(exhibition) {
                 rightQueue.add(function () {
+                    if (cancelView) return;
                     var options = {
                         backCollection: exhibition,
                         previewing: true
@@ -2051,6 +2076,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 tobj.mode = 'authoring';
             });
         }
+        cancelLastView = function () {
+            cancelView = true;
+        };
     }
 
     /**Create an exhibition
@@ -2429,7 +2457,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-        var saveButton = createButton('Save Changes',
+        var saveButton = createButton('Save',
             function () {
                 if (nameInput.val() === undefined || nameInput.val() === "") {
                     nameInput.val("Untitled Tour");
@@ -3018,7 +3046,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left'
             });
 
-        var saveButton = createButton('Save Changes',
+        var saveButton = createButton('Save',
             function () {
                 if (titleInput.val() === undefined || titleInput.val() === "") {
                     titleInput.val("Untitled Asset");
@@ -3300,7 +3328,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} src        URL to embed
      */
     function createIframeAsset(src) { //TODO IFRAME ASSOC MEDIA: iframe asset creation would look something like this
-        
+        middleLabelContainer.empty();
+        middleLabelContainer.append(middleLoading);
+        middleLoading.show();
+        clearRight();
+        viewer.empty();
+        viewer.css('background', 'black');
         var validURL = checkEmbeddedURL(src);
         if (validURL) {
             var options = {
@@ -3309,11 +3342,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
         }
-        middleLoading.show();
         function onSuccess(doqData) {
             var newDoq = new Worktop.Doq(doqData.responseText);
             function done() {
-                middleLoading.hide();
                 loadAssocMediaView(newDoq.Identifier);
             }
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
@@ -4094,7 +4125,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             descInput: descInput,                                          //Artwork description
             customInputs: customInputs                                    //Artwork custom info fields
         };
-        var saveButton = createButton('Save Changes',
+        var saveButton = createButton('Save',
             function () {
                 if (titleInput.val() === undefined || titleInput.val() === "") {
                     titleInput.val("Untitled Artwork");
@@ -5802,7 +5833,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (!isSingleYear(year)){
                 return [''];
             } else {
-                return ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+                return ['','01','02','03','04','05','06','07','08','09','10','11','12'];
             }
         }
 

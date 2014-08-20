@@ -13,6 +13,8 @@ TAG.Util.makeNamespace("TAG.Layout.StartPage");
 TAG.Layout.StartPage = function (options, startPageCallback) {
     "use strict"; ////////////////////////////////////////////////
 
+    var isPreview;
+    options && function () {isPreview = options.isPreview; }();
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
@@ -38,6 +40,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
+    //PREVIEW STYLING
+    isPreview && function () {
+        serverInput.css({ 'min-height': '0px','min-width': '0px',});
+        serverSubmit.css({ 'min-height': '0px', 'min-width': '0px', });
+        authoringInput.css({ 'min-height': '0px', 'min-width': '0px', });
+        passwordSubmit.css({ 'min-height': '0px', 'min-width': '0px', });
+    }();
+
   // TODO merging TAG.Telemetry.register(goToCollectionsButton, 'click', 'start_to_collections');
   //                     tobj.mode = 'Kiosk';
  if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
@@ -46,11 +56,13 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
     tagContainer = options.tagContainer || $('body');
+    /*
     if (!IS_WINDOWS) {
         authoringInput.prop('disabled', true);
         authoringInput.css('opacity', '0.5');
         passwordSubmit.css('opacity', '0.5');
     }
+    */
     testConnection();
     //applyCustomization();
 
@@ -244,7 +256,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     serverSubmit.on('click', saveClick);
     serverInput.keypress(function(e){
-        if(e.which===13){
+        if (e.which === 13) {
             saveClick();
         }
     });
@@ -255,8 +267,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     });
 
     function authClick(){
-        passwordSubmit.on('click',function () {
-            if(IS_WINDOWS) {
+        passwordSubmit.on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            //if(IS_WINDOWS) {
                 TAG.Auth.checkPassword(authoringInput.val(), function () { 
                     enterAuthoringMode();
                     }, function () {
@@ -265,18 +279,21 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     }, function () {
                     passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
                     passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
-                });       
+                });  
+            /*
             } else {
                 passwordError.html('Authoring mode is only accessible from the Windows 8 app');
                 passwordError.css({'visibility':'visible'});
                 passwordError.css({'color':'rgba(255, 255, 255, 1)'});
             }
-            
+            */
         });
     
     //Enter can be pressed to submit the password form...
-        authoringInput.keypress(function(e){
-            if (e.which===13) {  // enter key press
+        authoringInput.keypress(function (e) {
+            if (e.which === 13) {  // enter key press
+                e.preventDefault();
+                e.stopPropagation();
             console.log('enter pressed on authoringInput');
                 TAG.Auth.checkPassword(authoringInput.val(), function () {
                     enterAuthoringMode()

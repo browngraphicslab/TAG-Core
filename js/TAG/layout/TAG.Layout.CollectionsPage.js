@@ -68,7 +68,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         scaleTicks = [],                               // timeline scale ticks
         artworkYears = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
         scaleTicksAppended = false,                            // if scale ticks have been appended
-        tileDivHeight = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
+        tileDivHeight = 0,                                // Height of tile div (before scroll bar added, should equal height of catalogDiv)
         artworkShown = false,                            // whether an artwork pop-up is currently displayed
         timelineShown = true,                             // whether current collection has a timeline
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
@@ -1173,13 +1173,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
         } else {
             bottomContainer.css({
-                'height':'85%',
+                'height':'79%',
                 'top':'15%',
                 'z-index':'100005',
             });
             selectedArtworkContainer.css({
                 'height': '100%',
-                'bottom':'2%'
+                'bottom':'-4%'
             })
         }
     }
@@ -1283,15 +1283,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else if (currentWork.Metadata.ContentType === "Audio" ){
                 tileImage.css('background-color','black');
                 tileImage.attr('src', tagPath+'images/audio_thumbnail.svg');
-            } else {
-                if (currentWork.Metadata.Medium=== "Video"|| currentWork.Metadata.ContentType==="Video"||currentWork.Metadata.ContentType ==="iframe"){
-                    showLabel = false;
-                    tileImage.css('background-color','black');
-                    tileImage.attr('src',tagPath + 'images/video_thumbnail.svg');
+            } else if (currentWork.Metadata.Medium=== "Video"|| currentWork.Metadata.ContentType==="Video"||currentWork.Metadata.ContentType ==="iframe"){
+                showLabel = false;
+                tileImage.css('background-color','black');
+                tileImage.attr('src', tagPath + 'images/video_thumbnail.svg');
+            } else if (currentWork.Metadata.ContentType === "Image") {
+                if (currentWork.Metadata.Thumbnail) {
+                    tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
+                } else if (currentWork.Metadata.Source) {
+                    tileImage.attr("src", FIX_PATH(currentWork.Metadata.Source));
                 } else {
-                    tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
-                } 
-            }
+                    tileImage.attr("src", tagPath + 'images/image_icon.svg');
+                }
+            } else if (currentWork.Type === "Empty" || currentWork.Type === "Tour" || currentWork.Metadata.Type === "Tour" || currentWork.Metadata.ContentType === "Tour") {
+                tileImage.css('background-color', 'black');
+                if (currentWork.Metadata.Thumbnail) {
+                    tileImage.attr('src', FIX_PATH(currentWork.Metadata.Thumbnail));
+                } else {
+                    tileImage.attr('src', FIX_PATH("/Images/default.jpg"));
+                }
+            }else{
+                tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
+            } 
             
 
             // Add title
@@ -2173,24 +2186,37 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 src = tagPath + 'images/video_icon.svg';
                                 break;
                             case 'Image':
-                                src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);
+                                if (thumb) {
+                                    src = FIX_PATH(thumb);
+                                } else if (metadata.Source) {
+                                    src = FIX_PATH(metadata.Source);
+                                } else {
+                                    src = tagPath + 'images/no_thumbnail.svg';
+                                }
                                 break;
                             case 'Text':
                                 src = tagPath + 'images/text_icon.svg';
                             default:
-                                src = tagPath + 'images/no_thumbnail.svg';
+                                if (thumb) {
+                                    src = FIX_PATH(thumb);
+                                } else if (metadata.Source) {
+                                    src = FIX_PATH(metadata.Source);
+                                } else {
+                                    src = tagPath + 'images/no_thumbnail.svg';
+                                }
                                 break;
                         }
-                        if (onAssocMediaView && metadata.Type === "Artwork"){
-                        	src = thumb ? FIX_PATH(thumb) : tagPath + 'images/no_thumbnail.svg';
+                        if (onAssocMediaView && metadata.Type === "Artwork") {
+                            if (thumb) {
+                                src = FIX_PATH(thumb);
+                            } else if (metadata.Source) {
+                                src = FIX_PATH(metadata.Source);
+                            } else {
+                                src = tagPath + 'images/no_thumbnail.svg';
+                            }
+                        	
                         }
-
-                        // Set tileImage to thumbnail image, if it exists
-                        if(doqs[i].Metadata.Thumbnail || metadata.ContentType === "iframe") {
-                            miniTile.attr("src", src);
-                        } else {
-                            miniTile.attr("src", tagPath + 'images/no_thumbnail.svg');
-                        }
+                        miniTile.attr("src", src);
                         miniTilesHolder.append(miniTile)
                     }   
                 	addAssociationRow(numberAssociatedDoqs); 
