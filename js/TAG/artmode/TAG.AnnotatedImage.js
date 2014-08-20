@@ -234,7 +234,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function dzScroll(scale, pivot) {
         if (IS_WINDOWS){
-            scale = 1/scale
             pivot = {
                 x: pivot.x + root.offset().left,
                 y: pivot.y + root.offset().top
@@ -1107,8 +1106,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         }   
         // Target location (where object should be moved to)
         finalPosition = {
-            x: (res.center.pageX - res.startEvent.center.pageX)*1.3 + startLocation.x, //the 1.3 is to give it a little acceleration 
-            y: (res.center.pageY - res.startEvent.center.pageY)*1.3 + startLocation.y
+            x: (res.center.pageX - res.startEvent.center.pageX)*1.5 + startLocation.x, //the constant is to give it a little acceleration 
+            y: (res.center.pageY - res.startEvent.center.pageY)*1.5 + startLocation.y
         };   
 
         // Animate to target location
@@ -1137,7 +1136,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Zoom handler for associated media (e.g., for mousewheel scrolling)
      */
     function mediaScroll(scale, pivot) {
-        IS_WINDOWS && (scale = 1/scale);
         var t       = outerContainer.position().top,
             l       = outerContainer.position().left,
             w       = outerContainer.width(),
@@ -1238,7 +1236,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     (root.data('split') === 'R') && (splitscreenOffset =  - root.find('#sideBar').width());
                     (root.data('split') === 'L') && (splitscreenOffset =   root.find('#sideBar').width());
                     t = root.height() * 1 / 10 + Math.random() * root.height() * 2 / 10;
-                    l = (root.width() + splitscreenOffset)/2 - w/2+ (1 - 2 * Math.random()) * w * 2 ;
+                    l = (root.width() + splitscreenOffset)/3 + (.5 - Math.random()) * root.width()/8  ;
                 };
                 outerContainer.css({
                     'top': t + "px",
