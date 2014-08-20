@@ -14,11 +14,11 @@ TAG.TourAuthoring.Tests = (function () {
 
     // Resources to pass to tracks
     var testResources = [
-            'http://cs.brown.edu/research/lads/LADS2.0Data/Documents/monethay/monet%20haystacks/monet%20haystacks.xml',
-            'http://cs.brown.edu/research/lads/LADS2.0Data/Documents/gari/garidz/dz.xml',
-            'http://cs.brown.edu/research/lads/LADS2.0Data/Documents/rembrandtself/rembrandt%20self/rembrandt%20self.xml',
-            'http://cs.brown.edu/research/lads/LADS2.0Data/Documents/marcdream/marc%20dream/marc%20dream.xml',
-            'http://cs.brown.edu/research/lads/LADS2.0Data/Documents/dirck/dirck/dirck.xml',
+            'http://cs.brown.edu/research/TAG/TAG2.0Data/Documents/monethay/monet%20haystacks/monet%20haystacks.xml',
+            'http://cs.brown.edu/research/TAG/TAG2.0Data/Documents/gari/garidz/dz.xml',
+            'http://cs.brown.edu/research/TAG/TAG2.0Data/Documents/rembrandtself/rembrandt%20self/rembrandt%20self.xml',
+            'http://cs.brown.edu/research/TAG/TAG2.0Data/Documents/marcdream/marc%20dream/marc%20dream.xml',
+            'http://cs.brown.edu/research/TAG/TAG2.0Data/Documents/dirck/dirck/dirck.xml',
             'http://10.116.71.58:8086/Images/20121105221815/dz.xml' // Portion of Garibaldi in James' tour
     ],
         testAudio = [
@@ -166,7 +166,7 @@ TAG.TourAuthoring.Tests = (function () {
      * Testing JSON RINdata + server send/recieve
      */
     function testServer() {
-        var repository = "http://cs.brown.edu/research/lads/LADS2.0Data/repository.xml",
+        var repository = "http://cs.brown.edu/research/TAG/TAG2.0Data/repository.xml",
             tourdoq;
         TAG.Worktop.Database.load(repository);
 
@@ -202,7 +202,7 @@ TAG.TourAuthoring.Tests = (function () {
         //change content, the json object
         tourXML.find("d3p1\\:Key:contains('Content') + d3p1\\:Value").text("[]");
         //change thumbnail
-        tourXML.find("d3p1\\:Key:contains('Thumbnail') + d3p1\\:Value").text("http://www.cs.brown.edu/research/lads/images/waterfallzoom.jpg");
+        tourXML.find("d3p1\\:Key:contains('Thumbnail') + d3p1\\:Value").text("http://www.cs.brown.edu/research/TAG/images/waterfallzoom.jpg");
         TAG.Worktop.Database.pushXML(tourXML[0], id, "Tour");
     }
 

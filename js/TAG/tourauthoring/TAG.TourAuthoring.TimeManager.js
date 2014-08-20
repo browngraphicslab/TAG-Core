@@ -1,11 +1,12 @@
 ﻿TAG.Util.makeNamespace('TAG.TourAuthoring.TimeManager');
 
-/**Manages all time-related things in TourAuthoring
+/**
+ * Manages all time-related things in TourAuthoring
  * Stores info re: start/end, current time, scale
  * Scale converts between time space (seconds) and pixel space (pixels on timeline)
  * Dispatches events to subscribers on time changes
  * All time values stored as seconds
- * @class TAG.TourAuthoring.TimeManager
+ * @class 
  * @constructor
  * @param spec      start, end, scale, current parameters, all integers, all in seconds (not required)
  * @param my        not used
@@ -17,62 +18,62 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     spec = spec || {};
 
     // PRIVATE DOM elements
-    var player = null,                                                                                 // Holds interval during playback
+    var player = null, // Holds interval during playback
+        // Initial time settings
+        start = spec.start|| 0,
+        end = spec.end || 180,
+        scale = spec.scale || 20, // Defines px per sec
+        current = spec.current || 0,
+        // Event handling
+        seekSubscribers = [],
+        durationSubscribers = [],
+        playStartSubscribers = [],
+        playSubscribers = [],
+        stopSubscribers = [],
+        moveSubscribers = [],
+        // viewer state
+        ready = false,
+        getViewerTime = null,
 
-        // initial time settings
-        start = spec.start || 0,                                                                       // initial start time
-        end = spec.end || 180,                                                                         // initial end time
-        scale = spec.scale || 20,                                                                      // Defines px per sec
-        current = spec.current || 0,                                                                   // current time
-                                                                                                       // Event handling
-        seekSubscribers = [],                                                                          // array of subscribers for the seeking event
-        durationSubscribers = [],                                                                      // array of subscribers for the duration updating event
-        playStartSubscribers = [],                                                                     // array of subscribers for 'play' event
-        playSubscribers = [],                                                                          // array of subscribers for play updating events
-        stopSubscribers = [],                                                                          // array of subscribers for 'stop' event
-        moveSubscribers = [],                                                                          // array of subscribers for 'move' event
-        ready = false,                                                                                 // checks state of viewer
-        getViewerTime = null,                                                                          // current registered time on the viewer
-        currentPx = null,                                                                              // current Pixel value of the tour
-
-        that = {                                                                                       // public methods of the class
-            setTime: setTime,
-            setStart: setStart,
-            setEnd: setEnd,
-            setScale: setScale,
-            seek: seek,
-            seekByAmount: seekByAmount,
-            seekToPercent: seekToPercent,
-            setReady: setReady,
-            getReady: getReady,
-            registerTime: registerTime,
-            getScale: getScale,
-            play: play,
-            stop: stop,
-            timeToPx: timeToPx,
-            pxToTime: pxToTime,
-            formatTime: formatTime,
-            unformatTime: unformatTime,
-            getCurrentTime: getCurrentTime,
-            getCurrentPx: getCurrentPx,
-            getCurrentPercent: getCurrentPercent,
-            getDuration: getDuration,
-            onSeek: onSeek,
-            onSizing: onSizing,
-            onPlayStart: onPlayStart,
-            onPlay: onPlay,
-            onStop: onStop,
-            onMove: onMove,
+    /////////
+    // PUBLIC
+        that = {
+            setTime : setTime,
+            setStart : setStart,
+            setEnd : setEnd,
+            setScale : setScale,
+            seek : seek,
+            seekByAmount : seekByAmount,
+            seekToPercent : seekToPercent,
+            setReady : setReady,
+            getReady : getReady,
+            registerTime : registerTime,
+            getScale : getScale,
+            play : play,
+            stop : stop,
+            timeToPx : timeToPx,
+            pxToTime : pxToTime,
+            formatTime : formatTime,
+            unformatTime : unformatTime,
+            getCurrentTime : getCurrentTime,
+            getCurrentPx : getCurrentPx,
+            getCurrentPercent : getCurrentPercent,
+            getDuration : getDuration,
+            onSeek : onSeek,
+            onSizing : onSizing,
+            onPlayStart : onPlayStart,
+            onPlay : onPlay,
+            onStop : onStop,
+            onMove : onMove,
         };
-       
-    
  
 
-    /////////////
-    // SETTERS //
-    /////////////
+    // SETTERS
 
-    /**Generally should use setTime once everything has been initialized:
+    
+
+    /**
+     * Generally should use setTime once everything has been initialized:
      * All time-dependent text in DOM is updated as well to reflect changes.
      * @method setTime
      * @param {Object} newspec      contains new start, end, and scale properties
@@ -107,7 +108,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
 
     /**Sets start
      * @method setStart
-     * @param {Time} newStart     in seconds
+     * @param {Integer} newStart     in seconds
      */
     function setStart(newStart) {
         currentPx = null;
@@ -115,9 +116,9 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendSizing({ start: start, end: end, scale: scale, updated: ['start'] });
     }
 
-    /**Sets end time
+    /**Sets end
      * @method setEnd
-     * @param {Time} newEnd       in seconds
+     * @param {Integer} newEnd       in seconds
      */
     function setEnd (newEnd) {
         end = newEnd;
@@ -130,7 +131,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
 
     /*Sets scale (pixels per second)
      * @method setScale
-     * @param {Number} newScale      px/sec
+     * @param {Integer} newScale      px/sec
      */
     function setScale(newScale) {
         currentPx = null;
@@ -138,24 +139,21 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendSizing({ start: start, end: end, scale: scale, updated: ['scale'] });
     }
 
-    //////////////////////
-    // SEEKING FUCTIONS //
-    //////////////////////
+    //SEEKING FUCTIONS
 
     /**Seek to a specific time
      * @method seek
      * @param {Integer} newTime     in seconds
      */
     function seek(newTime) {
-        var pct;
-        if (newTime < 0) {                                  //prevent seeking to -1 sec
+        if (newTime < 0) { //prevent seeking to -1 sec
             newTime = 0;
-        } else if (newTime > end) {                         // prevent seeking past the end of the timeline
+        } else if (newTime > end) { // prevent seeking past the end of the timeline
             newTime = end;
         }
         currentPx = null;
         current = newTime;
-        pct = ((current - start) / (end - start)); 
+        var pct = ((current - start) / (end - start)); 
         _sendMove({ current: current, percent: pct });
         _sendSeek({ current: current, percent: pct });
         if (current > end) {
@@ -165,14 +163,13 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     
     /**Seek by a certain amount past current time 
      * @method seekByAmound
-     * @param {Time} amount        in seconds
+     * @param {Integer} amount        in seconds
      */
     function seekByAmount(amount) {
-        var pct;
         currentPx = null;
         //TODO- should probably have check to make sure doesn't pass end
         current += amount;
-        pct = ((current - start) / (end - start));
+        var pct = ((current - start) / (end - start));
         _sendMove({ current: current, percent: pct });
         _sendSeek({ current: current, percent: pct });
         if (current > end) {
@@ -182,7 +179,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
 
     /**Seek to a specific percent of the tour length
      * @method seekToPercent
-     * @param {Number} per         percent (as decimal)
+     * @param {Integer} per         percent (as decimal)
      */
     function seekToPercent(per) {
         currentPx = null;
@@ -191,39 +188,34 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendSeek({ current: current, percent: per });
     }
 
-    /**Set state of viewer
+    /** Set state of viewer
      * @param {Boolean} isReady       whether the tour can play
      */
     function setReady(isReady) {
         ready = isReady;
     }
 
-    /**Get state from viewer
+    /** Get state from viewer
     * @method getReady
     * @return {Boolean} ready       whether the tour can play
     */
+    //LVK- removed parameter from this function cause not neccessary--> check to make sure never called with passed in parameter
     function getReady() {
         return ready;
     }
-    
-    /**Register current time on the viewer
-     * @method registerTime
-     * @param {Function} func
-     */
+   
+
     function registerTime(func) {
         getViewerTime = func;
     }
+    //that.registerTime = registerTime;
 
-    /**Return time scale
-     * @method getScale
-     * @return {Number} scale       pixels per second scale on the timeline
-     */
     function getScale() {
         return scale;
     }
-
-    /**Drives forward current time to mimic playback
-     * @method play
+   // that.getScale = getScale;
+    /**
+     * Drives forward current time to mimic playback
      */
     function play () {
         var interval = 100, last = -10,//?
@@ -233,16 +225,19 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendMove({ current: current, percent: pct });
         _sendPlayStart({ current: current, percent: pct });
 
-        player = window.requestAnimationFrame(function updatePlay(timestamp) {      //window?
+        player = window.requestAnimationFrame(function updatePlay(timestamp) {//window?
             player = window.requestAnimationFrame(updatePlay);
             // update program state
             if (ready) {
-                if (!useInternalTime) {         //internal time?
+                if (!useInternalTime) {//internal time?
                     current = getViewerTime();
                     if (current === last) {
                         useInternalTime = true;
                         current += (timestamp - lastInternalTime) / 1000;
-                     }
+                        //if(current > end)
+                        //    current = end;
+                        //stop();
+                    }
                 } else {
                     current += (timestamp - lastInternalTime) / 1000;
                 }
@@ -260,9 +255,10 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
             }
         });
     }
-   
-    /**Stops playback if time manager is playing
-     * @method stop
+   // that.play = play;
+
+    /**
+     * Stops playback if time manager is playing
      */
     function stop () {
         if (player) {
@@ -271,31 +267,18 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
             _sendStop();
         }
     }
+    //that.stop = stop;
     onSeek(stop); // Automatically stop playback when a seek occurs
 
-    /**Convert time to pixel scale
-     * @method timeToPx
-     * @param {Time} t
-     * @return {Number}         in pixels
+    /**
+     * Functions for converting btw pixel space and time space
      */
     function timeToPx(t) {
         return (t - start) * scale;
     }
-
-    /**Convert pixel scale to time scale
-     * @method pxToTime
-     * @param {Number} px
-     * @return {Time}           in seconds
-     */
     function pxToTime(px) {
         return (px / scale) + start;
     }
-
-    /**Sets the time display format
-     * @method formatTime
-     * @param {Time} seconds
-     * @return {Time} formatted as 'min:sec'
-     */
     function formatTime(seconds) {
         var min = parseInt(seconds / 60, 10);
         var sec = Math.floor(seconds % 60);
@@ -304,74 +287,71 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         }
         return min + ':' + sec;
     }
-
-    /**Change formatted time to seconds
-     * @method unformatTime
-     * @param {String} string           time as 'min:sec'
-     * @return {Time}                   in seconds
-     */
     function unformatTime(string) {
-        // Strings are expected in format: MM:SS  #TODO: include milliseconds?
+        // Strings are expected in format: MM:SS TODO: include milliseconds?
         var min, sec;
         string.split(':');
         min = parseFloat(min);
         sec = parseFloat(sec);
         return min * 60 + sec;
     }
-
-    /**Grab current time in editor using playhead position
-     * @method getCurrentTime
-     * @return     Current time (in time-space)
+/*
+    that.timeToPx = timeToPx;
+    that.pxToTime = pxToTime;
+    that.formatTime = formatTime;
+    that.unformatTime = unformatTime;
+    */
+    var currentPx = null;
+    /**
+     * Grab current time in editor using playhead position
+     * @returns     Current time (in time-space)
      */
     function getCurrentTime() {
         return current;
     }
-    
-    /**Returns current pixel position
-     * @method getCurrentPx
-     * @return {Number} currentPx
-     */
+    //that.getCurrentTime = getCurrentTime;
+
     function getCurrentPx() {
         if (!currentPx) {
             currentPx = timeToPx(current);
         }
         return currentPx;
     }
-   
-    /**Grab current time as percent complete of tour
-     * @method getCurrentPercent
-     * @return {Number}     Current time (as percentage)
+   // that.getCurrentPx = getCurrentPx;
+
+    /**
+     * Grab current time as percent complete of tour
+     * @returns     Current time (as percentage)
      */
     function getCurrentPercent() {
         return (current - start) / (end - start);
     }
-    
-    /**Gets description of current duration
-     * @method getDuration
-     * @return {Object}     Object w/ start, end, scale parameters
+    //that.getCurrentPercent = getCurrentPercent;
+
+    /**
+     * Gets description of current duration
+     * @returns     Object w/ start, end, scale parameters
      */
-    function getDuration() {
-        return {
-            start: start,
-            end: end, 
-            scale: scale
-        };
+    function getDuration () {
+        return { start: start, end: end, scale: scale };
     }
+    //that.getDuration = getDuration;
 
     // Event subscribers
-    
-    /**Add an event handler to be called on updating of current time (during playback or seek)
-     * @method onSeek
-     * @param {Event} handler   Event handler to be called whenever current time is updated
+
+    /**
+     * Add an event handler to be called on updating of current time (during playback or seek)
+     * @param handler   Event handler to be called whenever current time is updated
      */
     function onSeek (handler) {
-        seekSubscribers.push(handler);
+        seekSubscribers.push(handler);//?
     }
-    
-    /**Dispatches events to subscribers on seek update (private)
+    //that.onSeek = onSeek;
+
+    /**
+     * Dispatches events to subscribers on seek update (private)
      * Context is set as time object
-     * @method _sendSeek
-     * @param {Event} ev    The event: current, percent parameters
+     * @param ev    The event: current, percent parameters
      */
     function _sendSeek (ev) {
         var i;
@@ -380,17 +360,18 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         }
     }
 
-    /**Add an event handler to be called on updating of duration
-     * @method onSizing
-     * @param {Event} handler   Event handler to be called whenever start, end, or scale is updated
+    /**
+     * Add an event handler to be called on updating of duration
+     * @param handler   Event handler to be called whenever start, end, or scale is updated
      */
     function onSizing (handler) {
         durationSubscribers.push(handler);
     }
-   
-    /**Dispatches events to subscribers on duration update (private)
+   // that.onSizing = onSizing;
+
+    /**
+     * Dispatches events to subscribers on duration update (private)
      * Context is set as time object
-     * @method _sendSizing
      * @param {Object} ev    The event: start, end, scale, updated parameters
      */
     function _sendSizing (ev) {
@@ -400,18 +381,19 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         }
     }
 
-    /**Add an event handler to be called on play() / when it is called
+    /**
+     * Add an event handler to be called on play() / when it is called
      * Will only be called once
-     * @method onPlayStart
-     * @param {Event} handler       Event handler
+     * @param handler       Event handler
      */
     function onPlayStart(handler) {
         playStartSubscribers.push(handler);
     }
-    
-    /**Dispatches events to subscribers on play (private)
-     * @method _sendPlayStart
-     * @param {Event} ev    The event: current, percent parameters
+    //that.onPlayStart = onPlayStart;
+
+    /**
+     * Dispatches events to subscribers on play (private)
+     * @param ev    The event: current, percent parameters
      */
     function _sendPlayStart(ev) {
         var i;
@@ -420,9 +402,9 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         }
     }
 
-    /**Add an event handler to be called during player interval updates
-     * @method onPlay
-     * @param {Event} handler       Event handler
+    /**
+     * Add an event handler to be called during player interval updates
+     * @param handler       Event handler
      */
     function onPlay (handler) {
         playSubscribers.push(handler);
@@ -430,10 +412,10 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     //?when/how is handler accessed?
     //that.onPlay = onPlay;
 
-    /**Dispatches events to subscribers on play updates (private)
+    /**
+     * Dispatches events to subscribers on play updates (private)
      * Context is set as time object
-     * @method _sendPlay
-     * @param {Event} ev    The event: current, percent parameters
+     * @param ev    The event: current, percent parameters
      */
     function _sendPlay(ev) {
         var i;
@@ -442,18 +424,19 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         }
     }
 
-    /**Add an event handler to be called on stop
-     * @method onStop
-     * @param {Event} handler       Event Handler to be called whenever stop() is called
+    /**
+     * Add an event handler to be called on stop
+     * @param handler       Event Handler to be called whenever stop() is called
      */
     function onStop(handler) {
         stopSubscribers.push(handler);
     }
-   
-    /**Dispatches events to subscribers on play (private)
+   // that.onStop = onStop;
+
+    /**
+     * Dispatches events to subscribers on play (private)
      * Context is set as time object
-     * @method _sendStop
-     * @param {Event} ev    The event: no use at the moment
+     * @param ev    The event: no use at the moment
      */
     function _sendStop (ev) {
         var i;
@@ -462,19 +445,20 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         }
     }
 
-    /**Add an event handler to be called on move (either play or seek)
+    /**
+     * Add an event handler to be called on move (either play or seek)
      * Executes before other actions in play or seek, allowing safe updates
-     * @method onMove
-     * @param {Event} handler       Event handler to be called whenever play() or seek() is called
+     * @param handler       Event handler to be called whenever play() or seek() is called
      */
     function onMove(handler) {
         moveSubscribers.push(handler);
     }
-    
-    /**Dispatches events to subscribers on move (private)
+    //that.onMove = onMove;
+
+    /**
+     * Dispatches events to subscribers on move (private)
      * Context is set as time object
-     * @method _sendMove
-     * @param {Event} ev    The event: current, percent parameters
+     * @param ev    The event: current, percent parameters
      */
     function _sendMove(ev) {
         var i;
@@ -482,6 +466,37 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
             moveSubscribers[i].call(that, ev);
         }
     }
+    /**
+    var that = {
+        setTime : setTime,
+        setStart : setStart,
+        setEnd : setEnd,
+        setScale : setScale,
+        seek : seek,
+        seekByAmount : seekByAmount,
+        seekToPercent : seekToPercent,
+        setReady : setReady,
+        getReady : getReady,
+        registerTime : registerTime,
+        getScale : getScale,
+        play : play,
+        stop : stop,
+        timeToPx : timeToPx,
+        pxToTime : pxToTime,
+        formatTime : formatTime,
+        unformatTime : unformatTime,
+        getCurrentTime : getCurrentTime,
+        getCurrentPx : getCurrentPx,
+        getCurrentPercent : getCurrentPercent,
+        getDuration : getDuration,
+        onSeek : onSeek,
+        onSizing : onSizing,
+        onPlayStart : onPlayStart,
+        onPlay : onPlay,
+        onStop : onStop,
+        onMove : onMove,
+    },
+        **/
     
     return that;
 };

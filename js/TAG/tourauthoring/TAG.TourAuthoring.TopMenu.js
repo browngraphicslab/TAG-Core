@@ -1,161 +1,36 @@
 ﻿TAG.Util.makeNamespace('TAG.TourAuthoring.TopMenu');
 
 /**
- * The top-most menu bar for tour authoring
+ * Main menu for Tour Authoring
  * Back button, rename tour controls, save button, tour options
- * @class TAG.TourAuthoring.TopMenu
- * @constructor
- * @param {Object} options      relevant options required for the menu
- * @return {Object} that        the topbar as a DOM object        
+ * @param spec      not used
+ * @param my        not used
  */
-TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timeline, timeManager, tourobj, playbackControls, root, componentControls
+TAG.TourAuthoring.TopMenu = function (spec, my) {
     "use strict";
 
-    var // the parameter object passed in
-        root = options.root,                                                  // root of the tour authoring top-bar
-        viewer = options.viewer,                                              // the preview window for the current tour being edited
-        timeline = options.timeline,                                          // timelines for the tracks
-        tourobj = options.tourobj,                                            // doq containing tour info
-        undoManager = options.undoManager,                                    // an instance of the UndoManager to keep track of the order of commands
-        timeManager = options.timeManager,                                    // keeps track of time-related stuff in tour authoring
-        playbackControls = options.playbackControls,                          // the component menu at the bottom of the screen to play/pause/seek videos
-        componentControls = options.componentControls,                        // controls to add components and edit their properties
+    var that = {},
+        viewer = spec.viewer,
+        undoManager = spec.undoManager,
+        timeline = spec.timeline,
+        timeManager = spec.timeManager,
+        tourobj = spec.tourobj,
+        playbackControls = spec.playbackControls,
+        root = spec.root,
+        componentControls = spec.componentControls,
+        topbar = $(document.createElement('div')),
+        //dialogOverlay = $(document.createElement('div')), // NOTE: TODO: figure out how to place dialogOverlay inside of topbar to maintain modularity?
 
-        // the UI stuff
-        topbar,                                                               // creates the top-bar holding the menu
-        dialogOverlay = $(TAG.Util.UI.blockInteractionOverlay()),            // the overlay generated when buttons like 'save changes' are clicked, to prevent further interaction with the UI
-        backDialogOverlay = $(TAG.Util.UI.blockInteractionOverlay()),        // the overlay generated when the program takes you back to the main tour-authoring page
-        titleTextArea,                                                        // the div where the tour title can be modified
-        backButton,                                                           // button to go back to the SettingsView page
+        dialogOverlay = $(TAG.Util.UI.blockInteractionOverlay()),
+        //backDialogOverlay = $(document.createElement('div'));
+        backDialogOverlay = $(TAG.Util.UI.blockInteractionOverlay());
 
-        // booleans
-        saveClicked = false,                                                  // checks if the save action has been invoked
-        nameChanged = false;                                                  // checks if the text in the title text area has been changed
-    
-   init();
-    
-    /**Initialize the UI and relevant controls
-     * @method init
-     */
-    function init() {
-        topbar = createTopBar();
-        titleTextArea = createTitleTextArea();
-        topbar.append(titleTextArea);
-        tourOptionsMenu();
-        createBackDialog();
-        createSaveDialog();
-    }
+    (function _createHTML() {
+        topbar.css({ "background-color": "rgb(63,55,53)", "height": "8%", "width": "100%" });
+        topbar.attr('id', 'topbar');
 
-    /**Creates the topbar div
-     * @method createTopBar
-     * @return {HTML Element} top       the top bar div
-     */
-    function createTopBar() {
-        var top = $(document.createElement('div'));
-        top.css({ "background-color": "rgb(63,55,53)", "height": "8%", "width": "100%" });
-        top.attr('id', 'topbar');
-        return top;
-    }
-
-    /**Saves the changes made to the tour
-     * @method save
-     * @param {Boolean} stayOnPage      determines whether or not to stay on the authoring page after saving changes
-     */
-    function save(stayOnPage) {
-        var name = titleTextArea.val(),
-            content = JSON.stringify(timeline.toRIN(true)),
-            related = JSON.stringify(timeline.getRelatedArtworks()),
-            options = {
-                Name: name,
-                Content: content,
-                RelatedArtworks: related
-            };
-
-        console.log("isUploading === " + componentControls.getIsUploading());
-        saveClicked = true;
-        nameChanged = false;
-
-        //if ($("#inkEditText").css('display') !== "none") {
-        //    componentControls.saveText();
-        //}
-        //else if ($("#inkEditDraw").css('display') !== "none") {
-        //    componentControls.saveDraw();
-        //}
-        //else if ($("#inkEditTransparency").css('display') !== "none") {
-        //    componentControls.saveTrans();
-        //}
-
-        timeline.hideEditorOverlay();
-        undoManager.setPrevFalse();                             //method sets savedState of top element of undoStack to true to indicate further prompt for saving is not required on leaving page
-        
-        TAG.Worktop.Database.changeTour(tourobj, options, function () {
-            // success
-            dialogOverlay.fadeOut(500);
-            !stayOnPage && goBack();
-        }, function () {
-            // unauth
-            dialogOverlay.hide();
-            var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
-            $('body').append(popup);
-            $(popup).show();
-        }, function (jqXHR, ajaxCall) {
-            // conflict
-            // Ignore conflict for now
-            ajaxCall.force();
-        }, function () {
-            // error
-            dialogOverlay.hide();
-            var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
-            $('body').append(popup);
-            $(popup).show();
-        });
-    }
-
-    /**The action excuted when back button is clicked
-     * @method goBack
-     */
-    function goBack() {
-        var messageBox,
-            tempSettings;
-
-        // first, make sure that a tour reload isn't in progress
-        if (viewer.getIsReloading()) {
-            messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
-            $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
-            $('body').append(messageBox);
-            $(messageBox).fadeIn(500);
-            return;
-        }
-
-        tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);
-        backButton.off('click');
-        viewer.unload();
-        TAG.Util.UI.slidePageRight(tempSettings.getRoot());
-    }
-
-    /**Handles creating the components for the back button and related actions
-     * @method createBackDialog
-     */
-    function createBackDialog() {
-
-        //var backSaveButton = $(document.createElement('button'));
-        //var backDontSaveButton = $(document.createElement('button'));
-        //var backCancelButton = $(document.createElement('button'));
+        var buttonHeight = $(window).height() * 0.0504; // matches effective % size from SettingsView
         var backButtonArea = $(document.createElement('div'));
-        //var backButtonRow = $(document.createElement('div'));
-        //var backDialog = $(document.createElement('div'));
-        //var backDialogTitle = $(document.createElement('div'));
-        var buttonHeight = $(window).height() * 0.0504;
-        //var backDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
-         //{
-         //    center_h: true,
-         //    center_v: true,
-         //    width: 0.5,
-         //    height: 0.35,
-         //    max_width: 560,
-         //    max_height: 200,
-         //});
-
         backButtonArea.css({
             "top": "18.5%",
             'margin-left': '1.2%',
@@ -164,7 +39,7 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             "position": "relative",
             "float": "left"
         });
-        backButton = $(document.createElement('img'));
+        var backButton = $(document.createElement('img'));
         backButton.attr('src', tagPath + 'images/icons/Back.svg');
         backButton.css({ 'width': '100%', 'height': '100%' });
 
@@ -175,6 +50,81 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         backButton.mouseleave(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
+
+        //save method saves all changes made
+        var saveClicked = false;
+        var nameChanged = false;
+        function save(stayOnPage) {
+            console.log("isUploading === " + componentControls.getIsUploading());
+            saveClicked = true;
+            nameChanged = false;
+            if ($("#inkEditText").css('display') !== "none") {
+                componentControls.saveText();
+            }
+            else if ($("#inkEditDraw").css('display') !== "none") {
+                componentControls.saveDraw();
+            }
+            else if ($("#inkEditTransparency").css('display') !== "none") {
+                componentControls.saveTrans();
+            }
+            timeline.hideEditorOverlay();
+
+            undoManager.setPrevFalse();//method sets savedState of top element of undoStack to true to indicate further prompt for saving is not required on leaving page
+            //var xml = TAG.Worktop.Database.getDoqXML(tourobj.Identifier);
+            //var parser = new DOMParser();
+            //var tourXML = $(parser.parseFromString(xml, 'text/xml'));
+
+            var name = textArea.val();
+            var content = JSON.stringify(timeline.toRIN(true));
+            var related = JSON.stringify(timeline.getRelatedArtworks());
+            //var thumbnail = optionsBuffer && optionsBuffer.thumbnail;
+
+            var options = {
+                Name: name,
+                Content: content,
+                RelatedArtworks: related
+            }
+
+            TAG.Worktop.Database.changeTour(tourobj, options, function () {
+                // success
+                dialogOverlay.fadeOut(500);
+                !stayOnPage && goBack();
+            }, function () {
+                // unauth
+                dialogOverlay.hide();
+                var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
+                $('body').append(popup);
+                $(popup).show();
+            }, function (jqXHR, ajaxCall) {
+                // conflict
+                // Ignore conflict for now
+                ajaxCall.force();
+            }, function () {
+                // error
+                dialogOverlay.hide();
+                var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
+                $('body').append(popup);
+                $(popup).show();
+            });   
+        }
+        // Takes you back to the tour authoring menu page
+        function goBack() {
+            var messageBox;
+            // first, make sure that a tour reload isn't in progress
+            if (viewer.getIsReloading()) {
+                messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
+                $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                $('body').append(messageBox);
+                $(messageBox).fadeIn(500);
+                return;
+            }
+            backButton.off('click');
+            $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
+            var tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);
+            viewer.stop();
+            viewer.unload();
+            TAG.Util.UI.slidePageRight(tempSettings.getRoot());
+        }
         //backDialogOverlay.attr('id', 'backDialogOverlay');
         //backDialogOverlay.css({
         //    display: 'none',
@@ -185,9 +135,31 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         //    height: '100%',
         //    'background-color': 'rgba(0,0,0,0.6)',
         //    'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
+        //    //'height': '30%',
+        //    //'width': '45%',
+        //    //'position': 'fixed',
+        //    //'top': '50%',
+        //    //'left': '50%',
+        //    //'margin-top': '-15%',
+        //    //'margin-left': '-22.5%',
+        //    //'background-color': 'black',
+        //    //'z-index': TAG.TourAuthoring.aboveRinZIndex+5,
+        //    //'border': '3px double white',
         //});
-
+        //// Actual dialog container for when back button is pressed
+        //var backDialog = $(document.createElement('div'));
         //backDialog.attr('id', 'backDialog');
+
+        /////new css
+        //var backDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+        //   {
+        //       center_h: true,
+        //       center_v: true,
+        //       width: 0.5,
+        //       height: 0.35,
+        //       max_width: 560,
+        //       max_height: 200,
+        //   });
         //backDialog.css({
         //    position: 'absolute',
         //    left: backDialogSpecs.x + 'px',
@@ -197,11 +169,11 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         //    border: '3px double white',
         //    'background-color': 'black',
         //});
-        
+
         //backDialogOverlay.append(backDialog);
-
-
+        //var backDialogTitle = $(document.createElement('div'));
         //backDialogTitle.attr('id', 'backDialogTitle');
+        ////var fontsize = TAG.Util.getMaxFontSizeEM('Entering authoring mode, please enter password.', 0.8, 0.8 * loginDialog.width(), 0.2 * loginDialog.height(), 0.05);
         //backDialogTitle.css({
         //    color: 'white',
         //    'width': '80%',
@@ -211,81 +183,93 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         //    'font-size': '1.25em',
         //    'position': 'relative',
         //    'text-align': 'center',
-        //    'word-wrap': 'break-word',
+        //   // 'overflow': 'hidden',
+        //    'word-wrap':'break-word',
         //});
+
         //backDialog.append(backDialogTitle);
         //backDialog.append(document.createElement('br'));
-
+         
+        //var backButtonRow = $(document.createElement('div'));
         //backButtonRow.css({
         //    'position': 'relative',
         //    'display': 'block',
         //    'width': '80%',
         //    'left': '10%',
-        //    'top': '40%'
+        //    'top':'40%'
         //});
 
+        //var backSaveButton = $(document.createElement('button'));
         //backSaveButton.css({
         //    'padding': '1%',
         //    'border': '1px solid white',
         //    'width': 'auto',
         //    'position': 'relative',
         //    'margin-top': '1%',
-        //    float: 'right',
-        //    display:'inline-block'
         //});
         //backSaveButton.text('Save');
-        //backSaveButton.click(function () {
-        //    backSaveButton.text('Saving...');
-        //    backSaveButton.attr("disabled", true);
-        //    backSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-        //    backDontSaveButton.attr("disabled", true);
+
+        //$(backSaveButton).click(function () {
         //    save();
         //});
+
         //backButtonRow.append(backSaveButton);
 
+        //var backDontSaveButton = $(document.createElement('button'));
         //backDontSaveButton.css({
         //    'padding': '1%',
         //    'border': '1px solid white',
         //    'width': 'auto',
         //    'position': 'relative',
         //    'margin-top': '1%',
-        //    float: 'left',
-        //    display: 'inline-block'
+        //    'left': '20%'
 
         //});
         //backDontSaveButton.text('Don\'t Save');
-        //backDontSaveButton.click(function () {
-        //    backDontSaveButton.attr("disabled", true);
-        //    backDontSaveButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-        //    backSaveButton.attr("disabled",true);
+        //$(backDontSaveButton).click(function () {
         //    goBack();
         //});
 
         //backButtonRow.append(backDontSaveButton);
+
+        //var backCancelButton = $(document.createElement('button'));
+        //backCancelButton.css({
+        //    'padding': '1%',
+        //    'border': '1px solid white',
+        //    'width': 'auto',
+        //    'position': 'relative',
+        //    'margin-top': '1%',
+        //    'float': 'right'
+        //});
+        //backCancelButton.text('Cancel');
+        //backCancelButton.click(function () { backDialogOverlay.fadeOut(500); });
+        //backButtonRow.append(backCancelButton);
+
         //backDialog.append(backButtonRow);
 
         backButton.click(function () {
             var messageBox;
+
             $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
+
             if (viewer.getIsReloading()) {
-                messageBox = $(TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null));
-                messageBox.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
+                $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
                 $('body').append(messageBox);
-                messageBox.fadeIn(500);
+                $(messageBox).fadeIn(500);
                 return;
             }
 
             if (nameChanged || (undoManager.dirtyStateGetter() === false) || 
-                (componentControls.getInkUndoManager() && (componentControls.getInkUndoManager().dirtyStateGetter() === false))) {
+                (componentControls.getInkUndoManager() && (componentControls.getInkUndoManager().dirtyStateGetter() === false) /*&& (componentControls.getInkUndoManager().undoStackSize() != 0)*/)) {
                 //backDialogOverlay.fadeIn(500);
-                if (titleTextArea.val().length === 0) {
-                    titleTextArea.val('Untitled Tour');
+                if (textArea.val().length === 0) {
+                    textArea.val('Untitled Tour 1');
                 }
-                //backDialogTitle.text('Save changes to ' + $(titleTextArea).val() + ' before leaving?');
                 var backDialog = TAG.Util.UI.PopUpConfirmation(function () {
                     $("#popupConfirmButton").text('Saving...').attr('disabled', true);
                     save();
-                }, 'Save changes to ' + $(titleTextArea).val() + ' before leaving?', "Save", false, function () {
+                }, 'Save changes to ' +textArea.val() + ' before leaving?', "Save", false, function () {
                     goBack();
                     $("#popupConfirmButton").attr('disabled', true);//.css({ 'color': 'rgba(255, 255, 255, 0.5)' });
                     $("#popupCancelButton").attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
@@ -294,20 +278,20 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
 
                 $(backDialog).css('z-index', 1000000);
                 $(backDialog).show();
-            } else {
-                goBack(); 
             }
-        });
+            else {
+                goBack();
+            }
+
+
+       });
         backButtonArea.append(backButton);
         topbar.append(backButtonArea);
-    }
 
-    /**Creating and positioning the title text area
-     * @method createTitleTextArea
-     * @return {HTML Element} textArea          the div containing the title text
-     */
-    function createTitleTextArea() {
+        // Title text area, users can retype and redefine title name
         var textArea = $(document.createElement('input'));
+        textArea.type = "text";
+
         var textAreaSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
         {
             center_v: true,
@@ -316,7 +300,6 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             x_offset: 0.05,
             x_max_offset: 60,
         });
-
         textArea.css({
             'margin-left': '3%',
             'position': 'absolute',
@@ -326,7 +309,9 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             'left': textAreaSpecs.x + 'px',
             width: textAreaSpecs.width + 'px',
             height: textAreaSpecs.height + 'px',
+            'font-size':'.7em'
         });
+
         textArea.attr({
             display: 'block',
             type: 'text',
@@ -345,39 +330,21 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             nameChanged = true;
             ev.stopImmediatePropagation();
         });
-        return textArea;
-    }
 
-    /**Handles putting up the save/cancel dialog box on an overlay
-     * @method createSaveDialog
-     */
-    function createSaveDialog() {
+        topbar.append(textArea);
+
+        // NOTE: save button click event handler is below dialog code
         var saveButton = $(document.createElement("button"));
-        var submitButton = $(document.createElement('button'));
-        var cancelButton = $(document.createElement('button'));
-        
-        var saveDialog = $(document.createElement('div'));
-        var dialogTitle = $(document.createElement('div'));
-        var buttonRow = $(document.createElement('div'));
-        var saveButtonSpecs = TAG.Util.constrainAndPosition($(window).width() * 0.8, $(window).height() * 0.08,
-            {
-                center_v: true,
-                width: 0.1,
-                height: 0.5,
-            });
-        var fontsize = TAG.Util.getMaxFontSizeEM('Save Changes', 0.2, 0.75 * saveButtonSpecs.width, 0.75 * saveButtonSpecs.height, 0.01);
-        var saveDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
-           {
-               center_h: true,
-               center_v: true,
-               width: 0.5,
-               height: 0.35,
-               max_width: 560,
-               max_height: 200,
-           });
-
         saveButton.text("Save Changes");
         saveButton.attr('type', 'button');
+
+        var saveButtonSpecs = TAG.Util.constrainAndPosition($(window).width() * 0.8, $(window).height() * 0.08,
+        {
+            center_v: true,
+            width: 0.13,
+            height: 0.5,
+        });
+        var fontsize = TAG.Util.getMaxFontSizeEM('Save Changes', 0.2, 0.63 * saveButtonSpecs.width, 0.75 * saveButtonSpecs.height, 0.01);
         saveButton.css({
             "color": "white",
             "border-color": "white",
@@ -386,48 +353,14 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             height: saveButtonSpecs.height + 'px',
             'top': saveButtonSpecs.y + 'px',
             'font-size': fontsize,
-            //'font-size': '1em',
-            'left': parseInt(titleTextArea.css('left'), 10) + titleTextArea.width() + 45 + ($(window).width() * 0.022) + 'px',
+            'left': parseInt(textArea.css('left'),10) + textArea.width() + 45 + ($(window).width() * 0.022) + 'px',
         });
-        saveButton.click(function () {
-            $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
-            //dialogOverlay.fadeIn(500);
-            if (titleTextArea.val().length === 0) {
-                titleTextArea.val('Untitled Tour');
-            }
-            var progressCircCSS = {
-                    'position': 'absolute',
-                    'left': '30%',
-                    'top': '22%',
-                    'z-index': '50',
-                    'height': '30%',
-                    'width': 'auto'
-                };
-                var circle = TAG.Util.showProgressCircle($("#optionButtonDiv"), progressCircCSS, '0px', '0px', false);
-                $("#optionButtonDiv").append(circle);
-                console.log(circle);
-           
-            var saveDialog = TAG.Util.UI.PopUpConfirmation(function () {
-                $("#popupConfirmButton").text('Saving...').attr('disabled', true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-                save(true);
-                $("#popupCancelButton").attr('disabled',true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-                
-            }, 'Save changes to ' + $(titleTextArea).val(), "Save", false);
-            root.append(saveDialog);
-            $(saveDialog).css('z-index', 1000000);
-            $(saveDialog).show();
-            //dialogTitle.text('Save changes to ' + titleTextArea.val() + '?');
-            //submitButton.css({
-            //    'color': 'white',
-            //    'border': '1px solid white',
-            //    'cursor': 'pointer'
-            //});
-            //submitButton.attr('disabled', false);
+        
+        topbar.append(saveButton);
 
-        });
 
         /*save button dialog code*/
-        // Overlay to darken out main UI
+        //// Overlay to darken out main UI
         //dialogOverlay.attr('id', 'dialogOverlay');
         //dialogOverlay.css({
         //    display: 'none',
@@ -441,7 +374,18 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         //});
 
         //// Actual dialog container
+        //var saveDialog = $(document.createElement('div'));
         //saveDialog.attr('id', 'saveDialog');
+
+        //var saveDialogSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+        //   {
+        //       center_h: true,
+        //       center_v: true,
+        //       width: 0.5,
+        //       height: 0.35,
+        //       max_width: 560,
+        //       max_height: 200,
+        //   });
         //saveDialog.css({
         //    position: 'absolute',
         //    left: saveDialogSpecs.x + 'px',
@@ -451,22 +395,28 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         //    border: '3px double white',
         //    'background-color': 'black',
         //});
-        //TAG.Util.multiLineEllipsis(saveDialog);
-        
+        //dialogOverlay.append(saveDialog);
+        //var dialogTitle = $(document.createElement('div'));
         //dialogTitle.attr('id', 'dialogTitle');
+        ////var fontsize = TAG.Util.getMaxFontSizeEM('Entering authoring mode, please enter password.', 0.8, 0.8 * loginDialog.width(), 0.2 * loginDialog.height(), 0.05);
         //dialogTitle.css({
         //    color: 'white',
         //    'width': '80%',
         //    'height': '15%',
         //    'left': '10%',
         //    'top': '12.5%',
-        //    'font-size': '1em',
+        //    'font-size': '1.25em',
         //    'position': 'relative',
         //    'text-align': 'center',
+        //    //'overflow': 'hidden',
         //    'word-wrap': 'break-word',
         //});
 
+        //saveDialog.append(dialogTitle);
+        //saveDialog.append(document.createElement('br'));
+
         //// Container for "save / cancel" buttons
+        //var buttonRow = $(document.createElement('div'));
         //buttonRow.css({
         //    'position': 'relative',
         //    'display': 'block',
@@ -474,48 +424,54 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
         //    'left': '10%',
         //    'top': '40%'
         //});
-        
+        //saveDialog.append(buttonRow);
+
+        //// TODO: Hook in save-to-server functionality here!
+        //var submitButton = $(document.createElement('button'));
         //submitButton.css({
         //    'padding': '1%',
         //    'border': '1px solid white',
         //    'width': 'auto',
         //    'position': 'relative',
-        //    'margin-top': '4.5%',
+        //    'margin-top': '1%',
         //});
         //submitButton.text('Save');
-        //submitButton.click(function () {
-        //    submitButton.text('Saving...');
-        //    save(true);
-        //    submitButton.attr('disabled', true);
-        //    submitButton.css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-        //});
+        //submitButton.click(function () { save(true); });
 
+        //buttonRow.append(submitButton);
+
+        //var cancelButton = $(document.createElement('button'));
         //cancelButton.css({
         //    'padding': '1%',
         //    'border': '1px solid white',
         //    'width': 'auto',
         //    'position': 'relative',
-        //    'margin-top': '5%',
+        //    'margin-top': '1%',
         //    'float': 'right'
         //});
         //cancelButton.text('Cancel');
         //cancelButton.click(function () { dialogOverlay.fadeOut(500); });
-        
-        
-        // appending stuff
-        topbar.append(saveButton);
-        //dialogOverlay.append(saveDialog);
-        //saveDialog.append(dialogTitle);
-        ////saveDialog.append(document.createElement('br'));
-        //saveDialog.append(buttonRow);
-        //buttonRow.append(submitButton);
         //buttonRow.append(cancelButton);
-    }
-    
-    /**Handles creating the tour options menu on the top bar
-     * @method tourOptionsMenu
-     */
-    function tourOptionsMenu() {
+        
+        //save button click event handler
+        saveButton.click(function () {
+            $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
+            //dialogOverlay.fadeIn(500);
+            if (textArea.val().length === 0) {
+                textArea.val('Untitled Tour 1');
+            }
+            var saveDialog = TAG.Util.UI.PopUpConfirmation(function () {
+                $("#popupConfirmButton").text('Saving...').attr('disabled', true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+                save(true);
+            }, 'Save changes to ' +textArea.val(), "Save", false);
+            root.append(saveDialog);
+            $(saveDialog).css('z-index', 1000000);
+            $(saveDialog).show();
+        });
+
+        //topbar.append(buttonPanel);
+
+        // Tour Options dropdown
         var tourOptions = TAG.TourAuthoring.TourOptions({
             timeManager: timeManager,
             timeline: timeline,
@@ -524,11 +480,12 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             playbackControls: playbackControls,
             tour: tourobj
         });
+        tourOptions.addToDOM(topbar);
         var tourOptionsSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
         {
-           center_v: true,
-           width: 0.13,
-           height: 0.8,
+            center_v: true,
+            width: 0.13,
+            height: 0.8,
         });
         var tourOptionsFontSize = TAG.Util.getMaxFontSizeEM('Options', 0.5, tourOptionsSpecs.width * 0.8, tourOptionsSpecs.height * 0.7, 0.01);
         var optionsLabelSpecs = TAG.Util.constrainAndPosition(tourOptionsSpecs.width, tourOptionsSpecs.height, {
@@ -536,33 +493,33 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             width: 0.8,
             height: 0.8,
         });
+
+        tourOptions.applyCSS(
+            {
+                "height": tourOptionsSpecs.height + "px",
+                "width": tourOptionsSpecs.width + 'px',
+                "left": "60%",
+                'top': tourOptionsSpecs.y + 'px',
+                "position": 'absolute',
+            });
+
+        tourOptions.applyLabelCSS(
+            {
+                'height': optionsLabelSpecs.height + 'px',
+                'width': optionsLabelSpecs.width + 'px',
+                'left': 0 + 'px',
+                'top': optionsLabelSpecs.y + 'px',
+                "position": 'absolute',
+                'font-size': tourOptionsFontSize,
+            });
+
+        // Page header (not user's tour title)
         var topBarLabel = $(document.createElement('div'));
         var topBarLabelSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
         {
             width: 0.4,
             height: 0.9,
         });
-        var fontsizeTop = TAG.Util.getMaxFontSizeEM('Tour Authoring', 0.5, topBarLabelSpecs.width, topBarLabelSpecs.height * 0.85);
-        tourOptions.addToDOM(topbar);
-       
-        tourOptions.applyCSS({
-            "height": tourOptionsSpecs.height + "px",
-            "width": tourOptionsSpecs.width + 'px',
-            "left": "60%",
-            'top': tourOptionsSpecs.y + 'px',
-            "position": 'absolute',
-        });
-
-        tourOptions.applyLabelCSS({
-            'height': optionsLabelSpecs.height + 'px',
-            'width': optionsLabelSpecs.width + 'px',
-            'left': 0 + 'px',
-            'top': optionsLabelSpecs.y + 'px',
-            "position": 'absolute',
-            'font-size': tourOptionsFontSize,
-        });
-
-        // Page header (not user's tour title)
         topBarLabel.css({
             'margin-right': '2%',
             'margin-top': 8 * 0.04 + '%',
@@ -575,21 +532,20 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             'width': topBarLabelSpecs.width + 'px',
         });
 
+        var fontsizeTop = TAG.Util.getMaxFontSizeEM('Tour Authoring', 0.5, topBarLabelSpecs.width, topBarLabelSpecs.height * 0.85);
         topBarLabel.css({ 'font-size': fontsizeTop });
-        topBarLabel.text('Tour Authoring');
-        topbar.append(topBarLabel);
-    }
 
-    /**Adds the entire top bar to the DOM
-     * @method addToDOM
-     * @param {HTML Element} container          the main container that contains TAG
-     */
+        topBarLabel.text('Tour Authoring');
+
+        topbar.append(topBarLabel);
+
+        //topbar.append(tourLabel);
+    })();
+
     function addToDOM(container) {
         container.append(topbar).append(dialogOverlay).append(backDialogOverlay);
     }
-    
-    // Public methods returned
-    return {
-        addToDOM: addToDOM
-    };
+    that.addToDOM = addToDOM;
+
+    return that;
 };

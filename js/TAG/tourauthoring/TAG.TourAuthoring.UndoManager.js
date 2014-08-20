@@ -1,38 +1,26 @@
 ﻿TAG.Util.makeNamespace('TAG.TourAuthoring.UndoManager');
 
-/**Keeps track of commands and changes issued by program and order of issuing
+/**
+ * Keeps track of commands and changes issued by program and order of issuing
  * Can unexecute or execute (undo / redo) these commands
- * @class TAG.TourAuthoring.UndoManager
- * @constructor
- * @return {Object} that                public methods of the class
+ * @param spec  not used
+ * @param my    not used
  */
-TAG.TourAuthoring.UndoManager = function () {
+TAG.TourAuthoring.UndoManager = function (spec, my) {
     "use strict";
 
-    var that = {                                                // object containing the public methods of the class
-            logCommand: logCommand,
-            dirtyStateGetter: dirtyStateGetter,
-            undoStackSize: undoStackSize,
-            setPrevFalse: setPrevFalse,
-            setInitialized: setInitialized,
-            undo: undo,
-            redo: redo,
-            clear: clear,
-            greyOutBtn: greyOutBtn,
-            combineLast: combineLast
-        },
-        undoStack = [],                                         // stack keeps track of the order of commands to undo actions
-        redoStack = [],                                         // stack keeps track of the order of commands to redo actions
-        initialized = false,                                    // used to prevent undoStack from updating when timeline is opening
-        undoStackSizeOriginal = 0,                              // default stack size is 0
-        stackSize = 75;                                         // max size is 75
+    // Private
+    var that = {},
+        undoStack = [],
+        redoStack = [],
+        initialized = false, //used to prevent undoStack from updating when timeline is opening
+        undoStackSizeOriginal = 0,
+        stackSize = 75;
 
-    ////////////////////
-    // PUBLIC METHODS //
-    ////////////////////
+    // Public methods
 
-    /**Log a command that has just been executed, ie. add it to the undo stack
-     * @method logCommand
+    /**
+     * Log a command that has just been executed, ie. add it to the undo stack
      * @param command       TAG.TourAuthoring.Command that was just run
      */
     function logCommand(command) {
@@ -50,12 +38,15 @@ TAG.TourAuthoring.UndoManager = function () {
                 var diff = undoStack.length - stackSize;
                 undoStack.splice(0, diff);
             }
+
+            //  console.log("SAVED STATE //TOP//FROM log command// ===" + undoStack[undoStack.length - 1].savedState);
         }
     }
-    
-    /**Function returns the savedState of the element in the top of the stack, which determines if timeline is dirty or not
-     * @method dirtyStateGetter
-     */
+    that.logCommand = logCommand;
+
+    /**
+    * function returns the savedState of the element in the top of the stack, which determines if timeline is dirty or not
+    */
     function dirtyStateGetter() {
         if (undoStack.length > 0) {
             console.log("SAVED STATE //TOP//FROM DSG// ===" + undoStack[undoStack.length - 1].savedState);
@@ -63,55 +54,59 @@ TAG.TourAuthoring.UndoManager = function () {
         }
         return true;
     }
-   
-    /**Returns undoStack size
-     * @method undoStackSize
-     * @return {Number} undoStack.length
-     */
+    that.dirtyStateGetter = dirtyStateGetter;
+
+
+    //returns undoStack size
     function undoStackSize() {
         return undoStack.length;
     }
-    
-    /**Sets the savedState of the top element in undoStack to true, and the rest to false 
-     * @method setPrevFalse
-     */
+    that.undoStackSize = undoStackSize;
+
+
+    //sets the savedState of the top element in undoStack to true, and the rest to false 
     function setPrevFalse() {
         if (undoStack.length > 0) {
             undoStack[undoStack.length - 1].savedState = true;
+
             for (var i = 0; i < undoStack.length - 1; i++) {
                 undoStack[i].savedState = false;
+                // console.log("SAVED STATE===" + undoStack[i].savedState);
             }
+            // console.log("SAVED STATE //TOP// ===" + undoStack[undoStack.length - 1].savedState);
         }
     }
-    
-    /**Called by loadRIN method in timeline class
-     * @method setInitialized
-     * @param {Boolean} boolVal
-     */
+    that.setPrevFalse = setPrevFalse;
+    //called by loadRIN method in timeline class
     function setInitialized(boolVal) {
         initialized = boolVal;
     }
-    
-    /**Undoes the last action when the 'undo' button is clicked
-     * @method undo
+    that.setInitialized = setInitialized;
+
+
+    function getInitialized() {
+        return initialized;
+    }
+    that.getInitialized = getInitialized;
+
+    /**
+     * Undo
      */
     function undo() {
-        var toUndo;
         if (undoStack.length > 0) {
-            toUndo = undoStack.pop();
+            var toUndo = undoStack.pop();
             toUndo.unexecute();
             redoStack.push(toUndo);
             $('.redoButton').css({ 'opacity': '1.0' });
-            if (undoStack.length === 0) {
+            if (undoStack.length === 0)
                 $('.undoButton').css({ 'opacity': '0.4' });
-            }
-        } else {
-            $('.undoButton').css({ 'opacity': '0.4' });
         }
+        else $('.undoButton').css({ 'opacity': '0.4' });
     }
-    
-    /**Redoes the last undone action when redo button is clicked
-     * @method redo
+    that.undo = undo;
+
+    /**
+     * Redo
      */
     function redo() {
         if (redoStack.length > 0) {
@@ -119,26 +114,24 @@ TAG.TourAuthoring.UndoManager = function () {
             toRedo.execute();
             undoStack.push(toRedo);
             $('.undoButton').css({ 'opacity': '1.0' });
-            if (redoStack.length === 0) {
+            if (redoStack.length === 0)
                 $('.redoButton').css({ 'opacity': '0.4' });
-            }
-        } else {
-            $('.redoButton').css({ 'opacity': '0.4' });
         }
+        else $('.redoButton').css({ 'opacity': '0.4' });
     }
-    
-    /**Clears undo / redo stack
+    that.redo = redo;
+
+    /**
+     * Clears undo / redo stack
      * Called on save or after loading
-     * @method clear
      */
     function clear() {
         undoStack = [];
         redoStack = [];
     }
-    
-    /**Greys out the undo/redo buttons when there is no possible action
-     * @method greyOutBtn
-     */
+    that.clear = clear;
+
+    // greyed out the undo/redo buttons when there is no possible action
     function greyOutBtn() {
         $('.undoButton').css({ 'opacity': '1.0' });
         $('.redoButton').css({ 'opacity': '1.0' });
@@ -149,10 +142,11 @@ TAG.TourAuthoring.UndoManager = function () {
             $('.redoButton').css({ 'opacity': '0.4' });
         }
     }
-    
-    /**Utility for combining together multiple commands
+    that.greyOutBtn = greyOutBtn;
+
+    /**
+     * Utility for combining together multiple commands
      * (Originally used for tying auto-creation of displays together with track creation)
-     * @method combineLast
      * @param n     Number of commands to tie together
      */
     function combineLast(n) {
@@ -172,6 +166,7 @@ TAG.TourAuthoring.UndoManager = function () {
         };
         logCommand(command);
     }
-    
+    that.combineLast = combineLast;
+
     return that;
 };

@@ -1,72 +1,44 @@
 ﻿TAG.Util.makeNamespace('TAG.TourAuthoring.Viewer');
 
-/**Previews current tour while user edits
- * @class TAG.TourAuthoring.Viewer
- * @constructor
+/**
+ * Previews current tour while user edits
  * @param spec  timeManager attr, url (url of tour if loading existing tour for editing)
  * @param my    not used
  */
 TAG.TourAuthoring.Viewer = function (spec, my) {
     "use strict";
 
-    var that = {                                                                                        // object storing public methods of the class
-            capturingOff: capturingOff,
-            isKeyframingDisabled: isKeyframingDisabled,
-            captureKeyframe: captureKeyframe,
-            getCurrentTime: getCurrentTime,
-            addToDOM: addToDOM,
-            getContainer: getContainer,
-            resize: resize,
-            play: play,
-            stop: stop,
-            seek: seek,
-            volume: volume,
-            setTimeline: setTimeline,
-            loadTour: loadTour,
-            reloadTour: reloadTour,
-            getIsReloading: getIsReloading,
-            setIsReloading: setIsReloading,
-            initializeTour: initializeTour,
-            unload: unload
-        },
-        player,                                                                                         // RIN player
-        timeline,                                                                                       // an instance of the timeline
-        
-        artworkPanel = $(document.createElement('div')),                                                // a div to display the track on the viewer
-        rinContainer = $(document.createElement('div')),                                                // container for RIN
-        timeManager = spec.timeManager,                                                                 // handles all time-related tasks in the tour
-        url = spec.url,                                                                                 // url of the track
+    var player, timeline,
+        that = {},
+        artworkPanel = $(document.createElement('div')),
+        rinContainer = $(document.createElement('div')),
+        timeManager = spec.timeManager,
+        url = spec.url,
 
         // viewer state
-        playing = false,                                                                                // boolean checks if the track is playing
-        buffering = false,                                                                              // checks if the track is buffering
-        reloading = false,                                                                              // checks to see if the tour is reloading
-        needRefresh = false,                                                                            // checks if the tour needs to be refreshed after changes have been made
-        ctime = null,                                                                                   // current pixel coordinates time of the tour in the viewer
+        playing = false,
+        buffering = false,
+        reloading = false,
+        needRefresh = false, ctime = null,
 
-        // capturing keyframes
-        capturingOn = false,                                                                            // boolean determines if keyframe data can be captured
-        currentCapture = '',                                                                            // currently captured data of a keyframe
-        keyframingDisabled = false,                                                                     // whether key frames are allowed currently
-        isReloading = false,                                                                            // is the tour reloading
-
-        rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
-
-    /**Instantiate RIN player
-     * @method _startRIN
-     */
+        // capturing keyframes?
+        capturingOn = false,
+        currentCapture = '',
+        keyframingDisabled = false,
+            
+        // is the tour reloading?
+        isReloading = false,
+        rinPath = IS_WINDOWS ? tagPath + 'js/WIN8_RIN/web' : tagPath + 'js/RIN/web';
+    // Instantiate RIN player
     (function _startRIN() {
         // HTML containers
-        var playerElement = $(document.createElement('div'));
         artworkPanel.attr('id', 'viewer');
         artworkPanel.css({
-            "background-color": "rgb(0,0,0)",
-            "height": "100%",
-            "width": "80%",
-            "position": "relative",
-            "left": "20%"
+            "background-color": "rgb(0,0,0)", "height": "100%", "width": "80%",
+            "position": "relative", "left": "20%"
         });
 
+        // let's assume 16:9 ratio for now
         rinContainer.attr('id', 'rinContainer');
         rinContainer.css({
             'border-style': 'solid', 'border-width': TAG.TourAuthoring.Constants.rinBorder+'px', 'border-color': 'white',
@@ -74,7 +46,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         });
         artworkPanel.append(rinContainer);
 
-       
+        var playerElement = $(document.createElement('div'));
         playerElement.attr('id', 'rinplayer');
         playerElement.css({
             'z-index': -100, 'overflow': 'hidden',
@@ -85,10 +57,12 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
 
         // creates actual RIN player
         rin.processAll(null, rinPath).then(function () {
-            var options = 'systemRootUrl='+rinPath+'/&hideAllControllers=true&playerMode=authorerEditor';
+            var options = 'systemRootUrl=' + rinPath + '/&hideAllControllers=true&playerMode=authorerEditor';;
             player = rin.createPlayerControl(playerElement[0], options);
+            //player.interactionModeStarted.subscribe(_onInteraction);
             player.orchestrator.playerESEvent.subscribe(_onPlayerESEvent, 'id');
             player.orchestrator.isPlayerReadyChangedEvent.subscribe(_onPlayerStateEvent);
+            
             timeManager.registerTime(getCurrentTime);
         });
 
@@ -97,8 +71,17 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         }
     })();
 
-    /**When RIN is interacted with, captures new keyframe data and sends it to timeline
-     * @method _onPlayerESEvent
+    //function _onInteraction(eventArgs) {
+    //    timeManager.stop();
+    //    capturingOn = true;
+    //    currentCapture = eventArgs.interactionES._esData.experienceId;
+    //    if (!reloading && timeManager.getReady()) {
+    //        _sendKeyframe(eventArgs.interactionES);
+    //    }
+    //}
+
+    /**
+     * When RIN is interacted with, captures new keyframe data and sends it to timeline
      * @param eventArgs     sender, eventId, ? (RIN)
      */
     function _onPlayerESEvent(eventArgs) {
@@ -106,7 +89,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         if (timeline) {
             switch (eventArgs.eventId) {
                 case rin.contracts.esEventIds.interactionActivatedEventId:
-                    timeManager.stop();                                                         // on interaction start capturing
+                    timeManager.stop(); // on interaction start capturing
                     capturingOn = true;
                     currentCapture = eventArgs.sender._esData.experienceId;
                     if (capturingOn && !reloading && !keyframingDisabled && timeManager.getReady()) {
@@ -123,42 +106,46 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         }
     }
 
-    /**Seneds keyframe data to timeline
-     * @method _sendKeyframe
-     * @param sender
-     */
     function _sendKeyframe(sender) {
-        var trackName,
-            capture = '';
+        var trackName, capture = '';
         if (sender.captureKeyframe && capturingOn) {
             capture = sender.captureKeyframe();
-            if (capture === '') {                                       // continue capturing until successful
-                console.log('No keyframe captured!?');
+            if (capture === '') { // continue capturing until successful
+                //setTimeout(function () { _sendKeyframe(sender); }, 10);
+				console.log('No keyframe captured!?');
                 return;
             }
             trackName = sender._esData.experienceId;
-            timeline.receiveKeyframe(trackName, capture, true);
+
+            timeline.receiveKeyframe(trackName, capture,
+                true);
             timeline.allDeselected();
         }
     }
 
-    /**Turn capturing off on update
-     * @method capturingOff
+    /**
+     * Turn capturing off on update
      */
     function capturingOff() {
         capturingOn = false;
         currentCapture = '';
     }
-    
-    /**Get state of keyframe disable switch.
-     * @method isKeyframingDisabled
-     * @return {Boolean} keyframingDisabled
+    that.capturingOff = capturingOff;
+
+    /**
+     * Get state of keyframe disable switch.
      */
     function isKeyframingDisabled() {
         return keyframingDisabled;
     }
-    
-    /**** Add event listeners for playerReady event to re-enable keyframe capture ****/
+    that.isKeyframingDisabled = isKeyframingDisabled;
+
+    function setKeyframingDisabled(state) {
+        keyframingDisabled = state;
+    }
+    that.setKeyframingDisabled = setKeyframingDisabled;
+
+    // add event listener for playerReady event to re-enable keyframe capture.
     $('body')[0].addEventListener('playerReady', function () {
         keyframingDisabled = false;
     });
@@ -170,8 +157,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         }, 150);
     });
 
-    /**Syncs time manager with buffering state of RIN
-     * @method _onPlayerStateEvent
+    /**
+     * Syncs time manager with buffering state of RIN
      * @param isReady        true if RIN is ready to play
      */
     function _onPlayerStateEvent(isReady) {
@@ -193,64 +180,56 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         }
     }
 
-    /**Turn off capture on player events
-     * @method _stopCapture
-     */
+    // Turn off capture on player events
     function _stopCapture() {
         capturingOn = false;
     }
     timeManager.onMove(_stopCapture);
     timeManager.onStop(_stopCapture);
 
-    ////////////////////
-    // Public methods //
-    ////////////////////
+    // Public stuff
 
-    /**Returns data from current state of the keyframe
-     * @method captureKeyframe
-     * @param artname
-     * @return     current keyframe state data
+    /**
+     * @returns     current keyframe state data
      */
     function captureKeyframe(artname) {
         if (player) {
-            return player.captureKeyframe(artname); 
+            return player.captureKeyframe(artname); //grab artwork container? BREAKPOINT HERE
         }
     }
-    
-    /**Passed to TimeManager on player load
-     * @method getCurrentTime
-     * @return {Time}     current time in player
+    that.captureKeyframe = captureKeyframe;
+
+    /**
+     * Passed to TimeManager on player load
+     * @returns     current time in player
      */
     function getCurrentTime() {
         return player.orchestrator.getCurrentLogicalTimeOffset();
     }
+    that.getCurrentTime = getCurrentTime;
     
-    /**Adds viewer container to DOM
-     * @method addToDOM
-     * @param {HTML Element} addToDOM
-     */
-    function addToDOM(container) {
+
+    function addToDOM (container) {
         container.append(artworkPanel);
     }
-    
-    /**Get JQuery object containing rin player
-     * @method getContainer
-     * @return rinContainer
+    that.addToDOM = addToDOM;
+
+    /**
+     * Get JQuery object containing rin player
      */
     function getContainer() {
         return rinContainer;
     }
-    
-    /**Updates size of viewer area on resize
-     * @method resize
+    that.getContainer = getContainer;
+
+    /**
+     * Updates size of viewer area on resize
      */
     function resize() {
         var h = artworkPanel.height() - 2 * TAG.TourAuthoring.Constants.rinBorder,
             w = artworkPanel.width() - 2 * TAG.TourAuthoring.Constants.rinBorder,
-            idealW = h * 16 / 9,
-            idealH,                                 // ideal W given h, vice-versa (9:16 ratio)
-            xoffset,
-            yoffset;
+            idealW = h * 16 / 9, idealH, // ideal W given h, vice-versa
+            xoffset, yoffset;
         if (idealW <= w) {
             xoffset = (w - idealW) / 2;
             rinContainer.css({
@@ -259,9 +238,9 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                 top: '0px',
                 left: xoffset + 'px'
             });
-        } else {                                    // no room to support, use ideal H
+        } else { // no room to support, use ideal H
             idealH = w * 9 / 16;
-            yoffset = (h - idealH) / 2;             // equal spacing on top and bottom
+            yoffset = (h - idealH) / 2; // equal spacing on top and bottom
             rinContainer.css({
                 width: w + 'px',
                 height: idealH + 'px',
@@ -270,14 +249,11 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             });
         }
     }
-    
-    /////////////////////////
-    // PLAYER INTERACTIONS //
-    /////////////////////////
+    that.resize = resize;
 
-    /**Play viewer (should only be called from timeManager)
-     * @method play
-     * @param time
+    // PLAYER INTERACTIONS
+    /**
+     * Play viewer (should only be called from timeManager)
      */
     function play(time) {
         if (!playing) {
@@ -285,10 +261,11 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             playing = true;
         }
     }
+    that.play = play;
     timeManager.onPlayStart(function (ev) { play(ev.current); });
 
-    /**Stop viewer (should only be called from timeManager)
-     * @method stop
+    /**
+     * Stop viewer (should only be called from timeManager)
      */
     function stop() {
         if (playing && !buffering) {
@@ -296,43 +273,48 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             playing = false;
         }
     }
+    that.stop = stop;
     timeManager.onStop(stop);
 
-    /**Seek viewer (should only be called from timeManager)
-     * @method seek
+    /**
+     * Seek viewer (should only be called from timeManager)
      * @param time  location to seek to in units of seconds
      */
     function seek(time) {
         if (player.orchestrator._isNarrativeLoaded) {
             if (needRefresh) {
                 ctime = timeManager.timeToPx(time);
-            } else if (player && !playing) {
+            }
+
+            else if (player && !playing) {
                 stop();
                 playing = false;
                 player.pause(time);
             }
         }
     }
+    that.seek = seek;
     timeManager.onSeek(function (ev) { seek(ev.current); });
 
-    /**Set volume
-     * @method volume
+    /**
+     * Set volume
      * @param v     volume, between 0 and 1
      */
     function volume(v) {
         player.volume(v);
     }
-    
-    /**Set reference to Timeline for keyframe passing
-     * @method setTimeline
-     * @param t
+    that.volume = volume;
+
+    /**
+     * Set reference to Timeline for keyframe passing
      */
     function setTimeline(t) {
         timeline = t;
     }
-    
-    /**Load tour from url
-     * @method loadTour
+    that.setTimeline = setTimeline;
+
+    /**
+     * Load tour from url
      * @param url       URL of json tour
      */
     function loadTour(url, callback) {
@@ -344,9 +326,10 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             }, 50);
         }
     }
-    
-    /**Load / reload tour into viewer
-     * @method reloadTour
+    that.loadTour = loadTour;
+
+    /**
+     * Load / reload tour into viewer
      * @param data      Segment portion of RIN tour
      */
     function reloadTour(data, doNotUpdateReloading) {
@@ -354,6 +337,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             isReloading = true;
         }
         //console.log("####################################################: "+isReloading);
+        // console.log("player: "+player);
         for (var key in data.resources) {
             if (data.resources.hasOwnProperty(key)) {
                 if (typeof data.resources[key].uriReference === 'string') {
@@ -368,6 +352,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             ctime = timeManager.getCurrentTime();
             player.unload();
             player.loadData(data, function () {
+                // if needRefresh is false we seeked too early?
                 if (!needRefresh) {
                     seek(timeManager.getCurrentTime());
                     setTimeout(function () {
@@ -376,6 +361,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                         $('body')[0].dispatchEvent(readyEvent);
                     }, 500);
                 }
+                //setTimeout(function () { seek(ctime); reloading = false; }, 25);
                 if (!doNotUpdateReloading) {
                     isReloading = false;
 
@@ -386,31 +372,23 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             setTimeout(function () { reloadTour(data, true); }, 50);
         }
     }
-    
-    /**Returns state of tour reloading boolean
-     * @method getIsReloading
-     * @return {Boolean} isReloading
-     */
+    that.reloadTour = reloadTour;
+
     function getIsReloading() {
         return isReloading;
     }
-    
-    /**Returns state of tour reloading boolean
-     * @method setIsReloading
-     * @param {Boolean} bool
-     */
+    that.getIsReloading = getIsReloading;
+
     function setIsReloading(bool) {
         isReloading = bool;
     }
-   
-    /**Starts the tour in the viewer
-     * @method initializeTour
-     * @param data
-     */
+    that.setIsReloading = setIsReloading;
+
     function initializeTour(data) {
         var ctime;
         isReloading = true;
         console.log("isReloading: true, in initializeTour");
+        // console.log("player: "+player);
         if (player) {
             ctime = timeManager.getCurrentTime();
             player.unload();
@@ -424,6 +402,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         } else if (timeline.getTrackslength() === 0) {
             ctime = timeManager.getCurrentTime();
             setTimeout(function () {
+                //seek(ctime);
                 isReloading = false;
                 console.log("isReloading: false, in initializeTour");
             }, 50);
@@ -431,13 +410,16 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             setTimeout(function () { reloadTour(data, true); }, 50);
         }
     }
-    
-    /**Unloads RIN player call when exiting Authoring
-     * @method unload
+    that.initializeTour = initializeTour;
+
+    /**
+     * Unloads RIN player
+     * call when exiting Authoring
      */
     function unload() {
         player.unload();
     }
-  
+    that.unload = unload;
+
     return that;
 };
