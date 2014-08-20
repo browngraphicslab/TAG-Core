@@ -1551,7 +1551,7 @@ TAG.Util = (function () {
             //use our deprecated function for now if error thrown
             return encodeXML(str);
         }*/
-        return str;
+        return str || "";
     }
 
     function htmlEntityDecode(str) {
@@ -1560,7 +1560,7 @@ TAG.Util = (function () {
         } catch (e) {
             return str ? unescape($('<div />').html(str).text()) : '';
         }*/
-        return str;
+        return str || "";
     }
 
     /**
