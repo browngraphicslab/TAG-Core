@@ -2305,6 +2305,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 mediaHolder.data('url', media.Metadata.Source); // store url as data
                 mediaHolder.data('name', media.Name);
                 mediaHolder.data('duration', media.Metadata.Duration);
+                mediaHolder.data('description', media.Metadata.Description);
                 var isSelected = selectedArtworksUrls[media.Metadata.Source] ? true : false;
                 mediaHolder.data('selected', isSelected);
                 mediaHolder.css({
@@ -2656,6 +2657,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         //$(artHolder).data('url', artwork.Metadata.DeepZoom); // store url as data
                         $(artHolder).data('name', artwork.Name);
                         $(artHolder).data('type', artwork.Metadata.Type);
+                        $(artHolder).data('description', artwork.Metadata.Description);
+                        if (artwork.Metadata.InfoFields) {
+                            $.each(artwork.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+                                $(artHolder).data(field, fieldText);
+                            });
+                        }
 
                         if (artwork.Metadata.Duration) { //for videos
                             $(artHolder).data('duration', artwork.Metadata.Duration);
