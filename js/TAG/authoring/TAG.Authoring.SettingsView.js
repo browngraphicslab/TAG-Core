@@ -3309,10 +3309,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
         }
-
+        var progressCircCSS = {
+            'position': 'absolute',
+            'left': '10%',
+            'top': '40%',
+            'z-index': '50',
+            'height': 'auto',
+            'width': '20%'
+        };
+        middleLoading.show();
         function onSuccess(doqData) {
             var newDoq = new Worktop.Doq(doqData.responseText);
             function done() {
+                middleLoading.hide();
                 loadAssocMediaView(newDoq.Identifier);
             }
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
@@ -3333,7 +3342,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //placeholder: 'E.g., http://www.youtube.com/embed/g794oDdc1l0',
             confirmText: 'Save'
         });
-
         root.append(overlay);
         overlay.fadeIn(500);
     }
