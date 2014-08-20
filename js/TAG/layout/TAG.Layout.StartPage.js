@@ -13,6 +13,8 @@ TAG.Util.makeNamespace("TAG.Layout.StartPage");
 TAG.Layout.StartPage = function (options, startPageCallback) {
     "use strict"; ////////////////////////////////////////////////
 
+    var isPreview;
+    options && function () {isPreview = options.isPreview; }();
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
@@ -37,6 +39,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
+
+    //PREVIEW STYLING
+    isPreview && function () {
+        serverInput.css({ 'min-height': '0px','min-width': '0px',});
+        serverSubmit.css({ 'min-height': '0px', 'min-width': '0px', });
+        authoringInput.css({ 'min-height': '0px', 'min-width': '0px', });
+        passwordSubmit.css({ 'min-height': '0px', 'min-width': '0px', });
+    }();
 
   // TODO merging TAG.Telemetry.register(goToCollectionsButton, 'click', 'start_to_collections');
   //                     tobj.mode = 'Kiosk';
