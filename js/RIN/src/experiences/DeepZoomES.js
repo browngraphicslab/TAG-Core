@@ -436,7 +436,6 @@ window.rin = window.rin || {};
 						translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
 					} else {
 						translation = { x: evt.gesture.center.pageX - lastPos.x, y: evt.gesture.center.pageY - lastPos.y };
-					   // console.log('translation.y = '+translation.y);
 					}
 					var scale = evt.gesture.scale - lastScale;
 					lastScale = evt.gesture.scale;
@@ -463,7 +462,6 @@ window.rin = window.rin || {};
 						translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
 					} else {
 						translation = { x: evt.pageX - lastPos.x, y: evt.pageY - lastPos.y };
-						console.log('translation.y = '+translation.y);
 					}
 					var scale = evt.gesture.scale - lastScale; /////////////////// HEREHEHEHEHEHRHERIEREIRHER ///
 					lastScale = evt.gesture.scale;

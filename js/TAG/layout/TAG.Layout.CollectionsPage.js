@@ -120,6 +120,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method init
      */
     function init() {
+        if (previewing && idleTimer) {
+            idleTimer.kill();
+        }
         var progressCircCSS,
             circle,
             oldSearchTerm;
@@ -470,7 +473,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 visibleCollections.push(collections[i]);
             }
         }
-        if (!collectionsToShow) {
+        if (!collectionsToShow && !previewing) {
             var infoOverlay = $(document.createElement('div'));
             infoOverlay.text("No collections to display");
             infoOverlay.css({ "color": "white", "text-align": "center", "font-size": "200%", "margin-top": "20%" });
@@ -573,7 +576,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             // if the idle timer hasn't started already, start it
-            if(!idleTimer && evt) { // loadCollection is called without an event to show the first collection
+            if (!idleTimer && evt && !previewing) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                 idleTimer.start();
             }
@@ -750,7 +753,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
-            collectionDescription.css({'word-wrap': 'break-word'});
+            collectionDescription.css({'word-wrap': 'break-word', "color": "#"+SECONDARY_FONT_COLOR});
                 str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
                 collectionDescription.css({
                     'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
@@ -830,6 +833,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 loadSortTags(currCollection, currCollection.collectionMedia)
                 initSearch(currCollection.collectionMedia);
             }
+            applyCustomization();
             cancelLoadCollection = function () { cancelLoad = true; };
         }
     }
@@ -955,7 +959,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 var emptyCollectionDiv = $(document.createElement('div'));
                 emptyCollectionDiv.addClass("primaryFont");
                 emptyCollectionDiv.text("There are no artworks in this collection at present.");
-                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": PRIMARY_FONT_COLOR });
+                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": "#"+PRIMARY_FONT_COLOR });
                 catalogDiv.append(emptyCollectionDiv);
             }
             if (cancel()) return;
@@ -1220,7 +1224,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     doubleClickHandler()
 
                     // if the idle timer hasn't started already, start it
-                    if (!idleTimer) {
+                    if (!idleTimer && !previewing) {
                         idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                         idleTimer.start();
                     }
@@ -1229,7 +1233,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     zoomTimeline(artworkCircles[currentWork.Identifier])
                     justShowedArtwork = true;
                 } else {
-                    if (!idleTimer) {
+                    if (!idleTimer && !previewing) {
                         idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                         idleTimer.start();
                     }
@@ -1592,7 +1596,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //Set intitial style of timeline event circles and set their zoomLevel
             for (var i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
                 timelineEventCircles[i].zoomLevel = getZoomLevel(timelineEventCircles[i]);
-                styleTimelineCircle(timelineEventCircles[i], false)
+                styleTimelineCircle(timelineEventCircles[i], false);
+                //Label of last circle should always be shown
+                if (i === timelineEventCircles.length-1){
+                    displayLabels(timelineEventCircles[i],null,i);
+                }
             };
 
             return timelineCircleArea;
@@ -1630,7 +1638,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         };
     };
 
-    function displayLabels(circ, selectedCircle){
+    function displayLabels(circ, selectedCircle, numCircles){
         var prevNode,
             labelOverlap,
             timelineDateLabel = circ.timelineDateLabel,
@@ -1658,10 +1666,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (prevCircle && !labelOverlap){
                 timelineDateLabel.css('visibility', 'visible');
             } else{
-                timelineDateLabel.css('visibility', 'hidden');
-                if (timelineEventCircles.indexOf(circ) === 0 || timelineEventCircles.indexOf(circ) === timelineEventCircles.length){
+                timelineDateLabel.css('visibility', 'hidden');    
+                if (numCircles && timelineEventCircles.indexOf(circ) === numCircles){
                     timelineDateLabel.css('visibility','visible');
-                }               
+                    prevCircle.timelineDateLabel.css('visibility','hidden');
+                }          
             } 
         }
         if (circ === timelineEventCircles[0]){
@@ -1672,6 +1681,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function zoomTimeline(circle) {
         var i,
             j,
+            k,
             tick,
             tickTarget,
             center = .5,
@@ -1688,7 +1698,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             otherCircle.css({ "-webkit-transition-property": "left", "-webkit-transition-duration": "1s", "-webkit-transition-timing-function": "ease-in-out" });
             otherCircle.css(            //ANIMATEALERT
                 { "left": parseInt(circleTarget * otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH * 15 / 20 });
-            displayLabels(otherCircle, circle);
+            //When last animation done, loop through and hide/show date labels
+            if (i === timelineEventCircles.length-1){
+                setTimeout(function() {
+                for (k=0; k < timelineEventCircles.length; k++){
+                        displayLabels(timelineEventCircles[k], circle);
+                        if (k===timelineEventCircles.length -1){
+                           displayLabels(timelineEventCircles[k],null,k); 
+                        }
+                    }
+                },1000); //would need to be changed if animation time changed (can't use transitionend event because sometimes last dot doesn't move)
+            }
         }
 
         for (j = 0; j < timelineTicks.length; j++) {
@@ -2061,7 +2081,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Div for above description
                 descText = $(document.createElement('div'))
-                    .addClass('descText')
+                    .addClass('descText secondaryFontColor')
                     .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
                     .css({
                     'color': '#' + SECONDARY_FONT_COLOR,
@@ -2230,6 +2250,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'width'   : 'auto',
                 'top'     : '22%',
             };
+            
             circle = TAG.Util.showProgressCircle(descSpan, progressCircCSS, '0px', '0px', false);    
         };
     }

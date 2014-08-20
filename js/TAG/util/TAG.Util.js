@@ -1170,7 +1170,6 @@ TAG.Util = (function () {
         function getDir(evt, noReturn) {
             if (!firstEvtX) {
                 firstEvtX = evt;
-                //console.log("firstEvtX SETA");
                 firstEvtX.currentDir = firstEvtX.gesture.deltaX / Math.abs(firstEvtX.gesture.deltaX) || 0;
                 if (!prevEvt) {
                     prevEvt = evt;
@@ -1179,17 +1178,14 @@ TAG.Util = (function () {
             } else {
                 if (evt.gesture.deltaX > prevEvt.gesture.deltaX && firstEvtX.currentDir !== 1) {
                     firstEvtX = evt;
-                    //console.log("firstEvtX SETB");
                     firstEvtX.currentDir = 1;
                 } else if (evt.gesture.deltaX < prevEvt.gesture.deltaX && firstEvtX.currentDir !== -1) {
                     firstEvtX = evt;
-                    //console.log("firstEvtX SETC");
                     firstEvtX.currentDir = -1;
                 }
             }
             if (!firstEvtY) {
                 firstEvtY = evt;
-                //console.log("firstEvtY SETA");
                 firstEvtY.currentDir = firstEvtY.gesture.deltaY / Math.abs(firstEvtY.gesture.deltaY) || 0;
             } else {
                 if (evt.gesture.deltaY > prevEvt.gesture.deltaY && firstEvtY.currentDir !== 1) {
@@ -2377,7 +2373,8 @@ TAG.Util.UI = (function () {
     // overlay that "absorbs" interactions with elements below it, used to isolate popup forms etc.
     function blockInteractionOverlay(opac) {
 
-        opac = opac ? Math.max(Math.min(parseFloat(opac), 1), 0) : 0.6;
+        opac = (opac || opac===0) ? Math.max(Math.min(parseFloat(opac), 1), 0) : 0.6;
+        
         var overlay = document.createElement('div');
         $(overlay).attr('id', 'blockInteractionOverlay');
 
