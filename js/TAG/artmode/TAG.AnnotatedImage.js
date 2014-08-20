@@ -1348,9 +1348,16 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.show();
             }
 
-            if (!thumbnailButton) {
-                thumbnailButton = $('#thumbnailButton-' + mdoq.Identifier);
+            mediaHidden = false;
+            var toHideID = '#thumbnailButton-' + mdoq.Identifier;
+            if (outerContainer.parents('#metascreen-R').length) {
+                toHideID += 'R';
             }
+
+            if (!thumbnailButton) {
+                thumbnailButton = $(toHideID);
+            }
+            
 
             thumbnailButton.css({
                 'color': 'black',
@@ -1362,7 +1369,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             //     resizeControlElements();
             // }
 
-            mediaHidden = false;
         }
 
         /**
@@ -1379,9 +1385,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             }
 
             mediaHidden = true;
-
+            var toHideID = '#thumbnailButton-' + mdoq.Identifier;
+            if (outerContainer.parents('#metascreen-R').length) {
+                toHideID += 'R';
+            } 
             if (!thumbnailButton) {
-                thumbnailButton = $('#thumbnailButton-' + mdoq.Identifier);
+                thumbnailButton = $(toHideID);
             }
 
             thumbnailButton.css({

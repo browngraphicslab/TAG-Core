@@ -799,15 +799,18 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         src = tagPath + 'images/text_icon.svg';
                         break;
                 }
-
-                container.append(TAG.Util.Artwork.createThumbnailButton({
+                var toAppend = TAG.Util.Artwork.createThumbnailButton({
                     title: TAG.Util.htmlEntityDecode(media.doq.Name),
                     year: TAG.Util.htmlEntityDecode(media.doq.Year || ""),
-                    handler:     mediaClicked(media),
+                    handler: mediaClicked(media),
                     buttonClass: 'mediaButton',
-                    buttonID:    'thumbnailButton-'+media.doq.Identifier,
-                    src:         src
-                }))
+                    buttonID: 'thumbnailButton-' + media.doq.Identifier,
+                    src: src
+                });
+                container.append(toAppend);
+                if (toAppend.parents('#metascreen-R').length) {
+                    toAppend.attr('id', toAppend.attr('id') + 'R');
+                }
             }
         }
 
