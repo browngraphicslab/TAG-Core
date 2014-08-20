@@ -97,7 +97,6 @@ window.rin = window.rin || {};
             //};
             this._audio.onstalled = function (args) { // diff
                 // Not dead / real error yet, but something is probably wrong
-                console.log("STALLED STALLED STALLED STALLED STALLED!!!!!");
             };
 
             // Handle load complete of audio.
@@ -166,7 +165,6 @@ window.rin = window.rin || {};
         },
         // Unload the ES.
         unload: function () {
-            console.log("AUDIO UNLOAD CALLED");
             try {
                 this._audio.pause();
                 var srcElements = this._audio.getElementsByTagName("source");
@@ -180,7 +178,6 @@ window.rin = window.rin || {};
         },
         // Play from the given offset.
         play: function (offset, experienceStreamId) {
-            console.log("Audio play, " + this._esData.experienceId + ', time: ' + offset);
 
             try {
                 this._updateMute();
@@ -218,7 +215,6 @@ window.rin = window.rin || {};
             var effectiveVolume = this._computeEffectiveVolume();
             this._audio.volume = Math.min(1, Math.max(0, effectiveVolume));
             //this._animateVolume(this.const_animation_time, effectiveVolume);
-            console.log("effective volume = " + effectiveVolume);
         },
 
         // Mute or Unmute the audio.

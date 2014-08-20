@@ -376,8 +376,6 @@ window.rin = window.rin || {};
             // called during unload which is problematic within iframes in IE.
             if ((typeof rin !== "undefined") && !rin.disableLogging &&
                (typeof (console) !== "undefined") && console && console.log) {
-
-                console.log(info);
             }
         }
     };

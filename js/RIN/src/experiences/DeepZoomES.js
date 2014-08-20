@@ -85,7 +85,6 @@ window.rin = window.rin || {};
             //self._userInterfaceControl.focus();
         });
         $(this._userInterfaceControl).bind("DOMMouseScroll", function(e) {
-            console.log("*************************************")
             self._orchestrator.startInteractionMode();
         });
 
@@ -358,8 +357,6 @@ window.rin = window.rin || {};
                 x: this.old_left, y: this.old_top,
                 width: this.old_width, height: this.old_height
             };
-			//console.log(this.old_left + ", " + this.old_top);
-			//console.log(this.old_width + ", " + this.old_height);
             this.viewportChangedEvent.publish(pushstate);
             return pushstate;
         }, 
@@ -400,7 +397,6 @@ window.rin = window.rin || {};
         },
 		
 		makeManipulatable: function (element, functions, stopOutside, noAccel) {
-			console.log("makeManip called");
 			var hammer = new Hammer(element, {
 				hold_threshold: 3,
 				drag_min_distance: 9,
@@ -597,7 +593,6 @@ window.rin = window.rin || {};
 			function getDir(evt, noReturn) {
 				if (!firstEvtX) {
 					firstEvtX = evt;
-					//console.log("firstEvtX SETA");
 					firstEvtX.currentDir = firstEvtX.gesture.deltaX / Math.abs(firstEvtX.gesture.deltaX) || 0;
 					if (!prevEvt) {
 						prevEvt = evt;
@@ -606,26 +601,21 @@ window.rin = window.rin || {};
 				} else {
 					if (evt.gesture.deltaX > prevEvt.gesture.deltaX && firstEvtX.currentDir !== 1) {
 						firstEvtX = evt;
-						//console.log("firstEvtX SETB");
 						firstEvtX.currentDir = 1;
 					} else if (evt.gesture.deltaX < prevEvt.gesture.deltaX && firstEvtX.currentDir !== -1) {
 						firstEvtX = evt;
-						//console.log("firstEvtX SETC");
 						firstEvtX.currentDir = -1;
 					}
 				}
 				if (!firstEvtY) {
 					firstEvtY = evt;
-					//console.log("firstEvtY SETA");
 					firstEvtY.currentDir = firstEvtY.gesture.deltaY / Math.abs(firstEvtY.gesture.deltaY) || 0;
 				} else {
 					if (evt.gesture.deltaY > prevEvt.gesture.deltaY && firstEvtY.currentDir !== 1) {
 						firstEvtY = evt;
-						//console.log("firstEvtY SETB");
 						firstEvtY.currentDir = 1;
 					} else if (evt.gesture.deltaY < prevEvt.gesture.deltaY && firstEvtY.currentDir !== -1) {
 						firstEvtY = evt;
-						//console.log("firstEvtY SETC");
 						firstEvtY.currentDir = -1;
 					}
 				}
@@ -789,9 +779,7 @@ window.rin = window.rin || {};
 					functions.onTappedRight(event);
 				};
 				element.addEventListener("MSPointerDown", function (evt) {
-					console.log(evt);
 					if (stopNextClick) {
-						console.log("STOPPING CLICK");
 						evt.stopPropagation();
 						setTimeout(function () {
 							stopNextClick = false;
@@ -800,9 +788,7 @@ window.rin = window.rin || {};
 					}
 				}, true);
 				element.addEventListener("mouseup", function (evt) {
-					console.log("CLICK");
 					if (stopNextClick) {
-						console.log("STOPPING CLICK");
 						evt.stopPropagation();
 						setTimeout(function () {
 							stopNextClick = false;
@@ -830,7 +816,6 @@ window.rin = window.rin || {};
 
         // Initialize touch gestures.
         initTouch: function () {
-			console.log("ALKWEFJIEWOJFASFISHEWIOFHSIEDHFIHEWIFHWEHFEHFIOWHEFOHIHWEIOFHIEWOHFOWEUHFWOEIUFHEWOFIHEWFIHWEUIOFHEWFUIOHEWFUIOHWEFIOHEWOFUIHEWIFUHEFIOHEWOFIUHEWFIOHWEFUIHEF");
             var self = this,
                 node = self._viewer.drawer.elmt,
                 cover = this.cover;
@@ -936,9 +921,7 @@ window.rin = window.rin || {};
 					},
                     onScroll: dzScroll,
 					onManipulate: function (res) {
-						console.log("logging mouse data");
-						console.log(res.translation.x);
-						console.log(res.translation.y);
+
 						self._viewer.viewport.panBy(self._viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(-res.translation.x, -res.translation.y), true), false);
                         self._viewer.viewport.applyConstraints(true);
 						self.raiseViewportUpdate();

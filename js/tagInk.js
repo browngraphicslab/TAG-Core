@@ -422,7 +422,6 @@ var tagInk = function (canvId, html_elt) {
                         drawTrans();
                         break;
                     default:
-                        console.log("Using deprecated ink types: " + type.toLowerCase() + ".");
                         break;
                 }
             }
@@ -689,7 +688,6 @@ var tagInk = function (canvId, html_elt) {
                 data_string += pth + "|";
             }
             else {
-                console.log("type = " + elt.data("type"));
             }
         });
         datastring = data_string;

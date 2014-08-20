@@ -11,8 +11,6 @@ TAG.Util.makeNamespace("TAG.Layout.TourPlayer");
  * @param tourObj      the tour doq object, so we can return to the proper tour in the collections screen
  */
 TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj) {
-    console.log("******************************************************************************")
-
     "use strict";
     var artworkPrev;
     var prevScroll = 0;
@@ -126,7 +124,6 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     }
 
     function goBack () {
-        console.log('player: '+player);
 
         var artmode, collectionsPage;
 
@@ -137,7 +134,6 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         if(player) {
             player.pause();
             player.screenplayEnded.unsubscribe();
-            console.log('UNLOADING PLAYER');
             player.unload();
         }
 
@@ -162,7 +158,6 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                 backTag : prevTag,
                 backMult : prevMult
             });
-            console.log("collectionsPage" + collectionsPage);
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
 				artworkPrev = "catalog";
 			});
