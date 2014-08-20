@@ -153,15 +153,26 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         });
         backButton.on('click', function () {
             var authoringHub;
-            var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0));
+            var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0.6));
             $("#tagRoot").append(transOverlay);
+            var vert = $("#tagRoot").height() / 2;
+            var horz = $("#tagRoot").width() / 2;
+            var progressCircCSS = {
+                'position': 'absolute',
+                'z-index': '50',
+                'height': 'auto',
+                'width': ($("#tagRoot").width() * 0.1) +"px"
+            };
+            var circle = TAG.Util.showProgressCircle(transOverlay, progressCircCSS, horz, vert, true);
             transOverlay.show();
             MEDIA_EDITOR.close();
             backButton.off('click');
-
-            saveMetadata();
-            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
-            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            if (shouldSave) {
+                saveMetadata();
+            } else {
+                var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            }
             
         });
  
@@ -2108,13 +2119,14 @@ TAG.Layout.ArtworkEditor = function (artwork) {
     * Save artwork metadata
     * @method save
     */
+    var shouldSave = false;
     function saveMetadata() {
         var i,
             additionalFields = $('.additionalField'),
             infoFields = {};        
         //saveMetadataButton.text('Saving...');
         //saveMetadataButton.attr('disabled', 'true');
-
+        titleArea.text("Saving "+artworkMetadata.Title.val() + "...");
         for (i = 0; i < additionalFields.length; i++) {
             infoFields[$(additionalFields[i]).attr("value")] = $(additionalFields[i]).attr('entry');
         }
@@ -2131,25 +2143,37 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         // success handler for save button
         function saveSuccess() {
             titleArea.text(artworkMetadata.Title.val());
+            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             //saveMetadataButton.text('Save Changes');
             //saveMetadataButton[0].removeAttribute('disabled');
         }
 
         // general failure callback for save button
         function saveFail() {
-            var popup = $(TAG.Util.UI.popUpMessage(null, "Changes to " + artwork.Name+ " have not been saved.  You must log in to save changes."));
+            titleArea.text(artworkMetadata.Title.val());
+            var popup = $(TAG.Util.UI.popUpMessage(function () {
+                var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            }, "Changes to " + artwork.Name + " have not been saved.  You must log in to save changes."));
             $('body').append(popup);
             popup.show();
+            shouldSave = false;
             //saveMetadataButton.text('Save Changes');
             //saveMetadataButton[0].removeAttribute('disabled');
         }
 
         // error handler for save button
         function saveError() {
+            titleArea.text(artworkMetadata.Title.val());
             var popup;
-            popup = $(TAG.Util.UI.popUpMessage(null, "Changes to " + artwork.Name + " have not been saved.  There was an error contacting the server."));
+            popup = $(TAG.Util.UI.popUpMessage(function () {
+                var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            }, "Changes to " + artwork.Name + " have not been saved.  There was an error contacting the server."));
             $('body').append(popup); // TODO ('body' might not be quite right in web app)
             popup.show();
+            shouldSave = false;
             //saveMetadataButton.text('Save Changes');
             //saveMetadataButton[0].removeAttribute('disabled');
         }
@@ -2214,6 +2238,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'background': 'white',
                     'border': "0px solid black",
                 });
+            } else {
+                textarea.change(function () {
+                    shouldSave = true;
+                })
             }
             textarea.css({ // TODO STYL
                 'width': '70%',
@@ -2245,6 +2273,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'display': 'inline-block'
                 });
                 deleteFieldIcon.bind("click", { Param1: field, }, function (event) {
+                    shouldSave = true;
                     textareaContainer.remove();
                     if (!shouldDisableAddButton()) {
                         addInfoButton.removeAttr('disabled');
@@ -2366,6 +2395,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             }
 
             addInfoButton.on('click', function () {
+                shouldSave = true;
                 createMetadataTextArea({ field: "new", entry: "metadata field", animate: true, isAdditionalField: true });
                 if (shouldDisableAddButton()) {
                     addInfoButton.attr('disabled', 'disabled');
