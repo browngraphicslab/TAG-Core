@@ -256,7 +256,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     serverSubmit.on('click', saveClick);
     serverInput.keypress(function(e){
-        if(e.which===13){
+        if (e.which === 13) {
             saveClick();
         }
     });
@@ -267,7 +267,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     });
 
     function authClick(){
-        passwordSubmit.on('click',function () {
+        passwordSubmit.on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             //if(IS_WINDOWS) {
                 TAG.Auth.checkPassword(authoringInput.val(), function () { 
                     enterAuthoringMode();
@@ -288,8 +290,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
     
     //Enter can be pressed to submit the password form...
-        authoringInput.keypress(function(e){
-            if (e.which===13) {  // enter key press
+        authoringInput.keypress(function (e) {
+            if (e.which === 13) {  // enter key press
+                e.preventDefault();
+                e.stopPropagation();
             console.log('enter pressed on authoringInput');
                 TAG.Auth.checkPassword(authoringInput.val(), function () {
                     enterAuthoringMode()
