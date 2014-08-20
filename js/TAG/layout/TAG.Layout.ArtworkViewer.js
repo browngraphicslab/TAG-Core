@@ -98,9 +98,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             script,
             meta;
 
-        if (!idleTimer) {
+        if (!idleTimer && !previewing) {
             idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
             idleTimer.start();
+        }
+        if (idleTimer && previewing) {
+            idleTimer.kill();
         }
 
         var progressCircCSS = {
@@ -799,15 +802,18 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         src = tagPath + 'images/text_icon.svg';
                         break;
                 }
-
-                container.append(TAG.Util.Artwork.createThumbnailButton({
+                var toAppend = TAG.Util.Artwork.createThumbnailButton({
                     title: TAG.Util.htmlEntityDecode(media.doq.Name),
                     year: TAG.Util.htmlEntityDecode(media.doq.Year || ""),
-                    handler:     mediaClicked(media),
+                    handler: mediaClicked(media),
                     buttonClass: 'mediaButton',
-                    buttonID:    'thumbnailButton-'+media.doq.Identifier,
-                    src:         src
-                }))
+                    buttonID: 'thumbnailButton-' + media.doq.Identifier,
+                    src: src
+                });
+                container.append(toAppend);
+                if (toAppend.parents('#metascreen-R').length) {
+                    toAppend.attr('id', toAppend.attr('id') + 'R');
+                }
             }
         }
 
@@ -1323,13 +1329,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 toggle.attr({
                     src: tagPath+'images/icons/plus.svg',
                     expanded: false
-                });
-
-                for(i=0; i<associatedMedia.guids.length; i++) {
-                    if(associatedMedia[associatedMedia.guids[i]].isVisible()) {
-                        associatedMedia[associatedMedia.guids[i]].hide();
-                    }
-                }
+                });          
 
             }
 

@@ -13,83 +13,83 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     options = options || {}; // cut down on null checks later
 
     var // DOM-related
-        root                     = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
-        infoDiv                  = root.find('#infoDiv'),
-        tileDiv                  = root.find('#tileDiv'),
-        collectionArea           = root.find('#collectionArea'),
-        backArrowArea            = root.find('#backArrowArea'),
-        backArrow                = root.find('#backArrow'),
-        nextArrowArea            = root.find('#nextArrowArea'),
-        nextArrow                = root.find('#nextArrow'),
-        collectionHeader         = root.find('#collectionHeader'),
-        collectionDotHolder      = root.find('#collectionDotHolder'),
-        bgimage                  = root.find('#bgimage'),
-        bottomContainer          = root.find('#bottomContainer'),
-        catalogDiv               = root.find('#catalogDiv'),
-        infoTilesContainer       = root.find('#infoTilesContainer'),
-        sortRow                  = root.find('#sortRow'),
-        searchInput              = root.find('#searchInput'),
-        searchTxt                = root.find('#searchTxt'),
-        buttonRow                = root.find('#buttonRow'),
-        artworksButton           = root.find('#artworksButton'),
-        assocMediaButton         = root.find('#assocMediaButton'),
-        toggleRow                = root.find('#toggleRow'),
+        root = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
+        infoDiv = root.find('#infoDiv'),
+        tileDiv = root.find('#tileDiv'),
+        collectionArea = root.find('#collectionArea'),
+        backArrowArea = root.find('#backArrowArea'),
+        backArrow = root.find('#backArrow'),
+        nextArrowArea = root.find('#nextArrowArea'),
+        nextArrow = root.find('#nextArrow'),
+        collectionHeader = root.find('#collectionHeader'),
+        collectionDotHolder = root.find('#collectionDotHolder'),
+        bgimage = root.find('#bgimage'),
+        bottomContainer = root.find('#bottomContainer'),
+        catalogDiv = root.find('#catalogDiv'),
+        infoTilesContainer = root.find('#infoTilesContainer'),
+        sortRow = root.find('#sortRow'),
+        searchInput = root.find('#searchInput'),
+        searchTxt = root.find('#searchTxt'),
+        buttonRow = root.find('#buttonRow'),
+        artworksButton = root.find('#artworksButton'),
+        assocMediaButton = root.find('#assocMediaButton'),
+        toggleRow = root.find('#toggleRow'),
         selectedArtworkContainer = root.find('#selectedArtworkContainer'),
-        timelineArea             = root.find('#timelineArea'),
-        topBar                   = root.find('#topBar'),
-        loadingArea              = root.find('#loadingArea'),
-        infoButton               = root.find('#infoButton'),
-        linkButton               = root.find('#linkButton'),
+        timelineArea = root.find('#timelineArea'),
+        topBar = root.find('#topBar'),
+        loadingArea = root.find('#loadingArea'),
+        infoButton = root.find('#infoButton'),
+        linkButton = root.find('#linkButton'),
         // splitscreenIcon          = root.find('#splitscreenIcon'),
-        overlay                  = root.find('#overlay'),
-        tileLoadingArea 	     = root.find('#tileLoadingArea'),
+        overlay = root.find('#overlay'),
+        tileLoadingArea = root.find('#tileLoadingArea'),
 
         // input options
-        scrollPos               = options.backScroll || null,     // horizontal position within collection's catalog
-        currCollection          = options.backCollection,      // the currently selected collection
-        currentArtwork          = options.backArtwork,         // the currently selected artwork
-        currentTag              = options.backTag,             // current sort tag for collection
-        multipleShown           = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
+        scrollPos = options.backScroll || null,     // horizontal position within collection's catalog
+        currCollection = options.backCollection,      // the currently selected collection
+        currentArtwork = options.backArtwork,         // the currently selected artwork
+        currentTag = options.backTag,             // current sort tag for collection
+        multipleShown = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
-        previewing              = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
-        
+        previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
+
         // misc initialized vars
-        loadQueue            = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
-        artworkSelected      = false,                            // whether an artwork is selected
-        visibleCollections   = [],                               // array of collections that are visible and published
-        collectionDots       = {},                               // dict of collection dots, keyed by collection id
-        artworkCircles       = {},                               // dict of artwork circles in timeline, keyed by artwork id                  
-        artworkTiles         = {},                               // dict of artwork tiles in bottom region, keyed by artwork id
-        firstLoad            = true,                             // TODO is this necessary? what is it doing?
-        currentArtworks      = [],                               // array of artworks in current collection
-        infoSource           = [],                               // array to hold sorting/searching information
+        loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
+        artworkSelected = false,                            // whether an artwork is selected
+        visibleCollections = [],                               // array of collections that are visible and published
+        collectionDots = {},                               // dict of collection dots, keyed by collection id
+        artworkCircles = {},                               // dict of artwork circles in timeline, keyed by artwork id                  
+        artworkTiles = {},                               // dict of artwork tiles in bottom region, keyed by artwork id
+        firstLoad = true,                             // TODO is this necessary? what is it doing?
+        currentArtworks = [],                               // array of artworks in current collection
+        infoSource = [],                               // array to hold sorting/searching information
         timelineEventCircles = [],                               // circles for timeline
-        timelineTicks        = [],                               // timeline ticks
-        scaleTicks           = [],                               // timeline scale ticks
-        artworkYears         = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
-        scaleTicksAppended   = false,                            // if scale ticks have been appended
-        tileDivHeight        = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
-        artworkShown         = false,                            // whether an artwork pop-up is currently displayed
-        timelineShown        = true,                             // whether current collection has a timeline
-        onAssocMediaView     = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
-        previouslyClicked    = null,
+        timelineTicks = [],                               // timeline ticks
+        scaleTicks = [],                               // timeline scale ticks
+        artworkYears = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
+        scaleTicksAppended = false,                            // if scale ticks have been appended
+        tileDivHeight = 0,                                // Height of tile div (before scroll bar added, should equal hieght of catalogDiv)
+        artworkShown = false,                            // whether an artwork pop-up is currently displayed
+        timelineShown = true,                             // whether current collection has a timeline
+        onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
+        previouslyClicked = null,
 
         // constants
-        BASE_FONT_SIZE      = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
-        FIX_PATH            = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
-        MAX_YEAR            = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
-        EVENT_CIRCLE_WIDTH  =  Math.min(40,Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
+        BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
+        FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
+        MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
+        EVENT_CIRCLE_WIDTH = Math.min(40, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
-        TILE_BUFFER         = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
-        TILE_HEIGHT_RATIO   = 200,                                          //ratio between width and height of artwork tiles
-        TILE_WIDTH_RATIO    = 255,
-        ANIMATION_DURATION  = 800,                                         // duration of timeline zoom animation
-        DIMMING_FACTOR      = 1.7,                                          //dimming of unhighlighted text
-        PRIMARY_FONT_COLOR  = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        TILE_BUFFER = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
+        TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
+        TILE_WIDTH_RATIO = 255,
+        ANIMATION_DURATION = 800,                                         // duration of timeline zoom animation
+        DIMMING_FACTOR = 1.7,                                          //dimming of unhighlighted text
+        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
-        FONT                = TAG.Worktop.Database.getMuseumFontFamily(),
-        
+        FONT = TAG.Worktop.Database.getMuseumFontFamily(),
+
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
         fullMaxDisplayDate,             // maximum display date of full timeline
@@ -106,8 +106,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         yearInfo,                       // year tombstone info div
         justShowedArtwork,              // for telemetry; helps keep track of artwork tile clicks
         comingBack,                      // if you are coming back from a viewer
-        defaultTag;                     // default sort tag
-
+        defaultTag,                     // default sort tag
+        showArtworkTimeout;
     root[0].collectionsPage = this;
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
@@ -120,6 +120,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method init
      */
     function init() {
+        if (previewing && idleTimer) {
+            idleTimer.kill();
+        }
         var progressCircCSS,
             circle,
             oldSearchTerm;
@@ -200,6 +203,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
             infoButton.hide();
+            linkButton.css("float", "left")
         }
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
@@ -236,9 +240,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileLoadingArea.append(tileCircle);
         */
         searchInput.hide();
-        applyCustomization();
-        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
 
+        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+        applyCustomization();
     }
 
     /**
@@ -470,11 +474,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 visibleCollections.push(collections[i]);
             }
         }
-        if (!collectionsToShow) {
+        if (!collectionsToShow && !previewing) {
             var infoOverlay = $(document.createElement('div'));
             infoOverlay.text("No collections to display");
-            infoOverlay.css({ "text-align": "center", "font-size": "200%", "margin-top": "20%" });
-            $('#catalogDivContainer').append(infoOverlay);
+            infoOverlay.css({ "color": "white", "text-align": "center", "font-size": "200%", "margin-top": "20%" });
+            root.append(infoOverlay);
+            $('#catalogDivContainer').hide();
             TAG.Util.hideLoading(bottomContainer);
         }
 
@@ -530,15 +535,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function applyCustomization() {
         var dimmedColor = TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR,DIMMING_FACTOR);
         $('.primaryFont').css({
-            'color': dimmedColor,
+            'color': PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
         $('.secondaryFont').css({
-            'color': '#' + SECONDARY_FONT_COLOR,
+            'color': SECONDARY_FONT_COLOR,
             //'font-family': FONT
         });
         $('.collection-title').css({ 
-            'color': '#' + PRIMARY_FONT_COLOR,
+            'color': PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
     }
@@ -572,7 +577,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             // if the idle timer hasn't started already, start it
-            if(!idleTimer && evt) { // loadCollection is called without an event to show the first collection
+            if (!idleTimer && evt && !previewing) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                 idleTimer.start();
             }
@@ -749,7 +754,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
-            collectionDescription.css({'word-wrap': 'break-word'});
+            collectionDescription.css({'word-wrap': 'break-word', "color": "#"+SECONDARY_FONT_COLOR});
                 str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
                 collectionDescription.css({
                     'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
@@ -953,6 +958,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         function contentsHelper(contents) {
             if (!contents.length) {
                 var emptyCollectionDiv = $(document.createElement('div'));
+                emptyCollectionDiv.addClass("primaryFont");
                 emptyCollectionDiv.text("There are no artworks in this collection at present.");
                 emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": "#"+PRIMARY_FONT_COLOR });
                 catalogDiv.append(emptyCollectionDiv);
@@ -1215,16 +1221,29 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //'font-family': FONT
             });
             main.on('click', function () {
-                doubleClickHandler()
-                // if the idle timer hasn't started already, start it
-                if(!idleTimer) {
-                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-                    idleTimer.start();
+                if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
+                    doubleClickHandler()
+
+                    // if the idle timer hasn't started already, start it
+                    if (!idleTimer && !previewing) {
+                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                        idleTimer.start();
+                    }
+                    //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
+                    setTimeout(function () { showArtwork(currentWork, false)() }, 10)
+                    zoomTimeline(artworkCircles[currentWork.Identifier])
+                    justShowedArtwork = true;
+                } else {
+                    if (!idleTimer && !previewing) {
+                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                        idleTimer.start();
+                    }
+                    clearTimeout(showArtworkTimeout);
+                    showArtworkTimeout = setTimeout(function () { showArtwork(currentWork, false)(); }, 230);
+
+                    zoomTimeline(artworkCircles[currentWork.Identifier])
+                    justShowedArtwork = true;
                 }
-                //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
-                setTimeout(function(){showArtwork(currentWork, false)()}, 10)
-                zoomTimeline(artworkCircles[currentWork.Identifier])
-                justShowedArtwork = true;
             })
 
             /* @function doubleClickHandler
@@ -1333,8 +1352,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     main.append(videoLabel);
                 }
             }
-
-            console.log(currentWork.Metadata.ContentType);
 
             tileDiv.append(main);
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
@@ -1580,7 +1597,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //Set intitial style of timeline event circles and set their zoomLevel
             for (var i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
                 timelineEventCircles[i].zoomLevel = getZoomLevel(timelineEventCircles[i]);
-                styleTimelineCircle(timelineEventCircles[i], false)
+                styleTimelineCircle(timelineEventCircles[i], false);
+                //Label of last circle should always be shown
+                if (i === timelineEventCircles.length-1){
+                    displayLabels(timelineEventCircles[i],null,i);
+                }
             };
 
             return timelineCircleArea;
@@ -1618,7 +1639,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         };
     };
 
-    function displayLabels(circ, selectedCircle){
+    function displayLabels(circ, selectedCircle, numCircles){
         var prevNode,
             labelOverlap,
             timelineDateLabel = circ.timelineDateLabel,
@@ -1646,10 +1667,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (prevCircle && !labelOverlap){
                 timelineDateLabel.css('visibility', 'visible');
             } else{
-                timelineDateLabel.css('visibility', 'hidden');
-                if (timelineEventCircles.indexOf(circ) === 0 || timelineEventCircles.indexOf(circ) === timelineEventCircles.length){
+                timelineDateLabel.css('visibility', 'hidden');    
+                if (numCircles && timelineEventCircles.indexOf(circ) === numCircles){
                     timelineDateLabel.css('visibility','visible');
-                }               
+                    prevCircle.timelineDateLabel.css('visibility','hidden');
+                }          
             } 
         }
         if (circ === timelineEventCircles[0]){
@@ -1660,6 +1682,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function zoomTimeline(circle) {
         var i,
             j,
+            k,
             tick,
             tickTarget,
             center = .5,
@@ -1676,7 +1699,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             otherCircle.css({ "-webkit-transition-property": "left", "-webkit-transition-duration": "1s", "-webkit-transition-timing-function": "ease-in-out" });
             otherCircle.css(            //ANIMATEALERT
                 { "left": parseInt(circleTarget * otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH * 15 / 20 });
-            displayLabels(otherCircle, circle);
+            //When last animation done, loop through and hide/show date labels
+            if (i === timelineEventCircles.length-1){
+                setTimeout(function() {
+                for (k=0; k < timelineEventCircles.length; k++){
+                        displayLabels(timelineEventCircles[k], circle);
+                        if (k===timelineEventCircles.length -1){
+                           displayLabels(timelineEventCircles[k],null,k); 
+                        }
+                    }
+                },1000); //would need to be changed if animation time changed (can't use transitionend event because sometimes last dot doesn't move)
+            }
         }
 
         for (j = 0; j < timelineTicks.length; j++) {
@@ -1721,7 +1754,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
-            $('.tile').css('opacity','1');
+            root.find('.tile').css('opacity','1');
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
@@ -1771,7 +1804,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (artworkShown) {
                 selectedArtworkContainer.animate(
                         {"opacity": 0}, 
-                        ANIMATION_DURATION/5, 
+                        0, //JessF: took out animation fade in and out because it causes problems with double clicks
                         function () {
                             animateCatalogDiv();
                         }
@@ -2049,7 +2082,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Div for above description
                 descText = $(document.createElement('div'))
-                    .addClass('descText')
+                    .addClass('descText secondaryFontColor')
                     .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
                     .css({
                     'color': '#' + SECONDARY_FONT_COLOR,
@@ -2068,11 +2101,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 function addAssociationRow(numberAssociatedDoqs){
                     var tileSpacing;
                 	if (numberAssociatedDoqs === 0){
-                		miniTilesLabel.hide();
                 		miniTilesHolder.hide();
                 		descSpan.css({"height": "100%"});
                 		return;
-                	}
+                	} else {
+                        miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
+                    }
                     tileSpacing = miniTilesHolder.height()/10;
                 	if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
                 		prevArrow = $(document.createElement('img'))
@@ -2179,8 +2213,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileBottom.append(descSpan);
 
                 miniTilesLabel = $(document.createElement('div'))
-                    				.addClass("miniTilesLabel")
-                    				.text(onAssocMediaView ? "Artworks" : "Associated Media");
+                    				.addClass("miniTilesLabel");
 				miniTilesHolder = $(document.createElement('div'))
                     				.addClass('miniTilesHolder');
                 tileBottom.append(miniTilesHolder)
@@ -2189,7 +2222,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 previewTile.append(tileTop)
                     	   .append(tileBottom);
 				selectedArtworkContainer.append(previewTile);
-                $('.tile').css('opacity','0.5');
+                root.find('.tile').css('opacity','0.5');
   
                 var numberAssociatedDoqs = 0;
                 var tileLoadQueue = TAG.Util.createQueue();
@@ -2218,10 +2251,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'width'   : 'auto',
                 'top'     : '22%',
             };
+            
             circle = TAG.Util.showProgressCircle(descSpan, progressCircCSS, '0px', '0px', false);    
         };
     }
-
 
 
     /**
@@ -2479,7 +2512,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
        var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR);
        $('.rowButton').css('color', unselectedColor);
        if (tag){
-            $('#' + tag.toLowerCase() + 'Button').css('color', '#' + SECONDARY_FONT_COLOR);
+            $('#' + tag.toLowerCase() + 'Button').css('color', SECONDARY_FONT_COLOR);
        }
     }
 
@@ -2531,7 +2564,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         root
                     ));
 
-                    confirmationBox.css('z-index', 10001);
+                    confirmationBox.css('z-index', 10000001);
                     root.append(confirmationBox);
                     confirmationBox.show();
                 }
@@ -2618,7 +2651,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         },
                         root
                     ));
-                    confirmationBox.css('z-index', 10001);
+                    confirmationBox.css('z-index', 1000000001);
                     root.append(confirmationBox);
                     confirmationBox.show();
                 } else {
@@ -2639,7 +2672,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         },
                         root
                     ));
-                    confirmationBox.css('z-index', 10001);
+                    confirmationBox.css('z-index', 100000001);
                     root.append(confirmationBox);
                     confirmationBox.show();
                 } else {

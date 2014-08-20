@@ -52,7 +52,6 @@ window.rin = window.rin || {};
             if (self._unloaded) {
                 return;
             }
-            console.log("load called in INKES");
             //this._unloaded = false;
 
             //// Check if valid link and hook up events
@@ -80,7 +79,6 @@ window.rin = window.rin || {};
                     return;
                 }
                 else {
-                    console.log("failed to find linkedES for " + encoded_id);
                     if (!self._unloaded) {
                         self._loadTimeout = setTimeout(findLinkedES, 1000);
                     }
@@ -106,7 +104,6 @@ window.rin = window.rin || {};
             var inkNum = "";
             for (i = 0; i < EID.length; i++)
                 inkNum += EID.charCodeAt(i);
-            console.log("in inkES, inknum = " + inkNum);
             // the dom element to which we'll append the ink canvas container
             //var viewerElt = $("#rinplayer");
             //viewerElt = (viewerElt.length) ? viewerElt : $("#rinPlayer");
@@ -154,7 +151,6 @@ window.rin = window.rin || {};
             }
             else {
                 if (!self._unloaded) {
-                    //console.log("ABOUT TO SET TIMEOUT IN INKES");
                     this._timeout = setTimeout(callback, 50);
                 }
             }
@@ -171,7 +167,6 @@ window.rin = window.rin || {};
                     this._rinInkController.adjustViewBox(dims);
                 }
                 catch (err) {
-                    console.log("error in viewportChanged: " + err);
                 }
             }
             this.prevDims = dims;
@@ -180,7 +175,6 @@ window.rin = window.rin || {};
         play: function (offset, experienceStreamId) {
             // here we call adjustViewBox to position a linked ink correctly when it first comes on screen. There's an issue now if the ink starts at time 0 (maybe
             // other times, too -- test!)
-            console.log("PLAY called for ink: " + this._esData.experienceId);
             this._playCalled = true;
             if (this.link.embedding.enabled) {
                 if (this.prevDims) {
@@ -191,7 +185,6 @@ window.rin = window.rin || {};
                     var y = parseFloat(proxy.data("y"));
                     var w = parseFloat(proxy.data("w"));
                     var h = parseFloat(proxy.data("h"));
-                    console.log("dims in inkes play: (" + x + "," + y + "," + w + "," + h + ")");
                     this._rinInkController.adjustViewBox({ x: x, y: y, width: w, height: h }, 1);
                 }
             }
@@ -209,9 +202,7 @@ window.rin = window.rin || {};
                 if (this._loadTimeout) {
                     clearTimeout(this._loadTimeout);
                 }
-                console.log("UNLOADING INKES");
             } catch (e) {
-                console.log("failed to clear timeout in inkES: "+e.message);
                 rin.internal.debug.assert(!e);
             } // Ignore errors on unload.
         },

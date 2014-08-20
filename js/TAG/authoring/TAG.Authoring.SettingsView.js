@@ -40,6 +40,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         circle = root.find('#setViewLoadingCircle'),
         rootContainer = root.find('#setViewRoot'),
         iframeAssetCreateButton = root.find('#iframeAssetCreateButton'),
+        primaryColorPicker,
+        secondaryColorPicker,
 
         // Constants
         VIEWER_ASPECTRATIO = $(window).width() / $(window).height(),
@@ -191,8 +193,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 })(i, artwork), null, conversionVideos[i]);
         }
     }*/
-    
-    TAG.Util.IdleTimer.restartTimer();
     function checkConversion(doq) { //WIN8 AUG 15 RELEASE ONLY
         //if(
         LADS.Worktop.Database.getConvertedVideoCheck(
@@ -870,7 +870,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //$('.secondaryFont').css('font-family', fontFamily);
         
         // Handle changes
-
+        primaryFontColorInput.focus(function () {
+            $('#tagContainer').off().unbind();
+        });
+        secondaryFontColorInput.focus(function () {
+            $('#tagContainer').off().unbind();
+        });
         // Handle changes for autosaving
         //primaryFontColorInput.on('change', function () { changesHaveBeenMade = true; });
         //secondaryFontColorInput.on('change', function () { changesHaveBeenMade = true; });
@@ -930,6 +935,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 		//automatically save General Settings - Customization
         onChangeUpdateText(idleTimerDurationInput, null, 3);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = idleTimerDurationInput.val();
+        settings.scroll(function () {
+            secondaryFontColorInput.trigger("blur");
+            primaryFontColorInput.trigger("blur");
+        });
 
         //currentMetadataHandler = function () {
         //    /*if (locInput === undefined) {
@@ -995,7 +1004,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         
         // preview buttons
-        var previewStartPageButton = createButton('Splash Screen', function () { previewStartPage(primaryFontColorInput, secondaryFontColorInput) }, {
+        var previewStartPageButton = createButton('Splash Screen', function () {
+            previewStartPage(primaryFontColorInput, secondaryFontColorInput);
+            primaryColorPicker.hidePicker();
+            secondaryColorPicker.hidePicker();
+        }, {
             'margin-left': '2%',
             'margin-top': '1%',
             'margin-right': '0%',
@@ -1003,7 +1016,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         var previewCollectionsPageButton = createButton('Collections Page', function () {
-            previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
+                previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
+                primaryColorPicker.hidePicker();
+                secondaryColorPicker.hidePicker();
             },
             {
             'margin-left': '2%',
@@ -1012,7 +1027,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-bottom': '3%',
         });
 
-        var previewArtworkViewerButton = createButton('Artwork Viewer', function () { previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput) }, {
+        var previewArtworkViewerButton = createButton('Artwork Viewer', function () {
+            previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput);
+            primaryColorPicker.hidePicker();
+            secondaryColorPicker.hidePicker();
+        }, {
             'margin-left': '2%',
             'margin-top': '1%',
             'margin-right': '0%',
@@ -1270,7 +1289,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     	    secondaryFontColor: secondaryFontInput.val(),
     		previewing:true
     	}
-        collectionsPage = TAG.Layout.CollectionsPage(options);
+    	collectionsPage = TAG.Layout.CollectionsPage(options);
+    	$(collectionsPage).find("*").off();;
         croot = collectionsPage.getRoot();
         $(croot).css({ 'z-index': '1' });
 
@@ -1316,9 +1336,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             	return;
         	}
         	viewer.empty();
+        	
         	viewer.append(aroot);
         	// Don't allow the viewer to be clicked
         	preventClickthrough(viewer);
+        	
         });      
     }
 
@@ -3287,10 +3309,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
         }
-
+        middleLoading.show();
         function onSuccess(doqData) {
             var newDoq = new Worktop.Doq(doqData.responseText);
             function done() {
+                middleLoading.hide();
                 loadAssocMediaView(newDoq.Identifier);
             }
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
@@ -3311,7 +3334,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //placeholder: 'E.g., http://www.youtube.com/embed/g794oDdc1l0',
             confirmText: 'Save'
         });
-
         root.append(overlay);
         overlay.fadeIn(500);
     }
@@ -4353,8 +4375,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             artist: "artist",
             extra1: customFields[0] || "",
             extra2: customFields[1] || "",
-            //extra3: customFields[2] || "",
-            //extra4: customFields[3] || "",
+            extra3: customFields[2] || "",
+            extra4: customFields[3] || "",
         };
         $.each(metadataspec, function (key, val) {
             var input = createTextInput(val, null, null, false, false);
@@ -5812,7 +5834,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //remove characters that are okay and white space
             dateString = dateString.replace(/bce?/gi,'')
                                    .replace(/ce/gi, '')
-                                   .replace(/ad/gi,'')
+                                   .replace(/ad/gi, '')
+                                   .replace(/,/g,'')
                                    .replace(/\s/gi,'');
             //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
             if (dateString.search(/[^0-9]/)>0 || dateString.length===0 || dateString[0].search(/[0-9||-]/)<0){
@@ -6022,6 +6045,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var hex = TAG.Util.UI.colorToHex(color);
         container.val(color);
         picker.fromString(color);
+        if (selectorText === ".secondaryFont"){
+            secondaryColorPicker = picker;
+        } else {
+            primaryColorPicker = picker;
+        }
         picker.onImmediateChange = function () {
             if(selectorText) {
                 updateTextColor(selectorText, container.val());
@@ -6034,8 +6062,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $('#passwordInput').css('border-color', '#' + container.val());
                 $('#serverSubmit').css('border-color', '#' + container.val());
                 $('#passwordSubmit').css('border-color', '#' + container.val());
-            }
-
+            } 
         };
         //container.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
         return container;

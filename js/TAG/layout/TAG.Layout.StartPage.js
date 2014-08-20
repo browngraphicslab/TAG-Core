@@ -46,11 +46,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
     tagContainer = options.tagContainer || $('body');
-    // if (!IS_WINDOWS) {
-    //     authoringInput.prop('disabled', true);
-    //     authoringInput.css('opacity', '0.5');
-    //     passwordSubmit.css('opacity', '0.5');
-    // }
+    if (!IS_WINDOWS) {
+        authoringInput.prop('disabled', true);
+        authoringInput.css('opacity', '0.5');
+        passwordSubmit.css('opacity', '0.5');
+    }
     testConnection();
     //applyCustomization();
 

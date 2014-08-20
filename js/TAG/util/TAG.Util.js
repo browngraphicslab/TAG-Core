@@ -472,7 +472,8 @@ TAG.Util = (function () {
             }
             yearString = yearString.replace(/ad/gi,'')
                                    .replace(/ce(?!n)/gi,'')
-                                   .replace(/\s/g,'');
+                                   .replace(/\s/g, '')
+                                   .replace(/,/g,'');
             //Catch 'century', 'c', and 'c.' and return mid year of that century (17th c --> 1650)
             if (yearString.search(/c.?/i)>=0 || yearString.search(/century/i)>=0){
                 yearString.replace(/[a-z]\w/gi,'')
@@ -703,6 +704,7 @@ TAG.Util = (function () {
             testDiv.css('font-size', currSize + 'em');
         }
         testDiv.remove();
+        currSize -= step;
         return currSize + 'em';
     }
 
@@ -1075,7 +1077,7 @@ TAG.Util = (function () {
             currentAccelId++;
             resetDir();
             clearTimeout(timer);
-            //manipulationHandler(evt);
+            manipulationHandler(evt);
         }
 
         // mouse move
@@ -1169,7 +1171,6 @@ TAG.Util = (function () {
         function getDir(evt, noReturn) {
             if (!firstEvtX) {
                 firstEvtX = evt;
-                //console.log("firstEvtX SETA");
                 firstEvtX.currentDir = firstEvtX.gesture.deltaX / Math.abs(firstEvtX.gesture.deltaX) || 0;
                 if (!prevEvt) {
                     prevEvt = evt;
@@ -1178,17 +1179,14 @@ TAG.Util = (function () {
             } else {
                 if (evt.gesture.deltaX > prevEvt.gesture.deltaX && firstEvtX.currentDir !== 1) {
                     firstEvtX = evt;
-                    //console.log("firstEvtX SETB");
                     firstEvtX.currentDir = 1;
                 } else if (evt.gesture.deltaX < prevEvt.gesture.deltaX && firstEvtX.currentDir !== -1) {
                     firstEvtX = evt;
-                    //console.log("firstEvtX SETC");
                     firstEvtX.currentDir = -1;
                 }
             }
             if (!firstEvtY) {
                 firstEvtY = evt;
-                //console.log("firstEvtY SETA");
                 firstEvtY.currentDir = firstEvtY.gesture.deltaY / Math.abs(firstEvtY.gesture.deltaY) || 0;
             } else {
                 if (evt.gesture.deltaY > prevEvt.gesture.deltaY && firstEvtY.currentDir !== 1) {
@@ -1699,7 +1697,7 @@ TAG.Util = (function () {
                     'top': '50%',
                     'color': 'white',
                     'text-align': 'center',
-                    'font-size': LADS.Util.getMaxFontSizeEM(msg, 2, container.width() * 0.8, container.height() * 0.2, 0.1)
+                    'font-size': TAG.Util.getMaxFontSizeEM(msg, 2, container.width() * 0.8, container.height() * 0.2, 0.1)
                 });
                 msgdiv.text(msg);
                 container.append(msgdiv);
@@ -2376,7 +2374,8 @@ TAG.Util.UI = (function () {
     // overlay that "absorbs" interactions with elements below it, used to isolate popup forms etc.
     function blockInteractionOverlay(opac) {
 
-        opac = opac ? Math.max(Math.min(parseFloat(opac), 1), 0) : 0.6;
+        opac = (opac || opac===0) ? Math.max(Math.min(parseFloat(opac), 1), 0) : 0.6;
+        
         var overlay = document.createElement('div');
         $(overlay).attr('id', 'blockInteractionOverlay');
 
@@ -4290,7 +4289,7 @@ TAG.Util.UI = (function () {
 /**
  * Some common functionality between the rich location editing and
  * viewing interfaces
- * @method LADS.Util.RLH
+ * @method TAG.Util.RLH
  * @param {Object} input           a couple input options
  *         {Doq}         artwork        artwork doq
  *         {jQuery obj}  root           root of current page
@@ -4735,7 +4734,7 @@ TAG.Util.RLH = function (input) {
                     }
                 }();
                 if (!(currentIndex === 0)) { //if it's not the bing map being displayed, confirm the deletion
-                    var overlay = LADS.Util.UI.PopUpConfirmation(function () {
+                    var overlay = TAG.Util.UI.PopUpConfirmation(function () {
                         deleteMap();
                     }, "Are you sure you want to delete " + mapName + " and all locations associated with it?", "Yes");
                     root.append(overlay);
@@ -4879,7 +4878,7 @@ TAG.Util.RLH = function (input) {
             }
         };
         mapGuids = (defaultMapShown || input.authoring) ? [null] : [];
-        LADS.Worktop.Database.getMaps(artwork.Identifier, function (mps) {
+        TAG.Worktop.Database.getMaps(artwork.Identifier, function (mps) {
             var mapslength = mps.length;
             if (mapslength > 0) {
                 for (var i = 0; i < mapslength; i++) {
@@ -4963,11 +4962,11 @@ TAG.Util.RLH = function (input) {
             'z-index': 50,
             'display': 'inline-block'
         };
-        var progCirc = LADS.Util.showProgressCircle(topRegion, progressCSS);
+        var progCirc = TAG.Util.showProgressCircle(topRegion, progressCSS);
 
         var index = currentIndex;
         if (mapGuids[index]) {
-            LADS.Worktop.Database.changeMap(mapDoqs[mapGuids[index]], {
+            TAG.Worktop.Database.changeMap(mapDoqs[mapGuids[index]], {
                 Name: nameInput.val() || 'Custom Map',
                 AdditionalInfo: additionalInfoInput.val(),
                 //Description: mapDescriptionInput.val()
@@ -4984,13 +4983,13 @@ TAG.Util.RLH = function (input) {
                     }
                 }();
                 deleteButton && deleteButton.text('Delete ' + mapName);
-                LADS.Util.removeProgressCircle(progCirc);
-                LADS.Worktop.Database.getDoq(mapDoqs[mapGuids[index]].Identifier, function (newMap) {
+                TAG.Util.removeProgressCircle(progCirc);
+                TAG.Worktop.Database.getDoq(mapDoqs[mapGuids[index]].Identifier, function (newMap) {
                     mapDoqs[mapGuids[index]] = newMap;
                 });
-            }, LADS.Util.UI.errorContactingServerPopup, function () {
-                LADS.Util.removeProgressCircle(progCirc);
-                LADS.Worktop.Database.getDoq(mapDoqs[mapGuids[index]].Identifier, function (newMap) {
+            }, TAG.Util.UI.errorContactingServerPopup, function () {
+                TAG.Util.removeProgressCircle(progCirc);
+                TAG.Worktop.Database.getDoq(mapDoqs[mapGuids[index]].Identifier, function (newMap) {
                     mapDoqs[mapGuids[index]] = newMap;
                 });
             });
@@ -5106,7 +5105,7 @@ TAG.Util.RLH = function (input) {
             'position': 'relative',
             'z-index': 50
         };
-        var progCirc = LADS.Util.showProgressCircle(messageDiv, progressCSS);
+        var progCirc = TAG.Util.showProgressCircle(messageDiv, progressCSS);
 
         locationsRegion.empty();
         locationsRegion.append(messageDiv);
@@ -5208,7 +5207,7 @@ TAG.Util.RLH = function (input) {
             createLocationList();
 
             //save
-            LADS.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
+            TAG.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
             function success() {}
             function error() { console.log('An error occured while saving.'); }
         }
@@ -5241,7 +5240,7 @@ TAG.Util.RLH = function (input) {
             createLocationList();
 
             //save
-            LADS.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
+            TAG.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
             function success() { }
             function error() { console.log('An error occured while saving.'); }
 
@@ -5842,7 +5841,7 @@ TAG.Util.RLH = function (input) {
             deleteButton.attr('src', tagPath+'images/icons/delete.svg');
 
             deleteButton.on('click', function (evt) {
-                var overlay = LADS.Util.UI.PopUpConfirmation(function () {
+                var overlay = TAG.Util.UI.PopUpConfirmation(function () {
                     index = locations.indexOf(location);
                     if (index >= 0) {
                         locations.splice(index, 1);
@@ -6238,7 +6237,7 @@ TAG.Util.RLH = function (input) {
             deleteButton.text('Delete');
             deleteButton.on('click', function (evt) {
                 formIsEnabled = false;
-                var overlay = LADS.Util.UI.PopUpConfirmation(function () {
+                var overlay = TAG.Util.UI.PopUpConfirmation(function () {
                     index = locations.indexOf(location);
                     if (index >= 0 && index < locations.length) {
                         locations.splice(index, 1);
@@ -6430,7 +6429,7 @@ TAG.Util.RLH = function (input) {
 
         TAG.Authoring.FileUploader(
             root,
-            TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to LADS.Authoring.FileUploadTypes.Map to test map uploading
+            TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
             function (files) {
                 fileArray = files;
             },
@@ -6460,9 +6459,9 @@ TAG.Util.RLH = function (input) {
                 //reload (which will show the map that has just been imported)
                 loadMaps();
 
-                //LADS.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
+                //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
                 // TODO this is just in here for testing purposes
-                //LADS.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
+                //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
                 //    console.log('success in changeMap');
                 //}, function () { }, function () { }, function () { }); // TODO RLH TESTING: make sure map doq is updated properly (the next time it's loaded, it should have these metadata)
             },

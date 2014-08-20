@@ -1,4 +1,4 @@
-/*! RIN | http://research.microsoft.com/rin | 2014-07-28 */
+/*! RIN | http://research.microsoft.com/rin | 2014-08-19 */
 /*!
 * RIN Core JavaScript Library v1.0
 * http://research.microsoft.com/rin
@@ -3330,8 +3330,6 @@ window.rin = window.rin || {};
             // called during unload which is problematic within iframes in IE.
             if ((typeof rin !== "undefined") && !rin.disableLogging &&
                (typeof (console) !== "undefined") && console && console.log) {
-
-                console.log(info);
             }
         }
     };
@@ -5258,7 +5256,6 @@ window.rin = window.rin || {};
             if (this.esItemsManager) this.esItemsManager.unload();
             this._esLoadedInfo = {};
             this._rinData = null;
-            console.log("setting player state to STOPPED (bleveque)");
             this.setPlayerState(rin.contracts.playerState.stopped); // bleveque: prevent further buffering messages
         },
 
