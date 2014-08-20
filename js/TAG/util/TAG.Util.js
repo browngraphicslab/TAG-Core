@@ -1545,20 +1545,22 @@ TAG.Util = (function () {
     }
 
     function htmlEntityEncode(str) {
-        try {
+        /*try {
             return str ? $('<div />').text(encodeURIComponent(str).html()) : '';
         } catch (e){
             //use our deprecated function for now if error thrown
             return encodeXML(str);
-        }
+        }*/
+        return str;
     }
 
     function htmlEntityDecode(str) {
-        try {
+        /*try {
             return str ? decodeURIComponent($('<div />').html(str).text()) : '';
         } catch (e) {
             return str ? unescape($('<div />').html(str).text()) : '';
-        }
+        }*/
+        return str;
     }
 
     /**
