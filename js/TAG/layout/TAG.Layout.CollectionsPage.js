@@ -1283,15 +1283,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else if (currentWork.Metadata.ContentType === "Audio" ){
                 tileImage.css('background-color','black');
                 tileImage.attr('src', tagPath+'images/audio_thumbnail.svg');
-            } else {
-                if (currentWork.Metadata.Medium=== "Video"|| currentWork.Metadata.ContentType==="Video"||currentWork.Metadata.ContentType ==="iframe"){
-                    showLabel = false;
-                    tileImage.css('background-color','black');
-                    tileImage.attr('src',tagPath + 'images/video_thumbnail.svg');
+            } else if (currentWork.Metadata.Medium=== "Video"|| currentWork.Metadata.ContentType==="Video"||currentWork.Metadata.ContentType ==="iframe"){
+                showLabel = false;
+                tileImage.css('background-color','black');
+                tileImage.attr('src', tagPath + 'images/video_thumbnail.svg');
+            } else if (currentWork.Metadata.ContentType === "Image") {
+                if (currentWork.Metadata.Thumbnail) {
+                    tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
+                } else if (currentWork.Metadata.Source) {
+                    tileImage.attr("src", FIX_PATH(currentWork.Metadata.Source));
                 } else {
-                    tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
-                } 
-            }
+                    tileImage.attr("src", tagPath + 'images/image_icon.svg');
+                }
+            } else if (currentWork.Type === "Empty" || currentWork.Type === "Tour" || currentWork.Metadata.Type === "Tour" || currentWork.Metadata.ContentType === "Tour") {
+                tileImage.css('background-color', 'black');
+                if (currentWork.Metadata.Thumbnail) {
+                    tileImage.attr('src', FIX_PATH(currentWork.Metadata.Thumbnail));
+                } else {
+                    tileImage.attr('src', FIX_PATH("/Images/default.jpg"));
+                }
+            }else{
+                tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
+            } 
             
 
             // Add title
@@ -2173,24 +2186,37 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 src = tagPath + 'images/video_icon.svg';
                                 break;
                             case 'Image':
-                                src = thumb ? FIX_PATH(thumb) : FIX_PATH(metadata.Source);
+                                if (thumb) {
+                                    src = FIX_PATH(thumb);
+                                } else if (metadata.Source) {
+                                    src = FIX_PATH(metadata.Source);
+                                } else {
+                                    src = tagPath + 'images/no_thumbnail.svg';
+                                }
                                 break;
                             case 'Text':
                                 src = tagPath + 'images/text_icon.svg';
                             default:
-                                src = tagPath + 'images/no_thumbnail.svg';
+                                if (thumb) {
+                                    src = FIX_PATH(thumb);
+                                } else if (metadata.Source) {
+                                    src = FIX_PATH(metadata.Source);
+                                } else {
+                                    src = tagPath + 'images/no_thumbnail.svg';
+                                }
                                 break;
                         }
-                        if (onAssocMediaView && metadata.Type === "Artwork"){
-                        	src = thumb ? FIX_PATH(thumb) : tagPath + 'images/no_thumbnail.svg';
+                        if (onAssocMediaView && metadata.Type === "Artwork") {
+                            if (thumb) {
+                                src = FIX_PATH(thumb);
+                            } else if (metadata.Source) {
+                                src = FIX_PATH(metadata.Source);
+                            } else {
+                                src = tagPath + 'images/no_thumbnail.svg';
+                            }
+                        	
                         }
-
-                        // Set tileImage to thumbnail image, if it exists
-                        if(doqs[i].Metadata.Thumbnail || metadata.ContentType === "iframe") {
-                            miniTile.attr("src", src);
-                        } else {
-                            miniTile.attr("src", tagPath + 'images/no_thumbnail.svg');
-                        }
+                        miniTile.attr("src", src);
                         miniTilesHolder.append(miniTile)
                     }   
                 	addAssociationRow(numberAssociatedDoqs); 

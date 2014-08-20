@@ -736,7 +736,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         });
 
                         
-                        xfadeDrawer = createDrawer('Crossfades', xfadeSlider);
+                        xfadeDrawer = createDrawer('Layers', xfadeSlider);
                     }
                     loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
                 } else {
