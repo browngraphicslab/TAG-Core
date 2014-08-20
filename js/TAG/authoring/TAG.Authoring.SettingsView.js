@@ -123,6 +123,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleQueue = TAG.Util.createQueue(),  //used to add things to the middle label container
         rightQueue = TAG.Util.createQueue(), //used to add things to the right panel
         cancelLastSetting,
+        cancelLastView,
         artPickerOpen = false,
         nav = [],
         artworks = [],
@@ -1414,6 +1415,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         // Select the first one or the specified id
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
                             previousIdentifier = val.Identifier;
+                            if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
                         }, val.Identifier), true));
@@ -1427,6 +1429,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         prevSelectedMiddleLabel = label;
                         currentSelected = prevSelectedMiddleLabel;
                         currentIndex = i;
+                        if (cancelLastView) cancelLastView();
                         loadExhibition(val);
                     } else {
                         middleLoading.before(label = createMiddleLabel(val.Name, null, function () {
@@ -1435,6 +1438,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
                             //    //changesHaveBeenMade = false;
                             //}
+                            if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             previousIdentifier = val.Identifier;
                             currentIndex = i;
@@ -1595,7 +1599,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
         deleteType = deleteExhibition;
         toDelete = exhibition;
-
+        var cancelView = false;
         // Create inputs
         var privateState;
         if (exhibition.Metadata.Private) {
@@ -1790,6 +1794,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         TAG.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
+            if (cancelView) return;
             for (var i = 0; i < artworks.length; i++) {
                 if (artworks[i].Extension === "tour") {
                     sortOptionsObj["Tours"] = curSortOptions["Tours"] || false;
@@ -1812,6 +1817,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
 
         function createCollectionSettings() {
+            if (cancelView) return;
             prepareViewer(true);
             clearRight();
             // Set the viewer to exhibition view (see function below)
@@ -1951,6 +1957,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     // Show a message and return if thats the case (would prefer not having
                     // to request all the artwork)
                     LADS.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
+                        if (cancelView) return;
                         if (!artworks || !artworks[0]) {
                             var messageBox = LADS.Util.UI.popUpMessage(null, "Cannot view in catalog mode because there is no artwork in this exhibit.", null, true);
                             root.append(messageBox);
@@ -2007,6 +2014,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             // Sets the viewer to catalog view
             function catalogView() {
                 rightQueue.add(function () {
+                    if (cancelView) return;
                     var catalog;
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                         return;
@@ -2026,6 +2034,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
              */
             function exhibitionView(exhibition) {
                 rightQueue.add(function () {
+                    if (cancelView) return;
                     var options = {
                         backCollection: exhibition,
                         previewing: true
@@ -2051,6 +2060,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 tobj.mode = 'authoring';
             });
         }
+        cancelLastView = function () { cancelView = true; clearRight(); prepareViewer(true);};
     }
 
     /**Create an exhibition
