@@ -3303,6 +3303,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleLabelContainer.empty();
         middleLabelContainer.append(middleLoading);
         middleLoading.show();
+        clearRight();
+        viewer.empty();
+        viewer.css('background', 'black');
         var validURL = checkEmbeddedURL(src);
         if (validURL) {
             var options = {
