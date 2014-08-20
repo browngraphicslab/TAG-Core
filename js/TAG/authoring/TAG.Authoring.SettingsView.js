@@ -1267,7 +1267,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function previewStartPage(primaryFontInput, secondaryFontInput) {
         // Load the start page, the callback adds it to the viewer when it's done loading
-        var startPage = TAG.Layout.StartPage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val() }, function (startPage) {
+        var startPage = TAG.Layout.StartPage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val(), isPreview:true}, function (startPage) {
             if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
                 return;
             }
