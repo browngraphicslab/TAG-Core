@@ -137,7 +137,6 @@ window.rin = window.rin || {};
         // Play the video.
         play: function (offset, experienceStreamId) {
             try {
-                console.log('begin play >>>>>>');
                 var epsilon = 0.05; // Ignore minute seeks.
                 if (Math.abs(this._video.currentTime - (this._startMarker + offset)) > epsilon) {
                     this._seek(offset, experienceStreamId);
@@ -154,7 +153,6 @@ window.rin = window.rin || {};
                     this._seek(offset, experienceStreamId);
                 }
                 this._video.pause();
-                console.log('end pause >>>>>>>');
             } catch (e) { rin.internal.debug.assert(false, "exception at video element " + e.Message); }
         },
         // Set the base volume for the ES. This will get multiplied with the keyframed volume to get to the final applied volume.

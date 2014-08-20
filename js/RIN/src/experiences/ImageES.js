@@ -243,14 +243,12 @@
 						var diffy = res.translation.y;
                         //this.lastTouchPoint.x = event.x;
                         //this.lastTouchPoint.y = event.y;
-                        console.log('translating image by ('+diffx+','+diffy+')');
                         self._translateImage(diffx, diffy);
 						//this._currentViewport.region.center.x += diffx;
 						//this._currentViewport.region.center.y += diffy;
 						//this._fitImage(this._currentViewport);
 					},
 					onScroll: function (delta, zoomScale, pivot) {
-						//console.log("onScroll delta " + delta);
 						self._orchestrator.startInteractionMode();
 						self._orchestrator.onESEvent(rin.contracts.esEventIds.interactionActivatedEventId, null);
 						//var scale = (event.wheelDelta > 0 ? ZOOMINSTEP - 1 : ZOOMOUTSTEP - 1) * Math.abs(event.wheelDelta / 120) + 1;
@@ -277,7 +275,6 @@
                     this._orchestrator.startInteractionMode();
                     self._orchestrator.onESEvent(rin.contracts.esEventIds.interactionActivatedEventId, null);
 
-                    // console.log('adding event listener');
                     // $('body').on('mousemove.ies', function(e) {
                     //     e.preventDefault();
                     //     immousemove.call(this, e);
@@ -309,7 +306,6 @@
                         var diffy = event.y - this.lastTouchPoint.y;
                         this.lastTouchPoint.x = event.x;
                         this.lastTouchPoint.y = event.y;
-                        console.log('translating image by ('+diffx+','+diffy+')');
                         this._translateImage(diffx, diffy);
                     }
                     return false;
@@ -334,7 +330,6 @@
         };
 
 		ImageES.prototype.makeManipulatable = function (element, functions, stopOutside, noAccel) {
-			console.log("makeManip called");
 			var hammer = new Hammer(element, {
 				hold_threshold: 3,
 				drag_min_distance: 9,
@@ -370,7 +365,6 @@
 						translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
 					} else {
 						translation = { x: evt.gesture.center.pageX - lastPos.x, y: evt.gesture.center.pageY - lastPos.y };
-					   // console.log('translation.y = '+translation.y);
 					}
 					var scale = evt.gesture.scale - lastScale;
 					lastScale = evt.gesture.scale;
@@ -397,7 +391,6 @@
 						translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
 					} else {
 						translation = { x: evt.pageX - lastPos.x, y: evt.pageY - lastPos.y };
-						console.log('translation.y = '+translation.y);
 					}
 					var scale = evt.gesture.scale - lastScale; /////////////////// HEREHEHEHEHEHRHERIEREIRHER ///
 					lastScale = evt.gesture.scale;
@@ -537,7 +530,6 @@
 			function getDir(evt, noReturn) {
 				if (!firstEvtX) {
 					firstEvtX = evt;
-					//console.log("firstEvtX SETA");
 					firstEvtX.currentDir = firstEvtX.gesture.deltaX / Math.abs(firstEvtX.gesture.deltaX) || 0;
 					if (!prevEvt) {
 						prevEvt = evt;
@@ -546,26 +538,21 @@
 				} else {
 					if (evt.gesture.deltaX > prevEvt.gesture.deltaX && firstEvtX.currentDir !== 1) {
 						firstEvtX = evt;
-						//console.log("firstEvtX SETB");
 						firstEvtX.currentDir = 1;
 					} else if (evt.gesture.deltaX < prevEvt.gesture.deltaX && firstEvtX.currentDir !== -1) {
 						firstEvtX = evt;
-						//console.log("firstEvtX SETC");
 						firstEvtX.currentDir = -1;
 					}
 				}
 				if (!firstEvtY) {
 					firstEvtY = evt;
-					//console.log("firstEvtY SETA");
 					firstEvtY.currentDir = firstEvtY.gesture.deltaY / Math.abs(firstEvtY.gesture.deltaY) || 0;
 				} else {
 					if (evt.gesture.deltaY > prevEvt.gesture.deltaY && firstEvtY.currentDir !== 1) {
 						firstEvtY = evt;
-						//console.log("firstEvtY SETB");
 						firstEvtY.currentDir = 1;
 					} else if (evt.gesture.deltaY < prevEvt.gesture.deltaY && firstEvtY.currentDir !== -1) {
 						firstEvtY = evt;
-						//console.log("firstEvtY SETC");
 						firstEvtY.currentDir = -1;
 					}
 				}
@@ -580,22 +567,11 @@
 
 			// scroll wheel
 			function processScroll(evt) {
-				console.log("capturing wheel events");
 				var pivot = { x: evt.x - $element.offset().left, y: evt.y - $element.offset().top };
 				//var delta = evt.wheelDelta || evt.detail;
 				var delta = evt.wheelDelta;
 				if (delta < 0) var zoomScale = 1.0 / 1.1;
             	else var zoomScale = 1.1;
-				console.log("chrome scrolled: " + zoomScale)
-				/*
-				if (delta < 0) { 
-					console.log("here; " + delta);
-					delta = 1.0 / 1.1;
-				} else { 
-					console.log("there; " + delta);
-					delta = 1.1;
-				}
-				*/
 				evt.cancelBubble = true;
 				if (typeof functions.onScroll === "function") { 
 					functions.onScroll(delta, zoomScale, pivot);
@@ -603,22 +579,17 @@
 			}
 			
 			function processScrollFirefox(evt) {
-				//console.log("capturing wheel events");
 //				var pivot = { x: evt.x - $element.offset().left, y: evt.y - $element.offset().top };
 //				var delta = -evt.detail;
-//				console.log("delta captured " + delta);
 //				/*
 //				if (delta < 0) { 
-//					console.log("here; " + delta);
 //					delta = 1.0 / 1.1;
 //				} else { 
-//					console.log("there; " + delta);
 //					delta = 1.1;
 //				}
 //				*/
 //				if (delta < 0) delta = 1.0 / 3;
 //            	else delta = 3;
-//				console.log("delta scrolled wahahwha " + delta);
 //				evt.cancelBubble = true;
 //				if (typeof functions.onScroll === "function") { 
 //					functions.onScroll(delta, pivot);
@@ -731,9 +702,7 @@
 					functions.onTappedRight(event);
 				};
 				element.addEventListener("MSPointerDown", function (evt) {
-					console.log(evt);
 					if (stopNextClick) {
-						console.log("STOPPING CLICK");
 						evt.stopPropagation();
 						setTimeout(function () {
 							stopNextClick = false;
@@ -742,9 +711,7 @@
 					}
 				}, true);
 				element.addEventListener("mouseup", function (evt) {
-					console.log("CLICK");
 					if (stopNextClick) {
-						console.log("STOPPING CLICK");
 						evt.stopPropagation();
 						setTimeout(function () {
 							stopNextClick = false;

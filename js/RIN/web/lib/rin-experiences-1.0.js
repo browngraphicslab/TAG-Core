@@ -1,4 +1,4 @@
-/*! RIN | http://research.microsoft.com/rin | 2014-07-28 */
+/*! RIN | http://research.microsoft.com/rin | 2014-08-19 */
 (function() {
     "use strict";
     var rin = window.rin || {};
@@ -254,14 +254,12 @@
 						var diffy = res.translation.y;
                         //this.lastTouchPoint.x = event.x;
                         //this.lastTouchPoint.y = event.y;
-                        console.log('translating image by ('+diffx+','+diffy+')');
                         self._translateImage(diffx, diffy);
 						//this._currentViewport.region.center.x += diffx;
 						//this._currentViewport.region.center.y += diffy;
 						//this._fitImage(this._currentViewport);
 					},
 					onScroll: function (delta, zoomScale, pivot) {
-						//console.log("onScroll delta " + delta);
 						self._orchestrator.startInteractionMode();
 						self._orchestrator.onESEvent(rin.contracts.esEventIds.interactionActivatedEventId, null);
 						//var scale = (event.wheelDelta > 0 ? ZOOMINSTEP - 1 : ZOOMOUTSTEP - 1) * Math.abs(event.wheelDelta / 120) + 1;
@@ -288,7 +286,6 @@
                     this._orchestrator.startInteractionMode();
                     self._orchestrator.onESEvent(rin.contracts.esEventIds.interactionActivatedEventId, null);
 
-                    // console.log('adding event listener');
                     // $('body').on('mousemove.ies', function(e) {
                     //     e.preventDefault();
                     //     immousemove.call(this, e);
@@ -320,7 +317,6 @@
                         var diffy = event.y - this.lastTouchPoint.y;
                         this.lastTouchPoint.x = event.x;
                         this.lastTouchPoint.y = event.y;
-                        console.log('translating image by ('+diffx+','+diffy+')');
                         this._translateImage(diffx, diffy);
                     }
                     return false;
@@ -345,7 +341,6 @@
         };
 
 		ImageES.prototype.makeManipulatable = function (element, functions, stopOutside, noAccel) {
-			console.log("makeManip called");
 			var hammer = new Hammer(element, {
 				hold_threshold: 3,
 				drag_min_distance: 9,
@@ -381,7 +376,6 @@
 						translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
 					} else {
 						translation = { x: evt.gesture.center.pageX - lastPos.x, y: evt.gesture.center.pageY - lastPos.y };
-					   // console.log('translation.y = '+translation.y);
 					}
 					var scale = evt.gesture.scale - lastScale;
 					lastScale = evt.gesture.scale;
@@ -408,7 +402,6 @@
 						translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
 					} else {
 						translation = { x: evt.pageX - lastPos.x, y: evt.pageY - lastPos.y };
-						console.log('translation.y = '+translation.y);
 					}
 					var scale = evt.gesture.scale - lastScale; /////////////////// HEREHEHEHEHEHRHERIEREIRHER ///
 					lastScale = evt.gesture.scale;
@@ -548,7 +541,6 @@
 			function getDir(evt, noReturn) {
 				if (!firstEvtX) {
 					firstEvtX = evt;
-					//console.log("firstEvtX SETA");
 					firstEvtX.currentDir = firstEvtX.gesture.deltaX / Math.abs(firstEvtX.gesture.deltaX) || 0;
 					if (!prevEvt) {
 						prevEvt = evt;
@@ -557,26 +549,21 @@
 				} else {
 					if (evt.gesture.deltaX > prevEvt.gesture.deltaX && firstEvtX.currentDir !== 1) {
 						firstEvtX = evt;
-						//console.log("firstEvtX SETB");
 						firstEvtX.currentDir = 1;
 					} else if (evt.gesture.deltaX < prevEvt.gesture.deltaX && firstEvtX.currentDir !== -1) {
 						firstEvtX = evt;
-						//console.log("firstEvtX SETC");
 						firstEvtX.currentDir = -1;
 					}
 				}
 				if (!firstEvtY) {
 					firstEvtY = evt;
-					//console.log("firstEvtY SETA");
 					firstEvtY.currentDir = firstEvtY.gesture.deltaY / Math.abs(firstEvtY.gesture.deltaY) || 0;
 				} else {
 					if (evt.gesture.deltaY > prevEvt.gesture.deltaY && firstEvtY.currentDir !== 1) {
 						firstEvtY = evt;
-						//console.log("firstEvtY SETB");
 						firstEvtY.currentDir = 1;
 					} else if (evt.gesture.deltaY < prevEvt.gesture.deltaY && firstEvtY.currentDir !== -1) {
 						firstEvtY = evt;
-						//console.log("firstEvtY SETC");
 						firstEvtY.currentDir = -1;
 					}
 				}
@@ -591,22 +578,11 @@
 
 			// scroll wheel
 			function processScroll(evt) {
-				console.log("capturing wheel events");
 				var pivot = { x: evt.x - $element.offset().left, y: evt.y - $element.offset().top };
 				//var delta = evt.wheelDelta || evt.detail;
 				var delta = evt.wheelDelta;
 				if (delta < 0) var zoomScale = 1.0 / 1.1;
             	else var zoomScale = 1.1;
-				console.log("chrome scrolled: " + zoomScale)
-				/*
-				if (delta < 0) { 
-					console.log("here; " + delta);
-					delta = 1.0 / 1.1;
-				} else { 
-					console.log("there; " + delta);
-					delta = 1.1;
-				}
-				*/
 				evt.cancelBubble = true;
 				if (typeof functions.onScroll === "function") { 
 					functions.onScroll(delta, zoomScale, pivot);
@@ -614,22 +590,17 @@
 			}
 			
 			function processScrollFirefox(evt) {
-				//console.log("capturing wheel events");
 //				var pivot = { x: evt.x - $element.offset().left, y: evt.y - $element.offset().top };
 //				var delta = -evt.detail;
-//				console.log("delta captured " + delta);
 //				/*
 //				if (delta < 0) { 
-//					console.log("here; " + delta);
 //					delta = 1.0 / 1.1;
 //				} else { 
-//					console.log("there; " + delta);
 //					delta = 1.1;
 //				}
 //				*/
 //				if (delta < 0) delta = 1.0 / 3;
 //            	else delta = 3;
-//				console.log("delta scrolled wahahwha " + delta);
 //				evt.cancelBubble = true;
 //				if (typeof functions.onScroll === "function") { 
 //					functions.onScroll(delta, pivot);
@@ -742,9 +713,7 @@
 					functions.onTappedRight(event);
 				};
 				element.addEventListener("MSPointerDown", function (evt) {
-					console.log(evt);
 					if (stopNextClick) {
-						console.log("STOPPING CLICK");
 						evt.stopPropagation();
 						setTimeout(function () {
 							stopNextClick = false;
@@ -753,9 +722,7 @@
 					}
 				}, true);
 				element.addEventListener("mouseup", function (evt) {
-					console.log("CLICK");
 					if (stopNextClick) {
-						console.log("STOPPING CLICK");
 						evt.stopPropagation();
 						setTimeout(function () {
 							stopNextClick = false;
@@ -1205,7 +1172,6 @@ window.rin = window.rin || {};
             //self._userInterfaceControl.focus();
         });
         $(this._userInterfaceControl).bind("DOMMouseScroll", function(e) {
-            console.log("*************************************")
             self._orchestrator.startInteractionMode();
         });
 
@@ -1478,8 +1444,6 @@ window.rin = window.rin || {};
                 x: this.old_left, y: this.old_top,
                 width: this.old_width, height: this.old_height
             };
-			//console.log(this.old_left + ", " + this.old_top);
-			//console.log(this.old_width + ", " + this.old_height);
             this.viewportChangedEvent.publish(pushstate);
             return pushstate;
         }, 
@@ -1520,7 +1484,6 @@ window.rin = window.rin || {};
         },
 		
 		makeManipulatable: function (element, functions, stopOutside, noAccel) {
-			console.log("makeManip called");
 			var hammer = new Hammer(element, {
 				hold_threshold: 3,
 				drag_min_distance: 9,
@@ -1556,7 +1519,6 @@ window.rin = window.rin || {};
 						translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
 					} else {
 						translation = { x: evt.gesture.center.pageX - lastPos.x, y: evt.gesture.center.pageY - lastPos.y };
-					   // console.log('translation.y = '+translation.y);
 					}
 					var scale = evt.gesture.scale - lastScale;
 					lastScale = evt.gesture.scale;
@@ -1583,7 +1545,6 @@ window.rin = window.rin || {};
 						translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
 					} else {
 						translation = { x: evt.pageX - lastPos.x, y: evt.pageY - lastPos.y };
-						console.log('translation.y = '+translation.y);
 					}
 					var scale = evt.gesture.scale - lastScale; /////////////////// HEREHEHEHEHEHRHERIEREIRHER ///
 					lastScale = evt.gesture.scale;
@@ -1719,7 +1680,6 @@ window.rin = window.rin || {};
 			function getDir(evt, noReturn) {
 				if (!firstEvtX) {
 					firstEvtX = evt;
-					//console.log("firstEvtX SETA");
 					firstEvtX.currentDir = firstEvtX.gesture.deltaX / Math.abs(firstEvtX.gesture.deltaX) || 0;
 					if (!prevEvt) {
 						prevEvt = evt;
@@ -1728,26 +1688,21 @@ window.rin = window.rin || {};
 				} else {
 					if (evt.gesture.deltaX > prevEvt.gesture.deltaX && firstEvtX.currentDir !== 1) {
 						firstEvtX = evt;
-						//console.log("firstEvtX SETB");
 						firstEvtX.currentDir = 1;
 					} else if (evt.gesture.deltaX < prevEvt.gesture.deltaX && firstEvtX.currentDir !== -1) {
 						firstEvtX = evt;
-						//console.log("firstEvtX SETC");
 						firstEvtX.currentDir = -1;
 					}
 				}
 				if (!firstEvtY) {
 					firstEvtY = evt;
-					//console.log("firstEvtY SETA");
 					firstEvtY.currentDir = firstEvtY.gesture.deltaY / Math.abs(firstEvtY.gesture.deltaY) || 0;
 				} else {
 					if (evt.gesture.deltaY > prevEvt.gesture.deltaY && firstEvtY.currentDir !== 1) {
 						firstEvtY = evt;
-						//console.log("firstEvtY SETB");
 						firstEvtY.currentDir = 1;
 					} else if (evt.gesture.deltaY < prevEvt.gesture.deltaY && firstEvtY.currentDir !== -1) {
 						firstEvtY = evt;
-						//console.log("firstEvtY SETC");
 						firstEvtY.currentDir = -1;
 					}
 				}
@@ -1911,9 +1866,7 @@ window.rin = window.rin || {};
 					functions.onTappedRight(event);
 				};
 				element.addEventListener("MSPointerDown", function (evt) {
-					console.log(evt);
 					if (stopNextClick) {
-						console.log("STOPPING CLICK");
 						evt.stopPropagation();
 						setTimeout(function () {
 							stopNextClick = false;
@@ -1922,9 +1875,7 @@ window.rin = window.rin || {};
 					}
 				}, true);
 				element.addEventListener("mouseup", function (evt) {
-					console.log("CLICK");
 					if (stopNextClick) {
-						console.log("STOPPING CLICK");
 						evt.stopPropagation();
 						setTimeout(function () {
 							stopNextClick = false;
@@ -1952,7 +1903,6 @@ window.rin = window.rin || {};
 
         // Initialize touch gestures.
         initTouch: function () {
-			console.log("ALKWEFJIEWOJFASFISHEWIOFHSIEDHFIHEWIFHWEHFEHFIOWHEFOHIHWEIOFHIEWOHFOWEUHFWOEIUFHEWOFIHEWFIHWEUIOFHEWFUIOHEWFUIOHWEFIOHEWOFUIHEWIFUHEFIOHEWOFIUHEWFIOHWEFUIHEF");
             var self = this,
                 node = self._viewer.drawer.elmt,
                 cover = this.cover;
@@ -2058,9 +2008,7 @@ window.rin = window.rin || {};
 					},
                     onScroll: dzScroll,
 					onManipulate: function (res) {
-						console.log("logging mouse data");
-						console.log(res.translation.x);
-						console.log(res.translation.y);
+
 						self._viewer.viewport.panBy(self._viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(-res.translation.x, -res.translation.y), true), false);
                         self._viewer.viewport.applyConstraints(true);
 						self.raiseViewportUpdate();
@@ -2411,7 +2359,6 @@ window.rin = window.rin || {};
         // Play the video.
         play: function (offset, experienceStreamId) {
             try {
-                console.log('begin play >>>>>>');
                 var epsilon = 0.05; // Ignore minute seeks.
                 if (Math.abs(this._video.currentTime - (this._startMarker + offset)) > epsilon) {
                     this._seek(offset, experienceStreamId);
@@ -2428,7 +2375,6 @@ window.rin = window.rin || {};
                     this._seek(offset, experienceStreamId);
                 }
                 this._video.pause();
-                console.log('end pause >>>>>>>');
             } catch (e) { rin.internal.debug.assert(false, "exception at video element " + e.Message); }
         },
         // Set the base volume for the ES. This will get multiplied with the keyframed volume to get to the final applied volume.
@@ -4781,7 +4727,6 @@ window.rin = window.rin || {};
             if (self._unloaded) {
                 return;
             }
-            console.log("load called in INKES");
             //this._unloaded = false;
 
             //// Check if valid link and hook up events
@@ -4809,7 +4754,6 @@ window.rin = window.rin || {};
                     return;
                 }
                 else {
-                    console.log("failed to find linkedES for " + encoded_id);
                     if (!self._unloaded) {
                         self._loadTimeout = setTimeout(findLinkedES, 1000);
                     }
@@ -4835,7 +4779,6 @@ window.rin = window.rin || {};
             var inkNum = "";
             for (i = 0; i < EID.length; i++)
                 inkNum += EID.charCodeAt(i);
-            console.log("in inkES, inknum = " + inkNum);
             // the dom element to which we'll append the ink canvas container
             //var viewerElt = $("#rinplayer");
             //viewerElt = (viewerElt.length) ? viewerElt : $("#rinPlayer");
@@ -4883,7 +4826,6 @@ window.rin = window.rin || {};
             }
             else {
                 if (!self._unloaded) {
-                    //console.log("ABOUT TO SET TIMEOUT IN INKES");
                     this._timeout = setTimeout(callback, 50);
                 }
             }
@@ -4900,7 +4842,6 @@ window.rin = window.rin || {};
                     this._rinInkController.adjustViewBox(dims);
                 }
                 catch (err) {
-                    console.log("error in viewportChanged: " + err);
                 }
             }
             this.prevDims = dims;
@@ -4909,7 +4850,6 @@ window.rin = window.rin || {};
         play: function (offset, experienceStreamId) {
             // here we call adjustViewBox to position a linked ink correctly when it first comes on screen. There's an issue now if the ink starts at time 0 (maybe
             // other times, too -- test!)
-            console.log("PLAY called for ink: " + this._esData.experienceId);
             this._playCalled = true;
             if (this.link.embedding.enabled) {
                 if (this.prevDims) {
@@ -4920,7 +4860,6 @@ window.rin = window.rin || {};
                     var y = parseFloat(proxy.data("y"));
                     var w = parseFloat(proxy.data("w"));
                     var h = parseFloat(proxy.data("h"));
-                    console.log("dims in inkes play: (" + x + "," + y + "," + w + "," + h + ")");
                     this._rinInkController.adjustViewBox({ x: x, y: y, width: w, height: h }, 1);
                 }
             }
@@ -4938,9 +4877,7 @@ window.rin = window.rin || {};
                 if (this._loadTimeout) {
                     clearTimeout(this._loadTimeout);
                 }
-                console.log("UNLOADING INKES");
             } catch (e) {
-                console.log("failed to clear timeout in inkES: "+e.message);
                 rin.internal.debug.assert(!e);
             } // Ignore errors on unload.
         },

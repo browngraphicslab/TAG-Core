@@ -1168,8 +1168,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             newX = l + (w - newW)/2;
             newY = t + (h - newH)/2;
         } else {
-            newX = l * scale + pivot.x * (1 - scale);
-            newY = t * scale + pivot.y * (1 - scale);
+            newX = l + pivot.x * (1 - scale);
+            newY = t + pivot.y * (1 - scale);
         }
         //Animate outerContainer to this new position
         outerContainer.stop()
