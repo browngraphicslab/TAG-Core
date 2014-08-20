@@ -75,13 +75,18 @@ TAG.Telemetry = (function() {
 	 */
 	function postTelemetryRequests() {
 		var data = JSON.stringify(requests);
+		var key = CryptoJS.enc.Base64.parse("#base64Key#");
+	    var iv  = CryptoJS.enc.Base64.parse("#base64IV#");
+
+	    var encrypted = CryptoJS.AES.encrypt(data, key, {iv: iv});
+	    console.log(encrypted.toString());
 
 		requests.length = 0;
 
 		$.ajax({
 			type: 'POST',
 			url: 'http://browntagserver.com:12043/',
-			data: data,
+			data: data, // this should be encrypted.toString() for encrypting the data
 			async: true, // this is the default, but just make it explicit
 			success: function() {
 				console.log('POST request to server worked');

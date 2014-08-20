@@ -67,7 +67,9 @@ var JSSRC = [
 		'js/utils/CryptoJS/rollups/sha224.js',                 // TAGCORE
 		'js/utils/CryptoJS/rollups/sha256.js',                 // TAGCORE
 		'js/utils/CryptoJS/rollups/sha384.js',                 // TAGCORE
-		'js/utils/CryptoJS/rollups/sha512.js',                 // TAGCORE
+		'js/utils/CryptoJS/rollups/sha512.js',                 //TAGCORE
+		'js/utils/CryptoJS/rollups/tripledes.js',              //TAGCORE
+		'js/utils/CryptoJS/rollups/aes.js',                    // TAGCORE
 		'js/utils/jquery.getScrollbarWidth.js',                // TAGCORE
 		'js/utils/jquery.throttle-debounce.js',                // TAGCORE
 		'js/utils/jquery-css-transform.js',                    // TAGCORE
@@ -86,7 +88,7 @@ var JSSRC = [
 		'js/TAG/util/TAG.Util.js',                             // TAGCORE
 		'js/html2canvas/html2canvas.js',                       // TAGCORE
 		'js/utils/jquery.livequery.js',                        // TAGCORE
-		'js/utils/Autolinker.js-master/dist/Autolinker.js',          // TAGCORE
+		'js/utils/Autolinker.js-master/dist/Autolinker.js',    // TAGCORE
 
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js', // TAGCORE
 		'js/TAG/util/TAG.Util.Constants.js',                   // TAGCORE
@@ -167,7 +169,7 @@ module.exports = function(grunt) {
 					        \n        urlToParse           = tagInput.urlToParse, \
 					        \n        pageToLoad           = {}, // a specific page to load \
 					        \n        TELEMETRY_SESSION_ID = null, \
-					        \n        TELEMETRY_SWITCH     = "off", \
+					        \n        TELEMETRY_SWITCH     = "on", \
                             \n        IS_WINDOWS           = (typeof Windows !== "undefined"), \
                             \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
 					        \n        idleTimer, \

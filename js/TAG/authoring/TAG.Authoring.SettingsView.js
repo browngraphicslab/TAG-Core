@@ -5834,7 +5834,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //remove characters that are okay and white space
             dateString = dateString.replace(/bce?/gi,'')
                                    .replace(/ce/gi, '')
-                                   .replace(/ad/gi,'')
+                                   .replace(/ad/gi, '')
+                                   .replace(/,/g,'')
                                    .replace(/\s/gi,'');
             //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
             if (dateString.search(/[^0-9]/)>0 || dateString.length===0 || dateString[0].search(/[0-9||-]/)<0){

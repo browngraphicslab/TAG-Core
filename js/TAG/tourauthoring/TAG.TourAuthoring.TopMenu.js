@@ -395,9 +395,23 @@ TAG.TourAuthoring.TopMenu = function (options) {   // viewer, undoManager, timel
             if (titleTextArea.val().length === 0) {
                 titleTextArea.val('Untitled Tour');
             }
+            var progressCircCSS = {
+                    'position': 'absolute',
+                    'left': '30%',
+                    'top': '22%',
+                    'z-index': '50',
+                    'height': '30%',
+                    'width': 'auto'
+                };
+                var circle = TAG.Util.showProgressCircle($("#optionButtonDiv"), progressCircCSS, '0px', '0px', false);
+                $("#optionButtonDiv").append(circle);
+                console.log(circle);
+           
             var saveDialog = TAG.Util.UI.PopUpConfirmation(function () {
                 $("#popupConfirmButton").text('Saving...').attr('disabled', true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
                 save(true);
+                $("#popupCancelButton").attr('disabled',true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+                
             }, 'Save changes to ' + $(titleTextArea).val(), "Save", false);
             root.append(saveDialog);
             $(saveDialog).css('z-index', 1000000);

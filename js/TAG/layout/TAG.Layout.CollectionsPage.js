@@ -2564,7 +2564,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         root
                     ));
 
-                    confirmationBox.css('z-index', 10001);
+                    confirmationBox.css('z-index', 10000001);
                     root.append(confirmationBox);
                     confirmationBox.show();
                 }
@@ -2651,7 +2651,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         },
                         root
                     ));
-                    confirmationBox.css('z-index', 10001);
+                    confirmationBox.css('z-index', 1000000001);
                     root.append(confirmationBox);
                     confirmationBox.show();
                 } else {
@@ -2672,7 +2672,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         },
                         root
                     ));
-                    confirmationBox.css('z-index', 10001);
+                    confirmationBox.css('z-index', 100000001);
                     root.append(confirmationBox);
                     confirmationBox.show();
                 } else {

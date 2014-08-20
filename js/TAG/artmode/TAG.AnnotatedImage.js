@@ -233,17 +233,21 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @param {Object} pivot          location of event (x,y)
      */
     function dzScroll(scale, pivot) {
-        IS_WINDOWS && (scale = 1/scale);
+        if (IS_WINDOWS){
+            scale = 1/scale
+            pivot = {
+                x: pivot.x + root.offset().left,
+                y: pivot.y + root.offset().top
+            }
+        };
+
         dzManip({
             scale: scale,
             translation: {
                 x: 0,
                 y: 0
             },
-            pivot: {
-                x: pivot.x + root.offset().left,
-                y: pivot.y + root.offset().top
-            }
+            pivot: pivot
         });
     }
 
@@ -1213,7 +1217,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var t,
                 l,
                 h = outerContainer.height(),
-                w = outerContainer.width();
+                w = outerContainer.width(),
+                splitscreenOffset = 0;
 
 
             if (IS_XFADE) {
@@ -1230,8 +1235,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
                     l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
                 } else {
-                    t = rootHeight * 1 / 10 + Math.random() * rootHeight * 2 / 10;
-                    l = rootWidth * 3 / 10 + Math.random() * rootWidth * 2 / 10;
+                    (root.data('split') === 'R') && (splitscreenOffset =  - root.find('#sideBar').width());
+                    (root.data('split') === 'L') && (splitscreenOffset =   root.find('#sideBar').width());
+                    t = root.height() * 1 / 10 + Math.random() * root.height() * 2 / 10;
+                    l = (root.width() + splitscreenOffset)/2 - w/2+ (1 - 2 * Math.random()) * w * 2 ;
                 };
                 outerContainer.css({
                     'top': t + "px",
