@@ -2638,7 +2638,7 @@ TAG.Util.UI = (function () {
             'text-overflow': 'ellipsis',
             'word-wrap': 'break-word'
         });
-        var fontsize = TAG.Util.getMaxFontSizeEM(message,0.8, $(messageLabel).width(), $(messageLabel).height());
+        var fontsize = TAG.Util.getMaxFontSizeEM(message,1, $(messageLabel).width(), $(messageLabel).height());
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message);
         TAG.Util.multiLineEllipsis($(messageLabel));
