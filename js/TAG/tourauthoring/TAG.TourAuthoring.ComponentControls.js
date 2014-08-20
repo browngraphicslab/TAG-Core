@@ -3847,6 +3847,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         //defaults to min
         var saveDrawThickness = 7;
         var saveEraseThickness = 7;
+        var drawThicknessCircleCSSLeft = 0;
+        var eraseThicknessCircleCSSLeft = 0;
 
         // draw label click handler
         drawLabel.on('click', function () {
@@ -3855,17 +3857,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 eraseLabel.css({ 'color': 'gray' });
                 drawMode = 'draw';
                 drawModeLabel1.text("Draw");
-                saveEraseThickness = parseFloat(brushSliderPoint.val());
-                //update thickness to saveEraseThickness
+                //save the erase thickness
+                    saveEraseThickness = parseFloat(brushSliderPoint.val());
+                    eraseThicknessCircleCSSLeft = parseFloat(brushSliderPoint.css('left'));
+                //update thickness to saveDrawThickness
                     $('#brushSlider').attr('value', saveDrawThickness);
                     $('#brushSlider').css({
-                        'left': saveEraseThickness*4.36 + 'px' //TODO this is experimentally-determined
+                        'left': drawThicknessCircleCSSLeft + 'px'
                     });
                     currentInkController.updatePenWidth("brushSlider");
                     currentInkController.setEraserWidth($('#brushSlider').attr('value'));
                     $('.brushLabel1').text(Math.round($('#brushSlider').attr('value')) + "px");
                 //
-                console.log('setting draw thickness to '+ saveDrawThickness);
+                //console.log('setting draw thickness to '+ saveDrawThickness);
                 currentInkController.set_mode(1); // draw mode
             }
         });
@@ -3883,17 +3887,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 eraseLabel.css({ 'color': 'black' });
                 drawMode = 'erase';
                 drawModeLabel1.text("Erase");
-                saveDrawThickness = parseFloat(brushSliderPoint.val());
-                //update thickness to saveDrawThickness
+                //save the draw thickness
+                    saveDrawThickness = parseFloat(brushSliderPoint.val());
+                    drawThicknessCircleCSSLeft = parseFloat(brushSliderPoint.css('left'));
+                //update thickness to saveEraseThickness
                     $('#brushSlider').attr('value', saveEraseThickness);
                     $('#brushSlider').css({
-                        'left': saveEraseThickness * 4.36 + 'px' //TODO this is experimentally-determined
+                        'left': eraseThicknessCircleCSSLeft + 'px'
                     });
                     currentInkController.updatePenWidth("brushSlider");
                     currentInkController.setEraserWidth($('#brushSlider').attr('value'));
                     $('.brushLabel1').text(Math.round($('#brushSlider').attr('value')) + "px");
                 //
-                console.log('setting erase thickness to ' + saveEraseThickness);
+                //console.log('setting erase thickness to ' + saveEraseThickness);
                 currentInkController.set_mode(2); // erase mode
             }
         });

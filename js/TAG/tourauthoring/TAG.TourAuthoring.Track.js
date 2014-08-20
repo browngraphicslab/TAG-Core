@@ -1728,7 +1728,7 @@ function trackTitleReleased(evt) {
             my.undoManager.logCommand(command);
         }
         titlediv.css('z-index', prevZIndex);
-        firstBlock = true;
+        //firstBlock = true;
         titleDivManip = false;
         firstEvent = true;
     }
