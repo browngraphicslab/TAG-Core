@@ -240,10 +240,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 x: 0,
                 y: 0
             },
-            pivot: {
-                x: pivot.x + root.offset().left,
-                y: pivot.y + root.offset().top
-            }
+            pivot: pivot
         });
     }
 
