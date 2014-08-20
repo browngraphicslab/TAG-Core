@@ -1600,6 +1600,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteType = deleteExhibition;
         toDelete = exhibition;
         var cancelView = false;
+        clearRight();
+        viewer.empty();
+        viewer.css('background', 'black');
+        var progressCircCSS = {
+            'position': 'absolute',
+            'left': '5%',
+            'z-index': '50',
+            'height': 'auto',
+            'width': '10%',
+            'top': '20%',
+        };
+        var vert = viewer.height() / 2;
+        var horz = viewer.width() / 2;
+
+        var circle = TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
+
         // Create inputs
         var privateState;
         if (exhibition.Metadata.Private) {
@@ -2062,21 +2078,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         cancelLastView = function () {
             cancelView = true;
-            clearRight();
-            viewer.empty();
-            viewer.css('background', 'black');
-            var progressCircCSS = {
-                'position': 'absolute',
-                'left': '5%',
-                'z-index': '50',
-                'height': 'auto',
-                'width': '10%',
-                'top': '20%',
-            };
-            var vert = viewer.height() / 2;
-            var horz = viewer.width() / 2;
-
-            var circle = TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
         };
     }
 
