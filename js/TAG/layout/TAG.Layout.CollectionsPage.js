@@ -753,7 +753,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
-            collectionDescription.css({'word-wrap': 'break-word'});
+            collectionDescription.css({'word-wrap': 'break-word', "color": "#"+SECONDARY_FONT_COLOR});
                 str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
                 collectionDescription.css({
                     'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
@@ -2081,7 +2081,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 //Div for above description
                 descText = $(document.createElement('div'))
-                    .addClass('descText')
+                    .addClass('descText secondaryFontColor')
                     .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
                     .css({
                     'color': '#' + SECONDARY_FONT_COLOR,
@@ -2250,6 +2250,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'width'   : 'auto',
                 'top'     : '22%',
             };
+            
             circle = TAG.Util.showProgressCircle(descSpan, progressCircCSS, '0px', '0px', false);    
         };
     }
