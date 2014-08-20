@@ -3300,7 +3300,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} src        URL to embed
      */
     function createIframeAsset(src) { //TODO IFRAME ASSOC MEDIA: iframe asset creation would look something like this
-        
+        middleLabelContainer.empty();
+        middleLabelContainer.append(middleLoading);
+        middleLoading.show();
         var validURL = checkEmbeddedURL(src);
         if (validURL) {
             var options = {
@@ -3309,11 +3311,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
         }
-        middleLoading.show();
         function onSuccess(doqData) {
             var newDoq = new Worktop.Doq(doqData.responseText);
             function done() {
-                middleLoading.hide();
                 loadAssocMediaView(newDoq.Identifier);
             }
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
