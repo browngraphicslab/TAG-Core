@@ -37,18 +37,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         doManipulation = true,      //used in RLH to prevent manipulation of image in certain cases
         aspectRatio = 1, //TODO - how to find this
         artworkFrozen = false,
-        descscroll=false,
+        descscroll = false,
         // misc uninitialized variables
         viewerelt,
         viewer,
-        assetCanvas,
-        makeManip;
-
-    if (IS_WINDOWS) {
-        makeManip = TAG.Util.makeManipulatableWin;
-    } else {
-        makeManip = TAG.Util.makeManipulatable;
-    }
+        assetCanvas;
 
     // get things rolling
     init();
@@ -240,6 +233,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @param {Object} pivot          location of event (x,y)
      */
     function dzScroll(scale, pivot) {
+        IS_WINDOWS && (scale = 1/scale);
         dzManip({
             scale: scale,
             translation: {
@@ -492,33 +486,18 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         canvas = $(viewer.canvas);
         canvas.addClass('artworkCanvasTesting');
-        if (IS_WINDOWS) {
-            TAG.Util.makeManipulatableWin(canvas[0], {
-                onScroll: function (delta, pivot) {
-                    dzScroll(delta, pivot);
-                },
-                onManipulate: function (res) {
-                    if (doManipulation) {
-                        res.translation.x = -res.translation.x;        //Flip signs for dragging
-                        res.translation.y = -res.translation.y;
-                        dzManip(res);
-                    }
+        TAG.Util.makeManipulatable(canvas[0], {
+            onScroll: function (delta, pivot) {
+                dzScroll(delta, pivot);
+            },
+            onManipulate: function (res) {
+                if (doManipulation) {
+                    res.translation.x = -res.translation.x;        //Flip signs for dragging
+                    res.translation.y = -res.translation.y;
+                    dzManip(res);
                 }
-            }, null); // NO ACCELERATION FOR NOW
-        } else {
-            TAG.Util.makeManipulatable(canvas[0], {
-                onScroll: function (delta, pivot) {
-                    dzScroll(delta, pivot);
-                },
-                onManipulate: function (res) {
-                    if (doManipulation) {
-                        res.translation.x = -res.translation.x;        //Flip signs for dragging
-                        res.translation.y = -res.translation.y;
-                        dzManip(res);
-                    }
-                }
-            }, null, true); // NO ACCELERATION FOR NOW
-        }
+            }
+        }, null, true); // NO ACCELERATION FOR NOW
         
 
         assetCanvas = $(document.createElement('div'));
@@ -714,17 +693,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 TAG.Util.disableDrag(outerContainer);
 
                 // register handlers
-                if (IS_WINDOWS) {
-                    TAG.Util.makeManipulatableWin(outerContainer[0], {
-                        onManipulate: mediaManipWin,
-                        onScroll: mediaScrollWin
-                    });
-                } else {
-                    TAG.Util.makeManipulatable(outerContainer[0], {
-                        onManipulate: mediaManip,
-                        onScroll: mediaScroll
-                    }, null, true); // NO ACCELERATION FOR NOW
-                }
+                TAG.Util.makeManipulatable(outerContainer[0], {
+                    onManipulate: mediaManip,
+                    onScroll: mediaScroll
+                }, null, true); // NO ACCELERATION FOR NOW  
             }
         }
 
@@ -1131,8 +1103,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         }   
         // Target location (where object should be moved to)
         finalPosition = {
-            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
-            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+            x: (res.center.pageX - res.startEvent.center.pageX)*1.3 + startLocation.x, //the 1.3 is to give it a little acceleration 
+            y: (res.center.pageY - res.startEvent.center.pageY)*1.3 + startLocation.y
         };   
 
         // Animate to target location
@@ -1161,6 +1133,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Zoom handler for associated media (e.g., for mousewheel scrolling)
      */
     function mediaScroll(scale, pivot) {
+        IS_WINDOWS && (scale = 1/scale);
         var t       = outerContainer.position().top,
             l       = outerContainer.position().left,
             w       = outerContainer.width(),
@@ -1171,8 +1144,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             minW,
             newX,
             newY;
-
-
         if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
             minW = 450;
             maxW = 800;
@@ -1192,97 +1163,23 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         // Update scale, new X and new Y according to newly constrained values.
         scale   = newW / w;
-        newH    = h * scale;
-        newX    = l + pivot.x*(1-scale);
-        newY    = t + pivot.y*(1-scale); 
-
+        newH = h * scale;
+        if (IS_WINDOWS) {
+            newX = l + (w - newW)/2;
+            newY = t + (h - newH)/2;
+        } else {
+            newX = l * scale + pivot.x * (1 - scale);
+            newY = t * scale + pivot.y * (1 - scale);
+        }
         //Animate outerContainer to this new position
         outerContainer.stop()
-        outerContainer.animate({
+        outerContainer.css({
             top: newY,
             left: newX,
             width: newW,
             height: newH
-        }, 10); 
+        }); 
     }
-
-        function mediaManipWin(res) {
-           
-            
-            if (descscroll===true) {
-                return;
-            }
-            
-            var t     = parseFloat(outerContainer.css('top')),
-                l     = parseFloat(outerContainer.css('left')),
-                w     = outerContainer.width(),
-                h     = outerContainer.height(),
-                neww = w * res.scale;
-
-                if (!(
-                (0 < outerContainer.position().top + outerContainer.height())
-                && (outerContainer.position().top < rootHeight)
-                && (0 < outerContainer.position().left + outerContainer.width())
-                && (outerContainer.position().left < rootWidth))) {
-                    hideMediaObject();
-                    pauseResetMediaObject();
-                    return;
-                };
-
-                var minConstraint,maxConstraint;
-                if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
-                    minConstraint = 450;
-                    maxConstraint = 800;
-                } else {
-                    minConstraint = 200;
-                    maxConstraint = 800;
-                }
-                if (CONTENT_TYPE === "iframe") {
-                    minConstraint = rootWidth * 0.33;
-                    maxConstraint = rootWidth * 0.75;
-                }
-                //if the new width is in the right range, scale from the point of contact and translate properly; otherwise, just translate and clamp
-                var newClone;
-                if ((neww >= minConstraint) && (neww <= maxConstraint)) {
-                    if (0 < t+h && t < rootHeight && 0 < l + w && l < rootWidth && res) {
-                        outerContainer.css("top", (t + res.translation.y + (1.0 - res.scale) * (res.pivot.y)) + "px");
-                        outerContainer.css("left", (l + res.translation.x + (1.0 - res.scale) * (res.pivot.x)) + "px");
-                    }
-                } else {
-                    if (0 < t + h && t < rootHeight && 0 < l + w && l < rootWidth && res) {
-                        outerContainer.css("top", (t + res.translation.y) + "px");
-                        outerContainer.css("left", (l + res.translation.x) + "px");
-                        neww = Math.min(Math.max(neww, minConstraint), 800);
-                    } 
-                }
-                outerContainer.css("width", neww + "px");
-                if (CONTENT_TYPE === 'Audio') {
-                     outerContainer.css('height', 'auto');
-                } else {
-                     var newH = (neww * h) / w;
-                     outerContainer.css('height', newH + 'px');
-                }
-                mediaManipPreprocessing();
-            }
-
-        function mediaScrollWin(res, pivot) {
-
-            if (descscroll === true) {
-                return;
-            }
-            mediaManip({
-                scale: res,
-                translation: {
-                    x: 0,
-                    y: 0
-                },
-                pivot: {
-                    x: pivot.x + root.offset().left,// + (outerContainer.offset().left - root.offset().left),
-                    y: pivot.y + root.offset().top// + (outerContainer.offset().top - root.offset().top)
-                }
-            });
-        }
-
         
         /**
          * Create a closeButton for associated media
