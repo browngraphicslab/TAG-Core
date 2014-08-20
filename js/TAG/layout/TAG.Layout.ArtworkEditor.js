@@ -1270,7 +1270,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             makeLayerContainer();
 
-            toggleLayerButton.text('Remove Crossfade');
+            toggleLayerButton.text('Remove Layer');
             toggleHotspotButton.attr('disabled', 'disabled');
             toggleHotspotButton.css('opacity', '0.5');
 
@@ -1308,7 +1308,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @method toggleFromLayer
          */
         function toggleFromLayer() {
-            toggleLayerButton.text('Create Crossfade');
+            toggleLayerButton.text('Create Layer');
             toggleHotspotButton.removeAttr('disabled');
             toggleHotspotButton.css('opacity', '1.0');
 
@@ -2024,7 +2024,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 }
 
                 toggleHotspotButton.text(isHotspot ? 'Remove Hotspot' : 'Create Hotspot');
-                toggleLayerButton.text(isLayer ? 'Remove Crossfade' : 'Create Crossfade');
+                toggleLayerButton.text(isLayer ? 'Remove Layer' : 'Create Layer');
 
                 isHotspot ? toggleToHotspot(point) : toggleFromHotspot();
                 isLayer ? toggleToLayer(rect) : toggleFromLayer();
