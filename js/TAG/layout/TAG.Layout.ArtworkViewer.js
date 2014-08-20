@@ -254,6 +254,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'right': 'auto',
                 'left': '0%'
             });
+            slideButton.css({ //fix the rounded edge to be on the correct side
+                'border-bottom-left-radius': '0px',
+                'border-bottom-right-radius': '10px',
+            });
         }
         if (!previewing){
         	container.css('min-width', 0.14 * screenWidth);
@@ -385,13 +389,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             manipulate = annotatedImage.getToManip();
 
             if (direction === 'left') {
-                manipulate({pivot: pivot, translation: {x: -panDelta, y: 0}, scale: 1});
+                manipulate({pivot: pivot, translation: {x: -panDelta, y: 0}, scale: 1}, true);
             } else if (direction === 'up') {
-                manipulate({pivot: pivot, translation: {x: 0, y: -panDelta}, scale: 1});
+                manipulate({pivot: pivot, translation: {x: 0, y: -panDelta}, scale: 1}, true);
             } else if (direction === 'right') {
-                manipulate({pivot: pivot, translation: {x: panDelta, y: 0}, scale: 1});
+                manipulate({pivot: pivot, translation: {x: panDelta, y: 0}, scale: 1}, true);
             } else if (direction === 'down') {
-                manipulate({pivot: pivot, translation: {x: 0, y: panDelta}, scale: 1});
+                manipulate({pivot: pivot, translation: {x: 0, y: panDelta}, scale: 1}, true);
             } else if (direction === 'in') {
                 manipulate({pivot: pivot, translation: {x: 0, y: 0}, scale: zoomScale});
             } else if (direction === 'out') {
@@ -736,7 +740,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         });
 
                         
-                        xfadeDrawer = createDrawer('Crossfades', xfadeSlider);
+                        xfadeDrawer = createDrawer('Layers', xfadeSlider);
                     }
                     loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
                 } else {
