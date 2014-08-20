@@ -158,7 +158,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             transOverlay.show();
             MEDIA_EDITOR.close();
             backButton.off('click');
+
             saveMetadata();
+            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             
         });
  
@@ -2128,19 +2131,15 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         // success handler for save button
         function saveSuccess() {
             titleArea.text(artworkMetadata.Title.val());
-            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
-            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             //saveMetadataButton.text('Save Changes');
             //saveMetadataButton[0].removeAttribute('disabled');
         }
 
         // general failure callback for save button
         function saveFail() {
-            var popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  You must log in to save changes."));
+            var popup = $(TAG.Util.UI.popUpMessage(null, "Changes to " + artwork.Name+ " have not been saved.  You must log in to save changes."));
             $('body').append(popup);
             popup.show();
-            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
-            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             //saveMetadataButton.text('Save Changes');
             //saveMetadataButton[0].removeAttribute('disabled');
         }
@@ -2148,12 +2147,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         // error handler for save button
         function saveError() {
             var popup;
-            popup = $(TAG.Util.UI.popUpMessage(null, "Changes have not been saved.  There was an error contacting the server."));
+            popup = $(TAG.Util.UI.popUpMessage(null, "Changes to " + artwork.Name + " have not been saved.  There was an error contacting the server."));
             $('body').append(popup); // TODO ('body' might not be quite right in web app)
             popup.show();
-            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
-            TAG.Util.UI.slidePageRight(authoringHub.getRoot());
-
             //saveMetadataButton.text('Save Changes');
             //saveMetadataButton[0].removeAttribute('disabled');
         }

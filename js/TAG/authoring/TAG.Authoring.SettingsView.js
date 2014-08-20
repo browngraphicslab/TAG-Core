@@ -968,7 +968,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Save button
 
-        var saveButton = createButton('Save Changes', function () {
+        var saveButton = createButton('Save', function () {
            /* if (locInput === undefined) {
                 locInput = "";
             }
@@ -1267,7 +1267,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function previewStartPage(primaryFontInput, secondaryFontInput) {
         // Load the start page, the callback adds it to the viewer when it's done loading
-        var startPage = TAG.Layout.StartPage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val() }, function (startPage) {
+        var startPage = TAG.Layout.StartPage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val(), isPreview:true}, function (startPage) {
             if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
                 return;
             }
@@ -1933,7 +1933,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //};
 
             // Buttons
-            var saveButton = createButton('Save Changes', function () {
+            var saveButton = createButton('Save', function () {
                 if (nameInput.val() === undefined || nameInput.val() === "") {
                     nameInput.val("Untitled Collection");
                 }
@@ -2457,7 +2457,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-        var saveButton = createButton('Save Changes',
+        var saveButton = createButton('Save',
             function () {
                 if (nameInput.val() === undefined || nameInput.val() === "") {
                     nameInput.val("Untitled Tour");
@@ -3046,7 +3046,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left'
             });
 
-        var saveButton = createButton('Save Changes',
+        var saveButton = createButton('Save',
             function () {
                 if (titleInput.val() === undefined || titleInput.val() === "") {
                     titleInput.val("Untitled Asset");
@@ -4125,7 +4125,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             descInput: descInput,                                          //Artwork description
             customInputs: customInputs                                    //Artwork custom info fields
         };
-        var saveButton = createButton('Save Changes',
+        var saveButton = createButton('Save',
             function () {
                 if (titleInput.val() === undefined || titleInput.val() === "") {
                     titleInput.val("Untitled Artwork");
