@@ -80,7 +80,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
         MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
-        EVENT_CIRCLE_WIDTH = Math.min(40, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
+        EVENT_CIRCLE_WIDTH = Math.min(30, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
         TILE_BUFFER = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
@@ -1491,17 +1491,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             element.css({
                 'height': EVENT_CIRCLE_WIDTH*3/2,
                 'width': EVENT_CIRCLE_WIDTH*3/2,
-                'border-radius': EVENT_CIRCLE_WIDTH * 3 / 4,
+                'border-radius': EVENT_CIRCLE_WIDTH*3 / 4,
                 'top': -EVENT_CIRCLE_WIDTH*3 / 4,
                 'opacity': "1"
             });
+
             if (IS_WINDOWS){
                element.timelineDateLabel.css({
                     'visibility': 'visible',
                     'color' : 'white',
-                    'font-size' : '110%' ,
-                    'top': -element.width()-2+ 'px',
-                    'left': "-2"
+                    'font-size' : '110%',
+                    'bottom': "90%",
+                    'left': element.width()/2 - element.timelineDateLabel.width()*1.1 / 2
                 }); 
             } else { 
                     element.timelineDateLabel.css({
@@ -1521,11 +1522,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'opacity': .5
             });
             element.timelineDateLabel.css({
-                    'color' : 'rgb(170,170,170)',
-                    'font-size' : '100%' ,
-                    'top': -EVENT_CIRCLE_WIDTH,
-                    'left': "-20%"
-                });
+                'color': 'rgb(170,170,170)',
+                'font-size': "100%",
+                'bottom': "80%",
+                'left': EVENT_CIRCLE_WIDTH / 2 - element.timelineDateLabel.width() / 2
+            });
         }
     }
 
