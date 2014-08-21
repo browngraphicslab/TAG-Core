@@ -43,6 +43,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay = root.find('#overlay'),
         tileLoadingArea = root.find('#tileLoadingArea'),
+        nextCollection = $(document.createElement('div')).attr('id', 'nextCollection'),
+        prevCollection = $(document.createElement('div')).attr('id', 'prevCollection'),
 
         // input options
         scrollPos = options.backScroll || null,     // horizontal position within collection's catalog
@@ -515,12 +517,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             }
                         }(i));
             collectionDotHolder.append(collectionDot);
-
             collectionDots[visibleCollections[i].Identifier] = collectionDot;
         }
 
         // Load collection
         if (currCollection) {
+            //Quick check for specific load
+            for(i = 0; i < visibleCollections.length; i++) {
+                if (currCollection.Identifier === visibleCollections[i].Identifier){
+                    currCollection = visibleCollections[i]
+                }
+            }
+
+            //If ou didnt find the collection you're trying to load in the visible collections, just load the first one instead
+            if (visibleCollections.indexOf(currCollection) === -1){loadFirstCollection();}
             loadCollection(currCollection, null, currentArtwork)();
         } else if (toShowFirst) {
             loadFirstCollection();
@@ -568,8 +578,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextTitle,
                 prevTitle,
                 mainCollection = root.find('#mainCollection'),
-                nextCollection = root.find('#nextCollection'),
-                prevCollection = root.find('#prevCollection'),
                 titleBox = root.find('.collection-title'),
                 collectionMedia = [],
                 counter = 0,
@@ -689,6 +697,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     loadCollection(visibleCollections[j.prevCollectionIndex])();
                                 }
                             }(collection));
+                collectionArea.append(prevCollection);
                 prevCollection.show();
                 TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
                     tobj.custom_1 = prevTitle;
@@ -751,7 +760,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
                     tobj.mode = 'Kiosk';
                 });
-                // collectionArea.append(nextCollection);
+                collectionArea.append(nextCollection);
             }
 
             if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
