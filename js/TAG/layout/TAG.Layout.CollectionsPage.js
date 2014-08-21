@@ -115,7 +115,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
         var cancelLoadCollection = null;
-        var cancelDrawCatalog = null;
+
     // get things rolling
     init();
 
@@ -530,7 +530,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             //If ou didnt find the collection you're trying to load in the visible collections, just load the first one instead
-            if (visibleCollections.indexOf(currCollection) === -1){loadFirstCollection();}
+            if (visibleCollections.indexOf(currCollection) === -1) {
+                if (previewing) {
+                    loadCollection(currCollection, null, currentArtwork)();
+                } else {
+                    loadFirstCollection();
+                }
+                
+            }
             loadCollection(currCollection, null, currentArtwork)();
         } else if (toShowFirst) {
             loadFirstCollection();
@@ -823,9 +830,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     assocMediaButton.css('color', dimmedColor);
                                     if (onAssocMediaView){
                                         onAssocMediaView = false;
-
-                                        /*loadQueue.clear();
-                                        if (cancelDrawCatalog) cancelDrawCatalog();*/
                                         loadCollection(currCollection)();
                                     }
                                });
@@ -836,9 +840,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView){
                                         onAssocMediaView = true;
-
-                                        /*loadQueue.clear();
-                                        if (cancelDrawCatalog) cancelDrawCatalog();*/
                                         loadCollection(currCollection)();
                                     }
                                 });
@@ -1079,7 +1080,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Boolean} onSearch  whether the list of artworks is a list of works matching a search term
      */
     function drawCatalog(artworks, tag, start, onSearch) {
-        var cancelDraw = false;
         if (!currCollection) {
             return;
         }
@@ -1097,7 +1097,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @method drawHelper
          */
         function drawHelper() {
-            if (cancelDraw) return;
             var sortedArtworks,
                 minOfSort,
                 currentWork,
@@ -1152,7 +1151,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             catalogDiv.append(tileDiv);
             clearTimeline(artworks);
-            cancelDrawCatalog = function () { cancelDraw = true;};
+           
         }
     }
         
