@@ -953,7 +953,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tobj.mode = 'Kiosk';
                 });
             }
-            if (!comingBack) {
+            if (!comingBack || !currentTag) {
                 //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
                 if (timelineShown && $('#dateButton')) {
                     currentTag = "Date";
@@ -967,6 +967,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     currentDefaultTag = currentTag;
                 }
             }
+            console.log(currentTag);
             colorSortTags(currentTag);
         }
 
