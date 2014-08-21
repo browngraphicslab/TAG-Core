@@ -1808,15 +1808,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 { "left": parseInt(circleTarget * otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH * 15 / 20 });
             //When last animation done, loop through and hide/show date labels
             if (i === timelineEventCircles.length-1){
-                setTimeout(function() {
-                for (k=0; k < timelineEventCircles.length; k++){
+                otherCircle.on('webkitTransitionEnd transitionend msTransitionEnd oTransitionEnd', function () {
+                    for (k=0; k < timelineEventCircles.length; k++){
                         displayLabels(timelineEventCircles[k], circle);
                         if (k===timelineEventCircles.length -1){
                            displayLabels(timelineEventCircles[k],null,k); 
                         }
                     }
-                },1100); //would need to be changed if animation time changed (can't use transitionend event because sometimes last dot doesn't move)
-            }
+                });
+                //If last dot doesn't change position, transition event never fires, so use timeout
+                if (otherCircle.position().left === parseInt(circleTarget * otherCircle.parent().width()) - EVENT_CIRCLE_WIDTH * 15 / 20){ 
+                    setTimeout(function() {
+                    for (k=0; k < timelineEventCircles.length; k++){
+                        displayLabels(timelineEventCircles[k], circle);
+                        if (k===timelineEventCircles.length -1){
+                           displayLabels(timelineEventCircles[k],null,k); 
+                        }
+                    }
+                    },1100); // timeout would need to be changed if animation time changed (should use transitionend event in other cases for slow connections)
+                }
+            }   
         }
 
         for (j = 0; j < timelineTicks.length; j++) {
@@ -1893,6 +1904,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 duration,
                 newTile,
                 previewTile,
+                firstDescSpan = $(document.createElement('div')),
                 progressCircCSS,
                 timelineDateLabel,
                 circle,
@@ -2038,7 +2050,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //If there are multiple artworks that should all be shown, selectedArtworkContainer will contain all of them and be larger
                 if (showAllAtYear && artworksForYear){
                     for (i = 0; i < artworksForYear.length; i++) {
-                        newTile = createOnePreviewTile(artworksForYear[i]);
+                        newTile = createOnePreviewTile(artworksForYear[i],i);
                         newTile.css({
                             'left': (i * previewWidth) + 'px',
                             'width': previewWidth
@@ -2049,7 +2061,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }
                     containerWidth = Math.min(($("#tagRoot").width()*.80), (artworksForYear.length) * previewWidth);
                 } else {
-                    newTile = createOnePreviewTile(artwork);
+                    newTile = createOnePreviewTile(artwork,0);
                     newTile.css('left', '0%');
                     newTile.append(closeButton);
                     containerWidth = previewWidth;
@@ -2059,9 +2071,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
              * @method createOnePreviewTile
              * @param {Object} artwork       //artwork to create preview tile for
+             * @param {Number}  num            //number previewer it is if multiple
              * @return {Object} previewTile    //preview tile just created
              */
-            function createOnePreviewTile(artwork){
+            function createOnePreviewTile(artwork, num){
                 var previewTile,
                     miniTilesLabel,
                     tileTop,
@@ -2070,6 +2083,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     imgDiv,
                     prevArrow,
                     nextArrow,
+                    descSpan,
                     exploreTab,
                     exploreText,
                     exploreIcon,
@@ -2078,13 +2092,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     artText,
                     yearInfo,
                     descText,
-                    descSpan = $(document.createElement('div')),
                     miniTilesHolder,
                     miniTile;
 
                 //Entire tile
                 previewTile = $(document.createElement('div'))
                     .addClass('previewTile');
+
 
                 //Top portion of the tile (with image, title, and subtitle)
                 tileTop = $(document.createElement('div'))
@@ -2204,6 +2218,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('tileBottom');
 
                 //Description of art
+                num===0 ? descSpan = firstDescSpan: descSpan = $(document.createElement('div'));
                 descSpan.addClass('descSpan');
 
                 //Div for above description
@@ -2229,6 +2244,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 	if (numberAssociatedDoqs === 0){
                 		miniTilesHolder.hide();
                 		descSpan.css({"height": "100%"});
+                        TAG.Util.removeProgressCircle(circle);
                 	} else {
                         descSpan.css({'height':'33%'});
                         miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
@@ -2370,19 +2386,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                     !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                 });
-                 
+
                 return previewTile;         
             }
 
             for (i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
                 styleTimelineCircle (timelineEventCircles[i], false)
-            };
+            };            
 
             // Make current circle larger and white           
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], true)
-            };
-           	progressCircCSS = {
+            };    
+
+            progressCircCSS = {
                 'position': 'absolute',
                 'float'   : 'left',
                 'left'    : '12%',
@@ -2390,9 +2407,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'height'  : '20%',
                 'width'   : 'auto',
                 'top'     : '22%',
-            };
+                };
             
-            circle = TAG.Util.showProgressCircle(descSpan, progressCircCSS, '0px', '0px', false);    
+            circle = TAG.Util.showProgressCircle(firstDescSpan, progressCircCSS, '0px', '0px', false);
+                 
         };
     }
 
