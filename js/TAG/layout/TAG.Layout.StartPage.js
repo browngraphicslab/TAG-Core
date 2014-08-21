@@ -64,7 +64,115 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     }
     */
     testConnection();
+    if(!localStorage.machId){
+         telemetryDialogDisplay();
+    }
+
+    
     //applyCustomization();
+    function telemetryDialogDisplay(){
+        var tagContainer = $('#tagRoot');
+
+        // Creating Overlay
+        var telemetryDialogOverlay = $(document.createElement('div'));
+        telemetryDialogOverlay.attr('id', 'telemetryDialogOverlay');
+        telemetryDialogOverlay.addClass('dialogBoxOverlay');
+        tagContainer.prepend(telemetryDialogOverlay);
+
+        // Creating Dialog Box Container (required for centering)
+        var telemetryDialogContainer = $(document.createElement('div'));
+        telemetryDialogContainer.attr('id', 'telemetryDialogContainer');
+        telemetryDialogContainer.addClass('dialogBoxContainer');
+        telemetryDialogOverlay.append(telemetryDialogContainer);
+        telemetryDialogContainer.css({
+                'position': 'relative'
+        });
+
+        // Creating Dialog Box
+        var telemetryDialog = $(document.createElement('div'));
+        telemetryDialog.attr('id', 'telemetryDialog');
+        telemetryDialog.addClass('dialogBox');
+        telemetryDialogContainer.append(telemetryDialog);
+        telemetryDialog.css({
+                'height':'20%'
+        });
+
+        // Content
+        var telemetryDialogPara = $(document.createElement('p'));
+        telemetryDialogPara.attr('id', 'dialogBoxPara');
+        telemetryDialogPara.text("Do you want to turn Telemetry on?");
+        telemetryDialog.append(telemetryDialogPara);
+
+        // Button Container
+        var telemetryButtonRow = $(document.createElement('div'));
+        telemetryButtonRow.attr('id', 'telemetryButtonRow');
+        telemetryDialog.append(telemetryButtonRow);
+        telemetryButtonRow.css({
+            'display': 'block',
+            'height' : '5%',
+            'position': 'absolute',
+            'width': '30%',
+            'margin-left': '5%',
+            'margin-top':'1%'
+        });
+
+        var yesButton = $(document.createElement('div'));
+        yesButton.attr('id', 'yesButton');
+        yesButton.text('Yes');
+        telemetryButtonRow.append(yesButton);
+        yesButton.css({
+            'position': 'relative',
+            'width': '30%',
+            'height': '90%',
+            'color': '#fff',
+            'font-family': '"Segoe UI",serif',
+            'font-size': '100%',
+            'font-weight': 'normal',
+            'background-color': 'transparent',
+            'cursor': 'pointer',
+            'padding': '0px 0px 0px 0px',
+            'border-radius' : '3.5px',
+            'border' : '1px solid white',
+            'margin' : '0',
+            'margin-left' : '0%',
+            'margin-top' : '1px'
+        });
+
+        var noButton = $(document.createElement('div'));
+        noButton.attr('id', 'noButton');
+        noButton.text('No');
+        telemetryButtonRow.append(noButton);
+        noButton.css({
+            'position': 'relative',
+            'width': '30%',
+            'height': '100%',
+            'margin-left': '75%',
+            'margin-top': '-10%',
+            'color': '#fff',
+            'font-family': '"Segoe UI",serif',
+            'font-size': '100%',
+            'font-weight': 'normal',
+            'background-color': 'transparent',
+            'cursor': 'pointer',
+            'padding': '0px 0px 0px 0px',
+            'border-radius' : '3.5px',
+            'border' : '1px solid white'
+        });
+
+        yesButton.click(function(){
+                TELEMETRY_SWITCH = 'on';
+                telemetryDialogOverlay.remove();
+
+        });
+
+        noButton.click(function(){
+            TELEMETRY_SWITCH = 'off';
+            telemetryDialogOverlay.remove();
+        });
+
+
+
+    }
 
     /**
      * Test internet and server connections
