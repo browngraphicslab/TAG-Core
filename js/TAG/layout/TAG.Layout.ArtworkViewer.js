@@ -389,13 +389,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             manipulate = annotatedImage.getToManip();
 
             if (direction === 'left') {
-                manipulate({pivot: pivot, translation: {x: -panDelta, y: 0}, scale: 1});
+                manipulate({pivot: pivot, translation: {x: -panDelta, y: 0}, scale: 1}, true);
             } else if (direction === 'up') {
-                manipulate({pivot: pivot, translation: {x: 0, y: -panDelta}, scale: 1});
+                manipulate({pivot: pivot, translation: {x: 0, y: -panDelta}, scale: 1}, true);
             } else if (direction === 'right') {
-                manipulate({pivot: pivot, translation: {x: panDelta, y: 0}, scale: 1});
+                manipulate({pivot: pivot, translation: {x: panDelta, y: 0}, scale: 1}, true);
             } else if (direction === 'down') {
-                manipulate({pivot: pivot, translation: {x: 0, y: panDelta}, scale: 1});
+                manipulate({pivot: pivot, translation: {x: 0, y: panDelta}, scale: 1}, true);
             } else if (direction === 'in') {
                 manipulate({pivot: pivot, translation: {x: 0, y: 0}, scale: zoomScale});
             } else if (direction === 'out') {
