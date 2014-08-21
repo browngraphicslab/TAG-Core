@@ -357,6 +357,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             if (!($(document.getElementById(asset.doq.Identifier)).css('background-color') === 'rgba(255, 255, 255, 0.4)')) {
                 closeAllPanels();
                 MEDIA_EDITOR.open(asset, MEDIA_EDITOR.createMediaWrapper(asset), function () {
+                    //Initially disable the save button
                     $(".addbutton").prop('disabled', true);
                     $(".addbutton").css('opacity', '0.4');
                     $('.assetHolder').css('background-color', '');
@@ -1091,6 +1092,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             // detect whether the hotspot is moved
             hotspotCircle.get(0).addEventListener('mouseup', function () {
+                //Enable save nutton
                 $(".addbutton").prop('disabled', false);
                 $(".addbutton").css('opacity', '1');
                 positionChanged = true;
