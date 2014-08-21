@@ -1155,6 +1155,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Manipulation for touch and drag events
      */
         function mediaManip(res, evt, fromSeadragonControls) {
+            if (descscroll === true) {
+                return;
+            }
             if (res.scale !== 1) {
                 mediaScroll(res.scale, res.pivot);
                 return;
@@ -1217,7 +1220,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Zoom handler for associated media (e.g., for mousewheel scrolling)
      */
         function mediaScroll(scale, pivot) {
-        var t       = outerContainer.position().top,
+            if (descscroll === true) {
+                return;
+            }
+            var t       = outerContainer.position().top,
             l       = outerContainer.position().left,
             w       = outerContainer.width(),
             h       = outerContainer.height(),
