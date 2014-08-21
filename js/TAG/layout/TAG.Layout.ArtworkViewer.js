@@ -636,7 +636,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             linkButton.on('click', function() {
                 var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
                     tagpagename: 'artwork',
-                    tagguid: doq.Identifier
+                    tagguid: doq.Identifier,
+                    prevpage: prevCollection.Identifier
                 });
 
                 root.append(linkOverlay);
