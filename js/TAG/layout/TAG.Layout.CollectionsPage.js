@@ -1495,24 +1495,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'top': -EVENT_CIRCLE_WIDTH*3 / 4,
                 'opacity': "1"
             });
-
-            if (IS_WINDOWS){
-               element.timelineDateLabel.css({
-                    'visibility': 'visible',
-                    'color' : 'white',
-                    'font-size' : '110%',
-                    'bottom': "90%",
-                    'left': element.width()/2 - element.timelineDateLabel.width()*1.1 / 2
-                }); 
-            } else { 
-                    element.timelineDateLabel.css({
-                    'visibility': 'visible',
-                    'color' : 'white',
-                    'font-size' : '120%' ,
-                    'top': -EVENT_CIRCLE_WIDTH ,
-                    'left': "0"
-                });
-            }
+           element.timelineDateLabel.css({
+                'visibility': 'visible',
+                'color' : 'white',
+                'font-size' : '110%',
+                'bottom': "100%",
+                'left': element.width()/2 - element.timelineDateLabel.width()*1.1 / 2
+            }); 
         } else {
             element.css({
                 'height': EVENT_CIRCLE_WIDTH,
@@ -1524,7 +1513,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             element.timelineDateLabel.css({
                 'color': 'rgb(170,170,170)',
                 'font-size': "100%",
-                'bottom': "80%",
+                'bottom': "100%",
                 'left': EVENT_CIRCLE_WIDTH / 2 - element.timelineDateLabel.width() / 2
             });
         }
