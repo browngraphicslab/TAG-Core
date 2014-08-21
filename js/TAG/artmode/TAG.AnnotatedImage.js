@@ -1070,6 +1070,29 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         height: '100%'
                     });
                     mediaContainer.append(iframe);
+                    
+                    //Create an overlay to help with interaction (problems with mouse "sticking" to iframe)
+                    //Basically, create an overlay that only exists while you have clicked down on the media, and then is removed when you release it (i.e, when you want to actually play the iframe)
+                    if (!IS_WINDOWS){
+                        var interactionOverlay = $(document.createElement('div'))
+                        interactionOverlay.css({
+                            height: "100%",
+                            width: "100%",
+                            position: "absolute", 
+                            left: 0, 
+                            top: 0
+                        })
+
+                        outerContainer.on('mousedown', function() {
+                            interactionOverlay.css("pointer-events", "auto");
+                            interactionOverlay.css('background-color', "rgba(10, 50 ,0, .5");
+                        });
+                        $("body").on('mouseup', function() {
+                            interactionOverlay && interactionOverlay.css("pointer-events", "none")
+                            interactionOverlay.css('background-color', "rgba(0, 0 ,0, 0")
+                        });
+                        mediaContainer.append(interactionOverlay)
+                    }
                 }
                 if (DESCRIPTION) {
                     descDiv = $(document.createElement('div'));
@@ -1136,14 +1159,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Drag/manipulation handler for associated media
      * Manipulation for touch and drag events
      */
-        function mediaManip(res, fromSeadragonControls) {
+        function mediaManip(res, evt, fromSeadragonControls) {
+            if (descscroll === true) {
+                return;
+            }
             if (res.scale !== 1) {
                 mediaScroll(res.scale, res.pivot);
                 return;
             }
-            if ((scrollingMedia) || (!IS_WINDOWS && !res.eventType)) {
-                return;
-            }
+
             var top         = outerContainer.position().top,
                 left        = outerContainer.position().left,
                 width       = outerContainer.width(),
@@ -1156,7 +1180,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     x: left + res.translation.x,
                     y: top + res.translation.y
                 }
-
             } else if (IS_WINDOWS) {
                 if (!outerContainer.manipulationOffset) return;
                 finalPosition = {
@@ -1164,7 +1187,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     y: top + res.pivot.y + root.offset().top - outerContainer.manipulationOffset.y
                 }
             } else {
-                finalPosition = {
+                // finalPosition = {
+                //     x: left + res.pivot.x  - outerContainer.manipulationOffset.x,
+                //     y: top + res.pivot.y  - outerContainer.manipulationOffset.y
+                // } 
+                //  
+              finalPosition = {
                     x: (res.center.pageX - res.startEvent.center.pageX) + outerContainer.startLocation.x,
                     y: (res.center.pageY - res.startEvent.center.pageY) + outerContainer.startLocation.y
                 };
@@ -1197,7 +1225,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Zoom handler for associated media (e.g., for mousewheel scrolling)
      */
         function mediaScroll(scale, pivot) {
-        var t       = outerContainer.position().top,
+            if (descscroll === true) {
+                return;
+            }
+            var t       = outerContainer.position().top,
             l       = outerContainer.position().left,
             w       = outerContainer.width(),
             h       = outerContainer.height(),
@@ -1208,7 +1239,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             newX,
             newY;
         scrollingMedia = true;
-        if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
+        if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio') {
             minW = 450;
             maxW = 800;
         } else {
@@ -1216,8 +1247,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             maxW = 800;
         }
         if (CONTENT_TYPE === "iframe") {
-            minW = rootWidth * 0.33;
-            maxW = rootWidth * 0.75;
+            minW = parseInt(rootWidth * 0.33);
+            maxW = parseInt(rootWidth * 0.75);
         }
 
         // Constrain new width

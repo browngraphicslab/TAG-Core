@@ -606,7 +606,6 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             drag: function (evt, ui) {
                 evt.stopPropagation();
                 ui.position.top = Math.constrain(ui.position.top, 0, sliderPane.height() - verticalScroller.height() - 2);
-
                 var newRelativeScroll = ui.position.top / (sliderPane.height() - verticalScroller.height() - 4);
                 var newAbsoluteScroll = newRelativeScroll * (calculateTotalTrackHeight() - trackBody.height() + 8);                
 
