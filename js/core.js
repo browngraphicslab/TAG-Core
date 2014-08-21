@@ -140,7 +140,11 @@
                     param = url.match(/tagguid=[a-f0-9\-]+/);
                     if(param && param.length > 0) {
                         ret.guid = param[0].split(/=/)[1];
+                        var prevPage = url.match(/prevpage=[a-f0-9\-]+/);
                         ret.onlytour = url.match(/tagonlytour=true/) ? true : false;
+                        if (prevPage && prevPage.length > 0) {
+                            ret.prevpage = prevPage[0].split(/=/)[1];
+                        }
                         return ret;
                     }
                     break;
