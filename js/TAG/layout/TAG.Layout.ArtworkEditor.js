@@ -2215,7 +2215,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             });
 
             isAdditionalField && fieldTitle.addClass('additionalField');
-            isAdditionalField ? fieldTitle.attr('value', field) : fieldTitle.text(field);
+            isAdditionalField && field!=="" ? fieldTitle.attr('value', field) : fieldTitle.text(field);
 
             fieldTitle.css({ // TODO STYL
                 'display': 'inline-block',
@@ -2238,18 +2238,26 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'background': 'white',
                     'border': "0px solid black",
                 });
-            } else {
-                textarea.change(function () {
-                    shouldSave = true;
-                })
-            }
+            }// else {
+            textarea.change(function () {
+                shouldSave = true;
+            })
+            fieldTitle.change(function () {
+                shouldSave = true;
+            })
+            //}
             textarea.css({ // TODO STYL
                 'width': '70%',
                 'font-size': '11pt',
                 'display': 'inline-block',
                 'border': "0px solid black",
             });
-            textarea.attr('placeholder', field);
+            if (isAdditionalField){
+                textarea.attr('placeholder', "Metadata Field")
+            }
+            if (!isAdditionalField) {
+                textarea.attr('placeholder', field);
+            }
 
             if (isAdditionalField) {
                 fieldTitle.attr('entry', entry);
@@ -2263,6 +2271,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             deleteFieldIcon.css({ 'margin-left': '15px', display: 'inline-block', width: '30px' });
             if (field !== 'Title' && field !== 'Keywords' && field !== 'Artist' && field !== 'Year' && field !== 'Description') {
+                fieldTitle.attr('placeholder', "New");
                 deleteFieldIcon = $(document.createElement('img'));
                 deleteFieldIcon.attr('src', tagPath + 'images/icons/minus.svg');
                 deleteFieldIcon.css({
@@ -2396,7 +2405,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             addInfoButton.on('click', function () {
                 shouldSave = true;
-                createMetadataTextArea({ field: "new", entry: "metadata field", animate: true, isAdditionalField: true });
+                createMetadataTextArea({ field: "", entry: "", animate: true, isAdditionalField: true });
                 if (shouldDisableAddButton()) {
                     addInfoButton.attr('disabled', 'disabled');
                 }
