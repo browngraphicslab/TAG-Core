@@ -348,7 +348,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             width: 0.13,
             height: 0.5,
         });
-        var fontsize = TAG.Util.getMaxFontSizeEM('Save Changes', 0.2, 0.63 * saveButtonSpecs.width, 0.75 * saveButtonSpecs.height, 0.01);
+        var fontsize = TAG.Util.getMaxFontSizeEM('Save', 0.2, 0.63 * saveButtonSpecs.width, 0.75 * saveButtonSpecs.height, 0.01);
         saveButton.css({
             "color": "white",
             "border-color": "white",
