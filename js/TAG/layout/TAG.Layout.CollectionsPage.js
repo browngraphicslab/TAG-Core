@@ -1291,7 +1291,34 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Set tileImage to thumbnail image, if it exists
             if(currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio" ) {
+                main.css('overflow','hidden');
+                
                 tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
+                
+                var w, h;
+                $("<img/>") // preload the image to "crop" it
+                    .attr("src", tileImage.attr("src"))
+                    .load(function() {
+                        w = this.width;   
+                        h = this.height; 
+                        var mainh=tileImage.height();
+                        var mainw=tileImage.width();
+                        if(mainw/mainh<w/h){
+                            mainh = tileImage.height();
+                            var neww= w/h*mainh;
+                            tileImage.css({
+                                'height':mainh,
+                                'width':neww,
+                            });
+                        }else{
+                            mainw = tileImage.width();
+                            var newh = h/w*mainw;
+                            tileImage.css({
+                                'width':mainw,
+                                'height':newh,
+                            });
+                        }
+                    });
             } else if (currentWork.Metadata.ContentType === "Audio" ){
                 tileImage.css('background-color','black');
                 tileImage.attr('src', tagPath+'images/audio_thumbnail.svg');
@@ -2052,7 +2079,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 currentThumbnail = $(document.createElement('img'))
                     .addClass('currentThumbnail');
                 if (artwork.Metadata.Thumbnail && artwork.Metadata.ContentType !== "Audio") {
-                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+//                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+                    currentThumbnail = $(document.createElement('div'));
+                    currentThumbnail.css({
+                        'background':'url('+FIX_PATH(artwork.Metadata.Thumbnail+') no-repeat center'),
+                        'height':'100%',
+                    })
+//                    background: url(url) no-repeat center;
                 } else if (artwork.Metadata.ContentType === "Audio") {
                     currentThumbnail.css('background-color', 'black');
                     currentThumbnail.attr('src', tagPath + 'images/audio_thumbnail.svg');

@@ -38,6 +38,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         aspectRatio = 1, //TODO - how to find this
         artworkFrozen = false,
         descscroll = false,
+        scrollingMedia = false,
+
         // misc uninitialized variables
         viewerelt,
         viewer,
@@ -489,19 +491,33 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         canvas = $(viewer.canvas);
         canvas.addClass('artworkCanvasTesting');
-        TAG.Util.makeManipulatable(canvas[0], {
-            onScroll: function (delta, pivot) {
-                dzScroll(delta, pivot);
-            },
-            onManipulate: function (res) {
-                if (doManipulation) {
-                    res.translation.x = -res.translation.x;        //Flip signs for dragging
-                    res.translation.y = -res.translation.y;
-                    dzManip(res);
+        if (IS_WINDOWS) {
+            TAG.Util.makeManipulatableWin(canvas[0], {
+                onScroll: function (delta, pivot) {
+                    dzScroll(delta, pivot);
+                },
+                onManipulate: function (res) {
+                    if (doManipulation) {
+                        res.translation.x = -res.translation.x;        //Flip signs for dragging
+                        res.translation.y = -res.translation.y;
+                        dzManip(res);
+                    }
                 }
-            }
-        }, null, true); // NO ACCELERATION FOR NOW
-        
+            }, null, true); // NO ACCELERATION FOR NOW
+        } else {
+            TAG.Util.makeManipulatable(canvas[0], {
+                onScroll: function (delta, pivot) {
+                    dzScroll(delta, pivot);
+                },
+                onManipulate: function (res) {
+                    if (doManipulation) {
+                        res.translation.x = -res.translation.x;        //Flip signs for dragging
+                        res.translation.y = -res.translation.y;
+                        dzManip(res);
+                    }
+                }
+            }, null, true); // NO ACCELERATION FOR NOW
+        }
 
         assetCanvas = $(document.createElement('div'));
         assetCanvas.attr('id', 'annotatedImageAssetCanvas');
@@ -696,10 +712,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 TAG.Util.disableDrag(outerContainer);
 
                 // register handlers
-                TAG.Util.makeManipulatable(outerContainer[0], {
-                    onManipulate: mediaManip,
-                    onScroll: mediaScroll
-                }, null, true); // NO ACCELERATION FOR NOW  
+                if (IS_WINDOWS) {
+                    TAG.Util.makeManipulatableWin(outerContainer[0], {
+                       onManipulate: mediaManip,
+                        onScroll: mediaScroll
+                    }, null); // NO ACCELERATION FOR NOW  
+                } else {
+                    TAG.Util.makeManipulatable(outerContainer[0], {
+                        onManipulate: mediaManip,
+                        onScroll: mediaScroll
+                    }, null, true); // NO ACCELERATION FOR NOW  
+                }
             }
         }
 
@@ -1079,8 +1102,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var w = outerContainer.width(),
                 h = outerContainer.height();
             outerContainerPivot = {
-                x: w / 2 - (outerContainer.offset().left - root.offset().left),
-                y: h / 2 - (outerContainer.offset().top - root.offset().top)
+                x: w / 2,// - (outerContainer.offset().left - root.offset().left),
+                y: h / 2// - (outerContainer.offset().top - root.offset().top)
             };
             toManip = mediaManip;
             $('.mediaOuterContainer').css('z-index', 1000);
@@ -1089,68 +1112,91 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         }
 
         //When the associated media is clicked, set it to active(see mediaManipPreprocessing() above )
-        outerContainer.on('click', function (event) {
+        outerContainer.on('click mousedown', function (event) {
             event.stopPropagation();            //Prevent the click going through to the main container
             event.preventDefault();
             TAG.Util.IdleTimer.restartTimer();
             mediaManipPreprocessing();
+
+            // If event is initial touch on artwork, save current position of media object to use for animation
+            outerContainer.startLocation = {
+                    x: outerContainer.position().left,
+                    y: outerContainer.position().top
+            };
+            outerContainer.manipulationOffset = {
+                x: event.clientX - outerContainer.position().left,
+                y: event.clientY - outerContainer.position().top
+            };
+
         });
+
 
     /**
      * I/P {Object} res     object containing hammer event info
      * Drag/manipulation handler for associated media
      * Manipulation for touch and drag events
      */
-    function mediaManip(res) {
-        var top         = outerContainer.position().top,
-            left        = outerContainer.position().left,
-            width       = outerContainer.width(),
-            height      = outerContainer.height(),
-            finalPosition;
+        function mediaManip(res, fromSeadragonControls) {
+            if (res.scale !== 1) {
+                mediaScroll(res.scale, res.pivot);
+                return;
+            }
+            if ((scrollingMedia) || (!IS_WINDOWS && !res.eventType)) {
+                return;
+            }
+            var top         = outerContainer.position().top,
+                left        = outerContainer.position().left,
+                width       = outerContainer.width(),
+                height      = outerContainer.height(),
+                finalPosition;
 
-        if (!res.eventType){
-            return
+            // Target location (where object should be moved to)
+            if (fromSeadragonControls) {
+                finalPosition = {
+                    x: left + res.translation.x,
+                    y: top + res.translation.y
+                }
+
+            } else if (IS_WINDOWS) {
+                if (!outerContainer.manipulationOffset) return;
+                finalPosition = {
+                    x: left + res.pivot.x + root.offset().left - outerContainer.manipulationOffset.x,
+                    y: top + res.pivot.y + root.offset().top - outerContainer.manipulationOffset.y
+                }
+            } else {
+                finalPosition = {
+                    x: (res.center.pageX - res.startEvent.center.pageX) + outerContainer.startLocation.x,
+                    y: (res.center.pageY - res.startEvent.center.pageY) + outerContainer.startLocation.y
+                };
+            }
+
+            // Animate to target location
+            outerContainer.stop()
+            outerContainer.animate({
+                top: finalPosition.y,
+                left: finalPosition.x
+            }, 800, function () {
+                IS_WINDOWS && (outerContainer.manipulationOffset = null);
+                //If object is not on screen, reset and hide it
+                if (!(
+                    (0 < finalPosition.y + height*1/2) 
+                    && (finalPosition.y + innerContainer.height()/2 < rootHeight) 
+                    && (0 < finalPosition.x + width*1/2) 
+                    && (finalPosition.x + width/2 < rootWidth))) 
+                    {
+                        hideMediaObject();
+                        pauseResetMediaObject();
+                        return;
+                };    
+            });  
         }
-
-        // If event is initial touch on artwork, save current position of media object to use for animation
-        if (res.eventType === 'start') {
-            startLocation = {
-                x: left,
-                y: top
-            };
-        }   
-        // Target location (where object should be moved to)
-        finalPosition = {
-            x: (res.center.pageX - res.startEvent.center.pageX)*1.5 + startLocation.x, //the constant is to give it a little acceleration 
-            y: (res.center.pageY - res.startEvent.center.pageY)*1.5 + startLocation.y
-        };   
-
-        // Animate to target location
-        outerContainer.stop()
-        outerContainer.animate({
-            top: finalPosition.y,
-            left: finalPosition.x
-        }, 800, function() {
-            //If object is not on screen, reset and hide it
-            if (!(
-                (0 < finalPosition.y + outerContainer.height()) 
-                && (finalPosition.y < rootHeight) 
-                && (0 < finalPosition.x + outerContainer.width()) 
-                && (finalPosition.x < rootWidth))) 
-                {
-                    hideMediaObject();
-                    pauseResetMediaObject();
-                    return;
-            };    
-        });  
-    }
 
     /**
      * I/P {Number} scale     scale factor
      * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
      * Zoom handler for associated media (e.g., for mousewheel scrolling)
      */
-    function mediaScroll(scale, pivot) {
+        function mediaScroll(scale, pivot) {
         var t       = outerContainer.position().top,
             l       = outerContainer.position().left,
             w       = outerContainer.width(),
@@ -1161,6 +1207,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             minW,
             newX,
             newY;
+        scrollingMedia = true;
         if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio'||CONTENT_TYPE==="iframe") {
             minW = 450;
             maxW = 800;
@@ -1181,13 +1228,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         // Update scale, new X and new Y according to newly constrained values.
         scale   = newW / w;
         newH = h * scale;
-        if (IS_WINDOWS) {
-            newX = l + (w - newW)/2;
-            newY = t + (h - newH)/2;
-        } else {
-            newX = l + pivot.x * (1 - scale);
-            newY = t + pivot.y * (1 - scale);
-        }
+        newX = l + pivot.x * (1 - scale);
+        newY = t + pivot.y * (1 - scale);
+
         //Animate outerContainer to this new position
         outerContainer.stop()
         outerContainer.css({
@@ -1195,7 +1238,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             left: newX,
             width: newW,
             height: newH
-        }); 
+        })
+        setTimeout(function () {
+            scrollingMedia = false;
+        }, 100);
     }
         
         /**
@@ -1293,6 +1339,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @method hideMediaObject
          */
         function hideMediaObject() {
+            outerContainer.stop();
             if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
                 outerContainer.hide();
             } else {
