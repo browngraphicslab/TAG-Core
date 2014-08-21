@@ -6883,6 +6883,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             showDropdown = !showDropdown;
         });
+
         var fromFile = $(document.createElement('label'))
             .attr('id', 'fromFile')
             .text('From File')

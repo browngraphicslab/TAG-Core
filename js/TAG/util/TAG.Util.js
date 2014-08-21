@@ -3527,6 +3527,12 @@ TAG.Util.UI = (function () {
 
         searchTab.append(pickerSearchBar);
 
+        pickerSearchBar.on('keyup', function () {
+            if (!pickerSearchBar.val()) {
+                TAG.Util.searchData('', '.compHolder', IGNORE_IN_SEARCH);
+            }
+        });
+
         // select all label
         selectAllLabel = $(document.createElement('div'));
         selectAllLabel.attr("id", "selectAllLabel");
@@ -3650,15 +3656,19 @@ TAG.Util.UI = (function () {
         /**Saves changes for pressing enter key
          * @method onEnter
          */
-        function onEnter() {
+        function onEnter(event) {
+            event.stopPropagation();
+            event.preventDefault();
             if (pickerSearchBar.is(':focus')) {
                 TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
-            } else {
+            } else if (confirmButton.is(':disabled')) {
+                cancelButton.click();
+            }
+            else {
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
                 finalizeAssociations();
                 globalKeyHandler[0] = currentKeyHandler;
-            }
-            
+            }            
         }
 
         var cancelButton = $(document.createElement('button'));
@@ -4077,6 +4087,9 @@ TAG.Util.UI = (function () {
                 pickerOverlay.empty();
                 pickerOverlay.remove();
             }
+            pickerOverlay.fadeOut();
+            pickerOverlay.empty();
+            pickerOverlay.remove();
         }
     }
 
