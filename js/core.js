@@ -109,7 +109,7 @@
         }
 
         param = url.match(/tagpagename=[a-zA-Z]+/);
-
+        
         if(param && param.length > 0) {
             ret.pagename = param[0].split(/=/)[1];
             switch(ret.pagename) {
@@ -127,8 +127,12 @@
                 case 'artwork':
                 case 'video':
                     param = url.match(/tagguid=[a-f0-9\-]+/);
+                    prevPage = url.match(/prevpage=[a-f0-9\-]+/);
                     if(param && param.length > 0) {
                         ret.guid = param[0].split(/=/)[1];
+                        if (prevPage && prevPage.length > 0) {
+                            ret.prevpage = prevPage[0].split(/=/)[1];
+                        }
                         return ret;
                     }
                     break;
@@ -242,17 +246,32 @@
             currentPage.obj  = null;
 
             TAG.Layout.StartPage(null, function (page) {
-                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(tour) {
-                    var tourData = JSON.parse(unescape(tour.Metadata.Content)),
-                        rinPlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function (tour) {
+                    if (pageToLoad.prevpage) {
+                        TAG.Worktop.Database.getDoq(pageToLoad.prevpage, function (prevCollection) {
+                            var tourData = JSON.parse(unescape(tour.Metadata.Content)),
+                                rinPlayer = TAG.Layout.TourPlayer(tourData, prevCollection, {}, null, tour);
 
-                    tagContainer.css('overflow', 'hidden');
+                            tagContainer.css('overflow', 'hidden');
 
-                    tagContainer.append(rinPlayer.getRoot());
-                    rinPlayer.startPlayback();
+                            tagContainer.append(rinPlayer.getRoot());
+                            rinPlayer.startPlayback();
 
-                    currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
-                    currentPage.obj  = rinPlayer;
+                            currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
+                            currentPage.obj = rinPlayer;
+                        });
+                    } else {
+                        var tourData = JSON.parse(unescape(tour.Metadata.Content)),
+                               rinPlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
+
+                        tagContainer.css('overflow', 'hidden');
+
+                        tagContainer.append(rinPlayer.getRoot());
+                        rinPlayer.startPlayback();
+
+                        currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
+                        currentPage.obj = rinPlayer;
+                    }
                 }, function() {
                     // TODO error handling
                 }, function() {
@@ -301,17 +320,32 @@
             currentPage.obj  = null;
 
             TAG.Layout.StartPage(null, function (page) {
-                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(artwork) {
-                    var artworkViewer = TAG.Layout.ArtworkViewer({
-                        doq: artwork,
-                        prevScroll: 0,
-                        prevCollection: null,
-                        prevPage: 'catalog'
-                    });
-                    tagContainer.append(artworkViewer.getRoot());
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function (artwork) {
+                    if (pageToLoad.prevpage) {
+                        TAG.Worktop.Database.getDoq(pageToLoad.prevpage, function (prevCollection) {
+                            var artworkViewer = TAG.Layout.ArtworkViewer({
+                                doq: artwork,
+                                prevScroll: 0,
+                                prevCollection: prevCollection,
+                                prevPage: 'catalog'
+                            });
+                            tagContainer.append(artworkViewer.getRoot());
 
-                    currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                    currentPage.obj  = artworkViewer;
+                            currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                            currentPage.obj = artworkViewer;
+                        });
+                    } else {
+                        var artworkViewer = TAG.Layout.ArtworkViewer({
+                            doq: artwork,
+                            prevScroll: 0,
+                            prevCollection: null,
+                            prevPage: 'catalog'
+                        });
+                        tagContainer.append(artworkViewer.getRoot());
+
+                        currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                        currentPage.obj = artworkViewer;
+                    }
                 });
             }, function() {
                 // TODO error handling
@@ -323,12 +357,22 @@
             currentPage.obj  = null;
 
             TAG.Layout.StartPage(null, function (page) {
-                TAG.Worktop.Database.getDoq(pageToLoad.guid, function(video) {
-                    var videoPlayer = TAG.Layout.VideoPlayer(video, null, null);
-                    tagContainer.append(videoPlayer.getRoot());
+                TAG.Worktop.Database.getDoq(pageToLoad.guid, function (video) {
+                    if (pageToLoad.prevpage) {
+                        TAG.Worktop.Database.getDoq(pageToLoad.prevpage, function (prevCollection) {
+                            var videoPlayer = TAG.Layout.VideoPlayer(video, prevCollection, null);
+                            tagContainer.append(videoPlayer.getRoot());
 
-                    currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
-                    currentPage.obj  = videoPlayer;
+                            currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+                            currentPage.obj = videoPlayer;
+                        });
+                    } else {
+                        var videoPlayer = TAG.Layout.VideoPlayer(video, null, null);
+                        tagContainer.append(videoPlayer.getRoot());
+
+                        currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+                        currentPage.obj = videoPlayer;
+                    }
                 });
             }, function() {
                 // TODO error handling

@@ -72,7 +72,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
                 tagpagename: 'tour',
                 tagguid: tourObj.Identifier,
-                tagonlytour: false
+                tagonlytour: false,
+                prevpage: prevExhib.Identifier
             });
 
             root.append(linkOverlay);
