@@ -2496,7 +2496,7 @@ TAG.Util.UI = (function () {
 
             color: 'white',
             'width': '80%',
-            'height': '15%',
+            'height': '30%',
             'left': '10%',
             'top': '12.5%',
             'font-size': '1.20em',
@@ -2505,7 +2505,7 @@ TAG.Util.UI = (function () {
             'word-wrap': 'break-word',
 
         });
-        var fontsize = TAG.Util.getMaxFontSizeEM(message, 0.8, $(messageLabel).width(), $(messageLabel).height());
+        var fontsize = TAG.Util.getMaxFontSizeEM(message, 1.5, $(messageLabel).width(), $(messageLabel).height());
         $(messageLabel).css('font-size', fontsize);
         TAG.Util.multiLineEllipsis($(messageLabel));
         if (useHTML) {
