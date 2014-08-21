@@ -323,7 +323,8 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
             linkButton.on('click', function() {
                 var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
                     tagpagename: 'video',
-                    tagguid: videoSrc.Identifier
+                    tagguid: videoSrc.Identifier,
+                    prevpage: prevExhib.Identifier
                 });
 
                 root.append(linkOverlay);

@@ -1542,14 +1542,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if(sortDiv.text()==="Tours"){
                     $("#toursButton").hide();
                 }
-                /*if (sortDiv.text() === "Date") {
+                if (sortDiv.text() === "Date") {
                     timelineShown = false;
                     $("#dateButton").hide();
                     $("#showTimelineBttn").css('background-color', '');
                     $("#hideTimelineBttn").css('background-color', 'white');
-
                     $("#showTimelineBttn").attr("disabled","true");
-                }*/
+                }
             } else {
 
                 if (sortOptionsCount < 4) {

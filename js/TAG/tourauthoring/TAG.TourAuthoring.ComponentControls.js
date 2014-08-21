@@ -1279,7 +1279,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         });
                     }
                 },
-            ['.mp4', '.webm', '.ogv'],//'.avi','.mov','.wma'
+            ['.mp4', '.webm', '.ogv','.avi','.mov','.wma'],//'.avi','.mov','.wma'
                 false,
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
@@ -3386,7 +3386,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             "-ms-touch-action": "none",
             'border': '1px solid gray',
             'width': '70%',
-            'height': '21px',
+            'height':'12%',// '21px',
             'margin-top': '3%',
             'margin-left': '8%',
             'display': 'none',
@@ -3718,7 +3718,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var textEditSizeSlider = $(document.createElement('div'));
         textEditSizeSlider.css({
             'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-            'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
+            'width': '70%', 'height': '12%', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
         });
         inkEditText.append(textEditSizeSlider);
         var textEditSliderPoint = $(document.createElement('div'));
@@ -3930,7 +3930,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var brushSlider = $(document.createElement('div')).addClass('brushSliderDiv');
         brushSlider.css({
             'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-            'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
+            'width': '70%', 'height': '12%', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
         });
         inkDrawControls.append(brushSlider);
         drawArray.push(brushSlider);
@@ -4089,7 +4089,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var opacitySlider = $(document.createElement('div'));
         opacitySlider.css({
             'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-            'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
+            'width': '70%', 'height': '12%', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
         });
         inkDrawControls.append(opacitySlider);
         drawArray.push(opacitySlider);
@@ -4236,7 +4236,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         brushEditSlider.addClass("brushEditSlider");
         brushEditSlider.css({
             'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-            'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative', 'float': 'left'
+            'width': '70%', 'height': '12%', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative', 'float': 'left'
         });
         inkEditDraw.append(brushEditSlider);
         drawEditArray.push(brushEditSlider);
@@ -4402,7 +4402,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var opacityEditSlider = $(document.createElement('div'));
         opacityEditSlider.css({
             'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-            'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
+            'width': '70%', 'height': '12%', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'
         });
         inkEditDraw.append(opacityEditSlider);
         drawEditArray.push(opacityEditSlider);
@@ -4586,7 +4586,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var opacityTransparencySlider = $(document.createElement('div'));
         opacityTransparencySlider.css({
             'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-            'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'/*, 'float': 'left'*/
+            'width': '70%', 'height': '12%', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'/*, 'float': 'left'*/
 
         });
         var opacityTransparencySliderPoint = $(document.createElement('div'));
@@ -4744,7 +4744,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         opacityEditTransparencySlider.attr("id", "opacityEditTransparencySlider");
         opacityEditTransparencySlider.css({
             'clear': 'both', 'background-color': 'rgb(136, 134, 134)', "border-radius": "25px", "-ms-touch-action": "none", 'border': '1px solid gray',
-            'width': '70%', 'height': '21px', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'/*, 'float': 'left'*/
+            'width': '70%', 'height': '12%', 'margin-top': '3%', 'margin-left': '8%', 'display': 'none', 'position': 'relative'/*, 'float': 'left'*/
         });
         var opacityEditTransparencySliderPoint = $(document.createElement('div'));
         opacityEditTransparencySliderPoint.attr("id", "opacityEditTransparencySliderPoint");
@@ -4909,8 +4909,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             newDiv.css('margin-top', '2%');
 
             // attach button
-            var linkButton = $(document.createElement('button'));
-            linkButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '5%', 'clear': 'left' });
+            var linkButton = $(document.createElement('button')).addClass("linkButton");
+            linkButton.css({
+                'padding-left': '4px',
+                'padding-right': '4px',
+                'color': 'black',
+                'width': '35%',
+                'float': 'left',
+                'margin-left': '8%',
+                'margin-top': '5%',
+                'clear': 'left'
+            });
             linkButton.get(0).innerHTML = "Attach to Selected";
 
             // attach button click handler -- reset to default values, call link, link_text, or link_trans or their unattached equivalents
@@ -4960,8 +4969,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             newDiv.append(linkButton);
 
             // create as unattached ink button
-            var freeInkButton = $(document.createElement('button'));
-            freeInkButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '5%' });
+            var freeInkButton = $(document.createElement('button')).addClass("freeInkButton");
+            freeInkButton.css({
+                'padding-left': '4px',
+                'padding-right': '4px',
+                'color': 'black',
+                'width': '35%',
+                'float': 'left',
+                'margin-left': '8%',
+                'margin-top': '5%'
+            });
             freeInkButton.get(0).innerHTML = "Create as Unattached";
 
             // unattached button click handler
