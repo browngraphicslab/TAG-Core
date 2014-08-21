@@ -909,7 +909,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         //var fontFamilyInput = createSelectInput(['Arial', 'Calibri', 'Comic Sans MS', 'Courier New', 'Franklin Gothic', 'Raavi', 'Segoe Print', 'Segoe UI Light', 'Source Sans Pro', 'Times New Roman', 'Trebuchet MS', 'Verdana'], TAG.Worktop.Database.getFontFamily());
-        var idleTimerDurationInput = createTextInput(idleTimerDuration, false, 3, false, false, true);
+        var idleTimerDurationInput = createTextInput(idleTimerDuration, "", 3, false, false, true);
         idleTimerDurationInput.on('keyup', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
@@ -2527,7 +2527,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var pubPrivDiv = $(document.createElement('div'));
         pubPrivDiv.append(privateInput).append(publicInput);
 
-        var nameInput = createTextInput(TAG.Util.htmlEntityDecode(tour.Name), true, 120);
+        var nameInput = createTextInput(TAG.Util.htmlEntityDecode(tour.Name), "Tour Title", 120);
         var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(tour.Metadata.Description).replace(/\n/g,'<br />') || "", false);
         var tourIdInput = createTextInput(tour.Identifier, 'Tour ID (read-only)', 80, false, true);
         nameInput.focus(function () {
@@ -3100,7 +3100,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         // Create labels
-        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(media.Name) || "", true, 100);
+        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(media.Name) || "", "Title", 100);
         var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(media.Metadata.Description).replace(/\n/g,'<br />') || "", true);
 
         titleInput.focus(function () {
@@ -4205,8 +4205,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
         }
 
-        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), true, 100);
-        var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), true, 100);
+        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), "Artwork Title", 100);
+        var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), "Artist", 100);
         var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Description).replace(/\n/g, '<br />') || "", "", false);
 
         titleInput.on('keyup', function () {
@@ -4260,7 +4260,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (artwork.Metadata.InfoFields) {
             $.each(artwork.Metadata.InfoFields, function (key, val) {
-                customInputs[key] = createTextInput(TAG.Util.htmlEntityDecode(val), true);
+                customInputs[key] = createTextInput(TAG.Util.htmlEntityDecode(val), "Metadata Field");
                 customSettings[key] = createSetting(key, customInputs[key]);
             });
         }
@@ -4609,7 +4609,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             extra4: customFields[3] || "",
         };
         $.each(metadataspec, function (key, val) {
-            var input = createTextInput(val, null, null, false, false);
+            var input = createTextInput(val, "Metadata Field", null, false, false);
             var field = createSetting(key, input, null, '7px');
             field.addClass("metadataspec");
             $(field).css({
@@ -4795,7 +4795,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (counter < 2) {
                     infoFields[ele] = data[ele];
                     // create input field for new cus field
-                    inputs.customInputs[ele] = createTextInput(TAG.Util.htmlEntityDecode(data[ele]), true);
+                    inputs.customInputs[ele] = createTextInput(TAG.Util.htmlEntityDecode(data[ele]), "Metadata Field");
                     customSettings[ele] = createSetting(ele, inputs.customInputs[ele]);
                     counter++;
                 }
@@ -5012,7 +5012,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     for (var rest in selectedmetadata) {
                         //if there are extra fields, add them
                         if (!fields[rest]) {
-                            var input = createTextInput(selectedmetadata[rest], null, null, false, true);
+                            var input = createTextInput(selectedmetadata[rest], "Metadata Field", null, false, true);
                             var field = createSetting(rest, input, null, '7px').addClass("metadataField").attr('title', rest);
                             field.css({
                                 margin:  '0%',
@@ -5806,14 +5806,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             yearMetadataDivSpecs;
 
         //Create input boxes: 
-        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), true, 100);
+        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), "Year", 100);
         var yearDescriptionDiv = $(document.createElement('div'));
         monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month);
         monthInput.css('margin-right', '0%');
         dayInput = createSelectInput(getDayOptions(monthInput.attr('value'),yearInput,monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
-        timelineYearInput = createTextInput(timelineInputText, true, 100);
+        timelineYearInput = createTextInput(timelineInputText, "Timeline Year", 100);
         if (timelineYearInput.val()===''){
             timelineYearInput.attr('placeholder', 'Type valid year');
         }
@@ -6197,6 +6197,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             input.on('keypress', function (event) {
                 return (event.charCode >= 48 && event.charCode <= 57);
             });
+        }
+        if (defaultval) {
+            input.attr("placeholder", defaultval);
         }
         input.attr('autocomplete', 'off');
         input.attr('spellcheck', 'false');
