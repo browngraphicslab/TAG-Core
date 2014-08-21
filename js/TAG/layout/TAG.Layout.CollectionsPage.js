@@ -1844,8 +1844,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @return {Boolean}                whether the labels of the two circles are overlapping
      */
     function labelsAreOverlapping(position1, position2, labelWidth){
-        //Hard-coded 4 pixel buffer between labels for clarity 
-        return Math.round(position1) + labelWidth + 4 > position2;
+        //40% of labels width padding between labels for clarity 
+        return Math.round(position1) + labelWidth*1.4 > position2;
     }
 
     /**
