@@ -105,9 +105,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         artistInfo,                     // artist tombstone info div
         yearInfo,                       // year tombstone info div
         justShowedArtwork,              // for telemetry; helps keep track of artwork tile clicks
-        comingBack,                      // if you are coming back from a viewer
+        comingBack,                     // if you are coming back from a viewer
         defaultTag,                     // default sort tag
-        showArtworkTimeout;
+        showArtworkTimeout,
+        tileCircle;                     // loading circle for artwork tiles
     root[0].collectionsPage = this;
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
@@ -240,7 +241,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var tileCircle = TAG.Util.showProgressCircle(tileDiv, progressCircCSS, '0px', '0px', false);
         tileLoadingArea.append(tileCircle);
         */
-        searchInput.hide();
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
@@ -410,7 +410,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadQueue.clear();
         comingBack = false;
         tileDiv.empty();
-        tileLoadingArea.show();
+        tileCircle.show();
         if (cancelLoadCollection) cancelLoadCollection();
     }
 
@@ -578,9 +578,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 dummyDot,
                 dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR),
                 str,
-                text = collection.Metadata && collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "";
-
-
+                text = collection.Metadata && collection.Metadata.Description ? TAG.Util.htmlEntityDecode(collection.Metadata.Description) : "",
+                progressCircCSS = {
+                    'position': 'absolute',
+                    'float'   : 'left',
+                    'left'    : '12%',
+                    'z-index' : '50',
+                    'height'  : '20%',
+                    'width'   : 'auto',
+                    'top'     : '22%',
+                };
             // if the idle timer hasn't started already, start it
             if (!idleTimer && evt && !previewing) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
@@ -791,6 +798,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.append(infoDiv);
             timelineArea.empty();
             styleBottomContainer();
+
+            //Show loading circle
+            tileCircle = TAG.Util.showProgressCircle(catalogDiv, progressCircCSS, catalogDiv.width()/2, catalogDiv.height()/2, true);
+            catalogDiv.append(tileCircle);
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
 
@@ -1086,8 +1097,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 circle,
                 i, h, w, j;
 
+
             if (!artworks || artworks.length === 0){
-                tileLoadingArea.hide();
+                tileCircle.hide();
                 return;
             }
 
@@ -1118,7 +1130,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
             }
             loadQueue.add(function () {
-            	tileLoadingArea.hide();
+            	tileCircle.hide();
             })
             loadQueue.add(function () {
                 showArtwork(currentArtwork,multipleShown && multipleShown)();

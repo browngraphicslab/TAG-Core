@@ -644,7 +644,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function initMediaObject() {
             if (IS_XFADE && linq.Offset && linq.Dimensions) {
-                console.log("initing");
                 outerContainer.css({
                     'border': '1px solid rgba(255,255,255,0.4)',
                     'background': 'rgba(0,0,0,0)',
@@ -1085,11 +1084,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
                         outerContainer.on('mousedown', function() {
                             interactionOverlay.css("pointer-events", "auto");
-                            interactionOverlay.css('background-color', "rgba(10, 50 ,0, .5");
                         });
                         $("body").on('mouseup', function() {
                             interactionOverlay && interactionOverlay.css("pointer-events", "none")
-                            interactionOverlay.css('background-color', "rgba(0, 0 ,0, 0")
                         });
                         mediaContainer.append(interactionOverlay)
                     }

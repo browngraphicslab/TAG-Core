@@ -529,7 +529,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             mediaDrawer,
             xfadeDrawer,
             xfadeSlider,
-            xfadeSliderPoint;
+            xfadeSliderPoint,
+            isFading = false;
 
         sideBarInfo.css({
             'height' : sideBarSections.height()-25 + 'px'
@@ -723,22 +724,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         });
                         xfadeSlider.append(xfadeSliderPoint);
 
-                        xfadeSlider.on('mousedown', function(evt) {
-                            var leftPercent = evt.offsetX / xfadeSlider.width();
-                            xfadeSliderPoint.css('width', leftPercent * 100 + '%');
-                            $('.xfadeImg').css('opacity', leftPercent);
-
-                            xfadeSlider.on('mousemove', function (evt) {
-                                var leftPercent = evt.offsetX / xfadeSlider.width();
+                        var updateOverlay = function(evt){
+                            if (isFading){
+                                var leftPercent =  (evt.clientX - xfadeSlider.offset().left)/ xfadeSlider.width();
                                 xfadeSliderPoint.css('width', leftPercent * 100 + '%');
                                 $('.xfadeImg').css('opacity', leftPercent);
-                            });
+                            }
+                        }
+
+                        xfadeSlider.on('mousedown', function(evt) {
+                            isFading = true;
+                            updateOverlay(evt)
+                        });
+                        xfadeSlider.on('mousemove', function (evt) {
+                                updateOverlay(evt)
                         });
 
-                        xfadeSlider.on('mouseup mouseleave', function (evt) {
-                            xfadeSlider.off('mousemove');
+                        root.on('mouseup', function(evt){
+                            isFading = false;
                         });
-
                         
                         xfadeDrawer = createDrawer('Layers', xfadeSlider);
                     }
