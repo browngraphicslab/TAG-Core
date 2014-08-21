@@ -3503,9 +3503,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'margin-top': '2%',
             'overflow-x': 'hidden',
             'position': 'relative',
-        });
+        }).attr("id","textEditArea");
         textEditArray.push(textEditArea);
-        textEditArea.autoSize();
+        $("#textEditArea").autoSize({
+            onResize: function () {
+                $(this).css({ 'opacity': '0.8' });
+            },
+            animateCallback: function () {
+                $(this).css({ 'opacity': '1' });
+            },
+            animateDuration: 300,
+            extraSpace: 40
+        });
         inkEditText.append(textEditArea);
 
         var textA;
