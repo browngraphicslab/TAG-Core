@@ -335,8 +335,12 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
 
         // NOTE: save button click event handler is below dialog code
         var saveButton = $(document.createElement("button"));
-        saveButton.text("Save Changes");
-        saveButton.attr('type', 'button');
+        saveButton.text("Save");
+        saveButton.attr('type', 'button');      
+        saveButton.attr('id', 'tourSaveButton');
+        //Initially disable save button since there have been no changes
+        saveButton.prop('disabled', true);
+        saveButton.css('opacity', '0.4');
 
         var saveButtonSpecs = TAG.Util.constrainAndPosition($(window).width() * 0.8, $(window).height() * 0.08,
         {
@@ -344,7 +348,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             width: 0.13,
             height: 0.5,
         });
-        var fontsize = TAG.Util.getMaxFontSizeEM('Save Changes', 0.2, 0.63 * saveButtonSpecs.width, 0.75 * saveButtonSpecs.height, 0.01);
+        var fontsize = TAG.Util.getMaxFontSizeEM('Save', 0.2, 0.63 * saveButtonSpecs.width, 0.75 * saveButtonSpecs.height, 0.01);
         saveButton.css({
             "color": "white",
             "border-color": "white",
@@ -463,7 +467,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             var saveDialog = TAG.Util.UI.PopUpConfirmation(function () {
                 $("#popupConfirmButton").text('Saving...').attr('disabled', true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
                 save(true);
-            }, 'Save changes to ' +textArea.val(), "Save", false);
+            }, 'Save changes to ' + textArea.val() + '?', "Save", false);
             root.append(saveDialog);
             $(saveDialog).css('z-index', 1000000);
             $(saveDialog).show();
