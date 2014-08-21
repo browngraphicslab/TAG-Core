@@ -1785,7 +1785,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tick.css(               //ANIMATEALERT
                 { "left": (tickTarget * 100) + "%" });
         }
-
+         
         function location(dot){
             var target =  ((currOffset + dot.Offset)  - center) * zoomLevel  + center;
             return target;

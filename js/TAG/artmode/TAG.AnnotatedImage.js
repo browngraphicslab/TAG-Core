@@ -1073,21 +1073,26 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     
                     //Create an overlay to help with interaction (problems with mouse "sticking" to iframe)
                     //Basically, create an overlay that only exists while you have clicked down on the media, and then is removed when you release it (i.e, when you want to actually play the iframe)
-                    var interactionOverlay = $(document.createElement('div'))
-                    interactionOverlay.css({
-                        height: "100%",
-                        width: "100%",
-                        position: "absolute", 
-                        left: 0, 
-                        top: 0
-                    })
-                    outerContainer.on('mousedown', function() {
-                        interactionOverlay.css("pointer-events", "auto");
-                    });
-                    $("body").on('mouseup', function() {
-                        interactionOverlay && interactionOverlay.css("pointer-events", "none")
-                    });
-                    mediaContainer.append(interactionOverlay)
+                    if (!IS_WINDOWS){
+                        var interactionOverlay = $(document.createElement('div'))
+                        interactionOverlay.css({
+                            height: "100%",
+                            width: "100%",
+                            position: "absolute", 
+                            left: 0, 
+                            top: 0
+                        })
+
+                        outerContainer.on('mousedown', function() {
+                            interactionOverlay.css("pointer-events", "auto");
+                            interactionOverlay.css('background-color', "rgba(10, 50 ,0, .5");
+                        });
+                        $("body").on('mouseup', function() {
+                            interactionOverlay && interactionOverlay.css("pointer-events", "none")
+                            interactionOverlay.css('background-color', "rgba(0, 0 ,0, 0")
+                        });
+                        mediaContainer.append(interactionOverlay)
+                    }
                 }
                 if (DESCRIPTION) {
                     descDiv = $(document.createElement('div'));
