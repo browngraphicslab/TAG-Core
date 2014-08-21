@@ -142,6 +142,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         };
         
         circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
+        var loadingLabel = $(document.createElement('div'));
+        loadingLabel.css({
+            'position': 'absolute',
+            'left': '37%',
+            'top': '55%',
+            'font-size': '200%',
+            'color': 'white',
+            'opacity': '1'
+        });
+        loadingLabel.text('Loading Collections');
+        loadingArea.append(loadingLabel);
 
         //Or else the search bar loses focus immediately when you come back from artwork viewer
         $('#tagContainer').off();
@@ -967,7 +978,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     currentDefaultTag = currentTag;
                 }
             }
-            console.log(currentTag);
             colorSortTags(currentTag);
         }
 
@@ -1736,16 +1746,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             nextCircle = timelineEventCircles[timelineEventCircles.indexOf(circ) + 1],
             prevCircle = timelineEventCircles[timelineEventCircles.indexOf(circ) - 1];
 
-        // Always show current circle, and if there are other circles with the same date, hide them
-        if (selectedCircle && circ.yearKey === selectedCircle.yearKey){
-            timelineDateLabel.css('visibility', 'hidden');
-                if (circ === selectedCircle){
-                    timelineDateLabel.css('visibility', 'visible');
-                };
-            return;
-        };
-
         //Decide whether to display labels:
+        if (circ === timelineEventCircles[0]){
+            timelineDateLabel.css('visibility', 'visible');
+        }
         if (prevCircle){
             //Find the previous visible timeline label:
             while (timelineEventCircles[timelineEventCircles.indexOf(prevCircle) - 1] && prevCircle.timelineDateLabel.css('visibility')!=='visible'){
@@ -1756,6 +1760,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //Overlapping circles should only have 1 label: 
             if (prevCircle && !labelOverlap){
                 timelineDateLabel.css('visibility', 'visible');
+                //prevCircle.timelineDateLabel.css('visibility','visible');
             } else{
                 timelineDateLabel.css('visibility', 'hidden');    
                 if (numCircles && timelineEventCircles.indexOf(circ) === numCircles){
@@ -1764,9 +1769,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }          
             } 
         }
-        if (circ === timelineEventCircles[0]){
-            timelineDateLabel.css('visibility', 'visible');
-        }
+
+        // Always show current circle, and if there are other circles with the same date, hide them
+        if (selectedCircle && circ.yearKey === selectedCircle.yearKey){ 
+            if (circ === selectedCircle){
+                timelineDateLabel.css('visibility', 'visible');
+            } else {
+                timelineDateLabel.css('visibility', 'hidden'); 
+            }
+            return;
+        };
     }
     
     function zoomTimeline(circle) {
@@ -1798,7 +1810,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                            displayLabels(timelineEventCircles[k],null,k); 
                         }
                     }
-                },1000); //would need to be changed if animation time changed (can't use transitionend event because sometimes last dot doesn't move)
+                },1100); //would need to be changed if animation time changed (can't use transitionend event because sometimes last dot doesn't move)
             }
         }
 
@@ -1837,6 +1849,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
       */
     function hideArtwork(artwork) {
         return function () {
+            var i;
             currentArtwork = null;
             if (!artwork) {
                 return;
@@ -2342,6 +2355,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 previewTile.append(tileTop)
                     	   .append(tileBottom);
+
 				selectedArtworkContainer.append(previewTile);
                 root.find('.tile').css('opacity','0.5');
   
@@ -2359,7 +2373,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 styleTimelineCircle (timelineEventCircles[i], false)
             };
 
-            // Make current circle larger and white
+            // Make current circle larger and white           
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], true)
             };
