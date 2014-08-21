@@ -4393,7 +4393,7 @@ TAG.Util.RLH = function (input) {
                             position: 'absolute',
                             top: '12%',
                             left: input.authoring?'20%':'22%',
-                            width: '70%',
+                            width: '65%',
                             height: '85%',
                             display: 'none',
                             'z-index': '51'
@@ -4410,6 +4410,8 @@ TAG.Util.RLH = function (input) {
                             top: '0%',
                             left: '0%',
                             'z-indez': 99,
+                            "border-top-right-radius": "10px",
+                            "border-bottom-right-radius": "10px",
                             'background-color': 'rgba(0,0,0,0.75)'
                         })
                         .appendTo(locationPanelDiv);
@@ -5810,7 +5812,7 @@ TAG.Util.RLH = function (input) {
         container.css({
             margin: '0px 0px 10px 0px',
             position: 'relative',
-            width: '97%',
+            width: '100%',
         });
         container.on('click', function () {
             if (!formIsEnabled) { //don't do anything if another form is already open

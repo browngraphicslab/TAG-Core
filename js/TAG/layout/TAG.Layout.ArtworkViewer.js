@@ -25,9 +25,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
         info                = root.find('#info'),
         loadingArea          = root.find('#loadingArea'),
-        locHistoryToggle    = root.find('#locationHistoryToggle'),
         locHistory          = root.find('#locationHistory'),
         locHistoryContainer = root.find('#locationHistoryContainer'),
+        locationPanelDiv = null,
+        locHistoryToggle = null,
+        isOpen = false,
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,
@@ -129,18 +131,18 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         loadingArea.append(loadingLabel);
 
         // add script for displaying bing maps
+        
         head = document.getElementsByTagName('head').item(0);
         script = document.createElement("script");
         script.charset = "UTF-8";
         script.type = "text/javascript";
         script.src = "http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0";
         head.appendChild(script);
-
         meta = document.createElement('meta');
         meta.httpEquiv = "Content-Type";
         meta.content = "text/html; charset=utf-8";
         head.appendChild(meta);
-
+        
         locationList = TAG.Util.UI.getLocationList(doq.Metadata);
 
         annotatedImage = TAG.AnnotatedImage({
@@ -205,21 +207,42 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         splitscreenContainer.on('click', function () {
             var collectionsPage,
                 collectionsPageRoot;
-            // TODO merge deal with location history container being open (it should be closed upon entering splitscreen)
             if (!TAG.Util.Splitscreen.isOn()) {
-                // TODO merge:
-                //   - dim out location history text in sidebar and disable it
-                //   - 
-                collectionsPage = TAG.Layout.CollectionsPage();
+                if (isOpen) {
+                    locationPanelDiv.animate({ width: '0%' }, 350, function () {
+                        locHistory.text("Related Maps");
+                        locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
+                        locHistoryContainer.css({ "background-color": "transparent" });
+                        locationPanelDiv.hide();
+                        locHistoryToggle.hide();
+                        isOpen = false;
+                        toggler.show();
 
-                collectionsPageRoot = collectionsPage.getRoot();
-                collectionsPageRoot.data('split', 'R');
+                        collectionsPage = TAG.Layout.CollectionsPage();
 
-                splitscreenContainer.css('display', 'none');
-                TAG.Util.Splitscreen.init(root, collectionsPageRoot);
-                annotatedImage.viewer.scheduleUpdate();
-                //annotatedImage.viewer.viewport.applyConstraints();
-                TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+                        collectionsPageRoot = collectionsPage.getRoot();
+                        collectionsPageRoot.data('split', 'R');
+
+                        splitscreenContainer.css('display', 'none');
+                        TAG.Util.Splitscreen.init(root, collectionsPageRoot);
+                        annotatedImage.viewer.scheduleUpdate();
+                        //annotatedImage.viewer.viewport.applyConstraints();
+                        TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+                    });
+                } else {
+                    locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
+                    collectionsPage = TAG.Layout.CollectionsPage();
+
+                    collectionsPageRoot = collectionsPage.getRoot();
+                    collectionsPageRoot.data('split', 'R');
+
+                    splitscreenContainer.css('display', 'none');
+                    TAG.Util.Splitscreen.init(root, collectionsPageRoot);
+                    annotatedImage.viewer.scheduleUpdate();
+                    //annotatedImage.viewer.viewport.applyConstraints();
+                    TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+                }
+                
             }
         });
 
@@ -1232,9 +1255,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @author jastern
      */
     function initlocationHistory() {
-        var RLH,
-            isOpen = false,
-            locationPanelDiv;
+        var RLH;            
+        isOpen = false;
 
         locHistoryContainer.on('click', function () { toggleLocationOpen(); });
 
@@ -1245,36 +1267,58 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             authoring: false
         });
         locationPanelDiv = RLH.init();
-
+        locationPanelDiv.css({"width":"0%"});
+        locHistoryToggle = $(document.createElement('div'))
+            .attr("id", "locHistoryToggle")
+            .css({
+                "left": '100%',
+                'border-top-right-radius': '10px',
+                'border-bottom-right-radius': '10px',
+                "background-color":"rgba(0,0,0,0.7)",
+                "top": "43%",
+                "width": "4%",
+                "height": "14%",
+                "z-index": "100",
+                "position": "relative"
+            });
+        var locHistoryToggleImage = $(document.createElement('img'))
+            .attr('src', tagPath + 'images/icons/Close.svg')
+            .attr("id", "locHistoryToggleImage")
+            .css({
+                'left': '0%',
+                "position":"absolute",
+	            "top": "30%",
+	            "width":"72%",
+	            "height":"42%"
+	        });
+        locationPanelDiv.append(locHistoryToggle);
+        locHistoryToggle.append(locHistoryToggleImage);
+        locHistoryToggle.on('click', function () { toggleLocationOpen(); });
         function toggleLocationOpen() {
-            isOpen ? locationClose() : locationOpen();
+            isOpen ? locationClose() : locationOpen();    
         }
-
-        function locationOpen() { //TODO why isn't this sliding open?
+        if (TAG.Util.Splitscreen.isOn()) {
+            locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
+        }
+        function locationOpen() { 
             if (!isOpen) {
-                
-                locHistoryToggle.css({'display':'none'});
-                toggler.css('display', 'none');
-                locationPanelDiv.show("slide", { direction: 'left' }, 500);
-                locationPanelDiv.css({ display: 'inline' });
-                locHistoryContainer.css({ "background-color": "white" });
-                locHistory.text("Close Related Maps");
-                locHistory.css({ "color": "black"});
-                isOpen = true;
+                if (!TAG.Util.Splitscreen.isOn()) {
+                    locationPanelDiv.css({ display: 'inline' });
+                    locHistory.text("Close Related Maps");
+                    isOpen = true;
+                    toggler.hide();
+                    locationPanelDiv.show();
+                    locationPanelDiv.animate({ width: '65%' }, 350, function () { locHistoryToggle.show(); });
+                }
             }
         }
 
         function locationClose() {
             if (isOpen) {
-                
-                locationPanelDiv.hide("slide", { direction: 'left' }, 500, function () {
-                    toggler.css('display', 'block');
-                    locHistory.text("Related Maps");
-                    locHistoryContainer.css({ "background-color": "transparent" });
-                    locHistory.css({ "color": "white"});
-                });
-                
+                locHistory.text("Related Maps");
+                locHistoryContainer.css({ "background-color": "transparent" });
                 isOpen = false;
+                locationPanelDiv.animate({ width: '0%' }, 350, function () { locationPanelDiv.hide(); locHistoryToggle.hide(); toggler.show(); });
             }
         }
 

@@ -223,8 +223,8 @@ TAG.Util.Splitscreen = (function () {
                     togglerImage = root.find('#togglerImage'),
                     splitscreenContainer = root.find('#splitscreenContainer'),
                     seadragonManipContainer = root.find('#seadragonManipContainer'),
-                    splitscreenIcon = root.find('.splitscreen-icon');
-                    //locationHistoryDiv = root.find('.locationHistoryDiv'),
+                    splitscreenIcon = root.find('.splitscreen-icon'),
+                    locationHistoryDiv = root.find('#locationHistory');
                     //locationHistoryPanel = root.find('.locationHistoryPanel'),
                     //locationHistoryToggle = root.find('.locationHistoryToggle'),
                     //locationHistoryToggleIcon = root.find('.locationHistoryToggleIcon'),
@@ -233,7 +233,8 @@ TAG.Util.Splitscreen = (function () {
                     //lhmapsuffix = (newside === 'R') ? 'R' : '',
                     //lhmap = root.find('.lpMapDiv'),
                     //sidebarsize = window.innerWidth * 0.2,
-                    //locsize = window.innerWidth * 0.8;
+                //locsize = window.innerWidth * 0.8;
+                locationHistoryDiv.css({ "color": "#" + TAG.Worktop.Database.getMuseumPrimaryFontColor() });
                 sideBar.css({
                     'left': '0%',
                     'right' : 'auto'
