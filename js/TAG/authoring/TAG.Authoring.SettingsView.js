@@ -150,6 +150,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 		leftButton,
         popUpBoxVisible = false,
         changesMade = false,
+        pickerOpen = false,
 
         // booleans
 		inGeneralView = false,
@@ -348,7 +349,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             event.stopPropagation();
             event.preventDefault();
         }
-        if (!$("input, textarea").is(":focus")) {
+        else if (!$("input, textarea").is(":focus")) {
             if (inCollectionsView) { manageCollection(currentList[currentIndex]);  }
             if (inArtworkView) {
                 if ($(document.getElementById('artworkEditorButton')).length) {
@@ -358,7 +359,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     saveThumbnail(currentList[currentIndex], false);
                 }
              }
-            if (inAssociatedView) { assocToArtworks(currentList[currentIndex]); }
+            if (inAssociatedView) {
+                if (!$('.pickerOverlay').length) {
+                    assocToArtworks(currentList[currentIndex]);
+                }                
+            }
             if (inToursView) { editTour(currentList[currentIndex]); }
             if (inFeedbackView) { deleteFeedback(currentList[currentIndex]); }
         }
@@ -3180,7 +3185,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // Create buttons
         
         var assocButton = createButton('Associate to Artworks',
-            function () { assocToArtworks(media); /*changesHaveBeenMade = true;*/ },
+            function () {
+                pickerOpen = true;
+                assocToArtworks(media); /*changesHaveBeenMade = true;*/
+            },
             {
                 'float': 'left',
                 'margin-left': '2%',

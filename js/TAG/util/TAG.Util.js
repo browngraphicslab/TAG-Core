@@ -1865,6 +1865,7 @@ TAG.Util.UI = (function () {
      * @param {Event} event     // the event triggered on key presses
      */
     function keyHandler(event) {
+        event.stopPropagation();        
         if (globalKeyHandler && globalKeyHandler[0] && globalKeyHandler[0][event.which]) {
             globalKeyHandler[0][event.which](event);
         }
@@ -3501,20 +3502,14 @@ TAG.Util.UI = (function () {
             'width': '20%',
             'height': '55%',
         });
-        pickerSearchBar.on('keyup', function (event) {
-            event.stopPropagation();
-        });
         // TAG.Util.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
         //pickerSearchBar.attr("placeholder", "Search");
-        pickerSearchBar.keyup(function () {
-            TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
-        });
-        pickerSearchBar.change(function () {
-            if (pickerSearchBar.val() !== '') {
+        pickerSearchBar.keyup(function (event) {
+            event.stopPropagation();
+            if (event.which === 13) {
                 TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
             }
         });
-
 
         pickerSearchBar.css({
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
@@ -3529,7 +3524,6 @@ TAG.Util.UI = (function () {
                 pickerSearchBar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             }
         });
-
 
         searchTab.append(pickerSearchBar);
 
@@ -3546,6 +3540,8 @@ TAG.Util.UI = (function () {
         
         selectAllLabel.on('click', function () {
             var holder, guid, index;
+            confirmButton.prop('disabled', false);
+            confirmButton.css('opacity', '1');
             $.each($('.compHolder'), function (ind, holderElt) {
                 holder = $(holderElt);
                 if (!holder.data("selected") && holder.css("display") !== "none") {
@@ -3576,6 +3572,8 @@ TAG.Util.UI = (function () {
         deselectAllLabel.text('Deselect All');
         deselectAllLabel.on('click', function () {
             var holder, guid, index, addedIndex;
+            confirmButton.prop('disabled', false);
+            confirmButton.css('opacity', '1');
             $.each($('.compHolder'), function (ind, holderElt) {
                 holder = $(holderElt);
                 if (holder.data("selected") && holder.css("display") !== "none") {
@@ -3638,6 +3636,7 @@ TAG.Util.UI = (function () {
             'position': 'relative',
             'float': "right",
         });
+
         confirmButton.text("Save");
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
@@ -3652,9 +3651,14 @@ TAG.Util.UI = (function () {
          * @method onEnter
          */
         function onEnter() {
-            progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
-            finalizeAssociations();
-            globalKeyHandler[0] = currentKeyHandler;
+            if (pickerSearchBar.is(':focus')) {
+                TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
+            } else {
+                progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
+                finalizeAssociations();
+                globalKeyHandler[0] = currentKeyHandler;
+            }
+            
         }
 
         var cancelButton = $(document.createElement('button'));
@@ -3670,6 +3674,7 @@ TAG.Util.UI = (function () {
             'float': "right",
             'margin-right': '3%'
         });
+
         cancelButton.text('Cancel');
         cancelButton.on('click', function () {
             $('.compHolder').off();
@@ -3688,12 +3693,19 @@ TAG.Util.UI = (function () {
         picker.append(optionButtonDiv);
 
         tabHelper(0)(); // load first tab
+        confirmButton.prop('disabled', true);
+        confirmButton.css('opacity', '0.4');
+
+        $('#mainThumbnailContainer').on('click', function (event) {
+            confirmButton.prop('disabled', false);
+            confirmButton.css('opacity', '1');
+        });
 
         // helper functions
 
         // click handler for tabs
-        function tabHelper(j) {
-            return function () {
+        function tabHelper(j) {            
+            return function () {                
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
                 pickerSearchBar.attr("value", "");
