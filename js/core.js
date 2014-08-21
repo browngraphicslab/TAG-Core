@@ -127,7 +127,7 @@
                 case 'artwork':
                 case 'video':
                     param = url.match(/tagguid=[a-f0-9\-]+/);
-                    prevPage = url.match(/prevpage=[a-f0-9\-]+/);
+                    var prevPage = url.match(/prevpage=[a-f0-9\-]+/);
                     if(param && param.length > 0) {
                         ret.guid = param[0].split(/=/)[1];
                         if (prevPage && prevPage.length > 0) {
