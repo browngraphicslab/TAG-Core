@@ -2126,7 +2126,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 //                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
                     currentThumbnail = $(document.createElement('div'));
                     currentThumbnail.css({
-                        'background':'url('+FIX_PATH(artwork.Metadata.Thumbnail+') no-repeat center'),
+                        'background': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail + ') no-repeat center'),
+                        'background-size':'contain',
                         'height':'100%',
                     })
 //                    background: url(url) no-repeat center;
