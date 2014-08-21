@@ -183,6 +183,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             createInfoPopUp();
         });
 
+        if (SECONDARY_FONT_COLOR[0]!=='#'){
+            SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;        
+        }    
+        if (PRIMARY_FONT_COLOR[0]!== '#'){
+            PRIMARY_FONT_COLOR = '#' + PRIMARY_FONT_COLOR;
+        }
 
         if (IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg')
@@ -560,10 +566,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'color': SECONDARY_FONT_COLOR,
             //'font-family': FONT
         });
-        $('.collection-title').css({ 
-            'color': PRIMARY_FONT_COLOR,
-            //'font-family': FONT
-        });
+        $('.nextPrevCollection').css({
+            'color' : dimmedColor
+        })
     }
 
     /**
@@ -826,7 +831,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 artworksButton.off()
                               .on('click', function(){
-                                    artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
+                                    artworksButton.css('color', SECONDARY_FONT_COLOR);
                                     assocMediaButton.css('color', dimmedColor);
                                     if (onAssocMediaView){
                                         onAssocMediaView = false;
@@ -837,7 +842,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 assocMediaButton.off()
                                 .on('click', function(){
                                     artworksButton.css('color', dimmedColor);
-                                    assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  
+                                    assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView){
                                         onAssocMediaView = true;
                                         loadCollection(currCollection)();
@@ -1444,11 +1449,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             **/
             if (last) {
                 if (onAssocMediaView) {
-                    assocMediaButton.css({ "color": "#" +SECONDARY_FONT_COLOR });
+                    assocMediaButton.css({ "color": SECONDARY_FONT_COLOR });
                     artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
                 } else {
                     assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
-                    artworksButton.css({ "color": "#" + SECONDARY_FONT_COLOR });
+                    artworksButton.css({ "color": SECONDARY_FONT_COLOR });
                 }
                 
                 assocMediaButton.removeAttr('disabled');
