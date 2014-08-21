@@ -822,6 +822,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Hide selected artwork container, as nothing is selected yet
             selectedArtworkContainer.css('display', 'none');
+            timelineShown && zoomTimeline();
       
             tileDiv.empty();
             catalogDiv.append(tileDiv);
