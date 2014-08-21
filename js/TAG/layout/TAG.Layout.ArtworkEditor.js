@@ -2382,7 +2382,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             metadataForm.append(addInfoButton);
 
             saveMetadataButton = $(document.createElement('button')); // TODO JADE/STYL
-            saveMetadataButton.text('Save Changes');
+            saveMetadataButton.text('Save');
             saveMetadataButton.attr('type', 'button');
             saveMetadataButton.css({
                 'left': '10%',

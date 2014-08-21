@@ -41,6 +41,12 @@ TAG.TourAuthoring.UndoManager = function (spec, my) {
 
             //  console.log("SAVED STATE //TOP//FROM log command// ===" + undoStack[undoStack.length - 1].savedState);
         }
+
+        //Check to see if there have been any changes and update save button accordingly
+        if (undoStack.length) {
+            $('#tourSaveButton').css('opacity', '1');
+            $('#tourSaveButton').prop('disabled', false);
+        }
     }
     that.logCommand = logCommand;
 
@@ -101,7 +107,19 @@ TAG.TourAuthoring.UndoManager = function (spec, my) {
             if (undoStack.length === 0)
                 $('.undoButton').css({ 'opacity': '0.4' });
         }
-        else $('.undoButton').css({ 'opacity': '0.4' });
+        else {
+            $('#tourSaveButton').prop('disabled', true);
+            $('#tourSaveButton').css('opacity', '0.4');
+            $('.undoButton').css({ 'opacity': '0.4' });
+        }
+
+        //Check to see if there have been any changes and update save button accordingly
+        if (!undoStack.length) {
+            $('#tourSaveButton').prop('disabled', true);
+            $('#tourSaveButton').css('opacity', '0.4');
+            $('.undoButton').css({ 'opacity': '0.4' });
+        }
+            
     }
     that.undo = undo;
 
@@ -118,6 +136,12 @@ TAG.TourAuthoring.UndoManager = function (spec, my) {
                 $('.redoButton').css({ 'opacity': '0.4' });
         }
         else $('.redoButton').css({ 'opacity': '0.4' });
+
+        //Check to see if there have been any changes and update save button accordingly
+        if (undoStack.length) {
+            $('#tourSaveButton').css('opacity', '1');
+            $('#tourSaveButton').prop('disabled', false);
+        }
     }
     that.redo = redo;
 

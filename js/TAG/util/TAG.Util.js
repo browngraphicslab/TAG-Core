@@ -3638,7 +3638,7 @@ TAG.Util.UI = (function () {
             'position': 'relative',
             'float': "right",
         });
-        confirmButton.text("Save Changes");
+        confirmButton.text("Save");
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
