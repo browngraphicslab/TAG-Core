@@ -841,6 +841,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 toggleRow.css({
                     'display': 'block',
                 });
+                if (TAG.Util.Splitscreen.isOn()) {
+                    toggleRow.css('width', '40%');
+                }
                 artworksButton.off()
                               .on('click', function(){
                                     artworksButton.css('color', SECONDARY_FONT_COLOR);
@@ -863,7 +866,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else {
                 toggleRow.css('display','none');
             }
-
+           
             currCollection = collection;
             currentArtwork = artwrk || null;
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
