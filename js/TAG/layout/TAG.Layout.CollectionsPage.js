@@ -111,7 +111,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     root[0].collectionsPage = this;
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
-    var cancelLoadCollection = null;
+        var cancelLoadCollection = null;
+        var cancelDrawCatalog = null;
     // get things rolling
     init();
 
@@ -558,6 +559,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function loadCollection(collection, sPos, artwrk) {
         return function (evt) {
             var cancelLoad = false;
+            assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+            assocMediaButton.attr('disabled', 'disabled');
+            artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+            artworksButton.attr('disabled', 'disabled');
             var i,
                 title = TAG.Util.htmlEntityDecode(collection.Name),
                 nextTitle,
@@ -768,13 +773,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         });
                     });
                 }
-                if (!onAssocMediaView){
-                    artworksButton.css('color', '#' + SECONDARY_FONT_COLOR);
-                    assocMediaButton.css('color', dimmedColor);
-                } else {
-                    assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);
-                    artworksButton.css('color', dimmedColor);
-                }
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
             if (collection.Metadata.Description && !onAssocMediaView) {
@@ -805,6 +803,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     assocMediaButton.css('color', dimmedColor);
                                     if (onAssocMediaView){
                                         onAssocMediaView = false;
+
+                                        /*loadQueue.clear();
+                                        if (cancelDrawCatalog) cancelDrawCatalog();*/
                                         loadCollection(currCollection)();
                                     }
                                });
@@ -815,10 +816,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     assocMediaButton.css('color', '#' + SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView){
                                         onAssocMediaView = true;
+
+                                        /*loadQueue.clear();
+                                        if (cancelDrawCatalog) cancelDrawCatalog();*/
                                         loadCollection(currCollection)();
                                     }
                                 });
-                                
             } else {
                 toggleRow.css('display','none');
             }
@@ -836,6 +839,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             applyCustomization();
             cancelLoadCollection = function () { cancelLoad = true; };
+
         }
     }
     this.loadCollection = loadCollection;
@@ -963,9 +967,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": "#"+PRIMARY_FONT_COLOR });
                 catalogDiv.append(emptyCollectionDiv);
             }
-            if (cancel()) return;
+            if (cancel && cancel()) return;
             loadSortTags(collection,contents);
-            createArtTiles(contents);
+            createArtTiles(contents, cancel);
             initSearch(contents);
             callback && callback();
         }
@@ -1039,10 +1043,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method createArtTiles
      * @param {Array} artworks     an array of doq objects
      */
-    function createArtTiles(artworks) {
+    function createArtTiles(artworks, cancel) {
         currentArtworks = artworks;
         currentTag && colorSortTags(currentTag);
-        drawCatalog(currentArtworks, currentTag, 0);
+        drawCatalog(currentArtworks, currentTag, 0, null, cancel);
         //drawCatalog(artworks, currentTag, 0);
     }
 
@@ -1055,7 +1059,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Boolean} onSearch  whether the list of artworks is a list of works matching a search term
      */
     function drawCatalog(artworks, tag, start, onSearch) {
-
+        var cancelDraw = false;
         if (!currCollection) {
             return;
         }
@@ -1073,6 +1077,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @method drawHelper
          */
         function drawHelper() {
+            if (cancelDraw) return;
             var sortedArtworks,
                 minOfSort,
                 currentWork,
@@ -1099,20 +1104,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             i = start;
             h = catalogDiv.height() * 0.48;
             w = h * 1.4;
-
+                
             tileDiv.empty();
             tileDivHeight = tileDiv.height();
 
             
             for (j = 0; j < works.length; j++) {
                 if (tag){
-                    loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j));
+                    loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i+j, j === works.length-1));
                 }
                 else{
-                   loadQueue.add(drawArtworkTile(works[j], null, onSearch, i + j)); 
+                    loadQueue.add(drawArtworkTile(works[j], null, onSearch, i+j, j === works.length-1));
                 }
             }
-            loadQueue.add(function(){
+            loadQueue.add(function () {
             	tileLoadingArea.hide();
             })
             loadQueue.add(function () {
@@ -1126,6 +1131,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             catalogDiv.append(tileDiv);
             clearTimeline(artworks);
+            cancelDrawCatalog = function () { cancelDraw = true;};
         }
     }
         
@@ -1192,7 +1198,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Boolean} onSearch    whether this work is a match after searching
      * @param {Number} i            index into list of all works in this collection
      */
-    function drawArtworkTile(currentWork, tag, onSearch, i) {
+    function drawArtworkTile(currentWork, tag, onSearch, i, last) {
         return function () {
             var main      = $(document.createElement('div')),
                 artTitle  = $(document.createElement('div')),
@@ -1206,7 +1212,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
   
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
-            main.attr("id", currentWork.Identifier);
             tileImage.addClass('tileImage');
             artTitle.addClass('artTitle');
             artText.addClass('artText');
@@ -1390,6 +1395,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 catalogDiv.css("overflow-x", "scroll")
             }      
             **/
+            if (last) {
+                if (onAssocMediaView) {
+                    assocMediaButton.css({ "color": "#" +SECONDARY_FONT_COLOR });
+                    artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                } else {
+                    assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                    artworksButton.css({ "color": "#" + SECONDARY_FONT_COLOR });
+                }
+                
+                assocMediaButton.removeAttr('disabled');
+                artworksButton.removeAttr('disabled');
+            }
         };
     }
 
