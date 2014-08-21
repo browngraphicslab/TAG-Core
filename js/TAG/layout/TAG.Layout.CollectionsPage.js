@@ -1900,7 +1900,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 closeButton,
                 tilePos,
                 i,
-                descSpan = $(document.createElement('div')),
                 currentThumbnail;
 
             if (!artwork) {
@@ -2079,6 +2078,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     artText,
                     yearInfo,
                     descText,
+                    descSpan = $(document.createElement('div')),
                     miniTilesHolder,
                     miniTile;
 
@@ -2229,13 +2229,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 	if (numberAssociatedDoqs === 0){
                 		miniTilesHolder.hide();
                 		descSpan.css({"height": "100%"});
-                		return;
                 	} else {
+                        descSpan.css({'height':'33%'});
                         miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
-                    }
-                    tileSpacing = miniTilesHolder.height()/10;
-                	if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
-                		prevArrow = $(document.createElement('img'))
+                        tileSpacing = miniTilesHolder.height()/10;
+                	    if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
+                		    prevArrow = $(document.createElement('img'))
                     			.addClass("miniTilesArrow")
                     			.attr('src', tagPath + 'images/icons/Close.svg')
                     			.on('click', function(){
@@ -2245,7 +2244,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         			}, ANIMATION_DURATION/2)
                     			});
 
-                		nextArrow = $(document.createElement('img'))
+                		    nextArrow = $(document.createElement('img'))
                     			.addClass("miniTilesArrow")
                     			.attr('src', tagPath + 'images/icons/Open.svg')
                     			.css('left', "94%")
@@ -2255,9 +2254,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             		scrollLeft: miniTilesHolder.scrollLeft() + 50
                         		}, ANIMATION_DURATION/2)
                     		});
-                    	tileBottom.append(prevArrow);
-                    	tileBottom.append(nextArrow);
-                	}
+                    	    tileBottom.append(prevArrow);
+                    	    tileBottom.append(nextArrow);
+                	   }
+                    }
                 }
 
 
