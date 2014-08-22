@@ -2610,8 +2610,8 @@ TAG.Util.UI = (function () {
                 center_v: true,
                 width: 0.5,
                 height: 0.35,
-                max_width: 600,
-                max_height: 280,
+                max_width: $('body').width()*0.33,
+                max_height: $('body').height()*0.2,
             });
 
         $(confirmBox).css({
@@ -2639,7 +2639,10 @@ TAG.Util.UI = (function () {
             'text-overflow': 'ellipsis',
             'word-wrap': 'break-word'
         });
-        var fontsize = TAG.Util.getMaxFontSizeEM(message,1, $(messageLabel).width(), $(messageLabel).height());
+        var fontsize =TAG.Util.getMaxFontSizeEM(message, 1, $(messageLabel).width(), $(messageLabel).height());
+        if (fortelemetry&&IS_WINDOWS) {
+            fontsize = TAG.Util.getMaxFontSizeEM(message, 0.9, $(messageLabel).width(), $(messageLabel).height());
+        }
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message);
         $(confirmBox).append(messageLabel);
@@ -4136,6 +4139,20 @@ TAG.Util.UI = (function () {
                 pickerOverlay.fadeOut();
                 pickerOverlay.empty();
                 pickerOverlay.remove();
+            }
+            if (type === "exhib" && target.type === "exhib") {
+                var progressCircCSS = {
+                    'position': 'absolute',
+                    'left': '40%',
+                    'top': '40%',
+                    'z-index': '50',
+                    'height': 'auto',
+                    'width': '20%'
+                };
+                var viewer = $("#setViewViewer");
+                var vert = viewer.height() / 2;
+                var horz = viewer.width() / 2;
+                var circle = TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
             }
             pickerOverlay.fadeOut();
             pickerOverlay.empty();
