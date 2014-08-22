@@ -45,6 +45,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevTag             = options.prevTag,          // sort tag of collection we came from, if any
         prevMult            = options.prevMult, 
         prevPreview         = options.prevPreview,      //previous artwork/media that was previewing (could be different than doq for assoc media view)     
+        prevPreviewPos       = options.prevPreviewPos,
         previewing 	        = options.previewing, 	   // if we are previewing in authoring (for styling)
         assocMediaToShow    = options.assocMediaToShow,
         wasOnAssocMediaView = options.onAssocMediaView,
@@ -70,7 +71,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     doq && init();
 
     return {
-        getRoot: getRoot
+        getRoot: getRoot,
     };
     root.attr('unselectable','on');
     root.css({'-moz-user-select':'-moz-none',
@@ -660,6 +661,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             annotatedImage && annotatedImage.unload();
             collectionsPage = TAG.Layout.CollectionsPage({
                 backScroll:     prevScroll,
+                backPreviewPos: prevPreviewPos,
                 backArtwork:    prevPreview,
                 backCollection: prevCollection,
                 backTag : prevTag,
@@ -673,7 +675,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             collectionsPageRoot = collectionsPage.getRoot();
             collectionsPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
 
-            TAG.Util.UI.slidePageRightSplit(root, collectionsPageRoot, function () {});
+            TAG.Util.UI.slidePageRightSplit(root, collectionsPageRoot, function () {
+                collectionsPage.showArtwork(prevPreview, prevMult && prevMult)();
+            });
 
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
             currentPage.obj  = collectionsPage;

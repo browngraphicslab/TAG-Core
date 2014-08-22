@@ -19,13 +19,15 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         prevScroll = 0,
         prevTag,
         prevMult,
+        prevPreviewPos,
 	    prevExhib = collection;
 
     if (prevInfo) {
         artworkPrev = prevInfo.artworkPrev,
         prevScroll = prevInfo.prevScroll || 0,
         prevMult = prevInfo.prevMult,
-        prevTag = prevInfo.prevTag;
+        prevTag = prevInfo.prevTag,
+        prevPreviewPos = prevInfo.prevPreviewPos;
     }
 
     var that = {};
@@ -79,12 +81,14 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
             backArtwork: videoSrc,
             backCollection: collection,
             backTag : prevTag,
-            backMult : prevMult
+            backMult : prevMult,
+            backPreviewPos : prevPreviewPos
         });
 
         // collectionsPage.getRoot().css({ 'overflow-x': 'hidden' }); // TODO should be default in .styl file
         TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
             artworkPrev = "catalog";
+            collectionsPage.showArtwork(videoSrc, prevMult && prevMult)();
             /**
             var selectedExhib = $('#collection-' + prevExhib.Identifier);
             selectedExhib.attr('flagClicked', 'true');
