@@ -1302,7 +1302,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 }();
             } 
-                main.on('mousedown', function () {
+                main.on('click', function () {
                     doubleClickHandler()
 
                     // if the idle timer hasn't started already, start it
@@ -1316,7 +1316,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     justShowedArtwork = true;
                 })         
             
-            TAG.Telemetry.register(main, 'mousedown', '', function(tobj) {
+            TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
                 //if (currentThumbnail.attr('guid') === currentWork.Identifier && !justShowedArtwork) {
                 //    tobj.ttype = 'collections_to_' + getWorkType(currentWork);
