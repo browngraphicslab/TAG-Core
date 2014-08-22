@@ -1266,7 +1266,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             yearTextBox.addClass('yearTextBox');
             yearTextBox.addClass('secondaryFont');
             yearTextBox.css({
-                'color': '#' + SECONDARY_FONT_COLOR,
+                'color': SECONDARY_FONT_COLOR,
                 //'font-family': FONT
             });
 
