@@ -283,9 +283,23 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'border-bottom-right-radius': '3.5px',
             });
         }
-        if (!previewing){
-        	container.css('min-width', 0.14 * screenWidth);
+
+        //To-do figure out best max-width, min width
+        if (previewing) {
+            return;
         }
+        container.css('width', Math.max(160,Math.min($('#tagRoot').width() * 0.19,400)));
+        var containerHeight = container.width()*(111/163)
+        container.css({
+            'height': containerHeight + 'px',
+            'top' : '-' + containerHeight + 'px',
+            'min-width' : container.width()
+        });
+        slideButton.css({
+            'padding-top': 0.05 * container.width() + 'px',
+            'padding-bottom': 0.05 * container.width() + 'px'
+        })
+
 
         slideButton.on('click', function () {
             count = 1 - count;
@@ -293,10 +307,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 top: top
             });
             if (count === 0){
-                top = '0%';
+                top = '0px';
                 slideButton.html("Show Controls");
             } else {
-                top = '-23%';
+                top = '-' + containerHeight + 'px';
                 slideButton.html('Hide Controls');
             }   
         });
@@ -324,8 +338,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         var radius = (sdrightbtn.position().left - sdleftbtn.position().left + sdrightbtn.width()) / 2;
         var centery = sdleftbtn.position().top + sdleftbtn.height() / 2;
-        sdupbtn.css('top', centery - radius +5+ 'px');
-        sddownbtn.css('top', centery + radius -sdleftbtn.width() +15+ 'px');
+        //sdupbtn.css('top', centery - radius +5+ 'px');
+        //sddownbtn.css('top', centery + radius -sdleftbtn.width() +15+ 'px');
         container.append(createButton('zinControl',   tagPath+'images/icons/zoom_plus.svg'));
         container.append(createButton('zoutControl',  tagPath+'images/icons/zoom_minus.svg'));
 

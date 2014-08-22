@@ -331,6 +331,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     /**Handles enter key press on the SettingsView page
      * @ method enterKeyHandlerSettingsView
+     * @param event
      */
     function enterKeyHandlerSettingsView(event) {
         if (event.target.className == "metadataPickerSearchbar") {
@@ -2177,7 +2178,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }], {
                         getObjs: TAG.Worktop.Database.getArtworksIn,
                         args: [exhibition.Identifier]
-                    }, function () {                        
+                    }, function () {
                         prepareNextView(true, "New", createExhibition);
                         clearRight();
                         prepareViewer(true);
@@ -2717,6 +2718,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} tour     tour to edit
      */
     function editTour(tour) {
+        if (!tour) {
+            return;
+        }
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Tour...', 1);
         middleQueue.clear();
@@ -3536,6 +3540,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    media to associate to artworks
      */
     function assocToArtworks(media) {
+        if (!media) {
+            return;
+        }
         artworkAssociations = [[]];
         numFiles = 1;
         TAG.Util.UI.createAssociationPicker(root, "Choose artworks", { comp: media, type: 'media' }, "artwork", [{
@@ -5149,6 +5156,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork   artwork to edit
      */
     function editArtwork(artwork) {
+        if (!artwork) {
+            return;
+        }
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Artwork...', 1);
         middleQueue.clear();

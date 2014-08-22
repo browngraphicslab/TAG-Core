@@ -36,8 +36,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit = root.find('#passwordSubmit'),
         serverURL,
         tagContainer,
-        newUser = options.newUser;
-
+        newUser = options.newUser,
+        mainDoq,
+        PRIMARY_FONT_COLOR,
+        SECONDARY_FONT_COLOR;
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
@@ -57,13 +59,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
     tagContainer = options.tagContainer || $('body');
-    /*
+
+    //Comment out this conditional block to disable access to authoring for the web
     if (!IS_WINDOWS) {
         authoringInput.prop('disabled', true);
         authoringInput.css('opacity', '0.5');
         passwordSubmit.css('opacity', '0.5');
     }
-    */
+    
     testConnection();
     if(newUser){
          telemetryDialogDisplay();
@@ -76,7 +79,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         var telemetryDialogoverlay = $(TAG.Util.UI.PopUpConfirmation(function(){
             TELEMETRY_SWITCH = 'off';
             localStorage.tagTelemetry = "off";
-            telemetryDialogOverlay.remove();},
+            //telemetryDialogOverlay.remove();
+        },
             "To improve the Touch Art Gallery experience, we're trying to collect more information about how users like you use our application. Do you mind us collecting information on your usage?",
             "Yes, I mind",null,
             function(){
@@ -278,8 +282,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @param {Object} main     contains all image paths and museum info
     */
     function loadHelper(main) {
-        
-
+        mainDoq = main;
+        PRIMARY_FONT_COLOR = '#' + mainDoq.Metadata["PrimaryFontColor"];
+        SECONDARY_FONT_COLOR = '#' + mainDoq.Metadata["SecondaryFontColor"];
         if (startPageCallback) {
             startPageCallback(root);
         }
@@ -387,6 +392,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             saveClick();
         }
     });
+    serverSubmit.on("mousedown", function () {
+        serverSubmit.css({"background-color": PRIMARY_FONT_COLOR, "color": "black"});
+    });
+    
+    $(document).on("mouseup", function () {
+        serverSubmit.css({ "background-color": "transparent", "color": PRIMARY_FONT_COLOR });
+        passwordSubmit.css({ "background-color": "transparent", "color": PRIMARY_FONT_COLOR });
+        goToCollectionsButton.css({ "background-color": "white", "color": "black" });
+    })
     serverInput.focusout(function () {
         if (!serverInput.val()) {
             serverInput.attr('value', localStorage.ip);
@@ -397,7 +411,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit.on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            //if(IS_WINDOWS) {
+
+            //To disable access to authoring for the web:
+            //Comment out the if statement and the entire else block. 
+            //Only leave the TAG.Auth.checkPassword() statement in.
+
+            if(IS_WINDOWS) {
                 TAG.Auth.checkPassword(authoringInput.val(), function () { 
                     enterAuthoringMode();
                     }, function () {
@@ -407,14 +426,18 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
                     passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
                 });  
-            /*
+            
             } else {
                 passwordError.html('Authoring mode is only accessible from the Windows 8 app');
                 passwordError.css({'visibility':'visible'});
                 passwordError.css({'color':'rgba(255, 255, 255, 1)'});
             }
-            */
+            
         });
+        passwordSubmit.on("mousedown", function () {
+            passwordSubmit.css({ "background-color": PRIMARY_FONT_COLOR, "color": "black" });
+        });
+
     
     //Enter can be pressed to submit the password form...
         authoringInput.keypress(function (e) {
@@ -651,10 +674,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     evt.stopPropagation();
         // });
 
+        goToCollectionsButton.css({ "border": "1px solid #fff" });
+
         goToCollectionsButton.on('click', 'a', function (evt) {
             // this === the link that was clicked
             var href = $(this).attr("href");
             evt.stopPropagation();
+        });
+        goToCollectionsButton.on("mousedown", function () {
+            goToCollectionsButton.css({"background-color": "transparent", "color": "white"});
         });
     }
 
