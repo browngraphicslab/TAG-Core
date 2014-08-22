@@ -51,9 +51,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit.css({ 'min-height': '0px', 'min-width': '0px', });
     }();
 
-  // TODO merging TAG.Telemetry.register(goToCollectionsButton, 'click', 'start_to_collections');
-  //                     tobj.mode = 'Kiosk';
- if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
+    // TODO merging TAG.Telemetry.register(goToCollectionsButton, 'click', 'start_to_collections');
+    //                     tobj.mode = 'Kiosk';
+    if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
     }
     
@@ -69,7 +69,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     testConnection();
     if(newUser){
-         telemetryDialogDisplay();
+        telemetryDialogDisplay();
     }
 
     
@@ -298,7 +298,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         TAG.Util.Constants.set("START_PAGE_SPLASH", tagPath+"images/birdtextile.jpg");
         //if(!allowServerChange) {
-          //  $('#serverTagBuffer').remove();
+        //  $('#serverTagBuffer').remove();
         //}
     
         // if(!allowAuthoringMode){
@@ -337,60 +337,60 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     }   
     
     function saveClick() {
-            var address = serverInput.val();
-            switch(address) {
-                case 'tagunicorn':
-                    var unicorn = $(document.createElement('img'));
-                    unicorn.attr('src', tagPath+'images/unicorn.jpg');
-                    unicorn.css({
-                        width: '100%',
-                        height: '100%',
-                        'z-index': 2147483647, // we really want this unicorn to show up
-                        display: 'none',
-                        position: 'absolute',
-                    });
-                    tagContainer.append(unicorn);
-                    unicorn.fadeIn(500);
-                    setTimeout(function () {
-                        $('img').attr('src', tagPath+'images/unicorn.jpg');
-                        $('.background').css('background-image', 'url('+tagPath+'"images/unicorn.jpg")');
-                        unicorn.fadeOut(500, function () { unicorn.remove(); });
-                    }, 5000);
-                    return;
-                case 'tagtest':
-                case 'tagtestserver.cloudapp.net':
-                    address = 'tagtestserver.cloudapp.net';
-                    break;
-                case 'tagdemo':
-                case 'tagdemo.cloudapp.net':
-                    address = 'tagdemo.cloudapp.net';
-                    break;
-                case 'taglive':
-                case 'browntagserver.com':
-                    address = 'browntagserver.com';
-                    break;
-                case 'taglocal':
-                case '10.116.71.58':
-                    address = '10.116.71.58';
-                    break;
-                case 'sam':
-                case 'seattleartmuseum':
-                case 'tag.seattleartmuseum.org':
-                    address = 'tag.seattleartmuseum.org'
-                    break;
-                default:
-                    break;
-            }
-            serverError.html('Connecting...');
-            serverError.css({"visibility":"visible"});
-            TAG.Worktop.Database.changeServer(address, false, function () {
-                TAG.Layout.StartPage(null, function (page) {
-                    TAG.Util.UI.slidePageRight(page);
+        var address = serverInput.val();
+        switch(address) {
+            case 'tagunicorn':
+                var unicorn = $(document.createElement('img'));
+                unicorn.attr('src', tagPath+'images/unicorn.jpg');
+                unicorn.css({
+                    width: '100%',
+                    height: '100%',
+                    'z-index': 2147483647, // we really want this unicorn to show up
+                    display: 'none',
+                    position: 'absolute',
                 });
-            }, function () {
-                serverError.html('Server connection failed. Contact the server administrator.');
-                serverError.css({"visibility":"visible"});       
+                tagContainer.append(unicorn);
+                unicorn.fadeIn(500);
+                setTimeout(function () {
+                    $('img').attr('src', tagPath+'images/unicorn.jpg');
+                    $('.background').css('background-image', 'url('+tagPath+'"images/unicorn.jpg")');
+                    unicorn.fadeOut(500, function () { unicorn.remove(); });
+                }, 5000);
+                return;
+            case 'tagtest':
+            case 'tagtestserver.cloudapp.net':
+                address = 'tagtestserver.cloudapp.net';
+                break;
+            case 'tagdemo':
+            case 'tagdemo.cloudapp.net':
+                address = 'tagdemo.cloudapp.net';
+                break;
+            case 'taglive':
+            case 'browntagserver.com':
+                address = 'browntagserver.com';
+                break;
+            case 'taglocal':
+            case '10.116.71.58':
+                address = '10.116.71.58';
+                break;
+            case 'sam':
+            case 'seattleartmuseum':
+            case 'tag.seattleartmuseum.org':
+                address = 'tag.seattleartmuseum.org'
+                break;
+            default:
+                break;
+        }
+        serverError.html('Connecting...');
+        serverError.css({"visibility":"visible"});
+        TAG.Worktop.Database.changeServer(address, false, function () {
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Util.UI.slidePageRight(page);
             });
+        }, function () {
+            serverError.html('Server connection failed. Contact the server administrator.');
+            serverError.css({"visibility":"visible"});       
+        });
     }
 
     serverSubmit.on('click', saveClick);
@@ -413,38 +413,39 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             serverInput.attr('value', localStorage.ip);
         }
     });
+    var passwordClick = $.debounce(500, false, function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        //To disable access to authoring for the web:
+        //Comment out the if statement and the entire else block. 
+        //Only leave the TAG.Auth.checkPassword() statement in.
+
+        if(IS_WINDOWS) {
+            TAG.Auth.checkPassword(authoringInput.val(), function () { 
+                enterAuthoringMode();
+            }, function () {
+                passwordError.html('Invalid Password. Please try again...');
+                passwordError.css({'visibility':'visible'});
+            }, function () {
+                passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
+                passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
+            });  
+            
+        } else {
+            passwordError.html('Authoring mode is only accessible from the Windows 8 app');
+            passwordError.css({'visibility':'visible'});
+            passwordError.css({'color':'rgba(255, 255, 255, 1)'});
+        }
+    });
+
 
     function authClick(){
-        passwordSubmit.on('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
+        passwordSubmit.on('click', passwordClick);
 
-            //To disable access to authoring for the web:
-            //Comment out the if statement and the entire else block. 
-            //Only leave the TAG.Auth.checkPassword() statement in.
-
-            if(IS_WINDOWS) {
-                TAG.Auth.checkPassword(authoringInput.val(), function () { 
-                    enterAuthoringMode();
-                    }, function () {
-                    passwordError.html('Invalid Password. Please try again...');
-                    passwordError.css({'visibility':'visible'});
-                    }, function () {
-                    passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
-                    passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
-                });  
-            
-            } else {
-                passwordError.html('Authoring mode is only accessible from the Windows 8 app');
-                passwordError.css({'visibility':'visible'});
-                passwordError.css({'color':'rgba(255, 255, 255, 1)'});
-            }
-            
-        });
         passwordSubmit.on("mousedown", function () {
             passwordSubmit.css({ "background-color": PRIMARY_FONT_COLOR, "color": "black" });
         });
-
     
     //Enter can be pressed to submit the password form...
         authoringInput.keypress(function (e) {
