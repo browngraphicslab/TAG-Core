@@ -1983,8 +1983,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.stop(true,false);
             rootWidth = root.width();
             infoWidth = infoDiv.width();
-            tileWidth = artworkTiles[artwork.Identifier].width();       
-            tilePos = artworkTiles[artwork.Identifier].position().left;
+            if (!comingBack){
+                tileWidth = artworkTiles[artwork.Identifier].width();       
+                tilePos = artworkTiles[artwork.Identifier].position().left;
+            }
             if (comingBack){
                 newScrollPos = scrollPos;
                 duration = ANIMATION_DURATION/5;
