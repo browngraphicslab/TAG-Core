@@ -630,7 +630,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.text('New');
         secondaryButton.text('Video');
         label.text('Loading...');
-        circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
+        circle.attr('src', tagPath + 'images/icons/progrescircle.gif');
 
         viewer.css({
             'height': $(window).width() * RIGHT_WIDTH / 100 * 1 / VIEWER_ASPECTRATIO + 'px',
@@ -6027,14 +6027,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             yearMetadataDivSpecs;
 
         //Create input boxes: 
-        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), "Year", 100);
+        yearInput = createTextInput(TAG.Util.htmlEntityDecode(work.Metadata.Year), "Enter valid year", 100);
         var yearDescriptionDiv = $(document.createElement('div'));
         monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month);
         monthInput.css('margin-right', '0%');
         dayInput = createSelectInput(getDayOptions(monthInput.attr('value'),yearInput,monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
-        timelineYearInput = createTextInput(timelineInputText, "Timeline Year", 100);
+        timelineYearInput = createTextInput(timelineInputText, "Enter valid year", 100);
 
         timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),work.Metadata.TimelineMonth);
         timelineMonthInput.css('margin-right','0%');
