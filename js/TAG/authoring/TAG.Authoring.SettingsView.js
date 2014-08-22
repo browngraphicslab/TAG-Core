@@ -338,7 +338,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             event.stopPropagation();
             event.preventDefault();
         }
-        if (searchbar.is(':focus')) {
+        if ($('.searchBar').is(':focus')) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (searchbar.is(':focus')) {
             if (!searchbar.val()) {
                 resetView();
                 searchbar.css({ 'background-image': 'none' });
@@ -349,8 +353,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             event.stopPropagation();
             event.preventDefault();
         }
-        else if (!$("input, textarea").is(":focus")) {
-            if (inCollectionsView) { manageCollection(currentList[currentIndex]);  }
+        else if (!$("input, textarea, select").is(":focus")) {
+            event.stopPropagation();
+            event.preventDefault();
+            if (inCollectionsView) {
+                manageCollection(currentList[currentIndex]);
+            }
             if (inArtworkView) {
                 if ($(document.getElementById('artworkEditorButton')).length) {
                     editArtwork(currentList[currentIndex]);
@@ -876,10 +884,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             return 100;
         });
 
-        primaryFontColorInput.on('keyup', function () {
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
+        primaryFontColorInput.on('keyup', function (event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                event.stopPropagation();
+                saveButton.click();
+            } else {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            }
+            
         });
 
         primaryFontColorInput.on('change', function () {
@@ -895,10 +910,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             return 100;
         });
 
-        secondaryFontColorInput.on('keyup', function () {
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
+        secondaryFontColorInput.on('keyup', function (event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                event.stopPropagation();
+                saveButton.click();
+            } else {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            }
         });
 
         secondaryFontColorInput.on('change', function () {
@@ -1054,7 +1075,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'float': 'right'
         }, true);
 
-        
         // preview buttons
         var previewStartPageButton = createButton('Splash Screen', function () {
             previewStartPage(primaryFontColorInput, secondaryFontColorInput);
@@ -1626,7 +1646,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method manageCollection
      * @param {doq} exhibition      the current collection to be edited
      */
-     function manageCollection(exhibition) {
+    function manageCollection(exhibition) {
+        if (!exhibition) {
+            return;
+        }
         TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                 { comp: exhibition, type: 'exhib' },
                 'exhib', [{
@@ -1976,11 +1999,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (nameInput.val() === 'Collection')
                     nameInput.select();
             });
-            nameInput.keyup(function () {
+            nameInput.keyup(function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (event.which === 13) {                   
+                    saveButton.click();
+                } else {
+                    changesMade = true;
+                    saveButton.prop("disabled", false);
+                    saveButton.css("opacity", 1);
+                }
                 $('.collection-title').text(nameInput.val());
-                changesMade = true;
-                saveButton.prop("disabled", false);
-                saveButton.css("opacity", 1);
+                
             });
             descInput.focus(function () {
                 if (descInput.val() === 'Description')
@@ -2553,10 +2583,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(desc);
         settingsContainer.append(tourIdLabel);
 
-        nameInput.on('keyup', function () {
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
+        nameInput.on('keyup', function (event) {
+            if (event.which === 13) {
+                saveButton.click();
+            } else {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            }
         });
 
         descInput.on('keyup', function () {
@@ -3108,10 +3142,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 titleInput.select();
         });
 
-        titleInput.on('keyup', function () {
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
+        titleInput.on('keyup', function (event) {
+            if (event.which === 13) {
+                saveButton.click();
+            } else {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            }
+            
         });
 
         descInput.focus(function () {
@@ -3130,10 +3169,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var title = createSetting('Title', titleInput);
         var desc = createSetting('Description', descInput);
-        var yearMetadataDivSpecs = createYearMetadataDiv(media, function () {            
+        var yearMetadataDivSpecs = createYearMetadataDiv(media, function (event) {            
+            if (event && event.which === 13) {
+                saveButton.click();
+            } else {
                 changesMade = true;
                 saveButton.prop("disabled", false);
-                saveButton.css("opacity", 1);           
+                saveButton.css("opacity", 1);
+            }
         });
 
         settingsContainer.append(title);
@@ -3157,6 +3200,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             sourceInput.focus(function () {
                 if (descInput.val() === 'Source')
                     descInput.select();
+            });
+            sourceInput.on('keyup', function (event) {
+                if (event.which === 13) {
+                    saveButton.click();
+                } else {
+                    changesMade = true;
+                    saveButton.prop("disabled", false);
+                    saveButton.css("opacity", 1);
+                }
             });
             onChangeUpdateText(sourceInput, null, 5000);
             var source = createSetting('Source', sourceInput);
@@ -4209,16 +4261,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), "Artist", 100);
         var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Description).replace(/\n/g, '<br />') || "", "", false);
 
-        titleInput.on('keyup', function () {
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
+        titleInput.on('keyup', function (event) {
+            if (event.which === 13) {
+                saveButton.click();
+            } else {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            }
+            
         });
 
-        artistInput.on('keyup', function () {
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
+        artistInput.on('keyup', function (event) {
+            if (event.which === 13) {
+                saveButton.click();
+            } else {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            }
+            
         });
 
         descInput.on('keyup', function () {
@@ -4231,11 +4293,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var customSettings = {};
         var desc = createSetting('Description', descInput);
         var saveButton;
-        var yearMetadataDivSpecs = createYearMetadataDiv(artwork, function () {
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
+        var yearMetadataDivSpecs = createYearMetadataDiv(artwork, function (event) {
+            if (event && event.which === 13) {
+                saveButton.click();
+            } else {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            }
         });
+
 
         titleInput.focus(function () {
             if (titleInput.val() === 'Title')
@@ -4348,6 +4415,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '.5%',
                 'float': 'right'
             }, true);
+
         var xmluploaderbtn = createButton('Upload XML',
                         function () {
                             uploadXML(artwork, inputs, settingsContainer);
@@ -5936,10 +6004,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'display':'inline-block'
         });
         yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
-
+        yearInput.on('keyup', function (event) {
+            callback(event)
+        });
+        timelineYearInput.on('keyup', function (event) {
+            callback(event)
+        });
         //Link input values of date fields to dynamically change/disable               
-        yearInput.on('input', function () {
-            callback();
+        yearInput.on('input', function (event) {
+            callback(event);
             setOptions(monthInput, getMonthOptions(yearInput.attr('value')),'');
             toggleAllow(monthInput);
             setOptions(dayInput, getDayOptions(monthInput.attr('value'),yearInput,monthInput));
@@ -5973,8 +6046,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 timelineDayInput.attr("value", dayInput.attr("value"));
             };
         });
-        timelineYearInput.on('input', function () {
-            callback();            
+        timelineYearInput.on('input', function (event) {
+            callback(event);            
             if (timelineYearInput.attr('value').length===0 && !timelineYearAutofilled){
                 timelineYearInput.val(getTimelineInputText(yearInput));
                 timelineMonthInput.val(monthInput.attr("value"));
