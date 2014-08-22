@@ -380,7 +380,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
     }, my);
     (function _initMenu() {
         menu.addTitle('Track Options');
-        menu.addButton('Rename', 'left', componentOptionRename);
+        var renameButton = menu.addButton('Rename', 'left', componentOptionRename);
         if (my.type === TAG.TourAuthoring.TrackType.ink) {
             menu.addButton('Edit Ink', 'left', componentOptionEditInk);
         }
@@ -390,14 +390,67 @@ TAG.TourAuthoring.Track = function (spec, my) {
             //if (my.toConvert === true) {
             //    convertbtn.text("Converting");
             //    convertbtn.css({
-            //        'color': 'gray'
+            //        'color': 'gray' 
             //    })
             //    convertbtn.data('disabled', true);
             //}
         }
-        menu.addButton('Duplicate', 'left', componentOptionDuplicate);
-        menu.addButton('Delete', 'left', componentOptionDelete);
-        menu.addButton('Cancel', 'left', componentOptionCancel);
+        var duplicateButton = menu.addButton('Duplicate', 'left', componentOptionDuplicate);
+        var deleteButton = menu.addButton('Delete', 'left', componentOptionDelete);
+        var cancelButton = menu.addButton('Cancel', 'left', componentOptionCancel);
+
+        //Rename button highlighting
+        renameButton.on('mousedown', function () {
+            renameButton.css({ "background-color": "white", "color": "black" });
+        });
+
+        renameButton.on('mouseup', function () {
+            renameButton.css({ "background-color": "transparent","color":"white" });
+        });
+
+        renameButton.on('mouseout', function () {
+            renameButton.css({ "background-color": "transparent", "color": "white" });
+        });
+
+        //Duplicate button highlighting
+        duplicateButton.on('mousedown', function () {
+            duplicateButton.css({ "background-color": "white", "color": "black" });
+        });
+
+       duplicateButton.on('mouseup', function () {
+            duplicateButton.css({ "background-color": "transparent", "color": "white" });
+        });
+
+        duplicateButton.on('mouseout', function () {
+            duplicateButton.css({ "background-color": "transparent", "color": "white" });
+        });
+
+        //Delete button highlighting
+        deleteButton.on('mousedown', function () {
+            deleteButton.css({ "background-color": "white", "color": "black" });
+        });
+
+        deleteButton.on('mouseup', function () {
+            deleteButton.css({ "background-color": "transparent", "color": "white" });
+        });
+
+        deleteButton.on('mouseout', function () {
+            deleteButton.css({ "background-color": "transparent", "color": "white" });
+        });
+
+        //Cancel button highlighting
+        cancelButton.on('mousedown', function () {
+            cancelButton.css({ "background-color": "white", "color": "black" });
+        });
+
+        cancelButton.on('mouseup', function () {
+            cancelButton.css({ "background-color": "transparent", "color": "white" });
+        });
+
+        cancelButton.on('mouseout', function () {
+            cancelButton.css({ "background-color": "transparent", "color": "white" });
+        });
+
     })();
 
     function close() {

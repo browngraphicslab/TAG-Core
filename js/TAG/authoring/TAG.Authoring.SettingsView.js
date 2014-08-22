@@ -3412,6 +3412,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '2%',
                 'float': 'left'
             });
+
         thumbnailButton.attr('id', 'thumbnailButton');
         buttonContainer.append(assocButton);
         if (media.Metadata.ContentType.toLowerCase() === 'video') {

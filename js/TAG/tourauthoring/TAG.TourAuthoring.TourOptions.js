@@ -102,9 +102,23 @@ TAG.TourAuthoring.TourOptions = function (spec) {
                 'text-indent': '4%',
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 5
             });
+
+            //Highlighting
             item.on('mousedown', function (evt) {
                 evt.stopImmediatePropagation();
+                item.css({ "background-color": "white", "color": "black" });
             });
+
+            item.on('mouseup', function (evt) {
+                evt.stopImmediatePropagation();
+                item.css({ "background-color": "transparent", "color": "white" });
+            });
+
+            item.on('mouseout', function (evt) {
+                evt.stopImmediatePropagation();
+                item.css({ "background-color": "transparent", "color": "white" });
+            });
+
             component.append(item);
             return item;
         }
