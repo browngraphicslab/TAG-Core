@@ -90,9 +90,20 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             },
             tagContainer,null,null,true
         ));
+
         
         root.append(telemetryDialogoverlay);
+        
         telemetryDialogoverlay.show();
+        adjustHeights(document.getElementById("popupmessage"));
+
+        function adjustHeights(elem) {
+            var fontstep = 0.1;
+            if ($(elem).height() > $(elem).parent().height() || $(elem).width() > $(elem).parent().width()) {
+                $(elem).css('font-size', (($(elem).css('font-size').substr(0, 2) - fontstep)) + 'px').css('line-height', (($(elem).css('font-size').substr(0, 2))) + 'px');
+                adjustHeights(elem);
+            }
+        }
         // Creating Overlay
         /*
         var telemetryDialogOverlay = $(document.createElement('div'));

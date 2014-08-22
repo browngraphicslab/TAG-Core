@@ -2603,15 +2603,21 @@ TAG.Util.UI = (function () {
         var currKeyHandler = globalKeyHandler[0];
         globalKeyHandler[0] = popUpHandler;
         
-        
+        //temp solution for telemetry box in all resolutions and browsers. 
+        var maxw = 600,
+            maxh=300;
+        if (fortelemetry) {
+            maxw = $('body').width() * 0.45;
+            maxh = $('body').height() * 0.33;
+        }
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(container).width(), $(container).height(),
             {
                 center_h: true,
                 center_v: true,
                 width: 0.5,
                 height: 0.35,
-                max_width: $('body').width()*0.33,
-                max_height: $('body').height()*0.2,
+                max_width:maxw,// $('body').width()*0.33,
+                max_height: maxh//$('body').height()*0.2,
             });
 
         $(confirmBox).css({
@@ -2641,10 +2647,10 @@ TAG.Util.UI = (function () {
         });
         var fontsize =TAG.Util.getMaxFontSizeEM(message, 1, $(messageLabel).width(), $(messageLabel).height());
         if (fortelemetry&&IS_WINDOWS) {
-            fontsize = TAG.Util.getMaxFontSizeEM(message, 0.9, $(messageLabel).width(), $(messageLabel).height());
+            fontsize = TAG.Util.getMaxFontSizeEM(message, 0.8, $(messageLabel).width(), $(messageLabel).height());
         }
         $(messageLabel).css('font-size', fontsize);
-        $(messageLabel).text(message);
+        $(messageLabel).text(message).attr("id","popupmessage");
         $(confirmBox).append(messageLabel);
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
@@ -2774,6 +2780,7 @@ TAG.Util.UI = (function () {
             removeAll();
             confirmAction();
         }
+        
 
         function removeAll() {
             if (noFade) {
