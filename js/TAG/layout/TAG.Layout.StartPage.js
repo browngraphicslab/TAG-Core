@@ -36,8 +36,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit = root.find('#passwordSubmit'),
         serverURL,
         tagContainer,
-        newUser = options.newUser;
-
+        newUser = options.newUser,
+        mainDoq,
+        PRIMARY_FONT_COLOR,
+        SECONDARY_FONT_COLOR;
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
@@ -280,8 +282,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @param {Object} main     contains all image paths and museum info
     */
     function loadHelper(main) {
-        
-
+        mainDoq = main;
+        PRIMARY_FONT_COLOR = '#' + mainDoq.Metadata["PrimaryFontColor"];
+        SECONDARY_FONT_COLOR = '#' + mainDoq.Metadata["SecondaryFontColor"];
         if (startPageCallback) {
             startPageCallback(root);
         }
@@ -389,6 +392,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             saveClick();
         }
     });
+    serverSubmit.on("mousedown", function () {
+        serverSubmit.css({"background-color": PRIMARY_FONT_COLOR, "color": "black"});
+    });
+    
+    $(document).on("mouseup", function () {
+        serverSubmit.css({ "background-color": "transparent", "color": PRIMARY_FONT_COLOR });
+        passwordSubmit.css({ "background-color": "transparent", "color": PRIMARY_FONT_COLOR });
+        goToCollectionsButton.css({ "background-color": "white", "color": "black" });
+    })
     serverInput.focusout(function () {
         if (!serverInput.val()) {
             serverInput.attr('value', localStorage.ip);
@@ -422,6 +434,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             }
             
         });
+        passwordSubmit.on("mousedown", function () {
+            passwordSubmit.css({ "background-color": PRIMARY_FONT_COLOR, "color": "black" });
+        });
+
     
     //Enter can be pressed to submit the password form...
         authoringInput.keypress(function (e) {
@@ -659,10 +675,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     evt.stopPropagation();
         // });
 
+        goToCollectionsButton.css({ "border": "1px solid #fff" });
+
         goToCollectionsButton.on('click', 'a', function (evt) {
             // this === the link that was clicked
             var href = $(this).attr("href");
             evt.stopPropagation();
+        });
+        goToCollectionsButton.on("mousedown", function () {
+            goToCollectionsButton.css({"background-color": "transparent", "color": "white"});
         });
     }
 
