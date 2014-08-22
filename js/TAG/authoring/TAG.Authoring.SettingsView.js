@@ -6035,9 +6035,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
         timelineYearInput = createTextInput(timelineInputText, "Timeline Year", 100);
-        if (timelineYearInput.val()===''){
-            timelineYearInput.attr('placeholder', 'Type valid year');
-        }
+
         timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),work.Metadata.TimelineMonth);
         timelineMonthInput.css('margin-right','0%');
         timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value'),timelineYearInput,timelineMonthInput), work.Metadata.TimelineDay);
@@ -6172,9 +6170,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             toggleAllow(dayInput);
             if (!timelineYearJustChanged|| timelineYearInput.val()===''){
                 timelineYearInput.val(getTimelineInputText(yearInput));
-                if (timelineYearInput.val()===''){
-                    timelineYearInput.attr('placeholder','Type valid year');
-                }
+
                 timelineYearJustChanged = false;
                 setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr("value")));
                 toggleAllow(timelineMonthInput);
