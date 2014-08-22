@@ -2585,7 +2585,7 @@ TAG.Util.UI = (function () {
 
     
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
         var overlay;
         var origin;
         if (document.getElementById("popupblockInteractionOverlay")) {
@@ -2671,7 +2671,7 @@ TAG.Util.UI = (function () {
         }).attr('id', 'popupConfirmButton');
         confirmButtonText = (!confirmButtonText || confirmButtonText === "") ? "Confirm" : confirmButtonText;
         $(confirmButton).text(confirmButtonText);
-        
+       
         confirmButton.onclick = function () {
             if (origin) {
                 removeAll();
@@ -2753,7 +2753,19 @@ TAG.Util.UI = (function () {
         }
 
         
-        
+        if(fortelemetry){
+            $cancelButton.text("No, I don't mind")
+                .css({
+                    "border-radius":'3.5px',
+                    "background-color": "white",
+                    "color":'black',
+                    "font-weight":"bold"
+                });
+            $(confirmButton).css({
+                "border-radius":'3.5px',
+                "font-weight":"bold"
+            });
+        }
         function doOnEnter() {
             removeAll();
             confirmAction();
