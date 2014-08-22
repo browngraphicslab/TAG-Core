@@ -181,7 +181,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         splitscreenContainer.attr('id', 'splitscreenContainer');
         splitscreenContainer.css({
             'background-color': 'rgba(0,0,0,0.6)',
-            'border-top-left-radius': '10px',
+            'border-top-left-radius': '3.5px',
             'height': '10%',
             'position': 'absolute',
             'right': '0%',
@@ -280,12 +280,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
             slideButton.css({ //fix the rounded edge to be on the correct side
                 'border-bottom-left-radius': '0px',
-                'border-bottom-right-radius': '10px',
+                'border-bottom-right-radius': '3.5px',
             });
         }
+        /**
         if (!previewing){
         	container.css('min-width', 0.14 * screenWidth);
         }
+        **/
 
         slideButton.on('click', function () {
             count = 1 - count;
@@ -324,8 +326,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         var radius = (sdrightbtn.position().left - sdleftbtn.position().left + sdrightbtn.width()) / 2;
         var centery = sdleftbtn.position().top + sdleftbtn.height() / 2;
-        sdupbtn.css('top', centery - radius +5+ 'px');
-        sddownbtn.css('top', centery + radius -sdleftbtn.width() +15+ 'px');
+        //sdupbtn.css('top', centery - radius +5+ 'px');
+        //sddownbtn.css('top', centery + radius -sdleftbtn.width() +15+ 'px');
         container.append(createButton('zinControl',   tagPath+'images/icons/zoom_plus.svg'));
         container.append(createButton('zoutControl',  tagPath+'images/icons/zoom_minus.svg'));
 
@@ -606,10 +608,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
             toggler.css({
                 left: '-12%',
-                'border-top-left-radius': '10px',
+                'border-top-left-radius': '3.5px',
                 'border-top-right-radius': '0px',
                 'border-bottom-right-radius': '0px',
-                'border-bottom-left-radius': '10px'
+                'border-bottom-left-radius': '3.5px'
             });
             togglerImage.attr('src', tagPath + 'images/icons/Open.svg')
                         .css('right','0%');
@@ -1279,10 +1281,15 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @author jastern
      */
     function initlocationHistory() {
-        var RLH;            
+        var RLH,  
+            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer'),
+            toggle          = $(document.createElement('img')).addClass("drawerPlusToggle")
+                .attr("src", tagPath+'images/icons/plus.svg');      
         isOpen = false;
 
         locHistoryContainer.on('click', function () { toggleLocationOpen(); });
+        toggleContainer.append(toggle);
+        locHistoryContainer.append(toggleContainer);
 
         //panel that slides out when location history is clicked
         RLH = TAG.Util.RLH({
@@ -1329,6 +1336,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 if (!TAG.Util.Splitscreen.isOn()) {
                     locationPanelDiv.css({ display: 'inline' });
                     locHistory.text("Close Related Maps");
+                    toggle.attr("src", tagPath+'images/icons/minus.svg');      
                     isOpen = true;
                     toggler.hide();
                     locationPanelDiv.show();
@@ -1339,6 +1347,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         function locationClose() {
             if (isOpen) {
+                toggle.attr("src", tagPath+'images/icons/plus.svg');      
                 locHistory.text("Related Maps");
                 locHistoryContainer.css({ "background-color": "transparent" });
                 isOpen = false;
