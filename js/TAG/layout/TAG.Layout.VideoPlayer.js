@@ -40,6 +40,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         videoElt = video[0],
         DURATION = parseFloat(videoSrc.Metadata.Duration),
         bottomBar = root.find('#bottomBar'),
+        topBar = root.find('#topBar'),
         play = root.find('#playPauseButton'),
         vol = root.find('#videoControlsButton'),
         loop = root.find('#loopButton'),
@@ -119,6 +120,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      */
     function playVideo() {
         videoElt.play();
+        topBar.css('display', 'none');
         play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/pause.png');
     }
 
@@ -128,6 +130,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      */
     function pauseVideo() {
         videoElt.pause();
+        topBar.css('display','inline');
         play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/play.png');
     }
 

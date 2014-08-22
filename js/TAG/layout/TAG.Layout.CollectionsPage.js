@@ -953,7 +953,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         * @method appendTags
         */
         function appendTags() {
-            console.log("appendTags")
             var i,
                 text;
             for (i = 0; i < sortOptions.length; i++) {
@@ -1919,8 +1918,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     shift = 0;
                 }
                 //if artwork tile at end of window
-                console.log(leftOffset + tileWidth + TILE_BUFFER);
-                console.log(rootWidth);
                 if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
                    shift = shift*2 + TILE_BUFFER;
                 }
@@ -1985,14 +1982,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.stop(true,false);
             rootWidth = root.width();
             infoWidth = infoDiv.width();
-            if (!comingBack){
-                tileWidth = artworkTiles[artwork.Identifier].width();       
-                tilePos = artworkTiles[artwork.Identifier].position().left;
-            }
-            if (comingBack){
+            if (comingBack && scrollPos){
                 newScrollPos = scrollPos;
                 duration = ANIMATION_DURATION/5;
             } else {
+                tileWidth = artworkTiles[artwork.Identifier].width();       
+                tilePos = artworkTiles[artwork.Identifier].position().left;
                 duration = ANIMATION_DURATION/3;
                 newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
             }   
