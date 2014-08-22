@@ -84,7 +84,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 localStorage.tagTelemetry = "on";
                 //telemetryDialogOverlay.remove();
             },
-            null,null,null,true
+            tagContainer,null,null,true
         ));
         
         root.append(telemetryDialogoverlay);
