@@ -52,9 +52,14 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
 
         //allow space bar to play/pause
         root.on('keyup', function (evt) { // Start and stop playback
-            if (evt.keyCode === 32) {
+            if (evt.which === 32) {
                 togglePlay();
             }
+        });
+
+        $('#rinContainer').on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
         });
 
         function togglePlay() {

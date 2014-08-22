@@ -343,6 +343,26 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         saveButton.prop('disabled', true);
         saveButton.css('opacity', '0.4');
 
+        //Save button highlighting
+        saveButton.on('mousedown', function () {
+            if (!saveButton.is(":disabled")) {
+                saveButton.css({ "background-color": "white", "color": "black" });
+            }
+        });
+
+        saveButton.on('mouseup', function () {
+            if (!saveButton.is(":disabled")) {
+                saveButton.css({ "background-color": "transparent", "color": "white" });
+            }
+        });
+
+        saveButton.on('mouseout', function () {
+            if (!saveButton.is(":disabled")) {
+                saveButton.css({ "background-color": "transparent", "color": "white" });
+            }
+        });
+
+
         var saveButtonSpecs = TAG.Util.constrainAndPosition($(window).width() * 0.8, $(window).height() * 0.08,
         {
             center_v: true,

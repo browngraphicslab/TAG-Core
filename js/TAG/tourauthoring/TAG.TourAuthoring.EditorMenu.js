@@ -405,6 +405,8 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
         TAG.Util.makeManipulatable(buttondiv[0], {
             onTapped: callback
         });
+
+        return buttondiv;
     }
     that.addButton = addButton;
 
