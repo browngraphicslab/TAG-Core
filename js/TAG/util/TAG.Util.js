@@ -2642,6 +2642,7 @@ TAG.Util.UI = (function () {
         var fontsize = TAG.Util.getMaxFontSizeEM(message,1, $(messageLabel).width(), $(messageLabel).height());
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message);
+        $(confirmBox).append(messageLabel);
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
         $(optionButtonDiv).addClass('optionButtonDiv');
@@ -2652,7 +2653,6 @@ TAG.Util.UI = (function () {
             'color': 'white',
             'bottom': '5%',
             'right': '5%',
-            'text-align':'center'
         });
         $(confirmBox).append(optionButtonDiv);
 
@@ -2782,7 +2782,6 @@ TAG.Util.UI = (function () {
         }
 
 
-        $(confirmBox).append(messageLabel);
        
         return overlay;
     }

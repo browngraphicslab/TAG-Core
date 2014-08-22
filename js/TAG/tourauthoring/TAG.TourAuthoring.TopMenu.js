@@ -462,15 +462,15 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
             //dialogOverlay.fadeIn(500);
             if (textArea.val().length === 0) {
-                textArea.val('Untitled Tour 1');
+                textArea.val('Untitled Tour');
             }
-            var saveDialog = TAG.Util.UI.PopUpConfirmation(function () {
-                $("#popupConfirmButton").text('Saving...').attr('disabled', true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
+            //var saveDialog = TAG.Util.UI.PopUpConfirmation(function () {
+                //$("#popupConfirmButton").text('Saving...').attr('disabled', true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
                 save(true);
-            }, 'Save changes to ' + textArea.val() + '?', "Save", false);
-            root.append(saveDialog);
-            $(saveDialog).css('z-index', 1000000);
-            $(saveDialog).show();
+            //}, 'Save changes to ' + textArea.val() + '?', "Save", false);
+            //root.append(saveDialog);
+            //$(saveDialog).css('z-index', 1000000);
+            //$(saveDialog).show();
         });
 
         //topbar.append(buttonPanel);
