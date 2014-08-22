@@ -168,12 +168,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Util.UI.initKeyHandler();
         TAG.Util.UI.getStack()[0] = settingsViewKeyHandler;
         var timelineShown;
+        newButton.on("mousedown", function () {
+            newButton.css({"background-color":"white"});
+        });
    var checkConTimerId;
     loadHelper();
     if (callback) {
         callback(that);
     }
-	   
+	
     //an array to store video guids that need to be converted
     //var conversionVideos = [];
     /*function checkConversion() {
@@ -816,6 +819,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadSplashScreen
      */
     function loadSplashScreen() {
+        $(document).off();
         prepareViewer(true);
         clearRight();
 
@@ -1116,6 +1120,32 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer.append(previewCollectionsPageButton);
         buttonContainer.append(previewArtworkViewerButton);
 
+
+        saveButton.on("mousedown", function () {
+            if (!saveButton.attr("disabled")) {
+                saveButton.css({ "background-color": "white" });
+            }
+        });
+        previewStartPageButton.on("mousedown", function () {
+            previewStartPageButton.css({ "background-color": "white" });
+        });
+        previewCollectionsPageButton.on("mousedown", function () {
+            previewCollectionsPageButton.css({ "background-color": "white" });
+        });
+        previewArtworkViewerButton.on("mousedown", function () {
+            previewArtworkViewerButton.css({ "background-color": "white" });
+        });
+        bgImgInput.on("mousedown", function () {
+            bgImgInput.css({ "background-color": "white" });
+        });
+        $(document).on("mouseup", function () {
+            saveButton.css({ "background-color": "transparent" });
+            previewStartPageButton.css({ "background-color": "transparent" });
+            previewCollectionsPageButton.css({ "background-color": "transparent" });
+            previewArtworkViewerButton.css({ "background-color": "transparent" });
+            bgImgInput.css({ "background-color": "transparent" });
+            newButton.css({ "background-color": "transparent" });
+        });
         TAG.Telemetry.register(saveButton,'click','general_set_save',function(tobj){
             tobj.mode = 'authoring'
         });
@@ -1690,7 +1720,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} exhibition   exhibition to load
      */
     function loadExhibition(exhibition) {
-        
+        $(document).off();
         deleteType = deleteExhibition;
         toDelete = exhibition;
         var cancelView = false;
@@ -2192,7 +2222,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
+            artPickerButton.on("mousedown", function () {
+                artPickerButton.css({ "background-color": "white"});
+            });
+
             leftButton = artPickerButton;
+
+            saveButton.on("mousedown", function () {
+                if (!saveButton.attr("disabled")) {
+                    saveButton.css({ "background-color": "white" });
+                }
+            });
+            artPickerButton.on("mousedown", function () {
+                artPickerButton.css({ "background-color": "white" });
+            });
+            deleteButton.on("mousedown", function () {
+                deleteButton.css({ "background-color": "white" });
+            });
+            $(document).on("mouseup", function () {
+                saveButton.css({ "background-color": "transparent" });
+                artPickerButton.css({ "background-color": "transparent" });
+                deleteButton.css({ "background-color": "transparent" });
+                newButton.css({ "background-color": "transparent" });
+            });
+
             // Sets the viewer to catalog view
             function catalogView() {
                 rightQueue.add(function () {
@@ -2228,6 +2281,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     preventClickthrough(viewer);
                 });
             }
+
+            
 
             buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
             TAG.Telemetry.register(artPickerButton,'click','art-selected_collections',function(tobj){
@@ -2484,6 +2539,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} tour     tour to load
      */
     function loadTour(tour) {
+        $(document).off();
         prepareViewer(true);
         clearRight();
         deleteType = deleteTour;
@@ -2675,6 +2731,28 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
 
+        saveButton.on("mousedown", function () {
+            if (!saveButton.attr("disabled")) {
+                saveButton.css({ "background-color": "white" });
+            }
+        });
+        duplicateButton.on("mousedown", function () {
+            duplicateButton.css({ "background-color": "white" });
+        });
+        deleteButton.on("mousedown", function () {
+            deleteButton.css({ "background-color": "white" });
+        });
+        editButton.on("mousedown", function () {
+            editButton.css({ "background-color": "white" });
+        });
+        $(document).on("mouseup", function () {
+            saveButton.css({ "background-color": "transparent" });
+            duplicateButton.css({ "background-color": "transparent" });
+            deleteButton.css({ "background-color": "transparent" });
+            editButton.css({ "background-color": "transparent" });
+            newButton.css({ "background-color": "transparent" });
+        });
+
          TAG.Telemetry.register(editButton,'click','tour_edit',function(tobj){
                 tobj.mode = 'authoring';
             });
@@ -2843,7 +2921,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadAssocMediaView(id, matches) {
-
+        $(document).off();
         inGeneralView = false;
         inCollectionsView = false;
         inArtworkView = false;
@@ -2855,7 +2933,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var list;
         currentIndex = 0;
-
+        $(document).on("mouseup", function () {
+            menuLabel.css({"background-color": "transparent"});
+        });
         if (showDropdown) {
             menuLabel.click();
         }
@@ -2972,6 +3052,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    associated media to load
      */
     function loadAssocMedia(media) {
+        
         prepareViewer(true);
         clearRight();
         deleteType = deleteAssociatedMedia;
@@ -3368,6 +3449,28 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             buttonContainer.append(generateAssocMediaThumbnailButton);
         }
         buttonContainer.append(deleteButton).append(saveButton); //SAVE BUTTON//
+
+        saveButton.on("mousedown", function () {
+            if (!saveButton.attr("disabled")) {
+                saveButton.css({ "background-color": "white" });
+            }
+        });
+        thumbnailButton.on("mousedown", function () {
+            thumbnailButton.css({ "background-color": "white" });
+        });
+        deleteButton.on("mousedown", function () {
+            deleteButton.css({ "background-color": "white" });
+        });
+        assocButton.on("mousedown", function () {
+            assocButton.css({ "background-color": "white" });
+        });
+        $(document).on("mouseup", function () {
+            saveButton.css({ "background-color": "transparent" });
+            thumbnailButton.css({ "background-color": "transparent" });
+            deleteButton.css({ "background-color": "transparent" });
+            assocButton.css({ "background-color": "transparent" });
+            newButton.css({ "background-color": "transparent" });
+        });
     }
 
 
@@ -4116,6 +4219,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork  artwork to load
      */
     function loadArtwork(artwork) {
+        $(document).off();
         prepareViewer(true);
         clearRight();
         deleteType = deleteArtwork;
@@ -4466,6 +4570,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             buttonContainer.append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
         }
         
+        saveButton.on("mousedown", function () {
+            if (!saveButton.attr("disabled")) {
+                saveButton.css({ "background-color": "white" });
+            }
+        });
+        thumbnailButton.on("mousedown", function () {
+            thumbnailButton.css({ "background-color": "white" });
+        });
+        xmluploaderbtn.on("mousedown", function () {
+            xmluploaderbtn.css({ "background-color": "white" });
+        });
+        deleteArt.on("mousedown", function () {
+            deleteArt.css({ "background-color": "white" });
+        });
+        editArt.on("mousedown", function () {
+            editArt.css({ "background-color": "white" });
+        });
+        $(document).on("mouseup", function () {
+            saveButton.css({ "background-color": "transparent" });
+            thumbnailButton.css({ "background-color": "transparent" });
+            xmluploaderbtn.css({ "background-color": "transparent" });
+            deleteArt.css({ "background-color": "transparent" });
+            editArt.css({ "background-color": "transparent" });
+            newButton.css({ "background-color": "transparent" });
+        });
         /*if (artwork.Metadata.Type !== 'VideoArtwork') {
             buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
         } else {
@@ -6957,7 +7086,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         dropDown.hide();
         addMenuLabel.click(function () {
             if (showDropdown) {
-                $("#setViewMiddleLabelContainer").css('overflow','auto');
+                $("#setViewMiddleLabelContainer").css('overflow', 'auto');
+                addMenuLabel.css({ "background-color": "transparent" });
                 addMenuArrowIcon.css({
                     '-webkit-transform': 'rotate(90deg)',
                     '-moz-transform': 'rotate(90deg)',
@@ -6969,6 +7099,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
                 dropDown.hide();
             } else {
+                addMenuLabel.css({ "background-color": "white" });
                 $("#setViewMiddleLabelContainer").css('overflow', 'hidden');
                 addMenuArrowIcon.css({
                     '-webkit-transform': 'rotate(270deg)',
@@ -7057,6 +7188,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         dropDown.append(fromFile);
         dropDown.append(iFrameAsset);
+        addMenuLabel.on("mousedown", function () {
+            if (!showDropdown) {
+                addMenuLabel.css({ "background-color": "white" });
+            }            
+        });
+        $(document).on("mouseup", function () {
+            if (!showDropdown) {
+                addMenuLabel.css({ "background-color": "transparent" });
+            }
+        });
+        
         return addMenuLabel;
     }
 
