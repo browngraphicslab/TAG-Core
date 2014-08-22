@@ -1901,10 +1901,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             containerLeft;
             rootWidth = root.width();
             infoWidth = infoDiv.width();
-            tileWidth = artworkTiles[artwork.Identifier].width();       
             if (comingBack && previewPos){
                 containerLeft = previewPos;
             } else {
+                tileWidth = artworkTiles[artwork.Identifier].width();
                 tilePos = artworkTiles[artwork.Identifier].position().left;
                 shift = (getContainerWidth(artwork,showAllAtYear)-tileWidth)/2;
                 leftOffset = tilePos + infoWidth - catalogDiv.scrollLeft();
@@ -1912,15 +1912,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 if (leftOffset < shift){
                     shift = 0;
                 }
-                //if artwork tile at end of window
-                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
-                    shift = shift * 2;
-                }
                 //if there are more than 3 artworks associated with the date year
                 if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
                     selectedArtworkContainer.css("overflow-x", "scroll")
                     leftOffset = bottomContainer.width()/10
                     shift = 0;
+                }
+                //if artwork tile at end of window
+                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
+                    shift = shift * 2;
                 }
                 containerLeft = leftOffset - shift;
                 }   
