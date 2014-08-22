@@ -288,6 +288,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         	container.css('min-width', 0.14 * screenWidth);
         }
         **/
+        var containerHeight = container.width()*(111/163)
+        container.css({
+            'height': containerHeight + 'px',
+            'top' : '-' + containerHeight + 'px'
+        });
+
 
         slideButton.on('click', function () {
             count = 1 - count;
@@ -295,10 +301,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 top: top
             });
             if (count === 0){
-                top = '0%';
+                top = '0px';
                 slideButton.html("Show Controls");
             } else {
-                top = '-23%';
+                top = '-' + containerHeight + 'px';
                 slideButton.html('Hide Controls');
             }   
         });
