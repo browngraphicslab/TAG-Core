@@ -62,6 +62,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
      * @method init
      */
     function init() {
+        $(document).off();
         root.css({ // TODO STYL
             "background-color": "rgb(219,217,204)",
             "color": "black",
@@ -541,7 +542,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         // open media picker on button click
         addRemoveMedia.on('click', createMediaPicker);
+        addRemoveMedia.on('mousedown', function () {
+            addRemoveMedia.css({ "background-color": "white","color":"black" });
+        });
 
+        $(document).on("mouseup", function () {
+            addRemoveMedia.css({ "background-color": "transparent","color":"white"});
+        });
         /**
          * Create the associated media selection picker
          * @method createMediaPicker
@@ -1156,6 +1163,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function toggleFromHotspot() {
             toggleHotspotButton.text('Create Hotspot');
             toggleLayerButton.removeAttr('disabled');
+            toggleHotspotButton.on("mousedown", function () {
+                toggleHotspotButton.css({ "background-color": "white", "color": "black" });
+            });
+            $(document).on("mouseup", function () {
+                toggleHotspotButton.css({ "background-color": "transparent", "color": "white" });
+            });
             toggleLayerButton.css('opacity', '1.0');
 
             annotatedImage.removeOverlay(hotspotAnchor[0]); // TODO check
@@ -1328,7 +1341,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleLayerButton.text('Create Layer');
             toggleHotspotButton.removeAttr('disabled');
             toggleHotspotButton.css('opacity', '1.0');
-
+           
+            toggleLayerButton.on("mousedown", function () {
+                toggleLayerButton.css({ "background-color": "white", "color": "black" });
+            });
+            $(document).on("mouseup", function () {
+                toggleLayerButton.css({ "background-color": "transparent", "color": "white" });
+            });
             if (layerContainer) {
                 annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
                 layerContainer.remove();
@@ -1851,7 +1870,19 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'height': '5%',//
                     })
                     .appendTo($rightbar);
+            
+            $saveAssocMediaButton.on("mousedown", function () {
+                $saveAssocMediaButton.css({ "background-color": "white", "color": "black" });
 
+            });
+            $unassociateAssocMediaButton.on("mousedown", function () {
+                $unassociateAssocMediaButton.css({ "background-color": "white", "color": "black" });
+
+            });
+            $(document).on("mouseup", function () {
+                $saveAssocMediaButton.css({ "background-color": "transparent", "color": "white" });
+                $unassociateAssocMediaButton.css({ "background-color": "transparent", "color": "white" });
+            });
             //Initially disable the save button
             $saveAssocMediaButton.prop('disabled', true);
             $saveAssocMediaButton.css('opacity', '0.4');
