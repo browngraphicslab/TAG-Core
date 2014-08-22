@@ -466,7 +466,10 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             }
             //var saveDialog = TAG.Util.UI.PopUpConfirmation(function () {
                 //$("#popupConfirmButton").text('Saving...').attr('disabled', true).css({ 'border': '1px solid gray', 'color': 'gray', 'cursor': 'default' });
-                save(true);
+            save(true);
+            saveButton.prop('disabled', true);
+            saveButton.css('opacity', '0.4');
+
             //}, 'Save changes to ' + textArea.val() + '?', "Save", false);
             //root.append(saveDialog);
             //$(saveDialog).css('z-index', 1000000);
