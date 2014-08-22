@@ -325,13 +325,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'height': '50%',
             'width': '50%',
             'margin-top': '15%',
-            'margin-left': '25%'
+            'margin-left': '25%',
         });
         infoTitle.css({
             'background-color': 'black',
             'margin': '0%',
             'display': 'block',
-            'color': 'white'
+            'color': 'white',
+            'border-top-left-radius':'3.5px',
+            'border-top-right-radius':'3.5px'
         });
         infoTitle.append(infoTitleLeft);
         infoTitle.append(infoTitleRight);
@@ -404,7 +406,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'display': 'block',
             'color': 'white',
             'height': '17%',
-            'padding':'5%'
+            'padding':'5%',
+            'border-bottom-right-radius':'3.5px',
+            'border-bottom-left-radius':'3.5px'
         });
         infoLogo.append(brownLogoDiv);
         infoLogo.append(microsoftLogoDiv);
