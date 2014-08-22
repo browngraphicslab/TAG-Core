@@ -112,6 +112,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         defaultTag,                     // default sort tag
         showArtworkTimeout,
         tileCircle;                     // loading circle for artwork tiles
+
+    if (SECONDARY_FONT_COLOR[0] !== '#') {
+        SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
+    }
+    if (PRIMARY_FONT_COLOR[0] !== '#') {
+        PRIMARY_FONT_COLOR = '#' + PRIMARY_FONT_COLOR;
+    }
     root[0].collectionsPage = this;
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
@@ -194,13 +201,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         infoButton.on('mousedown', function () {
             createInfoPopUp();
         });
-
-        if (SECONDARY_FONT_COLOR[0]!=='#'){
-            SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;        
-        }    
-        if (PRIMARY_FONT_COLOR[0]!== '#'){
-            PRIMARY_FONT_COLOR = '#' + PRIMARY_FONT_COLOR;
-        }
 
         if (IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg')
@@ -805,7 +805,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
-            collectionDescription.css({'word-wrap': 'break-word', "color": "#"+SECONDARY_FONT_COLOR});
+            collectionDescription.css({'word-wrap': 'break-word', "color": SECONDARY_FONT_COLOR});
                 str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
                 collectionDescription.css({
                     'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
@@ -1013,7 +1013,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 var emptyCollectionDiv = $(document.createElement('div'));
                 emptyCollectionDiv.addClass("primaryFont");
                 emptyCollectionDiv.text("There are no artworks in this collection at present.");
-                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": "#"+PRIMARY_FONT_COLOR });
+                emptyCollectionDiv.css({ "text-align": "center", "margin-top": "20%", "color": PRIMARY_FONT_COLOR });
                 catalogDiv.append(emptyCollectionDiv);
             }
             if (cancel && cancel()) return;
@@ -2109,7 +2109,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('titleSpan')
                          .text(TAG.Util.htmlEntityDecode(artwork.Name))
                     .css({
-                        'color': '#' + SECONDARY_FONT_COLOR,
+                        'color': SECONDARY_FONT_COLOR,
                         //'font-family': FONT,
                     });
 
@@ -2191,7 +2191,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('artistInfo')
                     .css({ 
                     'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
-                    'color': '#' + SECONDARY_FONT_COLOR,
+                    'color': SECONDARY_FONT_COLOR,
                     //'font-family': FONT
                 });
 
@@ -2200,7 +2200,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('yearInfo')
                     .css({ 
                     'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
-                    'color': '#' + SECONDARY_FONT_COLOR,
+                    'color': SECONDARY_FONT_COLOR,
                     //'font-family': FONT
                 });
 
@@ -2227,7 +2227,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .addClass('descText secondaryFontColor')
                     .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
                     .css({
-                    'color': '#' + SECONDARY_FONT_COLOR,
+                    'color': SECONDARY_FONT_COLOR,
                     //'font-family': FONT,
                     'font-size': "80%"
                 });
