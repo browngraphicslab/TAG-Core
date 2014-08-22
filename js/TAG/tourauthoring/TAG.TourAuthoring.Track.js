@@ -954,7 +954,6 @@ TAG.TourAuthoring.Track = function (spec, my) {
         var fontsize = TAG.Util.getMaxFontSizeEM(text, 1, mssge.width(), mssge.height());
         mssge.css('font-size', fontsize);
         deleteDialog.append(mssge);
-        TAG.Util.multiLineEllipsis(mssge);
 
         //var mssge = "Are you sure you want to delete " + my.title;
         var hasAttachedInks = false;
@@ -1034,6 +1033,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         cancelButton.text('Cancel');
         cancelButton.click(function () { deleteOverlay.fadeOut(500); });
         buttonRow.append(cancelButton);
+        TAG.Util.multiLineEllipsis(mssge);
 
 
         function yesTap() {

@@ -30,6 +30,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locationPanelDiv = null,
         locHistoryToggle = null,
         isOpen = false,
+        that = this,
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,
@@ -1349,8 +1350,16 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function locationOpen() { 
             if (!isOpen) {
                 if (!TAG.Util.Splitscreen.isOn()) {
+
+                    //close other drawers if any are open
+                    root.find(".drawerPlusToggle").attr({
+                        src: tagPath+'images/icons/plus.svg',
+                        expanded: false
+                    });
+                    root.find(".drawerContents").slideUp();
+
+                    //and open RLH
                     locationPanelDiv.css({ display: 'inline' });
-                    locHistory.text("Close Related Maps");
                     toggle.attr("src", tagPath+'images/icons/minus.svg');      
                     isOpen = true;
                     toggler.hide();
@@ -1369,6 +1378,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 locationPanelDiv.animate({ width: '0%' }, 350, function () { locationPanelDiv.hide(); locHistoryToggle.hide(); toggler.show(); });
             }
         }
+
+        that.locationClose = locationClose
 
         return locHistoryContainer;
     }
@@ -1430,6 +1441,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
 
             drawerContents.slideToggle();
+            isOpen && that.locationClose()
             drawerContents.css({
                 'display':'inline-block',
                 'overflow-y': 'scroll'

@@ -2603,15 +2603,21 @@ TAG.Util.UI = (function () {
         var currKeyHandler = globalKeyHandler[0];
         globalKeyHandler[0] = popUpHandler;
         
-        
+        //temp solution for telemetry box in all resolutions and browsers. 
+        var maxw = 600,
+            maxh=300;
+        if (fortelemetry) {
+            maxw = $('body').width() * 0.45;
+            maxh = $('body').height() * 0.33;
+        }
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(container).width(), $(container).height(),
             {
                 center_h: true,
                 center_v: true,
                 width: 0.5,
                 height: 0.35,
-                max_width: $('body').width()*0.33,
-                max_height: $('body').height()*0.2,
+                max_width:maxw,// $('body').width()*0.33,
+                max_height: maxh//$('body').height()*0.2,
             });
 
         $(confirmBox).css({
@@ -2641,10 +2647,10 @@ TAG.Util.UI = (function () {
         });
         var fontsize =TAG.Util.getMaxFontSizeEM(message, 1, $(messageLabel).width(), $(messageLabel).height());
         if (fortelemetry&&IS_WINDOWS) {
-            fontsize = TAG.Util.getMaxFontSizeEM(message, 0.9, $(messageLabel).width(), $(messageLabel).height());
+            fontsize = TAG.Util.getMaxFontSizeEM(message, 0.8, $(messageLabel).width(), $(messageLabel).height());
         }
         $(messageLabel).css('font-size', fontsize);
-        $(messageLabel).text(message);
+        $(messageLabel).text(message).attr("id","popupmessage");
         $(confirmBox).append(messageLabel);
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
@@ -2774,6 +2780,7 @@ TAG.Util.UI = (function () {
             removeAll();
             confirmAction();
         }
+        
 
         function removeAll() {
             if (noFade) {
@@ -6037,7 +6044,9 @@ TAG.Util.RLH = function (input) {
             margin: '0px 10px 0px 10px',
             position: 'relative',
             'vertical-align': 'middle',
-            'font-size': '24px'
+            'max-font-size': '24px',
+            'min-font-size' : "12px",
+            "font-size": root.height()/40
         });
         titleContainer.text((location.title ? location.title + (location.date ? ',' : '') : (location.date ? '' : '(Untitled Location)')));
         (!location.title && titleContainer.css({margin:'0px 0px 0px 10px'}));
@@ -6047,7 +6056,9 @@ TAG.Util.RLH = function (input) {
             margin: '0px 0px 0px 0px',
             position: 'relative',
             'vertical-align': 'middle',
-            'font-size': '24px'
+            'max-font-size': '24px',
+            'min-font-size' : "12px",
+            "font-size": root.height()/40
         });
         dateContainer.text(location.date || '');
 
@@ -6056,7 +6067,9 @@ TAG.Util.RLH = function (input) {
             margin: '0px 0px 0px 80px',
             position: 'relative',
             'vertical-align': 'middle',
-            'font-size': '20px',
+            'max-font-size': '24px',
+            'min-font-size' : "12px",
+            "font-size": root.height()/50,
             'padding-right': '20px',
             'font-style': 'italic'
         });
@@ -6257,6 +6270,14 @@ TAG.Util.RLH = function (input) {
             });
         }
 
+        titleInput.on('keydown', function (event) {
+            event.stopPropagation();
+            if (event.which === 13) {
+                event.preventDefault();
+                searchButton.click();
+            }
+        });
+
         dateInput.css({
             position: 'relative',
             width: '52%',
@@ -6293,6 +6314,7 @@ TAG.Util.RLH = function (input) {
         });
         saveButton.text('Save Location');
         saveButton.on('click', function () {
+
             // TODO only replace the relevant list item rather than recreating whole list
             var pushpinLocation,
                 newLoc,
@@ -6411,6 +6433,11 @@ TAG.Util.RLH = function (input) {
      *              callback       a callback function to be called after saving and reloading artwork is done
      */
     function saveRichLocationHistory(input) {
+
+        if ($('.locationTitleInput').is(':focus')) {
+            return;
+        }
+
         disableButtons();
 
         var options = {

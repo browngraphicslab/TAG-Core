@@ -275,6 +275,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                     $("#popupCancelButton").attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
                 }, null, null, true);
                 root.append(backDialog);
+                TAG.Util.multiLineEllipsis($($($(backDialog).children()[0]).children()[0]));
 
                 $(backDialog).css('z-index', 1000000);
                 $(backDialog).show();
