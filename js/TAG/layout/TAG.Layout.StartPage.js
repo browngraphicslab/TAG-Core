@@ -82,7 +82,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             function(){
                 TELEMETRY_SWITCH = 'on';
                 localStorage.tagTelemetry = "on";
-                telemetryDialogOverlay.remove();
+                //telemetryDialogOverlay.remove();
             },
             null,null,null,true
         ));
