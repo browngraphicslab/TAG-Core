@@ -35,7 +35,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverSubmit = root.find('#serverSubmit'),
         passwordSubmit = root.find('#passwordSubmit'),
         serverURL,
-        tagContainer;
+        tagContainer,
+        newUser = options.newUser;
 
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
@@ -64,7 +65,117 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     }
     */
     testConnection();
+    if(newUser){
+         telemetryDialogDisplay();
+    }
+
+    
     //applyCustomization();
+    function telemetryDialogDisplay(){
+        var tagContainer = $('#tagRoot');
+
+        // Creating Overlay
+        var telemetryDialogOverlay = $(document.createElement('div'));
+        telemetryDialogOverlay.attr('id', 'telemetryDialogOverlay');
+        telemetryDialogOverlay.addClass('dialogBoxOverlay');
+        tagContainer.prepend(telemetryDialogOverlay);
+
+        // Creating Dialog Box Container (required for centering)
+        var telemetryDialogContainer = $(document.createElement('div'));
+        telemetryDialogContainer.attr('id', 'telemetryDialogContainer');
+        telemetryDialogContainer.addClass('dialogBoxContainer');
+        telemetryDialogOverlay.append(telemetryDialogContainer);
+        telemetryDialogContainer.css({
+                'position': 'relative'
+        });
+
+        // Creating Dialog Box
+        var telemetryDialog = $(document.createElement('div'));
+        telemetryDialog.attr('id', 'telemetryDialog');
+        telemetryDialog.addClass('dialogBox');
+        telemetryDialogContainer.append(telemetryDialog);
+        telemetryDialog.css({
+                'height':'26%'
+        });
+
+        // Content
+        var telemetryDialogPara = $(document.createElement('p'));
+        telemetryDialogPara.attr('id', 'dialogBoxPara');
+        //telemetryDialogPara.css({"margin-top": "5%"});
+        telemetryDialogPara.text("To improve the Touch Art Gallery experience, we're trying to collect more information about how users like you use our application. Do you mind us collecting information on your usage?");
+        telemetryDialog.append(telemetryDialogPara);
+
+        // Button Container
+        var telemetryButtonRow = $(document.createElement('div'));
+        telemetryButtonRow.attr('id', 'telemetryButtonRow');
+        telemetryDialog.append(telemetryButtonRow);
+        telemetryButtonRow.css({
+            'display': 'block',
+            'height' : '13%',
+            'position': 'relative',
+            'width': '90%',
+            'margin-left': '5%',
+            'margin-top':'10%'
+        });
+
+        var yesButton = $(document.createElement('button'));
+        yesButton.attr('id', 'yesButton');
+        yesButton.text('Yes, I mind');
+        telemetryButtonRow.append(yesButton);
+        yesButton.css({
+            'position': 'relative',
+            'width': '30%',
+            'height': '100%',
+            'color': '#fff',
+            'font-family': '"Segoe UI",serif',
+            'font-size': '80%',
+            'font-weight': 'normal',
+            'background-color': 'transparent',
+            'cursor': 'pointer',
+            'padding': '0px 0px 0px 0px',
+            'border-radius' : '3.5px',
+            'border' : '1px solid white',
+            'margin': '0',
+            'float': 'left',
+            'margin-left' : '0%',
+            'margin-top' : '1px'
+        });
+
+        var noButton = $(document.createElement('button'));
+        noButton.attr('id', 'noButton');
+        noButton.text('No, I don\'t mind');
+        telemetryButtonRow.append(noButton);
+        noButton.css({
+            'position': 'relative',
+            'width': '40%',
+            'height': '100%',
+            "background-color": "white",
+            'color': 'black',
+            'font-family': '"Segoe UI",serif',
+            'font-weight': 'normal',
+            'cursor': 'pointer',
+            'float': 'right',
+            'font-size': '80%',
+            'padding': '0px 0px 0px 0px',
+            'border-radius' : '3.5px',
+            'border' : '1px solid white'
+        });
+
+        noButton.click(function () {
+            TELEMETRY_SWITCH = 'on';
+            localStorage.tagTelemetry = "on";
+            telemetryDialogOverlay.remove();
+        });
+
+        yesButton.click(function(){
+            TELEMETRY_SWITCH = 'off';
+            localStorage.tagTelemetry = "off";
+            telemetryDialogOverlay.remove();
+        });
+
+
+
+    }
 
     /**
      * Test internet and server connections

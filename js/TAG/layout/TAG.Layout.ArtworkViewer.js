@@ -307,10 +307,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             tobj.mode = 'Kiosk';
         });
         container.append(slideButton);
-        container.append(createButton('leftControl',  tagPath+'images/icons/zoom_left.svg'));
-        container.append(createButton('upControl',    tagPath+'images/icons/zoom_up.svg'));
-        container.append(createButton('rightControl', tagPath+'images/icons/zoom_right.svg'));
-        container.append(createButton('downControl',  tagPath+'images/icons/zoom_down.svg'));
+        var sdleftbtn = createButton('leftControl', tagPath + 'images/icons/zoom_left.svg'),
+            sdrightbtn = createButton('rightControl', tagPath + 'images/icons/zoom_right.svg'),
+            sdupbtn = createButton('upControl', tagPath + 'images/icons/zoom_up.svg'),
+            sddownbtn = createButton('downControl', tagPath + 'images/icons/zoom_down.svg');
+        container.append(sddownbtn);
+        container.append(sdupbtn);
+
+        if (sddownbtn.width()) {
+            console.log("got valid height"+ sddownbtn.height());
+            sdleftbtn.css('height', sddownbtn.width());
+            sdrightbtn.css('height', sddownbtn.width());
+        }
+        container.append(sdleftbtn);
+        container.append(sdrightbtn);
+
+        var radius = (sdrightbtn.position().left - sdleftbtn.position().left + sdrightbtn.width()) / 2;
+        var centery = sdleftbtn.position().top + sdleftbtn.height() / 2;
+        sdupbtn.css('top', centery - radius +5+ 'px');
+        sddownbtn.css('top', centery + radius -sdleftbtn.width() +15+ 'px');
         container.append(createButton('zinControl',   tagPath+'images/icons/zoom_plus.svg'));
         container.append(createButton('zoutControl',  tagPath+'images/icons/zoom_minus.svg'));
 
