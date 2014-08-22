@@ -30,9 +30,10 @@
             l;                      // left of tagRoot
         
         TELEMETRY_SESSION_ID = TAG.Util.IdCreator();
-
-        if (!localStorage.machId) {
+        if (!localStorage.tagTelemetry) {
             newUser = true;
+        }
+        if (!localStorage.machId) {
             localStorage.machId= TAG.Util.IdCreator();
         }
     
