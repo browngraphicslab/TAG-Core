@@ -213,7 +213,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     locationPanelDiv.animate({ width: '0%' }, 350, function () {
                         locHistory.text("Related Maps");
                         locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
-                        locHistoryContainer.css({ "background-color": "transparent" });
+                        locHistoryContainer.css({ "background-color": "rgba(250, 250, 250, 0)" });
                         locationPanelDiv.hide();
                         locHistoryToggle.hide();
                         isOpen = false;
@@ -315,7 +315,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         container.append(sdupbtn);
 
         if (sddownbtn.width()) {
-            console.log("got valid height"+ sddownbtn.height());
             sdleftbtn.css('height', sddownbtn.width());
             sdrightbtn.css('height', sddownbtn.width());
         }
@@ -1329,6 +1328,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 if (!TAG.Util.Splitscreen.isOn()) {
                     locationPanelDiv.css({ display: 'inline' });
                     locHistory.text("Close Related Maps");
+                    locHistory.css("color", "black")
+                    locHistoryContainer.css({ "background-color": "white" });
                     isOpen = true;
                     toggler.hide();
                     locationPanelDiv.show();
@@ -1340,7 +1341,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function locationClose() {
             if (isOpen) {
                 locHistory.text("Related Maps");
-                locHistoryContainer.css({ "background-color": "transparent" });
+                locHistory.css("color", "#" + PRIMARY_FONT_COLOR)
+                locHistoryContainer.css({ "background-color": "rgba(250, 250, 250, 0)" });
                 isOpen = false;
                 locationPanelDiv.animate({ width: '0%' }, 350, function () { locationPanelDiv.hide(); locHistoryToggle.hide(); toggler.show(); });
             }
