@@ -6257,6 +6257,14 @@ TAG.Util.RLH = function (input) {
             });
         }
 
+        titleInput.on('keydown', function (event) {
+            event.stopPropagation();
+            if (event.which === 13) {
+                event.preventDefault();
+                searchButton.click();
+            }
+        });
+
         dateInput.css({
             position: 'relative',
             width: '52%',
@@ -6293,6 +6301,7 @@ TAG.Util.RLH = function (input) {
         });
         saveButton.text('Save Location');
         saveButton.on('click', function () {
+
             // TODO only replace the relevant list item rather than recreating whole list
             var pushpinLocation,
                 newLoc,
@@ -6411,6 +6420,11 @@ TAG.Util.RLH = function (input) {
      *              callback       a callback function to be called after saving and reloading artwork is done
      */
     function saveRichLocationHistory(input) {
+
+        if ($('.locationTitleInput').is(':focus')) {
+            return;
+        }
+
         disableButtons();
 
         var options = {
