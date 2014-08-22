@@ -1295,6 +1295,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
                         if (previouslyClicked === main) {
+                            console.log("double-click");
                             switchPage(currentWork, null, getContainerLeft(currentWork, false))();
                         } else {
                             previouslyClicked = main;
@@ -2013,8 +2014,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             catalogDiv.animate({
                 scrollLeft: newScrollPos
-            //}, duration, "easeInOutQuint", function(){
-            }, duration, null, function(){
+            }, duration, "easeInOutQuint", function(){
+            //}, duration, null, function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
                 selectedArtworkContainer.css({
