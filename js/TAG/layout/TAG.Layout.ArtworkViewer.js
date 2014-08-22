@@ -291,7 +291,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         var containerHeight = container.width()*(111/163)
         container.css({
             'height': containerHeight + 'px',
-            'top' : '-' + containerHeight + 'px'
+            'top' : '-' + containerHeight + 'px',
+            'min-width' : container.width()
         });
 
 
