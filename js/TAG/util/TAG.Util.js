@@ -2585,7 +2585,7 @@ TAG.Util.UI = (function () {
 
     
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
         var overlay;
         var origin;
         if (document.getElementById("popupblockInteractionOverlay")) {
@@ -2642,6 +2642,7 @@ TAG.Util.UI = (function () {
         var fontsize = TAG.Util.getMaxFontSizeEM(message,1, $(messageLabel).width(), $(messageLabel).height());
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message);
+        $(confirmBox).append(messageLabel);
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
         $(optionButtonDiv).addClass('optionButtonDiv');
@@ -2671,7 +2672,7 @@ TAG.Util.UI = (function () {
         }).attr('id', 'popupConfirmButton');
         confirmButtonText = (!confirmButtonText || confirmButtonText === "") ? "Confirm" : confirmButtonText;
         $(confirmButton).text(confirmButtonText);
-        
+       
         confirmButton.onclick = function () {
             if (origin) {
                 removeAll();
@@ -2753,7 +2754,19 @@ TAG.Util.UI = (function () {
         }
 
         
-        
+        if(fortelemetry){
+            $cancelButton.text("No, I don't mind")
+                .css({
+                    "border-radius":'3.5px',
+                    "background-color": "white",
+                    "color":'black',
+                    "font-weight":"bold"
+                });
+            $(confirmButton).css({
+                "border-radius":'3.5px',
+                "font-weight":"bold"
+            });
+        }
         function doOnEnter() {
             removeAll();
             confirmAction();
@@ -2770,7 +2783,6 @@ TAG.Util.UI = (function () {
         }
 
 
-        $(confirmBox).append(messageLabel);
        
         return overlay;
     }
@@ -4473,8 +4485,8 @@ TAG.Util.RLH = function (input) {
                             top: '0%',
                             left: '0%',
                             'z-indez': 99,
-                            "border-top-right-radius": "10px",
-                            "border-bottom-right-radius": "10px",
+                            "border-top-right-radius": "3.5px",
+                            "border-bottom-right-radius": "3.5px",
                             'background-color': 'rgba(0,0,0,0.75)'
                         })
                         .appendTo(locationPanelDiv);

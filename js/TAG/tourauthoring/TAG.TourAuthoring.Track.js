@@ -615,7 +615,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         renameOverlay.fadeIn(500);
         var form = $(document.createElement("form"));
         var newName = $(document.createElement("input"));
-        form.css("text-align", 'left');
+        form.css("text-align", 'left').attr("maxlength","100");
         newName.attr("type", "text");
         newName.css("margin", '4% 4%');
         newName.css("width", '100%'); 
@@ -929,19 +929,32 @@ TAG.TourAuthoring.Track = function (spec, my) {
         var text = "Are you sure you want to delete " + my.title;
          mssge.text(text);
         mssge.css({
+            //color: 'white',
+            //'width': '80%',
+            //'height': '15%',
+            //'left': '10%',
+            //'top': '12.5%',
+            //'font-size': '1.25em',
+            //'position': 'relative',
+            //'text-align': 'center',
+            ////'overflow': 'hidden',
+            //'word-wrap': 'break-word',
             color: 'white',
             'width': '80%',
-            'height': '15%',
+            'height': '50%',
             'left': '10%',
             'top': '12.5%',
-            'font-size': '1.25em',
+            'font-size': '0.8em',
+            //'overflow': 'hidden',
             'position': 'relative',
             'text-align': 'center',
-            //'overflow': 'hidden',
-            'word-wrap': 'break-word',
+            'text-overflow': 'ellipsis',
+            'word-wrap': 'break-word'
         });
-       
+        var fontsize = TAG.Util.getMaxFontSizeEM(text, 1, mssge.width(), mssge.height());
+        mssge.css('font-size', fontsize);
         deleteDialog.append(mssge);
+        TAG.Util.multiLineEllipsis(mssge);
 
         //var mssge = "Are you sure you want to delete " + my.title;
         var hasAttachedInks = false;
@@ -978,11 +991,12 @@ TAG.TourAuthoring.Track = function (spec, my) {
             //'margin-top': '10px',
             //'text-align': 'center',
 
-            'position': 'relative',
-            'display': 'block',
+            'height': '20%',
             'width': '80%',
-            'left': '10%',
-            'top': '50%'
+            'position': 'absolute',
+            'color': 'white',
+            'bottom': '5%',
+            'right': '10%',
 
 
         });

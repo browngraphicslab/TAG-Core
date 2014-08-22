@@ -90,7 +90,7 @@ TAG.Layout.InternetFailurePage = function (errorType, detach) {
         else if (errorType === SERVER_DOWN) {
             reconnectButton.text('Reconnect');
             //reconnectButton.css({ 'font-size': '150%', 'position': 'relative', 'left': '30%', 'top': '5%' });
-        } else if (OLD_SERVER) {
+        } else if (errorType === OLD_SERVER) {
             reconnectButton.hide();
         }else {
             reconnectButton.text('Reconnect');

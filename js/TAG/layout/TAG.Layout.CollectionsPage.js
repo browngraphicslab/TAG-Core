@@ -191,7 +191,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
             .addClass('bottomButton')
-        infoButton.on('click', function () {
+        infoButton.on('mousedown', function () {
             createInfoPopUp();
         });
 
@@ -205,7 +205,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg')
                         .addClass('bottomButton')
-                        .on('click', function () {
+                        .on('mousedown', function () {
                             var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
                                 tagpagename: 'collections',
                                 tagcollectionid: currCollection.Identifier,
@@ -422,7 +422,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         root.append(infoOverlay);
         infoOverlay.fadeIn();
 
-        closeButton.on('click', function () {
+        closeButton.on('mousedown', function () {
             infoOverlay.fadeOut();
         });
     }
@@ -532,12 +532,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "height":  COLLECTION_DOT_WIDTH,
                             "border-radius": COLLECTION_DOT_WIDTH / 2,
                             "margin": COLLECTION_DOT_WIDTH/4
-                        }).on('click', function(j){
+                        }).on('mousedown', function(j){
                            return function(){
                                 prepareNextView();
                                 loadCollection(visibleCollections[j])();
                             }
-                        }(i));
+                        }(i))
+
             collectionDotHolder.append(collectionDot);
             collectionDots[visibleCollections[i].Identifier] = collectionDot;
         }
@@ -702,7 +703,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 
                 backArrowArea.css('left', '0%')
                     .off()
-                    .on('click', function(j){
+                    .on('mousedown', function(j){
                         return function () {
                             prepareNextView();
                             loadCollection(visibleCollections[j.prevCollectionIndex])();
@@ -719,7 +720,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             .css('left','3%')
                             .html(prevTitle)
                             .off()
-                            .on('click', function(j){
+                            .on('mousedown', function(j){
                                 return function () {
                                     prepareNextView();
                                     loadCollection(visibleCollections[j.prevCollectionIndex])();
@@ -727,13 +728,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             }(collection));
                 collectionArea.append(prevCollection);
                 prevCollection.show();
-                TAG.Telemetry.register(backArrowArea, 'click', 'collection_title', function(tobj){
+                TAG.Telemetry.register(backArrowArea, 'mousedown', 'collection_title', function(tobj){
                     tobj.custom_1 = prevTitle;
                     tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
                     tobj.mode = 'Kiosk';
 
                 });
-                TAG.Telemetry.register(prevCollection, 'click', 'collection_title', function(tobj){
+                TAG.Telemetry.register(prevCollection, 'mousedown', 'collection_title', function(tobj){
                     tobj.custom_1 = prevTitle;
                     tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
                     tobj.mode = 'Kiosk';
@@ -749,7 +750,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextArrowArea.addClass('arrowArea');
                 nextArrowArea.css({'right': '0%'})
                             .off()
-                            .on('click', function(j){
+                            .on('mousedown', function(j){
                                 return function () {
                                     prepareNextView();
                                     loadCollection(visibleCollections[j.nextCollectionIndex])();
@@ -771,19 +772,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                   //'color': '#' + PRIMARY_FONT_COLOR
                               })
                             .off()
-                            .on('click', function(j){
+                            .on('mousedown', function(j){
                                 return function(){
                                     prepareNextView();
                                     loadCollection(visibleCollections[j.nextCollectionIndex])();
                                 }
                             }(collection));
                 nextCollection.show();
-                TAG.Telemetry.register(nextArrowArea, 'click', 'collection_title', function(tobj){
+                TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
                     tobj.custom_1 = nextTitle;
                     tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
                     tobj.mode = 'Kiosk';
                 });
-                TAG.Telemetry.register(nextCollection, 'click', 'collection_title', function(tobj){
+                TAG.Telemetry.register(nextCollection, 'mousedown', 'collection_title', function(tobj){
                     tobj.custom_1 = nextTitle;
                     tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
                     tobj.mode = 'Kiosk';
@@ -850,7 +851,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     toggleRow.css('width', '40%');
                 }
                 artworksButton.off()
-                              .on('click', function(){
+                              .on('mousedown', function(){
                                     artworksButton.css('color', SECONDARY_FONT_COLOR);
                                     assocMediaButton.css('color', dimmedColor);
                                     if (onAssocMediaView){
@@ -860,7 +861,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                });
 
                 assocMediaButton.off()
-                                .on('click', function(){
+                                .on('mousedown', function(){
                                     artworksButton.css('color', dimmedColor);
                                     assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView){
@@ -961,14 +962,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             .text(text)
                             .attr('id', sortOptions[i].toLowerCase() + "Button")
                             .off()
-                            .on('click', function () {
+                            .on('mousedown', function () {
                                 currentArtwork = null;
                                 changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
                             });
                 buttonRow.append(sortButton);
                 sortButtonTags[sortButton.attr('id')] = sortOptions[i];
                 //TO-DO: test this telemetry handler
-                TAG.Telemetry.register(sortButton, 'click', '', function (tobj) {
+                TAG.Telemetry.register(sortButton, 'mousedown', '', function (tobj) {
                     tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
                     tobj.mode = 'Kiosk';
                 });
@@ -1194,17 +1195,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (currTimelineCircleArea){
             currTimelineCircleArea.stop(true,true);
         }
-        if (artworks) {//initial timelines anyway as long as there is artwork, for settingsview's sake.
-            initTimeline(artworks);
-            timelineArea.hide();
-        }
-        if (timelineShown && artworks){ 
-            if (onAssocMediaView){
+        if (timelineShown && artworks) {
+            if (onAssocMediaView) {
                 var loadAssocMediaTimeline;
-                setTimeout(function(){initTimeline(artworks)},1000);
-            } else{ 
-                timelineArea.show();
-                //initTimeline(artworks);
+                setTimeout(function () { initTimeline(artworks) }, 1000);
+            } else {
+                initTimeline(artworks);
             }
         }
         styleBottomContainer();
@@ -1270,7 +1266,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             yearTextBox.addClass('yearTextBox');
             yearTextBox.addClass('secondaryFont');
             yearTextBox.css({
-                'color': '#' + SECONDARY_FONT_COLOR,
+                'color': SECONDARY_FONT_COLOR,
                 //'font-family': FONT
             });
 
@@ -1305,8 +1301,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }
 
                 }();
-            }
-                   
+            } 
                 main.on('click', function () {
                     doubleClickHandler()
 
@@ -1319,7 +1314,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     setTimeout(function () { showArtwork(currentWork, false)() }, 10)
                     zoomTimeline(artworkCircles[currentWork.Identifier])
                     justShowedArtwork = true;
-                })                
+                })         
             
             TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
@@ -1647,7 +1642,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     eventCircle = $(document.createElement('div'));  
                     eventCircle.addClass('timelineEventCircle')
                                 .css('left', positionOnTimeline + '%')
-                                .on('click', (function(art, eventCircle) {
+                                .on('mousedown', (function(art, eventCircle) {
                                     return function() {
                                     if (artworkShown === true && currentArtwork === art) {
                                         hideArtwork(art)();
@@ -2044,7 +2039,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'background-color': '',
                     'left': '1.5%'
                 });
-                closeButton.on('click', function () {
+                closeButton.on('mousedown', function () {
                     hideArtwork(currentArtwork)();
                 });
                 
@@ -2124,7 +2119,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 exploreTab = $(document.createElement('div'))
                     .addClass('exploreTab');
                 if (!onAssocMediaView){
-                    exploreTab.on('click', switchPage(artwork))
+                    exploreTab.on('mousedown', switchPage(artwork))
                 } 
 
                 //Explore text
@@ -2172,10 +2167,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }else {
                     currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
                 }
-                !onAssocMediaView && currentThumbnail.on('click', switchPage(artwork))
+                !onAssocMediaView && currentThumbnail.on('mousedown', switchPage(artwork))
 
                 //Telemetry stuff
-                TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'click', '', function(tobj) {
+                TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'mousedown', '', function(tobj) {
                     if (!artwork || !artworkSelected) {
                         return true; // abort
                     }
@@ -2257,7 +2252,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 		    prevArrow = $(document.createElement('img'))
                     			.addClass("miniTilesArrow")
                     			.attr('src', tagPath + 'images/icons/Close.svg')
-                    			.on('click', function(){
+                    			.on('mousedown', function(){
                         				miniTilesHolder.stop();
                         				miniTilesHolder.animate({
                             			scrollLeft: miniTilesHolder.scrollLeft() - 50
@@ -2268,7 +2263,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     			.addClass("miniTilesArrow")
                     			.attr('src', tagPath + 'images/icons/Open.svg')
                     			.css('left', "94%")
-                    			.on('click', function(){
+                    			.on('mousedown', function(){
                         			miniTilesHolder.stop();
                         			miniTilesHolder.animate({
                             		scrollLeft: miniTilesHolder.scrollLeft() + 50
@@ -2302,7 +2297,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             .css({
                                 'width': .35*(.45*selectedArtworkContainer.height())
                             })
-                            .on('click', 
+                            .on('mousedown', 
                                     onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
                                 )
                         miniTile.css('left', i*(miniTile.width() + miniTilesHolder.height()/10));

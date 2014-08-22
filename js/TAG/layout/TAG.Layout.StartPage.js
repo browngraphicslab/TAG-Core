@@ -73,8 +73,24 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     //applyCustomization();
     function telemetryDialogDisplay(){
         var tagContainer = $('#tagRoot');
-
+        var telemetryDialogoverlay = $(TAG.Util.UI.PopUpConfirmation(function(){
+            TELEMETRY_SWITCH = 'off';
+            localStorage.tagTelemetry = "off";
+            telemetryDialogOverlay.remove();},
+            "To improve the Touch Art Gallery experience, we're trying to collect more information about how users like you use our application. Do you mind us collecting information on your usage?",
+            "Yes, I mind",null,
+            function(){
+                TELEMETRY_SWITCH = 'on';
+                localStorage.tagTelemetry = "on";
+                //telemetryDialogOverlay.remove();
+            },
+            tagContainer,null,null,true
+        ));
+        
+        root.append(telemetryDialogoverlay);
+        telemetryDialogoverlay.show();
         // Creating Overlay
+        /*
         var telemetryDialogOverlay = $(document.createElement('div'));
         telemetryDialogOverlay.attr('id', 'telemetryDialogOverlay');
         telemetryDialogOverlay.addClass('dialogBoxOverlay');
@@ -172,7 +188,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             localStorage.tagTelemetry = "off";
             telemetryDialogOverlay.remove();
         });
-
+        */
 
 
     }
@@ -235,7 +251,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     function successConnecting() {
         TAG.Worktop.Database.getVersion(function (ver) {
-            if (parseFloat(ver) < 1.0) {
+            if (parseFloat(ver) < 1.5) {
                 tagContainer.empty();
                 tagContainer.append((new TAG.Layout.InternetFailurePage("Old Server")).getRoot());
             } else {
@@ -487,9 +503,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             else if(browser.indexOf('firefox') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
                 console.log("Detected Firefox Version: " + version);
-                var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use two-finger scroll."),"OK");
-                root.append(popupMsg);
-                popupMsg.show();
+//                var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use two-finger scroll."),"OK");
+//                root.append(popupMsg);
+//                popupMsg.show();
                 //document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
                 //$('meta[name=viewport]').attr('content','width='+$(window).width()+',user-scalable=no, maximum-scale=1.0');
                 return(version >= 28);
