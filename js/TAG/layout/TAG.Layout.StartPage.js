@@ -57,13 +57,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
     tagContainer = options.tagContainer || $('body');
-    /*
+
+    //Comment out this conditional block to disable access to authoring for the web
     if (!IS_WINDOWS) {
         authoringInput.prop('disabled', true);
         authoringInput.css('opacity', '0.5');
         passwordSubmit.css('opacity', '0.5');
     }
-    */
+    
     testConnection();
     if(newUser){
          telemetryDialogDisplay();
@@ -76,7 +77,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         var telemetryDialogoverlay = $(TAG.Util.UI.PopUpConfirmation(function(){
             TELEMETRY_SWITCH = 'off';
             localStorage.tagTelemetry = "off";
-            telemetryDialogOverlay.remove();},
+            //telemetryDialogOverlay.remove();
+        },
             "To improve the Touch Art Gallery experience, we're trying to collect more information about how users like you use our application. Do you mind us collecting information on your usage?",
             "Yes, I mind",null,
             function(){
@@ -397,7 +399,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit.on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            //if(IS_WINDOWS) {
+
+            //To disable access to authoring for the web:
+            //Comment out the if statement and the entire else block. 
+            //Only leave the TAG.Auth.checkPassword() statement in.
+
+            if(IS_WINDOWS) {
                 TAG.Auth.checkPassword(authoringInput.val(), function () { 
                     enterAuthoringMode();
                     }, function () {
@@ -407,13 +414,13 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
                     passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
                 });  
-            /*
+            
             } else {
                 passwordError.html('Authoring mode is only accessible from the Windows 8 app');
                 passwordError.css({'visibility':'visible'});
                 passwordError.css({'color':'rgba(255, 255, 255, 1)'});
             }
-            */
+            
         });
     
     //Enter can be pressed to submit the password form...
