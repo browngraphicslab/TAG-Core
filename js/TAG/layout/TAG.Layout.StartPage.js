@@ -283,8 +283,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     */
     function loadHelper(main) {
         mainDoq = main;
-        PRIMARY_FONT_COLOR = '#' + mainDoq.Metadata["PrimaryFontColor"];
-        SECONDARY_FONT_COLOR = '#' + mainDoq.Metadata["SecondaryFontColor"];
+        PRIMARY_FONT_COLOR = mainDoq.Metadata["PrimaryFontColor"];
+        SECONDARY_FONT_COLOR = mainDoq.Metadata["SecondaryFontColor"];
+
+        if (SECONDARY_FONT_COLOR[0] !== '#') {
+            SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
+        }
+        if (PRIMARY_FONT_COLOR[0] !== '#') {
+            PRIMARY_FONT_COLOR = '#' + PRIMARY_FONT_COLOR;
+        }
         if (startPageCallback) {
             startPageCallback(root);
         }
