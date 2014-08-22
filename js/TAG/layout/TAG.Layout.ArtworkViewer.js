@@ -213,7 +213,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     locationPanelDiv.animate({ width: '0%' }, 350, function () {
                         locHistory.text("Related Maps");
                         locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
-                        locHistoryContainer.css({ "background-color": "rgba(250, 250, 250, 0)" });
+                        locHistoryContainer.css({ "background-color": "transparent" });
                         locationPanelDiv.hide();
                         locHistoryToggle.hide();
                         isOpen = false;
@@ -317,6 +317,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         container.append(sdupbtn);
 
         if (sddownbtn.width()) {
+            console.log("got valid height"+ sddownbtn.height());
             sdleftbtn.css('height', sddownbtn.width());
             sdrightbtn.css('height', sddownbtn.width());
         }
@@ -1280,10 +1281,15 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @author jastern
      */
     function initlocationHistory() {
-        var RLH;            
+        var RLH,  
+            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer'),
+            toggle          = $(document.createElement('img')).addClass("drawerPlusToggle")
+                .attr("src", tagPath+'images/icons/plus.svg');      
         isOpen = false;
 
         locHistoryContainer.on('click', function () { toggleLocationOpen(); });
+        toggleContainer.append(toggle);
+        locHistoryContainer.append(toggleContainer);
 
         //panel that slides out when location history is clicked
         RLH = TAG.Util.RLH({
@@ -1330,8 +1336,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 if (!TAG.Util.Splitscreen.isOn()) {
                     locationPanelDiv.css({ display: 'inline' });
                     locHistory.text("Close Related Maps");
-                    locHistory.css("color", "black")
-                    locHistoryContainer.css({ "background-color": "white" });
+                    toggle.attr("src", tagPath+'images/icons/minus.svg');      
                     isOpen = true;
                     toggler.hide();
                     locationPanelDiv.show();
@@ -1342,9 +1347,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         function locationClose() {
             if (isOpen) {
+                toggle.attr("src", tagPath+'images/icons/plus.svg');      
                 locHistory.text("Related Maps");
-                locHistory.css("color", "#" + PRIMARY_FONT_COLOR)
-                locHistoryContainer.css({ "background-color": "rgba(250, 250, 250, 0)" });
+                locHistoryContainer.css({ "background-color": "transparent" });
                 isOpen = false;
                 locationPanelDiv.animate({ width: '0%' }, 350, function () { locationPanelDiv.hide(); locHistoryToggle.hide(); toggler.show(); });
             }
