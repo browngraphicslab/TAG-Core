@@ -1130,6 +1130,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 currentWork,
                 works,
                 progressCircCSS,
+                paddingDiv,
                 circle,
                 i, h, w, j;
 
@@ -1165,6 +1166,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     loadQueue.add(drawArtworkTile(works[j], null, onSearch, i+j, j === works.length-1));
                 }
             }
+            loadQueue.add(function(){
+                paddingDiv = $(document.createElement("div"))
+                    .css({
+                        'height': "100%",
+                        "width": TILE_BUFFER,
+                        "pointer-events": "none",
+                        'position': 'absolute',
+                        "margin": "none",
+                        'left': tileDiv.children().eq(-1).position().left + tileDiv.children().eq(-1).width() // to get last child position
+                    });
+                tileDiv.append(paddingDiv);
+            })
             loadQueue.add(function () {
             	tileCircle.hide();
             })
