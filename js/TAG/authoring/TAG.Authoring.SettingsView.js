@@ -3521,6 +3521,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, "Are you sure you want to delete " + media.Name + "?", "Delete", true, function () { $(confirmationBox).hide(); });
             root.append(confirmationBox);
             $(confirmationBox).show();
+            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
+
     }
 
     /**Brings up an artwork chooser for a particular associated media
