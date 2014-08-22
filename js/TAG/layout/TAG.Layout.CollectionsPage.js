@@ -48,6 +48,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // input options
         scrollPos = options.backScroll || null,     // horizontal position within collection's catalog
+        previewPos = options.backPreviewPos || null,
         currCollection = options.backCollection,      // the currently selected collection
         currentArtwork = options.backArtwork,         // the currently selected artwork
         currentTag = options.backTag,             // current sort tag for collection
@@ -324,13 +325,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'height': '50%',
             'width': '50%',
             'margin-top': '15%',
-            'margin-left': '25%'
+            'margin-left': '25%',
         });
         infoTitle.css({
             'background-color': 'black',
             'margin': '0%',
             'display': 'block',
-            'color': 'white'
+            'color': 'white',
+            'border-top-left-radius':'3.5px',
+            'border-top-right-radius':'3.5px'
         });
         infoTitle.append(infoTitleLeft);
         infoTitle.append(infoTitleRight);
@@ -403,7 +406,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'display': 'block',
             'color': 'white',
             'height': '17%',
-            'padding':'5%'
+            'padding':'5%',
+            'border-bottom-right-radius':'3.5px',
+            'border-bottom-left-radius':'3.5px'
         });
         infoLogo.append(brownLogoDiv);
         infoLogo.append(microsoftLogoDiv);
@@ -822,6 +827,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Hide selected artwork container, as nothing is selected yet
             selectedArtworkContainer.css('display', 'none');
+            timelineShown && zoomTimeline();
       
             tileDiv.empty();
             catalogDiv.append(tileDiv);
@@ -840,6 +846,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 toggleRow.css({
                     'display': 'block',
                 });
+                if (TAG.Util.Splitscreen.isOn()) {
+                    toggleRow.css('width', '40%');
+                }
                 artworksButton.off()
                               .on('click', function(){
                                     artworksButton.css('color', SECONDARY_FONT_COLOR);
@@ -862,7 +871,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else {
                 toggleRow.css('display','none');
             }
-
+           
             currCollection = collection;
             currentArtwork = artwrk || null;
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
@@ -1156,9 +1165,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             loadQueue.add(function () {
             	tileCircle.hide();
             })
-            loadQueue.add(function () {
-                showArtwork(currentArtwork,multipleShown && multipleShown)();
-           	});
             tileDiv.css({'left': infoDiv.width()});
             if (infoDiv.width()===0){
                 tileDiv.css({'margin-left':'2%'});
@@ -1931,24 +1937,30 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             infoWidth = infoDiv.width();
             tileWidth = artworkTiles[artwork.Identifier].width();       
             if (comingBack){
-                tilePos = scrollPos;
-                duration = ANIMATION_DURATION;
+                newScrollPos = scrollPos;
+                if (previewPos){
+                    containerLeft = previewPos;
+                }
+                duration = ANIMATION_DURATION/5;
             } else {
                 tilePos = artworkTiles[artwork.Identifier].position().left;
                 duration = ANIMATION_DURATION/3;
-            }
-            newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
+                 newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
+            }   
             if (newScrollPos<0){
                 newScrollPos = 0;
             }
+            //Don't animate if not actually scrolling
             if (parseInt(newScrollPos) === catalogDiv.scrollLeft()){
                 duration = 0;
             }
             catalogDiv.animate({
                 scrollLeft: newScrollPos
-            }, duration, "easeInOutQuint", function(){
+            //}, duration, "easeInOutQuint", function(){
+            }, duration, null, function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
+                if (!comingBack || !containerLeft){
                 shift = (containerWidth-tileWidth)/2;
                 leftOffset = tilePos + infoWidth - catalogDiv.scrollLeft();
                 //if artwork tile at beginning of window
@@ -1966,6 +1978,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     shift = 0;
                 }
                 containerLeft = leftOffset - shift;
+                }
                 selectedArtworkContainer.css({
                     'width' : containerWidth,
                     'display': 'inline',
@@ -2130,7 +2143,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 //                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
                     currentThumbnail = $(document.createElement('div'));
                     currentThumbnail.css({
-                        'background':'url('+FIX_PATH(artwork.Metadata.Thumbnail+') no-repeat center'),
+                        'background': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail + ') no-repeat center'),
+                        'background-size':'contain',
                         'height':'100%',
                     })
 //                    background: url(url) no-repeat center;
@@ -2403,7 +2417,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                  
         };
     }
-
+    this.showArtwork = showArtwork;
 
     /**
      * Generates a comparator function for catalog sorting
@@ -2729,7 +2743,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         collectionOptions = {
-            backScroll: scrollPos,
+            prevScroll: catalogDiv.scrollLeft(),
+            prevPreviewPos: selectedArtworkContainer.position().left,
             backCollection: currCollection,
             prevTag : currentTag,
             backArtwork: tour,
@@ -2755,7 +2770,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         prevInfo = {
             artworkPrev: null,
-            prevScroll: scrollPos,
+            prevScroll: catalogDiv.scrollLeft(),
+            prevPreviewPos : selectedArtworkContainer.position().left,
             prevTag: currentTag,
             prevMult: multipleShown
         };
@@ -2827,12 +2843,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     switchPageVideo(artwork);
                 }
             } else { // deepzoom artwork
-                scrollPos = scrollPos;
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
                     prevPreview: currentArtwork,
                     prevTag : currentTag,
-                    prevScroll: scrollPos,
+                    prevScroll: catalogDiv.scrollLeft(),
+                    prevPreviewPos: selectedArtworkContainer.position().left,
                     prevCollection: currCollection,
                     prevPage: 'catalog',
                     prevMult: multipleShown,
@@ -2916,7 +2932,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     return {
         getRoot: getRoot,
         loadCollection: loadCollection,
-        loadFirstCollection: loadFirstCollection
+        loadFirstCollection: loadFirstCollection,
+        showArtwork : showArtwork
     };
 };
 

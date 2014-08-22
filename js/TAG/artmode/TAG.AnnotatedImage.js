@@ -1200,7 +1200,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             outerContainer.animate({
                 top: finalPosition.y,
                 left: finalPosition.x
-            }, 800, function () {
+            }, 300, function () {
                 IS_WINDOWS && (outerContainer.manipulationOffset = null);
                 //If object is not on screen, reset and hide it
                 if (!(
