@@ -2653,6 +2653,7 @@ TAG.Util.UI = (function () {
             'color': 'white',
             'bottom': '5%',
             'right': '5%',
+            'text-align':'center'
         });
         $(confirmBox).append(optionButtonDiv);
 
