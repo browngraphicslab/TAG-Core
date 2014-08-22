@@ -283,17 +283,22 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'border-bottom-right-radius': '3.5px',
             });
         }
-        /**
-        if (!previewing){
-        	container.css('min-width', 0.14 * screenWidth);
+
+        //To-do figure out best max-width, min width
+        if (previewing) {
+            return;
         }
-        **/
+        container.css('width', Math.max(160,Math.min($('#tagRoot').width() * 0.19,400)));
         var containerHeight = container.width()*(111/163)
         container.css({
             'height': containerHeight + 'px',
             'top' : '-' + containerHeight + 'px',
             'min-width' : container.width()
         });
+        slideButton.css({
+            'padding-top': 0.05 * container.width() + 'px',
+            'padding-bottom': 0.05 * container.width() + 'px'
+        })
 
 
         slideButton.on('click', function () {
