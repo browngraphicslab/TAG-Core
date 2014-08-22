@@ -264,7 +264,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                 (componentControls.getInkUndoManager() && (componentControls.getInkUndoManager().dirtyStateGetter() === false) /*&& (componentControls.getInkUndoManager().undoStackSize() != 0)*/)) {
                 //backDialogOverlay.fadeIn(500);
                 if (textArea.val().length === 0) {
-                    textArea.val('Untitled Tour 1');
+                    textArea.val('Untitled Tour');
                 }
                 var backDialog = TAG.Util.UI.PopUpConfirmation(function () {
                     $("#popupConfirmButton").text('Saving...').attr('disabled', true);

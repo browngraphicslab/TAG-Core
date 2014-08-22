@@ -2651,9 +2651,12 @@ TAG.Util.UI = (function () {
             'position': 'absolute',
             'color': 'white',
             'bottom': '5%',
-            'right': '5%'
+            'right': '5%',
+            'text-align':'center'
         });
+        $(confirmBox).append(optionButtonDiv);
 
+        $(overlay).append(confirmBox);
         var confirmButton = document.createElement('button');
         $(confirmButton).css({
             'padding': '1%',
@@ -2685,9 +2688,11 @@ TAG.Util.UI = (function () {
                     confirmAction();
             }
         }
+        $(optionButtonDiv).append(confirmButton);
 
         var cancelButton = document.createElement('button');
-        $(cancelButton).css({
+        var $cancelButton = $(cancelButton);
+        $cancelButton.css({
             'padding': '1%',
             'border': '1px solid white',
             'width': 'auto',
@@ -2697,9 +2702,46 @@ TAG.Util.UI = (function () {
             'color': 'white',
             'margin-top': '1%'
         }).attr('id', 'popupCancelButton');
-        $(cancelButton).text('Cancel');
+        $cancelButton.text('Cancel');
+        $(optionButtonDiv).append(cancelButton);
+
         if (forTourBack) {
-            $(cancelButton).text('Don\'t Save');
+            $cancelButton.text('Don\'t Save');
+            $(optionButtonDiv).css({
+                "right": "0%",
+            });
+            $(confirmButton).css({
+                'left': '12%',
+                'margin': 'auto',
+                'margin-top': '1%',
+            });
+            var realcancelbtn = $(document.createElement('button'));
+            realcancelbtn.css({
+                'padding': '1%',
+                'border': '1px solid white',
+                'width': 'auto',
+                'position': 'relative',
+                'float': "right",
+                //'margin-right': '12%',
+                'right':'12%',
+                'color': 'white',
+                'margin-top': '1%'
+            }).text("Cancel");
+            var btnwidth = $(cancelButton).width();
+            var dontleft = ($(optionButtonDiv).width() - btnwidth) / 2;
+            $cancelButton.css({
+                "float": 'none',
+                'margin': 'auto',
+                'margin-top':'1%',                
+            });
+            $(optionButtonDiv).append(realcancelbtn);
+            realcancelbtn.click(function () {
+                if (origin) {
+                    removeAll();
+                } else {
+                    $(confirmBox).remove();
+                }
+            });
         }
         cancelButton.onclick = function () {
             if(origin){
@@ -2727,13 +2769,9 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currKeyHandler;
         }
 
-        $(optionButtonDiv).append(cancelButton);
-        $(optionButtonDiv).append(confirmButton);
 
         $(confirmBox).append(messageLabel);
-        $(confirmBox).append(optionButtonDiv);
-
-        $(overlay).append(confirmBox);
+       
         return overlay;
     }
 
