@@ -1194,17 +1194,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (currTimelineCircleArea){
             currTimelineCircleArea.stop(true,true);
         }
-        if (artworks) {//initial timelines anyway as long as there is artwork, for settingsview's sake.
-            initTimeline(artworks);
-            timelineArea.hide();
-        }
-        if (timelineShown && artworks){ 
-            if (onAssocMediaView){
+        if (timelineShown && artworks) {
+            if (onAssocMediaView) {
                 var loadAssocMediaTimeline;
-                setTimeout(function(){initTimeline(artworks)},1000);
-            } else{ 
-                timelineArea.show();
-                //initTimeline(artworks);
+                setTimeout(function () { initTimeline(artworks) }, 1000);
+            } else {
+                initTimeline(artworks);
             }
         }
         styleBottomContainer();
