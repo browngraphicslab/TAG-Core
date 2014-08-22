@@ -13,10 +13,12 @@ TAG.Util.makeNamespace("TAG.Layout.TourPlayer");
 TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj) {
     "use strict";
     var artworkPrev;
-    var prevScroll = 0;
+    var prevScroll = prevInfo.prevScroll;
+    var prevPreviewPos = prevInfo.prevPreviewPos;
 	var prevExhib = exhibition;
     var prevTag = prevInfo.prevTag;
     var prevMult = prevInfo.prevMult;
+    var prevS
     var rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
     var ispagetoload = pageToLoad && (pageToLoad.pagename === 'tour');
 
@@ -152,15 +154,19 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             currentPage.obj  = artmode;
         } else {
             var backInfo = { backArtwork: tourObj, backScroll: prevScroll };
+            console.log("ps" + prevScroll);
             collectionsPage = new TAG.Layout.CollectionsPage({
                 backScroll: prevScroll,
                 backArtwork: tourObj,
                 backCollection: exhibition,
                 backTag : prevTag,
-                backMult : prevMult
+                backMult : prevMult,
+                backPreviewPos : prevPreviewPos
             });
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
 				artworkPrev = "catalog";
+                console.log(tourObj);
+                collectionsPage.showArtwork(tourObj, prevMult && prevMult)();
 			});
         
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;

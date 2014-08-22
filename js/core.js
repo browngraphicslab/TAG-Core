@@ -6,7 +6,7 @@
  */
 (function () { // TODO merging: make sure everything necessary from the win8 app is here
     "use strict";
-
+    var newUser = false;
     if (IS_WINDOWS) {
         $(document).on('ready', load);
     } else {
@@ -30,8 +30,10 @@
             l;                      // left of tagRoot
         
         TELEMETRY_SESSION_ID = TAG.Util.IdCreator();
-
-        if(!localStorage.machId){
+        if (!localStorage.tagTelemetry) {
+            newUser = true;
+        }
+        if (!localStorage.machId) {
             localStorage.machId= TAG.Util.IdCreator();
         }
     
@@ -249,7 +251,7 @@
             currentPage.name = TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
 
-            TAG.Layout.StartPage(null, function (page) {
+            TAG.Layout.StartPage({newUser:newUser}, function (page) {
                 TAG.Worktop.Database.getDoq(pageToLoad.guid, function (tour) {
                     if (pageToLoad.prevpage) {
                         TAG.Worktop.Database.getDoq(pageToLoad.prevpage, function (prevCollection) {
@@ -286,7 +288,7 @@
             currentPage.name = TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
 
-            TAG.Layout.StartPage(null, function (page) {
+            TAG.Layout.StartPage({ newUser: newUser }, function (page) {
                 var collectionsPage;
                 if(pageToLoad.collectionid) {
                     TAG.Worktop.Database.getDoq(pageToLoad.collectionid, function(collection) {
@@ -323,7 +325,7 @@
             currentPage.name = TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
 
-            TAG.Layout.StartPage(null, function (page) {
+            TAG.Layout.StartPage({ newUser: newUser }, function (page) {
                 TAG.Worktop.Database.getDoq(pageToLoad.guid, function (artwork) {
                     if (pageToLoad.prevpage) {
                         TAG.Worktop.Database.getDoq(pageToLoad.prevpage, function (prevCollection) {
@@ -360,7 +362,7 @@
             currentPage.name = TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
 
-            TAG.Layout.StartPage(null, function (page) {
+            TAG.Layout.StartPage({ newUser: newUser }, function (page) {
                 TAG.Worktop.Database.getDoq(pageToLoad.guid, function (video) {
                     if (pageToLoad.prevpage) {
                         TAG.Worktop.Database.getDoq(pageToLoad.prevpage, function (prevCollection) {
@@ -391,7 +393,7 @@
             currentPage.name = TAG.Util.Constants.pages.START_PAGE;
             currentPage.obj  = null;
 
-            TAG.Layout.StartPage(null, function (page) {
+            TAG.Layout.StartPage({ newUser: newUser }, function (page) {
                 tagContainer.append(page);
             });
         }

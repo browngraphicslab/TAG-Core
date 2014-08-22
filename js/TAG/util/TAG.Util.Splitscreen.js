@@ -280,6 +280,7 @@ TAG.Util.Splitscreen = (function () {
                     root.find('#infoDiv').css('width', '25%');
                     root.find("#tileDiv").css({ 'margin-left': '0%', 'left': root.find('#infoDiv').width() });
                 }
+                root.find("#toggleRow").css('width',"20%");
             } else if (root.hasClass('videoPlayer')) {
                 root.find('#playPauseButton').attr('src', 'images/icons/PlayWhite.svg');
             } else if (root.hasClass('exhibition')) { // Restore defaults to exhibition

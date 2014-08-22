@@ -35,7 +35,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverSubmit = root.find('#serverSubmit'),
         passwordSubmit = root.find('#passwordSubmit'),
         serverURL,
-        tagContainer;
+        tagContainer,
+        newUser = options.newUser;
 
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
@@ -64,7 +65,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     }
     */
     testConnection();
-    if(!localStorage.machId){
+    if(newUser){
          telemetryDialogDisplay();
     }
 
@@ -72,8 +73,24 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     //applyCustomization();
     function telemetryDialogDisplay(){
         var tagContainer = $('#tagRoot');
-
+        var telemetryDialogoverlay = $(TAG.Util.UI.PopUpConfirmation(function(){
+            TELEMETRY_SWITCH = 'off';
+            localStorage.tagTelemetry = "off";
+            telemetryDialogOverlay.remove();},
+            "To improve the Touch Art Gallery experience, we're trying to collect more information about how users like you use our application. Do you mind us collecting information on your usage?",
+            "Yes, I mind",null,
+            function(){
+                TELEMETRY_SWITCH = 'on';
+                localStorage.tagTelemetry = "on";
+                //telemetryDialogOverlay.remove();
+            },
+            null,null,null,true
+        ));
+        
+        root.append(telemetryDialogoverlay);
+        telemetryDialogoverlay.show();
         // Creating Overlay
+        /*
         var telemetryDialogOverlay = $(document.createElement('div'));
         telemetryDialogOverlay.attr('id', 'telemetryDialogOverlay');
         telemetryDialogOverlay.addClass('dialogBoxOverlay');
@@ -94,13 +111,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         telemetryDialog.addClass('dialogBox');
         telemetryDialogContainer.append(telemetryDialog);
         telemetryDialog.css({
-                'height':'20%'
+                'height':'26%'
         });
 
         // Content
         var telemetryDialogPara = $(document.createElement('p'));
         telemetryDialogPara.attr('id', 'dialogBoxPara');
-        telemetryDialogPara.text("Do you want to turn Telemetry on?");
+        //telemetryDialogPara.css({"margin-top": "5%"});
+        telemetryDialogPara.text("To improve the Touch Art Gallery experience, we're trying to collect more information about how users like you use our application. Do you mind us collecting information on your usage?");
         telemetryDialog.append(telemetryDialogPara);
 
         // Button Container
@@ -109,67 +127,68 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         telemetryDialog.append(telemetryButtonRow);
         telemetryButtonRow.css({
             'display': 'block',
-            'height' : '5%',
-            'position': 'absolute',
-            'width': '30%',
+            'height' : '13%',
+            'position': 'relative',
+            'width': '90%',
             'margin-left': '5%',
-            'margin-top':'1%'
+            'margin-top':'10%'
         });
 
-        var yesButton = $(document.createElement('div'));
+        var yesButton = $(document.createElement('button'));
         yesButton.attr('id', 'yesButton');
-        yesButton.text('Yes');
+        yesButton.text('Yes, I mind');
         telemetryButtonRow.append(yesButton);
         yesButton.css({
             'position': 'relative',
             'width': '30%',
-            'height': '90%',
+            'height': '100%',
             'color': '#fff',
             'font-family': '"Segoe UI",serif',
-            'font-size': '100%',
+            'font-size': '80%',
             'font-weight': 'normal',
             'background-color': 'transparent',
             'cursor': 'pointer',
             'padding': '0px 0px 0px 0px',
             'border-radius' : '3.5px',
             'border' : '1px solid white',
-            'margin' : '0',
+            'margin': '0',
+            'float': 'left',
             'margin-left' : '0%',
             'margin-top' : '1px'
         });
 
-        var noButton = $(document.createElement('div'));
+        var noButton = $(document.createElement('button'));
         noButton.attr('id', 'noButton');
-        noButton.text('No');
+        noButton.text('No, I don\'t mind');
         telemetryButtonRow.append(noButton);
         noButton.css({
             'position': 'relative',
-            'width': '30%',
+            'width': '40%',
             'height': '100%',
-            'margin-left': '75%',
-            'margin-top': '-10%',
-            'color': '#fff',
+            "background-color": "white",
+            'color': 'black',
             'font-family': '"Segoe UI",serif',
-            'font-size': '100%',
             'font-weight': 'normal',
-            'background-color': 'transparent',
             'cursor': 'pointer',
+            'float': 'right',
+            'font-size': '80%',
             'padding': '0px 0px 0px 0px',
             'border-radius' : '3.5px',
             'border' : '1px solid white'
         });
 
-        yesButton.click(function(){
-                TELEMETRY_SWITCH = 'on';
-                telemetryDialogOverlay.remove();
-
-        });
-
-        noButton.click(function(){
-            TELEMETRY_SWITCH = 'off';
+        noButton.click(function () {
+            TELEMETRY_SWITCH = 'on';
+            localStorage.tagTelemetry = "on";
             telemetryDialogOverlay.remove();
         });
 
+        yesButton.click(function(){
+            TELEMETRY_SWITCH = 'off';
+            localStorage.tagTelemetry = "off";
+            telemetryDialogOverlay.remove();
+        });
+        */
 
 
     }
@@ -484,9 +503,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             else if(browser.indexOf('firefox') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
                 console.log("Detected Firefox Version: " + version);
-                var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use two-finger scroll."),"OK");
-                root.append(popupMsg);
-                popupMsg.show();
+//                var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use two-finger scroll."),"OK");
+//                root.append(popupMsg);
+//                popupMsg.show();
                 //document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
                 //$('meta[name=viewport]').attr('content','width='+$(window).width()+',user-scalable=no, maximum-scale=1.0');
                 return(version >= 28);
