@@ -227,31 +227,31 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         topbar.append(topBarLabel);
         root.append(topbar);
         TAG.Telemetry.register(root.find('.artworkInfoLabel'),'click','artworkeditor_info',function(tobj){
-            tobj.mode = 'authoring';
+            tobj.mode = 'artwork editor';
         });
 
          TAG.Telemetry.register(root.find('.addRemoveMedia'),'click','artworkeditor_media_addremove',function(tobj){
-            tobj.mode = 'authoring';
+             tobj.mode = 'artwork editor';
         });
 
         TAG.Telemetry.register(root.find('#locationHistoryAddLocationButton'),'click','artworkeditor_addlocation',function(tobj){
-            tobj.mode = 'authoring';
+            tobj.mode = 'artwork editor';
         });
 
         TAG.Telemetry.register(root.find('#locationHistorySortLocationsByTitleButton'),'click','artworkeditor_sort_title',function(tobj){
-            tobj.mode = 'authoring';
+            tobj.mode = 'artwork editor';
         });
 
         TAG.Telemetry.register(root.find('#locationHistorySortLocationsByDateButton'),'click','artworkeditor_sort_date',function(tobj){
-            tobj.mode = 'authoring';
+            tobj.mode = 'artwork editor';
         });
 
         TAG.Telemetry.register(root.find('#locationHistoryDeleteButton'),'click','artworkeditor_sort_title',function(tobj){
-            tobj.mode = 'authoring';
+            tobj.mode = 'artwork editor';
         });
 
         TAG.Telemetry.register(root.find('#locationHistoryImportMapButton'),'click','artworkeditor_sort_title',function(tobj){
-            tobj.mode = 'authoring';
+            tobj.mode = 'artwork editor';
         });
     }   
 

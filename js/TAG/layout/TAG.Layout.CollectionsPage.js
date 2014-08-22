@@ -731,14 +731,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionArea.append(prevCollection);
                 prevCollection.show();
                 TAG.Telemetry.register(backArrowArea, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = prevTitle;
-                    tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                    tobj.custom_1 = CryptoJS.SHA1(prevTitle).toString(CryptoJS.enc.Base64);
                     tobj.mode = 'Kiosk';
 
                 });
                 TAG.Telemetry.register(prevCollection, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = prevTitle;
-                    tobj.custom_2 = visibleCollections[collection.prevCollectionIndex].Identifier;
+                    tobj.custom_1 = CryptoJS.SHA1(prevTitle).toString(CryptoJS.enc.Base64);
                     tobj.mode = 'Kiosk';
                 });
             }
@@ -782,13 +780,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             }(collection));
                 nextCollection.show();
                 TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = nextTitle;
-                    tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                    tobj.custom_1 = CryptoJS.SHA1(nextTitle).toString(CryptoJS.enc.Base64);
                     tobj.mode = 'Kiosk';
                 });
                 TAG.Telemetry.register(nextCollection, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = nextTitle;
-                    tobj.custom_2 = visibleCollections[collection.nextCollectionIndex].Identifier;
+                    tobj.custom_1 = CryptoJS.SHA1(nextTitle).toString(CryptoJS.enc.Base64);
                     tobj.mode = 'Kiosk';
                 });
                 collectionArea.append(nextCollection);
@@ -1333,15 +1329,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             
             TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
-                //if (currentThumbnail.attr('guid') === currentWork.Identifier && !justShowedArtwork) {
-                //    tobj.ttype = 'collections_to_' + getWorkType(currentWork);
-                //} else {
-                    tobj.ttype = 'artwork_tile';
-                //}
-                //tobj.artwork_name = currentWork.Name;
-                //tobj.artwork_guid = currentWork.Identifier;
-                tobj.custom_1 = currentWork.Name;
-                tobj.custom_2 = currentWork.Identifier;
+                tobj.ttype = 'artwork_tile';
+                tobj.custom_1 = CryptoJS.SHA1(currentWork.Name).toString(CryptoJS.enc.Base64);
                 tobj.mode = 'Kiosk';
                 justShowedArtwork = false;
             });
@@ -2219,8 +2208,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (!artwork || !artworkSelected) {
                         return true; // abort
                     }
-                    tobj.custom_1 = artwork.Name;
-                    tobj.custom_2 = artwork.Identifier;
+                    tobj.custom_1 = CryptoJS.SHA1(artwork.Name).toString(CryptoJS.enc.Base64);
                     tobj.ttype     = 'collection_to_' + getWorkType(artwork);
                     tobj.mode = 'Kiosk'; 
                 });
