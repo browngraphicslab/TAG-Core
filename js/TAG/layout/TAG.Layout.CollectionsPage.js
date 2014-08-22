@@ -560,8 +560,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     loadFirstCollection();
                 }
                 
+            } else {
+                loadCollection(currCollection, null, currentArtwork)();
             }
-            loadCollection(currCollection, null, currentArtwork)();
         } else if (toShowFirst) {
             loadFirstCollection();
         }
@@ -951,6 +952,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         * @method appendTags
         */
         function appendTags() {
+            console.log("appendTags")
             var i,
                 text;
             for (i = 0; i < sortOptions.length; i++) {

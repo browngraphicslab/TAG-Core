@@ -452,7 +452,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             if (e.which === 13) {  // enter key press
                 e.preventDefault();
                 e.stopPropagation();
-            console.log('enter pressed on authoringInput');
                 TAG.Auth.checkPassword(authoringInput.val(), function () {
                     enterAuthoringMode()
                 }, function () {

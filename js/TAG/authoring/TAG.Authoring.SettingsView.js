@@ -1541,6 +1541,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //CLICK HANDLER FOR SORT OPTIONS
     function clickCallback(sortDiv) {
         return function () {
+            var buttonId = sortDiv.text().toLowerCase() + "Button",
+                sortButton;
+
             if (sortDiv.attr("setSort") === "true" || sortDiv.attr("setSort") === true) {
                 if (sortOptionsCount>0){
                     sortOptionsCount--;
@@ -1554,15 +1557,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
                 sortOptionsObj[sortDiv.text()] = false;
                 //TODO:set the sort tag to white in previewer
-                if(sortDiv.text()==="Title"){
-                    $("#titleButton").hide();
-                }
-                if(sortDiv.text()==="Artist"){
-                    $("#artistButton").hide();
-                }
-                if(sortDiv.text()==="Tours"){
-                    $("#toursButton").hide();
-                }
+
+                $("#" + buttonId).hide();
+
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
                     $("#dateButton").hide();
@@ -1571,25 +1568,41 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     $("#showTimelineBttn").attr("disabled","true");
                 }
             } else {
-
                 if (sortOptionsCount < 4) {
                     sortOptionsCount++;
                     sortDiv.attr("setSort", true);
                     sortDiv.css({
                         "background-color": "white"
                     });
+
+                    //if the button already exists
+                    if ($("#" + buttonId)[0]){
+                        $("#" + buttonId).show()
+                            .css({"color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)})
+                    } else { //or if you're making it (sort option was origionally deselected)
+                        sortButton = $(document.createElement('div'));
+                        //Because stored on server as "Tour" but should be displayed as "Tours"
+                        //sortDiv.text()==="Tour" ? text = "Tours" : text = sortDiv.text();
+                        sortButton.addClass('secondaryFont');
+                        sortButton.addClass('rowButton')
+                                    .text(sortDiv.text())
+                                    .attr('id', buttonId)
+                                    //TODO: make sortButton have the same class as the same ones that are created in the collections page
+                                    .css({
+                                        "cursor": "pointer",
+                                        "float": "left",
+                                        "font-size": "92.5%",
+                                        "margin-top": "0.475%",
+                                        "margin-right": "2%",
+                                        "height": "100%",
+                                        "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
+                                    });
+                    $("#buttonRow").append(sortButton);
+                    }
+
                     if (sortDiv.text() === "Date") {
                         $("#showTimelineBttn").removeAttr('disabled');
                         $("#dateButton").show();
-                    }
-                    if(sortDiv.text()==="Title"){
-                        $("#titleButton").show();
-                    }
-                    if(sortDiv.text()==="Artist"){
-                        $("#artistButton").show();
-                    }
-                    if(sortDiv.text()==="Tours"){
-                        $("#toursButton").show();
                     }
                     sortOptionsObj[sortDiv.text()] = true;
                 }
@@ -1613,7 +1626,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var sortObj, sortDiv;
         for (sortObj in sortOptionsObj) {
-            if (sortOptionsObj.hasOwnProperty(sortObj)) {
+            if ((sortOptionsObj.hasOwnProperty(sortObj)) && !(sortObj === '')) {
                 /*if (sortObj === "Date" && sortOptionsObj[sortObj] === false) {
                     timelineShown = false;
 
@@ -1622,7 +1635,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                     $("#showTimelineBttn").attr("disabled","true");
                 }*/
-                   
                 var sortDiv = $(document.createElement("div"))
                     .text(sortObj)
                     .addClass("sortOptionDiv");

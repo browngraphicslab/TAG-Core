@@ -6037,7 +6037,9 @@ TAG.Util.RLH = function (input) {
             margin: '0px 10px 0px 10px',
             position: 'relative',
             'vertical-align': 'middle',
-            'font-size': '24px'
+            'max-font-size': '24px',
+            'min-font-size' : "12px",
+            "font-size": root.height()/40
         });
         titleContainer.text((location.title ? location.title + (location.date ? ',' : '') : (location.date ? '' : '(Untitled Location)')));
         (!location.title && titleContainer.css({margin:'0px 0px 0px 10px'}));
@@ -6047,7 +6049,9 @@ TAG.Util.RLH = function (input) {
             margin: '0px 0px 0px 0px',
             position: 'relative',
             'vertical-align': 'middle',
-            'font-size': '24px'
+            'max-font-size': '24px',
+            'min-font-size' : "12px",
+            "font-size": root.height()/40
         });
         dateContainer.text(location.date || '');
 
@@ -6056,7 +6060,9 @@ TAG.Util.RLH = function (input) {
             margin: '0px 0px 0px 80px',
             position: 'relative',
             'vertical-align': 'middle',
-            'font-size': '20px',
+            'max-font-size': '24px',
+            'min-font-size' : "12px",
+            "font-size": root.height()/50,
             'padding-right': '20px',
             'font-style': 'italic'
         });
