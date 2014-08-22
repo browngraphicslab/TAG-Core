@@ -4485,8 +4485,8 @@ TAG.Util.RLH = function (input) {
                             top: '0%',
                             left: '0%',
                             'z-indez': 99,
-                            "border-top-right-radius": "10px",
-                            "border-bottom-right-radius": "10px",
+                            "border-top-right-radius": "3.5px",
+                            "border-bottom-right-radius": "3.5px",
                             'background-color': 'rgba(0,0,0,0.75)'
                         })
                         .appendTo(locationPanelDiv);
