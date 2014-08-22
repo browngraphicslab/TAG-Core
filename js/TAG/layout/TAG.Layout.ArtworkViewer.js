@@ -705,7 +705,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             collectionsPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
 
             TAG.Util.UI.slidePageRightSplit(root, collectionsPageRoot, function () {
-                collectionsPage.showArtwork(prevPreview, prevMult && prevMult)();
+                if (collectionsPage.getState().exhibition === prevCollection){
+                    console.log(collectionsPage.getState().exhibition);
+                    collectionsPage.showArtwork(prevPreview, prevMult && prevMult)();
+                }
             });
 
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;

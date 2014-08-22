@@ -88,13 +88,9 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         // collectionsPage.getRoot().css({ 'overflow-x': 'hidden' }); // TODO should be default in .styl file
         TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
             artworkPrev = "catalog";
-            collectionsPage.showArtwork(videoSrc, prevMult && prevMult)();
-            /**
-            var selectedExhib = $('#collection-' + prevExhib.Identifier);
-            selectedExhib.attr('flagClicked', 'true');
-            selectedExhib.css({ 'background-color': 'white', 'color': 'black' });
-            $(selectedExhib[0].firstChild).css({'color': 'black'});
-            **/
+            if (collectionsPage.getState().exhibition === collection){  
+                collectionsPage.showArtwork(videoSrc, prevMult && prevMult)();
+            }
         });
 
         currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;

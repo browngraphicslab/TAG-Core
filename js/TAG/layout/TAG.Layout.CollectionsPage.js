@@ -431,6 +431,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         onAssocMediaView = false;
         currentTag = null;
         currentArtwork = null;
+        currCollection = null;
         loadQueue.clear();
         comingBack = false;
         tileDiv.empty();
@@ -1280,7 +1281,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
                         if (previouslyClicked === main) {
-                            switchPage(currentWork)();
+                            switchPage(currentWork, null, getContainerLeft(currentWork, false))();
                         } else {
                             previouslyClicked = main;
                             setTimeout(function () { previouslyClicked = null }, 1000)
@@ -1288,7 +1289,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     } else {
                         TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
                             if (previouslyClicked === main) {
-                                switchPage(doqs[0], currentWork)();
+                                switchPage(doqs[0], currentWork, getContainerLeft(currentWork,false))();
                             } else {
                                 previouslyClicked = main;
                                 setTimeout(function () { previouslyClicked = null }, 1000);
@@ -1874,6 +1875,56 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         };
     }
 
+    function getContainerWidth(artwork, showAllAtYear){
+        var previewWidth,
+            artworksForYear,
+            containerWidth;
+        artworksForYear = artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()];
+        previewWidth = (0.38) * $("#tagRoot").width();
+        if (showAllAtYear && artworksForYear){
+            containerWidth = Math.min(($("#tagRoot").width()*.80), (artworksForYear.length) * previewWidth);
+        } else {
+            containerWidth = previewWidth;
+        }
+        return containerWidth || 0;
+    }
+
+    function getContainerLeft(artwork, showAllAtYear){
+        var rootWidth,
+            infoWidth,
+            tileWidth,
+            tilePos,
+            shift,
+            leftOffset,
+            containerLeft;
+            rootWidth = root.width();
+            infoWidth = infoDiv.width();
+            tileWidth = artworkTiles[artwork.Identifier].width();       
+            if (comingBack && previewPos){
+                containerLeft = previewPos;
+            } else {
+                tilePos = artworkTiles[artwork.Identifier].position().left;
+                shift = (getContainerWidth(artwork,showAllAtYear)-tileWidth)/2;
+                leftOffset = tilePos + infoWidth - catalogDiv.scrollLeft();
+                //if artwork tile at beginning of window
+                if (leftOffset < shift){
+                    shift = 0;
+                }
+                //if artwork tile at end of window
+                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
+                    shift = shift * 2;
+                }
+                //if there are more than 3 artworks associated with the date year
+                if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
+                    selectedArtworkContainer.css("overflow-x", "scroll")
+                    leftOffset = bottomContainer.width()/10
+                    shift = 0;
+                }
+                containerLeft = leftOffset - shift;
+                }   
+            return containerLeft || 0;
+            }
+
     /**
      * Shows an artwork as an outset box and shows name, description, etc
      * @method showArtwork
@@ -1886,8 +1937,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var rootWidth,
                 infoWidth,
                 tileWidth,
-                shift,
-                leftOffset,
+                //shift,
+                //leftOffset,
                 previewWidth,
                 containerWidth,
                 containerLeft,
@@ -1931,16 +1982,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             rootWidth = root.width();
             infoWidth = infoDiv.width();
             tileWidth = artworkTiles[artwork.Identifier].width();       
+            tilePos = artworkTiles[artwork.Identifier].position().left;
             if (comingBack){
                 newScrollPos = scrollPos;
-                if (previewPos){
-                    containerLeft = previewPos;
-                }
                 duration = ANIMATION_DURATION/5;
             } else {
-                tilePos = artworkTiles[artwork.Identifier].position().left;
                 duration = ANIMATION_DURATION/3;
-                 newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
+                newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
             }   
             if (newScrollPos<0){
                 newScrollPos = 0;
@@ -1955,29 +2003,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }, duration, null, function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
-                if (!comingBack || !containerLeft){
-                shift = (containerWidth-tileWidth)/2;
-                leftOffset = tilePos + infoWidth - catalogDiv.scrollLeft();
-                //if artwork tile at beginning of window
-                if (leftOffset < shift){
-                    shift = 0;
-                }
-                //if artwork tile at end of window
-                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
-                    shift = shift * 2;
-                }
-                //if there are more than 3 artworks associated with the date year
-                if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
-                    selectedArtworkContainer.css("overflow-x", "scroll")
-                    leftOffset = bottomContainer.width()/10
-                    shift = 0;
-                }
-                containerLeft = leftOffset - shift;
-                }
                 selectedArtworkContainer.css({
-                    'width' : containerWidth,
+                    'width' : getContainerWidth(artwork,showAllAtYear),
+                    'left' : getContainerLeft(artwork,showAllAtYear),
                     'display': 'inline',
-                    'left' : containerLeft,
                     'opacity':1
                 });
 
@@ -2698,7 +2727,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method switchPageTour
      * @param {doq} tour    the relevant tour doq
      */
-    function switchPageTour(tour) {
+    function switchPageTour(tour, containerLeft) {
         var rinData,
             rinPlayer,
             prevInfo,
@@ -2739,7 +2768,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         collectionOptions = {
             prevScroll: catalogDiv.scrollLeft(),
-            prevPreviewPos: selectedArtworkContainer.position().left,
+            prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
             backCollection: currCollection,
             prevTag : currentTag,
             backArtwork: tour,
@@ -2759,14 +2788,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method switchPageVideo
      * @param {doq} video         the video to which we'll switch
      */
-    function switchPageVideo(video) {
+    function switchPageVideo(video, containerLeft) {
         var prevInfo,
             videoPlayer;
 
         prevInfo = {
             artworkPrev: null,
             prevScroll: catalogDiv.scrollLeft(),
-            prevPreviewPos : selectedArtworkContainer.position().left,
+            prevPreviewPos : containerLeft || selectedArtworkContainer.position().left,
             prevTag: currentTag,
             prevMult: multipleShown
         };
@@ -2782,7 +2811,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method switchPage
      * @param {Object} artwork      artwork to return to after switching
      */
-    function switchPage(artwork, associatedMedia) {
+    function switchPage(artwork, associatedMedia, containerLeft) {
         return function() {
             var artworkViewer,
                 newPageRoot,
@@ -2814,7 +2843,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     root.append(confirmationBox);
                     confirmationBox.show();
                 } else {
-                    switchPageTour(artwork);
+                    switchPageTour(artwork, containerLeft);
                 }
             } else if (artwork.Metadata.Type === "VideoArtwork") { // video
                 if (TAG.Util.Splitscreen.isOn()) {
@@ -2835,7 +2864,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     root.append(confirmationBox);
                     confirmationBox.show();
                 } else {
-                    switchPageVideo(artwork);
+                    switchPageVideo(artwork, containerLeft);
                 }
             } else { // deepzoom artwork
                 artworkViewer = TAG.Layout.ArtworkViewer({
@@ -2843,7 +2872,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     prevPreview: currentArtwork,
                     prevTag : currentTag,
                     prevScroll: catalogDiv.scrollLeft(),
-                    prevPreviewPos: selectedArtworkContainer.position().left,
+                    prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
                     prevCollection: currCollection,
                     prevPage: 'catalog',
                     prevMult: multipleShown,
@@ -2928,7 +2957,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         getRoot: getRoot,
         loadCollection: loadCollection,
         loadFirstCollection: loadFirstCollection,
-        showArtwork : showArtwork
+        showArtwork : showArtwork,
+        getState : getState
     };
 };
 

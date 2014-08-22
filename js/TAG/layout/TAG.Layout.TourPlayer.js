@@ -154,7 +154,6 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             currentPage.obj  = artmode;
         } else {
             var backInfo = { backArtwork: tourObj, backScroll: prevScroll };
-            console.log("ps" + prevScroll);
             collectionsPage = new TAG.Layout.CollectionsPage({
                 backScroll: prevScroll,
                 backArtwork: tourObj,
@@ -165,8 +164,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             });
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
 				artworkPrev = "catalog";
-                console.log(tourObj);
-                collectionsPage.showArtwork(tourObj, prevMult && prevMult)();
+                if (collectionsPage.getState().exhibition === exhibition){  
+                    collectionsPage.showArtwork(tourObj, prevMult && prevMult)();
+                }
 			});
         
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
