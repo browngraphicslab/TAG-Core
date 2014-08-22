@@ -283,9 +283,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'border-bottom-right-radius': '3.5px',
             });
         }
+        /**
         if (!previewing){
         	container.css('min-width', 0.14 * screenWidth);
         }
+        **/
 
         slideButton.on('click', function () {
             count = 1 - count;
@@ -323,8 +325,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         var radius = (sdrightbtn.position().left - sdleftbtn.position().left + sdrightbtn.width()) / 2;
         var centery = sdleftbtn.position().top + sdleftbtn.height() / 2;
-        sdupbtn.css('top', centery - radius +5+ 'px');
-        sddownbtn.css('top', centery + radius -sdleftbtn.width() +15+ 'px');
+        //sdupbtn.css('top', centery - radius +5+ 'px');
+        //sddownbtn.css('top', centery + radius -sdleftbtn.width() +15+ 'px');
         container.append(createButton('zinControl',   tagPath+'images/icons/zoom_plus.svg'));
         container.append(createButton('zoutControl',  tagPath+'images/icons/zoom_minus.svg'));
 
