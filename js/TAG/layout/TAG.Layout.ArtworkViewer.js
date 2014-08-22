@@ -30,6 +30,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locationPanelDiv = null,
         locHistoryToggle = null,
         isOpen = false,
+        that = this,
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,
@@ -283,11 +284,23 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'border-bottom-right-radius': '3.5px',
             });
         }
-        /**
-        if (!previewing){
-        	container.css('min-width', 0.14 * screenWidth);
+
+        //To-do figure out best max-width, min width
+        if (previewing) {
+            return;
         }
-        **/
+        container.css('width', Math.max(160,Math.min($('#tagRoot').width() * 0.19,400)));
+        var containerHeight = container.width()*(111/163)
+        container.css({
+            'height': containerHeight + 'px',
+            'top' : '-' + containerHeight + 'px',
+            'min-width' : container.width()
+        });
+        slideButton.css({
+            'padding-top': 0.05 * container.width() + 'px',
+            'padding-bottom': 0.05 * container.width() + 'px'
+        })
+
 
         slideButton.on('click', function () {
             count = 1 - count;
@@ -295,10 +308,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 top: top
             });
             if (count === 0){
-                top = '0%';
+                top = '0px';
                 slideButton.html("Show Controls");
             } else {
-                top = '-23%';
+                top = '-' + containerHeight + 'px';
                 slideButton.html('Hide Controls');
             }   
         });
@@ -1334,8 +1347,16 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function locationOpen() { 
             if (!isOpen) {
                 if (!TAG.Util.Splitscreen.isOn()) {
+
+                    //close other drawers if any are open
+                    root.find(".drawerPlusToggle").attr({
+                        src: tagPath+'images/icons/plus.svg',
+                        expanded: false
+                    });
+                    root.find(".drawerContents").slideUp();
+
+                    //and open RLH
                     locationPanelDiv.css({ display: 'inline' });
-                    locHistory.text("Close Related Maps");
                     toggle.attr("src", tagPath+'images/icons/minus.svg');      
                     isOpen = true;
                     toggler.hide();
@@ -1354,6 +1375,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 locationPanelDiv.animate({ width: '0%' }, 350, function () { locationPanelDiv.hide(); locHistoryToggle.hide(); toggler.show(); });
             }
         }
+
+        that.locationClose = locationClose
 
         return locHistoryContainer;
     }
@@ -1415,6 +1438,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
 
             drawerContents.slideToggle();
+            isOpen && that.locationClose()
             drawerContents.css({
                 'display':'inline-block',
                 'overflow-y': 'scroll'
