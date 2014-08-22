@@ -317,8 +317,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
         
         TAG.Telemetry.register(slideButton,'click','seadragon_button_panel_toggled',function(tobj){
-            tobj.custom_1 = doq.Name;
-            tobj.custom_2 = doq.Identifier;
+            tobj.custom_1 = CryptoJS.SHA1(doq.Name).toString(CryptoJS.enc.Base64);
             tobj.mode = 'Kiosk';
         });
         container.append(slideButton);
@@ -399,8 +398,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
         
         TAG.Telemetry.register(root.find("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"), 'click', 'seadragon_control_clicked', function (tobj) {
-            tobj.custom_1 = doq.Name;
-            tobj.custom_2 = doq.Identifier;
+            tobj.custom_1 = CryptoJS.SHA1(doq.Name).toString(CryptoJS.enc.Base64);;
             tobj.mode = 'Kiosk';
         });
         
@@ -550,8 +548,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             if (containerFocused===false){
                 return true;
             }
-             tobj.custom_1 = doq.Name;
-             tobj.custom_2 = doq.Identifier;
+            tobj.custom_1 = CryptoJS.SHA1(doq.Name).toString(CryptoJS.enc.Base64);
              tobj.mode = 'Kiosk';
         });
     }
@@ -656,8 +653,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         TAG.Util.UI.setUpBackButton(backButton, goBack);
         TAG.Telemetry.register(backButton, 'click', 'artwork_to_collections', function(tobj) {
 
-            tobj.custom_1 = doq.Name;
-            tobj.custom_2 = doq.Identifier;
+            tobj.custom_1 = CryptoJS.SHA1(doq.Name).toString(CryptoJS.enc.Base64);
             tobj.mode = 'Kiosk';
  
         });
