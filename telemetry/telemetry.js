@@ -74,12 +74,7 @@ TAG.Telemetry = (function() {
 	 * @method postTelemetryRequests
 	 */
 	function postTelemetryRequests() {
-		var data = JSON.stringify(requests);
-		var key = CryptoJS.enc.Base64.parse("#base64Key#");
-	    var iv  = CryptoJS.enc.Base64.parse("#base64IV#");
-
-	    var encrypted = CryptoJS.AES.encrypt(data, key, {iv: iv});
-	    console.log(encrypted.toString());
+	    var data = JSON.stringify(requests);
 
 		requests.length = 0;
 
