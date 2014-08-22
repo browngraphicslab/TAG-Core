@@ -77,7 +77,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         var telemetryDialogoverlay = $(TAG.Util.UI.PopUpConfirmation(function(){
             TELEMETRY_SWITCH = 'off';
             localStorage.tagTelemetry = "off";
-            telemetryDialogOverlay.remove();},
+            telemetryDialogoverlay.remove();},
             "To improve the Touch Art Gallery experience, we're trying to collect more information about how users like you use our application. Do you mind us collecting information on your usage?",
             "Yes, I mind",null,
             function(){
