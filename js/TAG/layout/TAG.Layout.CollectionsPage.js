@@ -1984,14 +1984,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.stop(true,false);
             rootWidth = root.width();
             infoWidth = infoDiv.width();
-            if (!comingBack){
-                tileWidth = artworkTiles[artwork.Identifier].width();       
-                tilePos = artworkTiles[artwork.Identifier].position().left;
-            }
-            if (comingBack){
+            if (comingBack && scrollPos){
                 newScrollPos = scrollPos;
                 duration = ANIMATION_DURATION/5;
             } else {
+                tileWidth = artworkTiles[artwork.Identifier].width();       
+                tilePos = artworkTiles[artwork.Identifier].position().left;
                 duration = ANIMATION_DURATION/3;
                 newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
             }   
