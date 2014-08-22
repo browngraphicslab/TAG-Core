@@ -1203,7 +1203,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 left: finalPosition.x
             }, 300, function () {
                 checkForOffscreen();
-            });  
+            });
 
             /**
              * @method checkForOffscreen()
