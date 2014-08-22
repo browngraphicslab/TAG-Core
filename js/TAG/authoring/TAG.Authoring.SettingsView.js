@@ -2165,7 +2165,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }], {
                         getObjs: TAG.Worktop.Database.getArtworksIn,
                         args: [exhibition.Identifier]
-                    }, function () {                        
+                    }, function () {
                         prepareNextView(true, "New", createExhibition);
                         clearRight();
                         prepareViewer(true);
