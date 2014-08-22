@@ -1168,7 +1168,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var top         = outerContainer.position().top,
                 left        = outerContainer.position().left,
                 width       = outerContainer.width(),
-                height      = outerContainer.height(),
+                height = outerContainer.height(),
                 finalPosition;
 
             // Target location (where object should be moved to)
@@ -1197,23 +1197,31 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             // Animate to target location
             outerContainer.stop()
+
             outerContainer.animate({
                 top: finalPosition.y,
                 left: finalPosition.x
             }, 300, function () {
-                IS_WINDOWS && (outerContainer.manipulationOffset = null);
-                //If object is not on screen, reset and hide it
+                checkForOffscreen();
+            });  
+
+            /**
+             * @method checkForOffscreen()
+             * check whether or not asset is still on screen
+             * If object is not on screen, reset and hide it
+             */
+            function checkForOffscreen(){
                 if (!(
                     (0 < finalPosition.y + height*1/2) 
                     && (finalPosition.y + innerContainer.height()/2 < rootHeight) 
                     && (0 < finalPosition.x + width*1/2) 
-                    && (finalPosition.x + width/2 < rootWidth))) 
-                    {
-                        hideMediaObject();
-                        pauseResetMediaObject();
-                        return;
-                };    
-            });  
+                    && (finalPosition.x + width/2 < rootWidth))) {
+                    hideMediaObject();
+                    pauseResetMediaObject();
+                    return;
+                    IS_WINDOWS && (outerContainer.manipulationOffset = null);
+                }
+           };    
         }
 
     /**
