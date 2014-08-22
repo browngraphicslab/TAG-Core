@@ -560,8 +560,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     loadFirstCollection();
                 }
                 
+            } else {
+                loadCollection(currCollection, null, currentArtwork)();
             }
-            loadCollection(currCollection, null, currentArtwork)();
         } else if (toShowFirst) {
             loadFirstCollection();
         }
@@ -951,6 +952,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         * @method appendTags
         */
         function appendTags() {
+            console.log("appendTags")
             var i,
                 text;
             for (i = 0; i < sortOptions.length; i++) {
@@ -1260,7 +1262,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             artText.addClass('artText');
             artText.addClass('secondaryFont');
             artText.css({
-                'color': '#' + SECONDARY_FONT_COLOR,
+                'color': SECONDARY_FONT_COLOR,
                 //'font-family': FONT
             });
             yearTextBox.addClass('yearTextBox');
