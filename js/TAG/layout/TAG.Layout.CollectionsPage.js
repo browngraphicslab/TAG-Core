@@ -1921,7 +1921,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     shift = 0;
                 }
                 //if artwork tile at end of window
-                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
+                if (leftOffset + tileWidth + TILE_BUFFER >=rootWidth){ 
                    shift = shift*2 + TILE_BUFFER;
                 }
                 containerLeft = leftOffset - shift;
