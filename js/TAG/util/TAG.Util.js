@@ -6827,7 +6827,7 @@ TAG.Util.Artwork = (function () {
 
         if (buttonClass && buttonClass === 'assetHolder') { //Artwork Editor TODO J/S
             holder.css({
-                border: '1px solid rgba(255,255,255,0.4)',
+                //border: '1px solid rgba(255,255,255,0.4)',
             });
             titleDiv.css({
                 margin: '1% 2% 0% 2%',
