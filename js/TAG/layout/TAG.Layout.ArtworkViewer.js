@@ -181,7 +181,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         splitscreenContainer.attr('id', 'splitscreenContainer');
         splitscreenContainer.css({
             'background-color': 'rgba(0,0,0,0.6)',
-            'border-top-left-radius': '10px',
+            'border-top-left-radius': '3.5px',
             'height': '10%',
             'position': 'absolute',
             'right': '0%',
@@ -280,7 +280,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
             slideButton.css({ //fix the rounded edge to be on the correct side
                 'border-bottom-left-radius': '0px',
-                'border-bottom-right-radius': '10px',
+                'border-bottom-right-radius': '3.5px',
             });
         }
         if (!previewing){
@@ -605,10 +605,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
             toggler.css({
                 left: '-12%',
-                'border-top-left-radius': '10px',
+                'border-top-left-radius': '3.5px',
                 'border-top-right-radius': '0px',
                 'border-bottom-right-radius': '0px',
-                'border-bottom-left-radius': '10px'
+                'border-bottom-left-radius': '3.5px'
             });
             togglerImage.attr('src', tagPath + 'images/icons/Open.svg')
                         .css('right','0%');
