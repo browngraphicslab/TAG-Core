@@ -1947,7 +1947,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Worktop.Database.getArtworksIn(exhibition.Identifier, function (artworks) {
             if (cancelView) return;
             for (var i = 0; i < artworks.length; i++) {
-                if (artworks[i].Extension === "tour") {
+                if (artworks[i].Extension === "tour" || (artworks[i].Type === "Empty" && artworks[i].Metadata.ContentType !== "Artwork" && artworks[i].Metadata.Type !== "Image" && artworks[i].Metadata.ContentType !== "VideoArtwork" && artworks[i].Metadata.ContentType !== "iframe")) {
                     sortOptionsObj["Tours"] = curSortOptions["Tours"] || false;
                 } else {
                     var infoFields = artworks[i].Metadata.InfoFields;
