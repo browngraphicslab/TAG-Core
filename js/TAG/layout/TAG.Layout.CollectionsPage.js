@@ -1291,6 +1291,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
                         if (previouslyClicked === main) {
+                            console.log("double-click");
                             switchPage(currentWork, null, getContainerLeft(currentWork, false))();
                         } else {
                             previouslyClicked = main;
@@ -1920,7 +1921,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     shift = 0;
                 }
                 //if artwork tile at end of window
-                if (leftOffset + tileWidth + TILE_BUFFER > rootWidth){ 
+                if (Math.ceil(leftOffset + tileWidth + TILE_BUFFER) >= rootWidth){ 
                    shift = shift*2 + TILE_BUFFER;
                 }
                 containerLeft = leftOffset - shift;
@@ -2002,8 +2003,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             catalogDiv.animate({
                 scrollLeft: newScrollPos
-            //}, duration, "easeInOutQuint", function(){
-            }, duration, null, function(){
+            }, duration, "easeInOutQuint", function(){
+            //}, duration, null, function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
                 selectedArtworkContainer.css({
