@@ -1416,11 +1416,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
                 var nameText = TAG.Util.htmlEntityDecode(currentWork.Name);
                 artText.text(nameText);
-
             } else if (tag === 'Tour') {
                 artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
+            } else if(tag) {
+                //If using custom tag
+                artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
+                yearTextBox.css('visibility', 'visible');
+                yearText = currentWork.Metadata.InfoFields[tag];
+                if (!yearText) {
+                    yearTextBox.text('')
+                        .css('visibility', 'hidden');
+                } else {
+                    yearTextBox.text(yearText);
+                }
             } else {
-                //If using custom tag or are no sort tags
+                //no sort tag
                 artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
             }
             artTitle.append(artText);
@@ -2567,10 +2577,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             for (i = 0; i < artworks.length; i++) {
                 artNode = {
                     artwork: artworks[i],
-                    sortKeyMetadataType: tag,
                     sortKey: artworks[i].Metadata.InfoFields ? artworks[i].Metadata.InfoFields[tag] : null
                 };
-                if (artNode.sortKey !== null) {
+                if (artNode.sortKey) {
                     avlTree.add(artNode);
                 }
             }
