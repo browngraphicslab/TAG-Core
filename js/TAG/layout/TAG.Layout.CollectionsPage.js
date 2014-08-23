@@ -2524,44 +2524,59 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             i;
 
         if (tag === 'Title') {
+            var titleKey;
             comparator = sortComparator('nameKey');
-            valuation  = sortValuation('nameKey');
-
+            valuation = sortValuation('nameKey');
             avlTree = new AVLTree(comparator, valuation);
             avlTree.clear();
             for (i = 0; i < artworks.length; i++) {
+                if (artworks[i].Name) {
+                    titleKey = artworks[i].Name.toLowerCase();
+                } else {
+                    titleKey = '~~~~';
+                }
                 artNode = {
                     artwork: artworks[i],
-                    nameKey: artworks[i].Name.toLowerCase(),
+                    nameKey: titleKey,
                 };
                 avlTree.add(artNode);
             }
             return avlTree;
         } else if (tag === 'Artist') {
+            var artistKey;
             comparator = sortComparator('artistKey');
             valuation  = sortValuation('artistKey');
-
             avlTree = new AVLTree(comparator, valuation);
             for (i = 0; i < artworks.length; i++) {
+                if (artworks[i].Metadata.Artist) {
+                    artistKey = artworks[i].Metadata.Artist.toLowerCase();
+                } else {
+                    artistKey = '~~~~';
+                }
                 artNode = {
                     artwork: artworks[i],
-                    artistKey: artworks[i].Type === 'Empty' ? '~~~~' : artworks[i].Metadata.Artist.toLowerCase() // tours show up at end
+                    artistKey: artworks[i].Type === 'Empty' ? '~~~~' : artistKey // tours show up at end
                 };
                 avlTree.add(artNode);
             }
             return avlTree;
         } else if (tag === 'Date') {
             return sortByYear(artworks,true);
-
-        } else if (tag === 'Tour'){
+        } else if (tag === 'Tour') {
+            var tourName;
             comparator = sortComparator('nameKey');
             valuation  = sortValuation('nameKey');
             avlTree = new AVLTree(comparator, valuation);
             for (i = 0; i < artworks.length; i++) {
-                if (artworks[i].Type === 'Empty'){
+                if (artworks[i].Type === 'Empty') {
+                    if (artworks[i].Name) {
+                        tourName = artworks[i].Name.toLowerCase();
+                    } else {
+                        tourName = '~~~~';
+                    }
                     artNode = {
                         artwork: artworks[i],
-                        nameKey: artworks[i].Name.toLowerCase(),
+                        nameKey: tourName,
                     };
                     avlTree.add(artNode);
                 }
@@ -2610,6 +2625,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             artNode,
             artworkDate,
             yearKey,
+            nameKey,
             i;
         comparator = sortComparator('yearKey', 'nameKey');
         valuation  = sortValuation('yearKey');
@@ -2620,17 +2636,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else {
                 artworkDate = getArtworkDate(artworks[i],false);
             }
+            if (artworks[i].Name) {
+                nameKey = artworks[i].Name.toLowerCase();
+            } else {
+                nameKey = '~~~~';
+            }
             yearKey = TAG.Util.parseDateToYear(artworkDate);
             if (!isNaN(yearKey)){
                 artNode = {
                     artwork: artworks[i],
-                    nameKey: artworks[i].Name,
+                    nameKey: nameKey,
                     yearKey: artworks[i].Type === 'Empty' ? Number.POSITIVE_INFINITY : yearKey //Tours set to Infinity to show up at end of 'Year' sort
                 };
             } else{                        
                 artNode = {
                     artwork: artworks[i],
-                    nameKey: artworks[i].Name,
+                    nameKey: nameKey,
                     yearKey: Number.POSITIVE_INFINITY //Set unintelligible dates to Infinity to show up at end of 'Year' sort 
                 };
             }
