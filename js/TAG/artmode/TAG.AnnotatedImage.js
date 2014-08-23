@@ -1210,12 +1210,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
              * check whether or not asset is still on screen
              * If object is not on screen, reset and hide it
              */
-            function checkForOffscreen(){
+            function checkForOffscreen() {
+                var offscreenBuffer = rootWidth / 8;
                 if (!(
-                    (0 < finalPosition.y + height*1/2) 
-                    && (finalPosition.y + innerContainer.height()/2 < rootHeight) 
-                    && (0 < finalPosition.x + width*1/2) 
-                    && (finalPosition.x + width/2 < rootWidth))) {
+                    (0 < finalPosition.y + height - offscreenBuffer) //top
+                    && (finalPosition.y + offscreenBuffer < rootHeight) //bottom
+                    && (0 < finalPosition.x + width - offscreenBuffer) //left
+                    && (finalPosition.x + offscreenBuffer < rootWidth))) { //right
                     hideMediaObject();
                     pauseResetMediaObject();
                     return;

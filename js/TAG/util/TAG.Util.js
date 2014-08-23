@@ -1397,6 +1397,7 @@ TAG.Util = (function () {
                 var rotation = evt.delta.rotation / 180 * Math.PI;
                 var translation = { x: evt.delta.translation.x, y: evt.delta.translation.y };
                 var scale = evt.delta.scale;
+                evt.target.autoProcessInertia = false;
                 if (typeof functions.onManipulate === "function") {
                     if (evt.gesture) {
                         functions.onManipulate({
