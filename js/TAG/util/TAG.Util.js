@@ -4344,6 +4344,9 @@ TAG.Util.UI = (function () {
             'width': '80%'
         });
 
+        //Read-only link
+        linkInput.attr('readonly', true);
+
         for(key in params) {
             if(params.hasOwnProperty(key) && (params[key] || params[key] === false)) {
                 text += ((paramNum++) > 0 ? '&' : '') + key + '=' + params[key];
