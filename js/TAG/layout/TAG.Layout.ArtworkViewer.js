@@ -972,7 +972,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     annotatedImage.unload();
                     prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll, prevTag: prevTag };
                     rinData = JSON.parse(unescape(tour.Metadata.Content));
-                    rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options);
+                    rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
 
                     TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
                 }
