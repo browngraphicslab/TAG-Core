@@ -951,6 +951,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         function appendTags() {
             var i,
                 text;
+            buttonRow.empty();
             for (i = 0; i < sortOptions.length; i++) {
                 sortButton = $(document.createElement('div'));
                 //Because stored on server as "Tour" but should be displayed as "Tours"
@@ -961,7 +962,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             .attr('id', sortOptions[i].toLowerCase() + "Button")
                             .off()
                             .on('mousedown', function () {
-                                currentArtwork = null;
+                                //currentArtwork = null;
                                 changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
                             });
                 buttonRow.append(sortButton);
@@ -974,10 +975,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             if (!comingBack || !currentTag) {
                 //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
-                if (timelineShown && $('#dateButton')) {
+                if (timelineShown && sortOptions.indexOf('Date')>0) {
                     currentTag = "Date";
                     currentDefaultTag = "Date";
-                } else if ($('#titleButton')) {
+                } else if (sortOptions.indexOf('Title')>0) {
                     currentTag = "Title";
                     currentDefaultTag = "Title";
                 } else {
@@ -2646,13 +2647,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artNode = {
                     artwork: artworks[i],
                     nameKey: nameKey,
-                    yearKey: artworks[i].Type === 'Empty' ? Number.POSITIVE_INFINITY : yearKey //Tours set to Infinity to show up at end of 'Year' sort
+                    yearKey: artworks[i].Type === 'Empty' ? '~~~~' : yearKey //Tours set to Infinity to show up at end of 'Year' sort
                 };
             } else{                        
                 artNode = {
                     artwork: artworks[i],
                     nameKey: nameKey,
-                    yearKey: Number.POSITIVE_INFINITY //Set unintelligible dates to Infinity to show up at end of 'Year' sort 
+                    yearKey: '~~~~' //Set unintelligible dates to show up at end of 'Year' sort 
                 };
             }
             avlTree.add(artNode);
@@ -2760,7 +2761,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             videosArray = [],
             bigArray    = [],
             i;
-
+        currentArtwork && hideArtwork(currentArtwork)();
         currentTag = tag;
         colorSortTags(currentTag);
         drawCatalog(artworks, currentTag, 0, false);
