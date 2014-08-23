@@ -2255,13 +2255,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     saveButton.css({ "background-color": "transparent" });
                 }
             });
-            artPickerButton.on("mousedown", function () {
+            artPickerButton.on("mouseleave", function () {
                 artPickerButton.css({ "background-color": "transparent" });
             });
-            deleteButton.on("mousedown", function () {
+            deleteButton.on("mouseleave", function () {
                 deleteButton.css({ "background-color": "transparent" });
             });
-            newButton.on("mousedown", function () {
+            newButton.on("mouseleave", function () {
                 newButton.css({ "background-color": "transparent" });
             });
             
