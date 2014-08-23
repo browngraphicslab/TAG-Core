@@ -2532,7 +2532,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             for (i = 0; i < artworks.length; i++) {
                 artNode = {
                     artwork: artworks[i],
-                    nameKey: artworks[i].Name,
+                    nameKey: artworks[i].Name.toLowerCase(),
                 };
                 avlTree.add(artNode);
             }
@@ -2545,7 +2545,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             for (i = 0; i < artworks.length; i++) {
                 artNode = {
                     artwork: artworks[i],
-                    artistKey: artworks[i].Type === 'Empty' ? '~~~~' : artworks[i].Metadata.Artist // tours show up at end
+                    artistKey: artworks[i].Type === 'Empty' ? '~~~~' : artworks[i].Metadata.Artist.toLowerCase() // tours show up at end
                 };
                 avlTree.add(artNode);
             }
@@ -2561,7 +2561,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 if (artworks[i].Type === 'Empty'){
                     artNode = {
                         artwork: artworks[i],
-                        nameKey: artworks[i].Name,
+                        nameKey: artworks[i].Name.toLowerCase(),
                     };
                     avlTree.add(artNode);
                 }
@@ -2577,7 +2577,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             for (i = 0; i < artworks.length; i++) {
                 artNode = {
                     artwork: artworks[i],
-                    sortKey: artworks[i].Metadata.InfoFields ? artworks[i].Metadata.InfoFields[tag] : null
+                    sortKey: artworks[i].Metadata.InfoFields[tag] ? artworks[i].Metadata.InfoFields[tag].toLowerCase() : null
                 };
                 if (artNode.sortKey) {
                     avlTree.add(artNode);
