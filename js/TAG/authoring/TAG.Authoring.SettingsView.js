@@ -2022,7 +2022,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
-            descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false);
+            descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false, 2000);
             bgInput = createButton('Change Background Image', function () {
                 //changesHaveBeenMade = true;                                                   
                 uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
@@ -2627,7 +2627,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         pubPrivDiv.append(privateInput).append(publicInput);
 
         var nameInput = createTextInput(TAG.Util.htmlEntityDecode(tour.Name), "Tour Title", 120);
-        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(tour.Metadata.Description).replace(/\n/g,'<br />') || "", false);
+        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(tour.Metadata.Description).replace(/\n/g,'<br />') || "", false, 2000);
         var tourIdInput = createTextInput(tour.Identifier, 'Tour ID (read-only)', 80, false, true);
         nameInput.focus(function () {
             if (nameInput.val() === 'Untitled Tour')
@@ -3232,7 +3232,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create labels
         var titleInput = createTextInput(TAG.Util.htmlEntityDecode(media.Name) || "", "Title", 100);
-        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(media.Metadata.Description).replace(/\n/g,'<br />') || "", true);
+        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(media.Metadata.Description).replace(/\n/g,'<br />') || "", true, 2000);
 
         titleInput.focus(function () {
             if (titleInput.val() === 'Title')
@@ -4385,7 +4385,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), "Artwork Title", 100);
         var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), "Artist", 100);
-        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Description).replace(/\n/g, '<br />') || "", "", false);
+        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Description).replace(/\n/g, '<br />') || "", "", false, 2000);
 
         titleInput.on('keyup', function (event) {
             if (event.which === 13) {
@@ -6443,13 +6443,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param hideOnClick
      * @return {Object} input    newly creted text input
      */
-    function createTextAreaInput(text, defaultval, hideOnClick) {
+    function createTextAreaInput(text, defaultval, hideOnClick, maxLength) {
         if (typeof text === 'string') {
             text = text.replace(/<br \/>/g, '\n').replace(/<br>/g, '\n').replace(/<br\/>/g, '\n');
         }
-         var input = $(document.createElement('textarea')).val(text).attr('id','settingsViewTextarea');
+        text = text.substring(0, 2001);
+        var input = $(document.createElement('textarea')).val(text).attr({ 'id': 'settingsViewTextarea', 'maxlength': maxLength});
          input.css({
              'overflow': 'hidden',
+         });
+         input.bind('copy paste', function (e) {
+             e.preventDefault();
          });
         //input.autoSize();
         doWhenReady(input, function (elem) {
