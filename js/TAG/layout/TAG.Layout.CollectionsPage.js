@@ -1906,7 +1906,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (comingBack && previewPos){
                 containerLeft = previewPos;
             } else {
-                if (!comingBack){
+                if (!comingBack||!IS_WINDOWS){
                     tileWidth = artworkTiles[artwork.Identifier].width();
                     tilePos = artworkTiles[artwork.Identifier].position().left;
                 }
@@ -1987,14 +1987,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.stop(true,false);
             rootWidth = root.width();
             infoWidth = infoDiv.width();
-            if (!comingBack){
-                tileWidth = artworkTiles[artwork.Identifier].width();       
-                tilePos = artworkTiles[artwork.Identifier].position().left;  
-            }
             if (comingBack && scrollPos){
                 newScrollPos = scrollPos;
                 duration = ANIMATION_DURATION/5;
             } else {
+                if (artworkTiles[artwork.Identifier]){
+                    tileWidth = artworkTiles[artwork.Identifier].width();       
+                    tilePos = artworkTiles[artwork.Identifier].position().left; 
+                }
                 duration = ANIMATION_DURATION/3;
                 newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
             }   
