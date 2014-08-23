@@ -2570,7 +2570,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     sortKeyMetadataType: tag,
                     sortKey: artworks[i].Metadata.InfoFields ? artworks[i].Metadata.InfoFields[tag] : null
                 };
-                avlTree.add(artNode);
+                if (artNode.sortKey !== null) {
+                    avlTree.add(artNode);
+                }
             }
             return avlTree;
         }
