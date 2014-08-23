@@ -1438,7 +1438,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .append(artTitle)
                 .append(yearTextBox);
 
-            if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe") {
+            if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
                 tourLabel = $(document.createElement('img'))
                     .addClass('tourLabel')
                     .attr('src', tagPath+'images/icons/catalog_tour_icon.svg');
@@ -2832,7 +2832,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 return;
             }
 
-            if (artwork.Type === "Empty") { // tour
+            if (artwork.Type === "Empty" && artwork.Metadata.Type !== "VideoArtwork" && artwork.Metadata.ContentType === "iframe") { // tour
                 if (TAG.Util.Splitscreen.isOn()) {
                     confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
