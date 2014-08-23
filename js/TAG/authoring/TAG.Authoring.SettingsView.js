@@ -4347,7 +4347,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.attr("fileName", artwork.Metadata.Source.substring(0, source.lastIndexOf('.')));
             TAG.Worktop.Database.getConvertedVideoCheck(
                 function (output) {
-                    if (output ==="True"||sourceExt===".mp4") {
+                    if (output === "True" || sourceExt === ".mp4" || output === "true") {
                         clearInterval(checkConTimerId);
                         var sourceMP4 = sourceWithoutExtension + ".mp4";
                         var sourceWEBM = sourceWithoutExtension + ".webm";
