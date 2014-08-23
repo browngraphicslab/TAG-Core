@@ -2077,7 +2077,6 @@ TAG.Util.UI = (function () {
         serverDialog.append(serverDialogInput);
         serverDialogInput.on('keydown', function(evt) {
             if (evt.which === 13 && serverDialog.length>0) {
-                serverDialogOverlay.remove();
                 saveClick();
             }
         });
@@ -2095,9 +2094,13 @@ TAG.Util.UI = (function () {
 
         var serverDialogContact = $(document.createElement('div'));
         serverDialogContact.css({ 'margin-top': '10%' , 'color':'white','text-align': 'center'  });
-        serverDialogContact.html(
-            "Contact us for server setup at:<br /><a href='mailto:brown.touchartgallery@outlook.com'>brown.touchartgallery@outlook.com</a>."
-        );
+        if (!IS_WINDOWS) {
+            serverDialogContact.html(
+                "Contact us for server setup at:<br /><a href='mailto:brown.touchartgallery@outlook.com'>brown.touchartgallery@outlook.com</a>.");
+        } else {
+            serverDialogContact.html(
+                "Contact us for server setup at:<br />brown.touchartgallery@outlook.com.");
+        }
         serverDialog.append(serverDialogContact);
 
         var serverButtonRow = $(document.createElement('div'));
