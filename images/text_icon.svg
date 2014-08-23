@@ -4,12 +4,13 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="200.979px" height="200.979px" viewBox="0 0 200.979 200.979" enable-background="new 0 0 200.979 200.979"
 	 xml:space="preserve">
+<rect x="-0.001" y="-0.001" fill="#212221" width="200.979" height="200.979"/>
 <g>
-	<path fill="#FFFFFF" d="M34,17.02v167.251h129.561V17.02H34z M152.807,173.525H44.746V27.767h108.061V173.525z"/>
-	<rect x="56.323" y="49.793" fill="#FFFFFF" width="83.73" height="7.977"/>
-	<rect x="56.323" y="72.292" fill="#FFFFFF" width="83.73" height="7.975"/>
-	<rect x="56.913" y="94.793" fill="#FFFFFF" width="83.729" height="7.978"/>
-	<rect x="56.323" y="117.285" fill="#FFFFFF" width="83.73" height="7.978"/>
-	<rect x="56.619" y="139.784" fill="#FFFFFF" width="41.861" height="7.978"/>
+	<path fill="#FFFFFF" d="M35.71,16.857v167.251h129.56V16.857H35.71z M154.517,173.362H46.457V27.604h108.06V173.362z"/>
+	<rect x="58.032" y="49.63" fill="#FFFFFF" width="83.73" height="7.977"/>
+	<rect x="58.032" y="72.129" fill="#FFFFFF" width="83.73" height="7.975"/>
+	<rect x="58.623" y="94.63" fill="#FFFFFF" width="83.729" height="7.978"/>
+	<rect x="58.032" y="117.122" fill="#FFFFFF" width="83.73" height="7.978"/>
+	<rect x="58.329" y="139.621" fill="#FFFFFF" width="41.861" height="7.978"/>
 </g>
 </svg>

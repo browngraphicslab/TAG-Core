@@ -62,7 +62,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
      * @method init
      */
     function init() {
-        $(document).off();
+        //$(document).off();
         root.css({ // TODO STYL
             "background-color": "rgb(219,217,204)",
             "color": "black",
@@ -546,7 +546,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             addRemoveMedia.css({ "background-color": "white","color":"black" });
         });
 
-        $(document).on("mouseup", function () {
+        addRemoveMedia.on("mouseleave", function () {
             addRemoveMedia.css({ "background-color": "transparent","color":"white"});
         });
         /**
@@ -1166,7 +1166,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleHotspotButton.on("mousedown", function () {
                 toggleHotspotButton.css({ "background-color": "white", "color": "black" });
             });
-            $(document).on("mouseup", function () {
+            toggleHotspotButton.on("mouseleave", function () {
                 toggleHotspotButton.css({ "background-color": "transparent", "color": "white" });
             });
             toggleLayerButton.css('opacity', '1.0');
@@ -1345,7 +1345,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleLayerButton.on("mousedown", function () {
                 toggleLayerButton.css({ "background-color": "white", "color": "black" });
             });
-            $(document).on("mouseup", function () {
+            toggleLayerButton.on("mouseleave", function () {
                 toggleLayerButton.css({ "background-color": "transparent", "color": "white" });
             });
             if (layerContainer) {
@@ -1879,10 +1879,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 $unassociateAssocMediaButton.css({ "background-color": "white", "color": "black" });
 
             });
-            $(document).on("mouseup", function () {
+            $saveAssocMediaButton.on("mouseleave", function () {
                 $saveAssocMediaButton.css({ "background-color": "transparent", "color": "white" });
+            });
+            $unassociateAssocMediaButton.on("mouseleave", function () {
                 $unassociateAssocMediaButton.css({ "background-color": "transparent", "color": "white" });
             });
+
             //Initially disable the save button
             $saveAssocMediaButton.prop('disabled', true);
             $saveAssocMediaButton.css('opacity', '0.4');

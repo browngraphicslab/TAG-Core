@@ -819,7 +819,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadSplashScreen
      */
     function loadSplashScreen() {
-        $(document).off();
+        //$(document).off();
         prepareViewer(true);
         clearRight();
 
@@ -1138,14 +1138,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         bgImgInput.on("mousedown", function () {
             bgImgInput.css({ "background-color": "white" });
         });
-        $(document).on("mouseup", function () {
+        saveButton.on("mouseleave", function () {
             saveButton.css({ "background-color": "transparent" });
+        });
+        previewStartPageButton.on("mouseleave", function () {
             previewStartPageButton.css({ "background-color": "transparent" });
+        });
+        previewCollectionsPageButton.on("mouseleave", function () {
             previewCollectionsPageButton.css({ "background-color": "transparent" });
+        });
+        previewArtworkViewerButton.on("mouseleave", function () {
             previewArtworkViewerButton.css({ "background-color": "transparent" });
+        });
+        bgImgInput.on("mouseleave", function () {
             bgImgInput.css({ "background-color": "transparent" });
+        });
+        newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
+        
         TAG.Telemetry.register(saveButton,'click','general_set_save',function(tobj){
             tobj.mode = 'settingsView'
         });
@@ -1720,7 +1731,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} exhibition   exhibition to load
      */
     function loadExhibition(exhibition) {
-        $(document).off();
+        //$(document).off();
         deleteType = deleteExhibition;
         toDelete = exhibition;
         var cancelView = false;
@@ -2239,12 +2250,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             deleteButton.on("mousedown", function () {
                 deleteButton.css({ "background-color": "white" });
             });
-            $(document).on("mouseup", function () {
-                saveButton.css({ "background-color": "transparent" });
+            saveButton.on("mouseleave", function () {
+                if (!saveButton.attr("disabled")) {
+                    saveButton.css({ "background-color": "transparent" });
+                }
+            });
+            artPickerButton.on("mouseleave", function () {
                 artPickerButton.css({ "background-color": "transparent" });
+            });
+            deleteButton.on("mouseleave", function () {
                 deleteButton.css({ "background-color": "transparent" });
+            });
+            newButton.on("mouseleave", function () {
                 newButton.css({ "background-color": "transparent" });
             });
+            
 
             // Sets the viewer to catalog view
             function catalogView() {
@@ -2539,7 +2559,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} tour     tour to load
      */
     function loadTour(tour) {
-        $(document).off();
+        //$(document).off();
         prepareViewer(true);
         clearRight();
         deleteType = deleteTour;
@@ -2745,13 +2765,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         editButton.on("mousedown", function () {
             editButton.css({ "background-color": "white" });
         });
-        $(document).on("mouseup", function () {
-            saveButton.css({ "background-color": "transparent" });
+        saveButton.on("mouseleave", function () {
+            if (!saveButton.attr("disabled")) {
+                saveButton.css({ "background-color": "transparent" });
+            }
+        });
+        duplicateButton.on("mouseleave", function () {
             duplicateButton.css({ "background-color": "transparent" });
+        });
+        deleteButton.on("mouseleave", function () {
             deleteButton.css({ "background-color": "transparent" });
+        });
+        editButton.on("mouseleave", function () {
             editButton.css({ "background-color": "transparent" });
+        });
+        newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
+        
 
          TAG.Telemetry.register(editButton,'click','tour_edit',function(tobj){
              tobj.mode = 'settingsView';
@@ -2921,7 +2952,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadAssocMediaView(id, matches) {
-        $(document).off();
+        //$(document).off();
         inGeneralView = false;
         inCollectionsView = false;
         inArtworkView = false;
@@ -2933,7 +2964,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var list;
         currentIndex = 0;
-        $(document).on("mouseup", function () {
+        menuLabel.on("mouseleave", function () {
             menuLabel.css({"background-color": "transparent"});
         });
         if (showDropdown) {
@@ -3465,11 +3496,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         assocButton.on("mousedown", function () {
             assocButton.css({ "background-color": "white" });
         });
-        $(document).on("mouseup", function () {
-            saveButton.css({ "background-color": "transparent" });
+        saveButton.on("mouseleave", function () {
+            if (!saveButton.attr("disabled")) {
+                saveButton.css({ "background-color": "transparent" });
+            }
+        });
+        thumbnailButton.on("mouseleave", function () {
             thumbnailButton.css({ "background-color": "transparent" });
+        });
+        deleteButton.on("mouseleave", function () {
             deleteButton.css({ "background-color": "transparent" });
+        });
+        assocButton.on("mouseleave", function () {
             assocButton.css({ "background-color": "transparent" });
+        });
+        newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
     }
@@ -4220,7 +4261,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork  artwork to load
      */
     function loadArtwork(artwork) {
-        $(document).off();
+        //$(document).off();
         prepareViewer(true);
         clearRight();
         deleteType = deleteArtwork;
@@ -4588,14 +4629,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         editArt.on("mousedown", function () {
             editArt.css({ "background-color": "white" });
         });
-        $(document).on("mouseup", function () {
+        saveButton.on("mouseleave", function () {
             saveButton.css({ "background-color": "transparent" });
+        });
+        thumbnailButton.on("mouseleave", function () {
             thumbnailButton.css({ "background-color": "transparent" });
+        });
+        xmluploaderbtn.on("mouseleave", function () {
             xmluploaderbtn.css({ "background-color": "transparent" });
+        });
+        deleteArt.on("mouseleave", function () {
             deleteArt.css({ "background-color": "transparent" });
+        });
+        editArt.on("mouseleave", function () {
             editArt.css({ "background-color": "transparent" });
+        });
+        newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
+            
+        
         /*if (artwork.Metadata.Type !== 'VideoArtwork') {
             buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
         } else {
@@ -7194,11 +7247,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 addMenuLabel.css({ "background-color": "white" });
             }            
         });
-        $(document).on("mouseup", function () {
+        addMenuLabel.on("mouseleave", function () {
             if (!showDropdown) {
                 addMenuLabel.css({ "background-color": "transparent" });
             }
         });
+       
         
         return addMenuLabel;
     }

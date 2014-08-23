@@ -533,7 +533,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "height":  COLLECTION_DOT_WIDTH,
                             "border-radius": COLLECTION_DOT_WIDTH / 2,
                             "margin": COLLECTION_DOT_WIDTH/4
-                        }).on('mousedown', function(j){
+                        }).on('click', function(j){
                            return function(){
                                 prepareNextView();
                                 loadCollection(visibleCollections[j])();
@@ -1291,7 +1291,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
                         if (previouslyClicked === main) {
-                            console.log("double-click");
                             switchPage(currentWork, null, getContainerLeft(currentWork, false))();
                         } else {
                             previouslyClicked = main;
@@ -1906,7 +1905,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (comingBack && previewPos){
                 containerLeft = previewPos;
             } else {
-                if (!comingBack||!IS_WINDOWS){
+                if (artworkTiles[artwork.Identifier]){
                     tileWidth = artworkTiles[artwork.Identifier].width();
                     tilePos = artworkTiles[artwork.Identifier].position().left;
                 }
