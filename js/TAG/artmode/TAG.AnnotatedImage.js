@@ -746,7 +746,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             // TODO move this css to styl file
             play.css({
                 'position': 'absolute',
-                //'height': '1%',
+                'height': '1%',
                 'min-height': '20px',
                 'max-height':  '30px',
                 'width':    'auto',
@@ -787,12 +787,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             vol.css({
                 'position': 'absolute',
                 'height': '1%',
-                'min-height': '25px',
+                'min-height': '20px',
                 'max-height': '30px',
                 'width': 'auto',
                 'display': 'block',
                 'padding': '2px 3px 2px 3px',
-                'right':'1%',
+                'right':'0%',
                 'top':'10%'
             });
 
@@ -820,7 +820,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 //'height': '1%',
                 //'min-height': '30px',
                 //'max-height':'40px',
-                'top': '17%',
+                'top': '10%',
                 'position': 'absolute',
                 'display':'block',
                 'font-size': '100%',
