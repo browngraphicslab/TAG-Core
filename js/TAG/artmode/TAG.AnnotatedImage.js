@@ -235,13 +235,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @param {Object} pivot          location of event (x,y)
      */
     function dzScroll(scale, pivot) {
-        if (IS_WINDOWS){
-            pivot = {
-                x: pivot.x + root.offset().left,
-                y: pivot.y + root.offset().top
-            }
-        };
-
         dzManip({
             scale: scale,
             translation: {
