@@ -414,11 +414,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverSubmit.css({"background-color": PRIMARY_FONT_COLOR, "color": "black"});
     });
     
-    $(document).on("mouseup", function () {
-        serverSubmit.css({ "background-color": "transparent", "color": PRIMARY_FONT_COLOR });
+    passwordSubmit.on("mouseleave", function () {
         passwordSubmit.css({ "background-color": "transparent", "color": PRIMARY_FONT_COLOR });
-        goToCollectionsButton.css({ "background-color": "white", "color": "black" });
+
     })
+    goToCollectionsButton.on("mouseleave", function () {
+        goToCollectionsButton.css({ "background-color": "white", "color": "black" });
+
+    })
+
     serverInput.focusout(function () {
         if (!serverInput.val()) {
             serverInput.attr('value', localStorage.ip);
