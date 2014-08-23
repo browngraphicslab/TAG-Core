@@ -533,7 +533,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             "height":  COLLECTION_DOT_WIDTH,
                             "border-radius": COLLECTION_DOT_WIDTH / 2,
                             "margin": COLLECTION_DOT_WIDTH/4
-                        }).on('mousedown', function(j){
+                        }).on('click', function(j){
                            return function(){
                                 prepareNextView();
                                 loadCollection(visibleCollections[j])();
