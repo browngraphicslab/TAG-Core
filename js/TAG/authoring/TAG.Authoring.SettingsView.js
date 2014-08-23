@@ -6447,9 +6447,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (typeof text === 'string') {
             text = text.replace(/<br \/>/g, '\n').replace(/<br>/g, '\n').replace(/<br\/>/g, '\n');
         }
+        text = text.substring(0, 2001);
         var input = $(document.createElement('textarea')).val(text).attr({ 'id': 'settingsViewTextarea', 'maxlength': maxLength});
          input.css({
              'overflow': 'hidden',
+         });
+         input.bind('copy paste', function (e) {
+             e.preventDefault();
          });
         //input.autoSize();
         doWhenReady(input, function (elem) {
