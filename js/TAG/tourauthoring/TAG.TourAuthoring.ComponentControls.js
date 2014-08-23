@@ -1810,17 +1810,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         $(associatedsearchbar).on('keyup', function (event) {
+            if (!pickerloaded)
+                return;
             event.stopPropagation();
         });
         //associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
         associatedsearchbar.val("");
         //TAG.Util.defaultVal(PICKER_SEARCH_TEXT, associatedsearchbar, true, IGNORE_IN_SEARCH);
         associatedsearchbar.keyup(function () {
+            if (!pickerloaded)
+                return; 
             TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
-        associatedsearchbar.change(function () {
-            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
-        });
+
         $(associatedMediaPickerHeader).append(associatedsearchbar);
 
         associatedMediaPicker.append(associatedMediaPickerHeader);
