@@ -4916,12 +4916,7 @@ TAG.Util.RLH = function (input) {
         });
 
         // load in the first map in the list
-        getMaps(function () {
-            if (mapGuids.length < 2) {
-                leftArrowButton.hide();
-                rightArrowButton.hide();
-            }
-        });
+        getMaps();
 
         return locationPanelDiv;
     }
