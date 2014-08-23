@@ -2570,14 +2570,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         //For custom sort tags
         else if (tag){
+            var sortKey;
             comparator = sortComparator('sortKey');
             valuation = sortValuation('sortKey');
             avlTree = new AVLTree(comparator,valuation);
             avlTree.clear();
             for (i = 0; i < artworks.length; i++) {
+                if (artworks[i].Metadata.InfoFields && artworks[i].Metadata.InfoFields[tag]) {
+                    sortKey = artworks[i].Metadata.InfoFields[tag].toLowerCase();
+                } else {
+                    sortKey = null;
+                }
                 artNode = {
                     artwork: artworks[i],
-                    sortKey: artworks[i].Metadata.InfoFields[tag] ? artworks[i].Metadata.InfoFields[tag].toLowerCase() : null
+                    sortKey: sortKey
                 };
                 if (artNode.sortKey) {
                     avlTree.add(artNode);
