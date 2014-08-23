@@ -235,13 +235,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @param {Object} pivot          location of event (x,y)
      */
     function dzScroll(scale, pivot) {
-        if (IS_WINDOWS){
-            pivot = {
-                x: pivot.x + root.offset().left,
-                y: pivot.y + root.offset().top
-            }
-        };
-
         dzManip({
             scale: scale,
             translation: {
@@ -755,10 +748,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'position': 'absolute',
                 'height': '1%',
                 'min-height': '20px',
-                'max-height':   '30px',
+                'max-height':  '30px',
                 'width':    'auto',
                 'display': 'block',
-                'padding':'3px 3px 3px 3px'
+                'padding':'3px 3px 3px 3px',
+                'top':'2%',
+                'left':'1%'
             });
 
             //playHolder.css({
@@ -797,7 +792,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'width': 'auto',
                 'display': 'block',
                 'padding': '2px 3px 2px 3px',
-                'right':'0%'
+                'right':'0%',
+                'top':'10%'
             });
 
             //volHolder.css({

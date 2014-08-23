@@ -1906,8 +1906,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (comingBack && previewPos){
                 containerLeft = previewPos;
             } else {
-                tileWidth = artworkTiles[artwork.Identifier].width();
-                tilePos = artworkTiles[artwork.Identifier].position().left;
+                if (!comingBack){
+                    tileWidth = artworkTiles[artwork.Identifier].width();
+                    tilePos = artworkTiles[artwork.Identifier].position().left;
+                }
                 shift = (getContainerWidth(artwork,showAllAtYear)-tileWidth)/2;
                 leftOffset = parseFloat(tileDiv.css('margin-left')) + tilePos + infoWidth - catalogDiv.scrollLeft();
                 //if artwork tile at beginning of window
@@ -1985,15 +1987,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.stop(true,false);
             rootWidth = root.width();
             infoWidth = infoDiv.width();
+            if (!comingBack){
+                tileWidth = artworkTiles[artwork.Identifier].width();       
+                tilePos = artworkTiles[artwork.Identifier].position().left;  
+            }
             if (comingBack && scrollPos){
                 newScrollPos = scrollPos;
                 duration = ANIMATION_DURATION/5;
             } else {
-                tileWidth = artworkTiles[artwork.Identifier].width();       
-                tilePos = artworkTiles[artwork.Identifier].position().left;
                 duration = ANIMATION_DURATION/3;
                 newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
             }   
+
             if (newScrollPos<0){
                 newScrollPos = 0;
             }
