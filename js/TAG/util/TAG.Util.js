@@ -1397,6 +1397,7 @@ TAG.Util = (function () {
                 var rotation = evt.delta.rotation / 180 * Math.PI;
                 var translation = { x: evt.delta.translation.x, y: evt.delta.translation.y };
                 var scale = evt.delta.scale;
+                evt.target.autoProcessInertia = false;
                 if (typeof functions.onManipulate === "function") {
                     if (evt.gesture) {
                         functions.onManipulate({
@@ -4343,6 +4344,9 @@ TAG.Util.UI = (function () {
             'left': '10%',
             'width': '80%'
         });
+
+        //Read-only link
+        linkInput.attr('readonly', true);
 
         for(key in params) {
             if(params.hasOwnProperty(key) && (params[key] || params[key] === false)) {
