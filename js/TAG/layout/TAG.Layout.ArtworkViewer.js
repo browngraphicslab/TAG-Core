@@ -1178,6 +1178,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             annotatedImage.viewer.viewport.applyConstraints();
         }
 
+
         /**Implement tapped function from makeManipulatable
         * @method onMinimapTapped
         * @param {Object} evt        object containing hammer event info
@@ -1188,8 +1189,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var minimapt = minimap.position().top;
             var minimapl = parseFloat(minimap.css('marginLeft'));
 
-            var xPos = evt.position.x + minimap.offset().left;
-            var yPos = evt.position.y + minimap.offset().top;
+            var xPos = evt.position.x; //+ minimap.offset().left;
+            var yPos = evt.position.y; //+ minimap.offset().top;
             var x =(xPos-minimapl)/ minimapw;
             var y = (yPos-minimapt)/minimaph;
             y = y / AR;
