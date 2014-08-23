@@ -6279,7 +6279,7 @@ TAG.Util.RLH = function (input) {
 
         titleInput.on('keydown', function (event) {
             event.stopPropagation();
-            if (event.which === 13) {
+            if (event.which === 13 && searchButton) {
                 event.preventDefault();
                 searchButton.click();
             }
