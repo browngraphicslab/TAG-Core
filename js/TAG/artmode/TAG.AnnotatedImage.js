@@ -753,12 +753,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             // TODO move this css to styl file
             play.css({
                 'position': 'absolute',
-                'height': '1%',
+                //'height': '1%',
                 'min-height': '20px',
-                'max-height':   '30px',
+                'max-height':  '30px',
                 'width':    'auto',
                 'display': 'block',
-                'padding':'3px 3px 3px 3px'
+                'padding':'3px 3px 3px 3px',
+                'top':'2%',
+                'left':'1%'
             });
 
             //playHolder.css({
@@ -792,12 +794,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             vol.css({
                 'position': 'absolute',
                 'height': '1%',
-                'min-height': '20px',
+                'min-height': '25px',
                 'max-height': '30px',
                 'width': 'auto',
                 'display': 'block',
                 'padding': '2px 3px 2px 3px',
-                'right':'0%'
+                'right':'1%',
+                'top':'10%'
             });
 
             //volHolder.css({
@@ -824,10 +827,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 //'height': '1%',
                 //'min-height': '30px',
                 //'max-height':'40px',
-                'top': '0%',
+                'top': '17%',
                 'position': 'absolute',
                 'display':'block',
-                'font-size': '70%',
+                'font-size': '100%',
                 'right': '50px',
                 'vertical-align': 'middle',
                 'margin':'0',
