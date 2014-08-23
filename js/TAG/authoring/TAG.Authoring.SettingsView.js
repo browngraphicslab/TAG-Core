@@ -630,7 +630,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.text('New');
         secondaryButton.text('Video');
         label.text('Loading...');
-        circle.attr('src', tagPath + 'images/icons/progrescircle.gif');
+        circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
         viewer.css({
             'height': $(window).width() * RIGHT_WIDTH / 100 * 1 / VIEWER_ASPECTRATIO + 'px',
@@ -6263,7 +6263,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (!isSingleYear(year)){
                 return [''];
             } else {
-                return ['','01','02','03','04','05','06','07','08','09','10','11','12'];
+                return ['','January','February','March','April','May','June','July','August','September','October','November','December'];
             }
         }
 

@@ -347,12 +347,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         }
     }   
     
-    function saveClick() {
+    var saveClick = $.debounce(500, false, function (e) {
         var address = serverInput.val();
-        switch(address) {
+        switch (address) {
             case 'tagunicorn':
                 var unicorn = $(document.createElement('img'));
-                unicorn.attr('src', tagPath+'images/unicorn.jpg');
+                unicorn.attr('src', tagPath + 'images/unicorn.jpg');
                 unicorn.css({
                     width: '100%',
                     height: '100%',
@@ -363,8 +363,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 tagContainer.append(unicorn);
                 unicorn.fadeIn(500);
                 setTimeout(function () {
-                    $('img').attr('src', tagPath+'images/unicorn.jpg');
-                    $('.background').css('background-image', 'url('+tagPath+'"images/unicorn.jpg")');
+                    $('img').attr('src', tagPath + 'images/unicorn.jpg');
+                    $('.background').css('background-image', 'url(' + tagPath + '"images/unicorn.jpg")');
                     unicorn.fadeOut(500, function () { unicorn.remove(); });
                 }, 5000);
                 return;
@@ -393,16 +393,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 break;
         }
         serverError.html('Connecting...');
-        serverError.css({"visibility":"visible"});
+        serverError.css({ "visibility": "visible" });
         TAG.Worktop.Database.changeServer(address, false, function () {
             TAG.Layout.StartPage(null, function (page) {
                 TAG.Util.UI.slidePageRight(page);
             });
         }, function () {
             serverError.html('Server connection failed. Contact the server administrator.');
-            serverError.css({"visibility":"visible"});       
+            serverError.css({ "visibility": "visible" });
         });
-    }
+    });
 
     serverSubmit.on('click', saveClick);
     serverInput.keypress(function(e){
