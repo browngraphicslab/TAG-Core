@@ -969,6 +969,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     width: '100%'
                 });
                 outerContainer.append($mediaElt);
+                outerContainer.css({
+                    "pointer-events": "none "
+                })
 
                 x = parseFloat(linq.Offset._x || 0);
                 y = parseFloat(linq.Offset._y || 0);
