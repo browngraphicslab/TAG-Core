@@ -975,10 +975,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             if (!comingBack || !currentTag) {
                 //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
-                if (timelineShown && sortOptions.indexOf('Date')>0) {
+                if (timelineShown && (sortOptions.indexOf('Date')>=0)) {
                     currentTag = "Date";
                     currentDefaultTag = "Date";
-                } else if (sortOptions.indexOf('Title')>0) {
+                } else if (sortOptions.indexOf('Title')>=0) {
                     currentTag = "Title";
                     currentDefaultTag = "Title";
                 } else {
@@ -2647,13 +2647,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artNode = {
                     artwork: artworks[i],
                     nameKey: nameKey,
-                    yearKey: artworks[i].Type === 'Empty' ? '~~~~' : yearKey //Tours set to Infinity to show up at end of 'Year' sort
+                    yearKey: artworks[i].Type === 'Empty' ? Number.POSITIVE_INFINITY : yearKey //Tours set to Infinity to show up at end of 'Year' sort
                 };
             } else{                        
                 artNode = {
                     artwork: artworks[i],
                     nameKey: nameKey,
-                    yearKey: '~~~~' //Set unintelligible dates to show up at end of 'Year' sort 
+                    yearKey: Number.POSITIVE_INFINITY //Set unintelligible dates to show up at end of 'Year' sort 
                 };
             }
             avlTree.add(artNode);
