@@ -33,8 +33,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         IGNORE_IN_SEARCH = ['visible', 'exhibits', 'selected'],
         rinContainer = viewer.getContainer(),
         isUploading = false,
-        allArtworks;
-
+        allArtworks,
+        pickerloaded = false;
     functionsPanelDocfrag.appendChild(functionsPanel[0]);
     timeline.setCompControl(that);
     var catalogPickerOverlay = TAG.Util.UI.blockInteractionOverlay();
@@ -1810,17 +1810,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         $(associatedsearchbar).on('keyup', function (event) {
+            if (!pickerloaded)
+                return;
             event.stopPropagation();
         });
         //associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
         associatedsearchbar.val("");
         //TAG.Util.defaultVal(PICKER_SEARCH_TEXT, associatedsearchbar, true, IGNORE_IN_SEARCH);
         associatedsearchbar.keyup(function () {
+            if (!pickerloaded)
+                return; 
             TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
-        associatedsearchbar.change(function () {
-            TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
-        });
+
         $(associatedMediaPickerHeader).append(associatedsearchbar);
 
         associatedMediaPicker.append(associatedMediaPickerHeader);
@@ -2453,9 +2455,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         //searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
         //TAG.Util.defaultVal(PICKER_SEARCH_TEXT, searchbar, true, IGNORE_IN_SEARCH);
         searchbar.keyup(function () {
+            if (!pickerloaded)
+                return;
             TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
         });
         searchbar.change(function () {
+            if (!pickerloaded)
+                return;
             TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
         });
         catalogPicker.append(searchbar);
@@ -2587,6 +2593,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
                 function makeExhibClickable(exhibHolder) {
                     exhibHolder.click(function () {
+                        if (!pickerloaded)
+                            return;
                         $(".allArtworksHolder").css('background', 'black');
                         $(".exhibHolder").css('background', 'black');
                         exhibHolder.css('background', '#999');
@@ -2616,6 +2624,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
 
             function loadInArtworks(artworks) {
+                pickerloaded = false;
                 var i;
                 for (i = 0; i < artworks.length; i++) {
                     if (artworks[i].Type === 'Empty') {
@@ -2762,6 +2771,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 });
                 artQueue.add(function () {
                     loading.hide();
+                    pickerloaded = true;
                 });
                 // append docfrag at end
                 //artQueue.add(function () { $(catalogPickerArtworks).append(artworkListDocfrag); });
