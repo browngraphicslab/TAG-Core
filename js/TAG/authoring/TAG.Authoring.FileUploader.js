@@ -51,6 +51,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     var shortFiles = [];
     var fileUploadError;
     var maxFileSize = 50 * 1024 * 1024;
+    var maxVideoArtworkSize = 80 * 1024 * 1024;
     var maxDeepZoomFileSize = 250 * 1024 * 1024;
 
     // Basic HTML initialization
@@ -139,6 +140,15 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 maxSize = maxFileSize;
                                                 break;
                                             case TAG.Authoring.FileUploadTypes.DeepZoom:
+                                                if (file.fileType === ".mp4" ||
+                                                    file.fileType === ".ogv" ||
+                                                    file.fileType === ".webm" ||
+                                                    file.fileType === ".mov" ||
+                                                    file.fileType === ".avi" ||
+                                                    file.fileType === ".wmv") {
+                                                    maxSize = maxVideoArtworkSize;
+                                                    break;
+                                                }
                                             case TAG.Authoring.FileUploadTypes.Map:
                                                 maxSize = maxDeepZoomFileSize;
                                                 break;
