@@ -636,12 +636,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @method initMediaObject
          */
         function initMediaObject() {
+
             if (IS_XFADE && linq.Offset && linq.Dimensions) {
                 outerContainer.css({
                     'border': '1px solid rgba(255,255,255,0.4)',
                     'background': 'rgba(0,0,0,0)',
-                    'width' : parseFloat(linq.Dimensions._x || 50),
-                    'height' : parseFloat(linq.Dimensions._y || 50),
+                    'width' : parseFloat(parseInt(linq.Dimensions._x) || 50),
+                    'height' : parseFloat(parseInt(linq.Dimensions._y) || 50),
                     'position': 'absolute'
                 });
                 assetCanvas.append(outerContainer);
@@ -968,6 +969,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     width: '100%'
                 });
                 outerContainer.append($mediaElt);
+                outerContainer.css({
+                    "pointer-events": "none "
+                })
 
                 x = parseFloat(linq.Offset._x || 0);
                 y = parseFloat(linq.Offset._y || 0);
