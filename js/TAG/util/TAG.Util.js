@@ -4635,17 +4635,19 @@ TAG.Util.RLH = function (input) {
                     .appendTo(mapRegion);
 
         leftArrowButton = $(document.createElement('img'))
-                    .attr('id', 'locationHistoryLeftArrowButton')
-                    .attr('src', tagPath+'images/icons/Left.png')
-                    .css({
-                        position: 'absolute',
-                        width: '13px',
-                        height: 'auto',
-                        right: '10%',
-                        top: '50%',
-                        cursor: 'pointer'
-                    })
-                    .appendTo(leftArrowContainer)
+                .attr('id', 'locationHistoryLeftArrowButton')
+                .attr('src', tagPath + 'images/icons/Left.png')
+                .css({
+                    position: 'absolute',
+                    width: '13px',
+                    height: 'auto',
+                    right: '10%',
+                    top: '50%',
+                    cursor: 'pointer'
+                })
+                .appendTo(leftArrowContainer)
+
+        
 
         mapContainer = $(document.createElement('div'))
                     .attr('id', 'locationHistoryMapContainer')
@@ -4671,17 +4673,19 @@ TAG.Util.RLH = function (input) {
                     .appendTo(mapRegion);
 
         rightArrowButton = $(document.createElement('img'))
-                    .attr('id', 'locationHistoryRightArrowButton')
-                    .attr('src', tagPath+'images/icons/Right.png')
-                    .css({
-                        position: 'absolute',
-                        width: '13px',
-                        height: 'auto',
-                        left: '10%',
-                        top: '50%',
-                        cursor: 'pointer'
-                    })
-                    .appendTo(rightArrowContainer)
+                .attr('id', 'locationHistoryRightArrowButton')
+                .attr('src', tagPath + 'images/icons/Right.png')
+                .css({
+                    position: 'absolute',
+                    width: '13px',
+                    height: 'auto',
+                    left: '10%',
+                    top: '50%',
+                    cursor: 'pointer'
+                })
+                .appendTo(rightArrowContainer)
+        
+        
 
         disabledOverlay = $(document.createElement('div'))
                     .attr('id', 'defaultMapDisabledOverlay')
@@ -4854,6 +4858,7 @@ TAG.Util.RLH = function (input) {
                 } else {
                     deleteMap(); //hides bing map
                 };
+
             });
             addLocationButton.on('click', addLocation);
             sortLocationsByTitleButton.on('click', sortLocationsByTitle);
@@ -4914,9 +4919,15 @@ TAG.Util.RLH = function (input) {
                 showMap(mapGuids[0]);
             }
         });
+        
 
         // load in the first map in the list
-        getMaps();
+        getMaps(function () {
+            if (mapGuids.length < 2) {
+                leftArrowButton.hide();
+                rightArrowButton.hide();
+            }
+        });
 
         return locationPanelDiv;
     }
