@@ -875,6 +875,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             currentArtwork = artwrk || null;
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             //scrollPos = sPos || 0;
+            applyCustomization();
             if (!onAssocMediaView || !currCollection.collectionMedia) {
                 getCollectionContents(currCollection, null, function () { return cancelLoad;});
             } else {
@@ -882,7 +883,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 loadSortTags(currCollection, currCollection.collectionMedia)
                 initSearch(currCollection.collectionMedia);
             }
-            applyCustomization();
             cancelLoadCollection = function () { cancelLoad = true; };
 
         }
@@ -936,7 +936,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             appendTags();
             //});
         } else if (onAssocMediaView){
-            sortOptions = ['Date','Title'];
+            sortOptions = ["Date","Title"];
             appendTags();
         } else {
             sortOptions = ["Date", "Title", "Artist"];
