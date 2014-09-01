@@ -1999,7 +1999,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             infoWidth = infoDiv.width();
             if (comingBack && scrollPos){
                 newScrollPos = scrollPos;
-                duration = 0//ANIMATION_DURATION/5;
+                duration = ANIMATION_DURATION/5;
             } else {
                 if (artworkTiles[artwork.Identifier]){
                     tileWidth = artworkTiles[artwork.Identifier].width();       
