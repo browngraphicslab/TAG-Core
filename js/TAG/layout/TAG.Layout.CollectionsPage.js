@@ -1992,76 +1992,76 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
                 
 
-        function animateCatalogDiv(){
-            //scroll catalogDiv to center the current artwork
-            catalogDiv.stop(true,false);
-            rootWidth = root.width();
-            infoWidth = infoDiv.width();
-            if (comingBack && scrollPos){
-                newScrollPos = scrollPos;
-                duration = 0//ANIMATION_DURATION/5;
-            } else {
-                if (artworkTiles[artwork.Identifier]){
-                    tileWidth = artworkTiles[artwork.Identifier].width();       
-                    tilePos = artworkTiles[artwork.Identifier].position().left; 
+            function animateCatalogDiv(){
+                //scroll catalogDiv to center the current artwork
+                catalogDiv.stop(true,false);
+                rootWidth = root.width();
+                infoWidth = infoDiv.width();
+                if (comingBack && scrollPos){
+                    newScrollPos = scrollPos;
+                    duration = 0//ANIMATION_DURATION/5;
+                } else {
+                    if (artworkTiles[artwork.Identifier]){
+                        tileWidth = artworkTiles[artwork.Identifier].width();       
+                        tilePos = artworkTiles[artwork.Identifier].position().left; 
+                    }
+                    duration = ANIMATION_DURATION/3;
+                    newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
+                }   
+
+                if (newScrollPos<0){
+                    newScrollPos = 0;
                 }
-                duration = ANIMATION_DURATION/3;
-                newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
-            }   
-
-            if (newScrollPos<0){
-                newScrollPos = 0;
-            }
 
 
-            //Don't animate if not actually scrolling
-            if (parseInt(newScrollPos) === catalogDiv.scrollLeft()){
-                duration = 0;
-            }
-
-            //For correctly scrolling when returning from an artwork
-            artwork.scrollPos = newScrollPos;
-
-            if (!(artworkTiles[artwork.Identifier])) {
-                setTimeout(animateCatalogDiv, duration)
-            }
-
-            catalogDiv.animate({
-                scrollLeft: newScrollPos
-            }, duration, "linear", function () {
-                //center selectedArtworkContainer over current artwork thumbnail
-                fillSelectedArtworkContainer();
-                selectedArtworkContainer.css({
-                    'width' : getContainerWidth(artwork,showAllAtYear),
-                    'left' : getContainerLeft(artwork,showAllAtYear),
-                    'display': 'inline',
-                    'opacity':1
-                });
-
-                //add back handlers
-                if (selectedArtworkContainer[0].addEventListener) {
-                    // IE9, Chrome, Safari, Opera
-                    selectedArtworkContainer[0].addEventListener("mousewheel", 
-                        function(e){
-                            e.stopPropagation();
-                        }, false);
-                    // Firefox
-                    selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
-                        function(e){
-                            e.stopPropagation();
-                        }, false);
-                } else { 
-                    // IE 6/7/8
-                    selectedArtworkContainer[0].attachEvent("onmousewheel",
-                        function(e){
-                            e.stopPropagation();
-                        }, false);
+                //Don't animate if not actually scrolling
+                if (parseInt(newScrollPos) === catalogDiv.scrollLeft()){
+                    duration = 0;
                 }
-                //selectedArtworkContainer.children().animate({"opacity": 1},ANIMATION_DURATION/5);
-                scrollPos = tilePos;
+
+                //For correctly scrolling when returning from an artwork
+                artwork.scrollPos = newScrollPos;
+
+                if (!(artworkTiles[artwork.Identifier])) {
+                    setTimeout(animateCatalogDiv, duration)
+                } else {
+                    catalogDiv.animate({
+                        scrollLeft: newScrollPos
+                    }, duration, "linear", function () {
+                        //center selectedArtworkContainer over current artwork thumbnail
+                        fillSelectedArtworkContainer();
+                        selectedArtworkContainer.css({
+                            'width' : getContainerWidth(artwork,showAllAtYear),
+                            'left' : getContainerLeft(artwork,showAllAtYear),
+                            'display': 'inline',
+                            'opacity':1
+                        });
+
+                        //add back handlers
+                        if (selectedArtworkContainer[0].addEventListener) {
+                            // IE9, Chrome, Safari, Opera
+                            selectedArtworkContainer[0].addEventListener("mousewheel", 
+                                function(e){
+                                    e.stopPropagation();
+                                }, false);
+                            // Firefox
+                            selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
+                                function(e){
+                                    e.stopPropagation();
+                                }, false);
+                        } else { 
+                            // IE 6/7/8
+                            selectedArtworkContainer[0].attachEvent("onmousewheel",
+                                function(e){
+                                    e.stopPropagation();
+                                }, false);
+                        }
+                        //selectedArtworkContainer.children().animate({"opacity": 1},ANIMATION_DURATION/5);
+                        scrollPos = tilePos;
+                    });
+                }
                 comingBack = false;
-            });
-        }
+            }
             currentArtwork = artwork;
             artworkSelected = true;
             artworkShown = true;
