@@ -1991,24 +1991,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 animateCatalogDiv();
             }
                 
-
-            function animateCatalogDiv(){
-                //scroll catalogDiv to center the current artwork
-                catalogDiv.stop(true,false);
-                rootWidth = root.width();
-                infoWidth = infoDiv.width();
-                if (comingBack && scrollPos){
-                    newScrollPos = scrollPos;
-                    duration = 0//ANIMATION_DURATION/5;
-                } else {
-                    if (artworkTiles[artwork.Identifier]){
-                        tileWidth = artworkTiles[artwork.Identifier].width();       
-                        tilePos = artworkTiles[artwork.Identifier].position().left; 
-                    }
-                    duration = ANIMATION_DURATION/3;
-                    newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
-                }   
-
+        function animateCatalogDiv(){
+            //scroll catalogDiv to center the current artwork
+            catalogDiv.stop(true,false);
+            rootWidth = root.width();
+            infoWidth = infoDiv.width();
+            if (comingBack && scrollPos){
+                newScrollPos = scrollPos;
+                duration = ANIMATION_DURATION/5;
+            } else {
+                if (artworkTiles[artwork.Identifier]){
+                    tileWidth = artworkTiles[artwork.Identifier].width();       
+                    tilePos = artworkTiles[artwork.Identifier].position().left; 
+                }
+                duration = ANIMATION_DURATION/3;
+                newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
+            }   
                 if (newScrollPos<0){
                     newScrollPos = 0;
                 }
