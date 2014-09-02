@@ -668,6 +668,12 @@ TAG.TourAuthoring.Track = function (spec, my) {
         renameOverlay.fadeIn(500);
         var form = $(document.createElement("form"));
         var newName = $(document.createElement("input"));
+        newName.on('keyup', function () {
+            var txt = (newName && newName[0] && newName[0].value) ? newName[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            if (newName && newName[0] && newName[0].value && newName[0].value != txt) {
+                newName[0].value = txt;
+            }
+        });
         form.css("text-align", 'left').attr("maxlength","100");
         newName.attr("type", "text");
         newName.css("margin", '4% 4%');

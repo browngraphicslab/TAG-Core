@@ -292,7 +292,12 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         // Title text area, users can retype and redefine title name
         var textArea = $(document.createElement('input'));
         textArea.type = "text";
-
+        textArea.on('keyup', function () {
+            var txt = (textArea && textArea[0] && textArea[0].value) ? textArea[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            if (textArea && textArea[0] && textArea[0].value && textArea[0].value!=txt) {
+                textArea[0].value = txt;
+            }
+        });
         var textAreaSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
         {
             center_v: true,
