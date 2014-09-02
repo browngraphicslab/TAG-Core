@@ -669,7 +669,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         var form = $(document.createElement("form"));
         var newName = $(document.createElement("input"));
         newName.on('keyup', function () {
-            var txt = (newName && newName[0] && newName[0].value) ? newName[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            var txt = (newName && newName[0] && newName[0].value) ? newName[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (newName && newName[0] && newName[0].value && newName[0].value != txt) {
                 newName[0].value = txt;
             }

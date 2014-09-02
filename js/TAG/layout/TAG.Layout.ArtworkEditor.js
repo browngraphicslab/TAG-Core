@@ -1877,13 +1877,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     })
                     .appendTo($rightbar);
             $descArea.on('keyup', function () {
-                var txt = ($descArea && $descArea[0] && $descArea[0].value) ? $descArea[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                var txt = ($descArea && $descArea[0] && $descArea[0].value) ? $descArea[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if ($descArea && $descArea[0] && $descArea[0].value && $descArea[0].value!=txt) {
                     $descArea[0].value = txt;
                 }
             });
             $titleText.on('keyup', function () {
-                var txt = ($titleText && $titleText[0] && $titleText[0].value) ? $titleText[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                var txt = ($titleText && $titleText[0] && $titleText[0].value) ? $titleText[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if ($titleText && $titleText[0] && $titleText[0].value && $titleText[0].value!=txt) {
                     $titleText[0].value = txt;
                 }
@@ -2324,13 +2324,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 });
             }// else {
             textarea.on('keyup', function () {
-                var txt = (textarea && textarea[0] && textarea[0].value) ? textarea[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                var txt = (textarea && textarea[0] && textarea[0].value) ? textarea[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if (textarea && textarea[0] && textarea[0].value && textarea[0].value!=txt) {
                     textarea[0].value = txt;
                 }
             });
             fieldTitle.on('keyup', function () {
-                var txt = (fieldTitle && fieldTitle[0] && fieldTitle[0].value) ? fieldTitle[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                var txt = (fieldTitle && fieldTitle[0] && fieldTitle[0].value) ? fieldTitle[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if (fieldTitle && fieldTitle[0] && fieldTitle[0].value && fieldTitle[0].value!=txt) {
                     fieldTitle[0].value = txt;
                 }

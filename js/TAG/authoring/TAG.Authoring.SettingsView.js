@@ -6469,7 +6469,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var input = $(document.createElement('input')).val(text);
         onlyNumbers = onlyNumbers || false;
         input.on('keyup', function () {
-            var txt = (input && input[0] && input[0].value) ? input[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            var txt = (input && input[0] && input[0].value) ? input[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (input && input[0] && input[0].value && input[0].value!=txt) {
                 input[0].value = txt;
             }
@@ -6524,7 +6524,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             $(input).css('height', realHeight + 'px');
         });
         input.on('keyup', function () {
-            var txt = (input && input.text()) ? input.text().replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            var txt = (input && input.text()) ? input.text().replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (input[0].scrollHeight <= (root.find('#setViewSettingsContainer').height() * 0.5)) {
                 var realHeight = input[0].scrollHeight;
             }

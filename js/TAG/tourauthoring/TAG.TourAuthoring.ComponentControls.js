@@ -3156,7 +3156,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         textArray.push(textArea);
         textArea.attr('id', 'writeAnnotation');
         textArea.on('keyup', function () {
-            var txt = (textArea && textArea[0] && textArea[0].value) ? textArea[0].value.replace(/[^\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            var txt = (textArea && textArea[0] && textArea[0].value) ? textArea[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (textArea && textArea[0] && textArea[0].value && textArea[0].value != txt) {
                 textArea[0].value = txt;
             }
