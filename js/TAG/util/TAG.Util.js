@@ -4999,7 +4999,7 @@ TAG.Util.RLH = function (input) {
                 removeLoadingOverlay();
             }
         };
-        mapGuids = (defaultMapShown || input.authoring) ? [null] : [];
+        mapGuids = (defaultMapShown || input.authoring) ? [null] : [null];
         TAG.Worktop.Database.getMaps(artwork.Identifier, function (mps) {
             var mapslength = mps.length;
             if (mapslength > 0) {
