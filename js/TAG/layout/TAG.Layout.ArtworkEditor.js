@@ -322,7 +322,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         src = ((mediadoq.Metadata.Thumbnail && !mediadoq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg');
                         break;
                     case 'Image':
-                        src = (mediadoq.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg');
+                        if (mediadoq.Metadata.Thumbnail) {
+                            src= TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail);
+                        }else if (mediadoq.Metadata.Source){
+                            src = TAG.Worktop.Database.fixPath(mediadoq.Metadata.Source);
+                        } else {
+                            src=tagPath + 'images/image_icon.svg';
+                        }
                         break;
                     case 'iframe':
                         src = tagPath + 'images/video_icon.svg';

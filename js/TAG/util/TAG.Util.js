@@ -572,11 +572,13 @@ TAG.Util = (function () {
             progressCircCSS.width = circleSize;
         }
         var colorString = $(divToAppend).css("background-color");
-        var colorOnly = colorString.substring(colorString.indexOf("(") + 1, colorString.lastIndexOf(")")).split(/, \s*/);
-        var bgColor = "rgba(" + colorOnly[0] + "," + colorOnly[1] + "," + colorOnly[2]  + "," + "0.5)";
-        divToAppend.css({
-            'background-color': bgColor
-        });
+        if (colorString && colorString.indexOf("rgb")!== -1){
+            var colorOnly = colorString.substring(colorString.indexOf("(") + 1, colorString.lastIndexOf(")")).split(/, \s*/);
+            var bgColor = "rgba(" + colorOnly[0] + "," + colorOnly[1] + "," + colorOnly[2]  + "," + "0.5)";
+            divToAppend.css({
+                'background-color': bgColor
+            });
+        }
 
         var circle = showProgressCircle($(divToAppend), progressCircCSS, centerhor, centerver, false);
     }
@@ -584,9 +586,11 @@ TAG.Util = (function () {
     // hide specified div
     function hideLoading(divToHide) {
         var colorString = $(divToHide).css("background-color");
-        var colorOnly = colorString.substring(colorString.indexOf("(") + 1, colorString.lastIndexOf(")")).split(/, \s*/);
-        var bgColor = "rgba(" + colorOnly[0] + "," + colorOnly[1] + "," + colorOnly[2] + "," + "1)";
-        divToHide.css({ 'background-color': bgColor });
+        if (colorString && colorString.indexOf("rgb") !== -1) {
+            var colorOnly = colorString.substring(colorString.indexOf("(") + 1, colorString.lastIndexOf(")")).split(/, \s*/);
+            var bgColor = "rgba(" + colorOnly[0] + "," + colorOnly[1] + "," + colorOnly[2] + "," + "1)";
+            divToHide.css({ 'background-color': bgColor });
+        }
 
         var circle = divToHide.find('.progressCircle');
         removeProgressCircle(circle);
