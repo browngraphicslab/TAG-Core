@@ -1657,7 +1657,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     eventCircle = $(document.createElement('div'));  
                     eventCircle.addClass('timelineEventCircle')
                                 .css('left', positionOnTimeline + '%')
-                                .on('click', (function(art, eventCircle) {
+                                .on('mousedown', (function(art, eventCircle) {
                                     return function() {
                                     if (artworkShown === true && currentArtwork === art) {
                                         hideArtwork(art)();
@@ -1991,6 +1991,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 animateCatalogDiv();
             }
                 
+
         function animateCatalogDiv(){
             //scroll catalogDiv to center the current artwork
             catalogDiv.stop(true,false);
@@ -2007,59 +2008,51 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 duration = ANIMATION_DURATION/3;
                 newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
             }   
-                if (newScrollPos<0){
-                    newScrollPos = 0;
-                }
 
-
-                //Don't animate if not actually scrolling
-                if (parseInt(newScrollPos) === catalogDiv.scrollLeft()){
-                    duration = 0;
-                }
-
-                //For correctly scrolling when returning from an artwork
-                artwork.scrollPos = newScrollPos;
-
-                if (!(artworkTiles[artwork.Identifier])) {
-                    setTimeout(animateCatalogDiv, duration)
-                } else {
-                    catalogDiv.animate({
-                        scrollLeft: newScrollPos
-                    }, duration, "linear", function () {
-                        //center selectedArtworkContainer over current artwork thumbnail
-                        fillSelectedArtworkContainer();
-                        selectedArtworkContainer.css({
-                            'width' : getContainerWidth(artwork,showAllAtYear),
-                            'left' : getContainerLeft(artwork,showAllAtYear),
-                            'display': 'inline',
-                            'opacity':1
-                        });
-
-                        //add back handlers
-                        if (selectedArtworkContainer[0].addEventListener) {
-                            // IE9, Chrome, Safari, Opera
-                            selectedArtworkContainer[0].addEventListener("mousewheel", 
-                                function(e){
-                                    e.stopPropagation();
-                                }, false);
-                            // Firefox
-                            selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
-                                function(e){
-                                    e.stopPropagation();
-                                }, false);
-                        } else { 
-                            // IE 6/7/8
-                            selectedArtworkContainer[0].attachEvent("onmousewheel",
-                                function(e){
-                                    e.stopPropagation();
-                                }, false);
-                        }
-                        //selectedArtworkContainer.children().animate({"opacity": 1},ANIMATION_DURATION/5);
-                        scrollPos = tilePos;
-                    });
-                }
-                comingBack = false;
+            if (newScrollPos<0){
+                newScrollPos = 0;
             }
+            //Don't animate if not actually scrolling
+            if (parseInt(newScrollPos) === catalogDiv.scrollLeft()){
+                duration = 0;
+            }
+            catalogDiv.animate({
+                scrollLeft: newScrollPos
+            }, duration, "easeInOutQuint", function(){
+            //}, duration, null, function(){
+                //center selectedArtworkContainer over current artwork thumbnail
+                fillSelectedArtworkContainer();
+                selectedArtworkContainer.css({
+                    'width' : getContainerWidth(artwork,showAllAtYear),
+                    'left' : getContainerLeft(artwork,showAllAtYear),
+                    'display': 'inline',
+                    'opacity':1
+                });
+
+                //add back handlers
+                if (selectedArtworkContainer[0].addEventListener) {
+                    // IE9, Chrome, Safari, Opera
+                    selectedArtworkContainer[0].addEventListener("mousewheel", 
+                        function(e){
+                            e.stopPropagation();
+                        }, false);
+                    // Firefox
+                    selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
+                        function(e){
+                            e.stopPropagation();
+                        }, false);
+                } else { 
+                    // IE 6/7/8
+                    selectedArtworkContainer[0].attachEvent("onmousewheel",
+                        function(e){
+                            e.stopPropagation();
+                        }, false);
+                }
+                //selectedArtworkContainer.children().animate({"opacity": 1},ANIMATION_DURATION/5);
+                scrollPos = tilePos;
+                comingBack = false;
+            });
+        }
             currentArtwork = artwork;
             artworkSelected = true;
             artworkShown = true;
@@ -2103,9 +2096,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //If there are multiple artworks that should all be shown, selectedArtworkContainer will contain all of them and be larger
                 if (showAllAtYear && artworksForYear){
                     for (i = 0; i < artworksForYear.length; i++) {
-
-                        //For correctly scrolling when returning from an artwork
-                        artworksForYear[i].scrollPos = currentArtwork.scrollPos
                         newTile = createOnePreviewTile(artworksForYear[i],i);
                         newTile.css({
                             'left': (i * previewWidth) + 'px',
@@ -2823,7 +2813,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         collectionOptions = {
-            prevScroll: tour.scrollPos,
+            prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
             backCollection: currCollection,
             prevTag : currentTag,
@@ -2850,7 +2840,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         prevInfo = {
             artworkPrev: null,
-            prevScroll: video.scrollPos,
+            prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos : containerLeft || selectedArtworkContainer.position().left,
             prevTag: currentTag,
             prevMult: multipleShown
@@ -2925,9 +2915,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else { // deepzoom artwork
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
-                    prevPreview: artwork,
+                    prevPreview: currentArtwork,
                     prevTag : currentTag,
-                    prevScroll: artwork.scrollPos,
+                    prevScroll: catalogDiv.scrollLeft(),
                     prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
                     prevCollection: currCollection,
                     prevPage: 'catalog',
