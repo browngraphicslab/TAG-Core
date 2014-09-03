@@ -857,7 +857,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                         loadCollection(currCollection)();
                                     }
                                });
-
+                
                 assocMediaButton.off()
                                 .on('mousedown', function(){
                                     artworksButton.css('color', dimmedColor);
@@ -894,7 +894,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method loadFirstCollection
      */
     function loadFirstCollection() {
-        loadCollection(toShowFirst)();
+        loadCollection(toShowFirst, null,currentArtwork && currentArtwork)();
     }
 
     /*helper function to load sort tags
@@ -1175,8 +1175,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     });
                 tileDiv.append(paddingDiv);
             })
+       
             loadQueue.add(function () {
             	tileCircle.hide();
+            })
+            loadQueue.add(function () {
+                showArtwork(currentArtwork, multipleShown && multipleShown)();
             })
             tileDiv.css({'left': infoDiv.width()});
             if (infoDiv.width()===0){

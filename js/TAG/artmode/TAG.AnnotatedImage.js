@@ -1157,6 +1157,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Manipulation for touch and drag events
      */
         function mediaManip(res, evt, fromSeadragonControls) {
+            if (IS_XFADE) {
+                return;
+            }
             if (descscroll === true) {
                 return;
             }
