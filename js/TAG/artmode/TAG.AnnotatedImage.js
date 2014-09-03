@@ -1214,9 +1214,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 var offscreenBuffer = rootWidth / 8;
                 if (!(
                     (0 < finalPosition.y + height - offscreenBuffer) //top
-                    && (finalPosition.y + offscreenBuffer < rootHeight) //bottom
+                    && (finalPosition.y + offscreenBuffer < root.height()) //bottom
                     && (0 < finalPosition.x + width - offscreenBuffer) //left
-                    && (finalPosition.x + offscreenBuffer < rootWidth))) { //right
+                    && (finalPosition.x + offscreenBuffer < root.width()))) { //right
                     hideMediaObject();
                     pauseResetMediaObject();
                     return;
