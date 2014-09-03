@@ -1157,6 +1157,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Manipulation for touch and drag events
      */
         function mediaManip(res, evt, fromSeadragonControls) {
+            if (IS_XFADE) {
+                return;
+            }
             if (descscroll === true) {
                 return;
             }
@@ -1211,12 +1214,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
              * If object is not on screen, reset and hide it
              */
             function checkForOffscreen() {
-                var offscreenBuffer = rootWidth / 8;
+                var offscreenBuffer = root.width() / 8;
                 if (!(
                     (0 < finalPosition.y + height - offscreenBuffer) //top
-                    && (finalPosition.y + offscreenBuffer < rootHeight) //bottom
+                    && (finalPosition.y + offscreenBuffer < root.height()) //bottom
                     && (0 < finalPosition.x + width - offscreenBuffer) //left
-                    && (finalPosition.x + offscreenBuffer < rootWidth))) { //right
+                    && (finalPosition.x + offscreenBuffer < root.width()))) { //right
                     hideMediaObject();
                     pauseResetMediaObject();
                     return;

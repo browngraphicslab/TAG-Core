@@ -163,10 +163,12 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                 backPreviewPos : prevPreviewPos
             });
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
-				artworkPrev = "catalog";
+                artworkPrev = "catalog";
+                /**
                 if (collectionsPage.getState().exhibition === exhibition){  
                     collectionsPage.showArtwork(tourObj, prevMult && prevMult)();
                 }
+                **/
 			});
         
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
