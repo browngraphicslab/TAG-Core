@@ -572,11 +572,13 @@ TAG.Util = (function () {
             progressCircCSS.width = circleSize;
         }
         var colorString = $(divToAppend).css("background-color");
-        var colorOnly = colorString.substring(colorString.indexOf("(") + 1, colorString.lastIndexOf(")")).split(/, \s*/);
-        var bgColor = "rgba(" + colorOnly[0] + "," + colorOnly[1] + "," + colorOnly[2]  + "," + "0.5)";
-        divToAppend.css({
-            'background-color': bgColor
-        });
+        if (colorString && colorString.indexOf("rgb")!== -1){
+            var colorOnly = colorString.substring(colorString.indexOf("(") + 1, colorString.lastIndexOf(")")).split(/, \s*/);
+            var bgColor = "rgba(" + colorOnly[0] + "," + colorOnly[1] + "," + colorOnly[2]  + "," + "0.5)";
+            divToAppend.css({
+                'background-color': bgColor
+            });
+        }
 
         var circle = showProgressCircle($(divToAppend), progressCircCSS, centerhor, centerver, false);
     }
@@ -584,9 +586,11 @@ TAG.Util = (function () {
     // hide specified div
     function hideLoading(divToHide) {
         var colorString = $(divToHide).css("background-color");
-        var colorOnly = colorString.substring(colorString.indexOf("(") + 1, colorString.lastIndexOf(")")).split(/, \s*/);
-        var bgColor = "rgba(" + colorOnly[0] + "," + colorOnly[1] + "," + colorOnly[2] + "," + "1)";
-        divToHide.css({ 'background-color': bgColor });
+        if (colorString && colorString.indexOf("rgb") !== -1) {
+            var colorOnly = colorString.substring(colorString.indexOf("(") + 1, colorString.lastIndexOf(")")).split(/, \s*/);
+            var bgColor = "rgba(" + colorOnly[0] + "," + colorOnly[1] + "," + colorOnly[2] + "," + "1)";
+            divToHide.css({ 'background-color': bgColor });
+        }
 
         var circle = divToHide.find('.progressCircle');
         removeProgressCircle(circle);
@@ -4559,7 +4563,12 @@ TAG.Util.RLH = function (input) {
                         'font-size':'110%'
                     })
                     .appendTo(metadataContainer);
-
+            nameInput.on('keyup', function () {
+                var txt = (nameInput && nameInput[0] && nameInput[0].value) ? nameInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                if (nameInput && nameInput[0] && nameInput[0].value && nameInput[0].value != txt) {
+                    nameInput[0].value = txt;
+                }
+            });
             additionalInfoInput = $(document.createElement('input'))
                         .attr({
                             id: 'locationHistoryAdditionalInfoInput',
@@ -4575,7 +4584,12 @@ TAG.Util.RLH = function (input) {
                             'font-size': '110%'
                         })
                         .appendTo(metadataContainer);
-
+            additionalInfoInput.on('keyup', function () {
+                var txt = (additionalInfoInput && additionalInfoInput[0] && additionalInfoInput[0].value) ? additionalInfoInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                if (additionalInfoInput && additionalInfoInput[0] && additionalInfoInput[0].value && additionalInfoInput[0].value != txt) {
+                    additionalInfoInput[0].value = txt;
+                }
+            });
             saveMapButton = $(document.createElement('button'))
                             .attr({
                                 id: 'locationHistorySaveMapButton',
@@ -4995,7 +5009,7 @@ TAG.Util.RLH = function (input) {
                 removeLoadingOverlay();
             }
         };
-        mapGuids = (defaultMapShown || input.authoring) ? [null] : [];
+        mapGuids = (defaultMapShown || input.authoring) ? [null] : [null];
         TAG.Worktop.Database.getMaps(artwork.Identifier, function (mps) {
             var mapslength = mps.length;
             if (mapslength > 0) {
@@ -6135,6 +6149,7 @@ TAG.Util.RLH = function (input) {
 
             titleContainer = $(document.createElement('div')).addClass('locationOptionsContainer'),
             titleInput = $(document.createElement('input')).addClass('locationTitleInput'),
+
             titleLabel = $(document.createElement('div')).addClass('locationLabel').text('Location Title'),
 
             dateContainer = $(document.createElement('div')).addClass('locationOptionsContainer'),
@@ -6167,6 +6182,26 @@ TAG.Util.RLH = function (input) {
                     mapguid: mapguid
                 });
             };
+        titleInput.on('keyup', function () {
+            var txt = (titleInput && titleInput[0] && titleInput[0].value) ? titleInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            if (titleInput && titleInput[0] && titleInput[0].value && titleInput[0].value != txt) {
+                titleInput[0].value = txt;
+            }
+        });
+
+        dateInput.on('keyup', function () {
+            var txt = (dateInput && dateInput[0] && dateInput[0].value) ? dateInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            if (dateInput && dateInput[0] && dateInput[0].value && dateInput[0].value != txt) {
+                dateInput[0].value = txt;
+            }
+        });
+
+        descInput.on('keyup', function () {
+            var txt = (descInput && descInput[0] && descInput[0].value) ? descInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            if (descInput && descInput[0] && descInput[0].value && descInput[0].value != txt) {
+                descInput[0].value = txt;
+            }
+        });
 
         if (!custom) {
             if (!location || index < 0 || index >= locations.length) {

@@ -284,6 +284,7 @@ TAG.Auth = (function () {
             'height': '15%',
             'left': '10%',
             'top': '12.5%',
+            'font-size': '50%',
             //'font-size': '1.25em',
             'position': 'relative',
             'text-align': 'center',
@@ -302,8 +303,8 @@ TAG.Auth = (function () {
             display: 'block',
             'position':'relative',
             margin: 'auto',
-            'margin-top': '6%',
-            'margin-bottom': '6%'
+            'margin-top': '8%',
+            'margin-bottom': '4%'
         });
 
 
@@ -316,6 +317,7 @@ TAG.Auth = (function () {
             'margin-bottom': '10px',
             'left': '10%',
             'width': '80%',
+            'font-size': '50%',
             'text-align': 'center',
             'bottom': '25%',
             'position': 'absolute',

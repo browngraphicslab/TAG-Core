@@ -2012,23 +2012,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (newScrollPos<0){
                 newScrollPos = 0;
             }
-
-
             //Don't animate if not actually scrolling
             if (parseInt(newScrollPos) === catalogDiv.scrollLeft()){
                 duration = 0;
             }
-
-            //For correctly scrolling when returning from an artwork
-            artwork.scrollPos = newScrollPos;
-
-            if (!(artworkTiles[artwork.Identifier])) {
-                setTimeout(animateCatalogDiv, duration)
-            }
-
             catalogDiv.animate({
                 scrollLeft: newScrollPos
-            }, duration, "linear", function () {
+            }, duration, "easeInOutQuint", function(){
+            //}, duration, null, function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
                 selectedArtworkContainer.css({
@@ -2105,9 +2096,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //If there are multiple artworks that should all be shown, selectedArtworkContainer will contain all of them and be larger
                 if (showAllAtYear && artworksForYear){
                     for (i = 0; i < artworksForYear.length; i++) {
-
-                        //For correctly scrolling when returning from an artwork
-                        artworksForYear[i].scrollPos = currentArtwork.scrollPos
                         newTile = createOnePreviewTile(artworksForYear[i],i);
                         newTile.css({
                             'left': (i * previewWidth) + 'px',
@@ -2825,7 +2813,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         collectionOptions = {
-            prevScroll: tour.scrollPos,
+            prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
             backCollection: currCollection,
             prevTag : currentTag,
@@ -2852,7 +2840,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         prevInfo = {
             artworkPrev: null,
-            prevScroll: video.scrollPos,
+            prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos : containerLeft || selectedArtworkContainer.position().left,
             prevTag: currentTag,
             prevMult: multipleShown
@@ -2927,9 +2915,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else { // deepzoom artwork
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
-                    prevPreview: artwork,
+                    prevPreview: currentArtwork,
                     prevTag : currentTag,
-                    prevScroll: artwork.scrollPos,
+                    prevScroll: catalogDiv.scrollLeft(),
                     prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
                     prevCollection: currCollection,
                     prevPage: 'catalog',

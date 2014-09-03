@@ -322,7 +322,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         src = ((mediadoq.Metadata.Thumbnail && !mediadoq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg');
                         break;
                     case 'Image':
-                        src = (mediadoq.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg');
+                        if (mediadoq.Metadata.Thumbnail) {
+                            src= TAG.Worktop.Database.fixPath(mediadoq.Metadata.Thumbnail);
+                        }else if (mediadoq.Metadata.Source){
+                            src = TAG.Worktop.Database.fixPath(mediadoq.Metadata.Source);
+                        } else {
+                            src=tagPath + 'images/image_icon.svg';
+                        }
                         break;
                     case 'iframe':
                         src = tagPath + 'images/video_icon.svg';
@@ -1870,7 +1876,18 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'height': '5%',//
                     })
                     .appendTo($rightbar);
-            
+            $descArea.on('keyup', function () {
+                var txt = ($descArea && $descArea[0] && $descArea[0].value) ? $descArea[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                if ($descArea && $descArea[0] && $descArea[0].value && $descArea[0].value!=txt) {
+                    $descArea[0].value = txt;
+                }
+            });
+            $titleText.on('keyup', function () {
+                var txt = ($titleText && $titleText[0] && $titleText[0].value) ? $titleText[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                if ($titleText && $titleText[0] && $titleText[0].value && $titleText[0].value!=txt) {
+                    $titleText[0].value = txt;
+                }
+            });
             $saveAssocMediaButton.on("mousedown", function () {
                 $saveAssocMediaButton.css({ "background-color": "white", "color": "black" });
 
@@ -2306,6 +2323,18 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'border': "0px solid black",
                 });
             }// else {
+            textarea.on('keyup', function () {
+                var txt = (textarea && textarea[0] && textarea[0].value) ? textarea[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                if (textarea && textarea[0] && textarea[0].value && textarea[0].value!=txt) {
+                    textarea[0].value = txt;
+                }
+            });
+            fieldTitle.on('keyup', function () {
+                var txt = (fieldTitle && fieldTitle[0] && fieldTitle[0].value) ? fieldTitle[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                if (fieldTitle && fieldTitle[0] && fieldTitle[0].value && fieldTitle[0].value!=txt) {
+                    fieldTitle[0].value = txt;
+                }
+            });
             textarea.change(function () {
                 shouldSave = true;
             })

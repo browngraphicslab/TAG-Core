@@ -6468,7 +6468,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function createTextInput(text, defaultval, maxlength, hideOnClick, readonly, onlyNumbers) {
         var input = $(document.createElement('input')).val(text);
         onlyNumbers = onlyNumbers || false;
-        
+        input.on('keyup', function () {
+            var txt = (input && input[0] && input[0].value) ? input[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            if (input && input[0] && input[0].value && input[0].value!=txt) {
+                input[0].value = txt;
+            }
+        });
         if (onlyNumbers) {
             input.on('keypress', function (event) {
                 return (event.charCode >= 48 && event.charCode <= 57);
@@ -6505,9 +6510,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          input.css({
              'overflow': 'hidden',
          });
-         input.bind('copy paste', function (e) {
+         /*input.bind('copy paste', function (e) {
              e.preventDefault();
-         });
+         });*/
         //input.autoSize();
         doWhenReady(input, function (elem) {
             if (input[0].scrollHeight<=(root.find('#setViewSettingsContainer').height() * 0.5)){
@@ -6519,11 +6524,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             $(input).css('height', realHeight + 'px');
         });
         input.on('keyup', function () {
+            var txt = (input && input.text()) ? input.text().replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (input[0].scrollHeight <= (root.find('#setViewSettingsContainer').height() * 0.5)) {
                 var realHeight = input[0].scrollHeight;
             }
             else {
                 var realHeight = root.find('#setViewSettingsContainer').height() * 0.5;
+            }
+            if (input && input.text() && input.text()!=txt) {
+                input.text(txt);
             }
             $(input).css('height', realHeight + 'px');
         });
