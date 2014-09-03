@@ -1211,7 +1211,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
              * If object is not on screen, reset and hide it
              */
             function checkForOffscreen() {
-                var offscreenBuffer = rootWidth / 8;
+                var offscreenBuffer = root.width() / 8;
                 if (!(
                     (0 < finalPosition.y + height - offscreenBuffer) //top
                     && (finalPosition.y + offscreenBuffer < root.height()) //bottom
