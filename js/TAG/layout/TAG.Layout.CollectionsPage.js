@@ -1657,7 +1657,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     eventCircle = $(document.createElement('div'));  
                     eventCircle.addClass('timelineEventCircle')
                                 .css('left', positionOnTimeline + '%')
-                                .on('mousedown', (function(art, eventCircle) {
+                                .on('click', (function(art, eventCircle) {
                                     return function() {
                                     if (artworkShown === true && currentArtwork === art) {
                                         hideArtwork(art)();
