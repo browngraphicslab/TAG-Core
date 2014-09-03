@@ -76,6 +76,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         timelineShown = true,                             // whether current collection has a timeline
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
+        artworkInCollectionList = [],
 
         // constants
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
@@ -1006,6 +1007,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
          * @param {Array} contents     array of doq objects for each of the contents of this collection
          */
         function contentsHelper(contents) {
+            artworkInCollectionList = [];
+            for (var i = 0; i < contents.length; i++){
+                artworkInCollectionList.push(contents[i].Identifier);
+            }
             if (!contents.length) {
                 var emptyCollectionDiv = $(document.createElement('div'));
                 emptyCollectionDiv.addClass("primaryFont");
@@ -2333,26 +2338,30 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         thumb;
                     numberAssociatedDoqs = doqs.length;
                     //Loop through media doqs and create tiles from them
-                    for (i=0; i<doqs.length;i++){
+                    for (i = 0; i < doqs.length; i++) {
+                        if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier)==-1) {
+                            continue;
+                        }
                         src = '';
                         metadata = doqs[i].Metadata;
                         thumb = metadata.Thumbnail;
 
                         !onAssocMediaView && (doqs[i].artwork = artwork);
+
                         miniTile = $(document.createElement('img'))
                             .addClass('miniTile')
                             .css({
-                                'width': .35*(.45*selectedArtworkContainer.height())
+                                'width': .35 * (.45 * selectedArtworkContainer.height())
                             })
-                            .on('mousedown', 
+                            .on('mousedown',
                                     onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
                                 )
-                        miniTile.css('left', i*(miniTile.width() + miniTilesHolder.height()/10));
+                        miniTile.css('left', i * (miniTile.width() + miniTilesHolder.height() / 10));
 
 
                         switch (metadata.ContentType) {
                             case 'Audio':
-                                src = tagPath+'images/audio_icon.svg';
+                                src = tagPath + 'images/audio_icon.svg';
                                 break;
                             case 'Video':
                                 src = (thumb && !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : tagPath + 'images/video_icon.svg';
@@ -2389,10 +2398,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             } else {
                                 src = tagPath + 'images/no_thumbnail.svg';
                             }
-                        	
+
                         }
                         miniTile.attr("src", src);
-                        miniTilesHolder.append(miniTile)
+                        miniTilesHolder.append(miniTile);
+                        
                     }   
                 	addAssociationRow(numberAssociatedDoqs); 
                     TAG.Util.removeProgressCircle(circle);                 
