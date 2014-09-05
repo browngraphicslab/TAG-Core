@@ -3732,6 +3732,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 Name: "Untitled Embedded Video"
             };
             TAG.Worktop.Database.createIframeAssocMedia(options, onSuccess);
+        } else {
+            loadAssocMediaView();
         }
         function onSuccess(doqData) {
             var newDoq = new Worktop.Doq(doqData.responseText);
