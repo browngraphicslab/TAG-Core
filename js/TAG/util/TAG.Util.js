@@ -2080,7 +2080,9 @@ TAG.Util.UI = (function () {
         });
         serverDialog.append(serverDialogInput);
         serverDialogInput.on('keydown', function(evt) {
-            if (evt.which === 13 && serverDialog.length>0) {
+            if (evt.which === 13 && serverDialog.length > 0) {
+                evt.stopPropagation();
+                evt.preventDefault();
                 saveClick();
             }
         });
