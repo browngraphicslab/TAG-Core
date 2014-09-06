@@ -89,8 +89,10 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         // collectionsPage.getRoot().css({ 'overflow-x': 'hidden' }); // TODO should be default in .styl file
         TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
             artworkPrev = "catalog";
-            if (collectionsPage.getState().exhibition === collection){  
-                collectionsPage.showArtwork(videoSrc, prevMult && prevMult)();
+            if (!IS_WINDOWS) {
+                if (collectionsPage.getState().exhibition === collection) {
+                    collectionsPage.showArtwork(videoSrc, prevMult && prevMult)();
+                }
             }
         });
 
