@@ -1184,9 +1184,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             loadQueue.add(function () {
             	tileCircle.hide();
             })
+            if (IS_WINDOWS){
             loadQueue.add(function () {
                 showArtwork(currentArtwork, multipleShown && multipleShown)();
             })
+            }
             tileDiv.css({'left': infoDiv.width()});
             if (infoDiv.width()===0){
                 tileDiv.css({'margin-left':'2%'});
