@@ -45,6 +45,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         viewer,
         assetCanvas;
 
+
+    var xFadeOffset;
+
     // get things rolling
     init();
 
@@ -214,11 +217,98 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         dzManipPreprocessing();
 
         if (!artworkFrozen) {
-            viewer.viewport.zoomBy(scale, viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)), false);
-            viewer.viewport.panBy(viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(trans.x, trans.y)), false);
+            var pivotRel = viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y));
+            var piv = {
+                x: pivotRel.x,
+                y: pivotRel.y
+            };
+            var transRel = viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(trans.x, trans.y));
+            if (xFadeOffset) {
+                
+                // testing 
+                //var zoom = viewer.viewport.getZoom(true);
+
+                //var correctionRel = new Seadragon.Point(xFadeOffset.x * 1/zoom, xFadeOffset.y * 1/zoom) // ver 1
+                //var correctionRel = new Seadragon.Point(xFadeOffset.x, xFadeOffset.y); // ver 2
+
+                //var correctionAbs = viewer.viewport.pixelFromPoint(correctionRel);
+                
+                //var pivotCorrectedRel = new Seadragon.Point(pivotRel.x - correctionRel.x, pivotRel.y - correctionRel.y);
+
+                //var pivotCorrectedAbs = viewer.viewport.pixelFromPoint(pivotCorrectedRel); // ver 1
+                //var pivotCorrectedAbs = new Seadragon.Point(pivot.x + correctionAbs.x, pivot.y + correctionAbs.y); // ver 2
+                //var pivotFinal = viewer.viewport.pointFromPixel(pivotCorrectedAbs);
+
+                // begin diagnostic markers
+                /*
+                if (!correctedMarker) {
+                    correctedMarker = $(document.createElement('div'));
+                    correctedMarker.css({
+                        width: "5px",
+                        height: "5px",
+                        background: "rgb(0, 0, 255)",
+                        position: "absolute",
+                        "z-index": "999999"
+                    });
+                    $('body').append(correctedMarker);
+                }
+                correctedMarker.css({
+                    top: pivotCorrectedAbs.y + "px",
+                    left: pivotCorrectedAbs.x + "px"
+                });
+
+                if (!pivotMarker) {
+                    pivotMarker = $(document.createElement('div'));
+                    pivotMarker.css({
+                        width: "5px",
+                        height: "5px",
+                        background: "rgb(255, 0, 0)",
+                        position: "absolute",
+                        "z-index": "999999"
+                    });
+                    $('body').append(pivotMarker);
+                }
+                pivotMarker.css({
+                    top: pivot.y + "px",
+                    left: pivot.x + "px"
+                });
+                */
+                // end diagnostic markers
+
+                // hacky fix - can't pan while you zoom otherwise stuff blows up
+                if (scale !== 1) {
+                    viewer.viewport.zoomBy(scale, piv, false);
+                } else {
+                    viewer.viewport.panBy(transRel, false);
+                }
+            } else {
+                // begin diagnostic markers
+                /*
+                if (!pivotMarker) {
+                    pivotMarker = $(document.createElement('div'));
+                    pivotMarker.css({
+                        width: "5px",
+                        height: "5px",
+                        background: "rgb(255, 0, 0)",
+                        position: "absolute",
+                        "z-index": "999999"
+                    });
+                    $('body').append(pivotMarker);
+                }
+                pivotMarker.css({
+                    top: pivot.y + "px",
+                    left: pivot.x + "px"
+                });
+                */
+                // end diagnostic markers
+                viewer.viewport.zoomBy(scale, pivotRel, false);
+                viewer.viewport.panBy(transRel, false);
+            }
+            
             viewer.viewport.applyConstraints();
         }
     }
+}
 
     function freezeArtwork() {
         artworkFrozen = true;
@@ -977,7 +1067,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 y = parseFloat(linq.Offset._y || 0);
                 w = parseFloat(linq.Dimensions._x || 50);
                 h = parseFloat(linq.Dimensions._y || 50);
-
+                xFadeOffset = {
+                    x: x,
+                    y: y
+                }
                 rect = new Seadragon.Rect(x, y, w, h);
 
                 viewer.drawer.addOverlay(outerContainer[0], rect);
