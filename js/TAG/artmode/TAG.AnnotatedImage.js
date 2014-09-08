@@ -1053,7 +1053,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 });
                 $mediaElt.css({
                     height: '100%',
-                    opacity: 0.5,
                     position: 'absolute',
                     width: '100%'
                 });
@@ -1217,12 +1216,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 x: w / 2,// - (outerContainer.offset().left - root.offset().left),
                 y: h / 2// - (outerContainer.offset().top - root.offset().top)
             };
-            toManip = mediaManip;
-            $('.mediaOuterContainer').css('z-index', 1000);
-            outerContainer.css('z-index', 1001);
+            if (IS_XFADE) {
+                toManip = dzManip;
+            } else {
+                toManip = mediaManip;
+                $('.mediaOuterContainer').css('z-index', 1000);
+                outerContainer.css('z-index', 1001);
+            }
             TAG.Util.IdleTimer.restartTimer();
         }
-
         //When the associated media is clicked, set it to active(see mediaManipPreprocessing() above )
         outerContainer.on('click mousedown', function (event) {
             event.stopPropagation();            //Prevent the click going through to the main container
@@ -1249,9 +1251,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * Manipulation for touch and drag events
      */
         function mediaManip(res, evt, fromSeadragonControls) {
-            if (IS_XFADE) {
-                return;
-            }
             if (descscroll === true) {
                 return;
             }
@@ -1416,6 +1415,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 //console.log(appending);
                 //assetCanvas.append(outerContainer);
                 outerContainer.show();
+                root.find('.xfadeImg').css("opacity", root.find('#xfadeSliderPoint').width() / root.find('#xfadeSlider').width());
+
             } else {
                 //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
                 if (IS_HOTSPOT) {

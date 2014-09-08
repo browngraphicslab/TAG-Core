@@ -769,7 +769,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 curr = associatedMedia[associatedMedia.guids[i]];
                 if (curr.linq.Metadata.Type === 'Layer') {
                     if (!xfadeDrawer) {
-                        xfadeSlider = $(document.createElement('div'));
+                        xfadeSlider = $(document.createElement('div'))
+                            .attr('id', 'xfadeSlider');
                         xfadeSlider.css({
                             border: '2px solid rgba(255,255,255,0.8)',
                             height: '25px',
@@ -778,7 +779,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                             position: 'relative',
                             width: '80%'
                         });
-                        xfadeSliderPoint = $(document.createElement('div'));
+                        xfadeSliderPoint = $(document.createElement('div'))
+                            .attr('id', 'xfadeSliderPoint');
                         xfadeSliderPoint.css({
                             'background-color': 'rgba(255,255,255,0.8)',
                             height: '100%',
@@ -792,8 +794,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         var updateOverlay = function(evt){
                             if (isFading){
                                 var leftPercent =  (evt.clientX - xfadeSlider.offset().left)/ xfadeSlider.width();
-                                xfadeSliderPoint.css('width', leftPercent * 100 + '%');
-                                $('.xfadeImg').css('opacity', leftPercent);
+                                xfadeSliderPoint.css('width', Math.min(leftPercent * 100, 100) + '%');
+                                root.find('.xfadeImg').css('opacity', leftPercent);
                             }
                         }
 
