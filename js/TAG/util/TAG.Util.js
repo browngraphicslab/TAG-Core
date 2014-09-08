@@ -1556,6 +1556,8 @@ TAG.Util = (function () {
             //use our deprecated function for now if error thrown
             return encodeXML(str);
         }*/
+        
+        encodeText(str || "");
         return str || "";
     }
 
@@ -1565,6 +1567,11 @@ TAG.Util = (function () {
         } catch (e) {
             return str ? unescape($('<div />').html(str).text()) : '';
         }*/
+        try {
+            return str ? decodeURIComponent($('<div />').html(str).text()) : '';
+        } catch (e) {
+            return str ? unescape($('<div />').html(str).text()) : '';
+        }
         return str || "";
     }
 
