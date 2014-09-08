@@ -1567,11 +1567,6 @@ TAG.Util = (function () {
         } catch (e) {
             return str ? unescape($('<div />').html(str).text()) : '';
         }*/
-        try {
-            return str ? decodeURIComponent($('<div />').html(str).text()) : '';
-        } catch (e) {
-            return str ? unescape($('<div />').html(str).text()) : '';
-        }
         return str || "";
     }
 
