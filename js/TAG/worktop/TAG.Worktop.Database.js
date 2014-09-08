@@ -916,7 +916,7 @@ TAG.Worktop.Database = (function () {
             body = "Boundary:" + boundary;
             boundary = "\r\n" + boundary + "\r\n";
             $.each(bodyOptions, function (key, val) {
-                body = body + boundary + key + ":" + val;
+                body = body + boundary + key + ":" + escape(val);
             });
         }
 

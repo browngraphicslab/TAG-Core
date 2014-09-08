@@ -1556,6 +1556,8 @@ TAG.Util = (function () {
             //use our deprecated function for now if error thrown
             return encodeXML(str);
         }*/
+        
+        encodeText(str || "");
         return str || "";
     }
 
