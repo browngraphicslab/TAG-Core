@@ -4567,12 +4567,12 @@ TAG.Util.RLH = function (input) {
                         'font-size':'110%'
                     })
                     .appendTo(metadataContainer);
-            nameInput.on('keyup', function () {
+            /*nameInput.on('keyup', function () {
                 var txt = (nameInput && nameInput[0] && nameInput[0].value) ? nameInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if (nameInput && nameInput[0] && nameInput[0].value && nameInput[0].value != txt) {
                     nameInput[0].value = txt;
                 }
-            });
+            });*/
             additionalInfoInput = $(document.createElement('input'))
                         .attr({
                             id: 'locationHistoryAdditionalInfoInput',
@@ -4588,12 +4588,12 @@ TAG.Util.RLH = function (input) {
                             'font-size': '110%'
                         })
                         .appendTo(metadataContainer);
-            additionalInfoInput.on('keyup', function () {
+            /*additionalInfoInput.on('keyup', function () {
                 var txt = (additionalInfoInput && additionalInfoInput[0] && additionalInfoInput[0].value) ? additionalInfoInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if (additionalInfoInput && additionalInfoInput[0] && additionalInfoInput[0].value && additionalInfoInput[0].value != txt) {
                     additionalInfoInput[0].value = txt;
                 }
-            });
+            });*/
             saveMapButton = $(document.createElement('button'))
                             .attr({
                                 id: 'locationHistorySaveMapButton',
@@ -6186,7 +6186,7 @@ TAG.Util.RLH = function (input) {
                     mapguid: mapguid
                 });
             };
-        titleInput.on('keyup', function () {
+        /*titleInput.on('keyup', function () {
             var txt = (titleInput && titleInput[0] && titleInput[0].value) ? titleInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (titleInput && titleInput[0] && titleInput[0].value && titleInput[0].value != txt) {
                 titleInput[0].value = txt;
@@ -6205,7 +6205,7 @@ TAG.Util.RLH = function (input) {
             if (descInput && descInput[0] && descInput[0].value && descInput[0].value != txt) {
                 descInput[0].value = txt;
             }
-        });
+        });*/
 
         if (!custom) {
             if (!location || index < 0 || index >= locations.length) {

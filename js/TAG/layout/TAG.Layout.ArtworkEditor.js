@@ -1876,7 +1876,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'height': '5%',//
                     })
                     .appendTo($rightbar);
-            $descArea.on('keyup', function () {
+            /*$descArea.on('keyup', function () {
                 var txt = ($descArea && $descArea[0] && $descArea[0].value) ? $descArea[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if ($descArea && $descArea[0] && $descArea[0].value && $descArea[0].value!=txt) {
                     $descArea[0].value = txt;
@@ -1887,7 +1887,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 if ($titleText && $titleText[0] && $titleText[0].value && $titleText[0].value!=txt) {
                     $titleText[0].value = txt;
                 }
-            });
+            });*/
             $saveAssocMediaButton.on("mousedown", function () {
                 $saveAssocMediaButton.css({ "background-color": "white", "color": "black" });
 
@@ -2323,7 +2323,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'border': "0px solid black",
                 });
             }// else {
-            textarea.on('keyup', function () {
+            /*textarea.on('keyup', function () {
                 var txt = (textarea && textarea[0] && textarea[0].value) ? textarea[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if (textarea && textarea[0] && textarea[0].value && textarea[0].value!=txt) {
                     textarea[0].value = txt;
@@ -2334,7 +2334,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 if (fieldTitle && fieldTitle[0] && fieldTitle[0].value && fieldTitle[0].value!=txt) {
                     fieldTitle[0].value = txt;
                 }
-            });
+            });*/
             textarea.change(function () {
                 shouldSave = true;
             })
