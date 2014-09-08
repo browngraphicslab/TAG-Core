@@ -308,7 +308,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             viewer.viewport.applyConstraints();
         }
     }
-}
 
     function freezeArtwork() {
         artworkFrozen = true;
