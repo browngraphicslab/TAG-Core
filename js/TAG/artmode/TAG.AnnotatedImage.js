@@ -871,7 +871,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'height':   '100%',
                 'background-color': '#3cf',
                 'width':    '0%',
-                'left':     '0%'
+                'left':     '0%',
+                'max-width' : '100%'
             });
 
             vol.css({
