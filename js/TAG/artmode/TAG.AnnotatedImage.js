@@ -693,6 +693,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             IS_XFADE = linq.Metadata.Type ? (linq.Metadata.Type === "Layer") : false,
             X = parseFloat(linq.Offset._x),
             Y = parseFloat(linq.Offset._y),
+            position = new Seadragon.Point(X, Y),
+            rect,   //For layer
             TITLE = TAG.Util.htmlEntityDecode(mdoq.Name),
             CONTENT_TYPE = mdoq.Metadata.ContentType,
             SOURCE = mdoq.Metadata.Source,
@@ -781,7 +783,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 // create hotspot circle if need be
                 if (IS_HOTSPOT) {
                     circle = $(document.createElement("img"));
-                    position = new Seadragon.Point(X, Y);
                     circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
                     circle.addClass('annotatedImageHotspotCircle');
                     circle.click(function () {
@@ -1037,8 +1038,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 x,
                 y,
                 w,
-                h,
-                rect;
+                h;
+                //rect;
 
             if(!mediaLoaded) {
                 mediaLoaded = true;
@@ -1416,7 +1417,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 //assetCanvas.append(outerContainer);
                 outerContainer.show();
                 root.find('.xfadeImg').css("opacity", root.find('#xfadeSliderPoint').width() / root.find('#xfadeSlider').width());
-
+                viewer.viewport.fitBounds(rect, false);
+                viewer.viewport.applyConstraints()
             } else {
                 //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
                 if (IS_HOTSPOT) {
@@ -1426,7 +1428,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     viewer.viewport.applyConstraints()
                     t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
                     l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
-                } else {
+                }
+                 else {
                     (root.data('split') === 'R') && (splitscreenOffset =  - root.find('#sideBar').width());
                     (root.data('split') === 'L') && (splitscreenOffset =   root.find('#sideBar').width());
                     t = root.height() * 1 / 10 + Math.random() * root.height() * 2 / 10;
