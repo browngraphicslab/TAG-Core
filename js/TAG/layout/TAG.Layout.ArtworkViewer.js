@@ -218,7 +218,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             if (!TAG.Util.Splitscreen.isOn()) {
                 if (isOpen) {
                     locationPanelDiv.animate({ width: '0%' }, 350, function () {
-                        locHistory.text("Related Maps");
+                        locHistory.text("Maps");
                         locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
                         locHistoryContainer.css({ "background-color": "transparent" });
                         locationPanelDiv.hide();
@@ -256,7 +256,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         splitscreenContainer.append(splitscreenIcon);
 
-        var splitScreenLabel = $(document.createElement('div')).css({'font-size':'40%', 'bottom':'0%', 'margin-top':'-2%'}).text('Splitscreen Mode').appendTo(splitscreenContainer);
+        var splitScreenLabel = $(document.createElement('div')).css({'font-size':'40%', 'bottom':'0%', 'margin-top':'-2%'}).text('Splitscreen').appendTo(splitscreenContainer);
 
         root.append(splitscreenContainer);
         if (TAG.Util.Splitscreen.isOn()) {
@@ -1379,7 +1379,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function locationClose() {
             if (isOpen) {
                 toggle.attr("src", tagPath+'images/icons/plus.svg');      
-                locHistory.text("Related Maps");
+                locHistory.text("Maps");
                 locHistoryContainer.css({ "background-color": "transparent" });
                 isOpen = false;
                 locationPanelDiv.animate({ width: '0%' }, 350, function () { locationPanelDiv.hide(); locHistoryToggle.hide(); toggler.show(); });

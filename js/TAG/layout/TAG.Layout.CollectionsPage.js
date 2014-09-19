@@ -2248,6 +2248,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({ 
                     'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
                     'color': SECONDARY_FONT_COLOR,
+                    'font-style':'italic'
                     //'font-family': FONT
                 });
 
@@ -2257,12 +2258,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({ 
                     'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
                     'color': SECONDARY_FONT_COLOR,
+                    'font-style': 'italic'
                     //'font-family': FONT
                 });
 
                 //Set texts of labels
                 if (artwork.Type !== "Empty") {
-                    artwork.Metadata.Artist ? artText = "Artist:  " + artwork.Metadata.Artist : artText = ' ';
+                    artwork.Metadata.Artist ? artText = "" + artwork.Metadata.Artist : artText = ' ';
                     artistInfo.text(artText);
                     yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
                 } else {
