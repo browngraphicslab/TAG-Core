@@ -211,6 +211,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
 
     function dzManip(res) {
+
+        if (disableZoomRLH) { return; }
+
         var scale = res.scale,
             trans = res.translation,
             pivot = res.pivot;
