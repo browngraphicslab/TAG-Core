@@ -39,6 +39,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         artworkFrozen = false,
         descscroll = false,
         scrollingMedia = false,
+        disableZoomRLH = options.disableZoom,
 
         // misc uninitialized variables
         viewerelt,
@@ -324,14 +325,16 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @param {Object} pivot          location of event (x,y)
      */
     function dzScroll(scale, pivot) {
-        dzManip({
-            scale: scale,
-            translation: {
-                x: 0,
-                y: 0
-            },
-            pivot: pivot
-        });
+        if (!disableZoomRLH) {
+            dzManip({
+                scale: scale,
+                translation: {
+                    x: 0,
+                    y: 0
+                },
+                pivot: pivot
+            });
+        }
     }
 
     /**

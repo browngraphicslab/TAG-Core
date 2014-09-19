@@ -4485,7 +4485,7 @@ TAG.Util.RLH = function (input) {
      */
     function init() {
         // get data and initialize maps and locations
-        richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(artwork.Metadata.RichLocationHistory) : locationToRichLocation(artwork.Metadata.Location);
+        richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(unescape(artwork.Metadata.RichLocationHistory)) : locationToRichLocation(artwork.Metadata.Location);
         locations = richLocationData.locations || [];
         defaultMapShown = richLocationData.defaultMapShown;
         currentIndex = 0;
@@ -5702,7 +5702,8 @@ TAG.Util.RLH = function (input) {
                             input.loadCallback && input.loadCallback();
                     }
                 },
-                noMedia     :   true
+                noMedia: true,
+                disableZoom : true
             });
         }
 
@@ -6507,7 +6508,7 @@ TAG.Util.RLH = function (input) {
         function success() {
             TAG.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
                 artwork = newArtwork;
-                richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(artwork.Metadata.RichLocationHistory) : locationToRichLocation(artwork.Metadata.Location);
+                richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(unescape(artwork.Metadata.RichLocationHistory)) : locationToRichLocation(artwork.Metadata.Location);
                 locations = richLocationData.locations || [];
                 !input.noReload && getMaps(input.callback);
                 enableButtons();
