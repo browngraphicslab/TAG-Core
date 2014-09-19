@@ -365,12 +365,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method initZoom
     */
     function initZoom() {
-        viewerelt && function () {
-            viewerelt.on('dblclick', function () {
-                zoomToPoint();
-            });
-        }();
-        console.log('error in initzoom');
+        if (!disableZoomRLH) {
+            viewerelt && function () {
+                viewerelt.on('dblclick', function () {
+                    zoomToPoint();
+                });
+            }();
+        }
     }
 
     /**
