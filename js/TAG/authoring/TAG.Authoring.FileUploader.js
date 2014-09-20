@@ -630,7 +630,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     function error(err) {
         var shouldContinue = false,
             popup;
-        if (err.message.split(" ")[0] !== "Unauthorized") {
+        if (err.message.split(" ")[0] === "Unauthorized") {
             removeOverlay();
             console.log("unauthorized");
             TAG.Auth.authenticate(
