@@ -754,7 +754,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     titleDiv = $(document.createElement('div'));
                     titleDiv.addClass('annotatedImageMediaTitle');//.css({'text-overflow':'ellipsis','white-space':'nowrap'});
                     titleDiv.text(TITLE);
+                    titleDiv.css('width', '95%');
 
+                    var closeButton = createCloseButton();
+                    titleDiv.append(closeButton[0]);
+                    closeButton.on('click', function (evt) {
+                        evt.stopPropagation();
+                        hideMediaObject();
+                    });
                     innerContainer.append(titleDiv);
                 }
 
@@ -1042,7 +1049,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var $mediaElt,
                 img,
                 iframe,
-                closeButton,
+               // closeButton,
                 x,
                 y,
                 w,
@@ -1082,12 +1089,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
                 viewer.drawer.addOverlay(outerContainer[0], rect);
             } else {
-                closeButton = createCloseButton();
-                mediaContainer.append(closeButton[0]);
-                closeButton.on('click', function (evt) {
-                        evt.stopPropagation();
-                        hideMediaObject();
-                });
+                //closeButton = createCloseButton();
+                //mediaContainer.append(closeButton[0]);
+                //closeButton.on('click', function (evt) {
+                //        evt.stopPropagation();
+                //        hideMediaObject();
+                //});
 
                 if (CONTENT_TYPE === 'Image') {
                     img = document.createElement('img');
@@ -1397,7 +1404,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'position': 'absolute',
                 'top': '2%',
                 'width': '4%',
-                'height': '4%',
+                'height': '100%',
                 'min-height': '15px',
                 'min-width': '15px',
                 'z-index': '1',
