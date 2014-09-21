@@ -793,7 +793,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
                     circle.addClass('annotatedImageHotspotCircle');
                     circle.click(function () {
-                        toggleHotspot();
+                        toggleMediaObject();
                     });
                     root.append(circle);
                 }
@@ -1488,7 +1488,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.hide();
             } else {
                 pauseResetMediaObject();
-                IS_HOTSPOT && removeOverlay(circle[0]);
+                //IS_HOTSPOT && removeOverlay(circle[0]);
                 outerContainer.detach();
             }
 
@@ -1509,6 +1509,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             dzManipPreprocessing();                     //When an object is hidden, set the artwork as active
 
         }
+
+        /* SAM custom build */
+        function showHotspot() {
+            createMediaElements();
+            showMediaObject();
+            hideMediaObject();
+        }
+
         /**
          * Show if hidden, hide if shown
          * @method toggleMediaObject
@@ -1556,7 +1564,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             hide:                hideMediaObject,
             create:              createMediaElements,
             pauseReset:          pauseResetMediaObject,
-            toggle:              toggleMediaObject,
+            toggle: toggleMediaObject,
+            showHotspot: showHotspot,
             createMediaElements: createMediaElements,
             isVisible:           isVisible,
             mediaManipPreprocessing: mediaManipPreprocessing
