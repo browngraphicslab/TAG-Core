@@ -1304,6 +1304,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             isHotspot && toggleFromHotspot();
 
+            isLayer = true;
+
             makeLayerContainer();
 
             toggleLayerButton.text('Remove Layer');
@@ -1335,8 +1337,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             }
 
             annotatedImage.viewer.drawer.addOverlay(layerContainer[0], rect);
-
-            isLayer = true;
         }
 
         /**
@@ -1344,6 +1344,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @method toggleFromLayer
          */
         function toggleFromLayer() {
+            isLayer = false;
             toggleLayerButton.text('Create Layer');
             toggleHotspotButton.removeAttr('disabled');
             toggleHotspotButton.css('opacity', '1.0');
@@ -1359,7 +1360,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 layerContainer.remove();
                 layerContainer.css('display', 'none');
             }
-            isLayer = false;
         }
 
         /** TODO GET RID OF THIS IN WEB APP (just use current assoc media object)
