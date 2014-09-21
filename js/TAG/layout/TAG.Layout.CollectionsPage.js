@@ -932,6 +932,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             for (var sortTag in sortOptionsObj){
                 if (sortOptionsObj[sortTag] === true) {
                     sortOptions.push(sortTag);
+                    //sortTag.style.marginTop = "30%";
                 }
             }
             appendTags();
@@ -959,13 +960,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
                 sortButton.addClass('secondaryFont');
                 sortButton.addClass('rowButton')
-                            .text(text)
+                            .text(text)   
                             .attr('id', sortOptions[i].toLowerCase() + "Button")
-                            .off()
+                         .off()
                             .on('mousedown', function () {
                                 //currentArtwork = null;
                                 changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
                             });
+               
+                //var spec = {
+                //    height: .7,
+                //    width:1,
+                //    center_v: true,
+                //};
+                //var newPos = TAG.Util.constrainAndPosition(0, buttonRow.height(), spec); // give a random width cuz when try to get the centered yPos, width doesn't matter
+                //sortButton.css("top", newPos.y + 'px');
+                //sortButton.css("height", newPos.height + 'px');
                 buttonRow.append(sortButton);
                 sortButtonTags[sortButton.attr('id')] = sortOptions[i];
                 //TO-DO: test this telemetry handler
@@ -2248,6 +2258,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({ 
                     'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
                     'color': SECONDARY_FONT_COLOR,
+                    'font-style':'italic'
                     //'font-family': FONT
                 });
 
@@ -2257,12 +2268,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({ 
                     'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
                     'color': SECONDARY_FONT_COLOR,
+                    'font-style': 'italic'
                     //'font-family': FONT
                 });
 
                 //Set texts of labels
                 if (artwork.Type !== "Empty") {
-                    artwork.Metadata.Artist ? artText = "Artist:  " + artwork.Metadata.Artist : artText = ' ';
+                    artwork.Metadata.Artist ? artText = "" + artwork.Metadata.Artist : artText = ' ';
                     artistInfo.text(artText);
                     yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
                 } else {

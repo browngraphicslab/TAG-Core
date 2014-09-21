@@ -418,7 +418,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             'position': 'relative'
         };
 
-        sidePanelFontSize = TAG.Util.getMaxFontSizeEM("Edit Related Maps", 1, root.width() * 0.1, 0.65 * newButtonCSS.height); // TODO can probably do this in STYL
+        sidePanelFontSize = TAG.Util.getMaxFontSizeEM("Edit Maps", 1, root.width() * 0.1, 0.65 * newButtonCSS.height); // TODO can probably do this in STYL
         titleFontSize = TAG.Util.getMaxFontSizeEM("Artwork Information", 1, root.width() * 0.15, 0.8 * newButtonCSS.height); // TODO can probably do this in STYL
 
         sidebar = $(document.createElement('div')); // TODO JADE/STYL
@@ -484,7 +484,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         rightArrowEditLoc.css({ "position": "absolute", "right": "5%", top: "30%", width: "auto", height: "40%" });
 
         editLocLabel = $(document.createElement('label')); // TODO J/S
-        editLocLabel.text("Edit Related Maps");
+        editLocLabel.text("Edit Maps");
         editLocLabel.css({ "width": "100%", "height": "100%", "line-height": "100%", "text-align": "center" });
 
         editLocButton = $(document.createElement('div')); // TODO J/S
@@ -1660,7 +1660,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 Name: title,
                 ContentType: contentType,
                 Duration: duration,
-                Source: contentUrl,
                 LinqTo: artwork.Identifier,
                 X: coords.x,
                 Y: coords.y,
@@ -1669,6 +1668,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 LinqType: assetType,
                 Description: desc
             };
+            if (contentType !== "iframe") {
+                options.Source = contentUrl;
+            }
 
             TAG.Worktop.Database.changeHotspot(worktopInfo.assetDoqID, options, updateSuccess, no_op, conflict, no_op);
 
