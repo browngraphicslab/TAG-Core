@@ -37,7 +37,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer = root.find('#setViewButtonContainer'),
         settings = root.find('#setViewSettingsBar'),
         label = root.find('#setViewLoadingLabel'),
-        circle = root.find('#setViewLoadingCircle'),
+        circle = root.find('#setViewLoadingCircle'), 
         rootContainer = root.find('#setViewRoot'),
         iframeAssetCreateButton = root.find('#iframeAssetCreateButton'),
         primaryColorPicker,
