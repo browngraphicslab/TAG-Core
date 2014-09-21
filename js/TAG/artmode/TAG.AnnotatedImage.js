@@ -1419,6 +1419,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 w = outerContainer.width(),
                 splitscreenOffset = 0;
 
+            // temporary crashfix for errors where viewport isn't properly initialized
+            // need to root-cause this issue ASAP
+            if (!viewer.viewport) {
+                return;
+            }
 
             if (IS_XFADE) {
                 //console.log(appending);
