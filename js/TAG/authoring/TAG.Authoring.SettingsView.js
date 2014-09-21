@@ -867,6 +867,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             });
         });
+        bgImgInput.css('height', '35px');
         /*var logoInput = createButton('Change Logo', function () {
             changesHaveBeenMade = true;
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
@@ -1767,6 +1768,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'min-height': '0px',
             'margin-right': '4%',
             'width': '48%',
+            'height':'35px'
         });
         privateInput.attr('class', 'settingButton');
         var publicInput = createButton('Publish', function () {
@@ -1777,6 +1779,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, {
             'min-height': '0px',
             'width': '48%',
+            'height':'35px'
         });
         publicInput.attr('class', 'settingButton');
         if (privateState) {
@@ -1798,6 +1801,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'min-height': '0px',
             'margin-right': '4%',
             'width': '48%',
+            'height':'35px'
         });
         var visibilityInput = createButton('Visible', function () {
             //if (!localVisibility) { changesHaveBeenMade = true; };
@@ -1807,6 +1811,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, {
             'min-height': '0px',
             'width': '48%',
+            'height': '35px'
         });
         if (localVisibility) {
             visibilityInput.css('background-color', 'white');
@@ -1833,7 +1838,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, {
             'min-height': '0px',
             'margin-right': '4%',
-            'width':'48%',
+            'width': '48%',
+            'height':'35px'
         });
         showAssocMedia.attr('class','settingButton');
         var hideAssocMedia = createButton('Hide Associated Media View', function () {
@@ -1844,7 +1850,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             $('#toggleRow').css('display','none');
             }, {
             'min-height': '0px',
-            'width': '48%'
+            'width': '48%',
+             'height': '35px'
         });
         hideAssocMedia.attr('class','settingButton');
         if (assocMediaShown){
@@ -2609,9 +2616,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             privateInput.css('background-color', 'white');
             publicInput.css('background-color', '');
         }, {
-            'min-height': '0px',
+            //'min-height': '0px',
             'margin-right': '4%',
             'width': '48%',
+            'height':'35px'
         });
         privateInput.attr('class', 'settingButton');
         
@@ -2627,8 +2635,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             publicInput.css('background-color', 'white');
             privateInput.css('background-color', '');
         }, {
-            'min-height': '0px',
+            //'min-height': '0px',
             'width': '48%',
+            'height':'35px'
         });
 
         publicInput.click(function () {
@@ -7094,21 +7103,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "color": "black",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'float':'right',
-                'font-size':'85%',
-                'height':'70%',
-                'margin-top':'1%',
-                //'padding-bottom':'1%',
+                'font-size':'50%',
+                'height':'40%',
+                'margin-top':'2.8%',
+                'padding-bottom':'1%',
                 'width': '48%',
                 'border': '1px solid black',
-                'padding': '1.5% 0px 0px 0px',
+                //'padding': '1.5% 0px 0px 0px',
+                'padding-top':'-10%',
                 'display': 'block',
             });
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
             .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '10%',
-                height: 'auto',
+                width: '6%',
+                height: '70%',
                 display:'inline-block',
                 'margin-right': '5%',
                 '-webkit-transform': 'rotate(90deg)',
