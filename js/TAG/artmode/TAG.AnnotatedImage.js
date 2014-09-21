@@ -1447,6 +1447,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             // temporary crashfix for errors where viewport isn't properly initialized
             // need to root-cause this issue ASAP
             if (!viewer.viewport) {
+                console.log("[DIAGNOSTIC] viewer or viewer.viewport is null in showMediaObject() call for " + (TITLE ? TITLE : "untitled") + "asset");
                 return;
             }
 
