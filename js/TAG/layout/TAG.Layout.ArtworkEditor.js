@@ -1660,7 +1660,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 Name: title,
                 ContentType: contentType,
                 Duration: duration,
-                Source: contentUrl,
                 LinqTo: artwork.Identifier,
                 X: coords.x,
                 Y: coords.y,
@@ -1669,6 +1668,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 LinqType: assetType,
                 Description: desc
             };
+            if (contentType !== "iframe") {
+                options.Source = contentUrl;
+            }
 
             TAG.Worktop.Database.changeHotspot(worktopInfo.assetDoqID, options, updateSuccess, no_op, conflict, no_op);
 
