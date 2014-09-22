@@ -1792,7 +1792,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // local visibility
         var localVisibility = LADS.Util.localVisibility(exhibition.Identifier);
-        var invisibilityInput = createButton('Hidden', function () {
+        var invisibilityInput = createButton('Hide on This Machine', function () {
             //if (localVisibility) { changesHaveBeenMade = true; };
             localVisibility = false;
             invisibilityInput.css('background-color', 'white');
@@ -1803,7 +1803,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width': '48%',
             'height':'35px'
         });
-        var visibilityInput = createButton('Visible', function () {
+        var visibilityInput = createButton('Show on This Machine', function () {
             //if (!localVisibility) { changesHaveBeenMade = true; };
             localVisibility = true;
             visibilityInput.css('background-color', 'white');
@@ -2039,9 +2039,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 saveButton.css("opacity", 1);
             });
 
-            nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Collection name', 40);
+            nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Title', 40);
             descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false, 2000);
-            bgInput = createButton('Change Background Image', function () {
+            bgInput = createButton('Select...', function () {
                 //changesHaveBeenMade = true;                                                   
                 uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                     changesMade = true;
@@ -2099,11 +2099,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             localVisibilitySetting = createSetting('Visibility on Machine', visDiv);
             privateSetting = createSetting('Change Publish Setting', pubPrivDiv);
-            name = createSetting('Collection Name', nameInput);
-            desc = createSetting('Collection Description', descInput);
-            bg = createSetting('Collection Background Image', bgInput);
-            timeline = createSetting('Change Timeline Setting', timelineOptionsDiv);
-            assocMedia = createSetting('Change View Settings', assocMediaOptionsDiv);
+            name = createSetting('Title', nameInput);
+            desc = createSetting('Description', descInput);
+            bg = createSetting('Background Image', bgInput);
+            timeline = createSetting('Timeline Setting', timelineOptionsDiv);
+            assocMedia = createSetting('Associated Media Timeline Setting', assocMediaOptionsDiv);
 
             if (sortDropDown) {
                 sortOptions = createSetting('Sort Options', sortDropDown);
@@ -2169,7 +2169,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'right',
             }, true);
 
-            var deleteButton = createButton('Delete Collection', function () {
+            var deleteButton = createButton('Delete', function () {
                 deleteExhibition(exhibition);
             }, {
                 'margin-left': '2%',
@@ -2213,7 +2213,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
-            var artPickerButton = createButton('Manage Collection', function () {
+            var artPickerButton = createButton('Manage', function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{
@@ -2671,7 +2671,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         onChangeUpdateText(descInput, null, 1500); // What should max length be?
         onChangeUpdateText(nameInput, null, 1500);
 
-        var privateSetting = createSetting('Change Publish Setting', pubPrivDiv);
+        var privateSetting = createSetting('Publish Setting', pubPrivDiv);
         var name = createSetting('Tour Name', nameInput);
         var desc = createSetting('Tour Description', descInput);
         var tourIdLabel = createSetting('Tour ID (read-only)', tourIdInput);
@@ -2710,7 +2710,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //};
 
         // Create buttons
-        var editButton = createButton('Edit Tour',
+        var editButton = createButton('Edit',
             function () { editTour(tour); },
             {
                 'margin-left': '2%',
@@ -2718,7 +2718,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-        var deleteButton = createButton('Delete Tour',
+        var deleteButton = createButton('Delete',
             function () { deleteTour(tour); },
             {
                 'margin-left': '2%',
@@ -2726,7 +2726,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-        var duplicateButton = createButton('Duplicate Tour',
+        var duplicateButton = createButton('Duplicate',
             function () {
                 duplicateTour(tour, {
                     privateInput: privateState,
@@ -3372,7 +3372,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create buttons
         
-        var assocButton = createButton('Associate to Artworks',
+        var assocButton = createButton('Manage Associations',
             function () {
                 pickerOpen = true;
                 assocToArtworks(media); /*changesHaveBeenMade = true;*/
@@ -4539,7 +4539,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //};
 
         // Create buttons
-        editArt = createButton('Enter Artwork Editor',
+        editArt = createButton('Artwork Editor',
             function () { editArtwork(artwork); },
             {
                 'margin-left': '2%',
@@ -4549,7 +4549,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         leftButton = editArt;
         editArt.attr("id", "artworkEditorButton");
-        var deleteArt = createButton('Delete Artwork',
+        var deleteArt = createButton('Delete',
             function () { deleteArtwork(artwork); },
             {
                 'margin-left': '2%',
