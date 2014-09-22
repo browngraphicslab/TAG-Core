@@ -1829,7 +1829,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //backwards compatibility
             assocMediaShown = false;
         }
-        var showAssocMedia = createButton('Show Associated Media View', function () {
+        var showAssocMedia = createButton('Show', function () {
             //(!assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = true;
             showAssocMedia.css({'background-color':'white'});
@@ -1842,7 +1842,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'height':'35px'
         });
         showAssocMedia.attr('class','settingButton');
-        var hideAssocMedia = createButton('Hide Associated Media View', function () {
+        var hideAssocMedia = createButton('Hide', function () {
             //(assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
@@ -1869,6 +1869,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //backwards compatibility
             timelineShown = true;
         }
+        // use #toggleRow
+        /*
+        $('#toggleRow').css({
+            'display': 'none',
+            'min-height': '0px',
+            'width': '48%',
+             'height': '35px'
+        });
+        */
         var showTimeline = createButton('Show Timeline', function () {
             //(!timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = true;
@@ -1908,6 +1917,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'min-height': '0px',
             'width': '48%'
             });
+
         hideTimeline.attr("id","hideTimelineBttn");
         hideTimeline.attr('class','settingButton');
         if (timelineShown){
