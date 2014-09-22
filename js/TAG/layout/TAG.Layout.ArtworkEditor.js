@@ -540,7 +540,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         addRemoveMedia = $(document.createElement('button')); // TODO JADE/STYL
         addRemoveMedia.addClass('addRemoveMedia');
-        addRemoveMedia.text('Add/Remove Media');
+        addRemoveMedia.text('Add/Remove');
         addRemoveMedia.attr('type', 'button');
         addRemoveMedia.css(buttonCSS);
         addRemoveMedia.css({'font-size':TAG.Util.getMaxFontSizeEM("Add/Remove Media", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height)});
@@ -1167,7 +1167,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @method toggleFromHotspot
          */
         function toggleFromHotspot() {
-            toggleHotspotButton.text('Create Hotspot');
+            toggleHotspotButton.text('Set as Hotspot');
             toggleLayerButton.removeAttr('disabled');
             toggleHotspotButton.on("mousedown", function () {
                 toggleHotspotButton.css({ "background-color": "white", "color": "black" });
@@ -1345,7 +1345,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          */
         function toggleFromLayer() {
             isLayer = false;
-            toggleLayerButton.text('Create Layer');
+            toggleLayerButton.text('Set as Layer');
             toggleHotspotButton.removeAttr('disabled');
             toggleHotspotButton.css('opacity', '1.0');
            

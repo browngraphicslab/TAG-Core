@@ -2098,7 +2098,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             onChangeUpdateText(descInput, '#description-text', 1790);
 
             localVisibilitySetting = createSetting('Visibility on Machine', visDiv);
-            privateSetting = createSetting('Change Publish Setting', pubPrivDiv);
+            privateSetting = createSetting('Publish Setting', pubPrivDiv);
             name = createSetting('Title', nameInput);
             desc = createSetting('Description', descInput);
             bg = createSetting('Background Image', bgInput);
@@ -2672,9 +2672,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         onChangeUpdateText(nameInput, null, 1500);
 
         var privateSetting = createSetting('Publish Setting', pubPrivDiv);
-        var name = createSetting('Tour Name', nameInput);
-        var desc = createSetting('Tour Description', descInput);
-        var tourIdLabel = createSetting('Tour ID (read-only)', tourIdInput);
+        var name = createSetting('Name', nameInput);
+        var desc = createSetting('Description', descInput);
+        var tourIdLabel = createSetting('ID (read-only)', tourIdInput);
 
         settingsContainer.append(privateSetting);
         settingsContainer.append(name);
