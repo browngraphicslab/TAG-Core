@@ -4635,7 +4635,7 @@ TAG.Util.RLH = function (input) {
                         .css({
                             'font-size': '2.5em',
                             position: 'absolute',
-                            top: '0%',
+                            top: '15%',
                             right: '0%',
                             height: '90%'
                         })
