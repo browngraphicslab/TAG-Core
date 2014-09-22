@@ -421,5 +421,10 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     }
     that.unload = unload;
 
+    function getPlayer() {
+        return player;
+    }
+    that.getPlayer = getPlayer;
+
     return that;
 };

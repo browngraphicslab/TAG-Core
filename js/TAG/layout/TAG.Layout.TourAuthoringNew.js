@@ -39,6 +39,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     });
     root.attr("class", "rootPage");
     TAG.Util.UI.getStack()[0] = null;
+
     /**
     *Second row on screen, contains ComponentControls and Viewer
     **/
@@ -237,11 +238,9 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         // Assemble the UI using docfrag
         var uiDocfrag = document.createDocumentFragment();
         uiDocfrag.appendChild(resizableArea[0]);
-
         topbar.addToDOM(root);
         componentControls.addToDOM(resizableArea);
         viewer.addToDOM(resizableArea);
-        root.append(uiDocfrag);
         componentControls.addCatalogToDOM(uiDocfrag);
         timeline.addToDOM(uiDocfrag);
         playbackControls.addToDOM(uiDocfrag);
