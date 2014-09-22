@@ -1824,7 +1824,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         '-webkit-box-sizing': 'border-box', /* Safari/Chrome, other WebKit */
                         '-moz-box-sizing': 'border-box',    /* Firefox, other Gecko */
                         'box-sizing': 'border-box',        /* Opera/IE 8+ */
-                        'font-size': '0.7em'
+                        'font-size': '0.7em',
+                        'padding-right': '8px'
                     })
                     .appendTo($descContainer),
                 $assocMediaButtonContainer = $(document.createElement('div'))
@@ -2313,16 +2314,15 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 'padding-top': isAdditionalField ? '0px' : '5px',
                 'font-size':'0.8em',
                 'overflow': 'hidden',
-                'border': "0px solid black",
+                'border': "0px solid black"
             });
 
             if (isTextarea) {
                 textarea.attr('rows', 3);
                 textarea.css({ // TODO add a class, use textarea.classname vs input.classname in STYL
                     'overflow': 'auto',
-                    'padding': '0px',
                     'background': 'white',
-                    'border': "0px solid black",
+                    'border': "0px solid black"
                 });
             }// else {
             /*textarea.on('keyup', function () {
@@ -2348,7 +2348,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 'width': '70%',
                 'font-size': '11pt',
                 'display': 'inline-block',
-                'border': "0px solid black",
+                'border': "0px solid black"
             });
             if (isAdditionalField){
                 textarea.attr('placeholder', "Metadata Field")
