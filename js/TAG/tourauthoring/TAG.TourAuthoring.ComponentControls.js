@@ -139,7 +139,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 var keyframe = viewer.captureKeyframe(artname);
                 if (!keyframe) {
                     track.setIsVisible(true);
-                    creationError("The track this ink is attached to must be fully on screen in order to edit this ink. Please seek to a location where the track is visible.");
+                    creationError("The track this annotation is attached to must be fully on screen in order to edit this annotation. Please seek to a location where the track is visible.");
                     return false;
                 }
                 var kfvx, kfvy, kfvw, kfvh,
@@ -250,7 +250,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         });
                         playbackControls.undoRedoInkOnly.css('display', 'none');
 
-                    }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
+                    }, "You have created an empty annotation. Would you like to delete annotation track or go back to editing?", "Delete Track", true);
                     root.append(confirmationBox);
                     $(confirmationBox).show();
                     return;
@@ -270,7 +270,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var new_keyframe = viewer.captureKeyframe(artname);
 
                     if (!new_keyframe) {
-                        creationError("The track this ink is attached to must be fully on screen in order to save this ink. Please seek to a location where the track is visible.");
+                        creationError("The track this annotation is attached to must be fully on screen in order to save this annotation. Please seek to a location where the track is visible.");
                         return false;
                     }
                     var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
@@ -412,7 +412,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
                 if (!keyframe) {
                     track.setIsVisible(true);
-                    creationError("The track this ink is attached to must be fully on screen in order to edit this ink. Please seek to a location where the track is visible.");
+                    creationError("The track this annotation is attached to must be fully on screen in order to edit this annotation. Please seek to a location where the track is visible.");
                     return false;
                 }
 
@@ -517,7 +517,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         });
                         playbackControls.undoRedoInkOnly.css('display', 'none');
 
-                    }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
+                    }, "You have created an empty annotation. Would you like to delete annotation track or go back to editing?", "Delete Track", true);
                     root.append(confirmationBox);
                     $(confirmationBox).show();
                     return;
@@ -536,7 +536,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var new_keyframe = viewer.captureKeyframe(artname);
 
                     if (!new_keyframe) {
-                        creationError("The track this ink is attached to must be fully on screen in order to save this ink. Please seek to a location where the track is visible.");
+                        creationError("The track this annotation is attached to must be fully on screen in order to save this annotation. Please seek to a location where the track is visible.");
                         return false;
                     }
                     var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
@@ -687,7 +687,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 var keyframe = viewer.captureKeyframe(artname);
                 if (!keyframe) {
                     track.setIsVisible(true);
-                    creationError("The track this ink is attached to must be fully on screen in order to edit this ink. Please seek to a location where the track is visible.");
+                    creationError("The track this annotation is attached to must be fully on screen in order to edit this annotation. Please seek to a location where the track is visible.");
                     return false;
                 }
 
@@ -792,7 +792,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         });
                         playbackControls.undoRedoInkOnly.css('display', 'none');
 
-                    }, "You have created an empty ink. Would you like to delete ink track or go back to editing?", "Delete Track", true);
+                    }, "You have created an empty annotation. Would you like to delete annotation track or go back to editing?", "Delete Track", true);
                     root.append(confirmationBox);
                     $(confirmationBox).show();
                     return;
@@ -811,7 +811,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var new_keyframe = viewer.captureKeyframe(artname);
 
                     if (!new_keyframe) {
-                        creationError("The track this ink is attached to must be fully on screen in order to save this ink. Please seek to a location where the track is visible.");
+                        creationError("The track this annotation is attached to must be fully on screen in order to save this annotation. Please seek to a location where the track is visible.");
                         return false;
                     }
                     var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
@@ -1433,7 +1433,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             addComponentButton.on('click', function (evt) {
                 if (timeline.getEditInkOn() === true) {
-                    var messageBox = TAG.Util.UI.popUpMessage(null, "An ink is already being edited.", null);
+                    var messageBox = TAG.Util.UI.popUpMessage(null, "An annotation is already being edited.", null);
                     $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 2000000);
                     $("#resizableArea").parent().parent().append(messageBox);
                     closeComponentMenu();

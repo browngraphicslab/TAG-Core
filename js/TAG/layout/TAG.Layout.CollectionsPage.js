@@ -1093,7 +1093,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
         }
 
-        searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
+        //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
 
         drawCatalog(matchedArts, currentTag, 0, true);
         drawCatalog(unmatchedArts, currentTag, matchedArts.length, false);

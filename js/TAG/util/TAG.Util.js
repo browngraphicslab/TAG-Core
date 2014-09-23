@@ -4576,7 +4576,8 @@ TAG.Util.RLH = function (input) {
             additionalInfoInput = $(document.createElement('input'))
                         .attr({
                             id: 'locationHistoryAdditionalInfoInput',
-                            placeholder: 'Date'
+                            placeholder: 'Date',
+                            maxlength:'15'
                         })
                         .css({
                             position: 'relative',
@@ -4634,7 +4635,7 @@ TAG.Util.RLH = function (input) {
                         .css({
                             'font-size': '2.5em',
                             position: 'absolute',
-                            top: '0%',
+                            top: '15%',
                             right: '0%',
                             height: '90%'
                         })
