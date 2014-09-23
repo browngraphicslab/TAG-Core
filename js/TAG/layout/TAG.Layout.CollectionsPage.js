@@ -810,12 +810,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
                 if (IS_WINDOWS) {
-                    var links = collectionDescription.find('a');
-                    links.each(function (index, element) {
-                        $(element).replaceWith(function () {
-                            return $.text([this]);
+                    if (collectionDescription) {
+                        var links = collectionDescription.find('a');
+                        links.each(function (index, element) {
+                            $(element).replaceWith(function () {
+                                return $.text([this]);
+                            });
                         });
-                    });
+                    }
                 }
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
@@ -2304,12 +2306,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
            
                 if (IS_WINDOWS) {
-                    var links = descText.find('a');
-                    links.each(function (index, element) {
-                        $(element).replaceWith(function () {
-                            return $.text([this]);
+                    if (descText){
+                        var links = descText.find('a');
+                        links.each(function (index, element) {
+                            $(element).replaceWith(function () {
+                                return $.text([this]);
+                            });
                         });
-                    });
+                    }
+                   
                 }
 
                 function addAssociationRow(numberAssociatedDoqs){
