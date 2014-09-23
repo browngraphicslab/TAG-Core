@@ -2286,19 +2286,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileBottom = $(document.createElement('div'))
                     .addClass('tileBottom');
 
-                //Description of art
-                num===0 ? descSpan = firstDescSpan: descSpan = $(document.createElement('div'));
-                descSpan.addClass('descSpan');
-
-                //Div for above description
-                descText = $(document.createElement('div'))
+                if (artwork.Metadata.Descriptionv||showAllAtYear){
+                    //Description of art
+                    num===0 ? descSpan = firstDescSpan: descSpan = $(document.createElement('div'));
+                    descSpan.addClass('descSpan');
+                
+                    //Div for above description
+                    descText = $(document.createElement('div'))
                     .addClass('descText secondaryFontColor')
                     .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
                     .css({
-                    'color': SECONDARY_FONT_COLOR,
-                    //'font-family': FONT,
-                    'font-size': "80%"
-                });
+                        'color': SECONDARY_FONT_COLOR,
+                        //'font-family': FONT,
+                        'font-size': "80%"
+                    });
+
+                }
+           
                 if (IS_WINDOWS) {
                     var links = descText.find('a');
                     links.each(function (index, element) {
@@ -2309,16 +2313,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
 
                 function addAssociationRow(numberAssociatedDoqs){
-                    var tileSpacing;
+                    var holderH =.35 * (.45 * selectedArtworkContainer.height());
                 	if (numberAssociatedDoqs === 0){
                 		miniTilesHolder.hide();
-                		descSpan.css({"height": "100%"});
+                		if (descSpan){
+                            descSpan.css({"height": "100%"});
+                        } 
                         TAG.Util.removeProgressCircle(circle);
                 	} else {
-                        descSpan.css({'height':'33%'});
+                        if (descSpan){
+                            descSpan.css({'height':'33%'});
+                        } 
                         miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
-                        tileSpacing = miniTilesHolder.height()/10;
-                	    if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
+                	    if (numberAssociatedDoqs* (holderH + holderH/10) - holderH > previewTile.width()){
                 		    prevArrow = $(document.createElement('img'))
                     			.addClass("miniTilesArrow")
                     			.attr('src', tagPath + 'images/icons/Close.svg')
@@ -2332,7 +2339,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 		    nextArrow = $(document.createElement('img'))
                     			.addClass("miniTilesArrow")
                     			.attr('src', tagPath + 'images/icons/Open.svg')
-                    			.css('left', "94%")
+                    			.css('left', "93.5%")
                     			.on('mousedown', function(){
                         			miniTilesHolder.stop();
                         			miniTilesHolder.animate({
@@ -2342,6 +2349,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     	    tileBottom.append(prevArrow);
                     	    tileBottom.append(nextArrow);
                 	   }
+                       if (!descSpan){
+                            console.log("here");
+                            var tileTopH = tileTop.height();
+                            var previewTileH = previewTile.height();
+                            //var miniTilesHolderH = .35 * (.45 * selectedArtworkContainer.height());
+                            //var miniTilesLabelH = 
+                            prevArrow.css('bottom','30%');
+                            nextArrow.css('bottom','30%')
+                            tileTop.css('height', tileTopH);
+                            previewTile.append(tileBottom); 
+                            miniTilesHolder.css('height',.35 * (.45 * selectedArtworkContainer.height()));
+                            miniTilesLabel.css('bottom','80%');
+                            tileBottom.css('height', 15+ miniTilesHolder.height()+miniTilesLabel.height());
+
+                            previewTile.css('height', previewTileH + tileBottom.height());
+                       }
                     }
                 }
 
@@ -2353,6 +2376,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 function addMiniTiles(doqs){
                     var src,
                         metadata,
+                        miniTileWidth = .35 * (.45 * selectedArtworkContainer.height()),
                         thumb;
                     numberAssociatedDoqs = doqs.length;
                     //Loop through media doqs and create tiles from them
@@ -2369,13 +2393,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         miniTile = $(document.createElement('img'))
                             .addClass('miniTile')
                             .css({
-                                'width': .35 * (.45 * selectedArtworkContainer.height())
+                                'width': miniTileWidth
                             })
                             .on('mousedown',
                                     onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
                                 )
-                        miniTile.css('left', i * (miniTile.width() + miniTilesHolder.height() / 10));
-
+                        miniTile.css('left', i * (miniTileWidth + miniTileWidth/ 10));
+                        console.log("lefting");
 
                         switch (metadata.ContentType) {
                             case 'Audio':
@@ -2438,18 +2462,35 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .append(titleSpan)
                     .append(infoText);
 
-                descSpan.append(descText);
-                tileBottom.append(descSpan);
 
                 miniTilesLabel = $(document.createElement('div'))
                     				.addClass("miniTilesLabel");
 				miniTilesHolder = $(document.createElement('div'))
                     				.addClass('miniTilesHolder');
-                tileBottom.append(miniTilesHolder)
-                    	   .append(miniTilesLabel);
+                tileBottom.append(miniTilesLabel)
+                           .append(miniTilesHolder);
 
-                previewTile.append(tileTop)
-                    	   .append(tileBottom);
+                if (descSpan) {
+                    descSpan.append(descText);
+                    tileBottom.append(descSpan);
+                    
+                }
+
+                previewTile.append(tileTop);
+
+                if (!descSpan){
+                    previewTile.css({
+                        'height': '55%',
+                        'padding-top':'10px',
+                        'padding-bottom':'10px'
+                    });
+                    artistInfo.css('padding-bottom','5px');
+                    yearInfo.css('padding-bottom','5px');
+                    tileTop.css('height','100%');
+                    selectedArtworkContainer.css('top','0%');
+                } else {
+                    previewTile.append(tileBottom);
+                }
 
 				selectedArtworkContainer.append(previewTile);
                 root.find('.tile').css('opacity','0.5');
