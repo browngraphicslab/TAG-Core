@@ -1253,8 +1253,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 selectedArtworkContainer.css({
                     'height' :'110%',
-                    'bottom': '-8.5%',
-                    'pointer-events': 'none'
+                    'bottom' : '-5%'
                 });
         } else {
             bottomContainer.css({
@@ -1264,8 +1263,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
             selectedArtworkContainer.css({
                 'height': '100%',
-                'bottom': '-7%',
-                'pointer-events': 'none'
+                'bottom':'-4%'
             })
         }
     }
@@ -2166,161 +2164,149 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     miniTilesHolder,
                     miniTile;
 
-                var hasDesc = false;
-                var hasAssocMaterials = false;
-                var hasCheckedAssocMats = false;
-                // check for assoc media - need to make this a serial call otherwise queue doesn't execute before formatting step and boolean will show false even if there are associated materials
-                var goAhead = function (doqs) {
-                    hasAssocMaterials = !(doqs.length === 0);
-                    //Entire tile
-                    previewTile = $(document.createElement('div'))
-                        .addClass('previewTile');
+                //Entire tile
+                previewTile = $(document.createElement('div'))
+                    .addClass('previewTile');
 
-                    //Top portion of the tile (with image, title, and subtitle)
-                    tileTop = $(document.createElement('div'))
-                        .addClass('tileTop');
 
-                    //Tile title
-                    titleSpan = $(document.createElement('div'))
-                        .addClass('titleSpan')
-                             .text(TAG.Util.htmlEntityDecode(artwork.Name))
-                        .css({
-                            'color': SECONDARY_FONT_COLOR
-                            //'font-family': FONT,
-                        });
+                //Top portion of the tile (with image, title, and subtitle)
+                tileTop = $(document.createElement('div'))
+                    .addClass('tileTop');
 
-                    //Image div
-                    imgDiv = $(document.createElement('div'))
-                        .addClass('imgDiv');
-
-                    //Explore div
-                    exploreTab = $(document.createElement('div'))
-                        .addClass('exploreTab');
-                    if (!onAssocMediaView) {
-                        exploreTab.on('mousedown', switchPage(artwork));
-                    }
-
-                    //Explore text
-                    exploreText = $(document.createElement('div'))
-                        .addClass('exploreText')
-                        .css("font-size", BASE_FONT_SIZE * 2 / 3 + 'em')
-                        .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Tap to Explore");
-
-                    exploreTab.append(exploreText);
-
-                    //Thumbnail image
-
-                    currentThumbnail = $(document.createElement('img'))
-                        .addClass('currentThumbnail');
-                    if (artwork.Metadata.Thumbnail && artwork.Metadata.ContentType !== "Audio") {
-                        //                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
-                        currentThumbnail = $(document.createElement('div'));
-                        currentThumbnail.css({
-                            'background': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail + ') no-repeat center'),
-                            'background-size': 'contain',
-                            'height': '100%'
-                        });
-                        //                    background: url(url) no-repeat center;
-                    } else if (artwork.Metadata.ContentType === "Audio") {
-                        currentThumbnail.css('background-color', 'black');
-                        currentThumbnail.attr('src', tagPath + 'images/audio_thumbnail.svg');
-                    } else if (artwork.Metadata.Medium === "Video" || artwork.Metadata.ContentType === "Video" || artwork.Metadata.ContentType === "iframe") {
-                        currentThumbnail.css('background-color', 'black');
-                        currentThumbnail.attr('src', tagPath + 'images/video_thumbnail.svg');
-                    } else if (artwork.Metadata.ContentType === "Image") {
-                        if (artwork.Metadata.Thumbnail) {
-                            currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
-                        } else if (artwork.Metadata.Source) {
-                            currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Source));
-                        } else {
-                            currentThumbnail.attr("src", tagPath + 'images/image_icon.svg');
-                        }
-                    } else if (artwork.Type === "Empty" || artwork.Type === "Tour" || artwork.Metadata.Type === "Tour" || artwork.Metadata.ContentType === "Tour") {
-                        currentThumbnail.css('background-color', 'black');
-                        if (artwork.Metadata.Thumbnail) {
-                            currentThumbnail.attr('src', FIX_PATH(artwork.Metadata.Thumbnail));
-                        } else {
-                            currentThumbnail.attr('src', FIX_PATH("/Images/default.jpg"));
-                        }
-                    } else {
-                        currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
-                    }
-
-                    !onAssocMediaView && currentThumbnail.on('mousedown', switchPage(artwork));
-
-                    //Telemetry stuff
-                    TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'mousedown', '', function (tobj) {
-                        if (!artwork || !artworkSelected) {
-                            return true; // abort
-                        }
-                        tobj.custom_1 = CryptoJS.SHA1(artwork.Name).toString(CryptoJS.enc.Base64);
-                        tobj.ttype = 'collection_to_' + getWorkType(artwork);
-                        tobj.mode = 'Kiosk';
+                //Tile title
+                titleSpan = $(document.createElement('div'))
+                    .addClass('titleSpan')
+                         .text(TAG.Util.htmlEntityDecode(artwork.Name))
+                    .css({
+                        'color': SECONDARY_FONT_COLOR,
+                        //'font-family': FONT,
                     });
 
-                    //Div for artist and year info, directly below image thumbnail
-                    infoText = $(document.createElement('div'))
-                        .addClass('infoText');
+                //Image div
+                imgDiv = $(document.createElement('div'))
+                    .addClass('imgDiv');
 
-                    //Artist name
-                    artistInfo = $(document.createElement('div'))
-                        .addClass('artistInfo')
-                        .css({
-                            'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
-                            'color': SECONDARY_FONT_COLOR,
-                            'font-style': 'italic'
-                            //'font-family': FONT
-                        });
+                //Explore div
+                exploreTab = $(document.createElement('div'))
+                    .addClass('exploreTab');
+                if (!onAssocMediaView){
+                    exploreTab.on('mousedown', switchPage(artwork))
+                } 
 
-                    //Year of creation
-                    yearInfo = $(document.createElement('div'))
-                        .addClass('yearInfo')
-                        .css({
-                            'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
-                            'color': SECONDARY_FONT_COLOR,
-                            'font-style': 'italic'
-                            //'font-family': FONT
-                        });
+                //Explore text
+                exploreText = $(document.createElement('div'))
+                    .addClass('exploreText')
+                    .css("font-size",  BASE_FONT_SIZE*2/3 + 'em')
+                    .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Tap to Explore");
 
-                    //Set texts of labels
-                    if (artwork.Type !== "Empty") {
-                        artwork.Metadata.Artist ? artText = "" + artwork.Metadata.Artist : artText = ' ';
-                        artistInfo.text(artText);
-                        yearInfo.text(getDateText(getArtworkDate(artwork, false)) || " ");
+                exploreTab.append(exploreText)
+
+                //Thumbnail image
+
+                currentThumbnail = $(document.createElement('img'))
+                    .addClass('currentThumbnail');
+                if (artwork.Metadata.Thumbnail && artwork.Metadata.ContentType !== "Audio") {
+//                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+                    currentThumbnail = $(document.createElement('div'));
+                    currentThumbnail.css({
+                        'background': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail + ') no-repeat center'),
+                        'background-size':'contain',
+                        'height':'100%',
+                    })
+//                    background: url(url) no-repeat center;
+                } else if (artwork.Metadata.ContentType === "Audio") {
+                    currentThumbnail.css('background-color', 'black');
+                    currentThumbnail.attr('src', tagPath + 'images/audio_thumbnail.svg');
+                } else if (artwork.Metadata.Medium === "Video" || artwork.Metadata.ContentType === "Video" || artwork.Metadata.ContentType === "iframe") {
+                        currentThumbnail.css('background-color', 'black');
+                        currentThumbnail.attr('src', tagPath + 'images/video_thumbnail.svg');
+                } else if (artwork.Metadata.ContentType === "Image") {
+                    if (artwork.Metadata.Thumbnail) {
+                        currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+                    } else if (artwork.Metadata.Source) {
+                        currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Source));
                     } else {
-                        artistInfo.text("(Interactive Tour)");
-                        yearInfo.text(" ");
+                        currentThumbnail.attr("src", tagPath + 'images/image_icon.svg');
                     }
-
-                    //Bottom portion of the tile (with thumbnails, description, etc)
-                    tileBottom = $(document.createElement('div'))
-                        .addClass('tileBottom');
-
-
-                    miniTilesLabel = $(document.createElement('div'))
-                                        .addClass("miniTilesLabel");
-                    miniTilesHolder = $(document.createElement('div'))
-                                        .addClass('miniTilesHolder');
-
-                    // draw description pane
-                    if (artwork.Metadata.Description || showAllAtYear) {
-                        hasDesc = true;
-                        //Description of art
-                        num === 0 ? descSpan = firstDescSpan : descSpan = $(document.createElement('div'));
-                        descSpan.addClass('descSpan');
-
-                        //Div for above description
-                        descText = $(document.createElement('div'))
-                        .addClass('descText secondaryFontColor')
-                        .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', { email: false, twitter: false }))
-                        .css({
-                            'color': SECONDARY_FONT_COLOR,
-                            //'font-family': FONT,
-                            'font-size': "80%"
-                        });
+                } else if (artwork.Type === "Empty" || artwork.Type === "Tour" || artwork.Metadata.Type === "Tour" || artwork.Metadata.ContentType === "Tour") {
+                    currentThumbnail.css('background-color', 'black');
+                    if (artwork.Metadata.Thumbnail) {
+                        currentThumbnail.attr('src', FIX_PATH(artwork.Metadata.Thumbnail));
+                    } else {
+                        currentThumbnail.attr('src', FIX_PATH("/Images/default.jpg"));
                     }
+                }else {
+                    currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
+                }
+                !onAssocMediaView && currentThumbnail.on('mousedown', switchPage(artwork))
 
-                    if (IS_WINDOWS && descText) {
+                //Telemetry stuff
+                TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'mousedown', '', function(tobj) {
+                    if (!artwork || !artworkSelected) {
+                        return true; // abort
+                    }
+                    tobj.custom_1 = CryptoJS.SHA1(artwork.Name).toString(CryptoJS.enc.Base64);
+                    tobj.ttype     = 'collection_to_' + getWorkType(artwork);
+                    tobj.mode = 'Kiosk'; 
+                });
+
+                //Div for artist and year info, directly below image thumbnail
+                infoText = $(document.createElement('div'))
+                    .addClass('infoText');
+
+                //Artist name
+                artistInfo = $(document.createElement('div'))
+                    .addClass('artistInfo')
+                    .css({ 
+                    'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
+                    'color': SECONDARY_FONT_COLOR,
+                    'font-style':'italic'
+                    //'font-family': FONT
+                });
+
+                //Year of creation
+                yearInfo = $(document.createElement('div'))
+                    .addClass('yearInfo')
+                    .css({ 
+                    'font-size': 11 * BASE_FONT_SIZE / 30 + 'em',
+                    'color': SECONDARY_FONT_COLOR,
+                    'font-style': 'italic'
+                    //'font-family': FONT
+                });
+
+                //Set texts of labels
+                if (artwork.Type !== "Empty") {
+                    artwork.Metadata.Artist ? artText = "" + artwork.Metadata.Artist : artText = ' ';
+                    artistInfo.text(artText);
+                    yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
+                } else {
+                    artistInfo.text("(Interactive Tour)" );
+                    yearInfo.text(" " );
+                }
+
+                //Bottom portion of the tile (with thumbnails, description, etc)
+                tileBottom = $(document.createElement('div'))
+                    .addClass('tileBottom');
+
+                if (artwork.Metadata.Descriptionv||showAllAtYear){
+                    //Description of art
+                    num===0 ? descSpan = firstDescSpan: descSpan = $(document.createElement('div'));
+                    descSpan.addClass('descSpan');
+                
+                    //Div for above description
+                    descText = $(document.createElement('div'))
+                    .addClass('descText secondaryFontColor')
+                    .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
+                    .css({
+                        'color': SECONDARY_FONT_COLOR,
+                        //'font-family': FONT,
+                        'font-size': "80%"
+                    });
+
+                }
+           
+                if (IS_WINDOWS) {
+                    if (descText){
                         var links = descText.find('a');
                         links.each(function (index, element) {
                             $(element).replaceWith(function () {
@@ -2328,179 +2314,109 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             });
                         });
                     }
+                   
+                }
 
-                    // load assoc media/artworks and draw assoc materials pane
-                    var numberAssociatedDoqs = 0;
-                    var tileLoadQueue = TAG.Util.createQueue();
-                    tileLoadQueue.add(function () {
-                        onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
-                        !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
-                    });
+                function addAssociationRow(numberAssociatedDoqs){
+                    var holderH =.35 * (.45 * selectedArtworkContainer.height());
+                	if (numberAssociatedDoqs === 0){
+                		miniTilesHolder.hide();
+                		if (descSpan){
+                            descSpan.css({"height": "100%"});
+                        } 
+                        TAG.Util.removeProgressCircle(circle);
+                	} else {
+                        if (descSpan){
+                            descSpan.css({'height':'33%'});
+                        } 
+                        miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
+                	    if (numberAssociatedDoqs* (holderH + holderH/10) - holderH > previewTile.width()){
+                		    prevArrow = $(document.createElement('img'))
+                    			.addClass("miniTilesArrow")
+                    			.attr('src', tagPath + 'images/icons/Close.svg')
+                    			.on('mousedown', function(){
+                        				miniTilesHolder.stop();
+                        				miniTilesHolder.animate({
+                            			scrollLeft: miniTilesHolder.scrollLeft() - 50
+                        			}, ANIMATION_DURATION/2)
+                    			});
 
-                    // formatting
-                    if (hasDesc) {
-                        if (hasAssocMaterials) {
-                            styleBottomContainer(); // takes care of selectedArtworkContainer
-                            previewTile.css({
-                                'height': '100%',
-                                'padding-top': '10px',
-                                'padding-bottom': '10px'
-                            });
-                            descSpan.css({
-                                'height': '33%'
-                            });
-                            artistInfo.css('padding-bottom', '5px');
-                            yearInfo.css('padding-bottom', '5px');
-                            tileTop.css('height', '55%');
+                		    nextArrow = $(document.createElement('img'))
+                    			.addClass("miniTilesArrow")
+                    			.attr('src', tagPath + 'images/icons/Open.svg')
+                    			.css('left', "93.5%")
+                    			.on('mousedown', function(){
+                        			miniTilesHolder.stop();
+                        			miniTilesHolder.animate({
+                            		scrollLeft: miniTilesHolder.scrollLeft() + 50
+                        		}, ANIMATION_DURATION/2)
+                    		});
+                    	    tileBottom.append(prevArrow);
+                    	    tileBottom.append(nextArrow);
+                	   }
+                       if (!descSpan){
+                            console.log("here");
+                            var tileTopH = tileTop.height();
+                            var previewTileH = previewTile.height();
+                            //var miniTilesHolderH = .35 * (.45 * selectedArtworkContainer.height());
+                            //var miniTilesLabelH = 
+                            prevArrow.css('bottom','30%');
+                            nextArrow.css('bottom','30%')
+                            tileTop.css('height', tileTopH);
+                            previewTile.append(tileBottom); 
+                            miniTilesHolder.css('height',.35 * (.45 * selectedArtworkContainer.height()));
+                            miniTilesLabel.css('bottom','80%');
+                            tileBottom.css('height', 15+ miniTilesHolder.height()+miniTilesLabel.height());
 
-                        } else {
-                            selectedArtworkContainer.css({
-                                'height': '75%',
-                            });
-                            previewTile.css({
-                                'height': '100%',
-                                'padding-top': '10px',
-                                'padding-bottom': '10px'
-                            });
-                            tileBottom.css({
-                                "height": "25%",
-                                'top': '73.33%'
-                            });
-                            descSpan.css({ "height": "100%" });
-                            artistInfo.css('padding-bottom', '5px');
-                            yearInfo.css('padding-bottom', '5px');
-                            tileTop.css('height', '73.33%');
-                            selectedArtworkContainer.css('top', '-5%');
-                        }
-                    } else {
-                        if (hasAssocMaterials) {
-                            if (prevArrow && nextArrow) {
-                                prevArrow.css('bottom', '30%');
-                                nextArrow.css('bottom', '30%')
-                            }
-                            miniTilesHolder.css('height', .35 * (.45 * selectedArtworkContainer.height()));
-                            miniTilesLabel.css('bottom', '80%');
-                            tileBottom.css('height', 15 + miniTilesHolder.height() + miniTilesLabel.height());
-                            previewTile.css('height', previewTile.height() + tileBottom.height());
-
-                        } else {
-                            selectedArtworkContainer.css({
-                                'height': '65%',
-                                'padding-top': '10px',
-                                'padding-bottom': '10px'
-                            });
-                            previewTile.css({
-                                'height': '100%',
-                                'padding-top': '10px',
-                                'padding-bottom': '10px'
-                            });
-                            artistInfo.css('padding-bottom', '5px');
-                            yearInfo.css('padding-bottom', '5px');
-                            tileTop.css('height', '91%');
-                            selectedArtworkContainer.css('top', '-5%');
-                        }
+                            previewTile.css('height', previewTileH + tileBottom.height());
+                       }
                     }
+                }
 
-                    function addAssociationRow(numberAssociatedDoqs) {
-                        var holderH = .35 * (.45 * selectedArtworkContainer.height());
-                        if (numberAssociatedDoqs === 0) {
-                            miniTilesHolder.hide();
-                            TAG.Util.removeProgressCircle(circle);
-                        } else {
-                            miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
-                            if (numberAssociatedDoqs * (holderH + holderH / 10) - holderH > previewTile.width()) {
-                                prevArrow = $(document.createElement('img'))
-                                    .addClass("miniTilesArrow")
-                                    .attr('src', tagPath + 'images/icons/Close.svg')
-                                    .on('mousedown', function () {
-                                        miniTilesHolder.stop();
-                                        miniTilesHolder.animate({
-                                            scrollLeft: miniTilesHolder.scrollLeft() - 50
-                                        }, ANIMATION_DURATION / 2)
-                                    });
 
-                                nextArrow = $(document.createElement('img'))
-                                    .addClass("miniTilesArrow")
-                                    .attr('src', tagPath + 'images/icons/Open.svg')
-                                    .css('left', "93.5%")
-                                    .on('mousedown', function () {
-                                        miniTilesHolder.stop();
-                                        miniTilesHolder.animate({
-                                            scrollLeft: miniTilesHolder.scrollLeft() + 50
-                                        }, ANIMATION_DURATION / 2)
-                                    });
-
-                                tileBottom.append(prevArrow);
-                                tileBottom.append(nextArrow);
-                            }
+                /**
+                * @method addMediaMiniTiles
+                * @param {Array} doqs    array of media or artworks doqs to with which the mini tiles are created
+                */
+                function addMiniTiles(doqs){
+                    var src,
+                        metadata,
+                        miniTileWidth = .35 * (.45 * selectedArtworkContainer.height()),
+                        thumb;
+                    numberAssociatedDoqs = doqs.length;
+                    //Loop through media doqs and create tiles from them
+                    for (i = 0; i < doqs.length; i++) {
+                        if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier)==-1) {
+                            continue;
                         }
-                    }
+                        src = '';
+                        metadata = doqs[i].Metadata;
+                        thumb = metadata.Thumbnail;
 
+                        !onAssocMediaView && (doqs[i].artwork = artwork);
 
-                    /**
-                    * @method addMediaMiniTiles
-                    * @param {Array} doqs    array of media or artworks doqs to with which the mini tiles are created
-                    */
-                    function addMiniTiles(doqs) {
-                        var src,
-                            metadata,
-                            miniTileWidth = .35 * (.45 * selectedArtworkContainer.height()),
-                            thumb;
-                        numberAssociatedDoqs = doqs.length;
-                        //Loop through media doqs and create tiles from them
-                        for (i = 0; i < doqs.length; i++) {
-                            if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier) == -1) {
-                                continue;
-                            }
-                            src = '';
-                            metadata = doqs[i].Metadata;
-                            thumb = metadata.Thumbnail;
+                        miniTile = $(document.createElement('img'))
+                            .addClass('miniTile')
+                            .css({
+                                'width': miniTileWidth
+                            })
+                            .on('mousedown',
+                                    onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
+                                )
+                        miniTile.css('left', i * (miniTileWidth + miniTileWidth/ 10));
+                        console.log("lefting");
 
-                            !onAssocMediaView && (doqs[i].artwork = artwork);
-
-                            miniTile = $(document.createElement('img'))
-                                .addClass('miniTile')
-                                .css({
-                                    'width': miniTileWidth
-                                })
-                                .on('mousedown',
-                                        onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
-                                    )
-                            miniTile.css('left', i * (miniTileWidth + miniTileWidth / 10));
-                            console.log("lefting");
-
-                            switch (metadata.ContentType) {
-                                case 'Audio':
-                                    src = tagPath + 'images/audio_icon.svg';
-                                    break;
-                                case 'Video':
-                                    src = (thumb && !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : tagPath + 'images/video_icon.svg';
-                                    break;
-                                case 'iframe':
-                                    src = tagPath + 'images/video_icon.svg';
-                                    break;
-                                case 'Image':
-                                    if (thumb) {
-                                        src = FIX_PATH(thumb);
-                                    } else if (metadata.Source) {
-                                        src = FIX_PATH(metadata.Source);
-                                    } else {
-                                        src = tagPath + 'images/no_thumbnail.svg';
-                                    }
-                                    break;
-                                case 'Text':
-                                    src = tagPath + 'images/text_icon.svg';
-                                default:
-                                    if (thumb) {
-                                        src = FIX_PATH(thumb);
-                                    } else if (metadata.Source) {
-                                        src = FIX_PATH(metadata.Source);
-                                    } else {
-                                        src = tagPath + 'images/no_thumbnail.svg';
-                                    }
-                                    break;
-                            }
-                            if (onAssocMediaView && metadata.Type === "Artwork") {
+                        switch (metadata.ContentType) {
+                            case 'Audio':
+                                src = tagPath + 'images/audio_icon.svg';
+                                break;
+                            case 'Video':
+                                src = (thumb && !thumb.match(/.mp4/)) ? FIX_PATH(thumb) : tagPath + 'images/video_icon.svg';
+                                break;
+                            case 'iframe':
+                                src = tagPath + 'images/video_icon.svg';
+                                break;
+                            case 'Image':
                                 if (thumb) {
                                     src = FIX_PATH(thumb);
                                 } else if (metadata.Source) {
@@ -2508,51 +2424,90 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 } else {
                                     src = tagPath + 'images/no_thumbnail.svg';
                                 }
-
+                                break;
+                            case 'Text':
+                                src = tagPath + 'images/text_icon.svg';
+                            default:
+                                if (thumb) {
+                                    src = FIX_PATH(thumb);
+                                } else if (metadata.Source) {
+                                    src = FIX_PATH(metadata.Source);
+                                } else {
+                                    src = tagPath + 'images/no_thumbnail.svg';
+                                }
+                                break;
+                        }
+                        if (onAssocMediaView && metadata.Type === "Artwork") {
+                            if (thumb) {
+                                src = FIX_PATH(thumb);
+                            } else if (metadata.Source) {
+                                src = FIX_PATH(metadata.Source);
+                            } else {
+                                src = tagPath + 'images/no_thumbnail.svg';
                             }
-                            miniTile.attr("src", src);
-                            miniTilesHolder.append(miniTile);
 
                         }
-                        addAssociationRow(numberAssociatedDoqs);
-                        TAG.Util.removeProgressCircle(circle);
-                    }
-
-                    //Append everything
-                    var tileDocFrag = document.createDocumentFragment();
-                    tileDocFrag.appendChild(previewTile[0]);
-                    infoText.append(artistInfo)
-                            .append(yearInfo);
-
-                    imgDiv.append(currentThumbnail)
-                        .append(exploreTab)
-                        .append(infoText);
-
-                    tileTop.append(imgDiv)
-                        .append(titleSpan)
-                        .append(infoText);
-
-                    tileBottom.append(miniTilesLabel)
-                               .append(miniTilesHolder);
-
-                    if (descSpan) {
-                        descSpan.append(descText);
-                        tileBottom.append(descSpan);
-
-                    }
-
-                    previewTile.append(tileTop);
-                    previewTile.append(tileBottom);
-
-                    selectedArtworkContainer.append($(tileDocFrag));
-                    root.find('.tile').css('opacity', '0.5');
-
-                    return previewTile;
+                        miniTile.attr("src", src);
+                        miniTilesHolder.append(miniTile);
+                        
+                    }   
+                	addAssociationRow(numberAssociatedDoqs); 
+                    TAG.Util.removeProgressCircle(circle);                 
                 }
 
-                onAssocMediaView ? TAG.Worktop.Database.getArtworksAssocToSynchronous(artwork.Identifier, goAhead, null, goAhead) : TAG.Worktop.Database.getAssocMediaToSynchronous(artwork.Identifier, goAhead, null, goAhead);
+                //Append everything
+                infoText.append(artistInfo)
+                        .append(yearInfo);
 
-                return previewTile;
+                imgDiv.append(currentThumbnail)
+                    .append(exploreTab)  
+                    .append(infoText);
+
+                tileTop.append(imgDiv)
+                    .append(titleSpan)
+                    .append(infoText);
+
+
+                miniTilesLabel = $(document.createElement('div'))
+                    				.addClass("miniTilesLabel");
+				miniTilesHolder = $(document.createElement('div'))
+                    				.addClass('miniTilesHolder');
+                tileBottom.append(miniTilesLabel)
+                           .append(miniTilesHolder);
+
+                if (descSpan) {
+                    descSpan.append(descText);
+                    tileBottom.append(descSpan);
+                    
+                }
+
+                previewTile.append(tileTop);
+
+                if (!descSpan){
+                    previewTile.css({
+                        'height': '55%',
+                        'padding-top':'10px',
+                        'padding-bottom':'10px'
+                    });
+                    artistInfo.css('padding-bottom','5px');
+                    yearInfo.css('padding-bottom','5px');
+                    tileTop.css('height','100%');
+                    selectedArtworkContainer.css('top','0%');
+                } else {
+                    previewTile.append(tileBottom);
+                }
+
+				selectedArtworkContainer.append(previewTile);
+                root.find('.tile').css('opacity','0.5');
+  
+                var numberAssociatedDoqs = 0;
+                var tileLoadQueue = TAG.Util.createQueue();
+                tileLoadQueue.add(function(){
+                    onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
+                    !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
+                });
+
+                return previewTile;         
             }
 
             for (i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small

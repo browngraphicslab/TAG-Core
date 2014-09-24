@@ -116,8 +116,6 @@ TAG.Worktop.Database = (function () {
         getLinq: getLinq,
         getAssocMediaTo: getAssocMediaTo,
         getArtworksAssocTo: getArtworksAssocTo,
-        getAssocMediaToSynchronous: getAssocMediaToSynchronous,
-        getArtworksAssocToSynchronous: getArtworksAssocToSynchronous,
         getArtworksIn: getArtworksIn,
         getAssocMediaIn: getAssocMediaIn,
         getMaps: getMaps,
@@ -327,11 +325,6 @@ TAG.Worktop.Database = (function () {
         _db.getAssocMediaTo(guid, { success: success, error: error, errorCache: errorCache });
     }
 
-    function getAssocMediaToSynchronous(guid, success, error, errorCache) {
-        _db = _db || new Worktop.Database();
-        _db.getAssocMediaToSynchronous(guid, { success: success, error: error, errorCache: errorCache });
-    }
-
     /*
         Gets all artworks a media is associated to
             guid: Guid of the media
@@ -342,11 +335,6 @@ TAG.Worktop.Database = (function () {
     function getArtworksAssocTo(guid, success, error, errorCache) {
         _db = _db || new Worktop.Database();
         _db.getArtworksAssocTo(guid, { success: success, error: error, errorCache: errorCache });
-    }
-
-    function getArtworksAssocToSynchronous(guid, success, error, errorCache) {
-        _db = _db || new Worktop.Database();
-        _db.getArtworksAssocToSynchronous(guid, { success: success, error: error, errorCache: errorCache });
     }
 
     /*
@@ -905,12 +893,8 @@ TAG.Worktop.Database = (function () {
         call: will redo the ajax request exactly as specified
         force: will redo the ajax request with Force=true to force an update if there is a conflict
     */
-    function asyncRequest(method, type, urlOptions, bodyOptions, handlers, secure, customBody, customAddress, synchronous) {
+    function asyncRequest(method, type, urlOptions, bodyOptions, handlers, secure, customBody, customAddress) {
         if (!type) return false;
-        var async = true;
-        if (synchronous) {
-            async = false;
-        }
 
         handlers = handlers || {};
         urlOptions = urlOptions || {};
@@ -943,7 +927,7 @@ TAG.Worktop.Database = (function () {
                     url: url,
                     cache: false,
                     dataType: "text",
-                    async: async,
+                    async: true,
                     processData: false,
                     data: customBody || body,
                     success: function (data, textStatus, jqXHR) {
