@@ -540,7 +540,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         addRemoveMedia = $(document.createElement('button')); // TODO JADE/STYL
         addRemoveMedia.addClass('addRemoveMedia');
-        addRemoveMedia.text('Add/Remove');
+        addRemoveMedia.text('Add/Remove').css('border-radius', '3.5px');
         addRemoveMedia.attr('type', 'button');
         addRemoveMedia.css(buttonCSS);
         addRemoveMedia.css({'font-size':TAG.Util.getMaxFontSizeEM("Add/Remove Media", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height)});
@@ -801,7 +801,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             tnHelp.width(tnBottomWidth - 2 * tnHelpBorder - 2 * tnHelpPadding);
 
             tnSave = $(document.createElement('button'));
-            tnSave.text("Save Thumbnail");
+            tnSave.text("Save Thumbnail").css('border-radius', '3.5px');
             tnSave.css({
                 position: 'relative',
                 'top': '8%',
@@ -978,7 +978,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             if (!isOpen) {
                 closeAllPanels();
                 MEDIA_EDITOR.close();
-                editLocButton.css({ 'background-color': 'white', 'color': 'black' });
+                editLocButton.css({ 'background-color': 'white', 'color': 'black' }).css('border-radius', '3.5px');
                 rightArrowEditLoc.attr('src', tagPath+'images/icons/RightB.png');
                 sidebarHideButtonContainer.hide();
                 locationPanelDiv.show("slide", { direction: 'left' }, 500);
@@ -990,7 +990,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         function close() {
             if (isOpen) {
-                editLocButton.css({ 'background-color': 'transparent', 'color': 'white' });
+                editLocButton.css({ 'background-color': 'transparent', 'color': 'white' }).css('border-radius', '3.5px');
                 rightArrowEditLoc.attr('src', tagPath+'images/icons/Right.png');
                 locationPanelDiv.hide("slide", { direction: 'left' }, 500, function () {
                     if (!METADATA_EDITOR.isOpen()) {
@@ -1039,7 +1039,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             oldTitle, //title text when the editor is opened
             oldDescription, // description text when the editor is opened
             positionChanged = false; // whether the hotspot is added, moved, or deleted
-
+        toggleHotspotButton.css('border-radius','3.5px');
+        toggleLayerButton.css('border-radius','3.5px');
         /**
          * Initialize a reusible hotspot circle div and store it in the variable hotspotAnchor
          * @method makeHotspotAnchor
@@ -1764,11 +1765,11 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'border': '2px solid white',
                         'position': 'relative',
                         'font-size': $('.addRemoveMedia').css('font-size')
-                    })
+                    }).css('border-radius','3.5px')
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
                 $toggleLayer = $(document.createElement('button'))
-                    .addClass('toggleLayer')
+                    .addClass('toggleLayer').css('border-radius','3.5px')
                     .css({
                         'width': '100%',
                         'height': 'auto',
@@ -1839,7 +1840,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     })
                     .appendTo($rightbar),
                 $unassociateAssocMediaButton = $(document.createElement('button'))
-                    .addClass('asscmediabutton unassociatebutton')
+                    .addClass('asscmediabutton unassociatebutton').css('border-radius','3.5px')
                     .text('Unassociate')
                     .css({
                         'float': 'left',
@@ -1853,7 +1854,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     })
                     .attr('type', 'button')
                     .appendTo($assocMediaButtonContainer),
-                $saveAssocMediaButton = $(document.createElement('button'))
+                $saveAssocMediaButton = $(document.createElement('button')).css('border-radius', '3.5px')
                     .addClass('asscmediabutton addbutton')
                     .text('Save')
                     .attr('type', 'button')
@@ -2468,7 +2469,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             metadataForm.append(textFieldContainer);
 
             addInfoButton = $(document.createElement('button'));
-            addInfoButton.text('Add Metadata Field'); // TODO JADE/STYL
+            addInfoButton.text('Add Metadata Field').css('border-radius', '3.5px'); // TODO JADE/STYL
             addInfoButton.attr('type', 'button');
             addInfoButton.css({
                 'left': '10%',

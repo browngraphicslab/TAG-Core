@@ -223,10 +223,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
+            $('.mainCollection').css('width', '60%');
         }
         if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
             infoButton.hide();
-            linkButton.css("float", "left")
+            linkButton.css("float", "left");
+            root.find('#mainCollection').css('width', '60%');
         }
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
@@ -810,12 +812,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
                 if (IS_WINDOWS) {
-                    var links = collectionDescription.find('a');
-                    links.each(function (index, element) {
-                        $(element).replaceWith(function () {
-                            return $.text([this]);
+                    if (collectionDescription) {
+                        var links = collectionDescription.find('a');
+                        links.each(function (index, element) {
+                            $(element).replaceWith(function () {
+                                return $.text([this]);
+                            });
                         });
-                    });
+                    }
                 }
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
@@ -2300,19 +2304,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'font-size': "80%"
                 });
                 if (IS_WINDOWS) {
-                    var links = descText.find('a');
-                    links.each(function (index, element) {
-                        $(element).replaceWith(function () {
-                            return $.text([this]);
+                    if (descText){
+                        var links = descText.find('a');
+                        links.each(function (index, element) {
+                            $(element).replaceWith(function () {
+                                return $.text([this]);
+                            });
                         });
-                    });
+                    }
+                   
                 }
 
                 function addAssociationRow(numberAssociatedDoqs){
                     var tileSpacing;
                 	if (numberAssociatedDoqs === 0){
                 		miniTilesHolder.hide();
-                		descSpan.css({"height": "100%"});
+                		descSpan.css({"height": "92%"});
                         TAG.Util.removeProgressCircle(circle);
                 	} else {
                         descSpan.css({'height':'33%'});

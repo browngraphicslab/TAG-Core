@@ -50,9 +50,13 @@ TAG.Util = (function () {
         localVisibility: localVisibility,
         dimColor: dimColor,
         hexToRGBA: hexToRGBA,
-        IdCreator: IdCreator
+        IdCreator: IdCreator,
+        makeBorderRadius:makeBorderRadius
     };
 
+    function makeBorderRadius(ele, radius) {
+        ele.css('border-radius', radius);
+    }
     function IdCreator(){
         var Id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -1401,7 +1405,7 @@ TAG.Util = (function () {
                 var rotation = evt.delta.rotation / 180 * Math.PI;
                 var translation = { x: evt.delta.translation.x, y: evt.delta.translation.y };
                 var scale = evt.delta.scale;
-                evt.target.autoProcessInertia = false;
+                //evt.target.autoProcessInertia = false;
                 if (typeof functions.onManipulate === "function") {
                     if (evt.gesture) {
                         functions.onManipulate({
@@ -1430,7 +1434,8 @@ TAG.Util = (function () {
                             pivot: pivot,
                             translation: translation,
                             rotation: rotation,
-                            scale: scale
+                            scale: scale,
+                            grEvent: evt
                         });
                     }
                 }
@@ -2552,7 +2557,7 @@ TAG.Util.UI = (function () {
             'margin-right': '3%',
             'margin-top': '-1%',
             color: 'white',
-        });
+        }).css('border-radius', '3.5px');
         buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
         $(confirmButton).text(buttonText);
         confirmButton.onclick = function () {
@@ -2679,7 +2684,7 @@ TAG.Util.UI = (function () {
         $(confirmBox).append(optionButtonDiv);
 
         $(overlay).append(confirmBox);
-        var confirmButton = document.createElement('button');
+        var confirmButton = document.createElement('button').css('border-radius', '3.5px');
         $(confirmButton).css({
             'padding': '1%',
             'border': '1px solid white',
@@ -2712,7 +2717,7 @@ TAG.Util.UI = (function () {
         }
         $(optionButtonDiv).append(confirmButton);
 
-        var cancelButton = document.createElement('button');
+        var cancelButton = document.createElement('button').css('border-radius', '3.5px');
         var $cancelButton = $(cancelButton);
         $cancelButton.css({
             'padding': '1%',
@@ -3715,7 +3720,7 @@ TAG.Util.UI = (function () {
             'float': "right",
         });
 
-        confirmButton.text("Save");
+        confirmButton.text("Save").css('border-radius', '3.5px');
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
@@ -3743,7 +3748,7 @@ TAG.Util.UI = (function () {
             }            
         }
 
-        var cancelButton = $(document.createElement('button'));
+        var cancelButton = $(document.createElement('button')).css('border-radius', '3.5px');
         cancelButton.css({
             'margin': '1%',
             'border': '1px solid white',
@@ -4804,7 +4809,7 @@ TAG.Util.RLH = function (input) {
                             float: 'left'
                         })
                         .appendTo(buttonsRegion)
-                        .text('Add Location');
+                        .text('Add Location').css('border-radius', '3.5px');
             sortLocationsByTitleButton = $(document.createElement('button'))
                         .attr({
                             'id': 'locationHistorySortLocationsByTitleButton',
@@ -4816,7 +4821,7 @@ TAG.Util.RLH = function (input) {
                             float: 'left'
                         })
                         .appendTo(buttonsRegion)
-                        .text('Sort By Title');
+                        .text('Sort By Title').css('border-radius', '3.5px');
             sortLocationsByDateButton = $(document.createElement('button'))
                         .attr({
                             'id': 'locationHistorySortLocationsByDateButton',
@@ -4828,7 +4833,7 @@ TAG.Util.RLH = function (input) {
                             float: 'left'
                         })
                         .appendTo(buttonsRegion)
-                        .text('Sort By Date');
+                        .text('Sort By Date').css('border-radius', '3.5px');
 
             importMapButton = $(document.createElement('button'))
                     .attr({
@@ -4840,7 +4845,7 @@ TAG.Util.RLH = function (input) {
                         float: 'right'
                     })
                     .appendTo(buttonsRegion)
-                    .text('Import Map');
+                    .text('Import Map').css('border-radius', '3.5px');
 
             deleteButton = $(document.createElement('button'))
                         .attr({
@@ -4853,7 +4858,7 @@ TAG.Util.RLH = function (input) {
                             float: 'right'
                         })
                         .text('Delete Map')
-                        .appendTo(buttonsRegion);
+                        .appendTo(buttonsRegion).css('border-radius', '3.5px');
 
 
 
@@ -6300,7 +6305,7 @@ TAG.Util.RLH = function (input) {
 
             titleInput.css({ width: '42%' });
 
-            searchButton = $(document.createElement('button')).addClass('locationEditorSearchButton');
+            searchButton = $(document.createElement('button')).addClass('locationEditorSearchButton').css('border-radius', '3.5px');
             searchButton.attr({
                 type: 'button'
             });
@@ -6359,7 +6364,7 @@ TAG.Util.RLH = function (input) {
         saveButton.css({
             position: 'relative',
             'margin-right': '2%'
-        });
+        }).css('border-radius', '3.5px');
         saveButton.text('Save Location');
         saveButton.on('click', function () {
 
@@ -6408,7 +6413,7 @@ TAG.Util.RLH = function (input) {
                 position: 'relative',
                 'margin-right': '2%'
             });
-            deleteButton.text('Delete');
+            deleteButton.text('Delete').css('border-radius', '3.5px');
             deleteButton.on('click', function (evt) {
                 formIsEnabled = false;
                 var overlay = TAG.Util.UI.PopUpConfirmation(function () {
@@ -6428,7 +6433,7 @@ TAG.Util.RLH = function (input) {
             position: 'relative',
             'margin-right': '2%'
         });
-        cancelButton.text('Cancel');
+        cancelButton.text('Cancel').css('border-radius', '3.5px');
         cancelButton.on('click', cancelClick);
 
         titleContainer.append(titleLabel);

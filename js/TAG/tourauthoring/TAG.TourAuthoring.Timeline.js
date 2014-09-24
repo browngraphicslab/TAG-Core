@@ -334,7 +334,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             'z-index': '5',
         });
 
-        var multiSelButton = $(document.createElement('button'));
+        var multiSelButton = $(document.createElement('button')).css('border-radius', '3.5px');
         multiSelButton.attr('type', 'button');
         multiSelButton.attr('id', "multiSelButton");
         multiSelButton.text("Multi-Select");

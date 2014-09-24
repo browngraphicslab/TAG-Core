@@ -341,7 +341,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
 
         // NOTE: save button click event handler is below dialog code
         var saveButton = $(document.createElement("button"));
-        saveButton.text("Save");
+        saveButton.text("Save").css('border-radius', '3.5px');
         saveButton.attr('type', 'button');      
         saveButton.attr('id', 'tourSaveButton');
         //Initially disable save button since there have been no changes

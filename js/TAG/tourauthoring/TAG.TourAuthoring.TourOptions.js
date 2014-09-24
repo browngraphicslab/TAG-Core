@@ -445,7 +445,7 @@ TAG.TourAuthoring.TourOptions = function (spec) {
 
 
         });
-        var cancelButton = $(document.createElement('button'));
+        var cancelButton = $(document.createElement('button')).css('border-radius', '3.5px');
         cancelButton.attr('type', 'button');
         cancelButton.text("Cancel");
         cancelButton.css({
@@ -545,7 +545,7 @@ TAG.TourAuthoring.TourOptions = function (spec) {
             var overlay = $(TAG.Util.UI.blockInteractionOverlay()),
                 messageDiv = $(document.createElement('div')),
                 textarea = $(document.createElement('textarea')),
-                closeButton = $(document.createElement('button')),
+                closeButton = $(document.createElement('button')).css('border-radius', '3.5px'),
                 optionButtonDiv = $(document.createElement('div')),
                 confirmBox = $(document.createElement('div')),
                 confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(), { // TODO is window right for the web app?
