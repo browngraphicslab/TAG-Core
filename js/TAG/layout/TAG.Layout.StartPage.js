@@ -335,7 +335,40 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     $('#authoringButtonBuffer').remove();
         // }
         
-        goToCollectionsButton.on('click', switchPage);
+        goToCollectionsButton.on('click', function () {
+            if (TAG.Worktop.Database.getLocked()) {
+                TAG.Worktop.Database.getArtworks(function (result) {
+                    $.each(result, function (index, artwork) {
+                        if (artwork.Identifier === TAG.Worktop.Database.getLocked()) {
+                            if (artwork.Metadata.Type === "VideoArtwork") { // video                  
+                                var videoPlayer = TAG.Layout.VideoPlayer(video);
+                                TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
+
+                                currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+                                currentPage.obj = videoPlayer;
+
+                            } else {
+                                var artworkViewer = TAG.Layout.ArtworkViewer({
+                                    doq: artwork,
+                                });
+                                var newPageRoot = artworkViewer.getRoot();
+                                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+                                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+
+                                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                                currentPage.obj = artworkViewer;
+                            }
+                               
+                        }
+                    });
+                });
+
+                return false;
+            } else {
+                switchPage();
+            }
+        });
         
         setImagePaths(main);
         setUpCredits();
