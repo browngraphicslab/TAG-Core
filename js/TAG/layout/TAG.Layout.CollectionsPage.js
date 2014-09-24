@@ -223,10 +223,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
+            $('.mainCollection').css('width', '60%');
         }
         if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
             infoButton.hide();
-            linkButton.css("float", "left")
+            linkButton.css("float", "left");
+            root.find('#mainCollection').css('width', '60%');
         }
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {

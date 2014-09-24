@@ -240,6 +240,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 } else {
                     locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
                     collectionsPage = TAG.Layout.CollectionsPage();
+                    collectionsPage.getRoot().find('#mainCollection').css('width', '60%');
 
                     collectionsPageRoot = collectionsPage.getRoot();
                     collectionsPageRoot.data('split', 'R');

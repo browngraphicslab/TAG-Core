@@ -683,6 +683,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @return {Object}       some public methods to be used in other files
      */
     function createMediaObject(mdoq, linq) {
+        console.log("CREATING MEDIA OBJECTS")
         var // DOM-related
             outerContainer = $(document.createElement('div')).addClass('mediaOuterContainer'),
             innerContainer = $(document.createElement('div')).addClass('mediaInnerContainer'),
@@ -1277,11 +1278,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             if (descscroll === true) {
                 return;
             }
+
             if (res.scale !== 1) {
                 mediaScroll(res.scale, res.pivot);
                 return;
             }
-
             var top         = outerContainer.position().top,
                 left        = outerContainer.position().left,
                 width       = outerContainer.width(),
@@ -1312,15 +1313,23 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 };
             }
 
-            // Animate to target location
+            // Animate to target location (or don't, if you're on the win8 app)
             outerContainer.stop()
-
-            outerContainer.animate({
-                top: finalPosition.y,
-                left: finalPosition.x
-            }, 300, function () {
+            if (IS_WINDOWS) {
+                outerContainer.css({
+                    top: finalPosition.y,
+                    left: finalPosition.x
+                });
                 checkForOffscreen();
-            });
+            }
+            else {
+                outerContainer.animate({
+                    top: finalPosition.y,
+                    left: finalPosition.x
+                }, 300, function () {
+                    checkForOffscreen();
+                });
+            }
 
             /**
              * @method checkForOffscreen()
@@ -1443,6 +1452,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 h = outerContainer.height(),
                 w = outerContainer.width(),
                 splitscreenOffset = 0;
+            outerContainer && outerContainer.detach();
+            createMediaObject(mdoq, linq);
 
             // temporary crashfix for errors where viewport isn't properly initialized
             // need to root-cause this issue ASAP
@@ -1515,13 +1526,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function hideMediaObject() {
             outerContainer.stop();
-            if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
-                outerContainer.hide();
-            } else {
-                pauseResetMediaObject();
-                IS_HOTSPOT && removeOverlay(circle[0]);
-                outerContainer.detach();
-            }
 
             mediaHidden = true;
             var toHideID = '#thumbnailButton-' + mdoq.Identifier;
@@ -1538,6 +1542,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             });
             TAG.Util.IdleTimer.restartTimer();
             dzManipPreprocessing();                     //When an object is hidden, set the artwork as active
+
+            if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
+                outerContainer.hide();
+            } else {
+                pauseResetMediaObject();
+                IS_HOTSPOT && removeOverlay(circle[0]);
+                outerContainer.detach();
+            }
 
         }
         /**
