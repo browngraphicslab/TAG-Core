@@ -31,7 +31,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locHistoryToggle = null,
         isOpen = false,
         that = this,
-
+        locked = TAG.Worktop.Database.getLocked(),     //Check for locked
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,
         PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
@@ -108,6 +108,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             idleTimer.start();
         }
         if (idleTimer && previewing) {
+            idleTimer.kill();
+        }
+        if (locked === doq.Identifier) {
             idleTimer.kill();
         }
 
@@ -591,8 +594,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         sideBarInfo.css({
             'height' : sideBarSections.height()-25 + 'px'
-            });
-        backButton.attr('src', tagPath+'images/icons/Back.svg');
+        });
+        if (locked !== doq.Identifier) {
+            backButton.attr('src', tagPath + 'images/icons/Back.svg');
+        } else {
+            backButton.hide();
+        }
+        
         togglerImage.attr("src", tagPath + 'images/icons/Close.svg');
         infoTitle.text(doq.Name);
         infoArtist.text(doq.Metadata.Artist);

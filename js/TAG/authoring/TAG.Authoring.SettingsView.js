@@ -4387,8 +4387,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 viewer.append(TAG.Util.createConversionLoading(msg, true, true));
                             } else {
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
-                            } 
-                        } else if(output ===null) {
+                            }
+                        } else if (output === null) {
                             TAG.Worktop.Database.convertVideo(function () {
                             }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
                         }
@@ -4423,7 +4423,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 viewer.css('background', 'black url(' + TAG.Worktop.Database.fixPath(artwork.URL) + ') no-repeat center / contain');
             });
         } else {
-            
+
         }
 
         var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), "Artwork Title", 100);
@@ -4438,7 +4438,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
             }
-            
+
         });
 
         artistInput.on('keyup', function (event) {
@@ -4449,7 +4449,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
             }
-            
+
         });
 
         descInput.on('keyup', function () {
@@ -4457,10 +4457,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
         });
-        
+
         var customInputs = {};
         var customSettings = {};
-        var desc = createSetting('Description', descInput);
+
         var saveButton;
         var yearMetadataDivSpecs = createYearMetadataDiv(artwork, function (event) {
             if (event && event.which === 13) {
@@ -4491,6 +4491,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 100);
         onChangeUpdateText(descInput, null, 5000);
 
+        var desc = createSetting('Description', descInput);
         var title = createSetting('Title', titleInput);
         var artist = createSetting('Artist', artistInput);
 
@@ -4500,7 +4501,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 customSettings[key] = createSetting(key, customInputs[key]);
             });
         }
-        
+
+
         settingsContainer.append(title);
         settingsContainer.append(artist);
         settingsContainer.append(desc);
@@ -4508,6 +4510,56 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         $.each(customSettings, function (key, val) {
             settingsContainer.append(val);
+        });
+
+        // Lock artwork setting: Only one artwork per server
+        var isLocked;
+        TAG.Worktop.Database.getMain(function () {
+
+            isLocked = TAG.Worktop.Database.getLocked();             //Get locked artwork GUID
+            var unlockedInput = createButton('Unlocked', function () {
+                //if (localVisibility) { changesHaveBeenMade = true; };
+                isLocked = "";
+                unlockedInput.css('background-color', 'white');
+                lockedInput.css('background-color', '');
+            }, {
+                'min-height': '0px',
+                'margin-right': '4%',
+                'width': '48%',
+            });
+            var lockedInput = createButton('Locked', function () {
+                //if (!localVisibility) { changesHaveBeenMade = true; };
+                isLocked = artwork.Identifier;
+                lockedInput.css('background-color', 'white');
+                unlockedInput.css('background-color', '');
+            }, {
+                'min-height': '0px',
+                'width': '48%',
+            });
+
+            //Color the appropriate button
+            if (isLocked === artwork.Identifier) {
+                lockedInput.css('background-color', 'white');
+            } else {
+                unlockedInput.css('background-color', 'white');
+            }
+
+            var lockedDiv = $(document.createElement('div'));
+            lockedDiv.append(lockedInput).append(unlockedInput);
+
+            lockedInput.click(function () {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            });
+
+            unlockedInput.click(function () {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            });
+            var lockedSetting = createSetting('Lock to this artwork', lockedDiv);
+            settingsContainer.append(lockedSetting);
         });
 
         //Automatically save changes
@@ -4575,6 +4627,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
                     timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
                     descInput: descInput,                                          //Artwork description
+                    locked: isLocked,                                                //Whether locked into artwork
                     customInputs: customInputs                                     //Artwork custom info fields
                 });
             }, {
@@ -4613,7 +4666,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             buttonContainer.append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
         }
-        
+
         saveButton.on("mousedown", function () {
             if (!saveButton.attr("disabled")) {
                 saveButton.css({ "background-color": "white" });
@@ -4649,8 +4702,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
-            
-        
+
+
         /*if (artwork.Metadata.Type !== 'VideoArtwork') {
             buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
         } else {
@@ -4706,7 +4759,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Worktop.Database.uploadImage(dataurl, function (imageURL) {
             if (isArtwork) {
                 TAG.Worktop.Database.changeArtwork(id, { Thumbnail: imageURL }, function () {
-                    console.log("success?");
+                    console.log("success?")
                     loadArtView(component.Identifier);
                 }, unauth, conflict, error);
             
@@ -5393,7 +5446,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineYear = inputs.timelineYearInput.val(),
             timelineMonth = inputs.timelineMonthInput.val(),
             timelineDay = inputs.timelineDayInput.val(),
-            description = inputs.descInput.val();
+            description = inputs.descInput.val(),
+            isLocked = inputs.locked;
 
         var infoFields = {};
         $.each(inputs.customInputs, function (key, val) {
@@ -5416,6 +5470,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TimelineMonth: timelineMonth,
             TimelineDay: timelineDay,
             Description: description,
+            Locked: isLocked,
             InfoFields: JSON.stringify(infoFields),
         }, function () {
             //refreshArtwork(artwork);

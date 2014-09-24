@@ -31,7 +31,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
-            url: ['Name', 'Title', 'Artist', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted'],
+            url: ['Name', 'Title', 'Artist', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted', 'Locked'],
             body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration', 'RichLocationHistory', 'AddMaps', 'RemoveMaps']
         },
         tour: {
@@ -95,6 +95,7 @@ TAG.Worktop.Database = (function () {
         getOptionalFeatures: getOptionalFeatures,
         getCustomFont: getCustomFont,
         getIdleTimerDuration: getIdleTimerDuration,
+        getLocked: getLocked,
 
         asyncRequest: asyncRequest,
         convertToDocHandler: convertToDocHandler,
@@ -1095,6 +1096,10 @@ TAG.Worktop.Database = (function () {
 
     function getMuseumName() {
         return _main.Metadata["MuseumName"];
+    }
+
+    function getLocked() {
+        return _main.Metadata["Locked"];
     }
 
     function getMuseumOverlayColor() {
