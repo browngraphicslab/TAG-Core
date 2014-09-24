@@ -635,7 +635,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             console.log("unauthorized");
             TAG.Auth.authenticate(
                 function () {
-                    uploadFilesObject(globalFilesObject); // need to deal with this for single file uploads, too, if this ever comes back...
+                    if (uploadFilesObject) {
+                        uploadFilesObject(globalFilesObject); // need to deal with this for single file uploads, too, if this ever comes back...
+                    }
                 },
                 function () {
                     shouldContinue = true;

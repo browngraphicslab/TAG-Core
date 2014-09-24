@@ -721,6 +721,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             mediaLoaded,
             mediaElt,
             titleDiv,
+            descTextSize,
+            titleTextHolder,
             descDiv,
             thumbnailButton,
             startLocation,
@@ -747,25 +749,45 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.hide();
             } else {
                 // set up divs for the associated media
-                outerContainer.css('width', '29%');
+                outerContainer.css('width', 0.29 * root.width() + 'px');
                 innerContainer.css('backgroundColor', 'rgba(0,0,0,0.65)');
-
-                if (TITLE) {
-                    titleDiv = $(document.createElement('div'));
-                    titleDiv.addClass('annotatedImageMediaTitle');//.css({'text-overflow':'ellipsis','white-space':'nowrap'});
-                    titleDiv.text(TITLE);
-                    titleDiv.css('width', '95%');
-
-                    var closeButton = createCloseButton();
-                    titleDiv.append(closeButton[0]);
-                    closeButton.on('click', function (evt) {
-                        evt.stopPropagation();
-                        hideMediaObject();
+                // for scaling and preventing overflow issues with the close button, we use a holder for the title
+                titleDiv = $(document.createElement('div'));
+                titleDiv.css({
+                    'display': 'block',
+                    'height': '40px',
+                    'position': 'relative',
+                    'margin-bottom': '5px',
+                    'width': '100%',
                     });
-                    innerContainer.append(titleDiv);
+                titleTextHolder = $(document.createElement('div'));
+                titleTextHolder.addClass('annotatedImageMediaTitle');//.css({'text-overflow':'ellipsis','white-space':'nowrap'});
+
+                titleDiv.append(titleTextHolder);
+                var titlefontsize = LADS.Util.getMaxFontSizeEM("WWWWW", 0.6, 999999, 41, 0.025);
+                if (TITLE) {
+                    titleTextHolder.text(TITLE);
+                } else {
+                    titleTextHolder.text('Untitled');
                 }
 
+                titleTextHolder.css({
+                    'width': (outerContainer.width() - 65) + 'px',
+                    'font-size': titlefontsize
+                });
+
+                descTextSize = titlefontsize;
+
+                var closeButton = createCloseButton();
+                closeButton.on('click', function (evt) {
+                    evt.stopPropagation();
+                    hideMediaObject();
+                });
+                titleDiv.append(closeButton[0]);               
+
+                innerContainer.append(titleDiv);
                 innerContainer.append(mediaContainer);
+
                 /**
                 if (DESCRIPTION) {
                     descDiv = $(document.createElement('div'));
@@ -831,6 +853,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function initMediaControls() {
             var elt = mediaElt,
                 $elt = $(elt),
+                cpHolder = $(document.createElement('div')),
                 controlPanel = $(document.createElement('div')).addClass('annotatedImageMediaControlPanel'),
                 vol = $(document.createElement('img')).addClass('mediaVolButton'),
                 timeContainer = $(document.createElement('div')).addClass('mediaTimeContainer'),
@@ -848,97 +871,82 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             vol.attr('src', tagPath+'images/icons/VolumeUpWhite.svg');
             currentTimeDisplay.text("00:00");
 
-            // TODO move this css to styl file
-            play.css({
-                'position': 'absolute',
-                'height': '1%',
-                'min-height': '20px',
-                'max-height':  '30px',
-                'width':    'auto',
-                'display': 'block',
-                'padding':'3px 3px 3px 3px',
-                'top':'2%',
-                'left':'1%'
+            // dz17 - don't move this out - these divs are dynamically generated. The holders help with scaled positioning substantially.
+            cpHolder.css({
+                'width': '100%',
+                'margin': '0 auto'
             });
 
-            //playHolder.css({
-            //    'position': 'absolute',
-            //    'height': '45%',
-            //    'width': '10%',
-            //    'min-height': '20px',
-            //    'top':    '0%',
-            //    'display':  'inline-block',
-            //    'margin':   '2px 1% 0px 1%',
-            //});
+            play.css({
+                'position': 'absolute',
+                'height': '100%',
+                'width': 'auto'
+            });
 
+            playHolder.css({
+                'position': 'absolute',
+                'height': '35px',
+                'width': "auto",
+                'display': "block",
+                'margin': '4px 1% 0px 1%'
+            });
+            
             sliderContainer.css({
                 'position': 'absolute',
-                'height': '20%',
-                'min-height': '15px',
-                'max-height' :'25px',
-                'width':    '100%',
-                'left':     '0px',
-                'bottom':   '0px'
+                'display': "block",
+                'height': '17px',
+                'width' :'475px',
+                'max-width': '600px',
+                'left': '55px',
+                'top': '13px' 
             });
 
             sliderPoint.css({
                 'position': 'absolute',
-                'height':   '100%',
+                'height': '100%',
                 'background-color': '#3cf',
-                'width':    '0%',
-                'left':     '0%',
-                'max-width' : '100%'
+                'width': '0%',
+                'left': '0%',
+                'max-width': '100%'
             });
 
             vol.css({
                 'position': 'absolute',
-                'height': '1%',
-                'min-height': '20px',
-                'max-height': '30px',
+                'height': '100%',
                 'width': 'auto',
-                'display': 'block',
-                'padding': '2px 3px 2px 3px',
-                'right':'0%',
-                'top':'10%'
+                'right': '0%'
             });
 
-            //volHolder.css({
-            //    'height': '45%',
-            //    'min-height' : '20px',
-            //    'position': 'absolute',
-            //    'width': '8%',
-            //    'right':    '2%',
-            //    'top':      '10%'
-            //});
-
-            //timeContainer.css({
-            //    'height': '45%',
-            //    'top': '0%',
-            //    'width' : '15%',
-            //    'right':  volHolder.width() + 10 + 'px',
-            //    'position': 'absolute',
-            //    'vertical-align': 'top',
-            //    'padding':  '0',
-            //    'display':  'inline-block',
-            //});
-
-            currentTimeDisplay.css({
-                //'height': '1%',
-                //'min-height': '30px',
-                //'max-height':'40px',
-                'top': '0%',
+            volHolder.css({
+                'height': '30px',
                 'position': 'absolute',
-                'display':'block',
-                'font-size': '70%',
-                'right': '50px',
-                'vertical-align': 'middle',
-                'margin':'0',
-                'padding':'0',
+                'display': "block",
+                'width': 'auto',
+                'right': '2%',
+                'top': '6px'
             });
 
-            //playHolder.append(play);
+            timeContainer.css({
+                'height': '45px',
+                'width': '15%',
+                'max-width': '70px',
+                'right': '56px',
+                'display': 'block',
+                'position': 'absolute'
+            });
+            var timefontsize = LADS.Util.getMaxFontSizeEM("00:00", 0.6, 70, 40, 0.025);
+            currentTimeDisplay.css({
+                'top': '1px',
+                'height': '40px',
+                'position': 'absolute',
+                'font-size': timefontsize,
+                'vertical-align': 'middle',
+                'text-align': 'center'
+            });
+
+            playHolder.append(play);
             sliderContainer.append(sliderPoint);
-            //volHolder.append(vol);
+            volHolder.append(vol);
             
             // set up handlers
             play.on('click', function () {
@@ -1032,12 +1040,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             mediaContainer.append(elt);
             mediaContainer.append(controlPanel);
-
-            controlPanel.append(play);
-            controlPanel.append(sliderContainer);
+            controlPanel.append(cpHolder);
+            cpHolder.append(playHolder);
+            cpHolder.append(sliderContainer);
             timeContainer.append(currentTimeDisplay);
-            controlPanel.append(timeContainer);
-            controlPanel.append(vol);
+            cpHolder.append(timeContainer);
+            cpHolder.append(volHolder);
         }
 
         /**
@@ -1118,7 +1126,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         controls: false
                     });
 
-                    outerContainer.css('min-width', 0.29*rootWidth);
+                    outerContainer.css({
+                        'width': '675px',
+                        'height': 'auto'
+                    });
 
                     // TODO need to use <source> tags rather than setting the source and type of the
                     //      video in the <video> tag's attributes; see video player code
@@ -1146,7 +1157,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         console.log("Here's an error ");
                     });
                     outerContainer.css({
-                        'min-width': 0.29*rootWidth,
+                        'width': '675px',
                         'height' : 'auto'
                     });
                 } else if (CONTENT_TYPE === 'iframe') {
@@ -1201,6 +1212,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (DESCRIPTION) {
                     descDiv = $(document.createElement('div'));
                     descDiv.addClass('annotatedImageMediaDescription');
+                    descDiv.css({
+                        'font-size': descTextSize
+                    });
                     descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                     if (IS_WINDOWS) {
                         var links = descDiv.find('a');
@@ -1343,6 +1357,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function mediaScroll(scale, pivot) {
             if (descscroll === true) {
                 return;
+            } else if (CONTENT_TYPE === 'Audio') {
+                // disallowing resizing of audio - doesn't make sense anyway
+                return;
             }
             var t       = outerContainer.position().top,
             l       = outerContainer.position().left,
@@ -1355,11 +1372,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             newX,
             newY;
         scrollingMedia = true;
-        if (CONTENT_TYPE === 'Video' ||CONTENT_TYPE === 'Audio') {
+        if (CONTENT_TYPE === 'Video') {
             minW = 450;
             maxW = 800;
         } else {
-            minW = 200;
+            minW = 250;
             maxW = 800;
         }
         if (CONTENT_TYPE === "iframe") {
@@ -1385,7 +1402,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             left: newX,
             width: newW,
             height: newH
-        })
+        });
+
+        outerContainer.find('.annotatedImageMediaTitle').css({
+            'width': (newW - 65) + 'px'
+        });
+
+        if (CONTENT_TYPE === 'Video') {
+            outerContainer.find('.mediaSliderContainer').css({
+                'width': (newW - 200) + 'px'
+            });
+        }
         setTimeout(function () {
             scrollingMedia = false;
         }, 100);
@@ -1402,14 +1429,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             closeButton.text('X');
             closeButton.css({
                 'position': 'absolute',
-                'top': '2%',
-                'width': '4%',
-                'height': '100%',
-                'min-height': '15px',
-                'min-width': '15px',
+                'width': 'auto',
+                'height': '30px',
+                'min-width': '30px',
                 'z-index': '1',
-                'background-color': '',
-                'right': '2%'
+                'right': '1.5%',
+                'margin-top': '7px'
             });
             return closeButton;
         }
@@ -1429,6 +1454,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             // temporary crashfix for errors where viewport isn't properly initialized
             // need to root-cause this issue ASAP
             if (!viewer.viewport) {
+                console.log("[DIAGNOSTIC] viewer or viewer.viewport is null in showMediaObject() call for " + (TITLE ? TITLE : "untitled") + "asset");
                 return;
             }
 
