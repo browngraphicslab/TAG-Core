@@ -627,7 +627,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
        // rootContainer.keydown(keyHandler);
         //searchbar.attr('placeholder', 'Search...');
-        newButton.text('New');
+        newButton.text('New').css('border-radius', '3.5px');
         secondaryButton.text('Video');
         label.text('Loading...');
         circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
@@ -4871,7 +4871,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             isrightdata = false,
             customFields = [],
             mtinputs = {};
-
+        paringPickerConfirm.css('border-radius', '3.5px');
+        paringPickerCancel.css('border-radius', '3.5px');
         parsingOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         parsingOverlay.append(parsingOverlayText);
         parsingOverlayText.hide();
@@ -5326,7 +5327,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var metadataPickerButtons = $(document.createElement('div')).attr("id", "metadataPickerButtons")
                                     .css({'height':'5%','bottom':'7%','width':'100%','position':'absolute'});
-        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel").css({ 'float': 'right', 'position':'absolute','margin-right':'12%'});
+        var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel").css({ 'float': 'right', 'position': 'absolute', 'margin-right': '12%' }).css('border-radius', '3.5px');;
         metadataPickerCancel.text("Cancel");
         
         // cancel button click handler
@@ -5338,7 +5339,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         metadataPickerButtons.append(metadataPickerCancel);
 
 
-        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport").css({ 'float': 'right', 'position': 'absolute', 'margin-right': '2%' });
+        var metadataPickerImport = $(document.createElement('button')).attr("id", "metadataPickerImport").css({ 'float': 'right', 'position': 'absolute', 'margin-right': '2%' }).css('border-radius', '3.5px');;
         metadataPickerImport.attr('disabled', true);
         if (selectedmetadata)
             metadataPickerImport.attr('disabled', false);
@@ -6453,7 +6454,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @return {Object} button      new button created
      */
     function createButton(text, onclick, css, isSaveButton) {
-        var button = $(document.createElement('button')).text(text);
+        var button = $(document.createElement('button')).text(text).css('border-radius','3.5px');
         button.attr('type', 'button');
         button.attr('class','button');
         if (css) {
@@ -7122,7 +7123,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top':'-10%',
                 'display': 'block',
-            });
+            }).css('border-radius', '3.5px');
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
             .attr('src', tagPath + 'images/icons/RightB.png')
