@@ -322,7 +322,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     $.each(result, function (index, artwork) {
                         if (artwork.Identifier === TAG.Worktop.Database.getLocked()) {
                             if (artwork.Metadata.Type === "VideoArtwork") { // video                  
-                                var videoPlayer = TAG.Layout.VideoPlayer(video);
+                                var videoPlayer = TAG.Layout.VideoPlayer(artwork);
                                 TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
 
                                 currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
