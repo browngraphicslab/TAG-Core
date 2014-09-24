@@ -396,7 +396,7 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
                     'margin-bottom': '3%',
                     //'padding-bottom': '2%',
                     top: ''
-                });
+                }).css('border-radius', '3.5px');
                 break;
         }
 

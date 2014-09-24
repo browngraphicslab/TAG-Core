@@ -2174,7 +2174,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 position: 'absolute',
                 bottom: '1%',
                 right: '22%',
-            });
+            }).css('border-radius', '3.5px');
 
             // click handler for import button -- perform the import using selectedArtworks.*
             $(associatedMediaPickerImport).click(function () {
@@ -2262,7 +2262,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 position: 'absolute',
                 bottom: '1%',
                 right: '5%'//$('button').width() + 15,
-            });
+            }).css('border-radius', '3.5px');
 
             // cancel button click handler
             $(associatedMediaPickerCancel).click(function () {
@@ -2927,7 +2927,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 position: 'absolute',
                 bottom: '2%',
                 right: '22%',
-            });
+            }).css('border-radius', '3.5px');
 
             // in here, deal with multiple selected artworks
             // artwork import button click handler
@@ -3009,7 +3009,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 position: 'absolute',
                 bottom: '2%',
                 right: '5%',
-            });
+            }).css('border-radius', '3.5px');
 
             // cancel button click handler
             $(catalogPickerCancel).click(function () {
@@ -3085,7 +3085,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'width': '80%',
             //'height': '14%'
             'padding-left':'4px','padding-right':'4px'
-        });
+        }).css('border-radius', '3.5px');
         cancelTextButton.get(0).innerHTML = "Cancel";
         cancelTextButton.click(function () {
             removeInkCanv();
@@ -3470,7 +3470,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         textEditDocfrag.appendChild(inkEditText[0]);
         inkEditText.css({ "display": "none" });
 
-        var cancelEditTextButton = $(document.createElement('button'));
+        var cancelEditTextButton = $(document.createElement('button')).css('border-radius', '3.5px');
         cancelEditTextButton.css({ 'padding-left':'4px','padding-right':'4px', 'font-size': '70%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', /*'width': '25%'*/ 'width':'80%' });
         cancelEditTextButton.get(0).innerHTML = "Cancel";
         inkEditText.append(cancelEditTextButton);
@@ -3783,7 +3783,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         });
 
         // save edited ink button
-        var saveTextButton = $(document.createElement('button'));
+        var saveTextButton = $(document.createElement('button')).css('border-radius', '3.5px');
         saveTextButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'font-size': '70%', 'color': 'black', 'margin-top': '3%', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%' });
         saveTextButton.get(0).innerHTML = "Save";
         inkEditText.append(saveTextButton);
@@ -3804,7 +3804,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkDrawControls.css({ "display": "none" });
 
         // draw cancel button
-        var cancelDrawButton = $(document.createElement('button'));
+        var cancelDrawButton = $(document.createElement('button')).css('border-radius', '3.5px');
         cancelDrawButton.css({
             'font-size': '70%',
             'color': 'black',
@@ -4175,7 +4175,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkEditDraw.css('display', 'none');
 
         // cancel edit draw button
-        var cancelEditDrawButton = $(document.createElement('button'));
+        var cancelEditDrawButton = $(document.createElement('button')).css('border-radius', '3.5px');
         cancelEditDrawButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'font-size': '70%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%' });
         cancelEditDrawButton.get(0).innerHTML = "Cancel";
         inkEditDraw.append(cancelEditDrawButton);
@@ -4472,7 +4472,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         
 
         // edit draw save button
-        var saveDrawButton = $(document.createElement('button'));
+        var saveDrawButton = $(document.createElement('button')).css('border-radius', '3.5px');
         saveDrawButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'font-size': '70%', 'color': 'black', 'margin-top': '3%', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%' });
         saveDrawButton.get(0).innerHTML = "Save";
         inkEditDraw.append(saveDrawButton);
@@ -4492,7 +4492,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkTransparencyControls.css({ "display": "none" });
 
         // trans cancel button
-        var cancelTransButton = $(document.createElement('button'));
+        var cancelTransButton = $(document.createElement('button')).css('border-radius', '3.5px');
         cancelTransButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'font-size': '70%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', /*'width': '25%'*/ 'width': '80%', });
         cancelTransButton.get(0).innerHTML = "Cancel";
         cancelTransButton.on('click', function () {
@@ -4520,7 +4520,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var transArray = []; // array of transparency controls
         
         // add ellipse bounding shape button
-        var addEllipseButton = $(document.createElement('button'));
+        var addEllipseButton = $(document.createElement('button')).css('border-radius', '3.5px');
         addEllipseButton.css({'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%', 'clear': 'left' });
         addEllipseButton.get(0).innerHTML = "Add Ellipse";
         addEllipseButton.on('click', function () {
@@ -4529,7 +4529,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkTransparencyControls.append(addEllipseButton);
 
         // add rectangle bounding shape button
-        var addRectButton = $(document.createElement('button'));
+        var addRectButton = $(document.createElement('button')).css('border-radius', '3.5px');
         addRectButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%' });
         addRectButton.get(0).innerHTML = "Add Rectangle";
         addRectButton.on('click', function () {
@@ -4667,7 +4667,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkEditTransparency.css({ "display": "none" });
 
         // trans cancel button
-        var cancelEditTransButton = $(document.createElement('button'));
+        var cancelEditTransButton = $(document.createElement('button')).css('border-radius', '3.5px');
         cancelEditTransButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'font-size': '70%', 'color': 'black', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', /*'width': '25%'*/ 'width': '80%' });
         cancelEditTransButton.get(0).innerHTML = "Cancel";
         inkEditTransparency.append(cancelEditTransButton);
@@ -4675,7 +4675,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var transEditArray = []; // array of edit transparency controls
 
         // add ellipse bounding shape button
-        var addEditEllipseButton = $(document.createElement('button'));
+        var addEditEllipseButton = $(document.createElement('button')).css('border-radius', '3.5px');
         addEditEllipseButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%', 'clear': 'left' });
         addEditEllipseButton.get(0).innerHTML = "Add Ellipse";
         addEditEllipseButton.on('click', function () {
@@ -4684,7 +4684,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         inkEditTransparency.append(addEditEllipseButton);
 
         // add rectangle bounding shape button
-        var addEditRectButton = $(document.createElement('button'));
+        var addEditRectButton = $(document.createElement('button')).css('border-radius', '3.5px');
         addEditRectButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'color': 'black', 'width': '35%', 'float': 'left', 'margin-left': '8%', 'margin-top': '3%' });
         addEditRectButton.get(0).innerHTML = "Add Rectangle";
         addEditRectButton.on('click', function () {
@@ -4807,7 +4807,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         transEditArray.push(opacityEditTransparencySlider);
 
         // edit trans save button
-        var saveTransButton = $(document.createElement('button'));
+        var saveTransButton = $(document.createElement('button')).css('border-radius', '3.5px');
         saveTransButton.css({ 'padding-left': '4px', 'padding-right': '4px', 'font-size': '70%', 'color': 'black', 'margin-top': '3%', 'margin-left': '8%', 'margin-bottom': '10px', 'font-weight': 'bold', 'float': 'left', 'width': '80%' });
         saveTransButton.get(0).innerHTML = "Save";
         inkEditTransparency.append(saveTransButton);
@@ -4934,7 +4934,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             newDiv.css('margin-top', '2%');
 
             // attach button
-            var linkButton = $(document.createElement('button')).addClass("linkButton");
+            var linkButton = $(document.createElement('button')).addClass("linkButton").css('border-radius', '3.5px');
             linkButton.css({
                 'padding-left': '4px',
                 'padding-right': '4px',
@@ -4994,7 +4994,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             newDiv.append(linkButton);
 
             // create as unattached ink button
-            var freeInkButton = $(document.createElement('button')).addClass("freeInkButton");
+            var freeInkButton = $(document.createElement('button')).addClass("freeInkButton").css('border-radius', '3.5px');
             freeInkButton.css({
                 'padding-left': '4px',
                 'padding-right': '4px',
