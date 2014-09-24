@@ -2319,7 +2319,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     var tileSpacing;
                 	if (numberAssociatedDoqs === 0){
                 		miniTilesHolder.hide();
-                		descSpan.css({"height": "100%"});
+                		descSpan.css({"height": "92%"});
                         TAG.Util.removeProgressCircle(circle);
                 	} else {
                         descSpan.css({'height':'33%'});
