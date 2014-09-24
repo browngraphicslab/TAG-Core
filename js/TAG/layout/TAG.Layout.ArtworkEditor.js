@@ -2216,7 +2216,11 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         //saveMetadataButton.attr('disabled', 'true');
         titleArea.text("Saving "+artworkMetadata.Title.val() + "...");
         for (i = 0; i < additionalFields.length; i++) {
-            infoFields[$(additionalFields[i]).attr("value")] = $(additionalFields[i]).attr('entry');
+            var key = $(additionalFields[i]).attr("value");
+            if (key === "") {
+                key = "Unnamed Field " + i;
+            }
+            infoFields[key] = $(additionalFields[i]).attr('entry');
         }
 
         TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
