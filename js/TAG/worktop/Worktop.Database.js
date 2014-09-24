@@ -71,7 +71,9 @@ Worktop.Database = function (mainID) {
         getFeedback: getFeedback,
         getMain: getMain,
         getAssocMediaTo: getAssocMediaTo,
+        getAssocMediaToSynchronous: getAssocMediaToSynchronous,
         getArtworksAssocTo: getArtworksAssocTo,
+        getArtworksAssocToSynchronous: getArtworksAssocToSynchronous,
         getLinq: getLinq,
         getArtworksIn: getArtworksIn,
         getAssocMediaIn: getAssocMediaIn,
@@ -177,6 +179,15 @@ Worktop.Database = function (mainID) {
             { "Guid": guid });
     }
 
+    function getAssocMediaToSynchronous(guid, handlers) {
+        getRequest(
+            "AssociatedMedia",
+            safeCache('doqMedia', guid, 'doqs'),
+            safeCache('doqMedia', guid, 'LinqCount'),
+            handlers,
+            { "Guid": guid }, null, null, true);
+    }
+
     function getArtworksAssocTo(guid, handlers) {
         getRequest(
             "ArtworksAssociated",
@@ -184,6 +195,15 @@ Worktop.Database = function (mainID) {
             safeCache('doqMedia', guid, 'LinqCount'),
             handlers,
             { "Guid": guid });
+    }
+
+    function getArtworksAssocToSynchronous(guid, handlers) {
+        getRequest(
+            "ArtworksAssociated",
+            safeCache('doqMedia', guid, 'doqs'),
+            safeCache('doqMedia', guid, 'LinqCount'),
+            handlers,
+            { "Guid": guid }, null, null, true);
     }
 
     function getLinq(guid1, guid2, handlers) {
@@ -410,7 +430,7 @@ Worktop.Database = function (mainID) {
       cacheFn is generally not required, but allows you to set a custom caching function
       secure makes the request use https
     */
-    function getRequest(type, cacheLoc, clientCount, handlers, urlOptions, cacheFn, secure) {
+    function getRequest(type, cacheLoc, clientCount, handlers, urlOptions, cacheFn, secure, synchronous) {
         handlers = handlers || {};
         urlOptions = urlOptions || {};
         var cacheFn = cacheFn || cacheFunc(cacheLoc, clientCount);
@@ -428,7 +448,12 @@ Worktop.Database = function (mainID) {
             401: handleAuth(handlers.unauth),
             error: _util.multiFnHandler(handlers.error, errorCacheHandler(handlers.errorCache, cacheLoc.get()))
         };
-        _static.asyncRequest('GET', type, urlOptions, null, ajaxHandlers, secure);
+
+        if (synchronous) {
+            _static.asyncRequest('GET', type, urlOptions, null, ajaxHandlers, secure, null, null, true);
+        } else {
+            _static.asyncRequest('GET', type, urlOptions, null, ajaxHandlers, secure);
+            }
     }
 
     function errorCacheHandler(fn, cacheVal) {
