@@ -1878,7 +1878,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
              'height': '35px'
         });
         */
-        var showTimeline = createButton('Show Timeline', function () {
+        var showTimeline = createButton('Show', function () {
             //(!timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = true;
             showTimeline.css('background-color', 'white');
@@ -1897,11 +1897,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-right': '4%',
             'width':'48%',
             'padding-left': '10px',
-            'padding-right': '10px'
+            'padding-right': '10px',
+            'height': '35px'
         });
         showTimeline.attr("id","showTimelineBttn");
         showTimeline.attr('class','settingButton');
-        var hideTimeline = createButton('Hide Timeline', function () {
+        var hideTimeline = createButton('Hide', function () {
             //(timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = false;
             hideTimeline.css('background-color','white');
@@ -1914,8 +1915,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //$('#dateButton') &&
             //$('#yearButton') &&
             }, {
-            'min-height': '0px',
-            'width': '48%'
+                'min-height': '0px',
+                'width': '48%',
+                'height': '35px'
             });
 
         hideTimeline.attr("id","hideTimelineBttn");
