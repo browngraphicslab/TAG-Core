@@ -2684,7 +2684,7 @@ TAG.Util.UI = (function () {
         $(confirmBox).append(optionButtonDiv);
 
         $(overlay).append(confirmBox);
-        var confirmButton = document.createElement('button').css('border-radius', '3.5px');
+        var confirmButton = document.createElement('button');
         $(confirmButton).css({
             'padding': '1%',
             'border': '1px solid white',
@@ -2693,6 +2693,7 @@ TAG.Util.UI = (function () {
             'float': "left",
             'margin-left': '12%',
             'color': 'white',
+            'border-radius': '3.5px',
             'margin-top': '1%'
 
         }).attr('id', 'popupConfirmButton');
@@ -2717,7 +2718,7 @@ TAG.Util.UI = (function () {
         }
         $(optionButtonDiv).append(confirmButton);
 
-        var cancelButton = document.createElement('button').css('border-radius', '3.5px');
+        var cancelButton = document.createElement('button');
         var $cancelButton = $(cancelButton);
         $cancelButton.css({
             'padding': '1%',
@@ -2727,7 +2728,8 @@ TAG.Util.UI = (function () {
             'float': "right",
             'margin-right': '3%',
             'color': 'white',
-            'margin-top': '1%'
+            'margin-top': '1%',
+            'border-radius': '3.5px'
         }).attr('id', 'popupCancelButton');
         $cancelButton.text('Cancel');
         $(optionButtonDiv).append(cancelButton);
@@ -3718,9 +3720,10 @@ TAG.Util.UI = (function () {
             'width': 'auto',
             'position': 'relative',
             'float': "right",
+            'border-radius': '3.5px'
         });
 
-        confirmButton.text("Save").css('border-radius', '3.5px');
+        confirmButton.text("Save");
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
