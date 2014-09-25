@@ -565,6 +565,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         if(Seadragon.Config) {
             Seadragon.Config.visibilityRatio = 0.8; // TODO see why Seadragon.Config isn't defined; should it be?
+            //Seadragon.Config.springStiffness = 0;
+            //Seadragon.Config.animationTime = 0;
         }
 
         viewerelt = $(document.createElement('div'));
@@ -1352,6 +1354,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     && (finalPosition.x + offscreenBuffer < root.width()))) { //right
                     hideMediaObject();
                     pauseResetMediaObject();
+                    //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
+                    //if (IS_WINDOWS) {
+                        //res.grEvent.target.isInertial = false;
+                        //res.grEvent.target.velocities.linear.x = 0;
+                        //res.grEvent.target.velocities.linear.y = 0;
+                        //res.grEvent.stop();
+                    //}
                     return;
                     IS_WINDOWS && (outerContainer.manipulationOffset = null);
                 }
