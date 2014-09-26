@@ -39,6 +39,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         topBar = root.find('#topBar'),
         loadingArea = root.find('#loadingArea'),
         infoButton = root.find('#infoButton'),
+        tutorialButton = root.find('#tutorialButton'),
         linkButton = root.find('#linkButton'),
         // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay = root.find('#overlay'),
@@ -202,6 +203,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         infoButton.on('mousedown', function () {
             createInfoPopUp();
         });
+
+        tutorialButton.attr('src', tagPath + 'images/icons/question_mark.svg')
+            .addClass('bottomButton')
+            .on('mousedown', function () {
+                TAG.Util.createTutorialPopup();
+            });
 
         if (IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg')
