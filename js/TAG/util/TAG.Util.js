@@ -51,7 +51,8 @@ TAG.Util = (function () {
         dimColor: dimColor,
         hexToRGBA: hexToRGBA,
         IdCreator: IdCreator,
-        makeBorderRadius:makeBorderRadius
+        makeBorderRadius: makeBorderRadius,
+        createTutorialPopup: createTutorialPopup
     };
 
     function makeBorderRadius(ele, radius) {
@@ -1811,6 +1812,104 @@ TAG.Util = (function () {
 
         return 'rgba(' + r + ',' + g + ',' + b + ',' + opac + ')';
     }
+
+    /***
+    * Create the tutorial popup for the collections page
+    *@method createTutorialPopup
+    */
+
+    function createTutorialPopup() {
+        var tagContainer = $('#tagRoot');
+        var infoOverlay = $(TAG.Util.UI.blockInteractionOverlay());
+        var infoBox = $(document.createElement('div'));
+        var infoMain = $(document.createElement('div'));
+        var infoTitle = $(document.createElement('div'));
+        var closeButton = createCloseButton();
+
+        function createCloseButton() {
+            var closeButton = $(document.createElement('img'));
+            closeButton.attr('src', tagPath + 'images/icons/x.svg');
+            closeButton.text('X');
+            closeButton.css({
+                'height': '3%',
+                'width': '3%',
+                'margin-left': '39%',
+                'margin-bottom': '3.5%'
+            });
+            return closeButton;
+        }
+
+        infoBox.css({
+            'background-color': 'black',
+            'color': 'white',
+            'height': '50%',
+            'width': '50%',
+            'margin-top': '15%',
+            'margin-left': '25%',
+        });
+
+        infoTitle.css({
+            'padding-top': '5%',
+            'padding-left': '8%',
+            'padding-right': '8%',
+            'background-color': 'black',
+            'display': 'block',
+            'color': 'white',
+            'border-top-left-radius': '3.5px',
+            'border-top-right-radius': '3.5px',
+            'font-size': '1.5em'
+        }).text('Welcome to the Touch Art Gallery');
+
+        infoMain.css({
+            'background-color': 'black',
+            'display': 'block',
+            'color': 'white',
+            'font-size': '0.75em',
+            'margin-left': '8%',
+            'margin-top': '5%',
+            'margin-right': '8%'
+        }).text(
+            'You can click/tap on artwork tiles that do not have attached an icon to interact with traditional image-based artworks.\n' +
+            'You can navigate to video artworks to view the video and interact with the simple video control interface.\n' +
+            'Tiles that have this icon refer to interactive tours. TAG tours function like simple video narratives but also encourage users to pause the tour and use intuitive pan, zoom gestures to interact with the image assets that appear on screen.\n' +
+            'You can tap on assets that appear in the associated media holder to bring them up automatically when while viewing the artwork.\n'
+        );
+
+        closeButton.css({
+            'height': '4%',
+            'width': '4%',
+            'min-height': '20px',
+            'min-width': '20px',
+            'margin-left': '0%',
+            'margin-bottom': '0%',
+            'margin-top': '1%',
+            'margin-right': '1%',
+            'top': '0%',
+            'display': 'block',
+            'float': 'right'
+        });
+
+        infoBox.append(closeButton);
+        infoBox.append(infoTitle);
+        infoBox.append(infoMain);
+
+
+        infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
+        infoOverlay.append(infoBox);
+
+        //root.append(infoOverlay);
+        //infoOverlay.fadeIn();
+
+        closeButton.on('mousedown', function () {
+            infoOverlay.fadeOut();
+        });
+
+        tagContainer.append(infoOverlay);
+        infoOverlay.fadeIn();
+
+    }
+
+
 
 })();
 
