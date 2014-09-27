@@ -410,16 +410,16 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         };
 
         newButtonCSS = { // TODO STYL
-            'margin-top': '2%',
-            'margin-bottom': '3%',
+            'margin-top': '1%',
+            'margin-bottom': '1.5%',
             'width': '100%',
-            'height': root.height() * 0.05,
+            'height': root.height() * 0.06,
             'color': 'white',
             'position': 'relative'
         };
 
-        sidePanelFontSize = TAG.Util.getMaxFontSizeEM("Edit Maps", 1, root.width() * 0.1, 0.65 * newButtonCSS.height); // TODO can probably do this in STYL
-        titleFontSize = TAG.Util.getMaxFontSizeEM("Artwork Information", 1, root.width() * 0.15, 0.8 * newButtonCSS.height); // TODO can probably do this in STYL
+        sidePanelFontSize = TAG.Util.getMaxFontSizeEM("Edit Maps", 1, root.width() * 0.11, 0.5 * root.height() * 0.07);
+        titleFontSize = TAG.Util.getMaxFontSizeEM("Artwork Properties", 1, root.width() * 0.15, root.height() * 0.07);
 
         sidebar = $(document.createElement('div')); // TODO JADE/STYL
         sidebar.addClass("sidebar");
@@ -430,7 +430,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             'left': '0%',
             'float': 'left',
             'background-color': 'rgba(0,0,0,0.85)',
-            'z-index': 100,
+            'z-index': 100
         });
 
         buttonContainer = $(document.createElement('div')); // TODO JADE/STYL
@@ -442,13 +442,18 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         });
         sidebar.append(buttonContainer);
 
+        // change calculation of max font size to be non-dependent on div size
+        // copy constant over
         artworkInfoLabel = $(document.createElement('div')); // TODO JADE/STYL
         artworkInfoLabel.addClass('artworkInfoLabel');
-        artworkInfoLabel.text('Artwork Information');
+        artworkInfoLabel.text('Artwork Properties');
         artworkInfoLabel.css({
-            color: 'white',
+            'color': 'white',
             'font-size': titleFontSize,
-            'margin-top': '2%'
+            'margin-top': '2%',
+            'margin-bottom': '3%',
+            'font-weight': 'bold',
+            'height': newButtonCSS.height * 0.6
         });
         buttonContainer.append(artworkInfoLabel);
 
@@ -467,7 +472,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         metadataButton.append(rightArrow);
 
         metaDataLabel = $(document.createElement('label')); // TODO J/S
-        metaDataLabel.text("Metadata");
+        metaDataLabel.text("Metadata  ");
         metaDataLabel.css({
             "width": "100%",
             "height": "100%",
@@ -484,7 +489,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         rightArrowEditLoc.css({ "position": "absolute", "right": "5%", top: "30%", width: "auto", height: "40%" });
 
         editLocLabel = $(document.createElement('label')); // TODO J/S
-        editLocLabel.text("Edit Maps");
+        editLocLabel.text("Edit Maps  ");
         editLocLabel.css({ "width": "100%", "height": "100%", "line-height": "100%", "text-align": "center" });
 
         editLocButton = $(document.createElement('div')); // TODO J/S
@@ -495,7 +500,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         editLocLabel.css({ "line-height": editLocButton.height() + "px", "font-size": sidePanelFontSize });
 
         editThumbLabel = $(document.createElement('label')); // TODO J/S
-        editThumbLabel.text("Capture Thumbnail");
+        editThumbLabel.text("Capture Thumbnail  ");
         editThumbLabel.css({ "width": "100%", "height": "100%", "line-height": "100%", "text-align": "center" });
 
         rightArrowEditThumb = $(document.createElement('img')); // TODO J/S
@@ -533,8 +538,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         assocMediaLabel.css({
             color: 'white',
             'font-size': titleFontSize,
-            'margin-top': '2%',
-            'margin-bottom': "2%"
+            'margin-top': '6%',
+            'margin-bottom': "2%",
+            'font-weight': 'bold'
         });
         buttonContainer.append(assocMediaLabel);
 
@@ -593,7 +599,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             'overflow-y': 'auto',
             'text-overflow': 'ellipsis',
             'word-wrap': 'break-word',
-            height: '60%'
+            height: '54%'
         });
         assetContainer.addClass('assetContainer');
         sidebar.append(assetContainer);

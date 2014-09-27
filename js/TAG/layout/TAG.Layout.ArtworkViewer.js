@@ -825,7 +825,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
                 } else {
                     if (!mediaDrawer) {
-                        mediaDrawer = createDrawer('Associated Media');
+                        mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
                     }
                     loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
                 }
@@ -1298,6 +1298,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          ******************/
 
         annotatedImage.addAnimateHandler(dzMoveHandler);
+        assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
         //PART OF CUSTOM BUILD FOR THE SAM
         for (i = 0; i < associatedMedia.guids.length; i++) {
             //console.log("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
@@ -1412,7 +1413,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @param {jQuery obj} topContents  an element to be included before the main contents of the drawer
      * @return {jQuery obj}             the drawer
      */
-    function createDrawer(title, topContents) {
+    function createDrawer(title, topContents, assocMediaToShow) {
         var drawer          = $(document.createElement('div')).addClass('drawer'),
             drawerHeader    = $(document.createElement('div')).addClass('drawerHeader'),
             label           = $(document.createElement('div')).addClass('drawerLabel'),
@@ -1471,6 +1472,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
         
         drawer.contents = drawerContents;
+        if (assocMediaToShow && title === 'Associated Media') {
+            drawerHeader.click();
+        }
         return drawer;
     }
 
