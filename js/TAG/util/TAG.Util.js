@@ -1916,17 +1916,17 @@ TAG.Util = (function () {
                     $(document.createElement('img'))
                     .addClass('infoSectionIcon')
                     .attr('src', src)
-                    .css({/*
+                    .css({
                         'display': 'block',
                         'position': 'absolute',
                         'vertical-align': 'middle',
                         'width': '100%',
                         'max-width':'45px',
                         'height':'auto',
-                        'max-height':'45px'*/
+                        'max-height':'45px'/*
                         bottom: '0px',
                         display: 'block',
-                        height: 'auto',
+                        height: '100%',
                         left: '0px',
                         'margin-bottom': 'auto',
                         'margin-left': 'auto',
@@ -1937,7 +1937,7 @@ TAG.Util = (function () {
                         position: 'absolute',
                         right: '0px',
                         top: '0px',
-                        width: 'auto',
+                        width: 'auto',*/
                     })
                 );
                 section.append(imgholder);
