@@ -1904,8 +1904,8 @@ TAG.Util = (function () {
                     .css({
                         'display': 'inline-block',
                         'position': 'absolute',
-                        'padding-top':'1%',
-                        'height': '100%',
+                        //'padding-top':'1%',
+                        'height': '80%',
                         'width':'10%',
                         'left': '0%',
                         'top':'0%',
@@ -1916,13 +1916,28 @@ TAG.Util = (function () {
                     $(document.createElement('img'))
                     .addClass('infoSectionIcon')
                     .attr('src', src)
-                    .css({
+                    .css({/*
                         'display': 'block',
                         'position': 'absolute',
                         'vertical-align': 'middle',
-                        'height':'90%',
-                        'max-height': '50px',
-                        'width': 'auto'
+                        'width': '100%',
+                        'max-width':'45px',
+                        'height':'auto',
+                        'max-height':'45px'*/
+                        bottom: '0px',
+                        display: 'block',
+                        height: 'auto',
+                        left: '0px',
+                        'margin-bottom': 'auto',
+                        'margin-left': 'auto',
+                        'margin-right': 'auto',
+                        'margin-top': 'auto',
+                        'max-height': '80%',
+                        'max-width': '80%',
+                        position: 'absolute',
+                        right: '0px',
+                        top: '0px',
+                        width: 'auto',
                     })
                 );
                 section.append(imgholder);
