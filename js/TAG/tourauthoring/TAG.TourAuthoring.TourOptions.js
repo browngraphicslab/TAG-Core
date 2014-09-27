@@ -422,7 +422,7 @@ TAG.TourAuthoring.TourOptions = function (spec) {
             'display': 'block',
             'width': '80%',
             'left': '10%',
-            'top': '70%'
+            'top': '60%'
         });
         dialogForm.append(buttonRow);
 
