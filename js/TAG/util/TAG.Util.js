@@ -1821,10 +1821,10 @@ TAG.Util = (function () {
     function createTutorialPopup() {
         var tagContainer = $('#tagRoot');
         var infoOverlay = $(TAG.Util.UI.blockInteractionOverlay());
-        var infoBox = $(document.createElement('div'));
-        var infoMain = $(document.createElement('div'));
-        var infoTitle = $(document.createElement('div'));
-        var closeButton = createCloseButton();
+        var infoBox = $(document.createElement('div')).addClass('infoBox');
+        var infoMain = $(document.createElement('div')).addClass('infoMain');
+        var infoTitle = $(document.createElement('div')).addClass('infoTitle');
+        var closeButton = createCloseButton().addClass('closeButton');
 
         function createCloseButton() {
             var closeButton = $(document.createElement('img'));
@@ -1842,7 +1842,7 @@ TAG.Util = (function () {
         infoBox.css({
             'background-color': 'black',
             'color': 'white',
-            'height': '50%',
+            'height': '55%',
             'width': '50%',
             'margin-top': '15%',
             'margin-left': '25%',
@@ -1866,14 +1866,9 @@ TAG.Util = (function () {
             'color': 'white',
             'font-size': '0.75em',
             'margin-left': '8%',
-            'margin-top': '5%',
+            'margin-top': '4%',
             'margin-right': '8%'
-        }).text(
-            'You can click/tap on artwork tiles that do not have attached an icon to interact with traditional image-based artworks.\n' +
-            'You can navigate to video artworks to view the video and interact with the simple video control interface.\n' +
-            'Tiles that have this icon refer to interactive tours. TAG tours function like simple video narratives but also encourage users to pause the tour and use intuitive pan, zoom gestures to interact with the image assets that appear on screen.\n' +
-            'You can tap on assets that appear in the associated media holder to bring them up automatically when while viewing the artwork.\n'
-        );
+        });
 
         closeButton.css({
             'height': '4%',
@@ -1891,14 +1886,70 @@ TAG.Util = (function () {
 
         infoBox.append(closeButton);
         infoBox.append(infoTitle);
-        infoBox.append(infoMain);
 
+        function createDivWithLabel(text, src) {
+            var section = $(document.createElement('div'))
+                .addClass('infoSection')
+                .css({
+                    'display': 'block',
+                    'position': 'relative',
+                    'width': '100%',
+                    'min-height': '1.5%',
+                    'max-height':'4%',
+                    'padding-bottom':'1.5%',
+                })
+            if (src) {
+                var imgholder = $(document.createElement('div'))
+                    .addClass('infoSectionIconHolder')
+                    .css({
+                        'display': 'inline-block',
+                        'position': 'absolute',
+                        'padding-top':'1%',
+                        'height': '100%',
+                        'width':'10%',
+                        'left': '0%',
+                        'top':'0%',
+                        'text-align':'center',
+                        'vertical-align':'middle'
+                    });
+                imgholder.append(
+                    $(document.createElement('img'))
+                    .addClass('infoSectionIcon')
+                    .attr('src', src)
+                    .css({
+                        'display': 'block',
+                        'position': 'absolute',
+                        'vertical-align': 'middle',
+                        'height':'90%',
+                        'max-height': '50px',
+                        'width': 'auto'
+                    })
+                );
+                section.append(imgholder);
+            }
+            section.append(
+                $(document.createElement('div'))
+                .addClass('infoSectionText')
+                .text(text)
+                .css({
+                    'display': 'inline-block',
+                    'position': 'relative',
+                    'width': src? '85%': '100%',
+                    'left': src? '12%' : '0%'
+                })
+            );
+            infoMain.append(section);
+        }
+
+        createDivWithLabel('You can click/tap on artwork tiles that do not have attached an icon to interact with traditional image-based artworks.');
+        createDivWithLabel("You can navigate to video artworks to view the video and interact with the simple video control interface.", tagPath+'images/video_icon.svg');
+        createDivWithLabel("Tiles that have this icon refer to interactive tours. TAG tours function like simple video narratives but also encourage users to pause the tour and use intuitive pan, zoom gestures to interact with the image assets that appear on screen.", tagPath + 'images/tour_icon.svg');
+        createDivWithLabel("You can tap on assets that appear in the associated media holder to bring them up automatically when while viewing the artwork.");
+
+        infoBox.append(infoMain);
 
         infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         infoOverlay.append(infoBox);
-
-        //root.append(infoOverlay);
-        //infoOverlay.fadeIn();
 
         closeButton.on('mousedown', function () {
             infoOverlay.fadeOut();
