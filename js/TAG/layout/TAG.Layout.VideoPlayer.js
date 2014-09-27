@@ -49,6 +49,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         currTime,
         poster = (videoSrc.Metadata.Thumbnail && !videoSrc.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(videoSrc.Metadata.Thumbnail) : '',
         source = TAG.Worktop.Database.fixPath(videoSrc.Metadata.Source),
+        locked = TAG.Worktop.Database.getLocked(),     //Check for locked
         sourceWithoutExtension = source.substring(0, source.lastIndexOf('.')),
         currentTimeDisplay = root.find('#currentTimeDisplay'),
         backButton = root.find('#backButton'),
@@ -286,7 +287,6 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
     function initPage() {
         idleTimer && idleTimer.kill();
         idleTimer = null;
-
         // set attributes of video element
         video.attr({
             poster: poster,
@@ -308,7 +308,11 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         currentTimeDisplay.text("00:00");
     
         // set up back button
-        backButton.attr('src',tagPath+'images/icons/Back.svg');
+        if (locked !== videoSrc.Identifier) {
+            backButton.attr('src', tagPath + 'images/icons/Back.svg');
+        } else {
+            backButton.hide();
+        }
         backButton.on('mousedown', function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
