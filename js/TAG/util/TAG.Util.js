@@ -5565,7 +5565,7 @@ TAG.Util.RLH = function (input) {
      * @return {Object}                       properly formatted rich location data
      */
     function locationToRichLocation(locationData) {
-        var parsedData = (typeof (locationData) === "string") ? JSON.parse(locationData) : locationData,
+        var parsedData = (typeof (locationData) === "string") ? JSON.parse(unescape(locationData)) : locationData,
             locs = [],
             loc,
             i;
