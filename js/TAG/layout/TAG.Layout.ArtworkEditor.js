@@ -1913,6 +1913,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 $unassociateAssocMediaButton.css({ "background-color": "transparent", "color": "white" });
             });
 
+            $unassociateAssocMediaButton.on("mouseup", function () {
+                $unassociateAssocMediaButton.css({ "background-color": "transparent", "color": "white" });
+            });
+
             //Initially disable the save button
             $saveAssocMediaButton.prop('disabled', true);
             $saveAssocMediaButton.css('opacity', '0.4');
