@@ -2374,6 +2374,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier)==-1) {
                             continue;
                         }
+
                         src = '';
                         metadata = doqs[i].Metadata;
                         thumb = metadata.Thumbnail;

@@ -1316,8 +1316,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             makeLayerContainer();
 
             toggleLayerButton.text('Remove Layer');
-            toggleHotspotButton.attr('disabled', 'disabled');
-            toggleHotspotButton.css('opacity', '0.5');
+            //toggleHotspotButton.attr('disabled', 'disabled'); TODO REMOVE WHEN LAYERS COME BACK
+            //toggleHotspotButton.css('opacity', '0.5');
 
             if (oldLayerContainers.length > 0) {   // clicking on a thumbnail button really quickly would add a bunch of layerContainers...but
                 for (i = 0; i < oldLayerContainers.length; i++) { // a cleaner way to avoid that would be to just disable the thumbnail button when its media is already open
@@ -1785,8 +1785,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'position': 'relative',
                         'font-size': $('.addRemoveMedia').css('font-size')
                     })
-                    .attr('type', 'button')
-                    .appendTo($toggleModeContainer),
+                    .attr('type', 'button'),
+                    //.appendTo($toggleModeContainer), //TODO Add layer functionality back in for 2.2
                 $titleContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
                     .css({
