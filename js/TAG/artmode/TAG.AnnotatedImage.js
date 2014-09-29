@@ -835,6 +835,26 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 // allows asset to be dragged, despite the name
                 TAG.Util.disableDrag(outerContainer);
 
+                //When the associated media is clicked, set it to active(see mediaManipPreprocessing() above )
+                outerContainer.on('click mousedown', function (event) {
+                    event.stopPropagation();            //Prevent the click going through to the main container
+                    event.preventDefault();
+                    TAG.Util.IdleTimer.restartTimer();
+                    mediaManipPreprocessing();
+
+                    // If event is initial touch on artwork, save current position of media object to use for animation
+                    outerContainer.startLocation = {
+                            x: outerContainer.position().left,
+                            y: outerContainer.position().top
+                    };
+                    console.log("startin location is getting set")
+                    outerContainer.manipulationOffset = {
+                        x: event.clientX - outerContainer.position().left,
+                        y: event.clientY - outerContainer.position().top
+                    };
+
+                });
+
                 // register handlers
                 if (IS_WINDOWS) {
                     TAG.Util.makeManipulatableWin(outerContainer[0], {
@@ -1343,25 +1363,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             }
             TAG.Util.IdleTimer.restartTimer();
         }
-        //When the associated media is clicked, set it to active(see mediaManipPreprocessing() above )
-        outerContainer.on('click mousedown', function (event) {
-            event.stopPropagation();            //Prevent the click going through to the main container
-            event.preventDefault();
-            TAG.Util.IdleTimer.restartTimer();
-            mediaManipPreprocessing();
-
-            // If event is initial touch on artwork, save current position of media object to use for animation
-            outerContainer.startLocation = {
-                    x: outerContainer.position().left,
-                    y: outerContainer.position().top
-            };
-            outerContainer.manipulationOffset = {
-                x: event.clientX - outerContainer.position().left,
-                y: event.clientY - outerContainer.position().top
-            };
-
-        });
-
 
 
 
