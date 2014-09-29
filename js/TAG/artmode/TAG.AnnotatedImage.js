@@ -836,8 +836,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 // register handlers
                 if (IS_WINDOWS) {
                     TAG.Util.makeManipulatableWin(outerContainer[0], {
-                        onManipulate: mediaManip,
-                        onScroll: mediaScroll
+                        onManipulate: mediaManipWin,
+                        onScroll: mediaScrollWin
                     }, null); // NO ACCELERATION FOR NOW  
                 } else {
                     TAG.Util.makeManipulatable(outerContainer[0], {
@@ -1278,12 +1278,83 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         });
 
 
+
+
+        function mediaManipWin(res) {
+            var t = outerContainer.css('top');
+            var l = outerContainer.css('left');
+            var w = outerContainer.css('width');
+            var h = outerContainer.css('height');
+            var neww = parseFloat(w) * res.scale;
+
+            var minConstraint;
+            if (CONTENT_TYPE === 'Video' || CONTENT_TYPE === 'Audio') {
+                minConstraint = 450;
+            } else {
+                minConstraint = 200;
+            }
+
+            //if the new width is in the right range, scale from the point of contact and translate properly; otherwise, just translate and clamp
+            var newClone;
+            if ((neww >= minConstraint) && (neww <= 800)) {
+                if (0 < parseFloat(t) + parseFloat(h) && parseFloat(t) < rootHeight && 0 < parseFloat(l) + parseFloat(w) && parseFloat(l) < rootWidth && res) {
+                    outerContainer.css("top", (parseFloat(t) + res.translation.y + (1.0 - res.scale) * (res.pivot.y)) + "px");
+                    outerContainer.css("left", (parseFloat(l) + res.translation.x + (1.0 - res.scale) * (res.pivot.x)) + "px");
+                }
+            } else {
+                if (0 < parseFloat(t) + parseFloat(h) && parseFloat(t) < rootHeight && 0 < parseFloat(l) + parseFloat(w) && parseFloat(l) < rootWidth && res) {
+                    outerContainer.css("top", (parseFloat(t) + res.translation.y) + "px");
+                    outerContainer.css("left", (parseFloat(l) + res.translation.x) + "px");
+                    neww = Math.min(Math.max(neww, minConstraint), 800);
+                }
+            }
+            outerContainer.css("width", neww + "px");
+            if (CONTENT_TYPE === 'Audio') {
+                outerContainer.css('height', 'auto');
+            } else {
+                var newH = (neww * h) / w;
+                outerContainer.css('height', newH + 'px');
+            }
+            outerContainer.find('.annotatedImageMediaTitle').css({
+                'width': (neww - 65) + 'px'
+            });
+
+            if (CONTENT_TYPE === 'Video') {
+                outerContainer.find('.mediaSliderContainer').css({
+                    'width': (neww - 200) + 'px'
+                });
+            }
+            mediaManipPreprocessing();
+        }
+
+        function mediaScrollWin(res, pivot) {
+            mediaManip({
+                scale: res,
+                translation: {
+                    x: 0,
+                    y: 0
+                },
+                pivot: {
+                    x: pivot.x + root.offset().left,// + (outerContainer.offset().left - root.offset().left),
+                    y: pivot.y + root.offset().top// + (outerContainer.offset().top - root.offset().top)
+                }
+            });
+        }
+
+
+
+
+
+
+
     /**
      * I/P {Object} res     object containing hammer event info
      * Drag/manipulation handler for associated media
      * Manipulation for touch and drag events
      */
         function mediaManip(res, evt, fromSeadragonControls) {
+            res && res.grEvent && (res.grEvent.target.autoProcessInertia = false);
+
             if (descscroll === true) {
                 return;
             }
