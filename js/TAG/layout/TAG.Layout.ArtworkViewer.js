@@ -1303,12 +1303,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         annotatedImage.addAnimateHandler(dzMoveHandler);
         assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
         //PART OF CUSTOM BUILD FOR THE SAM
-        for (i = 0; i < associatedMedia.guids.length; i++) {
+        /*for (i = 0; i < associatedMedia.guids.length; i++) {
             //console.log("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
             if (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type && (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type === "Hotspot")) {
                 loadQueue.add(associatedMedia[associatedMedia.guids[i]].showHotspot());
             }
-        };
+        };*/
     }
 
 

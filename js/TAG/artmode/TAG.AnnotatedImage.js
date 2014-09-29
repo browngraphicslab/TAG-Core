@@ -836,7 +836,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 // register handlers
                 if (IS_WINDOWS) {
                     TAG.Util.makeManipulatableWin(outerContainer[0], {
-                       onManipulate: mediaManip,
+                        onManipulate: mediaManip,
                         onScroll: mediaScroll
                     }, null); // NO ACCELERATION FOR NOW  
                 } else {
@@ -1346,7 +1346,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
              * If object is not on screen, reset and hide it
              */
             function checkForOffscreen() {
-                var offscreenBuffer = root.width() / 8;
+                var offscreenBuffer = (!IS_WINDOWS ? root.width() / 8: 0);
                 if (!(
                     (0 < finalPosition.y + height - offscreenBuffer) //top
                     && (finalPosition.y + offscreenBuffer < root.height()) //bottom
@@ -1523,7 +1523,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 thumbnailButton = $(toHideID);
             }
             
-
             thumbnailButton.css({
                 'color': 'black',
                 'background-color': 'rgba(255,255,255, 0.3)'
@@ -1593,6 +1592,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function isVisible() {
             return !mediaHidden;
         }
+
         function toggleHotspot() {
             if (outerContainerhidden) {
                 outerContainer.show();
