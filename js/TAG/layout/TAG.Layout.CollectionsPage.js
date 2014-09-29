@@ -522,6 +522,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // Iterate through visible/not private/published collections, and set their prev and next values
         // Also create a scroll dot for each (under main collection title)
         collectionDotHolder.empty();
+        var uiDocfrag = document.createDocumentFragment();
         for(i = 0; i < visibleCollections.length; i++) {
             if(visibleCollections.length<=2){ 
                 lastCollectionIndex = null;
@@ -549,11 +550,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 loadCollection(visibleCollections[j])();
                             }
                         }(i))
-
-            collectionDotHolder.append(collectionDot);
+            uiDocfrag.appendChild(collectionDot[0]);
+            //collectionDotHolder.append(collectionDot);
             collectionDots[visibleCollections[i].Identifier] = collectionDot;
         }
-
+        collectionDotHolder.append($(uiDocfrag));
         // Load collection
         if (currCollection) {
             //Quick check for specific load
@@ -708,6 +709,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             mainCollection.addClass('mainCollection');
             titleBox.addClass('collection-title primaryFont').html(title);
 
+            var uiDocfrag = document.createDocumentFragment();
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
@@ -738,7 +740,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     loadCollection(visibleCollections[j.prevCollectionIndex])();
                                 }
                             }(collection));
-                collectionArea.append(prevCollection);
+                //collectionArea.append(prevCollection);
+                uiDocfrag.appendChild(prevCollection[0]);
                 prevCollection.show();
                 TAG.Telemetry.register(backArrowArea, 'mousedown', 'collection_title', function(tobj){
                     tobj.custom_1 = CryptoJS.SHA1(prevTitle).toString(CryptoJS.enc.Base64);
@@ -797,8 +800,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tobj.custom_1 = CryptoJS.SHA1(nextTitle).toString(CryptoJS.enc.Base64);
                     tobj.mode = 'Kiosk';
                 });
-                collectionArea.append(nextCollection);
+                //collectionArea.append(nextCollection);
+                uiDocfrag.appendChild(nextCollection[0]);
             }
+            collectionArea.append($(uiDocfrag));
 
             if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
                 backArrowArea.hide();
@@ -965,8 +970,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var i,
                 text;
             buttonRow.empty();
+            var uiDocfrag = document.createDocumentFragment();
             for (i = 0; i < sortOptions.length; i++) {
                 sortButton = $(document.createElement('div'));
+                uiDocfrag.appendChild(sortButton[0]);
                 //Because stored on server as "Tour" but should be displayed as "Tours"
                 sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
                 sortButton.addClass('secondaryFont');
@@ -987,7 +994,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //var newPos = TAG.Util.constrainAndPosition(0, buttonRow.height(), spec); // give a random width cuz when try to get the centered yPos, width doesn't matter
                 //sortButton.css("top", newPos.y + 'px');
                 //sortButton.css("height", newPos.height + 'px');
-                buttonRow.append(sortButton);
+                //buttonRow.append(sortButton);
                 sortButtonTags[sortButton.attr('id')] = sortOptions[i];
                 //TO-DO: test this telemetry handler
                 TAG.Telemetry.register(sortButton, 'mousedown', '', function (tobj) {
@@ -995,6 +1002,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tobj.mode = 'Kiosk';
                 });
             }
+            buttonRow.append($(uiDocfrag));
             if (!comingBack || !currentTag) {
                 //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
                 if (timelineShown && (sortOptions.indexOf('Date')>=0)) {
@@ -1297,6 +1305,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 videoLabel,
                 showLabel = true;
   
+            var uiDocfrag = document.createDocumentFragment();
+            uiDocfrag.appendChild(main[0]);
+
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
             tileImage.addClass('tileImage');
@@ -1494,7 +1505,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
             }
 
-            tileDiv.append(main);
+            //tileDiv.append(main);
+            tileDiv.append($(uiDocfrag));
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
             var tileHeight = (0.45) * tileDivHeight;
             main.css({'height': (0.45) * tileDivHeight});
@@ -1672,7 +1684,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 labelOverlap,
                 zoomLevel = 1,
                 currOffset;
-
+            var uiDocfrag = document.createDocumentFragment();
             timeRange = maxDate - minDate;
 
             timelineCircleArea.addClass('timelineCircleArea');
@@ -1686,7 +1698,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     positionOnTimeline = 100*(curr.yearKey - minDate)/timeRange;
 
                     //Create and append event circle
-                    eventCircle = $(document.createElement('div'));  
+                    eventCircle = $(document.createElement('div'));
+                    uiDocfrag.appendChild(eventCircle[0]);
                     eventCircle.addClass('timelineEventCircle')
                                 .css('left', positionOnTimeline + '%')
                                 .on('click', (function(art, eventCircle) {
@@ -1704,7 +1717,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                         } 
                                     }      
                                 })(art, eventCircle));
-                    timelineCircleArea.append(eventCircle);
+                    //timelineCircleArea.append(eventCircle);
 
                     //Shift circles left by half their width so they are centered on ticks
                     //TO-DO: add this back in so that it works with new animations (all relative positioning)
@@ -1736,7 +1749,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 if(curr) { art = curr.artwork; }
 
             }
-
+            timelineCircleArea.append($(uiDocfrag));
             //Set intitial style of timeline event circles and set their zoomLevel
             for (var i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
                 timelineEventCircles[i].zoomLevel = getZoomLevel(timelineEventCircles[i]);
@@ -2172,11 +2185,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     descText,
                     miniTilesHolder,
                     miniTile;
-
+                var uiDocfrag = document.createDocumentFragment();
                 //Entire tile
                 previewTile = $(document.createElement('div'))
                     .addClass('previewTile');
-
+                uiDocfrag.appendChild(previewTile[0]);
 
                 //Top portion of the tile (with image, title, and subtitle)
                 tileTop = $(document.createElement('div'))
@@ -2466,7 +2479,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 previewTile.append(tileTop)
                     	   .append(tileBottom);
 
-				selectedArtworkContainer.append(previewTile);
+                //selectedArtworkContainer.append(previewTile);
+                selectedArtworkContainer.append($(uiDocfrag));
                 root.find('.tile').css('opacity','0.5');
   
                 var numberAssociatedDoqs = 0;
