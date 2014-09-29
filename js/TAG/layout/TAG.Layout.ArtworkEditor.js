@@ -417,7 +417,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             'color': 'white',
             'position': 'relative'
         };
-
+        
         sidePanelFontSize = TAG.Util.getMaxFontSizeEM("Edit Maps", 1, root.width() * 0.11, 0.5 * root.height() * 0.07);
         titleFontSize = TAG.Util.getMaxFontSizeEM("Artwork Properties", 1, root.width() * 0.15, root.height() * 0.07);
 

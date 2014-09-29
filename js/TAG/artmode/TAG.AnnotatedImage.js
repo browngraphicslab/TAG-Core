@@ -755,6 +755,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.css('width', 0.29 * root.width() + 'px');
                 innerContainer.css('backgroundColor', 'rgba(0,0,0,0.65)');
                 // for scaling and preventing overflow issues with the close button, we use a holder for the title
+                // .remove is safety check for inertia looping issue
+                titleDiv && titleDiv.remove();
                 titleDiv = $(document.createElement('div'));
                 titleDiv.css({
                     'display': 'block',
@@ -1067,10 +1069,93 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 h;
                 //rect;
 
-            if(!mediaLoaded) {
+            if (!mediaLoaded) {
                 mediaLoaded = true;
             } else {
-                return;
+                if (mediaHidden) {
+                    initMediaObject();
+                    if (IS_XFADE) {
+                        outerContainer.css({
+                            "pointer-events": "none "
+                        })
+                    } else {
+                        if (CONTENT_TYPE === 'Image') {
+                            outerContainer.css('min-width', '');
+                        } else if (CONTENT_TYPE === 'Video') {
+                            outerContainer.css({
+                                'width': '675px',
+                                'height': 'auto'
+                            });
+                        } else if (CONTENT_TYPE === 'Audio') {
+                            outerContainer.css({
+                                'width': '675px',
+                                'height': 'auto'
+                            });
+                        } else if (CONTENT_TYPE === 'iframe') {
+                            outerContainer.css({
+                                'width': '30%',
+                            });
+                            if (descDiv) {
+                                outerContainer.css('height', outerContainer.width() * 1.15);
+                            } else {
+                                outerContainer.css('height', outerContainer.width() * 0.89);
+                            }
+                            innerContainer.css({
+                                'height': '100%'
+                            });
+                            var mediaHeight;
+                            DESCRIPTION ? mediaHeight = '85%' : mediaHeight = '100%';
+                            mediaContainer.css({
+                                'height': mediaHeight
+                            });
+
+                            //Create an overlay to help with interaction (problems with mouse "sticking" to iframe)
+                            //Basically, create an overlay that only exists while you have clicked down on the media, and then is removed when you release it (i.e, when you want to actually play the iframe)
+                            if (!IS_WINDOWS) {
+                                var interactionOverlay = $(document.createElement('div')).addClass("interactionOverlay");
+                                interactionOverlay.css({
+                                    height: "100%",
+                                    width: "100%",
+                                    position: "absolute",
+                                    left: 0,
+                                    top: 0
+                                });
+                                outerContainer.on('mousedown', function () {
+                                    interactionOverlay.css("pointer-events", "auto");
+                                });
+                                $("body").on('mouseup', function () {
+                                    interactionOverlay && interactionOverlay.css("pointer-events", "none")
+                                });
+                                mediaContainer.append(interactionOverlay)
+                            }
+                        }
+                        if (DESCRIPTION) {
+                            descDiv = $(document.createElement('div'));
+                            descDiv.addClass('annotatedImageMediaDescription');
+                            descDiv.css({
+                                'font-size': descTextSize
+                            });
+                            descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
+                            if (IS_WINDOWS) {
+                                var links = descDiv.find('a');
+                                links.each(function (index, element) {
+                                    $(element).replaceWith(function () {
+                                        return $.text([this]);
+                                    });
+                                });
+                            }
+                            descDiv.mouseover(function () { descscroll = true });
+                            descDiv.mouseleave(function () { descscroll = false; });
+                            //if(CONTENT_TYPE === 'iframe'){
+                            //    descDiv.css({top:'110%'});
+                            //}
+                            outerContainer.append(descDiv);
+                        }
+                        return;
+                    }
+                } else {
+                    return;
+                }
             }
 
             if (IS_XFADE) {
@@ -1325,6 +1410,37 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 });
             }
             mediaManipPreprocessing();
+
+            checkForOffscreen();
+
+            function checkForOffscreen() {
+                var offscreenBuffer = (!IS_WINDOWS ? root.width() / 8 : 0);
+                var finalPosition = {
+                    x: parseInt(outerContainer.css('left')),
+                    y: parseInt(outerContainer.css('top'))
+                };
+                var finalDims = {
+                    w: parseInt(outerContainer.css('width')),
+                    h: parseInt(outerContainer.css('height'))
+                }
+                if (!(
+                    (0 < finalPosition.y + finalDims.h - offscreenBuffer) //top
+                    && (finalPosition.y + offscreenBuffer < root.height()) //bottom
+                    && (0 < finalPosition.x + finalDims.w - offscreenBuffer) //left
+                    && (finalPosition.x + offscreenBuffer < root.width()))) { //right
+                    hideMediaObject();
+                    pauseResetMediaObject();
+                    //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
+                    //if (IS_WINDOWS) {
+                    //res.grEvent.target.isInertial = false;
+                    //res.grEvent.target.velocities.linear.x = 0;
+                    //res.grEvent.target.velocities.linear.y = 0;
+                    //res.grEvent.stop();
+                    //}
+                    return;
+                    IS_WINDOWS && (outerContainer.manipulationOffset = null);
+                }
+            }
         }
 
         function mediaScrollWin(res, pivot) {
@@ -1340,12 +1456,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 }
             });
         }
-
-
-
-
-
-
 
     /**
      * I/P {Object} res     object containing hammer event info
@@ -1435,7 +1545,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     return;
                     IS_WINDOWS && (outerContainer.manipulationOffset = null);
                 }
-           };    
+            }
         }
 
     /**
@@ -1540,7 +1650,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 w = outerContainer.width(),
                 splitscreenOffset = 0;
             outerContainer && outerContainer.detach();
-            createMediaObject(mdoq, linq);
 
             // temporary crashfix for errors where viewport isn't properly initialized
             // need to root-cause this issue ASAP
@@ -1599,7 +1708,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'background-color': 'rgba(255,255,255, 0.3)'
             });
 
-            // TODO is this necessary?
+            // TODO is this necessary? 
+            // dz17: this WAS necessary due to scaling. Please ask before disabling anything to do with resizing
             // if ((info.contentType === 'Video') || (info.contentType === 'Audio')) {
             //     resizeControlElements();
             // }
@@ -1629,13 +1739,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             TAG.Util.IdleTimer.restartTimer();
             dzManipPreprocessing();                     //When an object is hidden, set the artwork as active
 
-            if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
-                outerContainer.hide();
-            } else {
-                pauseResetMediaObject();
-                IS_HOTSPOT && removeOverlay(circle[0]);
-                outerContainer.detach();
-            }
+            pauseResetMediaObject();
+            IS_HOTSPOT && removeOverlay(circle[0]);
+            outerContainer.remove();
+
+            outerContainer = $(document.createElement('div'));;
+            // removed below because xfades are gone for 2.1
+            //if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
+            //    outerContainer.hide();
+            //} else {
+            //    pauseResetMediaObject();
+            //    IS_HOTSPOT && removeOverlay(circle[0]);
+            //    outerContainer.detach();
+            //}
 
         }
 
