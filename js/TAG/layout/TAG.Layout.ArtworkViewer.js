@@ -1440,7 +1440,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         drawerHeader.append(label);
         drawerHeader.append(toggleContainer);
         toggleContainer.append(toggle);
-        
+   
         drawer.append(drawerContents);
         topContents && drawerContents.append(topContents);
 
@@ -1468,10 +1468,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             drawerContents.slideToggle();
             isOpen && that.locationClose()
-            drawerContents.css({
-                'display':'inline-block',
-                'overflow-y': 'scroll'
-            });
         });
         
         drawer.contents = drawerContents;
