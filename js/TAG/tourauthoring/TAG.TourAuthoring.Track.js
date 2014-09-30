@@ -382,7 +382,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         menu.addTitle('Track Options');
         var renameButton = menu.addButton('Rename', 'left', componentOptionRename);
         if (my.type === TAG.TourAuthoring.TrackType.ink) {
-            menu.addButton('Edit Ink', 'left', componentOptionEditInk);
+            menu.addButton('Edit Annotation', 'left', componentOptionEditInk);
         }
         if (my.type === TAG.TourAuthoring.TrackType.video && !my.toConvert) {
             convertbtn = menu.addButton('Convert', 'left', componentOptionConvertVideo);
@@ -500,12 +500,12 @@ TAG.TourAuthoring.Track = function (spec, my) {
         var i;
         var displays = that.getStorageContainer().displays.getContents();
         if ($("#inkDrawControls").css("display") == "block" || $("#inkTransparencyControls").css("display") == "block" || $("#inkTextControls").css("display") == "block" || $("#inkEditDraw").css("display") == "block" || $("#inkEditTransparency").css("display") == "block" || $("#inkEditText").css("display") == "block") {
-            displayError("An ink is already being edited.");
+            displayError("An annotation is already being edited.");
             return;
         }
 
         if (!displays.length) {
-            displayError("The ink must be visible in the preview window in order to edit it.");
+            displayError("The annotation must be visible in the preview window in order to edit it.");
             return;
         }
 
@@ -541,7 +541,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
         //ensures warning message appears if user tries to edit an ink without the playhead being inside artwork and ink, ink or artwork
         if ((!inInkDisplay) || (!inArtDisplay)) {
-            displayError("The ink must be visible in the preview window in order to edit it.");
+            displayError("The annotation must be visible in the preview window in order to edit it.");
             return;
         }
 
@@ -551,14 +551,14 @@ TAG.TourAuthoring.Track = function (spec, my) {
         close();
 
         if (!old_datastring || !inkType) {
-            displayError("This ink track has become corrupted, please remove and create a new ink.");
+            displayError("This annotation track has become corrupted, please remove and create a new ink.");
             return;
         }
 
 
         var ES = $("[ES_ID='" + my.title + "']");
         if (!ES[0]) {
-            displayError("The ink must be visible in the preview window in order to edit it.");
+            displayError("The annotation must be visible in the preview window in order to edit it.");
             return;
         }
 
@@ -577,7 +577,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             var viewBox = text_elt[0] ? ES.find('svg')[0].getAttribute('viewBox') : null;
             if (!text_elt[0] || (getInkEnabled() && !viewBox)) {
                 my.isVisible = true;
-                displayError("The ink must be loaded and on screen in order to edit it.");
+                displayError("The annotation must be loaded and on screen in order to edit it.");
                 return;
             }
             var rinplayer = $('#rinplayer');
@@ -591,7 +591,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             my.timeline.showEditText(that, old_datastring, dims);
         } else {
             my.isVisible = true;
-            displayError("This ink track is in a deprecated format, please remove and create a new ink.");
+            displayError("This annotation track is in a deprecated format, please remove and create a new ink.");
             return;
         }
 
@@ -1030,7 +1030,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             }
         });
 
-        text += ((hasAttachedInks && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) ? " and any attached ink tracks?" : "?");
+        text += ((hasAttachedInks && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) ? " and any attached annotation tracks?" : "?");
         mssge.text(text);
 
         //var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
