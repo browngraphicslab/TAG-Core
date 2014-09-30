@@ -2058,13 +2058,13 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         }
         var track = dataHolder.getSelectedTrack();
         if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
-            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
+            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked annotation.");
             return false;
         }
 
         // First, check if the text is a valid (non-empty) ink by checking the value of the textbox. If invalid, show a warning message.
         if (isTextboxEmpty()) {
-            creationError("Unable to attach an empty ink. Please add to ink component before attaching.");
+            creationError("Unable to attach an empty annotation. Please add to annotation component before attaching.");
             return false;
         }
         // next, check to make sure the playhead is in a display; if not, show a warning message
@@ -2076,7 +2076,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         }
         var keyframe = viewer.captureKeyframe(track.getTitle());
         if (!keyframe) {
-            creationError("The track selected must be fully on screen in order to attach an ink. Please seek to a location where the track is visible.");
+            creationError("The track selected must be fully on screen in order to attach an annotation. Please seek to a location where the track is visible.");
             return false;
         }
 
@@ -2093,7 +2093,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     function link_text_unattached() {
         // First, check if the text is a valid (non-empty) ink by checking the value of the textbox. If invalid, show a warning message.
         if (isTextboxEmpty()) {
-            creationError("Unable to attach an empty ink. Please add to ink component before attaching.");
+            creationError("Unable to attach an empty annotation. Please add to annotation component before attaching.");
             return false;
         }
         if (!linkUnattached()) return false;
@@ -2112,7 +2112,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         var track = dataHolder.getSelectedTrack();
         
         if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
-            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
+            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked annotation.");
             return false;
         }
 
@@ -2125,7 +2125,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         
         var keyframe = viewer.captureKeyframe(track.getTitle());
         if (!keyframe) {
-            creationError("The track selected must be fully on screen in order to attach an ink. Please seek to a location where the track is visible.");
+            creationError("The track selected must be fully on screen in order to attach an annotation. Please seek to a location where the track is visible.");
             return false;
         }
 
@@ -2140,7 +2140,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function link_trans_unattached() {
         if (isDatastringEmpty(update_datastring())) {
-            creationError("Unable to attach an empty ink. Please add to ink component before attaching.");
+            creationError("Unable to attach an empty annotation. Please add to annotation component before attaching.");
             return false;
         }
         get_trans_shape_data();
@@ -2161,11 +2161,11 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         var track = dataHolder.getSelectedTrack();
 
         if (!track || (track.getType() !== TAG.TourAuthoring.TrackType.artwork && track.getType() !== TAG.TourAuthoring.TrackType.image)) {
-            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked ink.");
+            creationError("There is no artwork or image track selected. Please select a valid track or create an unlinked annotation.");
             return false;
         }
         if (isDatastringEmpty(update_datastring())) { // make sure the datastring is nonempty before we attach
-            creationError("Unable to attach an empty ink. Please add to ink component before attaching.");
+            creationError("Unable to attach an empty annotation. Please add to annotation component before attaching.");
             return false;
         }
         var inDisplay = checkInDisplay(track);
@@ -2193,7 +2193,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
 
         var keyframe = viewer.captureKeyframe(artName);
         if (!keyframe) {
-            creationError("The track selected must be fully on screen in order to attach an ink. Please seek to a location where the track is visible.");
+            creationError("The track selected must be fully on screen in order to attach an annotation. Please seek to a location where the track is visible.");
             return false;
         }
 
@@ -2288,7 +2288,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             inkEmptyOverlay.fadeIn(100);
 
             var text = $(document.createElement("div"));
-            text.text("Unable to attach an empty ink. Please add to ink component before attaching.");
+            text.text("Unable to attach an empty annotation. Please add to annotation component before attaching.");
             text.css('font-size', '1.25em', "text-align", 'left');
             inkEmptyDialog.append(text);
 
@@ -2315,7 +2315,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         }
 
         // add track and set track data
-        inktrack = timeline.addInkTrack(null, "Unattached Ink", 1);
+        inktrack = timeline.addInkTrack(null, "Unattached Annotation", 1);
         inktrack.setInkLink(null);
         var datastr = update_datastring();
         var inkType = datastr.split("::")[0].toLowerCase();
