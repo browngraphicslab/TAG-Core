@@ -1603,7 +1603,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptionsObj[sortDiv.text()] = false;
                 //TODO:set the sort tag to white in previewer
 
-                $("#" + buttonId).hide();
+                $("[id='"+buttonId+"']").hide();
 
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
@@ -1621,8 +1621,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     });
 
                     //if the button already exists
-                    if ($("#" + buttonId)[0]){
-                        $("#" + buttonId).show()
+                    if ($("[id='" + buttonId + "']")[0]) {
+                        $("[id='" + buttonId + "']").show()
                             .css({"color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)})
                     } else { //or if you're making it (sort option was origionally deselected)
                         sortButton = $(document.createElement('div'));
@@ -1642,7 +1642,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                         "height": "100%",
                                         "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
                                     });
-                    $("#buttonRow").append(sortButton);
+                        $("#buttonRow").append(sortButton);
                     }
 
                     if (sortDiv.text() === "Date") {
