@@ -1858,72 +1858,72 @@ TAG.Util = (function () {
             'border-top-left-radius': '3.5px',
             'border-top-right-radius': '3.5px',
             'font-size': '1.5em'
-        }).text('Welcome to the Touch Art Gallery');
+        }).text('Welcome to Touch Art Gallery');
 
-        infoMain.css({
-            'background-color': 'black',
-            'display': 'block',
-            'color': 'white',
-            'font-size': '0.75em',
-            'margin-left': '8%',
-            'margin-top': '4%',
-            'margin-right': '8%'
-        });
+            infoMain.css({
+                'background-color': 'black',
+                'display': 'block',
+                'color': 'white',
+                'font-size': '0.75em',
+                'margin-left': '8%',
+                'margin-top': '4%',
+                'margin-right': '8%'
+            });
 
-        closeButton.css({
-            'height': '4%',
-            'width': '4%',
-            'min-height': '20px',
-            'min-width': '20px',
-            'margin-left': '0%',
-            'margin-bottom': '0%',
-            'margin-top': '1%',
-            'margin-right': '1%',
-            'top': '0%',
-            'display': 'block',
-            'float': 'right'
-        });
+            closeButton.css({
+                'height': '4%',
+                'width': '4%',
+                'min-height': '20px',
+                'min-width': '20px',
+                'margin-left': '0%',
+                'margin-bottom': '0%',
+                'margin-top': '1%',
+                'margin-right': '1%',
+                'top': '0%',
+                'display': 'block',
+                'float': 'right'
+            });
 
-        infoBox.append(closeButton);
-        infoBox.append(infoTitle);
+            infoBox.append(closeButton);
+            infoBox.append(infoTitle);
 
-        function createDivWithLabel(text, src) {
-            var section = $(document.createElement('div'))
-                .addClass('infoSection')
-                .css({
-                    'display': 'block',
-                    'position': 'relative',
-                    'width': '100%',
-                    'min-height': '1.5%',
-                    'max-height':'4%',
-                    'padding-bottom':'1.5%',
-                })
-            if (src) {
-                var imgholder = $(document.createElement('div'))
-                    .addClass('infoSectionIconHolder')
-                    .css({
-                        'display': 'inline-block',
-                        'position': 'absolute',
-                        //'padding-top':'1%',
-                        'height': '80%',
-                        'width':'10%',
-                        'left': '0%',
-                        'top':'0%',
-                        'text-align':'center',
-                        'vertical-align':'middle'
-                    });
-                imgholder.append(
-                    $(document.createElement('img'))
-                    .addClass('infoSectionIcon')
-                    .attr('src', src)
+            function createDivWithLabel(text, src) {
+                var section = $(document.createElement('div'))
+                    .addClass('infoSection')
                     .css({
                         'display': 'block',
-                        'position': 'absolute',
-                        'vertical-align': 'middle',
+                        'position': 'relative',
                         'width': '100%',
-                        'max-width':'45px',
-                        'height':'auto',
-                        'max-height':'45px'/*
+                        'min-height': '1.5%',
+                        'max-height': '4%',
+                        'padding-bottom': '1.5%',
+                    })
+                if (src) {
+                    var imgholder = $(document.createElement('div'))
+                        .addClass('infoSectionIconHolder')
+                        .css({
+                            'display': 'inline-block',
+                            'position': 'absolute',
+                            //'padding-top':'1%',
+                            'height': '80%',
+                            'width': '10%',
+                            'left': '0%',
+                            'top': '0%',
+                            'text-align': 'center',
+                            'vertical-align': 'middle'
+                        });
+                    imgholder.append(
+                        $(document.createElement('img'))
+                        .addClass('infoSectionIcon')
+                        .attr('src', src)
+                        .css({
+                            'display': 'block',
+                            'position': 'absolute',
+                            'vertical-align': 'middle',
+                            'width': '100%',
+                            'max-width': '45px',
+                            'height': 'auto',
+                            'max-height': '45px'/*
                         bottom: '0px',
                         display: 'block',
                         height: '100%',
@@ -1938,28 +1938,28 @@ TAG.Util = (function () {
                         right: '0px',
                         top: '0px',
                         width: 'auto',*/
+                        })
+                    );
+                    section.append(imgholder);
+                }
+                section.append(
+                    $(document.createElement('div'))
+                    .addClass('infoSectionText')
+                    .text(text)
+                    .css({
+                        'display': 'inline-block',
+                        'position': 'relative',
+                        'width': src ? '85%' : '100%',
+                        'left': src ? '12%' : '0%'
                     })
                 );
-                section.append(imgholder);
+                infoMain.append(section);
             }
-            section.append(
-                $(document.createElement('div'))
-                .addClass('infoSectionText')
-                .text(text)
-                .css({
-                    'display': 'inline-block',
-                    'position': 'relative',
-                    'width': src? '85%': '100%',
-                    'left': src? '12%' : '0%'
-                })
-            );
-            infoMain.append(section);
-        }
 
-        createDivWithLabel('You can click/tap on artwork tiles that do not have attached an icon to interact with traditional image-based artworks.');
-        createDivWithLabel("You can navigate to video artworks to view the video and interact with the simple video control interface.", tagPath+'images/video_icon.svg');
-        createDivWithLabel("Tiles that have this icon refer to interactive tours. TAG tours function like simple video narratives but also encourage users to pause the tour and use intuitive pan, zoom gestures to interact with the image assets that appear on screen.", tagPath + 'images/tour_icon.svg');
-        createDivWithLabel("You can tap on assets that appear in the associated media holder to bring them up automatically when while viewing the artwork.");
+            createDivWithLabel("Click or tap on a tile to preview the item it represents, and click/tap on its thumbnail again to begin exploring it in full.");
+            createDivWithLabel("Tiles without icons are image artworks. Any media associated with the artwork will appear below the artwork in the previewer. You can explore the artwork with a specific media item by tapping on the item's thumbnail image.")
+            createDivWithLabel("Tiles with the play icon represent video artworks. Click or tap on the tile to view them in the video player.", tagPath + 'images/video_icon.svg');
+            createDivWithLabel("Tiles with this icon represent interactive tours. Click or tap on the tile to open them in the tour player. Tours are like video narratives, but can be paused at any time via the controls, or by tapping anywhere in the player. While paused, you can freely manipulate all items that are currently onscreen.", tagPath + 'images/tour_icon.svg');
 
         infoBox.append(infoMain);
 
