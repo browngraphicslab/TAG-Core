@@ -2233,8 +2233,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             infoFields[key] = $(additionalFields[i]).attr('entry');
         }
 
+        var textName = $(artworkMetadata.Title).val();
+        
+        if (textName == "") {
+            textName= "Untitled Artwork";
+        }
         TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
-            Name: $(artworkMetadata.Title).val(),
+            Name: textName,
             Artist: $(artworkMetadata.Artist).val(),
             Year: $(artworkMetadata.Year).val(),
             Location: JSON.stringify(locationList),
