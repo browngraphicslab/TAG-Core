@@ -6681,7 +6681,9 @@ TAG.Util.RLH = function (input) {
 
         function success() {
             TAG.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
-                artwork = newArtwork;
+                if (newArtwork.length > 0) {
+                    artwork = newArtwork;
+                }
                 richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(unescape(artwork.Metadata.RichLocationHistory)) : locationToRichLocation(artwork.Metadata.Location);
                 locations = richLocationData.locations || [];
                 !input.noReload && getMaps(input.callback);
