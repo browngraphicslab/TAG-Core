@@ -5264,7 +5264,7 @@ TAG.Util.RLH = function (input) {
      */
     function saveCurrentMapMetadata() {
         var progressCSS = {
-            'left': '65%',
+            'left': '70%',
             'top': '10px',
             'width': 'auto',
             'height': '50%',
