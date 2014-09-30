@@ -2505,14 +2505,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             progressCircCSS = {
                 'position': 'absolute',
                 'float'   : 'left',
-                'left'    : '12%',
+                'left'    : '35%',
                 'z-index' : '50',
-                'height'  : '20%',
+                'height'  : '60%',
                 'width'   : 'auto',
-                'top'     : '22%',
-                };
-            
-            circle = TAG.Util.showProgressCircle(firstDescSpan, progressCircCSS, '0px', '0px', false);
+                'top'     : '15%',
+            };
+            var miniTilesHolder = $('.miniTilesHolder');
+            circle = TAG.Util.showProgressCircle(miniTilesHolder, progressCircCSS, '0px', '0px', false);
                  
         };
     }
