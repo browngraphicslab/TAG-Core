@@ -29,6 +29,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locHistoryContainer = root.find('#locationHistoryContainer'),
         locationPanelDiv = null,
         locHistoryToggle = null,
+        locHistoryToggleSign = null,
         isOpen = false,
         that = this,
         locked = TAG.Worktop.Database.getLocked(),     //Check for locked
@@ -226,6 +227,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         locHistoryContainer.css({ "background-color": "transparent" });
                         locationPanelDiv.hide();
                         locHistoryToggle.hide();
+                        locHistoryToggleSign.attr("src", tagPath + 'images/icons/plus.svg');
                         isOpen = false;
                         toggler.show();
 
@@ -1330,14 +1332,16 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @author jastern
      */
     function initlocationHistory() {
-        var RLH,  
-            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer'),
-            toggle          = $(document.createElement('img')).addClass("drawerPlusToggle")
-                .attr("src", tagPath+'images/icons/plus.svg');      
+        var RLH,
+            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer');
+            //toggle          = $(document.createElement('img')).addClass("drawerPlusToggle")
+            //    .attr("src", tagPath+'images/icons/plus.svg');      
         isOpen = false;
 
+        locHistoryToggleSign = $(document.createElement('img')).addClass("drawerPlusToggle")
+                .attr("src", tagPath+'images/icons/plus.svg'); 
         locHistoryContainer.on('click', function () { toggleLocationOpen(); });
-        toggleContainer.append(toggle);
+        toggleContainer.append(locHistoryToggleSign);
         locHistoryContainer.append(toggleContainer);
 
         //panel that slides out when location history is clicked
@@ -1393,7 +1397,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
                     //and open RLH
                     locationPanelDiv.css({ display: 'inline' });
-                    toggle.attr("src", tagPath+'images/icons/minus.svg');      
+                    locHistoryToggleSign.attr("src", tagPath + 'images/icons/minus.svg');
                     isOpen = true;
                     toggler.hide();
                     locationPanelDiv.show();
@@ -1404,7 +1408,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         function locationClose() {
             if (isOpen) {
-                toggle.attr("src", tagPath+'images/icons/plus.svg');      
+                locHistoryToggleSign.attr("src", tagPath + 'images/icons/plus.svg');
                 locHistory.text("Maps");
                 locHistoryContainer.css({ "background-color": "transparent" });
                 isOpen = false;
