@@ -758,9 +758,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 // .remove is safety check for inertia looping issue
                 titleDiv && titleDiv.remove();
                 titleDiv = $(document.createElement('div'));
+                var titleHeight = '20px';
+                if (IS_WINDOWS) {
+                    titleHeight = '40px';
+                }
                 titleDiv.css({
                     'display': 'block',
-                    'height': '40px',
+                    'height': titleHeight,
                     'position': 'relative',
                     'margin-bottom': '5px',
                     'width': '100%',
@@ -769,7 +773,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 titleTextHolder.addClass('annotatedImageMediaTitle');//.css({'text-overflow':'ellipsis','white-space':'nowrap'});
 
                 titleDiv.append(titleTextHolder);
-                var titlefontsize = LADS.Util.getMaxFontSizeEM("WWWWW", 0.6, 999999, 41, 0.025);
+                var titlefontsize = LADS.Util.getMaxFontSizeEM("WWWWW", 0.6, 999999, parseInt(titleHeight)+1, 0.025);
                 if (TITLE) {
                     titleTextHolder.text(TITLE);
                 } else {
@@ -1627,10 +1631,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var closeButton = $(document.createElement('img'));
             closeButton.attr('src', tagPath + 'images/icons/x.svg');
             closeButton.text('X');
+            var cssHeight = IS_WINDOWS ? '30px' : '15px';
             closeButton.css({
                 'position': 'absolute',
                 'width': 'auto',
-                'height': '30px',
+                'height': cssHeight,
                 'min-width': '30px',
                 'z-index': '1',
                 'right': '1.5%',
