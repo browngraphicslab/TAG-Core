@@ -34,7 +34,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordError = root.find('#passwordError'),
         serverSubmit = root.find('#serverSubmit'),
         passwordSubmit = root.find('#passwordSubmit'),
-        tutorialButton = root.find('#tutorialButton'),
+        //tutorialButton = root.find('#tutorialButton'),
         serverURL,
         tagContainer,
         newUser = options.newUser,
@@ -54,7 +54,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     //INFO POPUP - todo styl
 
-    tutorialButton.attr('src', tagPath + 'images/icons/question_mark.svg')
+    /*tutorialButton.attr('src', tagPath + 'images/icons/question_mark.svg')
         .addClass('bottomButton')
         .on('mousedown', function () {
             TAG.Util.createTutorialPopup();
@@ -68,7 +68,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             'bottom': '0%',
             'margin': '0px 0px 1.5% 1.5%',
             'position': 'absolute',
-        });
+        });*/
 
     // TODO merging TAG.Telemetry.register(goToCollectionsButton, 'click', 'start_to_collections');
     //                     tobj.mode = 'Kiosk';
