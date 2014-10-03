@@ -2064,7 +2064,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.animate({
                 scrollLeft: newScrollPos
             }, duration, "easeInOutQuint", function(){
-            //}, duration, null, function(){
+                //}, duration, null, function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
                 selectedArtworkContainer.css({
@@ -2073,7 +2073,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'display': 'inline',
                     'opacity':1
                 });
-
+                if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3) {
+                    selectedArtworkContainer.css({
+                        "overflow-x": "scroll"
+                    });
+                }
                 //add back handlers
                 if (selectedArtworkContainer[0].addEventListener) {
                     // IE9, Chrome, Safari, Opera
