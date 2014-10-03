@@ -966,7 +966,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             maxHeight = Math.max(1, assetContainer.height() - currBottom ); //to account for the height of the drawerLabel of the current drawer.
 
             root.find(".drawerContents").css({
-                "max-height": maxHeight*.8 + "px", //TODO this
+                "max-height": maxHeight*.75 + "px", //TODO this
                 //'max-height':2*0.19 * $('#tagRoot').height() + 'px', //height of two thumbnails
             });
         });
