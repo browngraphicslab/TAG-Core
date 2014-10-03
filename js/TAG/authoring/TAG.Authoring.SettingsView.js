@@ -744,9 +744,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             prevSelectedSetting = container;
         });
 
-        // vertical centering groundwork for 2.2
-        //var navTextHolder;
-
         var navtext = $(document.createElement('label'));
         navtext.attr('class','navtext');
         navtext.text(text.text);
@@ -5794,28 +5791,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             container.dblclick(onDoubleClick);
         }
         var width;
-
-        // BUILD VERTICAL CENTERING HELPER FUCK YEAH
-        var helper = $(document.createElement('span'));
-        helper.css({
-            'display' : 'inline-block',
-            'height': '100%',
-            'vertical-align': 'middle'
-        });
-        container.append(helper);
-
-        // build image if it exists WHICH WILL BE VERTICALLY CENTERED FUCK YEAH
-        if (imagesrc) {    
+        if (imagesrc) {
             var image = $(document.createElement('img'));
             image.attr('src', imagesrc);
             image.css({
-                'display': 'inline-block',
-                'vertical-align': 'middle',
                 'height': 'auto',
                 'width': '20%',
-                'margin': 'auto 3% auto 1%'
+                'margin-right': '5%',
             });
             container.append(image);
+            
 
             var progressCircCSS = {
                 'position': 'absolute',
@@ -5823,35 +5808,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'z-index': '50',
                 'height': 'auto',
                 'width': '10%',
-                'top': '20%'
+                'top': '20%',
             };
             var circle = TAG.Util.showProgressCircle(container, progressCircCSS, '0px', '0px', false);
             image.load(function () {
                 TAG.Util.removeProgressCircle(circle);
             });
-            width = '70%';
+            width = '75%';
         } else {
-            width = '90%';
+            width = '95%';
         }
 
-        // build text label WHICH WILL ALSO BE VERTICALLY CENTERED FUCK YEAH
         var label = $(document.createElement('div'));
         label.attr('class', 'labelText');
-        label.css({
-            'width': width,
-            'vertical-align': 'middle'
-        });
+        label.css({'width': width});
 
         if (!imagesrc) {
             label.css({
-                'padding-left': '4%'
-            });
-        } else {
-            label.css({
-                'padding-left': '2%'
+                'padding-top': '0.4%',
+                'padding-left': '1.3%',
             });
         }
-
         label.text(text);
 
         container.append(label);
