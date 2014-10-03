@@ -4929,8 +4929,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             isrightdata = false,
             customFields = [],
             mtinputs = {};
-        paringPickerConfirm.css('border-radius', '3.5px');
-        paringPickerCancel.css('border-radius', '3.5px');
+        parsingPickerConfirm.css('border-radius', '3.5px');
+        parsingPickerCancel.css('border-radius', '3.5px');
         parsingOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         parsingOverlay.append(parsingOverlayText);
         parsingOverlayText.hide();
