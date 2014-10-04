@@ -844,8 +844,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Hide selected artwork container, as nothing is selected yet
             selectedArtworkContainer.css('display', 'none');
-            timelineShown && zoomTimeline();
-      
+            ;
+
             tileDiv.empty();
             catalogDiv.append(tileDiv);
             infoDiv.empty();
@@ -1634,7 +1634,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentTimeline = prepTimelineArea(minDate, maxDate);
         currTimelineCircleArea = prepTimelineCircles(avlTree, minDate, maxDate);
         setTimeout(function() {
-            currentArtwork && zoomTimeline(artworkCircles[currentArtwork.Identifier])
+            currentArtwork && zoomTimeline(artworkCircles[currentArtwork.Identifier]);
         }, 100);
 
         /**Helper function to prepare timeline area including 'ticks'
@@ -1659,7 +1659,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tick = $(document.createElement('div'));
                 tick.addClass('timelineTick');
                 tick.css({
-                    'left' : i/(numTicks-1)*100 + '%'
+                    'left' : (i/(numTicks-1)*100 - .05) + '%'
                 });
                 tick.Offset = i/numTicks;
                 timeline.append(tick);
@@ -1700,12 +1700,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             while (curr&& curr.yearKey!==Number.POSITIVE_INFINITY){
                 if (!isNaN(curr.yearKey)){
                     positionOnTimeline = 100*(curr.yearKey - minDate)/timeRange;
-
+                    var correctedPosition = (positionOnTimeline - 1.25);
                     //Create and append event circle
                     eventCircle = $(document.createElement('div'));
                     uiDocfrag.appendChild(eventCircle[0]);
                     eventCircle.addClass('timelineEventCircle')
-                                .css('left', positionOnTimeline + '%')
+                                .css('left', correctedPosition + '%')
                                 .on('click', (function(art, eventCircle) {
                                     return function() {
                                     if (artworkShown === true && currentArtwork === art) {
@@ -1758,6 +1758,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             for (var i = 0; i < timelineEventCircles.length; i++) { // Make sure all other circles are grayed-out and small
                 timelineEventCircles[i].zoomLevel = getZoomLevel(timelineEventCircles[i]);
                 styleTimelineCircle(timelineEventCircles[i], false);
+                displayLabels(timelineEventCircles[i]);
                 //Label of last circle should always be shown
                 if (i === timelineEventCircles.length-1){
                     displayLabels(timelineEventCircles[i],null,i);
