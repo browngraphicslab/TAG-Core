@@ -1170,6 +1170,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             if (!artworks || artworks.length === 0){
                 tileCircle.hide();
+                if (onAssocMediaView) {
+                    assocMediaButton.css({ "color": SECONDARY_FONT_COLOR });
+                    artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                } else {
+                    assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                    artworksButton.css({ "color": SECONDARY_FONT_COLOR });
+                }
+                assocMediaButton.removeAttr('disabled');
+                artworksButton.removeAttr('disabled');
                 return;
             }
 
@@ -1198,6 +1207,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 else{
                     loadQueue.add(drawArtworkTile(works[j], null, onSearch, i+j, j === works.length-1));
                 }
+            }
+            if (works.length == 0) {
+
+                if (onAssocMediaView) {
+                    assocMediaButton.css({ "color": SECONDARY_FONT_COLOR });
+                    artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                } else {
+                    assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                    artworksButton.css({ "color": SECONDARY_FONT_COLOR });
+                }
+
+                assocMediaButton.removeAttr('disabled');
+                artworksButton.removeAttr('disabled');
+                
             }
             loadQueue.add(function () {
                 if (works.length > 0) {
