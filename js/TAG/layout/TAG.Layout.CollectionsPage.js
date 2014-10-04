@@ -895,12 +895,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             //scrollPos = sPos || 0;
             applyCustomization();
+            
             if (!onAssocMediaView || !currCollection.collectionMedia) {
                 getCollectionContents(currCollection, null, function () { return cancelLoad;});
             } else {
-                createArtTiles(currCollection.collectionMedia);
-                loadSortTags(currCollection, currCollection.collectionMedia)
-                initSearch(currCollection.collectionMedia);
+                if (onAssocMediaView && artworkInCollectionList.length == 0) {
+                    TAG.Worktop.Database.getArtworksIn(collection.Identifier,
+                        function (contents) {
+                            artworkInCollectionList = [];
+                            for (var i = 0; i < contents.length; i++) {
+                                artworkInCollectionList.push(contents[i].Identifier);
+                            }
+
+                            createArtTiles(currCollection.collectionMedia);
+                            loadSortTags(currCollection, currCollection.collectionMedia)
+                            initSearch(currCollection.collectionMedia);
+                        }, null, null);
+                } else {
+                    createArtTiles(currCollection.collectionMedia);
+                    loadSortTags(currCollection, currCollection.collectionMedia)
+                    initSearch(currCollection.collectionMedia);
+                }
             }
             cancelLoadCollection = function () { cancelLoad = true; };
 
@@ -1050,6 +1065,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 catalogDiv.append(emptyCollectionDiv);
             }
             if (cancel && cancel()) return;
+
+            if (onAssocMediaView && artworkInCollectionList.length == 0) {
+                createArtTiles(currCollection.collectionMedia);
+                loadSortTags(currCollection, currCollection.collectionMedia)
+                initSearch(currCollection.collectionMedia);
+            }
+
+
             loadSortTags(collection,contents);
             createArtTiles(contents, cancel);
             initSearch(contents);
