@@ -1535,6 +1535,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 assocMediaButton.removeAttr('disabled');
                 artworksButton.removeAttr('disabled');
             }
+            if (artworkShown) {
+                main.css({ "opacity": 0 });
+            };
         };
     }
 
