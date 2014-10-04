@@ -5805,17 +5805,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         container.append(helper);
 
         // build image if it exists WHICH WILL BE VERTICALLY CENTERED FUCK YEAH
-        if (imagesrc) {    
+        if (imagesrc) {
+            var imageParent = $(document.createElement('div'))
+            .css({
+                'display': 'inline-block',
+                'vertical-align': 'middle',
+                'height': '100%',
+                'width': '20%',
+                'position': 'relative',
+                'margin': 'auto 3% auto 1%'
+            });
+            container.append(imageParent);
             var image = $(document.createElement('img'));
             image.attr('src', imagesrc);
             image.css({
-                'display': 'inline-block',
-                'vertical-align': 'middle',
+                'margin': 'auto auto auto',
                 'height': 'auto',
-                'width': '20%',
-                'margin': 'auto 3% auto 1%'
+                'max-width': '100%',
+                'max-height': '100%',
+                'display': 'block',
+                'position': 'absolute',
+                'width': 'auto',
+                'left': '0',
+                'right': '0',
+                'top': '0',
+                'bottom': '0'
             });
-            container.append(image);
+            imageParent.append(image);
 
             var progressCircCSS = {
                 'position': 'absolute',
