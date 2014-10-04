@@ -1097,6 +1097,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-top': '1%',
             'margin-right': '0%',
             'margin-bottom': '3%',
+            'background-color':'white'
         });
 
         var previewCollectionsPageButton = createButton('Collections Page', function () {
