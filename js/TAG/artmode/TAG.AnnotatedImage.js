@@ -705,7 +705,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             Y = parseFloat(linq.Offset._y),
             position = new Seadragon.Point(X, Y),
             rect,   //For layer
-            TITLE = TAG.Util.htmlEntityDecode(mdoq.Name),
+            TITLE = unescape(TAG.Util.htmlEntityDecode(mdoq.Name)),
             CONTENT_TYPE = mdoq.Metadata.ContentType,
             SOURCE = mdoq.Metadata.Source,
             DESCRIPTION = unescape(TAG.Util.htmlEntityDecode(mdoq.Metadata.Description)),
