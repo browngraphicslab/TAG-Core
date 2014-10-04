@@ -529,6 +529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         backButton.click(function () {
             //if (!changesHaveBeenMade) {
+            TAG.Util.removeYoutubeVideo();
                 TAG.Auth.clearToken();
                 rightQueue.clear();
                 middleQueue.clear();
