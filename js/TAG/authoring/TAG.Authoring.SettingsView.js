@@ -732,7 +732,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    changesHaveBeenMade = false;
             //}
             // Reset all labels and then select this one
-
+            var iframeEle = document.getElementsByTagName("iframe");
+            if (iframeEle[0]) {
+                iframeEle[0].src = "";
+            }
             searchbar[0].value = "";
 
             resetLabels('.navContainer');
@@ -4110,6 +4113,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method doSearch
      */
     function doSearch() {
+        var iframeEle = document.getElementsByTagName("iframe");
+        if (iframeEle[0]) {
+            iframeEle[0].src = "";
+        }
+
         var content = searchbar.val().toLowerCase(),
             matches = [],
             i;
@@ -5782,6 +5790,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    changesHaveBeenMade = false;
             //    //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
             //}
+            var iframeEle = document.getElementsByTagName("iframe");
+            if (iframeEle[0]) {
+                iframeEle[0].src = "";
+            }
             resetLabels('.middleLabel');
             selectLabel(container, !noexpand);
             if (onclick) {
@@ -5883,7 +5895,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} loadingText      Text to display while middle bar loading
      */
     function prepareNextView(showSearch, newText, newBehavior, loadingText) {
-
+        var iframeEle = document.getElementsByTagName("iframe");
+        if (iframeEle[0]) {
+            iframeEle[0].src = "";
+        }
         clearInterval(checkConTimerId);
         middleQueue.clear();
         middleLabelContainer.empty();
@@ -5942,7 +5957,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} text           text to add to the viewer (in a textbox)
      * @param {Boolean} showButtons   whether the buttonContainer is shown
      */
-    function prepareViewer(showViewer,text, showButtons) { 
+    function prepareViewer(showViewer, text, showButtons) {
+        var iframeEle = document.getElementsByTagName("iframe");
+        if (iframeEle[0]) {
+            iframeEle[0].src = "";
+        }
         viewer.empty();
         viewer.css('background', 'black');
         if (showViewer) {

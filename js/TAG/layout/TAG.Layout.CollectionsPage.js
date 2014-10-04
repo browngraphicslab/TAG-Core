@@ -15,7 +15,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     var // DOM-related
         root = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
         infoDiv = root.find('#infoDiv'),
-        tileDiv = $(document.createElement("div")).attr("id", "tileDiv"),//root.find('#tileDiv'),
+        tileDiv = root.find('#tileDiv'),
         displayArea = root.find("#displayArea"),
         collectionArea = root.find('#collectionArea'),
         backArrowArea = root.find('#backArrowArea'),
@@ -1297,8 +1297,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Boolean} onSearch    whether this work is a match after searching
      * @param {Number} i            index into list of all works in this collection
      */
-    var tileDivDocFrag = document.createDocumentFragment();
-    tileDivDocFrag.appendChild(tileDiv[0]);
+
     function drawArtworkTile(currentWork, tag, onSearch, i, last) {
         return function () {
             var main      = $(document.createElement('div')),
@@ -1310,9 +1309,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tourLabel,
                 videoLabel,
                 showLabel = true;
-  
             
-            //uiDocfrag.appendChild(main[0]);
+            var uiDocfrag = document.createDocumentFragment();
+            uiDocfrag.appendChild(main[0]);
 
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
@@ -1511,7 +1510,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
             }
 
-            tileDiv.append(main);
+            tileDiv.append($(uiDocfrag));
             
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
             var tileHeight = (0.45) * tileDivHeight;
@@ -1540,7 +1539,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 
                 assocMediaButton.removeAttr('disabled');
                 artworksButton.removeAttr('disabled');
-                displayArea.append($(tileDivDocFrag));
             }
             if (artworkShown) {
                 main.css({ "opacity": 0 });
