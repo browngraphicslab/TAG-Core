@@ -2919,7 +2919,8 @@ TAG.Util.UI = (function () {
                 //'margin-right': '12%',
                 'right':'12%',
                 'color': 'white',
-                'margin-top': '1%'
+                'margin-top': '1%',
+                'border-radius': '3.5px'
             }).text("Cancel");
             var btnwidth = $(cancelButton).width();
             var dontleft = ($(optionButtonDiv).width() - btnwidth) / 2;

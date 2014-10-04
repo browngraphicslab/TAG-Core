@@ -15,7 +15,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     var // DOM-related
         root = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
         infoDiv = root.find('#infoDiv'),
-        tileDiv = root.find('#tileDiv'),
+        tileDiv = $(document.createElement("div")).attr("id", "tileDiv"),//root.find('#tileDiv'),
+        displayArea = root.find("#displayArea"),
         collectionArea = root.find('#collectionArea'),
         backArrowArea = root.find('#backArrowArea'),
         backArrow = root.find('#backArrow'),
@@ -1198,17 +1199,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     loadQueue.add(drawArtworkTile(works[j], null, onSearch, i+j, j === works.length-1));
                 }
             }
-            loadQueue.add(function(){
-                paddingDiv = $(document.createElement("div"))
-                    .css({
-                        'height': "100%",
-                        "width": TILE_BUFFER,
-                        "pointer-events": "none",
-                        'position': 'absolute',
-                        "margin": "none",
-                        'left': tileDiv.children().eq(-1).position().left + tileDiv.children().eq(-1).width() // to get last child position
-                    });
-                tileDiv.append(paddingDiv);
+            loadQueue.add(function () {
+                if (works.length > 0) {
+                    paddingDiv = $(document.createElement("div"))
+                        .css({
+                            'height': "100%",
+                            "width": TILE_BUFFER,
+                            "pointer-events": "none",
+                            'position': 'absolute',
+                            "margin": "none",
+                            'left': tileDiv.children().eq(-1).position().left + tileDiv.children().eq(-1).width() // to get last child position
+                        });
+                    tileDiv.append(paddingDiv);
+                }
             })
        
             loadQueue.add(function () {
@@ -1294,6 +1297,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Boolean} onSearch    whether this work is a match after searching
      * @param {Number} i            index into list of all works in this collection
      */
+    var tileDivDocFrag = document.createDocumentFragment();
+    tileDivDocFrag.appendChild(tileDiv[0]);
     function drawArtworkTile(currentWork, tag, onSearch, i, last) {
         return function () {
             var main      = $(document.createElement('div')),
@@ -1306,8 +1311,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 videoLabel,
                 showLabel = true;
   
-            var uiDocfrag = document.createDocumentFragment();
-            uiDocfrag.appendChild(main[0]);
+            
+            //uiDocfrag.appendChild(main[0]);
 
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
@@ -1461,7 +1466,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
                 var nameText = TAG.Util.htmlEntityDecode(currentWork.Name);
                 artText.text(nameText);
-            } else if (tag === 'Tour') {
+            } else if (tag === 'Tours') {
                 artText.text(TAG.Util.htmlEntityDecode(currentWork.Name));
             } else if(tag) {
                 //If using custom tag
@@ -1506,8 +1511,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
             }
 
-            //tileDiv.append(main);
-            tileDiv.append($(uiDocfrag));
+            tileDiv.append(main);
+            
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
             var tileHeight = (0.45) * tileDivHeight;
             main.css({'height': (0.45) * tileDivHeight});
@@ -1535,6 +1540,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 
                 assocMediaButton.removeAttr('disabled');
                 artworksButton.removeAttr('disabled');
+                displayArea.append($(tileDivDocFrag));
             }
             if (artworkShown) {
                 main.css({ "opacity": 0 });
@@ -2629,7 +2635,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             return avlTree;
         } else if (tag === 'Date') {
             return sortByYear(artworks,true);
-        } else if (tag === 'Tour') {
+        } else if (tag === 'Tours') {
             var tourName;
             comparator = sortComparator('nameKey');
             valuation  = sortValuation('nameKey');
@@ -2639,14 +2645,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (artworks[i].Name) {
                         tourName = artworks[i].Name.toLowerCase();
                     } else {
-                        tourName = '~~~~';
+                        tourName = '';
                     }
-                    artNode = {
-                        artwork: artworks[i],
-                        nameKey: tourName,
-                    };
-                    avlTree.add(artNode);
+
+                } else {
+                    tourName = '~~~~~~';
                 }
+                artNode = {
+                    artwork: artworks[i],
+                    nameKey: tourName,
+                };
+                    
+                avlTree.add(artNode);
             }
             return avlTree;
         }
