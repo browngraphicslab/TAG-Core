@@ -681,7 +681,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         newName.attr("id","newNameInput"); 
         newName.val(my.title); // default text is existing title
         var text = $(document.createElement("div"));
-        //newName.attr('maxlength', '18');
+        newName.attr('maxlength', '50');
         text.text("Rename track to: ");
         text.css({
             //'top': '5%',
@@ -744,6 +744,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
             'padding': '1%',
             'border': '1px solid white',
+            'border-radius':'3.5px',
             'width': 'auto',
             'position': 'relative',
             //'margin-top': '1%',
@@ -767,6 +768,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             //'box-sizing': 'border-box',
 
             'padding': '1%',
+            'border-radius': '3.5px',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
@@ -1008,7 +1010,8 @@ TAG.TourAuthoring.Track = function (spec, my) {
             'position': 'relative',
             'text-align': 'center',
             'text-overflow': 'ellipsis',
-            'word-wrap': 'break-word'
+            'word-wrap': 'break-word',
+            'maxlength':'200'
         });
         var fontsize = TAG.Util.getMaxFontSizeEM(text, 1, mssge.width(), mssge.height());
         mssge.css('font-size', fontsize);
@@ -1064,10 +1067,12 @@ TAG.TourAuthoring.Track = function (spec, my) {
         var deleteButton = $(document.createElement('button'));
         deleteButton.css({
             'padding': '1%',
+            'border-radius': '3.5px',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
             'margin-top': '1%',
+          
         });
         deleteButton.text('Delete');
         $(deleteButton).click(function () {
@@ -1082,6 +1087,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         cancelButton.css({
 
             'padding': '1%',
+            'border-radius': '3.5px',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
