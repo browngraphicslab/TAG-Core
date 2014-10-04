@@ -529,6 +529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         backButton.click(function () {
             //if (!changesHaveBeenMade) {
+            TAG.Util.removeYoutubeVideo();
                 TAG.Auth.clearToken();
                 rightQueue.clear();
                 middleQueue.clear();
@@ -732,10 +733,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    changesHaveBeenMade = false;
             //}
             // Reset all labels and then select this one
-            var iframeEle = document.getElementsByTagName("iframe");
-            if (iframeEle[0]) {
-                iframeEle[0].src = "";
-            }
+            TAG.Util.removeYoutubeVideo();
             searchbar[0].value = "";
 
             resetLabels('.navContainer');
@@ -4113,10 +4111,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method doSearch
      */
     function doSearch() {
-        var iframeEle = document.getElementsByTagName("iframe");
-        if (iframeEle[0]) {
-            iframeEle[0].src = "";
-        }
+        TAG.Util.removeYoutubeVideo();
 
         var content = searchbar.val().toLowerCase(),
             matches = [],
@@ -5790,10 +5785,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    changesHaveBeenMade = false;
             //    //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
             //}
-            var iframeEle = document.getElementsByTagName("iframe");
-            if (iframeEle[0]) {
-                iframeEle[0].src = "";
-            }
+            TAG.Util.removeYoutubeVideo();
             resetLabels('.middleLabel');
             selectLabel(container, !noexpand);
             if (onclick) {
@@ -5895,10 +5887,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} loadingText      Text to display while middle bar loading
      */
     function prepareNextView(showSearch, newText, newBehavior, loadingText) {
-        var iframeEle = document.getElementsByTagName("iframe");
-        if (iframeEle[0]) {
-            iframeEle[0].src = "";
-        }
+        TAG.Util.removeYoutubeVideo();
         clearInterval(checkConTimerId);
         middleQueue.clear();
         middleLabelContainer.empty();
@@ -5958,10 +5947,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Boolean} showButtons   whether the buttonContainer is shown
      */
     function prepareViewer(showViewer, text, showButtons) {
-        var iframeEle = document.getElementsByTagName("iframe");
-        if (iframeEle[0]) {
-            iframeEle[0].src = "";
-        }
+        TAG.Util.removeYoutubeVideo();
         viewer.empty();
         viewer.css('background', 'black');
         if (showViewer) {

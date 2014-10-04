@@ -52,8 +52,16 @@ TAG.Util = (function () {
         hexToRGBA: hexToRGBA,
         IdCreator: IdCreator,
         makeBorderRadius: makeBorderRadius,
-        createTutorialPopup: createTutorialPopup
+        createTutorialPopup: createTutorialPopup,
+        removeYoutubeVideo: removeYoutubeVideo
     };
+
+    function removeYoutubeVideo(){
+        var iframeEle = document.getElementsByTagName("iframe");
+        if (iframeEle[0]) {
+            iframeEle[0].src = "";
+        }
+    }
 
     function makeBorderRadius(ele, radius) {
         ele.css('border-radius', radius);

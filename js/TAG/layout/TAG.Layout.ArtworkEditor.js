@@ -153,6 +153,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
         backButton.on('click', function () {
+            TAG.Util.removeYoutubeVideo();
             var authoringHub;
             var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0.6));
             $("#tagRoot").append(transOverlay);
@@ -1957,7 +1958,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleLayerButton = $toggleLayer;
 
             $unassociateAssocMediaButton.on('click', function () {
-
+                TAG.Util.removeYoutubeVideo();
                 var assetDoqID = getActiveMediaMetadata('assetDoqID'); // TODO see comment below about AnnotatedImage
                 $saveAssocMediaButton.attr('disabled', true).css('color', 'rgba(255,255,255,0.5)');
                 if (getActiveMediaMetadata('contentType') === 'Video') { // TODO when this file is better integrated with the new AnnotatedImage, should store the current active media in a 'global' variable and just access its contentType rather than going through a helper function
@@ -2178,6 +2179,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @method close
          */
         function close() {
+            TAG.Util.removeYoutubeVideo();
             var rightbar;
             if (isOpen) {
                 //saveAssocMedia();

@@ -1311,7 +1311,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 videoLabel,
                 showLabel = true;
   
-            
+            //var uiDocfrag = document.createDocumentFragment();
             //uiDocfrag.appendChild(main[0]);
 
             artworkTiles[currentWork.Identifier] = main;
@@ -2397,6 +2397,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         metadata,
                         thumb;
                     numberAssociatedDoqs = doqs.length;
+                    var j = 0;
                     //Loop through media doqs and create tiles from them
                     for (i = 0; i < doqs.length; i++) {
                         if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier)==-1) {
@@ -2417,7 +2418,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             .on('mousedown',
                                     onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
                                 )
-                        miniTile.css('left', i * (miniTile.width() + miniTilesHolder.height() / 10));
+                        miniTile.css('left', j * (miniTile.width() + miniTilesHolder.height() / 10));
 
 
                         switch (metadata.ContentType) {
@@ -2462,17 +2463,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                         }
                         miniTile.attr("src", src);
-                        miniTilesHolder.append(miniTile);
-                        
-                    }
-                    //Also add handlers to switch to first artwork if in assoc media view
-                    if (onAssocMediaView) {
-                        exploreTab.on('mousedown', switchPage(doqs[0], artwork));
-                        currentThumbnail.on('mousedown', switchPage(doqs[0]));
+                        miniTilesHolder.append(miniTile);                        
+                        j++;
                     }
 
                 	addAssociationRow(numberAssociatedDoqs); 
-                    TAG.Util.removeProgressCircle(circle);                 
+                	TAG.Util.removeProgressCircle(circle);
+
+                                        //Also add handlers to switch to first artwork if in assoc media view
+                	if (onAssocMediaView) {
+                	    exploreTab.on('mousedown', switchPage(doqs[0], artwork, getContainerLeft(artwork, false)));
+                	    currentThumbnail.on('mousedown', switchPage(doqs[0], artwork, getContainerLeft(artwork, false)));
+                	}
                 }
 
                 //Append everything
