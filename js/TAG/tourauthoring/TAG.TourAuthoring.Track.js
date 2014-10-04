@@ -1780,7 +1780,11 @@ function trackTitleReleased(evt) {
      * @method titleDivMouseUp
      */
     function titleDivMouseUp() {
-        var tr = dataHolder._trackArray[arrayPos + offset].track;
+        var tr = dataHolder._trackArray[arrayPos + offset]
+        if (!tr){
+            return;
+        }
+        tr = tr.track;
         var prev;
         var command;
         totalYMoved = 0;

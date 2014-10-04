@@ -1087,9 +1087,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // preview buttons
         var previewStartPageButton = createButton('Splash Screen', function () {
             previewStartPage(primaryFontColorInput, secondaryFontColorInput);
-            previewStartPageButton.css("background-color", "white");
-            previewCollectionsPageButton.css("background-color", "rgba(0,0,0,0)");
-            previewArtworkViewerButton.css("background-color", "rgba(0,0,0,0)");
             primaryColorPicker.hidePicker();
             secondaryColorPicker.hidePicker();
         }, {
@@ -1097,14 +1094,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-top': '1%',
             'margin-right': '0%',
             'margin-bottom': '3%',
-            'background-color':'white'
         });
 
         var previewCollectionsPageButton = createButton('Collections Page', function () {
-            previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
-            previewStartPageButton.css("background-color", "rgba(0,0,0,0)");
-            previewCollectionsPageButton.css("background-color", "white");
-            previewArtworkViewerButton.css("background-color", "rgba(0,0,0,0)");
+                previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
                 primaryColorPicker.hidePicker();
                 secondaryColorPicker.hidePicker();
             },
@@ -1117,9 +1110,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var previewArtworkViewerButton = createButton('Artwork Viewer', function () {
             previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput);
-            previewStartPageButton.css("background-color", "rgba(0,0,0,0)");
-            previewCollectionsPageButton.css("background-color", "rgba(0,0,0,0)");
-            previewArtworkViewerButton.css("background-color", "white");
             primaryColorPicker.hidePicker();
             secondaryColorPicker.hidePicker();
         }, {
@@ -1140,7 +1130,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 saveButton.css({ "background-color": "white" });
             }
         });
-        /*previewStartPageButton.on("mousedown", function () {
+        previewStartPageButton.on("mousedown", function () {
             previewStartPageButton.css({ "background-color": "white" });
         });
         previewCollectionsPageButton.on("mousedown", function () {
@@ -1148,14 +1138,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         previewArtworkViewerButton.on("mousedown", function () {
             previewArtworkViewerButton.css({ "background-color": "white" });
-        });*/
+        });
         bgImgInput.on("mousedown", function () {
             bgImgInput.css({ "background-color": "white" });
         });
         saveButton.on("mouseleave", function () {
             saveButton.css({ "background-color": "transparent" });
         });
-        /*previewStartPageButton.on("mouseleave", function () {
+        previewStartPageButton.on("mouseleave", function () {
             previewStartPageButton.css({ "background-color": "transparent" });
         });
         previewCollectionsPageButton.on("mouseleave", function () {
@@ -1163,7 +1153,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         previewArtworkViewerButton.on("mouseleave", function () {
             previewArtworkViewerButton.css({ "background-color": "transparent" });
-        });*/
+        });
         bgImgInput.on("mouseleave", function () {
             bgImgInput.css({ "background-color": "transparent" });
         });
@@ -5822,7 +5812,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'display': 'inline-block',
                 'vertical-align': 'middle',
                 'height': 'auto',
-                'max-height': '100%',
                 'width': '20%',
                 'margin': 'auto 3% auto 1%'
             });
