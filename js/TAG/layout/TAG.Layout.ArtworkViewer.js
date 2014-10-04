@@ -694,6 +694,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         function goBack() {
+            TAG.Util.removeYoutubeVideo();
             var collectionsPage,
                 collectionsPageRoot;
             backButton.off('click');
@@ -973,6 +974,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         function tourClicked(tour) {
             return function () {
+                TAG.Util.removeYoutubeVideo();
                 var rinData,
                     parentid,
                     prevInfo,
