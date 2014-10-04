@@ -15,7 +15,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     var // DOM-related
         root = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
         infoDiv = root.find('#infoDiv'),
-        tileDiv = root.find('#tileDiv'),
+        tileDiv = $(document.createElement("div")).attr("id", "tileDiv"),//root.find('#tileDiv'),
         displayArea = root.find("#displayArea"),
         collectionArea = root.find('#collectionArea'),
         backArrowArea = root.find('#backArrowArea'),
@@ -1297,7 +1297,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Boolean} onSearch    whether this work is a match after searching
      * @param {Number} i            index into list of all works in this collection
      */
-
+    var tileDivDocFrag = document.createDocumentFragment();
+    tileDivDocFrag.appendChild(tileDiv[0]);
     function drawArtworkTile(currentWork, tag, onSearch, i, last) {
         return function () {
             var main      = $(document.createElement('div')),
@@ -1309,9 +1310,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tourLabel,
                 videoLabel,
                 showLabel = true;
+  
             
-            var uiDocfrag = document.createDocumentFragment();
-            uiDocfrag.appendChild(main[0]);
+            //uiDocfrag.appendChild(main[0]);
 
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
@@ -1510,7 +1511,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
             }
 
-            tileDiv.append($(uiDocfrag));
+            tileDiv.append(main);
             
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
             var tileHeight = (0.45) * tileDivHeight;
@@ -1539,6 +1540,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 
                 assocMediaButton.removeAttr('disabled');
                 artworksButton.removeAttr('disabled');
+                displayArea.append($(tileDivDocFrag));
             }
             if (artworkShown) {
                 main.css({ "opacity": 0 });
@@ -2224,7 +2226,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //Explore div
                 exploreTab = $(document.createElement('div'))
                     .addClass('exploreTab');
-                if (!onAssocMediaView){
+                if (!onAssocMediaView) {
                     exploreTab.on('mousedown', switchPage(artwork))
                 } 
 
@@ -2273,7 +2275,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }else {
                     currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
                 }
-                !onAssocMediaView && currentThumbnail.on('mousedown', switchPage(artwork))
+                !onAssocMediaView && currentThumbnail.on('mousedown', switchPage(artwork));
 
                 //Telemetry stuff
                 TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'mousedown', '', function(tobj) {
@@ -2462,7 +2464,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         miniTile.attr("src", src);
                         miniTilesHolder.append(miniTile);
                         
-                    }   
+                    }
+                    //Also add handlers to switch to first artwork if in assoc media view
+                    if (onAssocMediaView) {
+                        exploreTab.on('mousedown', switchPage(doqs[0], artwork));
+                        currentThumbnail.on('mousedown', switchPage(doqs[0]));
+                    }
+
                 	addAssociationRow(numberAssociatedDoqs); 
                     TAG.Util.removeProgressCircle(circle);                 
                 }
