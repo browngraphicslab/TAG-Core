@@ -708,7 +708,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             TITLE = TAG.Util.htmlEntityDecode(mdoq.Name),
             CONTENT_TYPE = mdoq.Metadata.ContentType,
             SOURCE = mdoq.Metadata.Source,
-            DESCRIPTION = TAG.Util.htmlEntityDecode(mdoq.Metadata.Description),
+            DESCRIPTION = unescape(TAG.Util.htmlEntityDecode(mdoq.Metadata.Description)),
             THUMBNAIL = mdoq.Metadata.Thumbnail,
             RELATED_ARTWORK = false,
 
