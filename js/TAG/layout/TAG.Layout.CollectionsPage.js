@@ -1360,46 +1360,31 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 * @returns handler function
                 */
             function doubleClickHandler() {
-                return function () {
-                    if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
+                if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
+                    switchPage(currentWork, null, getContainerLeft(currentWork, false))();
+                } else {
+                    TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                        switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
+                    }, function () {
 
-                        if (previouslyClicked === main) {
-                            switchPage(currentWork, null, getContainerLeft(currentWork, false))();
-                        } else {
-                            previouslyClicked = main;
-                            setTimeout(function () { previouslyClicked = null }, 1000)
-                        }
-                    } else {
-                        TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
-                            if (previouslyClicked === main) {
-                                switchPage(doqs[0], currentWork, getContainerLeft(currentWork,false))();
-                            } else {
-                                previouslyClicked = main;
-                                setTimeout(function () { previouslyClicked = null }, 1000);
-                            }
-                        }, function () {
-                            
-                        }, function () {
-                            
-                        });
-                    }
+                    }, function () {
 
-                }();
+                    });
+                }
             } 
-                main.on('click', function () {
-                    doubleClickHandler()
+            main.on('click', function () {
+                showArtwork(currentWork, false)();
 
-                    // if the idle timer hasn't started already, start it
-                    if (!idleTimer && !previewing) {
-                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-                        idleTimer.start();
-                    }
-                    //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
-                    setTimeout(function () { showArtwork(currentWork, false)() }, 10)
-                    zoomTimeline(artworkCircles[currentWork.Identifier])
-                    justShowedArtwork = true;
-                })         
+                // if the idle timer hasn't started already, start it
+                if (!idleTimer && !previewing) {
+                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                    idleTimer.start();
+                }
+                zoomTimeline(artworkCircles[currentWork.Identifier])
+                justShowedArtwork = true;
+            })         
             
+            main.dblclick(doubleClickHandler);
             TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
                 tobj.ttype = 'artwork_tile';
