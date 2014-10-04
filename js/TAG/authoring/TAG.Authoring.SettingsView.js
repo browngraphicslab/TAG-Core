@@ -5821,6 +5821,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'display': 'inline-block',
                 'vertical-align': 'middle',
                 'height': 'auto',
+                'max-height': '100%',
                 'width': '20%',
                 'margin': 'auto 3% auto 1%'
             });
