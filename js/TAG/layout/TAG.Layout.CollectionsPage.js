@@ -234,6 +234,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
             infoButton.hide();
+            tutorialButton.hide();
             linkButton.css("float", "left");
             root.find('#mainCollection').css('width', '60%');
         }

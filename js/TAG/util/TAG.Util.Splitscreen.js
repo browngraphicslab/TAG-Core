@@ -318,6 +318,7 @@ TAG.Util.Splitscreen = (function () {
                 root.find('#exhibition-label').css({
                     'display': 'block'
                 });
+                root.find('#tutorialButton').show();
                 root.find('#infoButton').show();
                 //if (root.find('#infoDiv').width() !== 0) {
                 //    root.find('#infoDiv').css('width', '25%');
