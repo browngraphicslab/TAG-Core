@@ -1038,7 +1038,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         dropFile.hide();
 
         var audioButton = _createAddComponentButton("Audio (MP3)", dropFile);
-        var videoButton = _createAddComponentButton("Video (MP4)", dropFile);
+        var videoButton = _createAddComponentButton("Video (MP4, WEBM, OGV)", dropFile);
         var imageButton = _createAddComponentButton("Image", dropFile);
 
         function exitInk() {
@@ -1174,7 +1174,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
             }
 
-            if (title === "Video (MP4)") {
+            if (title === "Video (MP4, WEBM, OGV)") {
                 upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files, localURLs, confirmCallback, cancelCallback) {
                     var file,
@@ -1385,7 +1385,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         dropInk.hide();
                         break;
                     case "Audio (MP3)":
-                    case "Video (MP4)":
+                    case "Video (MP4, WEBM, OGV)":
                     case "Image":
                         isInFileSubMenu = true;
                         break;
@@ -1491,7 +1491,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Audio (MP3)":
-                    case "Video (MP4)":
+                    case "Video (MP4, WEBM, OGV)":
                     case "Image":
                         closeComponentMenu();
                         exitInk();
