@@ -872,6 +872,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     artworksButton.css('color', SECONDARY_FONT_COLOR);
                                     assocMediaButton.css('color', dimmedColor);
                                     if (onAssocMediaView){
+                                        artworkShown = false;
                                         onAssocMediaView = false;
                                         loadCollection(currCollection)();
                                     }
@@ -881,7 +882,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .on('mousedown', function(){
                                     artworksButton.css('color', dimmedColor);
                                     assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
-                                    if (!onAssocMediaView){
+                                    if (!onAssocMediaView) {
+                                        currentArtwork && hideArtwork(currentArtwork)()
                                         onAssocMediaView = true;
                                         loadCollection(currCollection)();
                                     }
@@ -1566,7 +1568,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 displayArea.append($(tileDivDocFrag));
             }
             if (artworkShown) {
-                main.css({ "opacity": 0 });
+                main.css({ "opacity": .5 });
             };
         };
     }
