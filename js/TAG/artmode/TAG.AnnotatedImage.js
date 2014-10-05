@@ -724,6 +724,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             position,
             mediaLoaded,
             mediaElt,
+            mediaController,
             titleDiv,
             descTextSize,
             titleTextHolder,
@@ -1076,6 +1077,110 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             timeContainer.append(currentTimeDisplay);
             cpHolder.append(timeContainer);
             cpHolder.append(volHolder);
+
+            mediaController = controlPanel;
+        }
+
+        function reinitMediaControlHandlers() {
+            // find shit
+            var elt = mediaElt,
+                $elt = $(elt),
+                vol = $(mediaController.find('.mediaVolButton')[0]),
+                timeContainer = $(mediaController.find('.mediaTimeContainer')[0]),
+                currentTimeDisplay = $(mediaController.find('.mediaTimeDisplay')[0]),
+                sliderContainer = $(mediaController.find('.mediaSliderContainer')[0]),
+                sliderPoint = $(mediaController.find('.mediaSliderPoint')[0]),
+                playButton = $(mediaController.find('.mediaPlayButton')[0]);
+
+            // set up handlers
+            playButton.on('click', function () {
+                if (elt.paused) {
+                    elt.play();
+                    playButton.attr('src', tagPath + 'images/icons/PauseWhite.svg');
+                } else {
+                    elt.pause();
+                    playButton.attr('src', tagPath + 'images/icons/PlayWhite.svg');
+                }
+            });
+
+            vol.on('click', function () {
+                if (elt.muted) {
+                    elt.muted = false;
+                    vol.attr('src', tagPath + 'images/icons/VolumeUpWhite.svg');
+                } else {
+                    elt.muted = true;
+                    vol.attr('src', tagPath + 'images/icons/VolumeDownWhite.svg');
+                }
+            });
+
+            $elt.on('ended', function () {
+                elt.pause();
+                playButton.attr('src', tagPath + 'images/icons/PlayWhite.svg');
+            });
+
+            sliderContainer.on('mousedown', function (evt) {
+                var time = elt.duration * ((evt.pageX - $(evt.target).offset().left) / sliderContainer.width()),
+                    origPoint = evt.pageX,
+                    timePxRatio = elt.duration / sliderContainer.width(),
+                    currTime = Math.max(0, Math.min(elt.duration, elt.currentTime)),
+                    origTime = time,
+                    currPx = currTime / timePxRatio,
+                    minutes = Math.floor(currTime / 60),
+                    seconds = Math.floor(currTime % 60),
+                    adjMin = (minutes < 10) ? '0' + minutes : minutes,
+                    adjSec = (seconds < 10) ? '0' + seconds : seconds;
+
+                evt.stopPropagation();
+
+                if (!isNaN(time)) {
+                    currentTimeDisplay.text(adjMin + ":" + adjSec);
+                    elt.currentTime = time;
+                    sliderPoint.css('width', 100 * (currPx / sliderContainer.width()) + '%');
+                }
+
+                sliderContainer.on('mousemove.seek', function (e) {
+                    var currPoint = e.pageX,
+                        timeDiff = (currPoint - origPoint) * timePxRatio;
+
+                    currTime = Math.max(0, Math.min(elt.duration, origTime + timeDiff));
+                    currPx = currTime / timePxRatio;
+                    minutes = Math.floor(currTime / 60);
+                    seconds = Math.floor(currTime % 60);
+                    adjMin = (minutes < 10) ? '0' + minutes : minutes;
+                    adjSec = (seconds < 10) ? '0' + seconds : seconds;
+
+                    if (!isNaN(currTime)) {
+                        currentTimeDisplay.text(adjMin + ":" + adjSec);
+                        elt.currentTime = currTime;
+                        sliderPoint.css('width', 100 * (currPx / sliderContainer.width()) + '%');
+                    }
+                });
+
+                $('body').on('mouseup.seek mouseleave.seek', function () {
+                    sliderContainer.off('mouseup.seek mouseleave.seek mousemove.seek');
+                    // if(!isNaN(getCurrTime())) {
+                    //     currentTimeDisplay.text(adjMin + ":" + adjSec);
+                    //     elt.currentTime = getCurrTime();
+                    //     sliderPoint.css('width', 100*(currPx / sliderContainer.width()) + '%');
+                    // }
+                });
+            });
+
+            // Update the seek bar as the video plays
+            $elt.on("timeupdate", function () {
+                var value = 100 * elt.currentTime / elt.duration,
+                    timePxRatio = elt.duration / sliderContainer.width(),
+                    currPx = elt.currentTime / timePxRatio,
+                    minutes = Math.floor(elt.currentTime / 60),
+                    seconds = Math.floor(elt.currentTime % 60),
+                    adjMin = (minutes < 10) ? '0' + minutes : minutes,
+                    adjSec = (seconds < 10) ? '0' + seconds : seconds;
+
+                if (!isNaN(elt.currentTime)) {
+                    currentTimeDisplay.text(adjMin + ":" + adjSec);
+                    sliderPoint.css('width', 100 * (currPx / sliderContainer.width()) + '%');
+                }
+            });
         }
 
         /**
@@ -1111,11 +1216,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                 'width': '675px',
                                 'height': 'auto'
                             });
+                            reinitMediaControlHandlers();
                         } else if (CONTENT_TYPE === 'Audio') {
                             outerContainer.css({
                                 'width': '675px',
                                 'height': 'auto'
                             });
+                            reinitMediaControlHandlers();
                         } else if (CONTENT_TYPE === 'iframe') {
 
                             outerContainer.css({
