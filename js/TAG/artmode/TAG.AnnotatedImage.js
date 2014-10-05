@@ -1117,6 +1117,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                 'height': 'auto'
                             });
                         } else if (CONTENT_TYPE === 'iframe') {
+
                             outerContainer.css({
                                 'width': '30%',
                             });
@@ -1133,6 +1134,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             mediaContainer.css({
                                 'height': mediaHeight
                             });
+                            /*var iframe = outerContainer.find("iframe");
+                            iframe.attr({
+                                src: SOURCE + "?modestbranding=1&showinfo=0&fs=0",
+                                frameborder: '0'
+                            });
+                            iframe.css({
+                                width: '100%',
+                                height: '100%'
+                            });*/
 
                             //Create an overlay to help with interaction (problems with mouse "sticking" to iframe)
                             //Basically, create an overlay that only exists while you have clicked down on the media, and then is removed when you release it (i.e, when you want to actually play the iframe)
@@ -1734,6 +1744,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @method hideMediaObject
          */
         function hideMediaObject(isHotspotIcon) {
+            //TAG.Util.removeYoutubeVideo();
             outerContainer.stop();
 
             var toHideID = '#thumbnailButton-' + mdoq.Identifier;
