@@ -4541,9 +4541,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Lock artwork setting: Only one artwork per server
         var isLocked;
+        isLocked = TAG.Worktop.Database.getLocked();
         TAG.Worktop.Database.getMain(function () {
 
-            isLocked = TAG.Worktop.Database.getLocked();             //Get locked artwork GUID
+            //Get locked artwork GUID
             var unlockedInput = createButton('Unlocked', function () {
                 //if (localVisibility) { changesHaveBeenMade = true; };
                 isLocked = "";
@@ -4587,187 +4588,195 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             var lockedSetting = createSetting('Lock to this artwork', lockedDiv);
             settingsContainer.append(lockedSetting);
-        });
 
-        //Automatically save changes
-        //currentMetadataHandler = function () {
-        //    if (titleInput.val() === undefined || titleInput.val() === "") {
-        //        titleInput.val("Untitled Artwork");
-        //    }
-        //    saveArtwork(artwork, {
-        //        artistInput: artistInput,                                      //Artwork artist
-        //        nameInput: titleInput,                                         //Artwork title
-        //        yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
-        //        monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
-        //        dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
-        //        timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
-        //        timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
-        //        timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
-        //        descInput: descInput,                                          //Artwork description
-        //        customInputs: customInputs                                    //Artwork custom info fields
-        //    });
-        //};
 
-        // Create buttons
-        editArt = createButton('Artwork Editor',
-            function () { editArtwork(artwork); },
-            {
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
-            });
-        leftButton = editArt;
-        editArt.attr("id", "artworkEditorButton");
-        var deleteArt = createButton('Delete',
-            function () { deleteArtwork(artwork); },
-            {
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
-            });
-        var inputs = {
-            artistInput: artistInput,                                      //Artwork artist
-            nameInput: titleInput,                                         //Artwork title
-            yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
-            monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
-            dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
-            timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
-            timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
-            timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
-            descInput: descInput,                                          //Artwork description
-            customInputs: customInputs                                    //Artwork custom info fields
-        };
-        saveButton = createButton('Save',
-            function () {
-                if (titleInput.val() === undefined || titleInput.val() === "") {
-                    titleInput.val("Untitled Artwork");
-                }
-                saveArtwork(artwork, {
-                    artistInput: artistInput,                                      //Artwork artist
-                    nameInput: titleInput,                                         //Artwork title
-                    yearInput: $(yearMetadataDivSpecs.yearInput),                  //Artwork year or era
-                    monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
-                    dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
-                    timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
-                    timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
-                    timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
-                    descInput: descInput,                                          //Artwork description
-                    locked: isLocked,                                                //Whether locked into artwork
-                    customInputs: customInputs                                     //Artwork custom info fields
+            //Automatically save changes
+            //currentMetadataHandler = function () {
+            //    if (titleInput.val() === undefined || titleInput.val() === "") {
+            //        titleInput.val("Untitled Artwork");
+            //    }
+            //    saveArtwork(artwork, {
+            //        artistInput: artistInput,                                      //Artwork artist
+            //        nameInput: titleInput,                                         //Artwork title
+            //        yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
+            //        monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
+            //        dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
+            //        timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
+            //        timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
+            //        timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
+            //        descInput: descInput,                                          //Artwork description
+            //        customInputs: customInputs                                    //Artwork custom info fields
+            //    });
+            //};
+
+            // Create buttons
+            editArt = createButton('Artwork Editor',
+                function () { editArtwork(artwork); },
+                {
+                    'margin-left': '2%',
+                    'margin-top': '1%',
+                    'margin-right': '0%',
+                    'margin-bottom': '3%',
                 });
-            }, {
-                'margin-right': '3%',
-                'margin-top': '1%',
-                'margin-bottom': '1%',
-                'margin-left': '.5%',
-                'float': 'right'
-            }, true);
-
-        var xmluploaderbtn = createButton('Upload XML',
-                        function () {
-                            uploadXML(artwork, inputs, settingsContainer);
-                        },
-                        {
-                            'margin-left': '2%',
-                            'margin-top': '1%',
-                            'margin-right': '0%',
-                            'margin-bottom': '3%',
-                        });
-
-
-        var thumbnailButton = createButton('Capture Thumbnail',
-            function () {
-                saveThumbnail(artwork, true);
-            }, {
-                'margin-right': '0%',
-                'margin-top': '1%',
-                'margin-bottom': '1%',
-                'margin-left': '2%',
-                'float': 'left'
-            });
-        thumbnailButton.attr('id', 'thumbnailButton');
-        if (artwork.Metadata.Type !== 'VideoArtwork') {
-            buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
-        } else {
-            buttonContainer.append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
-        }
-
-        saveButton.on("mousedown", function () {
-            if (!saveButton.attr("disabled")) {
-                saveButton.css({ "background-color": "white" });
+            leftButton = editArt;
+            editArt.attr("id", "artworkEditorButton");
+            var deleteArt = createButton('Delete',
+                function () { deleteArtwork(artwork); },
+                {
+                    'margin-left': '2%',
+                    'margin-top': '1%',
+                    'margin-right': '0%',
+                    'margin-bottom': '3%',
+                });
+            if (isLocked) {
+                deleteArt.prop("disabled", true);
+                deleteArt.css({
+                    "opacity": "0.5"
+                });
             }
-        });
-        thumbnailButton.on("mousedown", function () {
-            thumbnailButton.css({ "background-color": "white" });
-        });
-        xmluploaderbtn.on("mousedown", function () {
-            xmluploaderbtn.css({ "background-color": "white" });
-        });
-        deleteArt.on("mousedown", function () {
-            deleteArt.css({ "background-color": "white" });
-        });
-        editArt.on("mousedown", function () {
-            editArt.css({ "background-color": "white" });
-        });
-        saveButton.on("mouseleave", function () {
-            saveButton.css({ "background-color": "transparent" });
-        });
-        thumbnailButton.on("mouseleave", function () {
-            thumbnailButton.css({ "background-color": "transparent" });
-        });
-        xmluploaderbtn.on("mouseleave", function () {
-            xmluploaderbtn.css({ "background-color": "transparent" });
-        });
-        deleteArt.on("mouseleave", function () {
-            deleteArt.css({ "background-color": "transparent" });
-        });
-        editArt.on("mouseleave", function () {
-            editArt.css({ "background-color": "transparent" });
-        });
-        newButton.on("mouseleave", function () {
-            newButton.css({ "background-color": "transparent" });
-        });
+            var inputs = {
+                artistInput: artistInput,                                      //Artwork artist
+                nameInput: titleInput,                                         //Artwork title
+                yearInput: $(yearMetadataDivSpecs.yearInput),                     //Artwork year or era
+                monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
+                dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
+                timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
+                timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
+                timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
+                descInput: descInput,                                          //Artwork description
+                customInputs: customInputs                                    //Artwork custom info fields
+            };
+            saveButton = createButton('Save',
+                function () {
+                    if (titleInput.val() === undefined || titleInput.val() === "") {
+                        titleInput.val("Untitled Artwork");
+                    }
+                    saveArtwork(artwork, {
+                        artistInput: artistInput,                                      //Artwork artist
+                        nameInput: titleInput,                                         //Artwork title
+                        yearInput: $(yearMetadataDivSpecs.yearInput),                  //Artwork year or era
+                        monthInput: yearMetadataDivSpecs.monthInput,                   //Artwork month
+                        dayInput: yearMetadataDivSpecs.dayInput,                       //Artwork day
+                        timelineYearInput: yearMetadataDivSpecs.timelineYearInput,     //Artwork year on timeline
+                        timelineMonthInput: yearMetadataDivSpecs.timelineMonthInput,   //Artwork month on timeline 
+                        timelineDayInput: yearMetadataDivSpecs.timelineDayInput,       //Artwork day on timeline 
+                        descInput: descInput,                                          //Artwork description
+                        locked: isLocked,                                                //Whether locked into artwork
+                        customInputs: customInputs                                     //Artwork custom info fields
+                    });
+                }, {
+                    'margin-right': '3%',
+                    'margin-top': '1%',
+                    'margin-bottom': '1%',
+                    'margin-left': '.5%',
+                    'float': 'right'
+                }, true);
+
+            var xmluploaderbtn = createButton('Upload XML',
+                            function () {
+                                uploadXML(artwork, inputs, settingsContainer);
+                            },
+                            {
+                                'margin-left': '2%',
+                                'margin-top': '1%',
+                                'margin-right': '0%',
+                                'margin-bottom': '3%',
+                            });
 
 
-        /*if (artwork.Metadata.Type !== 'VideoArtwork') {
-            buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
-        } else {
-            var convertBtn = createButton('Convert Video',
-                    function () {
-                        var source = artwork.Metadata.Source;
-                        var newFileName = source.slice(8, source.length);
-                        var index = newFileName.lastIndexOf(".");
-                        var fileExtension = newFileName.slice(index);
-                        var baseFileName = newFileName.slice(0, index);
-                        if (artwork.Metadata.Converted !== "True") {
-                            TAG.Worktop.Database.convertVideo(function () {
-                            }, null, newFileName, fileExtension, baseFileName, artwork.Identifier);
-                            conversionVideos.push(artwork.Identifier);
-                            $("#videoErrorMsg").remove();
-                            $("#leftLoading").remove();
-                            var msg = "This video is being converted to compatible formats for different browsers";
-                            viewer.append(TAG.Util.createConversionLoading(msg));
-                            mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, "False");
-                            convertBtn.hide().data('disabled', true);
-                        }
-                    }, {
-                        'margin-right': '0%',
-                        'margin-top': '1%',
-                        'margin-bottom': '3%',
-                        'margin-left': '2%',
-                        'float': 'left'
-                    })
-            convertBtn.attr('class', 'button convertVideoBtn');
-            convertBtn.attr("disabled", "");
-            if (artwork.Metadata.Converted !== "True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
-                convertBtn.show().data('disabled', false);
+            var thumbnailButton = createButton('Capture Thumbnail',
+                function () {
+                    saveThumbnail(artwork, true);
+                }, {
+                    'margin-right': '0%',
+                    'margin-top': '1%',
+                    'margin-bottom': '1%',
+                    'margin-left': '2%',
+                    'float': 'left'
+                });
+            thumbnailButton.attr('id', 'thumbnailButton');
+            if (artwork.Metadata.Type !== 'VideoArtwork') {
+                buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
             } else {
-                convertBtn.hide().data('disabled', true);
+                buttonContainer.append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
             }
-            buttonContainer.append(thumbnailButton).append(saveButton).append(convertBtn).append(xmluploaderbtn).append(deleteArt); //SAVE BUTTON//
-        }*/
+
+            saveButton.on("mousedown", function () {
+                if (!saveButton.attr("disabled")) {
+                    saveButton.css({ "background-color": "white" });
+                }
+            });
+            thumbnailButton.on("mousedown", function () {
+                thumbnailButton.css({ "background-color": "white" });
+            });
+            xmluploaderbtn.on("mousedown", function () {
+                xmluploaderbtn.css({ "background-color": "white" });
+            });
+            deleteArt.on("mousedown", function () {
+                deleteArt.css({ "background-color": "white" });
+            });
+            editArt.on("mousedown", function () {
+                editArt.css({ "background-color": "white" });
+            });
+            saveButton.on("mouseleave", function () {
+                saveButton.css({ "background-color": "transparent" });
+            });
+            thumbnailButton.on("mouseleave", function () {
+                thumbnailButton.css({ "background-color": "transparent" });
+            });
+            xmluploaderbtn.on("mouseleave", function () {
+                xmluploaderbtn.css({ "background-color": "transparent" });
+            });
+            deleteArt.on("mouseleave", function () {
+                deleteArt.css({ "background-color": "transparent" });
+            });
+            editArt.on("mouseleave", function () {
+                editArt.css({ "background-color": "transparent" });
+            });
+            newButton.on("mouseleave", function () {
+                newButton.css({ "background-color": "transparent" });
+            });
+
+
+            /*if (artwork.Metadata.Type !== 'VideoArtwork') {
+                buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); //SAVE BUTTON//
+            } else {
+                var convertBtn = createButton('Convert Video',
+                        function () {
+                            var source = artwork.Metadata.Source;
+                            var newFileName = source.slice(8, source.length);
+                            var index = newFileName.lastIndexOf(".");
+                            var fileExtension = newFileName.slice(index);
+                            var baseFileName = newFileName.slice(0, index);
+                            if (artwork.Metadata.Converted !== "True") {
+                                TAG.Worktop.Database.convertVideo(function () {
+                                }, null, newFileName, fileExtension, baseFileName, artwork.Identifier);
+                                conversionVideos.push(artwork.Identifier);
+                                $("#videoErrorMsg").remove();
+                                $("#leftLoading").remove();
+                                var msg = "This video is being converted to compatible formats for different browsers";
+                                viewer.append(TAG.Util.createConversionLoading(msg));
+                                mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer, "False");
+                                convertBtn.hide().data('disabled', true);
+                            }
+                        }, {
+                            'margin-right': '0%',
+                            'margin-top': '1%',
+                            'margin-bottom': '3%',
+                            'margin-left': '2%',
+                            'float': 'left'
+                        })
+                convertBtn.attr('class', 'button convertVideoBtn');
+                convertBtn.attr("disabled", "");
+                if (artwork.Metadata.Converted !== "True" && conversionVideos.indexOf(artwork.Identifier) === -1) {
+                    convertBtn.show().data('disabled', false);
+                } else {
+                    convertBtn.hide().data('disabled', true);
+                }
+                buttonContainer.append(thumbnailButton).append(saveButton).append(convertBtn).append(xmluploaderbtn).append(deleteArt); //SAVE BUTTON//
+            }*/
+        });
+
     }
 
     /**Save Thumbnail image 
