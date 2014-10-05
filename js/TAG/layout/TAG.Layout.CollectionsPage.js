@@ -901,9 +901,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!onAssocMediaView || !currCollection.collectionMedia) {
                 getCollectionContents(currCollection, null, function () { return cancelLoad;});
             } else {
-                createArtTiles(currCollection.collectionMedia);
-                loadSortTags(currCollection, currCollection.collectionMedia)
-                initSearch(currCollection.collectionMedia);
+                if (onAssocMediaView && artworkInCollectionList.length == 0) {
+                    TAG.Worktop.Database.getArtworksIn(collection.Identifier,
+                        function (contents) {
+                            artworkInCollectionList = [];
+                            for (var i = 0; i < contents.length; i++) {
+                                artworkInCollectionList.push(contents[i].Identifier);
+                            }
+
+                            createArtTiles(currCollection.collectionMedia);
+                            loadSortTags(currCollection, currCollection.collectionMedia)
+                            initSearch(currCollection.collectionMedia);
+                        }, null, null);
+                } else {
+                    createArtTiles(currCollection.collectionMedia);
+                    loadSortTags(currCollection, currCollection.collectionMedia)
+                    initSearch(currCollection.collectionMedia);
+                }
             }
             cancelLoadCollection = function () { cancelLoad = true; };
 
