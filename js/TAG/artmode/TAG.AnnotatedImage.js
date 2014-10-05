@@ -1645,7 +1645,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var cssHeight = IS_WINDOWS ? '30px' : '15px';
             closeButton.css({
                 'position': 'absolute',
-                'width': 'auto',
+                'width': cssHeight,
                 'height': cssHeight,
                 'min-width': '30px',
                 'z-index': '1',
