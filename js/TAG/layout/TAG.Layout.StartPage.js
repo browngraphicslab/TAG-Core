@@ -335,6 +335,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     $('#authoringButtonBuffer').remove();
         // }
         
+        if (TAG.Worktop.Database.getLocked()) {
+            goToCollectionsButton.text("Go to Artwork");
+        }
+        
         goToCollectionsButton.on('click', function () {
             if (TAG.Worktop.Database.getLocked()) {
                 TAG.Worktop.Database.getArtworks(function (result) {
