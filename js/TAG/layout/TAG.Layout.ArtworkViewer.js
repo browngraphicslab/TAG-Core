@@ -675,7 +675,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
  
         });
         
-        if(IS_WEBAPP) {
+        if (IS_WEBAPP && !locked) {
             linkButton.attr('src', tagPath+'images/link.svg');
             linkButton.on('click', function() {
                 var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
