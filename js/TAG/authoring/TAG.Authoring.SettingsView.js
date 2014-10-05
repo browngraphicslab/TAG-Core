@@ -529,6 +529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         backButton.click(function () {
             //if (!changesHaveBeenMade) {
+            TAG.Util.removeYoutubeVideo();
                 TAG.Auth.clearToken();
                 rightQueue.clear();
                 middleQueue.clear();
@@ -732,7 +733,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    changesHaveBeenMade = false;
             //}
             // Reset all labels and then select this one
-
+            TAG.Util.removeYoutubeVideo();
             searchbar[0].value = "";
 
             resetLabels('.navContainer');
@@ -743,6 +744,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             prevSelectedSetting = container;
         });
+
+        // vertical centering groundwork for 2.2
+        //var navTextHolder;
 
         var navtext = $(document.createElement('label'));
         navtext.attr('class','navtext');
@@ -1600,7 +1604,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptionsObj[sortDiv.text()] = false;
                 //TODO:set the sort tag to white in previewer
 
-                $("#" + buttonId).hide();
+                $("[id='"+buttonId+"']").hide();
 
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
@@ -1618,8 +1622,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     });
 
                     //if the button already exists
-                    if ($("#" + buttonId)[0]){
-                        $("#" + buttonId).show()
+                    if ($("[id='" + buttonId + "']")[0]) {
+                        $("[id='" + buttonId + "']").show()
                             .css({"color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)})
                     } else { //or if you're making it (sort option was origionally deselected)
                         sortButton = $(document.createElement('div'));
@@ -1639,7 +1643,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                         "height": "100%",
                                         "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
                                     });
-                    $("#buttonRow").append(sortButton);
+                        $("#buttonRow").append(sortButton);
                     }
 
                     if (sortDiv.text() === "Date") {
@@ -1878,7 +1882,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
              'height': '35px'
         });
         */
-        var showTimeline = createButton('Show Timeline', function () {
+        var showTimeline = createButton('Show', function () {
             //(!timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = true;
             showTimeline.css('background-color', 'white');
@@ -1897,11 +1901,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-right': '4%',
             'width':'48%',
             'padding-left': '10px',
-            'padding-right': '10px'
+            'padding-right': '10px',
+            'height': '35px'
         });
         showTimeline.attr("id","showTimelineBttn");
         showTimeline.attr('class','settingButton');
-        var hideTimeline = createButton('Hide Timeline', function () {
+        var hideTimeline = createButton('Hide', function () {
             //(timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = false;
             hideTimeline.css('background-color','white');
@@ -1914,8 +1919,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //$('#dateButton') &&
             //$('#yearButton') &&
             }, {
-            'min-height': '0px',
-            'width': '48%'
+                'min-height': '0px',
+                'width': '48%',
+                'height': '35px'
             });
 
         hideTimeline.attr("id","hideTimelineBttn");
@@ -4105,6 +4111,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method doSearch
      */
     function doSearch() {
+        TAG.Util.removeYoutubeVideo();
+
         var content = searchbar.val().toLowerCase(),
             matches = [],
             i;
@@ -4924,8 +4932,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             isrightdata = false,
             customFields = [],
             mtinputs = {};
-        paringPickerConfirm.css('border-radius', '3.5px');
-        paringPickerCancel.css('border-radius', '3.5px');
+        parsingPickerConfirm.css('border-radius', '3.5px');
+        parsingPickerCancel.css('border-radius', '3.5px');
         parsingOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
         parsingOverlay.append(parsingOverlayText);
         parsingOverlayText.hide();
@@ -5777,6 +5785,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    changesHaveBeenMade = false;
             //    //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
             //}
+            TAG.Util.removeYoutubeVideo();
             resetLabels('.middleLabel');
             selectLabel(container, !noexpand);
             if (onclick) {
@@ -5789,16 +5798,44 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             container.dblclick(onDoubleClick);
         }
         var width;
+
+        // BUILD VERTICAL CENTERING HELPER FUCK YEAH
+        var helper = $(document.createElement('span'));
+        helper.css({
+            'display' : 'inline-block',
+            'height': '100%',
+            'vertical-align': 'middle'
+        });
+        container.append(helper);
+
+        // build image if it exists WHICH WILL BE VERTICALLY CENTERED FUCK YEAH
         if (imagesrc) {
+            var imageParent = $(document.createElement('div'))
+            .css({
+                'display': 'inline-block',
+                'vertical-align': 'middle',
+                'height': '100%',
+                'width': '20%',
+                'position': 'relative',
+                'margin': 'auto 3% auto 1%'
+            });
+            container.append(imageParent);
             var image = $(document.createElement('img'));
             image.attr('src', imagesrc);
             image.css({
+                'margin': 'auto auto auto',
                 'height': 'auto',
-                'width': '20%',
-                'margin-right': '5%',
+                'max-width': '100%',
+                'max-height': '100%',
+                'display': 'block',
+                'position': 'absolute',
+                'width': 'auto',
+                'left': '0',
+                'right': '0',
+                'top': '0',
+                'bottom': '0'
             });
-            container.append(image);
-            
+            imageParent.append(image);
 
             var progressCircCSS = {
                 'position': 'absolute',
@@ -5806,27 +5843,35 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'z-index': '50',
                 'height': 'auto',
                 'width': '10%',
-                'top': '20%',
+                'top': '20%'
             };
             var circle = TAG.Util.showProgressCircle(container, progressCircCSS, '0px', '0px', false);
             image.load(function () {
                 TAG.Util.removeProgressCircle(circle);
             });
-            width = '75%';
+            width = '70%';
         } else {
-            width = '95%';
+            width = '90%';
         }
 
+        // build text label WHICH WILL ALSO BE VERTICALLY CENTERED FUCK YEAH
         var label = $(document.createElement('div'));
         label.attr('class', 'labelText');
-        label.css({'width': width});
+        label.css({
+            'width': width,
+            'vertical-align': 'middle'
+        });
 
         if (!imagesrc) {
             label.css({
-                'padding-top': '0.4%',
-                'padding-left': '1.3%',
+                'padding-left': '4%'
+            });
+        } else {
+            label.css({
+                'padding-left': '2%'
             });
         }
+
         label.text(text);
 
         container.append(label);
@@ -5842,7 +5887,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} loadingText      Text to display while middle bar loading
      */
     function prepareNextView(showSearch, newText, newBehavior, loadingText) {
-
+        TAG.Util.removeYoutubeVideo();
         clearInterval(checkConTimerId);
         middleQueue.clear();
         middleLabelContainer.empty();
@@ -5901,7 +5946,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} text           text to add to the viewer (in a textbox)
      * @param {Boolean} showButtons   whether the buttonContainer is shown
      */
-    function prepareViewer(showViewer,text, showButtons) { 
+    function prepareViewer(showViewer, text, showButtons) {
+        TAG.Util.removeYoutubeVideo();
         viewer.empty();
         viewer.css('background', 'black');
         if (showViewer) {

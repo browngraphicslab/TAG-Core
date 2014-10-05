@@ -29,6 +29,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locHistoryContainer = root.find('#locationHistoryContainer'),
         locationPanelDiv = null,
         locHistoryToggle = null,
+        locHistoryToggleSign = null,
         isOpen = false,
         that = this,
         locked = TAG.Worktop.Database.getLocked(),     //Check for locked
@@ -226,6 +227,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         locHistoryContainer.css({ "background-color": "transparent" });
                         locationPanelDiv.hide();
                         locHistoryToggle.hide();
+                        locHistoryToggleSign.attr("src", tagPath + 'images/icons/plus.svg');
                         isOpen = false;
                         toggler.show();
 
@@ -692,6 +694,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         function goBack() {
+            TAG.Util.removeYoutubeVideo();
             var collectionsPage,
                 collectionsPageRoot;
             backButton.off('click');
@@ -773,10 +776,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             root.find('#locationHistoryContainer').remove();
         }
 
+        var drawerToggleFn = null;
         if (associatedMedia.guids.length > 0) {
             for (i = 0; i < associatedMedia.guids.length; i++) {
                 curr = associatedMedia[associatedMedia.guids[i]];
-                if (curr.linq.Metadata.Type === 'Layer') {
+                /*if (curr.linq.Metadata.Type === 'Layer') {
                     if (!xfadeDrawer) {
                         xfadeSlider = $(document.createElement('div'))
                             .attr('id', 'xfadeSlider');
@@ -823,12 +827,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         xfadeDrawer = createDrawer('Layers', xfadeSlider);
                     }
                     loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
-                } else {
-                    if (!mediaDrawer) {
-                        mediaDrawer = createDrawer('Associated Media');
+                } else { */
+
+                if (!mediaDrawer) {
+                    mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
+                    if (mediaDrawer.drawerToggle) {
+                        drawerToggleFn = mediaDrawer.drawerToggle;
                     }
-                    loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
                 }
+
+                loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+                //} //TODO ADD BACK LAYERS FUNCTIONALITY
             }
             if (mediaDrawer) {
                 assetContainer.append(mediaDrawer);
@@ -837,6 +846,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             if (xfadeDrawer) {
                 assetContainer.append(xfadeDrawer);
                 currBottom += xfadeDrawer.height();
+            }
+            if (drawerToggleFn && (typeof drawerToggleFn === "function")) {
+                loadQueue.add(drawerToggleFn);
             }
         }
 
@@ -915,7 +927,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 media.create(); // returns if already created
                 media.toggle();
                 TAG.Util.IdleTimer.restartTimer();
-                (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
+                //(media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
+                media.mediaManipPreprocessing(); //todo delete when layers functionality is added back in
                 media.pauseReset();
                 // toggleLocationPanel();
             };
@@ -954,13 +967,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             maxHeight = Math.max(1, assetContainer.height() - currBottom ); //to account for the height of the drawerLabel of the current drawer.
 
             root.find(".drawerContents").css({
-                "max-height": maxHeight*.8 + "px", //TODO this
+                "max-height": maxHeight*.75 + "px", //TODO this
                 //'max-height':2*0.19 * $('#tagRoot').height() + 'px', //height of two thumbnails
             });
         });
 
         function tourClicked(tour) {
             return function () {
+                TAG.Util.removeYoutubeVideo();
                 var rinData,
                     parentid,
                     prevInfo,
@@ -1298,13 +1312,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          ******************/
 
         annotatedImage.addAnimateHandler(dzMoveHandler);
+        assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
         //PART OF CUSTOM BUILD FOR THE SAM
-        for (i = 0; i < associatedMedia.guids.length; i++) {
+        /*for (i = 0; i < associatedMedia.guids.length; i++) {
             //console.log("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
             if (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type && (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type === "Hotspot")) {
                 loadQueue.add(associatedMedia[associatedMedia.guids[i]].showHotspot());
             }
-        };
+        };*/
     }
 
 
@@ -1319,14 +1334,16 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @author jastern
      */
     function initlocationHistory() {
-        var RLH,  
-            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer'),
-            toggle          = $(document.createElement('img')).addClass("drawerPlusToggle")
-                .attr("src", tagPath+'images/icons/plus.svg');      
+        var RLH,
+            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer');
+            //toggle          = $(document.createElement('img')).addClass("drawerPlusToggle")
+            //    .attr("src", tagPath+'images/icons/plus.svg');      
         isOpen = false;
 
+        locHistoryToggleSign = $(document.createElement('img')).addClass("drawerPlusToggle")
+                .attr("src", tagPath+'images/icons/plus.svg'); 
         locHistoryContainer.on('click', function () { toggleLocationOpen(); });
-        toggleContainer.append(toggle);
+        toggleContainer.append(locHistoryToggleSign);
         locHistoryContainer.append(toggleContainer);
 
         //panel that slides out when location history is clicked
@@ -1382,7 +1399,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
                     //and open RLH
                     locationPanelDiv.css({ display: 'inline' });
-                    toggle.attr("src", tagPath+'images/icons/minus.svg');      
+                    locHistoryToggleSign.attr("src", tagPath + 'images/icons/minus.svg');
                     isOpen = true;
                     toggler.hide();
                     locationPanelDiv.show();
@@ -1393,7 +1410,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         function locationClose() {
             if (isOpen) {
-                toggle.attr("src", tagPath+'images/icons/plus.svg');      
+                locHistoryToggleSign.attr("src", tagPath + 'images/icons/plus.svg');
                 locHistory.text("Maps");
                 locHistoryContainer.css({ "background-color": "transparent" });
                 isOpen = false;
@@ -1412,7 +1429,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @param {jQuery obj} topContents  an element to be included before the main contents of the drawer
      * @return {jQuery obj}             the drawer
      */
-    function createDrawer(title, topContents) {
+    function createDrawer(title, topContents, assocMediaToShow) {
         var drawer          = $(document.createElement('div')).addClass('drawer'),
             drawerHeader    = $(document.createElement('div')).addClass('drawerHeader'),
             label           = $(document.createElement('div')).addClass('drawerLabel'),
@@ -1436,41 +1453,42 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         drawerHeader.append(label);
         drawerHeader.append(toggleContainer);
         toggleContainer.append(toggle);
-        
+   
         drawer.append(drawerContents);
         topContents && drawerContents.append(topContents);
-
-        //have the toggler icon minus when is is expanded, plus otherwise.
-        drawerHeader.on('click', function (evt) {
+        var drawerToggle = function (evt) {
             if (toggle.attr('expanded') !== 'true') {
                 root.find(".drawerPlusToggle").attr({
-                   src: tagPath+'images/icons/plus.svg',
+                    src: tagPath + 'images/icons/plus.svg',
                     expanded: false
                 });
 
                 root.find(".drawerContents").slideUp();
 
                 toggle.attr({
-                    src: tagPath+'images/icons/minus.svg',
+                    src: tagPath + 'images/icons/minus.svg',
                     expanded: true
                 });
             } else {
                 toggle.attr({
-                    src: tagPath+'images/icons/plus.svg',
+                    src: tagPath + 'images/icons/plus.svg',
                     expanded: false
-                });          
+                });
 
             }
 
             drawerContents.slideToggle();
             isOpen && that.locationClose()
-            drawerContents.css({
-                'display':'inline-block',
-                'overflow-y': 'scroll'
-            });
-        });
-        
+        }
+
+        //have the toggler icon minus when is is expanded, plus otherwise.
+        drawerHeader.on('click', drawerToggle);
+
         drawer.contents = drawerContents;
+        if (assocMediaToShow && title === 'Associated Media') {
+            //drawerHeader.click();
+            drawer.drawerToggle = drawerToggle;
+        }
         return drawer;
     }
 

@@ -51,8 +51,17 @@ TAG.Util = (function () {
         dimColor: dimColor,
         hexToRGBA: hexToRGBA,
         IdCreator: IdCreator,
-        makeBorderRadius:makeBorderRadius
+        makeBorderRadius: makeBorderRadius,
+        createTutorialPopup: createTutorialPopup,
+        removeYoutubeVideo: removeYoutubeVideo
     };
+
+    function removeYoutubeVideo(){
+        var iframeEle = document.getElementsByTagName("iframe");
+        if (iframeEle[0]) {
+            iframeEle[0].src = "";
+        }
+    }
 
     function makeBorderRadius(ele, radius) {
         ele.css('border-radius', radius);
@@ -1812,6 +1821,170 @@ TAG.Util = (function () {
         return 'rgba(' + r + ',' + g + ',' + b + ',' + opac + ')';
     }
 
+    /***
+    * Create the tutorial popup for the collections page
+    *@method createTutorialPopup
+    */
+
+    function createTutorialPopup() {
+        var tagContainer = $('#tagRoot');
+        var infoOverlay = $(TAG.Util.UI.blockInteractionOverlay());
+        var infoBox = $(document.createElement('div')).addClass('infoBox');
+        var infoMain = $(document.createElement('div')).addClass('infoMain');
+        var infoTitle = $(document.createElement('div')).addClass('infoTitle');
+        var closeButton = createCloseButton().addClass('closeButton');
+
+        function createCloseButton() {
+            var closeButton = $(document.createElement('img'));
+            closeButton.attr('src', tagPath + 'images/icons/x.svg');
+            closeButton.text('X');
+            closeButton.css({
+                'height': '3%',
+                'width': '3%',
+                'margin-left': '39%',
+                'margin-bottom': '3.5%'
+            });
+            return closeButton;
+        }
+
+        infoBox.css({
+            'background-color': 'black',
+            'color': 'white',
+            'height': '55%',
+            'width': '50%',
+            'margin-top': '15%',
+            'margin-left': '25%',
+        });
+
+        infoTitle.css({
+            'padding-top': '5%',
+            'padding-left': '8%',
+            'padding-right': '8%',
+            'background-color': 'black',
+            'display': 'block',
+            'color': 'white',
+            'border-top-left-radius': '3.5px',
+            'border-top-right-radius': '3.5px',
+            'font-size': '1.5em'
+        }).text('Welcome to Touch Art Gallery');
+
+            infoMain.css({
+                'background-color': 'black',
+                'display': 'block',
+                'color': 'white',
+                'font-size': '0.75em',
+                'margin-left': '8%',
+                'margin-top': '4%',
+                'margin-right': '8%'
+            });
+
+            closeButton.css({
+                'height': '4%',
+                'width': '4%',
+                'min-height': '20px',
+                'min-width': '20px',
+                'margin-left': '0%',
+                'margin-bottom': '0%',
+                'margin-top': '1%',
+                'margin-right': '1%',
+                'top': '0%',
+                'display': 'block',
+                'float': 'right'
+            });
+
+            infoBox.append(closeButton);
+            infoBox.append(infoTitle);
+
+            function createDivWithLabel(text, src) {
+                var section = $(document.createElement('div'))
+                    .addClass('infoSection')
+                    .css({
+                        'display': 'block',
+                        'position': 'relative',
+                        'width': '100%',
+                        'min-height': '1.5%',
+                        'max-height': '4%',
+                        'padding-bottom': '1.5%',
+                    })
+                if (src) {
+                    var imgholder = $(document.createElement('div'))
+                        .addClass('infoSectionIconHolder')
+                        .css({
+                            'display': 'inline-block',
+                            'position': 'absolute',
+                            //'padding-top':'1%',
+                            'height': '80%',
+                            'width': '10%',
+                            'left': '0%',
+                            'top': '0%',
+                            'text-align': 'center',
+                            'vertical-align': 'middle'
+                        });
+                    imgholder.append(
+                        $(document.createElement('img'))
+                        .addClass('infoSectionIcon')
+                        .attr('src', src)
+                        .css({
+                            'display': 'block',
+                            'position': 'absolute',
+                            'vertical-align': 'middle',
+                            'width': '100%',
+                            'max-width': '45px',
+                            'height': 'auto',
+                            'max-height': '45px'/*
+                        bottom: '0px',
+                        display: 'block',
+                        height: '100%',
+                        left: '0px',
+                        'margin-bottom': 'auto',
+                        'margin-left': 'auto',
+                        'margin-right': 'auto',
+                        'margin-top': 'auto',
+                        'max-height': '80%',
+                        'max-width': '80%',
+                        position: 'absolute',
+                        right: '0px',
+                        top: '0px',
+                        width: 'auto',*/
+                        })
+                    );
+                    section.append(imgholder);
+                }
+                section.append(
+                    $(document.createElement('div'))
+                    .addClass('infoSectionText')
+                    .text(text)
+                    .css({
+                        'display': 'inline-block',
+                        'position': 'relative',
+                        'width': src ? '85%' : '100%',
+                        'left': src ? '12%' : '0%'
+                    })
+                );
+                infoMain.append(section);
+            }
+
+            createDivWithLabel("Click or tap on a tile to preview the item it represents, and click/tap on its thumbnail again to begin exploring it in full.");
+            createDivWithLabel("Tiles without icons are image artworks. Any media associated with the artwork will appear below the artwork in the previewer. You can explore the artwork with a specific media item by tapping on the item's thumbnail image.")
+            createDivWithLabel("Tiles with the play icon represent video artworks. Click or tap on the tile to view them in the video player.", tagPath + 'images/video_icon.svg');
+            createDivWithLabel("Tiles with this icon represent interactive tours. Click or tap on the tile to open them in the tour player. Tours are like video narratives, but can be paused at any time via the controls, or by tapping anywhere in the player. While paused, you can freely manipulate all items that are currently onscreen.", tagPath + 'images/tour_icon.svg');
+
+        infoBox.append(infoMain);
+
+        infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
+        infoOverlay.append(infoBox);
+
+        closeButton.on('mousedown', function () {
+            infoOverlay.fadeOut();
+        });
+
+        tagContainer.append(infoOverlay);
+        infoOverlay.fadeIn();
+
+    }
+
+
+
 })();
 
 /**
@@ -2684,7 +2857,7 @@ TAG.Util.UI = (function () {
         $(confirmBox).append(optionButtonDiv);
 
         $(overlay).append(confirmBox);
-        var confirmButton = document.createElement('button').css('border-radius', '3.5px');
+        var confirmButton = document.createElement('button');
         $(confirmButton).css({
             'padding': '1%',
             'border': '1px solid white',
@@ -2693,6 +2866,7 @@ TAG.Util.UI = (function () {
             'float': "left",
             'margin-left': '12%',
             'color': 'white',
+            'border-radius': '3.5px',
             'margin-top': '1%'
 
         }).attr('id', 'popupConfirmButton');
@@ -2717,7 +2891,7 @@ TAG.Util.UI = (function () {
         }
         $(optionButtonDiv).append(confirmButton);
 
-        var cancelButton = document.createElement('button').css('border-radius', '3.5px');
+        var cancelButton = document.createElement('button');
         var $cancelButton = $(cancelButton);
         $cancelButton.css({
             'padding': '1%',
@@ -2727,7 +2901,8 @@ TAG.Util.UI = (function () {
             'float': "right",
             'margin-right': '3%',
             'color': 'white',
-            'margin-top': '1%'
+            'margin-top': '1%',
+            'border-radius': '3.5px'
         }).attr('id', 'popupCancelButton');
         $cancelButton.text('Cancel');
         $(optionButtonDiv).append(cancelButton);
@@ -2752,7 +2927,8 @@ TAG.Util.UI = (function () {
                 //'margin-right': '12%',
                 'right':'12%',
                 'color': 'white',
-                'margin-top': '1%'
+                'margin-top': '1%',
+                'border-radius': '3.5px'
             }).text("Cancel");
             var btnwidth = $(cancelButton).width();
             var dontleft = ($(optionButtonDiv).width() - btnwidth) / 2;
@@ -3718,9 +3894,10 @@ TAG.Util.UI = (function () {
             'width': 'auto',
             'position': 'relative',
             'float': "right",
+            'border-radius': '3.5px'
         });
 
-        confirmButton.text("Save").css('border-radius', '3.5px');
+        confirmButton.text("Save");
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
@@ -5096,7 +5273,7 @@ TAG.Util.RLH = function (input) {
      */
     function saveCurrentMapMetadata() {
         var progressCSS = {
-            'left': '65%',
+            'left': '70%',
             'top': '10px',
             'width': 'auto',
             'height': '50%',
@@ -5397,7 +5574,7 @@ TAG.Util.RLH = function (input) {
      * @return {Object}                       properly formatted rich location data
      */
     function locationToRichLocation(locationData) {
-        var parsedData = (typeof (locationData) === "string") ? JSON.parse(locationData) : locationData,
+        var parsedData = (typeof (locationData) === "string") ? JSON.parse(unescape(locationData)) : locationData,
             locs = [],
             loc,
             i;
@@ -6513,7 +6690,9 @@ TAG.Util.RLH = function (input) {
 
         function success() {
             TAG.Worktop.Database.getDoq(artwork.Identifier, function (newArtwork) {
-                artwork = newArtwork;
+                if (newArtwork.Metadata) {
+                    artwork = newArtwork;
+                }
                 richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(unescape(artwork.Metadata.RichLocationHistory)) : locationToRichLocation(artwork.Metadata.Location);
                 locations = richLocationData.locations || [];
                 !input.noReload && getMaps(input.callback);

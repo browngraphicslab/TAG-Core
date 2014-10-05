@@ -153,6 +153,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
         backButton.on('click', function () {
+            TAG.Util.removeYoutubeVideo();
             var authoringHub;
             var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0.6));
             $("#tagRoot").append(transOverlay);
@@ -410,16 +411,16 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         };
 
         newButtonCSS = { // TODO STYL
-            'margin-top': '2%',
-            'margin-bottom': '3%',
+            'margin-top': '1%',
+            'margin-bottom': '1.5%',
             'width': '100%',
-            'height': root.height() * 0.05,
+            'height': root.height() * 0.06,
             'color': 'white',
             'position': 'relative'
         };
-
-        sidePanelFontSize = TAG.Util.getMaxFontSizeEM("Edit Maps", 1, root.width() * 0.1, 0.65 * newButtonCSS.height); // TODO can probably do this in STYL
-        titleFontSize = TAG.Util.getMaxFontSizeEM("Artwork Information", 1, root.width() * 0.15, 0.8 * newButtonCSS.height); // TODO can probably do this in STYL
+        
+        sidePanelFontSize = TAG.Util.getMaxFontSizeEM("Edit Maps", 1, root.width() * 0.11, 0.5 * root.height() * 0.07);
+        titleFontSize = TAG.Util.getMaxFontSizeEM("Artwork Properties", 1, root.width() * 0.15, root.height() * 0.07);
 
         sidebar = $(document.createElement('div')); // TODO JADE/STYL
         sidebar.addClass("sidebar");
@@ -430,7 +431,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             'left': '0%',
             'float': 'left',
             'background-color': 'rgba(0,0,0,0.85)',
-            'z-index': 100,
+            'z-index': 100
         });
 
         buttonContainer = $(document.createElement('div')); // TODO JADE/STYL
@@ -442,13 +443,18 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         });
         sidebar.append(buttonContainer);
 
+        // change calculation of max font size to be non-dependent on div size
+        // copy constant over
         artworkInfoLabel = $(document.createElement('div')); // TODO JADE/STYL
         artworkInfoLabel.addClass('artworkInfoLabel');
-        artworkInfoLabel.text('Artwork Information');
+        artworkInfoLabel.text('Artwork Properties');
         artworkInfoLabel.css({
-            color: 'white',
+            'color': 'white',
             'font-size': titleFontSize,
-            'margin-top': '2%'
+            'margin-top': '2%',
+            'margin-bottom': '3%',
+            'font-weight': 'bold',
+            'height': newButtonCSS.height * 0.6
         });
         buttonContainer.append(artworkInfoLabel);
 
@@ -467,7 +473,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         metadataButton.append(rightArrow);
 
         metaDataLabel = $(document.createElement('label')); // TODO J/S
-        metaDataLabel.text("Metadata");
+        metaDataLabel.text("Metadata  ");
         metaDataLabel.css({
             "width": "100%",
             "height": "100%",
@@ -484,7 +490,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         rightArrowEditLoc.css({ "position": "absolute", "right": "5%", top: "30%", width: "auto", height: "40%" });
 
         editLocLabel = $(document.createElement('label')); // TODO J/S
-        editLocLabel.text("Edit Maps");
+        editLocLabel.text("Edit Maps  ");
         editLocLabel.css({ "width": "100%", "height": "100%", "line-height": "100%", "text-align": "center" });
 
         editLocButton = $(document.createElement('div')); // TODO J/S
@@ -495,7 +501,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         editLocLabel.css({ "line-height": editLocButton.height() + "px", "font-size": sidePanelFontSize });
 
         editThumbLabel = $(document.createElement('label')); // TODO J/S
-        editThumbLabel.text("Capture Thumbnail");
+        editThumbLabel.text("Capture Thumbnail  ");
         editThumbLabel.css({ "width": "100%", "height": "100%", "line-height": "100%", "text-align": "center" });
 
         rightArrowEditThumb = $(document.createElement('img')); // TODO J/S
@@ -533,8 +539,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         assocMediaLabel.css({
             color: 'white',
             'font-size': titleFontSize,
-            'margin-top': '2%',
-            'margin-bottom': "2%"
+            'margin-top': '6%',
+            'margin-bottom': "2%",
+            'font-weight': 'bold'
         });
         buttonContainer.append(assocMediaLabel);
 
@@ -593,7 +600,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             'overflow-y': 'auto',
             'text-overflow': 'ellipsis',
             'word-wrap': 'break-word',
-            height: '60%'
+            height: '54%'
         });
         assetContainer.addClass('assetContainer');
         sidebar.append(assetContainer);
@@ -1310,8 +1317,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             makeLayerContainer();
 
             toggleLayerButton.text('Remove Layer');
-            toggleHotspotButton.attr('disabled', 'disabled');
-            toggleHotspotButton.css('opacity', '0.5');
+            //toggleHotspotButton.attr('disabled', 'disabled'); TODO REMOVE WHEN LAYERS COME BACK
+            //toggleHotspotButton.css('opacity', '0.5');
 
             if (oldLayerContainers.length > 0) {   // clicking on a thumbnail button really quickly would add a bunch of layerContainers...but
                 for (i = 0; i < oldLayerContainers.length; i++) { // a cleaner way to avoid that would be to just disable the thumbnail button when its media is already open
@@ -1779,8 +1786,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'position': 'relative',
                         'font-size': $('.addRemoveMedia').css('font-size')
                     })
-                    .attr('type', 'button')
-                    .appendTo($toggleModeContainer),
+                    .attr('type', 'button'),
+                    //.appendTo($toggleModeContainer), //TODO Add layer functionality back in for 2.2
                 $titleContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
                     .css({
@@ -1907,6 +1914,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 $unassociateAssocMediaButton.css({ "background-color": "transparent", "color": "white" });
             });
 
+            $unassociateAssocMediaButton.on("mouseup", function () {
+                $unassociateAssocMediaButton.css({ "background-color": "transparent", "color": "white" });
+            });
+
             //Initially disable the save button
             $saveAssocMediaButton.prop('disabled', true);
             $saveAssocMediaButton.css('opacity', '0.4');
@@ -1947,7 +1958,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             toggleLayerButton = $toggleLayer;
 
             $unassociateAssocMediaButton.on('click', function () {
-
+                TAG.Util.removeYoutubeVideo();
                 var assetDoqID = getActiveMediaMetadata('assetDoqID'); // TODO see comment below about AnnotatedImage
                 $saveAssocMediaButton.attr('disabled', true).css('color', 'rgba(255,255,255,0.5)');
                 if (getActiveMediaMetadata('contentType') === 'Video') { // TODO when this file is better integrated with the new AnnotatedImage, should store the current active media in a 'global' variable and just access its contentType rather than going through a helper function
@@ -2168,6 +2179,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @method close
          */
         function close() {
+            TAG.Util.removeYoutubeVideo();
             var rightbar;
             if (isOpen) {
                 //saveAssocMedia();
@@ -2216,11 +2228,20 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         //saveMetadataButton.attr('disabled', 'true');
         titleArea.text("Saving "+artworkMetadata.Title.val() + "...");
         for (i = 0; i < additionalFields.length; i++) {
-            infoFields[$(additionalFields[i]).attr("value")] = $(additionalFields[i]).attr('entry');
+            var key = $(additionalFields[i]).attr("value");
+            if (key === "") {
+                key = "Unnamed Field " + i;
+            }
+            infoFields[key] = $(additionalFields[i]).attr('entry');
         }
 
+        var textName = $(artworkMetadata.Title).val();
+        
+        if (textName == "") {
+            textName= "Untitled Artwork";
+        }
         TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
-            Name: $(artworkMetadata.Title).val(),
+            Name: textName,
             Artist: $(artworkMetadata.Artist).val(),
             Year: $(artworkMetadata.Year).val(),
             Location: JSON.stringify(locationList),

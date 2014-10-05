@@ -382,7 +382,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         menu.addTitle('Track Options');
         var renameButton = menu.addButton('Rename', 'left', componentOptionRename);
         if (my.type === TAG.TourAuthoring.TrackType.ink) {
-            menu.addButton('Edit Ink', 'left', componentOptionEditInk);
+            menu.addButton('Edit Annotation', 'left', componentOptionEditInk);
         }
         if (my.type === TAG.TourAuthoring.TrackType.video && !my.toConvert) {
             convertbtn = menu.addButton('Convert', 'left', componentOptionConvertVideo);
@@ -500,12 +500,12 @@ TAG.TourAuthoring.Track = function (spec, my) {
         var i;
         var displays = that.getStorageContainer().displays.getContents();
         if ($("#inkDrawControls").css("display") == "block" || $("#inkTransparencyControls").css("display") == "block" || $("#inkTextControls").css("display") == "block" || $("#inkEditDraw").css("display") == "block" || $("#inkEditTransparency").css("display") == "block" || $("#inkEditText").css("display") == "block") {
-            displayError("An ink is already being edited.");
+            displayError("An annotation is already being edited.");
             return;
         }
 
         if (!displays.length) {
-            displayError("The ink must be visible in the preview window in order to edit it.");
+            displayError("The annotation must be visible in the preview window in order to edit it.");
             return;
         }
 
@@ -541,7 +541,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
         //ensures warning message appears if user tries to edit an ink without the playhead being inside artwork and ink, ink or artwork
         if ((!inInkDisplay) || (!inArtDisplay)) {
-            displayError("The ink must be visible in the preview window in order to edit it.");
+            displayError("The annotation must be visible in the preview window in order to edit it.");
             return;
         }
 
@@ -551,14 +551,14 @@ TAG.TourAuthoring.Track = function (spec, my) {
         close();
 
         if (!old_datastring || !inkType) {
-            displayError("This ink track has become corrupted, please remove and create a new ink.");
+            displayError("This annotation track has become corrupted, please remove and create a new ink.");
             return;
         }
 
 
         var ES = $("[ES_ID='" + my.title + "']");
         if (!ES[0]) {
-            displayError("The ink must be visible in the preview window in order to edit it.");
+            displayError("The annotation must be visible in the preview window in order to edit it.");
             return;
         }
 
@@ -577,7 +577,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             var viewBox = text_elt[0] ? ES.find('svg')[0].getAttribute('viewBox') : null;
             if (!text_elt[0] || (getInkEnabled() && !viewBox)) {
                 my.isVisible = true;
-                displayError("The ink must be loaded and on screen in order to edit it.");
+                displayError("The annotation must be loaded and on screen in order to edit it.");
                 return;
             }
             var rinplayer = $('#rinplayer');
@@ -591,7 +591,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             my.timeline.showEditText(that, old_datastring, dims);
         } else {
             my.isVisible = true;
-            displayError("This ink track is in a deprecated format, please remove and create a new ink.");
+            displayError("This annotation track is in a deprecated format, please remove and create a new ink.");
             return;
         }
 
@@ -681,7 +681,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         newName.attr("id","newNameInput"); 
         newName.val(my.title); // default text is existing title
         var text = $(document.createElement("div"));
-        //newName.attr('maxlength', '18');
+        newName.attr('maxlength', '50');
         text.text("Rename track to: ");
         text.css({
             //'top': '5%',
@@ -744,6 +744,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
             'padding': '1%',
             'border': '1px solid white',
+            'border-radius':'3.5px',
             'width': 'auto',
             'position': 'relative',
             //'margin-top': '1%',
@@ -767,6 +768,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             //'box-sizing': 'border-box',
 
             'padding': '1%',
+            'border-radius': '3.5px',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
@@ -1008,7 +1010,8 @@ TAG.TourAuthoring.Track = function (spec, my) {
             'position': 'relative',
             'text-align': 'center',
             'text-overflow': 'ellipsis',
-            'word-wrap': 'break-word'
+            'word-wrap': 'break-word',
+            'maxlength':'200'
         });
         var fontsize = TAG.Util.getMaxFontSizeEM(text, 1, mssge.width(), mssge.height());
         mssge.css('font-size', fontsize);
@@ -1030,7 +1033,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             }
         });
 
-        text += ((hasAttachedInks && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) ? " and any attached ink tracks?" : "?");
+        text += ((hasAttachedInks && (my.type === TAG.TourAuthoring.TrackType.artwork || my.type === TAG.TourAuthoring.TrackType.image)) ? " and any attached annotation tracks?" : "?");
         mssge.text(text);
 
         //var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
@@ -1064,10 +1067,12 @@ TAG.TourAuthoring.Track = function (spec, my) {
         var deleteButton = $(document.createElement('button'));
         deleteButton.css({
             'padding': '1%',
+            'border-radius': '3.5px',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
             'margin-top': '1%',
+          
         });
         deleteButton.text('Delete');
         $(deleteButton).click(function () {
@@ -1082,6 +1087,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         cancelButton.css({
 
             'padding': '1%',
+            'border-radius': '3.5px',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
@@ -1774,7 +1780,11 @@ function trackTitleReleased(evt) {
      * @method titleDivMouseUp
      */
     function titleDivMouseUp() {
-        var tr = dataHolder._trackArray[arrayPos + offset].track;
+        var tr = dataHolder._trackArray[arrayPos + offset]
+        if (!tr){
+            return;
+        }
+        tr = tr.track;
         var prev;
         var command;
         totalYMoved = 0;

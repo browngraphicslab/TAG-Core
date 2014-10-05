@@ -54,7 +54,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
     var editInkOverlay = $(TAG.Util.UI.blockInteractionOverlay());//overlay for when 'edit ink' component option is selected while playhead is not over the art track
     editInkOverlay.addClass('editInkOverlay');
     var overlayLabel = $(document.createElement('div'));
-    overlayLabel.text("Ink is being edited...");
+    overlayLabel.text("Annotation is being edited...");
     var deleteConfirmationOverlay = $(document.createElement('div'));
     that.editInkOn = false;
     that.clamped_displays = [];
@@ -545,11 +545,11 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                 center_v: true,
                 width: 0.3,
                 height: 0.2,
-                max_width: 400,
+                max_width: 550,
                 max_height: 100, 
             });
 
-        var labelFontSize = TAG.Util.getMaxFontSizeEM("Ink is being edited...", 0, overlayLabelSpec.width - 10, overlayLabelSpec.height, 0.01);
+        var labelFontSize = TAG.Util.getMaxFontSizeEM("Annotation is being edited...", 0, overlayLabelSpec.width - 10, overlayLabelSpec.height, 0.01);
 
         overlayLabel.css({
             top: overlayLabelSpec.y + 'px',
