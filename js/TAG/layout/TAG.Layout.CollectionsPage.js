@@ -640,6 +640,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'width'   : 'auto',
                     'top'     : '22%',
                 };
+            artworkShown = false;
             // if the idle timer hasn't started already, start it
             if (!idleTimer && evt && !previewing) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
@@ -897,27 +898,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //loadCollection.call($('#collection-'+ currCollection.Identifier), currCollection);
             //scrollPos = sPos || 0;
             applyCustomization();
-            
             if (!onAssocMediaView || !currCollection.collectionMedia) {
                 getCollectionContents(currCollection, null, function () { return cancelLoad;});
             } else {
-                if (onAssocMediaView && artworkInCollectionList.length == 0) {
-                    TAG.Worktop.Database.getArtworksIn(collection.Identifier,
-                        function (contents) {
-                            artworkInCollectionList = [];
-                            for (var i = 0; i < contents.length; i++) {
-                                artworkInCollectionList.push(contents[i].Identifier);
-                            }
-
-                            createArtTiles(currCollection.collectionMedia);
-                            loadSortTags(currCollection, currCollection.collectionMedia)
-                            initSearch(currCollection.collectionMedia);
-                        }, null, null);
-                } else {
-                    createArtTiles(currCollection.collectionMedia);
-                    loadSortTags(currCollection, currCollection.collectionMedia)
-                    initSearch(currCollection.collectionMedia);
-                }
+                createArtTiles(currCollection.collectionMedia);
+                loadSortTags(currCollection, currCollection.collectionMedia)
+                initSearch(currCollection.collectionMedia);
             }
             cancelLoadCollection = function () { cancelLoad = true; };
 
@@ -1067,14 +1053,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 catalogDiv.append(emptyCollectionDiv);
             }
             if (cancel && cancel()) return;
-
-            if (onAssocMediaView && artworkInCollectionList.length == 0) {
-                createArtTiles(currCollection.collectionMedia);
-                loadSortTags(currCollection, currCollection.collectionMedia)
-                initSearch(currCollection.collectionMedia);
-            }
-
-
             loadSortTags(collection,contents);
             createArtTiles(contents, cancel);
             initSearch(contents);
@@ -1385,31 +1363,46 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 * @returns handler function
                 */
             function doubleClickHandler() {
-                if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
-                    switchPage(currentWork, null, getContainerLeft(currentWork, false))();
-                } else {
-                    TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
-                        switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
-                    }, function () {
+                return function () {
+                    if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
-                    }, function () {
+                        if (previouslyClicked === main) {
+                            switchPage(currentWork, null, getContainerLeft(currentWork, false))();
+                        } else {
+                            previouslyClicked = main;
+                            setTimeout(function () { previouslyClicked = null }, 1000)
+                        }
+                    } else {
+                        TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                            if (previouslyClicked === main) {
+                                switchPage(doqs[0], currentWork, getContainerLeft(currentWork,false))();
+                            } else {
+                                previouslyClicked = main;
+                                setTimeout(function () { previouslyClicked = null }, 1000);
+                            }
+                        }, function () {
+                            
+                        }, function () {
+                            
+                        });
+                    }
 
-                    });
-                }
+                }();
             } 
-            main.on('click', function () {
-                showArtwork(currentWork, false)();
+                main.on('click', function () {
+                    doubleClickHandler()
 
-                // if the idle timer hasn't started already, start it
-                if (!idleTimer && !previewing) {
-                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-                    idleTimer.start();
-                }
-                zoomTimeline(artworkCircles[currentWork.Identifier])
-                justShowedArtwork = true;
-            })         
+                    // if the idle timer hasn't started already, start it
+                    if (!idleTimer && !previewing) {
+                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                        idleTimer.start();
+                    }
+                    //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
+                    setTimeout(function () { showArtwork(currentWork, false)() }, 10)
+                    zoomTimeline(artworkCircles[currentWork.Identifier])
+                    justShowedArtwork = true;
+                })         
             
-            main.dblclick(doubleClickHandler);
             TAG.Telemetry.register(main, 'click', '', function(tobj) {
                 var type;
                 tobj.ttype = 'artwork_tile';
