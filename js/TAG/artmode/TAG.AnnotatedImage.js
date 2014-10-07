@@ -714,7 +714,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             // misc initialized variables
             mediaHidden = true,
-            hotspotMediaHidden = true,
+            //hotspotMediaHidden = true,
             outerContainerhidden = true,
             currentlySeeking = false,
             movementTimeouts = [],
@@ -736,12 +736,27 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         // get things rolling
         initMediaObject();
 
+        // create hotspot circle if need be
+        if (IS_HOTSPOT) {
+            circle = $(document.createElement("img"));
+            circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
+            circle.addClass('annotatedImageHotspotCircle');
+            circle.css('visibility', 'visible');
+            addOverlay(circle[0], position, Seadragon.OverlayPlacement.TOP_LEFT);
+            circle.click(function () {
+                toggleMediaObject(true);
+            });
+            root.append(circle);
+        };
+
+
         /**
          * Initialize various parts of the media object: UI, manipulation handlers
          * @method initMediaObject
          */
         function initMediaObject() {
-
+            // set up divs for the associated media
+            outerContainer ? true : outerContainer = $(document.createElement('div'));
             if (IS_XFADE && linq.Offset && linq.Dimensions) {
                 outerContainer.css({
                     'border': '1px solid rgba(255,255,255,0.4)',
@@ -826,17 +841,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.append(innerContainer);
                 assetCanvas.append(outerContainer);
                 outerContainer.hide();
-
-                // create hotspot circle if need be
-                if (IS_HOTSPOT) {
-                    circle = $(document.createElement("img"));
-                    circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
-                    circle.addClass('annotatedImageHotspotCircle');
-                    circle.click(function () {
-                        toggleMediaObject(true);
-                    });
-                    root.append(circle);
-                }
 
                 // allows asset to be dragged, despite the name
                 TAG.Util.disableDrag(outerContainer);
@@ -1773,7 +1777,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 h = outerContainer.height(),
                 w = outerContainer.width(),
                 splitscreenOffset = 0;
-            outerContainer && outerContainer.detach();
+            outerContainer && outerContainer.remove();
 
             // temporary crashfix for errors where viewport isn't properly initialized
             // need to root-cause this issue ASAP
@@ -1791,11 +1795,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 viewer.viewport.applyConstraints()
             } else {
                 //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
+                outerContainer = null;
+                createMediaElements();
                 if (IS_HOTSPOT) {
-                    if (!isHotspotIcon) {
+                    /*if (!isHotspotIcon) {
                         circle.css('visibility', 'visible');
                         addOverlay(circle[0], position, Seadragon.OverlayPlacement.TOP_LEFT);
-                    }
+                    }*/
                     viewer.viewport.panTo(position, false);
                     viewer.viewport.applyConstraints()
                     t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
@@ -1821,9 +1827,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             mediaHidden = false;
 
-            if (hotspotMediaHidden) {
+           /* if (hotspotMediaHidden) {
                 hotspotMediaHidden = false;
-            }
+            }*/
             var toHideID = '#thumbnailButton-' + mdoq.Identifier;
             if (outerContainer.parents('#metascreen-R').length) {
                 toHideID += 'R';
@@ -1837,6 +1843,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'color': 'black',
                 'background-color': 'rgba(255,255,255, 0.3)'
             });
+            console.log("toggling stuff and making stuff highlight");
 
             // TODO is this necessary? 
             // dz17: this WAS necessary due to scaling. Please ask before disabling anything to do with resizing
@@ -1861,32 +1868,32 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             if (!thumbnailButton) {
                 thumbnailButton = $(toHideID);
             }
-
-            if (!isHotspotIcon) {
-                thumbnailButton.css({
-                    'color': 'white',
-                    'background-color': ''
-                });
-                mediaHidden = true;
-            } else {
+            thumbnailButton.css({
+                'color': 'white',
+                'background-color': ''
+            });
+            console.log("toggling stuff"); 
+            // if (!isHotspotIcon) {
+            mediaHidden = true;
+            /*} else {
                 hotspotMediaHidden = true;
-            }
+            }*/
             TAG.Util.IdleTimer.restartTimer();
             dzManipPreprocessing();                     //When an object is hidden, set the artwork as active
 
             // removed below because xfades are gone for 2.1
-            if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
-                outerContainer.hide();
-            } else {
+            //if (IS_XFADE) { // slightly repeated code, but emphasizes that this is all we need to do for xfades
+            //    outerContainer.hide();
+            //} else {
                 pauseResetMediaObject();
-                if (!isHotspotIcon) {
-                    IS_HOTSPOT && removeOverlay(circle[0]); 
+               /* if (!isHotspotIcon) {
+                    //IS_HOTSPOT && removeOverlay(circle[0]); 
                     outerContainer.remove();
                     outerContainer = $(document.createElement('div'));
-                }else {
-                    outerContainer.hide();
-                }
-            }
+                }else {*/
+                    outerContainer.remove();
+                //}
+            //}
 
         }
 
@@ -1902,11 +1909,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @method toggleMediaObject
          */
         function toggleMediaObject(isHotspotIcon) {
-            if (hotspotMediaHidden) {
+            /*if (hotspotMediaHidden) {
                 showMediaObject(isHotspotIcon);
             } else {
                 mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
-            }
+            } */
+            mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
+
 
             outerContainerhidden = mediaHidden;
         }
