@@ -171,12 +171,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mousedown", function () {
             newButton.css({"background-color":"white"});
         });
-   var checkConTimerId;
+        var checkConTimerId;
+        var cancelArtworkLoad = null;
     loadHelper();
     if (callback) {
         callback(that);
     }
-	
+
     //an array to store video guids that need to be converted
     //var conversionVideos = [];
     /*function checkConversion() {
@@ -4291,6 +4292,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function loadArtwork(artwork) {
         //$(document).off();
+        if (cancelArtworkLoad) cancelArtworkLoad();
         prepareViewer(true);
         clearRight();
         deleteType = deleteArtwork;
@@ -4299,6 +4301,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         currDoq = artwork.Identifier;
         // Create an img element to load the image
         var mediaElement;
+        var cancel = false;
         if (artwork.Metadata.Type !== 'VideoArtwork') {
             mediaElement = $(document.createElement('img'));
             mediaElement.attr('src', TAG.Worktop.Database.fixPath(artwork.URL));
@@ -4453,96 +4456,101 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         }
 
-        var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), "Artwork Title", 100);
-        var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), "Artist", 100);
-        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Description).replace(/\n/g, '<br />') || "", "", false, 2000);
-
-        titleInput.on('keyup', function (event) {
-            if (event.which === 13) {
-                saveButton.click();
-            } else {
-                changesMade = true;
-                saveButton.prop("disabled", false);
-                saveButton.css("opacity", 1);
-            }
-
-        });
-
-        artistInput.on('keyup', function (event) {
-            if (event.which === 13) {
-                saveButton.click();
-            } else {
-                changesMade = true;
-                saveButton.prop("disabled", false);
-                saveButton.css("opacity", 1);
-            }
-
-        });
-
-        descInput.on('keyup', function () {
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
-        });
-
-        var customInputs = {};
-        var customSettings = {};
-
-        var saveButton;
-        var yearMetadataDivSpecs = createYearMetadataDiv(artwork, function (event) {
-            if (event && event.which === 13) {
-                saveButton.click();
-            } else {
-                changesMade = true;
-                saveButton.prop("disabled", false);
-                saveButton.css("opacity", 1);
-            }
-        });
-
-
-        titleInput.focus(function () {
-            if (titleInput.val() === 'Title')
-                titleInput.select();
-        });
-        artistInput.focus(function () {
-            if (artistInput.val() === 'Artist')
-                artistInput.select();
-        });
-        descInput.focus(function () {
-            if (descInput.val() === 'Description')
-                descInput.select();
-        });
-
-        onChangeUpdateText(titleInput, null, 100);
-        onChangeUpdateText(artistInput, null, 100);
-        onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 100);
-        onChangeUpdateText(descInput, null, 5000);
-
-        var desc = createSetting('Description', descInput);
-        var title = createSetting('Title', titleInput);
-        var artist = createSetting('Artist', artistInput);
-
-        if (artwork.Metadata.InfoFields) {
-            $.each(artwork.Metadata.InfoFields, function (key, val) {
-                customInputs[key] = createTextInput(TAG.Util.htmlEntityDecode(val), "Metadata Field");
-                customSettings[key] = createSetting(key, customInputs[key]);
-            });
-        }
-
-
-        settingsContainer.append(title);
-        settingsContainer.append(artist);
-        settingsContainer.append(desc);
-        settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
-
-        $.each(customSettings, function (key, val) {
-            settingsContainer.append(val);
-        });
+        
 
         // Lock artwork setting: Only one artwork per server
         var isLocked;
 
         TAG.Worktop.Database.getMain(function () {
+            var titleInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Name), "Artwork Title", 100);
+            var artistInput = createTextInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Artist), "Artist", 100);
+            var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(artwork.Metadata.Description).replace(/\n/g, '<br />') || "", "", false, 2000);
+
+            titleInput.on('keyup', function (event) {
+                if (event.which === 13) {
+                    saveButton.click();
+                } else {
+                    changesMade = true;
+                    saveButton.prop("disabled", false);
+                    saveButton.css("opacity", 1);
+                }
+
+            });
+
+            artistInput.on('keyup', function (event) {
+                if (event.which === 13) {
+                    saveButton.click();
+                } else {
+                    changesMade = true;
+                    saveButton.prop("disabled", false);
+                    saveButton.css("opacity", 1);
+                }
+
+            });
+
+            descInput.on('keyup', function () {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            });
+
+            var customInputs = {};
+            var customSettings = {};
+
+            var saveButton;
+            var yearMetadataDivSpecs = createYearMetadataDiv(artwork, function (event) {
+                if (event && event.which === 13) {
+                    saveButton.click();
+                } else {
+                    changesMade = true;
+                    saveButton.prop("disabled", false);
+                    saveButton.css("opacity", 1);
+                }
+            });
+
+
+            titleInput.focus(function () {
+                if (titleInput.val() === 'Title')
+                    titleInput.select();
+            });
+            artistInput.focus(function () {
+                if (artistInput.val() === 'Artist')
+                    artistInput.select();
+            });
+            descInput.focus(function () {
+                if (descInput.val() === 'Description')
+                    descInput.select();
+            });
+
+            onChangeUpdateText(titleInput, null, 100);
+            onChangeUpdateText(artistInput, null, 100);
+            onChangeUpdateText(yearMetadataDivSpecs.yearInput, null, 100);
+            onChangeUpdateText(descInput, null, 5000);
+
+            var desc = createSetting('Description', descInput);
+            var title = createSetting('Title', titleInput);
+            var artist = createSetting('Artist', artistInput);
+
+            if (artwork.Metadata.InfoFields) {
+                $.each(artwork.Metadata.InfoFields, function (key, val) {
+                    customInputs[key] = createTextInput(TAG.Util.htmlEntityDecode(val), "Metadata Field");
+                    customSettings[key] = createSetting(key, customInputs[key]);
+                });
+            }
+
+
+            settingsContainer.append(title);
+            settingsContainer.append(artist);
+            settingsContainer.append(desc);
+            settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
+
+            $.each(customSettings, function (key, val) {
+                settingsContainer.append(val);
+            });
+
+
+
+            if (cancel) return;
             isLocked = TAG.Worktop.Database.getLocked();
             //Get locked artwork GUID
             var unlockedInput = createButton('Unlocked', function () {
@@ -4776,7 +4784,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 buttonContainer.append(thumbnailButton).append(saveButton).append(convertBtn).append(xmluploaderbtn).append(deleteArt); //SAVE BUTTON//
             }*/
         });
-
+        cancelArtworkLoad = function () { cancel = true; };
     }
 
     /**Save Thumbnail image 
