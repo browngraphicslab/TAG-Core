@@ -4628,7 +4628,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-right': '0%',
                     'margin-bottom': '3%',
                 });
-            if (isLocked) {
+            if (isLocked == artwork.Identifier) {
                 deleteArt.prop("disabled", true);
                 deleteArt.css({
                     "opacity": "0.5"
