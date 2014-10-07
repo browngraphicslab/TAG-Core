@@ -39,7 +39,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         artworkFrozen = false,
         descscroll = false,
         scrollingMedia = false,
-        disableZoomRLH = false, //options.disableZoom,
+        disableZoomRLH = options.disableZoom,
 
         // misc uninitialized variables
         viewerelt,

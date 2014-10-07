@@ -5886,7 +5886,7 @@ TAG.Util.RLH = function (input) {
                     }
                 },
                 noMedia: true,
-                disableZoom : true
+                disableZoom : false
             });
         }
 
