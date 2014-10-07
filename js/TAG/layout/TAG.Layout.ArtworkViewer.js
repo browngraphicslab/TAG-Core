@@ -919,13 +919,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          * @method mediaClicked
          * @param {Object} media       the associated media object (from AnnotatedImage)
          */
-        function mediaClicked(media) {
+        function mediaClicked(media, intialCreation) {
             //var toggleFunction = toggleLocationPanel;
             return function (evt) {
                 evt && evt.stopPropagation();
                 locHistoryActive = true;
-                media.create(); // returns if already created
+                //media.create(); // returns if already created
                 media.toggle();
+                //intialCreation && media.hide();
                 TAG.Util.IdleTimer.restartTimer();
                 //(media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
                 media.mediaManipPreprocessing(); //todo delete when layers functionality is added back in
@@ -1312,14 +1313,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          ******************/
 
         annotatedImage.addAnimateHandler(dzMoveHandler);
-        assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
+        //assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
         //PART OF CUSTOM BUILD FOR THE SAM
-        /*for (i = 0; i < associatedMedia.guids.length; i++) {
+        for (i = 0; i < associatedMedia.guids.length; i++) {
             //console.log("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
             if (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type && (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type === "Hotspot")) {
-                loadQueue.add(associatedMedia[associatedMedia.guids[i]].showHotspot());
+                //loadQueue.add(mediaClicked(associatedMedia[associatedMedia.guids[i]], true));
+                loadQueue.add(associatedMedia[associatedMedia.guids[i]].create());
+                //loadQueue.add(associatedMedia[associatedMedia.guids[i]].toggle());
+
             }
-        };*/
+        };
     }
 
 
