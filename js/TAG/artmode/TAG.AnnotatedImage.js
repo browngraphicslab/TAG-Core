@@ -1205,6 +1205,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             if (!mediaLoaded) {
                 mediaLoaded = true;
+                initMediaObject();
             } else {
                 if (mediaHidden) {
                     initMediaObject();
