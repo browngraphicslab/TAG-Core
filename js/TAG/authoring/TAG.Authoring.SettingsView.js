@@ -4541,9 +4541,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Lock artwork setting: Only one artwork per server
         var isLocked;
-        isLocked = TAG.Worktop.Database.getLocked();
-        TAG.Worktop.Database.getMain(function () {
 
+        TAG.Worktop.Database.getMain(function () {
+            isLocked = TAG.Worktop.Database.getLocked();
             //Get locked artwork GUID
             var unlockedInput = createButton('Unlocked', function () {
                 //if (localVisibility) { changesHaveBeenMade = true; };
