@@ -1,4 +1,4 @@
-﻿window.ITE = window.ITE || {};
+window.ITE = window.ITE || {};
 
 ITE.Player = function (options) { //acts as ITE object that contains the orchestrator, etc
    var  orchestrator            = new ITE.Orchestrator(this),

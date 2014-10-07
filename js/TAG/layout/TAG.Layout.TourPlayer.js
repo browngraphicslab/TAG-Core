@@ -1,4 +1,4 @@
-﻿TAG.Util.makeNamespace("TAG.Layout.TourPlayer");
+TAG.Util.makeNamespace("TAG.Layout.TourPlayer");
 
 /**
  * Player for RIN tours

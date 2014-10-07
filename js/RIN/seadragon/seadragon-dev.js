@@ -1,4 +1,4 @@
-﻿
+
 (function() {
     var PATH = "src/";      // the path to the scripts, relative to HTML page
     var SCRIPTS = [         // the script filenames, in dependency order

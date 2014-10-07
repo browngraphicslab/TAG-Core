@@ -1,4 +1,4 @@
-﻿TAG.Util.makeNamespace("TAG.Layout.CollectionsPage");
+TAG.Util.makeNamespace("TAG.Layout.CollectionsPage");
 
 /**
  * The collections page

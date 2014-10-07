@@ -1,4 +1,4 @@
-﻿/**
+/**
  * A basic telemetry server. Should probably be hooked up with a DB.
  * @class Telemetry
  * @constructor

@@ -1,4 +1,4 @@
-﻿window.ITE = window.ITE || {};
+window.ITE = window.ITE || {};
 //ATTACHED INKS MUST ALWAYS BE AT THE END OF THE JSON FILE
 
 ITE.InkProvider = function (trackData, player, taskManager, orchestrator){

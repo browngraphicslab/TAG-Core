@@ -1,4 +1,4 @@
-﻿[{
+[{
     "version": 1.0,
     "defaultScreenplayId": "SCP1",
     "screenplayProviderId": "MicrosoftResearch.Rin.DefaultScreenPlayInterpreter",

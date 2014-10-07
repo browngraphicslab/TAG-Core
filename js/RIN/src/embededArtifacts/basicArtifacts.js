@@ -1,4 +1,4 @@
-﻿(function (rin) {
+(function (rin) {
     /*global $:true*/
     "use strict";
     rin.embeddedArtifacts = rin.embeddedArtifacts || {};

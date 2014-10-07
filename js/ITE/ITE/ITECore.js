@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Library for tour annotation drawing. Instance created in InkES.
  * Uses the RaphaelJS library for svg manipulation.
  * @class tagInk
@@ -1859,7 +1859,7 @@ TAG.Util = (function () {
             manipulationHandler(evt);
         }
 
-        // requestAnimationFrame polyfill by Erik MÃ¶ller
+        // requestAnimationFrame polyfill by Erik Möller
         // fixes from Paul Irish and Tino Zijdel
         (function () {
             var lastTime = 0;
@@ -4694,10 +4694,10 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 			_super.load()
 
-			//Sets the imageâ€™s URL source
+			//Sets the image’s URL source
 			_image.attr("src", "../../Assets/TourData/" + this.trackData.assetUrl)
 
-			// When image has finished loading, set status to â€œpausedâ€, and position element where it should be for the first keyframe
+			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?
 					this.setStatus(2);
 					this.setState(keyframes[0]);
@@ -4964,14 +4964,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 		_super.load()
 
-		//Sets the imageâ€™s URL source
+		//Sets the image’s URL source
 		_video.attr({
 			"src"	: "../../Assets/TourData/" + self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		})
 
 		_videoControls.load()
-		// When image has finished loading, set status to â€œpausedâ€, and position element where it should be for the first keyframe
+		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 		_video.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
 			this.setState(keyframes[0]);
@@ -5600,12 +5600,12 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 		_super.load()
 
-		//Sets the imageâ€™s URL source
+		//Sets the image’s URL source
 		_audio.attr({
 			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
 			"type" 	: this.trackData.type
 		})
-		// When image has finished loading, set status to â€œpausedâ€, and position element where it should be for the first keyframe
+		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 		_audio.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
 			this.setState(keyframes[0]);
@@ -6061,7 +6061,7 @@ window.ITE = window.ITE || {};
 
 ITE.Orchestrator = function(player) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
-									// Defaulted to â€˜loadingâ€™
+									// Defaulted to ‘loading’
 	var	self = this;
 	self.narrativeSeekedEvent 	= new ITE.PubSubStruct();
 	self.narrativeLoadedEvent 	= new ITE.PubSubStruct();
@@ -6720,7 +6720,7 @@ window.ITE = window.ITE || {};
 
 ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orchestrator){ 
 	this.currentStatus			= 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
-									// Defaulted to â€˜loadingâ€™
+									// Defaulted to ‘loading’
 
 	this.savedState				= null; 	// Current state of track (last-saved state)
 	this.duration				= 0;	// Duration of track
@@ -6762,7 +6762,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	O/P: none
 	*/
 	this.parseDisplays = function (trackData) {
-		//Leaving this for now as we donâ€™t yet know what data structure we want to use
+		//Leaving this for now as we don’t yet know what data structure we want to use
 	};
 
 	/* 
@@ -6782,7 +6782,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 			//Animates to the next keyframe
 			this.animate(Math.abs(targetTime - this.taskManager.timeManager.getElapsedOffset()), data);
 		}
-	// // Set current status to â€œplayedâ€
+	// // Set current status to “played”
 	// 	this.setCurrentStatus(1);
 	};
 
@@ -6799,7 +6799,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 		// currentAnimation && currentAnimation.stop();
 
 		// // Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		// var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. Iâ€™m not sure exactly what the syntax will be for this, but I know itâ€™s possible in most of the animation libraries weâ€™ve looked at.
+		// var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. I’m not sure exactly what the syntax will be for this, but I know it’s possible in most of the animation libraries we’ve looked at.
 		// 	this.setState(state)
 		// 	this.play()
 	};

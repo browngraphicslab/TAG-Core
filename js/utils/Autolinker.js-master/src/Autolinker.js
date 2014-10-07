@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @class Autolinker
  * @extends Object
  * @singleton

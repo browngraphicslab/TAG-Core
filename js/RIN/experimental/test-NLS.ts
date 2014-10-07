@@ -1,4 +1,4 @@
-﻿/// <reference path="../src/storyboard/nonLinearStoryboard.ts" />
+/// <reference path="../src/storyboard/nonLinearStoryboard.ts" />
 /// <reference path="../src/storyboard/trajectory.ts" />
 /// <reference path="../src/storyboard/basicinterpolators.ts" />
 //

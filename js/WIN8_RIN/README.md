@@ -1,4 +1,4 @@
-﻿# Prerequisites
+# Prerequisites
 1. Install NodeJS from [http://nodejs.org/](http://nodejs.org/)
 2. Open a command prompt and navigate to the project's root directory (where you cloned the repository)
 3. Run the command "npm install" to install grunt and its plugins

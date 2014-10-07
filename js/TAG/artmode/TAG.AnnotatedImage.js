@@ -1,4 +1,4 @@
-﻿TAG.Util.makeNamespace("TAG.AnnotatedImage");
+TAG.Util.makeNamespace("TAG.AnnotatedImage");
 
 /**
  * Representation of deepzoom image with associated media. Contains

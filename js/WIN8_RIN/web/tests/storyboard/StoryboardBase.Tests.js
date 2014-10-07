@@ -1,4 +1,4 @@
-﻿//
+//
 // Basic unit tests AND common code for RIN Nonlinear Storyboard and Trajectory testing
 //
 // Copyright (C) 2013 Microsoft Research

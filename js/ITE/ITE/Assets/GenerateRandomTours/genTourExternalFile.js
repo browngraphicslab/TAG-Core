@@ -1,4 +1,4 @@
-﻿var myTour = "";
+var myTour = "";
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)

@@ -1,4 +1,4 @@
-﻿/*global Autolinker, _, describe, beforeEach, afterEach, it, expect */
+/*global Autolinker, _, describe, beforeEach, afterEach, it, expect */
 describe( "Autolinker", function() {
 	
 	describe( "link()", function() {

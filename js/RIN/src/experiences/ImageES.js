@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../web/lib/rin-core-1.0.js" />
+/// <reference path="../../../web/lib/rin-core-1.0.js" />
 
 /*!
 * RIN Experience Provider JavaScript Library v1.0
@@ -451,7 +451,7 @@
 				manipulationHandler(evt);
 			}
 
-			// requestAnimationFrame polyfill by Erik MÃ¶ller
+			// requestAnimationFrame polyfill by Erik Möller
 			// fixes from Paul Irish and Tino Zijdel
 			(function () {
 				var lastTime = 0;

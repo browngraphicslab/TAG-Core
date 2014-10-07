@@ -1,4 +1,4 @@
-﻿window.ITE = window.ITE || {};
+window.ITE = window.ITE || {};
 //creates a wrapper around a keyframe to indicate a task that needs to be scheduled
 ITE.Task = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, ongoingTasks, track) {
 

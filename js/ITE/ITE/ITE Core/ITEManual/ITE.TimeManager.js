@@ -1,4 +1,4 @@
-﻿window.ITE = window.ITE || {};
+window.ITE = window.ITE || {};
 
 ITE.TimeManager = function(){
 

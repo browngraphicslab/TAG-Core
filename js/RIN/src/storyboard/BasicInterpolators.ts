@@ -1,4 +1,4 @@
-﻿/// <reference path="rintypes.d.ts"/>
+/// <reference path="rintypes.d.ts"/>
 //
 // RIN Trajectory implementation (part of Nonlinear Storyboard functionality)
 //

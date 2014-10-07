@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 *
 * RIN Core JavaScript Library v1.0
 * http://research.microsoft.com/rin

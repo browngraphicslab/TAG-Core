@@ -1,4 +1,4 @@
-﻿//TAG Utilities
+//TAG Utilities
 TAG.Util = (function () {
     "use strict";
 
@@ -1102,7 +1102,7 @@ TAG.Util = (function () {
             manipulationHandler(evt);
         }
 
-        // requestAnimationFrame polyfill by Erik MÃ¶ller
+        // requestAnimationFrame polyfill by Erik Möller
         // fixes from Paul Irish and Tino Zijdel
         (function () {
             var lastTime = 0;
@@ -4750,7 +4750,7 @@ TAG.Util.RLH = function (input) {
                     })
                     .appendTo(metadataContainer);
             /*nameInput.on('keyup', function () {
-                var txt = (nameInput && nameInput[0] && nameInput[0].value) ? nameInput[0].value.replace(/[^Ã Ã¡Ã¢Ã£Ã¤Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã±Ã²Ã³Ã´ÃµÃ¶Ã¹ÃºÃ»Ã¼Ã½Ã¿Ã€ÃÃ‚ÃƒÃ„Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã™ÃšÃ›ÃœÃ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                var txt = (nameInput && nameInput[0] && nameInput[0].value) ? nameInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if (nameInput && nameInput[0] && nameInput[0].value && nameInput[0].value != txt) {
                     nameInput[0].value = txt;
                 }
@@ -4772,7 +4772,7 @@ TAG.Util.RLH = function (input) {
                         })
                         .appendTo(metadataContainer);
             /*additionalInfoInput.on('keyup', function () {
-                var txt = (additionalInfoInput && additionalInfoInput[0] && additionalInfoInput[0].value) ? additionalInfoInput[0].value.replace(/[^Ã Ã¡Ã¢Ã£Ã¤Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã±Ã²Ã³Ã´ÃµÃ¶Ã¹ÃºÃ»Ã¼Ã½Ã¿Ã€ÃÃ‚ÃƒÃ„Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã™ÃšÃ›ÃœÃ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+                var txt = (additionalInfoInput && additionalInfoInput[0] && additionalInfoInput[0].value) ? additionalInfoInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
                 if (additionalInfoInput && additionalInfoInput[0] && additionalInfoInput[0].value && additionalInfoInput[0].value != txt) {
                     additionalInfoInput[0].value = txt;
                 }
@@ -6371,21 +6371,21 @@ TAG.Util.RLH = function (input) {
                 });
             };
         /*titleInput.on('keyup', function () {
-            var txt = (titleInput && titleInput[0] && titleInput[0].value) ? titleInput[0].value.replace(/[^Ã Ã¡Ã¢Ã£Ã¤Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã±Ã²Ã³Ã´ÃµÃ¶Ã¹ÃºÃ»Ã¼Ã½Ã¿Ã€ÃÃ‚ÃƒÃ„Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã™ÃšÃ›ÃœÃ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            var txt = (titleInput && titleInput[0] && titleInput[0].value) ? titleInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (titleInput && titleInput[0] && titleInput[0].value && titleInput[0].value != txt) {
                 titleInput[0].value = txt;
             }
         });
 
         dateInput.on('keyup', function () {
-            var txt = (dateInput && dateInput[0] && dateInput[0].value) ? dateInput[0].value.replace(/[^Ã Ã¡Ã¢Ã£Ã¤Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã±Ã²Ã³Ã´ÃµÃ¶Ã¹ÃºÃ»Ã¼Ã½Ã¿Ã€ÃÃ‚ÃƒÃ„Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã™ÃšÃ›ÃœÃ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            var txt = (dateInput && dateInput[0] && dateInput[0].value) ? dateInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (dateInput && dateInput[0] && dateInput[0].value && dateInput[0].value != txt) {
                 dateInput[0].value = txt;
             }
         });
 
         descInput.on('keyup', function () {
-            var txt = (descInput && descInput[0] && descInput[0].value) ? descInput[0].value.replace(/[^Ã Ã¡Ã¢Ã£Ã¤Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã±Ã²Ã³Ã´ÃµÃ¶Ã¹ÃºÃ»Ã¼Ã½Ã¿Ã€ÃÃ‚ÃƒÃ„Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã™ÃšÃ›ÃœÃ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
+            var txt = (descInput && descInput[0] && descInput[0].value) ? descInput[0].value.replace(/[^àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ\w\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '') : "";
             if (descInput && descInput[0] && descInput[0].value && descInput[0].value != txt) {
                 descInput[0].value = txt;
             }

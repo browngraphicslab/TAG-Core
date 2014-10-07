@@ -1,4 +1,4 @@
-﻿/*
+/*
 * dz - speedy array-based implementation of a binary heap
 * can select maxheap or minheap by passing in a scoring function.
 * first item of array is the min/max

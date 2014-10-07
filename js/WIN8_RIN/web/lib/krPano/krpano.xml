@@ -1,4 +1,4 @@
-﻿<krpano version="1.0.8.15" onstart="startup();">
+<krpano version="1.0.8.15" onstart="startup();">
 
 	<!-- use a grid preview pano as background -->
 	<preview type="grid(cube,16,16,512,0xCCCCCC,0xF6F6F6,0x999999);" details="16" />

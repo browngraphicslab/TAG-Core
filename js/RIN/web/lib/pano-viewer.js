@@ -1,4 +1,4 @@
-﻿/*! RIN | http://research.microsoft.com/rin | 2014-09-20 */
+/*! RIN | http://research.microsoft.com/rin | 2014-09-20 */
 (function(){
 "use strict";
 
