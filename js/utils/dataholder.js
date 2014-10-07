@@ -1,4 +1,4 @@
-/*
+﻿/*
  * dz/lz - DataHolder
  * 
  * DataHolder is designed to be a centralized place to store all tour authoring data.

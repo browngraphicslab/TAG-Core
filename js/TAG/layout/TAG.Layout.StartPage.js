@@ -1,4 +1,4 @@
-TAG.Util.makeNamespace("TAG.Layout.StartPage");
+﻿TAG.Util.makeNamespace("TAG.Layout.StartPage");
 
 
 /**

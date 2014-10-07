@@ -1,10 +1,10 @@
-// I/P: ESData 	parsed data associated with the track
+﻿// I/P: ESData 	parsed data associated with the track
 
 window.ITE = window.ITE || {};
 
 ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orchestrator){ 
 	this.currentStatus			= 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
-									// Defaulted to ‘loading’
+									// Defaulted to â€˜loadingâ€™
 
 	this.savedState				= null; 	// Current state of track (last-saved state)
 	this.duration				= 0;	// Duration of track
@@ -46,7 +46,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	O/P: none
 	*/
 	this.parseDisplays = function (trackData) {
-		//Leaving this for now as we don’t yet know what data structure we want to use
+		//Leaving this for now as we donâ€™t yet know what data structure we want to use
 	};
 
 	/* 
@@ -66,7 +66,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 			//Animates to the next keyframe
 			this.animate(Math.abs(targetTime - this.taskManager.timeManager.getElapsedOffset()), data);
 		}
-	// // Set current status to “played”
+	// // Set current status to â€œplayedâ€
 	// 	this.setCurrentStatus(1);
 	};
 
@@ -83,7 +83,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 		// currentAnimation && currentAnimation.stop();
 
 		// // Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		// var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. I’m not sure exactly what the syntax will be for this, but I know it’s possible in most of the animation libraries we’ve looked at.
+		// var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. Iâ€™m not sure exactly what the syntax will be for this, but I know itâ€™s possible in most of the animation libraries weâ€™ve looked at.
 		// 	this.setState(state)
 		// 	this.play()
 	};

@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 
 ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 
@@ -78,10 +78,10 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 			_super.load()
 
-			//Sets the image’s URL source
+			//Sets the imageâ€™s URL source
 			_image.attr("src", "../../Assets/TourData/" + this.trackData.assetUrl)
 
-			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
+			// When image has finished loading, set status to â€œpausedâ€, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?
 					this.setStatus(2);
 					this.setState(keyframes[0]);

@@ -1,4 +1,4 @@
-/*! RIN | http://research.microsoft.com/rin | 2014-09-20 */
+﻿/*! RIN | http://research.microsoft.com/rin | 2014-09-20 */
 (function() {
     "use strict";
     var rin = window.rin || {};
@@ -462,7 +462,7 @@
 				manipulationHandler(evt);
 			}
 
-			// requestAnimationFrame polyfill by Erik Möller
+			// requestAnimationFrame polyfill by Erik MÃ¶ller
 			// fixes from Paul Irish and Tino Zijdel
 			(function () {
 				var lastTime = 0;
@@ -1602,7 +1602,7 @@ window.rin = window.rin || {};
                 isDown && manipulationHandler(evt);
 			}
 
-			// requestAnimationFrame polyfill by Erik Möller
+			// requestAnimationFrame polyfill by Erik MÃ¶ller
 			// fixes from Paul Irish and Tino Zijdel
 			(function () {
 				var lastTime = 0;

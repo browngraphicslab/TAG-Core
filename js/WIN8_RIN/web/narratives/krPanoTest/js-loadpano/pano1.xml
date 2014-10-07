@@ -1,4 +1,4 @@
-<krpano onstart="ifnot(haveexternalinterface, error('ExternalInterface (Javascript Interface) not avaiable![br]Check your Flashplayer security settings:[br]http://krpano.com/docu/localusage/'));">
+﻿<krpano onstart="ifnot(haveexternalinterface, error('ExternalInterface (Javascript Interface) not avaiable![br]Check your Flashplayer security settings:[br]http://krpano.com/docu/localusage/'));">
 
 	<!-- preview -->
 	<preview url="pano1.jpg" />

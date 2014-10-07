@@ -1,4 +1,4 @@
-//  This code is distributed under the included license agreement, also
+﻿//  This code is distributed under the included license agreement, also
 //  available here: http://go.microsoft.com/fwlink/?LinkId=164943
 
 var SeadragonViewer,
@@ -688,7 +688,8 @@ var SeadragonViewer,
             window.setTimeout(function() {
                 onOpen(currentTime, tileSource);
             }, 1);
-        };        
+        };
+        
         this.close = function() {
             if (!source) {
                 return;

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * This file takes care of compiling jade and stylus files and
  * building TAG.js by concatenating a collection of source js
  * files. The source files can be found in the JSSRC array below.

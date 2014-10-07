@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 
 var TAG = TAG || {},
     Worktop = Worktop || {};
@@ -924,7 +924,7 @@ TAG.Util = (function () {
             manipulationHandler(evt);
         }
 
-        // requestAnimationFrame polyfill by Erik Möller
+        // requestAnimationFrame polyfill by Erik MÃ¶ller
         // fixes from Paul Irish and Tino Zijdel
         (function () {
             var lastTime = 0;

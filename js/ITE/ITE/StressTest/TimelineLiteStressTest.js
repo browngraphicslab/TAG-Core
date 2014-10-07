@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 
 var cat1 = document.getElementById('cat1');
 var cat2 = document.getElementById('cat2');

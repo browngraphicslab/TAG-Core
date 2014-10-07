@@ -1,4 +1,4 @@
-//  This code is distributed under the included license agreement, also
+﻿//  This code is distributed under the included license agreement, also
 //  available here: http://go.microsoft.com/fwlink/?LinkId=164943
 
 var SeadragonProfiler = Seadragon.Profiler = function() {
@@ -85,7 +85,8 @@ var SeadragonProfiler = Seadragon.Profiler = function() {
         }
     };
     
-    this.endUpdate = function() {        if (!midUpdate) {
+    this.endUpdate = function() {
+        if (!midUpdate) {
             return;
         }
         

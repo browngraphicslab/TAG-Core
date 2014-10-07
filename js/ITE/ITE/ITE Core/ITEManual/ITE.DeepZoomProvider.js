@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 
 ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 

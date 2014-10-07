@@ -1,4 +1,4 @@
-TAG.Util.makeNamespace("TAG.Layout.VideoPlayer");
+﻿TAG.Util.makeNamespace("TAG.Layout.VideoPlayer");
 
 /**
  * TAG video player -- a wrapper around the standard html5 video element

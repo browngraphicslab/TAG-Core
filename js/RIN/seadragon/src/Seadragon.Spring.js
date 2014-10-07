@@ -1,4 +1,4 @@
-//  This code is distributed under the included license agreement, also
+﻿//  This code is distributed under the included license agreement, also
 //  available here: http://go.microsoft.com/fwlink/?LinkId=164943
 
 var SeadragonSpring = Seadragon.Spring = function(initialValue) {

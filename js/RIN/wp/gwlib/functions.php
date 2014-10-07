@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * gwlib functions and definitions
  *

@@ -1,4 +1,4 @@
-{
+﻿{
 	projectName: "Autolinker",
 	licenseText: "Autolinker.js\nVersion 0.6.0\n\nCopyright(c) 2014 Gregory Jacobs.\nMIT Licensed. http://www.opensource.org/licenses/mit-license.php\n\nhttps://github.com/gregjacobs/Autolinker.js",
 	pkgs: [

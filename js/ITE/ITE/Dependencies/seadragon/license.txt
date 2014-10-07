@@ -1,9 +1,9 @@
-Live Labs Software License Agreement ñ Seadragon Ajax Code 
+ÔªøLive Labs Software License Agreement ‚Äì Seadragon Ajax Code 
 
-This is an agreement between You ( ìYouî) and Microsoft Corporation, 
-located at One Microsoft Way, Redmond, WA 98052-6399, (ìMicrosoftî) 
+This is an agreement between You ( ‚ÄúYou‚Äù) and Microsoft Corporation, 
+located at One Microsoft Way, Redmond, WA 98052-6399, (‚ÄúMicrosoft‚Äù) 
 regarding Your use of the Seadragon Ajax Code made available by 
-Microsoft (îSoftwareî) at this link:
+Microsoft (‚ÄùSoftware‚Äù) at this link:
  
 http://go.microsoft.com/fwlink/?LinkId=164943.  
 
@@ -20,8 +20,8 @@ If You comply with this agreement, You have the rights below.
       royalty-free copyright license to use and modify the Software 
       solely as part of your own web applications which are served at 
       runtime from a web server over the internet to run on a Javascript
-      runtime in a remote end userís web browser (referred to as 
-      ìApplicationsî).  You may distribute the Software only to the 
+      runtime in a remote end user‚Äôs web browser (referred to as 
+      ‚ÄúApplications‚Äù).  You may distribute the Software only to the 
       extent necessary for end users to make use of your Application(s) 
       in their web browsers.  You may not rent, lease or lend any of 
       Your rights in the Software.   
@@ -42,18 +42,18 @@ If You comply with this agreement, You have the rights below.
         at http://go.microsoft.com/fwlink/?LinkId=164944;
 
       - indicate in the user interface of your Application that your 
-        Application is ìbuilt on Microsoft technologyî; and
+        Application is ‚Äúbuilt on Microsoft technology‚Äù; and
 
       - indemnify, defend and hold harmless Microsoft from any claims,
-        including attorneysí fees, related to the distribution or use of
+        including attorneys‚Äô fees, related to the distribution or use of
         Your Applications.
 
       Additionally, You may not
 
       - alter any copyright, trademark or patent notice in the Software;
  
-      - Except as expressly granted in this Agreement, use Microsoftís 
-        trademarks in Your programsí names or in a way that suggests 
+      - Except as expressly granted in this Agreement, use Microsoft‚Äôs 
+        trademarks in Your programs‚Äô names or in a way that suggests 
         Your Applications come from or are endorsed by Microsoft;
  
       - include the Software in malicious, deceptive or unlawful 
@@ -84,7 +84,7 @@ If You comply with this agreement, You have the rights below.
    USE.  FOR ADDITIONAL INFORMATION, SEE WWW.MICROSOFT.COM/EXPORTING.
 
 4. SUPPORT.  Microsoft is not obligated to provide any technical or 
-   other support (ìSupport Servicesî) for the Software to You.  However,
+   other support (‚ÄúSupport Services‚Äù) for the Software to You.  However,
    if Microsoft chooses to provide any Support Services to You, Your use
    of such Support Services will be governed by then-current Microsoft 
    policies.  With respect to any technical or other information You 
@@ -136,7 +136,7 @@ If You comply with this agreement, You have the rights below.
    does not change Your rights under the laws of Your country if the 
    laws of Your country do not permit it to do so.
 
-10. DISCLAIMER OF WARRANTY.   The Software is licensed ìas-is.î  You 
+10. DISCLAIMER OF WARRANTY.   The Software is licensed ‚Äúas-is.‚Äù  You 
     bear the risk of using it.  Microsoft gives no express or implied 
     warranties, guarantees or conditions.  You may have additional 
     consumer rights under Your local laws which this agreement cannot 

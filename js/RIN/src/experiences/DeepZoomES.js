@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 * RIN Experience Provider JavaScript Library v1.0
 * http://research.microsoft.com/rin
 *
@@ -515,7 +515,7 @@ window.rin = window.rin || {};
                 isDown && manipulationHandler(evt);
 			}
 
-			// requestAnimationFrame polyfill by Erik Möller
+			// requestAnimationFrame polyfill by Erik MÃ¶ller
 			// fixes from Paul Irish and Tino Zijdel
 			(function () {
 				var lastTime = 0;

@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 
 ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
@@ -82,14 +82,14 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 		_super.load()
 
-		//Sets the image’s URL source
+		//Sets the imageâ€™s URL source
 		_video.attr({
 			"src"	: "../../Assets/TourData/" + self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		})
 
 		_videoControls.load()
-		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
+		// When image has finished loading, set status to â€œpausedâ€, and position element where it should be for the first keyframe
 		_video.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
 			this.setState(keyframes[0]);
