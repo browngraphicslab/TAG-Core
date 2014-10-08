@@ -335,7 +335,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     $('#authoringButtonBuffer').remove();
         // }
         
-        if (TAG.Worktop.Database.getLocked()) {
+        if (TAG.Worktop.Database.getLocked() != "undefined") {
             goToCollectionsButton.text("Go to Artwork");
         }
         
