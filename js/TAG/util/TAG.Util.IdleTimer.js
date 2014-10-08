@@ -46,7 +46,8 @@ TAG.Util.IdleTimer = (function() {
             if(idleDuration !== 0) { // default is no idle timer
                 s1TimeoutID = setTimeout(fireS1, s1d);
                 started = true;
-
+            } else {
+                started = false;
             }
         }
 
