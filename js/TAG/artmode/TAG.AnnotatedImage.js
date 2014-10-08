@@ -9,7 +9,7 @@ TAG.Util.makeNamespace("TAG.AnnotatedImage");
  * @return {Object}                some public methods and variables
  */
 
-TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shouldNotLoadHotspots) {
+TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shouldNotLoadHotspots, artworkViewer) {
     "use strict";
     
 
@@ -18,6 +18,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         doq = options.doq,            // doq for the artwork
         callback = options.callback,       // called after associated media are retrieved from server
         noMedia = options.noMedia,        // should we not have assoc media? (set to true in artwork editor)
+        fromArtworkViewer = options.fromArtworkViewer,   //is this coming from the artwork viewer or from authoring?
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,   // prepend server address to given path
@@ -718,7 +719,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             outerContainerhidden = true,
             currentlySeeking = false,
             movementTimeouts = [],
-            circleRadius = 60,
+            circleRadius = 40,
             // misc uninitialized variables
             circle,
             position,
@@ -737,12 +738,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         initMediaObject();
 
         // create hotspot circle if need be
-        if (IS_HOTSPOT) {
+        if (IS_HOTSPOT && fromArtworkViewer) {
             circle = $(document.createElement("img"));
             circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
             circle.addClass('annotatedImageHotspotCircle');
             circle.css('visibility', 'visible');
-            addOverlay(circle[0], position, Seadragon.OverlayPlacement.TOP_LEFT);
+            addOverlay(circle[0], position, Seadragon.OverlayPlacement.CENTER);
             circle.click(function () {
                 toggleMediaObject(true);
             });
@@ -1844,7 +1845,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'color': 'black',
                 'background-color': 'rgba(255,255,255, 0.3)'
             });
-            console.log("toggling stuff and making stuff highlight");
 
             // TODO is this necessary? 
             // dz17: this WAS necessary due to scaling. Please ask before disabling anything to do with resizing
@@ -1873,7 +1873,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'color': 'white',
                 'background-color': ''
             });
-            console.log("toggling stuff"); 
             // if (!isHotspotIcon) {
             mediaHidden = true;
             /*} else {

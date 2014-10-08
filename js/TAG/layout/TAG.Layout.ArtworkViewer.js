@@ -177,7 +177,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 
                 loadingArea.hide();
             },
-            noMedia: false
+            noMedia: false,
+            fromArtworkViewer: true
         });
     }
 
@@ -1318,10 +1319,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         for (i = 0; i < associatedMedia.guids.length; i++) {
             //console.log("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
             if (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type && (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type === "Hotspot")) {
-                //loadQueue.add(mediaClicked(associatedMedia[associatedMedia.guids[i]], true));
                 loadQueue.add(associatedMedia[associatedMedia.guids[i]].create());
-                //loadQueue.add(associatedMedia[associatedMedia.guids[i]].toggle());
-
             }
         };
     }
