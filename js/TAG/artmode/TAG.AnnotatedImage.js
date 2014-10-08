@@ -1794,7 +1794,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (IS_HOTSPOT) {
                     if (!isHotspotIcon) {
                         circle.css('visibility', 'visible');
-                        addOverlay(circle[0], position, Seadragon.OverlayPlacement.TOP_LEFT);
+                        addOverlay(circle[0], position, Seadragon.OverlayPlacement.CENTER);
                     }
                     viewer.viewport.panTo(position, false);
                     viewer.viewport.applyConstraints()
