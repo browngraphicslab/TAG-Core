@@ -334,11 +334,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // if(!allowAuthoringMode){
         //     $('#authoringButtonBuffer').remove();
         // }
-        
-        if (TAG.Worktop.Database.getLocked()) {
+       
+        if (TAG.Worktop.Database.getLocked() != undefined) {
             goToCollectionsButton.text("Go to Artwork");
         }
-        
         goToCollectionsButton.on('click', function () {
             if (TAG.Worktop.Database.getLocked()) {
                 TAG.Worktop.Database.getArtworks(function (result) {
