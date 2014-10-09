@@ -211,17 +211,20 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @param {Object} res             object containing hammer event info
      */
 
-    function dzManip(res) {
+    function dzManip(res, stopZoom) {
 
         if (disableZoomRLH) { return; }
 
-        var scale = res.scale,
+        var scale = stopZoom ? 1.0 : res.scale,
             trans = res.translation,
             pivot = res.pivot;
 
         dzManipPreprocessing();
 
         if (!artworkFrozen) {
+            if (!viewer.viewport) {
+                return false;
+            }
             var pivotRel = viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y));
             var piv = {
                 x: pivotRel.x,
@@ -337,7 +340,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     y: 0
                 },
                 pivot: pivot
-            });
+            }, true); //stopZoom=true
         }
     }
 

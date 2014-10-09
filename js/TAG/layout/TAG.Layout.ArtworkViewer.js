@@ -176,13 +176,39 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     customMapsLength = mps.length;
                     makeSidebar();
                 });
-                    
-                
-                loadingArea.hide();
+
+                setTimeout(initialManip, 3000);
+                //loadingArea.hide(); FOR INITIAL ZOOMING
+
             },
             noMedia: false,
             fromArtworkViewer: true
         });
+
+    }
+
+    function initialManip(){
+        manipulate = annotatedImage.getToManip();
+
+        var success = manipulate({
+            scale: 1.2,
+            translation: {
+                x: -100,
+                y: 0
+            },
+            pivot: {
+                x: 692,
+                y: 493
+            }
+        }, false);
+        if (success == false) {
+            setTimeout(initialManip, 3000);
+        } else {
+            var pivot = annotatedImage.getMediaPivot();
+            manipulate({ pivot: pivot, translation: { x: -10, y: 0 }, scale: 1 }, false);
+            loadingArea.hide();
+        }
+        
     }
 
     /**
@@ -455,7 +481,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function doManip(evt, direction) {
             var pivot = annotatedImage.getMediaPivot();
             manipulate = annotatedImage.getToManip();
-
+            
             if (direction === 'left') {
                 manipulate({pivot: pivot, translation: {x: -panDelta, y: 0}, scale: 1}, null, true);
             } else if (direction === 'up') {
@@ -465,9 +491,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             } else if (direction === 'down') {
                 manipulate({pivot: pivot, translation: {x: 0, y: panDelta}, scale: 1}, null, true);
             } else if (direction === 'in') {
-                manipulate({pivot: pivot, translation: {x: 0, y: 0}, scale: zoomScale});
+                manipulate({ pivot: pivot, translation: { x: 0, y: 0 }, scale: zoomScale }, true); // stopZoom = true
             } else if (direction === 'out') {
-                manipulate({pivot: pivot, translation: {x: 0, y: 0}, scale: 1/zoomScale});
+                manipulate({ pivot: pivot, translation: { x: 0, y: 0 }, scale: 1 / zoomScale }, true); //stopZoom = true
             }   
         }
 
