@@ -105,13 +105,15 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             meta;
 
         if (!idleTimer && !previewing) {
-            idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-            idleTimer.start();
+            if (locked !== doq.Identifier) {
+                idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                idleTimer.start();
+            }
         }
         if (idleTimer && previewing) {
             idleTimer.kill();
         }
-        if (locked === doq.Identifier) {
+        if ((locked === doq.Identifier) && idleTimer) {
             idleTimer.kill();
         }
 
@@ -170,8 +172,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 if (locked !== doq.Identifier) {
                     TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                     initSplitscreen();
+                    createSeadragonControls();
                 }
-                createSeadragonControls();
                 TAG.Worktop.Database.getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
                     makeSidebar();
