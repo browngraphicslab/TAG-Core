@@ -735,7 +735,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             play;
         
         // get things rolling
-        initMediaObject();
+        initMediaObject(true);
 
         // create hotspot circle if need be
         if (IS_HOTSPOT && fromArtworkViewer) {
@@ -755,7 +755,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * Initialize various parts of the media object: UI, manipulation handlers
          * @method initMediaObject
          */
-        function initMediaObject() {
+        function initMediaObject(first) {
+            if (first) {
+                return;
+            }
             // set up divs for the associated media
             outerContainer ? true : outerContainer = $(document.createElement('div'));
             if (IS_XFADE && linq.Offset && linq.Dimensions) {

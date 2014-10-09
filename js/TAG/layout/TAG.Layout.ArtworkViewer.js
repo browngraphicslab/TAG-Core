@@ -166,8 +166,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     debugger;
                     console.log(err); // TODO if we hit a network error, show an error message
                 }
-                TAG.Util.Splitscreen.setViewers(root, annotatedImage);
-                initSplitscreen();
+
+                if (locked !== doq.Identifier) {
+                    TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+                    initSplitscreen();
+                }
                 createSeadragonControls();
                 TAG.Worktop.Database.getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
@@ -919,6 +922,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          * Also used when entering from collections page to open a specific associated media (hence the error check for evt)
          * @method mediaClicked
          * @param {Object} media       the associated media object (from AnnotatedImage)
+         * @param boolean initialCreation           <<< PLEASE DOCUMENT - dz17
          */
         function mediaClicked(media, intialCreation) {
             //var toggleFunction = toggleLocationPanel;
@@ -1315,11 +1319,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         annotatedImage.addAnimateHandler(dzMoveHandler);
         //assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
+
         //PART OF CUSTOM BUILD FOR THE SAM
         for (i = 0; i < associatedMedia.guids.length; i++) {
             //console.log("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
             if (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type && (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type === "Hotspot")) {
-                loadQueue.add(associatedMedia[associatedMedia.guids[i]].create());
+                // dz17 - this removes preloading
+                //loadQueue.add(associatedMedia[associatedMedia.guids[i]].create());
             }
         };
     }
