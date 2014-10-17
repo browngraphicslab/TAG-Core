@@ -48,9 +48,9 @@ TAG.Telemetry = (function() {
 					machine_id : localStorage.machId,
 					session_id : TELEMETRY_SESSION_ID,
 					mode : null,
-					custom_1: null,
-					custom_2: null,
-					custom_3: null,
+					custom_1: null, //TODO: Check for ttype and set the required properties for each ttype to null using switch-case statements. These properties will be set in the prehandler when a particular element is registered depending on its ttype. All other generic properties are set here. 
+					custom_2: null, // A compact way to define all 'ttype' classes in one method and also include other functionality like stop telemetry_timer etc. Get rid of the custom fields here. Concatenate all the new properties
+					custom_3: null, //set by the prehandler into xml files (using another method created in this file itself). Probably create a new function in a new file with the switch statements.
 					custom_4: null,
 					custom_5: null
 				},
