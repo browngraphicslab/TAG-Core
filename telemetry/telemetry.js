@@ -39,6 +39,7 @@ TAG.Telemetry = (function() {
 		$(element).on(etype + '.tag_telemetry', function(evt) {
 		    var date = new Date(),
 				tobj = {
+
 				    ttype:      ttype,
 				    tagserver:  localStorage.ip || '',
 				    browser:    bversion,
@@ -60,7 +61,7 @@ TAG.Telemetry = (function() {
 			if((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH==='off') {
 				return;
 			}
-
+            
 			requests.push(tobj);
 
 			if(requests.length >= sendFreq - 1) { // tweak this later
