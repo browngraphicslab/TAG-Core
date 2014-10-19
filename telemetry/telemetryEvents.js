@@ -1,8 +1,8 @@
 ﻿TAG.Telemetry.Events = (function () {
 
     return {
-        assignEventProperties : assignEventProperties
-    }
+        assignEventProperties: assignEventProperties
+    };
 
     function assignEventProperties(tobj){
         switch (tobj.ttype){
