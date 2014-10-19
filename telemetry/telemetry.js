@@ -28,20 +28,21 @@ TAG.Telemetry = (function() {
     /**
     * Push the main_tobj onto the requests once at the beginning of the session.
     */
-	var date = new Date(),
-    main_tobj = {
-        ttype: ttype,
-        tagserver: localStorage.ip || '',
-        browser: bversion,
-        platform: platform,
-        time_stamp: date.getTime(),
-        time_human: date.toString(),
-        machine_id: localStorage.machId,
-        session_id: TELEMETRY_SESSION_ID,
-        mode: null,
-    };
-
-	requests.push(main_tobj);
+	(function () {
+	    var date = new Date(),
+        main_tobj = {
+            ttype: ttype,
+            tagserver: localStorage.ip || '',
+            browser: bversion,
+            platform: platform,
+            time_stamp: date.getTime(),
+            time_human: date.toString(),
+            machine_id: localStorage.machId,
+            session_id: TELEMETRY_SESSION_ID,
+            mode: null,
+        };
+	    requests.push(main_tobj);
+	})();
 
 
 	/**
