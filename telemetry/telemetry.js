@@ -24,6 +24,26 @@ TAG.Telemetry = (function() {
 	    return M.join(' ');
 	}
 
+
+    /**
+    * Push the main_tobj onto the requests once at the beginning of the session.
+    */
+	var date = new Date(),
+    main_tobj = {
+        ttype: ttype,
+        tagserver: localStorage.ip || '',
+        browser: bversion,
+        platform: platform,
+        time_stamp: date.getTime(),
+        time_human: date.toString(),
+        machine_id: localStorage.machId,
+        session_id: TELEMETRY_SESSION_ID,
+        mode: null,
+    };
+
+	requests.push(main_tobj);
+
+
 	/**
 	 * Register an element with the telemetry module
 	 * @method registerTelemetry
@@ -37,24 +57,11 @@ TAG.Telemetry = (function() {
 	 */
 	function register(element, etype, ttype, preHandler) {
 		$(element).on(etype + '.tag_telemetry', function(evt) {
-		    var date = new Date(),
-				tobj = {
-
-				    ttype:      ttype,
-				    tagserver:  localStorage.ip || '',
-				    browser:    bversion,
-				    platform:   platform,
-				    time_stamp: date.getTime(),
-				    time_human: date.toString(),
-				    machine_id : localStorage.machId,
-				    session_id : TELEMETRY_SESSION_ID,
-				    mode: null,
-				},
-                ret = true;
 
             //TODO: Check for ttype and set the required properties for each ttype to null using switch-case statements. These properties will be set in the prehandler when a particular element is registered depending on its ttype. All other generic properties are set here. 
             // A compact way to define all 'ttype' classes in one method and also include other functionality like stop telemetry_timer etc. Get rid of the custom fields here. Concatenate all the new properties
             //set by the prehandler into xml files (using another method created in this file itself). Probably create a new function in a new file with the switch statements.
+		    var tobj = {};
 		    TAG.Telemetry.Events.assignEventProperties(tobj);
 
 			// if preHandler returns true, return
