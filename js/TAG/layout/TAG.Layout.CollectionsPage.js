@@ -114,6 +114,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         comingBack,                     // if you are coming back from a viewer
         defaultTag,                     // default sort tag
         showArtworkTimeout,
+        searchResultsLength,
         tileCircle;                     // loading circle for artwork tiles
 
     if (SECONDARY_FONT_COLOR[0] !== '#') {
@@ -175,11 +176,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 drawCatalog(currentArtworks, currentTag, 0, false);
             }
             else if (e.which === 13) {
-                doSearch();
+                doSearch();   
             }
-
         });
-        
+
+        //Search telemetry register
+        TAG.Telemetry.register(searchInput, 'keyup', 'Search', function(tobj, evt){
+            if(evt.which != 13) {
+                return true;
+            }
+            tobj.search_text = searchTxt.text();
+            tobj.current_collection = currCollection.Identifier;
+            tobj.number_of_matches = searchResultsLength;
+            tobj.is_splitscreen = TAG.Util.Splitscreen.isOn();
+        });
+
         searchInput.css({
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
             'background-size' : 'auto 50%',
@@ -1132,9 +1143,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
-
+        searchResultsLength = matchedArts.length;
         drawCatalog(matchedArts, currentTag, 0, true);
-        drawCatalog(unmatchedArts, currentTag, matchedArts.length, false);
+        drawCatalog(unmatchedArts, currentTag, searchResultsLength, false);
     }
 
     /**
