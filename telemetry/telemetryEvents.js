@@ -1,4 +1,4 @@
-﻿TAG.Telemetry.Events = (function () {
+﻿TAG.TelemetryEvents = (function () {
 
     return {
         initEventProperties: initEventProperties

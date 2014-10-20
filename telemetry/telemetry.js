@@ -65,7 +65,7 @@ TAG.Telemetry = (function() {
 		    var tobj = {
 		        ttype: ttype
 		    };
-		    TAG.Telemetry.Events.initEventProperties(tobj);
+		    TAG.TelemetryEvents.initEventProperties(tobj);
 
 			// if preHandler returns true, return
 			if((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH==='off') {
