@@ -668,11 +668,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
 
         TAG.Util.UI.setUpBackButton(backButton, goBack);
-        TAG.Telemetry.register(backButton, 'click', 'artwork_to_collections', function(tobj) {
-
+        TAG.Telemetry.register(backButton, 'click', 'BackButton', function(tobj) {
             tobj.custom_1 = CryptoJS.SHA1(doq.Name).toString(CryptoJS.enc.Base64);
             tobj.mode = 'Kiosk';
- 
         });
         
         if (IS_WEBAPP && !locked) {
