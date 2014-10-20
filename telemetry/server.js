@@ -78,13 +78,15 @@
 		request.on('end', function() {
 			var i,
 				key,
-				tobj;
+				main_tobj;
+			    tobj;
+			    xml_tobj;
 
 			parsedBody = JSON.parse(requestBody); // parse body to js object
 
 		
-			for(i=0; i<parsedBody.length; i++) {
-				tobj = parsedBody[i];
+			
+				main_tobj = parsedBody[0];
                 var connection = new Connection(config); //create a new tedious connection to connect to the database mentioned in config
 console.log("reaches here");
 			    connection.on("connect", function(err){
@@ -94,9 +96,8 @@ console.log("reaches here");
 			        }
 			        else {
                         console.log("connection created");
-                        var type = tobj.ttype;
-			        	var req = new Request("INSERT INTO tmetrytesttable (ttype,tagserver,browser,platform,time_stamp,time_human,machine_id,session_id,custom_1,custom_2,custom_3,custom_4,custom_5) VALUES ('"+tobj.ttype+"','"+tobj.tagserver+"','"+tobj.browser+"','"+tobj.platform+"','"+tobj.time_stamp+"','"+tobj.time_human+"','"+tobj.machine_id+"','"+tobj.session_id+"','"+tobj.custom_1+"','"+tobj.custom_2+"','"+tobj.custom_3+"','"+tobj.custom_4+"','"+tobj.custom_5+"')",function(err, rowCount){
-			    		if (err){              //insert each tobj into each row of the table
+			        	var req = new Request("INSERT INTO tmetrytesttable (tagserver,browser,platform,time_stamp,time_human,machine_id,session_id) VALUES ('"+main_tobj.ttype+"','"+main_tobj.tagserver+"','"+main_tobj.browser+"','"+main_tobj.platform+"','"+main_tobj.time_stamp+"','"+main_tobj.time_human+"','"+main_tobj.machine_id+"','"+main_tobj.session_id+"'",function(err, rowCount){
+			    		if (err){              //insert main_tobj into each row of the table
 			    			console.log(err);
 			    		}
 			    		else {
@@ -113,21 +114,25 @@ console.log("reaches here");
 				    	connection.execSql(req);
 			        }
 			    });
+			    for (i = 1; i < parsedBody.length; i++) {
+			        tobj = parsedBody[i];
+			        xml_tobj = json2xml(tobj, 2);
+			    }
                 
                 
 				
 				// tdata = {
-				// 	time_stamp: tobj.time_stamp || NOT_AVAIL,                   // milliseconds since 1970
-				// 	type:       tobj.ttype      || NOT_AVAIL,                   // type of telemetry request
-				// 	tagserver:  tobj.tagserver  || NOT_AVAIL,                   // TAG server to which computer is connected
-				// 	browser:    tobj.browser    || NOT_AVAIL,                   // browser
-				// 	platform:   tobj.platform   || NOT_AVAIL,                   // platform (e.g., Mac)
-				// 	time_human: tobj.time_human || NOT_AVAIL,                   // human-readable time
-				// 	additional: tobj.additional ? JSON.stringify(tobj.additional) : NOT_AVAIL // any additional info
+				// 	time_stamp: main_tobj.time_stamp || NOT_AVAIL,                   // milliseconds since 1970
+				// 	type:       main_tobj.ttype      || NOT_AVAIL,                   // type of telemetry request
+				// 	tagserver:  main_tobj.tagserver  || NOT_AVAIL,                   // TAG server to which computer is connected
+				// 	browser:    main_tobj.browser    || NOT_AVAIL,                   // browser
+				// 	platform:   main_tobj.platform   || NOT_AVAIL,                   // platform (e.g., Mac)
+				// 	time_human: main_tobj.time_human || NOT_AVAIL,                   // human-readable time
+				// 	additional: main_tobj.additional ? JSON.stringify(main_tobj.additional) : NOT_AVAIL // any additional info
 				// };
 
 				//WRITE_DATA(tdata);
-			}
+			
 
 			response.writeHead(200, {
 				'Content-Type': 'text/plain',
@@ -144,6 +149,7 @@ console.log("reaches here");
 	 * @param {Object} request          the http request to the server
 	 * @param {Object} response         the response we'll send back to the client
 	 */
+
 	function handleGet(request, response) {
 		var requestBody = '',
 			parsedBody,
@@ -166,6 +172,47 @@ console.log("reaches here");
 			console.log("about to call READ_DATA");
 			READ_DATA(response);
 		});
+	}
+    /**
+    *Taken from http://goessner.net/download/prj/jsonxml/json2xml.js
+    */
+	function json2xml(o, tab) {
+	    var toXml = function (v, name, ind) {
+	        var xml = "";
+	        if (v instanceof Array) {
+	            for (var i = 0, n = v.length; i < n; i++)
+	                xml += ind + toXml(v[i], name, ind + "\t") + "\n";
+	        }
+	        else if (typeof (v) == "object") {
+	            var hasChild = false;
+	            xml += ind + "<" + name;
+	            for (var m in v) {
+	                if (m.charAt(0) == "@")
+	                    xml += " " + m.substr(1) + "=\"" + v[m].toString() + "\"";
+	                else
+	                    hasChild = true;
+	            }
+	            xml += hasChild ? ">" : "/>";
+	            if (hasChild) {
+	                for (var m in v) {
+	                    if (m == "#text")
+	                        xml += v[m];
+	                    else if (m == "#cdata")
+	                        xml += "<![CDATA[" + v[m] + "]]>";
+	                    else if (m.charAt(0) != "@")
+	                        xml += toXml(v[m], m, ind + "\t");
+	                }
+	                xml += (xml.charAt(xml.length - 1) == "\n" ? ind : "") + "</" + name + ">";
+	            }
+	        }
+	        else {
+	            xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">";
+	        }
+	        return xml;
+	    }, xml = "";
+	    for (var m in o)
+	        xml += toXml(o[m], m, "");
+	    return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 	}
 
 	/**
