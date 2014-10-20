@@ -4,7 +4,7 @@
         initEventProperties: initEventProperties
     };
 
-    function assignEventProperties(tobj){
+    function initEventProperties(tobj){
         switch (tobj.ttype){
             //Collections Page Events
             case "BackButton":
