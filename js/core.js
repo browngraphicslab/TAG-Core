@@ -37,8 +37,9 @@
         if (!localStorage.machId) {
             localStorage.machId= TAG.Util.IdCreator();
         }
-        TAG.Telemetry.pushMetadata(); //pushes the session telemetry metadata onto the list of requests which get sent to the server depending on whether telemetry is turned on
-    
+        if (TELEMETRY_SWITCH === 'on') {
+            TAG.Telemetry.pushMetadata(); //pushes the session telemetry metadata onto the list of requests which get sent to the server depending on whether telemetry is turned on
+        }
         
         if(containerId && $('#'+containerId).length > 0) {
             container = $('#'+containerId);
