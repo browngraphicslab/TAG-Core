@@ -1,4 +1,6 @@
-﻿TAG.TelemetryEvents = (function () {
+﻿TAG.Util.makeNamespace("TAG.TelemetryEvents");
+
+TAG.TelemetryEvents = (function () {
 
     return {
         initEventProperties: initEventProperties
