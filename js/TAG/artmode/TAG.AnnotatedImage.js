@@ -45,7 +45,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         // misc uninitialized variables
         viewerelt,
         viewer,
-        assetCanvas;
+        assetCanvas,
+        circleHandlers = [];
 
 
     var xFadeOffset;
@@ -82,7 +83,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         getOverlayCoordinates: getOverlayCoordinates,
         freezeArtwork: freezeArtwork,
         unfreezeArtwork: unfreezeArtwork,
-        initZoom: initZoom
+        initZoom: initZoom,
+        circleHandlers: circleHandlers,
+        getCircleHandlers: getCircleHandlers
     };
 
 
@@ -103,6 +106,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function getMediaPivot() {
         return outerContainerPivot;   
+    }
+
+    function getCircleHandlers() {
+        return circleHandlers;
     }
 
 
@@ -745,11 +752,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             circle = $(document.createElement("img"));
             circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
             circle.addClass('annotatedImageHotspotCircle');
+            circle.attr('id', TITLE);
             circle.css('visibility', 'visible');
             addOverlay(circle[0], position, Seadragon.OverlayPlacement.CENTER);
             circle.click(function () {
                 toggleMediaObject(true);
             });
+            var handler = {
+                handler: toggleMediaObject,
+                title: TITLE,
+                element: circle[0],
+                position: position
+            };
+            circleHandlers.push(handler);
             root.append(circle);
         };
 

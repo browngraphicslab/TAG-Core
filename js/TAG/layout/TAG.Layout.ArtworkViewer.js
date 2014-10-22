@@ -193,9 +193,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         manipulate = annotatedImage.getToManip();
 
         var success = manipulate({
-            scale: 1.2,
+            scale: 1.15,
             translation: {
-                x: -100,
+                x: -87,
                 y: 0
             },
             pivot: {
@@ -211,6 +211,187 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             loadingArea.hide();
         }
         
+        collapseCircles();
+
+    }
+
+    // dz17 - collapse all circles into just one circle per set of overlapping circles
+    function collapseCircles() {
+
+        var handlers = annotatedImage.getCircleHandlers();
+        var circles = [];
+
+        // extract elements (circle imgs in the DOM) from objects
+        for (var idx = 0; idx < handlers.length; idx++) {
+            circles.push(handlers[idx].element);
+        }
+
+        var merged = [];
+        var thres = 0.15; // 15% threshold
+
+        // O(n^2) loop to match a lead circle with all overlapping circles and push them into list of merges
+        while (circles.length !== 0) {
+            // "pop" current circle
+            var currentCircle = circles[0];
+
+            // set running average to current circle's position
+            var avgCenter = {
+                x: parseInt(currentCircle.style.left),
+                y: parseInt(currentCircle.style.top)
+            }
+
+            var toMerge = [];
+            // find all indices of circles we want to merge
+            for (var i = 1; i < circles.length; i++) {
+                var circleDims = {
+                    x: parseInt(circles[i].style.left),
+                    y: parseInt(circles[i].style.top)
+                }
+
+                if (isOverlapping(avgCenter, circleDims, thres)) {
+                    toMerge.push(i);
+                    avgCenter.x = 0.5 * (avgCenter.x + circleDims.x);
+                    avgCenter.y = 0.5 * (avgCenter.y + circleDims.y);
+                }
+            }
+
+            // assemble the merge set of elements wrapped in objects with their handler, which will be rebound to menu item
+            var mergeSet = [];
+            var leader = {
+                id: currentCircle.id,
+                handler: handlers[0].handler,
+                element: currentCircle,
+                position: handlers[0].position
+            };
+
+            mergeSet.push(leader);
+
+            for (var j = 0; j < toMerge.length; j++) {
+                var idx = toMerge[j];
+                var comp = {
+                    id: circles[idx].id,
+                    handler: handlers[idx].handler,
+                    element: circles[idx]
+                };
+
+                mergeSet.push(comp);
+            }
+
+            // remove all the elements we just added from the original set to exclude them from the next search
+            // splice backwards so we don't affect indexing in the future and don't have to keep a running offset counter
+            for (var k = toMerge.length - 1; k >= 0; k--) {
+                var idx = toMerge[k];
+                circles.splice(idx, 1);
+                handlers.splice(idx, 1);
+            }
+
+            circles.splice(0, 1);
+            handlers.splice(0, 1);
+
+            // add the finished merge set to the list of merge sets
+            merged.push(mergeSet);
+        }
+
+        console.log("done merging");
+
+        // hide all the circles
+        var all = root.find(".annotatedImageHotspotCircle");
+        for (var a = 0; a < all.length; a++) {
+            $(all[a]).attr("visibility", "none");
+            $(all[a]).hide();
+            $(all[a]).off('click');
+        }
+
+        // create a menu for each mergeSet
+        for (var i = 0; i < merged.length; i++) {
+            var menu = createMenu(merged[i]);
+        }
+    }
+
+    function createMenu(mergeSet) {
+        // create the menu container object
+        var menuContainer = $(document.createElement('div'));
+        menuContainer.css({
+            display: 'inline-block',
+            width: '300px',
+            height: 'auto',
+            position: 'relative',
+            'background-color': 'rgba(0, 0, 0, 0.8)',
+            'z-index': '142248924'
+        })
+
+        // create a single circle per menu
+        var circle = $(document.createElement("img"));
+        var circlePosition = mergeSet[0].position;
+        var circleID = mergeSet[0].id;
+        var hidden = true;
+        var menuItemCSS = {
+            'font-color': 'white',
+            'font-size': '85%',
+            'height': '20px',
+            'width': '300px',
+            'display': 'inline-block',
+            'position': 'relative',
+            'padding': '1.5%'
+        };
+
+        //var allIDs = circleID;
+        //var lead = $(document.createElement('div'));
+
+        //lead.css(menuItemCSS)
+        //lead.text(circleID);
+        //menuContainer.append(lead);
+
+        var i;
+        for (i = 0; i < mergeSet.length; i++) {
+            var selection = generateMenuItem(mergeSet[i]);
+            menuContainer.append(selection);
+        }
+
+        function generateMenuItem(source) {
+            var selection = $(document.createElement('div'));
+            var handler = source.handler;
+            selection.css(menuItemCSS);
+            selection.text(mergeSet[i].id);
+            selection.click(function () {
+                menuContainer.hide();
+                hidden = true;
+                handler(true);
+            })
+            return selection;
+        }
+
+        annotatedImage.addOverlay(menuContainer[0], circlePosition, Seadragon.OverlayPlacement.LEFT);
+        menuContainer.hide();
+
+
+        circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
+        circle.addClass('annotatedImageHotspotCircle');
+        circle.attr('id', "merged_" + circleID);
+        circle.css('visibility', 'visible');
+        annotatedImage.addOverlay(circle[0], circlePosition, Seadragon.OverlayPlacement.CENTER);
+        circle.click(function () {
+            console.log("clicked menu circle");
+            console.log(mergeSet.length);
+            if (hidden) {
+                menuContainer.show();
+            } else {
+                menuContainer.hide();
+            }
+            hidden = !hidden;
+        });
+    }
+
+    // dz17 - function that determines whether things are overlapping within a specified % threshold
+    function isOverlapping(average, circle, threshold) {
+        var xdiff = Math.abs(average.x - circle.x);
+        var ydiff = Math.abs(average.y - circle.y);
+        var acceptX = threshold * average.x;
+        var acceptY = threshold * average.y;
+        if ((xdiff > acceptX) || (ydiff > acceptY)) {
+            return false;
+        }
+        return true;
     }
 
     /**
