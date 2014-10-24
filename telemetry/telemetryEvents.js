@@ -72,7 +72,7 @@ TAG.TelemetryEvents = (function () {
                 tobj.current_artwork = null;
                 break;
             default:
-                console.log("ERROR!!!! NOT A VALID EVENT!!!");
+                console.log(tobj.ttype + " is not a valid event.");
                 break;
         }
     }
