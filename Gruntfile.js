@@ -139,6 +139,8 @@ var JSSRC = [
 		'js/utils/popcorn.capture.js',                     // TAGCORE
 
 		'telemetry/telemetry.js',                          // TAGCORE
+        'telemetry/telemetryEvents.js',                    // TAGCORE
+        'telemetry/telemetryTimer.js',                     // TAGCORE
 		
 		'js/tests.js',                                     // TAGCORE
 		
