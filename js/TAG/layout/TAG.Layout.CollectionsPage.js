@@ -214,13 +214,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         infoButton.on('mousedown', function () {
             createInfoPopUp();
         });
+        //Info register
+        TAG.Telemetry.register(infoButton, 'mousedown', 'Overlay', function(tobj){
+            tobj.overlay_type = "info"; //info or tutorial page
+            tobj.current_collection = currCollection.Identifier;
+            tobj.time_spent = null;
+        });
 
         tutorialButton.attr('src', tagPath + 'images/icons/question_mark.svg')
             .addClass('bottomButton')
             .on('mousedown', function () {
                 TAG.Util.createTutorialPopup();
             });
-
+        TAG.Telemetry.register(tutorialButton, 'mousedown', 'Overlay', function(tobj){
+            tobj.overlay_type = "tutorial"; //info or tutorial page
+            tobj.current_collection = currCollection.Identifier;
+            tobj.time_spent = null;
+        });
         if (IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg')
                         .addClass('bottomButton')
@@ -756,14 +766,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //collectionArea.append(prevCollection);
                 uiDocfrag.appendChild(prevCollection[0]);
                 prevCollection.show();
-                TAG.Telemetry.register(backArrowArea, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = CryptoJS.SHA1(prevTitle).toString(CryptoJS.enc.Base64);
-                    tobj.mode = 'Kiosk';
-
+                TAG.Telemetry.register(backArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
+                    tobj.current_collection = currCollection.Identifier;
+                    tobj.next_collection = prevTitle;
+                    tobj.time_spent = null;
+                    tobj.navigation_type = "arrow";
                 });
-                TAG.Telemetry.register(prevCollection, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = CryptoJS.SHA1(prevTitle).toString(CryptoJS.enc.Base64);
-                    tobj.mode = 'Kiosk';
+                TAG.Telemetry.register(prevCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
+                    tobj.current_collection = currCollection.Identifier;
+                    tobj.next_collection = prevTitle;
+                    tobj.time_spent = null;
+                    tobj.navigation_type = "collection_name";
                 });
             }
 
@@ -806,12 +819,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             }(collection));
                 nextCollection.show();
                 TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = CryptoJS.SHA1(nextTitle).toString(CryptoJS.enc.Base64);
-                    tobj.mode = 'Kiosk';
+                    tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
+                    tobj.current_collection = currCollection.Identifier;
+                    tobj.next_collection = nextTitle;
+                    tobj.time_spent = null;
+                    tobj.navigation_type = "arrow";
                 });
-                TAG.Telemetry.register(nextCollection, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = CryptoJS.SHA1(nextTitle).toString(CryptoJS.enc.Base64);
-                    tobj.mode = 'Kiosk';
+                TAG.Telemetry.register(nextCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
+                    tobj.current_collection = currCollection.Identifier;
+                    tobj.next_collection = nextTitle;
+                    tobj.time_spent = null;
+                    tobj.navigation_type = "collection_name";
                 });
                 //collectionArea.append(nextCollection);
                 uiDocfrag.appendChild(nextCollection[0]);

@@ -22,7 +22,7 @@ TAG.TelemetryEvents = (function () {
                 tobj.current_collection = null;
                 tobj.number_of_matches = null;
                 break;
-            case "CollectionsNavigation":
+            case "CollectionsNavigation":       //done
                 tobj.current_collection = null;
                 tobj.next_collection = null;
                 tobj.time_spent = null;
@@ -38,9 +38,9 @@ TAG.TelemetryEvents = (function () {
                 tobj.assoc_media = null;
                 tobj.time_spent = null; //time spent in the previewer
                 break;
-            case "Overlay":
+            case "Overlay":                 //Done
                 tobj.overlay_type = null; //info or tutorial page
-                tobj.current_page = null;
+                tobj.current_collection = null;         //Changed from current page to current collection
                 tobj.time_spent = null;
                 break;
             //Artwork Viewer Events
