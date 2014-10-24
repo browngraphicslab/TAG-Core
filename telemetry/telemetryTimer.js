@@ -1,18 +1,13 @@
-﻿TAG.Telemetry.Timer = (function () {
+﻿var TelemetryTimer = function () {
 
-    var start_time = null;
+    this.start_time = new Date().getTime() / 1000;
 
-    return {
-        start : start,
-        kill : kill
-    };
-
-    function start() {
-        start_time = new Date().getTime() / 1000; //time in seconds since 1/1/1970
+    this.restart = function() {
+        this.start_time = new Date().getTime() / 1000;
     }
 
-    function kill() {
-        return (new Date().getTime() / 1000) - start_time;
+    this.get_elapsed = function() {
+        return (new Date().getTime() / 1000) - this.start_time;
     }
 
-})();
+};

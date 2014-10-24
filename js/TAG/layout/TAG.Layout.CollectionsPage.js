@@ -115,7 +115,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         defaultTag,                     // default sort tag
         showArtworkTimeout,
         searchResultsLength,
-        tileCircle;                     // loading circle for artwork tiles
+        tileCircle,                     // loading circle for artwork tiles
+
+        //TELEMETRY
+        telemetry_timer = new TelemetryTimer();
 
     if (SECONDARY_FONT_COLOR[0] !== '#') {
         SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
@@ -769,13 +772,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 TAG.Telemetry.register(backArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
                     tobj.current_collection = currCollection.Identifier;
                     tobj.next_collection = prevTitle;
-                    tobj.time_spent = null;
+                    tobj.time_spent = telemetry_timer.get_elapsed();
+                    console.log("nav timer: " + tobj.time_spent);
+                    telemetry_timer.restart();
                     tobj.navigation_type = "arrow";
                 });
                 TAG.Telemetry.register(prevCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
                     tobj.current_collection = currCollection.Identifier;
                     tobj.next_collection = prevTitle;
-                    tobj.time_spent = null;
+                    tobj.time_spent = telemetry_timer.get_elapsed();
+                    console.log("nav timer: " + tobj.time_spent);
+                    telemetry_timer.restart();
                     tobj.navigation_type = "collection_name";
                 });
             }
@@ -819,16 +826,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             }(collection));
                 nextCollection.show();
                 TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
-                    tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
+                    //tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
                     tobj.current_collection = currCollection.Identifier;
                     tobj.next_collection = nextTitle;
-                    tobj.time_spent = null;
+                    tobj.time_spent = telemetry_timer.get_elapsed();
+                    console.log("nav timer: " + tobj.time_spent);
+                    telemetry_timer.restart();
                     tobj.navigation_type = "arrow";
                 });
                 TAG.Telemetry.register(nextCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
                     tobj.current_collection = currCollection.Identifier;
                     tobj.next_collection = nextTitle;
-                    tobj.time_spent = null;
+                    tobj.time_spent = telemetry_timer.get_elapsed();
+                    console.log("nav timer: " + tobj.time_spent);
+                    telemetry_timer.restart();
                     tobj.navigation_type = "collection_name";
                 });
                 //collectionArea.append(nextCollection);
