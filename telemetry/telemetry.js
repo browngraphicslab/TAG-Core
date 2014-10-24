@@ -41,6 +41,7 @@ TAG.Telemetry = (function() {
                 session_id: TELEMETRY_SESSION_ID
             };
 	        requests.push(main_tobj);
+	        postTelemetryRequests();
 	    }
 	}
 
@@ -67,15 +68,21 @@ TAG.Telemetry = (function() {
 		    };
 		    tobj.is_splitscreen =  TAG.Util.Splitscreen.isOn();
 		    TAG.TelemetryEvents.initEventProperties(tobj);
+		    console.log("asjdkld");
 
 			// if preHandler returns true, return
-			if((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH==='off') {
+		    if ((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH === 'off') {
+		        console.log(TELEMETRY_SWITCH);
 				return;
 			}
             
-			requests.push(tobj);
 
-			if(requests.length >= sendFreq - 1) { // tweak this later
+		    requests.push(tobj);
+		   
+			
+
+			if (requests.length >= sendFreq - 1) { // tweak this later
+			    
 				postTelemetryRequests();
 			} 
 		});
@@ -105,6 +112,7 @@ TAG.Telemetry = (function() {
 	}
 
 	return {
-		register: register
+	    register: register,
+        pushMetaData : pushMetaData
 	}
 })();
