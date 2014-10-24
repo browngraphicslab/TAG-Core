@@ -1823,16 +1823,17 @@ TAG.Util = (function () {
 
     /***
     * Create the tutorial popup for the collections page
-    *@method createTutorialPopup
+    * @method createTutorialPopup
     */
 
-    function createTutorialPopup() {
+    function createTutorialPopup(collection) {
         var tagContainer = $('#tagRoot');
         var infoOverlay = $(TAG.Util.UI.blockInteractionOverlay());
         var infoBox = $(document.createElement('div')).addClass('infoBox');
         var infoMain = $(document.createElement('div')).addClass('infoMain');
         var infoTitle = $(document.createElement('div')).addClass('infoTitle');
         var closeButton = createCloseButton().addClass('closeButton');
+        var telemetry_timer = new TelemetryTimer();
 
         function createCloseButton() {
             var closeButton = $(document.createElement('img'));
@@ -1846,6 +1847,14 @@ TAG.Util = (function () {
             });
             return closeButton;
         }
+
+        TAG.Telemetry.register(closeButton, 'mousedown', 'Overlay', function(tobj){
+            tobj.overlay_type = "tutorial";
+            tobj.current_collection = collection.Identifier;
+            tobj.time_spent = telemetry_timer.get_elapsed();
+            //console.log("current collection " + tobj.current_collection);
+            //console.log("elapsed " + tobj.time_spent);
+        });
 
         infoBox.css({
             'background-color': 'black',

@@ -218,22 +218,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             createInfoPopUp();
         });
         //Info register
-        TAG.Telemetry.register(infoButton, 'mousedown', 'Overlay', function(tobj){
+        /*TAG.Telemetry.register(infoButton, 'mousedown', 'Overlay', function(tobj){
             tobj.overlay_type = "info"; //info or tutorial page
             tobj.current_collection = currCollection.Identifier;
             tobj.time_spent = null;
-        });
+        });*/
 
         tutorialButton.attr('src', tagPath + 'images/icons/question_mark.svg')
             .addClass('bottomButton')
             .on('mousedown', function () {
-                TAG.Util.createTutorialPopup();
+                TAG.Util.createTutorialPopup(currCollection);
             });
-        TAG.Telemetry.register(tutorialButton, 'mousedown', 'Overlay', function(tobj){
+        /*TAG.Telemetry.register(tutorialButton, 'mousedown', 'Overlay', function(tobj){
             tobj.overlay_type = "tutorial"; //info or tutorial page
             tobj.current_collection = currCollection.Identifier;
             tobj.time_spent = null;
-        });
+        });*/
         if (IS_WEBAPP) {
             linkButton.attr('src', tagPath + 'images/link.svg')
                         .addClass('bottomButton')
@@ -459,6 +459,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         closeButton.on('mousedown', function () {
             infoOverlay.fadeOut();
+        });
+
+        //telemetry registering
+        var telemetry_timer = new TelemetryTimer();
+        TAG.Telemetry.register(closeButton, 'mousedown', 'Overlay', function(tobj){
+            tobj.overlay_type = "info"; //info or tutorial page
+            tobj.current_collection = currCollection.Identifier;
+            tobj.time_spent = telemetry_timer.get_elapsed();
+            //console.log("current collection " + tobj.current_collection);
+            //console.log("elapsed " + tobj.time_spent);
         });
     }
 
