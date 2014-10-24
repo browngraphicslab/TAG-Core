@@ -157,7 +157,7 @@ WATCH.push(
 module.exports = function(grunt) {
 	grunt.initConfig({
 	    concat: {
-	        options: {
+	        options: { //localStorage.tagTelemetry ? localStorage.tagTelemetry : 
 	            separator: '\n;\n',
 	            banner: 'var TAG_GLOBAL = function(tagInput) { \
 					        \n    var tagPath              = tagInput.path || "", \
@@ -171,7 +171,7 @@ module.exports = function(grunt) {
 					        \n        urlToParse           = tagInput.urlToParse, \
 					        \n        pageToLoad           = {}, // a specific page to load \
 					        \n        TELEMETRY_SESSION_ID = null, \
-					        \n        TELEMETRY_SWITCH     = localStorage.tagTelemetry ? localStorage.tagTelemetry : "off", \
+					        \n        TELEMETRY_SWITCH     = "on", \
                             \n        IS_WINDOWS           = (typeof Windows !== "undefined"), \
                             \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
 					        \n        idleTimer, \

@@ -24,6 +24,7 @@ TAG.TelemetryEvents = (function () {
                 tobj.current_collection = null;
                 tobj.number_of_matches = null;
                 tobj.is_splitscreen = null;
+                console.log("SEARCHED!");
                 break;
             case "CollectionsNavigation":
                 tobj.current_collection = null;
