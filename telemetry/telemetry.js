@@ -64,8 +64,9 @@ TAG.Telemetry = (function() {
             // A compact way to define all 'ttype' classes in one method and also include other functionality like stop telemetry_timer etc. Get rid of the custom fields here. Concatenate all the new properties
             //set by the prehandler into xml files (using another method created in this file itself). Probably create a new function in a new file with the switch statements.
 		    var tobj = {
-		        ttype: ttype
+		        ttype: ttype,		        
 		    };
+		    tobj.is_splitscreen =  TAG.Util.Splitscreen.isOn();
 		    TAG.TelemetryEvents.initEventProperties(tobj);
 		    console.log("asjdkld");
 

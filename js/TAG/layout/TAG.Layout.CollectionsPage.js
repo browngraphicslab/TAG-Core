@@ -188,7 +188,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tobj.search_text = searchTxt.text();
             tobj.current_collection = currCollection.Identifier;
             tobj.number_of_matches = searchResultsLength;
-            tobj.is_splitscreen = TAG.Util.Splitscreen.isOn();
         });
 
         searchInput.css({
@@ -1026,10 +1025,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //sortButton.css("height", newPos.height + 'px');
                 //buttonRow.append(sortButton);
                 sortButtonTags[sortButton.attr('id')] = sortOptions[i];
-                //TO-DO: test this telemetry handler
-                TAG.Telemetry.register(sortButton, 'mousedown', '', function (tobj) {
-                    tobj.ttype = 'sort_by_' + sortButtonTags[$(sortButton).attr('id')].toLowerCase();
-                    tobj.mode = 'Kiosk';
+
+                //Sort telemetry register
+                TAG.Telemetry.register(sortButton, 'mousedown', 'SortOptions', function (tobj) {
+                    tobj.sort_type = sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                    tobj.current_collection = currCollection.Identifier;
                 });
             }
             buttonRow.append($(uiDocfrag));
