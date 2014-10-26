@@ -328,10 +328,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }   
         });
         
-        TAG.Telemetry.register(slideButton,'click','seadragon_button_panel_toggled',function(tobj){
-            tobj.custom_1 = CryptoJS.SHA1(doq.Name).toString(CryptoJS.enc.Base64);
-            tobj.mode = 'Kiosk';
+        TAG.Telemetry.register(slideButton,'click','ButtonPanelToggled',function(tobj){
+            tobj.current_artwork = doq.Identifier;
+            tobj.time_spent = null;
         });
+
         container.append(slideButton);
         var sdleftbtn = createButton('leftControl', tagPath + 'images/icons/zoom_left.svg'),
             sdrightbtn = createButton('rightControl', tagPath + 'images/icons/zoom_right.svg'),
@@ -409,9 +410,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             return img;
         }
         
-        TAG.Telemetry.register(root.find("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"), 'click', 'seadragon_control_clicked', function (tobj) {
-            tobj.custom_1 = CryptoJS.SHA1(doq.Name).toString(CryptoJS.enc.Base64);;
-            tobj.mode = 'Kiosk';
+        TAG.Telemetry.register(root.find("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"), 'click', 'ControlButton', function (tobj, evt) {
+            tobj.control_type = "seadragon_click"
+            tobj.button = evt.target.id;
+            tobj.current_artwork = doq.Identifier;
         });
         
         /**
@@ -556,12 +558,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             clearInterval(interval);
         });
 
-        TAG.Telemetry.register($("[tabindex='-1']"),'keydown','seadragon_key_pressed',function(tobj){
+        TAG.Telemetry.register($("[tabindex='-1']"),'keydown','ControlButton',function(tobj){
             if (containerFocused===false){
                 return true;
             }
-            tobj.custom_1 = CryptoJS.SHA1(doq.Name).toString(CryptoJS.enc.Base64);
-             tobj.mode = 'Kiosk';
+            tobj.control_type = "seadragon_keypress";
+            tobj.button = evt.which;        //Keycode
+            tobj.current_artwork = doq.Identifier;
         });
     }
 
@@ -665,6 +668,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             sideBar.animate(opts, 1000, function () {
                 togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen)^(!isLeft) ? 'Close.svg' : 'Open.svg'));
             });
+        });
+        TAG.Telemetry.register(toggler, 'click', 'ToggleSidebar', function(tobj) {
+            tobj.sidebar_open = isBarOpen;
+            tobj.current_artwork = doq.Identifier;        
         });
 
         TAG.Util.UI.setUpBackButton(backButton, goBack);
@@ -1342,6 +1349,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locHistoryToggleSign = $(document.createElement('img')).addClass("drawerPlusToggle")
                 .attr("src", tagPath+'images/icons/plus.svg'); 
         locHistoryContainer.on('click', function () { toggleLocationOpen(); });
+        
         toggleContainer.append(locHistoryToggleSign);
         locHistoryContainer.append(toggleContainer);
 
@@ -1382,6 +1390,22 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function toggleLocationOpen() {
             isOpen ? locationClose() : locationOpen();    
         }
+        
+        TAG.Telemetry.register(locHistoryContainer, 'click', 'Drawer', function(tobj, evt){
+            tobj.current_artwork = doq.Identifier;
+            tobj.toggle = isOpen; //expanded or collapsed
+            tobj.time_spent = null;
+            tobj.drawer_header = "Maps";
+        });
+        /*
+        TAG.Telemetry.register(drawerHeader, 'click', 'Drawer', function(tobj) {                                
+                tobj.current_artwork = doq.Identifier;
+                tobj.toggle = toggle.attr("expanded"); //expanded or collapsed
+                tobj.time_spent = null;
+                tobj.drawer_header = drawerHeader.text();
+                console.log(drawerHeader.text());
+        });
+        */
         if (TAG.Util.Splitscreen.isOn()) {
             locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
         }
@@ -1482,7 +1506,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         //have the toggler icon minus when is is expanded, plus otherwise.
         drawerHeader.on('click', drawerToggle);
-
+        TAG.Telemetry.register(drawerHeader, 'click', 'Drawer', function(tobj) {                                
+                tobj.current_artwork = doq.Identifier;
+                tobj.toggle = toggle.attr("expanded"); //expanded or collapsed
+                tobj.time_spent = null;
+                tobj.drawer_header = drawerHeader.text();
+                console.log(drawerHeader.text());
+        });
         drawer.contents = drawerContents;
         if (assocMediaToShow && title === 'Associated Media') {
             //drawerHeader.click();

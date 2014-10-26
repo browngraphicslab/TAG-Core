@@ -44,10 +44,11 @@ TAG.TelemetryEvents = (function () {
                 tobj.next_page = null;
                 tobj.time_spent = null;
                 break;
-            case "Description":
+            case "Drawer":      //Done minus timer
                 tobj.current_artwork = null;
                 tobj.toggle = null; //expanded or collapsed
                 tobj.time_spent = null;
+                tobj.drawer_header = null;
                 break;
             case "Maps":
                 tobj.current_artwork = null;
@@ -55,7 +56,6 @@ TAG.TelemetryEvents = (function () {
                 tobj.pins_clicked = null;
                 tobj.locations_clicked = null;
                 tobj.maps_viewed = null;
-                tobj.collapsed = null; //by the minus sign or the arrow icon - which
                 tobj.time_spent = null;
                 break;
             case "AssociatedMedia":
@@ -67,9 +67,19 @@ TAG.TelemetryEvents = (function () {
                 tobj.event_type = null; //Tour Clicked in artwork viewer, hide menu arrow in artwork viewer, navigation minimap interaction, splitscreen initialized/closed
                 tobj.current_artwork = null;
                 break;
-            case "ControlButton":
+            case "ControlButton": //Done for seaDragon and keypress
+                tobj.control_type = null;
                 tobj.button = null;
                 tobj.current_artwork = null;
+                break;
+            case "ButtonPanelToggled": //Done minus timer
+                tobj.current_artwork = null;
+                tobj.time_spent = null;
+                break;
+            case "ToggleSidebar":       //Done minus timer
+                tobj.sidebar_open = null;
+                tobj.current_artwork = null;
+                tobj.time_spent = null;
                 break;
             default:
                 console.log(tobj.ttype + " is not a valid event.");
