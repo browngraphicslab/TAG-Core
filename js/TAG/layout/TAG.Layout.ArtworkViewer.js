@@ -1397,15 +1397,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             tobj.time_spent = null;
             tobj.drawer_header = "Maps";
         });
-        /*
-        TAG.Telemetry.register(drawerHeader, 'click', 'Drawer', function(tobj) {                                
-                tobj.current_artwork = doq.Identifier;
-                tobj.toggle = toggle.attr("expanded"); //expanded or collapsed
-                tobj.time_spent = null;
-                tobj.drawer_header = drawerHeader.text();
-                console.log(drawerHeader.text());
-        });
-        */
+
         if (TAG.Util.Splitscreen.isOn()) {
             locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
         }
