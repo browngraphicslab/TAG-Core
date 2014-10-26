@@ -8,11 +8,6 @@ TAG.TelemetryEvents = (function () {
     function initEventProperties(tobj){
         switch (tobj.ttype){
             //Collections Page Events
-            case "BackButton": //There isn't a back button...
-                tobj.current_page = null;
-                tobj.next_page = null;
-                tobj.time_spent = null;
-                break;
             case "SortOptions":         //done
                 tobj.sort_type = null;
                 tobj.current_collection = null;
@@ -44,6 +39,11 @@ TAG.TelemetryEvents = (function () {
                 tobj.time_spent = null;
                 break;
             //Artwork Viewer Events
+            case "BackButton": //Done minus timer
+                tobj.current_artwork = null;
+                tobj.next_page = null;
+                tobj.time_spent = null;
+                break;
             case "Description":
                 tobj.current_artwork = null;
                 tobj.toggle = null; //expanded or collapsed

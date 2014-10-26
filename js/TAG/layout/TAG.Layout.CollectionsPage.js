@@ -592,7 +592,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tobj.current_collection = currCollection.Identifier;
                     tobj.next_collection = visibleCollections[dot_index].Identifier;
                     tobj.time_spent = nav_timer.get_elapsed();
-                    //console.log("nav timer: " + tobj.time_spent);
                     nav_timer.restart();
                     tobj.navigation_type = "navigation_dot";
                 });
@@ -1412,6 +1411,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 yearText,
                 tourLabel,
                 videoLabel,
+                click,
                 showLabel = true;
   
             //var uiDocfrag = document.createDocumentFragment();
@@ -1444,17 +1444,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
                         if (previouslyClicked === main) {
+                            click = "double";
                             switchPage(currentWork, null, getContainerLeft(currentWork, false))();
                         } else {
+                            click = "single";
                             previouslyClicked = main;
                             setTimeout(function () { previouslyClicked = null }, 1000)
                         }
                     } else {
                         TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
                             if (previouslyClicked === main) {
+                                click = "double";
                                 switchPage(doqs[0], currentWork, getContainerLeft(currentWork,false))();
                             } else {
                                 previouslyClicked = main;
+                                click = "single";
                                 setTimeout(function () { previouslyClicked = null }, 1000);
                             }
                         }, function () {
@@ -1466,7 +1470,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 }();
             } 
-                main.on('click', function () {
+                main.on('click', function () {                
                     doubleClickHandler()
 
                     // if the idle timer hasn't started already, start it
@@ -1480,12 +1484,25 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     justShowedArtwork = true;
                 })         
             
-            TAG.Telemetry.register(main, 'click', '', function(tobj) {
-                var type;
-                tobj.ttype = 'artwork_tile';
-                tobj.custom_1 = CryptoJS.SHA1(currentWork.Name).toString(CryptoJS.enc.Base64);
-                tobj.mode = 'Kiosk';
-                justShowedArtwork = false;
+            TAG.Telemetry.register(main, 'click', 'ArtworkPreviewer', function(tobj) {
+                setTimeout(function () {        //timeout so that we can wait for the click type to update
+
+                tobj.click_type = click; //single or double click on the preview tile. How do we do this?
+                tobj.selected_artwork = currentWork.Identifier;
+                tobj.is_tour = false;
+                if(currentWork.type === 'Tour') {
+                    tobj.is_tour = true;
+                }
+                
+                tobj.current_collection = currCollection;
+                tobj.tap_to_explore = null;         //How to do this?
+                tobj.close_button = null;
+                tobj.assoc_media = null;        //Is this supposed to register the associated media that was clicked?
+                tobj.time_spent = null; //time spent in the previewer
+
+
+                }, 2000);
+                
             });
 
             // Set tileImage to thumbnail image, if it exists
