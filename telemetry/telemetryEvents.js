@@ -39,7 +39,7 @@ TAG.TelemetryEvents = (function () {
                 tobj.time_spent = null;
                 break;
             //Artwork Viewer Events
-            case "BackButton": //Done minus timer
+            case "BackButton": //Done
                 tobj.current_artwork = null;
                 tobj.next_page = null;
                 tobj.time_spent = null;

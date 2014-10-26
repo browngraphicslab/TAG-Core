@@ -60,6 +60,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         mediaHolders     = [],                      // array of thumbnail buttons
         loadQueue        = TAG.Util.createQueue(),  // async queue for thumbnail button creation, etc
         screenWidth      = $('#tagRoot').width(),      // Width of entire tag screen (for split screen styling)
+        telemetry_timer  = new TelemetryTimer(),       //Timer for telemetry
         
 
         // misc uninitialized vars
@@ -678,7 +679,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         TAG.Telemetry.register(backButton, 'click', 'BackButton', function(tobj) {
             tobj.current_artwork = doq.Identifier;
             tobj.next_page = prevCollection;
-            tobj.time_spent = null;     //TODO timer
+            tobj.time_spent = telemetry_timer.get_elapsed();
         });
         
         if (IS_WEBAPP && !locked) {
