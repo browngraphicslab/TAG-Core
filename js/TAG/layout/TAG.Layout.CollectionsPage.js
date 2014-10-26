@@ -189,9 +189,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if(evt.which != 13) {
                 return true;
             }
+
             tobj.search_text = searchTxt.text();
             tobj.current_collection = currCollection.Identifier;
-            tobj.number_of_matches = searchResultsLength;
+            setTimeout(function () { 
+                tobj.number_of_matches = searchResultsLength; 
+            }, 2000);       //Delay so that searchResultsLength gets updated
+            
         });
 
         searchInput.css({
@@ -1501,8 +1505,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tobj.close_button = null;
                 tobj.assoc_media = null;        //Is this supposed to register the associated media that was clicked?
                 tobj.time_spent = null; //time spent in the previewer
-
-
                 }, 2000);
                 
             });
