@@ -471,8 +471,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tobj.overlay_type = "info"; //info or tutorial page
             tobj.current_collection = currCollection.Identifier;
             tobj.time_spent = telemetry_timer.get_elapsed();
-            //console.log("current collection " + tobj.current_collection);
-            //console.log("elapsed " + tobj.time_spent);
         });
     }
 

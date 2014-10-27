@@ -88,6 +88,24 @@ TAG.Telemetry = (function() {
 		});
 	}
 
+	//Manually record events from the existing event handlers instead of registering an additional handler
+	function recordEvent(ttype, prehandler) {
+		var tobj = {
+		        ttype: ttype,		        
+		    };
+		    tobj.is_splitscreen =  TAG.Util.Splitscreen.isOn();
+		    TAG.TelemetryEvents.initEventProperties(tobj);
+		    // if preHandler returns true, return
+		    if ((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH === 'off') {
+		        console.log(TELEMETRY_SWITCH);
+				return;
+			}
+		    requests.push(tobj);		   
+			if (requests.length >= sendFreq - 1) { // tweak this later			    
+				postTelemetryRequests();
+			} 
+	}
+
 	/**
 	 * Make a request to the telemetry server using the requests variable
 	 * @method postTelemetryRequests

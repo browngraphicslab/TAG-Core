@@ -50,9 +50,8 @@ TAG.TelemetryEvents = (function () {
                 tobj.time_spent = null;
                 tobj.drawer_header = null;
                 break;
-            case "Maps":
+            case "Maps":        //Moved the drawer aspect to the generic Drawer event. 
                 tobj.current_artwork = null;
-                tobj.expanded = null;
                 tobj.pins_clicked = null;
                 tobj.locations_clicked = null;
                 tobj.maps_viewed = null;
@@ -67,9 +66,10 @@ TAG.TelemetryEvents = (function () {
                 tobj.event_type = null; //Tour Clicked in artwork viewer, hide menu arrow in artwork viewer, navigation minimap interaction, splitscreen initialized/closed
                 tobj.current_artwork = null;
                 break;
-            case "ControlButton": //Done for seaDragon and keypress
+            case "Manipulation": //Done for seaDragon and keypress
                 tobj.control_type = null;
-                tobj.button = null;
+                tobj.media_manipulated = null;
+                tobj.navigation = null;
                 tobj.current_artwork = null;
                 break;
             case "ButtonPanelToggled": //Done minus timer

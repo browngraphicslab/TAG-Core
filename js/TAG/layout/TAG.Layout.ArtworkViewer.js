@@ -409,13 +409,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             return img;
         }
-        
+        /*      //TODO change to record_event
         TAG.Telemetry.register(root.find("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"), 'click', 'ControlButton', function (tobj, evt) {
             tobj.control_type = "seadragon_click"
             tobj.button = evt.target.id;
             tobj.current_artwork = doq.Identifier;
         });
-        
+        */
         /**
          * Keydown handler for artwork manipulation; wrapper around doManip that first
          * prevents default key behaviors
@@ -487,9 +487,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
 
         // TODO merge: need to fix the $(...) calls above for splitscreen
-
         
-
         $(document).on('keydown', function(evt) {
             if(containerFocused) {
                 switch(evt.which) {
@@ -557,15 +555,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         root.find('.seadragonManipButtoninout').on('mouseup mouseleave', function () {
             clearInterval(interval);
         });
-
-        TAG.Telemetry.register($("[tabindex='-1']"),'keydown','ControlButton',function(tobj){
-            if (containerFocused===false){
-                return true;
-            }
-            tobj.control_type = "seadragon_keypress";
-            tobj.button = evt.which;        //Keycode
-            tobj.current_artwork = doq.Identifier;
-        });
+        
     }
 
     /**
