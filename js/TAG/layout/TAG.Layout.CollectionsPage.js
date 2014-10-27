@@ -118,7 +118,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileCircle,                     // loading circle for artwork tiles
 
         //TELEMETRY
-        nav_timer = new TelemetryTimer();
+        nav_timer = new TelemetryTimer(),
+        global_artwork_prev_timer = new TelemetryTimer();
 
     if (SECONDARY_FONT_COLOR[0] !== '#') {
         SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
@@ -1486,6 +1487,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     justShowedArtwork = true;
                 })         
             
+            //TODO move this into the hideArtwork function
             TAG.Telemetry.register(main, 'click', 'ArtworkPreviewer', function(tobj) {
                 setTimeout(function () {        //timeout so that we can wait for the click type to update
 
@@ -2062,6 +2064,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             zoomTimeline();
             catalogDiv.stop(true,false);
             artworkShown = false;
+
+            //REGISTER ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+            /*
+            TAG.Telemetry.register(selectedArtworkContainer, 'click', 'ArtworkPreviewer', function(tobj) {
+
+                tobj.click_type = null; //TODO
+                tobj.selected_artwork = artwork.Identifier;
+                tobj.is_tour = false;
+                if(currentWork.type === 'Tour') {
+                    tobj.is_tour = true;
+                }
+                tobj.current_collection = currCollection;
+                tobj.tap_to_explore = null; 
+                tobj.close_button = null;
+                tobj.assoc_media = null;  
+                tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                global_artwork_prev_timer.restart();
+                console.log("artwork previewer time = " + tobj.time_spent);
+            });
+            */
         };
     }
 
