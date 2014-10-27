@@ -89,14 +89,14 @@ TAG.Telemetry = (function() {
 	}
 
 	//Manually record events from the existing event handlers instead of registering an additional handler
-	function recordEvent(ttype, prehandler) {
+	function recordEvent(ttype, preHandler) {
 		var tobj = {
 		        ttype: ttype,		        
 		    };
 		    tobj.is_splitscreen =  TAG.Util.Splitscreen.isOn();
 		    TAG.TelemetryEvents.initEventProperties(tobj);
 		    // if preHandler returns true, return
-		    if ((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH === 'off') {
+		    if ((preHandler && preHandler(tobj)) || TELEMETRY_SWITCH === 'off') {
 		        console.log(TELEMETRY_SWITCH);
 				return;
 			}
@@ -131,6 +131,7 @@ TAG.Telemetry = (function() {
 
 	return {
 	    register: register,
+	    recordEvent: recordEvent,
         pushMetaData : pushMetaData
 	}
 })();
