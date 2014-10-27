@@ -119,7 +119,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         //TELEMETRY
         nav_timer = new TelemetryTimer(),
-        global_artwork_prev_timer = new TelemetryTimer(); //initialized here, restarted when previewer is opened
+        global_artwork_prev_timer = new TelemetryTimer(), //initialized here, restarted when previewer is opened
+        previewer_exit_click; //keeps track of how the previewer was closed
 
     if (SECONDARY_FONT_COLOR[0] !== '#') {
         SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
@@ -2268,6 +2269,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Set selected artwork to hide when anything else is clicked
             root.on('mouseup', function(e) {
+
+                //TELEMETRY STUFF
+                //TODO
+                if (e.target.id.toString()){
+                    previewer_exit_click = e.target.id.toString();
+                    console.log(previewer_exit_click);
+                } else {
+                    console.log("closed previewer; target has no id");
+                }
+
                 var subject = selectedArtworkContainer;
                 if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length){    
                     if (artworkShown){
