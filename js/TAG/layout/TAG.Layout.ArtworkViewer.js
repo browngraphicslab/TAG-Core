@@ -61,6 +61,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         loadQueue        = TAG.Util.createQueue(),  // async queue for thumbnail button creation, etc
         screenWidth      = $('#tagRoot').width(),      // Width of entire tag screen (for split screen styling)
         telemetry_timer  = new TelemetryTimer(),       //Timer for telemetry
+        register_slideButton,                          //for telemetry 
         
 
         // misc uninitialized vars
@@ -329,10 +330,20 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }   
         });
         
+        var first_time = true,
+            telem_timer = new TelemetryTimer();
+        
         TAG.Telemetry.register(slideButton,'click','ButtonPanelToggled',function(tobj){
+            if (first_time || count){ //registering only when the button panel is open and for how long it was open
+                telemetry_timer.restart();
+                first_time = false;
+                return true;
+            }
             tobj.current_artwork = doq.Identifier;
-            tobj.time_spent = null;
+            tobj.time_spent = telemetry_timer.get_elapsed();
+            //console.log(tobj.time_spent);
         });
+
 
         container.append(slideButton);
         var sdleftbtn = createButton('leftControl', tagPath + 'images/icons/zoom_left.svg'),
@@ -667,6 +678,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         TAG.Util.UI.setUpBackButton(backButton, goBack);
         TAG.Telemetry.register(backButton, 'click', 'BackButton', function(tobj) {
+
+            //for the seadragon controls, if the back button is pressed when they are open
+            root.find('#seadragonManipSlideButton').click();
+
             tobj.current_artwork = doq.Identifier;
             tobj.next_page = prevCollection;
             tobj.time_spent = telemetry_timer.get_elapsed();
