@@ -76,7 +76,7 @@ TAG.TelemetryEvents = (function () {
                 tobj.current_artwork = null;
                 tobj.time_spent = null;
                 break;
-            case "ToggleSidebar":       //Done minus timer
+            case "ToggleSidebar":       //Done - registering only when the sidebar menu is open and for how long it is open
                 tobj.sidebar_open = null;
                 tobj.current_artwork = null;
                 tobj.time_spent = null;

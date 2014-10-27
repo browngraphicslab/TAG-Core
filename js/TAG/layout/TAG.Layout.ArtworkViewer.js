@@ -61,7 +61,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         loadQueue        = TAG.Util.createQueue(),  // async queue for thumbnail button creation, etc
         screenWidth      = $('#tagRoot').width(),      // Width of entire tag screen (for split screen styling)
         telemetry_timer  = new TelemetryTimer(),       //Timer for telemetry
-        register_slideButton,                          //for telemetry 
         
 
         // misc uninitialized vars
@@ -682,7 +681,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             tobj.sidebar_open = !isBarOpen;
             tobj.current_artwork = doq.Identifier;   
             tobj.time_spent = t_timer.get_elapsed();
-            console.log(tobj.time_spent);
+            //console.log(tobj.time_spent);
         });
 
         TAG.Util.UI.setUpBackButton(backButton, goBack);
