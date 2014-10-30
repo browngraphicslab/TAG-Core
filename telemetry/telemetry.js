@@ -5,7 +5,8 @@ TAG.Telemetry = (function () {
         sessionDataRequests = [],
 		sendFreq = 1,  // telemetry data is sent once every sendFreq-th log
 	    bversion = browserVersion(),
-	    platform = navigator.platform;
+	    platform = navigator.platform,
+        pushMetaDataCount = 0;
 
 
     /**
@@ -30,27 +31,30 @@ TAG.Telemetry = (function () {
     * Push the main_tobj onto the requests once at the beginning of the session.
     */
     function pushMetaData() { //called in core.js on startup if telemetry is switched on.
-        if (TELEMETRY_SWITCH === 'on') {
-            var date = new Date();
-            var property = {
-                token: "metadata",
-            };
+        if (pushMetaDataCount < 1) {
+            if (TELEMETRY_SWITCH === 'on') {
+                pushMetaDataCount++;
+                console.log("pushmetadata called in telemetry.js");
+                var date = new Date();
+                var property = {
+                    token: "metadata",
+                };
 
-            var main_tobj = {
-                tagserver: localStorage.ip || '',
-                browser: bversion,
-                platform: platform,
-                time_stamp: date.getTime(),
-                time_human: date.toString(),
-                machine_id: localStorage.machId,
-                session_id: TELEMETRY_SESSION_ID,
-            };
+                var main_tobj = {
+                    tagserver: localStorage.ip || '',
+                    browser: bversion,
+                    platform: platform,
+                    time_stamp: date.getTime(),
+                    time_human: date.toString(),
+                    machine_id: localStorage.machId,
+                    session_id: TELEMETRY_SESSION_ID,
+                };
 
-            metaDataRequests.push(property);
-            metaDataRequests.push(main_tobj);
-            postMetaDataRequests();
-            console.log("pushmetadata called in telemetry.js");
-            console.log("metadataobj is " + " " + main_tobj);
+                metaDataRequests.push(property);
+                metaDataRequests.push(main_tobj);
+                postMetaDataRequests();
+                console.log("metadataobj is " + " " + main_tobj);
+            }
         }
     }
 
@@ -67,6 +71,8 @@ TAG.Telemetry = (function () {
 	 *                                     further handling.
 	 */
     function register(element, etype, ttype, preHandler) {
+        console.log("register called in telemetry.js");
+        
         $(element).on(etype + '.tag_telemetry', function (evt) {
 
             //TODO: Check for ttype and set the required properties for each ttype to null using switch-case statements. These properties will be set in the prehandler when a particular element is registered depending on its ttype. All other generic properties are set here. 
@@ -84,14 +90,13 @@ TAG.Telemetry = (function () {
             tobj.is_splitscreen = TAG.Util.Splitscreen.isOn();
             TAG.TelemetryEvents.initEventProperties(tobj);
             console.log("asjdkld");
+            console.log("sessiondataobj is " + " " + tobj);
 
             // if preHandler returns true, return
             if ((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH === 'off') {
-                console.log(TELEMETRY_SWITCH);
                 return;
             }
-            console.log("register called in telemetry.js");
-            console.log("sessiondataobj is " + " " + tobj);
+            
             sessionDataRequests.push(property);
             sessionDataRequests.push(tobj);
 
@@ -106,6 +111,7 @@ TAG.Telemetry = (function () {
 
     //Manually record events from the existing event handlers instead of registering an additional handler
     function recordEvent(ttype, preHandler) {
+        console.log("record called in telemetry.js");
         var tobj = {
             ttype: ttype,
             session_id: TELEMETRY_SESSION_ID,
@@ -115,14 +121,13 @@ TAG.Telemetry = (function () {
         TAG.TelemetryEvents.initEventProperties(tobj);
         // if preHandler returns true, return
         if ((preHandler && preHandler(tobj)) || TELEMETRY_SWITCH === 'off') {
-            console.log(TELEMETRY_SWITCH);
             return;
         }
         sessionDataRequests.push(tobj);
         if (sessionDataRequests.length >= sendFreq - 1) { // tweak this later			    
             postSessionDataRequests();
         }
-        console.log("record called in telemetry.js");
+       
     }
 
     /**
@@ -130,6 +135,7 @@ TAG.Telemetry = (function () {
 	 * @method postTelemetryRequests
 	 */
     function postMetaDataRequests() {
+        console.log("post metadata requests called");
         var data = JSON.stringify(metaDataRequests);
 
         metaDataRequests.length = 0;
@@ -149,6 +155,7 @@ TAG.Telemetry = (function () {
     }
 
     function postSessionDataRequests() {
+        console.log("post session data requests called");
         var data = JSON.stringify(sessionDataRequests);
 
         sessionDataRequests.length = 0;
