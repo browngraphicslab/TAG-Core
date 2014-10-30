@@ -72,11 +72,11 @@ TAG.TelemetryEvents = (function () {
                 tobj.navigation = null;
                 tobj.current_artwork = null;
                 break;
-            case "ButtonPanelToggled": //Done minus timer
+            case "ButtonPanelToggled": //Done - actually registering only when the button panel is open and for how long it was open
                 tobj.current_artwork = null;
                 tobj.time_spent = null;
                 break;
-            case "ToggleSidebar":       //Done minus timer
+            case "ToggleSidebar":       //Done - registering only when the sidebar menu is open and for how long it is open
                 tobj.sidebar_open = null;
                 tobj.current_artwork = null;
                 tobj.time_spent = null;

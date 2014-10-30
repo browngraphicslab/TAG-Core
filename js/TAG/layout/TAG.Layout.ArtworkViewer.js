@@ -329,10 +329,20 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }   
         });
         
+        var first_time = true,
+            telem_timer = new TelemetryTimer();
+        
         TAG.Telemetry.register(slideButton,'click','ButtonPanelToggled',function(tobj){
+            if (first_time || count){ //registering only when the button panel is open and for how long it was open
+                telemetry_timer.restart();
+                first_time = false;
+                return true;
+            }
             tobj.current_artwork = doq.Identifier;
-            tobj.time_spent = null;
+            tobj.time_spent = telemetry_timer.get_elapsed();
+            //console.log(tobj.time_spent);
         });
+
 
         container.append(slideButton);
         var sdleftbtn = createButton('leftControl', tagPath + 'images/icons/zoom_left.svg'),
@@ -660,13 +670,29 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen)^(!isLeft) ? 'Close.svg' : 'Open.svg'));
             });
         });
-        TAG.Telemetry.register(toggler, 'click', 'ToggleSidebar', function(tobj) {
-            tobj.sidebar_open = isBarOpen;
-            tobj.current_artwork = doq.Identifier;        
+
+        var t_timer = new TelemetryTimer();
+
+        TAG.Telemetry.register(toggler, 'mouseup', 'ToggleSidebar', function(tobj) {
+            if (!isBarOpen){
+                t_timer.restart();
+                return true;
+            }
+            tobj.sidebar_open = !isBarOpen;
+            tobj.current_artwork = doq.Identifier;   
+            tobj.time_spent = t_timer.get_elapsed();
+            //console.log(tobj.time_spent);
         });
 
         TAG.Util.UI.setUpBackButton(backButton, goBack);
         TAG.Telemetry.register(backButton, 'click', 'BackButton', function(tobj) {
+
+            //for the seadragon controls, if the back button is pressed when they are open
+            root.find('#seadragonManipSlideButton').click();
+
+            //same for the left menu sidebar
+            toggler.mouseup();
+
             tobj.current_artwork = doq.Identifier;
             tobj.next_page = prevCollection;
             tobj.time_spent = telemetry_timer.get_elapsed();

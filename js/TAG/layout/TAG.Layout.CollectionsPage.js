@@ -119,7 +119,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         //TELEMETRY
         nav_timer = new TelemetryTimer(),
-        global_artwork_prev_timer = new TelemetryTimer();
+        global_artwork_prev_timer = new TelemetryTimer(), //initialized here, restarted when previewer is opened
+        previewer_exit_click; //keeps track of how the previewer was closed
 
     if (SECONDARY_FONT_COLOR[0] !== '#') {
         SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
@@ -1486,8 +1487,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     zoomTimeline(artworkCircles[currentWork.Identifier])
                     justShowedArtwork = true;
                 })         
-            
-            //TODO move this into the hideArtwork function
+            /*
+            //THIS HAS BEEN MOVED TO THE HIDEARTWORK FUNCTION
             TAG.Telemetry.register(main, 'click', 'ArtworkPreviewer', function(tobj) {
                 setTimeout(function () {        //timeout so that we can wait for the click type to update
 
@@ -1506,6 +1507,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }, 2000);
                 
             });
+            */
 
             // Set tileImage to thumbnail image, if it exists
             if(currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio" ) {
@@ -2065,14 +2067,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.stop(true,false);
             artworkShown = false;
 
-            //REGISTER ARTWORK PREVIEWER CLOSE FOR TELEMETRY
-            /*
-            TAG.Telemetry.register(selectedArtworkContainer, 'click', 'ArtworkPreviewer', function(tobj) {
-
+            //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+            TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
                 tobj.click_type = null; //TODO
                 tobj.selected_artwork = artwork.Identifier;
                 tobj.is_tour = false;
-                if(currentWork.type === 'Tour') {
+                if(artwork.type === 'Tour') {
                     tobj.is_tour = true;
                 }
                 tobj.current_collection = currCollection;
@@ -2080,10 +2080,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tobj.close_button = null;
                 tobj.assoc_media = null;  
                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                global_artwork_prev_timer.restart();
-                console.log("artwork previewer time = " + tobj.time_spent);
+                //console.log(tobj.time_spent);
+                //timer reset in showArtwork
             });
-            */
+            
         };
     }
 
@@ -2148,6 +2148,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function showArtwork(artwork, showAllAtYear) {
         return function () {
             
+            if (!artworkShown){ //FOR NOW - switching between artworks in the previewer does not 
+                                //reset the timer, and the total time spent with the previewer
+                                //open is recorded (this is only one event)
+                //console.log("restarting previewer timer");
+                global_artwork_prev_timer.restart(); //restarts the previewer timer for telemetry
+            }
+
             var rootWidth,
                 infoWidth,
                 tileWidth,
@@ -2262,6 +2269,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Set selected artwork to hide when anything else is clicked
             root.on('mouseup', function(e) {
+
+                //TELEMETRY STUFF
+                //TODO
+                if (e.target.id.toString()){
+                    previewer_exit_click = e.target.id.toString();
+                    console.log(previewer_exit_click);
+                } else {
+                    console.log("closed previewer; target has no id");
+                }
+
                 var subject = selectedArtworkContainer;
                 if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length){    
                     if (artworkShown){
