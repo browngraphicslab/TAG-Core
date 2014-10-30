@@ -82,11 +82,13 @@ TAG.TelemetryEvents = (function () {
                 tobj.sidebar_open = null;
                 tobj.current_artwork = null;
                 tobj.time_spent = null;
+                tobj.input_device = null;
                 break;
             case "VideoPlayer":
                 tobj.current_video = null;
                 tobj.collection = null;
                 tobj.interaction = null;
+                tobj.input_device = null;
                 break;
             default:
                 console.log(tobj.ttype + " is not a valid event.");

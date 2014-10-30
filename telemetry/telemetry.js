@@ -86,6 +86,7 @@ TAG.Telemetry = (function () {
                 ttype: ttype,
                 session_id: TELEMETRY_SESSION_ID,
                 machine_id: localStorage.machId,
+                input_device: null
             };
             tobj.is_splitscreen = TAG.Util.Splitscreen.isOn();
             TAG.TelemetryEvents.initEventProperties(tobj);
@@ -116,6 +117,7 @@ TAG.Telemetry = (function () {
             ttype: ttype,
             session_id: TELEMETRY_SESSION_ID,
             machine_id: localStorage.machId,
+            input_device: null
         };
         tobj.is_splitscreen = TAG.Util.Splitscreen.isOn();
         TAG.TelemetryEvents.initEventProperties(tobj);
