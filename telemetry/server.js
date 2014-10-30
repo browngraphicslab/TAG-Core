@@ -10,7 +10,10 @@
     var http = require('http'),
 	fs = require('fs'),
 	Connection = require('tedious').Connection,
-	qs = require('querystring');
+	qs = require('querystring'),
+    mkdirp = require('mkdirp');
+    machine_id_list = [];
+    session_id_list= [];
 
     // some constants
     var PORT = 12043,
@@ -244,7 +247,15 @@
         return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
     }
 
-
+    function contains(a, obj) {
+        var i = a.length;
+        while (i--) {
+            if (a[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
 	 * Writes telemetry data to a log file (specified by LOG_FILE_PATH).
 	 * Set the global WRITE_DATA = writeTDataToFile to log data in this way.
@@ -252,22 +263,51 @@
 	 * @param {Object} tdata     the telemetry data object to stringify and write to file
 	 */
     function writeTDataToFile(tdata) {
-        fs.writeFile(LOG_FILE_PATH, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
-            var key;
-            if (err) {
-                console.log('err: ' + err);
-            } else {
-                console.log('interaction successfully written to log:');
-                for (key in tdata) {
-                    if (tdata.hasOwnProperty(key) && key !== 'platform' && key !== 'browser' && key !== 'time_stamp') {
-                        console.log('      ' + key + ': ' + tdata[key]);
+        if (contains(machine_id_list, tdata.machine_id) === false) {
+            var newDirPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + tdata.machine_id;
+            var newPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + tdata.machine_id + '/';
+            fs.mkdir(newDirPath, function (err) {
+                console.log("Error making directory!");
+            });
+            machine_id_list.append(tdata.machine_id);
+           
+            fs.appendFile(newPath+tdata.session_id, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
+                var key;
+                if (err) {
+                    console.log('err: ' + err);
+                } else {
+                    console.log('interaction successfully written to log:');
+                    for (key in tdata) {
+                        if (tdata.hasOwnProperty(key) && key !== 'platform' && key !== 'browser' && key !== 'time_stamp') {
+                            console.log('      ' + key + ': ' + tdata[key]);
+                        }
                     }
+                    console.log('');
                 }
-                console.log('');
-            }
-        });
-    }
+            });
+        } else {
+            var existingPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + tdata.machine_id + '/';
+            fs.appendFile(existingPath + tdata.session_id, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
+                var key;
+                if (err) {
+                    console.log('err: ' + err);
+                } else {
+                    console.log('interaction successfully written to log:');
+                    for (key in tdata) {
+                        if (tdata.hasOwnProperty(key) && key !== 'platform' && key !== 'browser' && key !== 'time_stamp') {
+                            console.log('      ' + key + ': ' + tdata[key]);
+                        }
+                    }
+                    console.log('');
+                }
+            });
 
+        }
+            
+     }
+            
+        
+ 
     /**
 	 * Reads telemetry data from a file (specified by LOG_FILE_PATH) and
 	 * returns it to client in a response.
