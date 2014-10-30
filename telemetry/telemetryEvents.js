@@ -62,7 +62,22 @@ TAG.TelemetryEvents = (function () {
                 tobj.current_artwork = null;
                 tobj.assoc_media = null; //the associated media that was clicked
                 tobj.assoc_media_interactions = null; //TODO what is this
+				tobj.final_position_x = null;
+                tobj.final_position_y = null;
+				tobj.final_position_h = null;
+                tobj.offscreen = null;
+                tobj.is_from_seadragon = null;
+                tobj.function = null;
+				tobj.scale = null;
                 break;
+			case "ArtworkManip":
+				tobj.artwork = null;
+				tobj.pivot_x = null;
+                tobj.pivot_y = null;
+                tobj.trans_x = null;
+                tobj.trans_y = null;
+                tobj.scale = null;
+                tobj.function = null;
             case "GenericArtworkEvent":
                 tobj.event_type = null; //Tour Clicked in artwork viewer, hide menu arrow in artwork viewer, navigation minimap interaction, splitscreen initialized/closed
                 tobj.current_artwork = null;
