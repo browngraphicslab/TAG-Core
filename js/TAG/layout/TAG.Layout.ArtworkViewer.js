@@ -1520,7 +1520,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 tobj.toggle = toggle.attr("expanded"); //expanded or collapsed
                 tobj.time_spent = null;
                 tobj.drawer_header = drawerHeader.text();
-                console.log(drawerHeader.text());
         });
         drawer.contents = drawerContents;
         if (assocMediaToShow && title === 'Associated Media') {

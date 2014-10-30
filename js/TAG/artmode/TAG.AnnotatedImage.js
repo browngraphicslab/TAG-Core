@@ -692,7 +692,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @return {Object}       some public methods to be used in other files
      */
     function createMediaObject(mdoq, linq) {
-        console.log("CREATING MEDIA OBJECTS")
         var // DOM-related
             outerContainer = $(document.createElement('div')).addClass('mediaOuterContainer'),
             innerContainer = $(document.createElement('div')).addClass('mediaInnerContainer'),
@@ -741,7 +740,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @method initMediaObject
          */
         function initMediaObject() {
-
             if (IS_XFADE && linq.Offset && linq.Dimensions) {
                 outerContainer.css({
                     'border': '1px solid rgba(255,255,255,0.4)',
@@ -793,6 +791,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 closeButton.on('click', function (evt) {
                     evt.stopPropagation();
                     hideMediaObject();
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                        tobj.assoc_media_interactions = "close"; //TODO what is this
+                    });
                 });
                 titleDiv.append(closeButton[0]);               
 
@@ -847,7 +850,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     event.preventDefault();
                     TAG.Util.IdleTimer.restartTimer();
                     mediaManipPreprocessing();
-
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                        tobj.assoc_media_interactions = "set_active"; //TODO what is this
+                    });
                     // If event is initial touch on artwork, save current position of media object to use for animation
                     outerContainer.startLocation = {
                             x: outerContainer.position().left,
@@ -1820,6 +1827,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             }
 
             mediaHidden = false;
+            TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                tobj.current_artwork = doq.Identifier;
+                tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                tobj.assoc_media_interactions = "open"; //TODO what is this
+            });
 
             if (hotspotMediaHidden) {
                 hotspotMediaHidden = false;
