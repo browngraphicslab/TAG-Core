@@ -10,7 +10,6 @@
     var http = require('http'),
 	fs = require('fs'),
 	Connection = require('tedious').Connection,
-	main_tobj_posted = 0,
 	qs = require('querystring');
 
     // some constants
@@ -19,7 +18,7 @@
 	MAX_BODY_LENGTH = Math.pow(10, 6),
 	WRITE_DATA = writeTDataToFile,
 	READ_DATA = readTDataFromFile,
-	LOG_FILE_PATH = 'telemetry_log.txt';
+	LOG_FILE_PATH = 'C:\Users\Garibaldi\Desktop\sample_telemetry.txt';
 
 
     // create server
@@ -27,12 +26,7 @@
         console.log("server created");
         switch (request.method.toLowerCase()) {
             case 'post':
-                if (main_tobj_posted === 0) {
-                    handleMainObjPost(request, response);
-                }
-                if (main_tobj_posted === 1) {
-                    handleTelemetryObjPost(request, response);
-                }
+                handlePost(request, response);
                 break;
             case 'get':
                 handleGet(request, response);
@@ -62,7 +56,7 @@
 
     var Request = require('tedious').Request;
 
-    function handleMainObjPost(request, response) {
+    function handlePost(request, response) {
         console.log("Post request" + request);
         var requestBody = '',
 	 	requestDecrypt = '',
@@ -109,37 +103,66 @@
 			xml_tobj;
 
             parsedBody = JSON.parse(requestBody); // parse body to js object
+            if (parsedBody[0].token === "metadata") {
+                main_tobj = parsedBody[1];
+                var connection = new Connection(config); //create a new tedious connection to connect to the database mentioned in config
+                console.log("reaches metadata area");
+                connection.on("connect", function (err) {
+                    console.log("reaches2");
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        console.log("connection created");
+                        var req = new Request("INSERT INTO tmetrytesttable(tagserver,browser,platform,time_stamp,time_human,machine_id,session_id) VALUES ('" + main_tobj.tagserver
+    + "','" + main_tobj.browser + "','" + main_tobj.platform + "','" + main_tobj.time_stamp + "','" + main_tobj.time_human + "','" + main_tobj.machine_id + "','" + main_tobj.session_id + "')", function (err, rowCount) {
+        if (err) {              //insert main tobj into each row of the table
+            console.log(err);
+        }
+        else {
+            console.log(rowCount + ' rows');
+        }
+    });
 
+                        req.on('row', function (columns) {
+                            columns.forEach(function (column) {
+                                console.log(column.value);
 
-            main_tobj = parsedBody[0];
-            var connection = new Connection(config); //create a new tedious connection to connect to the database mentioned in config
-            console.log("reaches here");
-            connection.on("connect", function (err) {
-                console.log("reaches2");
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    console.log("connection created");
-                    var req = new Request("INSERT INTO tmetrytesttable(tagserver,browser,platform,time_stamp,time_human,machine_id,session_id) VALUES ('" + main_tobj.tagserver + "','" + main_tobj.browser + "','" + main_tobj.platform + "','" + main_tobj.time_stamp + "','" + main_tobj.time_human + "','" + main_tobj.machine_id + "','" + main_tobj.session_id + "'", function (err, rowCount) {
-                        if (err) {              //insert main tobj into each row of the table
-                            console.log(err);
-                        }
-                        else {
-                            console.log(rowCount + ' rows');
-                        }
-                    });
-
-                    req.on('row', function (columns) {
-                        columns.forEach(function (column) {
-                            console.log(column.value);
-
+                            });
                         });
-                    });
-                    connection.execSql(req);
+                        connection.execSql(req);
+                    }
+                });
+
+            }
+
+
+            if (parsedBody[0].token === "sessiondata") {
+
+                for (i = 1; i < parsedBody.length; i++) {
+                    console.log("reaches the session data loop ");
+                    tobj = parsedBody[i];
+                    WRITE_DATA(tobj);
+                    xml_tobj = json2xml(tobj, 2);
                 }
-            });
-            main_tobj_posted = 1;
+            }
+
+
+
+
+            // tdata = {
+            // 	time_stamp: tobj.time_stamp || NOT_AVAIL,                   // milliseconds since 1970
+            // 	type:       tobj.ttype      || NOT_AVAIL,                   // type of telemetry request
+            // 	tagserver:  tobj.tagserver  || NOT_AVAIL,                   // TAG server to which computer is connected
+            // 	browser:    tobj.browser    || NOT_AVAIL,                   // browser
+            // 	platform:   tobj.platform   || NOT_AVAIL,                   // platform (e.g., Mac)
+            // 	time_human: tobj.time_human || NOT_AVAIL,                   // human-readable time
+            // 	additional: tobj.additional ? JSON.stringify(tobj.additional) : NOT_AVAIL // any additional info
+            // };
+
+            //WRITE_DATA(tdata);
+
+
             response.writeHead(200, {
                 'Content-Type': 'text/plain',
                 'Access-Control-Allow-Origin': '*'
@@ -148,62 +171,6 @@
         });
     }
 
-    function handleTelemetryObjPost(request, response) {
-        var requestBody = '',
-            requestDecrypt = '',
-            requestParse = '',
-            key = '',
-            iv = '',
-            parsedBody,
-            date = new Date(),
-            printData,
-                tdata; // telemetry data
-        //TODO:This should work with a bit of tweaking (I am not sure which data to decrypt, request or dataChunk?
-        //require("crypto-js", function(CryptoJS){
-        //	key = CryptoJS.enc.Base64.parse("#base64Key#");
-        //	iv  = CryptoJS.enc.Base64.parse("#base64IV#");
-        //	requestDecrypt = CryptoJS.AES.decrypt(request, key, {iv: iv})
-        //});
-        //console.log(requestDecrypt);
-        //requestParse = JSON.parse(requestDecrypt);
-
-
-
-        // read in data from request as it becomes available
-        request.on('data', function (dataChunk) {
-
-
-
-
-            requestBody += dataChunk;
-
-
-            // if too much data, could be malicious, cut it off. our data will be small anyway...
-            if (requestBody.length > MAX_BODY_LENGTH) {
-                request.connection.destroy();
-            }
-        });
-
-
-        // when all data is read
-        request.on('end', function () {
-            var i,
-			key,
-			tobj,
-			xml_tobj;
-
-            parsedBody = JSON.parse(requestBody); // parse body to js object
-            for (i = 1; i < parsedBody.length; i++) {
-                tobj = parsedBody[i];
-                xml_tobj = json2xml(tobj, 2);
-            }
-            response.writeHead(200, {
-                'Content-Type': 'text/plain',
-                'Access-Control-Allow-Origin': '*'
-            });
-            response.end(); // done creating response, don't need to send back any data
-        });
-    }
     /**
 	 * Handles a get request to the server. SHOULD get data from server, return it to client
 	 * for data viz or analysis.
@@ -234,6 +201,49 @@
             READ_DATA(response);
         });
     }
+
+    /**
+*Taken from http://goessner.net/download/prj/jsonxml/json2xml.js
+*/
+    function json2xml(o, tab) {
+        var toXml = function (v, name, ind) {
+            var xml = "";
+            if (v instanceof Array) {
+                for (var i = 0, n = v.length; i < n; i++)
+                    xml += ind + toXml(v[i], name, ind + "\t") + "\n";
+            }
+            else if (typeof (v) == "object") {
+                var hasChild = false;
+                xml += ind + "<" + name;
+                for (var m in v) {
+                    if (m.charAt(0) == "@")
+                        xml += " " + m.substr(1) + "=\"" + v[m].toString() + "\"";
+                    else
+                        hasChild = true;
+                }
+                xml += hasChild ? ">" : "/>";
+                if (hasChild) {
+                    for (var m in v) {
+                        if (m == "#text")
+                            xml += v[m];
+                        else if (m == "#cdata")
+                            xml += "<![CDATA[" + v[m] + "]]>";
+                        else if (m.charAt(0) != "@")
+                            xml += toXml(v[m], m, ind + "\t");
+                    }
+                    xml += (xml.charAt(xml.length - 1) == "\n" ? ind : "") + "</" + name + ">";
+                }
+            }
+            else {
+                xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">";
+            }
+            return xml;
+        }, xml = "";
+        for (var m in o)
+            xml += toXml(o[m], m, "");
+        return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
+    }
+
 
     /**
 	 * Writes telemetry data to a log file (specified by LOG_FILE_PATH).
