@@ -51,7 +51,7 @@ TAG.TelemetryEvents = (function () {
                 tobj.drawer_header = null;
                 tobj.time_spent = null; //ONLY SET FOR MAPS, it doesn't make sense for other drawers
                 break;
-            case "Maps":        //Moved the drawer aspect to the generic Drawer event. 
+            case "Maps":        //done needs to be tested //Moved the drawer aspect to the generic Drawer event. 
                 tobj.current_artwork = null;
                 tobj.pin_clicked = null;
                 tobj.location_clicked = null;
