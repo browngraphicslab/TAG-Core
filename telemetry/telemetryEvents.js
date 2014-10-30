@@ -24,12 +24,13 @@ TAG.TelemetryEvents = (function () {
                 tobj.navigation_type = null;
                 break;
             case "ArtworkPreviewer":
+                tobj.is_assoc_media_view = null; //is the collections page on the assoc media view (if true, then selected artwork is actually assoc media, assoc media is actually artwork)
                 tobj.click_type = null; //single or double click on the preview tile
                 tobj.selected_artwork = null;
                 tobj.is_tour = null;
                 tobj.current_collection = null;
                 tobj.tap_to_explore = null;
-                tobj.close_button = null;
+                tobj.close = null; //whether the previewer was closed before something in it was clicked
                 tobj.assoc_media = null;
                 tobj.time_spent = null; //time spent in the previewer
                 break;
@@ -52,10 +53,11 @@ TAG.TelemetryEvents = (function () {
                 break;
             case "Maps":        //Moved the drawer aspect to the generic Drawer event. 
                 tobj.current_artwork = null;
-                tobj.pins_clicked = null;
-                tobj.locations_clicked = null;
-                tobj.maps_viewed = null;
+                tobj.pin_clicked = null;
+                tobj.location_clicked = null;
+                tobj.map_viewed = null;
                 tobj.time_spent = null;
+                tobj.map_interaction = null;
                 break;
             case "AssociatedMedia":
                 tobj.current_artwork = null;
@@ -80,6 +82,11 @@ TAG.TelemetryEvents = (function () {
                 tobj.sidebar_open = null;
                 tobj.current_artwork = null;
                 tobj.time_spent = null;
+                break;
+            case "VideoPlayer":
+                tobj.current_video = null;
+                tobj.collection = null;
+                tobj.interaction = null;
                 break;
             default:
                 console.log(tobj.ttype + " is not a valid event.");

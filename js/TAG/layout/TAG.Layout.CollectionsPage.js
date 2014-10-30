@@ -119,8 +119,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         //TELEMETRY
         nav_timer = new TelemetryTimer(),
-        global_artwork_prev_timer = new TelemetryTimer(), //initialized here, restarted when previewer is opened
-        previewer_exit_click; //keeps track of how the previewer was closed
+        global_artwork_prev_timer = new TelemetryTimer(); //initialized here, restarted when previewer is opened
+        //previewer_exit_click; //keeps track of how the previewer was closed
 
     if (SECONDARY_FONT_COLOR[0] !== '#') {
         SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
@@ -1415,7 +1415,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 yearText,
                 tourLabel,
                 videoLabel,
-                click,
+                //click,
                 showLabel = true;
   
             //var uiDocfrag = document.createDocumentFragment();
@@ -1448,21 +1448,67 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
                         if (previouslyClicked === main) {
-                            click = "double";
+                            //click = "double";
                             switchPage(currentWork, null, getContainerLeft(currentWork, false))();
+
+                            //TELEMETRY
+
+                            //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                            TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
+                                tobj.is_assoc_media_view = onAssocMediaView;
+                                tobj.click_type = "double";
+                                tobj.selected_artwork = currentWork.Identifier;
+                                tobj.is_tour = false;
+                                if(currentWork.type === 'Tour') {
+                                    tobj.is_tour = true;
+                                }
+                                tobj.current_collection = currCollection;
+                                tobj.tap_to_explore = false; 
+                                tobj.close = false; //it was closed
+                                tobj.assoc_media = false;  
+                                tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                                //console.log(tobj.time_spent);
+                                //timer reset in showArtwork
+                                console.log("DOUBLE CLICKED ON THE TILE");
+                            });
+
+
                         } else {
-                            click = "single";
+                            //click = "single";
                             previouslyClicked = main;
                             setTimeout(function () { previouslyClicked = null }, 1000)
                         }
                     } else {
                         TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
                             if (previouslyClicked === main) {
-                                click = "double";
+                                //click = "double";
                                 switchPage(doqs[0], currentWork, getContainerLeft(currentWork,false))();
+
+                                //TELEMETRY
+
+                                //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                                TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
+                                    tobj.is_assoc_media_view = onAssocMediaView;
+                                    tobj.click_type = "double";
+                                    tobj.selected_artwork = currentWork.Identifier;
+                                    tobj.is_tour = false;
+                                    if(currentWork.type === 'Tour') {
+                                        tobj.is_tour = true;
+                                    }
+                                    tobj.current_collection = currCollection;
+                                    tobj.tap_to_explore = false; 
+                                    tobj.close = false; //it was closed
+                                    tobj.assoc_media = false;  
+                                    tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                                    //console.log(tobj.time_spent);
+                                    //timer reset in showArtwork
+                                    console.log("DOUBLE CLICKED ON THE ASSOC MEDIA TILE");
+                                });
+
+
                             } else {
                                 previouslyClicked = main;
-                                click = "single";
+                                //click = "single";
                                 setTimeout(function () { previouslyClicked = null }, 1000);
                             }
                         }, function () {
@@ -2069,19 +2115,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
             TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
-                tobj.click_type = null; //TODO
+                tobj.is_assoc_media_view = onAssocMediaView;
+                tobj.click_type = "Single";
                 tobj.selected_artwork = artwork.Identifier;
                 tobj.is_tour = false;
                 if(artwork.type === 'Tour') {
                     tobj.is_tour = true;
                 }
                 tobj.current_collection = currCollection;
-                tobj.tap_to_explore = null; 
-                tobj.close_button = null;
-                tobj.assoc_media = null;  
+                tobj.tap_to_explore = false; 
+                tobj.close = true; //it was closed
+                tobj.assoc_media = false;  
                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
                 //console.log(tobj.time_spent);
                 //timer reset in showArtwork
+                console.log("ARTWORK PREVIEWER WAS CLOSED");
             });
             
         };
@@ -2271,13 +2319,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             root.on('mouseup', function(e) {
 
                 //TELEMETRY STUFF
-                //TODO
+                /*
                 if (e.target.id.toString()){
                     previewer_exit_click = e.target.id.toString();
                     console.log(previewer_exit_click);
                 } else {
                     console.log("closed previewer; target has no id");
                 }
+                */
 
                 var subject = selectedArtworkContainer;
                 if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length){    
@@ -2386,7 +2435,32 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 exploreTab = $(document.createElement('div'))
                     .addClass('exploreTab');
                 if (!onAssocMediaView) {
-                    exploreTab.on('mousedown', switchPage(artwork))
+                    exploreTab.on('mousedown', function(){
+
+                        (switchPage(artwork))();
+
+                        //TELEMETRY
+
+                        //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                        TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
+                            tobj.is_assoc_media_view = false;
+                            tobj.click_type = "Single";
+                            tobj.selected_artwork = artwork.Identifier;
+                            tobj.is_tour = false;
+                            if(artwork.type === 'Tour') {
+                                tobj.is_tour = true;
+                            }
+                            tobj.current_collection = currCollection;
+                            tobj.tap_to_explore = true; 
+                            tobj.close = false; //it was closed
+                            tobj.assoc_media = false;  
+                            tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                            //console.log(tobj.time_spent);
+                            //timer reset in showArtwork
+                            console.log("TAP TO EXPLORE");
+                        });
+
+                    });
                 } 
 
                 //Explore text
@@ -2434,8 +2508,36 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }else {
                     currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
                 }
-                !onAssocMediaView && currentThumbnail.on('mousedown', switchPage(artwork));
+                !onAssocMediaView && currentThumbnail.on('mousedown', function(){
 
+
+                    (switchPage(artwork))();
+
+                    //TELEMETRY
+
+                    //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                    TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
+                        tobj.is_assoc_media_view = false;
+                        tobj.click_type = "Single";
+                        tobj.selected_artwork = artwork.Identifier;
+                        tobj.is_tour = false;
+                        if(artwork.type === 'Tour') {
+                            tobj.is_tour = true;
+                        }
+                        tobj.current_collection = currCollection;
+                        tobj.tap_to_explore = true; 
+                        tobj.close = false; //it was closed
+                        tobj.assoc_media = false;  
+                        tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                        //console.log(tobj.time_spent);
+                        //timer reset in showArtwork
+                        console.log("CLICKED ON THE ARTWORK TILE");
+                    });
+
+                });
+
+
+                /*
                 //Telemetry stuff
                 TAG.Telemetry.register($("#currentThumbnail,#exploreTab"), 'mousedown', '', function(tobj) {
                     if (!artwork || !artworkSelected) {
@@ -2445,6 +2547,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tobj.ttype     = 'collection_to_' + getWorkType(artwork);
                     tobj.mode = 'Kiosk'; 
                 });
+                */
 
                 //Div for artist and year info, directly below image thumbnail
                 infoText = $(document.createElement('div'))
@@ -2574,9 +2677,32 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             .css({
                                 'width': .35 * (.45 * selectedArtworkContainer.height())
                             })
-                            .on('mousedown',
-                                    onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
-                                )
+                            .on('mousedown', onAssocMediaView ? switchPage(doqs[i], artwork) : switchPage(artwork, doqs[i])
+                                    /*function(){
+                                        var func = onAssocMediaView ? (switchPage(doqs[i], artwork)) : (switchPage(artwork, doqs[i]));
+                                        func();
+                                    }*/
+                                );
+
+                        TAG.Telemetry.register(miniTile, "mousedown", "ArtworkPreviewer", function(tobj){
+                            tobj.is_assoc_media_view = onAssocMediaView;
+                            tobj.click_type = "Single";
+                            tobj.selected_artwork = artwork.Identifier;
+                            tobj.is_tour = false;
+                            if(artwork.type === 'Tour') {
+                                tobj.is_tour = true;
+                            }
+                            tobj.current_collection = currCollection;
+                            tobj.tap_to_explore = false; 
+                            tobj.close = false; //it was closed
+                            tobj.assoc_media = true;  
+                            tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                            //console.log(tobj.time_spent);
+                            //timer reset in showArtwork
+                            console.log("CLICKED ON AN ASSOCIATED MEDIA");
+                        });
+
+
                         miniTile.css('left', j * (miniTile.width() + miniTilesHolder.height() / 10));
 
 
@@ -2629,10 +2755,55 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 	addAssociationRow(numberAssociatedDoqs); 
                 	TAG.Util.removeProgressCircle(circle);
 
-                                        //Also add handlers to switch to first artwork if in assoc media view
+                    //Also add handlers to switch to first artwork if in assoc media view
                 	if (onAssocMediaView) {
-                	    exploreTab.on('mousedown', switchPage(doqs[0], artwork, getContainerLeft(artwork, false)));
-                	    currentThumbnail.on('mousedown', switchPage(doqs[0], artwork, getContainerLeft(artwork, false)));
+                	    exploreTab.on('mousedown', function(){
+                            (switchPage(doqs[0], artwork, getContainerLeft(artwork, false)))();
+
+                            //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                            TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
+                                tobj.is_assoc_media_view = true;
+                                tobj.click_type = "Single";
+                                tobj.selected_artwork = artwork.Identifier;
+                                tobj.is_tour = false;
+                                if(artwork.type === 'Tour') {
+                                    tobj.is_tour = true;
+                                }
+                                tobj.current_collection = currCollection;
+                                tobj.tap_to_explore = false; 
+                                tobj.close = false; //it was closed
+                                tobj.assoc_media = true;  
+                                tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                                //console.log(tobj.time_spent);
+                                //timer reset in showArtwork
+                                console.log("CLICKED ON EXPLORE TAB (FIRST ARTWORK) IN ASSOCIATED MEDIA VIEW");
+                            });
+
+                        });
+                	    currentThumbnail.on('mousedown', function(){
+                            (switchPage(doqs[0], artwork, getContainerLeft(artwork, false)))();
+
+
+                            //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                            TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
+                                tobj.is_assoc_media_view = true;
+                                tobj.click_type = "Single";
+                                tobj.selected_artwork = artwork.Identifier;
+                                tobj.is_tour = false;
+                                if(artwork.type === 'Tour') {
+                                    tobj.is_tour = true;
+                                }
+                                tobj.current_collection = currCollection;
+                                tobj.tap_to_explore = false; 
+                                tobj.close = false; //it was closed
+                                tobj.assoc_media = true;  
+                                tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                                //console.log(tobj.time_spent);
+                                //timer reset in showArtwork
+                                console.log("CLICKED ON THUMBNAIL (FIRST ARTWORK) IN ASSOCIATED MEDIA VIEW");
+                            });
+
+                        });
                 	}
                 }
 
