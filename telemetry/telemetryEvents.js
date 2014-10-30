@@ -23,7 +23,7 @@ TAG.TelemetryEvents = (function () {
                 tobj.time_spent = null;
                 tobj.navigation_type = null;
                 break;
-            case "ArtworkPreviewer":
+            case "ArtworkPreviewer": //done but needs testing of all cases
                 tobj.is_assoc_media_view = null; //is the collections page on the assoc media view (if true, then selected artwork is actually assoc media, assoc media is actually artwork)
                 tobj.click_type = null; //single or double click on the preview tile
                 tobj.selected_artwork = null;
@@ -45,25 +45,39 @@ TAG.TelemetryEvents = (function () {
                 tobj.next_page = null;
                 tobj.time_spent = null;
                 break;
-            case "Drawer":      //Done minus timer
+            case "Drawer":      //Done
                 tobj.current_artwork = null;
                 tobj.toggle = null; //expanded or collapsed
-                tobj.time_spent = null;
                 tobj.drawer_header = null;
+                tobj.time_spent = null; //ONLY SET FOR MAPS, it doesn't make sense for other drawers
                 break;
-            case "Maps":        //Moved the drawer aspect to the generic Drawer event. 
+            case "Maps":        //done needs to be tested //Moved the drawer aspect to the generic Drawer event. 
                 tobj.current_artwork = null;
                 tobj.pin_clicked = null;
                 tobj.location_clicked = null;
                 tobj.map_viewed = null;
-                tobj.time_spent = null;
                 tobj.map_interaction = null;
                 break;
             case "AssociatedMedia":
                 tobj.current_artwork = null;
                 tobj.assoc_media = null; //the associated media that was clicked
                 tobj.assoc_media_interactions = null; //TODO what is this
+				tobj.final_position_x = null;
+                tobj.final_position_y = null;
+				tobj.final_position_h = null;
+                tobj.offscreen = null;
+                tobj.is_from_seadragon = null;
+                tobj.function = null;
+				tobj.scale = null;
                 break;
+			case "ArtworkManip":
+				tobj.artwork = null;
+				tobj.pivot_x = null;
+                tobj.pivot_y = null;
+                tobj.trans_x = null;
+                tobj.trans_y = null;
+                tobj.scale = null;
+                tobj.function = null;
             case "GenericArtworkEvent":
                 tobj.event_type = null; //Tour Clicked in artwork viewer, hide menu arrow in artwork viewer, navigation minimap interaction, splitscreen initialized/closed
                 tobj.current_artwork = null;

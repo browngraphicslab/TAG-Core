@@ -1403,16 +1403,23 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 	        });
         locationPanelDiv.append(locHistoryToggle);
         locHistoryToggle.append(locHistoryToggleImage);
+        
+        var maps_timer = new TelemetryTimer();
+
         locHistoryToggle.on('click', function () { toggleLocationOpen(); });
         function toggleLocationOpen() {
             isOpen ? locationClose() : locationOpen();    
         }
         
         TAG.Telemetry.register(locHistoryContainer, 'click', 'Drawer', function(tobj, evt){
+            if (!isOpen){
+                maps_timer.restart();
+                return true;
+            }
             tobj.current_artwork = doq.Identifier;
             tobj.toggle = isOpen; //expanded or collapsed
-            tobj.time_spent = null;
             tobj.drawer_header = "Maps";
+            tobj.time_spent = maps_timer.get_elapsed();  
         });
 
         if (TAG.Util.Splitscreen.isOn()) {
@@ -1518,7 +1525,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         TAG.Telemetry.register(drawerHeader, 'click', 'Drawer', function(tobj) {                                
                 tobj.current_artwork = doq.Identifier;
                 tobj.toggle = toggle.attr("expanded"); //expanded or collapsed
-                tobj.time_spent = null;
                 tobj.drawer_header = drawerHeader.text();
         });
         drawer.contents = drawerContents;
