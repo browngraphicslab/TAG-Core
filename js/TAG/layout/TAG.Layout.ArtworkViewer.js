@@ -420,7 +420,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             return img;
         }
-        /*      //TODO change to record_event
+        /*      //TODO change to recordEvent
         TAG.Telemetry.register(root.find("#leftControl,#rightControl,#downControl,#upControl,#zoutControl,#zinControl"), 'click', 'ControlButton', function (tobj, evt) {
             tobj.control_type = "seadragon_click"
             tobj.button = evt.target.id;
@@ -1520,7 +1520,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 tobj.toggle = toggle.attr("expanded"); //expanded or collapsed
                 tobj.time_spent = null;
                 tobj.drawer_header = drawerHeader.text();
-                console.log(drawerHeader.text());
         });
         drawer.contents = drawerContents;
         if (assocMediaToShow && title === 'Associated Media') {
