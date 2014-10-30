@@ -1467,7 +1467,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 tobj.close = false; //it was closed
                                 tobj.assoc_media = false;  
                                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                console.log(tobj.time_spent);
+                                //console.log(tobj.time_spent);
                                 //timer reset in showArtwork
                                 console.log("DOUBLE CLICKED ON THE TILE");
                             });
@@ -1500,7 +1500,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     tobj.close = false; //it was closed
                                     tobj.assoc_media = false;  
                                     tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                    console.log(tobj.time_spent);
+                                    //console.log(tobj.time_spent);
                                     //timer reset in showArtwork
                                     console.log("DOUBLE CLICKED ON THE ASSOC MEDIA TILE");
                                 });
@@ -2127,7 +2127,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tobj.close = true; //it was closed
                 tobj.assoc_media = false;  
                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                console.log(tobj.time_spent);
+                //console.log(tobj.time_spent);
                 //timer reset in showArtwork
                 console.log("ARTWORK PREVIEWER WAS CLOSED");
             });
@@ -2455,7 +2455,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             tobj.close = false; //it was closed
                             tobj.assoc_media = false;  
                             tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                            console.log(tobj.time_spent);
+                            //console.log(tobj.time_spent);
                             //timer reset in showArtwork
                             console.log("TAP TO EXPLORE");
                         });
@@ -2529,7 +2529,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         tobj.close = false; //it was closed
                         tobj.assoc_media = false;  
                         tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                        console.log(tobj.time_spent);
+                        //console.log(tobj.time_spent);
                         //timer reset in showArtwork
                         console.log("CLICKED ON THE ARTWORK TILE");
                     });
@@ -2697,7 +2697,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             tobj.close = false; //it was closed
                             tobj.assoc_media = true;  
                             tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                            console.log(tobj.time_spent);
+                            //console.log(tobj.time_spent);
                             //timer reset in showArtwork
                             console.log("CLICKED ON AN ASSOCIATED MEDIA");
                         });
@@ -2774,7 +2774,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 tobj.close = false; //it was closed
                                 tobj.assoc_media = true;  
                                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                console.log(tobj.time_spent);
+                                //console.log(tobj.time_spent);
                                 //timer reset in showArtwork
                                 console.log("CLICKED ON EXPLORE TAB (FIRST ARTWORK) IN ASSOCIATED MEDIA VIEW");
                             });
@@ -2798,7 +2798,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 tobj.close = false; //it was closed
                                 tobj.assoc_media = true;  
                                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                console.log(tobj.time_spent);
+                                //console.log(tobj.time_spent);
                                 //timer reset in showArtwork
                                 console.log("CLICKED ON THUMBNAIL (FIRST ARTWORK) IN ASSOCIATED MEDIA VIEW");
                             });
