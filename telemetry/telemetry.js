@@ -49,6 +49,8 @@ TAG.Telemetry = (function () {
             metaDataRequests.push(property);
             metaDataRequests.push(main_tobj);
             postMetaDataRequests();
+            console.log("pushmetadata called in telemetry.js");
+            console.log("metadataobj is " + " " + main_tobj);
         }
     }
 
@@ -88,7 +90,8 @@ TAG.Telemetry = (function () {
                 console.log(TELEMETRY_SWITCH);
                 return;
             }
-
+            console.log("register called in telemetry.js");
+            console.log("sessiondataobj is " + " " + tobj);
             sessionDataRequests.push(property);
             sessionDataRequests.push(tobj);
 
@@ -119,6 +122,7 @@ TAG.Telemetry = (function () {
         if (sessionDataRequests.length >= sendFreq - 1) { // tweak this later			    
             postSessionDataRequests();
         }
+        console.log("record called in telemetry.js");
     }
 
     /**
@@ -145,7 +149,7 @@ TAG.Telemetry = (function () {
     }
 
     function postSessionDataRequests() {
-        var data = JSON.stringify(sessionaDataRequests);
+        var data = JSON.stringify(sessionDataRequests);
 
         sessionDataRequests.length = 0;
 
