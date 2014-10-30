@@ -34,7 +34,7 @@
         if (!localStorage.tagTelemetry) {
             newUser = true;
         }
-        if (!localStorage.machId) {
+        if (!localStorage.machId) { //wrong?
             localStorage.machId= TAG.Util.IdCreator();
         }
         if (TELEMETRY_SWITCH === 'on') {

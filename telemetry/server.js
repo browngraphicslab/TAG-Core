@@ -269,7 +269,7 @@
             fs.mkdir(newDirPath, function (err) {
                 console.log("Error making directory!");
             });
-            machine_id_list.append(tdata.machine_id);
+            machine_id_list.push(tdata.machine_id);
            
             fs.appendFile(newPath+tdata.session_id, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
                 var key;
