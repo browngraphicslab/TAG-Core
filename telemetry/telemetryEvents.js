@@ -24,12 +24,13 @@ TAG.TelemetryEvents = (function () {
                 tobj.navigation_type = null;
                 break;
             case "ArtworkPreviewer":
+                tobj.is_assoc_media_view = null; //is the collections page on the assoc media view (if true, then selected artwork is actually assoc media, assoc media is actually artwork)
                 tobj.click_type = null; //single or double click on the preview tile
                 tobj.selected_artwork = null;
                 tobj.is_tour = null;
                 tobj.current_collection = null;
                 tobj.tap_to_explore = null;
-                tobj.close_button = null;
+                tobj.close = null; //whether the previewer was closed before something in it was clicked
                 tobj.assoc_media = null;
                 tobj.time_spent = null; //time spent in the previewer
                 break;
