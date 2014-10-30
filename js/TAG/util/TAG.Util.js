@@ -5362,7 +5362,14 @@ TAG.Util.RLH = function (input) {
      */
     function showMap(guid) {
         var i;
-
+        TAG.Telemetry.recordEvent("Maps", function(tobj) {
+            tobj.current_artwork = artwork.Identifier;            
+            tobj.pin_clicked = null;
+            tobj.location_clicked = null;
+            tobj.map_viewed = guid;
+            tobj.time_spent = null;
+            tobj.map_interaction = "show_map";
+        });
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
         currentIndex = mapGuids.indexOf(guid);
 
@@ -5703,6 +5710,14 @@ TAG.Util.RLH = function (input) {
                         locationsRegion.scrollTop(pushpin.container.position().top);
                     }
                 }
+                TAG.Telemetry.recordEvent("Maps", function(tobj) {
+                    tobj.current_artwork = artwork.Identifier;            
+                    tobj.pin_clicked = location;
+                    tobj.location_clicked = null;
+                    tobj.map_viewed = null;         //TODO
+                    tobj.time_spent = null;
+                    tobj.map_interaction = "pushpin_clicked";
+                });
             }
 
             map.entities.push(pushpin);

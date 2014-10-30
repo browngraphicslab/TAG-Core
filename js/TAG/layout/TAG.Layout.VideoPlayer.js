@@ -125,6 +125,11 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         videoElt.play();
         topBar.css('display', 'none');
         play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/pause.png');
+        TAG.Telemetry.recordEvent("VideoPlayer", function(tobj) {
+            tobj.current_video = videoSrc.Identifier;
+            tobj.collection = prevExhib.Identifier;
+            tobj.interaction = "play_video";
+        });
     }
 
     /**
@@ -135,6 +140,11 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         videoElt.pause();
         topBar.css('display','inline');
         play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/play.png');
+        TAG.Telemetry.recordEvent("VideoPlayer", function(tobj) {
+            tobj.current_video = videoSrc.Identifier;
+            tobj.collection = prevExhib.Identifier;
+            tobj.interaction = "pause_video";
+        });
     }
 
     /**
@@ -159,6 +169,11 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         // set up mute button
         vol.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/volume.png');
         $(vol).on('click', function () {
+            TAG.Telemetry.recordEvent("VideoPlayer", function(tobj) {
+                tobj.current_video = videoSrc.Identifier;
+                tobj.collection = prevExhib.Identifier;
+                tobj.interaction = "video_volume";
+            });
             videoElt.muted = !videoElt.muted;
             vol.css("opacity", (videoElt.muted ? ".5" : "1"))
         });
@@ -244,7 +259,11 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
             if((""+minutes).length < 2) {
                 minutes = "0" + minutes;
             }
-
+            TAG.Telemetry.recordEvent("VideoPlayer", function(tobj) {
+                tobj.current_video = videoSrc.Identifier;
+                tobj.collection = prevExhib.Identifier;
+                tobj.interaction = "video_seek";
+            });
             // set up mousemove handler now that mousedown has happened
             $('body').on('mousemove.seek', function(evt) {
                 var currPoint = evt.pageX,
@@ -315,6 +334,11 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         }
         backButton.on('mousedown', function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
+            TAG.Telemetry.recordEvent("VideoPlayer", function(tobj) {
+                tobj.current_video = videoSrc.Identifier;
+                tobj.collection = prevExhib.Identifier;
+                tobj.interaction = "back_button";
+            });
         });
         backButton.on('mouseleave', function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, true);

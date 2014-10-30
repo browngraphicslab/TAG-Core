@@ -346,6 +346,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method panToPoint
     */
     function panToPoint(element) {
+        console.log("Panning");
         viewer.viewport && function () {
             var ycoord = parseFloat($(element).css('top')) + parseFloat($(element).css('height'));
             var xcoord = parseFloat($(element).css('left')) + 0.5 * parseFloat($(element).css('width'));
@@ -368,6 +369,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         if (!disableZoomRLH) {
             viewerelt && function () {
                 viewerelt.on('dblclick', function () {
+                    console.log("Zooming!");
                     zoomToPoint();
                 });
             }();
@@ -379,6 +381,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method zoomToPoint()
     */
     function zoomToPoint() { //TODO zoom to where the mouse is
+        console.log("Also zooming");
         viewer.viewport.zoomBy(2);
     }
 
@@ -586,6 +589,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             TAG.Util.makeManipulatableWin(canvas[0], {
                 onScroll: function (delta, pivot) {
                     dzScroll(delta, pivot);
+                    console.log("Scrolling map!");
                 },
                 onManipulate: function (res) {
                     if (doManipulation) {
@@ -692,7 +696,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @return {Object}       some public methods to be used in other files
      */
     function createMediaObject(mdoq, linq) {
-        console.log("CREATING MEDIA OBJECTS")
         var // DOM-related
             outerContainer = $(document.createElement('div')).addClass('mediaOuterContainer'),
             innerContainer = $(document.createElement('div')).addClass('mediaInnerContainer'),
@@ -741,7 +744,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @method initMediaObject
          */
         function initMediaObject() {
-
             if (IS_XFADE && linq.Offset && linq.Dimensions) {
                 outerContainer.css({
                     'border': '1px solid rgba(255,255,255,0.4)',
@@ -793,6 +795,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 closeButton.on('click', function (evt) {
                     evt.stopPropagation();
                     hideMediaObject();
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                        tobj.assoc_media_interactions = "close"; //TODO what is this
+                    });
                 });
                 titleDiv.append(closeButton[0]);               
 
@@ -834,6 +841,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     circle.addClass('annotatedImageHotspotCircle');
                     circle.click(function () {
                         toggleMediaObject(true);
+                        TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                            tobj.current_artwork = doq.Identifier;
+                            tobj.assoc_media = mdoq.Identifier;
+                            tobj.assoc_media_interactions = "hotspot_toggle";
+                        });
                     });
                     root.append(circle);
                 }
@@ -847,7 +859,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     event.preventDefault();
                     TAG.Util.IdleTimer.restartTimer();
                     mediaManipPreprocessing();
-
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                        tobj.assoc_media_interactions = "set_active"; //TODO what is this
+                    });
                     // If event is initial touch on artwork, save current position of media object to use for animation
                     outerContainer.startLocation = {
                             x: outerContainer.position().left,
@@ -984,9 +1000,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (elt.paused) {
                     elt.play();
                     play.attr('src', tagPath + 'images/icons/PauseWhite.svg');
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "play_media";
+                    });
                 } else {
                     elt.pause();
                     play.attr('src', tagPath + 'images/icons/PlayWhite.svg');
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "pause_media";
+                    });
                 }
             });
 
@@ -994,9 +1020,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (elt.muted) {
                     elt.muted = false;
                     vol.attr('src', tagPath + 'images/icons/VolumeUpWhite.svg');
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "volume_up";
+                    });
                 } else {
                     elt.muted = true;
                     vol.attr('src', tagPath + 'images/icons/VolumeDownWhite.svg');
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "volume_down";
+                    });
                 }
             });
 
@@ -1018,7 +1054,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     adjSec = (seconds < 10) ? '0'+seconds : seconds;
 
                 evt.stopPropagation();
-
+                TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    tobj.current_artwork = doq.Identifier;
+                    tobj.assoc_media = mdoq.Identifier;
+                    tobj.assoc_media_interactions = "media_seek";
+                });
                 if(!isNaN(time)) {
                     currentTimeDisplay.text(adjMin + ":" + adjSec);
                     elt.currentTime = time;
@@ -1097,9 +1137,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (elt.paused) {
                     elt.play();
                     playButton.attr('src', tagPath + 'images/icons/PauseWhite.svg');
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "play_media";
+                    });
                 } else {
                     elt.pause();
                     playButton.attr('src', tagPath + 'images/icons/PlayWhite.svg');
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "pause_media";
+                    });
                 }
             });
 
@@ -1107,9 +1157,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (elt.muted) {
                     elt.muted = false;
                     vol.attr('src', tagPath + 'images/icons/VolumeUpWhite.svg');
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "volume_up";
+                    });
                 } else {
                     elt.muted = true;
                     vol.attr('src', tagPath + 'images/icons/VolumeDownWhite.svg');
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "volume_down";
+                    });
                 }
             });
 
@@ -1131,7 +1191,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     adjSec = (seconds < 10) ? '0' + seconds : seconds;
 
                 evt.stopPropagation();
-
+                TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier;
+                        tobj.assoc_media_interactions = "media_seek";
+                    });
                 if (!isNaN(time)) {
                     currentTimeDisplay.text(adjMin + ":" + adjSec);
                     elt.currentTime = time;
@@ -1820,6 +1884,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             }
 
             mediaHidden = false;
+            TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                tobj.current_artwork = doq.Identifier;
+                tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                tobj.assoc_media_interactions = "open"; //TODO what is this
+            });
 
             if (hotspotMediaHidden) {
                 hotspotMediaHidden = false;

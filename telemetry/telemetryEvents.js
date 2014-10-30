@@ -53,10 +53,11 @@ TAG.TelemetryEvents = (function () {
                 break;
             case "Maps":        //Moved the drawer aspect to the generic Drawer event. 
                 tobj.current_artwork = null;
-                tobj.pins_clicked = null;
-                tobj.locations_clicked = null;
-                tobj.maps_viewed = null;
+                tobj.pin_clicked = null;
+                tobj.location_clicked = null;
+                tobj.map_viewed = null;
                 tobj.time_spent = null;
+                tobj.map_interaction = null;
                 break;
             case "AssociatedMedia":
                 tobj.current_artwork = null;
@@ -81,6 +82,11 @@ TAG.TelemetryEvents = (function () {
                 tobj.sidebar_open = null;
                 tobj.current_artwork = null;
                 tobj.time_spent = null;
+                break;
+            case "VideoPlayer":
+                tobj.current_video = null;
+                tobj.collection = null;
+                tobj.interaction = null;
                 break;
             default:
                 console.log(tobj.ttype + " is not a valid event.");
