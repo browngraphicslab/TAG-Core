@@ -4627,7 +4627,7 @@ TAG.Util.RLH = function (input) {
         pushpins = [],       // used to iterate through pushpins
         disabledOverlay,     // overlay on default (bing) map holder if it's disabled
         importDisabledOverlay,
-        formIsEnabled,       // form is currently being displayed
+        formIsEnabled = false,// form is currently being displayed
         isEditForm,          // edit location form is open (as opposed to add location form)
         importingMap,        // used to show the correct map after importing 
 
@@ -5362,14 +5362,18 @@ TAG.Util.RLH = function (input) {
      */
     function showMap(guid) {
         var i;
-        TAG.Telemetry.recordEvent("Maps", function(tobj) {
-            tobj.current_artwork = artwork.Identifier;            
-            tobj.pin_clicked = null;
-            tobj.location_clicked = null;
-            tobj.map_viewed = guid;
-            tobj.time_spent = null;
-            tobj.map_interaction = "show_map";
-        });
+
+        //if (!(mapGuids[currentIndex] == guid)){ //don't register if already being shown
+            TAG.Telemetry.recordEvent("Maps", function(tobj) {
+                tobj.current_artwork = artwork.Identifier;            
+                tobj.pin_clicked = null;
+                tobj.location_clicked = null;
+                tobj.map_viewed = mapDoqs[guid] || "Bing Map";
+                tobj.map_interaction = "show_map";
+                console.log("show map");
+            });
+        //}
+
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
         currentIndex = mapGuids.indexOf(guid);
 
@@ -5714,9 +5718,9 @@ TAG.Util.RLH = function (input) {
                     tobj.current_artwork = artwork.Identifier;            
                     tobj.pin_clicked = location;
                     tobj.location_clicked = null;
-                    tobj.map_viewed = null;         //TODO
-                    tobj.time_spent = null;
+                    tobj.map_viewed = "Bing Map";
                     tobj.map_interaction = "pushpin_clicked";
+                    console.log("bing map pushpin clicked");
                 });
             }
 
@@ -5967,6 +5971,16 @@ TAG.Util.RLH = function (input) {
                         }
                     }
                 }
+
+                TAG.Telemetry.recordEvent("Maps", function(tobj) {
+                    tobj.current_artwork = artwork.Identifier;            
+                    tobj.pin_clicked = location;
+                    tobj.location_clicked = null;
+                    tobj.map_viewed = mapdoq;
+                    tobj.map_interaction = "pushpin_clicked";
+                    console.log("custom map pushpin clicked");
+                });
+
             });
 
             //all pins start off in an overlay
@@ -6156,6 +6170,16 @@ TAG.Util.RLH = function (input) {
                     }
                 }
                 else { //if not previously selected
+
+                    TAG.Telemetry.recordEvent("Maps", function(tobj) {
+                        tobj.current_artwork = artwork.Identifier;            
+                        tobj.pin_clicked = null;
+                        tobj.location_clicked = location;
+                        tobj.map_viewed = mapDoqs[mapguid] || "Bing Map";
+                        tobj.map_interaction = "location_clicked";
+                        console.log("location clicked");
+                    });
+
                     if (custom) {
                         annotImgs[mapguid].panToPoint(pushpin[0]);
                         select(location, pushpin, true);
