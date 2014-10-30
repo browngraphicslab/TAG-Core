@@ -309,15 +309,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 viewer.viewport.zoomBy(scale, pivotRel, false);
                 viewer.viewport.panBy(transRel, false);
             }
-            TAG.Telemetry.recordEvent("ArtworkManip", function (tobj) {
-                tobj.artwork = doq.Identifier;
-                tobj.pivot_x = pivotRel.x.toString();
-                tobj.pivot_y = pivotRel.y.toString();
-                tobj.trans_x = transRel.x.toString();
-                tobj.trans_y = transRel.y.toString();
-                tobj.scale = scale;
-                tobj.function = "dzManip";
-            });
             viewer.viewport.applyConstraints();
         }
     }
@@ -1624,7 +1615,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     && (finalPosition.y + offscreenBuffer < root.height()) //bottom
                     && (0 < finalPosition.x + finalDims.w - offscreenBuffer) //left
                     && (finalPosition.x + offscreenBuffer < root.width()))) { //right
-                    isOffscreen = "true";
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                        tobj.assoc_media_interactions = "pan"; //TODO what is this
+                        tobj.offscreen = "true";
+                    });
                     hideMediaObject();
                     pauseResetMediaObject();
                     //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
@@ -1638,15 +1634,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     IS_WINDOWS && (outerContainer.manipulationOffset = null);
                 }
             }
-            TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
-                tobj.current_artwork = doq.Identifier;
-                tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
-                tobj.assoc_media_interactions = "open"; //TODO what is this
-                tobj.final_position_x = outerContainer.css('left');
-                tobj.final_position_y = outerContainer.css('top');
-                tobj.offscreen = isOffscreen;
-                tobj.function = "mediaManipWin";
-            });
         }
 
         function mediaScrollWin(res, pivot) {
@@ -1679,12 +1666,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 mediaScroll(res.scale, res.pivot);
                 return;
             }
-            var top         = outerContainer.position().top,
-                left        = outerContainer.position().left,
-                width       = outerContainer.width(),
+            var top = outerContainer.position().top,
+                left = outerContainer.position().left,
+                width = outerContainer.width(),
                 height = outerContainer.height(),
-                finalPosition,
-                isOffscreen = false;
+                finalPosition;
 
             // Target location (where object should be moved to)
             if (fromSeadragonControls) {
@@ -1740,7 +1726,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     && (finalPosition.y + offscreenBuffer < root.height()) //bottom
                     && (0 < finalPosition.x + width - offscreenBuffer) //left
                     && (finalPosition.x + offscreenBuffer < root.width()))) { //right
-                    isOffscreen = true;
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
+                        tobj.current_artwork = doq.Identifier;
+                        tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                        tobj.assoc_media_interactions = "pan"; //TODO what is this
+                        tobj.offscreen = "true";
+                    });
                     hideMediaObject();
                     pauseResetMediaObject();
                     //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
@@ -1754,16 +1745,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     IS_WINDOWS && (outerContainer.manipulationOffset = null);
                 }
             }
-            TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
-                tobj.current_artwork = doq.Identifier;
-                tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
-                tobj.assoc_media_interactions = "open"; //TODO what is this
-                tobj.final_position_x = outerContainer.css('left');
-                tobj.final_position_y = outerContainer.css('top');
-                tobj.offscreen = isOffscreen;
-                tobj.is_from_seadragon = fromSeadragonControls;
-                tobj.function = "mediaManip";
-            });
         }
 
     /**
@@ -1812,16 +1793,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         newX = l + pivot.x * (1 - scale);
         newY = t + pivot.y * (1 - scale);
 
-        TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
-            tobj.current_artwork = doq.Identifier;
-            tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
-            tobj.assoc_media_interactions = "open"; //TODO what is this
-            tobj.function = "mediaScroll";
-            tobj.scale = scale.toString();
-            tobj.final_position_h = newH.toString();
-            tobj.final_position_x = newX.toString();
-            tobj.final_position_y = newY.toString();
-        });
         //Animate outerContainer to this new position
         outerContainer.stop()
         outerContainer.css({
