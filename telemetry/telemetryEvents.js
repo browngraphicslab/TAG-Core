@@ -90,6 +90,160 @@ TAG.TelemetryEvents = (function () {
                 tobj.interaction = null;
                 tobj.input_device = null;
                 break;
+
+            //AUTHORING EVENTS
+            
+            //General Use Timers (not connected to a specific event)
+            case "PageLoadTime":
+                tobj.destination_page = null; //what the destination page is
+                tobj.source_page = null; //what the source page was
+                tobj.load_time = null;
+                break;
+            case "SpentTime": //the time spent on a page or action
+                tobj.item = null; //the page or action in question
+                tobj.time_spent = null;
+                break;
+            case "LoadTime": //load time for a specific item, action or process
+                tobj.item = null; //what is being loaded
+                tobj.load_time = null;
+                break;
+
+            //All back buttons
+            case "AuthoringBackButton":
+                tobj.source_page = null;
+                tobj.destination_page = null;
+                break;
+
+            //All cancel buttons
+            case "AuthoringCancelButton":
+                tobj.cancelled_action = null; //what was cancelled
+                break;
+
+            //SettingsView
+            case "LeftBarSelection":
+                tobj.category_name = null;
+                tobj.middle_bar_load_count = null;
+                tobj.time_spent = null;
+                break;
+            case "MiddleBarSelection":
+                tobj.type_representation = null; //(i.e. artwork, collection, media, setting)
+                tobj.time_spent = null;
+                break;
+            case "ImportButton":
+                tobj.element_type = null; //artwork/media
+                break;
+            case "EndOfImport":
+                tobj.number_imported = null;
+                tobj.element_type = null; //artwork/media
+                break;
+            case "EditorButton":
+                tobj.edit_type = null; //Manage Collection, Artwork Editor, Edit Tour, or Manage Associations 
+                tobj.element_id = null; //ID of the object if applicable
+                break;
+            case "Visibility":
+                tobj.toggle_state = null;
+                tobj.collection_id = null;
+                break;
+            case "BackgroundImage":
+                break;
+            case "DeleteButton":
+                tobj.element_type = null;
+                break;
+            case "SaveButton":
+                tobj.element_type = null;
+                break;
+            case "DuplicateTour":
+                break;
+            case "Publish":
+                tobj.toggle_state = null;
+                tobj.element_type = null; //collection/tour
+                break;
+            case "LockToArtwork":
+                tobj.toggle_state = null;
+                break;
+
+            //Artwork Editor
+            case "AddRemoveAssocMedia":
+                tobj.net_change = null; //number added or removed
+                tobj.time_spent = null;
+                break;
+            case "CaptureArtworkThumbnail":
+                break;
+            case "EditMaps":
+                tobj.time_spent = null;
+                break;
+            case "ShowHideBingMap":
+                tobj.current_state = null;
+                break;
+            case "ImportMap":
+                break;
+            case "AddLocation":
+                break;
+            case "SortByTitle":
+                break;
+            case "SortByDate":
+                break;
+            case "Metadata":
+                break;
+            case "AddCustomField":
+                break;
+            case "RemoveCustonField":
+                break;
+
+            //Tour Authoring (for feature utilization)
+            case "AddTrack":
+                tobj.track_type = null;
+                tobj.quantity = null;
+                break;
+            case "MultiSelect":
+                break;
+            case "SaveTour":
+                break;
+            case "ZoomSlider":
+                break
+            case "Undo":
+                break;
+            case "Redo":
+                break;
+            case "CaptureTourThumbnail":
+                break;
+            case "ChangeTourLength":
+                break;
+            case "ExportTourData":
+                break;
+            case "MinimizeTrackHeader":
+                break;
+            case "RenameTrack":
+                break;
+            case "EditAnnotation":
+                break;
+            case "DuplicateTrack":
+                break;
+            case "DeleteTrack":
+                break;
+            case "DeleteDisplay": //from menu
+                break;
+            case "DeleteKeyframe": //from menu
+                break;
+            case "Scrollbar": //click-drag
+                break;
+            case "Play":
+                break;
+            case "ResizePreviewArea": //click-drag
+                break;
+            case "TimelineOverviewBox": //green box below the track area, click-drag
+                break;
+            case "TimelineOverviewPlayhead": //mini-playhead below track area, click-drag
+                break;
+            case "ArtworkLabelAssocMediaImport":
+                break;
+            case "CollectionLabelArtworkImport":
+                break;
+            case "SearchWhileImporting":
+                tobj.element_type = null; //artwork/assoc media
+                break;
+
+            //default error
             default:
                 console.log(tobj.ttype + " is not a valid event.");
                 break;
