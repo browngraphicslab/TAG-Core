@@ -152,7 +152,15 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         backButton.on('mousedown', function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
+        var timer = new TelemetryTimer();
         backButton.on('click', function () {
+
+            TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
+                tobj.item = "artwork_editor";
+                tobj.time_spent = timer.get_elapsed();
+                console.log("artwork editor spent time: " + tobj.time_spent);
+            });
+
             TAG.Util.removeYoutubeVideo();
             var authoringHub;
             var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0.6));

@@ -100,7 +100,7 @@ TAG.TelemetryEvents = (function () {
                 tobj.load_time = null;
                 tobj.identifier = null; //another field containing the ID of the artwork, tour being loaded (when applicable)
                 break;
-            case "SpentTime": //the time spent on a page or action
+            case "SpentTime": //the time spent on a page or action                  //done: settingsview, artwork editor (check this)
                 tobj.item = null; //the page or action in question
                 tobj.time_spent = null;
                 break;
