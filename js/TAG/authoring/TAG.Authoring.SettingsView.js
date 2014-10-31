@@ -18,7 +18,7 @@
  */
 TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID) {
     "use strict";
-    //$(document).off();
+    //$(document).off();                   
      
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
 
@@ -781,7 +781,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareNextView(false);
 
         // Add this to our queue so the UI doesn't lock up
-        middleQueue.add(function () {
+        middleQueue.add(function () { 
             var label;
             // Add the Splash Screen label and set it as previously selected because its our default
             middleLoading.before(label = selectLabel(createMiddleLabel('Splash Screen', null, loadSplashScreen), true));
@@ -2856,13 +2856,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!tour) {
             return;
         }
+        var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Tour...', 1);
         middleQueue.clear();
         rightQueue.clear();
         setTimeout(function () {
             var toureditor = new TAG.Layout.TourAuthoringNew(tour, function () {
-                TAG.Util.UI.slidePageLeft(toureditor.getRoot());
+                TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
+                    TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
+                        tobj.source_page = "settings_view";
+                        tobj.destination_page = "tour_editor";
+                        tobj.load_time = timer.get_elapsed();
+                        tobj.identifier = tour.Identifier;
+                        //console.log("tour editor load time: " + tobj.load_time);
+                    });
+                });
             });
         }, 1);
     }
@@ -5444,13 +5453,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!artwork) {
             return;
         }
+        var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Artwork...', 1);
         middleQueue.clear();
         clearTimeout(checkConTimerId);
         rightQueue.clear();
         setTimeout(function () {
-            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork)).getRoot());
+            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork)).getRoot(), function () {
+                TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
+                    tobj.source_page = "settings_view";
+                    tobj.destination_page = "artwork_editor";
+                    tobj.load_time = timer.get_elapsed();
+                    tobj.identifier = artwork.Identifier;
+                    //console.log("artwork editor load time: " + tobj.load_time);
+                });
+            });
         }, 1);
     }
 

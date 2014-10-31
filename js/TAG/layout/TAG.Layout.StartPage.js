@@ -1016,10 +1016,19 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      * @method enterAuthoringMode
      */
     function enterAuthoringMode() {
+        var timer = new TelemetryTimer();
         goToCollectionsButton.on('click', function() {;});
         // authoringButtonContainer.off('click');
         var authoringMode = new TAG.Authoring.SettingsView();
-        TAG.Util.UI.slidePageLeft(authoringMode.getRoot());
+        TAG.Util.UI.slidePageLeft(authoringMode.getRoot(), function () {
+            TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
+                tobj.source_page = "start_page";
+                tobj.destination_page = "settings_view";
+                tobj.load_time = timer.get_elapsed();
+                tobj.identifier = null; //no identifier for this
+                //console.log("settings view load time: " + tobj.load_time);
+            });
+        });
     }
  
     /**
