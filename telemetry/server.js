@@ -11,9 +11,12 @@
 	fs = require('fs'),
 	Connection = require('tedious').Connection,
 	qs = require('querystring'),
-    mkdirp = require('mkdirp');
-    machine_id_list = [];
-    session_id_list= [];
+    j2x = require('js2xmlparser'),
+    mkdirp = require('mkdirp'),
+
+    // local vars
+    machine_id_list = [],
+    session_id_list = [];
 
     // some constants
     var PORT = 12043,
@@ -149,12 +152,19 @@
 
 
             if (parsedBody[0].token === "sessiondata") {
-
+                // config disables xml and encoding declaration
+                xmlconfig = {
+                    declaration: {
+                        include: false
+                    }
+                };
                 for (i = 1; i < parsedBody.length; i++) {
                     console.log("reaches the session data loop ");
                     tobj = parsedBody[i];
-                    WRITE_DATA(tobj);
-                    xml_tobj = json2xml(tobj, 2);
+                    //WRITE_DATA(tobj);
+                    // this will wrap the telemetry data in a <event> tag
+                    xml_tobj = j2x("event", tobj, xmlconfig);
+                    WRITE_DATA(xml_tobj + "\n", tobj.machine_id, tobj.session_id);
                 }
             }
 
@@ -216,6 +226,9 @@
     /**
 *Taken from http://goessner.net/download/prj/jsonxml/json2xml.js
 */
+    
+    // dz17 - please don't do this, use the node module instead. I've already installed js2xmlparser as a node module on the server. 
+    /*
     function json2xml(o, tab) {
         var toXml = function (v, name, ind) {
             var xml = "";
@@ -254,6 +267,7 @@
             xml += toXml(o[m], m, "");
         return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
     }
+    */
 
     function contains(a, obj) {
         var i = a.length;
@@ -264,22 +278,47 @@
         }
         return false;
     }
+    
+
     /**
 	 * Writes telemetry data to a log file (specified by LOG_FILE_PATH).
 	 * Set the global WRITE_DATA = writeTDataToFile to log data in this way.
 	 * @method writeTDataToFile
 	 * @param {Object} tdata     the telemetry data object to stringify and write to file
 	 */
-    function writeTDataToFile(tdata) {
-        if (contains(machine_id_list, tdata.machine_id) === false) {
-            var newDirPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + tdata.machine_id;
-            var newPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + tdata.machine_id + '/';
+    function writeTDataToFile(tdata, mid, sid) {
+        if (contains(machine_id_list, mid) === false) {
+            machine_id_list.push(mid);
+            console.log("new machine detected, creating new directory");
+            var newDirPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + mid;
+            var newPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + mid + '/';
+
+            // new error handler catches case where asynchronous thread has created directory before machine ID entered registered ID list, as well as case where the folder exists from an old machine but the server was restarted so the ID is no longer cached in the array
+            // in the future we should scan the log folder names and put them into a dict instead of an array, which will let us re-acquire all existing machine IDs
             fs.mkdir(newDirPath, function (err) {
-                console.log("Error making directory!");
+                if (err === "EEXISTS") {
+                    console.log("Can't create directory; directory (machine) already exists");
+                    var existingPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + mid + '/';
+                    fs.appendFile(existingPath + sid, tdata, { flag: 'a' }, function (err) {
+                        //fs.appendFile(existingPath + sid, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
+                        var key;
+                        if (err) {
+                            console.log('err: ' + err);
+                        } else {
+                            console.log('interaction successfully written to log:');
+                            for (key in tdata) {
+                                if (tdata.hasOwnProperty(key) && key !== 'platform' && key !== 'browser' && key !== 'time_stamp') {
+                                    //console.log('      ' + key + ': ' + tdata[key]);
+                                }
+                            }
+                            //console.log('');
+                        }
+                    });
+                }
             });
-            machine_id_list.push(tdata.machine_id);
-           
-            fs.appendFile(newPath+tdata.session_id, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
+            
+            //fs.appendFile(newPath+sid, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
+            fs.appendFile(newPath + sid, tdata, { flag: 'a' }, function (err) {
                 var key;
                 if (err) {
                     console.log('err: ' + err);
@@ -287,15 +326,16 @@
                     console.log('interaction successfully written to log:');
                     for (key in tdata) {
                         if (tdata.hasOwnProperty(key) && key !== 'platform' && key !== 'browser' && key !== 'time_stamp') {
-                            console.log('      ' + key + ': ' + tdata[key]);
+                            //console.log('      ' + key + ': ' + tdata[key]);
                         }
                     }
-                    console.log('');
+                    //console.log('');
                 }
             });
         } else {
-            var existingPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + tdata.machine_id + '/';
-            fs.appendFile(existingPath + tdata.session_id, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
+            var existingPath = 'C:/Users/Garibaldi/Desktop/Telemetry Data/' + mid + '/';
+            fs.appendFile(existingPath + sid, tdata, { flag: 'a' }, function (err) {
+            //fs.appendFile(existingPath + sid, JSON.stringify(tdata) + ',', { flag: 'a' }, function (err) {
                 var key;
                 if (err) {
                     console.log('err: ' + err);
@@ -303,10 +343,10 @@
                     console.log('interaction successfully written to log:');
                     for (key in tdata) {
                         if (tdata.hasOwnProperty(key) && key !== 'platform' && key !== 'browser' && key !== 'time_stamp') {
-                            console.log('      ' + key + ': ' + tdata[key]);
+                            //console.log('      ' + key + ': ' + tdata[key]);
                         }
                     }
-                    console.log('');
+                    //console.log('');
                 }
             });
 
