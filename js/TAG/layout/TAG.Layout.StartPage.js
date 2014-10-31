@@ -1026,7 +1026,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 tobj.destination_page = "settings_view";
                 tobj.load_time = timer.get_elapsed();
                 tobj.identifier = null; //no identifier for this
-                //console.log("settings view load time: " + tobj.load_time);
+                console.log("settings view load time: " + tobj.load_time);
             });
         });
     }

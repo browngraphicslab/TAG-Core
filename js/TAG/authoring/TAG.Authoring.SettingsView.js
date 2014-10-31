@@ -528,7 +528,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
 
+        var timer = new TelemetryTimer();
         backButton.click(function () {
+
+            TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
+                tobj.item = "settings_view";
+                tobj.time_spent = timer.get_elapsed();
+                console.log("settings view spent time: " + tobj.time_spent);
+            });
+
             //if (!changesHaveBeenMade) {
             TAG.Util.removeYoutubeVideo();
                 TAG.Auth.clearToken();
