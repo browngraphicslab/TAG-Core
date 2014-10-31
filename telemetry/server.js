@@ -117,15 +117,23 @@
                     }
                     else {
                         console.log("connection created");
-                        var req = new Request("INSERT INTO tmetrytesttable(tagserver,browser,platform,time_stamp,time_human,machine_id,session_id) VALUES ('" + main_tobj.tagserver
-    + "','" + main_tobj.browser + "','" + main_tobj.platform + "','" + main_tobj.time_stamp + "','" + main_tobj.time_human + "','" + main_tobj.machine_id + "','" + main_tobj.session_id + "')", function (err, rowCount) {
-        if (err) {              //insert main tobj into each row of the table
-            console.log(err);
-        }
-        else {
-            console.log(rowCount + ' rows');
-        }
-    });
+                        var req = new Request("INSERT INTO tmetrytesttable(tagserver,browser,platform,time_stamp,time_human,machine_id,session_id) "
+                                + "VALUES ('" + main_tobj.tagserver + "','"
+                                + main_tobj.browser + "','"
+                                + main_tobj.platform + "','"
+                                + main_tobj.time_stamp + "','"
+                                + main_tobj.time_human + "','"
+                                + main_tobj.machine_id + "','"
+                                + main_tobj.session_id + "')",
+                            function (err, rowCount) {
+                                if (err) {              //insert main tobj into each row of the table
+                                    console.log(err);
+                                }
+                                else {
+                                    console.log(rowCount + ' rows');
+                                }
+                            }
+                        );
 
                         req.on('row', function (columns) {
                             columns.forEach(function (column) {
