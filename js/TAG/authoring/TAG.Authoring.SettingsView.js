@@ -1,4 +1,5 @@
-﻿TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
+﻿/// <reference path="../../../telemetry/telemetry.js" />
+TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
 
 /*  Creates a SettingsView, which is the first UI in authoring mode.  
  *  @class TAG.Authoring.SettingsView
@@ -19,7 +20,12 @@
 TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID) {
     "use strict";
     //$(document).off();                   
-     
+
+    var prevLeftBarSelection = {
+        timeSpentTimer: null,
+        categoryName: null,
+        loadTime: null
+    };
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
 
         //get all of the ui elements from the root and save them in variables
@@ -690,6 +696,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 loadFeedbackView(id);
                 break;
             case "General Settings":
+
             default:
                 selectLabel(nav[NAV_TEXT.general.text]);
                 prevSelectedSetting = nav[NAV_TEXT.general.text];
@@ -734,6 +741,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         });
         container.click(function () {
+            
+            TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
+                tobj.category_name = prevLeftBarSelection.categoryName;
+                tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
+                tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+            });
+
+            prevLeftBarSelection.timeSpentTimer.restart();
+            prevLeftBarSelection.loadTime = 0
+            prevLeftBarSelection.categoryName = text.text;
+
             // If a label is clicked return if its already selected.
             //if (prevSelectedSetting === container) {
             //    return;
@@ -776,7 +794,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadGeneralView
      */
     function loadGeneralView() {
-
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "General Settings",
+                loadTime: 0
+            };
+        }
+            
         inGeneralView = true;
         inCollectionsView = false;
         inArtworkView = false;
@@ -788,6 +813,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         prepareNextView(false);
 
+        var loadTimer = new TelemetryTimer();
         // Add this to our queue so the UI doesn't lock up
         middleQueue.add(function () { 
             var label;
@@ -802,7 +828,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             labelTwo = createMiddleLabel('Password Settings', null, loadPasswordScreen).attr('id', 'password');
             labelTwo.addClass('leftLabel');
             middleLoading.before(labelTwo);
-            middleLoading.hide();
+            middleLoading.hide(); 
+        });
+        middleQueue.add(function () {
+            prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
         });
         cancelLastSetting = null;
     }
@@ -1513,7 +1542,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //collectionsIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
-
+        var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {
             list = matches;
             displayLabels();
@@ -1587,6 +1616,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             // Hide the loading label when we're done
             middleQueue.add(function () {
                 middleLoading.hide();
+            });
+            middleQueue.add(function () {
+                prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
             });
         }
 
@@ -2480,7 +2512,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadTourView(id, matches) {
-
+        var loadTimer = new TelemetryTimer();
         inGeneralView = false;
         inCollectionsView = false;
         inArtworkView = false;
@@ -2580,6 +2612,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             // Hide the loading label when we're done
             middleQueue.add(function () {
                 middleLoading.hide();
+            });
+            middleQueue.add(function () {
+                prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
             });
         }
 
@@ -2864,6 +2899,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!tour) {
             return;
         }
+        TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
+            tobj.category_name = prevLeftBarSelection.categoryName;
+            tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
+            tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+        });
         var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Tour...', 1);
@@ -2995,6 +3035,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadAssocMediaView(id, matches) {
+        var loadTimer = new TelemetryTimer();
         //$(document).off();
         inGeneralView = false;
         inCollectionsView = false;
@@ -3116,6 +3157,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             } else {
                 middleLoading.hide();
             }
+            middleQueue.add(function () {
+                prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
+            });
         }
 
         cancelLastSetting = function () { cancel = true; };
@@ -4195,7 +4239,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //artworksIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
-
+        var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
             displayLabels();
@@ -4290,6 +4334,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             } else {
                 middleLoading.hide();
             }
+            middleQueue.add(function () {
+                prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
+            });
         }
             
         cancelLastSetting = function () { cancel = true; };
@@ -5461,6 +5508,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!artwork) {
             return;
         }
+        TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
+            tobj.category_name = prevLeftBarSelection.categoryName;
+            tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
+            tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+        });
         var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Artwork...', 1);
