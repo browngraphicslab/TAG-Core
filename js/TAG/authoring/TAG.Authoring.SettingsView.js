@@ -20,12 +20,6 @@ TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
 TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID) {
     "use strict";
     //$(document).off();                   
-
-    var prevLeftBarSelection = {
-        timeSpentTimer: null,
-        categoryName: null,
-        loadTime: null
-    };
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
 
         //get all of the ui elements from the root and save them in variables
@@ -177,6 +171,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mousedown", function () {
             newButton.css({"background-color":"white"});
         });
+
+    var prevLeftBarSelection = {
+        timeSpentTimer: null,
+        categoryName: null,
+        loadTime: null
+    };
+
+    var timer = new TelemetryTimer();
+    var prevMiddleBarSelection = {
+        type_representation: null,
+        time_spent_timer: null
+    };
+
+    /*Surbhi */
+
+        TAG.Telemetry.register(newButton, "mousedown", "ImportButton", function (tobj) {
+            tobj.element_type = "artwork";
+        });
+
+    //////////////////////////
         var checkConTimerId;
         var cancelArtworkLoad = null;
     loadHelper();
@@ -529,18 +543,28 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         backButton.mousedown(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
-
+            
         backButton.mouseleave(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
 
-        var timer = new TelemetryTimer();
         backButton.click(function () {
 
             TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                 tobj.item = "settings_view";
-                tobj.time_spent = timer.get_elapsed();
+                tobj.time_spent = SETTINGSVIEW_TIMER.get_elapsed();
                 console.log("settings view spent time: " + tobj.time_spent);
+            });
+
+            TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
+                tobj.category_name = prevLeftBarSelection.categoryName;
+                tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
+                tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+            });
+
+            TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+                tobj.type_representation = prevMiddleBarSelection.type_representation;
+                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
             });
 
             //if (!changesHaveBeenMade) {
@@ -593,6 +617,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //}
             
         });
+        /*
+        TAG.Telemtry.register(backButton, "click", "BackButton", function (tobj) {
+            tobj.current_artwork = artwork.Identifier;
+            tobj.next_page = null;
+            tobj.time_spent = null;
+        }); */
 
         var topBarLabel = root.find('#setViewTopBarLabel');
         var topBarLabelSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
@@ -794,14 +824,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadGeneralView
      */
     function loadGeneralView() {
-        if (prevLeftBarSelection.categoryName == null) {
-            prevLeftBarSelection = {
-                timeSpentTimer: new TelemetryTimer(),
-                categoryName: "General Settings",
-                loadTime: 0
-            };
-        }
-            
+  
         inGeneralView = true;
         inCollectionsView = false;
         inArtworkView = false;
@@ -812,6 +835,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         prepareNextView(false);
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "General Settings",
+                loadTime: 0
+            };
+        }
 
         var loadTimer = new TelemetryTimer();
         // Add this to our queue so the UI doesn't lock up
@@ -895,6 +925,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var fontFamily = TAG.Worktop.Database.getFontFamily();
         var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration()/60000;
 
+        prevMiddleBarSelection = {
+            type_representation: "Splash Screen",
+            time_spent_timer: new TelemetryTimer()
+        };
+
         // Create inputs
         //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
         var bgImgInput = createButton('Change Image', function () {
@@ -908,6 +943,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'background-size': 'cover',
                 });
             });
+        });
+        TAG.Telemetry.register(bgImgInput, "click", "BackgroundImage", function (tobj) {
+            //nothing to record
         });
         bgImgInput.css('height', '35px');
         /*var logoInput = createButton('Change Logo', function () {
@@ -1290,6 +1328,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(false, null, false);
         clearRight();
 
+        prevMiddleBarSelection = {
+            type_representation: "Password Screen",
+            time_spent_timer: new TelemetryTimer()
+        };
         var loading = createLabel('Loading...');
         var loadingSetting = createSetting('', loading);
         settingsContainer.append(loadingSetting);
@@ -1502,6 +1544,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //collectionsIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "General Settings",
+                loadTime: 0
+            };
+        }
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {
             list = matches;
@@ -1792,6 +1841,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             publicInput.css('background-color', 'white');
         }
+        
+        TAG.Telemetry.register(privateInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "collections";
+        });
+
+        TAG.Telemetry.register(publicInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "collections";
+        });
+
         /*var pubPrivDiv = $(document.createElement('div'));
         pubPrivDiv.append(privateInput).append(publicInput);*/
 
@@ -1808,6 +1868,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width': '48%',
             'height':'35px'
         });
+        TAG.Telemetry.register(invisibilityInput, "click", "Visibility", function (tobj) {
+            tobj.toggle_state = "Hide";
+            tobj.collection_id = exhibition.Identifier;
+        });
         var visibilityInput = createButton('Show on This Machine', function () {
             //if (!localVisibility) { changesHaveBeenMade = true; };
             localVisibility = true;
@@ -1817,6 +1881,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'min-height': '0px',
             'width': '48%',
             'height': '35px'
+        });
+
+        TAG.Telemetry.register(visibilityInput, "click", "Visibility", function (tobj) {
+            tobj.toggle_state = "Show";
+            tobj.collection_id = exhibition.Identifier;
         });
         if (localVisibility) {
             visibilityInput.css('background-color', 'white');
@@ -2462,7 +2531,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadTourView(id, matches) {
-        var loadTimer = new TelemetryTimer();
+        
+
         inGeneralView = false;
         inCollectionsView = false;
         inArtworkView = false;
@@ -2489,7 +2559,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //toursIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
 
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "Tour",
+                loadTime: 0
+            };
+        }
 
+        var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {
             list = matches;
             displayLabels();
@@ -2582,6 +2660,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteType = deleteTour;
         toDelete = tour;
 
+        prevMiddleBarSelection = {
+            type_representation: "Tour",
+            time_spent_timer: new TelemetryTimer()
+        };
+
         // Create an img element just to load the image
         var img = $(document.createElement('img'));
         img.attr('src', TAG.Worktop.Database.fixPath(tour.Metadata.Thumbnail));
@@ -2655,6 +2738,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
         });
+
+        TAG.Telemetry.register(privateInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "tours";
+        });
+
+        TAG.Telemetry.register(publicInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = publicInput.changesMade;
+            tobj.element_type = "tours";
+        });
+
 
         publicInput.attr('class','settingButton');
         if (privateState) {
@@ -2750,6 +2844,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
+        TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
+            //nothing to record
+        });
         var saveButton = createButton('Save',
             function () {
                 if (nameInput.val() === undefined || nameInput.val() === "") {
@@ -2839,6 +2936,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
             tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
         });
+
+        TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+            tobj.type_representation = prevMiddleBarSelection.type_representation;
+            tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+        });
+
         var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Tour...', 1);
@@ -2849,11 +2952,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
                     TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                         tobj.source_page = "settings_view";
-                        tobj.destination_page = "tour_editor";
+                        tobj.destination_page = "tour_authoring";
                         tobj.load_time = timer.get_elapsed();
                         tobj.identifier = tour.Identifier;
                         //console.log("tour editor load time: " + tobj.load_time);
                     });
+                    SPENT_TIMER.restart();
                 });
             });
         }, 1);
@@ -2970,7 +3074,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadAssocMediaView(id, matches) {
-        var loadTimer = new TelemetryTimer();
+
+        
+
+
         //$(document).off();
         inGeneralView = false;
         inCollectionsView = false;
@@ -3003,7 +3110,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //associatedMediaIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
-
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "Associated Media",
+                loadTime: 0
+            };
+        }
+        var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
             displayLabels();
@@ -3117,6 +3231,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var holder;
         var sourceExt;
         var source = (type === 'iframe') ? media.Metadata.Source : TAG.Worktop.Database.fixPath(media.Metadata.Source);
+
+        prevMiddleBarSelection = {
+            type_representation: "Assoc Media",
+            time_spent_timer: new TelemetryTimer()
+        };
+
         switch (type) {
             case "image":
                 holder = $(document.createElement('img'));
@@ -4149,7 +4269,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadArtView(id, matches) {
-
+        
         inGeneralView = false;
         inCollectionsView = false;
         inArtworkView = true;
@@ -4174,6 +4294,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //artworksIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "Artwork",
+                loadTime: 0
+            };
+        }
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
@@ -4301,6 +4428,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // Create an img element to load the image
         var mediaElement;
         var cancel = false;
+
+        prevMiddleBarSelection = {
+            type_representation: "Artwork",
+            time_spent_timer: new TelemetryTimer()
+        };
+
         if (artwork.Metadata.Type !== 'VideoArtwork') {
             mediaElement = $(document.createElement('img'));
             mediaElement.attr('src', TAG.Worktop.Database.fixPath(artwork.URL));
@@ -4586,12 +4719,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 changesMade = true;
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
+                TAG.Telemetry.recordEvent('LockToArtwork', function(tobj) {
+                    tobj.toggle_state = true;                                
+                });
+
             });
 
             unlockedInput.click(function () {
                 changesMade = true;
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
+                TAG.Telemetry.recordEvent('LockToArtwork', function(tobj) {
+                    tobj.toggle_state = false;                                
+                });
             });
             var lockedSetting = createSetting('Lock to this artwork', lockedDiv);
             settingsContainer.append(lockedSetting);
@@ -5448,6 +5588,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
             tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
         });
+
+        TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+            tobj.type_representation = prevMiddleBarSelection.type_representation;
+            tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+        });
         var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Artwork...', 1);
@@ -5463,6 +5608,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     tobj.identifier = artwork.Identifier;
                     //console.log("artwork editor load time: " + tobj.load_time);
                 });
+                SPENT_TIMER.restart();
             });
         }, 1);
     }
@@ -5818,6 +5964,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Util.removeYoutubeVideo();
             resetLabels('.middleLabel');
             selectLabel(container, !noexpand);
+
+            TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+                tobj.type_representation = prevMiddleBarSelection.type_representation;
+                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+            });
+
             if (onclick) {
                 onclick();
             }
@@ -6985,6 +7137,32 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     } else if (files[i].name.match('\.woff')) {
                         contentTypes.push('Font');
                     }
+                }
+
+                if (files.length > 0) {
+                    var elementType;
+                    switch (type) {
+                        case 0:
+                            elementType = "Standard";
+                            break;
+                        case 1:
+                            elementType = "DeepZoom";
+                            break;
+                        case 2:
+                            elementType = "Associated Media";
+                            break;
+                        case 3:
+                            elementType = "Video Artwork";
+                        case 4:
+                            elementType = "Map";
+                            break;
+                        default:
+                            elementType = "Unkown";
+                    }
+                    TAG.Telemetry.recordEvent("EndOfImport", function (tobj) {
+                        tobj.number_imported = files.length;
+                        tobj.element_type = elementType;
+                    });
                 }
             },
             // remote callback - save correct name

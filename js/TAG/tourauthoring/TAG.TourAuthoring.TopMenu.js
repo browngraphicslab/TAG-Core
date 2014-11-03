@@ -28,7 +28,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
     (function _createHTML() {
         topbar.css({ "background-color": "rgb(63,55,53)", "height": "8%", "width": "100%" });
         topbar.attr('id', 'topbar');
-
+        
         var buttonHeight = $(window).height() * 0.0504; // matches effective % size from SettingsView
         var backButtonArea = $(document.createElement('div'));
         backButtonArea.css({
@@ -123,7 +123,13 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             var tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);
             viewer.stop();
             viewer.unload();
-            TAG.Util.UI.slidePageRight(tempSettings.getRoot());
+            TAG.Util.UI.slidePageRight(tempSettings.getRoot(), function () {
+                TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
+                    tobj.item = "tour_authoring";
+                    tobj.time_spent = SPENT_TIMER.get_elapsed();
+                    console.log("tour authoring spent time: " + tobj.time_spent);
+                });
+            });
         }
         //backDialogOverlay.attr('id', 'backDialogOverlay');
         //backDialogOverlay.css({
@@ -495,12 +501,12 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             save(true);
             saveButton.prop('disabled', true);
             saveButton.css('opacity', '0.4');
-
             //}, 'Save changes to ' + textArea.val() + '?', "Save", false);
             //root.append(saveDialog);
             //$(saveDialog).css('z-index', 1000000);
             //$(saveDialog).show();
         });
+        TAG.Telemetry.register(saveButton, 'click', 'SaveTour', null);
 
         //topbar.append(buttonPanel);
 

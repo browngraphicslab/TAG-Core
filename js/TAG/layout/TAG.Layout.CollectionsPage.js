@@ -186,6 +186,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
 
         //Search telemetry register
+        /*
         TAG.Telemetry.register(searchInput, 'keyup', 'Search', function(tobj, evt){
             if(evt.which != 13) {
                 return true;
@@ -197,7 +198,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tobj.number_of_matches = searchResultsLength; 
             }, 2000);       //Delay so that searchResultsLength gets updated
             
-        });
+        }); */
 
         searchInput.css({
             'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")',
@@ -1199,6 +1200,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
         searchResultsLength = matchedArts.length;
+        TAG.Telemetry.recordEvent('Search', function (tobj) {
+            tobj.search_text = searchTxt.text();
+            tobj.current_collection = currCollection.Identifier;
+            tobj.number_of_matches = matchedArts.length;
+        });
         drawCatalog(matchedArts, currentTag, 0, true);
         drawCatalog(unmatchedArts, currentTag, searchResultsLength, false);
     }
