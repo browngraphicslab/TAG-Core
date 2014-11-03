@@ -20,12 +20,6 @@ TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
 TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID) {
     "use strict";
     //$(document).off();                   
-
-    var prevLeftBarSelection = {
-        timeSpentTimer: null,
-        categoryName: null,
-        loadTime: null
-    };
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
 
         //get all of the ui elements from the root and save them in variables
@@ -178,7 +172,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             newButton.css({"background-color":"white"});
         });
 
+    var prevLeftBarSelection = {
+        timeSpentTimer: null,
+        categoryName: null,
+        loadTime: null
+    };
 
+    var timer = new TelemetryTimer();
+    var prevMiddleBarSelection = {
+        type_representation: null,
+        time_spent_timer: null
+    };
 
     /*Surbhi */
 
@@ -539,7 +543,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         backButton.mousedown(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
-
+            
         backButton.mouseleave(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
@@ -550,6 +554,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 tobj.item = "settings_view";
                 tobj.time_spent = SETTINGSVIEW_TIMER.get_elapsed();
                 console.log("settings view spent time: " + tobj.time_spent);
+            });
+
+            TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
+                tobj.category_name = prevLeftBarSelection.categoryName;
+                tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
+                tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+            });
+
+            TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+                tobj.type_representation = prevMiddleBarSelection.type_representation;
+                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
             });
 
             //if (!changesHaveBeenMade) {
@@ -909,6 +924,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var secondaryFontColor = TAG.Worktop.Database.getSecondaryFontColor();
         var fontFamily = TAG.Worktop.Database.getFontFamily();
         var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration()/60000;
+
+        prevMiddleBarSelection = {
+            type_representation: "Splash Screen",
+            time_spent_timer: new TelemetryTimer()
+        };
 
         // Create inputs
         //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
@@ -1345,6 +1365,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(false, null, false);
         clearRight();
 
+        prevMiddleBarSelection = {
+            type_representation: "Password Screen",
+            time_spent_timer: new TelemetryTimer()
+        };
         var loading = createLabel('Loading...');
         var loadingSetting = createSetting('', loading);
         settingsContainer.append(loadingSetting);
@@ -2658,6 +2682,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteType = deleteTour;
         toDelete = tour;
 
+        prevMiddleBarSelection = {
+            type_representation: "Tour",
+            time_spent_timer: new TelemetryTimer()
+        };
+
         // Create an img element just to load the image
         var img = $(document.createElement('img'));
         img.attr('src', TAG.Worktop.Database.fixPath(tour.Metadata.Thumbnail));
@@ -2941,6 +2970,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
             tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
         });
+
+        TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+            tobj.type_representation = prevMiddleBarSelection.type_representation;
+            tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+        });
+
         var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Tour...', 1);
@@ -3220,6 +3255,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var holder;
         var sourceExt;
         var source = (type === 'iframe') ? media.Metadata.Source : TAG.Worktop.Database.fixPath(media.Metadata.Source);
+
+        prevMiddleBarSelection = {
+            type_representation: "Assoc Media",
+            time_spent_timer: new TelemetryTimer()
+        };
+
         switch (type) {
             case "image":
                 holder = $(document.createElement('img'));
@@ -4404,6 +4445,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // Create an img element to load the image
         var mediaElement;
         var cancel = false;
+
+        prevMiddleBarSelection = {
+            type_representation: "Artwork",
+            time_spent_timer: new TelemetryTimer()
+        };
+
         if (artwork.Metadata.Type !== 'VideoArtwork') {
             mediaElement = $(document.createElement('img'));
             mediaElement.attr('src', TAG.Worktop.Database.fixPath(artwork.URL));
@@ -5551,6 +5598,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
             tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
         });
+
+        TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+            tobj.type_representation = prevMiddleBarSelection.type_representation;
+            tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+        });
         var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Artwork...', 1);
@@ -5922,6 +5974,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Util.removeYoutubeVideo();
             resetLabels('.middleLabel');
             selectLabel(container, !noexpand);
+
+            TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+                tobj.type_representation = prevMiddleBarSelection.type_representation;
+                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+            });
+
             if (onclick) {
                 onclick();
             }
