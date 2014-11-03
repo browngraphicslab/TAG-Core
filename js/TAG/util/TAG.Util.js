@@ -3958,7 +3958,7 @@ TAG.Util.UI = (function () {
                 pickerOverlay.remove(); 
             }); //Josh L -- fix so the div actually fades out
             globalKeyHandler[0] = currentKeyHandler;
-            //TAG.Telemetry.register()
+            TAG.Telemetry.register(this, 'click', 'CancelAssociatedMediaPicker', null);
         });
 
         optionButtonDiv.append(cancelButton);

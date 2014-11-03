@@ -182,6 +182,10 @@ TAG.TelemetryEvents = (function () {
                 break;
             case "ArtworkEditorMetadata":
                 break;
+            case "LocHisorySortbyTitle":
+                break;
+            case "LocHistorySortbyDate":
+                break;
             case "AddCustomField":
                 break;
             case "RemoveCustonField":
