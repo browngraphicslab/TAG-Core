@@ -750,8 +750,12 @@ TAG.TourAuthoring.Display = function (spec, my) {
             menu.addInput('Fade-Out', TAG.TourAuthoring.MenuInputFormats.sec,
                 getFadeOut, setFadeOutFromMenu);
         }
-        menu.addButton('Delete', 'left', removeHelper);
+        var deleteKFButton = menu.addButton('Delete', 'left', removeHelper);
         menu.addButton('Close', 'right', menu.forceClose);
+
+        //Telemetry
+        TAG.Telemetry.register(deleteKFButton, "mousedown", "DeleteDisplay");
+
     })();
 
     function getLimits() {
