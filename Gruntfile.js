@@ -172,6 +172,8 @@ module.exports = function(grunt) {
 					        \n        pageToLoad           = {}, // a specific page to load \
 					        \n        TELEMETRY_SESSION_ID = null, \
 					        \n        TELEMETRY_SWITCH     = "on", \
+                            \n        SPENT_TIMER          = null, \
+                            \n        SETTINGSVIEW_TIMER    = null, \
                             \n        IS_WINDOWS           = (typeof Windows !== "undefined"), \
                             \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
 					        \n        idleTimer, \
