@@ -343,7 +343,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         }
         
         goToCollectionsButton.on('click', function () {
-            if (TAG.Worktop.Database.getLocked()) {
+            if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
                 TAG.Worktop.Database.getArtworks(function (result) {
                     $.each(result, function (index, artwork) {
                         if (artwork.Identifier === TAG.Worktop.Database.getLocked()) {

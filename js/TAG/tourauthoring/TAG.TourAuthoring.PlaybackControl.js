@@ -729,6 +729,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         undoButton.click(function () {
             undoManager.undo();
         });
+        TAG.Telemetry.register(undoButton, 'click', 'TourUndo', null);
         undoRedoButtonArea.append(undoButton);
         that.undoButton = undoButton;
 
@@ -739,6 +740,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         redoButton.click(function () {
             undoManager.redo();
         });
+        TAG.Telemetry.register(redoButton, 'click', 'TourRedo', null);
         undoRedoButtonArea.append(redoButton);
         that.redoButton = redoButton;
         undoRedoButtonArea.append(undoRedoInkOnly);
