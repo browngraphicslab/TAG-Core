@@ -3237,6 +3237,7 @@ function trackTitleReleased(evt) {
         drawLines();
         my.timeline.updateVerticalScroller();
         my.timeline.enableDisableDrag();
+        TAG.Telemetry.register(titleDiv, 'DoubleClick', 'MinimizeTrackHeader', null);
     }
 
     return that;
