@@ -7051,6 +7051,32 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         contentTypes.push('Font');
                     }
                 }
+
+                if (files.length > 0) {
+                    var elementType;
+                    switch (type) {
+                        case 0:
+                            elementType = "Standard";
+                            break;
+                        case 1:
+                            elementType = "DeepZoom";
+                            break;
+                        case 2:
+                            elementType = "Associated Media";
+                            break;
+                        case 3:
+                            elementType = "Video Artwork";
+                        case 4:
+                            elementType = "Map";
+                            break;
+                        default:
+                            elementType = "Unkown";
+                    }
+                    TAG.Telemetry.recordEvent("EndOfImport", function (tobj) {
+                        tobj.number_imported = files.length;
+                        tobj.element_type = elementType;
+                    });
+                }
             },
             // remote callback - save correct name
             function (urls) {
