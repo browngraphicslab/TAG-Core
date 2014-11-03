@@ -382,7 +382,10 @@ TAG.TourAuthoring.Track = function (spec, my) {
         menu.addTitle('Track Options');
         var renameButton = menu.addButton('Rename', 'left', componentOptionRename);
         if (my.type === TAG.TourAuthoring.TrackType.ink) {
-            menu.addButton('Edit Annotation', 'left', componentOptionEditInk);
+            var annotationButton = menu.addButton('Edit Annotation', 'left', componentOptionEditInk);
+            //Telemetry for add annotation button
+            TAG.Telemetry.register(annotationButton, "mousedown", "EditAnnotation");
+
         }
         if (my.type === TAG.TourAuthoring.TrackType.video && !my.toConvert) {
             convertbtn = menu.addButton('Convert', 'left', componentOptionConvertVideo);
@@ -412,6 +415,9 @@ TAG.TourAuthoring.Track = function (spec, my) {
             renameButton.css({ "background-color": "transparent", "color": "white" });
         });
 
+        //Telemetry for rename button
+        TAG.Telemetry.register(renameButton, "mousedown", "RenameTrack");
+
         //Duplicate button highlighting
         duplicateButton.on('mousedown', function () {
             duplicateButton.css({ "background-color": "white", "color": "black" });
@@ -425,6 +431,9 @@ TAG.TourAuthoring.Track = function (spec, my) {
             duplicateButton.css({ "background-color": "transparent", "color": "white" });
         });
 
+        //Telemetry for duplicate button
+        TAG.Telemetry.register(duplicateButton, "mousedown", "DuplicateTrack");
+
         //Delete button highlighting
         deleteButton.on('mousedown', function () {
             deleteButton.css({ "background-color": "white", "color": "black" });
@@ -437,6 +446,9 @@ TAG.TourAuthoring.Track = function (spec, my) {
         deleteButton.on('mouseout', function () {
             deleteButton.css({ "background-color": "transparent", "color": "white" });
         });
+
+        //Telemetry for duplicate button
+        TAG.Telemetry.register(deleteButton, "mousedown", "DeleteTrack");
 
         //Cancel button highlighting
         cancelButton.on('mousedown', function () {

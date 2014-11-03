@@ -975,7 +975,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         var isOpen = false,
             RLH,
             locationPanelDiv;
-
+        var timer = new TelemetryTimer();
         function init() {
             RLH = TAG.Util.RLH({
                 artwork: artwork,
@@ -987,6 +987,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         function open() {
             if (!isOpen) {
+                timer.restart();
                 closeAllPanels();
                 MEDIA_EDITOR.close();
                 editLocButton.css({ 'background-color': 'white', 'color': 'black' }).css('border-radius', '3.5px');
@@ -1001,6 +1002,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         function close() {
             if (isOpen) {
+                TAG.Telemetry.recordEvent("EditMaps", function (tobj) {
+                    tobj.time_spent = timer.get_elapsed();
+                });
                 editLocButton.css({ 'background-color': 'transparent', 'color': 'white' }).css('border-radius', '3.5px');
                 rightArrowEditLoc.attr('src', tagPath+'images/icons/Right.png');
                 locationPanelDiv.hide("slide", { direction: 'left' }, 500, function () {

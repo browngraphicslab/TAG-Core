@@ -1823,6 +1823,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             TAG.Util.searchData(associatedsearchbar.val(), '.mediaHolder', IGNORE_IN_SEARCH);
         });
 
+        //Search telemetry register
+        TAG.Telemetry.register(associatedsearchbar, 'keyup', 'SearchWhileImporting', function (tobj, evt) {
+            if(evt.which != 13) {
+                return true;
+            }
+            tobj.element_type = "associated media";
+        }); 
+
+
         $(associatedMediaPickerHeader).append(associatedsearchbar);
 
         associatedMediaPicker.append(associatedMediaPickerHeader);
@@ -2459,6 +2468,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 return;
             TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
         });
+
+        //Search telemetry register
+        TAG.Telemetry.register(searchbar, 'keyup', 'SearchWhileImporting', function (tobj, evt) {
+            if (evt.which != 13) {
+                return true;
+            }
+            tobj.element_type = "artwork";
+        });
+
         searchbar.change(function () {
             if (!pickerloaded)
                 return;
@@ -2805,6 +2823,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
             }
 
+            //Telemetry
+            TAG.Telemetry.register(artHolder, 'click', 'ArtworkLabelAssocMediaImport');
+
             //double clicking will import all selected artworks
             function doubleClick(e,artHolder) {
                 var i, selectedArt;
@@ -2972,6 +2993,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         }
                     }
                 }
+
+                //Telemetry
+                emetry.register(catalogPickerImport, 'click', 'CollectionLabelArtworkImport');
+
                 if (selectedArtworks && selectedArtworks.length) {
                     artQueue.clear();
                     loading.text('Importing...');
