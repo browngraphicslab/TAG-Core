@@ -944,6 +944,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             });
         });
+        TAG.Telemetry.register(bgImgInput, "click", "BackgroundImage", function (tobj) {
+            //nothing to record
+        });
         bgImgInput.css('height', '35px');
         /*var logoInput = createButton('Change Logo', function () {
             changesHaveBeenMade = true;
