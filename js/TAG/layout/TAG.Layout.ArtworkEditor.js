@@ -240,10 +240,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             tobj.mode = 'artwork editor';
         });
 
-         TAG.Telemetry.register(root.find('.addRemoveMedia'),'click','artworkeditor_media_addremove',function(tobj){
-             tobj.mode = 'artwork editor';
-        });
-
         TAG.Telemetry.register(root.find('#locationHistoryAddLocationButton'),'click','artworkeditor_addlocation',function(tobj){
             tobj.mode = 'artwork editor';
         });
