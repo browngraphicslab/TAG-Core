@@ -1107,6 +1107,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     }
                     type = TAG.TourAuthoring.TrackType.audio;
                     mediaFiles = files;
+                    
                 },
                 function (urls) {
                     getMusicPropertiesHelper(mediaFiles, 0, urlsCallback);
@@ -1137,6 +1138,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         isUploading = false;
                         timeline.getDataHolder().mapTracks(function (container, i) {
                             container.track.updatePos(i);
+                        });
+                        TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
+                            tobj.track_type = "Audio File";
+                            tobj.quantity = urls.length;
                         });
                     }
                 },
@@ -1277,6 +1282,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         timeline.getDataHolder().mapTracks(function (container, i) {
                             container.track.updatePos(i);
                         });
+                        TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
+                            tobj.track_type = "Video File";
+                            tobj.quantity = urls.length;
+                        });
                     }
                 },
             ['.mp4', '.webm', '.ogv','.avi','.mov','.wma'],//'.avi','.mov','.wma'
@@ -1314,6 +1323,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     isUploading = false;
                     timeline.getDataHolder().mapTracks(function (container, i) {
                         container.track.updatePos(i);
+                    });
+                    TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
+                        tobj.track_type = "Image File";
+                        tobj.quantity = urls.length;
                     });
                 },
                 ['.jpg', '.png', '.gif', '.tif', '.tiff'],
@@ -2252,6 +2265,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             console.log('Unrecognized file type imported!!!???');
                         }
                     }
+                    TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
+                        tobj.track_type = "Assoc Media";
+                        tobj.quantity = selectedArtworks.length;
+                    });
                     undoManager.combineLast(2 * selectedArtworks.length);
                 }
                 //associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
@@ -2995,7 +3012,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
 
                 //Telemetry
-                emetry.register(catalogPickerImport, 'click', 'CollectionLabelArtworkImport');
+                TAG.Telemetry.register(catalogPickerImport, 'click', 'CollectionLabelArtworkImport');
 
                 if (selectedArtworks && selectedArtworks.length) {
                     artQueue.clear();
@@ -3006,6 +3023,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     for (i = 0; i < selectedArtworks.length; i++) {
                         importHelper(i);
                     }
+                    TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
+                        tobj.track_type = "Artwork";
+                        tobj.quantity = selectedArtworks.length;
+                    });
                     undoManager.combineLast(2 * selectedArtworks.length);
                     //artQueue.add(function () {
                         //allow ink annotations
@@ -4994,6 +5015,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     check = currentInkController.link();
                 if (!check)
                     return;
+
+                TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
+                    tobj.track_type = "Ink";
+                    tobj.quantity = 1;
+                });
 
                 controls.hide();
                 // reset undo/redo buttons to global undo/redo functionality
