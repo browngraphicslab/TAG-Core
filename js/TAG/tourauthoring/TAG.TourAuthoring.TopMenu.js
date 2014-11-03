@@ -123,7 +123,13 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             var tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);
             viewer.stop();
             viewer.unload();
-            TAG.Util.UI.slidePageRight(tempSettings.getRoot());
+            TAG.Util.UI.slidePageRight(tempSettings.getRoot(), function () {
+                TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
+                    tobj.item = "tour_authoring";
+                    tobj.time_spent = SPENT_TIMER.get_elapsed();
+                    console.log("tour authoring spent time: " + tobj.time_spent);
+                });
+            });
         }
         //backDialogOverlay.attr('id', 'backDialogOverlay');
         //backDialogOverlay.css({
