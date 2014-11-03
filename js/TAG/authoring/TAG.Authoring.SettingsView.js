@@ -1160,7 +1160,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-left': '.5%',
             'float': 'right'
         }, true);
-
+        TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+            tobj.element_type = "Splash Screen";
+        });
         // preview buttons
         var previewStartPageButton = createButton('Splash Screen', function () {
             previewStartPage(primaryFontColorInput, secondaryFontColorInput);
@@ -1414,6 +1416,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         new2: newInput2,       // New password confirmation
                         msg: msgLabel,         // Message area
                     });
+                });
+                TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+                    tobj.element_type = "Change Password";
                 });
                 // Make the save button respond to enter
                 saveButton.removeAttr('type');
@@ -2303,7 +2308,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0',
                 'margin-bottom': '3%',
             });
-
+            TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+                tobj.element_type = "Collections";
+            });
             var catalogNext = true;
             // Creates the button to toggle between views
             var switchViewButton = createButton('Preview Catalog', function () {
@@ -2925,7 +2932,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '.5%',
                 'float': 'right'
             }, true);
-
+        TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+            tobj.element_type = "Tour";
+        });
         buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
 
         saveButton.on("mousedown", function () {
@@ -3653,7 +3662,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '.5%',
                 'float': 'right'
             }, true);
-
+        TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+            tobj.element_type = "Assoc Media";
+        });
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
                 saveThumbnail(media, false);
@@ -4903,7 +4914,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-left': '.5%',
                     'float': 'right'
                 }, true);
-
+            TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+                tobj.element_type = "Artwork";
+            });
             var xmluploaderbtn = createButton('Upload XML',
                             function () {
                                 uploadXML(artwork, inputs, settingsContainer);
