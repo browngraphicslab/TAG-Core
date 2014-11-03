@@ -2841,7 +2841,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
 
             //Telemetry
-            TAG.Telemetry.register(artHolder, 'click', 'ArtworkLabelAssocMediaImport');
 
             //double clicking will import all selected artworks
             function doubleClick(e,artHolder) {
@@ -2928,6 +2927,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $(this).data('double', 2);
                     doubleClick.call(this, e, artHolder);
                 });
+
             }
 
 
@@ -2950,7 +2950,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     });
                 }
             });
-
+            TAG.Telemetry.register($(allArtworksHolder), 'click', 'ArtworkLabelAssocMediaImport');
 
 
             $(catalogPickerOverlay).fadeIn();
