@@ -177,6 +177,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mousedown", function () {
             newButton.css({"background-color":"white"});
         });
+
+
+
+    /*Surbhi */
+
+        TAG.Telemetry.register(newButton, "mousedown", "ImportButton", function (tobj) {
+            tobj.element_type = "artwork";
+        });
+
+    //////////////////////////
         var checkConTimerId;
         var cancelArtworkLoad = null;
     loadHelper();
@@ -593,6 +603,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //}
             
         });
+        /*
+        TAG.Telemtry.register(backButton, "click", "BackButton", function (tobj) {
+            tobj.current_artwork = artwork.Identifier;
+            tobj.next_page = null;
+            tobj.time_spent = null;
+        }); */
 
         var topBarLabel = root.find('#setViewTopBarLabel');
         var topBarLabelSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
@@ -1832,6 +1848,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             publicInput.css('background-color', 'white');
         }
+        
+        TAG.Telemetry.register(privateInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "collections";
+        });
+
+        TAG.Telemetry.register(publicInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "collections";
+        });
+
         /*var pubPrivDiv = $(document.createElement('div'));
         pubPrivDiv.append(privateInput).append(publicInput);*/
 
@@ -2705,6 +2732,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
         });
+
+        TAG.Telemetry.register(privateInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "tours";
+        });
+
+        TAG.Telemetry.register(publicInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = publicInput.changesMade;
+            tobj.element_type = "tours";
+        });
+
 
         publicInput.attr('class','settingButton');
         if (privateState) {
