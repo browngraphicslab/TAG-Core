@@ -2366,6 +2366,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
+            TAG.Telemetry.register(artPickerButton, "click", "EditorButton", function (tobj) {
+                tobj.edit_type = "Manage Collection";
+                tobj.element_id = exhibition.Identifier;
+            });
+
             artPickerButton.on("mousedown", function () {
                 artPickerButton.css({ "background-color": "white"});
             });
@@ -2872,6 +2877,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
+
+        TAG.Telemetry.register(editButton, "click", "EditorButton", function (tobj) {
+            tobj.edit_type = "Edit Tour";
+            tobj.element_id = tour.Identifier;
+        });
+
         var deleteButton = createButton('Delete',
             function () { deleteTour(tour); },
             {
@@ -3582,7 +3593,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-        
+        TAG.Telemetry.register(assocButton, "click", "EditorButton", function (tobj) {
+            tobj.edit_type = "Manage Associations";
+            tobj.element_id = media.Identifier;
+        });
+
         leftButton = assocButton;
         var deleteButton = createButton('Delete',
             function () { deleteAssociatedMedia(media); /*changesHaveBeenMade = true;*/ },
@@ -4830,6 +4845,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-right': '0%',
                     'margin-bottom': '3%',
                 });
+
+            TAG.Telemetry.register(editArt, "click", "EditorButton", function (tobj) {
+                tobj.edit_type = "Artwork Editor";
+                tobj.element_id = artwork.Identifier;
+            });
             leftButton = editArt;
             editArt.attr("id", "artworkEditorButton");
             var deleteArt = createButton('Delete',
