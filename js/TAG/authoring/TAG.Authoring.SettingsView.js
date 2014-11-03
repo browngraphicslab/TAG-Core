@@ -824,14 +824,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadGeneralView
      */
     function loadGeneralView() {
-        if (prevLeftBarSelection.categoryName == null) {
-            prevLeftBarSelection = {
-                timeSpentTimer: new TelemetryTimer(),
-                categoryName: "General Settings",
-                loadTime: 0
-            };
-        }
-            
+  
         inGeneralView = true;
         inCollectionsView = false;
         inArtworkView = false;
@@ -842,6 +835,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         prepareNextView(false);
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "General Settings",
+                loadTime: 0
+            };
+        }
 
         var loadTimer = new TelemetryTimer();
         // Add this to our queue so the UI doesn't lock up
@@ -943,6 +943,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'background-size': 'cover',
                 });
             });
+        });
+        TAG.Telemetry.register(bgImgInput, "click", "BackgroundImage", function (tobj) {
+            //nothing to record
         });
         bgImgInput.css('height', '35px');
         /*var logoInput = createButton('Change Logo', function () {
@@ -1581,6 +1584,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //collectionsIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "General Settings",
+                loadTime: 0
+            };
+        }
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {
             list = matches;
@@ -2562,7 +2572,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadTourView(id, matches) {
-        var loadTimer = new TelemetryTimer();
+        
+
         inGeneralView = false;
         inCollectionsView = false;
         inArtworkView = false;
@@ -2589,7 +2600,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //toursIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
 
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "Tour",
+                loadTime: 0
+            };
+        }
 
+        var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {
             list = matches;
             displayLabels();
@@ -3108,7 +3127,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadAssocMediaView(id, matches) {
-        var loadTimer = new TelemetryTimer();
+
+        
+
+
         //$(document).off();
         inGeneralView = false;
         inCollectionsView = false;
@@ -3141,7 +3163,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //associatedMediaIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
-
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "Associated Media",
+                loadTime: 0
+            };
+        }
+        var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
             displayLabels();
@@ -4293,7 +4322,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadArtView(id, matches) {
-
+        
         inGeneralView = false;
         inCollectionsView = false;
         inArtworkView = true;
@@ -4318,6 +4347,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
         //artworksIsLoading && showLoading();
         //(saveArray.indexOf(previousIdentifier) < 0) && function () { hideLoading(); hideLoadingSettings(pCL); };
+        if (prevLeftBarSelection.categoryName == null) {
+            prevLeftBarSelection = {
+                timeSpentTimer: new TelemetryTimer(),
+                categoryName: "Artwork",
+                loadTime: 0
+            };
+        }
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
