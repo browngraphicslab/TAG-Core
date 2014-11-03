@@ -342,6 +342,10 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
                 timeline.cancelAccel();
             }
         });
+
+        //Telemetry
+        TAG.Telemetry.register(zoomfader, "mousedown", "ZoomSlider");
+
         $('#timeRuler').livequery(function () {
             var percent = zoomfader.position().left / (zoomfader.offsetParent().width() - zoomfader.width());
             zoom(percent);
