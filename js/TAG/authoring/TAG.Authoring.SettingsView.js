@@ -1908,6 +1908,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width': '48%',
             'height':'35px'
         });
+        TAG.Telemetry.register(invisibilityInput, "click", "Visibility", function (tobj) {
+            tobj.toggle_state = "Hide";
+            tobj.collection_id = exhibition.Identifierl;
+        });
         var visibilityInput = createButton('Show on This Machine', function () {
             //if (!localVisibility) { changesHaveBeenMade = true; };
             localVisibility = true;
@@ -1917,6 +1921,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'min-height': '0px',
             'width': '48%',
             'height': '35px'
+        });
+
+        TAG.Telemetry.register(visibilityInput, "click", "Visibility", function (tobj) {
+            tobj.toggle_state = "Show";
+            tobj.collection_id = exhibition.Identifierl;
         });
         if (localVisibility) {
             visibilityInput.css('background-color', 'white');
