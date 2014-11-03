@@ -1910,7 +1910,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         TAG.Telemetry.register(invisibilityInput, "click", "Visibility", function (tobj) {
             tobj.toggle_state = "Hide";
-            tobj.collection_id = exhibition.Identifierl;
+            tobj.collection_id = exhibition.Identifier;
         });
         var visibilityInput = createButton('Show on This Machine', function () {
             //if (!localVisibility) { changesHaveBeenMade = true; };
@@ -1925,7 +1925,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         TAG.Telemetry.register(visibilityInput, "click", "Visibility", function (tobj) {
             tobj.toggle_state = "Show";
-            tobj.collection_id = exhibition.Identifierl;
+            tobj.collection_id = exhibition.Identifier;
         });
         if (localVisibility) {
             visibilityInput.css('background-color', 'white');
@@ -2894,6 +2894,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
+        TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
+            //nothing to record
+        });
         var saveButton = createButton('Save',
             function () {
                 if (nameInput.val() === undefined || nameInput.val() === "") {
