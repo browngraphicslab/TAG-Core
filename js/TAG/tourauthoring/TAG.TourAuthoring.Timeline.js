@@ -384,6 +384,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                 });
             }
         });
+        TAG.Telemetry.register($(multiSelButton), 'click', 'MultiSelect', null);
 
         editInkOverlay.css({
             top: TAG.Util.Constants.timeRulerSize,

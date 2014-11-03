@@ -210,7 +210,9 @@ TAG.TourAuthoring.TourOptions = function (spec) {
                 },
                 allowTaint: true, // allow imageES images in thumbnails, etc
             });
+
         });
+        TAG.Telemetry.register(thumbnailButton, 'click', 'CaptureTourThumbnail', null);
 
         function unauth() {
             dialogOverlay.hide();
@@ -244,10 +246,10 @@ TAG.TourAuthoring.TourOptions = function (spec) {
             dialogOverlay.fadeIn(500);
             // Set timeInput to the current length
             timeInput.val(timeManager.formatTime(timeManager.getDuration().end));
-
             timeInput.select();
             messageRow.text('');
         });
+        TAG.Telemetry.register(lengthButton, 'click', 'ChangeTourLength', null);
 
         // Tour Length Dialog
         // Overlay to darken out main UI
@@ -541,6 +543,8 @@ TAG.TourAuthoring.TourOptions = function (spec) {
             //    }
             //);
         }
+        TAG.Telemetry.register($(exportButton), 'click', 'ExportTourData', null);
+
         function popupTextareaDialog(description, text) {
             var overlay = $(TAG.Util.UI.blockInteractionOverlay()),
                 messageDiv = $(document.createElement('div')),
