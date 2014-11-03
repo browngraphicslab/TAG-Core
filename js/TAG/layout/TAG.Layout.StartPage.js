@@ -13,6 +13,9 @@ TAG.Util.makeNamespace("TAG.Layout.StartPage");
 TAG.Layout.StartPage = function (options, startPageCallback) {
     "use strict"; ////////////////////////////////////////////////
 
+    SPENT_TIMER = new TelemetryTimer(); //global timer to measure time spent
+    SETTINGSVIEW_TIMER = new TelemetryTimer(); //global timer to measure time spent in settings view
+
     var isPreview;
     options && function () {isPreview = options.isPreview; }();
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
@@ -1028,6 +1031,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 tobj.identifier = null; //no identifier for this
                 console.log("settings view load time: " + tobj.load_time);
             });
+            SPENT_TIMER.restart();
         });
     }
  

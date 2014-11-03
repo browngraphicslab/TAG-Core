@@ -157,7 +157,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
             TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                 tobj.item = "artwork_editor";
-                tobj.time_spent = timer.get_elapsed();
+                tobj.time_spent = SPENT_TIMER.get_elapsed();
                 console.log("artwork editor spent time: " + tobj.time_spent);
             });
 
