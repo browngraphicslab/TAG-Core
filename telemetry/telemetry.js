@@ -93,7 +93,6 @@ TAG.Telemetry = (function () {
             };
             tobj.is_splitscreen = TAG.Util.Splitscreen.isOn();
             TAG.TelemetryEvents.initEventProperties(tobj);
-            console.log("asjdkld");
             console.log("sessiondataobj is " + " " + tobj);
 
             // if preHandler returns true, return
