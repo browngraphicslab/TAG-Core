@@ -4781,12 +4781,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 changesMade = true;
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
+                TAG.Telemetry.recordEvent('LockToArtwork', function(tobj) {
+                    tobj.toggle_state = true;                                
+                });
+
             });
 
             unlockedInput.click(function () {
                 changesMade = true;
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
+                TAG.Telemetry.recordEvent('LockToArtwork', function(tobj) {
+                    tobj.toggle_state = false;                                
+                });
             });
             var lockedSetting = createSetting('Lock to this artwork', lockedDiv);
             settingsContainer.append(lockedSetting);
