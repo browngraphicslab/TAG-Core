@@ -180,11 +180,7 @@ TAG.TelemetryEvents = (function () {
                 break;
             case "AddLocation":
                 break;
-            case "SortByTitle":
-                break;
-            case "SortByDate":
-                break;
-            case "Metadata":
+            case "ArtworkEditorMetadata":
                 break;
             case "AddCustomField":
                 break;

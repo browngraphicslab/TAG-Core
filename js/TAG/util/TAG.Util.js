@@ -3958,6 +3958,7 @@ TAG.Util.UI = (function () {
                 pickerOverlay.remove(); 
             }); //Josh L -- fix so the div actually fades out
             globalKeyHandler[0] = currentKeyHandler;
+            //TAG.Telemetry.register()
         });
 
         optionButtonDiv.append(cancelButton);
