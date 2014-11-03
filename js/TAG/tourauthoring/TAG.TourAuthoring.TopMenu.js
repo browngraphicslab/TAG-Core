@@ -51,6 +51,12 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
 
+        //Telemetry for multiselect button
+        TAG.Telemetry.register(backButton, "click", "AuthoringBackButton", function (tobj) {
+            tobj.source_page = "Tour Authoring";
+            tobj.destination_page = "Settings View";
+        });
+
         //save method saves all changes made
         var saveClicked = false;
         var nameChanged = false;

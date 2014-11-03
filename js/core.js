@@ -31,6 +31,7 @@
         
 
         TELEMETRY_SESSION_ID = TAG.Util.IdCreator();
+        
         if (!localStorage.tagTelemetry) {
             newUser = true;
         }
@@ -52,6 +53,7 @@
             pageToLoad = parseQueryParams();
         }
 
+        console.log(TELEMETRY_SESSION_ID);
         // if we're in the windows app, localStorage.ip should take precedence (starting on the last server
         // running makes more sense than in the web app, where TAG should start to whichever server is specified
         // by the museum/institution)

@@ -384,6 +384,8 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                 });
             }
         });
+
+        //Telemetry for multiselect button
         TAG.Telemetry.register($(multiSelButton), 'click', 'MultiSelect', null);
 
         editInkOverlay.css({
@@ -2125,6 +2127,10 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                 deleteConfirmationOverlay.fadeOut(500);
             });
             buttonRow.append(cancelButton);
+
+            TAG.Telemetry.register(cancelButton, 'mousedown', 'AuthoringCancelButton', function (tobj) {
+                tobj.cancelled_action = "Delete Track"; //what was cancelled
+            });
 
             // fade in the overlay
             deleteConfirmationOverlay.fadeIn(500);

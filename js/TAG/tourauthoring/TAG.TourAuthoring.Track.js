@@ -463,6 +463,11 @@ TAG.TourAuthoring.Track = function (spec, my) {
             cancelButton.css({ "background-color": "transparent", "color": "white" });
         });
 
+        TAG.Telemetry.register(cancelButton, 'mousedown', 'AuthoringCancelButton', function (tobj) {
+            tobj.cancelled_action = "Cancel Track Options"; //what was cancelled
+        });
+
+
     })();
 
     function close() {

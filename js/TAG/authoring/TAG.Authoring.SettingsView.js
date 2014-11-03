@@ -1240,46 +1240,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             newButton.css({ "background-color": "transparent" });
         });
         
-        TAG.Telemetry.register(saveButton,'click','general_set_save',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-        
-        TAG.Telemetry.register(previewStartPageButton,'click','startpage_preview',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
-        TAG.Telemetry.register(previewCollectionsPageButton,'click','collectionspage_preview',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
-        TAG.Telemetry.register(previewArtworkViewerButton,'click','artworkviewer_preview',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
-        TAG.Telemetry.register(root.find('#nav-General Settings'),'click','settings_general',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
-        TAG.Telemetry.register(root.find('#nav-Collections'),'click','settings_collections',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
-        TAG.Telemetry.register(root.find('#nav-Artworks'),'click','settings_artworks',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
-        TAG.Telemetry.register(root.find('#nav-Associated Media'),'click','settings_asscmedia',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
-        TAG.Telemetry.register(root.find('#nav-Tours'),'click','settings_tours',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
-        TAG.Telemetry.register(root.find('#artworkEditorButtont'),'click','settings_to_artworkeditor',function(tobj){
-            tobj.mode = 'settingsView'
-        });
-
     }
 
     /**Changes idle timer stageOne duration from the customization settings
@@ -2378,6 +2338,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 tobj.element_id = exhibition.Identifier;
             });
 
+            TAG.Telemetry.register(deleteButton, "click", "DeleteButton", function (tobj) {
+                tobj.element_type = "Collections";
+            })
+
             artPickerButton.on("mousedown", function () {
                 artPickerButton.css({ "background-color": "white"});
             });
@@ -2450,17 +2414,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
 
             buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
-            TAG.Telemetry.register(artPickerButton,'click','art-selected_collections',function(tobj){
-                tobj.mode = 'settingsView';
-            });
-
-            TAG.Telemetry.register(deleteButton,'click','art-deleted_collections',function(tobj){
-                tobj.mode = 'settingsView';
-            });
-
-             TAG.Telemetry.register(saveButton,'click','art-saved_collections',function(tobj){
-                 tobj.mode = 'settingsView';
-            });
+            
         }
         cancelLastView = function () {
             cancelView = true;
@@ -2959,6 +2913,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         duplicateButton.on("mouseleave", function () {
             duplicateButton.css({ "background-color": "transparent" });
         });
+        TAG.Telemetry.register(deleteButton,"click","DeleteButton",function(tobj){
+            tobj.element_type= "Tour";
+        });
         deleteButton.on("mouseleave", function () {
             deleteButton.css({ "background-color": "transparent" });
         });
@@ -2970,21 +2927,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         
 
-         TAG.Telemetry.register(editButton,'click','tour_edit',function(tobj){
-             tobj.mode = 'settingsView';
-            });
-
-          TAG.Telemetry.register(duplicateButton,'click','tour_duplicate',function(tobj){
-              tobj.mode = 'settingsView';
-            });
-
-           TAG.Telemetry.register(deleteButton,'click','tour_delete',function(tobj){
-                tobj.mode = 'settingsView';
-            });
-
-            TAG.Telemetry.register(saveButton,'click','tour_save',function(tobj){
-                tobj.mode = 'settingsView';
-            });
     }
 
     /** Create a tour
@@ -3722,6 +3664,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         thumbnailButton.on("mousedown", function () {
             thumbnailButton.css({ "background-color": "white" });
+        });
+        TAG.Telemetry.register(deleteButton, "click", "DeleteButton", function (tobj) {
+            tobj.element_type = "Assoc Media";
         });
         deleteButton.on("mousedown", function () {
             deleteButton.css({ "background-color": "white" });
@@ -4956,6 +4901,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             xmluploaderbtn.on("mousedown", function () {
                 xmluploaderbtn.css({ "background-color": "white" });
+            });
+            TAG.Telemetry.register(deleteArt, "click", "DeleteButton", function (tobj) {
+                tobj.element_type = "Artwork";
             });
             deleteArt.on("mousedown", function () {
                 deleteArt.css({ "background-color": "white" });
