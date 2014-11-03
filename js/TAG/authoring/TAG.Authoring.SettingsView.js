@@ -1160,7 +1160,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-left': '.5%',
             'float': 'right'
         }, true);
-
+        TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+            tobj.element_type = "Splash Screen";
+        });
         // preview buttons
         var previewStartPageButton = createButton('Splash Screen', function () {
             previewStartPage(primaryFontColorInput, secondaryFontColorInput);
@@ -1374,6 +1376,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         new2: newInput2,       // New password confirmation
                         msg: msgLabel,         // Message area
                     });
+                });
+                TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+                    tobj.element_type = "Change Password";
                 });
                 // Make the save button respond to enter
                 saveButton.removeAttr('type');
@@ -2263,7 +2268,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0',
                 'margin-bottom': '3%',
             });
-
+            TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+                tobj.element_type = "Collections";
+            });
             var catalogNext = true;
             // Creates the button to toggle between views
             var switchViewButton = createButton('Preview Catalog', function () {
@@ -2324,6 +2331,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-top': '1%',
                 'margin-right': '0%',
                 'margin-bottom': '3%',
+            });
+
+            TAG.Telemetry.register(artPickerButton, "click", "EditorButton", function (tobj) {
+                tobj.edit_type = "Manage Collection";
+                tobj.element_id = exhibition.Identifier;
             });
 
             artPickerButton.on("mousedown", function () {
@@ -2822,6 +2834,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
+
+        TAG.Telemetry.register(editButton, "click", "EditorButton", function (tobj) {
+            tobj.edit_type = "Edit Tour";
+            tobj.element_id = tour.Identifier;
+        });
+
         var deleteButton = createButton('Delete',
             function () { deleteTour(tour); },
             {
@@ -2864,7 +2882,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '.5%',
                 'float': 'right'
             }, true);
-
+        TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+            tobj.element_type = "Tour";
+        });
         buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
 
         saveButton.on("mousedown", function () {
@@ -3517,7 +3537,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-        
+        TAG.Telemetry.register(assocButton, "click", "EditorButton", function (tobj) {
+            tobj.edit_type = "Manage Associations";
+            tobj.element_id = media.Identifier;
+        });
+
         leftButton = assocButton;
         var deleteButton = createButton('Delete',
             function () { deleteAssociatedMedia(media); /*changesHaveBeenMade = true;*/ },
@@ -3573,7 +3597,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '.5%',
                 'float': 'right'
             }, true);
-
+        TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+            tobj.element_type = "Assoc Media";
+        });
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
                 saveThumbnail(media, false);
@@ -4765,6 +4791,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-right': '0%',
                     'margin-bottom': '3%',
                 });
+
+            TAG.Telemetry.register(editArt, "click", "EditorButton", function (tobj) {
+                tobj.edit_type = "Artwork Editor";
+                tobj.element_id = artwork.Identifier;
+            });
             leftButton = editArt;
             editArt.attr("id", "artworkEditorButton");
             var deleteArt = createButton('Delete',
@@ -4818,7 +4849,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-left': '.5%',
                     'float': 'right'
                 }, true);
-
+            TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
+                tobj.element_type = "Artwork";
+            });
             var xmluploaderbtn = createButton('Upload XML',
                             function () {
                                 uploadXML(artwork, inputs, settingsContainer);
