@@ -614,6 +614,9 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                 cancelAccel();
             }
         });
+
+        //Telemetry for vertical scrollbar
+        TAG.Telemetry.register(verticalScroller, 'click', 'Scrollbar');
         
         elements.push(widget);
         elements.push(verticalScroller);

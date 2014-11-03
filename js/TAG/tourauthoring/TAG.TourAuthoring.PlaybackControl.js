@@ -72,6 +72,9 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             }
         }
 
+        //Telemetry stuff
+        TAG.Telemetry.register(playButton, "click", "Play");
+
         // on play and stop update the play button image and internal state
         timeManager.onPlayStart(function () {
             playButton.attr('src', tagPath + 'images/icons/Pause.svg');
@@ -164,6 +167,8 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             evt.stopPropagation();
         });
 
+        //Telemetry
+        TAG.Telemetry.register(sliderBox, "mousedown", "TimelineOverviewBox");
 
 
         //represents the green part of the timeline for artworks and the gray part for inks -- indicates the length
@@ -199,6 +204,10 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
                 }
             }
         });
+
+        //Telemetry
+        TAG.Telemetry.register(fader, "mousedown", "TimelineOverviewPlayhead");
+
         var faderUpdate = function (ev) {
             fader.css('left', ((fader.offsetParent().width() - fader.width()) * ev.percent) + 'px');
         };

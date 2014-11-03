@@ -184,6 +184,10 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             },
             appendTo: 'body'
         });
+
+        //Telemetry
+        TAG.Telemetry.register(resizeButtonArea, "mousedown", "ResizePreviewArea");
+
         resizeButtonArea.append(resizeButton);
 
         root.append(resizeButtonDocfrag);
