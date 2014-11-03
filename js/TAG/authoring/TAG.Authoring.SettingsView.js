@@ -2338,6 +2338,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 tobj.element_id = exhibition.Identifier;
             });
 
+            TAG.Telemetry.register(deleteButton, "click", "DeleteButton", function (tobj) {
+                tobj.element_type = "Collections";
+            })
+
             artPickerButton.on("mousedown", function () {
                 artPickerButton.css({ "background-color": "white"});
             });
@@ -2908,6 +2912,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         duplicateButton.on("mouseleave", function () {
             duplicateButton.css({ "background-color": "transparent" });
+        });
+        TAG.Telemetry.register(deleteButton,"click","DeleteButton",function(tobj){
+            tobj.element_type= "Tour";
         });
         deleteButton.on("mouseleave", function () {
             deleteButton.css({ "background-color": "transparent" });
@@ -3657,6 +3664,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         thumbnailButton.on("mousedown", function () {
             thumbnailButton.css({ "background-color": "white" });
+        });
+        TAG.Telemetry.register(deleteButton, "click", "DeleteButton", function (tobj) {
+            tobj.element_type = "Assoc Media";
         });
         deleteButton.on("mousedown", function () {
             deleteButton.css({ "background-color": "white" });
@@ -4891,6 +4901,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             xmluploaderbtn.on("mousedown", function () {
                 xmluploaderbtn.css({ "background-color": "white" });
+            });
+            TAG.Telemetry.register(deleteArt, "click", "DeleteButton", function (tobj) {
+                tobj.element_type = "Artwork";
             });
             deleteArt.on("mousedown", function () {
                 deleteArt.css({ "background-color": "white" });
