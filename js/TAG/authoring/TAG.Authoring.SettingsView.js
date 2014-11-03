@@ -177,6 +177,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mousedown", function () {
             newButton.css({"background-color":"white"});
         });
+
+
+
+    /*Surbhi */
+
+        TAG.Telemetry.register(newButton, "mousedown", "ImportButton", function (tobj) {
+            tobj.element_type = "artwork";
+        });
+
+    //////////////////////////
         var checkConTimerId;
         var cancelArtworkLoad = null;
     loadHelper();
@@ -534,12 +544,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
 
-        var timer = new TelemetryTimer();
         backButton.click(function () {
 
             TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                 tobj.item = "settings_view";
-                tobj.time_spent = timer.get_elapsed();
+                tobj.time_spent = SETTINGSVIEW_TIMER.get_elapsed();
                 console.log("settings view spent time: " + tobj.time_spent);
             });
 
@@ -593,6 +602,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //}
             
         });
+        /*
+        TAG.Telemtry.register(backButton, "click", "BackButton", function (tobj) {
+            tobj.current_artwork = artwork.Identifier;
+            tobj.next_page = null;
+            tobj.time_spent = null;
+        }); */
 
         var topBarLabel = root.find('#setViewTopBarLabel');
         var topBarLabelSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height() * 0.08,
@@ -1832,6 +1847,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             publicInput.css('background-color', 'white');
         }
+        
+        TAG.Telemetry.register(privateInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "collections";
+        });
+
+        TAG.Telemetry.register(publicInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "collections";
+        });
+
         /*var pubPrivDiv = $(document.createElement('div'));
         pubPrivDiv.append(privateInput).append(publicInput);*/
 
@@ -2706,6 +2732,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.css("opacity", 1);
         });
 
+        TAG.Telemetry.register(privateInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = privateInput.privateState;
+            tobj.element_type = "tours";
+        });
+
+        TAG.Telemetry.register(publicInput, "click", "Publish", function (tobj) {
+            tobj.toggle_state = publicInput.changesMade;
+            tobj.element_type = "tours";
+        });
+
+
         publicInput.attr('class','settingButton');
         if (privateState) {
             privateInput.css('background-color', 'white');
@@ -2914,11 +2951,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
                     TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                         tobj.source_page = "settings_view";
-                        tobj.destination_page = "tour_editor";
+                        tobj.destination_page = "tour_authoring";
                         tobj.load_time = timer.get_elapsed();
                         tobj.identifier = tour.Identifier;
                         //console.log("tour editor load time: " + tobj.load_time);
                     });
+                    SPENT_TIMER.restart();
                 });
             });
         }, 1);
@@ -5528,6 +5566,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     tobj.identifier = artwork.Identifier;
                     //console.log("artwork editor load time: " + tobj.load_time);
                 });
+                SPENT_TIMER.restart();
             });
         }, 1);
     }

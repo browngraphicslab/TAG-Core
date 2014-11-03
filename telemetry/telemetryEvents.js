@@ -94,13 +94,13 @@ TAG.TelemetryEvents = (function () {
             //AUTHORING EVENTS
             
             //General Use Timers (not connected to a specific event)
-            case "PageLoadTime":                                                    //done: settingsview load time, artwork editor load time, tour editor load time
+            case "PageLoadTime":                                                    //done: settingsview load time, artwork editor load time, tour editor load time (david)
                 tobj.destination_page = null; //what the destination page is
                 tobj.source_page = null; //what the source page was
                 tobj.load_time = null;
                 tobj.identifier = null; //another field containing the ID of the artwork, tour being loaded (when applicable)
                 break;
-            case "SpentTime": //the time spent on a page or action                  //done: settingsview, artwork editor (check this)
+            case "SpentTime": //the time spent on a page or action                  //done: settingsview, artwork editor, tour authoring (david)
                 tobj.item = null; //the page or action in question
                 tobj.time_spent = null;
                 break;
@@ -180,11 +180,7 @@ TAG.TelemetryEvents = (function () {
                 break;
             case "AddLocation":
                 break;
-            case "SortByTitle":
-                break;
-            case "SortByDate":
-                break;
-            case "Metadata":
+            case "ArtworkEditorMetadata":
                 break;
             case "AddCustomField":
                 break;
