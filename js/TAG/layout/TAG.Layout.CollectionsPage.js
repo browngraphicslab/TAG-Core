@@ -1200,11 +1200,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
         searchResultsLength = matchedArts.length;
-       TAG.Telemetry.recordEvent('Search', function(tobj)) {
+        TAG.Telemetry.recordEvent('Search', function (tobj) {
             tobj.search_text = searchTxt.text();
             tobj.current_collection = currCollection.Identifier;
-            tobj.number_of_matches = matchedArts.length; 
-        }
+            tobj.number_of_matches = matchedArts.length;
+        });
         drawCatalog(matchedArts, currentTag, 0, true);
         drawCatalog(unmatchedArts, currentTag, searchResultsLength, false);
     }
