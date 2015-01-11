@@ -1,5 +1,6 @@
 {
-    "tourTitle": "TempTour",
+    "tourTitle": "TourData",
+    "totalDuration" : "30",
     "tracks": [
         {
             "name": "Track1",

@@ -188,6 +188,16 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function attachProgressBar() {
         if (playerConfiguration.attachProgressBar) {
+            //For seeking, skipping and scrubbing: when you click and drag on the progressbar, you can seek.  But also if you click down and then move your mouse outside of the bar without mousing up it will still seek (mimiking old RIN)
+            $( "*" ).on({
+                "mouseup": function(e){
+                    progressBarContainer.dragging ? seek(e) : null
+                    progressBarContainer.dragging = false
+                },
+                "mousemove": function(e){
+                    progressBarContainer.dragging ? seek(e) : null
+                }
+            })
 
             var progressBarContainer = $(document.createElement("div"))
                 .addClass("progressBarContainer")
@@ -200,10 +210,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                     },
                     "mouseup": function(e){
                         progressBarContainer.dragging = false;
-                    },
-                    "mouseleave" : function(e){
-                        progressBarContainer.dragging = false;
-                    },            
+                    },         
                     "mousemove": function(e){
                         progressBarContainer.dragging ? seek(e) : null
                     }
@@ -228,12 +235,24 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("progressIndicatorContainer");
 
             progressIndicator.addClass("progressIndicator")
-            .innerHTML = "01:04";
+            .innerHTML = "01:04"
+            //.text = "01:04";
 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
         }
     };
+
+    /*
+    * I/P:   sec (int-- a time in sec)
+    * called by timeManager and Orchestrator; updates current displayed time
+    * O/P:   none
+    */
+    function updateProgressIndicator(sec) {
+        console.log(typeof(sec))
+       // progressIndicator.innerHTML = "test"
+    };
+    this.updateProgressIndicator = updateProgressIndicator;
 
     /*
     * I/P:   none
@@ -325,7 +344,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function seek(e) {
         if (playerConfiguration.allowSeek){
-            // console.log("Tour was seeked")
+            console.log("Tour was seeked")
             progressBar.css({
                 width : e.pageX - ITEHolder.offset().left
             })

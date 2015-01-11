@@ -1,5 +1,6 @@
 {
-    "tourTitle": "TempTour",
+    "tourTitle": "TourDataDZImageVideo",
+    "totalDuration" : "30",
     "tracks": [
         {
             "name": "Track1",

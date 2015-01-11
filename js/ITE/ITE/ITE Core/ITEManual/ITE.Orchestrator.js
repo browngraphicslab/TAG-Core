@@ -48,7 +48,6 @@ ITE.Orchestrator = function(player) {
 			//Creates tracks
 			for (i = 0; i < tourData.tracks.length; i++){
 				var track = tourData.tracks[i]
-
 				createTrackByProvider(track)
 			};
 
@@ -120,7 +119,7 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function seek(seekTime){
-
+		
 	}
 
 	function setVolume(newVolumeLevel){
