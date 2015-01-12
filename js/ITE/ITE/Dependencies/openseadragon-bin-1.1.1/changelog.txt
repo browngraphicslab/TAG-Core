@@ -1,6 +1,27 @@
 OPENSEADRAGON CHANGELOG
 =======================
 
+1.2.0:
+
+* New combined IIIF TileSource for 1.0 through 2.0 (#441)
+    * BREAKING CHANGE: Removed IIIF1_1TileSource (now that IIIFTileSource supports all versions)
+* Allowed TileSources to have dynamic tileSize via source.getTileSize(level) (#441)
+    * DEPRECATION: Use .getTileSize(level) instead of .tileSize
+* Fix for IIPServer-style urls when using DZI (#413)
+* Fix memory leak while destroying the viewer (#421)
+* Added fitBoundsWithConstraints() to the viewport (#423)
+* Fixed MouseTracker cross-browser issues with tracking pointers over and out of the tracked element (pull request #448, fix for #152, #404, #420, and #427)
+* Fixed incorrect flick direction after image is rotated (#452)
+* Debug mode now works with rotate images (#453)
+* Now supporting dzi xml with namespaces (#462)
+* You can now rotate the navigator along with the main viewer (#455)
+* Viewport.setRotation now allows all rotation angles (#466)
+* Pinch rotate is now available (defaults to off) (#468)
+* Added option for home button to fill viewer (#474)
+* Better handling of mid-update image loaded callbacks (#409)
+* Tracked pointers are now cleaned up when Viewer.setMouseNavEnabled(false) is called (#518)
+* Added explicit pointer capture for touch event model touchstart events (#552)
+
 1.1.1:
 
 * Fixed issue with dragging the navigator highlight on Webkit browsers (#395)
