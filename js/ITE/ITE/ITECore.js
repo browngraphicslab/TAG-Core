@@ -5273,7 +5273,25 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2
 		})
-        _viewer.setMouseNavEnabled(false);
+
+
+		/*_viewer.addHandler({
+			'canvas-scroll': function(evt) {
+				console.log("scrolling")
+				(self.orchestrator.status === 1) ? self.player.pause() : null
+		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+		    	resetSeadragonConfig()
+	    	},
+	    	'canvas-drag': function(evt) {
+	    		console.log("dragging")
+				(self.orchestrator.status === 1) ? self.player.pause() : null
+		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+		    	resetSeadragonConfig()	
+	    	}
+		})*/
+
+
+        //_viewer.setMouseNavEnabled(false);
         _viewer.clearControls();
 
         // _deepZoom is the canvas with the deepZoom image files
@@ -5409,7 +5427,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	/* 
 	* I/P: duration	duration of track
 	* Helper function for animate() that is a bit of a hack
-	* Since Seadragon's animation is a bit jenky, and you can't input your own animation time, we're going to do it manually.
+	* Since Seadragon's animation is a bit janky, and you can't input your own animation time, we're going to do it manually.
 	* We're also going to change the "spring stiffness", which is another characteristic of their animation scheme 
 	* (they use a physics-based, non-linear approach), so that Seadragon animation looks more linear and 
 	* thus more similar to other animation in tours (re: Andy's Law of Least Astonishment)
@@ -5476,6 +5494,22 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	*/
     function attachHandlers() {
 
+
+		_viewer.addHandler(
+			'canvas-scroll', function(evt) {
+				console.log("scrolling");
+				(self.orchestrator.status === 1) ? self.player.pause() : null
+		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+		    	resetSeadragonConfig()
+	    	})
+		_viewer.addHandler(
+			'canvas-drag', function(evt) {
+				console.log("dragging");
+				(self.orchestrator.status === 1) ? self.player.pause() : null
+		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+		    	resetSeadragonConfig()
+	    	})
+
         // // Allows asset to be dragged, despite the name
         // TAG.Util.disableDrag(_deepZoom);
 
@@ -5508,7 +5542,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
         // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
 
-        // Register handlers
+        /*// Register handlers
         TAG.Util.makeManipulatable(_deepZoom[0], {
             onScroll: function (delta, pivot) {
                 mediaScroll(delta, pivot);
@@ -5521,7 +5555,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
         }, null, true);
 
         interactionHandlers.onManipulate 	= mediaManip;
-        interactionHandlers.onScroll		= mediaScroll;    	
+        interactionHandlers.onScroll		= mediaScroll;    */	
     }
 };
 
