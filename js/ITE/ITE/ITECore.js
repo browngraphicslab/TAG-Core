@@ -5497,19 +5497,28 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
 		_viewer.addHandler(
 			'canvas-scroll', function(evt) {
-				console.log("scrolling");
+				//console.log("scrolling");
 				(self.orchestrator.status === 1) ? self.player.pause() : null
 		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		    	resetSeadragonConfig()
 	    	})
 		_viewer.addHandler(
 			'canvas-drag', function(evt) {
-				console.log("dragging");
+				//console.log("dragging");
 				(self.orchestrator.status === 1) ? self.player.pause() : null
 		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		    	resetSeadragonConfig()
 	    	})
-
+		_viewer.addHandler(
+			'container-exit', function(evt) {
+				console.log("exited");
+				_viewer.raiseEvent('canvas-release', evt);
+				_viewer.raiseEvent('canvas-drag-end', evt);
+				_viewer.raiseEvent('container-release', evt);				
+				//(self.orchestrator.status === 1) ? self.player.pause() : null
+		    	//self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+		    	//resetSeadragonConfig()
+	    	})
         // // Allows asset to be dragged, despite the name
         // TAG.Util.disableDrag(_deepZoom);
 
