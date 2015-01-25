@@ -19,6 +19,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         callback = options.callback,       // called after associated media are retrieved from server
         noMedia = options.noMedia,        // should we not have assoc media? (set to true in artwork editor)
         fromArtworkViewer = options.fromArtworkViewer,   //is this coming from the artwork viewer or from authoring?
+        loaded = false,
+        opened = [],
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,   // prepend server address to given path
@@ -55,6 +57,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     init();
 
     return {
+        setLoaded: setLoaded,
         getAssociatedMedia: getAssociatedMedia,
         unload: unload,
         dzManip: dzManip,
@@ -96,6 +99,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function getToManip() {
         return toManip;   
+    }
+
+    function setLoaded(isLoaded) {
+        loaded = isLoaded;
     }
 
 
@@ -221,6 +228,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     function dzManip(res, stopZoom) {
 
         if (disableZoomRLH) { return; }
+        if (loaded) { return; }
 
         var scale = stopZoom ? 1.0 : res.scale,
             trans = res.translation,
@@ -829,6 +837,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 var closeButton = createCloseButton();
                 closeButton.on('click', function (evt) {
                     evt.stopPropagation();
+                    if (opened.indexOf(hideMediaObject) > -1) {
+                        var loc = opened.indexOf(hideMediaObject);
+                        opened.splice(loc, 1);
+                    }
                     hideMediaObject();
                 });
                 titleDiv.append(closeButton[0]);               
@@ -1825,10 +1837,22 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         circle.css('visibility', 'visible');
                         addOverlay(circle[0], position, Seadragon.OverlayPlacement.TOP_LEFT);
                     }*/
-                    viewer.viewport.panTo(position, false);
-                    viewer.viewport.applyConstraints()
-                    t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
-                    l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
+                    
+                    // dz17 - removing to disable autopan for SAM
+                    //viewer.viewport.panTo(position, false);
+                    //viewer.viewport.applyConstraints()
+
+                    // 515 px for 1080p adjustment for SAM
+                    //t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
+                    t = viewer.viewport.pixelFromPoint(position).y - 256 + circleRadius / 2;
+
+                    //l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
+                    // - 290 px for 1080p video window placement adjustment
+                    l = viewer.viewport.pixelFromPoint(position).x + circleRadius - 375;
+
+                    // or random?
+                    //t = Math.random() * (300 - 250) + 250;
+                    //l = Math.random() * (1600 - 300) + 300;
                 }
                  else {
                     (root.data('split') === 'R') && (splitscreenOffset =  - root.find('#sideBar').width());
@@ -1935,7 +1959,18 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             } else {
                 mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
             } */
-            mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
+            // dz17 - keeps track of max # of objects open and shuts existing ones if exceeds 3
+            var show = function () {
+                showMediaObject(isHotspotIcon);
+                opened.push(hideMediaObject);
+                if (opened.length > 1) {
+                    opened[0]();
+                    opened.shift();
+                }
+            }
+
+            //mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
+            mediaHidden ? show() : hideMediaObject(isHotspotIcon);
 
 
             outerContainerhidden = mediaHidden;
