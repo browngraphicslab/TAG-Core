@@ -998,7 +998,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function tourClicked(tour) {
             return function () {
                 TAG.Util.removeYoutubeVideo();
-                var rinData,
+                var iteData,
                     parentid,
                     prevInfo,
                     rinPlayer,
@@ -1027,10 +1027,35 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 } else {
                     annotatedImage.unload();
                     prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll, prevTag: prevTag };
-                    rinData = JSON.parse(unescape(tour.Metadata.Content));
-                    rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
 
-                    TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
+                    //CALL RIN TO ITE PARSING HERE
+                    iteData = TAG.Util.RIN_TO_ITE(tour);
+
+                    window.ITE = window.ITE || {};
+                    var testOptions =   {
+                            attachVolume:               true,
+                            attachLoop:                 true,
+                            attachPlay:                 true,
+                            attachProgressBar:          true,
+                            attachFullScreen:           true,
+                            attachProgressIndicator:    true,
+                            hideControls:               false,
+                            autoPlay:                   false,
+                            autoLoop:                   false,
+                            setMute:                    false,
+                            setInitVolume:              1,
+                            allowSeek:                  true,
+                            setFullScreen:              false,
+                            setStartingOffset:          0,
+                            setEndTime:                 NaN
+                        };
+
+                    //hardcoded tour - replace with parsed ITE data
+                    var ITEPlayer = new ITE.Player(testOptions);
+                    ITEPlayer.load(itePath + "Assets/TourData/TourDataAudioImagesDZ.JSON")
+                    
+                    //rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
+                    TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function(){});
                 }
             };
         }

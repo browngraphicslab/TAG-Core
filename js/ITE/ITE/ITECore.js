@@ -4693,7 +4693,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			_super.load()
 
 			//Sets the image’s URL source
-			_image.attr("src", "../../Assets/TourData/" + this.trackData.assetUrl)
+			_image.attr("src", itePath + "Assets/TourData/" + this.trackData.assetUrl)
 
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?
@@ -4964,7 +4964,7 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_video.attr({
-			"src"	: "../../Assets/TourData/" + self.trackData.assetUrl,
+			"src"	: itePath + "Assets/TourData/" + self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		})
 
@@ -5267,7 +5267,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		//_viewer is the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: "DeepZoomHolder",
-			prefixUrl	 		: "../../Dependencies/openseadragon-bin-1.1.1/images/",
+			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.1.1/images/",
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
@@ -5326,7 +5326,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 		_super.load()
 		//Sets the DeepZoom's URL source
-    	_viewer.open("../../Assets/TourData/" + this.trackData.assetUrl);
+    	_viewer.open(itePath + "Assets/TourData/" + this.trackData.assetUrl);
 	};
 
    /** 
@@ -5643,7 +5643,7 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_audio.attr({
-			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
+			"src"	: itePath + "Assets/TourData/"  + this.trackData.assetUrl,
 			"type" 	: this.trackData.type
 		})
 		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
@@ -6381,7 +6381,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("volumeButtonContainer");
 
             volumeButton.addClass("volumeButton")
-            .attr("src", "ITEPlayerImages/volume.svg")
+            .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg")
             .on("click", toggleMute);
 
             var volumeLevelContainer = $(document.createElement("div"))
@@ -6428,7 +6428,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("playPauseButtonContainer");
 
                 playPauseButton.addClass("playPauseButton")
-                .attr("src", "ITEPlayerImages/play.svg")
+                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
@@ -6450,7 +6450,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("loopButtonContainer");
 
                 loopButton.addClass("loopButton")
-                .attr("src", "ITEPlayerImages/loop.svg")
+                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/loop.svg")
                 .on("click", toggleLoop);
 
             buttonContainer.append(loopButtonContainer);
@@ -6545,7 +6545,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("fullScreenButtonContainer");
 
             fullScreenButton.addClass("fullScreenButton")
-            .attr("src", "ITEPlayerImages/fullScreen.svg")
+            .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/fullscreen.svg")
             .on("click", toggleFullScreen);
 
             buttonContainer.append(fullScreenButtonContainer);
@@ -6601,7 +6601,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function play() {
         orchestrator.play();
         // console.log("Tour is playing")
-        playPauseButton.attr("src", "ITEPlayerImages/pause.svg")
+        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/pause.svg")
     };
 
 
@@ -6613,7 +6613,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function pause() {
         orchestrator.pause();
         // console.log("Tour is paused")
-        playPauseButton.attr("src", "ITEPlayerImages/play.svg")
+        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
     };
 
     /*
@@ -6647,7 +6647,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         volumeLevel.css({
             height : newVolume * 100 + "%"
         });
-        volumeButton.attr("src", "ITEPlayerImages/volume.svg");
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg");
         self.previousVolumeLevel = self.currentVolumeLevel   // Reference to previous volume level for volume control in video/audio tracks
         self.currentVolumeLevel = newVolume;
         orchestrator.setVolume(self.currentVolumeLevel);
@@ -6671,7 +6671,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function mute(){
         isMuted = true;
-        volumeButton.attr("src", "ITEPlayerImages/volume0.svg")
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume0.svg")
         volumeButton.css("opacity" , ".5")
         volumeLevel.css("opacity" , "0")
         orchestrator.toggleMute(true);
@@ -6684,7 +6684,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function unMute(){
         isMuted = false;
-        volumeButton.attr("src", "ITEPlayerImages/volume.svg");
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg");
         volumeButton.css("opacity" , "1");
         volumeLevel.css("opacity" , "1")
         orchestrator.toggleMute(false);
@@ -6755,7 +6755,16 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         loopButton.css("opacity" , ".5")
     };
 
+    /**
+    * I/P:    none
+    * returns holder (used for transitioning into tour player)
+    * O/P:    root of the ITE player
+    */ 
+    function getRoot() {
+        return ITEHolder
+    };
 
+    this.getRoot            = getRoot;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;
     this.pause              = pause;

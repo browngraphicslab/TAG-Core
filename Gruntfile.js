@@ -42,6 +42,16 @@ var JSSRC = [
 		'js/jQueryUI/js/jquery.autoSize.js',                   // TAGCORE
 		'js/jQueryUI/js/jquery.numeric.js',                    // TAGCORE
 
+		//ITE DEPENDENCIES - MUST BE HERE
+        'js/ITE/ITE/Dependencies/CSSPlugin.min.js',
+        //'js/ITE/ITE/Dependencies/jquery.min.js',
+        'js/ITE/ITE/Dependencies/TweenLite.min.js',
+        'js/ITE/ITE/Dependencies/openseadragon-bin-1.1.1/openseadragon.js',
+        'js/ITE/ITE/Dependencies/Hammer.js',
+        'js/ITE/ITE/Dependencies/Raphael.js',
+        'js/ITE/ITE/ITECore.js',
+
+
 		'js/seadragon/src/Seadragon.Core.js',                  // TAGCORE
 		'js/seadragon/src/Seadragon.Config.js',                // TAGCORE
 		'js/seadragon/src/Seadragon.Strings.js',               // TAGCORE
@@ -145,6 +155,7 @@ var JSSRC = [
 		'js/tests.js',                                     // TAGCORE
 		
 		'js/core.js'                                       // TAGCORE
+
 	],
 	WATCH = JSSRC.slice(); // WATCH will be a superset of JSSRC
 
@@ -178,6 +189,7 @@ module.exports = function(grunt) {
                             \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
 					        \n        idleTimer, \
                             \n        Worktop = {}, \
+                            \n 		  itePath 			   = tagPath + "js/ITE/ITE/",\
 			                \n        TAG                  = {}; \n\n',
 				footer: '};'
 			},
@@ -203,8 +215,9 @@ module.exports = function(grunt) {
 						'css/General.styl',              // TAGCORE
 						'css/SettingsView.styl',         // TAGCORE
 						'css/Util.styl',                 // TAGCORE
-						'css/SplashScreenOverlay.styl'   // TAGCORE
+						'css/SplashScreenOverlay.styl',  // TAGCORE
 						//'css/ComponentControls.styl'	 // TAGCORE
+						'css/ITE.Player.css'
 					]
 				}
 			}
