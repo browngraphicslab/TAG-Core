@@ -79,7 +79,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			_super.load()
 
 			//Sets the image’s URL source
-			_image.attr("src", itePath + "Assets/TourData/" + this.trackData.assetUrl)
+			_image.attr("src", "../../Assets/TourData/" + this.trackData.assetUrl)
 
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?

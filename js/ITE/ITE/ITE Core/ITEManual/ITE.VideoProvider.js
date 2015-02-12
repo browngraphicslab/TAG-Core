@@ -84,7 +84,7 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_video.attr({
-			"src"	: itePath + "Assets/TourData/" + self.trackData.assetUrl,
+			"src"	: "../../Assets/TourData/" + self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		})
 

@@ -72,7 +72,7 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_audio.attr({
-			"src"	: itePath + "Assets/TourData/"  + this.trackData.assetUrl,
+			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
 			"type" 	: this.trackData.type
 		})
 		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
