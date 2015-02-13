@@ -937,18 +937,18 @@ var TAG = TAG || {},
     Worktop = Worktop || {};
 
 //TAG Utilities
-TAG.Util = (function () {
+TAG.Util_ITE = (function () {
     "use strict";
 
     var tagContainerId = 'tagRoot';
 
-    //TAG.Util public methods and members
+    //TAG.Util_ITE public methods and members
     return {
         makeNamespace: namespace,
         setToDefaults: setToDefaults,
         getGestureRecognizer: getGestureRecognizer,
         makeXmlRequest: makeXmlRequest,
-        makeManipulatable: makeManipulatable,
+        makeManipulatableITE: makeManipulatableITE,
         makeManipulatableWin: makeManipulatableWin,
         applyD3DataRec: applyD3DataRec,
         elementInDocument: elementInDocument,
@@ -1677,7 +1677,7 @@ TAG.Util = (function () {
     //onScroll(delta,pivot) is the scroll wheel
     //onTapped
     //onHolding
-    function makeManipulatable(element, functions, stopOutside, noAccel) {
+    function makeManipulatableITE(element, functions, stopOutside, noAccel) {
         var hammer = new Hammer(element, {
             hold_threshold: 3,
             drag_min_distance: 9,
@@ -2163,7 +2163,7 @@ TAG.Util = (function () {
 
         var lastTouched = null;
         var that = this;
-        var gr = TAG.Util.getGestureRecognizer();
+        var gr = TAG.Util_ITE.getGestureRecognizer();
         var manipulating = false;
 
         // general event handler
@@ -2351,7 +2351,7 @@ TAG.Util = (function () {
                 'top': '50%',
                 'color': 'white',
                 'text-align': 'center',
-                'font-size': TAG.Util.getMaxFontSizeEM(msg, 2, container.width() * 0.8, container.height() * 0.2, 0.1)
+                'font-size': TAG.Util_ITE.getMaxFontSizeEM(msg, 2, container.width() * 0.8, container.height() * 0.2, 0.1)
             });
             msgdiv.text(msg);
             videoElt.hide();
@@ -2414,7 +2414,7 @@ TAG.Util = (function () {
 /**
  * Utils for Animation, splitscreen, colors and the like
  */
-TAG.Util.UI = (function () {
+TAG.Util_ITE.UI = (function () {
     "use strict";
 
     var PICKER_SEARCH_TEXT = 'Search by Name, Artist, or Year...';
@@ -2600,7 +2600,7 @@ TAG.Util.UI = (function () {
 
         //
 
-        var serverDialogSpecs = TAG.Util.constrainAndPosition($(tagContainer).width(), $(tagContainer).height(),
+        var serverDialogSpecs = TAG.Util_ITE.constrainAndPosition($(tagContainer).width(), $(tagContainer).height(),
         {
             center_h: true,
             center_v: true,
@@ -2757,7 +2757,7 @@ TAG.Util.UI = (function () {
             serverErrorMessage.show();
             TAG.Worktop.Database.changeServer(address, false, function () {
                 TAG.Layout.StartPage(null, function (page) {
-                    TAG.Util.UI.slidePageRight(page);
+                    TAG.Util_ITE.UI.slidePageRight(page);
                 });
             }, function () {
                 serverCancelButton.show();
@@ -2825,7 +2825,7 @@ TAG.Util.UI = (function () {
 
         var feedbackBox = $(document.createElement('div'));
         $(feedbackBox).addClass('feedbackBox');
-        var feedbackBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+        var feedbackBoxSpecs = TAG.Util_ITE.constrainAndPosition($(window).width(), $(window).height(),
 
         {
             center_h: true,
@@ -2913,7 +2913,7 @@ TAG.Util.UI = (function () {
             TAG.Worktop.Database.createFeedback($(commentBox).val(), type, id);
             $(dialogOverlay).css({ 'display': 'none' });
             $(commentBox).val('');
-            var popup = TAG.Util.UI.popUpMessage(null, "Your feedback has been submitted, thank you for your feedback.", null, null, null, true);
+            var popup = TAG.Util_ITE.UI.popUpMessage(null, "Your feedback has been submitted, thank you for your feedback.", null, null, null, true);
             tagContainer.append(popup);
             $(popup).css('z-index', 1000000);
             $(popup).show();
@@ -3007,7 +3007,7 @@ TAG.Util.UI = (function () {
         var overlay = blockInteractionOverlay();
 
         var confirmBox = document.createElement('div');
-        var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+        var confirmBoxSpecs = TAG.Util_ITE.constrainAndPosition($(window).width(), $(window).height(),
            {
                center_h: true,
                center_v: true,
@@ -3127,7 +3127,7 @@ TAG.Util.UI = (function () {
         var overlay = blockInteractionOverlay();
         container = container || window;
         var confirmBox = document.createElement('div');
-        var confirmBoxSpecs = TAG.Util.constrainAndPosition($(container).width(), $(container).height(),
+        var confirmBoxSpecs = TAG.Util_ITE.constrainAndPosition($(container).width(), $(container).height(),
             {
                 center_h: true,
                 center_v: true,
@@ -3694,7 +3694,7 @@ TAG.Util.UI = (function () {
             removedComps = [], // components whose associations with target we will be removing
             origComps = [], // components that are already associated with target
             tabCache = [], // cached results from the server
-            loadQueue = TAG.Util.createQueue();
+            loadQueue = TAG.Util_ITE.createQueue();
 
         for (i = 0; i < tabs.length; i++) {
             tabCache.push({ cached: false, comps: [] });
@@ -3815,14 +3815,14 @@ TAG.Util.UI = (function () {
         pickerSearchBar.on('keyup', function (event) {
             event.stopPropagation();
         });
-        // TAG.Util.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
+        // TAG.Util_ITE.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
         pickerSearchBar.attr("placeholder", "Search by Name...");
         pickerSearchBar.keyup(function () {
-            TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
+            TAG.Util_ITE.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
         });
         pickerSearchBar.change(function () {
             if (pickerSearchBar.val() !== '') {
-                TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
+                TAG.Util_ITE.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
             }
         });
         searchTab.append(pickerSearchBar);
@@ -3931,7 +3931,7 @@ TAG.Util.UI = (function () {
         });
         confirmButton.text("Save Changes");
         confirmButton.on('click', function () {
-            progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
+            progressCirc = TAG.Util_ITE.showProgressCircle(optionButtonDiv, progressCSS);
             finalizeAssociations();
         });
 
@@ -3966,7 +3966,7 @@ TAG.Util.UI = (function () {
         function tabHelper(j) {
             return function () {
                 loadQueue.clear();
-                progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
+                progressCirc = TAG.Util_ITE.showProgressCircle(optionButtonDiv, progressCSS);
                 pickerSearchBar.attr("value", "");
                 mainContainer.empty();
                 $(".tab").css({
@@ -4003,7 +4003,7 @@ TAG.Util.UI = (function () {
                 }
             }
             drawComps(newComps, compSingleDoubleClick);
-            TAG.Util.removeProgressCircle(progressCirc);
+            TAG.Util_ITE.removeProgressCircle(progressCirc);
         }
 
         function error() {
@@ -4402,9 +4402,9 @@ TAG.Util.UI = (function () {
     //    setHeight(thumbnail);
     //    container.append(thumbnail);
 
-    //    var circle = TAG.Util.showProgressCircle(container, progressCircCSS, '0px', '0px', false);
+    //    var circle = TAG.Util_ITE.showProgressCircle(container, progressCircCSS, '0px', '0px', false);
     //    image.load(function () {
-    //        TAG.Util.removeProgressCircle(circle);
+    //        TAG.Util_ITE.removeProgressCircle(circle);
     //    });
 
     //    metadataDiv.css(metadataCSS);
@@ -4417,9 +4417,9 @@ TAG.Util.UI = (function () {
 
 /**
  * Utils for the artwork viewer and the artwork editor
- * @class TAG.Util.Artwork
+ * @class TAG.Util_ITE.Artwork
  */
-TAG.Util.Artwork = (function () {
+TAG.Util_ITE.Artwork = (function () {
     "use strict";
 
     return {
@@ -4581,7 +4581,7 @@ if (!Math.constrain) {
         return Math.min(max, Math.max(min, num));
     };
 }
-ITE.TAGUtils = TAG.Util;
+ITE.TAGUtils = TAG.Util_ITE;
 
 /*************/
 window.ITE = window.ITE || {};
@@ -4693,7 +4693,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			_super.load()
 
 			//Sets the image’s URL source
-			_image.attr("src", "../../Assets/TourData/" + this.trackData.assetUrl)
+			_image.attr("src", itePath + "Assets/TourData/" + this.trackData.assetUrl)
 
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?
@@ -4793,7 +4793,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
     	(self.orchestrator.status === 1) ? self.player.pause() : null
 
     	if (!res.eventType){
-return    	}
+			return    	
+		}
 
         // If event is initial touch on artwork, save current position of media object to use for animation
         if (res.eventType === 'start') {
@@ -4864,10 +4865,10 @@ return    	}
 	*/
     function attachHandlers() {
         // Allows asset to be dragged, despite the name
-        TAG.Util.disableDrag(_UIControl);
+        TAG.Util_ITE.disableDrag(_UIControl);
 
         // Register handlers
-        TAG.Util.makeManipulatable(_UIControl[0], {
+        TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
             onManipulate: mediaManip,
             onScroll:     mediaScroll
         }, null, true); 
@@ -4964,7 +4965,7 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_video.attr({
-			"src"	: "../../Assets/TourData/" + self.trackData.assetUrl,
+			"src"	: itePath + "Assets/TourData/" + self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		})
 
@@ -5195,10 +5196,10 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	*/
     function attachHandlers() {
         // Allows asset to be dragged, despite the name
-        TAG.Util.disableDrag(_UIControl);
+        TAG.Util_ITE.disableDrag(_UIControl);
 
         // Register handlers
-        TAG.Util.makeManipulatable(_UIControl[0], {
+        TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
             onManipulate: mediaManip,
             onScroll:     mediaScroll
         }); 
@@ -5267,7 +5268,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		//_viewer is the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: "DeepZoomHolder",
-			prefixUrl	 		: "../../Dependencies/openseadragon-bin-1.1.1/images/",
+			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.1.1/images/",
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
@@ -5326,7 +5327,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 		_super.load()
 		//Sets the DeepZoom's URL source
-    	_viewer.open("../../Assets/TourData/" + this.trackData.assetUrl);
+    	_viewer.open(itePath + "Assets/TourData/" + this.trackData.assetUrl);
 	};
 
    /** 
@@ -5520,7 +5521,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		    	//resetSeadragonConfig()
 	    	})
         // // Allows asset to be dragged, despite the name
-        // TAG.Util.disableDrag(_deepZoom);
+        // TAG.Util_ITE.disableDrag(_deepZoom);
 
         // _deepZoom.on("mousedown", function() {
         // 	console.log("mouse down")
@@ -5552,7 +5553,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
         // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
 
         /*// Register handlers
-        TAG.Util.makeManipulatable(_deepZoom[0], {
+        TAG.Util_ITE.makeManipulatable(_deepZoom[0], {
             onScroll: function (delta, pivot) {
                 mediaScroll(delta, pivot);
             },
@@ -5643,7 +5644,7 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_audio.attr({
-			"src"	: "../../Assets/TourData/" + this.trackData.assetUrl,
+			"src"	: itePath + "Assets/TourData/"  + this.trackData.assetUrl,
 			"type" 	: this.trackData.type
 		})
 		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
@@ -6381,7 +6382,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("volumeButtonContainer");
 
             volumeButton.addClass("volumeButton")
-            .attr("src", "ITEPlayerImages/volume.svg")
+            .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg")
             .on("click", toggleMute);
 
             var volumeLevelContainer = $(document.createElement("div"))
@@ -6428,7 +6429,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("playPauseButtonContainer");
 
                 playPauseButton.addClass("playPauseButton")
-                .attr("src", "ITEPlayerImages/play.svg")
+                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
@@ -6450,7 +6451,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("loopButtonContainer");
 
                 loopButton.addClass("loopButton")
-                .attr("src", "ITEPlayerImages/loop.svg")
+                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/loop.svg")
                 .on("click", toggleLoop);
 
             buttonContainer.append(loopButtonContainer);
@@ -6545,7 +6546,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("fullScreenButtonContainer");
 
             fullScreenButton.addClass("fullScreenButton")
-            .attr("src", "ITEPlayerImages/fullScreen.svg")
+            .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/fullscreen.svg")
             .on("click", toggleFullScreen);
 
             buttonContainer.append(fullScreenButtonContainer);
@@ -6601,7 +6602,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function play() {
         orchestrator.play();
         // console.log("Tour is playing")
-        playPauseButton.attr("src", "ITEPlayerImages/pause.svg")
+       playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/pause.svg")
     };
 
 
@@ -6613,7 +6614,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function pause() {
         orchestrator.pause();
         // console.log("Tour is paused")
-        playPauseButton.attr("src", "ITEPlayerImages/play.svg")
+        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
     };
 
     /*
@@ -6647,7 +6648,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         volumeLevel.css({
             height : newVolume * 100 + "%"
         });
-        volumeButton.attr("src", "ITEPlayerImages/volume.svg");
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg");
         self.previousVolumeLevel = self.currentVolumeLevel   // Reference to previous volume level for volume control in video/audio tracks
         self.currentVolumeLevel = newVolume;
         orchestrator.setVolume(self.currentVolumeLevel);
@@ -6671,7 +6672,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function mute(){
         isMuted = true;
-        volumeButton.attr("src", "ITEPlayerImages/volume0.svg")
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume0.svg")
         volumeButton.css("opacity" , ".5")
         volumeLevel.css("opacity" , "0")
         orchestrator.toggleMute(true);
@@ -6684,7 +6685,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function unMute(){
         isMuted = false;
-        volumeButton.attr("src", "ITEPlayerImages/volume.svg");
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg");
         volumeButton.css("opacity" , "1");
         volumeLevel.css("opacity" , "1")
         orchestrator.toggleMute(false);
@@ -6755,7 +6756,16 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         loopButton.css("opacity" , ".5")
     };
 
+    /**
+    * I/P:    none
+    * returns holder (used for transitioning into tour player)
+    * O/P:    root of the ITE player
+    */ 
+    function getRoot() {
+        return ITEHolder
+    };
 
+    this.getRoot            = getRoot;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;
     this.pause              = pause;

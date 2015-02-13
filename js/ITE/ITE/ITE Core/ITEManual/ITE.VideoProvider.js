@@ -84,7 +84,7 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_video.attr({
-			"src"	: "../../Assets/TourData/" + self.trackData.assetUrl,
+			"src"	: itePath + "Assets/TourData/" + self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		})
 
@@ -315,10 +315,10 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	*/
     function attachHandlers() {
         // Allows asset to be dragged, despite the name
-        TAG.Util.disableDrag(_UIControl);
+        TAG.Util_ITE.disableDrag(_UIControl);
 
         // Register handlers
-        TAG.Util.makeManipulatable(_UIControl[0], {
+        TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
             onManipulate: mediaManip,
             onScroll:     mediaScroll
         }); 

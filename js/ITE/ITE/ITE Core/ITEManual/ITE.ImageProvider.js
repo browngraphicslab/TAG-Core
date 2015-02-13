@@ -79,7 +79,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			_super.load()
 
 			//Sets the image’s URL source
-			_image.attr("src", "../../Assets/TourData/" + this.trackData.assetUrl)
+			_image.attr("src", itePath + "Assets/TourData/" + this.trackData.assetUrl)
 
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?
@@ -179,7 +179,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
     	(self.orchestrator.status === 1) ? self.player.pause() : null
 
     	if (!res.eventType){
-return    	}
+			return    	
+		}
 
         // If event is initial touch on artwork, save current position of media object to use for animation
         if (res.eventType === 'start') {
@@ -250,10 +251,10 @@ return    	}
 	*/
     function attachHandlers() {
         // Allows asset to be dragged, despite the name
-        TAG.Util.disableDrag(_UIControl);
+        TAG.Util_ITE.disableDrag(_UIControl);
 
         // Register handlers
-        TAG.Util.makeManipulatable(_UIControl[0], {
+        TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
             onManipulate: mediaManip,
             onScroll:     mediaScroll
         }, null, true); 

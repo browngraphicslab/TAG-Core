@@ -4,18 +4,18 @@ var TAG = TAG || {},
     Worktop = Worktop || {};
 
 //TAG Utilities
-TAG.Util = (function () {
+TAG.Util_ITE = (function () {
     "use strict";
 
     var tagContainerId = 'tagRoot';
 
-    //TAG.Util public methods and members
+    //TAG.Util_ITE public methods and members
     return {
         makeNamespace: namespace,
         setToDefaults: setToDefaults,
         getGestureRecognizer: getGestureRecognizer,
         makeXmlRequest: makeXmlRequest,
-        makeManipulatable: makeManipulatable,
+        makeManipulatableITE: makeManipulatableITE,
         makeManipulatableWin: makeManipulatableWin,
         applyD3DataRec: applyD3DataRec,
         elementInDocument: elementInDocument,
@@ -744,7 +744,7 @@ TAG.Util = (function () {
     //onScroll(delta,pivot) is the scroll wheel
     //onTapped
     //onHolding
-    function makeManipulatable(element, functions, stopOutside, noAccel) {
+    function makeManipulatableITE(element, functions, stopOutside, noAccel) {
         var hammer = new Hammer(element, {
             hold_threshold: 3,
             drag_min_distance: 9,
@@ -1230,7 +1230,7 @@ TAG.Util = (function () {
 
         var lastTouched = null;
         var that = this;
-        var gr = TAG.Util.getGestureRecognizer();
+        var gr = TAG.Util_ITE.getGestureRecognizer();
         var manipulating = false;
 
         // general event handler
@@ -1418,7 +1418,7 @@ TAG.Util = (function () {
                 'top': '50%',
                 'color': 'white',
                 'text-align': 'center',
-                'font-size': TAG.Util.getMaxFontSizeEM(msg, 2, container.width() * 0.8, container.height() * 0.2, 0.1)
+                'font-size': TAG.Util_ITE.getMaxFontSizeEM(msg, 2, container.width() * 0.8, container.height() * 0.2, 0.1)
             });
             msgdiv.text(msg);
             videoElt.hide();
@@ -1481,7 +1481,7 @@ TAG.Util = (function () {
 /**
  * Utils for Animation, splitscreen, colors and the like
  */
-TAG.Util.UI = (function () {
+TAG.Util_ITE.UI = (function () {
     "use strict";
 
     var PICKER_SEARCH_TEXT = 'Search by Name, Artist, or Year...';
@@ -1667,7 +1667,7 @@ TAG.Util.UI = (function () {
 
         //
 
-        var serverDialogSpecs = TAG.Util.constrainAndPosition($(tagContainer).width(), $(tagContainer).height(),
+        var serverDialogSpecs = TAG.Util_ITE.constrainAndPosition($(tagContainer).width(), $(tagContainer).height(),
         {
             center_h: true,
             center_v: true,
@@ -1824,7 +1824,7 @@ TAG.Util.UI = (function () {
             serverErrorMessage.show();
             TAG.Worktop.Database.changeServer(address, false, function () {
                 TAG.Layout.StartPage(null, function (page) {
-                    TAG.Util.UI.slidePageRight(page);
+                    TAG.Util_ITE.UI.slidePageRight(page);
                 });
             }, function () {
                 serverCancelButton.show();
@@ -1892,7 +1892,7 @@ TAG.Util.UI = (function () {
 
         var feedbackBox = $(document.createElement('div'));
         $(feedbackBox).addClass('feedbackBox');
-        var feedbackBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+        var feedbackBoxSpecs = TAG.Util_ITE.constrainAndPosition($(window).width(), $(window).height(),
 
         {
             center_h: true,
@@ -1980,7 +1980,7 @@ TAG.Util.UI = (function () {
             TAG.Worktop.Database.createFeedback($(commentBox).val(), type, id);
             $(dialogOverlay).css({ 'display': 'none' });
             $(commentBox).val('');
-            var popup = TAG.Util.UI.popUpMessage(null, "Your feedback has been submitted, thank you for your feedback.", null, null, null, true);
+            var popup = TAG.Util_ITE.UI.popUpMessage(null, "Your feedback has been submitted, thank you for your feedback.", null, null, null, true);
             tagContainer.append(popup);
             $(popup).css('z-index', 1000000);
             $(popup).show();
@@ -2074,7 +2074,7 @@ TAG.Util.UI = (function () {
         var overlay = blockInteractionOverlay();
 
         var confirmBox = document.createElement('div');
-        var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+        var confirmBoxSpecs = TAG.Util_ITE.constrainAndPosition($(window).width(), $(window).height(),
            {
                center_h: true,
                center_v: true,
@@ -2194,7 +2194,7 @@ TAG.Util.UI = (function () {
         var overlay = blockInteractionOverlay();
         container = container || window;
         var confirmBox = document.createElement('div');
-        var confirmBoxSpecs = TAG.Util.constrainAndPosition($(container).width(), $(container).height(),
+        var confirmBoxSpecs = TAG.Util_ITE.constrainAndPosition($(container).width(), $(container).height(),
             {
                 center_h: true,
                 center_v: true,
@@ -2761,7 +2761,7 @@ TAG.Util.UI = (function () {
             removedComps = [], // components whose associations with target we will be removing
             origComps = [], // components that are already associated with target
             tabCache = [], // cached results from the server
-            loadQueue = TAG.Util.createQueue();
+            loadQueue = TAG.Util_ITE.createQueue();
 
         for (i = 0; i < tabs.length; i++) {
             tabCache.push({ cached: false, comps: [] });
@@ -2882,14 +2882,14 @@ TAG.Util.UI = (function () {
         pickerSearchBar.on('keyup', function (event) {
             event.stopPropagation();
         });
-        // TAG.Util.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
+        // TAG.Util_ITE.defaultVal("Search by Name...", pickerSearchBar, true, IGNORE_IN_SEARCH); // TODO more specific search (e.g. include year for artworks)
         pickerSearchBar.attr("placeholder", "Search by Name...");
         pickerSearchBar.keyup(function () {
-            TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
+            TAG.Util_ITE.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
         });
         pickerSearchBar.change(function () {
             if (pickerSearchBar.val() !== '') {
-                TAG.Util.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
+                TAG.Util_ITE.searchData(pickerSearchBar.val(), '.compHolder', IGNORE_IN_SEARCH);
             }
         });
         searchTab.append(pickerSearchBar);
@@ -2998,7 +2998,7 @@ TAG.Util.UI = (function () {
         });
         confirmButton.text("Save Changes");
         confirmButton.on('click', function () {
-            progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
+            progressCirc = TAG.Util_ITE.showProgressCircle(optionButtonDiv, progressCSS);
             finalizeAssociations();
         });
 
@@ -3033,7 +3033,7 @@ TAG.Util.UI = (function () {
         function tabHelper(j) {
             return function () {
                 loadQueue.clear();
-                progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
+                progressCirc = TAG.Util_ITE.showProgressCircle(optionButtonDiv, progressCSS);
                 pickerSearchBar.attr("value", "");
                 mainContainer.empty();
                 $(".tab").css({
@@ -3070,7 +3070,7 @@ TAG.Util.UI = (function () {
                 }
             }
             drawComps(newComps, compSingleDoubleClick);
-            TAG.Util.removeProgressCircle(progressCirc);
+            TAG.Util_ITE.removeProgressCircle(progressCirc);
         }
 
         function error() {
@@ -3469,9 +3469,9 @@ TAG.Util.UI = (function () {
     //    setHeight(thumbnail);
     //    container.append(thumbnail);
 
-    //    var circle = TAG.Util.showProgressCircle(container, progressCircCSS, '0px', '0px', false);
+    //    var circle = TAG.Util_ITE.showProgressCircle(container, progressCircCSS, '0px', '0px', false);
     //    image.load(function () {
-    //        TAG.Util.removeProgressCircle(circle);
+    //        TAG.Util_ITE.removeProgressCircle(circle);
     //    });
 
     //    metadataDiv.css(metadataCSS);
@@ -3484,9 +3484,9 @@ TAG.Util.UI = (function () {
 
 /**
  * Utils for the artwork viewer and the artwork editor
- * @class TAG.Util.Artwork
+ * @class TAG.Util_ITE.Artwork
  */
-TAG.Util.Artwork = (function () {
+TAG.Util_ITE.Artwork = (function () {
     "use strict";
 
     return {
@@ -3648,4 +3648,4 @@ if (!Math.constrain) {
         return Math.min(max, Math.max(min, num));
     };
 }
-ITE.TAGUtils = TAG.Util;
+ITE.TAGUtils = TAG.Util_ITE;

@@ -57,7 +57,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		//_viewer is the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: "DeepZoomHolder",
-			prefixUrl	 		: "../../Dependencies/openseadragon-bin-1.1.1/images/",
+			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.1.1/images/",
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
@@ -116,7 +116,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 		_super.load()
 		//Sets the DeepZoom's URL source
-    	_viewer.open("../../Assets/TourData/" + this.trackData.assetUrl);
+    	_viewer.open(itePath + "Assets/TourData/" + this.trackData.assetUrl);
 	};
 
    /** 
@@ -310,7 +310,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		    	//resetSeadragonConfig()
 	    	})
         // // Allows asset to be dragged, despite the name
-        // TAG.Util.disableDrag(_deepZoom);
+        // TAG.Util_ITE.disableDrag(_deepZoom);
 
         // _deepZoom.on("mousedown", function() {
         // 	console.log("mouse down")
@@ -342,7 +342,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
         // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
 
         /*// Register handlers
-        TAG.Util.makeManipulatable(_deepZoom[0], {
+        TAG.Util_ITE.makeManipulatable(_deepZoom[0], {
             onScroll: function (delta, pivot) {
                 mediaScroll(delta, pivot);
             },
