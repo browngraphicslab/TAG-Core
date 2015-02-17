@@ -44,13 +44,25 @@ var JSSRC = [
 
 
 		//ITE DEPENDENCIES
-        'js/ITE/ITE/Dependencies/CSSPlugin.min.js',
-        //'js/ITE/ITE/Dependencies/jquery.min.js',
-        'js/ITE/ITE/Dependencies/TweenLite.min.js',
-        'js/ITE/ITE/Dependencies/openseadragon-bin-1.1.1/openseadragon.js',
-        'js/ITE/ITE/Dependencies/Hammer.js',
-        'js/ITE/ITE/Dependencies/Raphael.js',
-        'js/ITE/ITE/ITECore.js',
+        'js/ITE/ITE/Dependencies/CSSPlugin.min.js',							//ITE
+        'js/ITE/ITE/Dependencies/TweenLite.min.js',							//ITE
+        'js/ITE/ITE/Dependencies/openseadragon-bin-1.1.1/openseadragon.js',	//ITE
+        'js/ITE/ITE/Dependencies/Hammer.js',								//ITE
+        'js/ITE/ITE/Dependencies/Raphael.js',								//ITE
+        '../../tagInk.js',													//ITE
+      	'js/ITE/ITE/ITE Core/Utils/ITE.Utils.js',							//ITE
+      	'js/ITE/ITE/ITE Core/Utils/TAG.Util.js',							//ITE
+      	'js/ITE/ITE/ITE Core/ITEManual/ITE.PubSubStruct.js',				//ITE
+      	'js/ITE/ITE/ITE Core/ITEManual/ITE.ImageProvider.js',				//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.VideoProvider.js',				//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.DeepZoomProvider.js',			//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.AudioProvider.js',				//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.InkProvider.js',					//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.TimeManager.js',					//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.TaskManager.js',					//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.Orchestrator.js',				//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.Player.js',						//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.ProviderInterfacePrototype.js',	//ITE
 
 
 		'js/seadragon/src/Seadragon.Core.js',                  // TAGCORE

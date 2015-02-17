@@ -58,7 +58,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
         previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
 
-        // misc initialized vars
+        // misc initialized variables
         loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
         artworkSelected = false,                            // whether an artwork is selected
         visibleCollections = [],                               // array of collections that are visible and published
