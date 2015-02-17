@@ -79,11 +79,8 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	O/P: none
 	*/
 	this.seek = function(seekTime){
-		// // Stops/cancels animation, if there is one
-		// currentAnimation && currentAnimation.stop();
-
 		// // Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		// var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. I’m not sure exactly what the syntax will be for this, but I know it’s possible in most of the animation libraries we’ve looked at.
+		//  var seekState = animationProvider.interpolate(seekTime, previousKeyFrame(), nextKeyFrame()) //NOTE: this interpolates between the two keyframes to return the state at the given time. I’m not sure exactly what the syntax will be for this, but I know it’s possible in most of the animation libraries we’ve looked at.
 		// 	this.setState(state)
 		// 	this.play()
 	};

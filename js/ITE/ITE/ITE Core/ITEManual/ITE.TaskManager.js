@@ -18,7 +18,7 @@ ITE.Task = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, ongo
 	self.animation;
 
 	this.play = function(){
-		(track.trackData.providerId === 'image') && asset.stop();
+		(track.trackData.providerId === 'image') && asset.stop(); //TODO deal with this
 		self.track.play(self.nextKeyframeTime, self.nextKeyframeData);
 	};
 

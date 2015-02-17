@@ -104,7 +104,7 @@ ITE.Orchestrator = function(player) {
 		var i;
 		for (i=0; i<self.trackManager.length; i++) {
 			if (self.trackManager[i].state === "loading"){
-				setTimeout(self.play, 1000);
+				setTimeout(self.play, 1000);//TODO not have this be a timeout...
 				return;
 			}
 		}
