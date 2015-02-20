@@ -216,7 +216,7 @@ module.exports = function(grunt) {
 					compress: false // in ship builds, set this to "true"
 				},
 				files: {
-					'css/TAG.css': [
+					'css/TAG.css': [ 
 						'css/common.styl',               // TAGCORE
 						'css/StartPage.styl',            // TAGCORE
 						'css/InternetFailurePage.styl',  // TAGCORE
