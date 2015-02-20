@@ -3266,7 +3266,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         //hardcoded tour - replace with parsed ITE data
         var ITEPlayer = new ITE.Player(testOptions);
         ITEPlayer.load(itePath + "Assets/TourData/TourDataAudioImagesDZ.JSON")
-        
+      //  ITEPlayer.load(itePath + "iteData")
+   
         //rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
         TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function(){});
 
