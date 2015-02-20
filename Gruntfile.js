@@ -228,7 +228,7 @@ module.exports = function(grunt) {
 						'css/SettingsView.styl',         // TAGCORE
 						'css/Util.styl',                 // TAGCORE
 						'css/SplashScreenOverlay.styl',   // TAGCORE
-						'css/ITE.Player.css'
+						'css/ITE.Player.styl'
 						//'css/ComponentControls.styl'	 // TAGCORE
 					]
 				}
