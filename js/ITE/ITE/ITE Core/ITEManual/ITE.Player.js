@@ -20,7 +20,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 setStartingOffset:          0,
                 setEndTime:                 NaN //defaults to end of tour if NaN
         },    //dictionary of player configuration options; defaults being set
-
     //DOM related
         ITEHolder = $(document.createElement("div"))
             .attr("id", "ITEHolder"),
@@ -230,14 +229,12 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function attachProgressIndicator() {
         if (playerConfiguration.attachProgressIndicator) {
-
             var ProgressIndicatorContainer = $(document.createElement("div"))
                 .addClass("progressIndicatorContainer");
 
-            progressIndicator.addClass("progressIndicator")
-            .innerHTML = "01:04"
-            //.text = "01:04";
-
+            progressIndicator.addClass("progressIndicator");
+            progressIndicator.innerHTML += "01:04"
+            //progressIndicator.text = "01:04";
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
         }
@@ -248,12 +245,13 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * called by timeManager and Orchestrator; updates current displayed time
     * O/P:   none
     */
+    /*
     function updateProgressIndicator(sec) {
         console.log(typeof(sec))
        // progressIndicator.innerHTML = "test"
     };
     this.updateProgressIndicator = updateProgressIndicator;
-
+    */
     /*
     * I/P:   none
     * Attaches full screen
