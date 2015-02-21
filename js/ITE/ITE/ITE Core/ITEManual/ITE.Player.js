@@ -416,6 +416,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * O/P:  none
     */ 
     function toggleFullScreen() {
+        //
         isFullScreen ? disableFullScreen() : enableFullScreen()
     };
 
