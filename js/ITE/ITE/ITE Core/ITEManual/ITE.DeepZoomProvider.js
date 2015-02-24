@@ -64,6 +64,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: "DeepZoomHolder",
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.1.1/images/",
+			//prefixUrl			: this.trackData.assetUrl,
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
@@ -120,6 +121,8 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 						};
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
+		_UIControl.css("z-index", keyframes[0].zIndex);
+
 		self.status = "ready";
 		console.log("DeepZoom: ready!");
 		self.setState(keyframesArray[0]);
@@ -137,7 +140,8 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	this.load = function(){
 		_super.load()
 		//Sets the DeepZoom's URL source
-    	_viewer.open(itePath + "Assets/TourData/" + this.trackData.assetUrl);
+    	//_viewer.open(itePath + "Assets/TourData/" + this.trackData.assetUrl);
+		_viewer.open(this.trackData.assetUrl)
 	};
 
    /** 

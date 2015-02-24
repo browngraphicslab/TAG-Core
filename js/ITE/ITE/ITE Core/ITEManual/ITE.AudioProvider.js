@@ -2,6 +2,7 @@ window.ITE = window.ITE || {};
 
 ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 "use strict";
+console.log("loading audio track")
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
@@ -97,10 +98,11 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 		//Sets the image’s URL source
 		_audio.attr({
-			"src"	: itePath + "Assets/TourData/"  + this.trackData.assetUrl,
+			//"src"	: itePath + "Assets/TourData/"  + this.trackData.assetUrl,
+			"src"	: this.trackData.assetUrl,
 			"type" 	: this.trackData.type
 		})
-		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
+		// When audio has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 		_audio.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
 			// TODO: remove old stuff
@@ -143,6 +145,7 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	* O/P: none
 	*/
 	this.play = function(targetTime, data){
+		console.log("PLAYING?!")
 		_super.play.call(self, targetTime, data);
 		_audioControls.play();
 	}
@@ -193,8 +196,6 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	this.toggleMute = function(isMuted){
 		isMuted? _audioControls.muted = true : _audioControls.muted = false;
 	}
-
-
 
 
 	/* 

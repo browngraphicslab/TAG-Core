@@ -85,6 +85,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 						};
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
+		keyframes[0] && _UIControl.css("z-index", keyframes[0].zIndex);//TODO: clean this up-- this is just to make sure that the asset has the correct z-index. 
+																		// There's also clearly been some mistake if we have to do this check (if there are any keyframes) because why would we have a track with no keyframes...?
 		self.status = "ready";
 		console.log("Image: ready!");
 		self.setState(keyframesArray[0]);
@@ -104,8 +106,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			_super.load()
 
 			//Sets the image’s URL source
-			_image.attr("src", itePath + "Assets/TourData/" + this.trackData.assetUrl)
-
+			_image.attr("src", this.trackData.assetUrl)
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?
 					this.setStatus(2);
@@ -129,8 +130,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 				y 		: _UIControl.position().top
 			},
 			size: {
-				height	: _UIControl.height(),
-				width	: _UIControl.width()
+				y	: _UIControl.height(),
+				x	: _UIControl.width()
 			},
 		};	
 		return self.savedState;
@@ -145,8 +146,8 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 		_UIControl.css({
 			"left":			state.pos.x,
 			"top":			state.pos.y,
-			"height":		state.size.height,
-			"width":		state.size.width,
+			"height":		state.size.y,
+			"width":		state.size.x,
 			"opacity":		state.opacity
 		});
 	};
