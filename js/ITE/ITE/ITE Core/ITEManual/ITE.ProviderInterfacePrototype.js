@@ -11,7 +11,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	// TODO: remove old stuff
 	// this.keyframes				= []; 	// Data structure to keep track of all displays/keyframes
 	// TODO: new stuff start
-	self.keyframes           = new AVLTree(
+	this.keyframes           = new AVLTree(
 		// Comparator function takes in two keyframes, returns comparison integer.
 		function (a, b) {
 			if (a.time < b.time) {
@@ -61,8 +61,11 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	O/P: none
 	*/
 	this.loadKeyframes = function(keyframeData){
-		for (i in keyframeData) {
-			self.keyframes.add(i);
+		for (var i = 0; i < keyframeData.length; i++) {
+			var keyframe = keyframeData[i];
+			if (typeof keyframe === "object" && keyframe.time) {
+				this.keyframes.add(keyframeData[i]);
+			}
 		}
 	}
 

@@ -13,7 +13,9 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 	// TODO: remove old stuff
     // var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
     // TODO: new stuff start
+    console.log("Video: loading keyframes...");
     self.loadKeyframes(trackData.keyframes);
+    console.log("Video: loaded!");
     // TODO: new stuff end
 
 	self.player 		= player;
@@ -74,8 +76,9 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		// }
 		// self.status = "ready";
 		// TODO: new stuff start
+		console.log("Video: loading tasks...");
 		var keyframesArray = self.keyframes.getContents();
-		for (i = 1; i < avlArr.length; i++) {
+		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
 						  "opacity"	: keyframesArray[i].opacity,
 						  "pos" : {
@@ -89,8 +92,9 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 						};
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
-		self.setState(keyframesArray[0]);
 		self.status = "ready";
+		console.log("Video: ready!");
+		self.setState(keyframesArray[0]);
 		// TODO: new stuff end
 
 		//Attach Handlers

@@ -13,7 +13,9 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
     // TODO: remove old keyframe stuff
     // var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
     // TODO: new stuff start
+    console.log("Audio: loading keyframes...");
     self.loadKeyframes(trackData.keyframes);
+    console.log("Audio: loaded!");
     // TODO: new stuff end
 
 	self.player 		= player;
@@ -70,15 +72,17 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 		// self.status = "ready";
 		// TODO: new stuff start
 		// Loop through AVL tree
+		console.log("Audio: loading tasks...");
 		var keyframesArray = self.keyframes.getContents();
-		for (i = 1; i < avlArr.length; i++) {
+		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
 						  "volume"	: keyframesArray[i].volume 
 						};
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
-		self.setState(keyframesArray[0]);
 		self.status = "ready";
+		console.log("Audio: ready!");
+		self.setState(keyframesArray[0]);
 		// TODO: new stuff end
 	};
 

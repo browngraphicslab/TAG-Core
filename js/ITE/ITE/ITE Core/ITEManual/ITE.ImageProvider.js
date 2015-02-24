@@ -13,14 +13,17 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 	// TODO: remove old stuff
     // var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
     // TODO: new stuff start
+    console.log("Image: loading keyframes...");
     self.loadKeyframes(trackData.keyframes);
+    console.log(self.keyframes);
+    console.log("Image: loaded!");
     // TODOL new stuff end
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
-	self.savedState		= keyframes[0];
+	// self.savedState		= keyframes[0];
 	self.animation,
 	self.interactionAnimation;
 
@@ -70,8 +73,9 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 		// self.status = "ready";
 		// self.setState(keyframes[0]);
 		// TODO: new stuff start
+		console.log("Image: loading tasks...");
 		var keyframesArray = self.keyframes.getContents();
-		for (i = 1; i < avlArr.length; i++) {
+		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
 						  "opacity"	: keyframesArray[i].opacity,
 						  "top"		: (500*keyframesArray[i].pos.y/100) + "px",
@@ -81,8 +85,9 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 						};
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
-		self.setState(keyframesArray[0]);
 		self.status = "ready";
+		console.log("Image: ready!");
+		self.setState(keyframesArray[0]);
 		// TODO: new stuff end
 		//Attach Handlers
 		attachHandlers()
