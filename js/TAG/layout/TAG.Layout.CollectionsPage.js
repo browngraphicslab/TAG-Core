@@ -3263,17 +3263,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 setEndTime:                 NaN
             };
 
-        //hardcoded tour - replace with parsed ITE data
         var ITEPlayer = new ITE.Player(testOptions);
-        ITEPlayer.load(itePath + "Assets/TourData/TourDataAudioImagesDZ.JSON")
-      //  ITEPlayer.load(itePath + "iteData")
-   
-        //rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
+        ITEPlayer.load(iteData)
+        //ITEPlayer.load(itePath + "Assets/TourData/TourDataAudioImagesDZ.JSON")
         TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function(){});
 
-        //rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour);
-
-        //TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
+        /*rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
+        rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour);
+        TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);*/
 
         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
         currentPage.obj  = rinPlayer;

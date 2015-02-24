@@ -67,6 +67,9 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 						};
 			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
 		}
+
+		_UIControl.css("z-index", keyframes[0].zIndex);
+
 		self.status = "ready";
 
 		//Attach Handlers

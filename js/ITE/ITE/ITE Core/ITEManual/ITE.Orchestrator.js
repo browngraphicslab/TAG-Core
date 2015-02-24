@@ -26,7 +26,7 @@ ITE.Orchestrator = function(player) {
 			AJAXreq = new XMLHttpRequest(),
 			i;
 
-	   	AJAXreq.open( "GET", dataURL, true );
+	   	/*AJAXreq.open( "GET", dataURL, true );
 	    AJAXreq.setRequestHeader("Content-type", "application/json");
 	    AJAXreq.onreadystatechange = function(){
 	        if( AJAXreq.readyState == 4 && AJAXreq.status == 200 ){
@@ -35,8 +35,9 @@ ITE.Orchestrator = function(player) {
 	       		loadHelper();
 	        }
 	    }
-	    AJAXreq.send();
-
+	    AJAXreq.send();*/
+	    tourData = dataURL
+	    loadHelper();
 
 	  /**
 	    * I/P: none
@@ -73,12 +74,18 @@ ITE.Orchestrator = function(player) {
 	    * O/P: none
 	    */
 		function createTrackByProvider(trackData){
+			/*console.log("----------------------------------------------------")
+			console.log("Name: " + trackData.Name)
+			console.log("URL: " + trackData.assetUrl)
+			console.log("provider: " + trackData.providerId)
+			console.log("----------------------------------------------------")*/
+
 			switch (trackData.providerId){
 				case "image" : 
 					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "video" : 
-					self.trackManager.push(new ITE.VideoProvider(trackData, self.player, self.taskManager, self));
+					//self.trackManager.push(new ITE.VideoProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "audio" : 
 					self.trackManager.push(new ITE.AudioProvider(trackData, self.player, self.taskManager, self));
@@ -87,10 +94,10 @@ ITE.Orchestrator = function(player) {
 					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "ink" : 
-					self.trackManager.push(new ITE.InkProvider(trackData, self.player, self.taskManager, self));
+					//self.trackManager.push(new ITE.InkProvider(trackData, self.player, self.taskManager, self));
 					break;
 				default:
-					throw new Error("Unexpected providerID; '" + trackData.providerID + "' is not a valid providerID");
+					throw new Error("Unexpected providerID; '" + trackData.providerId + "' is not a valid providerID");
 			}
 		}
 	};
