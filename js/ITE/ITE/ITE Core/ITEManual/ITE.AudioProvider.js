@@ -10,14 +10,22 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+    // TODO: remove old keyframe stuff
+    // var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+    // TODO: new stuff start
+    self.loadKeyframes(trackData.keyframes);
+    // TODO: new stuff end
 
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
-	self.savedState		= keyframes[0];
+	// TODO: remove old kf stuff
+	// self.savedState		= keyframes[0];
+	// TODO: new stuff start
+	// self.savedStateAVL 	= self.keyframes.min();
+	// TODO: new stuff end
 	self.animation;
 
 	this.trackData   			= trackData;
@@ -50,15 +58,28 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 		$("#ITEHolder").append(_UIControl);
 
+		
 		var i, keyframeData;
-
-		for (i=1; i<keyframes.length; i++) {
+		// TODO: Remove old stuff
+		// for (i=1; i<keyframes.length; i++) {
+		// 	keyframeData={
+		// 				  "volume"	: keyframes[i].volume 
+		// 				};
+		// 	self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+		// }
+		// self.status = "ready";
+		// TODO: new stuff start
+		// Loop through AVL tree
+		var keyframesArray = self.keyframes.getContents();
+		for (i = 1; i < avlArr.length; i++) {
 			keyframeData={
-						  "volume"	: keyframes[i].volume 
+						  "volume"	: keyframesArray[i].volume 
 						};
-			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
+		self.setState(keyframesArray[0]);
 		self.status = "ready";
+		// TODO: new stuff end
 	};
 
 
@@ -78,7 +99,11 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 		_audio.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
+			// TODO: remove old stuff
 			this.setState(keyframes[0]);
+			// TODO: new stuff start
+			this.setState(self.keframes.min());
+			// TODO: new stuff end
 		};
 	};
 

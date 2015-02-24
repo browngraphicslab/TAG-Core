@@ -10,7 +10,11 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+	// TODO: remove old stuff
+    // var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+    // TODO: new stuff start
+    self.loadKeyframes(trackData.keyframes);
+    // TODOL new stuff end
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
@@ -52,18 +56,34 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 
 		var i, keyframeData;
 
-		for (i=1; i<keyframes.length; i++) {
+		// TODO: remove old stuff
+		// for (i=1; i<keyframes.length; i++) {
+		// 	keyframeData={
+		// 				  "opacity"	: keyframes[i].opacity,
+		// 				  "top"		: (500*keyframes[i].pos.y/100) + "px",
+		// 				  "left"	: (1000*keyframes[i].pos.x/100) + "px",
+		// 				  "width"	: (1000*keyframes[i].size.x/100) + "px",
+		// 				  "height"	: (500*keyframes[i].size.y/100) + "px"
+		// 				};
+		// 	self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+		// }
+		// self.status = "ready";
+		// self.setState(keyframes[0]);
+		// TODO: new stuff start
+		var keyframesArray = self.keyframes.getContents();
+		for (i = 1; i < avlArr.length; i++) {
 			keyframeData={
-						  "opacity"	: keyframes[i].opacity,
-						  "top"		: (500*keyframes[i].pos.y/100) + "px",
-						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
-						  "width"	: (1000*keyframes[i].size.x/100) + "px",
-						  "height"	: (500*keyframes[i].size.y/100) + "px"
+						  "opacity"	: keyframesArray[i].opacity,
+						  "top"		: (500*keyframesArray[i].pos.y/100) + "px",
+						  "left"	: (1000*keyframesArray[i].pos.x/100) + "px",
+						  "width"	: (1000*keyframesArray[i].size.x/100) + "px",
+						  "height"	: (500*keyframesArray[i].size.y/100) + "px"
 						};
-			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
+		self.setState(keyframesArray[0]);
 		self.status = "ready";
-		self.setState(keyframes[0]);
+		// TODO: new stuff end
 		//Attach Handlers
 		attachHandlers()
 
