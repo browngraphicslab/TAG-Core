@@ -232,11 +232,12 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             var ProgressIndicatorContainer = $(document.createElement("div"))
                 .addClass("progressIndicatorContainer");
 
-            progressIndicator.addClass("progressIndicator");
-            progressIndicator.innerHTML += "01:04"
-            //progressIndicator.text = "01:04";
+            progressIndicator.addClass("progressIndicator"); 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
+            progressIndicator.append("0:00 / 11:11");
+            //progressIndicator.clear;
+            
         }
     };
 
