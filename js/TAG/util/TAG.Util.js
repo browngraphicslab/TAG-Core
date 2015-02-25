@@ -7402,11 +7402,13 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
             //Adds a final keyframe using the duration of time for the experience stream, this is so items 
             //don't prematurely disappear from the screen.  note - this is before the fade in/out keyframes are added.
-
-            var endKeyframe = jQuery.extend({}, currKeyframes[currKeyframes.length - 1]);
-            endKeyframe.time = currKeyframes[0].time + currExperienceStream.duration
-            endKeyframe.SpecialKeyframeType = "HOLDING FOR DURATION" //for testing
-            currKeyframes.push(endKeyframe)
+            //audio and video don't need this
+            if (providerID != "audio" && providerID != "video"){
+                var endKeyframe = jQuery.extend({}, currKeyframes[currKeyframes.length - 1]);
+                endKeyframe.time = currKeyframes[0].time + currExperienceStream.duration
+                endKeyframe.SpecialKeyframeType = "HOLDING FOR DURATION" //for testing
+                currKeyframes.push(endKeyframe)
+            }
 
             /*  This section deals with adding initial and final keyframes for the fade in and fade out.
                 Note - each experience stream in the RIN object needs its own fade in and fade out. */
