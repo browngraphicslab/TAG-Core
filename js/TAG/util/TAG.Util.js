@@ -7267,6 +7267,7 @@ TAG.Util.Artwork = (function () {
 
 //Utilities for RIN parsing
 TAG.Util.RIN_TO_ITE = function (tour) {
+
     console.log(">>>>>>>>>>>>> Starting ITE Parsing >>>>>>>>>>>>>");
 
     if (!tour){
@@ -7275,6 +7276,9 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
     var rinData = JSON.parse(unescape(tour.Metadata.Content)),
         ITE_tour = {};
+
+        console.log("rin data: ")
+        console.log(rinData)
         
     //parses keyframes from a RIN experience track
     var ITE_keyframes = function(track, providerID){
@@ -7298,25 +7302,29 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                 if (providerID == "image"){
                     keyframeObject = {
                         "dispNum": k,
+                        "zIndex": track.data.zIndex,
                         "time": currKeyframe.offset,
-                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 0 : 1, //0 at beginning and end of each display, 1 otherwise
+                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 1 : 1, //0 at beginning and end of each display, 1 otherwise
+                        //TODO: CHANGE BACK TO ...? 0: 1-- ITS JUST 1 FOR TESTING CURRENTLY
                         "size": {
-                            "x": currKeyframe.state.viewport.region.span.x,
-                            "y": currKeyframe.state.viewport.region.span.y
+                            "x": currKeyframe.state.viewport.region.span.x * 100,
+                            "y": currKeyframe.state.viewport.region.span.y * 100
                         },
                         "pos": {
-                            "x": currKeyframe.state.viewport.region.center.x,
-                            "y": currKeyframe.state.viewport.region.center.y
+                            "x": currKeyframe.state.viewport.region.center.x * 100,
+                            "y": currKeyframe.state.viewport.region.center.y * 100
                         },
                         "data": {}
                     }
                 }
-                else if (providerID == "deepzoom"){
+                else if (providerID == "deepZoom"){
                     keyframeObject = {
                         "dispNum": k,
+                        "zIndex": track.data.zIndex,
                         "time": currKeyframe.offset,
-                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 0 : 1, 
-                        "scale": null, //TODO
+                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 1 : 1, 
+                        //"scale": null, //TODO
+                        "scale": currKeyframe.state.viewport.region.span.x, //TODO
                         "pos": {
                             "x": currKeyframe.state.viewport.region.center.x,
                             "y": currKeyframe.state.viewport.region.center.y
@@ -7336,8 +7344,9 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                 else if (providerID == "video"){
                     keyframeObject = { //TODO
                         "dispNum": k,
+                        "zIndex": track.data.zIndex,
                         "time": null,
-                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 0 : 1,
+                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 1 : 1,
                         "size": {
                             "x": null,
                             "y": null
@@ -7355,6 +7364,17 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                     keyframeObject = {}
                 }
                 keyframes.push(keyframeObject);
+
+                //Backwards compatability for old RIN tours that stored audio as a single keyframe with a specific duration
+                if ((providerID == "audio") && (experienceStreamKeys.length == 1)){
+                    keyframes.push({
+                        "dispNum": k,
+                        "time": currExperienceStream.duration,
+                        "volume": currKeyframe.state.sound.volume,
+                        "data": {},
+                        "audioOffset": null //TODO
+                    })
+                }
             }
         }
         return keyframes;
@@ -7370,14 +7390,15 @@ TAG.Util.RIN_TO_ITE = function (tour) {
         for (j=0; j<track.resourceReferences.length; j++){
             urls.push(rinData.resources[track.resourceReferences[j].resourceId].uriReference);
         }
-        return urls;
+        var serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8086' : "browntagserver.com:8080");
+        return serverURL + urls;
     }
 
     //returns a string of the providerID based on RIN's providerId's
     var ITE_providerID = function(RINid){
         return {
             "ImageES" : "image", 
-            "ZMES" : "deepzoom",
+            "ZMES" : "deepZoom",
             "AES" : "audio",
             "" : "video", //TODO find out what this is
             "InkES" : "ink"
@@ -7394,7 +7415,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
             var currExperience = rinData.experiences[rinDataExperiencesKeys[i]];
             tracks.push({
                 "name" : rinDataExperiencesKeys[i],
-                "providerID" : ITE_providerID(currExperience.providerId),
+                "providerId" : ITE_providerID(currExperience.providerId),
                 "assetUrl" : ITE_assetUrl(currExperience),
                 "keyframes" : ITE_keyframes(currExperience, ITE_providerID(currExperience.providerId)),
                 "zIndex" : currExperience.data.zIndex

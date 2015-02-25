@@ -32,13 +32,15 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     bottomContainer.append(buttonContainer);
 
     //Buttons
-    var volumeButton        = $(document.createElement("img")),
-        volumeLevel         = $(document.createElement("img")),
-        playPauseButton     = $(document.createElement("img")),
-        loopButton          = $(document.createElement("img")),
-        progressBar         = $(document.createElement("div")),
-        fullScreenButton    = $(document.createElement("img")),
-        progressIndicator   = $(document.createElement("div")),
+    var volumeButton            = $(document.createElement("img")),
+        volumeLevel             = $(document.createElement("img")),
+        playPauseButton         = $(document.createElement("img")),
+        loopButton              = $(document.createElement("img")),
+        progressBar             = $(document.createElement("div")),
+        fullScreenButton        = $(document.createElement("img")),
+        progressIndicator       = $(document.createElement("div")),
+        volumeLevelContainer    = $(document.createElement("div")),
+
 
     //Other atributes
         timeOffset,
@@ -104,12 +106,10 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg")
             .on("click", toggleMute);
 
-            var volumeLevelContainer = $(document.createElement("div"))
-                .addClass("volumeLevelContainer")
+                volumeLevelContainer.addClass("volumeLevelContainer")
                 .on({
                     "click": function(e){
-                        var height = Math.abs(e.pageY - volumeLevel.parent().offset().top - volumeLevel.parent().height())/100;
-                        setVolume(height);
+                        setVolume(volumeLevelContainer.getVolumeFromMouse(e));
                     },
                     "mousedown": function(e){
                         volumeLevelContainer.dragging = true;
@@ -117,16 +117,24 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                     "mouseup": function(e){
                         volumeLevelContainer.dragging = false;
                     },
-                    "mouseleave" : function(e){
-                        volumeLevelContainer.dragging = false;
-                    },
                     "mousemove": function(e){
-                        volumeLevelContainer.dragging ? setVolume(e) : null
+                        volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
                     }
                 });
 
                 volumeLevel = $(document.createElement("div"))
                     .addClass("volumeLevel");
+
+                volumeLevelContainer.getVolumeFromMouse = function (e) {
+                    var newVol = ((volumeLevelContainer.offset().top + volumeLevelContainer.height()) - e.pageY) / volumeLevelContainer.height()
+                    volumeLevelContainer.css("background-color", "rgba(255,0,0,0)") //TODO
+                    //this makes volume increasable for some reason?? 
+                    //It seems like if the background is transparent, mouse movements on volumeLevelContainer are subject not to the size/position of volumeLevelContainer,
+                    //but instead to those of volumeLevel, which makes absolutely no sense to me but I might be missing something stupid.
+                    //Anyway, I'm leaving it out for now but we do need to deal with this (ereif)
+                    return newVol
+                }
+
             buttonContainer.append(volumeContainer);
             volumeContainer.append(volumeButtonContainer)
                            .append(volumeLevelContainer);
@@ -187,14 +195,21 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function attachProgressBar() {
         if (playerConfiguration.attachProgressBar) {
-            //For seeking, skipping and scrubbing: when you click and drag on the progressbar, you can seek.  But also if you click down and then move your mouse outside of the bar without mousing up it will still seek (mimiking old RIN)
+            //For seeking, skipping and scrubbing (on volume as well as time): when you click and drag on the progressbar, you can seek.  But also if you click down and then move your mouse outside of the bar without mousing up it will still seek (mimiking old RIN)
             $( "*" ).on({
-                "mouseup": function(e){
+                "mouseup": function (e) {
+                    //seeking
                     progressBarContainer.dragging ? seek(e) : null
                     progressBarContainer.dragging = false
+                    //volume
+                    volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
+                    volumeLevelContainer.dragging = false
                 },
-                "mousemove": function(e){
+                "mousemove": function (e) {
+                    //time
                     progressBarContainer.dragging ? seek(e) : null
+                    //volume
+                    volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
                 }
             })
 
@@ -361,6 +376,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function setVolume(newVolume) {
         newVolume > 1 ? newVolume = 1 : null
+        newVolume <=0 ? newVolume = 0 : null
+
         if (isMuted){
             unMute();
         }
@@ -417,6 +434,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * O/P:  none
     */ 
     function toggleFullScreen() {
+        //
         isFullScreen ? disableFullScreen() : enableFullScreen()
     };
 
