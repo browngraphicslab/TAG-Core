@@ -7263,8 +7263,6 @@ TAG.Util.Artwork = (function () {
     }
 })();
 
-
-
 //Utilities for RIN parsing
 TAG.Util.RIN_TO_ITE = function (tour) {
 
@@ -7274,38 +7272,63 @@ TAG.Util.RIN_TO_ITE = function (tour) {
         return {};
     }
 
-    var rinData = JSON.parse(unescape(tour.Metadata.Content)),
-        ITE_tour = {};
-
+    var rinData = JSON.parse(unescape(tour.Metadata.Content)); //the original RIN tour obj
         console.log("rin data: ")
         console.log(rinData)
         
     //parses keyframes from a RIN experience track
     var ITE_keyframes = function(track, providerID){
-        var keyframes = [];
-        var experienceStreamKeys = Object.keys(track.experienceStreams)
-                                         .sort(); //TODO test if the ordering of experience streams is preserved
+        var keyframes = []; //all of the keyframes for the entire track
+        var experienceStreamKeys = Object.keys(track.experienceStreams).sort(); //TODO test if the ordering of experience streams is preserved - I don't think it is
+
+        /*  RIN has multiple experience streams (each with its own keyframes) per track.
+            ITE gets rid of the middle layer and only has one set of keyframes per track. 
+            The keyframes are parsed from one experience stream at a time, then the initial
+            and final keyframes are added, and then these keyframes are added to the final 
+            keyframes array */
 
         var k=0;
         for (k=0; k<experienceStreamKeys.length; k++){
+            var currKeyframes = []; //the keyframes for the current experience stream
             var currKey = experienceStreamKeys[k];
-            var currExperienceStream = track.experienceStreams[currKey];
+            var currExperienceStream = track.experienceStreams[currKey]; //the current experience stream
+            
             if (!currExperienceStream.keyframes){
                 continue;
             }
 
+            //parses time offset of current experience stream from a different section of the RIN metadata
+
+            if (!(rinData.screenplays && 
+                rinData.screenplays.SCP1 && 
+                rinData.screenplays.SCP1.data && 
+                rinData.screenplays.SCP1.data.experienceStreamReferences)) {
+                console.log("ERROR: no data for experience stream time offsets")
+            }
+
+            var referenceData = jQuery.grep(rinData.screenplays.SCP1.data.experienceStreamReferences, 
+                function(e){ 
+                    return e.experienceStreamId == currKey; //searches for matching key
+                }
+            );
+
+            if (referenceData.length == 0) {
+                console.log("ERROR: no data for experience stream time offsets")
+            }
+
+            var time_offset = referenceData[0].begin;
+
             var l = 0;
             for (l=0; l<currExperienceStream.keyframes.length; l++) {
                 var currKeyframe = currExperienceStream.keyframes[l]
-                var keyframeObject = {};
+                var keyframeObject = {}; //represents one keyframe
                 
                 if (providerID == "image"){
                     keyframeObject = {
                         "dispNum": k,
                         "zIndex": track.data.zIndex,
-                        "time": currKeyframe.offset,
-                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 1 : 1, //0 at beginning and end of each display, 1 otherwise
-                        //TODO: CHANGE BACK TO ...? 0: 1-- ITS JUST 1 FOR TESTING CURRENTLY
+                        "time": time_offset + currKeyframe.offset,
+                        "opacity": 1, 
                         "size": {
                             "x": currKeyframe.state.viewport.region.span.x * 100,
                             "y": currKeyframe.state.viewport.region.span.y * 100
@@ -7321,9 +7344,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                     keyframeObject = {
                         "dispNum": k,
                         "zIndex": track.data.zIndex,
-                        "time": currKeyframe.offset,
-                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 1 : 1, 
-                        //"scale": null, //TODO
+                        "time": time_offset + currKeyframe.offset,
+                        "opacity": 1, 
                         "scale": currKeyframe.state.viewport.region.span.x, //TODO
                         "pos": {
                             "x": currKeyframe.state.viewport.region.center.x,
@@ -7335,7 +7357,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                 else if (providerID == "audio"){
                     keyframeObject = {
                         "dispNum": k,
-                        "time": currKeyframe.offset,
+                        "time": time_offset + currKeyframe.offset,
                         "volume": currKeyframe.state.sound.volume,
                         "data": {},
                         "audioOffset": null //TODO
@@ -7346,7 +7368,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                         "dispNum": k,
                         "zIndex": track.data.zIndex,
                         "time": null,
-                        "opacity": (l == 0 || l == currExperienceStream.keyframes.length - 1) ? 1 : 1,
+                        "opacity": 1,
                         "size": {
                             "x": null,
                             "y": null
@@ -7363,21 +7385,108 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                 else if (providerID == "ink"){
                     keyframeObject = {}
                 }
-                keyframes.push(keyframeObject);
+
+                currKeyframes.push(keyframeObject);
 
                 //Backwards compatability for old RIN tours that stored audio as a single keyframe with a specific duration
                 if ((providerID == "audio") && (experienceStreamKeys.length == 1)){
-                    keyframes.push({
+                    currKeyframes.push({
                         "dispNum": k,
-                        "time": currExperienceStream.duration,
+                        "time": time_offset + currExperienceStream.duration,
                         "volume": currKeyframe.state.sound.volume,
                         "data": {},
                         "audioOffset": null //TODO
                     })
                 }
             }
+
+            /*  This section deals with adding initial and final keyframes for the fade in and fade out.
+                Note - each experience stream in the RIN object needs its own fade in and fade out. */
+
+            //if the RIN object has transition data for the current experience stream
+            if (currExperienceStream.data['transition']){
+
+                var fadeInDuration = currExperienceStream.data.transition.inDuration,
+                    fadeOutDuration = currExperienceStream.data.transition.outDuration
+
+                //assert that the duration of the asset is longer than RIN's inDuration + outDuration
+                if (track.data.duration < fadeInDuration + fadeOutDuration){
+                    console.log("ERROR: track duration shorter than fadein/fadeout duration")
+                }
+
+                //each provider has this - the opacity is zero, and the time is -inDuration and +outDuration
+                var initialKeyframe = ITE_createTransitionKeyframe({
+                        "keyframes" : currKeyframes, 
+                        "providerID" : providerID, 
+                        "ktype" : "initial", 
+                        "duration" : fadeInDuration 
+                    }),
+                    finalKeyframe = ITE_createTransitionKeyframe({
+                        "keyframes" : currKeyframes, 
+                        "providerID" : providerID, 
+                        "ktype" : "final",
+                        "duration" : fadeOutDuration
+                    })
+
+                //merges them into the array
+                currKeyframes.push(finalKeyframe)
+                currKeyframes.unshift(initialKeyframe)
+
+            } else {
+                console.log("ERROR: " + providerID + " track has no transition data available.")
+            }
+
+            //at the end - merges onto the end of the total keyframes array, preserving ordering of experience streams
+            keyframes = keyframes.concat(currKeyframes)
+
         }
-        return keyframes;
+
+        return keyframes
+    }
+
+    /* creates final or initial keyframe for fade in and out
+        args:
+            keyframes:          array of keyframes
+            providerID:         providerID of this track
+            ktype:              "initial" or "final" specifying the type of keyframe
+            duration:           duration (either fadeInDuration or fadeOutDuration)
+    */
+    var ITE_createTransitionKeyframe = function(args){
+        var keyframes   = args.keyframes,
+            providerID  = args.providerID,
+            ktype       = args.ktype,
+            duration    = args.duration,
+            transitionKeyframe = {}
+
+        //possible error - no keyframes to begin with
+        if (keyframes.length == 0) {
+            return transitionKeyframe
+        }
+
+        //current first and last keyframes
+        var firstKeyframe = keyframes[0],
+            lastKeyframe = keyframes[keyframes.length - 1]
+
+        //new one is the same as either the current first or last keyframe - except the time and the opacity
+        if (ktype == "initial") {
+            transitionKeyframe = jQuery.extend({}, firstKeyframe); //need to make a copy of the first keyframe
+            transitionKeyframe.time = transitionKeyframe.time - duration
+
+            //TODO - is this a problem?
+            if (transitionKeyframe.time < 0){
+                console.log("ERROR: initial keyframe with time < 0")
+            }
+
+            transitionKeyframe.opacity = 0
+            transitionKeyframe['transition'] = "INITIAL" //for testing
+        } else {
+            transitionKeyframe = jQuery.extend({}, lastKeyframe); //need to make a copy of the last keyframe
+            transitionKeyframe.time = transitionKeyframe.time + duration
+            transitionKeyframe.opacity = 0
+            transitionKeyframe['transition'] = "FINAL" //for testing
+        }
+
+        return transitionKeyframe
     }
 
     //parses asset URL(s) from a RIN experience track
@@ -7425,7 +7534,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
         return tracks.sort(function(a, b){return a.zIndex - b.zIndex});
     }
 
-    ITE_tour = {
+    var ITE_tour = {
         "tourTitle" : tour.Name,
         "totalDuration" : rinData.data.narrativeData.estimatedDuration || 0,
         "guid" : rinData.data.narrativeData.guid,
