@@ -10,13 +10,8 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-	// TODO: remove old stuff
-    // var keyframes       		= trackData.keyframes;   // Data structure to keep track of all displays/keyframes
-    // TODO: new stuff start
-    console.log("DeepZoom: loading keyframes...");
     self.loadKeyframes(trackData.keyframes);
-    console.log("DeepZoom: loaded!");
-    // TODO: new stuff end
+    
 	self.player 				= player;
 	self.taskManager 			= taskManager;
 	self.trackData 				= trackData;
