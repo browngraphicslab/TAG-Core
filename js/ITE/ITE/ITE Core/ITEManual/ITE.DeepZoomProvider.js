@@ -116,7 +116,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		var keyframesArray = self.keyframes.getContents();
 		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
-						  "opacity"	: keyframesArray[i].volume, 
+						  "opacity"	: keyframesArray[i].opacity, 
 						  "bounds"	: new OpenSeadragon.Rect(parseFloat(keyframesArray[i].pos.x), parseFloat(keyframesArray[i].pos.y), keyframesArray[i].scale, keyframesArray[i].scale/2)
 						};
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
@@ -125,6 +125,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
 		self.status = "ready";
 		console.log("DeepZoom: ready!");
+		console.log(keyframesArray);
 		console.log(self.keyframes);
 		self.setState(keyframesArray[0]);
 		// TODO: new stuff end

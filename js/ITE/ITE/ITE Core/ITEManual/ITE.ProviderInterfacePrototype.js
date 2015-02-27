@@ -64,8 +64,8 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 		for (var i = 0; i < keyframeData.length; i++) {
 			var keyframe = keyframeData[i];
 			if (typeof keyframe === "object" && "time" in keyframe) {
+				console.log(keyframeData[i]);
 				this.keyframes.add(keyframeData[i]);
-
 			}
 		}
 	}
