@@ -27,7 +27,7 @@ console.log("loading audio track")
 	// TODO: remove old kf stuff
 	// self.savedState		= keyframes[0];
 	// TODO: new stuff start
-	// self.savedStateAVL 	= self.keyframes.min();
+	// self.savedState 	= self.keyframes.min();
 	// TODO: new stuff end
 	self.animation;
 
@@ -83,6 +83,7 @@ console.log("loading audio track")
 		}
 		self.status = "ready";
 		console.log("Audio: ready!");
+		console.log(self.keyframes);
 		self.setState(keyframesArray[0]);
 		// TODO: new stuff end
 	};
@@ -106,9 +107,9 @@ console.log("loading audio track")
 		_audio.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
 			// TODO: remove old stuff
-			this.setState(keyframes[0]);
+			// this.setState(keyframes[0]);
 			// TODO: new stuff start
-			this.setState(self.keframes.min());
+			this.setState(self.keyframes.min());
 			// TODO: new stuff end
 		};
 	};

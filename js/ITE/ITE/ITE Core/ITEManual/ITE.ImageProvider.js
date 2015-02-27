@@ -15,7 +15,6 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
     // TODO: new stuff start
     console.log("Image: loading keyframes...");
     self.loadKeyframes(trackData.keyframes);
-    console.log(self.keyframes);
     console.log("Image: loaded!");
     // TODOL new stuff end
 	self.player 		= player;
@@ -85,7 +84,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 						};
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
-		keyframes[0] && _UIControl.css("z-index", keyframes[0].zIndex);//TODO: clean this up-- this is just to make sure that the asset has the correct z-index. 
+		keyframesArray[0] && _UIControl.css("z-index", keyframesArray[0].zIndex);//TODO: clean this up-- this is just to make sure that the asset has the correct z-index. 
 																		// There's also clearly been some mistake if we have to do this check (if there are any keyframes) because why would we have a track with no keyframes...?
 		self.status = "ready";
 		console.log("Image: ready!");
@@ -110,7 +109,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?
 					this.setStatus(2);
-					this.setState(keyframes[0]);
+					this.setState(keyframes.min());
 			};
 	};
 

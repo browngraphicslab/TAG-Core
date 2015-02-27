@@ -93,7 +93,7 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
 
-		_UIControl.css("z-index", keyframes[0].zIndex);
+		_UIControl.css("z-index", keyframesArray[0].zIndex);
 
 		self.status = "ready";
 		console.log("Video: ready!");
