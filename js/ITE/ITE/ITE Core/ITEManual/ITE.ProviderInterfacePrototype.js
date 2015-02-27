@@ -64,7 +64,6 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 		for (var i = 0; i < keyframeData.length; i++) {
 			var keyframe = keyframeData[i];
 			if (typeof keyframe === "object" && "time" in keyframe) {
-				console.log(keyframeData[i]);
 				this.keyframes.add(keyframeData[i]);
 			}
 		}
@@ -197,7 +196,6 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	// 	};
 	// 	return keyFrames.next(keyFrame);
 
-		// TODO: Remove old keyframe stuff
 		var 	time 		= time || timeManager.getElapsedSeconds()
 				keyframe 	= self.keyframes.min();
 
@@ -225,11 +223,6 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	// 		keyFrame = keyFrames.next(keyFrame)
 	// 	};
 	// 	return keyFrame;
-	// 	// TODO: Remove old keyframe stuff
-	// 	var 	time 		= time || timeManager.getElapsedSeconds()
-	// 			keyframe 	= keyframesAVL.min();
-
-		// TODO: Remove old keyframe stuff.
 		var nn = self.keyframes.nearestNeightbors(time, -1);
 		if (nn[0]) {
 			keyframe = nn[0];

@@ -10,20 +10,13 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-	// TODO: remove old stuff
-    // var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
-    // TODO: new stuff start
-    console.log("Video: loading keyframes...");
     self.loadKeyframes(trackData.keyframes);
-    console.log("Video: loaded!");
-    // TODO: new stuff end
 
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
-	// self.savedState		= keyframes[0];
 	self.animation;
 	self.audioAnimation;
 
@@ -58,25 +51,6 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		$("#ITEHolder").append(_UIControl);
 
 		var i, keyframeData;
-
-		// TODO: remove old stuff
-		// for (i=1; i<keyframes.length; i++) {
-		// 	keyframeData={
-		// 				  "opacity"	: keyframes[i].opacity,
-		// 				  "pos" : {
-		// 				  	"top"	: (500*keyframes[i].pos.y/100) + "px",
-		// 				  	"left"	: (1000*keyframes[i].pos.x/100) + "px"
-		// 				  },
-		// 				  "size" : {
-		// 				  	"width"	: (1000*keyframes[i].size.x/100) + "px"
-		// 				  },
-		// 				  "volume"	: keyframes[i].volume
-		// 				};
-		// 	self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
-		// }
-		// self.status = "ready";
-		// TODO: new stuff start
-		console.log("Video: loading tasks...");
 		var keyframesArray = self.keyframes.getContents();
 		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
@@ -96,9 +70,7 @@ ITE.VideoProvider = function (trackData, player, taskManager, orchestrator){
 		_UIControl.css("z-index", keyframesArray[0].zIndex);
 
 		self.status = "ready";
-		console.log("Video: ready!");
 		self.setState(keyframesArray[0]);
-		// TODO: new stuff end
 
 		//Attach Handlers
 		attachHandlers() 

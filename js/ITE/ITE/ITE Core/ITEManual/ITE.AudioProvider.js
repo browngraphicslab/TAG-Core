@@ -2,7 +2,6 @@ window.ITE = window.ITE || {};
 
 ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 "use strict";
-console.log("loading audio track")
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
@@ -11,24 +10,14 @@ console.log("loading audio track")
 
 	Utils.extendsPrototype(this, _super);
 
-    // TODO: remove old keyframe stuff
-    // var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
-    // TODO: new stuff start
-    console.log("Audio: loading keyframes...");
     self.loadKeyframes(trackData.keyframes);
-    console.log("Audio: loaded!");
-    // TODO: new stuff end
 
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
-	// TODO: remove old kf stuff
-	// self.savedState		= keyframes[0];
-	// TODO: new stuff start
-	// self.savedState 	= self.keyframes.min();
-	// TODO: new stuff end
+
 	self.animation;
 
 	this.trackData   			= trackData;
@@ -63,17 +52,6 @@ console.log("loading audio track")
 
 		
 		var i, keyframeData;
-		// TODO: Remove old stuff
-		// for (i=1; i<keyframes.length; i++) {
-		// 	keyframeData={
-		// 				  "volume"	: keyframes[i].volume 
-		// 				};
-		// 	self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
-		// }
-		// self.status = "ready";
-		// TODO: new stuff start
-		// Loop through AVL tree
-		console.log("Audio: loading tasks...");
 		var keyframesArray = self.keyframes.getContents();
 		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
@@ -82,10 +60,7 @@ console.log("loading audio track")
 			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
-		console.log("Audio: ready!");
-		console.log(self.keyframes);
 		self.setState(keyframesArray[0]);
-		// TODO: new stuff end
 	};
 
 
@@ -106,11 +81,7 @@ console.log("loading audio track")
 		// When audio has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 		_audio.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
-			// TODO: remove old stuff
-			// this.setState(keyframes[0]);
-			// TODO: new stuff start
 			this.setState(self.keyframes.min());
-			// TODO: new stuff end
 		};
 	};
 
@@ -146,7 +117,6 @@ console.log("loading audio track")
 	* O/P: none
 	*/
 	this.play = function(targetTime, data){
-		console.log("PLAYING?!")
 		_super.play.call(self, targetTime, data);
 		_audioControls.play();
 	}
