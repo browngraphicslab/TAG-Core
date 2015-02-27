@@ -130,7 +130,7 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function setVolume(newVolumeLevel){
-		self.volumeChangedEvent.publish(newVolumeLevel)
+	    self.volumeChangedEvent.publish(newVolumeLevel)
 	    // parseInt(this.status) !== 3 ? self.volumeChangedEvent.publish(newVolumeLevel) : console.log("don't do anything");
 	}
 

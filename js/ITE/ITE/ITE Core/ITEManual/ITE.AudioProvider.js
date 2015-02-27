@@ -169,6 +169,7 @@ console.log("loading audio track")
 			this.toggleMute()
 		} else {	
 			//Set volume to newVolume * value from keyframes
+
 			_audioControls.volume = _audioControls.volume*newVolume/self.player.previousVolumeLevel;
 			
 			if (this.orchestrator.status === 1){
