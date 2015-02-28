@@ -126,6 +126,9 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function seek(seekTime){
+		console.log("ORCH SEEK");
+		console.log(ITE);
+		//self.taskManager.seek(seekTime * ITE_tour.totalDuration);
 		
 	}
 
