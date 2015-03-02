@@ -7266,8 +7266,6 @@ TAG.Util.Artwork = (function () {
 //Utilities for RIN parsing
 TAG.Util.RIN_TO_ITE = function (tour) {
 
-	//TODO david - replace calls to $.grep by storing the referenceData objects in an object keyed by item name (will improve performance slightly)
-
     console.log(">>>>>>>>>>>>> Starting ITE Parsing >>>>>>>>>>>>>");
 
     if (!tour){
@@ -7277,19 +7275,22 @@ TAG.Util.RIN_TO_ITE = function (tour) {
     var rinData = JSON.parse(unescape(tour.Metadata.Content)); //the original RIN tour obj
         console.log("rin data: ")
         console.log(rinData)
+
+    //parses the referenceData to be used for the keyframes
+    //Object with the names of all of the *experience streams* as keys
+    var referenceDataMap = function(){
+    	var data = {};
+    	$.each(rinData.screenplays.SCP1.data.experienceStreamReferences, function(key, value) {
+    		data[value.experienceStreamId] = value
+    	});
+    	return data;
+    }();
+
+    // console.log("REFERENCE DATA")
+    // console.log(referenceDataMap)
         
     //parses keyframes from a RIN experience track
     var ITE_keyframes = function(track, providerID){
-
-        /*//Separate parse function for inks
-        if (providerID == "ink") {
-        	return ITE_parseInkKeyframes(
-        		{
-        			"track" : track
-        		}
-        	)
-        }*/
-
         var keyframes = []; //all of the keyframes for the entire track
         var experienceStreamKeys = Object.keys(track.experienceStreams).sort(); //TODO test if the ordering of experience streams is preserved - I don't think it is
 
@@ -7317,17 +7318,11 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                 console.log("ERROR: no data for experience stream time offsets")
             }
 
-            var referenceData = $.grep(rinData.screenplays.SCP1.data.experienceStreamReferences, 
-                function(e){ 
-                    return e.experienceStreamId == currKey; //searches for matching key
-                }
-            );
-
-            if (referenceData.length == 0) {
+			var referenceData = referenceDataMap[currKey];
+            if (!referenceData) {
                 console.log("ERROR: no data for experience stream time offsets")
             }
-
-            var time_offset = referenceData[0].begin;
+            var time_offset = referenceData.begin;
 
             var l = 0;
             for (l=0; l<currExperienceStream.keyframes.length; l++) {
@@ -7478,7 +7473,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
     /* parses and returns keyframes for an ink track
         args:
             track: 		the ink track to be parsed
-            name: 		the name of the track (used to match track to reference data)
     */
     var ITE_parseInkKeyframes = function(args){
 
@@ -7496,7 +7490,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
     	*/
 
     	var track = args.track,
-    		name = args.name,
     		keyframes = [],
     		referenceData,
     		timeOffset = 0,
@@ -7504,19 +7497,13 @@ TAG.Util.RIN_TO_ITE = function (tour) {
     		fadeInDurationInk = 0,
     		fadeOutDurationInk = 0;
 
-    	//searches for the reference metadata
-    	referenceData = $.grep(rinData.screenplays.SCP1.data.experienceStreamReferences, 
-            function(e){ 
-                return e.experienceId == name; //searches for matching key //TODO use the experienceStreamId as the identifier for the search ?????
-            }
-        );	
-
-        if (referenceData.length != 1) {
-        	//this shouldn't ever happen
+        referenceData = referenceDataMap[Object.keys(track.experienceStreams)[0]];
+        if (!referenceData) {
+        	//this shouldn't ever happen - but why is it?
         	console.log("An error occurred retrieving the reference data for: " + name)
         } else {
-       		timeOffset = referenceData[0].begin,
-        	duration = referenceData[0].duration;
+       		timeOffset = referenceData.begin,
+        	duration = referenceData.duration;
         }
 
         if (Object.keys(track.experienceStreams).length > 0) {
@@ -7649,8 +7636,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	                "assetUrl" : "noAssetUrl",
 	                "string" : currExperience.data.linkToExperience.embedding.element.datastring.str, //TODO - needs to be parsed further b/c this is what differentiates te three types of annotations
 	                "keyframes" : ITE_parseInkKeyframes({
-	                	"track" : currExperience,
-	                	"name"	: rinDataExperiencesKeys[i]
+	                	"track" : currExperience
 	                }),
 	                "zIndex" : currExperience.data.zIndex
             	})
