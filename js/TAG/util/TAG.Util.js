@@ -7370,7 +7370,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                         "time": time_offset + currKeyframe.offset,
                         "volume": currKeyframe.state.sound.volume,
                         "data": {},
-                        "audioOffset": null //TODO
+                        "audioOffset": null, //TODO
+                        "audioKeyframeType" : "INITIAL"
                     }
                 }
                 else if (providerID == "video"){
@@ -7401,10 +7402,21 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                 if ((providerID == "audio") && (experienceStreamKeys.length == 1)){
                     currKeyframes.push({
                         "dispNum": k,
-                        "time": time_offset + currExperienceStream.duration,
+                        "time": time_offset + currKeyframe.offset + currExperienceStream.duration,
                         "volume": currKeyframe.state.sound.volume,
                         "data": {},
-                        "audioOffset": null //TODO
+                        "audioOffset": null, //TODO
+                        "audioKeyframeType": "FINAL"
+                    })
+
+                    //TODO - this is a really really janky fix for the audio problem
+                    currKeyframes.push({
+                        "dispNum": k,
+                        "time": time_offset + currKeyframe.offset + currExperienceStream.duration + .01,
+                        "volume": 0,
+                        "data": {},
+                        "audioOffset": null, //TODO
+                        "audioKeyframeType": "FINAL"
                     })
                 }
             }
@@ -7485,10 +7497,15 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
     	var track = args.track,
     		name = args.name,
-    		keyframes = [];
+    		keyframes = [],
+    		referenceData,
+    		timeOffset = 0,
+    		duration = 0,
+    		fadeInDurationInk = 0,
+    		fadeOutDurationInk = 0;
 
     	//searches for the reference metadata
-    	var referenceData = $.grep(rinData.screenplays.SCP1.data.experienceStreamReferences, 
+    	referenceData = $.grep(rinData.screenplays.SCP1.data.experienceStreamReferences, 
             function(e){ 
                 return e.experienceId == name; //searches for matching key //TODO use the experienceStreamId as the identifier for the search ?????
             }
@@ -7497,15 +7514,15 @@ TAG.Util.RIN_TO_ITE = function (tour) {
         if (referenceData.length != 1) {
         	//this shouldn't ever happen
         	console.log("An error occurred retrieving the reference data for: " + name)
+        } else {
+       		timeOffset = referenceData[0].begin,
+        	duration = referenceData[0].duration;
         }
 
-        referenceData = referenceData[0] //sets it to be the result
-        var timeOffset = referenceData.begin,
-        	duration = referenceData.duration;
-
-        //TODO
-        var fadeInDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.inDuration,
+        if (Object.keys(track.experienceStreams).length > 0) {
+        	fadeInDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.inDuration,
         	fadeOutDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.outDuration;
+        }
 
         //this is where the four keyframes are actually parsed
 
