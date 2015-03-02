@@ -7500,7 +7500,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
         referenceData = referenceDataMap[Object.keys(track.experienceStreams)[0]];
         if (!referenceData) {
         	//this shouldn't ever happen - but why is it?
-        	console.log("An error occurred retrieving the reference data for: " + name)
+        	console.log("An error occurred retrieving the reference data for: " + track)
         } else {
        		timeOffset = referenceData.begin,
         	duration = referenceData.duration;
