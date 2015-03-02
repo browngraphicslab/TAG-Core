@@ -7292,7 +7292,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
             var currKeyframes = []; //the keyframes for the current experience stream
             var currKey = experienceStreamKeys[k];
             var currExperienceStream = track.experienceStreams[currKey]; //the current experience stream
-            
             if (!currExperienceStream.keyframes){
                 continue;
             }
@@ -7322,7 +7321,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
             for (l=0; l<currExperienceStream.keyframes.length; l++) {
                 var currKeyframe = currExperienceStream.keyframes[l]
                 var keyframeObject = {}; //represents one keyframe
-                
                 if (providerID == "image"){
                     keyframeObject = {
                         "dispNum": k,
@@ -7383,6 +7381,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                     }
                 }
                 else if (providerID == "ink"){
+                    console.log("INK TRACK INFORMATION:")
+                    console.log(track)
                     keyframeObject = {}
                 }
 
@@ -7519,8 +7519,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
             "ImageES" : "image", 
             "ZMES" : "deepZoom",
             "AES" : "audio",
-            "" : "video", //TODO find out what this is
-            "InkES" : "ink"
+            "InkES" : "ink",
+            "" : "video" //TODO find out what this is
         }[RINid] || "";
     }
 
