@@ -7266,6 +7266,8 @@ TAG.Util.Artwork = (function () {
 //Utilities for RIN parsing
 TAG.Util.RIN_TO_ITE = function (tour) {
 
+	//TODO david - replace calls to $.grep by storing the referenceData objects in an object keyed by item name (will improve performance slightly)
+
     console.log(">>>>>>>>>>>>> Starting ITE Parsing >>>>>>>>>>>>>");
 
     if (!tour){
@@ -7278,6 +7280,16 @@ TAG.Util.RIN_TO_ITE = function (tour) {
         
     //parses keyframes from a RIN experience track
     var ITE_keyframes = function(track, providerID){
+
+        /*//Separate parse function for inks
+        if (providerID == "ink") {
+        	return ITE_parseInkKeyframes(
+        		{
+        			"track" : track
+        		}
+        	)
+        }*/
+
         var keyframes = []; //all of the keyframes for the entire track
         var experienceStreamKeys = Object.keys(track.experienceStreams).sort(); //TODO test if the ordering of experience streams is preserved - I don't think it is
 
@@ -7305,7 +7317,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                 console.log("ERROR: no data for experience stream time offsets")
             }
 
-            var referenceData = jQuery.grep(rinData.screenplays.SCP1.data.experienceStreamReferences, 
+            var referenceData = $.grep(rinData.screenplays.SCP1.data.experienceStreamReferences, 
                 function(e){ 
                     return e.experienceStreamId == currKey; //searches for matching key
                 }
@@ -7380,11 +7392,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                         "videoOffset": null
                     }
                 }
-                else if (providerID == "ink"){
-                    console.log("INK TRACK INFORMATION:")
-                    console.log(track)
-                    keyframeObject = {}
-                }
+                
+                /* Ink tracks parsed separately in the ITE_parseInkKeyframes function below */
 
                 currKeyframes.push(keyframeObject);
 
@@ -7404,7 +7413,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
             //don't prematurely disappear from the screen.  note - this is before the fade in/out keyframes are added.
             //audio and video don't need this
             if (providerID != "audio" && providerID != "video"){
-                var endKeyframe = jQuery.extend({}, currKeyframes[currKeyframes.length - 1]);
+                var endKeyframe = $.extend({}, currKeyframes[currKeyframes.length - 1]);
                 endKeyframe.time = currKeyframes[0].time + currExperienceStream.duration
                 endKeyframe.SpecialKeyframeType = "HOLDING FOR DURATION" //for testing
                 currKeyframes.push(endKeyframe)
@@ -7454,6 +7463,86 @@ TAG.Util.RIN_TO_ITE = function (tour) {
         return keyframes
     }
 
+    /* parses and returns keyframes for an ink track
+        args:
+            track: 		the ink track to be parsed
+            name: 		the name of the track (used to match track to reference data)
+    */
+    var ITE_parseInkKeyframes = function(args){
+
+    	/* IMPORTANT: for now, I am assuming that each ink track will have 4 keyframes:
+
+    		1.  The start of the fadeIn (the start time - the fade in time)
+    		2.  The start of the ink annotation (the start time)
+    		3.  The end of the ink annotation (the start time + the duration)
+    		4.  The end of the fadeOut (the start time + the duration + the fade out time)
+	
+			Emily - does this seem good?
+
+			Also - I'm assuming that each ink track in RIN only has one experience stream
+
+    	*/
+
+    	var track = args.track,
+    		name = args.name,
+    		keyframes = [];
+
+    	//searches for the reference metadata
+    	var referenceData = $.grep(rinData.screenplays.SCP1.data.experienceStreamReferences, 
+            function(e){ 
+                return e.experienceId == name; //searches for matching key //TODO use the experienceStreamId as the identifier for the search ?????
+            }
+        );	
+
+        if (referenceData.length != 1) {
+        	//this shouldn't ever happen
+        	console.log("An error occurred retrieving the reference data for: " + name)
+        }
+
+        referenceData = referenceData[0] //sets it to be the result
+        var timeOffset = referenceData.begin,
+        	duration = referenceData.duration;
+
+        //TODO
+        var fadeInDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.inDuration,
+        	fadeOutDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.outDuration;
+
+        //this is where the four keyframes are actually parsed
+
+        var keyframePrototype = {
+        	"type" : track.data.linkToExperience.embedding.experienceId == "" ? "unattached" : "attached", //TODO - is this what differentiates attached vs. unattached ?????
+        	"dispNum" : 1, //TODO - can this be hardcoded (are there ever multiple displays of inks)
+        	"initKeyframe" : track.data.linkToExperience.embedding.initKeyframe,
+        	"initproxy" : track.data.linkToExperience.embedding.initproxy,
+        }
+
+        //#1
+        keyframes.push($.extend({}, keyframePrototype, {
+        	"time" : timeOffset - fadeInDurationInk,
+        	"opacity" : 0,
+        }));
+
+        //#2
+        keyframes.push($.extend({}, keyframePrototype, {
+        	"time" : timeOffset,
+        	"opacity" : 1,
+        }));
+
+        //#3
+        keyframes.push($.extend({}, keyframePrototype, {
+        	"time" : timeOffset + duration,
+        	"opacity" : 1,
+        }));
+
+        //#4
+        keyframes.push($.extend({}, keyframePrototype, {
+        	"time" : timeOffset + duration + fadeOutDurationInk,
+        	"opacity" : 0,
+        }));
+
+    	return keyframes
+    }
+
     /* creates final or initial keyframe for fade in and out
         args:
             keyframes:          array of keyframes
@@ -7479,7 +7568,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
         //new one is the same as either the current first or last keyframe - except the time and the opacity
         if (ktype == "initial") {
-            transitionKeyframe = jQuery.extend({}, firstKeyframe); //need to make a copy of the first keyframe
+            transitionKeyframe = $.extend({}, firstKeyframe); //need to make a copy of the first keyframe
             transitionKeyframe.time = transitionKeyframe.time - duration
 
             //TODO - is this a problem?
@@ -7490,7 +7579,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
             transitionKeyframe.opacity = 0
             transitionKeyframe['SpecialKeyframeType'] = "INITIAL" //for testing
         } else {
-            transitionKeyframe = jQuery.extend({}, lastKeyframe); //need to make a copy of the last keyframe
+            transitionKeyframe = $.extend({}, lastKeyframe); //need to make a copy of the last keyframe
             transitionKeyframe.time = transitionKeyframe.time + duration
             transitionKeyframe.opacity = 0
             transitionKeyframe['SpecialKeyframeType'] = "FINAL" //for testing
@@ -7531,14 +7620,32 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
         var i = 0;
         for (i=0; i < rinDataExperiencesKeys.length; i++){
-            var currExperience = rinData.experiences[rinDataExperiencesKeys[i]];
-            tracks.push({
-                "name" : rinDataExperiencesKeys[i],
-                "providerId" : ITE_providerID(currExperience.providerId),
-                "assetUrl" : ITE_assetUrl(currExperience),
-                "keyframes" : ITE_keyframes(currExperience, ITE_providerID(currExperience.providerId)),
-                "zIndex" : currExperience.data.zIndex
-            });
+            var currExperience = rinData.experiences[rinDataExperiencesKeys[i]],
+            	providerID = ITE_providerID(currExperience.providerId);
+
+            //different structure for ink tracks vs. others
+            if (providerID == "ink") {
+            	tracks.push({
+            		"name" : rinDataExperiencesKeys[i],
+	                "providerId" : providerID,
+	                "experienceReference" : currExperience.data.linkToExperience.embedding.experienceId, //TODO - check this
+	                "assetUrl" : "noAssetUrl",
+	                "string" : currExperience.data.linkToExperience.embedding.element.datastring.str, //TODO - needs to be parsed further b/c this is what differentiates te three types of annotations
+	                "keyframes" : ITE_parseInkKeyframes({
+	                	"track" : currExperience,
+	                	"name"	: rinDataExperiencesKeys[i]
+	                }),
+	                "zIndex" : currExperience.data.zIndex
+            	})
+            } else {
+            	tracks.push({
+	                "name" : rinDataExperiencesKeys[i],
+	                "providerId" : providerID,
+	                "assetUrl" : ITE_assetUrl(currExperience),
+	                "keyframes" : ITE_keyframes(currExperience, providerID),
+	                "zIndex" : currExperience.data.zIndex
+            	});
+            }
         }
         //sorted from lowest to highest z-index
         return tracks.sort(function(a, b){return a.zIndex - b.zIndex});
