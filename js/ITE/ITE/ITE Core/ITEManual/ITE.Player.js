@@ -250,8 +250,11 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             progressIndicator.addClass("progressIndicator"); 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
-            //progressIndicator.append("0:00 / ");
+            window.setInterval(function(){
+                updateProgressIndicator(Math.floor(orchestrator.getElapsedTime()));
+            },100);
         }
+
     };
      /*
     * I/P:   sec (int-- a time in sec)
@@ -259,10 +262,17 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * O/P:   string version of the time in seconds passed in
     */
     function makeTimeString(time){
+        if (time>totalTourDuration){
+            return makeTimeString(totalTourDuration);
+        }
         if (time == 0){
             return ("0:00");
         }
-        return String(Math.floor(time/60))+":"+String(time%60);
+        s = String(time%60);
+        if (time%60<10){
+            s = "0"+s
+        }
+        return String(Math.floor(time/60))+":"+s;
     }
     /*
     * I/P:   sec (int-- a time in sec)
@@ -271,12 +281,11 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     
     function updateProgressIndicator(sec) {
-        console.log(typeof(sec))
         progressIndicator.empty();
         var timeString = makeTimeString(sec) + " / "+makeTimeString(totalTourDuration);
         progressIndicator.append(timeString);
     };
-    this.updateProgressIndicator = updateProgressIndicator;
+
     
     /*
     * I/P:   none

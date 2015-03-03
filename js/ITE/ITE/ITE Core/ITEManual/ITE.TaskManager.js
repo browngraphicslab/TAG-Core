@@ -53,7 +53,7 @@ ITE.TaskManager = function() {
 
 	//getElaspedTime
 	this.getElapsedTime = function(){
-		return this.timeManager.getElapsedOffset();
+		return self.timeManager.getElapsedOffset();
 	};	
 
 	//load tasks to be scheduled
