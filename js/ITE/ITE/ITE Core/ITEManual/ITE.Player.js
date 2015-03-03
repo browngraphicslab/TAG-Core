@@ -1,6 +1,7 @@
 window.ITE = window.ITE || {};
 
 ITE.Player = function (options) { //acts as ITE object that contains the orchestrator, etc
+   var totalTourDuration;
    var  orchestrator            = new ITE.Orchestrator(this),
         self = this,
         playerConfiguration = {
@@ -246,28 +247,37 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         if (playerConfiguration.attachProgressIndicator) {
             var ProgressIndicatorContainer = $(document.createElement("div"))
                 .addClass("progressIndicatorContainer");
-
             progressIndicator.addClass("progressIndicator"); 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
-            progressIndicator.append("0:00 / 11:11");
-            //progressIndicator.clear;
-            
+            //progressIndicator.append("0:00 / ");
         }
     };
-
+     /*
+    * I/P:   sec (int-- a time in sec)
+    * called by updateProgressIndicator function to stringify the times
+    * O/P:   string version of the time in seconds passed in
+    */
+    function makeTimeString(time){
+        if (time == 0){
+            return ("0:00");
+        }
+        return String(Math.floor(time/60))+":"+String(time%60);
+    }
     /*
     * I/P:   sec (int-- a time in sec)
     * called by timeManager and Orchestrator; updates current displayed time
     * O/P:   none
     */
-    /*
+    
     function updateProgressIndicator(sec) {
         console.log(typeof(sec))
-       // progressIndicator.innerHTML = "test"
+        progressIndicator.empty();
+        var timeString = makeTimeString(sec) + " / "+makeTimeString(totalTourDuration);
+        progressIndicator.append(timeString);
     };
     this.updateProgressIndicator = updateProgressIndicator;
-    */
+    
     /*
     * I/P:   none
     * Attaches full screen
@@ -295,6 +305,9 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
     function load(tourData) {
         orchestrator.load(tourData);
+        //progressIndicator.append(tourData.totalDuration)
+        totalTourDuration = tourData.totalDuration;
+        updateProgressIndicator(0);
     };
 
     function unload() {
@@ -518,4 +531,5 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.isMuted            = isMuted;
     this.isLooped           = isLooped;
     this.isFullScreen       = isFullScreen;
+    this.updateProgressIndicator = updateProgressIndicator;
 };

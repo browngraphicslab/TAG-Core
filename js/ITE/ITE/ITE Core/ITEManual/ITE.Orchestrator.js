@@ -9,7 +9,7 @@ ITE.Orchestrator = function(player) {
 	self.volumeChangedEvent		= new ITE.PubSubStruct();
 	self.stateChangeEvent 		= new ITE.PubSubStruct();
 	self.muteChangedEvent		= new ITE.PubSubStruct();
-
+	self.tourData;
 	self.player 			= player;
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
 	self.taskManager 		= new ITE.TaskManager();
@@ -37,6 +37,7 @@ ITE.Orchestrator = function(player) {
 	    }
 	    AJAXreq.send();*/
 	    tourData = dataURL
+	    self.tourData = tourData;
 	    loadHelper();
 
 	  /**
@@ -65,7 +66,6 @@ ITE.Orchestrator = function(player) {
 				play();
 			}
 		}
-
 
 
 	   /**
@@ -105,7 +105,14 @@ ITE.Orchestrator = function(player) {
 	function unload(track){
 		trackManager.remove(track)
 	}
-
+	/**
+	    * I/P: none
+	  	* getter for the tour data
+	    * O/P: tourData object
+	    */
+	function getTourData(){
+		return self.tourData;
+	}
 
 	function play(){
 		var i;
@@ -178,6 +185,7 @@ ITE.Orchestrator = function(player) {
 	this.captureKeyframe = captureKeyframe;
 	this.areAllTracksReady = areAllTracksReady;
 	this.initializeTracks = initializeTracks;
+	this.getTourData = getTourData;
 	this.status = status;
 }
 
