@@ -7553,28 +7553,28 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	}
 
 	/** stolen from tagInk.js
-     * Takes in a datastring and parses for a certain attribute by splitting at "[" and "]" (these surround
-     * attribute names).
-     * NOTE if errors are coming from this function, could be that the datastring is empty...
-     * @param str        the datastring
-     * @param attr       the attribute we'll parse for
-     * @param parsetype  'i' (int), 's' (string), or 'f' (float)
-     * @return  the value of the attribute in the correct format
-     */
-    var ITE_get_attr = function(str, attr, parsetype) {
-    	//checks if not in string to begin with
-    	if (str.indexOf("["+attr+"]") == -1){
-    		return parsetype == "s" ? null : 0
-    	}
+	 * Takes in a datastring and parses for a certain attribute by splitting at "[" and "]" (these surround
+	 * attribute names).
+	 * NOTE if errors are coming from this function, could be that the datastring is empty...
+	 * @param str        the datastring
+	 * @param attr       the attribute we'll parse for
+	 * @param parsetype  'i' (int), 's' (string), or 'f' (float)
+	 * @return  the value of the attribute in the correct format
+	 */
+	var ITE_get_attr = function(str, attr, parsetype) {
+		//checks if not in string to begin with
+		if (str.indexOf("["+attr+"]") == -1){
+			return parsetype == "s" ? null : 0
+		}
 
-        if (parsetype === "f") {
-            return parseFloat(str.split("[" + attr + "]")[1].split("[")[0]);
-        } else if (parsetype === "s") {
-            return str.split("[" + attr + "]")[1].split("[")[0];
-        } else {
-            return parseInt(str.split("[" + attr + "]")[1].split("[")[0]);
-        }
-    }
+		if (parsetype === "f") {
+			return parseFloat(str.split("[" + attr + "]")[1].split("[")[0]);
+		} else if (parsetype === "s") {
+			return str.split("[" + attr + "]")[1].split("[")[0];
+		} else {
+			return parseInt(str.split("[" + attr + "]")[1].split("[")[0]);
+		}
+	}
 
 	/* parses the datastring into an object for ink tracks
 		args:
