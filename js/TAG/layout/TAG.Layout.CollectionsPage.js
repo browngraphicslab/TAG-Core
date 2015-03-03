@@ -29,6 +29,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         catalogDiv = root.find('#catalogDiv'),
         infoTilesContainer = root.find('#infoTilesContainer'),
         sortRow = root.find('#sortRow'),
+        collectionMenu = root.find('#collectionMenu'),
         searchInput = root.find('#searchInput'),
         searchTxt = root.find('#searchTxt'),
         buttonRow = root.find('#buttonRow'),
@@ -135,7 +136,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
     // get things rolling
     init();
-
     /**
      * Sets up the collections page UI
      * @method init
@@ -606,7 +606,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //collectionDotHolder.append(collectionDot);
             collectionDots[visibleCollections[i].Identifier] = collectionDot;
         }
-        collectionDotHolder.append($(uiDocfrag));
+        // collectionDotHolder.append($(uiDocfrag));
         // Load collection
         if (currCollection) {
             //Quick check for specific load
@@ -616,7 +616,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
             }
 
-            //If ou didnt find the collection you're trying to load in the visible collections, just load the first one instead
+            //If you didnt find the collection you're trying to load in the visible collections, just load the first one instead
             if (visibleCollections.indexOf(currCollection) === -1) {
                 if (previewing) {
                     loadCollection(currCollection, null, currentArtwork)();
@@ -758,6 +758,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionDots[collection.Identifier].css('background-color', 'white');
             }                
 
+
+            // To show/hide dropdown menu
+            function showMenu(id){
+                var menu = document.getElementById(id);
+                if(menu.style.opacity==0) {
+                    menu.style.opacity = .7;
+                } else {
+                    menu.style.opacity = 0;
+                }
+            }
+
             // Add collection title
             mainCollection.addClass('mainCollection');
             titleBox.addClass('collection-title primaryFont').html(title);
@@ -765,92 +776,93 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var uiDocfrag = document.createDocumentFragment();
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
-                prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
+                // prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
                 backArrowArea.addClass('arrowArea');
                 
                 backArrowArea.css('left', '0%')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
-                            prepareNextView();
-                            loadCollection(visibleCollections[j.prevCollectionIndex])();
+                            showMenu('collectionMenu');
+                            // prepareNextView();
+                            // loadCollection(visibleCollections[j.prevCollectionIndex])();
                         }
                     }(collection));
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 backArrow.addClass('arrow');    
                 backArrowArea.show();
-                prevCollection.addClass('nextPrevCollection')
-                            .addClass('primaryFont')
-                            //.attr({
-                            //   'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
-                            //})
-                            .css('left','3%')
-                            .html(prevTitle)
-                            .off()
-                            .on('mousedown', function(j){
-                                return function () {
-                                    prepareNextView();
-                                    loadCollection(visibleCollections[j.prevCollectionIndex])();
-                                }
-                            }(collection));
+                // prevCollection.addClass('nextPrevCollection')
+                //             .addClass('primaryFont')
+                //             //.attr({
+                //             //   'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
+                //             //})
+                //             .css('left','3%')
+                //             .html(prevTitle)
+                //             .off()
+                //             .on('mousedown', function(j){
+                //                 return function () {
+                //                     prepareNextView();
+                //                     loadCollection(visibleCollections[j.prevCollectionIndex])();
+                //                 }
+                //             }(collection));
                 //collectionArea.append(prevCollection);
                 uiDocfrag.appendChild(prevCollection[0]);
-                prevCollection.show();
-                TAG.Telemetry.register(backArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
-                    tobj.current_collection = currCollection.Identifier;
-                    tobj.next_collection = prevTitle;
-                    tobj.time_spent = nav_timer.get_elapsed();
-                    //console.log("nav timer: " + tobj.time_spent);
-                    nav_timer.restart();
-                    tobj.navigation_type = "arrow";
-                });
-                TAG.Telemetry.register(prevCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
-                    tobj.current_collection = currCollection.Identifier;
-                    tobj.next_collection = prevTitle;
-                    tobj.time_spent = nav_timer.get_elapsed();
-                    //console.log("nav timer: " + tobj.time_spent);
-                    nav_timer.restart();
-                    tobj.navigation_type = "collection_name";
-                });
+                //prevCollection.show();
+                // TAG.Telemetry.register(backArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
+                //     tobj.current_collection = currCollection.Identifier;
+                //     tobj.next_collection = prevTitle;
+                //     tobj.time_spent = nav_timer.get_elapsed();
+                //     //console.log("nav timer: " + tobj.time_spent);
+                //     nav_timer.restart();
+                //     tobj.navigation_type = "arrow";
+                // });
+                // TAG.Telemetry.register(prevCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
+                //     tobj.current_collection = currCollection.Identifier;
+                //     tobj.next_collection = prevTitle;
+                //     tobj.time_spent = nav_timer.get_elapsed();
+                //     //console.log("nav timer: " + tobj.time_spent);
+                //     nav_timer.restart();
+                //     tobj.navigation_type = "collection_name";
+                // });
             }
 
-            if (prevCollection){
-                prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
-                // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
-            }
-            if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
-                nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
-                nextArrowArea.addClass('arrowArea');
-                nextArrowArea.css({'right': '0%'})
-                            .off()
-                            .on('mousedown', function(j){
-                                return function () {
-                                    prepareNextView();
-                                    loadCollection(visibleCollections[j.nextCollectionIndex])();
-                                }
-                            }(collection));
-                nextArrowArea.show();
-                // collectionArea.append(nextArrowArea);
-                nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
-                nextArrow.addClass('arrow');
-                nextCollection.addClass('nextPrevCollection')
-                              .addClass('primaryFont')
-                              //.attr({
-                              //   'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
-                              // })
-                              .html(nextTitle)
-                              .css({
-                                  'right': 0 + nextArrowArea.width()/2,
-                                  'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
-                                  //'color': '#' + PRIMARY_FONT_COLOR
-                              })
-                            .off()
-                            .on('mousedown', function(j){
-                                return function(){
-                                    prepareNextView();
-                                    loadCollection(visibleCollections[j.nextCollectionIndex])();
-                                }
-                            }(collection));
+            // if (prevCollection){
+            //     prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
+            //     // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
+            // }
+            // if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
+            //     nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
+            //     nextArrowArea.addClass('arrowArea');
+            //     nextArrowArea.css({'right': '0%'})
+            //                 .off()
+            //                 .on('mousedown', function(j){
+            //                     return function () {
+            //                         prepareNextView();
+            //                         loadCollection(visibleCollections[j.nextCollectionIndex])();
+            //                     }
+            //                 }(collection));
+            //     nextArrowArea.show();
+            //     // collectionArea.append(nextArrowArea);
+            //     nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
+            //     nextArrow.addClass('arrow');
+            //     nextCollection.addClass('nextPrevCollection')
+            //                   .addClass('primaryFont')
+            //                   //.attr({
+            //                   //   'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
+            //                   // })
+            //                   .html(nextTitle)
+            //                   .css({
+            //                       'right': 0 + nextArrowArea.width()/2,
+            //                       'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
+            //                       //'color': '#' + PRIMARY_FONT_COLOR
+            //                   })
+            //                 .off()
+            //                 .on('mousedown', function(j){
+            //                     return function(){
+            //                         prepareNextView();
+            //                         loadCollection(visibleCollections[j.nextCollectionIndex])();
+            //                     }
+            //                 }(collection));
                 nextCollection.show();
                 TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
                     //tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
@@ -871,7 +883,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 //collectionArea.append(nextCollection);
                 uiDocfrag.appendChild(nextCollection[0]);
-            }
+            // }
             collectionArea.append($(uiDocfrag));
 
             if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
@@ -1903,7 +1915,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                         } 
                                     }      
                                 })(art, eventCircle));
-                    //timelineCircleArea.append(eventCircle);
+                    // timelineCircleArea.append(eventCircle);
 
                     //Shift circles left by half their width so they are centered on ticks
                     //TO-DO: add this back in so that it works with new animations (all relative positioning)
