@@ -760,7 +760,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             // To show/hide dropdown menu
-            function showMenu(id){
+            function showMenu(id) {
+                console.log(visibleCollections.toString());
                 var menu = document.getElementById(id);
                 if(menu.style.opacity==0) {
                     menu.style.opacity = .7;
