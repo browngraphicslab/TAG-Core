@@ -10,13 +10,14 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+    self.loadKeyframes(trackData.keyframes);
+
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
-	self.savedState		= keyframes[0];
+	// self.savedState		= keyframes[0];
 	self.animation,
 	self.interactionAnimation;
 
@@ -51,21 +52,22 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 		$("#ITEHolder").append(_UIControl);
 
 		var i, keyframeData;
-
-		for (i=1; i<keyframes.length; i++) {
+		var keyframesArray = self.keyframes.getContents();
+		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
-						  "opacity"	: keyframes[i].opacity,
-						  "top"		: (500*keyframes[i].pos.y/100) + "px",
-						  "left"	: (1000*keyframes[i].pos.x/100) + "px",
-						  "width"	: (1000*keyframes[i].size.x/100) + "px",
-						  "height"	: (500*keyframes[i].size.y/100) + "px"
+						  "opacity"	: keyframesArray[i].opacity,
+						  "top"		: (500*keyframesArray[i].pos.y/100) + "px",
+						  "left"	: (1000*keyframesArray[i].pos.x/100) + "px",
+						  "width"	: (1000*keyframesArray[i].size.x/100) + "px",
+						  "height"	: (500*keyframesArray[i].size.y/100) + "px"
 						};
-			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
-		keyframes[0] && _UIControl.css("z-index", keyframes[0].zIndex);//TODO: clean this up-- this is just to make sure that the asset has the correct z-index. 
+		keyframesArray[0] && _UIControl.css("z-index", keyframesArray[0].zIndex);//TODO: clean this up-- this is just to make sure that the asset has the correct z-index. 
 																		// There's also clearly been some mistake if we have to do this check (if there are any keyframes) because why would we have a track with no keyframes...?
 		self.status = "ready";
-		self.setState(keyframes[0]);
+		console.log("Image: ready!");
+		self.setState(keyframesArray[0]);
 		//Attach Handlers
 		attachHandlers()
 
@@ -85,7 +87,7 @@ ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
 			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 			_image.onload = function (event) {//Is this ever getting called?
 					this.setStatus(2);
-					this.setState(keyframes[0]);
+					this.setState(keyframes.min());
 			};
 	};
 

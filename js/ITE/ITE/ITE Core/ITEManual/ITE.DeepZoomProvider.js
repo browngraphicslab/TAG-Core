@@ -10,7 +10,8 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-    var keyframes       		= trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+    self.loadKeyframes(trackData.keyframes);
+    
 	self.player 				= player;
 	self.taskManager 			= taskManager;
 	self.trackData 				= trackData;
@@ -94,18 +95,18 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		})
 		
 		var i, keyframeData;
-
-		//Initialize keyframes and load into taskManager
-		for (i=1; i<keyframes.length; i++) {
+		var keyframesArray = self.keyframes.getContents();
+		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
-						  opacity	: keyframes[i].opacity,
-						  bounds 	: new OpenSeadragon.Rect(parseFloat(keyframes[i].pos.x), parseFloat(keyframes[i].pos.y), keyframes[i].scale, keyframes[i].scale/2)
+						  "opacity"	: keyframesArray[i].opacity, 
+						  "bounds"	: new OpenSeadragon.Rect(parseFloat(keyframesArray[i].pos.x), parseFloat(keyframesArray[i].pos.y), keyframesArray[i].scale, keyframesArray[i].scale/2)
 						};
-			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
-		_UIControl.css("z-index", keyframes[0].zIndex);
+		_UIControl.css("z-index", keyframesArray[0].zIndex);
 
 		self.status = "ready";
+		self.setState(keyframesArray[0]);
 
 		// Attach Handlers
 		attachHandlers()

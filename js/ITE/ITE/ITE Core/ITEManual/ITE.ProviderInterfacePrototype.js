@@ -8,8 +8,33 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 
 	this.savedState				= null; 	// Current state of track (last-saved state)
 	this.duration				= 0;	// Duration of track
-	this.keyframes				= []; 	// Data structure to keep track of all displays/keyframes
-
+	// TODO: remove old stuff
+	// this.keyframes				= []; 	// Data structure to keep track of all displays/keyframes
+	// TODO: new stuff start
+	this.keyframes           = new AVLTree(
+		// Comparator function takes in two keyframes, returns comparison integer.
+		function (a, b) {
+			if (a.time < b.time) {
+				return -1;
+			} else if (a.time > b.time) {
+				return 1;
+			} else {
+				return 0;
+			}
+		},
+		// Valuation function takes in a value and keyframe to compare it's time to.
+		function (value, compareToNode) {
+			if (!compareToNode) {
+				return null;
+			} else if (value < compareToNode.time) {
+				return -1;
+			} else if (value > compareToNode.time) {
+				return 1;
+			} else {
+				return 0;
+			}
+		});
+	// TODO: new stuff end
 	this.interactionHandlers 	= null;	// object with a set of handlers for common tour interactions such as mousedown/tap, mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can bind and unbind handlers to the media element
 
 	self.player 				= player;
@@ -28,6 +53,20 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	O/P: none
 	*/
 	this.load = function(){
+	}
+
+	/*
+	I/P: Array of keyframes from trackData
+		Public function
+	O/P: none
+	*/
+	this.loadKeyframes = function(keyframeData){
+		for (var i = 0; i < keyframeData.length; i++) {
+			var keyframe = keyframeData[i];
+			if (typeof keyframe === "object" && "time" in keyframe) {
+				this.keyframes.add(keyframeData[i]);
+			}
+		}
 	}
 
 	/*
@@ -148,14 +187,26 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	O/P: nextKeyframe: next keyframe to be displayed
 	*/
 	this.getNextKeyframe = function(time){
-		var 	time		= time || timeManager.getElapsedSeconds()
-				keyFrame 	= keyframes[0];
-	// Loops through keyframes and returns the first that has a time AFTER our inputted time
-	// DEPENDS ON DATASTRUCTURE FOR KEYFRAMES/DISPLAYS
-		while (keyFrame.time <= time){
-			keyFrame = keyFrames.next(keyFrame)
-		};
-		return keyFrames.next(keyFrame);
+	// 	var 	time		= time || timeManager.getElapsedSeconds()
+	// 			keyFrame 	= keyframes[0];
+	// // Loops through keyframes and returns the first that has a time AFTER our inputted time
+	// // DEPENDS ON DATASTRUCTURE FOR KEYFRAMES/DISPLAYS
+	// 	while (keyFrame.time <= time){
+	// 		keyFrame = keyFrames.next(keyFrame)
+	// 	};
+	// 	return keyFrames.next(keyFrame);
+
+		var 	time 		= time || timeManager.getElapsedSeconds()
+				keyframe 	= self.keyframes.min();
+
+		var nn = self.keyframes.nearestNeightbors(time, 1);
+		if (nn[1]) {
+			keyframe = nn[1];
+		} else if (nn[0]) {
+			keyframe = nn[0];
+		}
+		return keyframe || null;
+
 	};
 
 	/*
@@ -164,13 +215,20 @@ ITE.ProviderInterfacePrototype = function(trackData, player, taskManager, orches
 	O/P: previousKeyframe: previous keyframe 
 	*/
 	this.getPreviousKeyframe = function(time){
-		var time 		= time || self.taskManager.timeManager.getElapsedSeconds()
-			keyFrame 	= keyframes[0];
-	// Loops through keyframes and returns the last that has a time BEFORE our inputted time
-	// DEPENDS ON DATASTRUCTURE FOR KEYFRAMES/DISPLAYS
-		while (keyFrame.time <= time){
-			keyFrame = keyFrames.next(keyFrame)
-		};
-		return keyFrame;
+	// 	var time 		= time || self.taskManager.timeManager.getElapsedSeconds()
+	// 		keyFrame 	= keyframes[0];
+	// // Loops through keyframes and returns the last that has a time BEFORE our inputted time
+	// // DEPENDS ON DATASTRUCTURE FOR KEYFRAMES/DISPLAYS
+	// 	while (keyFrame.time <= time){
+	// 		keyFrame = keyFrames.next(keyFrame)
+	// 	};
+	// 	return keyFrame;
+		var nn = self.keyframes.nearestNeightbors(time, -1);
+		if (nn[0]) {
+			keyframe = nn[0];
+		} else if (nn[1]) {
+			keyframe = nn[1];
+		}
+		return keyframe || null;
 	};
 }

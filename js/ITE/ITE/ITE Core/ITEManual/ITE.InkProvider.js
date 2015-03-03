@@ -10,7 +10,7 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
-    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+    self.loadKeyframes(trackData.keyframes);
 
 	self.player 		= player;
 	self.taskManager 	= taskManager;
@@ -55,16 +55,16 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 		_ink = new tagInk(trackData.assetUrl, _UIControl[0]);
 
 		var i, keyframeData;
-		for (i=1; i<keyframes.length; i++) {
+		var keyframesArray = self.keyframes.getContents();
+		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
-						  "opacity"	: keyframes[i].opacity,
+						  "opacity"	: keyframesArray[i].opacity,
 						  "inkData" : trackData.string
 						};
-			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
-		
 		self.status = "ready";
-		self.setState(keyframes[0]);
+		self.setState(keyframesArray[0]);
 	};
 
 

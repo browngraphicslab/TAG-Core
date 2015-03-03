@@ -2,7 +2,6 @@ window.ITE = window.ITE || {};
 
 ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 "use strict";
-console.log("loading audio track")
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
@@ -11,14 +10,14 @@ console.log("loading audio track")
 
 	Utils.extendsPrototype(this, _super);
 
-    var keyframes       = trackData.keyframes;   // Data structure to keep track of all displays/keyframes
+    self.loadKeyframes(trackData.keyframes);
 
 	self.player 		= player;
 	self.taskManager 	= taskManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
 	self.status 		= "loading";
-	self.savedState		= keyframes[0];
+
 	self.animation;
 
 	this.trackData   			= trackData;
@@ -51,15 +50,17 @@ console.log("loading audio track")
 
 		$("#ITEHolder").append(_UIControl);
 
+		
 		var i, keyframeData;
-
-		for (i=1; i<keyframes.length; i++) {
+		var keyframesArray = self.keyframes.getContents();
+		for (i = 1; i < keyframesArray.length; i++) {
 			keyframeData={
-						  "volume"	: keyframes[i].volume 
+						  "volume"	: keyframesArray[i].volume 
 						};
-			self.taskManager.loadTask(keyframes[i-1].time, keyframes[i].time, keyframeData, _UIControl, self);
+			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
 		}
 		self.status = "ready";
+		self.setState(keyframesArray[0]);
 	};
 
 
@@ -80,7 +81,7 @@ console.log("loading audio track")
 		// When audio has finished loading, set status to “paused”, and position element where it should be for the first keyframe
 		_audio.onload = function (event) {//Is this ever getting called?
 			this.setStatus(2);
-			this.setState(keyframes[0]);
+			this.setState(self.keyframes.min());
 		};
 	};
 
@@ -116,7 +117,6 @@ console.log("loading audio track")
 	* O/P: none
 	*/
 	this.play = function(targetTime, data){
-		console.log("PLAYING?!")
 		_super.play.call(self, targetTime, data);
 		_audioControls.play();
 	}
