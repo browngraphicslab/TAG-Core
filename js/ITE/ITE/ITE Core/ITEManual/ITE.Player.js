@@ -251,7 +251,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
             window.setInterval(function(){
-                updateProgressIndicator(Math.floor(orchestrator.getElapsedTime()));
+                updateProgressIndicator(orchestrator.getElapsedTime());
             },100);
         }
 
@@ -262,6 +262,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * O/P:   string version of the time in seconds passed in
     */
     function makeTimeString(time){
+        time = Math.floor(time);
         if (time>totalTourDuration){
             return makeTimeString(totalTourDuration);
         }
