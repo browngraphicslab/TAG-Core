@@ -7278,13 +7278,25 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
     //parses the referenceData to be used for the keyframes
     //Object with the names of all of the *experience streams* as keys
-    var referenceDataMap = function(){
-    	var data = {};
-    	$.each(rinData.screenplays.SCP1.data.experienceStreamReferences, function(key, value) {
-    		data[value.experienceStreamId] = value
-    	});
-    	return data;
-    }();
+    var referenceDataMap;
+
+    if (!(rinData.screenplays && 
+        rinData.screenplays.SCP1 && 
+    	rinData.screenplays.SCP1.data && 
+        rinData.screenplays.SCP1.data.experienceStreamReferences)) {
+            console.log("ERROR: no data for experience stream time offsets");
+        	referenceDataMap = {};
+    } else {
+	    referenceDataMap = function(){
+	    	var data = {};
+	    	$.each(rinData.screenplays.SCP1.data.experienceStreamReferences, 
+	    		function(key, value) {
+	    			data[value.experienceStreamId] = value
+	    		}
+	    	);
+	    	return data;
+	    }();
+	}
 
     // console.log("REFERENCE DATA")
     // console.log(referenceDataMap)
@@ -7310,13 +7322,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
             }
 
             //parses time offset of current experience stream from a different section of the RIN metadata
-
-            if (!(rinData.screenplays && 
-                rinData.screenplays.SCP1 && 
-                rinData.screenplays.SCP1.data && 
-                rinData.screenplays.SCP1.data.experienceStreamReferences)) {
-                console.log("ERROR: no data for experience stream time offsets")
-            }
 
 			var referenceData = referenceDataMap[currKey];
             if (!referenceData) {
