@@ -10,7 +10,7 @@ ITE.Task = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, ongo
 	self.ongoingTasks 		= ongoingTasks;
 	self.track 				= track
 
-	self.nextKeyframeData.ease = Linear.easeNone;
+	//self.nextKeyframeData.ease = Linear.easeNone;
 
 	// self.nextKeyframeData.onComplete = function(){
 	// 	self.ongoingTasks.splice(self.ongoingTasks.indexOf(self), 1);
@@ -51,7 +51,7 @@ ITE.TaskManager = function() {
 	this.ongoingTasks = [];
 	this.status = "starting";
 
-	//getElaspedTime
+	//getElaspedTim+e
 	this.getElapsedTime = function(){
 		return this.timeManager.getElapsedOffset();
 	};	
@@ -64,6 +64,8 @@ ITE.TaskManager = function() {
 
 	//start the scheduler on current tasks
 	this.play = function() {
+		console.log("printing taskmanager");
+		console.log(self);
 		if (self.status === "paused"){
 
 			self.status = "playing";
@@ -94,8 +96,9 @@ ITE.TaskManager = function() {
 //seek to the correct point in the scheduler
 	this.seek = function(seekedOffset) {
 		this.pause();
+		console.log("SEEEEEEKONK");
 		this.timeManager.addElapsedTime(seekedOffset);
-		this.currentTaskIndex = this.getIndexAt(offset);
+		this.currentTaskIndex = this.getIndexAt(seekedOffset);
 		this.triggerCurrentTasks();
 		this.scheduleNextTasks();
 	};

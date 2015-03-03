@@ -14,6 +14,7 @@ ITE.Orchestrator = function(player) {
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
 	self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
+	self.tourData 			= null;
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -38,6 +39,7 @@ ITE.Orchestrator = function(player) {
 	    AJAXreq.send();*/
 	    tourData = dataURL
 	    loadHelper();
+	    self.tourData = tourData;
 
 	  /**
 	    * I/P: none
@@ -126,10 +128,7 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function seek(seekTime){
-		console.log("ORCH SEEK");
-		console.log(ITE);
-		//self.taskManager.seek(seekTime * ITE_tour.totalDuration);
-		
+		self.taskManager.seek(seekTime * self.tourData.totalDuration);
 	}
 
 	function setVolume(newVolumeLevel){
