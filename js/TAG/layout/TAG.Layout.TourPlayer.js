@@ -37,7 +37,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         bigPlayButton = root.find('#bigPlayButton'),
         w = $('#tagRoot').width(),
         h = $('#tagRoot').height();
-
+    
     if (h * 16 / 9 < w) { // make sure player is 16:9
         root.css({
             'width': h * 16 / 9 + 'px',
@@ -49,7 +49,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             'top': (h - w * 9 / 16) / 2 + 'px'
         });
     }
-
+    
     // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
     // idleTimer.start();
