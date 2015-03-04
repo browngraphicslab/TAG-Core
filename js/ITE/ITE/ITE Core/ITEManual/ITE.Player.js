@@ -57,7 +57,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.onTourEndEvent = new ITE.PubSubStruct();
 
 
-    this.playerParent = $(document.body);
+    this.playerParent = $("#tagRoot");
 
     //Start things up
     createITEPlayer(this.playerParent, options)
