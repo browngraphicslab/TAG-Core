@@ -691,6 +691,7 @@ var tagInk = function (canvId, html_elt) {
             }
         });
         datastring = data_string;
+        console.log("DATA STRING::::::" + data_string)
         return data_string;
     }
     that.update_datastring = update_datastring;

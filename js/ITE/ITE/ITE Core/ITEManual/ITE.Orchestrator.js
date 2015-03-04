@@ -83,9 +83,9 @@ ITE.Orchestrator = function(player) {
 			switch (trackData.providerId){
 				case "image" : 
 					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.taskManager, self));
-					break;
+					break; 
 				case "video" : 
-					//self.trackManager.push(new ITE.VideoProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.VideoProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "audio" : 
 					self.trackManager.push(new ITE.AudioProvider(trackData, self.player, self.taskManager, self));
@@ -94,7 +94,7 @@ ITE.Orchestrator = function(player) {
 					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
 					break;
 				case "ink" : 
-					//self.trackManager.push(new ITE.scribbleProvider(trackData, self.player, self.taskManager, self));
+					//self.trackManager.push(new ITE.ScribbleProvider(trackData, self.player, self.taskManager, self));
 					break;
 				default:
 					throw new Error("Unexpected providerID; '" + trackData.providerId + "' is not a valid providerID");
