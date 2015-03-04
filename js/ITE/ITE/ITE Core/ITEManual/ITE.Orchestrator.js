@@ -183,7 +183,6 @@ ITE.Orchestrator = function(player) {
 	this.setVolume = setVolume;
 	this.toggleMute = toggleMute;
 	this.getElapsedTime = self.taskManager.getElapsedTime;
-	console.log("THISTHIS: " + self.taskManager.getElapsedTime)
 	this.captureKeyframe = captureKeyframe;
 	this.areAllTracksReady = areAllTracksReady;
 	this.initializeTracks = initializeTracks;

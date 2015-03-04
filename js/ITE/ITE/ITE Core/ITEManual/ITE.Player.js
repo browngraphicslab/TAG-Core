@@ -255,7 +255,9 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             },100);
         }
 
+
     };
+
      /*
     * I/P:   sec (int-- a time in sec)
     * called by updateProgressIndicator function to stringify the times
@@ -321,7 +323,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     };
 
     function unload() {
-    //    orchestrator.unload();
+        orchestrator.unload();
     };
 	
     /*

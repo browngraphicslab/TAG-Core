@@ -3241,10 +3241,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevMult : multipleShown
         }
 
-        //CALL RIN TO ITE PARSING HERE
+        //CALL RIN TO ITE PARSING HERE 
         var iteData = TAG.Util.RIN_TO_ITE(tour);
 
-        window.ITE = window.ITE || {};
+       /* window.ITE = window.ITE || {};
         var testOptions =   {
                 attachVolume:               true,
                 attachLoop:                 true,
@@ -3261,12 +3261,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 setFullScreen:              false,
                 setStartingOffset:          0,
                 setEndTime:                 NaN
-            };
+            };*/
 
-        var ITEPlayer = new ITE.Player(testOptions);
-        ITEPlayer.load(iteData)
+        var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
+
+        //var ITEPlayer = new ITE.Player(testOptions);
+        //ITEPlayer.load(iteData)
         //ITEPlayer.load(itePath + "Assets/TourData/TourDataAudioImagesDZ.JSON")
-        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function(){});
+        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), ITEPlayer.startPlayback);
 
         /*rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
         rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour);
