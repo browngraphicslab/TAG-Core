@@ -761,12 +761,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // To show/hide dropdown menu
             function showMenu(id) {
-                console.log(visibleCollections.toString());
+                //console.log(visibleCollections.toString());
                 var menu = document.getElementById(id);
-                if(menu.style.opacity==0) {
-                    menu.style.opacity = .7;
+                if (menu.style.display == 'block') {
+                    menu.style.display = 'none';
                 } else {
-                    menu.style.opacity = 0;
+                    menu.style.display = 'block';
                 }
             }
 
