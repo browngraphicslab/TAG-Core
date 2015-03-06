@@ -374,23 +374,25 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     };
     /*
     * I/P:   none
-    * Sets the buttons to fade in 3 seconds from function call
+    * Sets the buttons to fade in 2 seconds from function call
     * O/P:   none
     */
     function setControlsFade(){
         if(playerConfiguration.fadeControls){
-            controlsFade = window.setTimeout(function(){
-                time = 1000
-                volumeButton.fadeTo(time,0,null);
-                volumeLevel.fadeTo(time,0,null);
-                playPauseButton.fadeTo(time,0,null);
-                loopButton.fadeTo(time,0,null);
-                progressBar.fadeTo(time,0,null);
-                fullScreenButton.fadeTo(time,0,null);
-                progressIndicator.fadeTo(time,0,null);
-                $("#backButton").fadeTo(time,0,null);
-                $("#linkButton").fadeTo(time,0,null);
-            },3000)
+            window.setTimeout(function(){
+                if(!playerParent.is(":hover")){
+                    time = 1000
+                    volumeButton.fadeTo(time,0,null);
+                    volumeLevel.fadeTo(time,0,null);
+                    playPauseButton.fadeTo(time,0,null);
+                    loopButton.fadeTo(time,0,null);
+                    progressBar.fadeTo(time,0,null);
+                    fullScreenButton.fadeTo(time,0,null);
+                    progressIndicator.fadeTo(time,0,null);
+                    $("#backButton").fadeTo(time,0,null);
+                    $("#linkButton").fadeTo(time,0,null);
+                }
+            },2000)
        }
     }
 
