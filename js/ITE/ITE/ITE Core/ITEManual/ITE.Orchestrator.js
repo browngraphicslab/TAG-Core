@@ -113,6 +113,14 @@ ITE.Orchestrator = function(player) {
 	function getTourData(){
 		return self.tourData;
 	}
+	/**
+	    * I/P: none
+	  	* getter for the status
+	    * O/P: tourData object
+	*/
+	function getStatus(){
+		return this.status;
+	}
 
 	function play(){
 		var i;
