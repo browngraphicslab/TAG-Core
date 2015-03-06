@@ -322,6 +322,15 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         updateProgressIndicator(0);
 
         playerParent.mousemove(function(){
+            volumeButton.stop();
+            volumeLevel.stop();
+            playPauseButton.stop();
+            loopButton.stop();
+            progressBar.stop();
+            fullScreenButton.stop();
+            progressIndicator.stop();
+            $("#backButton").stop();
+            $("#linkButton").stop();
             makeControlsVisible();
         });
         playerParent.mouseleave(function(){
@@ -381,7 +390,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         if(playerConfiguration.fadeControls){
             window.setTimeout(function(){
                 if(!playerParent.is(":hover")){
-                    time = 1000
+                    time = 500
                     volumeButton.fadeTo(time,0,null);
                     volumeLevel.fadeTo(time,0,null);
                     playPauseButton.fadeTo(time,0,null);
