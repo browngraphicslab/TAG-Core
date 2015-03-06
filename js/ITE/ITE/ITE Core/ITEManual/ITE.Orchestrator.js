@@ -11,10 +11,17 @@ ITE.Orchestrator = function(player) {
 	self.muteChangedEvent		= new ITE.PubSubStruct();
 	self.tourData;
 	self.player 			= player;
-	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY THIS IS GOING TO BE************
-	self.taskManager 		= new ITE.TaskManager();
+	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
+	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
 	self.tourData 			= null;
+
+	// TODO: NEW
+	self.timeManager = new ITE.TimeManager();
+	self.getElapsedTime = function(){
+		return self.timeManager.getElapsedOffset();
+	};	
+	// TODO: END
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -22,7 +29,7 @@ ITE.Orchestrator = function(player) {
     * Once the asset is loaded, the initializeTracks() is called, and when tracks are ready, the tour is played. 
     * O/P: none
     */
-	this.load = function(dataURL){
+	self.load = function(dataURL){
 		var tourData,
 			AJAXreq = new XMLHttpRequest(),
 			i;
@@ -84,19 +91,19 @@ ITE.Orchestrator = function(player) {
 
 			switch (trackData.providerId){
 				case "image" : 
-					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "video" : 
-					//self.trackManager.push(new ITE.VideoProvider(trackData, self.player, self.taskManager, self));
+					//self.trackManager.push(new ITE.VideoProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "audio" : 
-					self.trackManager.push(new ITE.AudioProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.AudioProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "deepZoom" : 
-					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "ink" : 
-					//self.trackManager.push(new ITE.scribbleProvider(trackData, self.player, self.taskManager, self));
+					//self.trackManager.push(new ITE.scribbleProvider(trackData, self.player, self.timeManager, self));
 					break;
 				default:
 					throw new Error("Unexpected providerID; '" + trackData.providerId + "' is not a valid providerID");
@@ -120,27 +127,48 @@ ITE.Orchestrator = function(player) {
 		var i;
 		for (i=0; i<self.trackManager.length; i++) {
 			if (self.trackManager[i].state === "loading"){
-				setTimeout(self.play, 1000);//TODO not have this be a timeout...
+				setTimeout(self.play, 1000);//TODO not have self be a timeout...
 				return;
 			}
 		}
-		self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
-		self.taskManager.play();
-		this.status = 1;
+		// TODO: OLD STUFF
+		// self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
+		// self.taskManager.play();
+		// TODO: NEW STUFF
+		for (i = 0; i < self.trackManager.length; i++) {
+			self.trackManager[i].play();
+		}
+		self.timeManager.startTimer();
+		// TODO: END
+		self.status = 1;
 	}
 
 	function pause(){
-		self.taskManager.pause();
-		this.status = 2;
+		// TODO: OLD
+		// self.taskManager.pause();
+		// TODO: NEW
+		self.timeManager.stopTimer();
+		for (i = 0; i < self.trackManager.length; i++) {
+			self.trackManager[i].pause();
+		}
+		// TODO: END
+		self.status = 2;
 	}
 
 	function seek(seekTime){
-		self.taskManager.seek(seekTime * self.tourData.totalDuration);
+		// Change time.
+		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+
+		// Inform tracks of seek.
+		for (i = 0; i < self.trackManager.length; i++) {
+			self.trackManager[i].seek();
+		}
+		//self.taskManager.seek(seekTime * self.tourData.totalDuration);
 	}
 
 	function setVolume(newVolumeLevel){
 	    self.volumeChangedEvent.publish(newVolumeLevel)
-	    // parseInt(this.status) !== 3 ? self.volumeChangedEvent.publish(newVolumeLevel) : console.log("don't do anything");
+	    // parseInt(self.status) !== 3 ? self.volumeChangedEvent.publish(newVolumeLevel) : console.log("don't do anything");
 	}
 
 	function toggleMute(isMuted){
@@ -177,20 +205,19 @@ ITE.Orchestrator = function(player) {
 			self.narrativeLoadedEvent.subscribe(track.load, null, track)
 		}
 	}
-	this.trackManager = trackManager;
-	this.unload = unload;
-	this.play = play;
-	this.pause = pause;
-	this.seek = seek;
-	this.setVolume = setVolume;
-	this.toggleMute = toggleMute;
-	this.getElapsedTime = self.taskManager.getElapsedTime;
-	console.log("THISTHIS: " + self.taskManager.getElapsedTime)
-	this.captureKeyframe = captureKeyframe;
-	this.areAllTracksReady = areAllTracksReady;
-	this.initializeTracks = initializeTracks;
-	this.getTourData = getTourData;
-	this.status = status;
+	self.trackManager = trackManager;
+	self.unload = unload;
+	self.play = play;
+	self.pause = pause;
+	self.seek = seek;
+	self.setVolume = setVolume;
+	self.toggleMute = toggleMute;
+	self.getElapsedTime = self.timeManager.getElapsedOffset;
+	self.captureKeyframe = captureKeyframe;
+	self.areAllTracksReady = areAllTracksReady;
+	self.initializeTracks = initializeTracks;
+	self.getTourData = getTourData;
+	self.status = status;
 }
 
 

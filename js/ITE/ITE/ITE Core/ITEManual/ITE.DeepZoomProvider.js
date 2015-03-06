@@ -1,11 +1,12 @@
 window.ITE = window.ITE || {};
 
-ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
+// ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
+ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator){
 
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
-		_super 		= new ITE.ProviderInterfacePrototype(),
+		_super 		= new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
 		self 		= this;
 
 	Utils.extendsPrototype(this, _super);
@@ -13,10 +14,11 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
     self.loadKeyframes(trackData.keyframes);
     
 	self.player 				= player;
-	self.taskManager 			= taskManager;
+	// self.taskManager 			= taskManager;
+	self.timeManager 			= timeManager;
 	self.trackData 				= trackData;
 	self.orchestrator			= orchestrator;
-	self.status 				= "loading";
+	self.status 				= 3;
 	self.trackData   			= trackData;
 	self.animationCallback;
 
@@ -30,7 +32,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
     	_mouseTracker;
 
 	//Start things up...
-    initialize()
+    initialize();
 
    /** 
 	* I/P: none
@@ -38,7 +40,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	* O/P: none
 	*/
 	function initialize(){
-		_super.initialize()
+		_super.initialize();
 
 		//Create UI and append to ITEHolder
 		_UIControl = $(document.createElement("div"))
@@ -59,13 +61,12 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: "DeepZoomHolder",
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.1.1/images/",
-			//prefixUrl			: this.trackData.assetUrl,
+			//prefixUrl			: self.trackData.assetUrl,
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2
-		})
-
+		});
 
 		/*_viewer.addHandler({
 			'canvas-scroll': function(evt) {
@@ -92,24 +93,51 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 
 		_mouseTracker = new OpenSeadragon.MouseTracker({
 			"element": "DeepZoomHolder"
-		})
-		
-		var i, keyframeData;
-		var keyframesArray = self.keyframes.getContents();
-		for (i = 1; i < keyframesArray.length; i++) {
-			keyframeData={
-						  "opacity"	: keyframesArray[i].opacity, 
-						  "bounds"	: new OpenSeadragon.Rect(parseFloat(keyframesArray[i].pos.x), parseFloat(keyframesArray[i].pos.y), keyframesArray[i].scale, keyframesArray[i].scale/2)
-						};
-			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
-		}
-		_UIControl.css("z-index", keyframesArray[0].zIndex);
+		});
 
-		self.status = "ready";
+		var keyframesArray = self.keyframes.getContents();
+		_UIControl.css("z-index", keyframesArray[0].zIndex);
 		self.setState(keyframesArray[0]);
+		self.status = 2;
 
 		// Attach Handlers
-		attachHandlers()
+		attachHandlers();
+	};
+
+	/** 
+	* I/P: keyframe: a keyframe on this track.
+	* Extracts the state information from this keyframe and returns it.
+	* O/P: state information (used in animation) from keyframe.
+	*/
+	self.getKeyframeState = function(keyframe) {
+		var state = {
+						"opacity"	: keyframe.opacity, 
+						 "bounds"	: new OpenSeadragon.Rect(parseFloat(keyframe.pos.x), parseFloat(keyframe.pos.y), keyframe.scale, keyframe.scale/2)
+					};
+		return state;
+	};
+
+	/** 
+	* I/P: 	startKeyframe: 	keyframe to lerp from.
+			endKeyframe: 	keyframe to lerp to.
+			interp: 		amount to interpolate.
+	* Creates a linearly interpolated state between start and end keyframes.
+	* O/P: state information (used in animation) from lerped keyframe.
+	*/
+	self.lerpState = function(startKeyframe, endKeyframe, interp) {
+		if (!endKeyframe) {
+			return self.getKeyframeState(startKeyframe);
+		}
+
+		var lerpOpacity = startKeyframe.opacity + (interp * (endKeyframe.opacity - startKeyframe.opacity));
+		var lerpPosX = startKeyframe.pos.x + (interp * (endKeyframe.pos.x - startKeyframe.pos.x));
+		var lerpPosY = startKeyframe.pos.y + (interp * (endKeyframe.pos.y - startKeyframe.pos.y));
+		var lerpScale = startKeyframe.scale + (interp * (endKeyframe.scale - startKeyframe.scale));
+		var state = {
+						"opacity"	: lerpOpacity,
+						"bounds"	: new OpenSeadragon.Rect(parseFloat(lerpPosX), parseFloat(lerpPosY), lerpScale, lerpScale/2)
+					};
+		return state;
 	};
 
    /** 
@@ -117,11 +145,11 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	* Loads actual image asset, and sets status to paused when complete
 	* O/P: none
 	*/
-	this.load = function(){
+	self.load = function(){
 		_super.load()
 		//Sets the DeepZoom's URL source
-    	//_viewer.open(itePath + "Assets/TourData/" + this.trackData.assetUrl);
-		_viewer.open(this.trackData.assetUrl)
+    	//_viewer.open(itePath + "Assets/TourData/" + self.trackData.assetUrl);
+		_viewer.open(self.trackData.assetUrl)
 	};
 
    /** 
@@ -130,9 +158,9 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	* returns savedState
 	* O/P: savedState
 	*/
-	this.getState = function(){
+	self.getState = function(){
 		self.savedState = {
-			time	: self.taskManager.timeManager.getElapsedOffset(),
+			time	: self.timeManager.getElapsedOffset(),
 			bounds 	: _viewer.viewport.getBounds(true)
 		};	
 		return self.savedState;
@@ -143,7 +171,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	* Sets properties of the image to reflect the input state
 	* O/P: none
 	*/
-	this.setState = function(state){
+	self.setState = function(state){
 		_viewer.viewport.fitBounds(state.bounds, true);
 	};
 
@@ -155,38 +183,110 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	* Starts animation, if needed
 	* O/P: none
 	*/
-	this.play = function(targetTime, data){
-	// Resets state to be where it was when track was paused, then clears the saved state
+	// self.play = function(targetTime, data){
+	// // Resets state to be where it was when track was paused, then clears the saved state
+	// 	self.animationCallback = function() {
+	// 		self.animate(targetTime - self.savedState.time, data);
+	// 		self.savedState = null;	
+	// 		_viewer.removeHandler("animation-finish", self.animationCallback)
+	// 	}
+
+	// 	// If tour was paused for any reason:
+	// 	if(self.savedState) {
+	// 		// If tour has been manipulated, reset it and continue animating (via the above callback method)
+	// 		if(self.imageHasBeenManipulated){
+	// 			self.setState(self.savedState);
+	// 			_viewer.addHandler("animation-finish", self.animationCallback);	
+	// 		}
+	// 		// If tour was paused simply and has not been manipulated, just start it from where it was before 
+	// 		else {
+	// 			self.animate(targetTime - self.savedState.time, data);
+	// 		}
+	// 	} 
+	// 	// If "play" is being called from taskmanager, just start animating to the next keyframe
+	// 	else {
+	// 		self.animate(targetTime - self.taskManager.timeManager.getElapsedOffset(), data);
+	// 	}
+	// };
+
+	/** 
+	* I/P: endKeyframe: if we know what keyframe we are animating to, pass it here.
+	* Plays DeepZoom asset
+	* O/P: none
+	*/
+	self.play = function(endKeyframe) {
+		if (self.status === 3) {
+			return;
+		}
+		self.status = 1;
+
+		// Callback function is image has been manipulated.
 		self.animationCallback = function() {
-			self.animate(targetTime - self.savedState.time, data);
+			var nextKeyframe = endKeyframe || self.getNextKeyframe(self.savedState.time);
+			self.animate(nextKeyframe.time - self.savedState.time, self.getKeyframeState(nextKeyframe));
 			self.savedState = null;	
 			_viewer.removeHandler("animation-finish", self.animationCallback)
 		}
 
-		// If tour was paused for any reason:
-		if(this.savedState) {
-			// If tour has been manipulated, reset it and continue animating (via the above callback method)
-			if(self.imageHasBeenManipulated){
-				this.setState(this.savedState);
+		// Revert to any saved state, get time to start animation.
+		var startTime;
+		if (self.savedState) {
+			// If manipulated, use callback.
+			if (self.imageHasBeenManipulated){
+				self.setState(self.savedState);
 				_viewer.addHandler("animation-finish", self.animationCallback);	
+				return;
 			}
-			// If tour was paused simply and has not been manipulated, just start it from where it was before 
-			else {
-				self.animate(targetTime - self.savedState.time, data);
-			}
-		} 
-		// If "play" is being called from taskmanager, just start animating to the next keyframe
-		else {
-			this.animate(targetTime - this.taskManager.timeManager.getElapsedOffset(), data);
+			// Otherwise, just revert back to saved state.
+			startTime = self.savedState.time;
+			self.setState(self.savedState);
+			self.savedState = null;
+
+		} else {
+			startTime = self.timeManager.getElapsedOffset();
 		}
+
+		// Get the next keyframe in the sequence and animate.
+		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
+		self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
 	};
 
-	this.pause = function(){
+	self.pause = function() {
 		// Sets savedState to be current state when tour is paused so that we can restart the tour from where we left off
-		this.getState();
-		this.setState(self.savedState);	// Stops animation
+		self.getState();
+		self.setState(self.savedState);	// Stops animation
 		self.animation.kill();
-	}
+	};
+
+	/** 
+	* I/P: none
+	* Informs DeepZoom asset of seek. TimeManager will have been updated.
+	* O/P: none
+	*/
+	self.seek = function() {
+		if (self.status === 3) {
+			return;
+		}
+
+		// Erase any saved state.
+		var prevStatus = self.status;
+		self.pause();
+		self.savedState = null;
+
+		// Update the state based on seeking.
+		var surKeyframes = self.getSurroundingKeyframes(self.timeManager.getElapsedOffset());
+		var interp = 0;
+		if (surKeyframes[1] - surKeyframes[0] !== 0) {
+			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1] - surKeyframes[0]);
+		}
+		var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
+		self.setState(soughtState);
+
+		// Play or pause, depending on state before being sought.
+		if (prevStatus === 1) {
+			self.play(surKeyframes[1]);
+		} 
+	};
 
 
 	/* 
@@ -194,7 +294,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	* interpolates between current state and next keyframe
 	* O/P: none
 	*/
-	this.animate = function(duration, state){
+	self.animate = function(duration, state){
 		self.imageHasBeenManipulated = false;
 		setSeadragonConfig(duration);
 		_viewer.viewport.fitBounds(state.bounds, false);
@@ -203,7 +303,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 	};
 
 	/* 
-	* I/P: inkTrack ink track to attach to this asset
+	* I/P: inkTrack ink track to attach to self asset
 	* Adds ink as an overlay
 	* O/P: none
 	*/
@@ -218,7 +318,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 			_viewer.addOverlay(inkTrack._UIControl[0], point);	
 		}
 	};
-	this.addInk = addInk;
+	self.addInk = addInk;
 	/* 
 	* I/P: duration	duration of track
 	* Helper function for animate() that is a bit of a hack

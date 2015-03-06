@@ -1,11 +1,12 @@
 window.ITE = window.ITE || {};
 //ATTACHED INKS MUST ALWAYS BE AT THE END OF THE JSON FILE
 
-ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
+// ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
+ITE.InkProvider = function (trackData, player, timeManager, orchestrator){
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
-		_super 		= new ITE.ProviderInterfacePrototype(),
+		_super 		= new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
 		self 		= this;
 
 	Utils.extendsPrototype(this, _super);
@@ -13,13 +14,14 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
     self.loadKeyframes(trackData.keyframes);
 
 	self.player 		= player;
-	self.taskManager 	= taskManager;
+	// self.taskManager 	= taskManager;
+	self.timeManager	= timeManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
-	self.status 		= "loading";
+	self.status 		= 3;
 	//self.savedState		= keyframes[0];
 	self.interactionAnimation;
-	this.trackData   			= trackData;
+	self.trackData   			= trackData;
 
     //DOM related
     var _ink,
@@ -54,24 +56,44 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 
 		_ink = new tagInk(trackData.assetUrl, _UIControl[0]);
 
-		var i, keyframeData;
 		var keyframesArray = self.keyframes.getContents();
-		for (i = 1; i < keyframesArray.length; i++) {
-			keyframeData={
-						  "opacity"	: keyframesArray[i].opacity,
-						  "inkData" : trackData.string
-						};
-			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
-		}
-		self.status = "ready";
 		self.setState(keyframesArray[0]);
+		self.status = 2;
+	};
+
+	self.getKeyframeState = function(keyframe) {
+		var state = {
+						"opacity"	: keyframe.opacity,
+						"inkData" 	: trackData.string
+					};
+		return state;
+	}
+
+	/** 
+	* I/P: 	startKeyframe: 	keyframe to lerp from.
+			endKeyframe: 	keyframe to lerp to.
+			interp: 		amount to interpolate.
+	* Creates a linearly interpolated state between start and end keyframes.
+	* O/P: state information (used in animation) from lerped keyframe.
+	*/
+	self.lerpState = function(startKeyframe, endKeyframe, interp) {
+		if (!endKeyframe) {
+			return self.getKeyframeState(startKeyframe);
+		}
+		
+		var lerpOpacity = startKeyframe.opacity + (interp * (endKeyframe.opacity - startKeyframe.opacity));
+		var state = {
+						"opacity"	: lerpOpacity,
+						"inkData"	: trackData.string
+					};
+		return state;
 	};
 
 
    /** 
 	* I/P: experienceReference name of asset to attach from Ink
 	* Finds the attached asset for the ink track (the track to attach the ink to)
-	* O/P: _attachedAsset Actual reference to the track that holds this asset
+	* O/P: _attachedAsset Actual reference to the track that holds self asset
 	*/
 	function findAttachedAsset(experienceReference){
 		var j,
@@ -101,7 +123,7 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 	* Loads actual image asset, and sets status to paused when complete
 	* O/P: none
 	*/
-	this.load = function(){
+	self.load = function(){
 			_super.load()
 			_ink.loadInk(trackData.string);
 	};
@@ -112,10 +134,10 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 	* returns savedState
 	* O/P: savedState
 	*/
-	this.getState = function(){
+	self.getState = function(){
 		self.savedState = {
-			//displayNumber	: this.getPreviousKeyframe().displayNumber,
-			time			: self.taskManager.timeManager.getElapsedOffset(),
+			//displayNumber	: self.getPreviousKeyframe().displayNumber,
+			time			: self.timeManager.getElapsedOffset(),
 			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
 			inkData			: trackData.string
 		};	
@@ -127,32 +149,94 @@ ITE.InkProvider = function (trackData, player, taskManager, orchestrator){
 	* Sets properties of the image to reflect the input state
 	* O/P: none
 	*/
-	this.setState = function(state){
+	self.setState = function(state){
 		_UIControl.css({
 			"opacity":		state.opacity
 		});
 	};
 
-	this.pause = function(){
-		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		this.getState();
-		self.animation.kill()
-	}
+	/** 
+	* I/P: endKeyframe: if we know what keyframe we are animating to, pass it here.
+	* Plays audio asset
+	* O/P: none
+	*/
+	self.play = function(endKeyframe) {
+		if (self.status === 3) {
+			return;
+		}
+		self.status = 1;
+
+		// Revert to any saved state, get time to start animation.
+		var startTime;
+		if (self.savedState) {
+			startTime = self.savedState.time;
+			self.setState(self.savedState);
+			self.savedState = null;
+		} else {
+			startTime = self.timeManager.getElapsedOffset();
+		}
+
+		// Get the next keyframe in the sequence and animate.
+		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
+		self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
+	};
+
+	/** 
+	* I/P: none
+	* Pauses ink asset
+	* O/P: none
+	*/
+	self.pause = function(){
+		if (self.status === 3) {
+			return;
+		}
+		self.status = 2;
+
+		self.getState();
+		self.animation.kill();
+	};
+
+	/** 
+	* I/P: none
+	* Informs ink asset of seek. TimeManager will have been updated.
+	* O/P: none
+	*/
+	self.seek = function() {
+		if (self.status === 3) {
+			return;
+		}
+
+		// Erase any saved state.
+		var prevStatus = self.status;
+		self.pause();
+		self.savedState = null;
+
+		// Update the state based on seeking.
+		var surKeyframes = self.getSurroundingKeyframes(self.timeManager.getElapsedOffset());
+		var interp = 0;
+		if (surKeyframes[1] - surKeyframes[0] !== 0) {
+			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1] - surKeyframes[0]);
+		}
+		var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
+		self.setState(soughtState);
+
+		// Play or pause, depending on state before being sought.
+		if (prevStatus === 1) {
+			self.play(surKeyframes[1]);
+		} 
+	};
 
 	/* 
 	I/P: none
 	interpolates between current state and next keyframe
 	O/P: none
 	*/
-	this.animate = function(duration, state){
-			self.animation = TweenLite.to(_UIControl, duration, state);		
-			self.animation.play();
+	self.animate = function(duration, state){
+		self.animation = TweenLite.to(_UIControl, duration, state);		
+		self.animation.play();
 	};
 
-	this.findAttachedAsset = findAttachedAsset
-	this.attachToAsset = attachToAsset;
-	this._UIControl = _UIControl;
-
-
-
+	self.findAttachedAsset = findAttachedAsset;
+	self.attachToAsset = attachToAsset;
+	self._UIControl = _UIControl;
 };

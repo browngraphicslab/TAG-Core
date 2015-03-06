@@ -1,11 +1,12 @@
 window.ITE = window.ITE || {};
 
-ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
+// ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
+ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 "use strict";
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
-		_super 		= new ITE.ProviderInterfacePrototype(),
+		_super 		= new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
 		self 		= this;
 
 	Utils.extendsPrototype(this, _super);
@@ -13,14 +14,15 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
     self.loadKeyframes(trackData.keyframes);
 
 	self.player 		= player;
-	self.taskManager 	= taskManager;
+	// self.taskManager 	= taskManager;
+	self.timeManager	= timeManager;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
-	self.status 		= "loading";
+	self.status 		= 3;
 
 	self.animation;
 
-	this.trackData   			= trackData;
+	self.trackData   			= trackData;
 
     //DOM related
     var _audio,
@@ -50,17 +52,40 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 
 		$("#ITEHolder").append(_UIControl);
 
-		
-		var i, keyframeData;
 		var keyframesArray = self.keyframes.getContents();
-		for (i = 1; i < keyframesArray.length; i++) {
-			keyframeData={
-						  "volume"	: keyframesArray[i].volume 
-						};
-			self.taskManager.loadTask(keyframesArray[i-1].time, keyframesArray[i].time, keyframeData, _UIControl, self);
-		}
-		self.status = "ready";
 		self.setState(keyframesArray[0]);
+		self.status = 2;
+	};
+
+	/** 
+	* I/P: keyframe: a keyframe on this track.
+	* Extracts the state information from this keyframe and returns it.
+	* O/P: state information (used in animation) from keyframe.
+	*/
+	self.getKeyframeState = function(keyframe) {
+		var state = {
+						"volume"	: keyframe.volume 
+					};
+		return state;
+	};
+
+	/** 
+	* I/P: 	startKeyframe: 	keyframe to lerp from.
+			endKeyframe: 	keyframe to lerp to.
+			interp: 		amount to interpolate.
+	* Creates a linearly interpolated state between start and end keyframes.
+	* O/P: state information (used in animation) from lerped keyframe.
+	*/
+	self.lerpState = function(startKeyframe, endKeyframe, interp) {
+		if (!endKeyframe) {
+			return self.getKeyframeState(startKeyframe);
+		}
+
+		var lerpVolume = startKeyframe.volume + (interp * (endKeyframe.volume - startKeyframe.volume));
+		var state = {
+						"volume"	: lerpVolume
+					};
+		return state;
 	};
 
 
@@ -69,19 +94,19 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	* Loads actual audio asset, and sets status to paused when complete
 	* O/P: none
 	*/
-	this.load = function(){
+	self.load = function(){
 		_super.load()
 
 		//Sets the image’s URL source
 		_audio.attr({
-			//"src"	: itePath + "Assets/TourData/"  + this.trackData.assetUrl,
-			"src"	: this.trackData.assetUrl,
-			"type" 	: this.trackData.type
+			//"src"	: itePath + "Assets/TourData/"  + self.trackData.assetUrl,
+			"src"	: self.trackData.assetUrl,
+			"type" 	: self.trackData.type
 		})
 		// When audio has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-		_audio.onload = function (event) {//Is this ever getting called?
-			this.setStatus(2);
-			this.setState(self.keyframes.min());
+		_audio.onload = function (event) {//Is self ever getting called?
+			self.setStatus(2);
+			self.setState(self.keyframes.min());
 		};
 	};
 
@@ -91,10 +116,10 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	* returns savedState
 	* O/P: savedState
 	*/
-	this.getState = function(){
+	self.getState = function(){
 		self.savedState = {
-			//displayNumber	: this.getPreviousKeyframe().displayNumber,
-			time			: self.taskManager.timeManager.getElapsedOffset(),
+			//displayNumber	: self.getPreviousKeyframe().displayNumber,
+			time			: self.timeManager.getElapsedOffset(),
 			volume			: _audioControls.volume,
 			audioOffset		: _audioControls.currentTime
 		};	
@@ -106,27 +131,95 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	* Sets properties of the image to reflect the input state
 	* O/P: none
 	*/
-	this.setState = function(state){
+	self.setState = function(state){
 		_audioControls.volume = state.volume;
 		state.audioOffset ? (_audioControls.currentTime = parseFloat(state.audioOffset)) : 0
 	};
 
  	/** 
-	* I/P: none
+	* I/P: endKeyframe: if we know what keyframe we are animating to, pass it here.
 	* Plays audio asset
 	* O/P: none
 	*/
-	this.play = function(targetTime, data){
-		_super.play.call(self, targetTime, data);
-		_audioControls.play();
-	}
+	self.play = function(endKeyframe) {
+		if (self.status === 3) {
+			return;
+		}
+		self.status = 1;
 
-	this.pause = function(){
-		// Sets savedState to be state when tour is paused so that we can restart the tour from where we left off
-		this.getState();
+		// Revert to any saved state, get time to start animation.
+		var startTime;
+		if (self.savedState) {
+			startTime = self.savedState.time;
+			self.setState(self.savedState);
+			self.savedState = null;
+		} else {
+			startTime = self.timeManager.getElapsedOffset();
+		}
+
+		// Get the next keyframe in the sequence and animate.
+		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
+		self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
+
+		_audioControls.play();
+	};
+
+	/** 
+	* I/P: none
+	* Pauses audio asset
+	* O/P: none
+	*/
+	self.pause = function(){
+		if (self.status === 3) {
+			return;
+		}
+		self.status = 2;
+
+		self.getState();
 		self.animation.stop();
-		_audioControls.pause()
-	}
+		_audioControls.pause();
+	};
+
+	/** 
+	* I/P: none
+	* Informs audio asset of seek. TimeManager will have been updated.
+	* O/P: none
+	*/
+	self.seek = function() {
+		if (self.status === 3) {
+			return;
+		}
+
+		// Erase any saved state.
+		var prevStatus = self.status;
+		self.pause();
+		self.savedState = null;
+
+		// Update the state based on seeking.
+		var surKeyframes = self.getSurroundingKeyframes(self.timeManager.getElapsedOffset());
+		var interp = 0;
+		if (surKeyframes[1] - surKeyframes[0] !== 0) {
+			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1] - surKeyframes[0]);
+		}
+		var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
+		self.setState(soughtState);
+
+		// Play or pause, depending on state before being sought.
+		if (prevStatus === 1) {
+			self.play(surKeyframes[1]);
+		} 
+	};
+
+	/* 
+	I/P: none
+	interpolates between current state and next keyframe
+	O/P: none
+	*/
+	self.animate = function(duration, state){
+		self.animation =_audio.animate({
+			volume: state.volume*self.player.currentVolumeLevel
+		}, duration*1000);	
+	};
 
 
 	/* 
@@ -134,15 +227,15 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	* Sets the current volume to the newVolume * value from keyframes, and then animates the audio to the next keyframe 
 	* O/P: none
 	*/
-	this.setVolume = function(newVolume){
+	self.setVolume = function(newVolume){
 		if (newVolume === 0) {
-			this.toggleMute()
+			self.toggleMute()
 		} else {	
 			//Set volume to newVolume * value from keyframes
 
 			_audioControls.volume = _audioControls.volume*newVolume/self.player.previousVolumeLevel;
 			
-			if (this.orchestrator.status === 1){
+			if (self.orchestrator.status === 1){
 
 				//Duration of current time to next keyframe
 				var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();
@@ -165,18 +258,8 @@ ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 	* mutes or unmutes tour
 	* O/P: none
 	*/
-	this.toggleMute = function(isMuted){
+	self.toggleMute = function(isMuted){
 		isMuted? _audioControls.muted = true : _audioControls.muted = false;
 	}
 
-
-	/* 
-	I/P: none
-	interpolates between current state and next keyframe
-	O/P: none
-	*/
-	this.animate = function(duration, state){
-		self.animation =_audio.animate({
-			volume: state.volume*self.player.currentVolumeLevel
-		}, duration*1000);	};
 };

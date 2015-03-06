@@ -2,40 +2,42 @@ window.ITE = window.ITE || {};
 
 ITE.TimeManager = function(){
 
-	this.isRunning = false; //stopwatch value indicating the time of the tour
-	this.startingOffset = 0; //the starting offset
-	this.elapsedOffset = 0; //how much time has elapsed
+	var self = this;
+
+	self.isRunning = false; //stopwatch value indicating the time of the tour
+	self.startingOffset = 0; //the starting offset
+	self.elapsedOffset = 0; //how much time has elapsed
 
 	//getIsRunning
-	this.getIsRunning = function(){
-		return this.isRunning;
+	self.getIsRunning = function(){
+		return self.isRunning;
 	};
 
 	//getElapsedOffset
-	this.getElapsedOffset = function(){
-		var offset = (Date.now()/1000 - this.startingOffset) + this.elapsedOffset;
-		if (this.isRunning){
+	self.getElapsedOffset = function(){
+		var offset = (Date.now()/1000 - self.startingOffset) + self.elapsedOffset;
+		if (self.isRunning){
 			return offset;
 		}else {
-			return this.elapsedOffset;
+			return self.elapsedOffset;
 		}
 	};
 
-	this.addElapsedTime = function(offset) {
-		this.elapsedOffset += offset;
+	self.addElapsedTime = function(offset) {
+		self.elapsedOffset += offset;
 	}
 
 		//start the timer
-	this.startTimer= function(){
-		this.startingOffset = Date.now() / 1000; //get startingOffset in seconds
-		this.isRunning = true;
+	self.startTimer= function(){
+		self.startingOffset = Date.now() / 1000; //get startingOffset in seconds
+		self.isRunning = true;
 	};
 
 	//pause the timer
-	this.stopTimer = function(){
-		if (this.isRunning){
-			this.elapsedOffset = this.getElapsedOffset();
+	self.stopTimer = function(){
+		if (self.isRunning){
+			self.elapsedOffset = self.getElapsedOffset();
 		}
-		this.isRunning = false;
+		self.isRunning = false;
 	};
 };
