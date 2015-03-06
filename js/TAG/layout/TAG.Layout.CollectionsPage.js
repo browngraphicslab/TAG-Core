@@ -763,11 +763,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             function showMenu(id) {
                 //console.log(visibleCollections.toString());
                 var menu = document.getElementById(id);
+                for (var i = 0; i < visibleCollections.length; i++) {         
+                    var para = document.createElement("p");
+                    var newNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
+                    menu.appendChild(para);
+                    para.appendChild(newNode);
+                }
                 if (menu.style.display == 'block') {
                     menu.style.display = 'none';
                 } else {
                     menu.style.display = 'block';
                 }
+                
+               
             }
 
             // Add collection title
@@ -777,7 +785,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var uiDocfrag = document.createDocumentFragment();
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
-                // prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
+                prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
                 backArrowArea.addClass('arrowArea');
                 
                 backArrowArea.css('left', '0%')
@@ -792,20 +800,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 backArrow.addClass('arrow');    
                 backArrowArea.show();
-                // prevCollection.addClass('nextPrevCollection')
-                //             .addClass('primaryFont')
-                //             //.attr({
-                //             //   'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
-                //             //})
-                //             .css('left','3%')
-                //             .html(prevTitle)
-                //             .off()
-                //             .on('mousedown', function(j){
-                //                 return function () {
-                //                     prepareNextView();
-                //                     loadCollection(visibleCollections[j.prevCollectionIndex])();
-                //                 }
-                //             }(collection));
+                prevCollection.addClass('nextPrevCollection')
+                             .addClass('primaryFont')
+                             .attr({
+                               'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
+                             })
+                             //.css('left','3%')
+                             //.html(prevTitle)
+                             .off()
+                             //.on('mousedown', function(j){
+                                // return function () {
+                                  //   prepareNextView();
+                                    // loadCollection(visibleCollections[j.prevCollectionIndex])();
+                                 //}
+                            // }(collection));
                 //collectionArea.append(prevCollection);
                 uiDocfrag.appendChild(prevCollection[0]);
                 //prevCollection.show();
