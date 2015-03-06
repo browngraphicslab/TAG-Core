@@ -16,12 +16,10 @@ ITE.Orchestrator = function(player) {
 	self.status 			= 3;
 	self.tourData 			= null;
 
-	// TODO: NEW
 	self.timeManager = new ITE.TimeManager();
 	self.getElapsedTime = function(){
 		return self.timeManager.getElapsedOffset();
 	};	
-	// TODO: END
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -121,6 +119,14 @@ ITE.Orchestrator = function(player) {
 	    */
 	function getTourData(){
 		return self.tourData;
+	}
+	/**
+	    * I/P: none
+	  	* getter for the status
+	    * O/P: tourData object
+	*/
+	function getStatus(){
+		return this.status;
 	}
 
 	function play(){

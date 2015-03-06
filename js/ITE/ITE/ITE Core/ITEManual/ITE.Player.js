@@ -11,6 +11,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 attachProgressBar:          true,
                 attachFullScreen:           true,
                 attachProgressIndicator:    true,
+                fadeControls:               true,
                 hideControls:               false,
                 autoPlay:                   false,
                 autoLoop:                   false,
@@ -57,7 +58,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.onTourEndEvent = new ITE.PubSubStruct();
 
 
-    this.playerParent = $(document.body);
+    this.playerParent = $("#tagRoot");
 
     //Start things up
     createITEPlayer(this.playerParent, options)
@@ -85,7 +86,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             attachFullScreen();
             attachProgressIndicator();
         };
-
         //onLoadPlayerEvent.publish(tourObj);
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
@@ -255,7 +255,9 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             },100);
         }
 
+
     };
+
      /*
     * I/P:   sec (int-- a time in sec)
     * called by updateProgressIndicator function to stringify the times
@@ -318,10 +320,17 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         //progressIndicator.append(tourData.totalDuration)
         totalTourDuration = tourData.totalDuration;
         updateProgressIndicator(0);
+
+        playerParent.mousemove(function(){
+            makeControlsVisible();
+        });
+        playerParent.mouseleave(function(){
+            setControlsFade();
+        })
     };
 
     function unload() {
-    //    orchestrator.unload();
+        orchestrator.unload();
     };
 	
     /*
@@ -358,10 +367,49 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function play() {
         orchestrator.play();
+
         // console.log("Tour is playing")
        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/pause.svg")
+       setControlsFade();
     };
+    /*
+    * I/P:   none
+    * Sets the buttons to fade in 3 seconds from function call
+    * O/P:   none
+    */
+    function setControlsFade(){
+        if(playerConfiguration.fadeControls){
+            controlsFade = window.setTimeout(function(){
+                time = 1000
+                volumeButton.fadeTo(time,0,null);
+                volumeLevel.fadeTo(time,0,null);
+                playPauseButton.fadeTo(time,0,null);
+                loopButton.fadeTo(time,0,null);
+                progressBar.fadeTo(time,0,null);
+                fullScreenButton.fadeTo(time,0,null);
+                progressIndicator.fadeTo(time,0,null);
+                $("#backButton").fadeTo(time,0,null);
+                $("#linkButton").fadeTo(time,0,null);
+            },3000)
+       }
+    }
 
+    /*
+    * I/P:   none
+    * Makes the controls/buttons visible and cancels timeouts making them dissappear
+    * O/P:   none
+    */
+    function makeControlsVisible(){
+        volumeButton.css({ 'opacity' : 1 })
+        volumeLevel.css({ 'opacity' : 1 })
+        playPauseButton.css({ 'opacity' : 1 })
+        loopButton.css({ 'opacity' : 1 })
+        progressBar.css({ 'opacity' : 1 })
+        fullScreenButton.css({ 'opacity' : 1 })
+        progressIndicator.css({ 'opacity' : 1 })
+        $("#backButton").css({ 'opacity' : 1 })
+        $("#linkButton").css({ 'opacity' : 1 })
+    }
 
     /*
     * I/P:   none
@@ -542,4 +590,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.isLooped           = isLooped;
     this.isFullScreen       = isFullScreen;
     this.updateProgressIndicator = updateProgressIndicator;
+    this.setControlsFade    = setControlsFade;
+    this.makeControlsVisible= makeControlsVisible;
 };

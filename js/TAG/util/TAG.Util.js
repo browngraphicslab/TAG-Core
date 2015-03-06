@@ -7552,6 +7552,144 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		return keyframes
 	}
 
+	/** stolen from tagInk.js
+	 * Takes in a datastring and parses for a certain attribute by splitting at "[" and "]" (these surround
+	 * attribute names).
+	 * NOTE if errors are coming from this function, could be that the datastring is empty...
+	 * @param str        the datastring
+	 * @param attr       the attribute we'll parse for
+	 * @param parsetype  'i' (int), 's' (string), or 'f' (float)
+	 * @return  the value of the attribute in the correct format
+	 */
+	var ITE_get_attr = function(str, attr, parsetype) {
+		//checks if not in string to begin with
+		if (str.indexOf("["+attr+"]") == -1){
+			return parsetype == "s" ? null : 0
+		}
+
+		if (parsetype === "f") {
+			return parseFloat(str.split("[" + attr + "]")[1].split("[")[0]);
+		} else if (parsetype === "s") {
+			return str.split("[" + attr + "]")[1].split("[")[0];
+		} else {
+			return parseInt(str.split("[" + attr + "]")[1].split("[")[0]);
+		}
+	}
+
+	/* parses the datastring into an object for ink tracks
+		args:
+			datastring: 		the datastring to be parsed
+
+		(refer to tagInk.js)
+	*/
+	var ITE_parseInkDatastring = function(args){
+		var datastring = args.datastring,
+			type,
+			objects = [];
+
+		if (!datastring){
+			return objects
+		}
+
+		var inkObjects = datastring.split("|")
+		$.each(inkObjects, function(inkObjectNum, inkObject) {
+			if (inkObject && (inkObject != "")) {
+				
+				var type = inkObject.split("::")[0].toLowerCase(),
+					currObj = {};
+					propertiesToParse = {};
+
+				switch (type) {
+					case "text":
+						// format: [str]<text>[font]<font>[fontsize]<fontsize>[color]<font color>[x]<x>[y]<y>[]
+						propertiesToParse = 
+						{
+							"str" 		: "s",
+							"font" 		: "s",
+							"fontsize" 	: "s",
+							"color" 	: "s",
+							"x" 		: "f",
+							"y" 		: "f",
+							"w" 		: "f",
+							"h" 		: "f"
+						};
+						break;
+					case "path":
+						// format: [pathstring]M284,193L284,193[stroke]000000[strokeo]1[strokew]10[]
+						propertiesToParse = 
+						{
+							"pathstring": "s",
+							"stroke"	: "s",
+							"strokeo"	: "f",
+							"strokew"	: "f",
+						}
+						break;
+					case "bezier":
+						// format: [pathstring]M284,193L284,193[stroke]000000[strokeo]1[strokew]10[]
+						propertiesToParse = 
+						{
+							"pathstring": "s",
+							"stroke"	: "s",
+							"strokeo"	: "f",
+							"strokew"	: "f",
+						}
+						break;
+					case "trans":
+						// format: [path]<path>[color]<color>[opac]<opac>[mode]<block or isolate>[]
+						propertiesToParse = 
+						{
+							"path" 		: "s",
+							"color" 	: "s",
+							"opac" 		: "f",
+							"mode" 		: "s"
+						}
+						break;
+					case "boundrect":
+						// format: BOUNDRECT::[x]<x>[y]<y>[w]<width>[h]<height>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
+						propertiesToParse = 
+						{
+							"x" 		: "f",
+							"y" 		: "f",
+							"w" 		: "f",
+							"h" 		: "s",
+							"fillc" 	: "s",
+							"fillo" 	: "f",
+							"strokec" 	: "s",
+							"strokeo" 	: "f",
+							"strokew" 	: "f"
+						}
+						break;
+					case "boundellipse":
+						// format: BOUNDELLIPSE::[cx]<center x>[cy]<center y>[rx]<x radius>[ry]<y radius>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
+						propertiesToParse = 
+						{
+							"cx" 		: "f",
+							"cy" 		: "f",
+							"rx" 		: "f",
+							"ry" 		: "f",
+							"fillc" 	: "s",
+							"fillo" 	: "f",
+							"strokec" 	: "s",
+							"strokeo" 	: "f",
+							"strokew" 	: "f"
+						}
+						break;
+				}
+
+				$.each(propertiesToParse, function(attrName, attrType){
+					var parsedAttr = ITE_get_attr(inkObject, attrName, attrType)
+					currObj[attrName] = parsedAttr
+				});
+
+				objects.push({
+					"inkType" : type,
+					"inkProperties" : currObj
+				});
+			}
+		});
+		return objects
+	}
+
 	/* creates final or initial keyframe for fade in and out
 		args:
 			keyframes:          array of keyframes
@@ -7639,7 +7777,10 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					"providerId" : providerID,
 					"experienceReference" : currExperience.data.linkToExperience.embedding.experienceId, //TODO - check this
 					"assetUrl" : "noAssetUrl",
-					"string" : currExperience.data.linkToExperience.embedding.element.datastring.str, //TODO - needs to be parsed further b/c this is what differentiates te three types of annotations
+					"datastring" : currExperience.data.linkToExperience.embedding.element.datastring.str,
+					"inkObjects" : ITE_parseInkDatastring({
+						"datastring" : currExperience.data.linkToExperience.embedding.element.datastring.str
+					}),
 					"keyframes" : ITE_parseInkKeyframes({
 						"track" : currExperience
 					}),
