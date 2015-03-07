@@ -6839,6 +6839,55 @@ TAG.Util.RLH = function (input) {
         var fileArray,
             i;
 
+        //webfileupload
+        /**
+        TAG.Authoring.WebFileUploader(
+            root,
+            TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
+            function (files) {
+                fileArray = files;
+            },
+            function (urls) {
+                var newDoq
+                if (!urls.length && urls.length !== 0) { // check to see whether a single file was returned
+                    urls = [urls];
+                }
+                var newDoq;
+                try {
+                    newDoq = new Worktop.Doq(urls[0]);
+                } catch (error) {
+                    console.log("error in uploading: " + error.message);
+                    return;
+                }
+                mapGuids.push(newDoq.Identifier);
+
+                mapDoqs[newDoq.Identifier] = newDoq;
+                //update changeartwork and linq the map and artwork
+
+                importLoadingOverlay();
+
+                saveRichLocationHistory({
+                    toadd: newDoq.Identifier,
+                });
+
+                //reload (which will show the map that has just been imported)
+                loadMaps();
+
+                //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
+                // TODO this is just in here for testing purposes
+                //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
+                //    console.log('success in changeMap');
+                //}, function () { }, function () { }, function () { }); // TODO RLH TESTING: make sure map doq is updated properly (the next time it's loaded, it should have these metadata)
+            },
+            ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
+            false,
+            function () {
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+            },
+            false // batch upload disabled for now
+        );
+**/
+
         TAG.Authoring.FileUploader(
             root,
             TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
