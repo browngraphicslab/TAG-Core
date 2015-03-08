@@ -49,6 +49,9 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
         	})
         	.css({
         		"z-index"	: 0,
+        		"pointer-events" : "none",
+        		"visibility":"hidden",
+        		"position":"relative",
         		"width"		: "100%",
         		"height"	: "100%"
         	});
@@ -64,6 +67,10 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2
+		})
+
+		$(_viewer.container).css({
+			"position":"absolute"
 		})
 
 
@@ -198,7 +205,31 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		self.imageHasBeenManipulated = false;
 		setSeadragonConfig(duration);
 		_viewer.viewport.fitBounds(state.bounds, false);
-		self.animation = TweenLite.to(_UIControl, duration, {opacity: state.opacity});		
+		self.animation = TweenLite.to(_UIControl, duration, {opacity: state.opacity});
+
+		console.log("animating")
+		//testing
+		/*_viewer.addHandler("animation", 
+			function(){*/
+				if (state.opacity == 0){
+					console.log("Enabling clickthrough")
+					_UIControl.css({
+						"pointer-events": "none",
+						"z-index": "-1",
+						"visibility":"hidden"
+					});
+				} else {
+					console.log("Disabling clickthrough")
+					_UIControl.css({
+						"z-index": "10",
+						"pointer-events":"auto",
+						"visibility":"visible"
+					});
+				}
+			/*}
+		)*/
+		//testing
+
 		self.animation.play(); 
 	};
 

@@ -7596,7 +7596,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			if (inkObject && (inkObject != "")) {
 				
 				var type = inkObject.split("::")[0].toLowerCase(),
-					currObj = {};
+					currObj = {},
+					willParsePathstring = false,
 					propertiesToParse = {};
 
 				switch (type) {
@@ -7623,6 +7624,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 							"strokeo"	: "f",
 							"strokew"	: "f",
 						}
+						willParsePathstring = true;
 						break;
 					case "bezier":
 						// format: [pathstring]M284,193L284,193[stroke]000000[strokeo]1[strokew]10[]
@@ -7633,6 +7635,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 							"strokeo"	: "f",
 							"strokew"	: "f",
 						}
+						willParsePathstring = true;
 						break;
 					case "trans":
 						// format: [path]<path>[color]<color>[opac]<opac>[mode]<block or isolate>[]
@@ -7681,6 +7684,10 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					currObj[attrName] = parsedAttr
 				});
 
+				if (willParsePathstring) {
+					currObj["path"] = ITE_parsePathstring(currObj.pathstring)
+				}
+
 				objects.push({
 					"inkType" : type,
 					"inkProperties" : currObj
@@ -7688,6 +7695,45 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			}
 		});
 		return objects
+	}
+
+	/* parses and returns the path (for an ink) from the pathstring
+		args:
+			pathstring: 		a pathstring
+	*/
+	var ITE_parsePathstring = function(pathstring){
+		var path = [],
+		coords = pathstring.split(" ");
+
+		$.each(coords, function(i, el){
+			var coordstring;
+			if (i == 0) {
+				el = el.split(/[RML]/).filter(
+					function(el){
+						return el !== "";
+					});
+			}
+			path = path.concat(function(){
+				if (Object.prototype.toString.call(el) === '[object Array]'){
+					var res = []
+					for (i=0; i<el.length; i++){
+						var xy = el[i].split(",");
+						res.push({
+							"x" : xy[0],
+							"y" : xy[1]
+						});
+					}
+					return res
+				} else {
+					var xy = el.split(",");
+					return [{
+						"x" : xy[0],
+						"y" : xy[1]
+					}];
+				}
+			}());
+		});
+		return path
 	}
 
 	/* creates final or initial keyframe for fade in and out
