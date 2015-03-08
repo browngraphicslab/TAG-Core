@@ -210,6 +210,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     attachProgressBar:          true,
                     attachFullScreen:           true,
                     attachProgressIndicator:    true, 
+                    fadeControlskey:            true, 
                     hideControls:               false,
                     autoPlay:                   false,
                     autoLoop:                   false,
