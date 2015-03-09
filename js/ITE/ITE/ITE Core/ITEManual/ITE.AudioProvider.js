@@ -1,8 +1,19 @@
+/*
+ * Model of AudioProvider state:
+ * {
+ * 		volume :		Value for track (not control) volume in range [0-1].
+ * 		audioOffset	:	(OPTIONAL) Time offset value in milliseconds from beginning of
+ *						track. Used only in seeking. Normal keyframes shouldn't use this,
+ *						as it could cause tiny audio jumps at the keyframes. 
+ * }
+ */
+
 window.ITE = window.ITE || {};
 
 // ITE.AudioProvider = function (trackData, player, taskManager, orchestrator){
 ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 "use strict";
+
 	//Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
@@ -11,36 +22,40 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 
 	Utils.extendsPrototype(this, _super);
 
+	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
     self.loadKeyframes(trackData.keyframes);
 
-	self.player 		= player;
-	// self.taskManager 	= taskManager;
-	self.timeManager	= timeManager;
-	self.trackData 		= trackData;
-	self.orchestrator	= orchestrator;
-	self.status 		= 3;
+    // Common stuff.
+	self.player 		= player;		// Actual DOM-related ITE player.
+	self.timeManager	= timeManager;	// Reference to common clock for player.
+	self.orchestrator	= orchestrator;	// Reference to common orchestrator, which informs tracks of actions.
 
-	self.animation;
+	// Track data.
+	self.animation;						// The animation of this track.
+	self.trackStartTime = 0;			// Taken from the "time" field of the first keyframe. Will be set in initialization.
+	self.trackData 		= trackData;	// Holds data on the track, such as duration.
+	self.status 		= 3;			// Status: 	1) PLAYING
+										//			2) PAUSED
+										//			3) LOADING
+										// 			4) BUFFERING
 
-	self.trackData   			= trackData;
-
-    //DOM related
+    // DOM related
     var _audio,
     	_UIControl,
     	_audioControls;
 
-	//Start things up...
-    initialize()
+	// Start things up...
+    initialize();
 
    /** 
 	* I/P: none
 	* Initializes track, creates UI, and attachs handlers
 	* O/P: none
 	*/
-	function initialize(){
-		_super.initialize()
+	function initialize() {
+		_super.initialize();
 
-		//Create UI and append to ITEHolder
+		// Create UI and append to ITEHolder.
 		_audio		= $(document.createElement("audio"))
 			.addClass("assetAudio");
 
@@ -52,31 +67,42 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 
 		$("#ITEHolder").append(_UIControl);
 
-		var keyframesArray = self.keyframes.getContents();
-		self.setState(keyframesArray[0]);
+		// Initialize the state to that of the first keyframe, and set track start time.
+		var firstKeyframe = self.keyframes.min();
+		self.setState(getKeyframeState(firstKeyframe));
+
+		// Set the starting time of the track.
+		self.trackStartTime = firstKeyframe.time; 
+
+		// Ready to go.
 		self.status = 2;
 	};
 
 	/** 
-	* I/P: keyframe: a keyframe on this track.
+	* I/P: 	keyframe : 			keyframe to extract state from
+	*		setAudioOffset : 	(OPTIONAL) set to true if we want to include the audioOffset field.
 	* Extracts the state information from this keyframe and returns it.
-	* O/P: state information (used in animation) from keyframe.
+	* O/P: 	state information (used in animation) from keyframe.
 	*/
-	self.getKeyframeState = function(keyframe) {
+	self.getKeyframeState = function(keyframe, setAudioOffset) {
 		var state = {
 						"volume"	: keyframe.volume 
 					};
+		if (setAudioOffset) {
+			state.audioOffset = keyframe.time - self.trackStartTime
+		}
 		return state;
 	};
 
 	/** 
-	* I/P: 	startKeyframe: 	keyframe to lerp from.
-			endKeyframe: 	keyframe to lerp to.
-			interp: 		amount to interpolate.
+	* I/P: 	startKeyframe : 	keyframe to lerp from.
+	*		endKeyframe : 		keyframe to lerp to.
+	*		interp : 			amount to interpolate.
+	*		setAudioOffset : 	(OPTIONAL) set to true if we want to include the audioOffset field.
 	* Creates a linearly interpolated state between start and end keyframes.
-	* O/P: state information (used in animation) from lerped keyframe.
+	* O/P: 	state information (used in animation) from lerped keyframe.
 	*/
-	self.lerpState = function(startKeyframe, endKeyframe, interp) {
+	self.lerpState = function(startKeyframe, endKeyframe, interp, setAudioOffset) {
 		if (!endKeyframe) {
 			return self.getKeyframeState(startKeyframe);
 		}
@@ -85,6 +111,9 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 		var state = {
 						"volume"	: lerpVolume
 					};
+		if (setAudioOffset) {
+			state.audioOffset = startKeyframe.time + (interp * (endKeyframe.time - startKeyframe.time));
+		}
 		return state;
 	};
 
@@ -97,14 +126,15 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 	self.load = function(){
 		_super.load()
 
-		//Sets the image’s URL source
+		// Sets the image’s URL source
 		_audio.attr({
 			//"src"	: itePath + "Assets/TourData/"  + self.trackData.assetUrl,
 			"src"	: self.trackData.assetUrl,
 			"type" 	: self.trackData.type
-		})
+		});
+
 		// When audio has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-		_audio.onload = function (event) {//Is self ever getting called?
+		_audio.onload = function (event) { //Is self ever getting called?
 			self.setStatus(2);
 			self.setState(self.keyframes.min());
 		};
@@ -114,9 +144,9 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 	* I/P: none
 	* Grabs current actual state of audio, and sets savedState to it 
 	* returns savedState
-	* O/P: savedState
+	* O/P: 	state information (used in animation) the track is currently at.
 	*/
-	self.getState = function(){
+	self.getState = function() {
 		self.savedState = {
 			//displayNumber	: self.getPreviousKeyframe().displayNumber,
 			time			: self.timeManager.getElapsedOffset(),
@@ -127,18 +157,20 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 	};
 
    /**
-	* I/P: state	state to make actual audio reflect
+	* I/P: 	state :		state to make actual audio reflect
 	* Sets properties of the image to reflect the input state
 	* O/P: none
 	*/
-	self.setState = function(state){
+	self.setState = function(state) {
 		_audioControls.volume = state.volume;
-		state.audioOffset ? (_audioControls.currentTime = parseFloat(state.audioOffset)) : 0
+		if (state.audioOffset) {
+			_audioControls.currentTime = parseFloat(state.audioOffset);
+		}
 	};
 
  	/** 
-	* I/P: endKeyframe: if we know what keyframe we are animating to, pass it here.
-	* Plays audio asset
+	* I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
+	* Plays audio asset.
 	* O/P: none
 	*/
 	self.play = function(endKeyframe) {
@@ -159,7 +191,9 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 
 		// Get the next keyframe in the sequence and animate.
 		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
-		self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
+		if (nextKeyframe) {
+			self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
+		}
 
 		_audioControls.play();
 	};
@@ -190,18 +224,25 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 			return;
 		}
 
+		// Has this track actually started?
+		var seekTime = self.timeManager.getElapsedOffset();
+		if (seekTime < self.trackStartTime) {
+			return;
+		}
+
 		// Erase any saved state.
 		var prevStatus = self.status;
 		self.pause();
 		self.savedState = null;
 
 		// Update the state based on seeking.
-		var surKeyframes = self.getSurroundingKeyframes(self.timeManager.getElapsedOffset());
+		var surKeyframes = self.getSurroundingKeyframes(seekTime);
 		var interp = 0;
-		if (surKeyframes[1] - surKeyframes[0] !== 0) {
-			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1] - surKeyframes[0]);
+		if (surKeyframes[1].time - surKeyframes[0].time !== 0) {
+			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1].time - surKeyframes[0].time);
 		}
 		var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
+		soughtState.audioOffset = seekTime - self.trackStartTime;
 		self.setState(soughtState);
 
 		// Play or pause, depending on state before being sought.
@@ -215,10 +256,16 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 	interpolates between current state and next keyframe
 	O/P: none
 	*/
-	self.animate = function(duration, state){
-		self.animation =_audio.animate({
-			volume: state.volume*self.player.currentVolumeLevel
-		}, duration*1000);	
+	self.animate = function(duration, state) {
+		self.animation =_audio.animate(
+			{
+				volume: state.volume * self.player.currentVolumeLevel
+			}, 
+			duration * 1000,
+			function() {
+				self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
+			}
+		);	
 	};
 
 
@@ -227,7 +274,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator){
 	* Sets the current volume to the newVolume * value from keyframes, and then animates the audio to the next keyframe 
 	* O/P: none
 	*/
-	self.setVolume = function(newVolume){
+	self.setVolume = function(newVolume) {
 		if (newVolume === 0) {
 			self.toggleMute()
 		} else {	

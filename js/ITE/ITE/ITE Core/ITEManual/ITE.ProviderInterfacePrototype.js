@@ -205,14 +205,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	self.getNextKeyframe = function(time) {
 		var 	time 		= time || this.timeManager.getElapsedOffset()
 				keyframe 	= this.keyframes.min();
-
-		var nn = this.keyframes.nearestNeighbors(time, 1);
-		if (nn[1]) {
-			keyframe = nn[1];
-		} else if (nn[0]) {
-			keyframe = nn[0];
-		}
-		return keyframe || null;
+		return this.keyframes.nearestNeighbors(time, 1)[1] || null;
 	};
 
 	/*
@@ -221,16 +214,9 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	O/P: previousKeyframe: previous keyframe 
 	*/
 	self.getPreviousKeyframe = function(time) {
-	var 	time 		= time || this.timeManager.getElapsedOffset()
-			keyframe 	= this.keyframes.min();
-
-		var nn = this.keyframes.nearestNeighbors(time, -1);
-		if (nn[0]) {
-			keyframe = nn[0];
-		} else if (nn[1]) {
-			keyframe = nn[1];
-		}
-		return keyframe || null;
+		var 	time 		= time || this.timeManager.getElapsedOffset()
+				keyframe 	= this.keyframes.min();
+		return this.keyframes.nearestNeighbors(time, -1)[0] || null;
 	};
 
 	/*

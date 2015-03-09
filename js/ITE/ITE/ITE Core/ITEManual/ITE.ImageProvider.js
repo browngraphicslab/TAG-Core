@@ -15,6 +15,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
 	self.player 		= player;
 	// self.taskManager 	= taskManager;
 	self.timeManager 	= timeManager;
+	self.trackStartTime = 0;
 	self.trackData 		= trackData;
 	self.orchestrator	= orchestrator;
 	self.status 		= 3;
@@ -54,7 +55,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
 
 		var keyframesArray = self.keyframes.getContents();
 		keyframesArray[0] && _UIControl.css("z-index", keyframesArray[0].zIndex);//TODO: clean self up-- self is just to make sure that the asset has the correct z-index. 
-		self.setState(keyframesArray[0]);															// There's also clearly been some mistake if we have to do self check (if there are any keyframes) because why would we have a track with no keyframes...?
+		// There's also clearly been some mistake if we have to do self check (if there are any keyframes) because why would we have a track with no keyframes...?
+		self.setState(keyframesArray[0]);
+		self.trackStartTime = keyframesArray[0].time;
 		self.status = 2;
 
 		//Attach Handlers
@@ -207,16 +210,22 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
 			return;
 		}
 
+		// Has this track actually started?
+		var seekTime = self.timeManager.getElapsedOffset();
+		if (seekTime < self.trackStartTime) {
+			return;
+		}
+
 		// Erase any saved state.
 		var prevStatus = self.status;
 		self.pause();
 		self.savedState = null;
 
 		// Update the state based on seeking.
-		var surKeyframes = self.getSurroundingKeyframes(self.timeManager.getElapsedOffset());
+		var surKeyframes = self.getSurroundingKeyframes(seekTime);
 		var interp = 0;
-		if (surKeyframes[1] - surKeyframes[0] !== 0) {
-			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1] - surKeyframes[0]);
+		if (surKeyframes[1].time - surKeyframes[0].time !== 0) {
+			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1].time - surKeyframes[0].time);
 		}
 		var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
 		self.setState(soughtState);

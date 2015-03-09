@@ -24,7 +24,9 @@ ITE.TimeManager = function(){
 	};
 
 	self.addElapsedTime = function(offset) {
-		self.elapsedOffset += offset;
+		var now = Date.now() / 1000;
+		self.elapsedOffset += (now - self.startingOffset) + offset;
+		self.startingOffset = now;
 	}
 
 		//start the timer
