@@ -74,8 +74,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: "DeepZoomHolder",
-			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.1.1/images/",
-			//prefixUrl			: self.trackData.assetUrl,
+			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
+			//prefixUrl			: this.trackData.assetUrl,
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
@@ -232,22 +232,22 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Update the state based on seeking.
 		var surKeyframes = self.getSurroundingKeyframes(seekTime);
-		if (!surKeyframes[0] || !surKeyframes[1]) {
-			console.log(surKeyframes);
-		}
+		// if (!surKeyframes[0] || !surKeyframes[1]) {
+		// 	console.log(surKeyframes);
+		// }
 		var interp = 0;
 		if (surKeyframes[1].time - surKeyframes[0].time !== 0) {
 			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1].time - surKeyframes[0].time);
 		}
 
 		var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
-		console.log("before: " + surKeyframes[0].time + " seek: " + seekTime + " after: " + surKeyframes[1].time);
-		console.log(surKeyframes[0]);
-		console.log(soughtState);
-		console.log(surKeyframes[1]);
+		// console.log("before: " + surKeyframes[0].time + " seek: " + seekTime + " after: " + surKeyframes[1].time);
+		// console.log(surKeyframes[0]);
+		// console.log(soughtState);
+		// console.log(surKeyframes[1]);
 		self.setState(soughtState);
-		console.log(_viewer);
-		console.log(self.getState());
+		// console.log(_viewer);
+		// console.log(self.getState());
 
 		// Play or pause, depending on state before being sought.
 		if (prevStatus === 1) {
@@ -279,19 +279,19 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			}
 		);
 
-		console.log("animating")
+		// console.log("animating")
 		//testing
 		/*_viewer.addHandler("animation", 
 			function(){*/
 				if (state.opacity == 0){
-					console.log("Enabling clickthrough")
+					// console.log("Enabling clickthrough")
 					_UIControl.css({
 						"pointer-events": "none",
 						"z-index": "-1",
 						"visibility":"hidden"
 					});
 				} else {
-					console.log("Disabling clickthrough")
+					// console.log("Disabling clickthrough")
 					_UIControl.css({
 						"z-index": "10",
 						"pointer-events":"auto",
@@ -511,7 +511,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	    	});
 		_viewer.addHandler(
 			'container-exit', function(evt) {
-				console.log("exited");
+				// console.log("exited");
 				_viewer.raiseEvent('canvas-release', evt);
 				_viewer.raiseEvent('canvas-drag-end', evt);
 				_viewer.raiseEvent('container-release', evt);				
@@ -519,51 +519,5 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		    	//self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		    	//resetSeadragonConfig()
 	    	});
-        // // Allows asset to be dragged, despite the name
-        // TAG.Util_ITE.disableDrag(_deepZoom);
-
-        // _deepZoom.on("mousedown", function() {
-        // 	console.log("mouse down")
-        // })
-        // _deepZoom.on("mouseup", function() {
-        // 	console.log("mouse up")
-        // })
-        // _deepZoom.on("mousemove", function() {
-        // 	console.log("mouse move")
-        // })
-        // _deepZoom.on("click", function() {
-        // 	console.log("click")
-        // })
-
-        // _viewer.addHandler("container-release", function() {
-        // 	console.log("mouseup: " + _deepZoom.mouseup)
-        // 	console.log("mousedown: " + _deepZoom.mousedown)
-
-        // 	_deepZoom.mouseup()
-        // })
-
-        // _mouseTracker.releaseHandler = function(){
-        // 	console.log("Mouse tracker worked!! release")
-        // }
-        // _mouseTracker.pressHandler = function(){
-        // 	console.log("Mouse tracker worked!! press")
-        // }
-
-        // console.log("_mouseTracker: " + Object.keys(_mouseTracker.element))
-
-        /*// Register handlers
-        TAG.Util_ITE.makeManipulatable(_deepZoom[0], {
-            onScroll: function (delta, pivot) {
-                mediaScroll(delta, pivot);
-            },
-            onManipulate: function (res) {
-                res.translation.x = - res.translation.x;        //Flip signs for dragging
-                res.translation.y = - res.translation.y;
-                mediaManip(res); 
-            }
-        }, null, true);
-
-        interactionHandlers.onManipulate 	= mediaManip;
-        interactionHandlers.onScroll		= mediaScroll;    */	
     };
 };
