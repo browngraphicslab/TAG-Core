@@ -143,7 +143,9 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		self.stopDelayStart();
 
 		self.getState();
-		self.animation.stop();
+		if (self.animation) {
+			self.animation.stop();
+		}
 		_audioControls.pause();
 	};
 

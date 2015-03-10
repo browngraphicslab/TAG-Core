@@ -46,8 +46,7 @@ ITE.Orchestrator = function(player) {
 	    self.tourData = tourData;
 	    loadHelper();
 	    self.tourData = tourData;
-	    console.log("TOURRR DATA");
-	    console.log(self.tourData);
+
 	  /**
 	    * I/P: none
 	  	* Helper function to load tour with AJAX (called below)
@@ -90,10 +89,10 @@ ITE.Orchestrator = function(player) {
 
 			switch (trackData.providerId){
 				case "image" : 
-					// self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.timeManager, self));
 					break; 
 				case "video" : 
-					self.trackManager.push(new ITE.VideoProvider(trackData, self.player, self.taskManager, self));
+					self.trackManager.push(new ITE.VideoProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "audio" : 
 					self.trackManager.push(new ITE.AudioProvider(trackData, self.player, self.timeManager, self));
@@ -102,7 +101,7 @@ ITE.Orchestrator = function(player) {
 					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "ink" : 
-					//self.trackManager.push(new ITE.ScribbleProvider(trackData, self.player, self.taskManager, self));
+					//self.trackManager.push(new ITE.ScribbleProvider(trackData, self.player, self.timeManager, self));
 					break;
 				default:
 					throw new Error("Unexpected providerID; '" + trackData.providerId + "' is not a valid providerID");
@@ -142,6 +141,7 @@ ITE.Orchestrator = function(player) {
 		// self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
 		// self.taskManager.play();
 		// TODO: NEW STUFF
+		console.log(trackManager);
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].play();
 		}

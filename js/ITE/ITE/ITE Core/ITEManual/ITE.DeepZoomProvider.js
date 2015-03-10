@@ -206,7 +206,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.getState();
 		self.setState(self.savedState);
-		self.animation.kill();
+		if (self.animation) {
+			self.animation.kill();
+		}
 	};
 
 	/*

@@ -159,8 +159,12 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.stopDelayStart();
 
 		self.getState();
-		self.animation.kill();
-		self.audioAnimation.stop();
+		if (self.animation) {
+			self.animation.kill();
+		}
+		if (self.audioAnimation) {
+			self.audioAnimation.stop();
+		}
 		_videoControls.pause()
 		_videoControls.setAttribute("controls", "controls")
 	};

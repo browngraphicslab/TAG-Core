@@ -141,7 +141,9 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		self.stopDelayStart();
 
 		self.getState();
-		self.animation.kill();
+		if (self.animation) {
+			self.animation.kill();
+		}
 	};
 
 	/*

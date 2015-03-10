@@ -126,18 +126,13 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// If the track hasn't started yet, set a trigger.
 		if (startTime < self.trackStartTime) {
-			console.log("SETTIN A TIMER");
 			var playTrigger = function() { console.log("selfie:"); console.log(self); self.play(); console.log("PLAYED");};
 			self.delayStart(self.trackStartTime - startTime, playTrigger);
 			return;
 		}
 
 		// Get the next keyframe in the sequence and animate.
-		console.log("SWEET THE PLAY WAS TRIGGERED!");
-		console.log("time is " + startTime);
-		console.log(self.keyframes);
 		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
-		console.log(nextKeyframe);
 		if (nextKeyframe) {
 			self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
 		}
@@ -155,9 +150,10 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		self.status = 2;
 
 		self.stopDelayStart();
-
 		self.getState();
-		self.animation.kill();
+		if (self.animation) {
+			self.animation.kill();
+		}
 	};
 
 	/*
