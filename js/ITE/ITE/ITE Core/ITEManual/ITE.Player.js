@@ -277,6 +277,18 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         }
         return String(Math.floor(time/60))+":"+s;
     }
+     /*
+    * I/P:   integer time in sec
+    * updates the progress bar with the given time
+    * O/P:   none
+    */
+    
+    function updateProgressBar(sec){
+        progressBar.css({
+            width : (sec/totalTourDuration)*ITEHolder.width()
+        });
+    }
+    
     /*
     * I/P:   sec (int-- a time in sec)
     * called by timeManager and Orchestrator; updates current displayed time
@@ -287,9 +299,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         progressIndicator.empty();
         var timeString = makeTimeString(sec) + " / "+makeTimeString(totalTourDuration);
         progressIndicator.append(timeString);
+        updateProgressBar(sec);
     };
-
-    
     /*
     * I/P:   none
     * Attaches full screen
