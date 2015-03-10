@@ -46,7 +46,7 @@ var JSSRC = [
 		//ITE DEPENDENCIES
         'js/ITE/ITE/Dependencies/CSSPlugin.min.js',							//ITE
         'js/ITE/ITE/Dependencies/TweenLite.min.js',							//ITE
-        'js/ITE/ITE/Dependencies/openseadragon-bin-1.1.1/openseadragon.js',	//ITE
+        'js/ITE/ITE/Dependencies/openseadragon-bin-1.2.1/openseadragon.js',	//ITE
         'js/ITE/ITE/Dependencies/Hammer.js',								//ITE
         'js/ITE/ITE/Dependencies/Raphael.js',								//ITE
         'js/ITE/ITE/Dependencies/paper/paper-core.min.js',					//ITE
@@ -60,6 +60,7 @@ var JSSRC = [
      	'js/ITE/ITE/ITE Core/ITEManual/ITE.DeepZoomProvider.js',			//ITE
      	'js/ITE/ITE/ITE Core/ITEManual/ITE.AudioProvider.js',				//ITE
      	'js/ITE/ITE/ITE Core/ITEManual/ITE.InkProvider.js',					//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.ScribbleProvider.js',			//ITE
     	'js/ITE/ITE/ITE Core/ITEManual/ITE.TimeManager.js',					//ITE
     	'js/ITE/ITE/ITE Core/ITEManual/ITE.TaskManager.js',					//ITE
     	'js/ITE/ITE/ITE Core/ITEManual/ITE.Orchestrator.js',				//ITE

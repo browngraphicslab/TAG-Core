@@ -5268,7 +5268,7 @@ ITE.DeepZoomProvider = function (trackData, player, taskManager, orchestrator){
 		//_viewer is the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: "DeepZoomHolder",
-			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.1.1/images/",
+			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
