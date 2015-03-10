@@ -446,7 +446,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 width : e.pageX - ITEHolder.offset().left
             })
             timeOffset = progressBar.width()/(progressBar.parent().width()) //timeOffset is currently a percentage of the total time
-       //     orchestrator.seek(timeOffset);
+            orchestrator.seek(timeOffset);
         }
     };
 
