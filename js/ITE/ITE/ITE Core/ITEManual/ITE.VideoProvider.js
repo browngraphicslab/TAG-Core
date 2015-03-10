@@ -128,6 +128,13 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			startTime = self.timeManager.getElapsedOffset();
 		}
 
+		// If the track hasn't started yet, set a trigger.
+		if (startTime < self.trackStartTime) {
+			var playTrigger = function() { self.play() };
+			self.delayStart(self.trackStartTime - startTime, playTrigger);
+			return;
+		}
+
 		// Get the next keyframe in the sequence and animate.
 		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
 		if (nextKeyframe) {
@@ -148,6 +155,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 2;
+
+		self.stopDelayStart();
 
 		self.getState();
 		self.animation.kill();

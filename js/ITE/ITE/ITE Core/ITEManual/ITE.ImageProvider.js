@@ -10,8 +10,8 @@ window.ITE = window.ITE || {};
  * Model of state:
  * 	{
  * 		opacity : 		Opacity of the image. 
- *		top : 			Pixel location of top of image.
  *		left : 			Pixel location of left of image.
+ *		top : 			Pixel location of top of image.
  *		width : 		Pixel width of image.
  *		height : 		Pixel height of image.
  *		time : 			(OPTIONAL) Actual elapsed time, from timeManager. Read-only.
@@ -79,6 +79,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Attach handlers.
 		attachHandlers();
+
+		// Ready to go.
+		self.status = 2;
 	};
 
 	/*
@@ -87,17 +90,17 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function() {
-			_super.load();
+		_super.load();
 
-			// Sets the image’s URL source.
-			_image.attr("src", self.trackData.assetUrl);
+		// Sets the image’s URL source.
+		_image.attr("src", self.trackData.assetUrl);
 
-			// When image has finished loading, set status to “paused” (2),
-			// and set state to first keyframe.
-			_image.onload = function (event) { // Is self ever getting called?
-					self.setStatus(2);
-					self.setState(getKeyframeState(keyframes.min()));
-			};
+		// When image has finished loading, set status to “paused” (2),
+		// and set state to first keyframe.
+		_image.onload = function (event) { // Is self ever getting called?
+				self.status = 2;
+				self.setState(getKeyframeState(keyframes.min()));
+		};
 	};
 
 	/*
@@ -121,8 +124,20 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			startTime = self.timeManager.getElapsedOffset();
 		}
 
+		// If the track hasn't started yet, set a trigger.
+		if (startTime < self.trackStartTime) {
+			console.log("SETTIN A TIMER");
+			var playTrigger = function() { console.log("selfie:"); console.log(self); self.play(); console.log("PLAYED");};
+			self.delayStart(self.trackStartTime - startTime, playTrigger);
+			return;
+		}
+
 		// Get the next keyframe in the sequence and animate.
+		console.log("SWEET THE PLAY WAS TRIGGERED!");
+		console.log("time is " + startTime);
+		console.log(self.keyframes);
 		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
+		console.log(nextKeyframe);
 		if (nextKeyframe) {
 			self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
 		}
@@ -138,6 +153,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 2;
+
+		self.stopDelayStart();
 
 		self.getState();
 		self.animation.kill();
@@ -212,14 +229,18 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			//displayNumber	: self.getPreviousKeyframe().displayNumber,
 			time			: self.timeManager.getElapsedOffset(),
 			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
-			pos : {
-				x		: _UIControl.position().left,
-				y 		: _UIControl.position().top
-			},
-			size: {
-				y	: _UIControl.height(),
-				x	: _UIControl.width()
-			},
+			left 			: _UIControl.position().left,
+			top 			: _UIControl.position().top,
+			width 			: _UIControl.width(),
+			height 			: _UIControl.height()
+			// pos : {
+			// 	x		: _UIControl.position().left,
+			// 	y 		: _UIControl.position().top
+			// },
+			// size: {
+			// 	y	: _UIControl.height(),
+			// 	x	: _UIControl.width()
+			// },
 		};	
 		return self.savedState;
 	};
@@ -229,13 +250,13 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Sets properties of the image to reflect the input state.
 	 * O/P: 	none
 	 */
-	self.setState = function(state){
+	self.setState = function(state) {
 		_UIControl.css({
-			"left":			state.pos.x,
-			"top":			state.pos.y,
-			"height":		state.size.y,
-			"width":		state.size.x,
-			"opacity":		state.opacity
+			"opacity":		state.opacity,
+			"left":			state.left,
+			"top":			state.top,
+			"width":		state.width,
+			"height":		state.height
 		});
 	};
 
@@ -247,8 +268,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	self.getKeyframeState = function(keyframe) {
 		var state = {
 						"opacity"	: keyframe.opacity,
-						"top"		: (500*keyframe.pos.y/100) + "px",
 						"left"		: (1000*keyframe.pos.x/100) + "px",
+						"top"		: (500*keyframe.pos.y/100) + "px",
 						"width"		: (1000*keyframe.size.x/100) + "px",
 						"height"	: (500*keyframe.size.y/100) + "px"
 					};

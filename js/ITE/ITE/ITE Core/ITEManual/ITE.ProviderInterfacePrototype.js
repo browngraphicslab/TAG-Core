@@ -21,6 +21,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	self.orchestrator	= orchestrator;	// Reference to common orchestrator, which informs tracks of actions.
 
 	// Track data.
+	self.startDelayTimer;				// Timer used to delay the start of a track.
 	self.animation;						// The animation of this track.
 	self.trackStartTime = 0;			// Taken from the "time" field of the first keyframe. Should be set in initialization.
 	self.trackData 		= trackData;	// Holds data on the track, such as duration.
@@ -69,6 +70,7 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	 * Constructs the AVL tree of keyframes for a track.
 	 * O/P: 	none
 	 */
+
 	self.loadKeyframes = function(keyframeData) {
 		for (var i = 0; i < keyframeData.length; i++) {
 			var keyframe = keyframeData[i];
@@ -97,19 +99,41 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	};
 
 	/*
-     * I/P: 	state: 		State to be animated to.
+     * I/P: 	state : 		State to be animated to.
 	 * O/P: 	nothing
 	 */
 	self.animateMedia = function(state) {
-         var container = document.createElement("div");
-         container.appendChild(media);
-         TweenLite.to(container, "duration", state);
+    	var container = document.createElement("div");
+        container.appendChild(media);
+        TweenLite.to(container, "duration", state);
 	};
 
 	/*
-	 * I/P: 	time: 			(OPTIONAL) Time to get next keyframe from; defaults to timeManager.getElapsedTime().
+	 * I/P: 	waitTime : 		Time to wait before triggering first keyframe, in milliseconds.
+	 * 			onTimeout : 	Function to call when the timer is done.
+	 * Waits specified time to call specified function; used to trigger playing. 
+	 * O/P: 	none
+	 */
+	 self.delayStart = function(waitTime, onTimeout) {
+	 	self.stopDelayStart();
+		self.startDelayTimer = setTimeout(onTimeout, waitTime * 1000);
+	 };
+
+	/*
+	 * I/P: 	none
+	 * Stops the delayed start timer.
+	 * O/P: 	none
+	 */
+	self.stopDelayStart = function() {
+		if (self.startDelayTimer) {
+	 		clearTimeout(self.startDelayTimer);
+	 	}
+	}
+
+	/*
+	 * I/P: 	time : 			(OPTIONAL) Time to get next keyframe from; defaults to timeManager.getElapsedTime().
 	 * Gets the next keyframe to be displayed immediately after specified or elapsed time.
-	 * O/P: 	nextKeyframe: 	Keyframe that immediately follows input time.
+	 * O/P: 	nextKeyframe : 	Keyframe that immediately follows input time.
 	 */
 	self.getNextKeyframe = function(time) {
 		var 	time 		= time || this.timeManager.getElapsedOffset()
@@ -118,9 +142,9 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	};
 
 	/*
-	 * I/P: 	time: 			(OPTIONAL) Time to get previous keyframe from; defaults to timeManager.getElapsedTime().
+	 * I/P: 	time : 			(OPTIONAL) Time to get previous keyframe from; defaults to timeManager.getElapsedTime().
 	 * Gets the previous keyframe displayed immediately before specified or elapsed time.
-	 * O/P: 	nextKeyframe: 	Keyframe that immediately precedes input time.
+	 * O/P: 	nextKeyframe : 	Keyframe that immediately precedes input time.
 	 */
 	self.getPreviousKeyframe = function(time) {
 		var 	time 		= time || this.timeManager.getElapsedOffset()
