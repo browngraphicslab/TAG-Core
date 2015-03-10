@@ -1,169 +1,110 @@
 window.ITE = window.ITE || {};
 
-// ITE.ImageProvider = function (trackData, player, taskManager, orchestrator){
-ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
-	//Extend class from ProviderInterfacePrototype
+/*
+ * I/P: 	trackData : 	Holds data on the track, such as duration.
+ *			player : 		Reference to actual DOM-related ITE player.
+ *			timeManager : 	Reference to common clock for player.
+ *			orchestrator : 	Reference to common orchestrator, which informs tracks of actions.
+ * Provider for an image track. 
+ * 
+ * Model of state:
+ * 	{
+ * 		opacity : 		Opacity of the image. 
+ *		top : 			Pixel location of top of image.
+ *		left : 			Pixel location of left of image.
+ *		width : 		Pixel width of image.
+ *		height : 		Pixel height of image.
+ *		time : 			(OPTIONAL) Actual elapsed time, from timeManager. Read-only.
+ * 	}
+ * O/P: 	none
+ */
+ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
+
+	// Extend class from ProviderInterfacePrototype
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
 		_super 		= new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
 		self 		= this;
-
 	Utils.extendsPrototype(this, _super);
 
+	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
     self.loadKeyframes(trackData.keyframes);
 
-	self.player 		= player;
-	// self.taskManager 	= taskManager;
-	self.timeManager 	= timeManager;
-	self.trackStartTime = 0;
-	self.trackData 		= trackData;
-	self.orchestrator	= orchestrator;
-	self.status 		= 3;
-	// self.savedState		= keyframes[0];
-	self.animation,
-	self.interactionAnimation;
-
-	interactionHandlers 		= {},
-	movementTimeouts 			= [],
-	self.trackData   			= trackData;
-
-    //DOM related
+    // DOM related.
     var _image,
     	_UIControl;
 
+    // Various animation/manipulation variables.
+	self.interactionAnimation;
+	var interactionHandlers 		= {},
+		movementTimeouts 			= [];
 
-	//Start things up...
-    initialize()
+	// Start things up...
+    initialize();
 
-   /** 
-	* I/P: none
-	* Initializes track, creates UI, and attachs handlers
-	* O/P: none
-	*/
-	function initialize(){
-		_super.initialize()
+    ///////////////////////////////////////////////////////////////////////////
+	// ProviderInterface functions.
+	///////////////////////////////////////////////////////////////////////////
 
-		//Create UI and append to ITEHolder
+   	/*
+	 * I/P: 	none
+	 * Initializes track, creates UI, and attaches handlers.
+	 * O/P: 	none
+	 */
+	function initialize() {
+		_super.initialize();
+
+		// Create UI and append to ITEHolder.
 		_image		= $(document.createElement("img"))
 			.addClass("assetImage");
-
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
 			.append(_image);
-
 		$("#ITEHolder").append(_UIControl);
 
-		var keyframesArray = self.keyframes.getContents();
-		keyframesArray[0] && _UIControl.css("z-index", keyframesArray[0].zIndex);//TODO: clean self up-- self is just to make sure that the asset has the correct z-index. 
-		// There's also clearly been some mistake if we have to do self check (if there are any keyframes) because why would we have a track with no keyframes...?
-		self.setState(keyframesArray[0]);
-		self.trackStartTime = keyframesArray[0].time;
-		self.status = 2;
+		// Initialize the state to that of the first keyframe, and set track start time.
+		var firstKeyframe = self.keyframes.min();
+		self.setState(self.getKeyframeState(firstKeyframe));
 
-		//Attach Handlers
-		attachHandlers()
+		// Set the starting time of the track.
+		self.trackStartTime = firstKeyframe.time;
 
-	};
-
-	self.getKeyframeState = function(keyframe) {
-		var state = {
-						"opacity"	: keyframe.opacity,
-						"top"		: (500*keyframe.pos.y/100) + "px",
-						"left"		: (1000*keyframe.pos.x/100) + "px",
-						"width"		: (1000*keyframe.size.x/100) + "px",
-						"height"	: (500*keyframe.size.y/100) + "px"
-					};
-		return state;
-	};
-
-	/** 
-	* I/P: 	startKeyframe: 	keyframe to lerp from.
-			endKeyframe: 	keyframe to lerp to.
-			interp: 		amount to interpolate.
-	* Creates a linearly interpolated state between start and end keyframes.
-	* O/P: state information (used in animation) from lerped keyframe.
-	*/
-	self.lerpState = function(startKeyframe, endKeyframe, interp) {
-		if (!endKeyframe) {
-			return self.getKeyframeState(startKeyframe);
+		// Formatting z-index of first keyframe.
+		// TODO: clean self up-- self is just to make sure that the asset has the correct z-index. 
+		// There's also clearly been some mistake if we have to do self check (if there are any keyframes) 
+		// because why would we have a track with no keyframes...?
+		if (firstKeyframe) {
+			_UIControl.css("z-index", firstKeyframe.zIndex); 
 		}
-		
-		var lerpOpacity = startKeyframe.opacity + (interp * (endKeyframe.opacity - startKeyframe.opacity));
-		var lerpPosX = startKeyframe.pos.x + (interp * (endKeyframe.pos.x - startKeyframe.pos.x));
-		var lerpPosY = startKeyframe.pos.y + (interp * (endKeyframe.pos.y - startKeyframe.pos.y));
-		var lerpSizeX = startKeyframe.size.x + (interp * (endKeyframe.size.x - startKeyframe.size.x));
-		var lerpSizeY = startKeyframe.size.y + (interp * (endKeyframe.size.y - startKeyframe.size.y));
-		var state = {
-						"opacity"	: lerpOpacity,
-						"top"		: (500 * lerpPosY / 100) + "px",
-						"left"		: (1000 * lerpPosX / 100) + "px",
-						"width"		: (1000 * lerpSizeX / 100) + "px",
-						"height"	: (500 * lerpSizeY / 100) + "px"
-					};
-		return state;
+
+		// Attach handlers.
+		attachHandlers();
 	};
 
+	/*
+	 * I/P: 	none
+	 * Loads actual image asset.
+	 * O/P: 	none
+	 */
+	self.load = function() {
+			_super.load();
 
-   /** 
-	* I/P: none
-	* Loads actual image asset, and sets status to paused when complete
-	* O/P: none
-	*/
-	self.load = function(){
-			_super.load()
+			// Sets the image’s URL source.
+			_image.attr("src", self.trackData.assetUrl);
 
-			//Sets the image’s URL source
-			_image.attr("src", self.trackData.assetUrl)
-			// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-			_image.onload = function (event) {//Is self ever getting called?
+			// When image has finished loading, set status to “paused” (2),
+			// and set state to first keyframe.
+			_image.onload = function (event) { // Is self ever getting called?
 					self.setStatus(2);
-					self.setState(keyframes.min());
+					self.setState(getKeyframeState(keyframes.min()));
 			};
 	};
 
-   /** 
-	* I/P: none
-	* Grabs current actual state of image, and sets savedState to it 
-	* returns savedState
-	* O/P: savedState
-	*/
-	self.getState = function(){
-		self.savedState = {
-			//displayNumber	: self.getPreviousKeyframe().displayNumber,
-			time			: self.timeManager.getElapsedOffset(),
-			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
-			pos : {
-				x		: _UIControl.position().left,
-				y 		: _UIControl.position().top
-			},
-			size: {
-				y	: _UIControl.height(),
-				x	: _UIControl.width()
-			},
-		};	
-		return self.savedState;
-	};
-
-   /**
-	* I/P: state	state to make actual image reflect
-	* Sets properties of the image to reflect the input state
-	* O/P: none
-	*/
-	self.setState = function(state){
-		_UIControl.css({
-			"left":			state.pos.x,
-			"top":			state.pos.y,
-			"height":		state.size.y,
-			"width":		state.size.x,
-			"opacity":		state.opacity
-		});
-	};
-
-	/** 
-	* I/P: endKeyframe: if we know what keyframe we are animating to, pass it here.
-	* Plays audio asset
-	* O/P: none
-	*/
+	/*
+	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
+	 * Plays image asset.
+	 * O/P: 	none
+	 */
 	self.play = function(endKeyframe) {
 		if (self.status === 3) {
 			return;
@@ -182,15 +123,17 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
 
 		// Get the next keyframe in the sequence and animate.
 		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
-		self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
+		if (nextKeyframe) {
+			self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
+		}
 	};
 
-	/** 
-	* I/P: none
-	* Pauses image asset
-	* O/P: none
-	*/
-	self.pause = function(){
+	/*
+	 * I/P: 	none
+	 * Pauses image asset.
+	 * O/P: 	none
+	 */
+	self.pause = function() {
 		if (self.status === 3) {
 			return;
 		}
@@ -200,11 +143,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
 		self.animation.kill();
 	};
 
-	/** 
-	* I/P: none
-	* Informs image asset of seek. TimeManager will have been updated.
-	* O/P: none
-	*/
+	/*
+	 * I/P: 	none
+	 * Informs image asset of seek. TimeManager will have been updated.
+	 * O/P: 	none
+	 */
 	self.seek = function() {
 		if (self.status === 3) {
 			return;
@@ -237,39 +180,135 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
 	};
 
 	/* 
-	I/P: none
-	interpolates between current state and next keyframe
-	O/P: none
-	*/
-	self.animate = function(duration, state){
-		self.animation = TweenLite.to(_UIControl, duration, state);		
+	 * I/P: 	duration : 		Length of time animation should take, in milliseconds.
+	 * 			state : 		State to animate to, from current state.
+	 * Animates from current state to provided state in specified duration.
+	 * O/P: 	none
+	 */
+	self.animate = function(duration, state) {
+		// OnComplete function.
+		state.onComplete = function () {
+			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
+		};
+
+		// Animation.
+		self.animation = TweenLite.to(
+			// What object to animate.
+			_UIControl, 
+			// Duration of animation.
+			duration, 
+			// New state for animation.
+			state);		
 		self.animation.play();
 	};
 
-	/* 
-	* I/P: inkTrack ink track to attach to self asset
-	* Adds ink as an overlay
-	* O/P: none
-	*/
-	//TODO: implement
-	self.addInk = function(inkTrack){
-		console.log("position().top: " + _UIControl.position().top)
-		console.log("offset().top: " + _UIControl.offset().top)
-
+	/*
+	 * I/P: 	none
+	 * Grabs current actual state of image, and sets savedState to it.
+	 * O/P: 	state : 	Object holding track's current state, as used in animation.
+	 */
+	self.getState = function() {
+		self.savedState = {
+			//displayNumber	: self.getPreviousKeyframe().displayNumber,
+			time			: self.timeManager.getElapsedOffset(),
+			opacity			: window.getComputedStyle(_UIControl[0]).opacity,
+			pos : {
+				x		: _UIControl.position().left,
+				y 		: _UIControl.position().top
+			},
+			size: {
+				y	: _UIControl.height(),
+				x	: _UIControl.width()
+			},
+		};	
+		return self.savedState;
 	};
 
+	/*
+	 * I/P: 	state :		State to make actual image reflect.
+	 * Sets properties of the image to reflect the input state.
+	 * O/P: 	none
+	 */
+	self.setState = function(state){
+		_UIControl.css({
+			"left":			state.pos.x,
+			"top":			state.pos.y,
+			"height":		state.size.y,
+			"width":		state.size.x,
+			"opacity":		state.opacity
+		});
+	};
 
+	/* 
+	 * I/P: 	keyframe : 			Keyframe to extract state from.
+	 * Extracts the state information from this keyframe and returns it.
+	 * O/P: 	state : 			Object holding keyframe's state, as used in animation.
+	 */
+	self.getKeyframeState = function(keyframe) {
+		var state = {
+						"opacity"	: keyframe.opacity,
+						"top"		: (500*keyframe.pos.y/100) + "px",
+						"left"		: (1000*keyframe.pos.x/100) + "px",
+						"width"		: (1000*keyframe.size.x/100) + "px",
+						"height"	: (500*keyframe.size.y/100) + "px"
+					};
+		return state;
+	};
 
-   /** 
-	* I/P: none
-	* Return a set of interactionHandlers attached to asset from provider
-	*/
+	/*
+	 * I/P: 	startKeyframe : 	Keyframe to lerp from.
+	 *			endKeyframe : 		Keyframe to lerp to.
+	 *			interp : 			Amount to interpolate.
+	 * Creates a linearly interpolated state between start and end keyframes.
+	 * O/P: 	state : 			Object holding lerped keyframe's state, as used in animation.
+	 */
+	self.lerpState = function(startKeyframe, endKeyframe, interp) {
+		if (!endKeyframe) {
+			return self.getKeyframeState(startKeyframe);
+		}
+		
+		var lerpOpacity = startKeyframe.opacity + (interp * (endKeyframe.opacity - startKeyframe.opacity));
+		var lerpPosX = startKeyframe.pos.x + (interp * (endKeyframe.pos.x - startKeyframe.pos.x));
+		var lerpPosY = startKeyframe.pos.y + (interp * (endKeyframe.pos.y - startKeyframe.pos.y));
+		var lerpSizeX = startKeyframe.size.x + (interp * (endKeyframe.size.x - startKeyframe.size.x));
+		var lerpSizeY = startKeyframe.size.y + (interp * (endKeyframe.size.y - startKeyframe.size.y));
+		var state = {
+						"opacity"	: lerpOpacity,
+						"top"		: (500 * lerpPosY / 100) + "px",
+						"left"		: (1000 * lerpPosX / 100) + "px",
+						"width"		: (1000 * lerpSizeX / 100) + "px",
+						"height"	: (500 * lerpSizeY / 100) + "px"
+					};
+		return state;
+	};
+
+	///////////////////////////////////////////////////////////////////////////
+	// ImageProvider functions.
+	///////////////////////////////////////////////////////////////////////////
+
+	/* 
+	 * I/P: 	inkTrack : 		Ink track to attach to self asset.
+	 * Adds ink as an overlay.
+	 * O/P: 	none
+	 */
+	self.addInk = function(inkTrack) {
+		// TODO: implement
+		console.log("position().top: " + _UIControl.position().top)
+		console.log("offset().top: " + _UIControl.offset().top)
+	};
+
+   	/*
+	 * I/P: 	none
+	 * Return a set of interactionHandlers attached to asset from provider.
+	 * O/P: 	none
+	 */
 	function getInteractionHandlers() {};
  
-    /**
-     * I/P {Object} res     object containing hammer event info
-     * Drag/manipulation handler for associated media
-     * Manipulation for touch and drag events
+    /*
+     * I/P: 	res : 		Object containing hammer event info.
+     * Drag/manipulation handler for associated media.
+     * Manipulation for touch and drag events.
+     * O/P: 	none
      */
     function mediaManip(res) {
         var top     	= _UIControl.position().top,
@@ -278,27 +317,30 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
             height     	= _UIControl.height(),
             finalPosition;
 
-        // If the player is playing, pause it
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
+        // If the player is playing, pause it.
+    	if (self.orchestrator.status === 1) {
+    		self.player.pause();
+    	}
 
     	if (!res.eventType){
 			return    	
 		}
 
-        // If event is initial touch on artwork, save current position of media object to use for animation
+        // If event is initial touch on artwork, save current position of media object to use for animation.
         if (res.eventType === 'start') {
             startLocation = {
                 x: left,
                 y: top
             };
         }	
-        // Target location (where object should be moved to)
+
+        // Target location (where object should be moved to).
         finalPosition = {
             x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
             y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
         };   
 
-        // Animate to target location
+        // Animate to target location.
         self.interactionAnimation && self.interactionAnimation.kill();
         self.interactionAnimation = TweenLite.to(_UIControl, .5, {
         	top: finalPosition.y,
@@ -306,11 +348,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
         });		
     };
 	
-
-    /**
-     * I/P {Number} scale     scale factor
-     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
-     * Zoom handler for associated media (e.g., for mousewheel scrolling)
+    /*
+     * I/P: 	scale : 	Scale factor.	
+     *			pivot : 	Location of event (x,y).
+     * Scroll/pinch-zoom handler for makeManipulatable on the DeepZoom image.
+     * O/P: 	none
      */
     function mediaScroll(scale, pivot) {
     	var t    	= _UIControl.position().top,
@@ -324,10 +366,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
             newX,
             newY;
 
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
+    	if (self.orchestrator.status === 1) {
+    		self.player.pause();
+    	}
 
-        // Constrain new width
-        if((newW < minW) || (newW > maxW)) {
+        // Constrain new width.
+        if ((newW < minW) || (newW > maxW)) {
             newW 	= Math.min(maxW, Math.max(minW, newW));
         };
 
@@ -337,7 +381,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
         newX 	= l + pivot.x*(1-scale);
        	newY 	= t + pivot.y*(1-scale); 
 
-       	//Animate _UIControl to self new position
+       	// Animate _UIControl to self new position.
         self.interactionAnimation && self.interactionAnimation.kill();
         self.interactionAnimation = TweenLite.to(_UIControl, .05, {
         	top: newY,
@@ -347,16 +391,16 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator){
         });	
     };
     
-
-    /** 
-	* I/P: none
-	* Initializes handlers 
-	*/
+    /*
+	 * I/P: 	none
+	 * Initializes handlers.
+	 * O/P: 	none
+	 */
     function attachHandlers() {
-        // Allows asset to be dragged, despite the name
+        // Allows asset to be dragged, despite the name.
         TAG.Util_ITE.disableDrag(_UIControl);
 
-        // Register handlers
+        // Register handlers.
         TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
             onManipulate: mediaManip,
             onScroll:     mediaScroll

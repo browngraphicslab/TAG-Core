@@ -46,7 +46,8 @@ ITE.Orchestrator = function(player) {
 	    self.tourData = tourData;
 	    loadHelper();
 	    self.tourData = tourData;
-
+	    console.log("TOURRR DATA");
+	    console.log(self.tourData);
 	  /**
 	    * I/P: none
 	  	* Helper function to load tour with AJAX (called below)
