@@ -303,6 +303,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var tileCircle = TAG.Util.showProgressCircle(tileDiv, progressCircCSS, '0px', '0px', false);
         tileLoadingArea.append(tileCircle);
         */
+        
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
@@ -758,25 +759,37 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionDots[collection.Identifier].css('background-color', 'white');
             }                
 
+            function loadPage(){
+                console.log("Button was clicked!");
+            }
 
             // To show/hide dropdown menu
             function showMenu(id) {
                 //console.log(visibleCollections.toString());
                 var menu = document.getElementById(id);
-                for (var i = 0; i < visibleCollections.length; i++) {         
-                    var para = document.createElement("p");
-                    var newNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
-                    menu.appendChild(para);
-                    para.appendChild(newNode);
+                if (menu.hasChildNodes() == false) {
+                    for (var i = 0; i < visibleCollections.length; i++) {
+                        var para = document.createElement("p");
+                        var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
+                        var btnNode = document.createElement("BUTTON");
+                        btnNode.style.border = "none";
+                        menu.appendChild(para);
+                        //txtNode.addEventListener("click", loadPage());
+                        btnNode.onclick = "loadPage()";
+                        para.appendChild(btnNode);
+                        btnNode.appendChild(txtNode);
+                    }
+
                 }
+
                 if (menu.style.display == 'block') {
                     menu.style.display = 'none';
                 } else {
                     menu.style.display = 'block';
                 }
-                
                
             }
+
 
             // Add collection title
             mainCollection.addClass('mainCollection');
