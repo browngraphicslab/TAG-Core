@@ -432,6 +432,9 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         progressIndicator.css({ 'opacity' : 1 })
         $("#backButton").css({ 'opacity' : 1 })
         $("#linkButton").css({ 'opacity' : 1 })
+        isMuted ? mute()   : unMute()
+        isFullScreen ? enableFullScreen() : disableFullScreen()
+        isLooped ? loop() : unLoop()
     }
 
     /*
