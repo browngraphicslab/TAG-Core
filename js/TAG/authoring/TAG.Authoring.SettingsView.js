@@ -553,7 +553,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                 tobj.item = "settings_view";
                 tobj.time_spent = SETTINGSVIEW_TIMER.get_elapsed();
-                console.log("settings view spent time: " + tobj.time_spent);
+                //console.log("settings view spent time: " + tobj.time_spent);
             });
 
             TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
@@ -3229,9 +3229,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
                     middleLoading.hide();
+                    hideUploadingProgress()
                 });
             } else {
                 middleLoading.hide();
+                hideUploadingProgress()
             }
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
@@ -3946,9 +3948,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function createAsset() {
         uploadFile(TAG.Authoring.FileUploadTypes.AssociatedMedia, function (urls, names, contentTypes, files) {
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+
+            //implementing background uploads - david
+            console.log("createAsset called")
+            //prepareNextView(false);
+            //clearRight();
+            //prepareViewer(true);
 
             if(files.length > 0) {
                 durationHelper(0);
@@ -3978,7 +3983,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 if (done >= total) {
-                    loadAssocMediaView(toScroll.Identifier);
+                    if (inAssociatedView) {
+                        loadAssocMediaView(toScroll.Identifier);
+                    } else {
+                        hideUploadingProgress()
+                    }
                 } else {
                     durationHelper(done);
                 }
@@ -4428,9 +4437,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
                     middleLoading.hide();
+                    hideUploadingProgress()
                 });
             } else {
                 middleLoading.hide();
+                hideUploadingProgress()
             }
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
@@ -5019,20 +5030,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         $(popup).show();
     }
 
+    function hideUploadingProgress() {
+        //updates loading UI
+        console.log("FINISHED THE UPLOAD PROCESS")
+        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+        $('.progressBarUploads').remove()
+    }
+
     /**Create an artwork (import), possibly more than one
      * @method createArtwork
      */
     function createArtwork() {
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
-            var check, i, url, name, done=0, total=urls.length, durations=[], toScroll, alphaName;
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
+
+            //implementing background uploads - david
+            console.log("createArtwork called")
+            //prepareNextView(false);
+            //clearRight();
+            //prepareViewer(true);
 
             function incrDone() {
                 done++;
                 if (done >= total) {
-                    loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
+                    if (inArtworkView) {
+                        loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
+                    } else {
+                        hideUploadingProgress()
+                    }
                 } else {
                     durationHelper(done);
                 }
@@ -7218,7 +7243,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     names = [names];
                 }
                 for (i = 0; i < urls.length; i++) {
-                    console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
+                    //console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
                 }
                 callback(urls, names, contentTypes, fileArray);
             },

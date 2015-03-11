@@ -489,11 +489,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      */
     function removeOverlay() {
         //uploadingOverlay.remove();
-
-        //updates loading UI
-        console.log("FINISHED THE UPLOAD")
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        $('.progressBarUploads').remove()
     }
 
     /**
