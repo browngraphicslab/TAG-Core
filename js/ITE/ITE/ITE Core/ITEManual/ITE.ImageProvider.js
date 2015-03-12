@@ -124,7 +124,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// If the track hasn't started yet, set a trigger.
 		if (startTime < self.firstKeyframe.time) {
-			var playTrigger = function() { console.log("selfie:"); console.log(self); self.play(); console.log("PLAYED");};
+			var playTrigger = function() { self.play(); };
 			self.delayStart(self.firstKeyframe.time - startTime, playTrigger);
 			return;
 		}

@@ -27,7 +27,7 @@ ITE.Orchestrator = function(player) {
     * Once the asset is loaded, the initializeTracks() is called, and when tracks are ready, the tour is played. 
     * O/P: none
     */
-	self.load = function(dataURL){
+	self.load = function(dataURL) {
 		var tourData,
 			AJAXreq = new XMLHttpRequest(),
 			i;
@@ -137,28 +137,19 @@ ITE.Orchestrator = function(player) {
 				return;
 			}
 		}
-		// TODO: OLD STUFF
-		// self.taskManager.scheduledTasks.sort(function(a, b){return a.timerOffset-b.timerOffset});
-		// self.taskManager.play();
-		// TODO: NEW STUFF
-		console.log(trackManager);
+
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].play();
 		}
 		self.timeManager.startTimer();
-		// TODO: END
 		self.status = 1;
 	}
 
 	function pause(){
-		// TODO: OLD
-		// self.taskManager.pause();
-		// TODO: NEW
 		self.timeManager.stopTimer();
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].pause();
 		}
-		// TODO: END
 		self.status = 2;
 	}
 

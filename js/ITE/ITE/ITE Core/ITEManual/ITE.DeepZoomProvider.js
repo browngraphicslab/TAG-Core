@@ -149,13 +149,19 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 		self.status = 1;
 
+		// TODO: was there a reason this was a callback? I just moved the contents of this function 
+		// to where the callback was previously added, and now reverting the state seems to work...
+		/*
 		// Callback function if image has been manipulated.
 		self.animationCallback = function() {
+			console.log("CALLBACK");
+			console.log(self);
 			var nextKeyframe = endKeyframe || self.getNextKeyframe(self.savedState.time);
 			self.animate(nextKeyframe.time - self.savedState.time, self.getKeyframeState(nextKeyframe));
 			self.savedState = null;	
 			_viewer.removeHandler("animation-finish", self.animationCallback)
 		}
+		*/
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;
@@ -163,7 +169,11 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			// If manipulated, use callback.
 			if (self.imageHasBeenManipulated) {
 				self.setState(self.savedState);
-				_viewer.addHandler("animation-finish", self.animationCallback);	
+				var nextKeyframe = endKeyframe || self.getNextKeyframe(self.savedState.time);
+				self.animate(nextKeyframe.time - self.savedState.time, self.getKeyframeState(nextKeyframe));
+				self.savedState = null;	
+				// TODO: see above... is this callback necessary?
+				//_viewer.addHandler("animation-finish", self.animationCallback);	
 				return;
 			}
 			// Otherwise, just revert back to saved state.
