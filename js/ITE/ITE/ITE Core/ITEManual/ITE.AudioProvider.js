@@ -319,5 +319,4 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			_audioControls.muted = false;
 		} 
 	};
-
 };

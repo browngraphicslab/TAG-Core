@@ -7262,6 +7262,59 @@ TAG.Util.Artwork = (function () {
 		return holder;
 	}
 })();
+////////////////////////////////////////////////////////////////////////////////////
+//				ITE PARSING
+////////////////////////////////////////////////////////////////////////////////////
+/*	TEMPLATE FOR TOUR DATASTRUCTURE: {
+*
+*		guid: guid
+*		timestamp: time
+*		totalDuration: duration
+*		tourTitle: title
+*		tracks:[], an array of tracks (see below for structure)
+*}
+*
+*	TEMPLATE FOR TRACK DATASTRUCTURE: {
+*
+*	name: name of track,
+*	assetURL: url of where track resources are stored to be loaded. Inks DO NOT have asset URLs
+*	providerID: image, video, audio, deepZoom, or ink
+*	zIndex: zIndex for proper layering
+*	keyframes: an array of all keyframes. The specific properties depend on the track type, and are as follows:
+*
+*		IMAGE:
+*			dispNum: display number
+*			time: time
+*			opacity: opacity
+*			pos{x, y}: position in x, y
+*			size{x, y}: size
+*
+*		DEEPZOOM:
+*			dispNum: display number
+*			time: time
+*			opacity: opacity
+*			pos{x, y}: position in x, y
+*			scale: scale
+*
+*		AUDIO:
+*			dispNum: display number
+*			time: time
+*			audioOffset: offset from beginning of audio track itsself
+*			volume: volume
+*
+*		VIDEO:
+*			dispNum: display number
+*			time: time
+*			opacity: opacity
+*			pos{x, y}: position in x, y
+*			size{x, y}: size	
+*			volume: volume
+*			videoOffset: offset from the beginning of the video itsself
+*			
+*		INKS: TBD depending on implementation
+*	}
+*
+*/
 
 //Utilities for RIN parsing
 TAG.Util.RIN_TO_ITE = function (tour) {
