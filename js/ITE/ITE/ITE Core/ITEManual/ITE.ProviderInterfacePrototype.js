@@ -21,17 +21,18 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	self.orchestrator	= orchestrator;	// Reference to common orchestrator, which informs tracks of actions.
 
 	// Track data.
-	self.startDelayTimer;				// Timer used to delay the start of a track.
-	self.animation;						// The animation of this track.
-	self.trackStartTime = 0;			// Taken from the "time" field of the first keyframe. Should be set in initialization.
-	self.trackData 		= trackData;	// Holds data on the track, such as duration.
-	self.savedState		= null; 		// The last saved state of the track.
-	self.status			= 3;			// Status of this track:
-										// (1) PLAYING
-										// (2) PAUSED
-										// (3) LOADING
-										// (4) BUFFERING
-	self.keyframes      = new AVLTree(	// AVL tree holding keyframes. Call self.loadKeyframes(keyframeData) to construct in initialize().
+	self.startDelayTimer;						// Timer used to delay the start of a track.
+	self.animation;								// The animation of this track.
+	self.firstKeyframe  = null;					// First keyframe. Should be set in initialization.
+	self.lastKeyframe  	= null;					// Last keyframe. Should be set in initialization.
+	self.trackData 		= trackData;			// Holds data on the track, such as duration.
+	self.savedState		= null; 				// The last saved state of the track.
+	self.status			= 3;					// Status of this track:
+												// (1) PLAYING
+												// (2) PAUSED
+												// (3) LOADING
+												// (4) BUFFERING
+	self.keyframes      = new AVLTree(			// AVL tree holding keyframes. Call self.loadKeyframes(keyframeData) to construct in initialize().
 		// Comparator function takes in two keyframes, returns comparison integer.
 		function (a, b) {
 			if (a.time < b.time) {

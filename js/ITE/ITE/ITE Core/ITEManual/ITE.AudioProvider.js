@@ -58,12 +58,10 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			.append(_audio);
 		$("#ITEHolder").append(_UIControl);
 
-		// Initialize the state to that of the first keyframe, and set track start time.
-		var firstKeyframe = self.keyframes.min();
-		self.setState(self.getKeyframeState(firstKeyframe));
-
-		// Set the starting time of the track.
-		self.trackStartTime = firstKeyframe.time; 
+		// Get first and last keyframes and set state to first.
+		self.firstKeyframe = self.keyframes.min();
+		self.lastKeyframe = self.keyframes.max();
+		self.setState(self.getKeyframeState(self.firstKeyframe));
 
 		// Ready to go.
 		self.status = 2;
@@ -88,7 +86,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		// and set state to first keyframe.
 		_audio.onload = function (event) { // Is self ever getting called?
 			self.setStatus(2);
-			self.setState(getKeyframeState(self.keyframes.min()));
+			self.setState(getKeyframeState(self.firstKeyframe));
 		};
 	};
 
@@ -114,9 +112,9 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 
 		// If the track hasn't started yet, set a trigger.
-		if (startTime < self.trackStartTime) {
+		if (startTime < self.firstKeyframe.time) {
 			var playTrigger = function() { self.play() };
-			self.delayStart(self.trackStartTime - startTime, playTrigger);
+			self.delayStart(self.firstKeyframe.time - startTime, playTrigger);
 			return;
 		}
 
@@ -159,30 +157,39 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 
-		// Has this track actually started?
-		var seekTime = self.timeManager.getElapsedOffset();
-		if (seekTime < self.trackStartTime) {
-			return;
+		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
+		var prevStatus = self.status; // Store what we were previously doing.
+		self.pause(); // Stop any animations and stop the delayStart timer.
+		self.savedState = null; // Erase any saved state.
+		var nextKeyframe = null; // Where to animate to, if animating.
+
+		// Sought before track started.
+		if (seekTime < self.firstKeyframe.time) {
+			self.setState(self.getKeyframeState(self.firstKeyframe));
+		} 
+
+		// Sought after track ended.
+		else if (seekTime > self.lastKeyframe.time) {
+			self.setState(self.getKeyframeState(self.lastKeyframe));
 		}
 
-		// Erase any saved state.
-		var prevStatus = self.status;
-		self.pause();
-		self.savedState = null;
-
-		// Update the state based on seeking.
-		var surKeyframes = self.getSurroundingKeyframes(seekTime);
-		var interp = 0;
-		if (surKeyframes[1].time - surKeyframes[0].time !== 0) {
-			interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1].time - surKeyframes[0].time);
+		// Sought in the track's content.
+		else {
+			// Update the state based on seeking.
+			var surKeyframes = self.getSurroundingKeyframes(seekTime);
+			var interp = 0;
+			if (surKeyframes[1].time - surKeyframes[0].time !== 0) {
+				interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1].time - surKeyframes[0].time);
+			}
+			var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
+			soughtState.audioOffset = seekTime - self.firstKeyframe.time;
+			self.setState(soughtState);
+			nextKeyframe = surKeyframes[1];
 		}
-		var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
-		soughtState.audioOffset = seekTime - self.trackStartTime;
-		self.setState(soughtState);
 
-		// Play or pause, depending on state before being sought.
+		// If this track was playing, continue playing.
 		if (prevStatus === 1) {
-			self.play(surKeyframes[1]);
+			self.play(nextKeyframe);
 		} 
 	};
 
@@ -245,7 +252,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 						"volume"	: keyframe.volume 
 					};
 		if (setAudioOffset) {
-			state.audioOffset = keyframe.time - self.trackStartTime
+			state.audioOffset = keyframe.time - self.firstKeyframe.time
 		}
 		return state;
 	};
