@@ -62,9 +62,6 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -73,7 +70,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function() {
-		_super.load()
+		_super.load();
 
 		// Sets the image’s URL source.
 		_audio.attr({
@@ -82,12 +79,8 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			"type" 	: self.trackData.type
 		});
 
-		// When audio has finished loading, set status to “paused” (2), 
-		// and set state to first keyframe.
-		_audio.onload = function (event) { // Is self ever getting called?
-			self.setStatus(2);
-			self.setState(getKeyframeState(self.firstKeyframe));
-		};
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
 	/*

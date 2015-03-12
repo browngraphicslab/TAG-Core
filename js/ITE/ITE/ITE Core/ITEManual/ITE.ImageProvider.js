@@ -77,9 +77,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Attach handlers.
 		attachHandlers();
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -93,12 +90,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		// Sets the image’s URL source.
 		_image.attr("src", self.trackData.assetUrl);
 
-		// When image has finished loading, set status to “paused” (2),
-		// and set state to first keyframe.
-		_image.onload = function (event) { // Is self ever getting called?
-				self.status = 2;
-				self.setState(getKeyframeState(keyframes.min()));
-		};
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
 	/*

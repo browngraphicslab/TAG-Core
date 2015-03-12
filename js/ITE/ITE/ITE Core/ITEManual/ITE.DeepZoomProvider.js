@@ -120,9 +120,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Attach handlers.
 		attachHandlers();
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -136,6 +133,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// Sets the DeepZoom's URL source.
     	//_viewer.open(itePath + "Assets/TourData/" + self.trackData.assetUrl);
 		_viewer.open(self.trackData.assetUrl);
+		
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
 	/*

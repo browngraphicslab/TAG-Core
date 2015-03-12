@@ -57,7 +57,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	function initialize() {
-		_super.initialize()
+		_super.initialize();
 
 		// Create UI and append to ITEHolder.
 		_video		= $(document.createElement("video"))
@@ -78,9 +78,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Attach Handlers.
 		attachHandlers();
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -89,20 +86,18 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function() {
-		_super.load()
+		_super.load();
 
 		//Sets the image’s URL source
 		_video.attr({
 			"src"	: itePath + "Assets/TourData/" + self.trackData.assetUrl,
 			"type" 	: self.trackData.type
-		})
+		});
 
-		_videoControls.load()
-		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-		_video.onload = function (event) {//Is self ever getting called?
-			self.setStatus(2);
-			self.setState(keyframes[0]);
-		};
+		_videoControls.load();
+
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
 	/*

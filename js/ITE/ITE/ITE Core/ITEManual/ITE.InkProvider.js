@@ -49,7 +49,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	function initialize() {
-		_super.initialize()
+		_super.initialize();
 
 		if (trackData.experienceReference !== "null") {
 			_attachedAsset = findAttachedAsset(trackData.experienceReference);
@@ -75,9 +75,6 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -86,8 +83,11 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function() {
-			_super.load()
-			_ink.loadInk(trackData.string);
+		_super.load();
+		_ink.loadInk(trackData.string);
+
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
 	/*
