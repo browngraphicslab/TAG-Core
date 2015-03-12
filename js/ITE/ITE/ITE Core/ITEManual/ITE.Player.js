@@ -599,6 +599,61 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         return ITEHolder
     };
 
+
+////////////////////////////////////////////////////////////////////////////
+// AUTHORING API
+////////////////////////////////////////////////////////////////////////////
+
+    /**
+    * I/P:    A track to which a keyframe will be added at the current state
+    * Creates a keyframe based on the current state of the track
+    * O/P:    none
+    */ 
+    function addKeyframe(track){
+        Orchestrator.captureKeyframe(track)
+    }
+
+    /**
+    * I/P:    A track and a keyframe within the track to change
+    * Changes a keyframe from the old state to the new state
+    * O/P:    none
+    */ 
+    function changeKeyframe(track, oldKeyFrame, newKeyFrame){
+        Orchestrator.changeKeyframe(track, oldKeyFrame, newKeyFrame)
+    }
+
+    /**
+    * I/P:    A track and a keyframe within the track to delete
+    * Deletes said keyframe
+    * O/P:    none
+    */ 
+    function removeKeyframe(track, keyframe){
+        Orchestrator.deleteKeyframe(track, oldKeyFrame)
+    }
+
+    /**
+    * I/P:    none
+    * returns tracks, used for authoring
+    * O/P:    trackManager of the orchestrator (list of tracks)
+    */ 
+    function getTracks(){
+        return Orchestrator.getTrackManager()
+    }
+
+    /**
+    * I/P:    trackData-- data object with all the properties of the specific track. See TAG.Utils.RIN_TO_ITE function for a template.
+    * Adds a track, used for tour authoring
+    * O/P:    said added track
+    */ 
+    function addTrack(trackData){
+        track =  Orchestrator.createTrackByProvider(trackData)
+        Orchestrator.initializeTrack(track)
+        track.load()
+        return track
+    }
+
+
+    this.getTracks          = getTracks;
     this.getRoot            = getRoot;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;

@@ -174,6 +174,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				self.savedState = null;	
 				// TODO: see above... is this callback necessary?
 				//_viewer.addHandler("animation-finish", self.animationCallback);	
+
 				return;
 			}
 			// Otherwise, just revert back to saved state.
@@ -208,13 +209,14 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		if (self.status === 3) {
 			return;
 		}
+
 		self.status = 2;
 
 		self.stopDelayStart();
 
 		self.getState();
-		self.setState(self.savedState);
-		if (self.animation) {
+		self.setState(self.savedState); //Effectively kills OSD animation by redirecting the current animation to where the image is right now
+		if (self.animation) {//Kills opacity animation
 			self.animation.kill();
 		}
 	};
@@ -335,7 +337,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.setState = function(state) {
 		_viewer.viewport.fitBounds(state.bounds, true);
-		_viewer.viewport.update();
+		_viewer.viewport.update();	
 	};
 
 	/* 
@@ -443,7 +445,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
      * Manipulation for touch and drag events.
      * O/P: 	none
      */
-    function mediaManip(res) {
+   /* function mediaManip(res) {
     	(self.orchestrator.status === 1) ? self.player.pause() : null
     	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 
@@ -452,7 +454,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
             trans = res.translation,
             pivot = res.pivot;
         _viewer.viewport.panBy(_viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y)), false);
-    };
+    };*/
 
     /*
      * I/P: 	scale : 	Scale factor.	
@@ -460,13 +462,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
      * Scroll/pinch-zoom handler for makeManipulatable on the DeepZoom image.
      * O/P: 	none
      */
-    function mediaScroll(scale, pivot) {
+    /*function mediaScroll(scale, pivot) {
     	(self.orchestrator.status === 1) ? self.player.pause() : null
      	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
     	resetSeadragonConfig();
       	_viewer.viewport.zoomBy(scale, _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y)), false);
     	_viewer.viewport.applyConstraints();
-    };
+    };*/
 
 	/* 
 	 * I/P: 	duration : 		Duration of track.

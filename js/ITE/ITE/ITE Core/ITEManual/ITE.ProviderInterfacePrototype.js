@@ -75,11 +75,21 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	self.loadKeyframes = function(keyframeData) {
 		for (var i = 0; i < keyframeData.length; i++) {
 			var keyframe = keyframeData[i];
-			if (typeof keyframe === "object" && "time" in keyframe) {
-				this.keyframes.add(keyframeData[i]);
-			}
+			self.addKeyframe(keyframe)
 		}
 	};
+
+
+	/*
+	 * I/P: 	keyframe : 		keyframe to be added to keyframes
+	 * Adds a single keyframe to the AVL tree. Used above and in authoring
+	 * O/P: 	none
+	 */
+	self.addKeyframe = function(keyframe) {
+		if (typeof keyframe === "object" && "time" in keyframe) {
+			this.keyframes.add(keyframe);
+		}
+	}
 
 	/*
 	 * I/P: 	none
