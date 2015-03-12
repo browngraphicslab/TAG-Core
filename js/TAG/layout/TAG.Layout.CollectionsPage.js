@@ -769,6 +769,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 var menu = document.getElementById(id);
                 if (menu.hasChildNodes() == false) {
                     for (var i = 0; i < visibleCollections.length; i++) {
+                        // console.log("In for loop!")
                         var para = document.createElement("p");
                         var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                         var btnNode = document.createElement("BUTTON");
@@ -777,9 +778,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         //txtNode.addEventListener("click", loadPage());
                         btnNode.onclick = "loadPage()";
                         para.appendChild(btnNode);
-                        btnNode.appendChild(txtNode);
+                        btnNode.appendChild(txtNode);   
                     }
-
                 }
 
                 if (menu.style.display == 'block') {
