@@ -57,15 +57,15 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// Create UI and append to ITEHolder.
 		_UIControl = $(document.createElement("div"))
         	.addClass("UIControl")
-        	.attr("id", "DeepZoomHolder")
+        	.attr("id", trackData.name + "holder")
 			.on('mousedown scroll click mousemove resize', function(evt) {
             	evt.preventDefault();
         	})
         	.css({
-        		"z-index"	: 0,
+        		// "z-index"	: 0,
         		"pointer-events" : "none",
-        		"visibility":"hidden",
-        		"position":"relative",
+        		// "visibility":"hidden",
+        		// "position":"relative",
         		"width"		: "100%",
         		"height"	: "100%"
         	});
@@ -73,7 +73,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
-			id 			 		: "DeepZoomHolder",
+			id 			 		: trackData.name + "holder",
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
 			//prefixUrl			: this.trackData.assetUrl,
 			zoomPerClick 		: 1,
@@ -114,9 +114,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
-
-		// Formatting z-index of first keyframe.
-		_UIControl.css("z-index", self.firstKeyframe.zIndex);
 
 		// Attach handlers.
 		attachHandlers();
@@ -219,11 +216,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.stopDelayStart();
 
-		self.getState();
-		self.setState(self.savedState); //Effectively kills OSD animation by redirecting the current animation to where the image is right now
 		if (self.animation) {//Kills opacity animation
 			self.animation.kill();
 		}
+
+		self.getState();
+		self.setState(self.savedState); //Effectively kills OSD animation by redirecting the current animation to where the image is right now
+
 	};
 
 	/*
@@ -311,7 +310,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				} else {
 					// console.log("Disabling clickthrough")
 					_UIControl.css({
-						"z-index": "10",
+						// "z-index": "10",
 						"pointer-events":"auto",
 						"visibility":"visible"
 					});
@@ -331,7 +330,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	self.getState = function() {
 		self.savedState = {
 			time	: self.timeManager.getElapsedOffset(),
-			bounds 	: _viewer.viewport.getBounds(true)
+			bounds 	: _viewer.viewport.getBounds(true),
 		};	
 		return self.savedState;
 	};
@@ -566,4 +565,16 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		    	//resetSeadragonConfig()
 	    	});
     };
+
+
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
+    
 };

@@ -166,6 +166,7 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function seek(seekPercent) {
+		self.updateZIndices()
 		// Pause.
 		if (self.prevStatus === 0) {
 			self.prevStatus = self.status;
@@ -218,6 +219,13 @@ ITE.Orchestrator = function(player) {
 		track.keyframes.remove(keyframe)
 	}
 
+	function updateZIndices(){
+		var i;
+		for (i = 0; i < trackManager.length; i++){
+			trackManager[i].setZIndex(i)
+		}
+	}
+
 	function deleteTrack(track){
 		var index = trackManager[indexOf(track)]
 		if (index > -1) {
@@ -262,6 +270,7 @@ ITE.Orchestrator = function(player) {
 		for (i = 0; i < trackManager.length; i++){
 			var track = trackManager[i];
 			initializeTrack(track)
+			track.setZIndex(i)
 		}
 	}
 
@@ -270,7 +279,12 @@ ITE.Orchestrator = function(player) {
 	}
 
 	self.getTrackManger = getTrackManger;
+	self.captureKeyframe = captureKeyframe;
+	self.changeKeyframe = changeKeyframe;
+	self.deleteKeyframe = deleteKeyframe;
+	self.deleteTrack = deleteTrack;
 	self.trackManager = trackManager;
+	self.updateZIndices = updateZIndices;
 	self.unload = unload;
 	self.play = play;
 	self.pause = pause;

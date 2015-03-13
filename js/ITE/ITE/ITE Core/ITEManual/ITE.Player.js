@@ -650,7 +650,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     }
 
     /**
-    * I/P:    none
+    * I/P:    track to be deleted
     * Deletes a track
     * O/P:    none
     */ 
@@ -659,12 +659,32 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     }
 
     /**
-    * I/P:    none
+    * I/P:    track and the new index/layer where it should be, with regards to the rest of the tracks (for example, adding one to the top of the list would be an index of)
     * Mutates time of a track
     * O/P:    none
     */ 
-    function changeTrackTime(track){
-        this.getTracks()
+    function changeTrackZIndex(track, index){
+        if (index > trackManager.length - 1){
+            console.log("ERROR: trying to change index of a track to an index that does not exist")
+            return
+        }
+        trackManger = self.getTracks();
+        var i = trackManager.indexOf(track);
+        //If desired index is less than current index, keep switching down until you get to the desired index
+        while (index < i){
+            var temp = trackManager[i - 1];
+            trackManager[i - 1] = trackManager[i];
+            trackManager[i] = temp
+            i--;
+        }
+        //If the desired index is greater than the current index, switch up
+        while (index > i){
+            var temp = trackManager[i + 1];
+            trackManager[i + 1] = trackManager[i];
+            trackManager[i] = temp
+            i++;
+        }
+        Orchestrator.updateZIndices();
     }
 
 
@@ -697,7 +717,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.changeKeyframe     = changeKeyframe;
     this.removeKeyframe     = removeKeyframe;
     this.deleteTrack        = deleteTrack;
-    this.changeTrackTime    = changeTrackTime;
+    this.changeTrackZIndex  = changeTrackZIndex;
     this.getRoot            = getRoot;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;
