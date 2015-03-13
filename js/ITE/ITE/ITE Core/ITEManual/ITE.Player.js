@@ -208,7 +208,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 },
                 "mousemove": function (e) {
                     //time
-                    progressBarContainer.dragging ? seek(e) : null
+                    progressBarContainer.dragging ? scrub(e) : null
                     //volume
                     volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
                 }
@@ -450,7 +450,25 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
     /*
     * I/P:   none
-    * Seeks tour to a specfied spot
+    * Seeks tour to a specfied spot, without playing it. 
+    * This is designed to be called as the user drags on the progress bar.
+    * O/P:   none
+    */
+    function scrub(e) {
+        if (playerConfiguration.allowSeek){
+            console.log("Tour was seeked")
+            progressBar.css({
+                width : e.pageX - ITEHolder.offset().left
+            })
+            timeOffset = progressBar.width()/(progressBar.parent().width()) //timeOffset is currently a percentage of the total time
+            orchestrator.scrub(timeOffset);
+        }
+    };
+
+    /*
+    * I/P:   none
+    * Seeks tour to a specfied spot, then continue playing (if previously playing).
+    * This is designed to be called when the user mouseups on the progress bar at a new time.
     * O/P:   none
     */
     function seek(e) {

@@ -146,12 +146,12 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 
 	/*
 	 * I/P: 	none
-	 * Informs ink asset of seek. TimeManager will have been updated.
-	 * O/P: 	none
+	 * Pauses track and changes its state based on new time from timeManager.
+	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function() {
 		if (self.status === 3) {
-			return;
+			return null;
 		}
 
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
@@ -184,9 +184,10 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 
 		// If this track was playing, continue playing.
-		if (prevStatus === 1) {
-			self.play(nextKeyframe);
-		} 
+		// if (prevStatus === 1) {
+		// 	self.play(nextKeyframe);
+		// } 
+		return nextKeyframe;
 	};
 
 	/* 

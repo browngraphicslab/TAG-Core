@@ -14,6 +14,7 @@ ITE.Orchestrator = function(player) {
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
 	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
+	self.prevStatus			= 0; // 0 means we're not scrubbing. 1 - previously playing. 2 - previously paused.
 	self.tourData 			= null;
 
 	self.timeManager = new ITE.TimeManager();
@@ -130,7 +131,7 @@ ITE.Orchestrator = function(player) {
 		return this.status;
 	}
 
-	function play(){
+	function play() {
 		var i;
 		for (i=0; i<self.trackManager.length; i++) {
 			if (self.trackManager[i].state === "loading"){
@@ -145,7 +146,7 @@ ITE.Orchestrator = function(player) {
 		self.status = 1;
 	}
 
-	function pause(){
+	function pause() {
 		self.timeManager.stopTimer();
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].pause();
@@ -153,7 +154,15 @@ ITE.Orchestrator = function(player) {
 		self.status = 2; 
 	}
 
-	function seek(seekPercent) {
+	function scrub(seekPercent) {
+		// Pause.
+		if (self.prevStatus === 0) {
+			self.prevStatus = self.status;
+		}
+		if (self.status === 1) {
+			self.pause();
+		}
+
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
 		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
@@ -162,7 +171,36 @@ ITE.Orchestrator = function(player) {
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].seek();
 		}
-		//self.taskManager.seek(seekTime * self.tourData.totalDuration);
+	}
+
+	function seek(seekPercent) {
+		// Pause.
+		if (self.prevStatus === 0) {
+			self.prevStatus = self.status;
+		}
+		if (self.status === 1) {
+			self.pause();
+		}
+
+		// Change time.
+		var seekTime = seekPercent * self.tourData.totalDuration;
+		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+
+		// Inform tracks of seek.
+		var nextKeyframes = new Array(trackManager.length);
+		for (i = 0; i < self.trackManager.length; i++) {
+			nextKeyframes[i] = self.trackManager[i].seek();
+		}
+
+		// If we're playing, continue playing!
+		if (self.prevStatus === 1) {
+			for (i = 0; i < self.trackManager.length; i++) {
+				self.trackManager[i].play(nextKeyframes[i]);
+			}
+			self.timeManager.startTimer();
+			self.status = 1;
+		}
+		self.prevStatus = 0;
 	}
 
 	function setVolume(newVolumeLevel){
@@ -236,6 +274,7 @@ ITE.Orchestrator = function(player) {
 	self.unload = unload;
 	self.play = play;
 	self.pause = pause;
+	self.scrub = scrub;
 	self.seek = seek;
 	self.setVolume = setVolume;
 	self.toggleMute = toggleMute;
