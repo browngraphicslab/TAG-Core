@@ -7707,7 +7707,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 							"x" 		: "f",
 							"y" 		: "f",
 							"w" 		: "f",
-							"h" 		: "s",
+							"h" 		: "f",
 							"fillc" 	: "s",
 							"fillo" 	: "f",
 							"strokec" 	: "s",

@@ -652,11 +652,21 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     /**
     * I/P:    none
     * Deletes a track
-    * O/P:    trackManager of the orchestrator (list of tracks)
+    * O/P:    none
     */ 
     function deleteTrack(track){
         Orchestrator.deleteTrack(track)
     }
+
+    /**
+    * I/P:    none
+    * Mutates time of a track
+    * O/P:    none
+    */ 
+    function changeTrackTime(track){
+        this.getTracks()
+    }
+
 
 
     /**
@@ -683,6 +693,11 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
 
     this.getTracks          = getTracks;
+    this.addKeyframe        = addKeyframe;
+    this.changeKeyframe     = changeKeyframe;
+    this.removeKeyframe     = removeKeyframe;
+    this.deleteTrack        = deleteTrack;
+    this.changeTrackTime    = changeTrackTime;
     this.getRoot            = getRoot;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;
