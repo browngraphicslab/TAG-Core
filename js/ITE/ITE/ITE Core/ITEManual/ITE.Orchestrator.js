@@ -82,13 +82,6 @@ ITE.Orchestrator = function(player) {
 	    * O/P: none
 	    */
 		function createTrackByProvider(trackData){
-			// console.log("----------------------------------------------------")
-			// console.log("Data: ")
-			// console.log(trackData)
-			// console.log("URL: " + trackData.assetUrl)
-			// console.log("provider: " + trackData.providerId)
-			// console.log("----------------------------------------------------")
-
 			switch (trackData.providerId){
 				case "image" : 
 					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.timeManager, self));
@@ -213,7 +206,7 @@ ITE.Orchestrator = function(player) {
 	}
  
 	function captureKeyframe(track) {
-		var keyFrameData = track.getState()
+		var keyFrameData = track.getKeyframeState()
 		track.addKeyframe(keyFrameData)
 	}
 
@@ -224,6 +217,14 @@ ITE.Orchestrator = function(player) {
 
 	function deleteKeyframe(track, keyframe){
 		track.keyframes.remove(keyframe)
+	}
+
+	function deleteTrack(track){
+		var index = trackManager[indexOf(track)]
+		if (index > -1) {
+		    trackManager.splice(index, 1);
+		}
+		track.unload();
 	}
 
 	function areAllTracksReady() {

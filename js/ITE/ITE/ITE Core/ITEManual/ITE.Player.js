@@ -651,6 +651,16 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
     /**
     * I/P:    none
+    * Deletes a track
+    * O/P:    trackManager of the orchestrator (list of tracks)
+    */ 
+    function deleteTrack(track){
+        Orchestrator.deleteTrack(track)
+    }
+
+
+    /**
+    * I/P:    none
     * returns tracks, used for authoring
     * O/P:    trackManager of the orchestrator (list of tracks)
     */ 
@@ -665,6 +675,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function addTrack(trackData){
         track =  Orchestrator.createTrackByProvider(trackData)
+        track.createDefaultKeyframes()
         Orchestrator.initializeTrack(track)
         track.load()
         return track
