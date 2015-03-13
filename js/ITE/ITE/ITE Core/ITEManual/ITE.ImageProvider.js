@@ -94,6 +94,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
+	self.unload = function(){
+		_UIControl.parent.removeChild(_UIControl)
+		_UIControl = null
+	}
+
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
 	 * Plays image asset.
@@ -302,6 +307,35 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	///////////////////////////////////////////////////////////////////////////
 	// ImageProvider functions.
 	///////////////////////////////////////////////////////////////////////////
+
+
+    /*
+	 * I/P: 	none
+	 * Creates defauly keyframes for the track
+	 * O/P: 	none
+	 */
+	function createDefaultKeyframes() {
+		var i;
+		for (i = 0; i < 4; i++){
+			opacity = (i == 0 || i == 3) ? 0 : 1;
+			var keyframe = {
+				"dispNum": 0,
+				"time": i,
+				"opacity": opacity,
+				"pos" : {
+					"x" : "100px",
+					"y" : "100px"
+				},
+				"size": {
+					"x" : "100",
+					"y" : "100"
+				}
+			}
+			self.keyframes.add(keyframe)
+		}
+	};
+	self.createDefaultKeyframes = createDefaultKeyframes
+
 
 	/* 
 	 * I/P: 	inkTrack : 		Ink track to attach to self asset.

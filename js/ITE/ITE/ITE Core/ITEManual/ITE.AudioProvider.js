@@ -83,6 +83,11 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
+	self.unload = function(){
+		_UIControl.parent.removeChild(_UIControl)
+		_UIControl = null
+	}
+
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
 	 * Plays audio asset.
@@ -276,6 +281,25 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	///////////////////////////////////////////////////////////////////////////
 	// AudioProvider functions.
 	///////////////////////////////////////////////////////////////////////////
+
+    /*
+	 * I/P: 	none
+	 * Creates defauly keyframes for the track
+	 * O/P: 	none
+	 */
+	function createDefaultKeyframes() {
+		var i;
+		for (i = 0; i < 4; i++){
+			var keyframe = {
+				"dispNum": 0,
+				"time": i,
+				"audioOffset": 0,
+				"volume": 1
+			}
+			self.keyframes.add(keyframe)
+		}
+	};
+	self.createDefaultKeyframes = createDefaultKeyframes
 
 	/* 
 	 * I/P: 	newVolume : 	 new volume set by user via UI
