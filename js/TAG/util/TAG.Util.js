@@ -7869,6 +7869,12 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			var currExperience = rinData.experiences[rinDataExperiencesKeys[i]],
 				providerID = ITE_providerID(currExperience.providerId);
 
+			//ignore experiences with no experience streams
+			if (Object.keys(currExperience.experienceStreams).length == 0){
+				console.log("Found an experience with no experience streams")
+				continue;
+			}
+
 			//different structure for ink tracks vs. others
 			if (providerID == "ink") {
 				tracks.push({
