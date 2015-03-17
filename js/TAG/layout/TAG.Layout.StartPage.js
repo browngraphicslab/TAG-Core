@@ -83,6 +83,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     tagContainer = options.tagContainer || $('body');
 
     //Comment out this conditional block to disable access to authoring for the web
+
     /*
     if (!IS_WINDOWS) {
         authoringInput.prop('disabled', true);
@@ -90,6 +91,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit.css('opacity', '0.5');
     }
     */
+
     testConnection();
     if(newUser){
         telemetryDialogDisplay();
