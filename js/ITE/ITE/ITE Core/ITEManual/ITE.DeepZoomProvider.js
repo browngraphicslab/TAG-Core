@@ -57,15 +57,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// Create UI and append to ITEHolder.
 		_UIControl = $(document.createElement("div"))
         	.addClass("UIControl")
-        	.attr("id", "DeepZoomHolder")
-			.on('mousedown scroll click mousemove resize', function(evt) {
-            	evt.preventDefault();
-        	})
+        	.attr("id", trackData.name + "holder")
         	.css({
-        		"z-index"	: 0,
-        		"pointer-events" : "none",
-        		"visibility":"hidden",
-        		"position":"relative",
+        		// "z-index"	: 0,
+        		// "pointer-events" : "none",
+        		// "visibility":"hidden",
+        		// "position":"relative",
         		"width"		: "100%",
         		"height"	: "100%"
         	}); 
@@ -277,25 +274,25 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// console.log("animating")
 		//testing
-		/*_viewer.addHandler("animation", 
-			function(){*/
-				if (state.opacity == 0){
-					// console.log("Enabling clickthrough")
-					_UIControl.css({
-						"pointer-events": "none",
-						"z-index": "-1",
-						"visibility":"hidden"
-					});
-				} else {
-					// console.log("Disabling clickthrough")
-					_UIControl.css({
-						"z-index": "10",
-						"pointer-events":"auto",
-						"visibility":"visible"
-					});
-				}
-			/*}
-		)*/
+		// _viewer.addHandler("animation", 
+		// 	function(){
+		// 		if (state.opacity == 0){
+		// 			// console.log("Enabling clickthrough")
+		// 			_UIControl.css({
+		// 				"pointer-events": "none",
+		// 				"z-index": "-1",
+		// 				"visibility":"hidden"
+		// 			});
+		// 		} else {
+		// 			// console.log("Disabling clickthrough")
+		// 			_UIControl.css({
+		// 				// "z-index": "10",
+		// 				"pointer-events":"auto",
+		// 				"visibility":"visible"
+		// 			});
+		// 		}
+		// 	}
+		// )
 		//testing
 
 		self.animation.play(); 
@@ -514,15 +511,37 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			    	// evt.preventDefaultAction()
 			    }
 	    	});
-		_viewer.addHandler(
-			'container-exit', function(evt) {
-				// console.log("exited");
-				_viewer.raiseEvent('canvas-release', evt);
-				_viewer.raiseEvent('canvas-drag-end', evt);
-				_viewer.raiseEvent('container-release', evt);				
-				//(self.orchestrator.status === 1) ? self.player.pause() : null
-		    	//self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		    	//resetSeadragonConfig()
-	    	});
-    };
+	}
+
+		/*
+	 * I/P: 	evt (a click/touch event)
+	 * 
+	 * O/P: 	bool, whether or not this event was within the image's bounds
+	 */
+	function isInImageBounds(evt){
+		var x = evt.position.x
+		var y = evt.position.y
+		var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
+		if (
+			(clickP.x < 1) &&
+			(clickP.x > 0) &&
+			(clickP.y <  _viewer.viewport.contentAspectY) &&
+			(clickP.y > 0)){
+			return true
+		} else{
+			return false
+		}
+	}
+
+
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
+    
 };
