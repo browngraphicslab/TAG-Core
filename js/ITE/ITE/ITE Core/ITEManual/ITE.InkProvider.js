@@ -49,7 +49,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	function initialize() {
-		_super.initialize()
+		_super.initialize();
 
 		if (trackData.experienceReference !== "null") {
 			_attachedAsset = findAttachedAsset(trackData.experienceReference);
@@ -75,9 +75,6 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -86,8 +83,11 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function() {
-			_super.load()
-			_ink.loadInk(trackData.string);
+		_super.load();
+		_ink.loadInk(trackData.string);
+
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
 	/*
@@ -146,12 +146,12 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 
 	/*
 	 * I/P: 	none
-	 * Informs ink asset of seek. TimeManager will have been updated.
-	 * O/P: 	none
+	 * Pauses track and changes its state based on new time from timeManager.
+	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function() {
 		if (self.status === 3) {
-			return;
+			return null;
 		}
 
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
@@ -184,9 +184,10 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 
 		// If this track was playing, continue playing.
-		if (prevStatus === 1) {
-			self.play(nextKeyframe);
-		} 
+		// if (prevStatus === 1) {
+		// 	self.play(nextKeyframe);
+		// } 
+		return nextKeyframe;
 	};
 
 	/* 
@@ -308,4 +309,15 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 
 	self._UIControl = _UIControl;
+
+	
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
 };
