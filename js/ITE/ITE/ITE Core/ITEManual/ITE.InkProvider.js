@@ -281,7 +281,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Finds the attached asset for the ink track (the track to attach the ink to).
 	 * O/P: 	_attachedAsset : 		Actual reference to the track that holds self asset.
 	 */
-	self.findAttachedAsset = function(experienceReference) {
+	findAttachedAsset = function(experienceReference) {
 		var j,
 			track;
 		//Loop through trackManager to find the asset whose name matches the Ink's experienceReference
@@ -298,6 +298,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 			throw new Error("Failed to find asset '" + experienceReference + "' for attached ink '" + trackData.name + "'");
 		};
 	};
+	self.findAttachedAsset = findAttachedAsset;
 
 	/*
 	 * I/P: 	assetName : 		Name of asset to attach from Ink.
@@ -306,6 +307,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.attachToAsset = function(assetName){
 		_attachedAsset.addInk(self);
+		console.log("ATTACHED?")
 	};
 
 	self._UIControl = _UIControl;
