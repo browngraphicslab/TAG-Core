@@ -759,26 +759,37 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionDots[collection.Identifier].css('background-color', 'white');
             }                
 
-            function loadPage(){
-                console.log("Button was clicked!");
+            var menuArray = [];
+
+            function loadPage(index){
+                prepareNextView();
+                loadCollection(visibleCollections[index])();
             }
 
             // To show/hide dropdown menu
             function showMenu(id) {
-                //console.log(visibleCollections.toString());
+
                 var menu = document.getElementById(id);
                 if (menu.hasChildNodes() == false) {
                     for (var i = 0; i < visibleCollections.length; i++) {
                         // console.log("In for loop!")
                         var para = document.createElement("p");
                         var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
-                        var btnNode = document.createElement("BUTTON");
-                        btnNode.style.border = "none";
+                        menuArray[i] = document.createElement("BUTTON");
+                        menuArray[i].setAttribute("id", i);
+                        menuArray[i].style.border = "none";
                         menu.appendChild(para);
+
                         //txtNode.addEventListener("click", loadPage());
-                        btnNode.onclick = loadPage;
-                        para.appendChild(btnNode);
-                        btnNode.appendChild(txtNode);   
+                        //btnNode.onclick = loadPage;
+                        //para.appendChild(btnNode);
+                       // btnNode.appendChild(txtNode);   
+
+                        menuArray[i].onclick = function() {
+                            loadPage(this.id);
+                        }
+                        para.appendChild(menuArray[i]);
+                        menuArray[i].appendChild(txtNode);
                     }
                 }
 
@@ -827,7 +838,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     // loadCollection(visibleCollections[j.prevCollectionIndex])();
                                  //}
                             // }(collection));
-                //collectionArea.append(prevCollection);
+                collectionArea.append(prevCollection);
                 uiDocfrag.appendChild(prevCollection[0]);
                 //prevCollection.show();
                 // TAG.Telemetry.register(backArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
