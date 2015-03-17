@@ -694,7 +694,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             toggler.mouseup();
 
             tobj.current_artwork = doq.Identifier;
-            tobj.next_page = prevCollection;
+            tobj.next_page = prevCollection.Identifier;
             tobj.time_spent = telemetry_timer.get_elapsed();
         });
         
