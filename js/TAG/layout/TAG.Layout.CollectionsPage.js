@@ -776,7 +776,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         btnNode.style.border = "none";
                         menu.appendChild(para);
                         //txtNode.addEventListener("click", loadPage());
-                        btnNode.onclick = "loadPage()";
+                        btnNode.onclick = loadPage;
                         para.appendChild(btnNode);
                         btnNode.appendChild(txtNode);   
                     }
