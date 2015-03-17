@@ -810,8 +810,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .on('mousedown', function(j){
                         return function () {
                             showMenu('collectionMenu');
-                            // prepareNextView();
-                            // loadCollection(visibleCollections[j.prevCollectionIndex])();
                         }
                     }(collection));
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
