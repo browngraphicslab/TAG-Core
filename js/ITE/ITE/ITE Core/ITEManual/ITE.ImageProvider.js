@@ -462,7 +462,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
     function setZIndex(index){
     	_UIControl.css("z-index", index)
-    	console.log("setting index of image " + trackData.name + " to " + index)
     }
     self.setZIndex = setZIndex;
 };
