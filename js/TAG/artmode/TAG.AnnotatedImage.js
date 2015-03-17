@@ -586,6 +586,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 		var canvas = $(viewer.canvas).addClass("artworkCanvasTesting");
 
 		//sets up manipulation 
+		//TODO - investigate using OpenSeadragon's touch handlers instead of makeManipulatable
 		if (IS_WINDOWS){
 			TAG.Util.makeManipulatableWin(canvas[0], {
 				onScroll: function (delta, pivot) {
