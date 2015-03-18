@@ -3609,8 +3609,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
             tobj.element_type = "Assoc Media";
         });
-        
-
         var thumbnailButton = createButton('Capture Thumbnail',
             function () {
                 saveThumbnail(media, false);
@@ -6547,124 +6545,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             height: '20px',
             'padding-top':'2%'
         });
-        
-        var versionsButton = createButton("Provide Web Versions",
-            function(){
-                var back = $(document.createElement("div"));
-                var centerDiv = $(document.createElement("div"));
-                centerDiv.attr("id","centerDivForVersionsButton");
-                back.attr("id","backgroundForVersionsButton");
-                back.css({
-                    //"color": "black",
-                    'z-index': "9999999999999999999999999999999999999999999999999999999999999999999999",
-                    //'float':'right',
-                    //'font-size':'50%',
-                    'height':'100%',
-                    //'margin-top':'2.8%',
-                    //'padding-bottom':'1%',
-                    'width': '100%',
-                    'position' : "absolute",
-                    'background-color' : "gray",
-                    "opacity" : ".75",
-                    //'border': '1px solid black',
-                    //'padding': '1.5% 0px 0px 0px',
-                    //'padding-top':'-10%',
-                    //'display': 'block',
-                });
-                centerDiv.css({
-                    "background-color" : "#3f3735",
-                    'z-index': "99999999999999999999999999999999999999999999999999999999999999999999999999999991",
-                    "height" : "50%",
-                    "width" : "50%",
-                    "position" : "absolute",
-                    "top" : "25%",
-                    "left" : "25%",
-                    "opacity" : "1",
-                });
-                $('#tagContainer').append(back);
-                $('#tagContainer').append(centerDiv);
-                function filesChosen(data){
-                    alert(data);
-                }
-                var uploadButton = createButton("Upload File(s)",
-                    function(){
-                        uploadFile(3,filesChosen,false,[".mp4",".ogv",".webm"]);
-                    }
-
-                );
-                uploadButton.css({
-                    "bottom" : "20%",
-                    "position" : "absolute",
-                    "left" : "40%",
-                    "width" : "20%",
-                })
-                var exitButton = createButton("Exit",
-                    function(){
-                        $("#centerDivForVersionsButton").remove();
-                        $("#backgroundForVersionsButton").remove();
-                    }
-                );
-                
-                exitButton.css({
-                    "bottom" : "5%",
-                    "position" : "absolute",
-                    "left" : "40%",
-                    "width" : "20%",
-                })
-                var webmT = "Enter webm file";
-                //if a webm file already exists, change the string to the file path
-                var webmTextInput = createTextInput(null, webmT, 100);
-                var webm = createSetting("webm",webmTextInput,85);
-                webm.css({
-                    "left" : "1%",
-                    "position" : "absolute",
-                    "height" : "10%",
-                    "top" : "10%",
-                })
-                
-                var ogvT = "Enter ogv file";
-                //if a ogv file already exists, change the string to the file path
-                var ogvTextInput = createTextInput(null, ogvT, 100);
-                var ogv = createSetting("ogv",ogvTextInput,85);
-                ogv.css({
-                    "left" : "1%",
-                    "position" : "absolute",
-                    "height" : "10%",
-                    "top" : "25%",
-
-                })
-                var mp4T = "Enter mp4 file";
-                //if a mp4 file already exists, change the string to the file path
-                var mp4TextInput = createTextInput(null, mp4T, 100);
-                var mp4 = createSetting("mp4",mp4TextInput,85);
-                mp4.css({
-                    "left" : "1%",
-                    "position" : "absolute",
-                    "height" : "10%",
-                    "top" : "40%",
-                })
-
-                centerDiv.append(webm);
-                centerDiv.append(ogv);
-                centerDiv.append(mp4);
-                centerDiv.append(uploadButton);
-                centerDiv.append(exitButton);
-
-
-            },
-            
-            {
-                'margin-right': '0%',
-                'margin-top': '1%',
-                'margin-bottom': '3%',
-                'margin-left': '2%',
-                'float': 'left',
-            });
-        versionsButton.attr("id","versionsButton");
-        //Trent's version button work in progress
-        
-
-
         timelineYear = createSetting('Date on Timeline', timelineYearInput, 40);
         timelineYear.css({
             width: '44%',
@@ -6787,8 +6667,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         yearMetadataDiv.append(yearDiv)
                        .append(yearDescriptionDiv)
-                       .append(timelineYearDiv)
-                       .append(versionsButton);
+                       .append(timelineYearDiv);
 
         yearMetadataDivSpecs = {
             yearMetadataDiv : yearMetadataDiv,
