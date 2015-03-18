@@ -222,8 +222,8 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 
 	/*
 	 * I/P: none
-	 * Pauses track and changes its state based on new time from timeManager.
-	 * O/P: nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
+	 * Informs track of seek. TimeManager will have been updated.
+	 * O/P: none
 	 */
 	self.seek = function() {};
 

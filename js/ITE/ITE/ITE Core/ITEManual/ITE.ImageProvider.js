@@ -67,8 +67,19 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 
+		// Formatting z-index of first keyframe.
+		// TODO: clean self up-- self is just to make sure that the asset has the correct z-index. 
+		// There's also clearly been some mistake if we have to do self check (if there are any keyframes) 
+		// because why would we have a track with no keyframes...?
+		if (self.firstKeyframe) {
+			_UIControl.css("z-index", self.firstKeyframe.zIndex); 
+		}
+
 		// Attach handlers.
 		attachHandlers();
+
+		// Ready to go.
+		self.status = 2;
 	};
 
 	/*
@@ -82,14 +93,13 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		// Sets the image’s URL source.
 		_image.attr("src", self.trackData.assetUrl);
 
-		// When finished loading, set status to 2 (paused).
-		self.status = 2; // TODO: should this be some kind of callback?
+		// When image has finished loading, set status to “paused” (2),
+		// and set state to first keyframe.
+		_image.onload = function (event) { // Is self ever getting called?
+				self.status = 2;
+				self.setState(getKeyframeState(keyframes.min()));
+		};
 	};
-
-	self.unload = function(){
-		_UIControl.parent.removeChild(_UIControl)
-		_UIControl = null
-	}
 
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
@@ -146,12 +156,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 	/*
 	 * I/P: 	none
-	 * Pauses track and changes its state based on new time from timeManager.
-	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
+	 * Informs image asset of seek. TimeManager will have been updated.
+	 * O/P: 	none
 	 */
 	self.seek = function() {
 		if (self.status === 3) {
-			return null;
+			return;
 		}
 
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
@@ -184,10 +194,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 
 		// If this track was playing, continue playing.
-		// if (prevStatus === 1) {
-		// 	self.play(nextKeyframe);
-		// } 
-		return nextKeyframe;
+		if (prevStatus === 1) {
+			self.play(nextKeyframe);
+		} 
 	};
 
 	/* 
@@ -300,35 +309,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	///////////////////////////////////////////////////////////////////////////
 	// ImageProvider functions.
 	///////////////////////////////////////////////////////////////////////////
-
-
-    /*
-	 * I/P: 	none
-	 * Creates defauly keyframes for the track
-	 * O/P: 	none
-	 */
-	function createDefaultKeyframes() {
-		var i;
-		for (i = 0; i < 4; i++){
-			opacity = (i == 0 || i == 3) ? 0 : 1;
-			var keyframe = {
-				"dispNum": 0,
-				"time": i,
-				"opacity": opacity,
-				"pos" : {
-					"x" : "100px",
-					"y" : "100px"
-				},
-				"size": {
-					"x" : "100",
-					"y" : "100"
-				}
-			}
-			self.keyframes.add(keyframe)
-		}
-	};
-	self.createDefaultKeyframes = createDefaultKeyframes
-
 
 	/* 
 	 * I/P: 	inkTrack : 		Ink track to attach to self asset.
@@ -453,15 +433,4 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         interactionHandlers.onManipulate 	= mediaManip;
         interactionHandlers.onScroll		= mediaScroll;    	
     };
-
-
-    /*
-	 * I/P: 	index
-	 * sets the track to the provided z-index
-	 * O/P: 	none
-	 */
-    function setZIndex(index){
-    	_UIControl.css("z-index", index)
-    }
-    self.setZIndex = setZIndex;
 };

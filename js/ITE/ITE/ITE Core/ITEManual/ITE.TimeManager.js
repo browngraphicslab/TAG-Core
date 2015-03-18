@@ -25,25 +25,18 @@ ITE.TimeManager = function(){
 
 	self.addElapsedTime = function(offset) {
 		var now = Date.now() / 1000;
-		if (self.isRunning) {
-			self.elapsedOffset = (now - self.startingOffset) + offset;
-			self.startingOffset = now;
-		} else {
-			self.elapsedOffset += offset;
-			self.startingOffset = now;
-		}
+		self.elapsedOffset += (now - self.startingOffset) + offset;
+		self.startingOffset = now;
 	}
 
 		//start the timer
 	self.startTimer= function(){
-		console.log("START TIMER");
 		self.startingOffset = Date.now() / 1000; //get startingOffset in seconds
 		self.isRunning = true;
 	};
 
 	//pause the timer
 	self.stopTimer = function(){
-		console.log("STOP TIMER");
 		if (self.isRunning){
 			self.elapsedOffset = self.getElapsedOffset();
 		}

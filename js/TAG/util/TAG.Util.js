@@ -7707,7 +7707,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 							"x" 		: "f",
 							"y" 		: "f",
 							"w" 		: "f",
-							"h" 		: "f",
+							"h" 		: "s",
 							"fillc" 	: "s",
 							"fillo" 	: "f",
 							"strokec" 	: "s",
@@ -7868,12 +7868,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		for (i=0; i < rinDataExperiencesKeys.length; i++){
 			var currExperience = rinData.experiences[rinDataExperiencesKeys[i]],
 				providerID = ITE_providerID(currExperience.providerId);
-
-			//ignore experiences with no experience streams
-			if (Object.keys(currExperience.experienceStreams).length == 0){
-				console.log("Found an experience with no experience streams")
-				continue;
-			}
 
 			//different structure for ink tracks vs. others
 			if (providerID == "ink") {

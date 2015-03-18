@@ -80,7 +80,7 @@ ITE.ScribbleProvider = function (trackData, player, taskManager, orchestrator){
 				//path.opacity = pathInfo.inkProperties.strokeo;
 				//Iterate through points and add them to curve
 				console.log("PATH________________________________________________")
-				console.log(pathInfo)
+								console.log(pathInfo)
 				for (p in pathInfo.inkProperties.path){
 					point = pathInfo.inkProperties.path[p]
 					var x = point.x * _UIControl.width()//sent over as relative coordiates; we're transforming them into pixel coordinates
@@ -93,15 +93,10 @@ ITE.ScribbleProvider = function (trackData, player, taskManager, orchestrator){
 						} else {
 							path.lineTo(start.add([x, y]));
 						}
-						// console.log("x: " + x)
-						// console.log("y: " + y)
-						// console.log("Holder height:" + $("#ITEHolder").height() + ": " + $("#ITEHolder").width())
-						// console.log("_UIControl height:" + _UIControl.height() + ": " + _UIControl.width())
+						console.log("x: " + x)
+						console.log("y: " + y)
 						if (y >= _UIControl.height()){
-							console.log("Y is greater than height of _UIControl")
-						}
-						if (x >= _UIControl.width()){
-							console.log("X is greater than height of _UIControl")
+							console.log("DLKSJFLSKJFLKJKLSDJKLFSDJLK")
 						}
 						// Draw the view now:
 						paper.view.draw();
@@ -207,14 +202,5 @@ ITE.ScribbleProvider = function (trackData, player, taskManager, orchestrator){
 	this._UIControl = _UIControl;
 
 
-    /*
-	 * I/P: 	index
-	 * sets the track to the provided z-index
-	 * O/P: 	none
-	 */
-    function setZIndex(index){
-    	_UIControl.css("z-index", index)
-    }
-    self.setZIndex = setZIndex;
 
 };
