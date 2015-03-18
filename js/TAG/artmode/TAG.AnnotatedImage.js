@@ -143,7 +143,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 			top  = parseFloat($elt.css('top')),
 			left = parseFloat($elt.css('left'));
 		if (top && left) { // TODO is this check necessary?
-			viewer.drawer.updateOverlay(element, viewer.viewport.pointFromPixel(new Seadragon.Point(left, top)), placement);
+			viewer.drawer.updateOverlay(element, viewer.viewport.pointFromPixel(new OpenSeadragon.Point(left, top)), placement);
 		}
 	}
 
@@ -157,7 +157,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 	 */
 	function addOverlay(element, point, placement) {
 		if (!viewer.isOpen()) {
-			viewer.addEventListener('open', function () {
+			viewer.addHandler('open', function () {
 				viewer.drawer.addOverlay(element, point, placement);
 				viewer.drawer.updateOverlay(element, point, placement);
 			});
@@ -175,7 +175,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 	 */
 	function removeOverlay(element) {
 		if (!viewer.isOpen()) {
-			viewer.addEventListener('open', function () {
+			viewer.addHandler('open', function () {
 				viewer.drawer.removeOverlay(element);
 			});
 		} else {
@@ -184,11 +184,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 	};
 
 	/**
-	 * Unloads the seadragon viewer
+	 * Destroys the OSD viewer
 	 * @method unload
 	 */
 	function unload() {
-		viewer && viewer.unload();
+		viewer && viewer.destroy();
 	}
 
 	/**
@@ -222,12 +222,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 		dzManipPreprocessing();
 
 		if (!artworkFrozen) {
-			pivotRel = viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y));
+			pivotRel = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y));
 			var piv = {
 				x: pivotRel.x,
 				y: pivotRel.y
 			};
-			transRel = viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(trans.x, trans.y));
+			transRel = viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y));
 			if (xFadeOffset) {
 				
 				// testing 
@@ -350,7 +350,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 		viewer.viewport && function () {
 			var ycoord = parseFloat($(element).css('top')) + parseFloat($(element).css('height'));
 			var xcoord = parseFloat($(element).css('left')) + 0.5 * parseFloat($(element).css('width'));
-			var point = viewer.viewport.pointFromPixel(new Seadragon.Point(xcoord, ycoord));
+			var point = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(xcoord, ycoord));
 			var bounds = viewer.viewport.getBounds();
 			//if the point is not visible in the current bounds
 			if (!((point.x < bounds.getBottomRight().x && point.x > bounds.getTopLeft().x)
@@ -398,10 +398,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 			top = parseFloat($(element).css('top')),
 			left = parseFloat($(element).css('left'));
 
-		var topY = pointFromPixel(new Seadragon.Point(1, top - 10)).y,
-			bottomY = pointFromPixel(new Seadragon.Point(1, top + height + 10)).y,
-			leftX = pointFromPixel(new Seadragon.Point(left - 10, 1)).x,
-			rightX = pointFromPixel(new Seadragon.Point(left + width + 10, 1)).x;
+		var topY = pointFromPixel(new OpenSeadragon.Point(1, top - 10)).y,
+			bottomY = pointFromPixel(new OpenSeadragon.Point(1, top + height + 10)).y,
+			leftX = pointFromPixel(new OpenSeadragon.Point(left - 10, 1)).x,
+			rightX = pointFromPixel(new OpenSeadragon.Point(left + width + 10, 1)).x;
 
 		if (((rightX < bounds.getBottomRight().x && leftX > bounds.getTopLeft().x)
 			&& (bottomY < bounds.getBottomRight().y && topY > bounds.getTopLeft().y))) {
@@ -438,28 +438,28 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 		var point = locationOf(element);
 		var bounds = viewer.viewport.getBounds();
 		if (point.x <= 0 && point.y <= 0) { //TOP LEFT
-			return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, 0));
+			return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0));
 		}
 		if (point.y <= 0 && point.x >= 1) { //TOP RIGHT
-			return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, 0));
+			return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, 0));
 		}
 		if (point.x <= 0 && point.y >= (1 / aspectRatio) + 0) { //BOTTOM LEFT
-			return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, (1 / aspectRatio)));
+			return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, (1 / aspectRatio)));
 		}
 		if (point.x >= 1 && point.y >= (1 / aspectRatio) + 0) { //BOTTOM RIGHT
-			return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, (1 / aspectRatio)));
+			return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, (1 / aspectRatio)));
 		}
 		if (point.x <= -0.05) { //LEFT
-			return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, point.y));
+			return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, point.y));
 		}
 		if (point.x >= 1.05) { //RIGHT
-			return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, point.y));
+			return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, point.y));
 		}
 		if (point.y <= -0.05) { //TOP
-			return viewer.viewport.pixelFromPoint(new Seadragon.Point(point.x, 0));
+			return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(point.x, 0));
 		}
 		if (point.y >= (1 / aspectRatio) + .05) { //BOTTOM
-			return viewer.viewport.pixelFromPoint(new Seadragon.Point(point.x, (1 / aspectRatio)));
+			return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(point.x, (1 / aspectRatio)));
 		}
 	}
 	
@@ -473,7 +473,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 		(viewer.viewport && element) && function () {
 			var ycoord = parseFloat($(element).css('top')) + parseFloat($(element).css('height'));
 			var xcoord = parseFloat($(element).css('left')) + 0.5 * parseFloat($(element).css('width'));
-			point = viewer.viewport.pointFromPixel(new Seadragon.Point(xcoord, ycoord));
+			point = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(xcoord, ycoord));
 		}();
 		return point;
 	}
@@ -501,7 +501,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 		var t = parseFloat($(element).css('top')) + $(element).height(),
 			l = parseFloat($(element).css('left')) + $(element).width() / 2;
 
-		return viewer.viewport.pointFromPixel(new Seadragon.Point(l, t));
+		return viewer.viewport.pointFromPixel(new OpenSeadragon.Point(l, t));
 	}
 
 	/** 
@@ -521,7 +521,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 	function createStartingPoint() {
 		var centerPoint = viewer.viewport.getCenter();
 		var bounds = viewer.viewport.getBounds();
-		return new Seadragon.Point(centerPoint.x + .01 * (bounds.getBottomRight().x - bounds.getTopLeft().x),
+		return new OpenSeadragon.Point(centerPoint.x + .01 * (bounds.getBottomRight().x - bounds.getTopLeft().x),
 			centerPoint.y + .01 * (bounds.getBottomRight().y - bounds.getTopLeft().y));
 	};
 
@@ -591,27 +591,28 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 			TAG.Util.makeManipulatableWin(canvas[0], {
 				onScroll: function (delta, pivot) {
 					dzScroll(delta, pivot);
-					console.log("Scrolling map!");
 				},
 				onManipulate: function (res) {
-					if (doManipulation) {
+					//if (doManipulation) {
 						res.translation.x = -res.translation.x;        //Flip signs for dragging
 						res.translation.y = -res.translation.y;
 						dzManip(res);
-					}
+					//}
 				}
 			}, null, true); // NO ACCELERATION FOR NOW
 		} else {
 			TAG.Util.makeManipulatable(canvas[0], {
 				onScroll: function (delta, pivot) {
+					console.log("scroll")
 					dzScroll(delta, pivot);
 				},
 				onManipulate: function (res) {
-					if (doManipulation) {
+					console.log("manip")
+					//if (doManipulation) {
 						res.translation.x = -res.translation.x;        //Flip signs for dragging
 						res.translation.y = -res.translation.y;
 						dzManip(res);
-					}
+					//}
 				}
 			}, null, true); // NO ACCELERATION FOR NOW
 		}
@@ -696,7 +697,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 	 * @param {Function} handler      the handler to add
 	 */
 	function addAnimateHandler(handler) {
-		viewer.addEventListener("animation", handler);
+		viewer.addHandler("animation", handler, {"viewport":viewer.viewport});
 	}
 
 	/**
@@ -1937,7 +1938,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 				if (IS_HOTSPOT) {
 					if (!isHotspotIcon) {
 						circle.css('visibility', 'visible');
-						addOverlay(circle[0], position, Seadragon.OverlayPlacement.CENTER);
+						addOverlay(circle[0], position, OpenSeadragon.OverlayPlacement.CENTER);
 					}
 					viewer.viewport.panTo(position, false);
 					viewer.viewport.applyConstraints()

@@ -1323,6 +1323,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         * @param {event} evt            manipulation event of the image
         */
         function dzMoveHandler(evt) {
+
             var minimaph = minimap.height();
             var minimapw = minimap.width();
 
@@ -1330,7 +1331,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var minimapt = (minimapContainer.height() / 2) - (minimap.height() / 2);
             var minimapl = (minimapContainer.width() / 2) - (minimap.width() / 2);
 
-            var viewport = evt.viewport;
+            var viewport = evt.userData.viewport;
             var rect = viewport.getBounds(true);
             var tl = rect.getTopLeft();
             var br = rect.getBottomRight();
