@@ -1,5 +1,4 @@
 window.ITE = window.ITE || {};
-
 ITE.Orchestrator = function(player) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
@@ -14,7 +13,9 @@ ITE.Orchestrator = function(player) {
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
 	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
+	self.prevStatus			= 0; // 0 means we're not scrubbing. 1 - previously playing. 2 - previously paused.
 	self.tourData 			= null;
+    self.loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
 
 	self.timeManager = new ITE.TimeManager();
 	self.getElapsedTime = function(){
@@ -57,7 +58,7 @@ ITE.Orchestrator = function(player) {
 			//Creates tracks
 			for (i = 0; i < tourData.tracks.length; i++){
 				var track = tourData.tracks[i]
-				createTrackByProvider(track)
+				self.loadQueue.add(createTrackByProvider(track))
 			};
 
 			//...Initializes them
@@ -81,13 +82,6 @@ ITE.Orchestrator = function(player) {
 	    * O/P: none
 	    */
 		function createTrackByProvider(trackData){
-			// console.log("----------------------------------------------------")
-			// console.log("Data: ")
-			// console.log(trackData)
-			// console.log("URL: " + trackData.assetUrl)
-			// console.log("provider: " + trackData.providerId)
-			// console.log("----------------------------------------------------")
-
 			switch (trackData.providerId){
 				case "image" : 
 					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.timeManager, self));
@@ -102,11 +96,7 @@ ITE.Orchestrator = function(player) {
 					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "ink" : 
-<<<<<<< HEAD
-					//self.trackManager.push(new ITE.ScribbleProvider(trackData, self.player, self.timeManager, self));
-=======
 					self.trackManager.push(new ITE.InkProvider(trackData, self.player, self.timeManager, self));
->>>>>>> 61e7a8d... starting ink stuff... again
 					break;
 				default:
 					throw new Error("Unexpected providerID; '" + trackData.providerId + "' is not a valid providerID");
@@ -134,7 +124,7 @@ ITE.Orchestrator = function(player) {
 		return this.status;
 	}
 
-	function play(){
+	function play() {
 		var i;
 		for (i=0; i<self.trackManager.length; i++) {
 			if (self.trackManager[i].state === "loading"){
@@ -149,7 +139,7 @@ ITE.Orchestrator = function(player) {
 		self.status = 1;
 	}
 
-	function pause(){
+	function pause() {
 		self.timeManager.stopTimer();
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].pause();
@@ -157,7 +147,15 @@ ITE.Orchestrator = function(player) {
 		self.status = 2; 
 	}
 
-	function seek(seekPercent) {
+	function scrub(seekPercent) {
+		// Pause.
+		if (self.prevStatus === 0) {
+			self.prevStatus = self.status;
+		}
+		if (self.status === 1) {
+			self.pause();
+		}
+
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
 		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
@@ -166,7 +164,37 @@ ITE.Orchestrator = function(player) {
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].seek();
 		}
-		//self.taskManager.seek(seekTime * self.tourData.totalDuration);
+	}
+
+	function seek(seekPercent) {
+		self.updateZIndices()
+		// Pause.
+		if (self.prevStatus === 0) {
+			self.prevStatus = self.status;
+		}
+		if (self.status === 1) {
+			self.pause();
+		}
+
+		// Change time.
+		var seekTime = seekPercent * self.tourData.totalDuration;
+		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+
+		// Inform tracks of seek.
+		var nextKeyframes = new Array(trackManager.length);
+		for (i = 0; i < self.trackManager.length; i++) {
+			nextKeyframes[i] = self.trackManager[i].seek();
+		}
+
+		// If we're playing, continue playing!
+		if (self.prevStatus === 1) {
+			for (i = 0; i < self.trackManager.length; i++) {
+				self.trackManager[i].play(nextKeyframes[i]);
+			}
+			self.timeManager.startTimer();
+			self.status = 1;
+		}
+		self.prevStatus = 0;
 	}
 
 	function setVolume(newVolumeLevel){
@@ -179,7 +207,7 @@ ITE.Orchestrator = function(player) {
 	}
  
 	function captureKeyframe(track) {
-		var keyFrameData = track.getState()
+		var keyFrameData = track.getKeyframeState()
 		track.addKeyframe(keyFrameData)
 	}
 
@@ -190,6 +218,21 @@ ITE.Orchestrator = function(player) {
 
 	function deleteKeyframe(track, keyframe){
 		track.keyframes.remove(keyframe)
+	}
+
+	function updateZIndices(){
+		var i;
+		for (i = 0; i < trackManager.length; i++){
+			trackManager[i].setZIndex(i)
+		}
+	}
+
+	function deleteTrack(track){
+		var index = trackManager[indexOf(track)]
+		if (index > -1) {
+		    trackManager.splice(index, 1);
+		}
+		track.unload();
 	}
 
 	function areAllTracksReady() {
@@ -228,6 +271,7 @@ ITE.Orchestrator = function(player) {
 		for (i = 0; i < trackManager.length; i++){
 			var track = trackManager[i];
 			initializeTrack(track)
+			track.setZIndex(i)
 		}
 	}
 
@@ -236,10 +280,16 @@ ITE.Orchestrator = function(player) {
 	}
 
 	self.getTrackManger = getTrackManger;
+	self.captureKeyframe = captureKeyframe;
+	self.changeKeyframe = changeKeyframe;
+	self.deleteKeyframe = deleteKeyframe;
+	self.deleteTrack = deleteTrack;
 	self.trackManager = trackManager;
+	self.updateZIndices = updateZIndices;
 	self.unload = unload;
 	self.play = play;
 	self.pause = pause;
+	self.scrub = scrub;
 	self.seek = seek;
 	self.setVolume = setVolume;
 	self.toggleMute = toggleMute;

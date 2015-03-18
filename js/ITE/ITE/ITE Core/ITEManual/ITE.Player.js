@@ -208,7 +208,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 },
                 "mousemove": function (e) {
                     //time
-                    progressBarContainer.dragging ? seek(e) : null
+                    progressBarContainer.dragging ? scrub(e) : null
                     //volume
                     volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
                 }
@@ -450,7 +450,25 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
     /*
     * I/P:   none
-    * Seeks tour to a specfied spot
+    * Seeks tour to a specfied spot, without playing it. 
+    * This is designed to be called as the user drags on the progress bar.
+    * O/P:   none
+    */
+    function scrub(e) {
+        if (playerConfiguration.allowSeek){
+            console.log("Tour was seeked")
+            progressBar.css({
+                width : e.pageX - ITEHolder.offset().left
+            })
+            timeOffset = progressBar.width()/(progressBar.parent().width()) //timeOffset is currently a percentage of the total time
+            orchestrator.scrub(timeOffset);
+        }
+    };
+
+    /*
+    * I/P:   none
+    * Seeks tour to a specfied spot, then continue playing (if previously playing).
+    * This is designed to be called when the user mouseups on the progress bar at a new time.
     * O/P:   none
     */
     function seek(e) {
@@ -632,6 +650,46 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     }
 
     /**
+    * I/P:    track to be deleted
+    * Deletes a track
+    * O/P:    none
+    */ 
+    function deleteTrack(track){
+        Orchestrator.deleteTrack(track)
+    }
+
+    /**
+    * I/P:    track and the new index/layer where it should be, with regards to the rest of the tracks (for example, adding one to the top of the list would be an index of)
+    * Mutates time of a track
+    * O/P:    none
+    */ 
+    function changeTrackZIndex(track, index){
+        if (index > trackManager.length - 1){
+            console.log("ERROR: trying to change index of a track to an index that does not exist")
+            return
+        }
+        trackManger = self.getTracks();
+        var i = trackManager.indexOf(track);
+        //If desired index is less than current index, keep switching down until you get to the desired index
+        while (index < i){
+            var temp = trackManager[i - 1];
+            trackManager[i - 1] = trackManager[i];
+            trackManager[i] = temp
+            i--;
+        }
+        //If the desired index is greater than the current index, switch up
+        while (index > i){
+            var temp = trackManager[i + 1];
+            trackManager[i + 1] = trackManager[i];
+            trackManager[i] = temp
+            i++;
+        }
+        Orchestrator.updateZIndices();
+    }
+
+
+
+    /**
     * I/P:    none
     * returns tracks, used for authoring
     * O/P:    trackManager of the orchestrator (list of tracks)
@@ -647,6 +705,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function addTrack(trackData){
         track =  Orchestrator.createTrackByProvider(trackData)
+        track.createDefaultKeyframes()
         Orchestrator.initializeTrack(track)
         track.load()
         return track
@@ -654,6 +713,11 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
 
     this.getTracks          = getTracks;
+    this.addKeyframe        = addKeyframe;
+    this.changeKeyframe     = changeKeyframe;
+    this.removeKeyframe     = removeKeyframe;
+    this.deleteTrack        = deleteTrack;
+    this.changeTrackZIndex  = changeTrackZIndex;
     this.getRoot            = getRoot;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;

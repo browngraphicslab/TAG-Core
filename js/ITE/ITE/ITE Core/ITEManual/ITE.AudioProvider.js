@@ -62,9 +62,6 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -73,7 +70,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function() {
-		_super.load()
+		_super.load();
 
 		// Sets the image’s URL source.
 		_audio.attr({
@@ -82,13 +79,14 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			"type" 	: self.trackData.type
 		});
 
-		// When audio has finished loading, set status to “paused” (2), 
-		// and set state to first keyframe.
-		_audio.onload = function (event) { // Is self ever getting called?
-			self.setStatus(2);
-			self.setState(getKeyframeState(self.firstKeyframe));
-		};
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
+
+	self.unload = function(){
+		_UIControl.parent.removeChild(_UIControl)
+		_UIControl = null
+	}
 
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
@@ -149,12 +147,12 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 
 	/*
 	 * I/P: 	none
-	 * Informs audio asset of seek. TimeManager will have been updated.
-	 * O/P: 	none
+	 * Pauses track and changes its state based on new time from timeManager.
+	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function() {
 		if (self.status === 3) {
-			return;
+			return null;
 		}
 
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
@@ -188,9 +186,10 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 
 		// If this track was playing, continue playing.
-		if (prevStatus === 1) {
-			self.play(nextKeyframe);
-		} 
+		// if (prevStatus === 1) {
+		// 	self.play(nextKeyframe);
+		// } 
+		return nextKeyframe;
 	};
 
 	/* 
@@ -284,6 +283,25 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	// AudioProvider functions.
 	///////////////////////////////////////////////////////////////////////////
 
+    /*
+	 * I/P: 	none
+	 * Creates defauly keyframes for the track
+	 * O/P: 	none
+	 */
+	function createDefaultKeyframes() {
+		var i;
+		for (i = 0; i < 4; i++){
+			var keyframe = {
+				"dispNum": 0,
+				"time": i,
+				"audioOffset": 0,
+				"volume": 1
+			}
+			self.keyframes.add(keyframe)
+		}
+	};
+	self.createDefaultKeyframes = createDefaultKeyframes
+
 	/* 
 	 * I/P: 	newVolume : 	 new volume set by user via UI
 	 * Sets the current volume to the newVolume * value from keyframes, and then animates the audio to the next keyframe 
@@ -326,4 +344,16 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			_audioControls.muted = false;
 		} 
 	};
+
+
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
+    
 };

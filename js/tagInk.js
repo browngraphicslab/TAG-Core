@@ -84,7 +84,9 @@ var tagInk = function (canvId, html_elt) {
         inkPannedY;
 
     // set up the coordinates for adjustViewBox
-    var viewerElt = ($("#rinplayer").length) ? $("#rinplayer") : $("#rinPlayer"),
+    // var viewerElt = ($("#rinplayer").length) ? $("#rinplayer") : $("#rinPlayer"),
+        var viewerElt = ($("#ITEHolder").length) ? $("#ITEHolder") : $("#ITEHolder"),
+
         origPaperX = 0, // original coordinates of the paper (match with rinContainer)
         origPaperY = 0,
         origPaperW = viewerElt.width(),
@@ -307,8 +309,8 @@ var tagInk = function (canvId, html_elt) {
             }
             else if (transLetters[i] == "z") // if z, close the path
                 path += "z"
-            else
-                console.log("ELSE: " + transLetters[i]);
+            // else
+            //     console.log("ELSE: " + transLetters[i]);
         }
         var final_path = path;
         if (trans_mode == 'isolate') // if the mode is 'isolate,' reverse the path and add an outer path
@@ -691,7 +693,6 @@ var tagInk = function (canvId, html_elt) {
             }
         });
         datastring = data_string;
-        console.log("DATA STRING::::::" + data_string)
         return data_string;
     }
     that.update_datastring = update_datastring;
@@ -795,9 +796,9 @@ var tagInk = function (canvId, html_elt) {
                 paCount++;
             }
         }
-        console.log("to save: " + pathsToSave);
+        // console.log("to save: " + pathsToSave);
         for (i = 0; i < pathsToDraw.length; i++) { // need to split up the paths so we can style each separately
-            console.log("to draw: " + pathsToDraw[i]);
+            // console.log("to draw: " + pathsToDraw[i]);
             var drawing = paper.path(pathsToDraw[i]); // draw the path to the canvas
             drawing.data("type", "bezier");
             drawing.attr({

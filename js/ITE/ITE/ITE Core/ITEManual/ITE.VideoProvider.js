@@ -57,7 +57,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	function initialize() {
-		_super.initialize()
+		_super.initialize();
 
 		// Create UI and append to ITEHolder.
 		_video		= $(document.createElement("video"))
@@ -73,14 +73,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 
-		// Formatting z-index of first keyframe.
-		_UIControl.css("z-index", self.firstKeyframe.zIndex);
-
 		// Attach Handlers.
 		attachHandlers();
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -89,21 +83,24 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function() {
-		_super.load()
+		_super.load();
 
 		//Sets the image’s URL source
 		_video.attr({
 			"src"	: itePath + "Assets/TourData/" + self.trackData.assetUrl,
 			"type" 	: self.trackData.type
-		})
+		});
 
-		_videoControls.load()
-		// When image has finished loading, set status to “paused”, and position element where it should be for the first keyframe
-		_video.onload = function (event) {//Is self ever getting called?
-			self.setStatus(2);
-			self.setState(keyframes[0]);
-		};
+		_videoControls.load();
+
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
+
+	self.unload = function(){
+		_UIControl.parent.removeChild(_UIControl)
+		_UIControl = null
+	}
 
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
@@ -169,12 +166,12 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 	/*
 	 * I/P: 	none
-	 * Informs video asset of seek. TimeManager will have been updated.
-	 * O/P: 	none
+	 * Pauses track and changes its state based on new time from timeManager.
+	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function() {
 		if (self.status === 3) {
-			return;
+			return null;
 		}
 
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
@@ -207,9 +204,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 
 		// If this track was playing, continue playing.
-		if (prevStatus === 1) {
-			self.play(nextKeyframe);
-		} 
+		// if (prevStatus === 1) {
+		// 	self.play(nextKeyframe);
+		// } 
+		return nextKeyframe;
 	};
 
 
@@ -348,6 +346,36 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	///////////////////////////////////////////////////////////////////////////
 	// InkProvider functions.
 	///////////////////////////////////////////////////////////////////////////
+
+    /*
+	 * I/P: 	none
+	 * Creates defauly keyframes for the track
+	 * O/P: 	none
+	 */
+	function createDefaultKeyframes() {
+		var i;
+		for (i = 0; i < 4; i++){
+			opacity = (i == 0 || i == 3) ? 0 : 1;
+			var keyframe = {
+				"dispNum": 0,
+				"time": i,
+				"opacity": opacity,
+				"pos" : {
+					"x" : "100px",
+					"y" : "100px"
+				},
+				"size": {
+					"x" : "100",
+					"y" : "100"
+				},
+				"volume": "1",
+                "videoOffset": "0"
+			}
+			self.keyframes.add(keyframe)
+		}
+	};
+	self.createDefaultKeyframes = createDefaultKeyframes
+
 
 	/* 
 	 * I/P: 	newVolume :  	 New volume set by user via UI.
@@ -517,4 +545,16 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
         interactionHandlers.onManipulate 	= mediaManip;
         interactionHandlers.onScroll		= mediaScroll;    	
     };
+
+
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
+    
 };

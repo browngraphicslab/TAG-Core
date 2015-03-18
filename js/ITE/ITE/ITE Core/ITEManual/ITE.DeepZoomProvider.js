@@ -70,7 +70,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
-			id 			 		: "DeepZoomHolder",
+			id 			 		: trackData.name + "holder",
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
@@ -97,14 +97,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 
-		// Formatting z-index of first keyframe.
-		_UIControl.css("z-index", self.firstKeyframe.zIndex);
-
 		// Attach handlers.
 		attachHandlers();
-
-		// Ready to go.
-		self.status = 2;
 	};
 
 	/*
@@ -117,7 +111,15 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Sets the DeepZoom's URL source.
 		_viewer.open(self.trackData.assetUrl);
+		
+		// When finished loading, set status to 2 (paused).
+		self.status = 2; // TODO: should this be some kind of callback?
 	};
+
+	self.unload = function(){
+		_UIControl.parent.removeChild(_UIControl)
+		_UIControl = null
+	}
 
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
@@ -195,21 +197,23 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.stopDelayStart();
 
-		self.getState();
-		self.setState(self.savedState); //Effectively kills OSD animation by redirecting the current animation to where the image is right now
 		if (self.animation) {//Kills opacity animation
 			self.animation.kill();
 		}
+
+		self.getState();
+		self.setState(self.savedState); //Effectively kills OSD animation by redirecting the current animation to where the image is right now
+
 	};
 
 	/*
 	 * I/P: 	none
-	 * Informs DeepZoom asset of seek. TimeManager will have been updated.
-	 * O/P: 	none
+	 * Pauses track and changes its state based on new time from timeManager.
+	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function() {
 		if (self.status === 3) {
-			return;
+			return null;
 		}
 
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
@@ -243,9 +247,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 
 		// If this track was playing, continue playing.
-		if (prevStatus === 1) {
-			self.play(nextKeyframe);
-		} 
+		// if (prevStatus === 1) {
+		// 	self.play(nextKeyframe);
+		// } 
+		return nextKeyframe;
 	};
 
 	/* 
@@ -306,7 +311,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	self.getState = function() {
 		self.savedState = {
 			time	: self.timeManager.getElapsedOffset(),
-			bounds 	: _viewer.viewport.getBounds(true)
+			bounds 	: _viewer.viewport.getBounds(true),
 		};	
 		return self.savedState;
 	};
@@ -393,15 +398,43 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	// };
 
 	///////////////////////////////////////////////////////////////////////////
-	// DeeppZoomProvider functions.
+	// DeepZoomProvider functions.
 	///////////////////////////////////////////////////////////////////////////
+
+
+    /*
+	 * I/P: 	none
+	 * Creates defauly keyframes for the track
+	 * O/P: 	none
+	 */
+	function createDefaultKeyframes() {
+		var i;
+		for (i = 0; i < 4; i++){
+			opacity = (i == 0 || i == 3) ? 0 : 1;
+			var keyframe = {
+				"dispNum": 0,
+				"time": i,
+				"opacity": opacity,
+				"pos" : {
+                    "x": "0.005",
+                    "y": "0.005"
+				},
+				"scale": 1
+			};
+			self.keyframes.add(keyframe);
+		}
+	}
+	self.createDefaultKeyframes = createDefaultKeyframes;
+
+
+
 
 	/* 
 	 * I/P: 	inkTrack : 		Ink track to attach to self asset.
 	 * Adds ink as an overlay.
 	 * O/P: 	none
 	 */
-	self.addInk = function(inkTrack) {
+	function addInk(inkTrack) {
 		if (!_viewer.viewport){
 			console.log("failed to load ink as DZ is not ready" );
 			setTimeout(function(){
@@ -411,7 +444,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			_viewer.addOverlay(inkTrack._UIControl[0], point);	
 		}
 	};
-
+	self.addInk = addInk;
 	/*
 	 * I/P: 	none
 	 * Return a set of interactionHandlers attached to asset from provider.
