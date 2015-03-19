@@ -284,6 +284,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	function findAttachedAsset(experienceReference) {
 		var j,
 			track;
+
 		//Loop through trackManager to find the asset whose name matches the Ink's experienceReference
 		for (j = 0; j < self.orchestrator.trackManager.length; j++) {
 			track = self.orchestrator.trackManager[j];
@@ -291,6 +292,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 				_attachedAsset = track;
 			};
 		};
+
 		//If it exists, return it, and if now, throw an error
 		if (_attachedAsset) {
 			return _attachedAsset;
@@ -308,8 +310,6 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		_attachedAsset.addInk(self);
 	};
 	self.attachToAsset = attachToAsset;
-	self._UIControl = _UIControl;
-
 	
     /*
 	 * I/P: 	index
@@ -320,4 +320,9 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
     	_UIControl.css("z-index", index)
     }
     self.setZIndex = setZIndex;
+
+    //Some other things to expose
+    self._UIControl = _UIControl;
+    self._ink = _ink;
+
 };

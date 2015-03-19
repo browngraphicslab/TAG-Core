@@ -39,6 +39,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	var interactionHandlers 		= {},
 		movementTimeouts 			= [];
 
+	// miscellaneous
+	var attachedInks = [];
+
 	// Start things up...
     initialize();
 
@@ -436,12 +439,22 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function addInk(inkTrack) {
 		if (!_viewer.viewport){
-			console.log("failed to load ink as DZ is not ready" );
+			console.log("failed to load ink as DZ is not ready... trying again" );
 			setTimeout(function(){
 				addInk(inkTrack) } , 100);
 		} else {
-			var point = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(50, 50));
-			_viewer.addOverlay(inkTrack._UIControl[0], point);	
+			attachedInks.push(inkTrack)	
+			_UIControl.append(inkTrack._UIControl[0])
+			
+			inkTrack._ink.retrieveOrigDims();
+
+			inkTrack._ink.setInitKeyframeData({ 
+				x: self.firstKeyframe.pos.x, 
+				y: self.firstKeyframe.pos.y, 
+				w: 1/self.firstKeyframe.scale, 
+				h: 1/self.firstKeyframe.scale/2
+			})
+
 		}
 	};
 	self.addInk = addInk;
@@ -544,6 +557,19 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			    	// evt.preventDefaultAction()
 			    }
 	    	});
+		_viewer.addHandler(
+			'animation', function(evt) {
+				for (var i = 0; i < attachedInks.length; i++){
+					var bounds = _viewer.viewport.getBounds(true);
+					bounds = {
+						x: bounds.x, 
+						y: bounds.y, 
+						width: bounds.width, 
+						height: bounds.height
+					}
+					attachedInks[i]._ink.adjustViewBox(bounds);
+				}
+			})
 	}
 
 		/*
