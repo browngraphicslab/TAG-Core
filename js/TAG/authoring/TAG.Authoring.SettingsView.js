@@ -3958,45 +3958,45 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (contentTypes[j] === 'Video') {
                     
                     //webappfileupload
-                    /**
-                    var videoElement = $(document.createElement('video'));
-                    videoElement.attr('preload', 'metadata');   //Instead of waiting for whole video to load, just load metadata
-                    var videoURL = URL.createObjectURL(files[j]);
-                    videoElement.attr('src', videoURL);
-                    videoElement.on('loadedmetadata', function() {
-                        var dur = this.duration;
-                     durations.push(dur);
-                    });
-                    **/
-
-                    files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
+                    if (!IS_WINDOWS){
+                        var videoElement = $(document.createElement('video'));
+                        videoElement.attr('preload', 'metadata');   //Instead of waiting for whole video to load, just load metadata
+                        var videoURL = URL.createObjectURL(files[j]);
+                        videoElement.attr('src', videoURL);
+                        videoElement.on('loadedmetadata', function() {
+                            var dur = this.duration;
+                            durations.push(dur);
+                        });
+                    } else {
+                        files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
                         durations.push(VideoProperties.duration / 1000); // duration in seconds
                         updateDoq(j);
-                    }, function (err) {
-                        console.log(err);
-                    });
+                        }, function (err) {
+                            console.log(err);
+                        });
+                    }
 
                 } else if (contentTypes[j] === 'Audio') {
 
                     //webappfileupload
-                    /**
-                    var audioElement = $(document.createElement('audio'));
-                    audioElement.attr('preload', 'metadata');   //Instead of waiting for whole audio to load, just load metadata
-                    var audioURL = URL.createObjectURL(files[j]);
-                    audioElement.attr('src', audioURL);
-                    audioElement.on('loadedmetadata', function() {
-                        var dur = this.duration;
-                        durations.push(dur);
-                        updateDoq(j);
-                    });
-                    **/
-
-                    files[j].properties.getMusicPropertiesAsync().done(function (MusicProperties) {
+                    if (!IS_WINDOWS){
+                        var audioElement = $(document.createElement('audio'));
+                        audioElement.attr('preload', 'metadata');   //Instead of waiting for whole audio to load, just load metadata
+                        var audioURL = URL.createObjectURL(files[j]);
+                        audioElement.attr('src', audioURL);
+                        audioElement.on('loadedmetadata', function() {
+                            var dur = this.duration;
+                            durations.push(dur);
+                            updateDoq(j);
+                        });
+                    } else {
+                        files[j].properties.getMusicPropertiesAsync().done(function (MusicProperties) {
                         durations.push(MusicProperties.duration / 1000); // duration in seconds
                         updateDoq(j);
-                    }, function (error) {
-                        console.log(error);
-                    });
+                        }, function (error) {
+                            console.log(error);
+                        });
+                    }
                 } else {
                     durations.push(null);
                     updateDoq(j);
@@ -4091,101 +4091,101 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         artworkAssociations = [];
         numFiles = 0;
         isUploading = true;
-        assetUploader = TAG.Authoring.FileUploader( // multi-file upload now
-            root,
-            TAG.Authoring.FileUploadTypes.AssociatedMedia,
-            function (files, localURLs) { // localCallback
-                var file, localURL, i;
-                var img, video, audio;
-                var contentType;
-                numFiles = files.length;
-                for (i = 0; i < files.length; i++) {
-                    artworkAssociations.push([]);
-                    file = files[i];
-                    localURL = localURLs[i];
-
-                    if (file.contentType.match(/image/)) {
-                        contentType = 'Image';
-                    } else if (file.contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
-                        contentType = 'Video';
-                    } else if (file.contentType.match(/audio/)) {
-                        contentType = 'Audio';
+        if (IS_WINDOWS){
+            assetUploader = TAG.Authoring.FileUploader( // multi-file upload now
+                root,
+                TAG.Authoring.FileUploadTypes.AssociatedMedia,
+                function (files, localURLs) { // localCallback
+                    var file, localURL, i;
+                    var img, video, audio;
+                    var contentType;
+                    numFiles = files.length;
+                    for (i = 0; i < files.length; i++) {
+                        artworkAssociations.push([]);
+                        file = files[i];
+                        localURL = localURLs[i];
+                        if (file.contentType.match(/image/)) {
+                            contentType = 'Image';
+                        } else if (file.contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
+                            contentType = 'Video';
+                        } else if (file.contentType.match(/audio/)) {
+                            contentType = 'Audio';
+                        }
+                        uniqueUrls.push(localURL);
+                        mediaMetadata.push({
+                            'title': file.displayName,
+                            'contentType': contentType,
+                            'localUrl': localURL,
+                            'assetType': 'Asset',
+                            'assetLinqID': undefined,
+                            'assetDoqID': undefined
+                        });
                     }
-                    uniqueUrls.push(localURL);
-                    mediaMetadata.push({
-                        'title': file.displayName,
-                        'contentType': contentType,
-                        'localUrl': localURL,
-                        'assetType': 'Asset',
-                        'assetLinqID': undefined,
-                        'assetDoqID': undefined
-                    });
-                }
-            },
-            function (dataReaderLoads) { // finished callback: set proper contentUrls, if not first, save it
-                var i, dataReaderLoad;
-                for (i = 0; i < dataReaderLoads.length; i++) {
-                    dataReaderLoad = dataReaderLoads[i];
-                    mediaMetadata[i].contentUrl = dataReaderLoad;
-                }
+                },
+                function (dataReaderLoads) { // finished callback: set proper contentUrls, if not first, save it
+                    var i, dataReaderLoad;
+                    for (i = 0; i < dataReaderLoads.length; i++) {
+                        dataReaderLoad = dataReaderLoads[i];
+                        mediaMetadata[i].contentUrl = dataReaderLoad;
+                    }
 
                 // chooseAssociatedArtworks(); // need to send in media objects here TODO
-            },
-            ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
-            false, // useThumbnail
-            null, // errorCallback
-            true // multiple file upload enabled?
-        );
+                },
+                ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
+                false, // useThumbnail
+                null, // errorCallback
+                true // multiple file upload enabled?
+            );
+        } else {
         //webappfileupload
-        /**
-        assetUploader = TAG.Authoring.WebFileUploader(
-            root,
-            TAG.Authoring.FileUploadTypes.AssociatedMedia,
-            function (files, localURLs) { // localCallback
-                var file, localURL, i;
-                var img, video, audio;
-                var contentType;
-                numFiles = files.length;
-                for (i = 0; i < files.length; i++) {
-                    artworkAssociations.push([]);
-                    file = files[i];
-                    localURL = localURLs[i];
+            assetUploader = TAG.Authoring.WebFileUploader(
+                root,
+                TAG.Authoring.FileUploadTypes.AssociatedMedia,
+                function (files, localURLs) { // localCallback
+                    var file, localURL, i;
+                    var img, video, audio;
+                    var contentType;
+                    numFiles = files.length;
+                    for (i = 0; i < files.length; i++) {
+                        artworkAssociations.push([]);
+                        file = files[i];
+                        localURL = localURLs[i];
 
-                    //webappfileupload
-                    if (file.type.match(/image/)) {
-                         contentType = 'Image';
-                    } else if (file.type.match(/video/)) {
-                         contentType = 'Video';
-                    } else if (file.type.match(/audio/)) {
-                         contentType = 'Audio';
-                    }
+                        //webappfileupload
+                        if (file.type.match(/image/)) {
+                            contentType = 'Image';
+                        } else if (file.type.match(/video/)) {
+                            contentType = 'Video';
+                        } else if (file.type.match(/audio/)) {
+                            contentType = 'Audio';
+                        }
                     
-                    uniqueUrls.push(localURL);
-                    mediaMetadata.push({
-                        'title': file.name,
-                        'contentType': contentType,
-                        'localUrl': localURL,
-                        'assetType': 'Asset',
-                        'assetLinqID': undefined,
-                        'assetDoqID': undefined
-                    });
-                }
-            },
-            function (dataReaderLoads) { // finished callback: set proper contentUrls, if not first, save it
-                var i, dataReaderLoad;
-                for (i = 0; i < dataReaderLoads.length; i++) {
-                    dataReaderLoad = dataReaderLoads[i];
-                    mediaMetadata[i].contentUrl = dataReaderLoad;
-                }
+                        uniqueUrls.push(localURL);
+                        mediaMetadata.push({
+                            'title': file.name,
+                            'contentType': contentType,
+                            'localUrl': localURL,
+                            'assetType': 'Asset',
+                            'assetLinqID': undefined,
+                            'assetDoqID': undefined
+                        });
+                    }
+                },
+                function (dataReaderLoads) { // finished callback: set proper contentUrls, if not first, save it
+                    var i, dataReaderLoad;
+                    for (i = 0; i < dataReaderLoads.length; i++) {
+                        dataReaderLoad = dataReaderLoads[i];
+                        mediaMetadata[i].contentUrl = dataReaderLoad;
+                    }
 
                 // chooseAssociatedArtworks(); // need to send in media objects here TODO
-            },
-            ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
-            false, // useThumbnail
-            null, // errorCallback
-            true // multiple file upload enabled?
-        );
-**/
+                },
+                ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
+                false, // useThumbnail
+                null, // errorCallback
+                true // multiple file upload enabled?
+            );
+        }
     }
 
     /**
@@ -5109,29 +5109,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             prepareViewer(true);
 
             //webappfileupload
-            /**
-            if(!total) {
-                loadArtView();
+            if (!IS_WINDOWS){
+                if(!total) {
+                    loadArtView();
+                }
             }
-            **/
 
             function incrDone() {
                 done++;
 
                 //webappfileupload
-                /**
-                if (done >= total || !total) {
-                    middleLoading.hide();
-                    loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
+                if (!IS_WINDOWS){
+                    if (done >= total || !total) {
+                        middleLoading.hide();
+                        loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
+                    } else {
+                        durationHelper(done);
+                    }
                 } else {
-                    durationHelper(done);
-                }
-                **/
-
-                if (done >= total) {
-                    loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
-                } else {
-                    durationHelper(done);
+                    if (done >= total) {
+                        loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
+                    } else {
+                        durationHelper(done);
+                    }
                 }
             }
 
@@ -5144,25 +5144,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (contentTypes[j] === 'Video') {
 
                     //webappfileupload
-                    /**
-                    var videoElement = $(document.createElement('video'));
-                    videoElement.attr('preload', 'metadata');   //Instead of waiting for whole video to load, just load metadata
-                    var videoURL = URL.createObjectURL(files[j]);
-                    videoElement.attr('src', videoURL);
-                    videoElement.on('loadedmetadata', function() {
-                        var dur = this.duration;
-                        durations.push(dur);
-                        updateDoq(j);
-                    });
-                    **/
-
-                    files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
-                        durations.push(VideoProperties.duration / 1000); // duration in seconds
-                        updateDoq(j);
-                    }, function (err) {
-                        console.log(err);
-                    });
-
+                    if (!IS_WINDOWS){
+                        var videoElement = $(document.createElement('video'));
+                        videoElement.attr('preload', 'metadata');   //Instead of waiting for whole video to load, just load metadata
+                        var videoURL = URL.createObjectURL(files[j]);
+                        videoElement.attr('src', videoURL);
+                        videoElement.on('loadedmetadata', function() {
+                            var dur = this.duration;
+                            durations.push(dur);
+                            updateDoq(j);
+                        });
+                    } else {
+                        files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
+                            durations.push(VideoProperties.duration / 1000); // duration in seconds
+                            updateDoq(j);
+                        }, function (err) {
+                            console.log(err);
+                        });
+                    }
                 } else {
                     durations.push(null);
                     updateDoq(j);
@@ -7278,8 +7277,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function uploadFile(type, callback, multiple, filter) {
         console.log("file upload!");
         console.log(IS_WINDOWS);
-//webappfileupload
-/**
+        if (!IS_WINDOWS){
+        //webappfileupload:   
         var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
         TAG.Authoring.WebFileUploader( // remember, this is a multi-file upload
             root,
@@ -7322,7 +7321,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             },
             !!multiple // batch upload disabled
             );
-**/
+        } else {
 
         var names = [], locals = [], contentTypes = [], fileArray, i;
         TAG.Authoring.FileUploader( // remember, this is a multi-file upload
@@ -7389,6 +7388,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             },
             !!multiple // batch upload disabled
             );
+        }
     }
 
     /**Create an overlay over the whole settings view with a spinning circle and centered text. This overlay is intended to be used 

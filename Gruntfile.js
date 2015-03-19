@@ -88,7 +88,7 @@ var JSSRC = [
 		'js/TAG/util/TAG.Util.js',                             // TAGCORE
 		'js/html2canvas/html2canvas.js',                       // TAGCORE
 		'js/utils/jquery.livequery.js',                        // TAGCORE
-		'TAG/js/utils/resumable_edit.js',
+		'js/utils/resumable_edit.js',
 		'js/utils/Autolinker.js-master/dist/Autolinker.js',    // TAGCORE
 
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js', // TAGCORE
