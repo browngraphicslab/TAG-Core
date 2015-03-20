@@ -6665,7 +6665,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width' : '100%'
         });
 
-
+        
         var versionsButton = createButton("Provide Web Versions",
             function(){
                 var back = $(document.createElement("div"));
@@ -6702,7 +6702,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $('#tagContainer').append(back);
                 $('#tagContainer').append(centerDiv);
                 function filesChosen(data){
-                    alert(data);
+                    console.log("Data uploading: " + data);
                 }
                 var uploadButton = createButton("Upload File(s)",
                     function(){
@@ -6729,42 +6729,80 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "left" : "40%",
                     "width" : "20%",
                 })
-                var webmT = "Enter webm file";
-                //if a webm file already exists, change the string to the file path
-                var webmTextInput = createTextInput(null, webmT, 100);
-                var webm = createSetting("webm",webmTextInput,85);
+                var webm = $(document.createElement("div"));
+                var webmButton = createButton("Browse", function(){
+                    uploadFile(3, filesChosen, false, [".webm"]);
+                    webm.css({
+                        "color": "green",
+                    })
+                })
+                webmButton.css({
+                    "left": "20%",
+                    "position": "absolute",
+                    "height": "8%",
+                    "width": "20%",
+                    "top": "9%",
+                });
+                webm.text("webm");
                 webm.css({
-                    "left" : "1%",
+                    "left" : "5%",
                     "position" : "absolute",
-                    "height" : "10%",
-                    "top" : "10%",
+                    "height": "10%",
+                    "width" : "90%",
+                    "top": "10%",
                 })
                 
-                var ogvT = "Enter ogv file";
-                //if a ogv file already exists, change the string to the file path
-                var ogvTextInput = createTextInput(null, ogvT, 100);
-                var ogv = createSetting("ogv",ogvTextInput,85);
+                var ogv = $(document.createElement("div"));
+                var ogvButton = createButton("Browse", function () {
+                    uploadFile(3, filesChosen, false, [".ogv"]);
+                    ogv.css({
+                        "color" : "green",
+                    })
+                });
+                ogvButton.css({
+                    "left": "20%",
+                    "position": "absolute",
+                    "height": "8%",
+                    "width": "20%",
+                    "top": "24%",
+                });
+                ogv.text("ogv");
                 ogv.css({
-                    "left" : "1%",
-                    "position" : "absolute",
-                    "height" : "10%",
-                    "top" : "25%",
-
+                    "left": "5%",
+                    "position": "absolute",
+                    "height": "10%",
+                    "width": "90%",
+                    "top": "25%",
                 })
-                var mp4T = "Enter mp4 file";
-                //if a mp4 file already exists, change the string to the file path
-                var mp4TextInput = createTextInput(null, mp4T, 100);
-                var mp4 = createSetting("mp4",mp4TextInput,85);
+                var mp4 = $(document.createElement("div"));
+                var mp4Button = createButton("Browse", function () {
+                    uploadFile(3, filesChosen, false, [".mp4"]);
+                    mp4.css({ 
+                        "color": "green",
+                    })
+                });
+                mp4Button.css({
+                    "left": "20%",
+                    "position": "absolute",
+                    "height": "8%",
+                    "width": "20%",
+                    "top": "39%",
+                });
+                mp4.text("mp4");
                 mp4.css({
-                    "left" : "1%",
-                    "position" : "absolute",
-                    "height" : "10%",
-                    "top" : "40%",
+                    "left": "5%",
+                    "position": "absolute",
+                    "height": "10%",
+                    "width": "90%",
+                    "top": "40%",
                 })
 
                 centerDiv.append(webm);
+                centerDiv.append(webmButton);
                 centerDiv.append(ogv);
+                centerDiv.append(ogvButton);
                 centerDiv.append(mp4);
+                centerDiv.append(mp4Button);
                 centerDiv.append(uploadButton);
                 centerDiv.append(exitButton);
 
@@ -6782,12 +6820,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Trent's version button work in progress
         yearMetadataDiv.append(yearDiv)
                        .append(yearDescriptionDiv)
-                       .append(timelineYearDiv)
-                       .append(versionsButton);
-
+                       .append(timelineYearDiv);
+        
+        var typ = "";
+        if (work.Metadata.Type) {
+            typ = work.Metadata.Type.toLowerCase();
+        }
+        else if (work.Metadata.ContentType) {
+            typ = work.Metadata.ContentType.toLowerCase();
+        }
+        if (typ=="video"||typ=="videoArtwork") {
+            yearMetaDataDiv.append(versionsButton);
+        }
         yearMetadataDivSpecs = {
             yearMetadataDiv : yearMetadataDiv,
-            yearInput : yearInput,
+            yearInput : yearInput, 
             monthInput: monthInput,
             dayInput: dayInput,
             timelineYearInput: timelineYearInput,
