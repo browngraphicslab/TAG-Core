@@ -86,10 +86,16 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
-	self.unload = function(){
-		_UIControl.parent.removeChild(_UIControl)
-		_UIControl = null
-	}
+	/*
+	 * I/P: 	none
+	 * Unoads track asset.
+	 * O/P: 	none
+	 */
+	self.unload = function() {
+		for(var v in self) {
+			v = null;
+		}
+	};
 
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.

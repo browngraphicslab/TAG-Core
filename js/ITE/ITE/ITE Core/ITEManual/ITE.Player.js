@@ -1,6 +1,6 @@
 window.ITE = window.ITE || {};
 
-ITE.Player = function (options) { //acts as ITE object that contains the orchestrator, etc
+ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains the orchestrator, etc
    var totalTourDuration;
    var  orchestrator            = new ITE.Orchestrator(this),
         self = this,
@@ -256,8 +256,13 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         }
     };
 
-    function tourOver(){
-        looped ? seek(0) : parentTourPlayer.goback()
+    function tourOver(sec) {
+        if (sec > totalTourDuration) {
+            //isLooped ? orchestrator.seek(0) : tourPlayer.goBack();
+            if (isLooped) {
+                orchestrator.seek(0);
+            }
+        }
     }
      /*
     * I/P:   sec (int-- a time in sec)
@@ -301,6 +306,8 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         var timeString = makeTimeString(sec) + " / "+makeTimeString(totalTourDuration);
         progressIndicator.append(timeString);
         updateProgressBar(sec);
+
+        tourOver(sec);
     };
     /*
     * I/P:   none
@@ -607,6 +614,17 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         // console.log("tour is not looped")
         loopButton.css("opacity" , ".5")
     };
+
+    /**
+     * I/P: 
+     * Checks if tour is over
+     * O/P: 
+     *
+    */
+    /*function tourIsOver() {
+
+    }*/
+
 
     /**
     * I/P:    none

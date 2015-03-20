@@ -207,6 +207,13 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	self.load = function() {};
 
 	/*
+	 * I/P: 	none
+	 * Unloads actual track asset.
+	 * O/P: 	none
+	 */
+	self.unload = function() {};
+
+	/*
 	 * I/P: endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
 	 * Plays track.
 	 * O/P: none

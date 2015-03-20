@@ -177,6 +177,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         // TODO: do we need this next line?
         // tagContainer.css({ 'font-size': '11pt', 'font-family': "'source sans pro regular' sans-serif" }); // Quick hack to fix bug where rin.css was overriding styles for body element -jastern 4/30
     }
+    this.goBack = goBack;
 
     return {
         getRoot: function () {
@@ -221,7 +222,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     setStartingOffset:          0,
                     setEndTime:                 NaN
             };
-            player = new ITE.Player(testOptions);
+            player = new ITE.Player(testOptions, self);
             player.load(tour)
         }
     };
