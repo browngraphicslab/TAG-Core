@@ -32,7 +32,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     var _deepZoom,
     	_UIControl,
     	_viewer,
-    	_mouseTracker;
+    	_mouseTracker,
+    	_shouldBeInvisible;//boolean for if the current keyframe dictates the image shouldn't be clickable
     
     // Various animation/manipulation variables.
 	self.animationCallback;
@@ -63,11 +64,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         	.attr("id", trackData.name + "holder")
         	.css({
         		// "z-index"	: 0,
-        		// "pointer-events" : "none",
-        		// "visibility":"hidden",
-        		// "position":"relative",
+        		 //"pointer-events" : "none",
+        		 //"visibility":"visible",
+        		 //"opacity" : "",
+        		 //"position":"relative",
         		"width"		: "100%",
-        		"height"	: "100%"
+        		"height"	: "100%",
         	}); 
 		$("#ITEHolder").append(_UIControl);
 
@@ -82,13 +84,34 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			// mouseNavEnabled 	: false
 		});
 		$(_viewer.container).css({
-			"position":"absolute"
+			"position":"absolute",
+			//"visibility" : "visible",
+			//"pointer-events" : "none",
 		});
 		_viewer.clearControls();
-
         // Create _deepZoom, the canvas with the deepZoom image files.
         _deepZoom = $(_viewer.canvas)
-			.addClass("deepZoomImage");
+			.addClass("deepZoomImage"); 
+		_deepZoom.css({
+			//"pointer-events" : "none",
+		})
+		
+		$("#ITEHolder").mousemove(function(evt){//whenever the mouse moves in the ITEHolder, 
+			if(isInImageBoundsMouseEvent(evt)){
+				//console.log("in Bounds");
+				if(!_shouldBeInvisible){//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
+					_UIControl.css({
+						"pointer-events" : "auto",
+					})
+				}
+			}
+			else{
+				_UIControl.css({
+					"pointer-events" : "none",//else, unclickable
+				})
+				//console.log("out of bounds");
+			}
+		});
 
 		// // Create _mousetracker, the seadragon mouse tracker.
 		// _mouseTracker = new OpenSeadragon.MouseTracker({
@@ -134,7 +157,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
-
 		// TODO: was there a reason this was a callback? I just moved the contents of this function 
 		// to where the callback was previously added, and now reverting the state seems to work...
 		/*
@@ -279,7 +301,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				}
 			}
 		);
-
+		if(state.opacity==0){
+			_shouldBeInvisible = true;
+		}
+		else{
+			_shouldBeInvisible = false;
+		}
 		// console.log("animating")
 		//testing
 		// _viewer.addHandler("animation", 
@@ -552,7 +579,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 					evt.originalEvent.preventDefault();
 					(self.orchestrator.status === 1) ? self.player.pause() : null
 		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		    		resetSeadragonConfig()		
+		    		resetSeadragonConfig()
 			    } else {
 			    	// evt.preventDefaultAction()
 			    }
@@ -591,6 +618,26 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			return false
 		}
 	}
+	/* I/P: 	evt (a click/touch event)
+	 * purpose:  This method simply compies the one above, but takes in a mouseMove event
+	 * O/P: 	bool, whether or not this event was within the image's bounds
+	 */
+	function isInImageBoundsMouseEvent(evt){
+		var x = evt.clientX - (($("#tagRootInnerContainer").width()-$("#ITEHolder").width())/2);
+		var y = evt.clientY
+		var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
+		if (
+			(clickP.x < 1) &&
+			(clickP.x > 0) &&
+			(clickP.y <  _viewer.viewport.contentAspectY) &&
+			(clickP.y > 0)){
+			return true
+		} else{
+			return false
+		}
+	}
+	
+
 
 
     /*
