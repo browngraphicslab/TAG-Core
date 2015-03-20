@@ -146,6 +146,7 @@ ITE.Orchestrator = function(player) {
 		}
 		self.timeManager.startTimer();
 		self.status = 1;
+
 	}
 
 	function pause() {
@@ -287,6 +288,8 @@ ITE.Orchestrator = function(player) {
 	function getTrackManger(){
 		return self.trackManger;
 	}
+
+
 
 	self.getTrackManger = getTrackManger;
 	self.captureKeyframe = captureKeyframe;
