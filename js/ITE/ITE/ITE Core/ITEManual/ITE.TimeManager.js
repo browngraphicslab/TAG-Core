@@ -7,15 +7,31 @@ ITE.TimeManager = function(){
 	self.isRunning = false; //stopwatch value indicating the time of the tour
 	self.startingOffset = 0; //the starting offset
 	self.elapsedOffset = 0; //how much time has elapsed
+	self.end = false; //whether or not the end of tour has been reached
 
 	//getIsRunning
 	self.getIsRunning = function(){
 		return self.isRunning;
 	};
 
+    //check end of tour.
+	/*self.endTour = function (offset) {
+	    //if (offset > totalTourDuration) {
+	        self.isRunning = false;
+	        self.end = true;
+	    //}
+	}*/
+
+	//return status, depending on whether tour is over or not
+	self.isEnd = function() {
+		return self.end;
+	}
+
 	//getElapsedOffset
 	self.getElapsedOffset = function(){
-		var offset = (Date.now()/1000 - self.startingOffset) + self.elapsedOffset;
+	    var offset = (Date.now() / 1000 - self.startingOffset) + self.elapsedOffset;
+	    //self.endTour(offset);
+
 		if (self.isRunning){
 			return offset;
 		}else {
