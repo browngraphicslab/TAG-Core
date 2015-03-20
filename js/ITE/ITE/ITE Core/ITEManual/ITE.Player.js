@@ -1,6 +1,7 @@
 window.ITE = window.ITE || {};
 
 ITE.Player = function (options) { //acts as ITE object that contains the orchestrator, etc
+   var totalTourDuration;
    var  orchestrator            = new ITE.Orchestrator(this),
         self = this,
         playerConfiguration = {
@@ -10,6 +11,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 attachProgressBar:          true,
                 attachFullScreen:           true,
                 attachProgressIndicator:    true,
+                fadeControls:               true,
                 hideControls:               false,
                 autoPlay:                   false,
                 autoLoop:                   false,
@@ -20,7 +22,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 setStartingOffset:          0,
                 setEndTime:                 NaN //defaults to end of tour if NaN
         },    //dictionary of player configuration options; defaults being set
-
     //DOM related
         ITEHolder = $(document.createElement("div"))
             .attr("id", "ITEHolder"),
@@ -33,13 +34,15 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     bottomContainer.append(buttonContainer);
 
     //Buttons
-    var volumeButton        = $(document.createElement("img")),
-        volumeLevel         = $(document.createElement("img")),
-        playPauseButton     = $(document.createElement("img")),
-        loopButton          = $(document.createElement("img")),
-        progressBar         = $(document.createElement("div")),
-        fullScreenButton    = $(document.createElement("img")),
-        progressIndicator   = $(document.createElement("div")),
+    var volumeButton            = $(document.createElement("img")),
+        volumeLevel             = $(document.createElement("img")),
+        playPauseButton         = $(document.createElement("img")),
+        loopButton              = $(document.createElement("img")),
+        progressBar             = $(document.createElement("div")),
+        fullScreenButton        = $(document.createElement("img")),
+        progressIndicator       = $(document.createElement("div")),
+        volumeLevelContainer    = $(document.createElement("div")),
+
 
     //Other atributes
         timeOffset,
@@ -55,7 +58,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.onTourEndEvent = new ITE.PubSubStruct();
 
 
-    this.playerParent = $(document.body);
+    this.playerParent = $("#tagRoot");
 
     //Start things up
     createITEPlayer(this.playerParent, options)
@@ -83,7 +86,6 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
             attachFullScreen();
             attachProgressIndicator();
         };
-
         //onLoadPlayerEvent.publish(tourObj);
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
@@ -102,15 +104,13 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("volumeButtonContainer");
 
             volumeButton.addClass("volumeButton")
-            .attr("src", "ITEPlayerImages/volume.svg")
+            .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg")
             .on("click", toggleMute);
 
-            var volumeLevelContainer = $(document.createElement("div"))
-                .addClass("volumeLevelContainer")
+                volumeLevelContainer.addClass("volumeLevelContainer")
                 .on({
                     "click": function(e){
-                        var height = Math.abs(e.pageY - volumeLevel.parent().offset().top - volumeLevel.parent().height())/100;
-                        setVolume(height);
+                        setVolume(volumeLevelContainer.getVolumeFromMouse(e));
                     },
                     "mousedown": function(e){
                         volumeLevelContainer.dragging = true;
@@ -118,16 +118,24 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                     "mouseup": function(e){
                         volumeLevelContainer.dragging = false;
                     },
-                    "mouseleave" : function(e){
-                        volumeLevelContainer.dragging = false;
-                    },
                     "mousemove": function(e){
-                        volumeLevelContainer.dragging ? setVolume(e) : null
+                        volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
                     }
                 });
 
                 volumeLevel = $(document.createElement("div"))
                     .addClass("volumeLevel");
+
+                volumeLevelContainer.getVolumeFromMouse = function (e) {
+                    var newVol = ((volumeLevelContainer.offset().top + volumeLevelContainer.height()) - e.pageY) / volumeLevelContainer.height()
+                    volumeLevelContainer.css("background-color", "rgba(255,0,0,0)") //TODO
+                    //this makes volume increasable for some reason?? 
+                    //It seems like if the background is transparent, mouse movements on volumeLevelContainer are subject not to the size/position of volumeLevelContainer,
+                    //but instead to those of volumeLevel, which makes absolutely no sense to me but I might be missing something stupid.
+                    //Anyway, I'm leaving it out for now but we do need to deal with this (ereif)
+                    return newVol
+                }
+
             buttonContainer.append(volumeContainer);
             volumeContainer.append(volumeButtonContainer)
                            .append(volumeLevelContainer);
@@ -149,7 +157,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("playPauseButtonContainer");
 
                 playPauseButton.addClass("playPauseButton")
-                .attr("src", "ITEPlayerImages/play.svg")
+                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
@@ -171,7 +179,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("loopButtonContainer");
 
                 loopButton.addClass("loopButton")
-                .attr("src", "ITEPlayerImages/loop.svg")
+                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/loop.svg")
                 .on("click", toggleLoop);
 
             buttonContainer.append(loopButtonContainer);
@@ -188,14 +196,21 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function attachProgressBar() {
         if (playerConfiguration.attachProgressBar) {
-            //For seeking, skipping and scrubbing: when you click and drag on the progressbar, you can seek.  But also if you click down and then move your mouse outside of the bar without mousing up it will still seek (mimiking old RIN)
+            //For seeking, skipping and scrubbing (on volume as well as time): when you click and drag on the progressbar, you can seek.  But also if you click down and then move your mouse outside of the bar without mousing up it will still seek (mimiking old RIN)
             $( "*" ).on({
-                "mouseup": function(e){
+                "mouseup": function (e) {
+                    //seeking
                     progressBarContainer.dragging ? seek(e) : null
                     progressBarContainer.dragging = false
+                    //volume
+                    volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
+                    volumeLevelContainer.dragging = false
                 },
-                "mousemove": function(e){
-                    progressBarContainer.dragging ? seek(e) : null
+                "mousemove": function (e) {
+                    //time
+                    progressBarContainer.dragging ? scrub(e) : null
+                    //volume
+                    volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
                 }
             })
 
@@ -230,30 +245,63 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function attachProgressIndicator() {
         if (playerConfiguration.attachProgressIndicator) {
-
             var ProgressIndicatorContainer = $(document.createElement("div"))
                 .addClass("progressIndicatorContainer");
-
-            progressIndicator.addClass("progressIndicator")
-            .innerHTML = "01:04"
-            //.text = "01:04";
-
+            progressIndicator.addClass("progressIndicator"); 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
+            window.setInterval(function(){
+                updateProgressIndicator(orchestrator.getElapsedTime());
+            },100);
         }
     };
 
+    function tourOver(){
+        looped ? seek(0) : parentTourPlayer.goback()
+    }
+     /*
+    * I/P:   sec (int-- a time in sec)
+    * called by updateProgressIndicator function to stringify the times
+    * O/P:   string version of the time in seconds passed in
+    */
+    function makeTimeString(time){
+        time = Math.floor(time);
+        if (time>totalTourDuration){
+            return makeTimeString(totalTourDuration);
+        }
+        if (time == 0){
+            return ("0:00");
+        }
+        s = String(time%60);
+        if (time%60<10){
+            s = "0"+s
+        }
+        return String(Math.floor(time/60))+":"+s;
+    }
+     /*
+    * I/P:   integer time in sec
+    * updates the progress bar with the given time
+    * O/P:   none
+    */
+    
+    function updateProgressBar(sec){
+        progressBar.css({
+            width : (sec/totalTourDuration)*ITEHolder.width()
+        });
+    }
+    
     /*
     * I/P:   sec (int-- a time in sec)
     * called by timeManager and Orchestrator; updates current displayed time
     * O/P:   none
     */
+    
     function updateProgressIndicator(sec) {
-        console.log(typeof(sec))
-       // progressIndicator.innerHTML = "test"
+        progressIndicator.empty();
+        var timeString = makeTimeString(sec) + " / "+makeTimeString(totalTourDuration);
+        progressIndicator.append(timeString);
+        updateProgressBar(sec);
     };
-    this.updateProgressIndicator = updateProgressIndicator;
-
     /*
     * I/P:   none
     * Attaches full screen
@@ -266,7 +314,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 .addClass("fullScreenButtonContainer");
 
             fullScreenButton.addClass("fullScreenButton")
-            .attr("src", "ITEPlayerImages/fullScreen.svg")
+            .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/fullscreen.svg")
             .on("click", toggleFullScreen);
 
             buttonContainer.append(fullScreenButtonContainer);
@@ -281,10 +329,29 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
 
     function load(tourData) {
         orchestrator.load(tourData);
+        //progressIndicator.append(tourData.totalDuration)
+        totalTourDuration = tourData.totalDuration;
+        updateProgressIndicator(0);
+
+        playerParent.mousemove(function(){
+            volumeButton.stop();
+            volumeLevel.stop();
+            playPauseButton.stop();
+            loopButton.stop();
+            progressBar.stop();
+            fullScreenButton.stop();
+            progressIndicator.stop();
+            $("#backButton").stop();
+            $("#linkButton").stop();
+            makeControlsVisible();
+        });
+        playerParent.mouseleave(function(){
+            setControlsFade();
+        })
     };
 
     function unload() {
-    //    orchestrator.unload();
+        orchestrator.unload();
     };
 	
     /*
@@ -321,10 +388,54 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */
     function play() {
         orchestrator.play();
-        // console.log("Tour is playing")
-        playPauseButton.attr("src", "ITEPlayerImages/pause.svg")
-    };
 
+        // console.log("Tour is playing")
+       playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/pause.svg")
+       setControlsFade();
+    };
+    /*
+    * I/P:   none
+    * Sets the buttons to fade in 2 seconds from function call
+    * O/P:   none
+    */
+    function setControlsFade(){
+        if(playerConfiguration.fadeControls){
+            window.setTimeout(function(){
+                if(!playerParent.is(":hover")){
+                    time = 500
+                    volumeButton.fadeTo(time,0,null);
+                    volumeLevel.fadeTo(time,0,null);
+                    playPauseButton.fadeTo(time,0,null);
+                    loopButton.fadeTo(time,0,null);
+                    progressBar.fadeTo(time,0,null);
+                    fullScreenButton.fadeTo(time,0,null);
+                    progressIndicator.fadeTo(time,0,null);
+                    $("#backButton").fadeTo(time,0,null);
+                    $("#linkButton").fadeTo(time,0,null);
+                }
+            },2000)
+       }
+    }
+
+    /*
+    * I/P:   none
+    * Makes the controls/buttons visible and cancels timeouts making them dissappear
+    * O/P:   none
+    */
+    function makeControlsVisible(){
+        volumeButton.css({ 'opacity' : 1 })
+        volumeLevel.css({ 'opacity' : 1 })
+        playPauseButton.css({ 'opacity' : 1 })
+        loopButton.css({ 'opacity' : 1 })
+        progressBar.css({ 'opacity' : 1 })
+        fullScreenButton.css({ 'opacity' : 1 })
+        progressIndicator.css({ 'opacity' : 1 })
+        $("#backButton").css({ 'opacity' : 1 })
+        $("#linkButton").css({ 'opacity' : 1 })
+        isMuted ? mute()   : unMute()
+        isFullScreen ? enableFullScreen() : disableFullScreen()
+        isLooped ? loop() : unLoop()
+    }
 
     /*
     * I/P:   none
@@ -334,12 +445,30 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     function pause() {
         orchestrator.pause();
         // console.log("Tour is paused")
-        playPauseButton.attr("src", "ITEPlayerImages/play.svg")
+        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
     };
 
     /*
     * I/P:   none
-    * Seeks tour to a specfied spot
+    * Seeks tour to a specfied spot, without playing it. 
+    * This is designed to be called as the user drags on the progress bar.
+    * O/P:   none
+    */
+    function scrub(e) {
+        if (playerConfiguration.allowSeek){
+            console.log("Tour was seeked")
+            progressBar.css({
+                width : e.pageX - ITEHolder.offset().left
+            })
+            timeOffset = progressBar.width()/(progressBar.parent().width()) //timeOffset is currently a percentage of the total time
+            orchestrator.scrub(timeOffset);
+        }
+    };
+
+    /*
+    * I/P:   none
+    * Seeks tour to a specfied spot, then continue playing (if previously playing).
+    * This is designed to be called when the user mouseups on the progress bar at a new time.
     * O/P:   none
     */
     function seek(e) {
@@ -349,7 +478,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
                 width : e.pageX - ITEHolder.offset().left
             })
             timeOffset = progressBar.width()/(progressBar.parent().width()) //timeOffset is currently a percentage of the total time
-       //     orchestrator.seek(timeOffset);
+            orchestrator.seek(timeOffset);
         }
     };
 
@@ -362,13 +491,15 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function setVolume(newVolume) {
         newVolume > 1 ? newVolume = 1 : null
+        newVolume <=0 ? newVolume = 0 : null
+
         if (isMuted){
             unMute();
         }
         volumeLevel.css({
             height : newVolume * 100 + "%"
         });
-        volumeButton.attr("src", "ITEPlayerImages/volume.svg");
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg");
         self.previousVolumeLevel = self.currentVolumeLevel   // Reference to previous volume level for volume control in video/audio tracks
         self.currentVolumeLevel = newVolume;
         orchestrator.setVolume(self.currentVolumeLevel);
@@ -392,7 +523,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function mute(){
         isMuted = true;
-        volumeButton.attr("src", "ITEPlayerImages/volume0.svg")
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume0.svg")
         volumeButton.css("opacity" , ".5")
         volumeLevel.css("opacity" , "0")
         orchestrator.toggleMute(true);
@@ -405,7 +536,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     */ 
     function unMute(){
         isMuted = false;
-        volumeButton.attr("src", "ITEPlayerImages/volume.svg");
+        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg");
         volumeButton.css("opacity" , "1");
         volumeLevel.css("opacity" , "1")
         orchestrator.toggleMute(false);
@@ -418,6 +549,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     * O/P:  none
     */ 
     function toggleFullScreen() {
+        //
         isFullScreen ? disableFullScreen() : enableFullScreen()
     };
 
@@ -476,7 +608,117 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
         loopButton.css("opacity" , ".5")
     };
 
+    /**
+    * I/P:    none
+    * returns holder (used for transitioning into tour player)
+    * O/P:    root of the ITE player
+    */ 
+    function getRoot() {
+        return ITEHolder
+    };
 
+
+////////////////////////////////////////////////////////////////////////////
+// AUTHORING API
+////////////////////////////////////////////////////////////////////////////
+
+    /**
+    * I/P:    A track to which a keyframe will be added at the current state
+    * Creates a keyframe based on the current state of the track
+    * O/P:    none
+    */ 
+    function addKeyframe(track){
+        Orchestrator.captureKeyframe(track)
+    }
+
+    /**
+    * I/P:    A track and a keyframe within the track to change
+    * Changes a keyframe from the old state to the new state
+    * O/P:    none
+    */ 
+    function changeKeyframe(track, oldKeyFrame, newKeyFrame){
+        Orchestrator.changeKeyframe(track, oldKeyFrame, newKeyFrame)
+    }
+
+    /**
+    * I/P:    A track and a keyframe within the track to delete
+    * Deletes said keyframe
+    * O/P:    none
+    */ 
+    function removeKeyframe(track, keyframe){
+        Orchestrator.deleteKeyframe(track, oldKeyFrame)
+    }
+
+    /**
+    * I/P:    track to be deleted
+    * Deletes a track
+    * O/P:    none
+    */ 
+    function deleteTrack(track){
+        Orchestrator.deleteTrack(track)
+    }
+
+    /**
+    * I/P:    track and the new index/layer where it should be, with regards to the rest of the tracks (for example, adding one to the top of the list would be an index of)
+    * Mutates time of a track
+    * O/P:    none
+    */ 
+    function changeTrackZIndex(track, index){
+        if (index > trackManager.length - 1){
+            console.log("ERROR: trying to change index of a track to an index that does not exist")
+            return
+        }
+        trackManger = self.getTracks();
+        var i = trackManager.indexOf(track);
+        //If desired index is less than current index, keep switching down until you get to the desired index
+        while (index < i){
+            var temp = trackManager[i - 1];
+            trackManager[i - 1] = trackManager[i];
+            trackManager[i] = temp
+            i--;
+        }
+        //If the desired index is greater than the current index, switch up
+        while (index > i){
+            var temp = trackManager[i + 1];
+            trackManager[i + 1] = trackManager[i];
+            trackManager[i] = temp
+            i++;
+        }
+        Orchestrator.updateZIndices();
+    }
+
+
+
+    /**
+    * I/P:    none
+    * returns tracks, used for authoring
+    * O/P:    trackManager of the orchestrator (list of tracks)
+    */ 
+    function getTracks(){
+        return Orchestrator.getTrackManager()
+    }
+
+    /**
+    * I/P:    trackData-- data object with all the properties of the specific track. See TAG.Utils.RIN_TO_ITE function for a template.
+    * Adds a track, used for tour authoring
+    * O/P:    said added track
+    */ 
+    function addTrack(trackData){
+        track =  Orchestrator.createTrackByProvider(trackData)
+        track.createDefaultKeyframes()
+        Orchestrator.initializeTrack(track)
+        track.load()
+        return track
+    }
+
+
+    this.getTracks          = getTracks;
+    this.addKeyframe        = addKeyframe;
+    this.changeKeyframe     = changeKeyframe;
+    this.removeKeyframe     = removeKeyframe;
+    this.deleteTrack        = deleteTrack;
+    this.changeTrackZIndex  = changeTrackZIndex;
+    this.getRoot            = getRoot;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;
     this.pause              = pause;
@@ -492,4 +734,7 @@ ITE.Player = function (options) { //acts as ITE object that contains the orchest
     this.isMuted            = isMuted;
     this.isLooped           = isLooped;
     this.isFullScreen       = isFullScreen;
+    this.updateProgressIndicator = updateProgressIndicator;
+    this.setControlsFade    = setControlsFade;
+    this.makeControlsVisible= makeControlsVisible;
 };

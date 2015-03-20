@@ -31,8 +31,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
 
     var uploadingOverlay = $(document.createElement('div')),
-        innerProgressBar = $(document.createElement('div')), // HTML upload overlay
-        progressBar;
+        innerProgressBar = $(document.createElement('div')); // HTML upload overlay
     var filesFinished = 0;
     var numFiles = 100000;
     var dataReaderLoads = [];
@@ -58,8 +57,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     // Basic HTML initialization
     (function init() {
         var uploadOverlayText = $(document.createElement('label')),
-            progressIcon = $(document.createElement('img'));
-        progressBar = $(document.createElement('div')).addClass('progressBarUploads');
+            progressIcon = $(document.createElement('img')),
+            progressBar = $(document.createElement('div'));
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
@@ -74,7 +73,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         progressIcon.attr('src', 'images/icons/progress-circle.gif');
 
         progressBar.css({
-            'position': 'relative', 'top': '0%', 'left': '5%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '20%', "display":"inline-block",
+            'position': 'relative', 'top': '42%', 'left': '45%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '2%'
         });
 
         innerProgressBar.css({
@@ -82,11 +81,10 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         });
 
         progressBar.append(innerProgressBar);
-        //uploadingOverlay.append(uploadOverlayText);
-        //uploadingOverlay.append(progressBar);
-        //uploadingOverlay.hide();
-        //root.append(uploadingOverlay);
-
+        uploadingOverlay.append(uploadOverlayText);
+        uploadingOverlay.append(progressBar);
+        uploadingOverlay.hide();
+        root.append(uploadingOverlay);
     })();
 
     /**
@@ -379,7 +377,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
                     });
             }
-
         } catch (e) {
             // file access failed
             console.log("file access failed: "+e.message);
@@ -474,21 +471,16 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * (no idea if this will actually disable interactions too as is)
      */
     function addOverlay(elmt) {
-        //if ($("#uploadingOverlay").length === 0) {
-        //    elmt.append(uploadingOverlay);
-        //}
-
-        //updates loading UI
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        settingsViewTopBar.append(progressBar)
-        console.log("STARTING THE UPLOAD")
+        if ($("#uploadingOverlay").length === 0) {
+            elmt.append(uploadingOverlay);
+        }
     }
 
     /**
      * Totally remove the overlay from the DOM / destroy
      */
     function removeOverlay() {
-        //uploadingOverlay.remove();
+        uploadingOverlay.remove();
     }
 
     /**
@@ -509,7 +501,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             var uriString = globalUriStrings[i], file = globalFiles[i];
             try {
                 addOverlay(root);
-                //uploadingOverlay.show();
+                uploadingOverlay.show();
 
                 uri = new Windows.Foundation.Uri(uriString);
                 uploader = new Windows.Networking.BackgroundTransfer.BackgroundUploader();
@@ -689,7 +681,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             }
         }        
         bar.width(percentComplete * 90 + "%");
-        console.log("PERCENT COMPLETE: " + percentComplete*90 + "%") 
     }
 
     function cancelPromises() {
