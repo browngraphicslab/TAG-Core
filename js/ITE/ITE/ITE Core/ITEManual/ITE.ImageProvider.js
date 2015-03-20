@@ -67,14 +67,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 
-		// Formatting z-index of first keyframe.
-		// TODO: clean self up-- self is just to make sure that the asset has the correct z-index. 
-		// There's also clearly been some mistake if we have to do self check (if there are any keyframes) 
-		// because why would we have a track with no keyframes...?
-		if (self.firstKeyframe) {
-			_UIControl.css("z-index", self.firstKeyframe.zIndex); 
-		}
-
 		// Attach handlers.
 		attachHandlers();
 	};
@@ -344,9 +336,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.addInk = function(inkTrack) {
-		// TODO: implement
-		console.log("position().top: " + _UIControl.position().top)
-		console.log("offset().top: " + _UIControl.offset().top)
+		
 	};
 
    	/*
@@ -461,4 +451,15 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         interactionHandlers.onManipulate 	= mediaManip;
         interactionHandlers.onScroll		= mediaScroll;    	
     };
+
+
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
 };

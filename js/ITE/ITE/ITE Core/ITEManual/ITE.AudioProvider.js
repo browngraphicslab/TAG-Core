@@ -344,4 +344,16 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			_audioControls.muted = false;
 		} 
 	};
+
+
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
+    
 };

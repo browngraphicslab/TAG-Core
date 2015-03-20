@@ -73,9 +73,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 
-		// Formatting z-index of first keyframe.
-		_UIControl.css("z-index", self.firstKeyframe.zIndex);
-
 		// Attach Handlers.
 		attachHandlers();
 	};
@@ -548,4 +545,16 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
         interactionHandlers.onManipulate 	= mediaManip;
         interactionHandlers.onScroll		= mediaScroll;    	
     };
+
+
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
+    
 };

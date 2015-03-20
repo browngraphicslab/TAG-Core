@@ -39,6 +39,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	var interactionHandlers 		= {},
 		movementTimeouts 			= [];
 
+	// miscellaneous
+	var attachedInks = [];
+
 	// Start things up...
     initialize();
 
@@ -57,66 +60,45 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// Create UI and append to ITEHolder.
 		_UIControl = $(document.createElement("div"))
         	.addClass("UIControl")
-        	.attr("id", "DeepZoomHolder")
-			.on('mousedown scroll click mousemove resize', function(evt) {
-            	evt.preventDefault();
-        	})
+        	.attr("id", trackData.name + "holder")
         	.css({
-        		"z-index"	: 0,
-        		"pointer-events" : "none",
-        		"visibility":"hidden",
-        		"position":"relative",
+        		// "z-index"	: 0,
+        		// "pointer-events" : "none",
+        		// "visibility":"hidden",
+        		// "position":"relative",
         		"width"		: "100%",
         		"height"	: "100%"
-        	});
+        	}); 
 		$("#ITEHolder").append(_UIControl);
 
 		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
-			id 			 		: "DeepZoomHolder",
+			id 			 		: trackData.name + "holder",
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
-			//prefixUrl			: this.trackData.assetUrl,
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2
+			// mouseNavEnabled 	: false
 		});
 		$(_viewer.container).css({
 			"position":"absolute"
 		});
 		_viewer.clearControls();
-		/*_viewer.addHandler({
-			'canvas-scroll': function(evt) {
-				console.log("scrolling")
-				(self.orchestrator.status === 1) ? self.player.pause() : null
-		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		    	resetSeadragonConfig()
-	    	},
-	    	'canvas-drag': function(evt) {
-	    		console.log("dragging")
-				(self.orchestrator.status === 1) ? self.player.pause() : null
-		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		    	resetSeadragonConfig()	
-	    	}
-		})*/
-        //_viewer.setMouseNavEnabled(false);
 
         // Create _deepZoom, the canvas with the deepZoom image files.
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage");
 
-		// Create _mousetracker, the seadragon mouse tracker.
-		_mouseTracker = new OpenSeadragon.MouseTracker({
-			"element": "DeepZoomHolder"
-		});
+		// // Create _mousetracker, the seadragon mouse tracker.
+		// _mouseTracker = new OpenSeadragon.MouseTracker({
+		// 	"element": trackData.name + "holder"
+		// });
 
 		// Get first and last keyframes and set state to first.
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
 		self.setState(self.getKeyframeState(self.firstKeyframe));
-
-		// Formatting z-index of first keyframe.
-		_UIControl.css("z-index", self.firstKeyframe.zIndex);
 
 		// Attach handlers.
 		attachHandlers();
@@ -131,7 +113,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_super.load();
 
 		// Sets the DeepZoom's URL source.
-    	//_viewer.open(itePath + "Assets/TourData/" + self.trackData.assetUrl);
 		_viewer.open(self.trackData.assetUrl);
 		
 		// When finished loading, set status to 2 (paused).
@@ -219,11 +200,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.stopDelayStart();
 
-		self.getState();
-		self.setState(self.savedState); //Effectively kills OSD animation by redirecting the current animation to where the image is right now
 		if (self.animation) {//Kills opacity animation
 			self.animation.kill();
 		}
+
+		self.getState();
+		self.setState(self.savedState); //Effectively kills OSD animation by redirecting the current animation to where the image is right now
+
 	};
 
 	/*
@@ -299,25 +282,25 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// console.log("animating")
 		//testing
-		/*_viewer.addHandler("animation", 
-			function(){*/
-				if (state.opacity == 0){
-					// console.log("Enabling clickthrough")
-					_UIControl.css({
-						"pointer-events": "none",
-						"z-index": "-1",
-						"visibility":"hidden"
-					});
-				} else {
-					// console.log("Disabling clickthrough")
-					_UIControl.css({
-						"z-index": "10",
-						"pointer-events":"auto",
-						"visibility":"visible"
-					});
-				}
-			/*}
-		)*/
+		// _viewer.addHandler("animation", 
+		// 	function(){
+		// 		if (state.opacity == 0){
+		// 			// console.log("Enabling clickthrough")
+		// 			_UIControl.css({
+		// 				"pointer-events": "none",
+		// 				"z-index": "-1",
+		// 				"visibility":"hidden"
+		// 			});
+		// 		} else {
+		// 			// console.log("Disabling clickthrough")
+		// 			_UIControl.css({
+		// 				// "z-index": "10",
+		// 				"pointer-events":"auto",
+		// 				"visibility":"visible"
+		// 			});
+		// 		}
+		// 	}
+		// )
 		//testing
 
 		self.animation.play(); 
@@ -331,7 +314,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	self.getState = function() {
 		self.savedState = {
 			time	: self.timeManager.getElapsedOffset(),
-			bounds 	: _viewer.viewport.getBounds(true)
+			bounds 	: _viewer.viewport.getBounds(true),
 		};	
 		return self.savedState;
 	};
@@ -454,18 +437,27 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Adds ink as an overlay.
 	 * O/P: 	none
 	 */
-	self.addInk = function(inkTrack) {
+	function addInk(inkTrack) {
 		if (!_viewer.viewport){
-			console.log("failed to load ink as DZ is not ready" );
+			console.log("failed to load ink as DZ is not ready... trying again" );
 			setTimeout(function(){
 				addInk(inkTrack) } , 100);
 		} else {
-			var point = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(50, 50));
-			console.log("point: " + point);
-			_viewer.addOverlay(inkTrack._UIControl[0], point);	
+			attachedInks.push(inkTrack)	
+			_UIControl.append(inkTrack._UIControl[0])
+			
+			inkTrack._ink.retrieveOrigDims();
+
+			inkTrack._ink.setInitKeyframeData({ 
+				x: self.firstKeyframe.pos.x, 
+				y: self.firstKeyframe.pos.y, 
+				w: 1/self.firstKeyframe.scale, 
+				h: 1/self.firstKeyframe.scale/2
+			})
+
 		}
 	};
-
+	self.addInk = addInk;
 	/*
 	 * I/P: 	none
 	 * Return a set of interactionHandlers attached to asset from provider.
@@ -544,26 +536,71 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_viewer.addHandler(
 			'canvas-scroll', function(evt) {
 				//console.log("scrolling");
-				(self.orchestrator.status === 1) ? self.player.pause() : null
-		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		    	resetSeadragonConfig()
+				if (isInImageBounds(evt)){
+					evt.originalEvent.preventDefault();
+					(self.orchestrator.status === 1) ? self.player.pause() : null
+			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+			    	resetSeadragonConfig()
+			    } else {
+			    	// evt.preventDefaultAction()
+			    }
 	    	});
 		_viewer.addHandler(
 			'canvas-drag', function(evt) {
 				//console.log("dragging");
-				(self.orchestrator.status === 1) ? self.player.pause() : null
-		    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		    	resetSeadragonConfig()
+				if (isInImageBounds(evt)){
+					evt.originalEvent.preventDefault();
+					(self.orchestrator.status === 1) ? self.player.pause() : null
+		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+		    		resetSeadragonConfig()		
+			    } else {
+			    	// evt.preventDefaultAction()
+			    }
 	    	});
 		_viewer.addHandler(
-			'container-exit', function(evt) {
-				// console.log("exited");
-				_viewer.raiseEvent('canvas-release', evt);
-				_viewer.raiseEvent('canvas-drag-end', evt);
-				_viewer.raiseEvent('container-release', evt);				
-				//(self.orchestrator.status === 1) ? self.player.pause() : null
-		    	//self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		    	//resetSeadragonConfig()
-	    	});
-    };
+			'animation', function(evt) {
+				for (var i = 0; i < attachedInks.length; i++){
+					var bounds = _viewer.viewport.getBounds(true);
+					bounds = {
+						x: bounds.x, 
+						y: bounds.y, 
+						width: bounds.width, 
+						height: bounds.height
+					}
+					attachedInks[i]._ink.adjustViewBox(bounds);
+				}
+			})
+	}
+
+		/*
+	 * I/P: 	evt (a click/touch event)
+	 * 
+	 * O/P: 	bool, whether or not this event was within the image's bounds
+	 */
+	function isInImageBounds(evt){
+		var x = evt.position.x
+		var y = evt.position.y
+		var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
+		if (
+			(clickP.x < 1) &&
+			(clickP.x > 0) &&
+			(clickP.y <  _viewer.viewport.contentAspectY) &&
+			(clickP.y > 0)){
+			return true
+		} else{
+			return false
+		}
+	}
+
+
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
+    
 };

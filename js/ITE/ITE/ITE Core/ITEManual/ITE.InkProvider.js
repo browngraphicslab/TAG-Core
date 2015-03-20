@@ -51,7 +51,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	function initialize() {
 		_super.initialize();
 
-		if (trackData.experienceReference !== "null") {
+		if ((trackData.experienceReference !== "null") && (trackData.experienceReference !== '')) {
 			_attachedAsset = findAttachedAsset(trackData.experienceReference);
 			attachToAsset(_attachedAsset);
 		};
@@ -84,7 +84,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.load = function() {
 		_super.load();
-		_ink.loadInk(trackData.string);
+		_ink.loadInk(trackData.datastring);
 
 		// When finished loading, set status to 2 (paused).
 		self.status = 2; // TODO: should this be some kind of callback?
@@ -281,9 +281,10 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Finds the attached asset for the ink track (the track to attach the ink to).
 	 * O/P: 	_attachedAsset : 		Actual reference to the track that holds self asset.
 	 */
-	self.findAttachedAsset = function(experienceReference) {
+	function findAttachedAsset(experienceReference) {
 		var j,
 			track;
+
 		//Loop through trackManager to find the asset whose name matches the Ink's experienceReference
 		for (j = 0; j < self.orchestrator.trackManager.length; j++) {
 			track = self.orchestrator.trackManager[j];
@@ -291,6 +292,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 				_attachedAsset = track;
 			};
 		};
+
 		//If it exists, return it, and if now, throw an error
 		if (_attachedAsset) {
 			return _attachedAsset;
@@ -298,15 +300,29 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 			throw new Error("Failed to find asset '" + experienceReference + "' for attached ink '" + trackData.name + "'");
 		};
 	};
-
+	self.findAttachedAsset = findAttachedAsset;
 	/*
 	 * I/P: 	assetName : 		Name of asset to attach from Ink.
 	 * Attaches this ink to the provided asset.
 	 * O/P: 	none
 	 */
-	self.attachToAsset = function(assetName){
+	function attachToAsset(assetName){
 		_attachedAsset.addInk(self);
 	};
+	self.attachToAsset = attachToAsset;
+	
+    /*
+	 * I/P: 	index
+	 * sets the track to the provided z-index
+	 * O/P: 	none
+	 */
+    function setZIndex(index){
+    	_UIControl.css("z-index", index)
+    }
+    self.setZIndex = setZIndex;
 
-	self._UIControl = _UIControl;
+    //Some other things to expose
+    self._UIControl = _UIControl;
+    self._ink = _ink;
+
 };

@@ -1,5 +1,4 @@
 window.ITE = window.ITE || {};
-
 ITE.Orchestrator = function(player) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
@@ -16,6 +15,7 @@ ITE.Orchestrator = function(player) {
 	self.status 			= 3;
 	self.prevStatus			= 0; // 0 means we're not scrubbing. 1 - previously playing. 2 - previously paused.
 	self.tourData 			= null;
+    self.loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
 
 	self.timeManager = new ITE.TimeManager();
 	self.getElapsedTime = function(){
@@ -58,7 +58,7 @@ ITE.Orchestrator = function(player) {
 			//Creates tracks
 			for (i = 0; i < tourData.tracks.length; i++){
 				var track = tourData.tracks[i]
-				createTrackByProvider(track)
+				self.loadQueue.add(createTrackByProvider(track))
 			};
 
 			//...Initializes them
@@ -82,8 +82,6 @@ ITE.Orchestrator = function(player) {
 	    * O/P: none
 	    */
 		function createTrackByProvider(trackData){
-			console.log("TRACK DATA");
-			console.log(trackData);
 			switch (trackData.providerId){
 				case "image" : 
 					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.timeManager, self));
@@ -98,7 +96,7 @@ ITE.Orchestrator = function(player) {
 					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "ink" : 
-					//self.trackManager.push(new ITE.ScribbleProvider(trackData, self.player, self.timeManager, self));
+					self.trackManager.push(new ITE.InkProvider(trackData, self.player, self.timeManager, self));
 					break;
 				default:
 					throw new Error("Unexpected providerID; '" + trackData.providerId + "' is not a valid providerID");
@@ -170,6 +168,7 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function seek(seekPercent) {
+		self.updateZIndices()
 		// Pause.
 		if (self.prevStatus === 0) {
 			self.prevStatus = self.status;
@@ -222,6 +221,13 @@ ITE.Orchestrator = function(player) {
 		track.keyframes.remove(keyframe)
 	}
 
+	function updateZIndices(){
+		var i;
+		for (i = 0; i < trackManager.length; i++){
+			trackManager[i].setZIndex(i)
+		}
+	}
+
 	function deleteTrack(track){
 		var index = trackManager[indexOf(track)]
 		if (index > -1) {
@@ -266,6 +272,7 @@ ITE.Orchestrator = function(player) {
 		for (i = 0; i < trackManager.length; i++){
 			var track = trackManager[i];
 			initializeTrack(track)
+			track.setZIndex(i)
 		}
 	}
 
@@ -276,7 +283,12 @@ ITE.Orchestrator = function(player) {
 
 
 	self.getTrackManger = getTrackManger;
+	self.captureKeyframe = captureKeyframe;
+	self.changeKeyframe = changeKeyframe;
+	self.deleteKeyframe = deleteKeyframe;
+	self.deleteTrack = deleteTrack;
 	self.trackManager = trackManager;
+	self.updateZIndices = updateZIndices;
 	self.unload = unload;
 	self.play = play;
 	self.pause = pause;

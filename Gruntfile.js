@@ -51,7 +51,6 @@ var JSSRC = [
         'js/ITE/ITE/Dependencies/Raphael.js',								//ITE
         'js/ITE/ITE/Dependencies/paper/paper-core.min.js',					//ITE
         'js/ITE/ITE/Dependencies/paper/paper-full.min.js',					//ITE
-        '../../tagInk.js',													//ITE
       	'js/ITE/ITE/ITE Core/Utils/ITE.Utils.js',							//ITE
       	'js/ITE/ITE/ITE Core/Utils/TAG.Util.js',							//ITE
       	'js/ITE/ITE/ITE Core/ITEManual/ITE.PubSubStruct.js',				//ITE
