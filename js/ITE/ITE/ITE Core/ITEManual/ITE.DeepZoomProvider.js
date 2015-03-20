@@ -119,10 +119,17 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
-	self.unload = function(){
-		_UIControl.parent.removeChild(_UIControl)
-		_UIControl = null
-	}
+	/*
+	 * I/P: 	none
+	 * Unoads track asset.
+	 * O/P: 	none
+	 */
+	self.unload = function() {
+		_viewer.destroy();
+		for(var v in self) {
+			v = null;
+		}
+	};
 
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
@@ -263,9 +270,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.animate = function(duration, state) {
+		self.opacity = 1;
+		console.log("ANIMATE");
 		self.imageHasBeenManipulated = false;
 		setSeadragonConfig(duration);
+		console.log(_viewer.viewport);
 		_viewer.viewport.fitBounds(state.bounds, false);
+		console.log(_viewer.viewport);
 		self.animation = TweenLite.to(
 			// What object to animate.
 			_UIControl, 
@@ -303,7 +314,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// )
 		//testing
 
-		self.animation.play(); 
+		//self.animation.play(); 
 	};
 
 	/*
@@ -325,6 +336,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.setState = function(state) {
+		console.log("SETSTATE");
 		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
 	};

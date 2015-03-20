@@ -104,9 +104,18 @@ ITE.Orchestrator = function(player) {
 		}
 	};
 
-	function unload(track){
-		trackManager.remove(track)
+	/**
+	    * I/P: none
+	  	* unloads the tour
+	    * O/P: none
+	 */
+	function unload(){
+		for (i = self.trackManager.length-1; i >= 0; i--) {
+			self.trackManager[i].unload();
+			trackManager.remove(trackManager[i]);
+		}
 	}
+
 	/**
 	    * I/P: none
 	  	* getter for the tour data
