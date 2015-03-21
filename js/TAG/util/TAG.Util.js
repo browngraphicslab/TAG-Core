@@ -6840,7 +6840,8 @@ TAG.Util.RLH = function (input) {
             i;
 
         //webfileupload
-        /**
+        if (!IS_WINDOWS){
+            console.log("maps");
         TAG.Authoring.WebFileUploader(
             root,
             TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
@@ -6886,7 +6887,7 @@ TAG.Util.RLH = function (input) {
             },
             false // batch upload disabled for now
         );
-**/
+        } else {
 
         TAG.Authoring.FileUploader(
             root,
@@ -6933,6 +6934,7 @@ TAG.Util.RLH = function (input) {
             },
             false // batch upload disabled for now
         );
+        }
 
     }
 

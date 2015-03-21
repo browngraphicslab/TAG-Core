@@ -644,7 +644,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar.append(nav[NAV_TEXT.exhib.text] = createNavLabel(NAV_TEXT.exhib, loadExhibitionsView));
         navBar.append(nav[NAV_TEXT.art.text] = createNavLabel(NAV_TEXT.art, loadArtView));
         navBar.append(nav[NAV_TEXT.media.text] = createNavLabel(NAV_TEXT.media, loadAssocMediaView)); // COMMENT!!!!!!!!
-        navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView));
+        if (IS_WINDOWS){
+            navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView));
+        }
         //navBar.append(nav[NAV_TEXT.feedback.text] = createNavLabel(NAV_TEXT.feedback, loadFeedbackView));
 
         searchbar.css({
@@ -6666,10 +6668,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'position': 'relative',
             'font-size': '70%',
             'font-style': 'italic',
-            'top': '-10px',
             'white-space': 'nowrap',
             'display':'inline-block'
         });
+        if (IS_WINDOWS){
+            yearDescriptionDiv.css({
+            'top': '-10px'
+            });
+        }
         yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
         yearInput.on('keyup', function (event) {
             callback(event)

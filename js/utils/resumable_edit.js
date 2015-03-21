@@ -128,7 +128,8 @@
         e.preventDefault();
       },
       each: function(o,callback){
-        if(typeof(o.length)!=='undefined') {
+        if (o){
+        if(typeof(o.length)!=='undefined') { //Note- error here for import map where o is undefined...
           for (var i=0; i<o.length; i++) {
             // Array or FileList
             if(callback(o[i])===false) return;
@@ -138,6 +139,7 @@
             // Object
             if(callback(i,o[i])===false) return;
           }
+        }
         }
       },
       generateUniqueIdentifier:function(file){
@@ -274,6 +276,7 @@
           if(_error) return;
           $.resumableObj.fire('fileProgress', $); // it's at least progress
           if($.isComplete()) {
+            console.log("resumable success");
             $.resumableObj.fire('fileSuccess', $, message);
           }
           break;

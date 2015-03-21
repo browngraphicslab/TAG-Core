@@ -7,7 +7,8 @@ TAG.Authoring.FileUploadTypes = {
     Standard: 0,
     DeepZoom: 1,
     AssociatedMedia: 2,
-    VideoArtwork: 3
+    VideoArtwork: 3,
+    Map: 4
 };
 
 TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar) {
@@ -51,7 +52,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         uploadingOverlay.attr("id", "uploadingOverlay");
         uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100 });
 
-        uploadOverlayText.css({ 'color': 'white', 'width': '10%', 'height': '5%', 'top': '38%', 'left': '40%', 'position': 'relative', 'font-size': '250%' });
+        uploadOverlayText.css({ 'color': 'white', 'height': '5%', 'top': '35%', 'left': '35%', 'position': 'absolute', 'font-size': '150%' });
         uploadOverlayText.text('Uploading file(s). Please wait.');
         /*
         progressIcon.css({
@@ -184,6 +185,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
                maxSize = maxFileSize;
                break;
             case TAG.Authoring.FileUploadTypes.DeepZoom:
+            case TAG.Authoring.FileUploadTypes.Map:
                maxSize = maxDeepZoomFileSize;
                break;
             }
@@ -209,6 +211,9 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
                        case TAG.Authoring.FileUploadTypes.DeepZoom:
                            uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + resumableFile.file.type.substr(1);
                            break;
+                       case TAG.Authoring.FileUploadTypes.Map:
+                            uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadMap&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + resumableFile.file.type.substr(1);
+                            break;
                     }
                     console.log("The file about to be uploaded is " + resumableFile.file.name);
                     globalUriStrings.push(uriString);
