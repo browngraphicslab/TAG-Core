@@ -144,14 +144,19 @@
 	overflow none
 	width 100%
 
-#newCatalogRoot .collection-title
+#newCatalogRoot #backArrowArea
 	display inline-block
+	float left
+
+#newCatalogRoot .collection-title
+	float left
 	wh 100%
 	margin-left 15%
 	overflow hidden
 	text-overflow ellipsis
 	white-space nowrap
 	color white
+	z-index 9000000
 
 #newCatalogRoot .currentThumbnail
 	width 100%
@@ -291,7 +296,9 @@
 	z-index 1000000
 
 #newCatalogRoot .mainCollection
-	margin auto
+	
+	float left
+	margin-left 50
 	display inline-block
 	height 100%
 	font-size 200%
@@ -371,6 +378,9 @@
 	margin-right 2%
 	height 100%
 
+#newCatalogRoot #backArrow
+	transform rotate(270deg)
+
 #newCatalogRoot #sortRow
 	height 10%
 	position absolute
@@ -382,17 +392,18 @@
 
 #newCatalogRoot #collectionMenu
 	width 40%
-	height 30%
+	height 25%
 	position absolute
 	display inline-block
-	top -9%
+	top 7%
 	left 1%
-	opacity .85
+	opacity .95
 	background-color black
+	border-radius 3%
 	overflow auto
 	list-style square none none
 	display none
-	z-index 90000
+	z-index 900000
 
 
 #newCatalogRoot #searchFilter
