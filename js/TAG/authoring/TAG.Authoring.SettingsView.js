@@ -4967,9 +4967,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             thumbnailButton.attr('id', 'thumbnailButton');
             if (artwork.Metadata.Type !== 'VideoArtwork') {
-                buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
+                buttonContainer.append(editArt).append(deleteArt).append(saveButton); //.append(xmluploaderbtn); // for win8 aug 15 release only
             } else {
-                buttonContainer.append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
+                buttonContainer.append(deleteArt).append(saveButton);//.append(xmluploaderbtn); // for win8 aug 15 release only
             }
 
             saveButton.on("mousedown", function () {
