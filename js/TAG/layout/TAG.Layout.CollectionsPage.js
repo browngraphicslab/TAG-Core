@@ -836,7 +836,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // Add collection title
             mainCollection.addClass('mainCollection');
             titleBox.addClass('collection-title primaryFont').html(title);
-            titleBox.css('left', '0%');
+            titleBox.css('display', 'inline');
 
             var uiDocfrag = document.createDocumentFragment();
             // Add previous and next collection titles
@@ -844,7 +844,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
                 backArrowArea.addClass('arrowArea');
                 
-                backArrowArea.css('left', '0%')
+                backArrowArea.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
@@ -1079,13 +1079,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var menu = document.getElementById(id);
         var menuArray = [];
         menu.innerHTML = "";
+        
         if (menu.hasChildNodes() == false) {
             for (var i = 0; i < visibleCollections.length; i++) {
                 var para = document.createElement("p");
+                
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
+                $("#" + i).addClass('secondaryFont');
                 menuArray[i].style.border = "none";
+                menuArray[i].style.marginLeft = "2%";
+                menuArray[i].style.fontSize = "100%";
+                menuArray[i].style.padding = ".5%";
                 menu.appendChild(para);
 
                 menuArray[i].onclick = function () {
