@@ -488,6 +488,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileDiv.empty();
         tileCircle.show();
         if (cancelLoadCollection) cancelLoadCollection();
+       
     }
 
     /**
@@ -759,45 +760,83 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionDots[collection.Identifier].css('background-color', 'white');
             }                
 
-            var menuArray = [];
-
-            function loadPage(index){
+            makeOptionsClick('collectionMenu');
+           
+            /*
+            function loadPage(index) {
+                //makeOptionsClick('collectionsMenu');
                 prepareNextView();
                 loadCollection(visibleCollections[index])();
             }
 
-            // To show/hide dropdown menu
-            function showMenu(id) {
-
+            function makeOptionsClick(id) {
                 var menu = document.getElementById(id);
+                console.log("called MakeOptionsClick");
                 if (menu.hasChildNodes() == false) {
                     for (var i = 0; i < visibleCollections.length; i++) {
+                        // console.log("In for loop!")
                         var para = document.createElement("p");
                         var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                         menuArray[i] = document.createElement("BUTTON");
                         menuArray[i].setAttribute("id", i);
                         menuArray[i].style.border = "none";
                         menu.appendChild(para);
-                        menuArray[i].onclick = function() {
+
+                        //txtNode.addEventListener("click", loadPage());
+                        //btnNode.onclick = loadPage;
+                        //para.appendChild(btnNode);
+                        // btnNode.appendChild(txtNode);   
+
+                        menuArray[i].onclick = function () {
                             loadPage(this.id);
                         }
                         para.appendChild(menuArray[i]);
                         menuArray[i].appendChild(txtNode);
                     }
                 }
+            }
 
+            // To show/hide dropdown menu
+            function showMenu(id) {
+                console.log("Called Show Menu");
+                
+                var menu = document.getElementById(id);
+                /*if (menu.hasChildNodes() == false) {
+                    for (var i = 0; i < visibleCollections.length; i++) {
+                        // console.log("In for loop!")
+                        var para = document.createElement("p");
+                        var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
+                        menuArray[i] = document.createElement("BUTTON");
+                        menuArray[i].setAttribute("id", i);
+                        menuArray[i].style.border = "none";
+                        menu.appendChild(para);
+
+                        //txtNode.addEventListener("click", loadPage());
+                        //btnNode.onclick = loadPage;
+                        //para.appendChild(btnNode);
+                       // btnNode.appendChild(txtNode);   
+
+                        menuArray[i].onclick = function() {
+                            loadPage(this.id);
+                        }
+                        para.appendChild(menuArray[i]);
+                        menuArray[i].appendChild(txtNode);
+                    }
+                } */
+            /*
                 if (menu.style.display == 'block') {
                     menu.style.display = 'none';
                 } else {
                     menu.style.display = 'block';
                 }
                
-            }
+            } */
 
 
             // Add collection title
             mainCollection.addClass('mainCollection');
             titleBox.addClass('collection-title primaryFont').html(title);
+            titleBox.css('display', 'inline');
 
             var uiDocfrag = document.createDocumentFragment();
             // Add previous and next collection titles
@@ -805,7 +844,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
                 backArrowArea.addClass('arrowArea');
                 
-                backArrowArea.css('left', '0%')
+                backArrowArea.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
@@ -935,7 +974,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             $(element).replaceWith(function () {
                                 return $.text([this]);
                             });
-                        });
+                        }); 
                     }
                 }
 
@@ -1026,6 +1065,56 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
     }
     this.loadCollection = loadCollection;
+
+    //For when buttons from collection Menu are clicked
+    function loadPage(index) {
+        prepareNextView();
+        loadCollection(visibleCollections[index])();
+    }
+
+    //To make the dropdown menu a list of clickable buttons that correspond to collections
+    function makeOptionsClick(id) {
+        var menu = document.getElementById(id);
+        var menuArray = [];
+        menu.innerHTML = "";
+        
+        if (menu.hasChildNodes() == false) {
+            for (var i = 0; i < visibleCollections.length; i++) {
+                var para = document.createElement("p");
+                
+                var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
+                menuArray[i] = document.createElement("BUTTON");
+                menuArray[i].setAttribute("id", i);
+                $("#" + i).addClass('secondaryFont');
+                menuArray[i].style.border = "none";
+                menuArray[i].style.marginLeft = "2%";
+                menuArray[i].style.fontSize = "100%";
+                menuArray[i].style.padding = ".5%";
+                menu.appendChild(para);
+
+                menuArray[i].onclick = function () {
+                    loadPage(this.id);
+                }
+                para.appendChild(menuArray[i]);
+                menuArray[i].appendChild(txtNode);
+            }
+        }
+    }
+
+    // To show/hide dropdown menu
+    function showMenu(id) {
+
+        var menu = document.getElementById(id);
+
+        if (menu.style.display == 'block') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'block';
+        }
+
+    }
+
+
 
     /**
      * Helper function to load first collection
