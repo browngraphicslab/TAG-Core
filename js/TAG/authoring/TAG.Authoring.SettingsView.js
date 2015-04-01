@@ -29,6 +29,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar = root.find('#setViewNavBar'),
         searchbar = root.find('#setViewSearchBar'),
         newButton = root.find('#setViewNewButton'),
+        addButton = root.find('#setViewAddButton'),
         secondaryButton = root.find('#setViewSecondaryButton'),
         middlebar = root.find('#setViewMiddleBar'),
         middleLabelContainer = root.find('#setViewMiddleLabelContainer'),
@@ -140,6 +141,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         artmodeList, // list of all artworks in a collection
         infoSource = [], // array to hold sorting/searching information
         currDoq,//current selected artwork/associated media id
+        currArtwork,
         // key handling stuff
         deleteType,
         toDelete,
@@ -673,8 +675,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
        // rootContainer.keydown(keyHandler);
         //searchbar.attr('placeholder', 'Search...');
-        newButton.text('New').css('border-radius', '3.5px');
+        newButton.text('New');
         secondaryButton.text('Video');
+        addButton.text("Add to Collection");
         label.text('Loading...');
         circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
@@ -4450,6 +4453,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
         cancelLastSetting = function () { cancel = true; };
     }
+
+
+    /**Add artworks to collections in the Artwork Tab
+     * @method addArtworksToCollections 
+     */
+    function addArtworksToCollections(artwork) {
+        if (!artwork) {
+            return;
+        }
+
+        console.log(Object.keys(artwork))
+        //Opens a popup to choose collection(s) to associate the artworks list to
+        TAG.Util.UI.createAssociationPicker(root, "Add Artworks to Collections",
+                { comp: artwork, type: 'artwork' , modifiedButtons: true},
+                'exhib', [{
+                    name: 'All Collections',
+                    getObjs: TAG.Worktop.Database.getExhibitions,
+                }], {
+                    getObjs: function () { return [];}, //TODO how to get the collections that an artwork is already in
+                }, function () {
+                    prepareNextView(true, "New", createExhibition);
+                    clearRight();
+                    prepareViewer(true);
+                    loadExhibitionsView(artwork.Identifier);
+                }
+        );
+    }
+
     /*nest source tag inside video element*/
     function addSourceToVideo(element, src, type) {
         var source = document.createElement('source');
@@ -4472,6 +4503,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         toDelete = artwork;
         clearInterval(checkConTimerId);
         currDoq = artwork.Identifier;
+        currArtwork = artwork;
         // Create an img element to load the image
         var mediaElement;
         var cancel = false;
@@ -6152,17 +6184,36 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             menuLabel.click();
         }
 
-        if (!inAssociatedView) {
+        if (inArtworkView){
             menuLabel.hide();
-            searchbar.css({ width: '53%' });
+            searchbar.css({ width: '40%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
-            if (!newText) newButton.hide();
-            else newButton.show();
+            if (!newText) { newButton.hide(); }
+            else { newButton.show(); }
+
+            //shows the second button
+            addButton.show()
+            addButton.click(function () { addArtworksToCollections(currArtwork)})
+
         } else {
-            newButton.hide();
-            searchbar.css({width:'40%'});
-            menuLabel.show();
+
+            //hides the second button
+            addButton.hide()
+            addButton.unbind('click')
+
+            if (!inAssociatedView) {
+                menuLabel.hide();
+                searchbar.css({ width: '53%' });
+                newButton.text(newText);
+                newButton.unbind('click').click(newBehavior);
+                if (!newText) newButton.hide();
+                else newButton.show();
+            } else {
+                newButton.hide();
+                searchbar.css({width:'40%'});
+                menuLabel.show();
+            }
         }
 
         prevSelectedMiddleLabel = null;
