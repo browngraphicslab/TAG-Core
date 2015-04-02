@@ -142,6 +142,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         infoSource = [], // array to hold sorting/searching information
         currDoq,//current selected artwork/associated media id
         currArtwork,
+        currTour,
         // key handling stuff
         deleteType,
         toDelete,
@@ -2679,6 +2680,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteType = deleteTour;
         toDelete = tour;
 
+        currTour = tour;
+
         prevMiddleBarSelection = {
             type_representation: "Tour",
             time_spent_timer: new TelemetryTimer()
@@ -4458,13 +4461,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Add artworks to collections in the Artwork Tab
      * @method addArtworksToCollections 
      */
-    function addArtworksToCollections(artwork) {
+    function addArtworksToCollections(artwork) { //todo - use an array instead of a single artwork (once multiselect is implemented)
         if (!artwork) {
             return;
         }
 
-        console.log(Object.keys(artwork))
-        //Opens a popup to choose collection(s) to associate the artworks list to
+        //Opens a popup to choose collection(s) to add the artworks list to
         TAG.Util.UI.createAssociationPicker(root, "Add Artworks to Collections",
                 { comp: artwork, type: 'artwork' , modifiedButtons: true},
                 'exhib', [{
@@ -4477,6 +4479,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     clearRight();
                     prepareViewer(true);
                     loadExhibitionsView(artwork.Identifier);
+                }
+        );
+    }
+
+    /**Add tours to collections in the Tours Tab
+     * @method addToursToCollections
+     */
+    function addToursToCollections(tour) { //todo - use an array instead of a single tour (once multiselect is implemented)
+        if (!tour) {
+            return;
+        }
+
+        //Opens a popup to choose collection(s) to add the tours to
+        TAG.Util.UI.createAssociationPicker(root, "Add Tours to Collections",
+                { comp: tour, type: 'artwork', modifiedButtons: true },
+                'exhib', [{
+                    name: 'All Collections',
+                    getObjs: TAG.Worktop.Database.getExhibitions,
+                }], {
+                    getObjs: function () { return []; }, //TODO how to get the collections that the tour is already in
+                }, function () {
+                    prepareNextView(true, "New", createExhibition);
+                    clearRight();
+                    prepareViewer(true);
+                    loadExhibitionsView(tour.Identifier);
                 }
         );
     }
@@ -6186,7 +6213,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (inArtworkView){
             menuLabel.hide();
-            searchbar.css({ width: '40%' });
+            searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
             if (!newText) { newButton.hide(); }
@@ -6194,7 +6221,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //shows the second button
             addButton.show()
-            addButton.click(function () { addArtworksToCollections(currArtwork)})
+            addButton.unbind('click').click(function () { addArtworksToCollections(currArtwork)})
+
+        } else if (inToursView) {
+            menuLabel.hide();
+            searchbar.css({ width: '53%' });
+            newButton.text(newText);
+            newButton.unbind('click').click(newBehavior);
+            if (!newText) { newButton.hide(); }
+            else { newButton.show(); }
+
+            //shows the second button
+            addButton.show()
+            addButton.unbind('click').click(function () { addToursToCollections(currTour)})
 
         } else {
 
@@ -6211,7 +6250,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 else newButton.show();
             } else {
                 newButton.hide();
-                searchbar.css({width:'40%'});
+                searchbar.css({ width: '40%' });
                 menuLabel.show();
             }
         }
