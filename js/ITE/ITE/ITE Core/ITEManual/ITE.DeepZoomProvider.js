@@ -634,7 +634,11 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * purpose:  This method simply compies the one above, but takes in a mouseMove event
 	 * O/P: 	bool, whether or not this event was within the image's bounds
 	 */
-	function isInImageBoundsMouseEvent(evt){
+	function isInImageBoundsMouseEvent(evt) {
+
+        //this prevents crashes if the image hasn't loaded yet
+	    if (!_viewer.viewport) { return; }
+
 		var x = evt.clientX - (($("#tagRootInnerContainer").width()-$("#ITEHolder").width())/2);
 		var y = evt.clientY
 		var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
