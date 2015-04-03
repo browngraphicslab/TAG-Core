@@ -456,16 +456,17 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				addInk(inkTrack) } , 100);
 		} else {
 			attachedInks.push(inkTrack)	
-			_UIControl.append(inkTrack._UIControl[0])
-			
-			inkTrack._ink.retrieveOrigDims();
-
-			inkTrack._ink.setInitKeyframeData({ 
+			var initialDims = { 
 				x: self.firstKeyframe.pos.x, 
 				y: self.firstKeyframe.pos.y, 
-				w: 1/self.firstKeyframe.scale, 
-				h: 1/self.firstKeyframe.scale/2
-			})
+				w: 1/self.firstKeyframe.scale * _UIControl.width(), 
+				h: 1/self.firstKeyframe.scale * _viewer.viewport.contentAspectY * _UIControl.height()
+			}	
+			inkTrack._ink.setInitKeyframeData(initialDims)
+			console.log("ORIGIONAL:")
+			console.log(initialDims)
+			console.log("--------------")
+			inkTrack._ink.retrieveOrigDims();
 
 		}
 	};
@@ -573,13 +574,32 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			'animation', function(evt) {
 				for (var i = 0; i < attachedInks.length; i++){
 					var bounds = _viewer.viewport.getBounds(true);
+
+           			// var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
+           			// var bottomRight = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, _viewer.viewport.contentAspectY, true));
+					// var bounds = { 
+					// 	x: self.firstKeyframe.pos.x, 
+					// 	y: self.firstKeyframe.pos.y, 
+					// 	w: 1/self.firstKeyframe.scale * _UIControl.width(), 
+					// 	h: 1/self.firstKeyframe.scale * _viewer.viewport.contentAspectY * _UIControl.height()
+					// }
+					// var bounds = _viewer.viewport.viewportToImageRectangle(_viewer.viewport.getBounds(true));
 					bounds = {
-						x: bounds.x, 
-						y: bounds.y, 
-						width: bounds.width, 
-						height: bounds.height
+						x: self.firstKeyframe.pos.x, 
+						y: self.firstKeyframe.pos.y,
+						width: bounds.width * _UIControl.width(), 
+						height: 1/self.firstKeyframe.scale * _viewer.viewport.contentAspectY * _UIControl.height()
+//bounds.height * _viewer.viewport.contentAspectY * _UIControl.height()
 					}
-					attachedInks[i]._ink.adjustViewBox(bounds);
+					// bounds = {
+					// 	x: topLeft.x, 
+					// 	y: topLeft.y, 
+					// 	width: topLeft.y - topLeft.x, 
+					// 	height: bottomRight.y - topLeft.x,
+					// }
+					// console.log("Why aren't you moving??")
+					// console.log(bounds)
+					//attachedInks[i]._ink.adjustViewBox(bounds);
 				}
 			})
 	}

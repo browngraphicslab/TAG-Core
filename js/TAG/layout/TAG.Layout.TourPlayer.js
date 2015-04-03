@@ -18,7 +18,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 	var prevExhib = exhibition;
     var prevTag = prevInfo.prevTag;
     var prevMult = prevInfo.prevMult;
-    var prevS
+    var prevS;
+    var self = this;
     var rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
     var ispagetoload = pageToLoad && (pageToLoad.pagename === 'tour');
 
@@ -136,14 +137,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         
         if(player) {
             player.pause();
-            //player.screenplayEnded.unsubscribe();
             player.unload();
         }
-        /*
-        if(!player || rinPlayer.children().length === 0) {
-            return; // if page hasn't loaded yet, don't exit (TODO -- should have slide page overlay)
-        }
-        */
+
         backButton.off('click'); // prevent user from clicking twice
 
         if (artmodeOptions) {
@@ -174,8 +170,6 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             currentPage.obj  = collectionsPage;
             $('#ITEHolder').remove();
         }
-        // TODO: do we need this next line?
-        // tagContainer.css({ 'font-size': '11pt', 'font-family': "'source sans pro regular' sans-serif" }); // Quick hack to fix bug where rin.css was overriding styles for body element -jastern 4/30
     }
     this.goBack = goBack;
 
@@ -183,26 +177,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         getRoot: function () {
             return root;
         },
-        startPlayback: function () { // need to call this to ensure the tour will play when you exit and re-enter a tour, since sliding functionality and audio playback don't cooperate
-            //rin.processAll(null, rinPath).then(function () {
-               // var options = 'systemRootUrl='+rinPath+'/&autoplay='+(ispagetoload ? 'false' : 'true')+'&loop=false';
-                // create player
-               // player = rin.createPlayerControl(rinPlayer[0], options);
-                /* for (var key in tour.resources) {
-                    if (tour.resources.hasOwnProperty(key)) {
-                        if (typeof tour.resources[key].uriReference === 'string') {
-                            tour.resources[key].uriReference = TAG.Worktop.Database.fixPath(tour.resources[key].uriReference);
-                        }
-                    }
-                }*/
-               // player.loadData(tour, function () {});
-                /**if(!ispagetoload) {
-                    player.screenplayEnded.subscribe(function() { // at the end of a tour, go back to the collections view
-                        setTimeout(goBack, 1000);
-                    });
-                }*/
-
-
+        startPlayback: function () { 
             window.ITE = window.ITE || {};
             var testOptions =   {
                     attachVolume:               true,

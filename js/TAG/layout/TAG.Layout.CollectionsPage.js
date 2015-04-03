@@ -3194,44 +3194,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} tour    the relevant tour doq
      */
     function switchPageTour(tour, containerLeft) {
-        var rinData,
-            rinPlayer,
-            prevInfo,
+        var prevInfo,
             messageBox,
             collectionOptions,
             parentid;
 
-            if (TAG.Util.Splitscreen.isOn()) {
-                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
-                            TAG.Util.Splitscreen.exit(root.data('split') || 'L');
-                            tourClicked(tour)();
-                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
-                        },
-                        "By opening this tour, you will exit splitscreen mode. Would you like to continue?",
-                        "Continue",
-                        false,
-                        function () {
-                            confirmationBox.remove();
-                        },
-                        root
-                    ));
-
-                    confirmationBox.css('z-index', 10000001);
-                    root.append(confirmationBox);
-                    confirmationBox.show();
-                }
-
-
-        rinData = JSON.parse(unescape(tour.Metadata.Content));
-
-        if (!rinData || !rinData.data) {
-            messageBox = $(TAG.Util.UI.popUpMessage(null, "Cannot play empty tour.", null));
-            messageBox.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 7);
-            root.append(messageBox);
-            messageBox.fadeIn(500);
-            return;
-        }
-
+        //Options for when we return to the collections page
         collectionOptions = {
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
@@ -3241,41 +3209,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevMult : multipleShown
         }
 
-        //CALL RIN TO ITE PARSING HERE 
+        //Parse RIN data to ITE Data
         var iteData = TAG.Util.RIN_TO_ITE(tour);
 
-       /* window.ITE = window.ITE || {};
-        var testOptions =   {
-                attachVolume:               true,
-                attachLoop:                 true,
-                attachPlay:                 true,
-                attachProgressBar:          true,
-                attachFullScreen:           true,
-                attachProgressIndicator:    true,
-                hideControls:               false,
-                autoPlay:                   false,
-                autoLoop:                   false,
-                setMute:                    false,
-                setInitVolume:              1,
-                allowSeek:                  true,
-                setFullScreen:              false,
-                setStartingOffset:          0,
-                setEndTime:                 NaN
-            };*/
-
+        //Create tag tourplayer (which will in turn create an ITE player)
         var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
-
-        //var ITEPlayer = new ITE.Player(testOptions);
-        //ITEPlayer.load(iteData)
-        //ITEPlayer.load(itePath + "Assets/TourData/TourDataAudioImagesDZ.JSON")
         TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), ITEPlayer.startPlayback);
-
-        /*rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
-        rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour);
-        TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);*/
-
         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
-        currentPage.obj  = rinPlayer;
     }
 
     /**

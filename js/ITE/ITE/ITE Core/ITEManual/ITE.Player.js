@@ -258,7 +258,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
 
     function tourOver(sec) {
         if (sec > totalTourDuration) {
-            //isLooped ? orchestrator.seek(0) : tourPlayer.goBack();
+            isLooped ? orchestrator.seek(0) : tourPlayer.goBack();
             if (isLooped) {
                 orchestrator.seek(0);
             }
