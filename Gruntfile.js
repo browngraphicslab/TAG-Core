@@ -203,7 +203,7 @@ module.exports = function(grunt) {
                             \n        IS_WEBAPP            = !IS_WINDOWS, // perhaps more intuitive than writing !IS_WINDOWS \
 					        \n        idleTimer, \
                             \n        Worktop = {}, \
-							\n 		  itePath 			   = tagPath + "js/ITE/ITE/",\
+							\n 		  itePath 			   = tagPath + "/js/ITE/ITE/",\
 			                \n        TAG                  = {}; \n\n',
 				footer: '};'
 			},
