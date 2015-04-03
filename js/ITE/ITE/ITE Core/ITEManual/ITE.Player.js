@@ -49,9 +49,10 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         isMuted,
         isLooped,
         isFullScreen,
+        isUnloaded = false;
 
     //Other miscellaneous variables
-        Utils = new ITE.Utils();
+    Utils = new ITE.Utils();
     this.Orchestrator = orchestrator;
 
     var onLoadPlayerEvent = new ITE.PubSubStruct();
@@ -244,23 +245,28 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     * O/P:   none
     */
     function attachProgressIndicator() {
-        if (playerConfiguration.attachProgressIndicator) {
+        if (playerConfiguration.attachProgressIndicator) 
+        {
             var ProgressIndicatorContainer = $(document.createElement("div"))
                 .addClass("progressIndicatorContainer");
             progressIndicator.addClass("progressIndicator"); 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
-            window.setInterval(function(){
-                updateProgressIndicator(orchestrator.getElapsedTime());
-            },100);
+            updateProgressIndicator(orchestrator.getElapsedTime());
         }
     };
 
     function tourOver(sec) {
-        if (sec > totalTourDuration) {
-            isLooped ? orchestrator.seek(0) : tourPlayer.goBack();
-            if (isLooped) {
-                orchestrator.seek(0);
+        if (sec > totalTourDuration) 
+        {
+            if (isLooped)
+            {
+                orchestrator.seek(0)
+            } 
+            else 
+            {
+                tourPlayer.goBack();
+                isUnloaded = true;
             }
         }
     }
@@ -306,8 +312,12 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         var timeString = makeTimeString(sec) + " / "+makeTimeString(totalTourDuration);
         progressIndicator.append(timeString);
         updateProgressBar(sec);
-
         tourOver(sec);
+        if (!isUnloaded){
+            window.setTimeout(function(){
+                updateProgressIndicator(orchestrator.getElapsedTime());
+            },100); 
+        }
     };
     /*
     * I/P:   none
