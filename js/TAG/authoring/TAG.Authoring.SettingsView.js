@@ -647,7 +647,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar.append(nav[NAV_TEXT.exhib.text] = createNavLabel(NAV_TEXT.exhib, loadExhibitionsView));
         navBar.append(nav[NAV_TEXT.art.text] = createNavLabel(NAV_TEXT.art, loadArtView));
         navBar.append(nav[NAV_TEXT.media.text] = createNavLabel(NAV_TEXT.media, loadAssocMediaView)); // COMMENT!!!!!!!!
-        navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView));
+        if (IS_WINDOWS){
+            navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView));
+        }
         //navBar.append(nav[NAV_TEXT.feedback.text] = createNavLabel(NAV_TEXT.feedback, loadFeedbackView));
 
         searchbar.css({
@@ -1572,6 +1574,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 currentList = result;
                 initSearch();
                 list = result;
+                console.log("loading colelctions");
                 displayLabels();
             });
         }
@@ -3967,19 +3970,47 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             function durationHelper(j) {
                 if (contentTypes[j] === 'Video') {
-                    files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
+                    
+                    //webappfileupload
+                    if (!IS_WINDOWS){
+                        var videoElement = $(document.createElement('video'));
+                        videoElement.attr('preload', 'metadata');   //Instead of waiting for whole video to load, just load metadata
+                        var videoURL = URL.createObjectURL(files[j]);
+                        videoElement.attr('src', videoURL);
+                        videoElement.on('loadedmetadata', function() {
+                            var dur = this.duration;
+                            durations.push(dur);
+                        });
+                    } else {
+                        files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
                         durations.push(VideoProperties.duration / 1000); // duration in seconds
                         updateDoq(j);
-                    }, function (err) {
-                        console.log(err);
-                    });
+                        }, function (err) {
+                            console.log(err);
+                        });
+                    }
+
                 } else if (contentTypes[j] === 'Audio') {
-                    files[j].properties.getMusicPropertiesAsync().done(function (MusicProperties) {
+
+                    //webappfileupload
+                    if (!IS_WINDOWS){
+                        var audioElement = $(document.createElement('audio'));
+                        audioElement.attr('preload', 'metadata');   //Instead of waiting for whole audio to load, just load metadata
+                        var audioURL = URL.createObjectURL(files[j]);
+                        audioElement.attr('src', audioURL);
+                        audioElement.on('loadedmetadata', function() {
+                            var dur = this.duration;
+                            durations.push(dur);
+                            updateDoq(j);
+                        });
+                    } else {
+                        files[j].properties.getMusicPropertiesAsync().done(function (MusicProperties) {
                         durations.push(MusicProperties.duration / 1000); // duration in seconds
                         updateDoq(j);
-                    }, function (error) {
-                        console.log(error);
-                    });
+                        }, function (error) {
+                            console.log(error);
+                        });
+                    }
                 } else {
                     durations.push(null);
                     updateDoq(j);
@@ -4078,50 +4109,101 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         artworkAssociations = [];
         numFiles = 0;
         isUploading = true;
-        assetUploader = TAG.Authoring.FileUploader( // multi-file upload now
-            root,
-            TAG.Authoring.FileUploadTypes.AssociatedMedia,
-            function (files, localURLs) { // localCallback
-                var file, localURL, i;
-                var img, video, audio;
-                var contentType;
-                numFiles = files.length;
-                for (i = 0; i < files.length; i++) {
-                    artworkAssociations.push([]);
-                    file = files[i];
-                    localURL = localURLs[i];
-                    if (file.contentType.match(/image/)) {
-                        contentType = 'Image';
-                    } else if (file.contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
-                        contentType = 'Video';
-                    } else if (file.contentType.match(/audio/)) {
-                        contentType = 'Audio';
+        if (IS_WINDOWS){
+            assetUploader = TAG.Authoring.FileUploader( // multi-file upload now
+                root,
+                TAG.Authoring.FileUploadTypes.AssociatedMedia,
+                function (files, localURLs) { // localCallback
+                    var file, localURL, i;
+                    var img, video, audio;
+                    var contentType;
+                    numFiles = files.length;
+                    for (i = 0; i < files.length; i++) {
+                        artworkAssociations.push([]);
+                        file = files[i];
+                        localURL = localURLs[i];
+                        if (file.contentType.match(/image/)) {
+                            contentType = 'Image';
+                        } else if (file.contentType.match(/video/) || files[i].fileType.toLowerCase() === ".mp4" || files[i].fileType.toLowerCase() === ".webm" || files[i].fileType.toLowerCase() === ".ogv") {
+                            contentType = 'Video';
+                        } else if (file.contentType.match(/audio/)) {
+                            contentType = 'Audio';
+                        }
+                        uniqueUrls.push(localURL);
+                        mediaMetadata.push({
+                            'title': file.displayName,
+                            'contentType': contentType,
+                            'localUrl': localURL,
+                            'assetType': 'Asset',
+                            'assetLinqID': undefined,
+                            'assetDoqID': undefined
+                        });
                     }
-                    uniqueUrls.push(localURL);
-                    mediaMetadata.push({
-                        'title': file.displayName,
-                        'contentType': contentType,
-                        'localUrl': localURL,
-                        'assetType': 'Asset',
-                        'assetLinqID': undefined,
-                        'assetDoqID': undefined
-                    });
-                }
-            },
-            function (dataReaderLoads) { // finished callback: set proper contentUrls, if not first, save it
-                var i, dataReaderLoad;
-                for (i = 0; i < dataReaderLoads.length; i++) {
-                    dataReaderLoad = dataReaderLoads[i];
-                    mediaMetadata[i].contentUrl = dataReaderLoad;
-                }
+                },
+                function (dataReaderLoads) { // finished callback: set proper contentUrls, if not first, save it
+                    var i, dataReaderLoad;
+                    for (i = 0; i < dataReaderLoads.length; i++) {
+                        dataReaderLoad = dataReaderLoads[i];
+                        mediaMetadata[i].contentUrl = dataReaderLoad;
+                    }
 
                 // chooseAssociatedArtworks(); // need to send in media objects here TODO
-            },
-            ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
-            false, // useThumbnail
-            null, // errorCallback
-            true // multiple file upload enabled?
-        );
+                },
+                ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
+                false, // useThumbnail
+                null, // errorCallback
+                true // multiple file upload enabled?
+            );
+        } else {
+        //webappfileupload
+            assetUploader = TAG.Authoring.WebFileUploader(
+                root,
+                TAG.Authoring.FileUploadTypes.AssociatedMedia,
+                function (files, localURLs) { // localCallback
+                    var file, localURL, i;
+                    var img, video, audio;
+                    var contentType;
+                    numFiles = files.length;
+                    for (i = 0; i < files.length; i++) {
+                        artworkAssociations.push([]);
+                        file = files[i];
+                        localURL = localURLs[i];
+
+                        //webappfileupload
+                        if (file.type.match(/image/)) {
+                            contentType = 'Image';
+                        } else if (file.type.match(/video/)) {
+                            contentType = 'Video';
+                        } else if (file.type.match(/audio/)) {
+                            contentType = 'Audio';
+                        }
+                    
+                        uniqueUrls.push(localURL);
+                        mediaMetadata.push({
+                            'title': file.name,
+                            'contentType': contentType,
+                            'localUrl': localURL,
+                            'assetType': 'Asset',
+                            'assetLinqID': undefined,
+                            'assetDoqID': undefined
+                        });
+                    }
+                },
+                function (dataReaderLoads) { // finished callback: set proper contentUrls, if not first, save it
+                    var i, dataReaderLoad;
+                    for (i = 0; i < dataReaderLoads.length; i++) {
+                        dataReaderLoad = dataReaderLoads[i];
+                        mediaMetadata[i].contentUrl = dataReaderLoad;
+                    }
+
+                // chooseAssociatedArtworks(); // need to send in media objects here TODO
+                },
+                ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
+                false, // useThumbnail
+                null, // errorCallback
+                true // multiple file upload enabled?
+            );
+        }
     }
 
     /**
@@ -4331,6 +4413,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         var list;
+        var sortLists;
+        var sortBy = "Title";
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork);
         prepareViewer(true);
@@ -4365,12 +4449,62 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 artworkList = result;
                 initSearch();
                 list = result;
-                displayLabels();
+                sortLabels();
+                //displayLabels();
             });
         }
         
+        function sortLabels(){
+            console.log("sort");
+            if (sortBy == "Title"){
+                console.log("sort by title");
+                //sortAz(list);
+            } 
+            else if (sortBy == "Collection"){
+                TAG.Worktop.Database.getExhibitions(function (result) {
+                    if (cancel) return;
+                    sortAZ(result);
+                    //create sort list for each collection
+                    for (r in result){
+                        var s = createSortList(r.Name, r.Identifier);
+                        sortLists.append(s);
+                    }
+                    //create sort list for artworks w/ no collection
+                    for (artwork in list){
+                        //once server changes happen
+                        //if (artwork.Collections = "None"){
+
+                        //}
+                    }
+                });
+            }
+            else if (sortBy == "Added Before"){
+                 //create sort list for added before and other
+            }
+            var k;
+            for (k=0; k<list.length;k++){
+                console.log(k + " " + list[k].Metadata.Exhibition);
+            }
+            displayLabels();
+        }
+
+        function createSortList(sort_title, guid){
+            var sortList;
+            sortList.sort_title = sort_title;
+            sortList.items = TAG.Worktop.Database.getArtworksIn(guid);
+        }
 
         function displayLabels() {
+            /**
+            //first load all the div for each sort list
+            $.each(sortList, function(i,val){
+                middleQueue.add(function(){
+                    if (cancel) return;
+                    createMiddleLabel(val.sort_title);
+                })
+            }
+            //then load all the artworks in each sort list into the corresponding divs
+            **/
             if (list[0] && list[0].Metadata) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -4452,6 +4586,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
             });
+            
         }
             
         cancelLastSetting = function () { cancel = true; };
@@ -4956,9 +5091,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             thumbnailButton.attr('id', 'thumbnailButton');
             if (artwork.Metadata.Type !== 'VideoArtwork') {
-                buttonContainer.append(editArt).append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
+                buttonContainer.append(editArt).append(deleteArt).append(saveButton); //.append(xmluploaderbtn); // for win8 aug 15 release only
             } else {
-                buttonContainer.append(deleteArt).append(saveButton).append(xmluploaderbtn); // for win8 aug 15 release only
+                buttonContainer.append(deleteArt).append(saveButton);//.append(xmluploaderbtn); // for win8 aug 15 release only
             }
 
             saveButton.on("mousedown", function () {
@@ -5109,16 +5244,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //clearRight();
             //prepareViewer(true);
 
+            //webappfileupload
+            if (!IS_WINDOWS){
+                if(!total) {
+                    loadArtView();
+                }
+            }
+
             function incrDone() {
                 done++;
-                if (done >= total) {
-                    if (inArtworkView) {
+                //webappfileupload
+                if (!IS_WINDOWS){
+                    if (done >= total || !total) {
+                        middleLoading.hide();
                         loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
                     } else {
-                        hideUploadingProgress()
+                        durationHelper(done);
                     }
                 } else {
-                    durationHelper(done);
+                    if (done >= total) {
+                        loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
+                    } else {
+                        durationHelper(done);
+                    }
                 }
             }
 
@@ -5129,12 +5277,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             function durationHelper(j) {
                 if (contentTypes[j] === 'Video') {
-                    files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
-                        durations.push(VideoProperties.duration / 1000); // duration in seconds
-                        updateDoq(j);
-                    }, function (err) {
-                        console.log(err);
-                    });
+
+                    //webappfileupload
+                    if (!IS_WINDOWS){
+                        var videoElement = $(document.createElement('video'));
+                        videoElement.attr('preload', 'metadata');   //Instead of waiting for whole video to load, just load metadata
+                        var videoURL = URL.createObjectURL(files[j]);
+                        videoElement.attr('src', videoURL);
+                        videoElement.on('loadedmetadata', function() {
+                            var dur = this.duration;
+                            durations.push(dur);
+                            updateDoq(j);
+                        });
+                    } else {
+                        files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
+                            durations.push(VideoProperties.duration / 1000); // duration in seconds
+                            updateDoq(j);
+                        }, function (err) {
+                            console.log(err);
+                        });
+                    }
                 } else {
                     durations.push(null);
                     updateDoq(j);
@@ -6670,10 +6832,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'position': 'relative',
             'font-size': '70%',
             'font-style': 'italic',
-            'top': '-10px',
             'white-space': 'nowrap',
             'display':'inline-block'
         });
+        if (IS_WINDOWS){
+            yearDescriptionDiv.css({
+            'top': '-10px'
+            });
+        }
         yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
         yearInput.on('keyup', function (event) {
             callback(event)
@@ -7442,6 +7608,54 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param filter    
      */
     function uploadFile(type, callback, multiple, filter) {
+        console.log("file upload!");
+        console.log(IS_WINDOWS);
+        if (!IS_WINDOWS){
+        //webappfileupload:   
+        var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
+        TAG.Authoring.WebFileUploader( // remember, this is a multi-file upload
+            root,
+            type,
+            // local callback - get filename
+            function (files, localURLs) {
+                for (i = 0; i < files.length; i++) {
+                    fileArray.push(files[i]);
+                    names.push(files[i].name);
+                    if (files[i].type.match(/image/)) {
+                        contentTypes.push('Image');
+                    } else if (files[i].type.match(/video/)) {
+                        contentTypes.push('Video');
+                    } else if (files[i].type.match(/audio/)) {
+                        contentTypes.push('Audio');
+                    }
+                }
+            },
+            // remote callback - save correct name
+            function (urls) {
+                if (!is_array(urls)) { // check to see whether a single file was returned
+                    urls = [urls];
+                    names = [names];
+                }
+                for (i = 0; i < urls.length; i++) {
+                    console.log("trying that new URL thing");
+                    urlArray.push(urls[i]);
+                    //console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
+                }
+
+                for (var i = 0; i < names.length; i++) {
+                    console.log("The files being passed through names: " + names[i]);
+                }
+                callback(urls, names, contentTypes, fileArray);
+            },
+            filter || ['.jpg', '.png', '.gif', '.tif', '.tiff'],
+            false,
+            function () {
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+            },
+            !!multiple // batch upload disabled
+            );
+        } else {
+
         var names = [], locals = [], contentTypes = [], fileArray, i;
         TAG.Authoring.FileUploader( // remember, this is a multi-file upload
             root,
@@ -7507,6 +7721,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             },
             !!multiple // batch upload disabled
             );
+        }
     }
 
     /**Create an overlay over the whole settings view with a spinning circle and centered text. This overlay is intended to be used 
