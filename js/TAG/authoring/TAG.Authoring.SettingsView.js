@@ -5362,11 +5362,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv']);
     }
+
+   // var optionButtons = document.getElementById('optionButtons');
+    //console.log(optionButtons == null);
+
+
     /*upload xml for single artwork
    artwork
    inputs: all the input fields in the settingsContainer
    settingsContainer
    */
+
+
     function uploadXML(artwork, inputs, settingsContainer) {
         var parsingOverlay = $(TAG.Util.UI.blockInteractionOverlay()).addClass("parsingOverlay"),
             parsingOverlayText = $(document.createElement('label')).addClass("parsingOverlayText").text('Parsing Metadata file now. Please wait.'),
@@ -8185,4 +8192,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     }
 
     return that;
+
+
+
 };

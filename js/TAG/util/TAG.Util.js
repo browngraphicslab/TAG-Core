@@ -3880,6 +3880,7 @@ TAG.Util.UI = (function () {
         // cancel and save buttons
         var optionButtonDiv = $(document.createElement('div'));
         optionButtonDiv.addClass('optionButtonDiv');
+        optionButtonDiv.attr("id", "optionButtons");
         optionButtonDiv.css({
             'height': '5%',
             'width': '100%'
@@ -3922,22 +3923,11 @@ TAG.Util.UI = (function () {
 
         function importFiles() {
             console.log("You've clicked the Import Button!");
-            loadScript("TAG.js", TAG.Authoring.FileUploader);
+            console.log("Another message saying you clicked the Import Button!");
+            TAG.Authoring.SettingsView.createArtwork();
 
-            /*uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
-                changesMade = true;
-                saveButton.prop("disabled", false);
-                saveButton.css("opacity", 1);
-                var url = urls[0];
-                bgInput.val(url);
-                $('#bgimage').css({
-                    'background-image': 'url("' + TAG.Worktop.Database.fixPath(url) + '")',
-                    'background-size': 'cover',
-                });
-            }); */
-
-                    
         }
+        
         var importButton = $(document.createElement('button'));
         importButton.css({
             'margin': '1%',
@@ -3955,6 +3945,8 @@ TAG.Util.UI = (function () {
         importButton.on('click', function () {
             importFiles();
         });
+        $(importButton).attr("id", "importButton");
+        
 
         /**Saves changes for pressing enter key
          * @method onEnter
@@ -4006,7 +3998,7 @@ TAG.Util.UI = (function () {
         optionButtonDiv.append(importButton);
 
         if (!modifiedButtons) {
-            optionButtonDiv.append(importButton);
+           optionButtonDiv.append(importButton);
         }
 
         picker.append(optionButtonDiv);
