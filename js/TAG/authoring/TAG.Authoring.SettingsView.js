@@ -6323,9 +6323,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             image.load(function () {
                 TAG.Util.removeProgressCircle(circle);
             });
-            width = '70%';
+            width = '60%';
         } else {
-            width = '90%';
+            width = '80%';
         }
 
         // build text label WHICH WILL ALSO BE VERTICALLY CENTERED FUCK YEAH
@@ -6349,6 +6349,53 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         label.text(text);
 
         container.append(label);
+
+
+        //add the checkbox if in the artworks tab
+        if (inArtworkView) {
+            container.append(function () {
+                var checkboxContainer = $(document.createElement('div'))
+                .addClass('checkboxContainer')
+                .css({
+                    'width': '10%',
+                    'height': '100%',
+                    'vertical-align': 'middle',
+                    'display': 'inline-block',
+                })
+
+                var checkbox = $(document.createElement('div'))
+                .addClass('checkbox')
+                .css({
+                    'width': '100%',
+                    'height':'50%',
+                    'padding-top': '50%',
+                    'padding-bottom':'50%',
+                    'vertical-align': 'middle',
+                    'position': 'relative',
+                    'display': 'block',
+                })
+
+                var box = $(document.createElement('div'))
+                .addClass('box')
+                .css({
+                    'background-color': 'grey',
+                    'width': '100%',
+                    'height':'100%'
+                });
+
+                box.on("click", function (evt) {
+                    box.css({ 'background-color': 'black' })
+                    evt.stopPropagation()
+                    evt.preventDefault()
+                })
+
+                checkbox.append(box);
+                checkboxContainer.append(checkbox);
+
+                return checkboxContainer
+            });
+        }
+
 
         return container;
     }
