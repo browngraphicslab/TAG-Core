@@ -35,7 +35,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         THUMBNAIL_EDITOR = ThumbnailEditor(),                                             // ThumbnailEditor object to deal with setting up thumbnail editing
         LOCATION_HISTORY = RichLocationHistory(),                                         // RichLocationHistory object ................................
         MEDIA_EDITOR = AssocMediaEditor(),                                                // AssocMediaEditor object ................................
-       
+        TEXT_EDITOR = AssocTextEditor(),
+
         // misc uninitialized variables
         annotatedImage,               // AnnotatedImage object
         associatedMedia,
@@ -45,8 +46,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         rightArrowEditThumb,          // right arrow in "Edit Thumbnail" button
         editLocButton,                // "Edit Location History" button
         rightArrowEditLoc,            // right arrow in "Edit Location History" button
-        sidebarHideButtonContainer;   // tab to expand/contract side bar
-   
+        sidebarHideButtonContainer,   // tab to expand/contract side bar
+        rightbarIsOpen;               // rightbar status
+
     LADS.Util.UI.getStack()[0] = null;
         
     root.attr("class", "rootPage");
@@ -402,6 +404,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             editThumbLabel,    // "Edit Thumbnail" label
             assocMediaLabel,   // "Associated Media" label
             addRemoveMedia,    // "Add/Remove Media" button
+            addText,      // "Add Text" button
             assetContainer,    // contains assoc media thumbnail buttons
             sidebarHideButton, // button to toggle side bar visibility
             sidebarHideIcon,   // arrow icon in the side bar hide button
@@ -549,6 +552,16 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         });
         buttonContainer.append(assocMediaLabel);
 
+        addText = $(document.createElement('button')); // TODO JADE/STYL
+        addText.addClass('addText');
+        addText.text('Add Text').css('border-radius', '3.5px');
+        addText.attr('type', 'button');
+        addText.css(buttonCSS);
+        addText.css({ 'font-size': TAG.Util.getMaxFontSizeEM("Add Text", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height) });
+        buttonContainer.append(addText);
+        addText.on('click', AssocTextEditor().openNew);
+
+
         addRemoveMedia = $(document.createElement('button')); // TODO JADE/STYL
         addRemoveMedia.addClass('addRemoveMedia');
         addRemoveMedia.text('Add/Remove').css('border-radius', '3.5px');
@@ -556,6 +569,16 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         addRemoveMedia.css(buttonCSS);
         addRemoveMedia.css({'font-size':TAG.Util.getMaxFontSizeEM("Add/Remove Media", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height)});
         buttonContainer.append(addRemoveMedia);
+
+        
+        addText.on('mousedown', function () {
+            addText.css({ "background-color": "white", "color": "black" });
+        });
+
+        addText.on("mouseleave", function () {
+            addText.css({ "background-color": "transparent", "color": "white" });
+        });
+
 
         // open media picker on button click
         addRemoveMedia.on('click', createMediaPicker);
@@ -1041,7 +1064,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
      * @return {Object}       an object with "public" associated media editing methods
      */
     function AssocMediaEditor() {
-        var isOpen = false,
+        var //isOpen = false,
             editingMedia = false,
             hotspotAnchor,
             layerContainer,
@@ -1055,7 +1078,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             oldDescription, // description text when the editor is opened
             positionChanged = false; // whether the hotspot is added, moved, or deleted
         toggleHotspotButton.css('border-radius','3.5px');
-        toggleLayerButton.css('border-radius','3.5px');
+        toggleLayerButton.css('border-radius', '3.5px');
+        rightbarIsOpen = false;
         /**
          * Initialize a reusible hotspot circle div and store it in the variable hotspotAnchor
          * @method makeHotspotAnchor
@@ -1821,6 +1845,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     .appendTo($titleContainer),
                 $descContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
+                    //.addClass('descContainer')
                     .css({
                         'width': '87%',
                         'left': '8%',
@@ -2095,9 +2120,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 return;
             }
             */
-            if (isOpen) {
-                //saveAssocMedia();
-            }
+           
             $(".asscmediabutton").attr('disabled', false).css('color', 'rgba(255,255,255,1)');
             editingMedia = false;
 
@@ -2164,7 +2187,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     editingMedia = true;
                 });
 
-                if (!isOpen) {
+                if (!rightbarIsOpen) {
                     rightbar.animate({ 'right': 0 }, 600);
                 }
 
@@ -2175,7 +2198,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 }
                 setActiveMediaMetadata('assetDoqID', asset.doq.Identifier);
 
-                isOpen = true;
+                rightbarIsOpen = true;
                 activeAssocMedia = asset;
 
                 callback && callback();
@@ -2189,7 +2212,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function close() {
             TAG.Util.removeYoutubeVideo();
             var rightbar;
-            if (isOpen) {
+            if (rightbarIsOpen) {
                 //saveAssocMedia();
                 rightbar = $('.rightbar');
                 hotspotAnchor.fadeOut(100);
@@ -2201,7 +2224,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 rightbar.animate({ 'right': '-20%' }, 600);
                 $('.assetHolder').css('background-color', '');
                 editingMedia = false;
-                isOpen = false;
+                rightbarIsOpen = false;
             }
         }
 
@@ -2211,7 +2234,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
          * @return {Boolean}      true if open
          */
         function returnIsOpen() {
-            return isOpen;
+            return rightbarIsOpen;
         }
 
         return {
@@ -2223,6 +2246,143 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         };
     }
 
+    function AssocTextEditor() {
+        var //isOpen = false,
+            editingMedia = false,
+            hotspotAnchor,
+            layerContainer,
+            currSource,
+            toggleHotspotButton = $('.toggleHotspot'),
+            toggleLayerButton = $('.toggleLayer'),
+            //activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
+            isHotspot = false, // whether the current media is a hotspot
+            isLayer = false,
+            oldTitle, //title text when the editor is opened
+            oldDescription, // description text when the editor is opened
+            //rightbar = $('.rightbar'),
+            //closeButton = rightbar.find('.closeEditAssocButton'),
+            positionChanged = false; // whether the hotspot is added, moved, or deleted
+            
+        toggleHotspotButton.css('border-radius', '3.5px');
+        toggleLayerButton.css('border-radius', '3.5px');
+
+        //closeButton.on('click', function () {
+        //    close();
+        //});
+
+        function openNew() {
+            //Initially disable the save button
+            $(".addbutton").prop('disabled', true);
+            $(".addbutton").css('opacity', '0.4');
+
+            /*
+            var editingMediamsg;
+
+            if (editingMedia) {
+                editingMediamsg = $(TAG.Util.UI.popUpMessage(null, "You are currently making changes. Please save or cancel before opening another media for editing.", "OK", false));
+                root.append(editingMediamsg);
+                editingMediamsg.show();
+                return;
+            }
+            */
+            
+            $(".asscmediabutton").attr('disabled', false).css('color', 'rgba(255,255,255,1)');
+            editingMedia = false;
+
+            //TAG.Worktop.Database.getLinq(artwork.Identifier, asset.doq.Identifier, linqCallback, function () { }, function () { });
+
+            ///**
+            // * Helper function for showEditMedia, called when the linq between the
+            // * media and the artwork has been obtained
+            // * @method linqCallback
+            // * @param {linq} linq           a linq object (see github wiki for structure)
+            // */
+            //function linqCallback(linq) {
+            //    var x = parseFloat(linq.Offset._x),
+            //        y = parseFloat(linq.Offset._y),
+            //        w = parseFloat(linq.Dimensions ? linq.Dimensions._x : 0), // some backwards compatibility checking
+            //        h = parseFloat(linq.Dimensions ? linq.Dimensions._y : 0),
+            //        title = TAG.Util.htmlEntityDecode(asset.doq.Name),
+            //        description = asset.doq.Metadata.Description ? TAG.Util.htmlEntityDecode(asset.doq.Metadata.Description).replace(/<br>/g, '\n') : '',
+            //        point,
+            //        enableLayering = asset.doq.Metadata.ContentType === 'Image' && linq.Dimensions,
+            //        rect,
+            //        key,
+            //        rightbar = $('.rightbar'); // TODO get this from JADE, store as a 'global' variable at top of file
+
+            //    isHotspot = linq.Metadata.Type === "Hotspot";
+            //    isLayer = linq.Metadata.Type === "Layer";
+
+            //    oldTitle = title;
+            //    oldDescription = description;
+            //    positionChanged = false;
+
+            //    if (enableLayering) {
+            //        currSource = LADS.Worktop.Database.fixPath(asset.doq.Metadata.Source);
+            //    }
+
+            //    $('.assocMediaContainer').show();
+
+            //if (isHotspot) {
+            //    point = new Seadragon.Point(x, y);
+            //} else if (isLayer) {
+            //    rect = new Seadragon.Rect(x, y, w, h);
+            //}
+
+           
+            toggleLayerButton.text(isLayer ? 'Remove Layer' : 'Create Layer');
+
+            //isHotspot ? toggleToHotspot(point) : toggleFromHotspot();
+            //isLayer ? toggleToLayer(rect) : toggleFromLayer();
+
+            // don't show the toggle layer button if we're dealing with audio/video or an older server
+            //toggleLayerButton.css({
+            //    'display': enableLayering ? 'inline-block' : 'none'
+            //});
+
+            //rightbar.find('.assocmedia').html(contentrightbar = $('.rightbar');
+            var rightbar = $('.rightbar');
+            rightbar.find('.title').val('');
+            rightbar.find('.description').text('');
+            rightbar.find('.header').text('Add Text Annotation');
+            rightbar.find('.assocMediaContainer').hide();
+            ///rightbar.find('descContainer').style.height = '35%';
+
+            rightbar.find('.title').on('keyup', function () {
+                editingMedia = true;
+            });
+
+            rightbar.find('.description').on('keyup', function () {
+                editingMedia = true;
+            });
+
+            rightbar.find('.toggleHotspot').text('Set as Hotspot');
+
+            if (!rightbarIsOpen) {
+                rightbar.animate({ 'right': 0 }, 600);
+            }
+
+            //for (key in asset.doq.Metadata) { // TODO just use 'global' current assoc media object rather than doing this set/getActiveMediaMetadata business
+            //    if (asset.doq.Metadata.hasOwnProperty(key)) {
+            //        setActiveMediaMetadata(key, asset.doq.Metadata[key]);
+            //    }
+            //}
+            //setActiveMediaMetadata('assetDoqID', asset.doq.Identifier);
+
+            rightbarIsOpen = true;
+            //activeAssocMedia = asset;
+
+            //callback;
+
+        }
+
+
+        return {
+            openNew: openNew,
+        };
+    }
+
+   
     /**
     * Save artwork metadata
     * @method save

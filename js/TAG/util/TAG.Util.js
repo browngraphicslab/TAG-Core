@@ -3916,6 +3916,30 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currentKeyHandler;
         });
 
+        function importFiles() {
+            console.log("You've clicked the Import Button!");
+        }
+      
+        var importButton = $(document.createElement('button'));
+        importButton.css({
+            'margin': '1%',
+            'border': '1px solid white',
+            'color': 'white',
+            'padding-left': '1%',
+            'padding-right': '1%',
+            'background-color': 'black',
+            'width': 'auto',
+            'position': 'relative',
+            'float': "right",
+            'border-radius': '3.5px'
+        });
+        importButton.text('Import');
+        importButton.on('click', function () {
+            importFiles();
+        });
+    
+
+
         /**Saves changes for pressing enter key
          * @method onEnter
          */
@@ -3963,6 +3987,7 @@ TAG.Util.UI = (function () {
 
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
+        optionButtonDiv.append(importButton);
 
         picker.append(optionButtonDiv);
 
