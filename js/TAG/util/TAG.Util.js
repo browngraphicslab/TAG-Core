@@ -3918,6 +3918,21 @@ TAG.Util.UI = (function () {
 
         function importFiles() {
             console.log("You've clicked the Import Button!");
+            loadScript("TAG.js", TAG.Authoring.FileUploader);
+
+            /*uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+                var url = urls[0];
+                bgInput.val(url);
+                $('#bgimage').css({
+                    'background-image': 'url("' + TAG.Worktop.Database.fixPath(url) + '")',
+                    'background-size': 'cover',
+                });
+            }); */
+
+                    
         }
       
         var importButton = $(document.createElement('button'));
