@@ -2753,6 +2753,9 @@ TAG.Util.UI = (function () {
             }
         };
 
+
+
+
         function onEnter() {
             if(clickAction) {
                 clickAction();
@@ -3641,6 +3644,7 @@ TAG.Util.UI = (function () {
             origComps = [], // components that are already associated with target
             tabCache = [], // cached results from the server
             loadQueue = TAG.Util.createQueue(),
+            modifiedButtons = target.modifiedButtons || false,
 
             currentKeyHandler = globalKeyHandler[0];
             globalKeyHandler[0] = { 13: onEnter };
@@ -3919,7 +3923,6 @@ TAG.Util.UI = (function () {
         function importFiles() {
             console.log("You've clicked the Import Button!");
         }
-      
         var importButton = $(document.createElement('button'));
         importButton.css({
             'margin': '1%',
@@ -3937,8 +3940,6 @@ TAG.Util.UI = (function () {
         importButton.on('click', function () {
             importFiles();
         });
-    
-
 
         /**Saves changes for pressing enter key
          * @method onEnter
@@ -3988,6 +3989,10 @@ TAG.Util.UI = (function () {
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
         optionButtonDiv.append(importButton);
+
+        if (!modifiedButtons) {
+            optionButtonDiv.append(importButton);
+        }
 
         picker.append(optionButtonDiv);
 
@@ -4369,6 +4374,23 @@ TAG.Util.UI = (function () {
                     }, function (err) {
                         console.log(err.message);
                     });
+                } else if (type === 'exhib' && target.type === 'artwork') {
+                    for (var i = 0; i < addedComps.length; i++) {
+                        TAG.Worktop.Database.changeExhibition(addedComps[i], {AddIDs : [target.comp.Identifier]}, function () {
+                            if (i == addedComps.length - 1) {
+                                callback();
+                                pickerOverlay.fadeOut();
+                                pickerOverlay.empty();
+                                pickerOverlay.remove();
+                            }
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
                 }
             } else {
                 callback();
