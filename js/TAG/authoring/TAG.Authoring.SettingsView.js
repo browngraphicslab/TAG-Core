@@ -1568,6 +1568,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 currentList = result;
                 initSearch();
                 list = result;
+                console.log("loading colelctions");
                 displayLabels();
             });
         }
@@ -4316,6 +4317,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         var list;
+        var sortLists;
+        var sortBy = "Title";
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork);
         prepareViewer(true);
@@ -4350,12 +4353,62 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 artworkList = result;
                 initSearch();
                 list = result;
-                displayLabels();
+                sortLabels();
+                //displayLabels();
             });
         }
         
+        function sortLabels(){
+            console.log("sort");
+            if (sortBy == "Title"){
+                console.log("sort by title");
+                //sortAz(list);
+            } 
+            else if (sortBy == "Collection"){
+                TAG.Worktop.Database.getExhibitions(function (result) {
+                    if (cancel) return;
+                    sortAZ(result);
+                    //create sort list for each collection
+                    for (r in result){
+                        var s = createSortList(r.Name, r.Identifier);
+                        sortLists.append(s);
+                    }
+                    //create sort list for artworks w/ no collection
+                    for (artwork in list){
+                        //once server changes happen
+                        //if (artwork.Collections = "None"){
+
+                        //}
+                    }
+                });
+            }
+            else if (sortBy == "Added Before"){
+                 //create sort list for added before and other
+            }
+            var k;
+            for (k=0; k<list.length;k++){
+                console.log(k + " " + list[k].Metadata.Exhibition);
+            }
+            displayLabels();
+        }
+
+        function createSortList(sort_title, guid){
+            var sortList;
+            sortList.sort_title = sort_title;
+            sortList.items = TAG.Worktop.Database.getArtworksIn(guid);
+        }
 
         function displayLabels() {
+            /**
+            //first load all the div for each sort list
+            $.each(sortList, function(i,val){
+                middleQueue.add(function(){
+                    if (cancel) return;
+                    createMiddleLabel(val.sort_title);
+                })
+            }
+            //then load all the artworks in each sort list into the corresponding divs
+            **/
             if (list[0] && list[0].Metadata) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -4435,6 +4488,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
             });
+            
         }
             
         cancelLastSetting = function () { cancel = true; };
