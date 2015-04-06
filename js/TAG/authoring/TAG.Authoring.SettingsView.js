@@ -154,6 +154,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         popUpBoxVisible = false,
         changesMade = false,
         pickerOpen = false,
+        multiSelected = [],
 
         // booleans
 		inGeneralView = false,
@@ -6225,11 +6226,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
         }
 
-        container.mousedown(function () {
+        var mousedownFn = 
+        function () {
             container.css({
                 'background': HIGHLIGHT
             });
-        });
+        }
+        container.mousedown(mousedownFn);
+
         container.mouseup(function () {
            container.css({
                 'background': 'transparent'
@@ -6240,7 +6244,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'background': 'transparent'
             });
         });
-        container.click(function () {
+
+        var clickFn = 
+        function () {
             //if (prevSelectedMiddleLabel == container) {
             //    return;
             //} else {
@@ -6253,6 +6259,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    changesHaveBeenMade = false;
             //    //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
             //}
+
             TAG.Util.removeYoutubeVideo();
             resetLabels('.middleLabel');
             selectLabel(container, !noexpand);
@@ -6267,7 +6274,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             prevSelectedMiddleLabel = container;
             currentSelected = container;
-        });
+        }
+
+        container.click(clickFn);
+
         if (onDoubleClick) {
             container.dblclick(onDoubleClick);
         }
@@ -6357,39 +6367,50 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var checkboxContainer = $(document.createElement('div'))
                 .addClass('checkboxContainer')
                 .css({
-                    'width': '10%',
+                    'width': '7%',
                     'height': '100%',
                     'vertical-align': 'middle',
                     'display': 'inline-block',
+                    'margin-left':'2%'
                 })
 
+                var checkboxColor = 'rgb(230, 235, 235)';
                 var checkbox = $(document.createElement('div'))
                 .addClass('checkbox')
                 .css({
                     'width': '100%',
-                    'height':'50%',
-                    'padding-top': '50%',
-                    'padding-bottom':'50%',
+                    'height':'0',
+                    'padding-top': '100%',
+                    'margin-top':'85%',
                     'vertical-align': 'middle',
                     'position': 'relative',
                     'display': 'block',
+                    'background-color': checkboxColor,
                 })
 
-                var box = $(document.createElement('div'))
-                .addClass('box')
-                .css({
-                    'background-color': 'grey',
-                    'width': '100%',
-                    'height':'100%'
-                });
-
-                box.on("click", function (evt) {
-                    box.css({ 'background-color': 'black' })
+                checkbox.on("click", function (evt) {
+                    container.unbind('click')
+                    if (checkbox.css('background-color') === checkboxColor) {
+                        checkbox.css({ 'background-color': 'black' })
+                        multiSelected.push(id)
+                    } else {
+                        checkbox.css({ 'background-color': checkboxColor })
+                        multiSelected.splice(multiSelected.indexOf(id), 1)
+                    }
+                    console.log(multiSelected)
                     evt.stopPropagation()
                     evt.preventDefault()
+                    container.click(clickFn)
                 })
 
-                checkbox.append(box);
+                checkbox.on('mousedown', function(){
+                    container.unbind('mousedown')
+                })
+
+                checkbox.on('mouseup', function () {
+                    container.mousedown(mousedownFn)
+                })
+
                 checkboxContainer.append(checkbox);
 
                 return checkboxContainer
