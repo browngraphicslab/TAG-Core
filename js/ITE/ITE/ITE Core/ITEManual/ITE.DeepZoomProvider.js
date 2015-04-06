@@ -600,33 +600,17 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_viewer.addHandler(
 			'animation', function(evt) {
 				for (var i = 0; i < attachedInks.length; i++){
-					var bounds = _viewer.viewport.getBounds(true);
-
-           			// var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
+           			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
            			// var bottomRight = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, _viewer.viewport.contentAspectY, true));
-					// var bounds = { 
-					// 	x: self.firstKeyframe.pos.x, 
-					// 	y: self.firstKeyframe.pos.y, 
-					// 	w: 1/self.firstKeyframe.scale * _UIControl.width(), 
-					// 	h: 1/self.firstKeyframe.scale * _viewer.viewport.contentAspectY * _UIControl.height()
-					// }
-					// var bounds = _viewer.viewport.viewportToImageRectangle(_viewer.viewport.getBounds(true));
+
 					bounds = {
-						x: self.firstKeyframe.pos.x, 
-						y: self.firstKeyframe.pos.y,
-						width: bounds.width * _UIControl.width(), 
-						height: 1/self.firstKeyframe.scale * _viewer.viewport.contentAspectY * _UIControl.height()
-//bounds.height * _viewer.viewport.contentAspectY * _UIControl.height()
+						x: topLeft.x,
+						y: topLeft.y,
+						width: _viewer.viewport.getZoom(true),
+						height: _viewer.viewport.getZoom(true)
 					}
-					// bounds = {
-					// 	x: topLeft.x, 
-					// 	y: topLeft.y, 
-					// 	width: topLeft.y - topLeft.x, 
-					// 	height: bottomRight.y - topLeft.x,
-					// }
-					// console.log("Why aren't you moving??")
-					// console.log(bounds)
-					//attachedInks[i]._ink.adjustViewBox(bounds);
+
+					attachedInks[i]._ink.adjustViewBox(bounds);
 				}
 			})
 	}
