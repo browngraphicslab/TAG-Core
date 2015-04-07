@@ -560,6 +560,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
     function setZIndex(index){
     	_UIControl.css("z-index", index)
+    	self.zIndex = index
     }
     self.setZIndex = setZIndex;
     

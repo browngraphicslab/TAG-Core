@@ -405,8 +405,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     */
     function play() {
         orchestrator.play();
-
-        // console.log("Tour is playing")
        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/pause.svg")
        setControlsFade();
     };
@@ -461,7 +459,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     */
     function pause() {
         orchestrator.pause();
-        // console.log("Tour is paused")
         playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
     };
 
@@ -473,7 +470,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     */
     function scrub(e) {
         if (playerConfiguration.allowSeek){
-            console.log("Tour was seeked")
             progressBar.css({
                 width : e.pageX - ITEHolder.offset().left
             })
@@ -490,7 +486,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     */
     function seek(e) {
         if (playerConfiguration.allowSeek){
-            console.log("Tour was seeked")
             progressBar.css({
                 width : e.pageX - ITEHolder.offset().left
             })
@@ -520,8 +515,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         self.previousVolumeLevel = self.currentVolumeLevel   // Reference to previous volume level for volume control in video/audio tracks
         self.currentVolumeLevel = newVolume;
         orchestrator.setVolume(self.currentVolumeLevel);
-
-        // console.log("volume set to " + currentVolumeLevel +  "%")
     };
 
     /*
@@ -577,7 +570,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     */ 
     function enableFullScreen() {
         isFullScreen = true;
-        // console.log("tour is fullscreen")
         fullScreenButton.css("opacity" , "1")
     };
 
@@ -588,7 +580,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     */ 
     function disableFullScreen() {
         isFullScreen = false;
-        // console.log("tour is not fullscreen")
         fullScreenButton.css("opacity" , ".5")
     };
 
@@ -610,7 +601,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     */ 
     function loop() {
         isLooped = true;
-        // console.log("tour is looped")
         loopButton.css("opacity" , "1")
     };
 
@@ -621,7 +611,6 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     */ 
     function unLoop() {
         isLooped = false;
-        // console.log("tour is not looped")
         loopButton.css("opacity" , ".5")
     };
 

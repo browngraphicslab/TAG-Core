@@ -37,7 +37,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     // Various animation/manipulation variables.
 	self.interactionAnimation;
 	var interactionHandlers 		= {},
-		movementTimeouts 			= [];
+		movementTimeouts 			= [],
+		attachedInks 				= [];
 
 	// Start things up...
     initialize();
@@ -206,6 +207,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		// OnComplete function.
 		state.onComplete = function () {
 			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
+			(state.opacity == 0) ? _UIControl.css("pointer-events", "none") :  _UIControl.css("pointer-events" , "auto")
 		};
 
 		// Animation.
@@ -215,7 +217,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			// Duration of animation.
 			duration, 
 			// New state for animation.
-			state);		
+			state);
 		self.animation.play();
 	};
 
@@ -258,6 +260,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			"width":		state.width,
 			"height":		state.height
 		});
+		(state.opacity == 0) ? _UIControl.css("pointer-events", "none") :  _UIControl.css("pointer-events" , "auto")
 	};
 
 	/* 
@@ -341,9 +344,18 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Adds ink as an overlay.
 	 * O/P: 	none
 	 */
-	self.addInk = function(inkTrack) {
-		
+	function addInk(inkTrack) {
+		attachedInks.push(inkTrack)	
+		var initialDims = { 
+			x: self.firstKeyframe.pos.x, 
+			y: self.firstKeyframe.pos.y, 
+			w: self.firstKeyframe.width, 
+			h: self.firstKeyframe.height
+		}	
+		inkTrack._ink.setInitKeyframeData(initialDims)
+		inkTrack._ink.retrieveOrigDims();
 	};
+	self.addInk = addInk;
 
    	/*
 	 * I/P: 	none
@@ -466,6 +478,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
     function setZIndex(index){
     	_UIControl.css("z-index", index)
+    	self.zIndex = index
     }
     self.setZIndex = setZIndex;
 };

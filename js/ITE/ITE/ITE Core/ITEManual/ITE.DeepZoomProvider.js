@@ -32,7 +32,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     var _deepZoom,
     	_UIControl,
     	_viewer,
-    	_mouseTracker,
     	_shouldBeInvisible;//boolean for if the current keyframe dictates the image shouldn't be clickable
     
     // Various animation/manipulation variables.
@@ -98,7 +97,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		
 		$("#ITEHolder").mousemove(function(evt){//whenever the mouse moves in the ITEHolder, 
 			if(isInImageBoundsMouseEvent(evt)){
-				//console.log("in Bounds");
 				if(!_shouldBeInvisible){//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
 					_UIControl.css({
 						"pointer-events" : "auto",
@@ -109,14 +107,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				_UIControl.css({
 					"pointer-events" : "none",//else, unclickable
 				})
-				//console.log("out of bounds");
 			}
 		});
-
-		// // Create _mousetracker, the seadragon mouse tracker.
-		// _mouseTracker = new OpenSeadragon.MouseTracker({
-		// 	"element": trackData.name + "holder"
-		// });
 
 		// Get first and last keyframes and set state to first.
 		self.firstKeyframe = self.keyframes.min();
@@ -293,12 +285,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.animate = function(duration, state) {
 		self.opacity = 1;
-		console.log("ANIMATE");
 		self.imageHasBeenManipulated = false;
 		setSeadragonConfig(duration);
-		console.log(_viewer.viewport);
 		_viewer.viewport.fitBounds(state.bounds, false);
-		console.log(_viewer.viewport);
 		self.animation = TweenLite.to(
 			// What object to animate.
 			_UIControl, 
@@ -363,7 +352,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.setState = function(state) {
-		console.log("SETSTATE");
 		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
 	};
@@ -490,9 +478,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				h: 1/self.firstKeyframe.scale * _viewer.viewport.contentAspectY * _UIControl.height()
 			}	
 			inkTrack._ink.setInitKeyframeData(initialDims)
-			console.log("ORIGIONAL:")
-			console.log(initialDims)
-			console.log("--------------")
 			inkTrack._ink.retrieveOrigDims();
 
 		}
@@ -667,6 +652,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
     function setZIndex(index){
     	_UIControl.css("z-index", index)
+        self.zIndex = index
     }
     self.setZIndex = setZIndex;
     

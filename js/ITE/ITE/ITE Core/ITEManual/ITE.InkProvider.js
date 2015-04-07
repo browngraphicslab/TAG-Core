@@ -29,9 +29,12 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
     self.loadKeyframes(trackData.keyframes);
 
     // DOM related.
-    var _ink,
-    	_UIControl,
+    var _UIControl,
    		_attachedAsset;
+
+   	//Some other things to expose 
+    self._UIControl = _UIControl;
+    self._ink;
 
    	// Various animation/manipulation variables.
 	self.interactionAnimation;
@@ -51,11 +54,6 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	function initialize() {
 		_super.initialize();
 
-		if ((trackData.experienceReference !== "null") && (trackData.experienceReference !== '')) {
-			_attachedAsset = findAttachedAsset(trackData.experienceReference);
-			attachToAsset(_attachedAsset);
-		};
-
 		// Create UI and append to ITEHolder.
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
@@ -69,7 +67,11 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		$("#ITEHolder").append(_UIControl);
 
 		// Create ink object.
-		_ink = new tagInk(trackData.assetUrl, _UIControl[0]);
+		self._ink = new tagInk(trackData.assetUrl, _UIControl[0]);
+		if ((trackData.experienceReference !== "null") && (trackData.experienceReference !== '')) {
+			_attachedAsset = findAttachedAsset(trackData.experienceReference);
+			attachToAsset(_attachedAsset);
+		};
 
 		// Get first and last keyframes and set state to first.
 		self.firstKeyframe = self.keyframes.min();
@@ -84,7 +86,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.load = function() {
 		_super.load();
-		_ink.loadInk(trackData.datastring);
+		self._ink.loadInk(trackData.datastring);
 
 		// When finished loading, set status to 2 (paused).
 		self.status = 2; // TODO: should this be some kind of callback?
@@ -308,7 +310,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		if (_attachedAsset) {
 			return _attachedAsset;
 		} else {
-			throw new Error("Failed to find asset '" + experienceReference + "' for attached ink '" + trackData.name + "'");
+			console.log("Failed to find asset '" + experienceReference + "' for attached ink '" + trackData.name + "'");
 		};
 	};
 	self.findAttachedAsset = findAttachedAsset;
@@ -328,12 +330,11 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
     function setZIndex(index){
+    	if (_attachedAsset){
+    		index = _attachedAsset.zIndex
+    	}
     	_UIControl.css("z-index", index)
     }
     self.setZIndex = setZIndex;
-
-    //Some other things to expose
-    self._UIControl = _UIControl;
-    self._ink = _ink;
 
 };

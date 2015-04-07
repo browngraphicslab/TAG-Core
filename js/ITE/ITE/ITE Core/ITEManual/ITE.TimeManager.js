@@ -52,14 +52,12 @@ ITE.TimeManager = function(){
 
 		//start the timer
 	self.startTimer= function(){
-		console.log("START TIMER");
 		self.startingOffset = Date.now() / 1000; //get startingOffset in seconds
 		self.isRunning = true;
 	};
 
 	//pause the timer
 	self.stopTimer = function(){
-		console.log("STOP TIMER");
 		if (self.isRunning){
 			self.elapsedOffset = self.getElapsedOffset();
 		}
