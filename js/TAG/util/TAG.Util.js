@@ -2753,6 +2753,9 @@ TAG.Util.UI = (function () {
             }
         };
 
+
+
+
         function onEnter() {
             if(clickAction) {
                 clickAction();
@@ -3641,6 +3644,7 @@ TAG.Util.UI = (function () {
             origComps = [], // components that are already associated with target
             tabCache = [], // cached results from the server
             loadQueue = TAG.Util.createQueue(),
+            modifiedButtons = target.modifiedButtons || false,
 
             currentKeyHandler = globalKeyHandler[0];
             globalKeyHandler[0] = { 13: onEnter };
@@ -3876,6 +3880,7 @@ TAG.Util.UI = (function () {
         // cancel and save buttons
         var optionButtonDiv = $(document.createElement('div'));
         optionButtonDiv.addClass('optionButtonDiv');
+        optionButtonDiv.attr("id", "optionButtons");
         optionButtonDiv.css({
             'height': '5%',
             'width': '100%'
@@ -3918,8 +3923,11 @@ TAG.Util.UI = (function () {
 
         function importFiles() {
             console.log("You've clicked the Import Button!");
+            console.log("Another message saying you clicked the Import Button!");
+            TAG.Authoring.SettingsView.createArtwork();
+
         }
-      
+        
         var importButton = $(document.createElement('button'));
         importButton.css({
             'margin': '1%',
@@ -3937,8 +3945,8 @@ TAG.Util.UI = (function () {
         importButton.on('click', function () {
             importFiles();
         });
-    
-
+        $(importButton).attr("id", "importButton");
+        
 
         /**Saves changes for pressing enter key
          * @method onEnter
@@ -3988,6 +3996,10 @@ TAG.Util.UI = (function () {
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
         optionButtonDiv.append(importButton);
+
+        if (!modifiedButtons) {
+           optionButtonDiv.append(importButton);
+        }
 
         picker.append(optionButtonDiv);
 
@@ -4369,6 +4381,23 @@ TAG.Util.UI = (function () {
                     }, function (err) {
                         console.log(err.message);
                     });
+                } else if (type === 'exhib' && target.type === 'artwork') {
+                    for (var i = 0; i < addedComps.length; i++) {
+                        TAG.Worktop.Database.changeExhibition(addedComps[i], {AddIDs : [target.comp.Identifier]}, function () {
+                            if (i == addedComps.length - 1) {
+                                callback();
+                                pickerOverlay.fadeOut();
+                                pickerOverlay.empty();
+                                pickerOverlay.remove();
+                            }
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
                 }
             } else {
                 callback();
