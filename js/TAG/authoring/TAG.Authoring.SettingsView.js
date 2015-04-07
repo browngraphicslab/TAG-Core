@@ -4398,8 +4398,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         var list;
-        var sortLists;
-        var sortBy = "Title";
+        var collectionList = {};
+        var guidsInCollection = [];
+        var sortBy = "Collection";
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork);
         prepareViewer(true);
@@ -4441,43 +4442,58 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
         function sortLabels(){
             console.log("sort");
+            //at some point maybe change so don't have to make server request every time?
+            collectionList = [];
+            guidsInCollection = [];
             if (sortBy == "Title"){
                 console.log("sort by title");
-                //sortAz(list);
+                sortAZ(list);
+                displayLabels();
             } 
             else if (sortBy == "Collection"){
+                console.log("sort by collection");
                 TAG.Worktop.Database.getExhibitions(function (result) {
                     if (cancel) return;
                     sortAZ(result);
                     //create sort list for each collection
-                    for (r in result){
-                        var s = createSortList(r.Name, r.Identifier);
-                        sortLists.append(s);
+                    for (var r = 0, len = result.length; r < len; r++){
+                        //make entry in hash map 
+                            //key- guid of collection
+                            //values- name of collection
+                            //      - list of artwork guids in collection
+                        collectionList[result[r].Identifier] = {collect_name: result[r].Name, artworks:[]};
                     }
-                    //create sort list for artworks w/ no collection
-                    for (artwork in list){
-                        //once server changes happen
-                        //if (artwork.Collections = "None"){
-
-                        //}
+                    //create list for artworks that are not in a collection
+                    collectionList["Other"] = {collect_name: "Other", artworks:[]};
+                    //add artworks to collectionList based on values in _Folders attribute
+                    for (var a=0, alen= list.length; a<alen; a++){
+                        console.log("artname:" + list[a].Name);
+                        var notInCollection = true;
+                        var folders = list[a]._Folders.FolderData;
+                        for (var v=0, vlen=folders.length; v<vlen;v++){
+                            if (folders[v].FolderId in collectionList){
+                                console.log("in a collection:");
+                                console.log(collectionList[folders[v].FolderId]);
+                                console.log(collectionList[folders[v].FolderId].artworks);
+                                collectionList[folders[v].FolderId].artworks.push(list[a]);
+                                notInCollection = false;
+                            }
+                        }
+                        if (notInCollection){
+                            //add to other
+                            collectionList["Other"].artworks.push(list[a]);
+                        }
                     }
+                    console.log("collectionList" + collectionList);
+                    displayLabels();
                 });
             }
             else if (sortBy == "Added Before"){
                  //create sort list for added before and other
             }
-            var k;
-            for (k=0; k<list.length;k++){
-                console.log(k + " " + list[k].Metadata.Exhibition);
-            }
-            displayLabels();
+            //displayLabels();
         }
 
-        function createSortList(sort_title, guid){
-            var sortList;
-            sortList.sort_title = sort_title;
-            sortList.items = TAG.Worktop.Database.getArtworksIn(guid);
-        }
 
         function displayLabels() {
             /**
