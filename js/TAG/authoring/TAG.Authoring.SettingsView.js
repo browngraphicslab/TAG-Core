@@ -38,12 +38,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         buttonContainer = root.find('#setViewButtonContainer'),
         settings = root.find('#setViewSettingsBar'),
         label = root.find('#setViewLoadingLabel'),
-        circle = root.find('#setViewLoadingCircle'), 
+        circle = root.find('#setViewLoadingCircle'),
         rootContainer = root.find('#setViewRoot'),
         iframeAssetCreateButton = root.find('#iframeAssetCreateButton'),
-        primaryColorPicker,
-        secondaryColorPicker,
+        importButton = root.find('#importButton');
+    primaryColorPicker,
+    secondaryColorPicker,
 
+    importButton.on('click', function(){
+        createArtwork();
+    });
         // Constants
         VIEWER_ASPECTRATIO = $(window).width() / $(window).height(),
         //Should probably get rid of any hard-coded values here:

@@ -3924,7 +3924,6 @@ TAG.Util.UI = (function () {
         function importFiles() {
             console.log("You've clicked the Import Button!");
             console.log("Another message saying you clicked the Import Button!");
-            TAG.Authoring.SettingsView.createArtwork();
 
         }
         
@@ -3942,9 +3941,6 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         });
         importButton.text('Import');
-        importButton.on('click', function () {
-            importFiles();
-        });
         $(importButton).attr("id", "importButton");
         
 
