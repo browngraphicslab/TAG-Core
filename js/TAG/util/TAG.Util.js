@@ -4398,6 +4398,23 @@ TAG.Util.UI = (function () {
                             console.log(err.message);
                         });
                     }
+                } else if (type === 'exhib' && target.type === 'artworkMulti') {
+                    for (var i = 0; i < addedComps.length; i++) {
+                        TAG.Worktop.Database.changeExhibition(addedComps[i], { AddIDs: [target.comp] }, function () {
+                            if (i == addedComps.length - 1) {
+                                callback();
+                                pickerOverlay.fadeOut();
+                                pickerOverlay.empty();
+                                pickerOverlay.remove();
+                        }
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
                 }
             } else {
                 callback();

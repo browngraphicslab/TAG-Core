@@ -4597,14 +4597,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Add artworks to collections in the Artwork Tab
      * @method addArtworksToCollections 
      */
-    function addArtworksToCollections(artwork) { //todo - use an array instead of a single artwork (once multiselect is implemented)
-        if (!artwork) {
+    function addArtworksToCollections(artworks) { 
+        if (!artworks.length) {
             return;
         }
 
         //Opens a popup to choose collection(s) to add the artworks list to
         TAG.Util.UI.createAssociationPicker(root, "Add Artworks to Collections",
-                { comp: artwork, type: 'artwork' , modifiedButtons: true},
+                { comp: artworks, type: 'artworkMulti' , modifiedButtons: true},
                 'exhib', [{
                     name: 'All Collections',
                     getObjs: TAG.Worktop.Database.getExhibitions,
@@ -4614,7 +4614,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     prepareNextView(true, "New", createExhibition);
                     clearRight();
                     prepareViewer(true);
-                    loadExhibitionsView(artwork.Identifier);
+                    loadExhibitionsView(currArtwork.Identifier);
                 }
         );
     }
@@ -4622,14 +4622,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Add tours to collections in the Tours Tab
      * @method addToursToCollections
      */
-    function addToursToCollections(tour) { //todo - use an array instead of a single tour (once multiselect is implemented)
-        if (!tour) {
+    function addToursToCollections(tours) { //todo - use an array instead of a single tour (once multiselect is implemented)
+        if (!tours.length) {
             return;
         }
 
         //Opens a popup to choose collection(s) to add the tours to
         TAG.Util.UI.createAssociationPicker(root, "Add Tours to Collections",
-                { comp: tour, type: 'artwork', modifiedButtons: true },
+                { comp: tours, type: 'artworkMulti', modifiedButtons: true },
                 'exhib', [{
                     name: 'All Collections',
                     getObjs: TAG.Worktop.Database.getExhibitions,
@@ -4639,7 +4639,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     prepareNextView(true, "New", createExhibition);
                     clearRight();
                     prepareViewer(true);
-                    loadExhibitionsView(tour.Identifier);
+                    loadExhibitionsView(currTour.Identifier);
                 }
         );
     }
@@ -5918,6 +5918,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork      artwork to delete
      */
     function deleteArtwork(artwork) {
+        //single delete
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -5931,6 +5932,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 loadArtView();
             }, authError, authError);
         }, "Are you sure you want to delete " + artwork.Name + "?", "Delete", true, function () { $(confirmationBox).hide() });
+
+        //multi delete
+        //var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
+        //    prepareNextView(false);
+        //    clearRight();
+        //    prepareViewer(true);
+
+        //    var i;
+        //    for (i = 0; i < artworks.length; i++) {
+        //        TAG.Worktop.Database.deleteDoq(artworks[i], finishUpload(i), authError, authError);
+        //    }
+
+        //    var finishUpload = function (num) {
+        //        if (num == artworks.length - 1) {
+        //            multiSelected = [];
+        //            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
+        //                return;
+        //            }
+        //            loadArtView();
+        //        }
+        //    }
+        //}, "Are you sure you want to delete the selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
+
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -6369,7 +6393,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         //add the checkbox if in the artworks tab
-        if (inArtworkView) {
+        if (inArtworkView || inToursView) {
             container.append(function () {
                 var checkboxContainer = $(document.createElement('div'))
                 .addClass('checkboxContainer')
@@ -6395,20 +6419,50 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'background-color': checkboxColor,
                 })
 
+                checkboxContainer.append(checkbox);
+
+                var check = $(document.createElement('img'))
+                    .attr('src', tagPath + 'images/icons/checkmark.svg')
+                    .css({
+                        'width': '5%',
+                        'height': 'auto',
+                        'vertical-align': 'middle',
+                        'position': 'absolute',
+                        'top': '40%',
+                        'right': '6%',
+                        'display':'none'
+                    })
+                    .addClass("check")
+
+                checkboxContainer.append(check)
+
+                var isSelected = false;
+
                 checkbox.on("click", function (evt) {
-                    container.unbind('click')
-                    if (checkbox.css('background-color') === checkboxColor) {
-                        checkbox.css({ 'background-color': 'black' })
+                    if (!isSelected) {
+                        container.unbind('click')
+                        isSelected = true
+                        check.css({ 'display': 'inherit' })
                         multiSelected.push(id)
-                    } else {
-                        checkbox.css({ 'background-color': checkboxColor })
-                        multiSelected.splice(multiSelected.indexOf(id), 1)
+                        console.log(multiSelected)
+                        evt.stopPropagation()
+                        evt.preventDefault()
+                        container.click(clickFn)
                     }
-                    console.log(multiSelected)
-                    evt.stopPropagation()
-                    evt.preventDefault()
-                    container.click(clickFn)
                 })
+
+                check.on("click", function (evt) {
+                    if (isSelected) {
+                        container.unbind('click')
+                        isSelected = false
+                        check.css({ 'display': 'none' })
+                        multiSelected.splice(multiSelected.indexOf(id), 1)
+                        console.log(multiSelected)
+                        evt.stopPropagation()
+                        evt.preventDefault()
+                        container.click(clickFn)
+                    }
+                });
 
                 checkbox.on('mousedown', function(){
                     container.unbind('mousedown')
@@ -6418,7 +6472,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     container.mousedown(mousedownFn)
                 })
 
-                checkboxContainer.append(checkbox);
+                check.on('mousedown', function () {
+                    container.unbind('mousedown')
+                })
+
+                check.on('mouseup', function () {
+                    container.mousedown(mousedownFn)
+                })
+
 
                 return checkboxContainer
             });
@@ -6444,6 +6505,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleLoading.show();
         secondaryButton.css("display", "none");
 
+        //clears the multiselected artworks/tours
+        multiSelected = []
+
         if (showDropdown) {
             menuLabel.click();
         }
@@ -6458,7 +6522,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //shows the second button
             addButton.show()
-            addButton.unbind('click').click(function () { addArtworksToCollections(currArtwork)})
+            addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)})
 
         } else if (inToursView) {
             menuLabel.hide();
@@ -6470,7 +6534,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //shows the second button
             addButton.show()
-            addButton.unbind('click').click(function () { addToursToCollections(currTour)})
+            addButton.unbind('click').click(function () { addToursToCollections(multiSelected)})
 
         } else {
 
