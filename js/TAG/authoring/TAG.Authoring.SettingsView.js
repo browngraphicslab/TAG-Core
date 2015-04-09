@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../telemetry/telemetry.js" />
+/// <reference path="../../../telemetry/telemetry.js" />
 TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
 
 /*  Creates a SettingsView, which is the first UI in authoring mode.  
@@ -4416,7 +4416,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         var collectionList = {};
         var guidsInCollection = [];
-        var sortBy = "Collection";
+        var sortBy = "Title";
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork);
         prepareViewer(true);
@@ -4457,8 +4457,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         
         function sortLabels(){
-            console.log("sort");
-            //at some point maybe change so don't have to make server request every time?
             collectionList = [];
             guidsInCollection = [];
             if (sortBy == "Title"){
@@ -4483,14 +4481,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     collectionList["Other"] = {collect_name: "Other", artworks:[]};
                     //add artworks to collectionList based on values in _Folders attribute
                     for (var a=0, alen= list.length; a<alen; a++){
-                        console.log("artname:" + list[a].Name);
                         var notInCollection = true;
                         var folders = list[a]._Folders.FolderData;
                         for (var v=0, vlen=folders.length; v<vlen;v++){
                             if (folders[v].FolderId in collectionList){
-                                console.log("in a collection:");
-                                console.log(collectionList[folders[v].FolderId]);
-                                console.log(collectionList[folders[v].FolderId].artworks);
                                 collectionList[folders[v].FolderId].artworks.push(list[a]);
                                 notInCollection = false;
                             }
@@ -4500,33 +4494,49 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             collectionList["Other"].artworks.push(list[a]);
                         }
                     }
-                    console.log("collectionList" + collectionList);
+                    //concatenate list
+                    list = [];
+                    for (var collect in collectionList){
+                        list.push(collectionList[collect].collect_name);
+                        list = list.concat(collectionList[collect].artworks);
+                    }
                     displayLabels();
                 });
             }
-            else if (sortBy == "Added Before"){
-                 //create sort list for added before and other
+            else if (sortBy == "Added After"){
+                //create sort list for added before and other
+                console.log("sort by added after")
+                sortAZ(list);
+                var afterList = [];
+                var beforeList = [];
+                for (var sb = 0, len = list.length; sb < len; sb++){
+                    var artDate = new Date(list[sb].Metadata.__Created);
+                    var now = new Date();
+                    var compareDate = new Date(now.getFullYear(), now.getMonth(),now.getDate());
+                    if (artDate.getTime() > compareDate.getTime()){
+                        afterList.push(list[sb]);
+                    } else{
+                        beforeList.push(list[sb]);
+                    }
+                }
+                list = [];
+                list.push("Added After" + compareDate);
+                list = list.concat(afterList);
+                list.push("Added Earlier");
+                list = list.concat(beforeList);
+                displayLabels();
             }
-            //displayLabels();
+
         }
 
 
         function displayLabels() {
-            /**
-            //first load all the div for each sort list
-            $.each(sortList, function(i,val){
-                middleQueue.add(function(){
-                    if (cancel) return;
-                    createMiddleLabel(val.sort_title);
-                })
-            }
-            //then load all the artworks in each sort list into the corresponding divs
-            **/
-            if (list[0] && list[0].Metadata) {
+            if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
                     // Add each label in a separate function in the queue
                     // so the UI doesn't lock up
+                    if (val && val.Metadata){
                     val.Name = TAG.Util.htmlEntityDecode(val.Name);
                     middleQueue.add(function () {
                         if (cancel) return;
@@ -4590,6 +4600,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                     });
+                    }
+                    //sort name
+                    else if (val) {
+                        middleQueue.add(function(){
+                            console.log(val);
+                            middleLoading.before(label= createSortLabel(val));
+                        });
+                    }
                 });
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
@@ -4607,6 +4625,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
             
         cancelLastSetting = function () { cancel = true; };
+    }
+
+    function createSortLabel(text){
+
+        var container = $(document.createElement('div'));
+        var text = TAG.Util.htmlEntityDecode(text);
+        container.attr('class', 'sortLabel');
+        var width;
+
+        var helper = $(document.createElement('span'));
+        helper.css({
+            'display' : 'inline-block',
+            'height': '100%',
+            'vertical-align': 'middle'
+        });
+        container.append(helper);
+        var label = $(document.createElement('div'));
+        label.attr('class', 'sortLabelText');
+        label.css({
+            'width': width,
+            'vertical-align': 'middle',
+            'padding-left': '4%'
+        });
+
+        label.text(text);
+        container.append(label); 
+        return container; 
     }
 
 
@@ -6231,6 +6276,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Function} onDoubleClick  function for double click
      * @param {Boolean} inArtMode 
      * @param extension                 to check if is video or static art
+     * @param {Boolean} isSortLabel     different formatting for sort labels
      * @return {Object} container       the container of the new label
      */
     function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension) {
@@ -6240,6 +6286,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (id) {
             container.attr('id', id);
         }
+
 
         if (inArtMode) {
             if (extension.match(/mp4/) || extension.match(/ogv/) || extension.match(/webm/) || extension.match(/avi/) || extension.match(/mov/)) {
@@ -6304,6 +6351,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (onDoubleClick) {
             container.dblclick(onDoubleClick);
         }
+
         var width;
 
         // BUILD VERTICAL CENTERING HELPER FUCK YEAH
