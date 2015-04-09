@@ -3626,7 +3626,7 @@ TAG.Util.UI = (function () {
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -3941,6 +3941,7 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         });
         importButton.text('Import');
+        importButton.click(importBehavior);
         $(importButton).attr("id", "importButton");
         
 

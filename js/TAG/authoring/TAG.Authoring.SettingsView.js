@@ -41,13 +41,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         circle = root.find('#setViewLoadingCircle'),
         rootContainer = root.find('#setViewRoot'),
         iframeAssetCreateButton = root.find('#iframeAssetCreateButton'),
-        importButton = root.find('#importButton');
-    primaryColorPicker,
-    secondaryColorPicker,
+        // = root.find('#importButton'),
+        primaryColorPicker,
+        secondaryColorPicker,
 
-    importButton.on('click', function(){
-        createArtwork();
-    });
+    
         // Constants
         VIEWER_ASPECTRATIO = $(window).width() / $(window).height(),
         //Should probably get rid of any hard-coded values here:
@@ -205,6 +203,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     if (callback) {
         callback(that);
     }
+
 
     //an array to store video guids that need to be converted
     //var conversionVideos = [];
@@ -707,8 +706,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {String} view         the view to switch to
      * @param {Object} id           the id of the middle label to start on
      */
+    function importFiles() {
+        console.log("Import button was clicked");
+    }
+
     function switchView(view, id) {
         resetLabels('.navContainer');
+        console.log("switch view called");
         switch (view) {
             case "Exhibitions":
                 selectLabel(nav[NAV_TEXT.exhib.text]);
@@ -1773,6 +1777,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {doq} exhibition      the current collection to be edited
      */
     function manageCollection(exhibition) {
+        console.log("called manage collections");
         if (!exhibition) {
             return;
         }
@@ -2336,7 +2341,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         clearRight();
                         prepareViewer(true);
                         loadExhibitionsView(exhibition.Identifier);
-                    });
+                    }, createArtwork);
 
             }, {
                 'margin-left': '2%',
@@ -2344,7 +2349,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-
+            
             TAG.Telemetry.register(artPickerButton, "click", "EditorButton", function (tobj) {
                 tobj.edit_type = "Manage Collection";
                 tobj.element_id = exhibition.Identifier;
@@ -2359,6 +2364,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
             leftButton = artPickerButton;
+
+
 
             saveButton.on("mousedown", function () {
                 if (!saveButton.attr("disabled")) {
@@ -4445,7 +4452,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
-            displayLabels();
+            displayLabels(); 
         } else {
             // Make an async call to get artworks and then display
             TAG.Worktop.Database.getArtworks(function (result) {
