@@ -44,6 +44,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // = root.find('#importButton'),
         primaryColorPicker,
         secondaryColorPicker,
+        isArtView = false,
 
     
         // Constants
@@ -718,34 +719,41 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 selectLabel(nav[NAV_TEXT.exhib.text]);
                 prevSelectedSetting = nav[NAV_TEXT.exhib.text];
                 loadExhibitionsView(id);
+                isArtView = false;
                 break;
             case "Artworks":
                 selectLabel(nav[NAV_TEXT.art.text]);
                 prevSelectedSetting = nav[NAV_TEXT.art.text];
                 loadArtView(id);
+                isArtView = true;
                 break;
             case "Associated Media": 
                 selectLabel(nav[NAV_TEXT.media.text]);
                 prevSelectedSetting = nav[NAV_TEXT.media.text];
                 loadAssocMediaView(id);
+                isArtView = false;
                 break;
             case "Tours":
                 
                 selectLabel(nav[NAV_TEXT.tour.text]);
                 prevSelectedSetting = nav[NAV_TEXT.tour.text];
                 loadTourView(id);
+                isArtView = false;
                 break;
             case "Feedback":
                 selectLabel(nav[NAV_TEXT.feedback.text]);
                 prevSelectedSetting = nav[NAV_TEXT.feedback.text];
                 loadFeedbackView(id);
+                isArtView = false;
                 break;
             case "General Settings":
+                isArtView = false;
 
             default:
                 selectLabel(nav[NAV_TEXT.general.text]);
                 prevSelectedSetting = nav[NAV_TEXT.general.text];
                 loadGeneralView();
+                isArtView = false;
                 break;
         }
     }
@@ -2082,7 +2090,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             createCollectionSettings();
         }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
 
-        function createCollectionSettings() {
+        var createCollectionSettings = function createCollectionSettings() {
             if (cancelView) return;
             prepareViewer(true);
             clearRight();
@@ -2322,8 +2330,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
+            
+            function importAndRefresh(){
+                //finalizeAssociations from TAG.Util.js
+                createArtwork();
+                makeManagePopUp();
+                //recreate the popup
 
-            var artPickerButton = createButton('Manage', function () {
+            }
+
+
+            function makeManagePopUp(){
+                console.log("Made Manage Pop Up");
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{
@@ -2341,9 +2359,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         clearRight();
                         prepareViewer(true);
                         loadExhibitionsView(exhibition.Identifier);
-                    }, createArtwork);
+                    }, importAndRefresh);
 
-            }, {
+            }
+
+            var artPickerButton = createButton('Manage', makeManagePopUp/*function () {
+                TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
+                    { comp: exhibition, type: 'exhib' },
+                    'exhib', [{
+                        name: 'All Artworks',
+                        getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                    }, {
+                        name: 'Artworks in this Collection',
+                        getObjs: TAG.Worktop.Database.getArtworksIn,
+                        args: [exhibition.Identifier]
+                    }], {
+                        getObjs: TAG.Worktop.Database.getArtworksIn,
+                        args: [exhibition.Identifier]
+                    }, function () {
+                        prepareNextView(true, "New", createExhibition);
+                        clearRight();
+                        prepareViewer(true);
+                        loadExhibitionsView(exhibition.Identifier);
+                    }, importAndRefresh);
+
+            }*/, {
                 'margin-left': '2%',
                 'margin-top': '1%',
                 'margin-right': '0%',
@@ -2393,6 +2433,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 newButton.css({ "background-color": "transparent" });
             });
             
+
+          
 
             // Sets the viewer to catalog view
             function catalogView() {
@@ -5320,7 +5362,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //webappfileupload
             if (!IS_WINDOWS){
                 if(!total) {
-                    loadArtView();
+                    if(isArtView==true){
+                        loadArtView();
+                    }
                 }
             }
 
@@ -5330,13 +5374,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (!IS_WINDOWS){
                     if (done >= total || !total) {
                         middleLoading.hide();
-                        loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
+                        if(isArtView==true){ //scroll down to newly-added artwork
+                            loadArtView(toScroll.Identifier);   
+                        }
+
                     } else {
                         durationHelper(done);
                     }
                 } else {
                     if (done >= total) {
-                        loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
+                        if(isArtView==true){
+                            loadArtView(toScroll.Identifier);   
+                        }    //Scroll down to a newly-added artwork
                     } else {
                         durationHelper(done);
                     }
