@@ -47,6 +47,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         editLocButton,                // "Edit Location History" button
         rightArrowEditLoc,            // right arrow in "Edit Location History" button
         sidebarHideButtonContainer,   // tab to expand/contract side bar
+        creatingText,                  // editing text associated media
         rightbarIsOpen;               // rightbar status
 
     LADS.Util.UI.getStack()[0] = null;
@@ -339,6 +340,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         break;
                     case 'iframe':
                         src = tagPath + 'images/video_icon.svg';
+                        break;
+                    case 'Text':
+                        src = tagPath + 'images/text_icon.svg';
                         break;
                     default:
                         src = tagPath + 'images/text_icon.svg';
@@ -1080,6 +1084,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         toggleHotspotButton.css('border-radius','3.5px');
         toggleLayerButton.css('border-radius', '3.5px');
         rightbarIsOpen = false;
+        creatingText = false;
         /**
          * Initialize a reusible hotspot circle div and store it in the variable hotspotAnchor
          * @method makeHotspotAnchor
@@ -1456,7 +1461,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function createMediaWrapper(media) {
             var video,
                 audio,
-                iframe,
+                text,
                 src = media.doq.Metadata.Source,
                 type = media.doq.Metadata.ContentType,
                 thumbnail = (media.doq.Metadata.Thumbnail && !media.doq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(media.doq.Metadata.Thumbnail) : '',
@@ -1708,7 +1713,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 LinqType: assetType,
                 Description: desc
             };
-            if (contentType !== "iframe") {
+            if (contentType !== "iframe" && contentType !== "Text") {
                 options.Source = contentUrl;
             }
 
@@ -2071,6 +2076,10 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
                 assetType = isHotspot ? 'Hotspot' : (isLayer ? 'Layer' : 'Asset');
 
+                if (creatingText) {
+                    createTextAsset(titleTextVal, $descArea.val());
+                }
+
                 updateAssocMedia({
                     title: TAG.Util.htmlEntityEncode(titleTextVal),
                     desc: TAG.Util.htmlEntityEncode($descArea.val()),
@@ -2123,6 +2132,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
            
             $(".asscmediabutton").attr('disabled', false).css('color', 'rgba(255,255,255,1)');
             editingMedia = false;
+            creatingText = false;
 
             TAG.Worktop.Database.getLinq(artwork.Identifier, asset.doq.Identifier, linqCallback, function () { }, function () { });
 
@@ -2225,6 +2235,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 $('.assetHolder').css('background-color', '');
                 editingMedia = false;
                 rightbarIsOpen = false;
+                creatingText = false;
             }
         }
 
@@ -2288,6 +2299,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             
             $(".asscmediabutton").attr('disabled', false).css('color', 'rgba(255,255,255,1)');
             editingMedia = false;
+            creatingText = true;
 
             //TAG.Worktop.Database.getLinq(artwork.Identifier, asset.doq.Identifier, linqCallback, function () { }, function () { });
 
@@ -2343,7 +2355,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             //rightbar.find('.assocmedia').html(contentrightbar = $('.rightbar');
             var rightbar = $('.rightbar');
             rightbar.find('.title').val('');
-            rightbar.find('.description').text('');
+            rightbar.find('.description').val('');
             rightbar.find('.header').text('Add Text Annotation');
             rightbar.find('.assocMediaContainer').hide();
             ///rightbar.find('descContainer').style.height = '35%';
@@ -2380,6 +2392,38 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         return {
             openNew: openNew,
         };
+    }
+
+    /**Generate text asset
+     * @method createTextAsset
+     * @param {String, String}  name: name of text assoc media, text: content of assoc media
+     */
+    function createTextAsset(title, text) { 
+        var name = title ? title : "Untitled Text";
+        if (text) {
+            var options = {
+                Text: text,
+                Name: name
+            };
+            TAG.Worktop.Database.createTextAssocMedia(options, onSuccess);
+        } 
+        //else {
+        //    loadAssocMediaView();
+        //}
+        function onSuccess(doqData) {
+            var newDoq = new Worktop.Doq(doqData.responseText);
+            function done() {
+                //loadAssocMediaView(newDoq.Identifier);
+                //Jing: TODO reload assoc media list in the sidebar
+                //rightbarLoadingSave.fadeOut();
+
+                reloadAssocMedia(newDoq.Identifier);
+                //thumbnailLoadingSave.fadeOut();
+            }
+            TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
+
+        };
+
     }
 
    

@@ -89,6 +89,7 @@ Worktop.Database = function (mainID) {
         postArtwork: postArtwork,
         postHotspot: postHotspot,
         postIframeAssocMedia: postIframeAssocMedia,
+        postTextAssocMedia: postTextAssocMedia,
         postMap: postMap,
         postMain: postMain,
         addSortOptions: addSortOptions,
@@ -288,6 +289,17 @@ Worktop.Database = function (mainID) {
         var sortedOptions = checkKeys(options, _static.params.hotspot, "CreateIframeAssocMedia", throwOnWarn);
         postRequest(
             'CreateIframeAssocMedia',
+            handlers,
+            sortedOptions.urlOptions,
+            sortedOptions.bodyOptions,
+            true);
+    }
+
+    function postTextAssocMedia(options, handlers, throwOnWarn) {
+        options = options || {};
+        var sortedOptions = checkKeys(options, _static.params.hotspot, "CreateTextAssocMedia", throwOnWarn);
+        postRequest(
+            'CreateTextAssocMedia',
             handlers,
             sortedOptions.urlOptions,
             sortedOptions.bodyOptions,
