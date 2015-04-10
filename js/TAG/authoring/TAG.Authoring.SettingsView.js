@@ -3391,7 +3391,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.crossOrigin = "";
                 break;
         }
-        (source && type !== 'text' && type!== "iframe") && holder.attr('src', source);
+        (source && type !== 'Text' && type!== "iframe") && holder.attr('src', source);
 
         // Create a progress circle
         var progressCircCSS = {

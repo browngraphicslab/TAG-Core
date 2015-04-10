@@ -2082,6 +2082,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
                 if (creatingText) {
                     createTextAsset(titleTextVal, $descArea.val());
+
                     creatingText = false;
                 }
 
@@ -2421,12 +2422,14 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 //loadAssocMediaView(newDoq.Identifier);
                 //Jing: TODO reload assoc media list in the sidebar
                 //rightbarLoadingSave.fadeOut();
-
+                
                 reloadAssocMedia(newDoq.Identifier);
                 //thumbnailLoadingSave.fadeOut();
             }
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
-
+            var options = {};
+            options.AddIDs = newDoq.Identifier;
+            TAG.Worktop.Database.changeArtwork(artwork.Identifier, options);
         };
 
     }
