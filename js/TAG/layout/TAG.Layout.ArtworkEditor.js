@@ -2082,6 +2082,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
                 if (creatingText) {
                     createTextAsset(titleTextVal, $descArea.val());
+                    creatingText = false;
                 }
 
                 updateAssocMedia({
