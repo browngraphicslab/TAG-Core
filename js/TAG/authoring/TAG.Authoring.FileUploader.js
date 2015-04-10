@@ -8,7 +8,8 @@ TAG.Authoring.FileUploadTypes = {
     DeepZoom: 1,
     AssociatedMedia: 2,
     VideoArtwork: 3,
-    Map: 4
+    Map: 4,
+    CSV: 5
 };
 
 /**
@@ -93,6 +94,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * Starts the file upload
      */
     (function uploadFile() {
+
         // Opens file picker
         var currentState = Windows.UI.ViewManagement.ApplicationView.value;        
         var filePicker = new Windows.Storage.Pickers.FileOpenPicker();
@@ -139,6 +141,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                             case TAG.Authoring.FileUploadTypes.VideoArtwork:
                                             case TAG.Authoring.FileUploadTypes.AssociatedMedia:
                                             case TAG.Authoring.FileUploadTypes.Standard:
+                                            case TAG.Authoring.FileUploadTypes.CSV:
                                                 maxSize = maxFileSize;
                                                 break;
                                             case TAG.Authoring.FileUploadTypes.DeepZoom:
@@ -168,6 +171,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     break;
                                                 case TAG.Authoring.FileUploadTypes.Standard:
                                                     uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
+                                                    break;
+                                                case TAG.Authoring.FileUploadTypes.CSV:
+                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadCSV&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fielType.substr(1));
                                                     break;
                                                 case TAG.Authoring.FileUploadTypes.DeepZoom:
                                                     if (ext === ".mp4" || ext === ".webm" || ext === ".avi" || ext === ".mov" || ext === ".ogv" || ext === ".wmv" ) {
@@ -286,6 +292,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                            case TAG.Authoring.FileUploadTypes.VideoArtwork:
                                            case TAG.Authoring.FileUploadTypes.AssociatedMedia:
                                            case TAG.Authoring.FileUploadTypes.Standard:
+                                           case TAG.Authoring.FileUploadTypes.CSV:
                                                maxSize = maxFileSize;
                                                break;
                                            case TAG.Authoring.FileUploadTypes.DeepZoom:
@@ -315,6 +322,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                        break;
                                                    case TAG.Authoring.FileUploadTypes.Standard:
                                                        uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&Token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
+                                                       break;
+                                                   case TAG.Authoring.FileUploadTypes.CSV:
+                                                       uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadCSV&Client=Windows&Token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1);
                                                        break;
                                                    case TAG.Authoring.FileUploadTypes.DeepZoom:
                                                        if (ext === ".mp4" ||ext === ".webm" || ext === ".avi" || ext === ".mov" || ext === ".ogv"||ext === ".wmv") {
