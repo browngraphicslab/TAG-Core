@@ -3921,11 +3921,6 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        function importFiles() {
-            console.log("You've clicked the Import Button!");
-            console.log("Another message saying you clicked the Import Button!");
-
-        }
         
         var importButton = $(document.createElement('button'));
         importButton.css({
@@ -3941,10 +3936,14 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         });
         importButton.text('Import');
-        importButton.click(importBehavior);
+        importButton.click(importOnClick);
         $(importButton).attr("id", "importButton");
         
-
+        function importOnClick(){
+            console.log("Called import on click");
+            finalizeAssociations();
+            importBehavior();
+        }
         /**Saves changes for pressing enter key
          * @method onEnter
          */
