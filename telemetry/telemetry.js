@@ -34,7 +34,7 @@ TAG.Telemetry = (function () {
         if (pushMetaDataCount < 1) {
             if (TELEMETRY_SWITCH === 'on') {
                 pushMetaDataCount++;
-                console.log("pushmetadata called in telemetry.js");
+                //console.log("pushmetadata called in telemetry.js");
                 var date = new Date();
                 var property = {
                     token: "metadata",
@@ -53,7 +53,7 @@ TAG.Telemetry = (function () {
                 metaDataRequests.push(property);
                 metaDataRequests.push(main_tobj);
                 postMetaDataRequests();
-                console.log("metadataobj is " + " " + main_tobj);
+                //console.log("metadataobj is " + " " + main_tobj);
             }
         }
     }
@@ -71,7 +71,7 @@ TAG.Telemetry = (function () {
 	 *                                     further handling.
 	 */
     function register(element, etype, ttype, preHandler) {
-        console.log("register called in telemetry.js");
+        //console.log("register called in telemetry.js");
         
         $(element).on(etype + '.tag_telemetry', function (evt) {
 
@@ -93,7 +93,7 @@ TAG.Telemetry = (function () {
             };
             tobj.is_splitscreen = TAG.Util.Splitscreen.isOn();
             TAG.TelemetryEvents.initEventProperties(tobj);
-            console.log("sessiondataobj is " + " " + tobj);
+            //console.log("sessiondataobj is " + " " + tobj);
 
             // if preHandler returns true, return
             if ((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH === 'off') {
@@ -114,7 +114,7 @@ TAG.Telemetry = (function () {
 
     //Manually record events from the existing event handlers instead of registering an additional handler
     function recordEvent(ttype, preHandler) {
-        console.log("record called in telemetry.js");
+        //console.log("record called in telemetry.js");
         var tobj = {
             ttype: ttype,
             session_id: TELEMETRY_SESSION_ID,
@@ -139,7 +139,7 @@ TAG.Telemetry = (function () {
 	 * @method postTelemetryRequests
 	 */
     function postMetaDataRequests() {
-        console.log("post metadata requests called");
+        //console.log("post metadata requests called");
         var data = JSON.stringify(metaDataRequests);
 
         metaDataRequests.length = 0;
@@ -150,16 +150,16 @@ TAG.Telemetry = (function () {
             data: data, // this should be encrypted.toString() for encrypting the data
             async: true, // this is the default, but just make it explicit
             success: function () {
-                console.log('POST request to server worked');
+                //console.log('POST request to server worked');
             },
             error: function (e) {
-                console.log('telemetry error! look at node output...');
+                //console.log('telemetry error! look at node output...');
             }
         });
     }
 
     function postSessionDataRequests() {
-        console.log("post session data requests called");
+        //console.log("post session data requests called");
         var data = JSON.stringify(sessionDataRequests);
 
         sessionDataRequests.length = 0;
@@ -170,10 +170,10 @@ TAG.Telemetry = (function () {
             data: data, // this should be encrypted.toString() for encrypting the data
             async: true, // this is the default, but just make it explicit
             success: function () {
-                console.log('POST request to server worked');
+                //console.log('POST request to server worked');
             },
             error: function (e) {
-                console.log('telemetry error! look at node output...');
+                //console.log('telemetry error! look at node output...');
             }
         });
     }

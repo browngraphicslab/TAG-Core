@@ -506,7 +506,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         editLocButton = $(document.createElement('div')); // TODO J/S
         editLocButton.css(newButtonCSS);
-        buttonContainer.append(editLocButton);
+        if (IS_WINDOWS){
+            buttonContainer.append(editLocButton);
+        }   
         editLocButton.append(rightArrowEditLoc);
         editLocButton.append(editLocLabel);
         editLocLabel.css({ "line-height": editLocButton.height() + "px", "font-size": sidePanelFontSize });
@@ -524,7 +526,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         editThumbnailButton.attr('type', 'button');
         editThumbnailButton.css(newButtonCSS);
 
-        buttonContainer.append(editThumbnailButton); // TODO J/S
+        if (IS_WINDOWS){
+            buttonContainer.append(editThumbnailButton); // TODO J/S
+        }
         editThumbnailButton.append(rightArrowEditThumb);
         editThumbnailButton.append(editThumbLabel);
         editThumbLabel.css({ "line-height": editLocButton.height() + "px", "font-size": sidePanelFontSize });
@@ -2606,13 +2610,22 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 fieldTitle.attr('placeholder', "New");
                 deleteFieldIcon = $(document.createElement('img'));
                 deleteFieldIcon.attr('src', tagPath + 'images/icons/minus.svg');
-                deleteFieldIcon.css({
+                if (!IS_WINDOWS){
+                    deleteFieldIcon.css({
+                    'float': 'right',
+                    'width': '20px',
+                    'height': '20px',
+                    'display': 'inline-block'
+                });
+                } else {
+                    deleteFieldIcon.css({
                     'float': 'right',
                     'margin-right': '2%',
                     'width': '30px',
                     'height': '30px',
                     'display': 'inline-block'
                 });
+                }
                 deleteFieldIcon.bind("click", { Param1: field, }, function (event) {
                     shouldSave = true;
                     textareaContainer.remove();

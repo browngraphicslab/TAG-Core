@@ -2753,6 +2753,9 @@ TAG.Util.UI = (function () {
             }
         };
 
+
+
+
         function onEnter() {
             if(clickAction) {
                 clickAction();
@@ -3623,7 +3626,7 @@ TAG.Util.UI = (function () {
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -3641,6 +3644,7 @@ TAG.Util.UI = (function () {
             origComps = [], // components that are already associated with target
             tabCache = [], // cached results from the server
             loadQueue = TAG.Util.createQueue(),
+            modifiedButtons = target.modifiedButtons || false,
 
             currentKeyHandler = globalKeyHandler[0];
             globalKeyHandler[0] = { 13: onEnter };
@@ -3876,6 +3880,7 @@ TAG.Util.UI = (function () {
         // cancel and save buttons
         var optionButtonDiv = $(document.createElement('div'));
         optionButtonDiv.addClass('optionButtonDiv');
+        optionButtonDiv.attr("id", "optionButtons");
         optionButtonDiv.css({
             'height': '5%',
             'width': '100%'
@@ -3918,8 +3923,10 @@ TAG.Util.UI = (function () {
 
         function importFiles() {
             console.log("You've clicked the Import Button!");
+            console.log("Another message saying you clicked the Import Button!");
+
         }
-      
+        
         var importButton = $(document.createElement('button'));
         importButton.css({
             'margin': '1%',
@@ -3934,11 +3941,9 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         });
         importButton.text('Import');
-        importButton.on('click', function () {
-            importFiles();
-        });
-    
-
+        importButton.click(importBehavior);
+        $(importButton).attr("id", "importButton");
+        
 
         /**Saves changes for pressing enter key
          * @method onEnter
@@ -3988,6 +3993,10 @@ TAG.Util.UI = (function () {
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
         optionButtonDiv.append(importButton);
+
+        if (!modifiedButtons) {
+           optionButtonDiv.append(importButton);
+        }
 
         picker.append(optionButtonDiv);
 
@@ -4369,6 +4378,40 @@ TAG.Util.UI = (function () {
                     }, function (err) {
                         console.log(err.message);
                     });
+                } else if (type === 'exhib' && target.type === 'artwork') {
+                    for (var i = 0; i < addedComps.length; i++) {
+                        TAG.Worktop.Database.changeExhibition(addedComps[i], {AddIDs : [target.comp.Identifier]}, function () {
+                            if (i == addedComps.length - 1) {
+                                callback();
+                                pickerOverlay.fadeOut();
+                                pickerOverlay.empty();
+                                pickerOverlay.remove();
+                            }
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
+                } else if (type === 'exhib' && target.type === 'artworkMulti') {
+                    for (var i = 0; i < addedComps.length; i++) {
+                        TAG.Worktop.Database.changeExhibition(addedComps[i], { AddIDs: [target.comp] }, function () {
+                            if (i == addedComps.length - 1) {
+                                callback();
+                                pickerOverlay.fadeOut();
+                                pickerOverlay.empty();
+                                pickerOverlay.remove();
+                        }
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
                 }
             } else {
                 callback();
@@ -6864,6 +6907,56 @@ TAG.Util.RLH = function (input) {
         var fileArray,
             i;
 
+        //webfileupload
+        if (!IS_WINDOWS){
+            console.log("maps");
+        TAG.Authoring.WebFileUploader(
+            root,
+            TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
+            function (files) {
+                fileArray = files;
+            },
+            function (urls) {
+                var newDoq
+                if (!urls.length && urls.length !== 0) { // check to see whether a single file was returned
+                    urls = [urls];
+                }
+                var newDoq;
+                try {
+                    newDoq = new Worktop.Doq(urls[0]);
+                } catch (error) {
+                    console.log("error in uploading: " + error.message);
+                    return;
+                }
+                mapGuids.push(newDoq.Identifier);
+
+                mapDoqs[newDoq.Identifier] = newDoq;
+                //update changeartwork and linq the map and artwork
+
+                importLoadingOverlay();
+
+                saveRichLocationHistory({
+                    toadd: newDoq.Identifier,
+                });
+
+                //reload (which will show the map that has just been imported)
+                loadMaps();
+
+                //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
+                // TODO this is just in here for testing purposes
+                //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
+                //    console.log('success in changeMap');
+                //}, function () { }, function () { }, function () { }); // TODO RLH TESTING: make sure map doq is updated properly (the next time it's loaded, it should have these metadata)
+            },
+            ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
+            false,
+            function () {
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+            },
+            false // batch upload disabled for now
+        );
+        } else {
+
         TAG.Authoring.FileUploader(
             root,
             TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
@@ -6909,6 +7002,7 @@ TAG.Util.RLH = function (input) {
             },
             false // batch upload disabled for now
         );
+        }
 
     }
 
