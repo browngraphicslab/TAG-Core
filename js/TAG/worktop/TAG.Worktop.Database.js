@@ -40,7 +40,7 @@ TAG.Worktop.Database = (function () {
         },
         hotspot: {
             url: ['Name', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'W', 'H', 'LinqType', 'Thumbnail', "Converted"],
-            body: ['Description', 'AddIDs', 'RemoveIDs']
+            body: ['Description', 'AddIDs', 'RemoveIDs','Text']
         },
         map: {
             url: ['Name', 'Thumbnail', 'Source'],
@@ -709,6 +709,22 @@ TAG.Worktop.Database = (function () {
     function createIframeAssocMedia(options, success, unauth, conflict, error) {
         _db = _db || new Worktop.Database();
         _db.postIframeAssocMedia(options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
+    }
+
+    /*
+    Add a Text associated media
+        options: New values for the text assoc media in a dictionary:
+            Name: Name of the text
+            Text: Content of the text
+
+        success: Success handler (called if the hotspot is successfully changed)
+        unauth: Unauthorized handler (called when a user fails to login)
+        conflict: Called if the client's version of the doq is out of date
+        error: Called for any other errors
+    */
+    function createTextAssocMedia(options, success, unauth, conflict, error) {
+        _db = _db || new Worktop.Database();
+        _db.postTextAssocMedia(options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
     }
 
     /*
