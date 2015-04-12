@@ -95,6 +95,7 @@ Worktop.Database = function (mainID) {
         addSortOptions: addSortOptions,
 
         deleteDoq: deleteDoq,
+        batchDeleteDoq: batchDeleteDoq,
         deleteLinq: deleteLinq,
     };
 
@@ -399,6 +400,14 @@ Worktop.Database = function (mainID) {
             true);
     }
 
+    function batchDeleteDoq(guids, guid, handlers) {
+        deleteRequest(
+            'Doq',
+            handlers,
+            { isBatch: true, batch: true, GuidList: guids, Guid: guid},
+            true);
+    }
+
     function deleteLinq(guid, handlers) {
         deleteRequest(
             'Linq',
@@ -483,7 +492,12 @@ Worktop.Database = function (mainID) {
         handlers = handlers || {};
         urlOptions = urlOptions || {};
         urlOptions.Token = LADS.Auth.getToken();
-        urlOptions.Count = safeCache('doqs', urlOptions.Guid).get().Metadata.Count || 0;
+
+        if (safeCache('doqs', urlOptions.Guid).get()) {
+            urlOptions.Count = safeCache('doqs', urlOptions.Guid).get().Metadata.Count || 0;
+        } else {
+            urlOptions.Count = 1;
+        }
 
         var ajaxHandlers = {
             200: handlers.success,

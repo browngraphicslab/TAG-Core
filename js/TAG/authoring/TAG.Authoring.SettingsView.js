@@ -5129,7 +5129,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             leftButton = editArt;
             editArt.attr("id", "artworkEditorButton");
             var deleteArt = createButton('Delete',
-                function () { deleteArtwork(artwork); },
+                function () { deleteArtwork(multiSelected); },
                 {
                     'margin-left': '2%',
                     'margin-top': '1%',
@@ -6038,43 +6038,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method deleteArtwork
      * @param {Object} artwork      artwork to delete
      */
-    function deleteArtwork(artwork) {
+    function deleteArtwork(artworks) {
         //single delete
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
             prepareViewer(true);
 
+            var doqsString = artworks.join(",");
+
             // actually delete the artwork
-            TAG.Worktop.Database.deleteDoq(artwork.Identifier, function () {
+            TAG.Worktop.Database.batchDeleteDoq(doqsString, artworks[0], function () {
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
                     return;
                 }
+                console.log("complete")
                 loadArtView();
             }, authError, authError);
-        }, "Are you sure you want to delete " + artwork.Name + "?", "Delete", true, function () { $(confirmationBox).hide() });
-
-        //multi delete
-        //var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-        //    prepareNextView(false);
-        //    clearRight();
-        //    prepareViewer(true);
-
-        //    var i;
-        //    for (i = 0; i < artworks.length; i++) {
-        //        TAG.Worktop.Database.deleteDoq(artworks[i], finishUpload(i), authError, authError);
-        //    }
-
-        //    var finishUpload = function (num) {
-        //        if (num == artworks.length - 1) {
-        //            multiSelected = [];
-        //            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
-        //                return;
-        //            }
-        //            loadArtView();
-        //        }
-        //    }
-        //}, "Are you sure you want to delete the selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
+        }, "Are you sure you want to delete the selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
 
         root.append(confirmationBox);
         $(confirmationBox).show();

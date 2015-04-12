@@ -3991,8 +3991,9 @@ TAG.Util.UI = (function () {
 
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
-        optionButtonDiv.append(importButton);
+        //optionButtonDiv.append(importButton);
 
+        //don't want import button to appear if this is in the add to collections popup
         if (!modifiedButtons) {
            optionButtonDiv.append(importButton);
         }

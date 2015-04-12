@@ -128,8 +128,10 @@ TAG.Worktop.Database = (function () {
         getConvertedCheck: getConvertedCheck, //video conversion
         getConvertedVideoCheck: getConvertedVideoCheck, //video conversion
         convertVideo: convertVideo,
+
         // DELETE
         deleteDoq: deleteDoq,
+        batchDeleteDoq: batchDeleteDoq,
         deleteLinq: deleteLinq,
 
         // PUT
@@ -813,6 +815,19 @@ TAG.Worktop.Database = (function () {
         _db = _db || new Worktop.Database();
         if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
         _db.deleteDoq(guid, { success: success, error: error, unauth: unauth, conflict: conflict });
+    }
+
+    /*
+        Delete multiple doqs
+            guids: GUIDs of the doqs to delete
+            success: See above
+            error: See above
+            unauth: See above
+            conflict: See above
+    */
+    function batchDeleteDoq(guids, guid, success, unauth, conflict, error) {
+        _db = _db || new Worktop.Database();
+        _db.batchDeleteDoq(guids, guid, { success: success, error: error, unauth: unauth, conflict: conflict });
     }
 
     /*
