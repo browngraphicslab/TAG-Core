@@ -3601,7 +3601,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create buttons
         
-        //var assocButton = artworkLabel;
+        artworkLabel.unbind("click");
         artworkLabel.click(
             function () {
                 pickerOpen = true;
