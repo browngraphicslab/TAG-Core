@@ -6653,6 +6653,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (inArtworkView){
             menuLabel.hide();
+            artworkLabel.hide();
             searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
@@ -6683,6 +6684,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             if (!inAssociatedView) {
                 menuLabel.hide();
+                artworkLabel.hide();
                 searchbar.css({ width: '53%' });
                 newButton.text(newText);
                 newButton.unbind('click').click(newBehavior);
@@ -6692,6 +6694,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 newButton.hide();
                 searchbar.css({ width: '40%' });
                 menuLabel.show();
+                artworkLabel.show();
             }
         }
 
