@@ -89,11 +89,13 @@ Worktop.Database = function (mainID) {
         postArtwork: postArtwork,
         postHotspot: postHotspot,
         postIframeAssocMedia: postIframeAssocMedia,
+        postTextAssocMedia: postTextAssocMedia,
         postMap: postMap,
         postMain: postMain,
         addSortOptions: addSortOptions,
 
         deleteDoq: deleteDoq,
+        batchDeleteDoq: batchDeleteDoq,
         deleteLinq: deleteLinq,
     };
 
@@ -294,6 +296,17 @@ Worktop.Database = function (mainID) {
             true);
     }
 
+    function postTextAssocMedia(options, handlers, throwOnWarn) {
+        options = options || {};
+        var sortedOptions = checkKeys(options, _static.params.hotspot, "CreateTextAssocMedia", throwOnWarn);
+        postRequest(
+            'CreateTextAssocMedia',
+            handlers,
+            sortedOptions.urlOptions,
+            sortedOptions.bodyOptions,
+            true);
+    }
+
     function postMain(options, handlers, throwOnWarn) {
         options = options || {};
         var sortedOptions = checkKeys(options, _static.params.main, "ChangeMain", throwOnWarn);
@@ -387,6 +400,14 @@ Worktop.Database = function (mainID) {
             true);
     }
 
+    function batchDeleteDoq(guids, guid, handlers) {
+        deleteRequest(
+            'Doq',
+            handlers,
+            { isBatch: true, batch: true, GuidList: guids, Guid: guid},
+            true);
+    }
+
     function deleteLinq(guid, handlers) {
         deleteRequest(
             'Linq',
@@ -471,7 +492,12 @@ Worktop.Database = function (mainID) {
         handlers = handlers || {};
         urlOptions = urlOptions || {};
         urlOptions.Token = LADS.Auth.getToken();
-        urlOptions.Count = safeCache('doqs', urlOptions.Guid).get().Metadata.Count || 0;
+
+        if (safeCache('doqs', urlOptions.Guid).get()) {
+            urlOptions.Count = safeCache('doqs', urlOptions.Guid).get().Metadata.Count || 0;
+        } else {
+            urlOptions.Count = 1;
+        }
 
         var ajaxHandlers = {
             200: handlers.success,

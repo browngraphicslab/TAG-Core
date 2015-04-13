@@ -3626,7 +3626,7 @@ TAG.Util.UI = (function () {
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -3921,12 +3921,6 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        function importFiles() {
-            console.log("You've clicked the Import Button!");
-            console.log("Another message saying you clicked the Import Button!");
-            TAG.Authoring.SettingsView.createArtwork();
-
-        }
         
         var importButton = $(document.createElement('button'));
         importButton.css({
@@ -3942,12 +3936,14 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         });
         importButton.text('Import');
-        importButton.on('click', function () {
-            importFiles();
-        });
+        importButton.click(importOnClick);
         $(importButton).attr("id", "importButton");
         
-
+        function importOnClick(){
+            console.log("Called import on click");
+            finalizeAssociations();
+            importBehavior();
+        }
         /**Saves changes for pressing enter key
          * @method onEnter
          */
@@ -3995,8 +3991,9 @@ TAG.Util.UI = (function () {
 
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
-        optionButtonDiv.append(importButton);
+        //optionButtonDiv.append(importButton);
 
+        //don't want import button to appear if this is in the add to collections popup
         if (!modifiedButtons) {
            optionButtonDiv.append(importButton);
         }
