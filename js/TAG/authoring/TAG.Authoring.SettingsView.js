@@ -48,9 +48,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         sortContainer = root.find('#setViewSortContainer'),
         sortLabelContainer = root.find('#sortLabelContainer'),
         sortsContainer = root.find('#sortsContainer'),
+        findButton = root.find('#findButton'),
         titleSort = root.find('#titleSort'),
         collectionSort = root.find('#collectionSort'),
-        addedAfterSort = root.find('#addedAfterSort'),
+        addedRecentlySort = root.find('#addedRecentlySort'),
+        searchLabelContainer = root.find('#searchLabelContainer'),
+        findSearchContainer = root.find('#findSearchContainer'),
         searhBarContainer = root.find('#setViewSearchBarContainer'),
         menuLabel = root.find('#addMenuLabel'),
 
@@ -59,8 +62,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         primaryColorPicker,
         secondaryColorPicker,
         isArtView = false,
+        findShown = false,
+        sortByArt = "Title",
+        sortByAssoc = "Title",
 
-    
         // Constants
         VIEWER_ASPECTRATIO = $(window).width() / $(window).height(),
         //Should probably get rid of any hard-coded values here:
@@ -3183,6 +3188,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function loadAssocMediaView(id, matches) {
 
+        console.log(sortByAssoc);
+
         //$(document).off();
         inGeneralView = false;
         inCollectionsView = false;
@@ -3194,7 +3201,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         var list;
-        var sortBy = "Title";
+        //var sortBy = "Title";
         currentIndex = 0;
         menuLabel.on("mouseleave", function () {
             menuLabel.css({"background-color": "transparent"});
@@ -3240,15 +3247,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
 
+        if (sortByAssoc == "Title"){
+            titleSort.css('background-color','white');
+            collectionSort.css('background-color','initial');
+            addedRecentlySort.css('background-color','initial');
+        } else if (sortByAssoc == "Collection"){
+            titleSort.css('background-color','initial');
+            collectionSort.css('background-color','white');
+            addedRecentlySort.css('background-color','initial');
+        } else if (sorByAssoc == "Recently Added"){
+            titleSort.css('background-color','initial');
+            collectionSort.css('background-color','initial');
+            addedRecentlySort.css('background-color','white');
+        }
+        
+
         function sortLabels(){
-            if (sortBy == "Title"){
+            if (sortByAssoc == "Title"){
                 console.log("sort by title");
                 sortAZ(list);
                 displayLabels();
             } 
-            else if (sortBy == "Added After"){
+            else if (sortByAssoc == "Recently Added"){
                 //create sort list for added before and other
-                console.log("sort by added after")
+                console.log("sort by recently added")
                 sortAZ(list);
                 var afterList = [];
                 var beforeList = [];
@@ -3263,9 +3285,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                 }
                 list = [];
-                list.push("Added After" + compareDate);
+                list.push("Recently Added" + compareDate);
                 list = list.concat(afterList);
-                list.push("Added Earlier");
+                list.push("Older");
                 list = list.concat(beforeList);
                 displayLabels();
             }
@@ -4524,6 +4546,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadArtView(id, matches) {
+
+        console.log(sortByArt);
         
         inGeneralView = false;
         inCollectionsView = false;
@@ -4537,7 +4561,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         var collectionList = {};
         var guidsInCollection = [];
-        var sortBy = "Title";
+        //var sortBy = "Title";
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork, null, true);
         prepareViewer(true);
@@ -4576,16 +4600,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //displayLabels();
             });
         }
+
+        if (sortByArt == "Title"){
+            titleSort.css('background-color','white');
+            collectionSort.css('background-color','initial');
+            addedRecentlySort.css('background-color','initial');
+        } else if (sortByArt == "Collection"){
+            titleSort.css('background-color','initial');
+            collectionSort.css('background-color','white');
+            addedRecentlySort.css('background-color','initial');
+        } else if (sortByArt == "Recently Added"){
+            titleSort.css('background-color','initial');
+            collectionSort.css('background-color','initial');
+            addedRecentlySort.css('background-color','white');
+        }
         
         function sortLabels(){
             collectionList = [];
             guidsInCollection = [];
-            if (sortBy == "Title"){
+            if (sortByArt == "Title"){
                 console.log("sort by title");
                 sortAZ(list);
                 displayLabels();
             } 
-            else if (sortBy == "Collection"){
+            else if (sortByArt == "Collection"){
                 console.log("sort by collection");
                 TAG.Worktop.Database.getExhibitions(function (result) {
                     if (cancel) return;
@@ -4624,9 +4662,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     displayLabels();
                 });
             }
-            else if (sortBy == "Added After"){
+            else if (sortByArt == "Recently Added"){
                 //create sort list for added before and other
-                console.log("sort by added after")
+                console.log("sort by recently added")
                 sortAZ(list);
                 var afterList = [];
                 var beforeList = [];
@@ -4641,9 +4679,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                 }
                 list = [];
-                list.push("Added After" + compareDate);
+                list.push("Recently Added" + compareDate);
                 list = list.concat(afterList);
-                list.push("Added Earlier");
+                list.push("Older");
                 list = list.concat(beforeList);
                 displayLabels();
             }
@@ -6679,13 +6717,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findBarTextBox.text("Find");
             findBarTextBox.css({
                 'height' : '100%',
-                'font-size': '175%',
+                'font-size': '100%',
                 'width': '20%',
                 'display': 'inline-block',
-                'padding-left': '10%'
+                'padding-left': '10%',
+                'float':'left'
             });
             findBarDropIcon.css({
-                                        width: '4%',
+                                        width: '7%',
                                         height: '70%',
                                         display:'inline-block',
                                         '-webkit-transform': 'rotate(90deg)',
@@ -6695,6 +6734,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                         'transform': 'rotate(90deg)',
                                     });
         findBar.css("display","none");
+        findContainer.css("display","none");
+        findShown = false;
 
         //clears the multiselected artworks/tours
         multiSelected = []
@@ -8293,12 +8334,69 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     function setUpFindContainer(){
         sortLabelContainer.text("Sort By:");
+        searchLabelContainer.text("Search:");
         titleSort.addClass('sortByButton')
+                  .click(function(){
+                    if (inArtworkView){
+                        sortByArt = "Title";
+                        titleSort.css('background-color','white');
+                        collectionSort.css('background-color','initial');
+                        addedRecentlySort.css('background-color','initial');
+                        loadArtView();
+                    }
+                    else if (inAssociatedView){
+                        sortByAssoc = "Title";
+                        titleSort.css('background-color','white');
+                        collectionSort.css('background-color','initial');
+                        addedRecentlySort.css('background-color','initial');
+                        loadAssocMediaView();
+                    }
+                  })
                   .text("Title");
         collectionSort.addClass('sortByButton')
+                    .click(function(){
+                        if (inArtworkView){
+                            sortByArt = "Collection";
+                            titleSort.css('background-color','initial');
+                            collectionSort.css('background-color','white');
+                            addedRecentlySort.css('background-color','initial');
+                            loadArtView();
+                        }
+                        else if (inAssociatedView){
+                            sortByAssoc = "Collection";
+                            titleSort.css('background-color','initial');
+                            collectionSort.css('background-color','white');
+                            addedRecentlySort.css('background-color','initial');
+                            loadAssocMediaView();
+                        }
+                    })
                     .text("Collection");
-        addedAfterSort.addClass('sortByButton')
-                    .text("Added After:");
+        addedRecentlySort.addClass('sortByButton')
+                    .click(function(){
+                        if (inArtworkView){
+                            sortByArt = "Recently Added";
+                            titleSort.css('background-color','initial');
+                            collectionSort.css('background-color','initial');
+                            addedRecentlySort.css('background-color','white');
+                            loadArtView();
+                        }
+                        else if (inAssociatedView){
+                            sortByAssoc = "Recently Added";
+                            titleSort.css('background-color','initial');
+                            collectionSort.css('background-color','initial');
+                            addedRecentlySort.css('background-color','white');
+                            loadAssocMediaView();
+                        }
+                    })
+                    .text("Recently Added");
+        findButton.click(function(){
+            if (findShown){
+                findContainer.css('display','none');
+            } else{
+                findContainer.css('display','inline-block');
+            }
+            findShown = !findShown;
+        });
     }
 
     function createAddToArtworkMenu() {

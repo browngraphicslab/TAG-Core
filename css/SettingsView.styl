@@ -48,6 +48,11 @@
     border-radius 3.5px
     display inline-block
 
+#setViewRoot #findButton
+    height 100%
+    width 50%
+    border-style none
+
 #setViewRoot #setViewSearchContainer
     height auto
     width 100%
@@ -325,11 +330,25 @@
     padding-left 5%
     font-size 80%
 
+#setViewRoot #searchLabelContainer
+    min-height 20px
+    height 50%
+    width 100%
+    padding-left 5%
+    font-size 80%
+
 #setViewRoot #sortsContainer
     min-height 20px
     height 50%
     width 100%
     padding-left 5%
+
+#setViewRoot #findSearchContainer
+    min-height 20px
+    height 50%
+    width 100%
+    padding-left 5%
+    padding-bottom 3%
 
 #setViewRoot .sortByButton
     display inline-block
@@ -337,13 +356,16 @@
     border none
     min-height 20px
     height 100%
+    padding-left 4%
+    padding-right 4%
+    margin-left 2%
 
 #setViewRoot #setViewFindContainer
     position: absolute
     top: 100%
     min-height: 100%
     height: auto
-    width: 200%
+    width: 150%
     z-index: 100000000
     background: #dbd9cc
     border-style solid
@@ -357,7 +379,6 @@
         display none
     width 55%
     border-color rgb(167,180,174)
-    margin-top: 2%
     margin-left: 3.5%
     border-style solid
 
