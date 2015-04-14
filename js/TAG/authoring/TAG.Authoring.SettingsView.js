@@ -4028,7 +4028,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
 
             //implementing background uploads - david
-            console.log("createAsset called")
+            console.log("createAsset called");
+            hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
@@ -5357,7 +5358,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function hideUploadingProgress() {
         //updates loading UI
         console.log("FINISHED THE UPLOAD PROCESS")
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         $('.progressBarUploads').remove()
     }
 
@@ -5370,6 +5370,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //implementing background uploads - david
             console.log("createArtwork called")
+            hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
