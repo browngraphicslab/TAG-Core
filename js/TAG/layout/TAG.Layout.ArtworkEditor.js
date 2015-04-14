@@ -2084,20 +2084,22 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     createTextAsset(titleTextVal, $descArea.val());
 
                     creatingText = false;
-                }
+                    close();
+                } else {
 
-                updateAssocMedia({
-                    title: TAG.Util.htmlEntityEncode(titleTextVal),
-                    desc: TAG.Util.htmlEntityEncode($descArea.val()),
-                    pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
-                    rect: isLayer ? getLayerRect() : null,
-                    contentType: activeAssocMedia.doq.Metadata.ContentType,
-                    contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
-                    assetType: assetType,
-                    metadata: {
-                        assetDoqID: activeAssocMedia.doq.Identifier
-                    }
-                });
+                    updateAssocMedia({
+                        title: TAG.Util.htmlEntityEncode(titleTextVal),
+                        desc: TAG.Util.htmlEntityEncode($descArea.val()),
+                        pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
+                        rect: isLayer ? getLayerRect() : null,
+                        contentType: activeAssocMedia.doq.Metadata.ContentType,
+                        contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
+                        assetType: assetType,
+                        metadata: {
+                            assetDoqID: activeAssocMedia.doq.Identifier
+                        }
+                    });
+                }
             });
 
             closeButton.on('click', function () {
@@ -2406,8 +2408,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
      */
     function createTextAsset(title, text) { 
         var name = title ? title : "Untitled Text";
+        var options;
         if (text) {
-            var options = {
+            options = {
                 Text: text,
                 Name: name
             };
@@ -2426,13 +2429,44 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 reloadAssocMedia(newDoq.Identifier);
                 //thumbnailLoadingSave.fadeOut();
             }
+            var ops = {};
+            ops.AddIDs = newDoq.Identifier;
+            TAG.Worktop.Database.changeArtwork(artwork.Identifier, ops);
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
-            var options = {};
-            options.AddIDs = newDoq.Identifier;
-            TAG.Worktop.Database.changeArtwork(artwork.Identifier, options);
+            
         };
 
     }
+
+    /** Authentication error function
+     * @method authError
+     */
+    function authError() {
+        var popup = TAG.Util.UI.popUpMessage(function () {
+            TAG.Auth.clearToken();
+            rightQueue.clear();
+            middleQueue.clear();
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Util.UI.slidePageRight(page);
+            });
+        }, "Could not authenticate, returning to the splash page.", null, true);
+        root.append(popup);
+        $(popup).show();
+    }
+
+    /**Error function
+    * @method error
+    * @param {Function} fn     function called if specified
+    */
+    function error(fn) {
+        return function () {
+            var popup = TAG.Util.UI.popUpMessage(null, "An unknown error occured.", null, true);
+            root.append(popup);
+            $(popup).show();
+            fn && fn();
+        }
+    }
+
 
    
     /**

@@ -141,6 +141,7 @@ TAG.Worktop.Database = (function () {
         createArtwork: createArtwork,
         createHotspot: createHotspot,
         createIframeAssocMedia: createIframeAssocMedia,
+        createTextAssocMedia: createTextAssocMedia,
         createMap: createMap,
 
         // POST

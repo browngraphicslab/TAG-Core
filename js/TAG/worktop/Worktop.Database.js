@@ -299,6 +299,7 @@ Worktop.Database = function (mainID) {
     function postTextAssocMedia(options, handlers, throwOnWarn) {
         options = options || {};
         var sortedOptions = checkKeys(options, _static.params.hotspot, "CreateTextAssocMedia", throwOnWarn);
+        sortedOptions.urlOptions.ReturnDoq = "true";
         postRequest(
             'CreateTextAssocMedia',
             handlers,
