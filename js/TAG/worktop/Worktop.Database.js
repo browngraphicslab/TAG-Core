@@ -404,7 +404,7 @@ Worktop.Database = function (mainID) {
         batchDeleteRequest(
             'Doq',
             handlers,
-            {isBatch: "true"},
+            {isBatch: "true", Guid: guid},
             {GuidList: guids},
             true);
     }
