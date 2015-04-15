@@ -401,11 +401,12 @@ Worktop.Database = function (mainID) {
             true);
     }
 
-    function batchDeleteDoq(guids, guid, handlers) {
+    function batchDeleteDoq(guids, handlers) {
+        console.log("GuidList: " + guids)
         batchDeleteRequest(
             'Doq',
             handlers,
-            {isBatch: "true", Guid: guid},
+            {isBatch: true},
             {GuidList: guids},
             true);
     }

@@ -826,9 +826,9 @@ TAG.Worktop.Database = (function () {
             unauth: See above
             conflict: See above
     */
-    function batchDeleteDoq(guids, guid, success, unauth, conflict, error) {
+    function batchDeleteDoq(guids, success, unauth, conflict, error) {
         _db = _db || new Worktop.Database();
-        _db.batchDeleteDoq(guids, guid, { success: success, error: error, unauth: unauth, conflict: conflict });
+        _db.batchDeleteDoq(guids, { success: success, error: error, unauth: unauth, conflict: conflict });
     }
 
     /*
