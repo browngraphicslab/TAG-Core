@@ -6154,7 +6154,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var doqsString = artworks.join(",");
 
             // actually delete the artwork
-            TAG.Worktop.Database.batchDeleteDoq(doqsString, artworks[0], function () {
+            TAG.Worktop.Database.batchDeleteDoq(artworks, function () {
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
                     return;
                 }

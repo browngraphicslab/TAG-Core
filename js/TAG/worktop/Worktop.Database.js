@@ -299,6 +299,7 @@ Worktop.Database = function (mainID) {
     function postTextAssocMedia(options, handlers, throwOnWarn) {
         options = options || {};
         var sortedOptions = checkKeys(options, _static.params.hotspot, "CreateTextAssocMedia", throwOnWarn);
+        sortedOptions.urlOptions.ReturnDoq = "true";
         postRequest(
             'CreateTextAssocMedia',
             handlers,
@@ -400,11 +401,12 @@ Worktop.Database = function (mainID) {
             true);
     }
 
-    function batchDeleteDoq(guids, guid, handlers) {
+    function batchDeleteDoq(guids, handlers) {
+        console.log("GuidList: " + guids)
         batchDeleteRequest(
             'Doq',
             handlers,
-            {isBatch: "true", Guid: guid},
+            {isBatch: true},
             {GuidList: guids},
             true);
     }
