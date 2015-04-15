@@ -5,22 +5,25 @@
     #setViewNavBar
     #setViewMiddleBarContainer
         #setViewSearchContainer
-            input#setViewSearchBar(type='text')
             button#setViewNewButton
             button#setViewAddButton
             button#setViewSecondaryButton
             button#addMenuLabel
             #setViewFindBar
-                #findBarTextBox
-                img#findBarDropIcon
+                button#findButton
+                    #findBarTextBox
+                    img#findBarDropIcon
             #setViewFindContainer
                 #setViewSortContainer
                     #sortLabelContainer
                     #sortsContainer
                         button#titleSort
                         button#collectionSort
-                        button#addedAfterSort
+                        button#addedRecentlySort
                 #setViewSearchBarContainer
+                    #searchLabelContainer
+                    #findSearchContainer
+                        input#setViewSearchBar(type='text')
         #setViewMiddleBar
             #setViewMiddleLabelContainer
                 #setViewMiddleLoading
