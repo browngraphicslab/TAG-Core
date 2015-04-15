@@ -3210,6 +3210,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             menuLabel.click();
         }
 
+        collectionSort.css('display','none');
+
         prepareNextView(true, "Add", createAsset);
         prepareViewer(true);
         clearRight();
@@ -4567,6 +4569,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(true);
         clearRight();
         var cancel = false;
+
+        collectionSort.css('display','inline-block');
 
         //if (generalIsLoading || collectionsIsLoading ||
         //  artworksIsLoading || associatedMediaIsLoading || toursIsLoading) {
