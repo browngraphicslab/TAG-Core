@@ -3279,7 +3279,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 for (var sb = 0, len = list.length; sb < len; sb++){
                     var artDate = new Date(list[sb].Metadata.__Created);
                     var now = new Date();
-                    var compareDate = new Date(now.getFullYear(), now.getMonth(),now.getDate());
+                    var compareDate = new Date(now.getFullYear(), now.getMonth(),now.getDate()-7);
                     if (artDate.getTime() > compareDate.getTime()){
                         afterList.push(list[sb]);
                     } else{
@@ -3287,7 +3287,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                 }
                 list = [];
-                list.push("Recently Added" + compareDate);
+                list.push("Recently Added");
                 list = list.concat(afterList);
                 list.push("Older");
                 list = list.concat(beforeList);
@@ -4675,7 +4675,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 for (var sb = 0, len = list.length; sb < len; sb++){
                     var artDate = new Date(list[sb].Metadata.__Created);
                     var now = new Date();
-                    var compareDate = new Date(now.getFullYear(), now.getMonth(),now.getDate());
+                    var compareDate = new Date(now.getFullYear(), now.getMonth(),now.getDate()-7);
+                    //compareDate = compareDate.setDate(compareDate.getDate()-7);
                     if (artDate.getTime() > compareDate.getTime()){
                         afterList.push(list[sb]);
                     } else{
@@ -4683,7 +4684,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                 }
                 list = [];
-                list.push("Recently Added" + compareDate);
+                list.push("Recently Added");
                 list = list.concat(afterList);
                 list.push("Older");
                 list = list.concat(beforeList);
