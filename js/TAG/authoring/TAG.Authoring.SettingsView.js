@@ -1170,7 +1170,50 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //    });
         //};
 
-        // Save button
+        var kioskIsLocked = true; //need server request
+        var unlockedKioskInput = createButton('Unlocked', function () {
+                kioskIsLocked = false;
+                unlockedKioskInput.css('background-color', 'white');
+                lockedKioskInput.css('background-color', '');
+            }, {
+                'min-height': '0px',
+                'margin-right': '4%',
+                'width': '48%',
+            });
+        var lockedKioskInput = createButton('Locked', function () {
+                kioskIsLocked = true;
+                lockedKioskInput.css('background-color', 'white');
+                unlockedKioskInput.css('background-color', '');
+            }, {
+                'min-height': '0px',
+                'width': '48%',
+            });
+        if (kioskIsLocked) {
+            lockedKioskInput.css('background-color', 'white');
+        } else {
+            unlockedKioskInput.css('background-color', 'white');
+        }
+        var kioskOptionsDiv = $(document.createElement('div'));
+        kioskOptionsDiv.append(unlockedKioskInput).append(lockedKioskInput);
+
+        //to-do create save function for kiosk locking
+
+        lockedKioskInput.on('click',function () {
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        });
+
+        unlockedKioskInput.on('click',function () {
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        });
+
+        var lockKioskSetting = createSetting("Lock Kiosk Mode", kioskOptionsDiv);
+        settingsContainer.append(lockKioskSetting);
+
+        // Save buttton
 
         var saveButton = createButton('Save', function () {
            /* if (locInput === undefined) {
@@ -2181,7 +2224,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Title', 40);
             descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false, 2000);
             bgInput = createButton('Select...', function () {
-                //changesHaveBeenMade = true;                                                   
+                //changesHaveBeenMade = true;    
+                console.log("collection bg");
+
+                //experimentation for background issue
+                /**
+                TAG.Util.UI.createAssociationPicker(root, "Choose Background Image",
+                { comp: exhibition, type: 'exhib' },
+                'bg', [{
+                        name: 'All Artworks',
+                        getObjs: TAG.Worktop.Database.getArtworks, //to-do only want image artworks, not videos
+                    }, {
+                    name: 'Artworks in this Collection',
+                    getObjs: TAG.Worktop.Database.getArtworksIn,
+                    args: [exhibition.Identifier]
+                }], {
+                    args: exhibition.Metadata.BackgroundImage //needs to be guid if artwork in collection, url if imported separately
+                }, function () {
+                    prepareNextView(true, "New", createExhibition);
+                    clearRight();
+                    prepareViewer(true);
+                    loadExhibitionsView(exhibition.Identifier);
+                });
+                **/
+
                 uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                     changesMade = true;
                     saveButton.prop("disabled", false);

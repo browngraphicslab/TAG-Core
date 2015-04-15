@@ -3618,7 +3618,7 @@ TAG.Util.UI = (function () {
      * @param title          string: the title to appear at the top of the picker
      * @param target         object: a comp property (object whose associations we're managing) and a type property
      *                               ('exhib', 'artwork', 'media') telling us what kind of component it is
-     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media) : type of the association
+     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media), "bg"- background image : type of the association
      * @param tabs           array: list of tab objects. Each has a name property (string, title of tab), a getObjs
      *                              property (a function to be called to get each entity listed in the tab), and a
      *                              args property (which will be extra arguments sent to getObjs)
@@ -3653,12 +3653,16 @@ TAG.Util.UI = (function () {
             tabCache.push({ cached: false, comps: [] });
         }
 
+        if (type == "bg"){
+            origComps= filter.args;
+        } else {
         var filterArgs = (filter.args || []).concat([function (comps) { // this has async stuff, make sure it gets called by the time it needs to be
             for (i = 0; i < comps.length; i++) {
                 origComps.push(comps[i].Identifier);
             }
         }, error, cacheError]);
         filter.getObjs.apply(null, filterArgs);
+        }
 
         // overlay
         pickerOverlay = $(blockInteractionOverlay());
