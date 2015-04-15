@@ -59,10 +59,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     (function init() {
         var uploadOverlayText = $(document.createElement('label')),
             progressIcon = $(document.createElement('img'));
-        progressBar = $(document.createElement('div')).addClass('progressBarUploads').click(function () {
-            //opens a popup giving progress for the current uploads
-            console.log("upload progress")
-        });
+
+        progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
@@ -245,6 +243,18 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     return;
                                                 }
                                                 globalFiles = files;
+
+                                                //sets up the upload progress popup
+                                                var filenames = []
+                                                for (var i = 0; i < globalFiles.length; i++) {
+                                                    filenames.push(globalFiles[i].name)
+                                                }
+                                                progressBar.click(function () {
+                                                    var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
+                                                    $('body').append(popup);
+                                                    $(popup).show();
+                                                });
+
                                                 numFiles = files.length; // global
                                                 globalUriStrings = uriStrings;
                                                 globalUpload = upload;
@@ -304,6 +314,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                    localURL; // local URL
 
                                                globalFiles = [file];
+
                                                numFiles = 1;
 
                                                localURL = window.URL.createObjectURL(file, { oneTimeOnly: true });

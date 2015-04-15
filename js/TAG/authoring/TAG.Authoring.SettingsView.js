@@ -3294,11 +3294,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
                     middleLoading.hide();
-                    hideUploadingProgress()
                 });
             } else {
                 middleLoading.hide();
-                hideUploadingProgress()
             }
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
@@ -4093,7 +4091,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (inAssociatedView) {
                         loadAssocMediaView(toScroll.Identifier);
                     } else {
-                        hideUploadingProgress()
+                        
                     }
                 } else {
                     durationHelper(done);
@@ -4681,11 +4679,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
                     middleLoading.hide();
-                    hideUploadingProgress()
+
                 });
             } else {
                 middleLoading.hide();
-                hideUploadingProgress()
+
             }
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
