@@ -401,10 +401,11 @@ Worktop.Database = function (mainID) {
     }
 
     function batchDeleteDoq(guids, guid, handlers) {
-        deleteRequest(
+        batchDeleteRequest(
             'Doq',
             handlers,
-            { isBatch: true, batch: true, GuidList: guids, Guid: guid},
+            {isBatch: "true", Guid: guid},
+            {GuidList: guids},
             true);
     }
 
@@ -506,6 +507,26 @@ Worktop.Database = function (mainID) {
             error: handlers.error,
         }
         _static.asyncRequest('DELETE', type, urlOptions, null, ajaxHandlers, secure);
+    }
+
+
+    function batchDeleteRequest(type, handlers, urlOptions, bodyOptions, secure, cacheCount) {
+        handlers = handlers || {};
+        urlOptions = urlOptions || {};
+        urlOptions.Token = LADS.Auth.getToken();
+        var cacheLoc = safeCache('doqs', urlOptions.Guid).get();
+        if (cacheCount !== 0) {
+            cacheCount = cacheCount || (cacheLoc && cacheLoc.Metadata && safeCache('doqs', urlOptions.Guid).get().Metadata.Count) || 0;
+        }
+        urlOptions.Count = cacheCount;
+
+        var ajaxHandlers = {
+            200: handlers.success,
+            401: handleAuth(handlers.unauth),
+            409: handlers.conflict,
+            error: handlers.error,
+        }
+        _static.asyncRequest('DELETE', type, urlOptions, bodyOptions, ajaxHandlers, secure);
     }
 
     /*

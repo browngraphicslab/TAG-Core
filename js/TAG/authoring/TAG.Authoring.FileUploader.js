@@ -59,7 +59,10 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     (function init() {
         var uploadOverlayText = $(document.createElement('label')),
             progressIcon = $(document.createElement('img'));
-        progressBar = $(document.createElement('div')).addClass('progressBarUploads');
+        progressBar = $(document.createElement('div')).addClass('progressBarUploads').click(function () {
+            //opens a popup giving progress for the current uploads
+            console.log("upload progress")
+        });
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
