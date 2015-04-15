@@ -93,6 +93,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
+		TweenLite.ticker.removeEventListener("tick", updateInk);
 		for(var v in self) {
 			v = null;
 		}
@@ -338,6 +339,27 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 	self.createDefaultKeyframes = createDefaultKeyframes
 
+	/* 
+	 * I/P: 	none
+	 * Updates ink so that it animates with image
+	 * O/P: 	none
+	 */
+	function updateInk() {
+		for (var i = 0; i < attachedInks.length; i++){
+
+			bounds = {
+				x: 0,//_UIControl.position().left,
+				y: 0, //_UIControl.position().top,
+				width: _UIControl.width()/$("#ITEHolder").width() || $("#ITEHolder").height(),
+				height: _UIControl.height()/$("#ITEHolder").height() || $("#ITEHolder").height()
+			}
+
+			// console.log(bounds)
+
+			attachedInks[i]._ink.adjustViewBox(bounds);
+		}
+	}
+
 
 	/* 
 	 * I/P: 	inkTrack : 		Ink track to attach to self asset.
@@ -346,14 +368,22 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function addInk(inkTrack) {
 		attachedInks.push(inkTrack)	
+		var kf = self.getKeyframeState(self.firstKeyframe)
 		var initialDims = { 
-			x: self.firstKeyframe.pos.x, 
-			y: self.firstKeyframe.pos.y, 
-			w: self.firstKeyframe.width, 
-			h: self.firstKeyframe.height
+			x: 0,//self.firstKeyframe.pos.x, 
+			y: 0,//self.firstKeyframe.pos.y, 
+			w: self.firstKeyframe.size.x,
+			h: self.firstKeyframe.size.y
 		}	
+		// var initialDims = { 
+		// 	x: parseFloat(kf.left), 
+		// 	y: parseFloat(kf.top), 
+		// 	w: parseFloat(kf.width), 
+		// 	h: parseFloat(kf.height)
+		// }
 		inkTrack._ink.setInitKeyframeData(initialDims)
 		inkTrack._ink.retrieveOrigDims();
+		TweenLite.ticker.addEventListener("tick", updateInk);
 	};
 	self.addInk = addInk;
 

@@ -41,6 +41,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 	// miscellaneous
 	var attachedInks = [];
+	var seeked;
 
 	// Start things up...
     initialize();
@@ -203,7 +204,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// Get the next keyframe in the sequence and animate.
 		var nextKeyframe = endKeyframe || self.getNextKeyframe(startTime);
 		if (nextKeyframe) {
+			// !seeked && self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
 			self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
+			seeked = false
 		}
 	};
 
@@ -236,24 +239,30 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function() {
+		// console.log("SEEKING ------------")
+		seeked = true;
 		if (self.status === 3) {
 			return null;
 		}
-
+		// console.log(_viewer.viewport.getBounds(true))
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
 		var prevStatus = self.status; // Store what we were previously doing.
+		// console.log("pausing")
 		self.pause(); // Stop any animations and stop the delayStart timer.
+		// console.log(_viewer.viewport.getBounds(true))
 		self.savedState = null; // Erase any saved state.
 		var nextKeyframe = null; // Where to animate to, if animating.
 
 		// Sought before track started.
 		if (seekTime < self.firstKeyframe.time) {
 			self.setState(self.getKeyframeState(self.firstKeyframe));
+			// console.log("seekTime < self.firstKeyframe.time")
 		} 
 
 		// Sought after track ended.
 		else if (seekTime > self.lastKeyframe.time) {
 			self.setState(self.getKeyframeState(self.lastKeyframe));
+			// console.log("seekTime > self.lastKeyframe.time")
 		}
 
 		// Sought in the track's content.
@@ -264,16 +273,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			if (surKeyframes[1].time - surKeyframes[0].time !== 0) {
 				interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1].time - surKeyframes[0].time);
 			}
-
 			var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
 			self.setState(soughtState);
+			// console.log("setting state to sought state ")
+			// console.log(_viewer.viewport.getBounds(true))
 			nextKeyframe = surKeyframes[1];
 		}
-
-		// If this track was playing, continue playing.
-		// if (prevStatus === 1) {
-		// 	self.play(nextKeyframe);
-		// } 
+		// console.log("END SEEKING -----------")
 		return nextKeyframe;
 	};
 
@@ -352,8 +358,22 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.setState = function(state) {
-		_viewer.viewport.fitBounds(state.bounds, true);
+
+		//So, for some very strang reason fitBounds(bounds, true) 
+		//(where "true" refers to whether or not the player is updated immediately or with an animation time, 
+		//[this animation time is actually a property of the springs used in their animation system])
+		//doesn't always actually update the screen. That is, the bounds is set correctly but it doesn't look any different.
+		//What we're doing here is just setting a very low animation time and using fitBounds(bounds, false), and then 
+		//resetting the seadragonConfig (the animation times) after we're done.
+		//Yeah, it's pretty strange. But it seems to work.
+		_viewer.viewport.centerSpringY.animationTime 	= .00001;	
+		_viewer.viewport.centerSpringX.animationTime 	= .00001;
+		_viewer.viewport.zoomSpring.animationTime 		= .00001;
+
+		_UIControl.css("opacity", state.opacity)
+		_viewer.viewport.fitBounds(state.bounds, false);
 		_viewer.viewport.update();	
+		resetSeadragonConfig()
 	};
 
 	/* 
@@ -391,41 +411,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 					};
 		return state;
 	};
-
-	// TODO: REMOVE ONCE TESTED.
-	/* 
-	* I/P: {time, ms}	duration duration of animation
-	* I/P: data 		data of next keyframe to animate to
-	* Starts or resumes tour
-	* Called when tour is played
-	* Starts animation, if needed
-	* O/P: none
-	*/
-	// self.play = function(targetTime, data){
-	// // Resets state to be where it was when track was paused, then clears the saved state
-	// 	self.animationCallback = function() {
-	// 		self.animate(targetTime - self.savedState.time, data);
-	// 		self.savedState = null;	
-	// 		_viewer.removeHandler("animation-finish", self.animationCallback)
-	// 	}
-
-	// 	// If tour was paused for any reason:
-	// 	if(self.savedState) {
-	// 		// If tour has been manipulated, reset it and continue animating (via the above callback method)
-	// 		if(self.imageHasBeenManipulated){
-	// 			self.setState(self.savedState);
-	// 			_viewer.addHandler("animation-finish", self.animationCallback);	
-	// 		}
-	// 		// If tour was paused simply and has not been manipulated, just start it from where it was before 
-	// 		else {
-	// 			self.animate(targetTime - self.savedState.time, data);
-	// 		}
-	// 	} 
-	// 	// If "play" is being called from taskmanager, just start animating to the next keyframe
-	// 	else {
-	// 		self.animate(targetTime - self.taskManager.timeManager.getElapsedOffset(), data);
-	// 	}
-	// };
 
 	///////////////////////////////////////////////////////////////////////////
 	// DeepZoomProvider functions.
@@ -479,7 +464,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			}	
 			inkTrack._ink.setInitKeyframeData(initialDims)
 			inkTrack._ink.retrieveOrigDims();
-
 		}
 	};
 	self.addInk = addInk;
@@ -586,15 +570,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			'animation', function(evt) {
 				for (var i = 0; i < attachedInks.length; i++){
            			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
-           			// var bottomRight = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, _viewer.viewport.contentAspectY, true));
-
 					bounds = {
 						x: topLeft.x,
 						y: topLeft.y,
 						width: _viewer.viewport.getZoom(true),
 						height: _viewer.viewport.getZoom(true)
 					}
-
 					attachedInks[i]._ink.adjustViewBox(bounds);
 				}
 			})

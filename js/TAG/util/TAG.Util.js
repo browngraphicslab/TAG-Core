@@ -7844,8 +7844,17 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		for (j=0; j<track.resourceReferences.length; j++){
 			urls.push(rinData.resources[track.resourceReferences[j].resourceId].uriReference);
 		}
-		var serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8086' : "browntagserver.com:8080");
-		return serverURL + urls;
+
+		var URL;
+
+		//TO DO: figure out why url sometimes has server and sometimes not (?!)
+		if (urls.toString().substring(0, 4) == "http"){//if first 4 letters are "http"; that is, if server name is being appended
+			URL = urls;
+		} else { //if server name is NOT already appended, append it.
+			var serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8086' : "browntagserver.com:8080");
+			URL = serverURL + urls
+		}
+		return URL;
 	}
 
 	//returns a string of the providerID based on RIN's providerId's
