@@ -95,7 +95,23 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_deepZoom.css({
 			//"pointer-events" : "none",
 		})
-		
+		$("#ITEHolder")[0].addEventListener("MSPointerMove", function (evt) {//whenever the mouse moves in the ITEHolder, 
+		    if (isInImageBoundsMouseEvent(evt)) {
+		        if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
+		            _UIControl.css({
+		                "pointer-events": "auto",
+                        "touch-action": "auto",
+		            })
+		        }
+		    }
+		    else {
+		        _UIControl.css({
+		            "pointer-events": "none",//else, unclickable
+		            "touch-action": "none",
+		        })
+		    }
+		});
+		/*
 		$("#ITEHolder").mousemove(function(evt){//whenever the mouse moves in the ITEHolder, 
 			if(isInImageBoundsMouseEvent(evt)){
 				if(!_shouldBeInvisible){//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
@@ -110,6 +126,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				})
 			}
 		});
+        */
 
 		// Get first and last keyframes and set state to first.
 		self.firstKeyframe = self.keyframes.min();
