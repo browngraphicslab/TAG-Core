@@ -18,6 +18,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileDiv = $(document.createElement("div")).attr("id", "tileDiv"),//root.find('#tileDiv'),
         displayArea = root.find("#displayArea"),
         collectionArea = root.find('#collectionArea'),
+        backButtonArea = root.find('#backButtonArea'),
+        backButton = root.find('#backButton'),
         backArrowArea = root.find('#backArrowArea'),
         backArrow = root.find('#backArrow'),
         nextArrowArea = root.find('#nextArrowArea'),
@@ -80,6 +82,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
+        lockKioskMode = true,                           // true if back button is hidden
 
         // constants
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
@@ -133,6 +136,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
         var cancelLoadCollection = null;
+
+    backButton.attr('src', tagPath + 'images/icons/Back.svg');
+
+    backButton.mousedown(function () {
+            TAG.Util.UI.cgBackColor("backButton", backButton, false);
+    });
+            
+    backButton.mouseleave(function () {
+            TAG.Util.UI.cgBackColor("backButton", backButton, true);
+    });
+
+    backButton.click(function () {    
+        TAG.Layout.StartPage(null, function (page) {
+            TAG.Util.UI.slidePageRight(page);
+        });
+    });
+
+    if (lockKioskMode){
+        backButton.css('display','none');
+    }
 
     // get things rolling
     init();

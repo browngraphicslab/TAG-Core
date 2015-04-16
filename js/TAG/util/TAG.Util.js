@@ -2044,7 +2044,8 @@ TAG.Util.UI = (function () {
         getStack: getStack,
         initKeyHandler: initKeyHandler,
         keyHandler: keyHandler,
-        showPageLink: showPageLink
+        showPageLink: showPageLink,
+        uploadProgressPopup : uploadProgressPopup,
     };
 
     //initKeyHandler();
@@ -2785,7 +2786,217 @@ TAG.Util.UI = (function () {
         return overlay;
     }
 
-    
+   
+    //generates upload progress popup
+    function uploadProgressPopup(clickAction, message, filesArray) {
+        var buttonText, noFade, useHTML, onDialogClick;
+        var overlay, first;
+        if (document.getElementById("popupblockInteractionOverlay")) {
+            overlay = $(document.getElementById("popupblockInteractionOverlay"));
+        } else {
+            overlay = blockInteractionOverlay();
+            first = true;
+            $(overlay).attr('id', 'popupblockInteractionOverlay');
+        }
+        var confirmBox = document.createElement('div');
+        var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+           {
+               center_h: true,
+               center_v: true,
+               width: 0.5,
+               height: 0.5,
+               max_width: 650,
+               max_height: 500,
+           });
+        var leftPos = ($('#tagRoot').width() - confirmBoxSpecs.width) * 0.5;
+        var currentKeyHandler = globalKeyHandler[0];
+
+        $(confirmBox).css({
+
+            position: 'absolute',
+            left: leftPos + 'px',
+            top: confirmBoxSpecs.y + 'px',
+            width: confirmBoxSpecs.width + 'px',
+            height: confirmBoxSpecs.height + 'px',
+            border: '3px double white',
+            'background-color': 'black',
+
+        });
+        if (onDialogClick) {
+            $(overlay).click(removeAll);
+            $(confirmBox).click(function (event) {
+                event.stopPropagation();
+            });
+        }
+
+        var messageLabel = document.createElement('div');
+        $(messageLabel).css({
+
+            color: 'white',
+            'width': '80%',
+            'height': '15%',
+            'left': '10%',
+            'top': '12.5%',
+            'font-size': '1.20em',
+            'position': 'relative',
+            'text-align': 'left',
+            'word-wrap': 'break-word',
+
+        });
+        var fontsize = TAG.Util.getMaxFontSizeEM(message, 1.5, $(messageLabel).width(), $(messageLabel).height());
+        $(messageLabel).css('font-size', fontsize);
+        TAG.Util.multiLineEllipsis($(messageLabel));
+        if (useHTML) {
+            $(messageLabel).html(message);
+        } else {
+            $(messageLabel).text(message);
+        }
+
+
+        //creates the progress pane
+        var progressDiv = $(document.createElement('div')).addClass("ProgressDiv").css({
+            color: 'white',
+            'width': '80%',
+            'height': '45%',
+            'left': '10%',
+            'top': '15%',
+            'font-size': '1.20em',
+            'position': 'relative',
+            'text-align': 'left',
+            'word-wrap': 'break-word',
+            'overflow-x': 'hidden',
+            'overflow-y':'scroll'
+        });
+
+        //creates an element for one upload
+        var createProgressElement = function (name) {
+
+            var realname = name;
+            name = name.replace(".", "");
+
+            var prog = $(document.createElement('div')).addClass("progress" + name).css({
+                'width': '100%',
+                'height':'20%',
+                'position': 'relative',
+                'font-size': '1.20em',
+                'text-align': 'left',
+                'word-wrap': 'break-word',
+                'display': 'block',
+                'margin-bottom': '3%'
+            });
+
+            var nameLabel = $(document.createElement('div')).addClass("uploadProgressName" + name).css({
+                'text-align': 'left',
+                'position': 'absolute',
+                'display': 'inline-block',
+                'width': '42%',
+                'left': '0%',
+                'top':'10%',
+                'white-space': 'nowrap',
+                'overflow': 'hidden',
+                'text-overflow':'ellipsis',
+                'height': '90%',
+                'max-width':'500px'
+            }).text(realname);
+
+            var progressBar = $(document.createElement('div')).addClass("uploadProgress" + name).css({
+                'position':'absolute', 'right': '23%', 'top':'20%', 'border-style': 'solid', 'border-color': 'white', 'width': '30%', 'height': '50%', "display": "inline-block",
+            });
+
+            var innerProgressBar = $(document.createElement('div')).addClass("uploadProgressInner" + name).css({
+                'background-color': 'white', 'width': '0%', 'height': '100%', 'display':'block', 'position':'absolute',
+            });
+
+            var progressLabel = $(document.createElement('div')).addClass("uploadProgressLabel" + name).css({
+                'text-align': 'left',
+                'word-wrap': 'break-word',
+                'position': 'absolute',
+                'display':'inline-block',
+                'width':'13%',
+                'right': '6%',
+                'height': '90%',
+                'top': '10%',
+                'white-space': 'nowrap',
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis',
+                'max-width': '500px'
+            }).text("0%");
+
+            progressBar.append(innerProgressBar)
+            prog.append(nameLabel)
+            prog.append(progressBar)
+            prog.append(progressLabel)
+            progressDiv.append(prog)
+        }
+
+        for (var i = 0; i < filesArray.length; i++) {
+            createProgressElement(filesArray[i])
+        }
+
+        var optionButtonDiv = document.createElement('div');
+        $(optionButtonDiv).addClass('optionButtonDiv');
+        $(optionButtonDiv).css({
+            'height': '10%',
+            'width': '100%',
+            'position': 'absolute',
+            'bottom': '5%',
+            'right': '2%',
+            'margin-bottom':'0%'
+        });
+
+        var confirmButton = document.createElement('button');
+        $(confirmButton).css({
+            'padding': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'position': 'relative',
+            'float': "right",
+            'margin-right': '3%',
+            'margin-top': '-1%',
+            color: 'white',
+        }).css('border-radius', '3.5px');
+        buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
+        $(confirmButton).text(buttonText);
+        confirmButton.onclick = function () {
+            if (clickAction) {
+                clickAction();
+            }
+            if (first) {
+                removeAll();
+            } else {
+                $(confirmBox).remove();
+            }
+        };
+
+        function onEnter() {
+            if (clickAction) {
+                clickAction();
+            }
+            removeAll();
+        }
+
+        globalKeyHandler[0] = { 13: onEnter, };
+
+        function removeAll() {
+            if (noFade) {
+                $(overlay).hide();
+                $(overlay).remove();
+            } else {
+                $(overlay).fadeOut(500, function () { $(overlay).remove(); });
+            }
+            globalKeyHandler[0] = currentKeyHandler;
+        }
+
+        $(optionButtonDiv).append(confirmButton);
+
+        $(confirmBox).append(messageLabel);
+        $(confirmBox).append(progressDiv);
+        $(confirmBox).append(optionButtonDiv);
+
+        $(overlay).append(confirmBox);
+        return overlay;
+    }
+
     // popup message to ask for user confirmation of an action e.g. deleting a tour
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
         var overlay;
@@ -3618,7 +3829,7 @@ TAG.Util.UI = (function () {
      * @param title          string: the title to appear at the top of the picker
      * @param target         object: a comp property (object whose associations we're managing) and a type property
      *                               ('exhib', 'artwork', 'media') telling us what kind of component it is
-     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media) : type of the association
+     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media), "bg"- background image : type of the association
      * @param tabs           array: list of tab objects. Each has a name property (string, title of tab), a getObjs
      *                              property (a function to be called to get each entity listed in the tab), and a
      *                              args property (which will be extra arguments sent to getObjs)
@@ -3653,12 +3864,16 @@ TAG.Util.UI = (function () {
             tabCache.push({ cached: false, comps: [] });
         }
 
+        if (type == "bg"){
+            origComps= filter.args;
+        } else {
         var filterArgs = (filter.args || []).concat([function (comps) { // this has async stuff, make sure it gets called by the time it needs to be
             for (i = 0; i < comps.length; i++) {
                 origComps.push(comps[i].Identifier);
             }
         }, error, cacheError]);
         filter.getObjs.apply(null, filterArgs);
+        }
 
         // overlay
         pickerOverlay = $(blockInteractionOverlay());
@@ -3880,6 +4095,7 @@ TAG.Util.UI = (function () {
         // cancel and save buttons
         var optionButtonDiv = $(document.createElement('div'));
         optionButtonDiv.addClass('optionButtonDiv');
+        optionButtonDiv.attr("id", "optionButtons");
         optionButtonDiv.css({
             'height': '5%',
             'width': '100%'
@@ -3914,17 +4130,12 @@ TAG.Util.UI = (function () {
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             $('.compHolder').off();
             progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
             finalizeAssociations();
             globalKeyHandler[0] = currentKeyHandler;
         });
-
-        function importOnClick() {
-            console.log("Import on click");
-            importBehavior();
-        }
-
 
         var importButton = $(document.createElement('button'));
         importButton.css({
@@ -3940,12 +4151,20 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         });
         importButton.text('Import');
-        importButton.on('click', function () {
-            importOnClick();
-        });
+        importButton.click(importOnClick);
+        $(importButton).attr("id", "importButton");
+        
+        function importOnClick(){
+            confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            console.log("Called import on click");
+            $('.compHolder').off();
+            finalizeAssociations();
+            globalKeyHandler[0] = currentKeyHandler;
+            importBehavior();
 
-
-       
+        }
 
         /**Saves changes for pressing enter key
          * @method onEnter
@@ -3984,6 +4203,7 @@ TAG.Util.UI = (function () {
             $('.compHolder').off();
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             pickerOverlay.fadeOut(function () { 
                 pickerOverlay.empty(); 
                 pickerOverlay.remove(); 
@@ -3994,9 +4214,11 @@ TAG.Util.UI = (function () {
 
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
+        //optionButtonDiv.append(importButton);
 
+        //don't want import button to appear if this is in the add to collections popup
         if (!modifiedButtons) {
-            optionButtonDiv.append(importButton);
+           optionButtonDiv.append(importButton);
         }
 
         picker.append(optionButtonDiv);
@@ -4388,6 +4610,23 @@ TAG.Util.UI = (function () {
                                 pickerOverlay.empty();
                                 pickerOverlay.remove();
                             }
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
+                } else if (type === 'exhib' && target.type === 'artworkMulti') {
+                    for (var i = 0; i < addedComps.length; i++) {
+                        TAG.Worktop.Database.changeExhibition(addedComps[i], { AddIDs: [target.comp] }, function () {
+                            if (i == addedComps.length - 1) {
+                                callback();
+                                pickerOverlay.fadeOut();
+                                pickerOverlay.empty();
+                                pickerOverlay.remove();
+                        }
                         }, function (err) {
                             console.log(err.message);
                         }, function (err) {
@@ -6891,6 +7130,56 @@ TAG.Util.RLH = function (input) {
         var fileArray,
             i;
 
+        //webfileupload
+        if (!IS_WINDOWS){
+            console.log("maps");
+        TAG.Authoring.WebFileUploader(
+            root,
+            TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
+            function (files) {
+                fileArray = files;
+            },
+            function (urls) {
+                var newDoq
+                if (!urls.length && urls.length !== 0) { // check to see whether a single file was returned
+                    urls = [urls];
+                }
+                var newDoq;
+                try {
+                    newDoq = new Worktop.Doq(urls[0]);
+                } catch (error) {
+                    console.log("error in uploading: " + error.message);
+                    return;
+                }
+                mapGuids.push(newDoq.Identifier);
+
+                mapDoqs[newDoq.Identifier] = newDoq;
+                //update changeartwork and linq the map and artwork
+
+                importLoadingOverlay();
+
+                saveRichLocationHistory({
+                    toadd: newDoq.Identifier,
+                });
+
+                //reload (which will show the map that has just been imported)
+                loadMaps();
+
+                //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
+                // TODO this is just in here for testing purposes
+                //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
+                //    console.log('success in changeMap');
+                //}, function () { }, function () { }, function () { }); // TODO RLH TESTING: make sure map doq is updated properly (the next time it's loaded, it should have these metadata)
+            },
+            ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
+            false,
+            function () {
+                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+            },
+            false // batch upload disabled for now
+        );
+        } else {
+
         TAG.Authoring.FileUploader(
             root,
             TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
@@ -6936,6 +7225,7 @@ TAG.Util.RLH = function (input) {
             },
             false // batch upload disabled for now
         );
+        }
 
     }
 

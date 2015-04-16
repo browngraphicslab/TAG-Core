@@ -88,6 +88,7 @@ var JSSRC = [
 		'js/TAG/util/TAG.Util.js',                             // TAGCORE
 		'js/html2canvas/html2canvas.js',                       // TAGCORE
 		'js/utils/jquery.livequery.js',                        // TAGCORE
+		'js/utils/resumable_edit.js',
 		'js/utils/Autolinker.js-master/dist/Autolinker.js',    // TAGCORE
 
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js', // TAGCORE
@@ -133,6 +134,7 @@ var JSSRC = [
         
 		'js/TAG/authoring/TAG.Authoring.SettingsView.js',  // TAGCORE
 		'js/TAG/authoring/TAG.Authoring.FileUploader.js',  // TAGCORE
+		'js/TAG/authoring/TAG.Authoring.WebFileUploader.js',  // TAGCORE
 		'js/TAG/authoring/jscolor/jscolor.js',             // TAGCORE
 
 		'js/utils/popcorn.min.js',                         // TAGCORE
