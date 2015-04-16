@@ -2310,6 +2310,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
+            function importAndRefresh(){
+                createArtwork();
+            }
+
             var artPickerButton = createButton('Manage', function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
@@ -2328,7 +2332,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         clearRight();
                         prepareViewer(true);
                         loadExhibitionsView(exhibition.Identifier);
-                    });
+                    }, importAndRefresh);
 
             }, {
                 'margin-left': '2%',

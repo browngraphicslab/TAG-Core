@@ -3626,7 +3626,7 @@ TAG.Util.UI = (function () {
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -3920,8 +3920,9 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        function importFiles() {
-            console.log("You've clicked the Import Button!");
+        function importOnClick() {
+            console.log("Import on click");
+            importBehavior();
         }
 
 
@@ -3940,7 +3941,7 @@ TAG.Util.UI = (function () {
         });
         importButton.text('Import');
         importButton.on('click', function () {
-            importFiles();
+            importOnClick();
         });
 
 
