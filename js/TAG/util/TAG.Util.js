@@ -2870,34 +2870,56 @@ TAG.Util.UI = (function () {
 
         //creates an element for one upload
         var createProgressElement = function (name) {
-            var prog = $(document.createElement('div')).addClass("progress:" + name).css({
+            var prog = $(document.createElement('div')).addClass("progress" + name).css({
                 'width': '100%',
+                'height':'20%',
                 'position': 'relative',
                 'font-size': '1.20em',
                 'text-align': 'left',
                 'word-wrap': 'break-word',
                 'display': 'block',
                 'margin-bottom': '3%'
+            });
+
+            var nameLabel = $(document.createElement('div')).addClass("uploadProgressName" + name).css({
+                'text-align': 'left',
+                'position': 'absolute',
+                'display': 'inline-block',
+                'width': '42%',
+                'left': '0%',
+                'top':'10%',
+                'white-space': 'nowrap',
+                'overflow': 'hidden',
+                'text-overflow':'ellipsis',
+                'height': '90%',
+                'max-width':'500px'
             }).text(name);
 
-            var progressBar = $(document.createElement('div')).addClass("uploadProgress:" + name).css({
-                'position':'absolute', 'right': '20%', 'top':'10%', 'border-style': 'solid', 'border-color': 'white', 'width': '30%', 'height': '60%', "display": "inline-block",
+            var progressBar = $(document.createElement('div')).addClass("uploadProgress" + name).css({
+                'position':'absolute', 'right': '23%', 'top':'20%', 'border-style': 'solid', 'border-color': 'white', 'width': '30%', 'height': '50%', "display": "inline-block",
             });
 
-            var innerProgressBar = $(document.createElement('div')).addClass("uploadProgressInner:" + name).css({
-                'background-color': 'white', 'width': '50%', 'height': '100%', 'display':'block', 'position':'absolute',
+            var innerProgressBar = $(document.createElement('div')).addClass("uploadProgressInner" + name).css({
+                'background-color': 'white', 'width': '0%', 'height': '100%', 'display':'block', 'position':'absolute',
             });
 
-            var progressLabel = $(document.createElement('div')).addClass("uploadProgressLabel:" + name).css({
+            var progressLabel = $(document.createElement('div')).addClass("uploadProgressLabel" + name).css({
                 'text-align': 'left',
                 'word-wrap': 'break-word',
                 'position': 'absolute',
                 'display':'inline-block',
-                'width':'10%',
-                'right':'3%'
-            }).text("50%");
+                'width':'13%',
+                'right': '6%',
+                'height': '90%',
+                'top': '10%',
+                'white-space': 'nowrap',
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis',
+                'max-width': '500px'
+            }).text("0%");
 
             progressBar.append(innerProgressBar)
+            prog.append(nameLabel)
             prog.append(progressBar)
             prog.append(progressLabel)
             progressDiv.append(prog)
@@ -2920,13 +2942,10 @@ TAG.Util.UI = (function () {
 
         var confirmButton = document.createElement('button');
         $(confirmButton).css({
-
-
             'padding': '1%',
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
-
             'float': "right",
             'margin-right': '3%',
             'margin-top': '-1%',
@@ -2945,15 +2964,11 @@ TAG.Util.UI = (function () {
             }
         };
 
-
-
-
         function onEnter() {
             if (clickAction) {
                 clickAction();
             }
             removeAll();
-
         }
 
         globalKeyHandler[0] = { 13: onEnter, };
