@@ -596,6 +596,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			'animation', function(evt) {
 				for (var i = 0; i < attachedInks.length; i++){
            			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
+           			//console.log(_viewer.viewport.contentSize);
+           			//console.log(_viewer.viewport.getZoom(true));
+           			//console.log(" ");
 					bounds = {
 						x: topLeft.x,
 						y: topLeft.y,
