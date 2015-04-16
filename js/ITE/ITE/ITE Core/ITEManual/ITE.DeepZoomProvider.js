@@ -12,6 +12,7 @@ window.ITE = window.ITE || {};
  * 		opacity : 		Opacity of the image. 
 		bounds : 		OpenSeadragon Rect representing the boundaries of the
 						DeepZoom Image, in format {x, y, width, height}.	
+						Check the DZ documentation on this - it's weird.
  *		time : 			(OPTIONAL) Actual elapsed time, from timeManager. Read-only.
  * 	}
  * O/P: 	none
@@ -128,10 +129,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		});
         */
 
-		// Get first and last keyframes and set state to first.
+		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
-		self.setState(self.getKeyframeState(self.firstKeyframe));
 
 		// Attach handlers.
 		attachHandlers();
@@ -145,11 +145,14 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	self.load = function() {
 		_super.load();
 
+		// Add a handler to set the first keyframe when the viewer is finished loading.
+		_viewer.addHandler('open', function(evt) {
+			var provider = evt.userData;
+			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
+			self.status = 2; 	
+		}, self);
 		// Sets the DeepZoom's URL source.
 		_viewer.open(self.trackData.assetUrl);
-		
-		// When finished loading, set status to 2 (paused).
-		self.status = 2; // TODO: should this be some kind of callback?
 	};
 
 	/*
@@ -401,7 +404,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	self.getKeyframeState = function(keyframe) {
 		var state = {
 						"opacity"	: keyframe.opacity, 
-						 "bounds"	: new OpenSeadragon.Rect(parseFloat(keyframe.pos.x), parseFloat(keyframe.pos.y), keyframe.scale, keyframe.scale/2)
+						 "bounds"	: new OpenSeadragon.Rect(parseFloat(keyframe.pos.x), 
+						 									 parseFloat(keyframe.pos.y),
+						 									 keyframe.scale, 
+						 									 keyframe.scale/_viewer.viewport.getAspectRatio())
 					};
 		return state;
 	};
@@ -424,7 +430,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		var lerpScale = startKeyframe.scale + (interp * (endKeyframe.scale - startKeyframe.scale));
 		var state = {
 						"opacity"	: lerpOpacity,
-						"bounds"	: new OpenSeadragon.Rect(parseFloat(lerpPosX), parseFloat(lerpPosY), lerpScale, lerpScale/2)
+						"bounds"	: new OpenSeadragon.Rect(parseFloat(lerpPosX), 
+															 parseFloat(lerpPosY), 
+															 lerpScale, 
+															 lerpScale/_viewer.viewport.getAspectRatio())
 					};
 		return state;
 	};

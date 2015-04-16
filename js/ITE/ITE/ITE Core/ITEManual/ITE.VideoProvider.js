@@ -68,10 +68,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			.append(_video);
 		$("#ITEHolder").append(_UIControl);
 
-		// Get first and last keyframes and set state to first.
+		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
-		self.setState(self.getKeyframeState(self.firstKeyframe));
 
 		// Attach Handlers.
 		attachHandlers();
@@ -92,6 +91,21 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		});
 
 		_videoControls.load();
+
+		// Ensure that the audio is completely loaded.
+		function monitor(timeWaited) {
+			timeWaited = timeWaited || 0;
+			if (timeWaited > 2000) {
+				console.log("Video failed to load!");
+			}
+			else if (_videoControls.readyState !== 4) {
+				setTimeout(function(){ monitor(timeWaited+100); }, 100);
+			}
+		};
+		monitor();
+
+		// Update first state.
+		self.setState(self.getKeyframeState(self.firstKeyframe));
 
 		// When finished loading, set status to 2 (paused).
 		self.status = 2; // TODO: should this be some kind of callback?

@@ -76,7 +76,6 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		// Get first and last keyframes and set state to first.
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
-		self.setState(self.getKeyframeState(self.firstKeyframe));
 	};
 
 	/*
@@ -88,8 +87,11 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		_super.load();
 		self._ink.loadInk(trackData.datastring);
 
+		// Update first state.
+		self.setState(self.getKeyframeState(self.firstKeyframe));
+
 		// When finished loading, set status to 2 (paused).
-		self.status = 2; // TODO: should this be some kind of callback?
+		self.status = 2; 
 	};
 
 	/*

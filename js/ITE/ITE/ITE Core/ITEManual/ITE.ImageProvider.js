@@ -63,10 +63,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			.append(_image);
 		$("#ITEHolder").append(_UIControl);
 
-		// Get first and last keyframes and set state to first.
+		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
-		self.setState(self.getKeyframeState(self.firstKeyframe));
 
 		// Attach handlers.
 		attachHandlers();
@@ -83,8 +82,24 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		// Sets the image’s URL source.
 		_image.attr("src", self.trackData.assetUrl);
 
+		// Ensure that the image is completely loaded.
+		// Kinda jank, but according to the onlines, stuff like $().load() can't be trusted.
+		function monitor(timeWaited) {
+			timeWaited = timeWaited || 0;
+			if (timeWaited > 2000) {
+				console.log("Image failed to load!");
+			}
+			else if (!_image[0].complete) {
+				setTimeout(function(){ monitor(timeWaited+100); }, 100);
+			}
+		};
+		monitor();
+
+		// Update first state.
+		self.setState(self.getKeyframeState(self.firstKeyframe));
+
 		// When finished loading, set status to 2 (paused).
-		self.status = 2; // TODO: should this be some kind of callback?
+		self.status = 2; 
 	};
 
 	/*
