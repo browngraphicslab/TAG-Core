@@ -248,7 +248,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 //sets up the upload progress popup as soon as the filenames are known
                                                 var filenames = []
                                                 for (var i = 0; i < globalFiles.length; i++) {
-                                                    filenames.push(globalFiles[i].name.replace(".", ""))
+                                                    filenames.push(globalFiles[i].name)
                                                 }
 
                                                 //creates popup but doesn't show it

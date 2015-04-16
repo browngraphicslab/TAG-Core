@@ -4170,6 +4170,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //implementing background uploads - david
             console.log("createAsset called")
+            hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
@@ -5530,6 +5531,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //implementing background uploads - david
             console.log("createArtwork called")
+            hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);

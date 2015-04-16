@@ -2870,6 +2870,10 @@ TAG.Util.UI = (function () {
 
         //creates an element for one upload
         var createProgressElement = function (name) {
+
+            var realname = name;
+            name = name.replace(".", "");
+
             var prog = $(document.createElement('div')).addClass("progress" + name).css({
                 'width': '100%',
                 'height':'20%',
@@ -2893,7 +2897,7 @@ TAG.Util.UI = (function () {
                 'text-overflow':'ellipsis',
                 'height': '90%',
                 'max-width':'500px'
-            }).text(name);
+            }).text(realname);
 
             var progressBar = $(document.createElement('div')).addClass("uploadProgress" + name).css({
                 'position':'absolute', 'right': '23%', 'top':'20%', 'border-style': 'solid', 'border-color': 'white', 'width': '30%', 'height': '50%', "display": "inline-block",
