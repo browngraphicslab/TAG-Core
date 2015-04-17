@@ -40,6 +40,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		movementTimeouts 			= [],
 		attachedInks 				= [];
 
+
 	// Start things up...
     initialize();
 
@@ -81,6 +82,10 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Sets the image’s URL source.
 		_image.attr("src", self.trackData.assetUrl);
+		self.setState(self.getKeyframeState(self.firstKeyframe));
+		window.setTimeout(function(){
+			TweenLite.ticker.addEventListener("tick", updateInk)
+		}, 100);
 
 		// Ensure that the image is completely loaded.
 		// Kinda jank, but according to the onlines, stuff like $().load() can't be trusted.
@@ -285,13 +290,22 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	state : 			Object holding keyframe's state, as used in animation.
 	 */
 	self.getKeyframeState = function(keyframe) {
+		// var state = {
+		// 				"opacity"	: keyframe.opacity,
+		// 				"left"		: (1000*keyframe.pos.x/100) + "px",
+		// 				"top"		: (500*keyframe.pos.y/100) + "px",
+		// 				"width"		: (1000*keyframe.size.x/100) + "px",
+		// 				"height"	: (500*keyframe.size.y/100) + "px"
+		// 			};
 		var state = {
-						"opacity"	: keyframe.opacity,
-						"left"		: (1000*keyframe.pos.x/100) + "px",
-						"top"		: (500*keyframe.pos.y/100) + "px",
-						"width"		: (1000*keyframe.size.x/100) + "px",
-						"height"	: (500*keyframe.size.y/100) + "px"
-					};
+			"opacity"	: keyframe.opacity,
+			"left"		: (keyframe.pos.x) + "px",
+			"top"		: (keyframe.pos.y) + "px",
+			"width"		: (keyframe.size.x) + "px",
+			"height"	: (keyframe.size.y) + "px"
+		};
+		// console.log("KEYFRAME")
+		// console.log(state)
 		return state;
 	};
 
@@ -314,10 +328,10 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		var lerpSizeY = startKeyframe.size.y + (interp * (endKeyframe.size.y - startKeyframe.size.y));
 		var state = {
 						"opacity"	: lerpOpacity,
-						"top"		: (500 * lerpPosY / 100) + "px",
-						"left"		: (1000 * lerpPosX / 100) + "px",
-						"width"		: (1000 * lerpSizeX / 100) + "px",
-						"height"	: (500 * lerpSizeY / 100) + "px"
+						"top"		: (lerpPosY) + "px",
+						"left"		: (lerpPosX) + "px",
+						"width"		: (lerpSizeX) + "px",
+						"height"	: (lerpSizeY) + "px"
 					};
 		return state;
 	};
@@ -354,27 +368,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 	self.createDefaultKeyframes = createDefaultKeyframes
 
-	/* 
-	 * I/P: 	none
-	 * Updates ink so that it animates with image
-	 * O/P: 	none
-	 */
-	function updateInk() {
-		for (var i = 0; i < attachedInks.length; i++){
-
-			bounds = {
-				x: 0,//_UIControl.position().left,
-				y: 0, //_UIControl.position().top,
-				width: _UIControl.width()/$("#ITEHolder").width() || $("#ITEHolder").height(),
-				height: _UIControl.height()/$("#ITEHolder").height() || $("#ITEHolder").height()
-			}
-
-			// console.log(bounds)
-
-			attachedInks[i]._ink.adjustViewBox(bounds);
-		}
-	}
-
 
 	/* 
 	 * I/P: 	inkTrack : 		Ink track to attach to self asset.
@@ -384,23 +377,64 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	function addInk(inkTrack) {
 		attachedInks.push(inkTrack)	
 		var kf = self.getKeyframeState(self.firstKeyframe)
-		var initialDims = { 
-			x: 0,//self.firstKeyframe.pos.x, 
-			y: 0,//self.firstKeyframe.pos.y, 
-			w: self.firstKeyframe.size.x,
-			h: self.firstKeyframe.size.y
-		}	
+		//THIS ONE WORKS (not really but yo know what I mean)
 		// var initialDims = { 
-		// 	x: parseFloat(kf.left), 
-		// 	y: parseFloat(kf.top), 
-		// 	w: parseFloat(kf.width), 
-		// 	h: parseFloat(kf.height)
+		// 	x: self.firstKeyframe.pos.x / $("#tagRoot").width(), 
+		// 	y: self.firstKeyframe.pos.y / $("#ITEHolder").height(),// + parseFloat(kf.height)/2, 
+		// 	w: self.firstKeyframe.size.x / $("#ITEHolder").width(),// * (1/(parseFloat(kf.width)/$("#ITEHolder").width())), //self.firstKeyframe.size.x,
+		// 	h: self.firstKeyframe.size.y / $("#ITEHolder").height()// //self.firstKeyframe.size.y
 		// }
+		// var initialDims = { 
+		// 	x: parseFloat(kf.left)/$("#ITEHolder").width(), 
+		// 	y: parseFloat(kf.top)/$("#ITEHolder").width(),// + parseFloat(kf.height)/2, 
+		// 	w: parseFloat(kf.width)/$("#ITEHolder").width(),// * (1/(parseFloat(kf.width)/$("#ITEHolder").width())), //self.firstKeyframe.size.x,
+		// 	h: parseFloat(kf.height)/$("#ITEHolder").width()// //self.firstKeyframe.size.y
+		// }
+		// var initialDims = { 
+		// 	x: self.firstKeyframe.pos.x / $("#tagRoot").width(), 
+		// 	y: self.firstKeyframe.pos.y / $("#ITEHolder").height(),// + parseFloat(kf.height)/2, 
+		// 	w: self.firstKeyframe.size.x / $("#ITEHolder").width(),// * (1/(parseFloat(kf.width)/$("#ITEHolder").width())), //self.firstKeyframe.size.x,
+		// 	h: self.firstKeyframe.size.y / $("#ITEHolder").height()// //self.firstKeyframe.size.y
+		// }
+		var holderRatio = $("#ITEHolder").width()/$("#ITEHolder").height();
+		var imageRatio = self.firstKeyframe.size.x/self.firstKeyframe.size.y
+		var initialDims = {
+			x: -imageRatio * self.firstKeyframe.pos.x/$("#ITEHolder").width(),
+			y: -self.firstKeyframe.pos.y/$("#ITEHolder").height() ,
+			w: 1/(self.firstKeyframe.size.x/$("#ITEHolder").width()) ,
+			h: 1/(self.firstKeyframe.size.y/$("#ITEHolder").height()) 
+		}
+		// console.log("keyframe")
+		console.log("initialDims")
+		console.log(initialDims)
 		inkTrack._ink.setInitKeyframeData(initialDims)
 		inkTrack._ink.retrieveOrigDims();
-		TweenLite.ticker.addEventListener("tick", updateInk);
-	};
+	}; 
 	self.addInk = addInk;
+
+	/* 
+	 * I/P: 	none
+	 * Updates ink so that it animates with image
+	 * O/P: 	none 
+	 */
+	updateInk = function() {
+		var i;
+		for (i = 0; i < attachedInks.length; i++){
+			// var bounds = {
+			// 	x: _UIControl.position().left,
+			// 	y: _UIControl.position().top,
+			// 	width: _UIControl.width(),///$("#ITEHolder").width() || $("#ITEHolder").height(),
+			// 	height: _UIControl.height()//$("#ITEHolder").height() || $("#ITEHolder").height()
+			// }
+			var bounds = {
+				x: _UIControl.position().left, 
+				y: _UIControl.position().top,
+				width: _UIControl.width(),
+				height: _UIControl.width()
+			}
+			attachedInks[i]._ink.adjustViewBox(bounds);
+		}
+	}
 
    	/*
 	 * I/P: 	none
