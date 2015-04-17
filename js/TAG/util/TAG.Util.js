@@ -4130,13 +4130,13 @@ TAG.Util.UI = (function () {
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             $('.compHolder').off();
             progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
             finalizeAssociations();
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        
         var importButton = $(document.createElement('button'));
         importButton.css({
             'margin': '1%',
@@ -4155,10 +4155,17 @@ TAG.Util.UI = (function () {
         $(importButton).attr("id", "importButton");
         
         function importOnClick(){
+            confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             console.log("Called import on click");
+            $('.compHolder').off();
             finalizeAssociations();
+            globalKeyHandler[0] = currentKeyHandler;
             importBehavior();
+
         }
+
         /**Saves changes for pressing enter key
          * @method onEnter
          */
@@ -4196,6 +4203,7 @@ TAG.Util.UI = (function () {
             $('.compHolder').off();
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             pickerOverlay.fadeOut(function () { 
                 pickerOverlay.empty(); 
                 pickerOverlay.remove(); 

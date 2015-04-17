@@ -703,7 +703,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             // constants
             IS_HOTSPOT = linq.Metadata.Type ? (linq.Metadata.Type === "Hotspot") : false,
-            IS_XFADE = false, //linq.Metadata.Type ? (linq.Metadata.Type === "Layer") : false, //TODO ADD BACK WHEN LAYERS COME BACK
+            IS_XFADE = linq.Metadata.Type ? (linq.Metadata.Type === "Layer") : false, //TODO ADD BACK WHEN LAYERS COME BACK
             X = parseFloat(linq.Offset._x),
             Y = parseFloat(linq.Offset._y),
             position = new Seadragon.Point(X, Y),

@@ -2423,11 +2423,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function importAndRefresh(){
                 //finalizeAssociations from TAG.Util.js
                 createArtwork();
-                makeManagePopUp();
-                //recreate the popup
-
+                //makeManagePopUp();
             }
-
 
             function makeManagePopUp(){
                 console.log("Made Manage Pop Up");
