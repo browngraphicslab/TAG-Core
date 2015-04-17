@@ -23,8 +23,7 @@ window.ITE = window.ITE || {};
  * O/P: 	none
  */
 ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
-
-	// Extend class from ProviderInterfacePrototype.
+   	// Extend class from ProviderInterfacePrototype.
 	var Utils 		= new ITE.Utils(),
 		TAGUtils	= ITE.TAGUtils,
 		_super 		= new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
@@ -81,7 +80,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Loads actual video asset.
 	 * O/P: 	none
 	 */
-	self.load = function() {
+	self.load = function () {
 		_super.load();
 
 		//Sets the image’s URL source
@@ -505,6 +504,45 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
         });		
     };
 	
+    /*
+	function mediaManip(res) {
+	    var top = _UIControl.position().top,
+            left = _UIControl.position().left,
+            width = _UIControl.width(),
+            height = _UIControl.height(),
+            finalPosition;
+
+	    // If the player is playing, pause it.
+	    if (self.orchestrator.status === 1) {
+	        self.player.pause();
+	    }
+
+	    if (!res.eventType) {
+	        return
+	    }
+
+	    // If event is initial touch on artwork, save current position of media object to use for animation.
+	    if (res.eventType === 'start') {
+	        startLocation = {
+	            x: left,
+	            y: top
+	        };
+	    }
+
+	    // Target location (where object should be moved to).
+	    finalPosition = {
+	        x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+	        y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+	    };
+
+	    // Animate to target location.
+	    self.interactionAnimation && self.interactionAnimation.kill();
+	    self.interactionAnimation = TweenLite.to(_UIControl, .5, {
+	        top: finalPosition.y,
+	        left: finalPosition.x
+	    });
+	};
+    */
 
     /*
      * I/P: 	scale : 	Scale factor.	
