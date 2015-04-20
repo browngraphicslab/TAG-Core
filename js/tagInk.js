@@ -127,13 +127,14 @@ var tagInk = function (canvId, html_elt) {
         real_kfw = origPaperW / initKeyframe.w; // deepzoom keyframe width is what we multiply the absolute width of art by to get width of viewer
         real_kfh = real_kfw * (new_ph / new_pw); // deepzoom keyframe height is kind of confusing, so use width * (1 / aspect_ratio of art)
         real_kfx = -initKeyframe.x * real_kfw; // deepzoom keyframe x times absolute width of art is what we must translate art by to reach the left of viewer
-        real_kfy = -initKeyframe.y * real_kfh; // (WEIRD -- seems to place too high if use -initKeyframe.y * real_kfh)
+        real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -initKeyframe.y * real_kfh)
 
         // if the new position is not trivially different from the old position, pan and zoom
         if (nontrivial({ x: new_px, y: new_py, w: new_pw, h: new_ph }, { x: lastpx, y: lastpy, w: lastpw, h: lastph })) {
             //var eid_elt = $("[ES_ID='" + EID + "']");
-            lambda_w = origPaperW / real_kfw;
+            lambda_w = origPaperW / real_kfw; //Is this not just initKeyframe.w?
             lambda_h = origPaperH / real_kfh;
+
             nvw = new_pw * lambda_w; // nv*: dimensions of the new virtual canvas (where the ink canvas would be if we were panning and zooming it with the artwork)
             nvh = new_ph * lambda_h;
             nvx = (nvw / origPaperW) * (origPaperX - real_kfx) + new_px;
@@ -142,7 +143,9 @@ var tagInk = function (canvId, html_elt) {
             SW = nvw / lastcw; // scale factor in x direction
             // var SH = nvh / lastch; // scale factor in y direction (in case we ever have non-aspect-ratio-preserving scaling)
 
-            oldScale = new_pw / origpw;
+            oldScale = new_pw / origpw; //So these SHOULD be going in in the same coordinate systems...? (origpw is just the first keyframe w)
+                                        //like we want this to be 1 when we're just translating, yes?
+            //
             // oldScaleH = new_ph / origph; // in case we ever have non-aspect-ratio-preserving scaling
 
             if (!transCoords.length || trans_mode === 'block') { // for all ink types except isolates (can't just resize the window for them)

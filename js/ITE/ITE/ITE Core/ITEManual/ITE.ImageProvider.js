@@ -376,38 +376,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function addInk(inkTrack) {
 		attachedInks.push(inkTrack)	
-		var kf = self.getKeyframeState(self.firstKeyframe)
-		//THIS ONE WORKS (not really but yo know what I mean)
-		// var initialDims = { 
-		// 	x: self.firstKeyframe.pos.x / $("#tagRoot").width(), 
-		// 	y: self.firstKeyframe.pos.y / $("#ITEHolder").height(),// + parseFloat(kf.height)/2, 
-		// 	w: self.firstKeyframe.size.x / $("#ITEHolder").width(),// * (1/(parseFloat(kf.width)/$("#ITEHolder").width())), //self.firstKeyframe.size.x,
-		// 	h: self.firstKeyframe.size.y / $("#ITEHolder").height()// //self.firstKeyframe.size.y
-		// }
-		// var initialDims = { 
-		// 	x: parseFloat(kf.left)/$("#ITEHolder").width(), 
-		// 	y: parseFloat(kf.top)/$("#ITEHolder").width(),// + parseFloat(kf.height)/2, 
-		// 	w: parseFloat(kf.width)/$("#ITEHolder").width(),// * (1/(parseFloat(kf.width)/$("#ITEHolder").width())), //self.firstKeyframe.size.x,
-		// 	h: parseFloat(kf.height)/$("#ITEHolder").width()// //self.firstKeyframe.size.y
-		// }
-		// var initialDims = { 
-		// 	x: self.firstKeyframe.pos.x / $("#tagRoot").width(), 
-		// 	y: self.firstKeyframe.pos.y / $("#ITEHolder").height(),// + parseFloat(kf.height)/2, 
-		// 	w: self.firstKeyframe.size.x / $("#ITEHolder").width(),// * (1/(parseFloat(kf.width)/$("#ITEHolder").width())), //self.firstKeyframe.size.x,
-		// 	h: self.firstKeyframe.size.y / $("#ITEHolder").height()// //self.firstKeyframe.size.y
-		// }
-		var holderRatio = $("#ITEHolder").width()/$("#ITEHolder").height();
-		var imageRatio = self.firstKeyframe.size.x/self.firstKeyframe.size.y
-		var initialDims = {
-			x: -imageRatio * self.firstKeyframe.pos.x/$("#ITEHolder").width(),
-			y: -self.firstKeyframe.pos.y/$("#ITEHolder").height() ,
-			w: 1/(self.firstKeyframe.size.x/$("#ITEHolder").width()) ,
-			h: 1/(self.firstKeyframe.size.y/$("#ITEHolder").height()) 
-		}
-		// console.log("keyframe")
-		console.log("initialDims")
-		console.log(initialDims)
-		inkTrack._ink.setInitKeyframeData(initialDims)
+		inkTrack._ink.setInitKeyframeData(inkTrack.trackData.initKeyframe)
 		inkTrack._ink.retrieveOrigDims();
 	}; 
 	self.addInk = addInk;
@@ -420,17 +389,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	updateInk = function() {
 		var i;
 		for (i = 0; i < attachedInks.length; i++){
-			// var bounds = {
-			// 	x: _UIControl.position().left,
-			// 	y: _UIControl.position().top,
-			// 	width: _UIControl.width(),///$("#ITEHolder").width() || $("#ITEHolder").height(),
-			// 	height: _UIControl.height()//$("#ITEHolder").height() || $("#ITEHolder").height()
-			// }
 			var bounds = {
 				x: _UIControl.position().left, 
 				y: _UIControl.position().top,
 				width: _UIControl.width(),
-				height: _UIControl.width()
+				height: _UIControl.height()
 			}
 			attachedInks[i]._ink.adjustViewBox(bounds);
 		}

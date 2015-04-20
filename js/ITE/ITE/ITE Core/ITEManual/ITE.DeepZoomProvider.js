@@ -259,30 +259,24 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function() {
-		// console.log("SEEKING ------------")
 		seeked = true;
 		if (self.status === 3) {
 			return null;
 		}
-		// console.log(_viewer.viewport.getBounds(true))
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
 		var prevStatus = self.status; // Store what we were previously doing.
-		// console.log("pausing")
 		self.pause(); // Stop any animations and stop the delayStart timer.
-		// console.log(_viewer.viewport.getBounds(true))
 		self.savedState = null; // Erase any saved state.
 		var nextKeyframe = null; // Where to animate to, if animating.
 
 		// Sought before track started.
 		if (seekTime < self.firstKeyframe.time) {
 			self.setState(self.getKeyframeState(self.firstKeyframe));
-			// console.log("seekTime < self.firstKeyframe.time")
 		} 
 
 		// Sought after track ended.
 		else if (seekTime > self.lastKeyframe.time) {
 			self.setState(self.getKeyframeState(self.lastKeyframe));
-			// console.log("seekTime > self.lastKeyframe.time")
 		}
 
 		// Sought in the track's content.
@@ -295,11 +289,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			}
 			var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
 			self.setState(soughtState);
-			// console.log("setting state to sought state ")
-			// console.log(_viewer.viewport.getBounds(true))
 			nextKeyframe = surKeyframes[1];
 		}
-		// console.log("END SEEKING -----------")
 		return nextKeyframe;
 	};
 
@@ -482,13 +473,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				addInk(inkTrack) } , 100);
 		} else {
 			attachedInks.push(inkTrack)	
-			var initialDims = { 
-				x: self.firstKeyframe.pos.x, 
-				y: self.firstKeyframe.pos.y, 
-				w: 1/self.firstKeyframe.scale * _UIControl.width(), 
-				h: 1/self.firstKeyframe.scale * _viewer.viewport.contentAspectY * _UIControl.height()
-			}	
-			inkTrack._ink.setInitKeyframeData(initialDims)
+			inkTrack._ink.setInitKeyframeData(inkTrack.trackData.initKeyframe)
 			inkTrack._ink.retrieveOrigDims();
 		}
 	};
@@ -596,14 +581,11 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			'animation', function(evt) {
 				for (var i = 0; i < attachedInks.length; i++){
            			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
-           			//console.log(_viewer.viewport.contentSize);
-           			//console.log(_viewer.viewport.getZoom(true));
-           			//console.log(" ");
 					bounds = {
 						x: topLeft.x,
 						y: topLeft.y,
-						width: _viewer.viewport.getZoom(true),
-						height: _viewer.viewport.getZoom(true)
+						width: _UIControl.width()*_viewer.viewport.getZoom(true),
+						height: _UIControl.width()*_viewer.viewport.getZoom(true)
 					}
 					attachedInks[i]._ink.adjustViewBox(bounds);
 				}
