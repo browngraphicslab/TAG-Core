@@ -395,6 +395,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 				width: _UIControl.width(),
 				height: _UIControl.height()
 			}
+			console.log(bouunds)
 			attachedInks[i]._ink.adjustViewBox(bounds);
 		}
 	}
