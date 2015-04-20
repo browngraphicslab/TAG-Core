@@ -7381,8 +7381,10 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				console.log("ERROR: no data for experience stream time offsets")
 			}
 			var time_offset = referenceData.begin;
-
 			var l = 0;
+			if (providerID == "video") {
+			    
+			}
 			for (l=0; l<currExperienceStream.keyframes.length; l++) {
 				var currKeyframe = currExperienceStream.keyframes[l]
 				var keyframeObject = {}; //represents one keyframe
@@ -7431,19 +7433,19 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					keyframeObject = { //TODO
 						"dispNum": k,
 						"zIndex": track.data.zIndex,
-						"time": null,
+						"time": time_offset + currKeyframe.offset,
 						"opacity": 1,
 						"size": {
-							"x": null,
-							"y": null
+						    "x": currKeyframe.state.viewport.region.span.x * 100,
+						    "y": currKeyframe.state.viewport.region.span.y * 100,
 						},
 						"pos": {
-							"x": null,
-							"y": null
+						    "x": currKeyframe.state.viewport.region.center.x * 100,
+						    "y": currKeyframe.state.viewport.region.center.y * 100,
 						},
 						"data": {},
-						"volume": null,
-						"videoOffset": null
+						"volume": currKeyframe.state.sound.volume,
+						"videoOffset": 0
 					}
 				}
 				
@@ -7858,13 +7860,14 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	}
 
 	//returns a string of the providerID based on RIN's providerId's
-	var ITE_providerID = function(RINid){
+	var ITE_providerID = function (RINid) {
+	    console.log("RIN ID: " + RINid);
 		return {
 			"ImageES" : "image", 
 			"ZMES" : "deepZoom",
 			"AES" : "audio",
 			"InkES" : "ink",
-			"" : "video" //TODO find out what this is
+			"VideoES": "video" //TODO find out what this is
 		}[RINid] || "";
 	}
 
@@ -7901,7 +7904,121 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					}),
 					"zIndex" : currExperience.data.zIndex
 				})
-			} else {
+			}
+			else if (providerID == 'video') {
+			    keyFrames = [];
+			    currExperienceStreamKey = Object.keys(currExperience.experienceStreams).sort()[0]
+                currExperienceStream = currExperience.experienceStreams[currExperienceStreamKey]
+			    console.log("Experience: ");
+			    console.log(currExperience);
+			    console.log(currExperienceStream);
+			    /*
+			    keyframeObject = {
+			        "dispNum": k,
+			        "zIndex": track.data.zIndex,
+			        "time": time_offset + currKeyframe.offset,
+			        "opacity": 1,
+			        "size": {
+			            "x": currKeyframe.state.viewport.region.span.x * 100,
+			            "y": currKeyframe.state.viewport.region.span.y * 100
+			        },
+			        "pos": {
+			            "x": currKeyframe.state.viewport.region.center.x * 100,
+			            "y": currKeyframe.state.viewport.region.center.y * 100
+			        },
+			        "data": {}
+			    }
+                
+			    VIDEO:
+			        *			dispNum: display number
+                    *			time: time
+                    *			opacity: opacity
+                    *			pos{x, y}: position in x, y
+                    *			size{x, y}: size	
+                    *			volume: volume
+                    *			videoOffset: offset from the beginning of the video itsself
+                */
+			    keyFrame0 = {
+			        "dispNum": 1,
+			        "zIndex": currExperienceStream.data.zIndex,
+			        "time": 0,
+			        "opacity": 1,
+			        "size": {
+			            "x": 100,
+			            "y": 100
+			        },
+			        "pos": {
+			            "x": 0,
+			            "y": 0
+			        },
+			        "volume": 1,
+			        "videoOffset": 0,
+			        "data": {}
+			    }
+			    keyFrame1 = {
+			        "dispNum": 1,
+			        "zIndex": currExperienceStream.data.zIndex,
+			        "time": .05,
+			        "opacity": .95,
+			        "size": {
+			            "x": 100,
+			            "y": 100
+			        },
+			        "pos": {
+			            "x": 0,
+			            "y": 0
+			        },
+			        "volume": 1,
+			        "videoOffset": 0,
+			        "data": {}
+			    }
+			    keyFrame2 = {
+			        "dispNum": 1,
+			        "zIndex": currExperienceStream.data.zIndex,
+			        "time": currExperienceStream.duration - .05,
+			        "opacity": .95,
+			        "size": {
+			            "x": 100,
+			            "y": 100
+			        },
+			        "pos": {
+			            "x": 0,
+			            "y": 0
+			        },
+			        "volume": 1,
+			        "videoOffset": 0,
+			        "data": {}
+			    }
+			    keyFrame3 = {
+			        "dispNum": 1,
+			        "zIndex": currExperienceStream.data.zIndex,
+			        "time": currExperienceStream.duration,
+			        "opacity": 0,
+			        "size": {
+			            "x": 100,
+			            "y": 100
+			        },
+			        "pos": {
+			            "x": 0,
+			            "y": 0
+			        },
+			        "volume": 1,
+			        "videoOffset": 0,
+			        "data": {}
+			    }
+			    keyFrames.push(keyFrame0);
+			    keyFrames.push(keyFrame1);
+			    keyFrames.push(keyFrame2);
+			    keyFrames.push(keyFrame3);
+			    tracks.push({
+			        "name": rinDataExperiencesKeys[i],
+			        "providerId": providerID,
+			        "assetUrl": ITE_assetUrl(currExperience),
+			        "keyframes": keyFrames,
+			        "zIndex": currExperience.data.zIndex
+			    });
+
+			}else {
 				tracks.push({
 					"name" : rinDataExperiencesKeys[i],
 					"providerId" : providerID,

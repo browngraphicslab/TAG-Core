@@ -503,10 +503,19 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         TAG.Util_ITE.disableDrag(_UIControl);
 
         // Register handlers.
-        TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
-            onManipulate: mediaManip,
-            onScroll:     mediaScroll
-        }, null, true); 
+        if (IS_WINDOWS) {
+            TAG.Util.makeManipulatableWin(_UIControl[0], {
+                onManipulate: mediaManip,
+                onScroll: mediaScroll
+            }, null, true);
+        } 
+        else {
+            TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
+                onManipulate: mediaManip,
+                onScroll: mediaScroll
+            }, null, true);
+        }
+
 
         interactionHandlers.onManipulate 	= mediaManip;
         interactionHandlers.onScroll		= mediaScroll;    	
