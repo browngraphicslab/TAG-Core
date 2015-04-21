@@ -495,15 +495,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		isMuted? _videoControls.muted = true : _videoControls.muted = false;
 	};
 
-	/* 
-	 * I/P: 	inkTrack : 		Ink track to attach to self asset.
-	 * Adds ink as an overlay.
-	 * O/P: 	none
-	 */
-	self.addInk = function(inkTrack){
-		console.log("adding "+ inkTrack.trackData.name + " as an overlay in a video")
-	};
-
    	/* 
 	 * I/P: 	none
 	 * Return a set of interactionHandlers attached to asset from provider.
@@ -525,7 +516,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
             width     	= _UIControl.width(),
             height     	= _UIControl.height(),
             finalPosition;
-            console.log("manipulation");
         // If the player is playing, pause it.
     	(self.orchestrator.status === 1) ? self.player.pause() : null
 
@@ -640,7 +630,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
     function attachHandlers() {
         // Allows asset to be dragged, despite the name.
         TAG.Util_ITE.disableDrag(_UIControl);
-        console.log("attaching handlers")
         // Register handlers.
         TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
             onManipulate: mediaManip,
