@@ -187,6 +187,8 @@ ITE.Orchestrator = function(player) {
 			self.pause();
 		}
 
+		//scrub(seekPercent);
+
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
 		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
