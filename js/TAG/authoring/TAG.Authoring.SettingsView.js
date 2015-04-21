@@ -4587,8 +4587,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         if (inArtworkView) {
             loadArtView(null, matches);
+            if(matches.length==0){
+                console.log("No matches in artwork view");
+            }
         } else if (inAssociatedView) {
             loadAssocMediaView(null, matches);
+            if(matches.length ==0){
+                console.log("no matches in associated media view");
+            }
         } else if (inCollectionsView) {
             loadExhibitionsView(null, matches);
         } else if (inFeedbackView) {
@@ -4596,9 +4602,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else if (inToursView) {
             loadTourView(null, matches);
         } else {
+
             return;
         }
 
+    }
+
+    function displayNoResults(){
+        
     }
 
 
