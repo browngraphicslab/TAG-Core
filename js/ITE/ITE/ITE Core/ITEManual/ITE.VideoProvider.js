@@ -124,7 +124,14 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 		TweenLite.ticker.removeEventListener("tick", updateInk);
 	};
-
+    /*
+	 * I/P: 	integer time to seek teh video to
+	 * seeks the video
+	 * O/P: 	none
+	 */
+	self.seekToTime = function (time) {
+	    _video.currentTime = time;
+	}
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
 	 * Plays video asset.
@@ -203,9 +210,12 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.savedState = null; // Erase any saved state.
 		var nextKeyframe = null; // Where to animate to, if animating.
 
+
+
 		// Sought before track started.
 		if (seekTime < self.firstKeyframe.time) {
-			self.setState(self.getKeyframeState(self.firstKeyframe));
+		    self.setState(self.getKeyframeState(self.firstKeyframe));
+		    this.seekToTime(seekTime);
 		} 
 
 		// Sought after track ended.
