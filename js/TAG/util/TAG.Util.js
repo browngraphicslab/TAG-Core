@@ -2872,7 +2872,7 @@ TAG.Util.UI = (function () {
         var createProgressElement = function (name) {
 
             var realname = name;
-            name = name.replace(".", "");
+            name = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (name)
 
             var prog = $(document.createElement('div')).addClass("progress" + name).css({
                 'width': '100%',
