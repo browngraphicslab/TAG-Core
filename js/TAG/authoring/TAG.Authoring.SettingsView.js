@@ -98,6 +98,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 text: 'Tours',
                 subtext: 'Build interactive tours'
             },
+            dummytour:{
+                text: 'Tours',
+                subtext: 'Tours are disabled on the web'
+            },
             feedback: {
                 text: 'Feedback',
                 subtext: 'View comments and reports'
@@ -676,7 +680,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar.append(nav[NAV_TEXT.art.text] = createNavLabel(NAV_TEXT.art, loadArtView));
         navBar.append(nav[NAV_TEXT.media.text] = createNavLabel(NAV_TEXT.media, loadAssocMediaView)); // COMMENT!!!!!!!!
         if (IS_WINDOWS){
-            navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView));
+            navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView, false));
+        } else{
+            navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.dummytour, null, true));
         }
         //navBar.append(nav[NAV_TEXT.feedback.text] = createNavLabel(NAV_TEXT.feedback, loadFeedbackView));
 
@@ -757,7 +763,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 isArtView = false;
                 break;
             case "Tours":
-                
                 selectLabel(nav[NAV_TEXT.tour.text]);
                 prevSelectedSetting = nav[NAV_TEXT.tour.text];
                 loadTourView(id);
@@ -795,12 +800,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method createNavLabel
      * @param {String} text         text for label
      * @param {Function} onclick    onclick function for label
+     * @param {Boolean} disabled    true if its disabled
      * @return {Object} container   container containing new label
      */
-    function createNavLabel(text, onclick) {
+    function createNavLabel(text, onclick, disabled) {
         var container = $(document.createElement('div'));
-        container.attr('class', 'navContainer');
+        if (!disabled){
+            container.attr('class', 'navContainer');
+        } else {
+            container.attr('class','dummyNav')
+        }
         container.attr('id', 'nav-' + text.text);
+        if (!disabled){
         container.mousedown(function () {
             container.css({
                 'background': HIGHLIGHT
@@ -847,7 +858,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             prevSelectedSetting = container;
         });
-
+        }
         // vertical centering groundwork for 2.2
         //var navTextHolder;
 
@@ -858,6 +869,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var navsubtext = $(document.createElement('label'));
         navsubtext.attr('class','navsubtext');
         navsubtext.text(text.subtext);
+
+        if (disabled){
+            container.removeClass('leftLabel');
+        }
 
         container.append(navtext);
         container.append(navsubtext);
@@ -3298,6 +3313,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
+            if (list.length>0){
+                list.unshift("Search Results:")
+            } else {
+                list.push("No search results");
+            }
             displayLabels();
         } else {
             // Make an async call to get artworks and then display
@@ -4652,6 +4672,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
+            if (list.length>0){
+                list.unshift("Search Results:")
+            } else {
+                list.push("No search results");
+            }
             displayLabels(); 
         } else {
             // Make an async call to get artworks and then display
@@ -4663,7 +4688,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 initSearch();
                 list = result;
                 sortLabels();
-                //displayLabels();
             });
         }
 
