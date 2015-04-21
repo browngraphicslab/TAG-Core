@@ -6836,8 +6836,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             else { newButton.show(); }
 
             //shows the second button
-            addButton.show()
-            addButton.unbind('click').click(function () { addToursToCollections(multiSelected)})
+            //addButton.show()
+            //addButton.unbind('click').click(function () { addToursToCollections(multiSelected)})
 
         } else {
             //hides the second button
