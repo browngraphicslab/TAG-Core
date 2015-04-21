@@ -130,7 +130,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.seekToTime = function (time) {
-	    _video.currentTime = time;
+	    console.log("seeked to time: " + time);
+	    _video[0].currentTime = time;
 	}
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
@@ -210,12 +211,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.savedState = null; // Erase any saved state.
 		var nextKeyframe = null; // Where to animate to, if animating.
 
-
-
 		// Sought before track started.
 		if (seekTime < self.firstKeyframe.time) {
 		    self.setState(self.getKeyframeState(self.firstKeyframe));
-		    this.seekToTime(seekTime);
 		} 
 
 		// Sought after track ended.
@@ -225,7 +223,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Sought in the track's content.
 		else {
-			// Update the state based on seeking.
+		    // Update the state based on seeking.
+		    self.seekToTime(seekTime);
 			var surKeyframes = self.getSurroundingKeyframes(seekTime);
 			var interp = 0;
 			if (surKeyframes[1].time - surKeyframes[0].time !== 0) {
