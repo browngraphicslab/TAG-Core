@@ -83,9 +83,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		// Sets the image’s URL source.
 		_image.attr("src", self.trackData.assetUrl);
 		self.setState(self.getKeyframeState(self.firstKeyframe));
-		window.setTimeout(function(){
-			TweenLite.ticker.addEventListener("tick", updateInk)
-		}, 100);
+		TweenLite.ticker.addEventListener("tick", updateInk)
 
 		// Ensure that the image is completely loaded.
 		// Kinda jank, but according to the onlines, stuff like $().load() can't be trusted.
@@ -228,7 +226,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		// OnComplete function.
 		state.onComplete = function () {
 			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
-			(state.opacity == 0) ? _UIControl.css("pointer-events", "none") :  _UIControl.css("pointer-events" , "auto")
+			if (state.css.opacity == 0){
+				_UIControl.css("pointer-events", "none")
+			}
+			else {
+				_UIControl.css("pointer-events" , "auto")
+			}
 		};
 
 		// Animation.
@@ -304,8 +307,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			"width"		: (keyframe.size.x) + "px",
 			"height"	: (keyframe.size.y) + "px"
 		};
-		// console.log("KEYFRAME")
-		// console.log(state)
 		return state;
 	};
 
@@ -395,7 +396,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 				width: _UIControl.width(),
 				height: _UIControl.height()
 			}
-			console.log(bouunds)
 			attachedInks[i]._ink.adjustViewBox(bounds);
 		}
 	}

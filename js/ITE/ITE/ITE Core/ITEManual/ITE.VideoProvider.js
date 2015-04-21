@@ -41,10 +41,12 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
     // Various animation/manipulation variables.
 	self.audioAnimation;
 	var interactionHandlers 		= {},
-		movementTimeouts 			= [];
+		movementTimeouts 			= [],
+		attachedInks 				= [];
 
 	// Start things up...
     initialize();
+    console.log("hiHI")
 
     ///////////////////////////////////////////////////////////////////////////
 	// ProviderInterface functions.
@@ -85,7 +87,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		//Sets the image’s URL source
 		_video.attr({
-			"src"	: itePath + "Assets/TourData/" + self.trackData.assetUrl,
+			"src"	: self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		});
 
@@ -105,6 +107,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Update first state.
 		self.setState(self.getKeyframeState(self.firstKeyframe));
+		TweenLite.ticker.addEventListener("tick", updateInk);
 
 		// When finished loading, set status to 2 (paused).
 		self.status = 2; // TODO: should this be some kind of callback?
@@ -119,6 +122,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		for(var v in self) {
 			v = null;
 		}
+		TweenLite.ticker.removeEventListener("tick", updateInk);
 	};
 
 	/*
@@ -397,6 +401,38 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 
 	/* 
+	 * I/P: 	inkTrack : 		Ink track to attach to self asset.
+	 * Adds ink as an overlay.
+	 * O/P: 	none
+	 */
+	function addInk(inkTrack) {
+		attachedInks.push(inkTrack)	
+		inkTrack._ink.setInitKeyframeData(inkTrack.trackData.initKeyframe)
+		inkTrack._ink.retrieveOrigDims();
+	}; 
+	self.addInk = addInk;
+
+
+	/* 
+	 * I/P: 	none
+	 * Updates ink so that it animates with image
+	 * O/P: 	none 
+	 */
+	updateInk = function() {
+		var i;
+		for (i = 0; i < attachedInks.length; i++){
+			var bounds = {
+				x: _UIControl.position().left, 
+				y: _UIControl.position().top,
+				width: _UIControl.width(),
+				height: _UIControl.height()
+			}
+			attachedInks[i]._ink.adjustViewBox(bounds);
+		}
+	}
+
+
+	/* 
 	 * I/P: 	newVolume :  	 New volume set by user via UI.
 	 * Sets the current volume to the newVolume * value from keyframes, and then animates the audio to the next keyframe. 
 	 * O/P: 	none
@@ -479,7 +515,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
             width     	= _UIControl.width(),
             height     	= _UIControl.height(),
             finalPosition;
-
+            console.log("manipulation");
         // If the player is playing, pause it.
     	(self.orchestrator.status === 1) ? self.player.pause() : null
 
@@ -594,7 +630,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
     function attachHandlers() {
         // Allows asset to be dragged, despite the name.
         TAG.Util_ITE.disableDrag(_UIControl);
-
+        console.log("attaching handlers")
         // Register handlers.
         TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
             onManipulate: mediaManip,

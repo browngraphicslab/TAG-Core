@@ -7388,6 +7388,12 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			for (l=0; l<currExperienceStream.keyframes.length; l++) {
 				var currKeyframe = currExperienceStream.keyframes[l]
 				var keyframeObject = {}; //represents one keyframe
+
+				//quick check to make sure that we're not adding keyframes after the track should be offscreen 
+				if(currKeyframe.offset > currExperienceStream.duration){
+					currKeyframe.offset = currExperienceStream.duration
+				}
+				
 				if (providerID == "image"){
 					keyframeObject = {
 						"dispNum": k,
@@ -7848,7 +7854,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		}
 
 		var URL;
-
 		//TO DO: figure out why url sometimes has server and sometimes not (?!)
 		if (urls.toString().substring(0, 4) == "http"){//if first 4 letters are "http"; that is, if server name is being appended
 			URL = urls;
@@ -7856,12 +7861,12 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			var serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8086' : "browntagserver.com:8080");
 			URL = serverURL + urls
 		}
+		console.log(URL)
 		return URL;
 	}
 
 	//returns a string of the providerID based on RIN's providerId's
 	var ITE_providerID = function (RINid) {
-	    console.log("RIN ID: " + RINid);
 		return {
 			"ImageES" : "image", 
 			"ZMES" : "deepZoom",

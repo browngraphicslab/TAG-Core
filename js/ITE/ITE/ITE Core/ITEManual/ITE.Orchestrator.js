@@ -82,7 +82,6 @@ ITE.Orchestrator = function(player) {
 	    * O/P: none
 	    */
 		function createTrackByProvider(trackData) {
-		    console.log("Orchestrator create track provider name: " + trackData.providerId);
 			switch (trackData.providerId){
 				case "image" : 
 					self.trackManager.push(new ITE.ImageProvider(trackData, self.player, self.timeManager, self));
