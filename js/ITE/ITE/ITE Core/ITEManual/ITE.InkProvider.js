@@ -86,7 +86,6 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.load = function() {
 		_super.load();
-		console.log("loading")
 		self._ink.loadInk(trackData.datastring);
 
 		// When finished loading, set status to 2 (paused).

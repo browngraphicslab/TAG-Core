@@ -603,14 +603,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	function attachHandlers() {
-	    console.log("Handlers added");
 		_viewer.addHandler(
 			'canvas-scroll', function(evt) {
 				//console.log("scrolling");
 				if (isInImageBounds(evt)){
 					evt.originalEvent.preventDefault();
 					(self.orchestrator.status === 1) ? self.player.pause() : null
-					console.log("PAUSINGPAUSING")
 			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 			    	resetSeadragonConfig()
 			    } else {
@@ -623,7 +621,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				if (isInImageBounds(evt)){
 					evt.originalEvent.preventDefault();
 					(self.orchestrator.status === 1) ? self.player.pause() : null
-                    console.log("PAUSINGPAUSING")
 		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		    		resetSeadragonConfig()
 			    } else {
