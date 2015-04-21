@@ -435,14 +435,14 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
                 x: left,
                 y: top
             };
-        }	
+        }
 
         // Target location (where object should be moved to).
         finalPosition = {
             x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
             y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
         };   
-
+        
         // Animate to target location.
         self.interactionAnimation && self.interactionAnimation.kill();
         self.interactionAnimation = TweenLite.to(_UIControl, .5, {
