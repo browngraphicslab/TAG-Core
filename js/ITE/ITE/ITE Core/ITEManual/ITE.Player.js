@@ -220,16 +220,20 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
             var progressBarContainer = $(document.createElement("div"))
                 .addClass("progressBarContainer")
                 .on({
-                    "click": function(e){
+                    "mouseup": function (e) {
                         seek(e);
                         isSeeking = false;
+                        console.log("We clicked!")
                     },
-                    "mousedown": function(e){
+                    "mousedown": function (e) {
                         scrub(e);
                         progressBarContainer.dragging = true;
                         isSeeking = true;
+                        console.log("we mousedowneed")
                     }
-                });
+                })
+            .css({
+                "background-color": "black" });
 
             progressBar.addClass("progressBar")
 
