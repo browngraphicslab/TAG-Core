@@ -49,6 +49,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         isMuted,
         isLooped,
         isFullScreen,
+        isSeeking,
         isUnloaded = false;
 
     //Other miscellaneous variables
@@ -202,7 +203,8 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
                 "mouseup": function (e) {
                     //seeking
                     progressBarContainer.dragging ? seek(e) : null
-                    progressBarContainer.dragging = false
+                    progressBarContainer.dragging = false;
+                    isSeeking = false;
                     //volume
                     volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
                     volumeLevelContainer.dragging = false
@@ -220,15 +222,12 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
                 .on({
                     "click": function(e){
                         seek(e);
+                        isSeeking = false;
                     },
                     "mousedown": function(e){
+                        scrub(e);
                         progressBarContainer.dragging = true;
-                    },
-                    "mouseup": function(e){
-                        progressBarContainer.dragging = false;
-                    },         
-                    "mousemove": function(e){
-                        progressBarContainer.dragging ? seek(e) : null
+                        isSeeking = true;
                     }
                 });
 
@@ -257,7 +256,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     };
 
     function tourOver(sec) {
-        if (sec > totalTourDuration) 
+        if (sec > totalTourDuration && !isSeeking) 
         {
             if (isLooped)
             {

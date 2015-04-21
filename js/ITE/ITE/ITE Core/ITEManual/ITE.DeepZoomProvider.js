@@ -427,9 +427,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		//What we're doing here is just setting a very low animation time and using fitBounds(bounds, false), and then 
 		//resetting the seadragonConfig (the animation times) after we're done.
 		//Yeah, it's pretty strange. But it seems to work.
-		_viewer.viewport.centerSpringY.animationTime 	= .00001;	
-		_viewer.viewport.centerSpringX.animationTime 	= .00001;
-		_viewer.viewport.zoomSpring.animationTime 		= .00001;
+		_viewer.viewport.centerSpringY.animationTime 	= .000001;	
+		_viewer.viewport.centerSpringX.animationTime 	= .000001;
+		_viewer.viewport.zoomSpring.animationTime 		= .000001;
 
 		_UIControl.css("opacity", state.opacity)
 		_viewer.viewport.fitBounds(state.bounds, false);
@@ -445,8 +445,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	self.getKeyframeState = function(keyframe) {
 		var state = {
 						"opacity"	: keyframe.opacity, 
-						 "bounds"	: new OpenSeadragon.Rect(parseFloat(keyframe.pos.x), 
-						 									 parseFloat(keyframe.pos.y),
+						 "bounds"	: new OpenSeadragon.Rect(keyframe.pos.x, 
+						 									 keyframe.pos.y,
 						 									 keyframe.scale, 
 						 									 keyframe.scale/_viewer.viewport.getAspectRatio())
 					};
@@ -464,6 +464,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		if (!endKeyframe) {
 			return self.getKeyframeState(startKeyframe);
 		}
+		//console.log(startKeyframe);
 
 		var lerpOpacity = startKeyframe.opacity + (interp * (endKeyframe.opacity - startKeyframe.opacity));
 		var lerpPosX = startKeyframe.pos.x + (interp * (endKeyframe.pos.x - startKeyframe.pos.x));
@@ -471,11 +472,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		var lerpScale = startKeyframe.scale + (interp * (endKeyframe.scale - startKeyframe.scale));
 		var state = {
 						"opacity"	: lerpOpacity,
-						"bounds"	: new OpenSeadragon.Rect(parseFloat(lerpPosX), 
-															 parseFloat(lerpPosY), 
+						"bounds"	: new OpenSeadragon.Rect(lerpPosX, 
+															 lerpPosY, 
 															 lerpScale, 
 															 lerpScale/_viewer.viewport.getAspectRatio())
 					};
+		//console.log("LERP");
+		//console.log(lerpPosX);
 		return state;
 	};
 
