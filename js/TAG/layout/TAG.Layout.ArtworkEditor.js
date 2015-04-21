@@ -2137,6 +2137,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 return;
             }
             */
+            //if (asset.doq.Metadata.ContentType == "Text"){
+            //    $(".rightbar").find('.assocMediaContainer').hide();
+            //}
            
             $(".asscmediabutton").attr('disabled', false).css('color', 'rgba(255,255,255,1)');
             editingMedia = false;
@@ -2174,7 +2177,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     currSource = LADS.Worktop.Database.fixPath(asset.doq.Metadata.Source);
                 }
 
-                $('.assocMediaContainer').show();
+                if (asset.doq.Metadata.ContentType == "Text") {
+                    rightbar.find('.assocMediaContainer').hide();
+                }
+                else {
+                    rightbar.find('.assocMediaContainer').show();
+                }
 
                 if (isHotspot) {
                     point = new Seadragon.Point(x, y);
@@ -2193,6 +2201,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'display': enableLayering ? 'inline-block' : 'none'
                 });
 
+                
+                rightbar.find('.header').text("Edit Associated Media");
+               
                 rightbar.find('.assocmedia').html(content);
                 rightbar.find('.title').val(title);
                 rightbar.find('.description').val(description);
@@ -2426,7 +2437,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 //Jing: TODO reload assoc media list in the sidebar
                 //rightbarLoadingSave.fadeOut();
                 
-                reloadAssocMedia(newDoq.Identifier);
+                //reloadAssocMedia(newDoq.Identifier);
+                $('.assetContainer').empty();
+                createMediaList($('.assetContainer'));
                 //thumbnailLoadingSave.fadeOut();
             }
             var ops = {};
