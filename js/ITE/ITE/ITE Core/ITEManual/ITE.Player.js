@@ -223,13 +223,11 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
                     "mouseup": function (e) {
                         seek(e);
                         isSeeking = false;
-                        console.log("We clicked!")
                     },
                     "mousedown": function (e) {
                         scrub(e);
                         progressBarContainer.dragging = true;
                         isSeeking = true;
-                        console.log("we mousedowneed")
                     }
                 })
             .css({

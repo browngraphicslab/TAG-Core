@@ -1448,7 +1448,22 @@ TAG.Util = (function () {
 						});
 					}
 				}
-			 }
+			}
+			else {
+                //If we haven't created a "delta" (that is, if this just a mouse down or a mouseup, then set some default params so we can still propogate these gestures to our element
+			    var pivot = { x: evt.position.x, y: evt.position.y };
+			    var rotation = 0;
+			    var translation = { x: 0, y: 0 };
+			    var scale = 1;
+
+			    functions.onManipulate({
+			        pivot: pivot,
+			        translation: translation,
+			        rotation: rotation,
+			        scale: scale,
+			        grEvent: evt
+			    });
+			}
 		}
 
 		function isManipulatingWin() { return manipulating; }

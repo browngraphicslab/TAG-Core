@@ -38,9 +38,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	self.interactionAnimation;
 	var interactionHandlers 		= {},
 		movementTimeouts 			= [],
-		attachedInks 				= [];
-
-
+		attachedInks 				= [],
+        
+        //For mediamanip
+	    finalPosition,
+        startLocation,
+        pointerStartLocation;
 	// Start things up...
     initialize();
 
@@ -226,11 +229,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		// OnComplete function.
 		state.onComplete = function () {
 			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
-			if (state.css.opacity == 0){
-				_UIControl.css("pointer-events", "none")
+			if (state.css.opacity === 0){
+			    _UIControl.css("pointer-events", "none")
+
 			}
 			else {
-				_UIControl.css("pointer-events" , "auto")
+			    _UIControl.css("pointer-events", "auto")
 			}
 		};
 
@@ -284,7 +288,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			"width":		state.width,
 			"height":		state.height
 		});
-		(state.opacity == 0) ? _UIControl.css("pointer-events", "none") :  _UIControl.css("pointer-events" , "auto")
+
+		(state.opacity === 0) ? _UIControl.css("pointer-events", "none") : _UIControl.css("pointer-events", "auto");
 	};
 
 	/* 
@@ -414,41 +419,68 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
      * O/P: 	none
      */
     function mediaManip(res) {
-        var top     	= _UIControl.position().top,
-            left     	= _UIControl.position().left,
-            width     	= _UIControl.width(),
-            height     	= _UIControl.height(),
-            finalPosition;
-
+        var top = _UIControl.position().top,
+            left = _UIControl.position().left,
+            width = _UIControl.width(),
+            height = _UIControl.height();
         // If the player is playing, pause it.
     	if (self.orchestrator.status === 1) {
     		self.player.pause();
     	}
 
-    	if (!res.eventType){
-			return    	
-		}
+    	if (IS_WINDOWS) {
+            //Target location is just current location plus translation
+    	   // if (res.grEvent.type === 'manipulationstarted') {
+    	   //     startLocation = {
+    	   ///         x: left,
+    	   //         y: top
+    	   //     };
+                
+    	   //     pointerStartLocation = {
+    	   //         x: res.pivot.x,
+    	   //         y: res.pivot.y
+    	   //     }
+           // }
 
-        // If event is initial touch on artwork, save current position of media object to use for animation.
-        if (res.eventType === 'start') {
-            startLocation = {
-                x: left,
-                y: top
-            };
-        }
+    	   // // Target location (where object should be moved to).
+    	   // finalPosition = {
+    	   //     x: res.pivot.x - (pointerStartLocation.x - startLocation.x),
+    	   //     y: res.pivot.y - (pointerStartLocation.y - startLocation.y)
+    	   // };
+    	   // _UIControl.css({
+    	   //     top: finalPosition.y,
+           //     left: finalPosition.x
+    	    // })
+    	     _UIControl.css({
+    	         top: top + res.translation.y,
+    	         left: left + res.translation.x
+    	    })
 
-        // Target location (where object should be moved to).
-        finalPosition = {
-            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
-            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-        };   
-        
-        // Animate to target location.
-        self.interactionAnimation && self.interactionAnimation.kill();
-        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
-        	top: finalPosition.y,
-        	left: finalPosition.x
-        });		
+    	} else {
+
+    	    // If event is initial touch on artwork, save current position of media object to use for animation.
+    	    if (res.eventType === 'start') {
+    	        startLocation = {
+    	            x: left,
+    	            y: top
+    	        };
+    	    }
+
+    	    // Target location (where object should be moved to).
+    	    finalPosition = {
+    	        x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+    	        y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+    	    };
+    	    // Animate to target location.
+    	    self.interactionAnimation && self.interactionAnimation.kill();
+    	    self.interactionAnimation = TweenLite.to(_UIControl, .5, {
+    	        top: finalPosition.y,
+    	        left: finalPosition.x
+    	    });
+    	}
+
+
+	
     };
 	
     /*
@@ -464,7 +496,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             h  		= _UIControl.height(),
             newW  	= w * scale,
             newH,
-            maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
+            maxW 	= 10000,        // These values are somewhat arbitrary; TODO determine good values
             minW	= 200,
             newX,
             newY;
@@ -481,12 +513,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         // Update scale, new X and new Y according to newly constrained values.
         scale 	= newW / w;
         newH	= h * scale;
-        newX 	= l + pivot.x*(1-scale);
-       	newY 	= t + pivot.y*(1-scale); 
+        newX 	= l*scale + pivot.x*(1-scale);
+       	newY 	= t*scale + pivot.y*(1-scale); 
 
        	// Animate _UIControl to self new position.
         self.interactionAnimation && self.interactionAnimation.kill();
-        self.interactionAnimation = TweenLite.to(_UIControl, .05, {
+        self.interactionAnimation = TweenLite.to(_UIControl, .2, {
         	top: newY,
         	left: newX,
         	width: newW,
