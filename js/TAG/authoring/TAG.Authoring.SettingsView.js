@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../telemetry/telemetry.js" />
+/// <reference path="../../../telemetry/telemetry.js" />
 TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
 
 /*  Creates a SettingsView, which is the first UI in authoring mode.  
@@ -31,6 +31,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton = root.find('#setViewNewButton'),
         addButton = root.find('#setViewAddButton'),
         secondaryButton = root.find('#setViewSecondaryButton'),
+        deleteBlankButton = root.find('#setViewFourthButton'),
         middlebar = root.find('#setViewMiddleBar'),
         middleLabelContainer = root.find('#setViewMiddleLabelContainer'),
         rightbar = root.find('#setViewRightBar'),
@@ -2560,7 +2561,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             
 
-            buttonContainer.append(artPickerButton).append(deleteButton).append(saveButton);
+            buttonContainer.append(artPickerButton).append(saveButton);
             
         }
         cancelLastView = function () {
@@ -3873,7 +3874,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             // rather than http:// _______/Images/_______.__
             buttonContainer.append(generateAssocMediaThumbnailButton);
         }
-        buttonContainer.append(deleteButton).append(saveButton); //SAVE BUTTON//
+        buttonContainer.append(saveButton); //SAVE BUTTON//
 
         saveButton.on("mousedown", function () {
             if (!saveButton.attr("disabled")) {
@@ -4609,7 +4610,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     }
 
     function displayNoResults(){
+        var noResults = $(document.createElement('label')).css('border-radius', '3.5px');
+        noResults.css({
+            'margin': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'color': 'white',
+            'padding-left': '1%',
+            'padding-right': '1%',
+            'background-color': 'black',
+            'position': 'relative',
+            'float': "right",
+            'margin-right': '3%'
+        });
         
+
     }
 
 
@@ -5312,6 +5327,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             leftButton = editArt;
             editArt.attr("id", "artworkEditorButton");
+
             var deleteArt = createButton('Delete',
                 function () { deleteArtwork(multiSelected); },
                 {
@@ -5321,8 +5337,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-bottom': '3%',
                 });
             if (isLocked == artwork.Identifier) {
-                deleteArt.prop("disabled", true);
-                deleteArt.css({
+                deleteBlankButton.prop("disabled", true);
+                deleteBlankButton.css({
                     "opacity": "0.5"
                 });
             }
@@ -5390,9 +5406,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             thumbnailButton.attr('id', 'thumbnailButton');
             if (artwork.Metadata.Type !== 'VideoArtwork') {
-                buttonContainer.append(editArt).append(deleteArt).append(saveButton); //.append(xmluploaderbtn); // for win8 aug 15 release only
+                buttonContainer.append(editArt).append(saveButton); //.append(xmluploaderbtn); // for win8 aug 15 release only
+                //deleteBlankButton = deleteArt;
             } else {
-                buttonContainer.append(deleteArt).append(saveButton);//.append(xmluploaderbtn); // for win8 aug 15 release only
+                buttonContainer.append(saveButton);//.append(xmluploaderbtn); // for win8 aug 15 release only
+
+              
             }
 
             saveButton.on("mousedown", function () {
