@@ -49,6 +49,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         sortLabelContainer = root.find('#sortLabelContainer'),
         sortsContainer = root.find('#sortsContainer'),
         findButton = root.find('#findButton'),
+        addToArtworkLabel = root.find('#addToArtworkLabel'),
+        addToArtworkDiv = root.find('#addToArtworkDiv'),
         titleSort = root.find('#titleSort'),
         collectionSort = root.find('#collectionSort'),
         addedRecentlySort = root.find('#addedRecentlySort'),
@@ -56,6 +58,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findSearchContainer = root.find('#findSearchContainer'),
         searhBarContainer = root.find('#setViewSearchBarContainer'),
         menuLabel = root.find('#addMenuLabel'),
+        dropDown = $(document.createElement('div')),
 
         // = root.find('#importButton'),
 
@@ -190,8 +193,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         inToursView = false,
         inFeedbackView = false,
 
-        showDropdown = false,
-        artworkLabel = createAddToArtworkMenu();
+        showDropdown = false;
+        createAddToArtworkMenu();
         
         createDropdownAssocMediaMenu();
         setUpFindContainer();
@@ -217,6 +220,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         type_representation: null,
         time_spent_timer: null
     };
+
+    //WEB ui
+    if (!IS_WINDOWS){
+        newButton.css({
+            'width': 'auto',
+            'font-size': '100%'
+        });
+        addButton.css({
+            'width': 'auto',
+            'font-size': '100%'
+        })
+
+    }
 
     /*Surbhi */
 
@@ -2464,7 +2480,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             }
 
-            var artPickerButton = createButton('Manage', makeManagePopUp/*function () {
+            var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{
@@ -3290,6 +3306,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         collectionSort.css('display','none');
 
+        findContainer.css('width','100%');
+
         prepareNextView(true, "Add", createAsset);
         prepareViewer(true);
         clearRight();
@@ -3759,13 +3777,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create buttons
         
-        artworkLabel.unbind("click");
-        artworkLabel.click(
+        addToArtworkLabel.unbind("click");
+        addToArtworkLabel.click(
             function () {
                 pickerOpen = true;
                 assocToArtworks(media);
             });
-        TAG.Telemetry.register(artworkLabel, "click", "EditorButton", function (tobj) {
+        TAG.Telemetry.register(addToArtworkLabel, "click", "EditorButton", function (tobj) {
             tobj.edit_type = "Manage Associations";
             tobj.element_id = media.Identifier;
         });
@@ -3787,7 +3805,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //        tobj.element_id = media.Identifier;
         //    });
 
-        leftButton = artworkLabel;
+        leftButton = addToArtworkLabel;
         var deleteButton = createButton('Delete',
             function () { deleteAssociatedMedia(media); /*changesHaveBeenMade = true;*/ },
             {
@@ -3909,8 +3927,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteButton.on("mousedown", function () {
             deleteButton.css({ "background-color": "white" });
         });
-        artworkLabel.on("mousedown", function () {
-            artworkLabel.css({ "background-color": "white" });
+        addToArtworkLabel.on("mousedown", function () {
+            addToAartworkLabel.css({ "background-color": "white" });
         });
         saveButton.on("mouseleave", function () {
             if (!saveButton.attr("disabled")) {
@@ -3923,8 +3941,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteButton.on("mouseleave", function () {
             deleteButton.css({ "background-color": "transparent" });
         });
-        artworkLabel.on("mouseleave", function () {
-            artworkLabel.css({ "background-color": "transparent" });
+        addToArtworkLabel.on("mouseleave", function () {
+            addToArtworkLabel.css({ "background-color": "transparent" });
         });
         newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
@@ -4653,6 +4671,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var cancel = false;
 
         collectionSort.css('display','inline-block');
+
+        findContainer.css('width','140%');
 
         //if (generalIsLoading || collectionsIsLoading ||
         //  artworksIsLoading || associatedMediaIsLoading || toursIsLoading) {
@@ -6809,22 +6829,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findBarTextBox.text("Find");
             findBarTextBox.css({
                 'height' : '100%',
-                'font-size': '100%',
+                'font-size': '110%',
                 'width': '20%',
                 'display': 'inline-block',
                 'padding-left': '10%',
                 'float':'left'
             });
             findBarDropIcon.css({
-                                        width: '7%',
-                                        height: '70%',
-                                        display:'inline-block',
-                                        '-webkit-transform': 'rotate(90deg)',
-                                        '-moz-transform': 'rotate(90deg)',
-                                        '-o-transform': 'rotate(90deg)',
-                                        '-ms-transform': 'rotate(90deg)',
-                                        'transform': 'rotate(90deg)',
-                                    });
+                width: '7%',
+                height: '70%',
+                display:'inline-block',
+                '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)',
+                });
         findBar.css("display","none");
         findContainer.css("display","none");
         findShown = false;
@@ -6839,7 +6859,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (inArtworkView){
             findBar.css("display","inline-block");
             menuLabel.hide();
-            artworkLabel.hide();
+            addToArtworkLabel.hide();
             searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
@@ -6852,7 +6872,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         } else if (inToursView) {
             menuLabel.hide();
-            artworkLabel.hide();
+            addToArtworkLabel.hide();
             searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
@@ -6871,7 +6891,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             if (!inAssociatedView) {
                 menuLabel.hide();
-                artworkLabel.hide();
+                addToArtworkLabel.hide();
                 searchbar.css({ width: '53%' });
                 findBar.css("display","none");
                 newButton.text(newText);
@@ -6882,7 +6902,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 newButton.hide();
                 searchbar.css({ width: '40%' });
                 menuLabel.show();
-                artworkLabel.show();
+                addToArtworkLabel.show();
             }
         }
 
@@ -8484,45 +8504,68 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findButton.click(function(){
             if (findShown){
                 findContainer.css('display','none');
+                findBarDropIcon.css({
+                   '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)',     
+                });
             } else{
                 findContainer.css('display','inline-block');
+                if (dropDown.css('display') != 'none'){
+                    menuLabel.click();
+                }
+                findBarDropIcon.css({
+                    '-webkit-transform': 'rotate(270deg)',
+                '-moz-transform': 'rotate(270deg)',
+                '-o-transform': 'rotate(270deg)',
+                '-ms-transform': 'rotate(270deg)',
+                'transform': 'rotate(270deg)',
+
+                });
             }
             findShown = !findShown;
         });
     }
 
     function createAddToArtworkMenu() {
-        var addToArtworkLabel = $(document.createElement('button'))
-            .attr('id', 'addToArtworkLabel')
-            .appendTo(searchContainer)
-            .css({
+        //var addToArtworkLabel = $(document.createElement('button'))
+            //.attr('id', 'addToArtworkLabel')
+            //.appendTo(searchContainer)
+        addToArtworkLabel.css({
                 "color": "black",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                'float': 'right',
-                'font-size': '50%',
+                 'float': 'left',
+                'font-size': '100%',
                 'height': '40%',
                 'margin-top': '2.8%',
                 'padding-bottom': '1%',
-                'width': '48%',
+                //'width': '48%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top': '-10%',
                 'display': 'block',
-            }).css('border-radius', '3.5px');
-        var addToArtworkDiv = $(document.createElement('div'))
-            .css({
+            }).css('border-radius', '3.5px')
+        //var addToArtworkDiv = $(document.createElement('div'))
+        /**
+        addToArtworkDiv.css({
                 width: '80%',
                 height: '100%',
                 'text-align': 'center',
                 'vertical-align': 'middle',
                 'padding': '0px 10% 0px 10%'
             })
+        **/
+           /**
             .append($(document.createElement('div')).text('Add to Artwork').css({
                 'display': 'inline-block',
                 'margin-right': '5%',
-            }))
-            .appendTo(addToArtworkLabel);
-        return addToArtworkLabel;
+            }));
+                **/
+            .text('Add to Artwork');
+            //.appendTo(addToArtworkLabel);
+        //return addToArtworkLabel;
     }
 
     function createDropdownAssocMediaMenu() {
@@ -8532,25 +8575,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         menuLabel.css({
                 "color": "black",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                'float':'right',
-                'font-size':'50%',
+                'float':'left',
                 'height':'40%',
                 'margin-top':'2.8%',
+                'margin-left':'2%',
                 'padding-bottom':'1%',
-                'width': '48%',
+                'padding-left':'5%',
+                'padding-right':'2%',
+                'width': '40%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top':'-10%',
                 'display': 'block',
             }).css('border-radius', '3.5px');
+        if (!IS_WINDOWS){
+            menuLabel.css('font-size','100%');
+        } else{
+            menuLabel.css('font-size','50%');
+        }
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
             .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '6%',
-                height: '70%',
+                width: '10%',
+                height: '10%',
                 display:'inline-block',
                 'margin-right': '5%',
+                'margin-left': '3%',
+                'margin-top': '5%',
                 '-webkit-transform': 'rotate(90deg)',
                 '-moz-transform': 'rotate(90deg)',
                 '-o-transform': 'rotate(90deg)',
@@ -8561,20 +8613,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
         var addMenuLabelDiv = $(document.createElement('div'))
             .css({
-                width:'80%',
+                width:'auto',
                 height: '100%',
                 'text-align': 'center',
-                'vertical-align': 'middle',
-                'padding':'0px 10% 0px 10%'
+                'vertical-align': 'middle'
+                //'padding':'0px 10% 0px 10%'
             })
-            .append($(document.createElement('div')).text('Add').css({
+            .append($(document.createElement('div')).text('Import').css({
                 'display': 'inline-block',
-                'margin-right': '5%',
+                'margin-right': '1%',
+                'float':'left'
             }))
             .append(addMenuArrowIcon)
             .appendTo(menuLabel);
-        var dropDown = $(document.createElement('div'))
-            .attr('id', 'dropDown')
+        dropDown.attr('id', 'dropDown')
             .appendTo(searchContainer)
             .css({
                 "left": '52%',
@@ -8584,7 +8636,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'width': '48%',
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
-                'top': '38%',
+                'top': '50%',
                 'clear': 'left',
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'border': '1px solid white',
@@ -8614,8 +8666,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     '-ms-transform': 'rotate(270deg)',
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
-                    'padding-right':'7%'
+                    'padding-right':'7%',
+                    'float':'left'
                 });
+                console.log(findContainer.css('display'));
+                if (findContainer.css('display') != 'none'){
+                        dropDown.css('top',(searchContainer.height()-findContainer.height())*0.5 + 'px');
+                } else {
+                    dropDown.css('top','50%');
+                }
                 dropDown.show();
             }
             showDropdown = !showDropdown;
