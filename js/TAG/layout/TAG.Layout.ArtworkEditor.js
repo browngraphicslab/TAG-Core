@@ -1358,8 +1358,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             makeLayerContainer();
 
             toggleLayerButton.text('Remove Layer');
-            //toggleHotspotButton.attr('disabled', 'disabled'); TODO REMOVE WHEN LAYERS COME BACK
-            //toggleHotspotButton.css('opacity', '0.5');
+            toggleHotspotButton.attr('disabled', 'disabled'); 
+            toggleHotspotButton.css('opacity', '0.5');
 
             if (oldLayerContainers.length > 0) {   // clicking on a thumbnail button really quickly would add a bunch of layerContainers...but
                 for (i = 0; i < oldLayerContainers.length; i++) { // a cleaner way to avoid that would be to just disable the thumbnail button when its media is already open
@@ -1827,8 +1827,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'position': 'relative',
                         'font-size': $('.addRemoveMedia').css('font-size')
                     })
-                    .attr('type', 'button'),
-                    //.appendTo($toggleModeContainer), //TODO Add layer functionality back in for 2.2
+                    .attr('type', 'button')
+                    .appendTo($toggleModeContainer), 
                 $titleContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
                     .css({
@@ -2084,20 +2084,22 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     createTextAsset(titleTextVal, $descArea.val());
 
                     creatingText = false;
-                }
+                    close();
+                } else {
 
-                updateAssocMedia({
-                    title: TAG.Util.htmlEntityEncode(titleTextVal),
-                    desc: TAG.Util.htmlEntityEncode($descArea.val()),
-                    pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
-                    rect: isLayer ? getLayerRect() : null,
-                    contentType: activeAssocMedia.doq.Metadata.ContentType,
-                    contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
-                    assetType: assetType,
-                    metadata: {
-                        assetDoqID: activeAssocMedia.doq.Identifier
-                    }
-                });
+                    updateAssocMedia({
+                        title: TAG.Util.htmlEntityEncode(titleTextVal),
+                        desc: TAG.Util.htmlEntityEncode($descArea.val()),
+                        pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
+                        rect: isLayer ? getLayerRect() : null,
+                        contentType: activeAssocMedia.doq.Metadata.ContentType,
+                        contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
+                        assetType: assetType,
+                        metadata: {
+                            assetDoqID: activeAssocMedia.doq.Identifier
+                        }
+                    });
+                }
             });
 
             closeButton.on('click', function () {
@@ -2135,6 +2137,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 return;
             }
             */
+            //if (asset.doq.Metadata.ContentType == "Text"){
+            //    $(".rightbar").find('.assocMediaContainer').hide();
+            //}
            
             $(".asscmediabutton").attr('disabled', false).css('color', 'rgba(255,255,255,1)');
             editingMedia = false;
@@ -2172,7 +2177,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     currSource = LADS.Worktop.Database.fixPath(asset.doq.Metadata.Source);
                 }
 
-                $('.assocMediaContainer').show();
+                if (asset.doq.Metadata.ContentType == "Text") {
+                    rightbar.find('.assocMediaContainer').hide();
+                }
+                else {
+                    rightbar.find('.assocMediaContainer').show();
+                }
 
                 if (isHotspot) {
                     point = new Seadragon.Point(x, y);
@@ -2191,6 +2201,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'display': enableLayering ? 'inline-block' : 'none'
                 });
 
+                
+                rightbar.find('.header').text("Edit Associated Media");
+               
                 rightbar.find('.assocmedia').html(content);
                 rightbar.find('.title').val(title);
                 rightbar.find('.description').val(description);
@@ -2406,8 +2419,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
      */
     function createTextAsset(title, text) { 
         var name = title ? title : "Untitled Text";
+        var options;
         if (text) {
-            var options = {
+            options = {
                 Text: text,
                 Name: name
             };
@@ -2423,16 +2437,49 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 //Jing: TODO reload assoc media list in the sidebar
                 //rightbarLoadingSave.fadeOut();
                 
-                reloadAssocMedia(newDoq.Identifier);
+                //reloadAssocMedia(newDoq.Identifier);
+                $('.assetContainer').empty();
+                createMediaList($('.assetContainer'));
                 //thumbnailLoadingSave.fadeOut();
             }
+            var ops = {};
+            ops.AddIDs = newDoq.Identifier;
+            TAG.Worktop.Database.changeArtwork(artwork.Identifier, ops);
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
-            var options = {};
-            options.AddIDs = newDoq.Identifier;
-            TAG.Worktop.Database.changeArtwork(artwork.Identifier, options);
+            
         };
 
     }
+
+    /** Authentication error function
+     * @method authError
+     */
+    function authError() {
+        var popup = TAG.Util.UI.popUpMessage(function () {
+            TAG.Auth.clearToken();
+            rightQueue.clear();
+            middleQueue.clear();
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Util.UI.slidePageRight(page);
+            });
+        }, "Could not authenticate, returning to the splash page.", null, true);
+        root.append(popup);
+        $(popup).show();
+    }
+
+    /**Error function
+    * @method error
+    * @param {Function} fn     function called if specified
+    */
+    function error(fn) {
+        return function () {
+            var popup = TAG.Util.UI.popUpMessage(null, "An unknown error occured.", null, true);
+            root.append(popup);
+            $(popup).show();
+            fn && fn();
+        }
+    }
+
 
    
     /**

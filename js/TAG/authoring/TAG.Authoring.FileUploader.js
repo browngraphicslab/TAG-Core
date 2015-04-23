@@ -44,6 +44,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     var promises = [];
     var globalFilesObject;
     var uploadFilesObject;
+    var guidsToFileNames = {};
     var maxDuration = Infinity;
     var minDuration = -1;
     var size;
@@ -59,10 +60,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     (function init() {
         var uploadOverlayText = $(document.createElement('label')),
             progressIcon = $(document.createElement('img'));
-        progressBar = $(document.createElement('div')).addClass('progressBarUploads').click(function () {
-            //opens a popup giving progress for the current uploads
-            console.log("upload progress")
-        });
+
+        progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
@@ -245,6 +244,23 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                     return;
                                                 }
                                                 globalFiles = files;
+
+                                                //sets up the upload progress popup as soon as the filenames are known
+                                                var filenames = []
+                                                for (var i = 0; i < globalFiles.length; i++) {
+                                                    filenames.push(globalFiles[i].name)
+                                                }
+
+                                                //creates popup but doesn't show it
+                                                var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
+                                                $('body').append(popup);
+                                                $(popup).css({'display':'none'});
+                                                progressBar.click(function () {
+                                                    $('body').append(popup);
+                                                    $(popup).css({ 'display': 'inherit' });
+                                                    $(popup).show();
+                                                });
+
                                                 numFiles = files.length; // global
                                                 globalUriStrings = uriStrings;
                                                 globalUpload = upload;
@@ -304,6 +320,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                    localURL; // local URL
 
                                                globalFiles = [file];
+
                                                numFiles = 1;
 
                                                localURL = window.URL.createObjectURL(file, { oneTimeOnly: true });
@@ -484,7 +501,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         //updates loading UI
         var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         settingsViewTopBar.append(progressBar)
-        console.log("STARTING THE UPLOAD")
+        console.log("STARTING NEW UPLOAD")
     }
 
     /**
@@ -534,6 +551,10 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                             promises.push(promise);
                     }
                 );
+
+                //the guid of the upload and filename
+                guidsToFileNames[upload.guid] = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); }(file.name)
+
             } catch (err) {
                 removeOverlay();
                 console.log(err.message);
@@ -693,7 +714,15 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             }
         }        
         bar.width(percentComplete * 90 + "%");
-        console.log("PERCENT COMPLETE: " + percentComplete*90 + "%") 
+        updateProgressUI(guidsToFileNames[upload.guid], percentComplete)
+    }
+
+    //updates the progress information in the upload queue popup
+    //right now - only shows 100% or 0% for each individual file
+    function updateProgressUI(name, percent) {
+        percent = 1;
+        $(".uploadProgressLabel" + name).text((percent*100).toString().substring(0, 4) + "%")
+        $(".uploadProgressInner" + name).css({'width':percent*100+'%'});
     }
 
     function cancelPromises() {
