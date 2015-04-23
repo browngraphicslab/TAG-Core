@@ -8232,8 +8232,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'width': '48%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
-                'padding-top': '-10%',
+                'padding-top': '-5%',
                 'display': 'block',
+                'position': 'absolute,
             }).css('border-radius', '3.5px');
         var addToArtworkDiv = $(document.createElement('div'))
             .css({
