@@ -220,7 +220,7 @@ ITE.Orchestrator = function(player) {
 	function updateZIndices(){
 		var i;
 		for (i = 0; i < trackManager.length; i++){
-			trackManager[i].setZIndex(i)
+			trackManager[i].setZIndex(i*10)
 		}
 	}
 
