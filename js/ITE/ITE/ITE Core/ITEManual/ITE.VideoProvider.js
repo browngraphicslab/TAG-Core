@@ -44,9 +44,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		movementTimeouts 			= [],
 		attachedInks 				= [];
 
+	self.polling = false;
+
 	// Start things up...
-    initialize();
-    console.log("hiHI")
+	initialize();
 
     ///////////////////////////////////////////////////////////////////////////
 	// ProviderInterface functions.
@@ -76,18 +77,29 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		// Attach Handlers.
 		attachHandlers();
         
-		var timer = setInterval(function () {
-		    console.log("Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _video[0].currentTime);
-		    if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _video[0].currentTime) > 150) {
-                console.log('pausing')
-		        orchestrator.pause();
-		    }
-		    else if(orchestrator.getStatus()==2){
-                console.log("playing")
-		        orchestrator.play();
-		    }
-		}, 250);
+		self.polling = true;
+		poll();
         
+	};
+
+    /*
+     * I/P:     none
+     * Recursive poll loop that makes sure the video's time is synchronized with the tour's.
+     * O/P:     none
+     */
+	function poll() {
+	    console.log("Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _video[0].currentTime);
+	    if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _video[0].currentTime) > 150) {
+	        console.log('pausing')
+	        orchestrator.pause();
+	    }
+	    else if (orchestrator.getStatus() == 2) {
+	        console.log("playing")
+	        orchestrator.play();
+	    }
+	    if (self.polling) {
+	        setTimeout(function () { poll(); }, 250);
+	    }
 	};
 
 	/*
@@ -136,7 +148,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Unoads track asset.
 	 * O/P: 	none
 	 */
-	self.unload = function() {
+	self.unload = function () {
+	    self.polling = false;
 		for(var v in self) {
 			v = null;
 		}
