@@ -58,7 +58,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function initialize() {
 		_super.initialize();
-
+		$(document).ready(function () {
+		    PointerEventsPolyfill.initialize({});
+            console.log("polyfill?")
+		});
 		// Create UI and append to ITEHolder.
 		_UIControl = $(document.createElement("div"))
         	.addClass("UIControl")
@@ -96,87 +99,64 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_deepZoom.css({
 			//"pointer-events" : "none",
 		})
-        /*
-		$("#ITEHolder").get(0).addEventListener("MSPointerMove", function (evt) {//whenever the mouse moves in the ITEHolder, 
-		    console.log(isInImageBoundsMouseEvent(evt) + "   X: " + evt.clientX + "     Y: " + evt.clientY+"     "+this);
-		    console.log("--------");
-		    if (isInImageBoundsMouseEvent(evt)) {
-		        if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
-		            console.log("enabled");
+		if (IS_WINDOWS) {
+		    $("#ITEHolder").get(0).addEventListener("MSPointerMove", function (evt) {//whenever the mouse moves in the ITEHolder, 
+		       // console.log(isInImageBoundsMouseEvent(evt) + "   X: " + evt.clientX + "     Y: " + evt.clientY + "     " + this);
+		       // console.log("--------");
+		        if (isInImageBoundsMouseEvent(evt)) {
+		            if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
+		               // console.log("enabled");
+		                _UIControl.css({
+		               //     "pointer-events": "auto",
+		              //      "touch-action": "auto",
+		              //      "-ms-touch-action": "auto",
+		                })
+		            }
+		        }
+		        else {
+		         //   console.log('disabled');
+
 		            _UIControl.css({
-		                "pointer-events": "auto",
-		                "touch-action": "auto",
-		                "-ms-touch-action" : "auto",
+		                "pointer-events": "none",//else, unclickable
+		                "touch-action": "none",
+		                "-ms-touch-action": "none",
+		            })
+
+		            _deepZoom.css({
+		                "pointer-events": "none",//else, unclickable
+		                "touch-action": "none",
+		                "-ms-touch-action": "none",
+		            })
+
+		        }
+		    });
+		}
+		else
+		{
+		    $("#ITEHolder").mousemove(function (evt) {//whenever the mouse moves in the ITEHolder, 
+		        if (isInImageBoundsMouseEvent(evt)) {
+		            if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
+		                _UIControl.css({
+		                    "pointer-events": "auto",
+		                    "touch-action": "auto",
+		                    "-ms-touch-action": "auto",
+		                })
+		            }
+		        }
+		        else {
+
+
+		            console.log('disabled');
+		            _UIControl.css({
+		                "pointer-events": "none",//else, unclickable
+		                "touch-action": "none",
+		                "-ms-touch-action": "none",
 		            })
 		        }
-		    }
-		    else {
-		        console.log('disabled');
-                
-		        _UIControl.css({
-		            "pointer-events": "none",//else, unclickable
-		            "touch-action": "none",
-		            "-ms-touch-action": "none",
-		        })
-                
-		    }
-        });
-        */
-		
-		// $("#ITEHolder").mousemove(function (evt) {//whenever the mouse moves in the ITEHolder, 
-		// 	if(isInImageBoundsMouseEvent(evt)){
-		// 		if(!_shouldBeInvisible){//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
-		// 			_UIControl.css({
-		// 			    "pointer-events": "auto",
-		// 			    "touch-action": "auto",
-		// 			    "-ms-touch-action": "auto",
-		// 			})
-		// 		    _viewer.setMouseNavEnabled(true);
+		    });
+		}
 
-                    
-		// 			_viewer.addHandler('canvas-scroll', function (evt) {
-		// 	            //console.log("scrolling");
-		// 	            if (isInImageBounds(evt)) {
-		// 	                evt.originalEvent.preventDefault();
-		// 	                (self.orchestrator.status === 1) ? self.player.pause() : null
-		// 	                self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		// 	                resetSeadragonConfig()
-		// 	            } else {
-		// 	                // evt.preventDefaultAction()
-		// 	            }
-		// 	        });
-		// 			_viewer.addHandler('canvas-drag', function (evt) {
-  //                       //console.log("dragging");
-  //                       if (isInImageBounds(evt)) {
-  //                           evt.originalEvent.preventDefault();
-  //                           (self.orchestrator.status === 1) ? self.player.pause() : null
-  //                           self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-  //                           resetSeadragonConfig()
-  //                       } else {
-  //                           // evt.preventDefaultAction()
-  //                       }
-  //                   });
-                    
-		// 		}
-		// 	}
-		// 	else {
-  //               /*
-		// 	    _viewer.removeHandler('canvas-scroll', _viewer.getHandler('canvas-scroll'));
-		// 	    _viewer.removeHandler('canvas-drag', _viewer.getHandler('canvas-drag'));
-		// 	    _viewer.removeAllHandlers('animation');
-		// 	    _viewer.removeAllHandlers('canvas-drag');
-		// 	    _viewer.removeAllHandlers('canvas-scroll');
-  //               */
-		// 	    _viewer.setMouseNavEnabled(false);
-                
-			  //  console.log('disabled');
-			    // _UIControl.css({
-				   //  "pointer-events": "none",//else, unclickable
-				   //  "touch-action": "none",
-				   //  "-ms-touch-action": "none",
-			    // })
-		// 	}
-		// });
+
         
 
 		// Get first and last keyframes.
@@ -538,36 +518,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function getInteractionHandlers() {};
 
-	/*
-     * I/P: 	res : 		Object containing hammer event info.
-     * Drag/manipulation handler for associated media.
-     * Manipulation for touch and drag events.
-     * O/P: 	none
-     */
-   /* function mediaManip(res) {
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
-    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-
-    	resetSeadragonConfig()
-        var scale = res.scale,
-            trans = res.translation,
-            pivot = res.pivot;
-        _viewer.viewport.panBy(_viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y)), false);
-    };*/
-
-    /*
-     * I/P: 	scale : 	Scale factor.	
-     *			pivot : 	Location of event (x,y).
-     * Scroll/pinch-zoom handler for makeManipulatable on the DeepZoom image.
-     * O/P: 	none
-     */
-    /*function mediaScroll(scale, pivot) {
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
-     	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-    	resetSeadragonConfig();
-      	_viewer.viewport.zoomBy(scale, _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y)), false);
-    	_viewer.viewport.applyConstraints();
-    };*/
 
 	/* 
 	 * I/P: 	duration : 		Duration of track.
@@ -611,7 +561,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
      */
 
     function dzManip(res) {
-
         //Pause
         (self.orchestrator.status === 1) ? self.player.pause() : null
       	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
