@@ -57,11 +57,6 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 		}
 	);
 
-	// Object with a set of handlers for common tour interactions such as mousedown/tap,
-	// mousewheel/pinch zoom, etc. so that a generic function within the orchestrator can 
-	// bind and unbind handlers to the media element.
-	self.interactionHandlers 	= null;	
-
 	///////////////////////////////////////////////////////////////////////////
 	// Common functions.
 	///////////////////////////////////////////////////////////////////////////

@@ -177,7 +177,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		if (seekTime < self.firstKeyframe.time) {
 			self.setState(self.getKeyframeState(self.firstKeyframe));
 		} 
-
+ 
 		// Sought after track ended.
 		else if (seekTime > self.lastKeyframe.time) {
 			self.setState(self.getKeyframeState(self.lastKeyframe));
@@ -195,11 +195,6 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 			self.setState(soughtState);
 			nextKeyframe = surKeyframes[1];
 		}
-
-		// If this track was playing, continue playing.
-		// if (prevStatus === 1) {
-		// 	self.play(nextKeyframe);
-		// } 
 		return nextKeyframe;
 	};
 
@@ -320,6 +315,12 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	function attachToAsset(assetName){
+		//When we add the ink to the attached asset, we set an intial keyframe. This keyframe is the first OF THE INK, not of the attached asset. VERY IMPORTANT.
+		//We then call two tagink functions, setInitKeyframeData() and retrieveOrigDims()
+		//The first takes in the the in dimensions in relative coordinates, and the second initializes a bunch of variables in tagink. 
+
+		//Then, when you animate (so on every timertick), call _adjustViewBox with ABSOLUTE coordinates of the artwork.
+
 		_attachedAsset.addInk(self);
 	};
 	self.attachToAsset = attachToAsset;
