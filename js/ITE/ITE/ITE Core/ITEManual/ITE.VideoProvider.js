@@ -135,8 +135,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.seekToTime = function (time) {
-	    console.log("seeked to time: " + time);
-	    _video[0].currentTime = time;
+		if (time < self.lastKeyframe.time - self.firstKeyframe.time) {
+	    	console.log("seeked to time: " + time);
+	    	console.log(_videoControls);
+	    	_video[0].currentTime = time;
+		}
 	}
 	/*
 	 * I/P: 	endKeyframe : 	(OPTIONAL) if we know what keyframe we are animating to, pass it here.
