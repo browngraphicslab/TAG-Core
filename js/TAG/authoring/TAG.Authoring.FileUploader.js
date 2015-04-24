@@ -553,7 +553,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                 );
 
                 //the guid of the upload and filename
-                guidsToFileNames[upload.guid] = file.name.replace(".", "")
+                guidsToFileNames[upload.guid] = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); }(file.name)
 
             } catch (err) {
                 removeOverlay();

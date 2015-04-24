@@ -2872,7 +2872,7 @@ TAG.Util.UI = (function () {
         var createProgressElement = function (name) {
 
             var realname = name;
-            name = name.replace(".", "");
+            name = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (name)
 
             var prog = $(document.createElement('div')).addClass("progress" + name).css({
                 'width': '100%',
@@ -2897,7 +2897,13 @@ TAG.Util.UI = (function () {
                 'text-overflow':'ellipsis',
                 'height': '90%',
                 'max-width':'500px'
-            }).text(realname);
+            }).text(function () {
+                if (realname.length > 20) {
+                    return realname.substring(0, 17) + "..."
+                } else {
+                    return realname
+                }
+            });
 
             var progressBar = $(document.createElement('div')).addClass("uploadProgress" + name).css({
                 'position':'absolute', 'right': '23%', 'top':'20%', 'border-style': 'solid', 'border-color': 'white', 'width': '30%', 'height': '50%', "display": "inline-block",

@@ -31,7 +31,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton = root.find('#setViewNewButton'),
         addButton = root.find('#setViewAddButton'),
         secondaryButton = root.find('#setViewSecondaryButton'),
-        deleteBlankButton = root.find('#setViewFourthButton'),
+        deleteBlankButton = root.find('#setViewDeleteButton'),
         middlebar = root.find('#setViewMiddleBar'),
         middleLabelContainer = root.find('#setViewMiddleLabelContainer'),
         rightbar = root.find('#setViewRightBar'),
@@ -50,6 +50,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         sortLabelContainer = root.find('#sortLabelContainer'),
         sortsContainer = root.find('#sortsContainer'),
         findButton = root.find('#findButton'),
+        addToArtworkLabel = root.find('#addToArtworkLabel'),
+        addToArtworkDiv = root.find('#addToArtworkDiv'),
         titleSort = root.find('#titleSort'),
         collectionSort = root.find('#collectionSort'),
         addedRecentlySort = root.find('#addedRecentlySort'),
@@ -57,6 +59,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findSearchContainer = root.find('#findSearchContainer'),
         searhBarContainer = root.find('#setViewSearchBarContainer'),
         menuLabel = root.find('#addMenuLabel'),
+        dropDown = $(document.createElement('div')),
 
         // = root.find('#importButton'),
 
@@ -98,6 +101,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tour: {
                 text: 'Tours',
                 subtext: 'Build interactive tours'
+            },
+            dummytour:{
+                text: 'Tours',
+                subtext: 'Tours are disabled on the web'
             },
             feedback: {
                 text: 'Feedback',
@@ -187,8 +194,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         inToursView = false,
         inFeedbackView = false,
 
-        showDropdown = false,
-        artworkLabel = createAddToArtworkMenu();
+        showDropdown = false;
+        createAddToArtworkMenu();
         
         createDropdownAssocMediaMenu();
         setUpFindContainer();
@@ -214,6 +221,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         type_representation: null,
         time_spent_timer: null
     };
+
+    //WEB ui
+    if (!IS_WINDOWS){
+        newButton.css({
+            'width': 'auto',
+            'font-size': '100%'
+        });
+        addButton.css({
+            'width': 'auto',
+            'font-size': '100%'
+        })
+
+    }
 
     /*Surbhi */
 
@@ -677,7 +697,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar.append(nav[NAV_TEXT.art.text] = createNavLabel(NAV_TEXT.art, loadArtView));
         navBar.append(nav[NAV_TEXT.media.text] = createNavLabel(NAV_TEXT.media, loadAssocMediaView)); // COMMENT!!!!!!!!
         if (IS_WINDOWS){
-            navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView));
+            navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView, false));
+        } else{
+            navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.dummytour, null, true));
         }
         //navBar.append(nav[NAV_TEXT.feedback.text] = createNavLabel(NAV_TEXT.feedback, loadFeedbackView));
 
@@ -758,7 +780,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 isArtView = false;
                 break;
             case "Tours":
-                
                 selectLabel(nav[NAV_TEXT.tour.text]);
                 prevSelectedSetting = nav[NAV_TEXT.tour.text];
                 loadTourView(id);
@@ -796,12 +817,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method createNavLabel
      * @param {String} text         text for label
      * @param {Function} onclick    onclick function for label
+     * @param {Boolean} disabled    true if its disabled
      * @return {Object} container   container containing new label
      */
-    function createNavLabel(text, onclick) {
+    function createNavLabel(text, onclick, disabled) {
         var container = $(document.createElement('div'));
-        container.attr('class', 'navContainer');
+        if (!disabled){
+            container.attr('class', 'navContainer');
+        } else {
+            container.attr('class','dummyNav')
+        }
         container.attr('id', 'nav-' + text.text);
+        if (!disabled){
         container.mousedown(function () {
             container.css({
                 'background': HIGHLIGHT
@@ -848,7 +875,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             prevSelectedSetting = container;
         });
-
+        }
         // vertical centering groundwork for 2.2
         //var navTextHolder;
 
@@ -859,6 +886,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var navsubtext = $(document.createElement('label'));
         navsubtext.attr('class','navsubtext');
         navsubtext.text(text.subtext);
+
+        if (disabled){
+            container.removeClass('leftLabel');
+        }
 
         container.append(navtext);
         container.append(navsubtext);
@@ -2383,6 +2414,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0',
                 'margin-bottom': '3%',
             });
+
+            deleteBlankButton.show();
+
+
+            deleteBlankButton.unbind('click').click(function(){ deleteExhibition(exhibition)});
+            deleteBlankButton.text("Delete");
+
             TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
                 tobj.element_type = "Collections";
             });
@@ -2450,7 +2488,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             }
 
-            var artPickerButton = createButton('Manage', makeManagePopUp/*function () {
+            var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{
@@ -3016,6 +3054,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
+
+
+    
         TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
             //nothing to record
         });
@@ -3276,6 +3317,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         collectionSort.css('display','none');
 
+        findContainer.css('width','100%');
+
         prepareNextView(true, "Add", createAsset);
         prepareViewer(true);
         clearRight();
@@ -3299,6 +3342,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
+            if (list.length>0){
+                list.unshift("Search Results:")
+            } else {
+                list.push("No search results");
+            }
             displayLabels();
         } else {
             // Make an async call to get artworks and then display
@@ -3740,13 +3788,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create buttons
         
-        artworkLabel.unbind("click");
-        artworkLabel.click(
+        addToArtworkLabel.unbind("click");
+        addToArtworkLabel.click(
             function () {
                 pickerOpen = true;
                 assocToArtworks(media);
             });
-        TAG.Telemetry.register(artworkLabel, "click", "EditorButton", function (tobj) {
+        TAG.Telemetry.register(addToArtworkLabel, "click", "EditorButton", function (tobj) {
             tobj.edit_type = "Manage Associations";
             tobj.element_id = media.Identifier;
         });
@@ -3768,7 +3816,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //        tobj.element_id = media.Identifier;
         //    });
 
-        leftButton = artworkLabel;
+        leftButton = addToArtworkLabel;
         var deleteButton = createButton('Delete',
             function () { deleteAssociatedMedia(media); /*changesHaveBeenMade = true;*/ },
             {
@@ -3778,6 +3826,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '2%',
                 'float': 'left',
             });
+
+
+
+        deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(media)});
+        deleteBlankButton.text("Delete");
 
         var generateAssocMediaThumbnailButton = createButton('Generate Thumbnail',
             function () {
@@ -3890,8 +3943,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteButton.on("mousedown", function () {
             deleteButton.css({ "background-color": "white" });
         });
-        artworkLabel.on("mousedown", function () {
-            artworkLabel.css({ "background-color": "white" });
+        addToArtworkLabel.on("mousedown", function () {
+            addToAartworkLabel.css({ "background-color": "white" });
         });
         saveButton.on("mouseleave", function () {
             if (!saveButton.attr("disabled")) {
@@ -3904,8 +3957,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteButton.on("mouseleave", function () {
             deleteButton.css({ "background-color": "transparent" });
         });
-        artworkLabel.on("mouseleave", function () {
-            artworkLabel.css({ "background-color": "transparent" });
+        addToArtworkLabel.on("mouseleave", function () {
+            addToArtworkLabel.css({ "background-color": "transparent" });
         });
         newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
@@ -4660,6 +4713,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         collectionSort.css('display','inline-block');
 
+        findContainer.css('width','140%');
+
         //if (generalIsLoading || collectionsIsLoading ||
         //  artworksIsLoading || associatedMediaIsLoading || toursIsLoading) {
         //    hideLoading();
@@ -4678,6 +4733,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
+            if (list.length>0){
+                list.unshift("Search Results:")
+            } else {
+                list.push("No search results");
+            }
             displayLabels(); 
         } else {
             // Make an async call to get artworks and then display
@@ -4689,7 +4749,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 initSearch();
                 list = result;
                 sortLabels();
-                //displayLabels();
             });
         }
 
@@ -5336,12 +5395,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-right': '0%',
                     'margin-bottom': '3%',
                 });
-            if (isLocked == artwork.Identifier) {
+            /*if (isLocked == artwork.Identifier) {
                 deleteBlankButton.prop("disabled", true);
                 deleteBlankButton.css({
                     "opacity": "0.5"
                 });
-            }
+            }*/
             var inputs = {
                 artistInput: artistInput,                                      //Artwork artist
                 nameInput: titleInput,                                         //Artwork title
@@ -5407,6 +5466,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             thumbnailButton.attr('id', 'thumbnailButton');
             if (artwork.Metadata.Type !== 'VideoArtwork') {
                 buttonContainer.append(editArt).append(saveButton); //.append(xmluploaderbtn); // for win8 aug 15 release only
+                //searchContainer.append(deleteArt);
                 //deleteBlankButton = deleteArt;
             } else {
                 buttonContainer.append(saveButton);//.append(xmluploaderbtn); // for win8 aug 15 release only
@@ -6815,22 +6875,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findBarTextBox.text("Find");
             findBarTextBox.css({
                 'height' : '100%',
-                'font-size': '100%',
+                'font-size': '110%',
                 'width': '20%',
                 'display': 'inline-block',
                 'padding-left': '10%',
                 'float':'left'
             });
             findBarDropIcon.css({
-                                        width: '7%',
-                                        height: '70%',
-                                        display:'inline-block',
-                                        '-webkit-transform': 'rotate(90deg)',
-                                        '-moz-transform': 'rotate(90deg)',
-                                        '-o-transform': 'rotate(90deg)',
-                                        '-ms-transform': 'rotate(90deg)',
-                                        'transform': 'rotate(90deg)',
-                                    });
+                width: '7%',
+                height: '70%',
+                display:'inline-block',
+                '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)',
+                });
         findBar.css("display","none");
         findContainer.css("display","none");
         findShown = false;
@@ -6845,7 +6905,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (inArtworkView){
             findBar.css("display","inline-block");
             menuLabel.hide();
-            artworkLabel.hide();
+            addToArtworkLabel.hide();
             searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
@@ -6853,21 +6913,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             else { newButton.show(); }
 
             //shows the second button
-            addButton.show()
-            addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)})
+            addButton.show();
+            addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)});
+
+            deleteBlankButton.show();
+            deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
+            deleteBlankButton.text('Delete');
 
         } else if (inToursView) {
             menuLabel.hide();
-            artworkLabel.hide();
+            addToArtworkLabel.hide();
             searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
             if (!newText) { newButton.hide(); }
             else { newButton.show(); }
-
             //shows the second button
-            addButton.show()
-            addButton.unbind('click').click(function () { addToursToCollections(multiSelected)})
+            //addButton.show()
+            //addButton.unbind('click').click(function () { addToursToCollections(multiSelected)})
 
         } else {
             //hides the second button
@@ -6877,18 +6940,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             if (!inAssociatedView) {
                 menuLabel.hide();
-                artworkLabel.hide();
+                addToArtworkLabel.hide();
                 searchbar.css({ width: '53%' });
                 findBar.css("display","none");
                 newButton.text(newText);
                 newButton.unbind('click').click(newBehavior);
+                deleteBlankButton.css("display", "none");
                 if (!newText) newButton.hide();
                 else newButton.show();
             } else {
                 newButton.hide();
                 searchbar.css({ width: '40%' });
                 menuLabel.show();
-                artworkLabel.show();
+                addToArtworkLabel.show();
             }
         }
 
@@ -8490,45 +8554,68 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findButton.click(function(){
             if (findShown){
                 findContainer.css('display','none');
+                findBarDropIcon.css({
+                   '-webkit-transform': 'rotate(90deg)',
+                '-moz-transform': 'rotate(90deg)',
+                '-o-transform': 'rotate(90deg)',
+                '-ms-transform': 'rotate(90deg)',
+                'transform': 'rotate(90deg)',     
+                });
             } else{
                 findContainer.css('display','inline-block');
+                if (dropDown.css('display') != 'none'){
+                    menuLabel.click();
+                }
+                findBarDropIcon.css({
+                    '-webkit-transform': 'rotate(270deg)',
+                '-moz-transform': 'rotate(270deg)',
+                '-o-transform': 'rotate(270deg)',
+                '-ms-transform': 'rotate(270deg)',
+                'transform': 'rotate(270deg)',
+
+                });
             }
             findShown = !findShown;
         });
     }
 
     function createAddToArtworkMenu() {
-        var addToArtworkLabel = $(document.createElement('button'))
-            .attr('id', 'addToArtworkLabel')
-            .appendTo(searchContainer)
-            .css({
+        //var addToArtworkLabel = $(document.createElement('button'))
+            //.attr('id', 'addToArtworkLabel')
+            //.appendTo(searchContainer)
+        addToArtworkLabel.css({
                 "color": "black",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                'float': 'right',
-                'font-size': '50%',
+                 'float': 'left',
+                'font-size': '100%',
                 'height': '40%',
                 'margin-top': '2.8%',
                 'padding-bottom': '1%',
-                'width': '48%',
+                //'width': '48%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top': '-10%',
                 'display': 'block',
-            }).css('border-radius', '3.5px');
-        var addToArtworkDiv = $(document.createElement('div'))
-            .css({
+            }).css('border-radius', '3.5px')
+        //var addToArtworkDiv = $(document.createElement('div'))
+        /**
+        addToArtworkDiv.css({
                 width: '80%',
                 height: '100%',
                 'text-align': 'center',
                 'vertical-align': 'middle',
                 'padding': '0px 10% 0px 10%'
             })
+        **/
+           /**
             .append($(document.createElement('div')).text('Add to Artwork').css({
                 'display': 'inline-block',
                 'margin-right': '5%',
-            }))
-            .appendTo(addToArtworkLabel);
-        return addToArtworkLabel;
+            }));
+                **/
+            .text('Add to Artwork');
+            //.appendTo(addToArtworkLabel);
+        //return addToArtworkLabel;
     }
 
     function createDropdownAssocMediaMenu() {
@@ -8538,25 +8625,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         menuLabel.css({
                 "color": "black",
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                'float':'right',
-                'font-size':'50%',
+                'float':'left',
                 'height':'40%',
                 'margin-top':'2.8%',
+                'margin-left':'2%',
                 'padding-bottom':'1%',
-                'width': '48%',
+                'padding-left':'5%',
+                'padding-right':'2%',
+                'width': '40%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top':'-10%',
                 'display': 'block',
             }).css('border-radius', '3.5px');
+        if (!IS_WINDOWS){
+            menuLabel.css('font-size','100%');
+        } else{
+            menuLabel.css('font-size','50%');
+        }
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
             .attr('src', tagPath + 'images/icons/RightB.png')
             .css({
-                width: '6%',
-                height: '70%',
+                width: '10%',
+                height: '10%',
                 display:'inline-block',
                 'margin-right': '5%',
+                'margin-left': '3%',
+                'margin-top': '5%',
                 '-webkit-transform': 'rotate(90deg)',
                 '-moz-transform': 'rotate(90deg)',
                 '-o-transform': 'rotate(90deg)',
@@ -8567,20 +8663,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
         var addMenuLabelDiv = $(document.createElement('div'))
             .css({
-                width:'80%',
+                width:'auto',
                 height: '100%',
                 'text-align': 'center',
-                'vertical-align': 'middle',
-                'padding':'0px 10% 0px 10%'
+                'vertical-align': 'middle'
+                //'padding':'0px 10% 0px 10%'
             })
-            .append($(document.createElement('div')).text('Add').css({
+            .append($(document.createElement('div')).text('Import').css({
                 'display': 'inline-block',
-                'margin-right': '5%',
+                'margin-right': '1%',
+                'float':'left'
             }))
             .append(addMenuArrowIcon)
             .appendTo(menuLabel);
-        var dropDown = $(document.createElement('div'))
-            .attr('id', 'dropDown')
+        dropDown.attr('id', 'dropDown')
             .appendTo(searchContainer)
             .css({
                 "left": '52%',
@@ -8590,7 +8686,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'width': '48%',
                 'background-color': 'rgba(0,0,0,0.95)',
                 'float': 'left',
-                'top': '38%',
+                'top': '50%',
                 'clear': 'left',
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'border': '1px solid white',
@@ -8620,8 +8716,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     '-ms-transform': 'rotate(270deg)',
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
-                    'padding-right':'7%'
+                    'padding-right':'7%',
+                    'float':'left'
                 });
+                console.log(findContainer.css('display'));
+                if (findContainer.css('display') != 'none'){
+                        dropDown.css('top',(searchContainer.height()-findContainer.height())*0.5 + 'px');
+                } else {
+                    dropDown.css('top','50%');
+                }
                 dropDown.show();
             }
             showDropdown = !showDropdown;
