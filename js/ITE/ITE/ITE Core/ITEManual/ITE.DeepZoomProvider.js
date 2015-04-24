@@ -32,6 +32,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     // DOM related.
     var _deepZoom,
     	_UIControl,
+    	_proxy,//For touch handling. We want to be able to click through the transparent parts of the layers, so we're just adding a div over the part of the canvas that has the image.
+    			//TODO: there has GOT to be a better way to do this
+    	_canvasHolder,
     	_viewer,
     	_shouldBeInvisible;//boolean for if the current keyframe dictates the image shouldn't be clickable
     
@@ -56,9 +59,20 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function initialize() {
 		_super.initialize();
+		// Get first and last keyframes.
+		self.firstKeyframe = self.keyframes.min();
+		self.lastKeyframe = self.keyframes.max();
 
+		//
+		_proxy = $(document.createElement("div"))
+        	.addClass("deepzoom_proxy")
+			.css({
+				"postion" : "absolute",
+			})
+
+		$("#ITEHolder")
 		// Create UI and append to ITEHolder.
-		_UIControl = $(document.createElement("div"))
+		_canvasHolder = $(document.createElement("div"))
         	.addClass("UIControl")
         	.attr("id", trackData.name + "holder")
         	.css({
@@ -67,10 +81,20 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         		 //"visibility":"visible",
         		 //"opacity" : "",
         		 //"position":"relative",
-        		"width"		: "100%",
-        		"height"	: "100%",
+        		// "width"		: "100%",
+        		// "height"	: "100%",
+        		"position":"absolute",
+        		"width"		: $("#ITEHolder").width(),
+        		"height"	: $("#ITEHolder").height(),
         	}); 
+        _UIControl = $(document.createElement("div"))
+
+		// $("#ITEHolder").append(_UIControl);
 		$("#ITEHolder").append(_UIControl);
+				_UIControl.append(_proxy);
+
+		_UIControl.append(_canvasHolder);
+
 
 		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
@@ -79,8 +103,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
-			visibilityRatio		: .2
-			//mouseNavEnabled 	: false
+			visibilityRatio		: .2,
+			mouseNavEnabled 	: false
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
@@ -99,7 +123,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		       // console.log(isInImageBoundsMouseEvent(evt) + "   X: " + evt.clientX + "     Y: " + evt.clientY + "     " + this);
 		        if (isInImageBoundsMouseEvent(evt)) {
 		            if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
-		                _UIControl.css({
+		                _canvasHolder.css({
 		                   "pointer-events": "auto",
 		                   "touch-action": "auto",
 		                   "-ms-touch-action": "auto",
@@ -109,17 +133,17 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		        else {
 		         //   console.log('disabled');
 
-		            _UIControl.css({
-		                "pointer-events": "none",//else, unclickable
-		                "touch-action": "none",
-		                "-ms-touch-action": "none",
-		            })
+		            // _UIControl.css({
+		            //     "pointer-events": "none",//else, unclickable
+		            //     "touch-action": "none",
+		            //     "-ms-touch-action": "none",
+		            // })
 
-		            _deepZoom.css({
-		                "pointer-events": "none",//else, unclickable
-		                "touch-action": "none",
-		                "-ms-touch-action": "none",
-		            })
+		            // _deepZoom.css({
+		            //     "pointer-events": "none",//else, unclickable
+		            //     "touch-action": "none",
+		            //     "-ms-touch-action": "none",
+		            // })
 
 		        }
 		    });
@@ -129,7 +153,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		    $("#ITEHolder").mousemove(function (evt) {//whenever the mouse moves in the ITEHolder, 
 		        if (isInImageBoundsMouseEvent(evt)) {
 		            if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
-		                _UIControl.css({
+		                _canvasHolder.css({
 		                    "pointer-events": "auto",
 		                    "touch-action": "auto",
 		                    "-ms-touch-action": "auto",
@@ -139,23 +163,15 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		        else {
 
 
-		            // console.log('disabled');
-		            _UIControl.css({
-		                "pointer-events": "none",//else, unclickable
-		                "touch-action": "none",
-		                "-ms-touch-action": "none",
-		            })
+		            // // console.log('disabled');
+		            // _UIControl.css({
+		            //     "pointer-events": "none",//else, unclickable
+		            //     "touch-action": "none",
+		            //     "-ms-touch-action": "none",
+		            // })
 		        }
 		    });
 		}
-
-
-        
-
-		// Get first and last keyframes.
-		self.firstKeyframe = self.keyframes.min();
-		self.lastKeyframe = self.keyframes.max();
-
 	};
 
 	/*
@@ -173,6 +189,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			self.status = 2; 	
 			// Attach handlers.
 			attachHandlers();
+			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
+
 		}, self);
 		// Sets the DeepZoom's URL source.
 		_viewer.open(self.trackData.assetUrl);
@@ -314,7 +332,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_viewer.viewport.fitBounds(state.bounds, false);
 		self.animation = TweenLite.to(
 			// What object to animate.
-			_UIControl, 
+			_canvasHolder, 
 			// Duration of animation.
 			duration, 
 			// Define animation:
@@ -388,7 +406,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_viewer.viewport.centerSpringX.animationTime 	= .000001;
 		_viewer.viewport.zoomSpring.animationTime 		= .000001;
 
-		_UIControl.css("opacity", state.opacity)
+		_canvasHolder.css("opacity", state.opacity)
 		_viewer.viewport.fitBounds(state.bounds, false);
 		_viewer.viewport.update();	
 		resetSeadragonConfig()
@@ -529,6 +547,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
     function dzManip(res) {
         //Pause
+
         (self.orchestrator.status === 1) ? self.player.pause() : null
       	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		resetSeadragonConfig()
@@ -573,88 +592,135 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Initializes handlers.
 	 * O/P: 	none
 	 */
-	// function attachHandlers() {
-
-	// 	_viewer.addHandler(
-	// 	'animation', function(evt) {
-	// 		for (var i = 0; i < attachedInks.length; i++){
- //       			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
-	// 			bounds = {
-	// 				x: topLeft.x,
-	// 				y: topLeft.y,
-	// 				width: _UIControl.width()*_viewer.viewport.getZoom(true),
-	// 				height: _UIControl.width()*_viewer.viewport.getZoom(true)
-	// 			}
-	// 			attachedInks[i]._ink.adjustViewBox(bounds);
-	// 		}
-	// 	})
-	//     if (IS_WINDOWS) {
-	//         TAG.Util.makeManipulatableWin(_deepZoom[0], {
-	//             onScroll: function (delta, pivot) {
-	//                 dzScroll(delta, pivot);
-	//             },
-	//             onManipulate: function (res) {
- //                    res.translation.x = -res.translation.x;        //Flip signs for dragging
- //                    res.translation.y = -res.translation.y;
- //                    dzManip(res);
-	//             }
-	//         }, null, true); // NO ACCELERATION FOR NOW
-	//     } else {
-	//         TAG.Util.makeManipulatable(_deepZoom[0], {
-	//             onScroll: function (delta, pivot) {
-	//                 dzScroll(delta, pivot);
-	//             },
-	//             onManipulate: function (res) {
- //                    res.translation.x = -res.translation.x;        //Flip signs for dragging
- //                    res.translation.y = -res.translation.y;
- //                    dzManip(res);
-	//             }
-	//         }, null, true); // NO ACCELERATION FOR NOW
-	//     }
-	// }
-
-
-
 	function attachHandlers() {
 
 		_viewer.addHandler(
-			'canvas-scroll', function(evt) {
-				//console.log("scrolling");
-				if (isInImageBounds(evt)){
-					//evt.originalEvent.preventDefault();
-					(self.orchestrator.status === 1) ? self.player.pause() : null
-			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-			    	resetSeadragonConfig()
-			    } else {
-			    	// evt.preventDefaultAction()
-			    }
-	    	});
-		_viewer.addHandler(
-			'canvas-drag', function(evt) {
-				//console.log("dragging");
-				if (isInImageBounds(evt)){
-					//evt.originalEvent.preventDefault();
-					(self.orchestrator.status === 1) ? self.player.pause() : null
-		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-		    		resetSeadragonConfig()
-			    } else {
-			    	// evt.preventDefaultAction()
-			    }
-	    	});
-		_viewer.addHandler(
-			'animation', function(evt) {
-				for (var i = 0; i < attachedInks.length; i++){
-           			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
-					bounds = {
-						x: topLeft.x,
-						y: topLeft.y,
-						width: _UIControl.width()*_viewer.viewport.getZoom(true),
-						height: _UIControl.width()*_viewer.viewport.getZoom(true)
-					}
-					attachedInks[i]._ink.adjustViewBox(bounds);
-				}
+		'animation', function(evt) {
+
+			//Calculate absolute coordinates of part of the canvas with image
+   			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
+			bounds = {
+				x: topLeft.x,
+				y: topLeft.y,
+				width: _canvasHolder.width()*_viewer.viewport.getZoom(true),
+				height: _canvasHolder.width()*_viewer.viewport.getZoom(true)*_viewer.viewport.contentAspectY
+			}
+
+			//Update proxy touch div
+			// _proxy.css({
+			// 	"position":"absolute",
+			// 	"width": bounds.width,
+			// 	"height": bounds.height,
+			// 	"top": bounds.y,
+			// 	"left": bounds.x
+			// })
+			// _UIControl.css({
+			// 	"top": -_proxy.position().top,
+			// 	"left": -_proxy.position().left
+			//})
+			_proxy.css({
+				"position":"absolute",
+				"width": bounds.width,
+				"height": bounds.height,
+				"top": bounds.y,
+				"left": bounds.x
 			})
-}
+			//Update all attached inks
+			for (var i = 0; i < attachedInks.length; i++){
+				attachedInks[i]._ink.adjustViewBox(bounds);
+			}
+
+		})
+	    // if (IS_WINDOWS) {
+	    //     TAG.Util.makeManipulatableWin(_deepZoom[0], {
+	    //         onScroll: function (delta, pivot) {
+	    //             dzScroll(delta, pivot);
+	    //         },
+	    //         onManipulate: function (res) {
+     //                res.translation.x = -res.translation.x;        //Flip signs for dragging
+     //                res.translation.y = -res.translation.y;
+     //                dzManip(res);
+	    //         }
+	    //     }, null, true); // NO ACCELERATION FOR NOW
+	    // } else {
+	    //     TAG.Util.makeManipulatable(_deepZoom[0], {
+	    //         onScroll: function (delta, pivot) {
+	    //             dzScroll(delta, pivot);
+	    //         },
+	    //         onManipulate: function (res) {
+     //                res.translation.x = -res.translation.x;        //Flip signs for dragging
+     //                res.translation.y = -res.translation.y;
+     //                dzManip(res);
+	    //         }
+	    //     }, null, true); // NO ACCELERATION FOR NOW
+	    // }
+	   	if (IS_WINDOWS) {
+	        TAG.Util.makeManipulatableWin(_proxy[0], {
+	            onScroll: function (delta, pivot) {
+	                dzScroll(delta, pivot);
+	            },
+	            onManipulate: function (res) {
+                    res.translation.x = -res.translation.x;        //Flip signs for dragging
+                    res.translation.y = -res.translation.y;
+                    dzManip(res);
+	            }
+	        }, null, true); // NO ACCELERATION FOR NOW
+	    } else {
+	        TAG.Util.makeManipulatable(_proxy[0], {
+	            onScroll: function (delta, pivot) {
+	                dzScroll(delta, pivot);
+	            },
+	            onManipulate: function (res) {
+                    res.translation.x = -res.translation.x;        //Flip signs for dragging
+                    res.translation.y = -res.translation.y;
+                    dzManip(res);
+	            }
+	        }, null, true); // NO ACCELERATION FOR NOW
+	    }
+	}
+
+
+
+// 	function attachHandlers() {
+
+// 		_viewer.addHandler(
+// 			'canvas-scroll', function(evt) {
+// 				//console.log("scrolling");
+// 				if (isInImageBounds(evt)){
+// 					//evt.originalEvent.preventDefault();
+// 					(self.orchestrator.status === 1) ? self.player.pause() : null
+// 			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+// 			    	resetSeadragonConfig()
+// 			    } else {
+// 			    	// evt.preventDefaultAction()
+// 			    }
+// 	    	});
+// 		_viewer.addHandler(
+// 			'canvas-drag', function(evt) {
+// 				//console.log("dragging");
+// 				if (isInImageBounds(evt)){
+// 					//evt.originalEvent.preventDefault();
+// 					(self.orchestrator.status === 1) ? self.player.pause() : null
+// 		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+// 		    		resetSeadragonConfig()
+// 			    } else {
+// 			    	// evt.preventDefaultAction()
+// 			    }
+// 	    	});
+// 		_viewer.addHandler(
+// 			'animation', function(evt) {
+// 				for (var i = 0; i < attachedInks.length; i++){
+//            			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
+// 					bounds = {
+// 						x: topLeft.x,
+// 						y: topLeft.y,
+// 						width: _UIControl.width()*_viewer.viewport.getZoom(true),
+// 						height: _UIControl.width()*_viewer.viewport.getZoom(true)
+// 					}
+// 					attachedInks[i]._ink.adjustViewBox(bounds);
+// 				}
+// 			})
+// }
 
 		/*
 	 * I/P: 	evt (a click/touch event)
@@ -708,6 +774,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
     function setZIndex(index){
     	_UIControl.css("z-index", index)
+    	_canvasHolder.css("z-index", 1)
+    	_proxy.css("z-index", 2)
         self.zIndex = index
     }
     self.setZIndex = setZIndex;
