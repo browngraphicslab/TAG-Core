@@ -603,6 +603,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     }
 
     function finishedUpload() {
+        console.log("FINISHED UPLOAD CALLED");
         filesFinished += 1;
         if (filesFinished === numFiles) {
             removeOverlay();
