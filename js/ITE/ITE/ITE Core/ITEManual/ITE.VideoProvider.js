@@ -75,6 +75,43 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		// Attach Handlers.
 		attachHandlers();
         
+		var timer = setInterval(function () {
+		    console.log("Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _videoControls.currentTime+"        playing: "+orchestrator.getStatus());
+		    /*if (orchestrator.getStatus() == 1) {
+		        _videoControls.play();
+		    }
+            */
+		    if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
+		        console.log("video controls played");
+		        _videoControls.play();
+		        if (_videoControls.currentTime >= orchestrator.getElapsedTime() - self.firstKeyframe.time) {
+		            console.log("orchestrator played");
+		            orchestrator.play();
+		        }
+		    }
+            /*
+		    else if (orchestrator.getStatus() == 4 && _videoControls.currentTime >= orchestrator.getElapsedTime() - self.firstKeyframe.time) {
+		        console.log("orchestrator played");
+		        orchestrator.play();
+		    }*/
+		    else if (_videoControls.readyState<3 && (orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
+		        console.log('pausing orchestrator and changing status to 4')
+		        orchestrator.pause();
+		        orchestrator.status = 4;
+		        //_videoControls.pause();
+		    }
+            /*
+		    else if (orchestrator.getStatus() == 1 && _videoControls.paused) {
+		        console.log("video was paused but orchestrator was playing");
+		        _videoControls.play();
+		    }
+		    else if(orchestrator.getStatus()==2){
+		        console.log("playing")
+		        _videoControls.play();
+		        orchestrator.play();
+		    }
+            */
+		}, 250);
 		self.polling = true;
 		poll();
         
@@ -655,8 +692,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
             onManipulate: mediaManip,
             onScroll:     mediaScroll
         }); 
-        interactionHandlers.onManipulate 	= mediaManip;
-        interactionHandlers.onScroll		= mediaScroll;    	
     };
 
 
