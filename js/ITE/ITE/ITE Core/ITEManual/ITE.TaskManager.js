@@ -8,23 +8,16 @@ ITE.Task = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, ongo
 	self.nextKeyframeData 	= nextKeyframeData;
 	self.asset 				= asset;
 	self.ongoingTasks 		= ongoingTasks;
-	self.track 				= track
-
-	//self.nextKeyframeData.ease = Linear.easeNone;
-
-	// self.nextKeyframeData.onComplete = function(){
-	// 	self.ongoingTasks.splice(self.ongoingTasks.indexOf(self), 1);
-	// }
+	self.track 				= track;
 	self.animation;
 
 	self.play = function(){
-		(track.trackData.providerId === 'image') && asset.stop(); //TODO deal with self
+		(track.trackData.providerId === 'image') && asset.stop(); //TODO deal with self 
 		self.track.play(self.nextKeyframeTime, self.nextKeyframeData);
 	};
 
 	self.pause = function() {
 		self.track.pause()
-		//self.track.animation.kill()
 	};
 
 };

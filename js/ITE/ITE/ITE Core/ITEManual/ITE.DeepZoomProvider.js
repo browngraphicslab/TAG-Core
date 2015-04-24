@@ -37,8 +37,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     
     // Various animation/manipulation variables.
 	self.animationCallback;
-	var interactionHandlers 		= {},
-		movementTimeouts 			= [];
 
 	// miscellaneous
 	var attachedInks = [];
@@ -58,10 +56,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function initialize() {
 		_super.initialize();
-		// $(document).ready(function () {
-		//     PointerEventsPolyfill.initialize({});
-  //           console.log("polyfill?")
-		// });
+
 		// Create UI and append to ITEHolder.
 		_UIControl = $(document.createElement("div"))
         	.addClass("UIControl")
@@ -102,14 +97,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		if (IS_WINDOWS) {
 		    $("#ITEHolder").get(0).addEventListener("MSPointerMove", function (evt) {//whenever the mouse moves in the ITEHolder, 
 		       // console.log(isInImageBoundsMouseEvent(evt) + "   X: " + evt.clientX + "     Y: " + evt.clientY + "     " + this);
-		       // console.log("--------");
 		        if (isInImageBoundsMouseEvent(evt)) {
 		            if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
-		               // console.log("enabled");
 		                _UIControl.css({
-		               //     "pointer-events": "auto",
-		              //      "touch-action": "auto",
-		              //      "-ms-touch-action": "auto",
+		                   "pointer-events": "auto",
+		                   "touch-action": "auto",
+		                   "-ms-touch-action": "auto",
 		                })
 		            }
 		        }
@@ -146,7 +139,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		        else {
 
 
-		            console.log('disabled');
+		            // console.log('disabled');
 		            _UIControl.css({
 		                "pointer-events": "none",//else, unclickable
 		                "touch-action": "none",
@@ -207,32 +200,16 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
-		// TODO: was there a reason this was a callback? I just moved the contents of this function 
-		// to where the callback was previously added, and now reverting the state seems to work...
-		/*
-		// Callback function if image has been manipulated.
-		self.animationCallback = function() {
-			console.log("CALLBACK");
-			console.log(self);
-			var nextKeyframe = endKeyframe || self.getNextKeyframe(self.savedState.time);
-			self.animate(nextKeyframe.time - self.savedState.time, self.getKeyframeState(nextKeyframe));
-			self.savedState = null;	
-			_viewer.removeHandler("animation-finish", self.animationCallback)
-		}
-		*/
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;
 		if (self.savedState) {
-			// If manipulated, use callback.
+			//If image has been manipulated, set correct state and animate to next keyframe
 			if (self.imageHasBeenManipulated) {
 				self.setState(self.savedState);
 				var nextKeyframe = endKeyframe || self.getNextKeyframe(self.savedState.time);
 				self.animate(nextKeyframe.time - self.savedState.time, self.getKeyframeState(nextKeyframe));
 				self.savedState = null;	
-				// TODO: see above... is this callback necessary?
-				//_viewer.addHandler("animation-finish", self.animationCallback);	
-
 				return;
 			}
 			// Otherwise, just revert back to saved state.
@@ -444,8 +421,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		if (!endKeyframe) {
 			return self.getKeyframeState(startKeyframe);
 		}
-		//console.log(startKeyframe);
-
 		var lerpOpacity = startKeyframe.opacity + (interp * (endKeyframe.opacity - startKeyframe.opacity));
 		var lerpPosX = startKeyframe.pos.x + (interp * (endKeyframe.pos.x - startKeyframe.pos.x));
 		var lerpPosY = startKeyframe.pos.y + (interp * (endKeyframe.pos.y - startKeyframe.pos.y));
@@ -457,8 +432,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 															 lerpScale, 
 															 lerpScale/_viewer.viewport.getAspectRatio())
 					};
-		//console.log("LERP");
-		//console.log(lerpPosX);
 		return state;
 	};
 
@@ -490,9 +463,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 	}
 	self.createDefaultKeyframes = createDefaultKeyframes;
-
-
-
 
 	/* 
 	 * I/P: 	inkTrack : 		Ink track to attach to self asset.
@@ -550,9 +520,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_viewer.viewport.zoomSpring.springStiffness 	= 6.5;
 	};
    
-
-
-
 
     /**
      * Manipulation/drag handler for makeManipulatable on the deepzoom image
@@ -654,7 +621,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			'canvas-scroll', function(evt) {
 				//console.log("scrolling");
 				if (isInImageBounds(evt)){
-					evt.originalEvent.preventDefault();
+					//evt.originalEvent.preventDefault();
 					(self.orchestrator.status === 1) ? self.player.pause() : null
 			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 			    	resetSeadragonConfig()
@@ -666,7 +633,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			'canvas-drag', function(evt) {
 				//console.log("dragging");
 				if (isInImageBounds(evt)){
-					evt.originalEvent.preventDefault();
+					//evt.originalEvent.preventDefault();
 					(self.orchestrator.status === 1) ? self.player.pause() : null
 		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		    		resetSeadragonConfig()

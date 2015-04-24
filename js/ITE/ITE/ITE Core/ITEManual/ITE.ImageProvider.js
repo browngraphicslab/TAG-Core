@@ -36,9 +36,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
     // Various animation/manipulation variables.
 	self.interactionAnimation;
-	var interactionHandlers 		= {},
-		movementTimeouts 			= [],
-		attachedInks 				= [],
+	var attachedInks 				= [],
         
         //For mediamanip
 	    finalPosition,
@@ -211,11 +209,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			self.setState(soughtState);
 			nextKeyframe = surKeyframes[1];
 		}
-
-		// If this track was playing, continue playing.
-		// if (prevStatus === 1) {
-		// 	self.play(nextKeyframe);
-		// } 
 		return nextKeyframe;
 	};
 
@@ -226,7 +219,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.animate = function(duration, state) {
-		// OnComplete function.
+		// OnComplete, if image is transparent make it transparent to clicks as well.
 		state.onComplete = function () {
 			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
 			if (state.css.opacity === 0){
@@ -263,14 +256,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			top 			: _UIControl.position().top,
 			width 			: _UIControl.width(),
 			height 			: _UIControl.height()
-			// pos : {
-			// 	x		: _UIControl.position().left,
-			// 	y 		: _UIControl.position().top
-			// },
-			// size: {
-			// 	y	: _UIControl.height(),
-			// 	x	: _UIControl.width()
-			// },
 		};	
 		return self.savedState;
 	};
@@ -298,13 +283,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	state : 			Object holding keyframe's state, as used in animation.
 	 */
 	self.getKeyframeState = function(keyframe) {
-		// var state = {
-		// 				"opacity"	: keyframe.opacity,
-		// 				"left"		: (1000*keyframe.pos.x/100) + "px",
-		// 				"top"		: (500*keyframe.pos.y/100) + "px",
-		// 				"width"		: (1000*keyframe.size.x/100) + "px",
-		// 				"height"	: (500*keyframe.size.y/100) + "px"
-		// 			};
 		var state = {
 			"opacity"	: keyframe.opacity,
 			"left"		: (keyframe.pos.x) + "px",
@@ -404,13 +382,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			attachedInks[i]._ink.adjustViewBox(bounds);
 		}
 	}
-
-   	/*
-	 * I/P: 	none
-	 * Return a set of interactionHandlers attached to asset from provider.
-	 * O/P: 	none
-	 */
-	function getInteractionHandlers() {};
  
     /*
      * I/P: 	res : 		Object containing hammer event info.
@@ -455,7 +426,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	         top: top + res.translation.y,
     	         left: left + res.translation.x
     	     })
-            console.log(_UIControl.position().top)
+            // console.log(_UIControl.position().top)
 
     	} else {
 
@@ -479,9 +450,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	        left: finalPosition.x
     	    });
     	}
-
-
-	
     };
 	
     /*
@@ -549,11 +517,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
                 onManipulate: mediaManip,
                 onScroll: mediaScroll
             }, null, true);
-        }
-
-
-        interactionHandlers.onManipulate 	= mediaManip;
-        interactionHandlers.onScroll		= mediaScroll;    	
+        } 	
     };
 
 

@@ -32,21 +32,9 @@ ITE.Orchestrator = function(player) {
 		var tourData,
 			AJAXreq = new XMLHttpRequest(),
 			i;
-
-	   	/*AJAXreq.open( "GET", dataURL, true );
-	    AJAXreq.setRequestHeader("Content-type", "application/json");
-	    AJAXreq.onreadystatechange = function(){
-	        if( AJAXreq.readyState == 4 && AJAXreq.status == 200 ){
-	        	//Once request is ready, parse data and call function that actually loads tracks
-	       		tourData = JSON.parse(AJAXreq.responseText);
-	       		loadHelper();
-	        }
-	    }
-	    AJAXreq.send();*/
 	    tourData = dataURL
 	    self.tourData = tourData;
 	    loadHelper();
-	    self.tourData = tourData;
 
 	  /**
 	    * I/P: none
@@ -209,7 +197,6 @@ ITE.Orchestrator = function(player) {
 
 	function setVolume(newVolumeLevel){
 	    self.volumeChangedEvent.publish(newVolumeLevel)
-	    // parseInt(self.status) !== 3 ? self.volumeChangedEvent.publish(newVolumeLevel) : console.log("don't do anything");
 	}
 
 	function toggleMute(isMuted){
@@ -289,8 +276,6 @@ ITE.Orchestrator = function(player) {
 		return self.trackManger;
 	}
 
-
-
 	self.getTrackManger = getTrackManger;
 	self.captureKeyframe = captureKeyframe;
 	self.changeKeyframe = changeKeyframe;
@@ -313,5 +298,3 @@ ITE.Orchestrator = function(player) {
 	self.getTourData = getTourData;
 	self.status = status;
 }
-
-

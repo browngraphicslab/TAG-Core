@@ -47,11 +47,6 @@ var JSSRC = [
         'js/ITE/ITE/Dependencies/CSSPlugin.min.js',							//ITE
         'js/ITE/ITE/Dependencies/TweenLite.min.js',							//ITE
         'js/ITE/ITE/Dependencies/openseadragon-bin-1.2.1/openseadragon.js',	//ITE
-        'js/ITE/ITE/Dependencies/Hammer.js',								//ITE
-        'js/ITE/ITE/Dependencies/Raphael.js',								//ITE
-        'js/ITE/ITE/Dependencies/paper/paper-core.min.js',					//ITE
-        'js/ITE/ITE/Dependencies/paper/paper-full.min.js',					//ITE
-        'js/ITE/ITE/Dependencies/pointer_events_polyfill-master/pointer_events_polyfill.js',			//ITE
       	'js/ITE/ITE/ITE Core/Utils/ITE.Utils.js',							//ITE
       	'js/ITE/ITE/ITE Core/Utils/TAG.Util.js',							//ITE
       	'js/ITE/ITE/ITE Core/ITEManual/ITE.PubSubStruct.js',				//ITE

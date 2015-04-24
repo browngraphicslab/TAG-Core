@@ -73,7 +73,6 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Sets the image’s URL source.
 		_audio.attr({
-			//"src"	: itePath + "Assets/TourData/"  + self.trackData.assetUrl,
 			"src"	: self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		});
@@ -214,10 +213,6 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			nextKeyframe = surKeyframes[1];
 		}
 
-		// If this track was playing, continue playing.
-		// if (prevStatus === 1) {
-		// 	self.play(nextKeyframe);
-		// } 
 		return nextKeyframe;
 	};
 

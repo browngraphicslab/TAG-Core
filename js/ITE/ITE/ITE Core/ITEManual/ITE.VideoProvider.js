@@ -40,9 +40,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
     // Various animation/manipulation variables.
 	self.audioAnimation;
-	var interactionHandlers 		= {},
-		movementTimeouts 			= [],
-		attachedInks 				= [];
+	var attachedInks 				= [];
 
 	self.polling = false;
 
@@ -155,6 +153,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 		TweenLite.ticker.removeEventListener("tick", updateInk);
 	};
+
     /*
 	 * I/P: 	integer time to seek teh video to
 	 * seeks the video
@@ -268,11 +267,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			self.setState(soughtState);
 			nextKeyframe = surKeyframes[1];
 		}
-
-		// If this track was playing, continue playing.
-		// if (prevStatus === 1) {
-		// 	self.play(nextKeyframe);
-		// } 
 		return nextKeyframe;
 	};
 
@@ -537,81 +531,74 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		return interactionHandlers;
 	};
  
-    /*
+   /*
      * I/P: 	res : 		Object containing hammer event info.
      * Drag/manipulation handler for associated media.
      * Manipulation for touch and drag events.
      * O/P: 	none
      */
     function mediaManip(res) {
-        var top     	= _UIControl.position().top,
-            left     	= _UIControl.position().left,
-            width     	= _UIControl.width(),
-            height     	= _UIControl.height(),
-            finalPosition;
-        // If the player is playing, pause it.
-    	(self.orchestrator.status === 1) ? self.player.pause() : null
-
-        // If event is initial touch on artwork, save current position of media object to use for animation.
-        if (res.eventType === 'start') {
-            startLocation = {
-                x: left,
-                y: top
-            };
-        }	              
-        // Target location (where object should be moved to).
-        finalPosition = {
-            x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
-            y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-        };   
-
-        // Animate to target location.
-        self.interactionAnimation && self.interactionAnimation.kill();
-        self.interactionAnimation = TweenLite.to(_UIControl, .5, {
-        	top: finalPosition.y,
-        	left: finalPosition.x
-        });		
-    };
-	
-    /*
-	function mediaManip(res) {
-	    var top = _UIControl.position().top,
+        var top = _UIControl.position().top,
             left = _UIControl.position().left,
             width = _UIControl.width(),
-            height = _UIControl.height(),
-            finalPosition;
+            height = _UIControl.height();
+        // If the player is playing, pause it.
+    	if (self.orchestrator.status === 1) {
+    		self.player.pause();
+    	}
 
-	    // If the player is playing, pause it.
-	    if (self.orchestrator.status === 1) {
-	        self.player.pause();
-	    }
+    	if (IS_WINDOWS) {
+            //Target location is just current location plus translation
+    	   // if (res.grEvent.type === 'manipulationstarted') {
+    	   //     startLocation = {
+    	   ///         x: left,
+    	   //         y: top
+    	   //     };
+                
+    	   //     pointerStartLocation = {
+    	   //         x: res.pivot.x,
+    	   //         y: res.pivot.y
+    	   //     }
+           // }
 
-	    if (!res.eventType) {
-	        return
-	    }
+    	   // // Target location (where object should be moved to).
+    	   // finalPosition = {
+    	   //     x: res.pivot.x - (pointerStartLocation.x - startLocation.x),
+    	   //     y: res.pivot.y - (pointerStartLocation.y - startLocation.y)
+    	   // };
+    	   // _UIControl.css({
+    	   //     top: finalPosition.y,
+           //     left: finalPosition.x
+    	    // })
+    	     _UIControl.css({
+    	         top: top + res.translation.y,
+    	         left: left + res.translation.x
+    	     })
+            console.log(_UIControl.position().top)
 
-	    // If event is initial touch on artwork, save current position of media object to use for animation.
-	    if (res.eventType === 'start') {
-	        startLocation = {
-	            x: left,
-	            y: top
-	        };
-	    }
+    	} else {
 
-	    // Target location (where object should be moved to).
-	    finalPosition = {
-	        x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
-	        y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
-	    };
+    	    // If event is initial touch on artwork, save current position of media object to use for animation.
+    	    if (res.eventType === 'start') {
+    	        startLocation = {
+    	            x: left,
+    	            y: top
+    	        };
+    	    }
 
-	    // Animate to target location.
-	    self.interactionAnimation && self.interactionAnimation.kill();
-	    self.interactionAnimation = TweenLite.to(_UIControl, .5, {
-	        top: finalPosition.y,
-	        left: finalPosition.x
-	    });
-	};
-    */
+    	    // Target location (where object should be moved to).
+    	    finalPosition = {
+    	        x: res.center.pageX - (res.startEvent.center.pageX - startLocation.x),
+    	        y: res.center.pageY - (res.startEvent.center.pageY - startLocation.y)
+    	    };
+    	    // Animate to target location.
+    	    self.interactionAnimation && self.interactionAnimation.kill();
+    	    self.interactionAnimation = TweenLite.to(_UIControl, .5, {
+    	        top: finalPosition.y,
+    	        left: finalPosition.x
+    	    });
+    	}
+    };
 
     /*
      * I/P: 	scale : 	Scale factor.	
@@ -626,7 +613,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
             h  		= _UIControl.height(),
             newW  	= w * scale,
             newH,
-            maxW 	= 1000,        // These values are somewhat arbitrary; TODO determine good values
+            maxW 	= 10000,        // These values are somewhat arbitrary; TODO determine good values
             minW	= 200,
             newX,
             newY;
