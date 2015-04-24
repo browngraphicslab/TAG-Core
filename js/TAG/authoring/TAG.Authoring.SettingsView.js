@@ -3928,7 +3928,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             deleteButton.css({ "background-color": "white" });
         });
         addToArtworkLabel.on("mousedown", function () {
-            addToAartworkLabel.css({ "background-color": "white" });
+            addToArtworkLabel.css({ "background-color": "white" });
         });
         saveButton.on("mouseleave", function () {
             if (!saveButton.attr("disabled")) {
@@ -8534,25 +8534,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //.attr('id', 'addToArtworkLabel')
             //.appendTo(searchContainer)
         addToArtworkLabel.css({
-                "color": "black",
-                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                 'float': 'left',
-                'font-size': '100%',
-                'height': '40%',
-                'margin-top': '2.8%',
-                'padding-bottom': '1%',
-                //'width': '48%',
-                'border': '1px solid black',
-                //'padding': '1.5% 0px 0px 0px',
-                'padding-top': '-5%',
-                'display': 'block',
-//<<<<<<< HEAD
-//                'position': 'absolute,
-//            }).css('border-radius', '3.5px');
-//        var addToArtworkDiv = $(document.createElement('div'))
-//            .css({
-//=======
-            }).css('border-radius', '3.5px')
+            "color": "black",
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
+            'float': 'left',
+            //'font-size': '50%',
+            'height': '40%',
+            'margin-top': '2.8%',
+            'padding-bottom': '1%',
+            //'width': '48%',
+            'border': '1px solid black',
+            //'padding': '1.5% 0px 0px 0px',
+            'padding-top': '-5%',
+            'display': 'block',
+            //<<<<<<< HEAD
+            //                'position': 'absolute,
+            //            }).css('border-radius', '3.5px');
+            //        var addToArtworkDiv = $(document.createElement('div'))
+            //            .css({
+            //=======
+        }).css('border-radius', '3.5px')
         //var addToArtworkDiv = $(document.createElement('div'))
         /**
         addToArtworkDiv.css({
@@ -8571,6 +8571,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }));
                 **/
             .text('Add to Artwork');
+        if (!IS_WINDOWS) {
+            addToArtworkLabel.css('font-size', '100%');
+        } else {
+            addToArtworkLabel.css('font-size', '50%');
+        }
             //.appendTo(addToArtworkLabel);
         //return addToArtworkLabel;
     }
@@ -8618,6 +8623,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-left': '7%',
                 'padding-right':'0%'
             })
+        if (IS_WINDOWS) {
+            addMenuArrowIcon.css({
+                width: '6%',
+                height: '6%',
+                'margin-top': '2%',
+                'margin-right': '2%'
+            });
+        } 
         var addMenuLabelDiv = $(document.createElement('div'))
             .css({
                 width:'auto',
@@ -8648,6 +8661,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
                 'border': '1px solid white',
             });
+        if (IS_WINDOWS) {
+            dropDown.css({
+                'font-size': '70%',
+                'left': '35%',
+                width: '37%'
+            })
+        }
         dropDown.hide();
         menuLabel.click(function () {
             if (showDropdown) {
