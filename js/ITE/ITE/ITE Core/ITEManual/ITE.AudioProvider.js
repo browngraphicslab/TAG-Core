@@ -79,22 +79,31 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		});
 
 		// Ensure that the audio is completely loaded.
-		function monitor(timeWaited) {
-			timeWaited = timeWaited || 0;
-			if (timeWaited > 2000) {
-				console.log("Audio failed to load!");
-			}
-			else if (_audioControls.readyState !== 4) {
-				setTimeout(function(){ monitor(timeWaited+100); }, 100);
-			}
-		};
-		monitor();
+		_audioControls.addEventListener("canplay", function() {
+			// Update first state.
+			self.setState(self.getKeyframeState(self.firstKeyframe));
 
-		// Update first state.
-		self.setState(self.getKeyframeState(self.firstKeyframe));
+			// When finished loading, set status to 2 (paused).
+			self.status = 2; 
+		});
 
-		// When finished loading, set status to 2 (paused).
-		self.status = 2;
+		// // Ensure that the audio is completely loaded.
+		// function monitor(timeWaited) {
+		// 	timeWaited = timeWaited || 0;
+		// 	if (timeWaited > 2000) {
+		// 		console.log("Audio failed to load!");
+		// 	}
+		// 	else if (_audioControls.readyState !== 4) {
+		// 		setTimeout(function(){ monitor(timeWaited+100); }, 100);
+		// 	}
+		// };
+		// monitor();
+
+		// // Update first state.
+		// self.setState(self.getKeyframeState(self.firstKeyframe));
+
+		// // When finished loading, set status to 2 (paused).
+		// self.status = 2;
 	};
 
 	/*

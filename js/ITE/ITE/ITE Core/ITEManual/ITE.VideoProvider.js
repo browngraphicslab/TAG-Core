@@ -93,24 +93,29 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		_videoControls.load();
 
-		// Ensure that the audio is completely loaded.
-		function monitor(timeWaited) {
-			timeWaited = timeWaited || 0;
-			if (timeWaited > 2000) {
-				console.log("Video failed to load!");
-			}
-			else if (_videoControls.readyState !== 4) {
-				setTimeout(function(){ monitor(timeWaited+100); }, 100);
-			}
-		};
-		monitor();
+		// Ensure that the video is completely loaded.
+		_videoControls.addEventListener("canplay", function() {
+			// Update first state.
+			self.setState(self.getKeyframeState(self.firstKeyframe));
+			TweenLite.ticker.addEventListener("tick", updateInk);
 
-		// Update first state.
-		self.setState(self.getKeyframeState(self.firstKeyframe));
-		TweenLite.ticker.addEventListener("tick", updateInk);
+			// When finished loading, set status to 2 (paused).
+			self.status = 2; 
+		});
 
-		// When finished loading, set status to 2 (paused).
-		self.status = 2; // TODO: should this be some kind of callback?
+		// // Ensure that the video is completely loaded.
+		// function monitor(timeWaited) {
+		// 	timeWaited = timeWaited || 0;
+		// 	if (timeWaited > 2000) {
+		// 		console.log("Video failed to load!");
+		// 	}
+		// 	else if (_videoControls.readyState !== 4) {
+		// 		setTimeout(function(){ monitor(timeWaited+100); }, 100);
+		// 	}
+		// };
+		// monitor();
+
+		
 	};
 
 	/*
