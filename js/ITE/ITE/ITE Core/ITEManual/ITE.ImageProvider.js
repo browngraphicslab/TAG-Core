@@ -454,7 +454,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	     _UIControl.css({
     	         top: top + res.translation.y,
     	         left: left + res.translation.x
-    	    })
+    	     })
+            console.log(_UIControl.position().top)
 
     	} else {
 
@@ -501,6 +502,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             newX,
             newY;
 
+        // If the player is playing, pause it.
     	if (self.orchestrator.status === 1) {
     		self.player.pause();
     	}
@@ -523,7 +525,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         	left: newX,
         	width: newW,
         	height: newH
-        });	
+        });
     };
     
     /*
