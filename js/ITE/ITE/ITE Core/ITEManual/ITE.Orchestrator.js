@@ -306,6 +306,7 @@ ITE.Orchestrator = function(player) {
 	self.setVolume = setVolume;
 	self.toggleMute = toggleMute;
 	self.getElapsedTime = self.timeManager.getElapsedOffset;
+	self.getStatus = getStatus;
 	self.captureKeyframe = captureKeyframe;
 	self.areAllTracksReady = areAllTracksReady;
 	self.initializeTracks = initializeTracks;
