@@ -67,7 +67,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_proxy = $(document.createElement("div"))
         	.addClass("deepzoom_proxy")
 			.css({
-				"postion" : "absolute",
+			    "postion": "absolute",
+			    "background-color": "orange",
+                "opacity": 0
 			})
 
 		$("#ITEHolder")
@@ -76,13 +78,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         	.addClass("UIControl")
         	.attr("id", trackData.name + "holder")
         	.css({
-        		// "z-index"	: 0,
-        		 //"pointer-events" : "none",
-        		 //"visibility":"visible",
-        		 //"opacity" : "",
-        		 //"position":"relative",
-        		// "width"		: "100%",
-        		// "height"	: "100%",
         		"position":"absolute",
         		"width"		: $("#ITEHolder").width(),
         		"height"	: $("#ITEHolder").height(),
@@ -94,7 +89,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				_UIControl.append(_proxy);
 
 		_UIControl.append(_canvasHolder);
-
 
 		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
 		_viewer	= new OpenSeadragon.Viewer({
@@ -108,70 +102,11 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
-			//"visibility" : "visible",
-			//"pointer-events" : "none",
 		});
 		_viewer.clearControls();
         // Create _deepZoom, the canvas with the deepZoom image files.
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage"); 
-		_deepZoom.css({
-			//"pointer-events" : "none",
-		})
-		if (IS_WINDOWS) {
-		    $("#ITEHolder").get(0).addEventListener("MSPointerMove", function (evt) {//whenever the mouse moves in the ITEHolder, 
-		       // console.log(isInImageBoundsMouseEvent(evt) + "   X: " + evt.clientX + "     Y: " + evt.clientY + "     " + this);
-		        if (isInImageBoundsMouseEvent(evt)) {
-		            if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
-		                _canvasHolder.css({
-		                   "pointer-events": "auto",
-		                   "touch-action": "auto",
-		                   "-ms-touch-action": "auto",
-		                })
-		            }
-		        }
-		        else {
-		         //   console.log('disabled');
-
-		            // _UIControl.css({
-		            //     "pointer-events": "none",//else, unclickable
-		            //     "touch-action": "none",
-		            //     "-ms-touch-action": "none",
-		            // })
-
-		            // _deepZoom.css({
-		            //     "pointer-events": "none",//else, unclickable
-		            //     "touch-action": "none",
-		            //     "-ms-touch-action": "none",
-		            // })
-
-		        }
-		    });
-		}
-		else
-		{
-		    $("#ITEHolder").mousemove(function (evt) {//whenever the mouse moves in the ITEHolder, 
-		        if (isInImageBoundsMouseEvent(evt)) {
-		            if (!_shouldBeInvisible) {//if the keyframe isn't invisible and the mouse is in the bounds of the image, make it clickable
-		                _canvasHolder.css({
-		                    "pointer-events": "auto",
-		                    "touch-action": "auto",
-		                    "-ms-touch-action": "auto",
-		                })
-		            }
-		        }
-		        else {
-
-
-		            // // console.log('disabled');
-		            // _UIControl.css({
-		            //     "pointer-events": "none",//else, unclickable
-		            //     "touch-action": "none",
-		            //     "-ms-touch-action": "none",
-		            // })
-		        }
-		    });
-		}
 	};
 
 	/*
@@ -188,7 +123,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
 			self.status = 2; 	
 			// Attach handlers.
-			attachHandlers();
+			attachHandlers1();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
 
 		}, self);
@@ -349,30 +284,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		else{
 			_shouldBeInvisible = false;
 		}
-		// console.log("animating")
-		//testing
-		// _viewer.addHandler("animation", 
-		// 	function(){
-		// 		if (state.opacity == 0){
-		// 			// console.log("Enabling clickthrough")
-		// 			_UIControl.css({
-		// 				"pointer-events": "none",
-		// 				"z-index": "-1",
-		// 				"visibility":"hidden"
-		// 			});
-		// 		} else {
-		// 			// console.log("Disabling clickthrough")
-		// 			_UIControl.css({
-		// 				// "z-index": "10",
-		// 				"pointer-events":"auto",
-		// 				"visibility":"visible"
-		// 			});
-		// 		}
-		// 	}
-		// )
-		//testing
-
-		//self.animation.play(); 
 	};
 
 	/*
@@ -566,7 +477,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         transRel = _viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y));
         _viewer.viewport.zoomBy(scale, pivotRel, false);
         _viewer.viewport.panBy(transRel, false);
-        _viewer.viewport.applyConstraints();
     }
 
 
@@ -592,7 +502,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Initializes handlers.
 	 * O/P: 	none
 	 */
-	function attachHandlers() {
+	function attachHandlers1() {
 
 		_viewer.addHandler(
 		'animation', function(evt) {
@@ -606,18 +516,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				height: _canvasHolder.width()*_viewer.viewport.getZoom(true)*_viewer.viewport.contentAspectY
 			}
 
-			//Update proxy touch div
-			// _proxy.css({
-			// 	"position":"absolute",
-			// 	"width": bounds.width,
-			// 	"height": bounds.height,
-			// 	"top": bounds.y,
-			// 	"left": bounds.x
-			// })
-			// _UIControl.css({
-			// 	"top": -_proxy.position().top,
-			// 	"left": -_proxy.position().left
-			//})
+
 			_proxy.css({
 				"position":"absolute",
 				"width": bounds.width,
@@ -631,29 +530,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			}
 
 		})
-	    // if (IS_WINDOWS) {
-	    //     TAG.Util.makeManipulatableWin(_deepZoom[0], {
-	    //         onScroll: function (delta, pivot) {
-	    //             dzScroll(delta, pivot);
-	    //         },
-	    //         onManipulate: function (res) {
-     //                res.translation.x = -res.translation.x;        //Flip signs for dragging
-     //                res.translation.y = -res.translation.y;
-     //                dzManip(res);
-	    //         }
-	    //     }, null, true); // NO ACCELERATION FOR NOW
-	    // } else {
-	    //     TAG.Util.makeManipulatable(_deepZoom[0], {
-	    //         onScroll: function (delta, pivot) {
-	    //             dzScroll(delta, pivot);
-	    //         },
-	    //         onManipulate: function (res) {
-     //                res.translation.x = -res.translation.x;        //Flip signs for dragging
-     //                res.translation.y = -res.translation.y;
-     //                dzManip(res);
-	    //         }
-	    //     }, null, true); // NO ACCELERATION FOR NOW
-	    // }
+
 	   	if (IS_WINDOWS) {
 	        TAG.Util.makeManipulatableWin(_proxy[0], {
 	            onScroll: function (delta, pivot) {
@@ -681,91 +558,34 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 
 
-// 	function attachHandlers() {
+	function attachHandlers() {
 
-// 		_viewer.addHandler(
-// 			'canvas-scroll', function(evt) {
-// 				//console.log("scrolling");
-// 				if (isInImageBounds(evt)){
-// 					//evt.originalEvent.preventDefault();
-// 					(self.orchestrator.status === 1) ? self.player.pause() : null
-// 			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-// 			    	resetSeadragonConfig()
-// 			    } else {
-// 			    	// evt.preventDefaultAction()
-// 			    }
-// 	    	});
-// 		_viewer.addHandler(
-// 			'canvas-drag', function(evt) {
-// 				//console.log("dragging");
-// 				if (isInImageBounds(evt)){
-// 					//evt.originalEvent.preventDefault();
-// 					(self.orchestrator.status === 1) ? self.player.pause() : null
-// 		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
-// 		    		resetSeadragonConfig()
-// 			    } else {
-// 			    	// evt.preventDefaultAction()
-// 			    }
-// 	    	});
-// 		_viewer.addHandler(
-// 			'animation', function(evt) {
-// 				for (var i = 0; i < attachedInks.length; i++){
-//            			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
-// 					bounds = {
-// 						x: topLeft.x,
-// 						y: topLeft.y,
-// 						width: _UIControl.width()*_viewer.viewport.getZoom(true),
-// 						height: _UIControl.width()*_viewer.viewport.getZoom(true)
-// 					}
-// 					attachedInks[i]._ink.adjustViewBox(bounds);
-// 				}
-// 			})
-// }
-
-		/*
-	 * I/P: 	evt (a click/touch event)
-	 * 
-	 * O/P: 	bool, whether or not this event was within the image's bounds
-	 */
-	function isInImageBounds(evt){
-		var x = evt.position.x
-		var y = evt.position.y
-		var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
-		if (
-			(clickP.x < 1) &&
-			(clickP.x > 0) &&
-			(clickP.y <  _viewer.viewport.contentAspectY) &&
-			(clickP.y > 0)){
-			return true
-		} else{
-			return false
-		}
-	}
-	/* I/P: 	evt (a click/touch event)
-	 * purpose:  This method simply compies the one above, but takes in a mouseMove event
-	 * O/P: 	bool, whether or not this event was within the image's bounds
-	 */
-	function isInImageBoundsMouseEvent(evt) {
-
-        //this prevents crashes if the image hasn't loaded yet
-	    if (!_viewer.viewport) { return; }
-
-		var x = evt.clientX - (($("#tagRootInnerContainer").width()-$("#ITEHolder").width())/2);
-		var y = evt.clientY
-		var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
-		if (
-			(clickP.x < 1) &&
-			(clickP.x > 0) &&
-			(clickP.y <  _viewer.viewport.contentAspectY) &&
-			(clickP.y > 0)){
-			return true
-		} else{
-			return false
-		}
-	}
-	
-
-
+ 		_viewer.addHandler(
+ 			'canvas-scroll', function(evt) {
+ 					(self.orchestrator.status === 1) ? self.player.pause() : null
+ 			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+ 			    	resetSeadragonConfig()
+ 	    	});
+ 		_viewer.addHandler(
+ 			'canvas-drag', function(evt) {
+ 					(self.orchestrator.status === 1) ? self.player.pause() : null
+ 		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+ 		    		resetSeadragonConfig()
+ 	    	});
+ 		_viewer.addHandler(
+ 			'animation', function(evt) {
+ 				for (var i = 0; i < attachedInks.length; i++){
+            			var topLeft = _viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
+ 					bounds = {
+ 						x: topLeft.x,
+ 						y: topLeft.y,
+ 						width: _UIControl.width()*_viewer.viewport.getZoom(true),
+ 						height: _UIControl.width()*_viewer.viewport.getZoom(true)
+ 					}
+ 					attachedInks[i]._ink.adjustViewBox(bounds);
+ 				}
+ 			})
+    }
 
     /*
 	 * I/P: 	index
