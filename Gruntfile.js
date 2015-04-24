@@ -42,27 +42,6 @@ var JSSRC = [
 		'js/jQueryUI/js/jquery.autoSize.js',                   // TAGCORE
 		'js/jQueryUI/js/jquery.numeric.js',                    // TAGCORE
 
-
-		//ITE DEPENDENCIES
-        'js/ITE/ITE/Dependencies/CSSPlugin.min.js',							//ITE
-        'js/ITE/ITE/Dependencies/TweenLite.min.js',							//ITE
-        'js/ITE/ITE/Dependencies/openseadragon-bin-1.2.1/openseadragon.js',	//ITE
-      	'js/ITE/ITE/ITE Core/Utils/ITE.Utils.js',							//ITE
-      	'js/ITE/ITE/ITE Core/Utils/TAG.Util.js',							//ITE
-      	'js/ITE/ITE/ITE Core/ITEManual/ITE.PubSubStruct.js',				//ITE
-      	'js/ITE/ITE/ITE Core/ITEManual/ITE.ImageProvider.js',				//ITE
-     	'js/ITE/ITE/ITE Core/ITEManual/ITE.VideoProvider.js',				//ITE
-     	'js/ITE/ITE/ITE Core/ITEManual/ITE.DeepZoomProvider.js',			//ITE
-     	'js/ITE/ITE/ITE Core/ITEManual/ITE.AudioProvider.js',				//ITE
-     	'js/ITE/ITE/ITE Core/ITEManual/ITE.InkProvider.js',					//ITE
-        'js/ITE/ITE/ITE Core/ITEManual/ITE.ScribbleProvider.js',			//ITE
-    	'js/ITE/ITE/ITE Core/ITEManual/ITE.TimeManager.js',					//ITE
-    	'js/ITE/ITE/ITE Core/ITEManual/ITE.TaskManager.js',					//ITE
-    	'js/ITE/ITE/ITE Core/ITEManual/ITE.Orchestrator.js',				//ITE
-    	'js/ITE/ITE/ITE Core/ITEManual/ITE.Player.js',						//ITE
-    	'js/ITE/ITE/ITE Core/ITEManual/ITE.ProviderInterfacePrototype.js',	//ITE
-
-
 		'js/seadragon/src/Seadragon.Core.js',                  // TAGCORE
 		'js/seadragon/src/Seadragon.Config.js',                // TAGCORE
 		'js/seadragon/src/Seadragon.Strings.js',               // TAGCORE
@@ -130,6 +109,27 @@ var JSSRC = [
 		'js/TAG/layout/TAG.Layout.ArtworkEditor.js',
 		'js/TAG/layout/TAG.Layout.TourAuthoringNew.js',
         
+
+		//ITE DEPENDENCIES
+        'js/ITE/ITE/Dependencies/CSSPlugin.min.js',							//ITE
+        'js/ITE/ITE/Dependencies/TweenLite.min.js',							//ITE
+        'js/ITE/ITE/Dependencies/openseadragon-bin-1.2.1/openseadragon.js',	//ITE
+      	'js/ITE/ITE/ITE Core/Utils/ITE.Utils.js',							//ITE
+      	'js/ITE/ITE/ITE Core/Utils/TAG.Util.js',							//ITE
+      	'js/ITE/ITE/ITE Core/ITEManual/ITE.PubSubStruct.js',				//ITE
+      	'js/ITE/ITE/ITE Core/ITEManual/ITE.ImageProvider.js',				//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.VideoProvider.js',				//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.DeepZoomProvider.js',			//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.AudioProvider.js',				//ITE
+     	'js/ITE/ITE/ITE Core/ITEManual/ITE.InkProvider.js',					//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.TimeManager.js',					//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.TaskManager.js',					//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.Orchestrator.js',				//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.Player.js',						//ITE
+    	'js/ITE/ITE/ITE Core/ITEManual/ITE.ProviderInterfacePrototype.js',	//ITE
+
+
+        
 		'js/TAG/tourauthoring/TAG.TourAuthoring.TimeManager.js',        // TAGCORE 
 		'js/TAG/tourauthoring/TAG.TourAuthoring.UndoManager.js',        // TAGCORE 
 		'js/TAG/tourauthoring/TAG.TourAuthoring.ArtworkTrack.js',       // TAGCORE 
@@ -166,6 +166,8 @@ var JSSRC = [
 		'js/tests.js',                                     // TAGCORE
 		
 		'js/core.js'                                       // TAGCORE
+
+
 	],
 	WATCH = JSSRC.slice(); // WATCH will be a superset of JSSRC
 

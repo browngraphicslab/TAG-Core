@@ -29,6 +29,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar = root.find('#setViewNavBar'),
         searchbar = root.find('#setViewSearchBar'),
         newButton = root.find('#setViewNewButton'),
+        addButton = root.find('#setViewAddButton'),
         secondaryButton = root.find('#setViewSecondaryButton'),
         middlebar = root.find('#setViewMiddleBar'),
         middleLabelContainer = root.find('#setViewMiddleLabelContainer'),
@@ -140,6 +141,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         artmodeList, // list of all artworks in a collection
         infoSource = [], // array to hold sorting/searching information
         currDoq,//current selected artwork/associated media id
+        currArtwork,
+        currTour,
         // key handling stuff
         deleteType,
         toDelete,
@@ -673,8 +676,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
        // rootContainer.keydown(keyHandler);
         //searchbar.attr('placeholder', 'Search...');
-        newButton.text('New').css('border-radius', '3.5px');
+        newButton.text('New');
         secondaryButton.text('Video');
+        addButton.text("Add to Collection");
         label.text('Loading...');
         circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
@@ -2676,6 +2680,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteType = deleteTour;
         toDelete = tour;
 
+        currTour = tour;
+
         prevMiddleBarSelection = {
             type_representation: "Tour",
             time_spent_timer: new TelemetryTimer()
@@ -4439,6 +4445,58 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
         cancelLastSetting = function () { cancel = true; };
     }
+
+
+    /**Add artworks to collections in the Artwork Tab
+     * @method addArtworksToCollections 
+     */
+    function addArtworksToCollections(artwork) { //todo - use an array instead of a single artwork (once multiselect is implemented)
+        if (!artwork) {
+            return;
+        }
+
+        //Opens a popup to choose collection(s) to add the artworks list to
+        TAG.Util.UI.createAssociationPicker(root, "Add Artworks to Collections",
+                { comp: artwork, type: 'artwork' , modifiedButtons: true},
+                'exhib', [{
+                    name: 'All Collections',
+                    getObjs: TAG.Worktop.Database.getExhibitions,
+                }], {
+                    getObjs: function () { return [];}, //TODO how to get the collections that an artwork is already in
+                }, function () {
+                    prepareNextView(true, "New", createExhibition);
+                    clearRight();
+                    prepareViewer(true);
+                    loadExhibitionsView(artwork.Identifier);
+                }
+        );
+    }
+
+    /**Add tours to collections in the Tours Tab
+     * @method addToursToCollections
+     */
+    function addToursToCollections(tour) { //todo - use an array instead of a single tour (once multiselect is implemented)
+        if (!tour) {
+            return;
+        }
+
+        //Opens a popup to choose collection(s) to add the tours to
+        TAG.Util.UI.createAssociationPicker(root, "Add Tours to Collections",
+                { comp: tour, type: 'artwork', modifiedButtons: true },
+                'exhib', [{
+                    name: 'All Collections',
+                    getObjs: TAG.Worktop.Database.getExhibitions,
+                }], {
+                    getObjs: function () { return []; }, //TODO how to get the collections that the tour is already in
+                }, function () {
+                    prepareNextView(true, "New", createExhibition);
+                    clearRight();
+                    prepareViewer(true);
+                    loadExhibitionsView(tour.Identifier);
+                }
+        );
+    }
+
     /*nest source tag inside video element*/
     function addSourceToVideo(element, src, type) {
         var source = document.createElement('source');
@@ -4461,6 +4519,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         toDelete = artwork;
         clearInterval(checkConTimerId);
         currDoq = artwork.Identifier;
+        currArtwork = artwork;
         // Create an img element to load the image
         var mediaElement;
         var cancel = false;
@@ -6127,17 +6186,48 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             menuLabel.click();
         }
 
-        if (!inAssociatedView) {
+        if (inArtworkView){
             menuLabel.hide();
             searchbar.css({ width: '53%' });
             newButton.text(newText);
             newButton.unbind('click').click(newBehavior);
-            if (!newText) newButton.hide();
-            else newButton.show();
+            if (!newText) { newButton.hide(); }
+            else { newButton.show(); }
+
+            //shows the second button
+            addButton.show()
+            addButton.unbind('click').click(function () { addArtworksToCollections(currArtwork)})
+
+        } else if (inToursView) {
+            menuLabel.hide();
+            searchbar.css({ width: '53%' });
+            newButton.text(newText);
+            newButton.unbind('click').click(newBehavior);
+            if (!newText) { newButton.hide(); }
+            else { newButton.show(); }
+
+            //shows the second button
+            addButton.show()
+            addButton.unbind('click').click(function () { addToursToCollections(currTour)})
+
         } else {
-            newButton.hide();
-            searchbar.css({width:'40%'});
-            menuLabel.show();
+
+            //hides the second button
+            addButton.hide()
+            addButton.unbind('click')
+
+            if (!inAssociatedView) {
+                menuLabel.hide();
+                searchbar.css({ width: '53%' });
+                newButton.text(newText);
+                newButton.unbind('click').click(newBehavior);
+                if (!newText) newButton.hide();
+                else newButton.show();
+            } else {
+                newButton.hide();
+                searchbar.css({ width: '40%' });
+                menuLabel.show();
+            }
         }
 
         prevSelectedMiddleLabel = null;
@@ -6640,13 +6730,176 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width' : '100%'
         });
 
+        
+        var versionsButton = createButton("Provide Web Versions",
+            function(){
+                var back = $(document.createElement("div"));
+                var centerDiv = $(document.createElement("div"));
+                centerDiv.attr("id","centerDivForVersionsButton");
+                back.attr("id","backgroundForVersionsButton");
+                back.css({
+                    //"color": "black",
+                    'z-index': "9999999999999999999999999999999999999999999999999999999999999999999999",
+                    //'float':'right',
+                    //'font-size':'50%',
+                    'height':'100%',
+                    //'margin-top':'2.8%',
+                    //'padding-bottom':'1%',
+                    'width': '100%',
+                    'position' : "absolute",
+                    'background-color' : "gray",
+                    "opacity" : ".75",
+                    //'border': '1px solid black',
+                    //'padding': '1.5% 0px 0px 0px',
+                    //'padding-top':'-10%',
+                    //'display': 'block',
+                });
+                centerDiv.css({
+                    "background-color" : "#3f3735",
+                    'z-index': "99999999999999999999999999999999999999999999999999999999999999999999999999999991",
+                    "height" : "50%",
+                    "width" : "50%",
+                    "position" : "absolute",
+                    "top" : "25%",
+                    "left" : "25%",
+                    "opacity" : "1",
+                });
+                $('#tagContainer').append(back);
+                $('#tagContainer').append(centerDiv);
+                function filesChosen(data){
+                    console.log("Data uploading: " + data);
+                }
+                var uploadButton = createButton("Upload File(s)",
+                    function(){
+                        uploadFile(3,filesChosen,false,[".mp4",".ogv",".webm"]);
+                    }
+
+                );
+                uploadButton.css({
+                    "bottom" : "20%",
+                    "position" : "absolute",
+                    "left" : "40%",
+                    "width" : "20%",
+                })
+                var exitButton = createButton("Exit",
+                    function(){
+                        $("#centerDivForVersionsButton").remove();
+                        $("#backgroundForVersionsButton").remove();
+                    }
+                );
+                
+                exitButton.css({
+                    "bottom" : "5%",
+                    "position" : "absolute",
+                    "left" : "40%",
+                    "width" : "20%",
+                })
+                var webm = $(document.createElement("div"));
+                var webmButton = createButton("Browse", function(){
+                    uploadFile(3, filesChosen, false, [".webm"]);
+                    webm.css({
+                        "color": "green",
+                    })
+                })
+                webmButton.css({
+                    "left": "20%",
+                    "position": "absolute",
+                    "height": "8%",
+                    "width": "20%",
+                    "top": "9%",
+                });
+                webm.text("webm");
+                webm.css({
+                    "left" : "5%",
+                    "position" : "absolute",
+                    "height": "10%",
+                    "width" : "90%",
+                    "top": "10%",
+                })
+                
+                var ogv = $(document.createElement("div"));
+                var ogvButton = createButton("Browse", function () {
+                    uploadFile(3, filesChosen, false, [".ogv"]);
+                    ogv.css({
+                        "color" : "green",
+                    })
+                });
+                ogvButton.css({
+                    "left": "20%",
+                    "position": "absolute",
+                    "height": "8%",
+                    "width": "20%",
+                    "top": "24%",
+                });
+                ogv.text("ogv");
+                ogv.css({
+                    "left": "5%",
+                    "position": "absolute",
+                    "height": "10%",
+                    "width": "90%",
+                    "top": "25%",
+                })
+                var mp4 = $(document.createElement("div"));
+                var mp4Button = createButton("Browse", function () {
+                    uploadFile(3, filesChosen, false, [".mp4"]);
+                    mp4.css({ 
+                        "color": "green",
+                    })
+                });
+                mp4Button.css({
+                    "left": "20%",
+                    "position": "absolute",
+                    "height": "8%",
+                    "width": "20%",
+                    "top": "39%",
+                });
+                mp4.text("mp4");
+                mp4.css({
+                    "left": "5%",
+                    "position": "absolute",
+                    "height": "10%",
+                    "width": "90%",
+                    "top": "40%",
+                })
+
+                centerDiv.append(webm);
+                centerDiv.append(webmButton);
+                centerDiv.append(ogv);
+                centerDiv.append(ogvButton);
+                centerDiv.append(mp4);
+                centerDiv.append(mp4Button);
+                centerDiv.append(uploadButton);
+                centerDiv.append(exitButton);
+
+
+            },
+            
+            {
+                'margin-right': '0%',
+                'margin-top': '1%',
+                'margin-bottom': '3%',
+                'margin-left': '2%',
+                'float': 'left',
+            });
+        versionsButton.attr("id","versionsButton");
+        //Trent's version button work in progress
         yearMetadataDiv.append(yearDiv)
                        .append(yearDescriptionDiv)
                        .append(timelineYearDiv);
-
+        
+        var typ = "";
+        if (work.Metadata.Type) {
+            typ = work.Metadata.Type.toLowerCase();
+        }
+        else if (work.Metadata.ContentType) {
+            typ = work.Metadata.ContentType.toLowerCase();
+        }
+        if (typ=="video"||typ=="videoArtwork") {
+            yearMetaDataDiv.append(versionsButton);
+        }
         yearMetadataDivSpecs = {
             yearMetadataDiv : yearMetadataDiv,
-            yearInput : yearInput,
+            yearInput : yearInput, 
             monthInput: monthInput,
             dayInput: dayInput,
             timelineYearInput: timelineYearInput,

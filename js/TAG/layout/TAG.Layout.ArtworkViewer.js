@@ -803,7 +803,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (associatedMedia.guids.length > 0) {
             for (i = 0; i < associatedMedia.guids.length; i++) {
                 curr = associatedMedia[associatedMedia.guids[i]];
-                /*if (curr.linq.Metadata.Type === 'Layer') {
+                if (curr.linq.Metadata.Type === 'Layer') {
                     if (!xfadeDrawer) {
                         xfadeSlider = $(document.createElement('div'))
                             .attr('id', 'xfadeSlider');
@@ -850,17 +850,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         xfadeDrawer = createDrawer('Layers', xfadeSlider);
                     }
                     loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
-                } else { */
+                } else { 
 
-                if (!mediaDrawer) {
-                    mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
-                    if (mediaDrawer.drawerToggle) {
-                        drawerToggleFn = mediaDrawer.drawerToggle;
+                    if (!mediaDrawer) {
+                        mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
+                        if (mediaDrawer.drawerToggle) {
+                            drawerToggleFn = mediaDrawer.drawerToggle;
+                        }
                     }
-                }
 
-                loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
-                //} //TODO ADD BACK LAYERS FUNCTIONALITY
+                    loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+                } 
             }
             if (mediaDrawer) {
                 assetContainer.append(mediaDrawer);
@@ -950,8 +950,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 media.create(); // returns if already created
                 media.toggle();
                 TAG.Util.IdleTimer.restartTimer();
-                //(media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
-                media.mediaManipPreprocessing(); //todo delete when layers functionality is added back in
+                (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
+               
                 media.pauseReset();
                 // toggleLocationPanel();
             };
