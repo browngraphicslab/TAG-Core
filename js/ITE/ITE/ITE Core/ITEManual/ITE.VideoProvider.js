@@ -692,8 +692,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
             onManipulate: mediaManip,
             onScroll:     mediaScroll
         }); 
-        interactionHandlers.onManipulate 	= mediaManip;
-        interactionHandlers.onScroll		= mediaScroll;    	
     };
 
 
