@@ -75,6 +75,19 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Attach Handlers.
 		attachHandlers();
+        
+		var timer = setInterval(function () {
+		    console.log("Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _video[0].currentTime);
+		    if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _video[0].currentTime) > 150) {
+                console.log('pausing')
+		        orchestrator.pause();
+		    }
+		    else if(orchestrator.getStatus()==2){
+                console.log("playing")
+		        orchestrator.play();
+		    }
+		}, 250);
+        
 	};
 
 	/*
