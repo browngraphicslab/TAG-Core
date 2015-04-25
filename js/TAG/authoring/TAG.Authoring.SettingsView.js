@@ -223,7 +223,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     };
 
     //WEB ui
-    if (!IS_WINDOWS){
+    if (!IS_WINDOWS) {
         newButton.css({
             'width': 'auto',
             'font-size': '100%'
@@ -232,7 +232,38 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width': 'auto',
             'font-size': '100%'
         })
-
+    } else {
+        menuLabel.css('min-width', '0px');
+        addToArtworkLabel.css('min-width', '0px');
+        newButton.css('min-width', '0px');
+    }
+    deleteBlankButton.css({
+        'min-width': '0px',
+        'width': '20%',
+        'font-size':'50%'
+    })
+    .text("Delete");
+    findBarTextBox.css({
+        'height': '100%',
+        'font-size': '110%',
+        'width': '20%',
+        'display': 'inline-block',
+        'padding-left': '10%',
+        'float': 'left'
+    });
+    findBarDropIcon.css({
+        width: '7%',
+        height: '70%',
+        display: 'inline-block',
+    });
+    if (IS_WINDOWS) {
+        findBarTextBox.css('font-size', '150%');
+        findBarDropIcon.css({
+            'float': 'left',
+            'width': '5%',
+            'margin-top': '5%',
+            'margin-left':'20%'
+        });
     }
 
     /*Surbhi */
@@ -2415,11 +2446,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
-            deleteBlankButton.show();
+            //deleteBlankButton.show();
 
 
             deleteBlankButton.unbind('click').click(function(){ deleteExhibition(exhibition)});
-            deleteBlankButton.text("Delete");
+            //deleteBlankButton.text("Delete");
 
             TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
                 tobj.element_type = "Collections";
@@ -6873,18 +6904,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleLoading.show();
         secondaryButton.css("display", "none");
         findBarTextBox.text("Find");
-            findBarTextBox.css({
-                'height' : '100%',
-                'font-size': '110%',
-                'width': '20%',
-                'display': 'inline-block',
-                'padding-left': '10%',
-                'float':'left'
-            });
             findBarDropIcon.css({
-                width: '7%',
-                height: '70%',
-                display:'inline-block',
+                //width: '7%',
+               // height: '70%',
+               // display:'inline-block',
                 '-webkit-transform': 'rotate(90deg)',
                 '-moz-transform': 'rotate(90deg)',
                 '-o-transform': 'rotate(90deg)',
@@ -6916,7 +6939,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.show();
             addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)});
 
-            deleteBlankButton.show();
+            //deleteBlankButton.show();
             deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
             deleteBlankButton.text('Delete');
 
@@ -6945,7 +6968,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 findBar.css("display","none");
                 newButton.text(newText);
                 newButton.unbind('click').click(newBehavior);
-                deleteBlankButton.css("display", "none");
+                //deleteBlankButton.css("display", "none");
                 if (!newText) newButton.hide();
                 else newButton.show();
             } else {
@@ -8644,7 +8667,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-bottom':'1%',
                 'padding-left':'5%',
                 'padding-right':'2%',
-                'width': '40%',
+                'width': '35%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top':'-10%',
@@ -8714,8 +8737,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (IS_WINDOWS) {
             dropDown.css({
                 'font-size': '70%',
-                'left': '35%',
-                width: '37%'
+                'right': '4%',
+                'left': '',
+                 width: '37%'
             })
         }
         dropDown.hide();
