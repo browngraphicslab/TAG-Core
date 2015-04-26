@@ -62,7 +62,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			.addClass("assetImage");
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
-			.append(_image);
+			.append(_image)
+			.css("zIndex", -1)
 		$("#ITEHolder").append(_UIControl);
 
 		// Get first and last keyframes.
@@ -219,16 +220,14 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.animate = function(duration, state) {
-		// OnComplete, if image is transparent make it transparent to clicks as well.
-		state.onComplete = function () {
-			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
-			if (state.css.opacity === 0){
-			    _UIControl.css("pointer-events", "none")
 
-			}
-			else {
-			    _UIControl.css("pointer-events", "auto")
-			}
+		//If we're fading in, set the z-index to be the track's real z-index (as opposed to -1)
+		(state.opacity !== 0) && _UIControl.css("z-index", self.zIndex)
+
+		state.onComplete = function () {
+			//If we're fading out, set the z-index to -1 to prevent touches
+			(state.css.opacity === 0) && _UIControl.css("z-index", -1);
+			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
 		};
 
 		// Animation.
@@ -273,8 +272,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			"width":		state.width,
 			"height":		state.height
 		});
-
-		(state.opacity === 0) ? _UIControl.css("pointer-events", "none") : _UIControl.css("pointer-events", "auto");
+		// (state.opacity === 0) ? _UIControl.css("z-index", -1) : _UIControl.css("z-index", self.zIndex);
+		// (state.opacity === 0) ? _UIControl.css("pointer-events", "none") : _UIControl.css("pointer-events", "auto");
 	};
 
 	/* 
@@ -426,7 +425,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	         top: top + res.translation.y,
     	         left: left + res.translation.x
     	     })
-            // console.log(_UIControl.position().top)
 
     	} else {
 
@@ -524,10 +522,18 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     /*
 	 * I/P: 	index
 	 * sets the track to the provided z-index
+	 * called by orchestrator on seek()
 	 * O/P: 	none
 	 */
     function setZIndex(index){
-    	_UIControl.css("z-index", index)
+    	//set the z index to be -1 if the track is not displayed
+		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
+			_UIControl.css("z-index", -1)
+		} 
+		else //Otherwise set it to its correct z index
+		{
+			_UIControl.css("z-index", index)
+		}
     	self.zIndex = index
     }
     self.setZIndex = setZIndex;

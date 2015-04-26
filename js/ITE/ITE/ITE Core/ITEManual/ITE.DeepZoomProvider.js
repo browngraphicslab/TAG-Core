@@ -98,7 +98,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2,
-			mouseNavEnabled 	: false
+			mouseNavEnabled 	: true
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
@@ -123,7 +123,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
 			self.status = 2; 	
 			// Attach handlers.
-			attachHandlers1();
+			attachHandlers();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
 
 		}, self);
@@ -263,8 +263,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	self.animate = function(duration, state) {
 		self.opacity = 1;
 		self.imageHasBeenManipulated = false;
+
 		setSeadragonConfig(duration);
 		_viewer.viewport.fitBounds(state.bounds, false);
+
+		//If we're fading in, set the z-index to be the track's real z-index (as opposed to -1)
+		(state.opacity !== 0) && _UIControl.css("z-index", self.zIndex)
+
 		self.animation = TweenLite.to(
 			// What object to animate.
 			_canvasHolder, 
@@ -275,6 +280,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				opacity: state.opacity, // Change in opacity
 				onComplete: function() { // OnComplete function.
 					self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
+					
+					//If we're fading out, set the z-index to -1 to prevent touches
+					(state.opacity === 0) && _UIControl.css("z-index", -1);
 				}
 			}
 		);
@@ -495,6 +503,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
             },
             pivot: pivot
         });
+        _viewer.viewport.applyConstraints()
     }
     
     /*
@@ -593,10 +602,18 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
     function setZIndex(index){
-    	_UIControl.css("z-index", index)
-    	_canvasHolder.css("z-index", 1)
-    	_proxy.css("z-index", 2)
-        self.zIndex = index
+
+    	//set the z index to be -1 if the track is not displayed
+		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
+			_UIControl.css("z-index", -1)
+		} 
+		else //Otherwise set it to its correct z index
+		{
+			_UIControl.css("z-index", index)
+			_canvasHolder.css("z-index", 1)
+    		_proxy.css("z-index", 2)
+		}
+    	self.zIndex = index
     }
     self.setZIndex = setZIndex;
     

@@ -376,7 +376,15 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
     function setZIndex(index){
-    	_UIControl.css("z-index", index)
+    	//set the z index to be -1 if the track is not displayed
+		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
+			_UIControl.css("z-index", -1)
+		} 
+		else //Otherwise set it to its correct z index
+		{
+			_UIControl.css("z-index", index)
+		}
+    	self.zIndex = index
     }
     self.setZIndex = setZIndex;
     

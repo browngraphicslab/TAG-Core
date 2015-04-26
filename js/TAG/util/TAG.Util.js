@@ -7913,7 +7913,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			var serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8086' : "browntagserver.com:8080");
 			URL = serverURL + urls
 		}
-		console.log(URL)
 		return URL;
 	}
 
