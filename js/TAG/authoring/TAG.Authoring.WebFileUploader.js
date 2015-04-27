@@ -19,6 +19,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     multiple = multiple || false;
     var uploadingOverlay = $(document.createElement('div')),
     innerProgressBar = $(document.createElement('div')); // HTML upload overlay
+    var progressBar;
     var dataReaderLoads = [];       //To pass into the finishedCallback, parsed as urls (paths to be precise)
     var maxDuration = Infinity;
     var minDuration = -1;
@@ -44,9 +45,9 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     //Basic HTML initialization
     (function init() {
-        var uploadOverlayText = $(document.createElement('label')),
+        var uploadOverlayText = $(document.createElement('label'));
             //progressIcon = $(document.createElement('img')),
-            progressBar = $(document.createElement('div'));
+        progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
@@ -61,7 +62,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         progressIcon.attr('src', 'images/icons/progress-circle.gif');
         */
         progressBar.css({
-            'position': 'relative', 'top': '42%', 'left': '45%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '2%'
+            'position': 'relative', 'top': '0%', 'left': '5%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '20%', "display":"inline-block",
         });
 
         innerProgressBar.css({
@@ -69,10 +70,10 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         });
 
         progressBar.append(innerProgressBar);
-        uploadingOverlay.append(uploadOverlayText);
-        uploadingOverlay.append(progressBar);    
-        root.append(uploadingOverlay);
-        removeOverlay();
+        //uploadingOverlay.append(uploadOverlayText);
+        //uploadingOverlay.append(progressBar);    
+        //root.append(uploadingOverlay);
+        //removeOverlay();
     })();
 
     (function uploadFile() {
@@ -151,7 +152,19 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         clickedElement.click();
         console.log("If you're seeing this, the file picker should be open");
 
+        //sets up the progress popup - creates popup but doesn't show it
+        var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
+        $('body').append(popup);
+        $(popup).css({'display':'none'});
+        progressBar.unbind('click').click(function () {
+            $('body').append(popup);
+            $(popup).css({ 'display': 'inherit' });
+            $(popup).show();
+        });
+
         resumableUploader.on('fileSuccess', function(resumableFile, message) {
+            popup.setProgress(resumableFile.fileName, 1.0)
+
             //Gets back the relative path of the uploaded file on the server
             globalFiles.push(resumableFile.file);
             dataReaderLoads.push($.trim(message));
@@ -160,20 +173,30 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             filesCompleted++;
             successfulUploads = true;
             //TODO progress bar
+
         });
         resumableUploader.on('complete', function(file) {   //Entire upload operation is complete
-            console.log("COMPLETE");
+            //console.log("COMPLETE");
             finishedUpload();
             removeOverlay();
         });
 
+        resumableUploader.on('fileError', function(file, message){
+            console.log("Error: " + message)
+            popup.setError(file.fileName)
+        })
+
         resumableUploader.on('fileProgress', function(resumableFile) {
+            popup.setProgress(resumableFile.fileName, resumableFile._prevProgress)
+
             var percentComplete = resumableUploader.progress();
             innerProgressBar.width(percentComplete * 90 + "%"); // * 90 or * 100?
         });
 
         resumableUploader.on('fileAdded', function(resumableFile){
             addOverlay();
+            popup.createProgressElement(resumableFile.fileName)
+
             filesAdded++;
             var maxSize;
             globalFilesArray.push(resumableFile.file);
@@ -215,7 +238,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
                             uriString = TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadMap&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + resumableFile.file.type.substr(1);
                             break;
                     }
-                    console.log("The file about to be uploaded is " + resumableFile.file.name);
+                    //console.log("The file about to be uploaded is " + resumableFile.file.name);
                     globalUriStrings.push(uriString);
                     resumableUploader.upload();
                     
@@ -263,7 +286,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     //Check the duration of media files
     function checkDuration(resumableFile, good, long, short) {
 
-        console.log("Passing through checkDuration for" + resumableFile.file.name);
+        //console.log("Passing through checkDuration for" + resumableFile.file.name);
         if (resumableFile.file.type.match(/video/)) {
             console.log("checking the video properties for " + resumableFile.file.name);
             // Get video properties. Any better way of doing this?
@@ -320,7 +343,10 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
 
     function addOverlay(elmt) {
-        uploadingOverlay.show();
+        //uploadingOverlay.show();
+
+        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+        settingsViewTopBar.append(progressBar)
     }
 
     /**

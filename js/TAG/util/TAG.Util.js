@@ -2837,12 +2837,17 @@ TAG.Util.UI = (function () {
             'height': '15%',
             'left': '10%',
             'top': '12.5%',
-            'font-size': '1.20em',
+            //'font-size': '1.20em',
             'position': 'relative',
             'text-align': 'left',
             'word-wrap': 'break-word',
 
         });
+
+        if (IS_WINDOWS) {
+            $(messageLabel).css({'font-size':'1.20em'})
+        }
+
         var fontsize = TAG.Util.getMaxFontSizeEM(message, 1.5, $(messageLabel).width(), $(messageLabel).height());
         $(messageLabel).css('font-size', fontsize);
         TAG.Util.multiLineEllipsis($(messageLabel));
@@ -2860,13 +2865,17 @@ TAG.Util.UI = (function () {
             'height': '45%',
             'left': '10%',
             'top': '15%',
-            'font-size': '1.20em',
+            //'font-size': '1.20em',
             'position': 'relative',
             'text-align': 'left',
             'word-wrap': 'break-word',
             'overflow-x': 'hidden',
             'overflow-y':'scroll'
         });
+
+        if (IS_WINDOWS) {
+            progressDiv.css({'font-size':'1.20em'})
+        }
 
         //creates an element for one upload
         var createProgressElement = function (name) {
@@ -2878,12 +2887,16 @@ TAG.Util.UI = (function () {
                 'width': '100%',
                 'height':'20%',
                 'position': 'relative',
-                'font-size': '1.20em',
+                //'font-size': '1.20em',
                 'text-align': 'left',
                 'word-wrap': 'break-word',
                 'display': 'block',
                 'margin-bottom': '3%'
             });
+
+            if (IS_WINDOWS) {
+                prog.css({'font-size':'1.20em'})
+            }
 
             var nameLabel = $(document.createElement('div')).addClass("uploadProgressName" + name).css({
                 'text-align': 'left',
@@ -2925,7 +2938,8 @@ TAG.Util.UI = (function () {
                 'white-space': 'nowrap',
                 'overflow': 'hidden',
                 'text-overflow': 'ellipsis',
-                'max-width': '500px'
+                'max-width': '500px',
+                'vertical-align':'middle'
             }).text("0%");
 
             progressBar.append(innerProgressBar)
@@ -2937,6 +2951,17 @@ TAG.Util.UI = (function () {
 
         for (var i = 0; i < filesArray.length; i++) {
             createProgressElement(filesArray[i])
+        }
+
+        var setProgress = function (name, percent) {
+            var elementClassName = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (name)
+            $(".uploadProgressLabel" + elementClassName).text((percent*100).toString().substring(0, 4) + "%")
+            $(".uploadProgressInner" + elementClassName).css({'width':percent*100+'%'});
+        }
+
+        var setError = function(name) {
+            var elementClassName = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (name)
+            $(".uploadProgressLabel" + elementClassName).text("Error")
         }
 
         var optionButtonDiv = document.createElement('div');
@@ -3000,6 +3025,11 @@ TAG.Util.UI = (function () {
         $(confirmBox).append(optionButtonDiv);
 
         $(overlay).append(confirmBox);
+
+        overlay.createProgressElement = createProgressElement
+        overlay.setProgress = setProgress
+        overlay.setError = setError
+
         return overlay;
     }
 
