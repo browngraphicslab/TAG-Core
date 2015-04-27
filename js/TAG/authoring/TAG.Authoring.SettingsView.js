@@ -5047,6 +5047,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         );
     }
 
+    /**Add associated medias to artworks
+     * @method addToursToCollections
+     */
+    function addAssocMediaToArtworks(assocMedia) {
+        if (!assocMedia.length) {
+            return;
+        }
+
+        //Opens a popup to choose artwork(s) to associate Associated Media(s) to
+        TAG.Util.UI.createAssociationPicker(root, "Associate with Artworks",
+                { comp: assocMedia, type: 'mediaMulti', modifiedButtons: true },
+                'artwork', [{
+                    name: 'All Artworks',
+                    getObjs: TAG.Worktop.Database.getArtworks,
+                }], {
+                    getObjs: function () { return []; }, 
+                }, function () {
+                    prepareNextView(true, "New", createArtwork);
+                    clearRight();
+                    prepareViewer(true);
+                    loadExhibitionsView(currArtwork.Identifier);
+                }
+        );
+    }
+
     /*nest source tag inside video element*/
     function addSourceToVideo(element, src, type) {
         var source = document.createElement('source');
@@ -6792,7 +6817,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         //add the checkbox if in the artworks tab
-        if (inArtworkView || inToursView) {
+        if (inArtworkView || inAssociatedView ) {
             container.append(function () {
                 var checkboxContainer = $(document.createElement('div'))
                 .addClass('checkboxContainer')
@@ -6904,16 +6929,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleLoading.show();
         secondaryButton.css("display", "none");
         findBarTextBox.text("Find");
-            findBarDropIcon.css({
-                //width: '7%',
-               // height: '70%',
-               // display:'inline-block',
-                '-webkit-transform': 'rotate(90deg)',
-                '-moz-transform': 'rotate(90deg)',
-                '-o-transform': 'rotate(90deg)',
-                '-ms-transform': 'rotate(90deg)',
-                'transform': 'rotate(90deg)',
-                });
+        findBarDropIcon.css({
+            //width: '7%',
+            // height: '70%',
+            // display:'inline-block',
+            '-webkit-transform': 'rotate(90deg)',
+            '-moz-transform': 'rotate(90deg)',
+            '-o-transform': 'rotate(90deg)',
+            '-ms-transform': 'rotate(90deg)',
+            'transform': 'rotate(90deg)',
+        });
         findBar.css("display","none");
         findContainer.css("display","none");
         findShown = false;
@@ -6925,17 +6950,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             menuLabel.click();
         }
 
+        menuLabel.hide();
+        addToArtworkLabel.hide();
+        searchbar.css({ width: '53%' });
+        newButton.text(newText);
+        newButton.unbind('click').click(newBehavior);
+        if (!newText) { newButton.hide(); }
+        else { newButton.show(); }
+
         if (inArtworkView){
             findBar.css("display","inline-block");
-            menuLabel.hide();
-            addToArtworkLabel.hide();
-            searchbar.css({ width: '53%' });
-            newButton.text(newText);
-            newButton.unbind('click').click(newBehavior);
-            if (!newText) { newButton.hide(); }
-            else { newButton.show(); }
 
             //shows the second button
+            addButton.text("Add to Collection")
             addButton.show();
             addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)});
 
@@ -6943,40 +6970,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
             deleteBlankButton.text('Delete');
 
-        } else if (inToursView) {
-            menuLabel.hide();
-            addToArtworkLabel.hide();
-            searchbar.css({ width: '53%' });
-            newButton.text(newText);
-            newButton.unbind('click').click(newBehavior);
-            if (!newText) { newButton.hide(); }
-            else { newButton.show(); }
-            //shows the second button
-            //addButton.show()
-            //addButton.unbind('click').click(function () { addToursToCollections(multiSelected)})
-
+        } else if (inAssociatedView) {
+            findBar.css("display", "none");
+            addButton.text("Associate to Artwork")
+            addButton.show()
+            addButton.unbind('click').click(function () { addAssocMediaToArtworks(multiSelected)})
         } else {
             //hides the second button
             addButton.hide()
             addButton.unbind('click')
-            findBar.css("display","inline-block");
-
-            if (!inAssociatedView) {
-                menuLabel.hide();
-                addToArtworkLabel.hide();
-                searchbar.css({ width: '53%' });
-                findBar.css("display","none");
-                newButton.text(newText);
-                newButton.unbind('click').click(newBehavior);
-                //deleteBlankButton.css("display", "none");
-                if (!newText) newButton.hide();
-                else newButton.show();
-            } else {
-                newButton.hide();
-                searchbar.css({ width: '40%' });
-                menuLabel.show();
-                addToArtworkLabel.show();
-            }
+            findBar.css("display","none");
         }
 
         prevSelectedMiddleLabel = null;
