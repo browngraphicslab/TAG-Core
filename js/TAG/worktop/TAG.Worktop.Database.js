@@ -51,7 +51,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description']
         },
         main: {
-            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'IdleTimerDuration'],
+            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'IdleTimerDuration','isKioskLocked'],
             body: ['Info']
         }
     };
@@ -96,6 +96,7 @@ TAG.Worktop.Database = (function () {
         getCustomFont: getCustomFont,
         getIdleTimerDuration: getIdleTimerDuration,
         getLocked: getLocked,
+        getKioskLocked : getKioskLocked,
 
         asyncRequest: asyncRequest,
         convertToDocHandler: convertToDocHandler,
@@ -1153,6 +1154,10 @@ TAG.Worktop.Database = (function () {
     /////////
     function getMuseumBackgroundColor() {
         return _main.Metadata["BackgroundColor"] || '000000';
+    }
+
+    function getKioskLocked() {
+        return _main.Metadata["isKioskLocked"] || 'true';
     }
 
     function getMuseumBackgroundOpacity() {

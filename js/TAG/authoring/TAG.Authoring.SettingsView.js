@@ -1202,7 +1202,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //    });
         //};
 
-        var kioskIsLocked = true; //need server request
+        var kioskIsLocked = TAG.Worktop.Database.getKioskLocked(); //need server request
         var unlockedKioskInput = createButton('Unlocked', function () {
                 kioskIsLocked = false;
                 unlockedKioskInput.css('background-color', 'white');
@@ -1220,7 +1220,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'min-height': '0px',
                 'width': '48%',
             });
-        if (kioskIsLocked) {
+        if (kioskIsLocked == "true") {
             lockedKioskInput.css('background-color', 'white');
         } else {
             unlockedKioskInput.css('background-color', 'white');
@@ -1265,6 +1265,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //locInput: locInput,                                 //Museum Location
                 //infoInput: infoInput,                               //Museum Info
                 //logoColorInput: logoColorInput,                     //Logo background color
+                isKioskLocked: kioskIsLocked,
                 bgImgInput: bgImgInput,                             //Background image
                 //logoInput: logoInput,                               //Logo image
                 //backgroundColorInput: backgroundColorInput,         //Background Color
@@ -1397,6 +1398,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var backgroundOpacity = inputs.backgroundOpacityInput.val();*/
         var primaryFontColor = inputs.primaryFontColorInput.val();
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
+        var isKioskLocked = inputs.isKioskLocked;
         //var fontFamily = inputs.fontFamilyInput.val();
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
@@ -1414,6 +1416,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //BackgroundOpacity: backgroundOpacity,
             PrimaryFontColor: primaryFontColor,
             SecondaryFontColor: secondaryFontColor,
+            isKioskLocked: isKioskLocked,
             //FontFamily: fontFamily,
             //BaseFontSize: baseFontSize,
             IdleTimerDuration: idleTimerDuration
