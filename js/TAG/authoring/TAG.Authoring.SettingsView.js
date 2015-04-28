@@ -4179,7 +4179,45 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method deleteAssociatedMedia
      * @param {Object} media    media to be deleted
      */
-    function deleteAssociatedMedia(media) {
+    function deleteAssociatedMedia(mediaMULTIPLE) {
+        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
+            prepareNextView(false);
+            clearRight();
+            prepareViewer(true);
+
+            for (var i = 0; i < mediaMULTIPLE.length; i++) {
+                var media = mediaMULTIPLE[i]
+
+                // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
+                TAG.Worktop.Database.changeHotspot(media.Identifier, {Name: media.Name }, function () {
+                    // success handler
+                    TAG.Worktop.Database.deleteDoq(media, function () {
+                        console.log("deleted");
+                        loadAssocMediaView();
+                    }, function () {
+                        console.log("noauth error");
+                    }, function () {
+                        console.log("conflict error");
+                    }, function () {
+                        console.log("general error");
+                    });
+                }, function () {
+                    // unauth handler
+                }, function () {
+                    // conflict handler
+                }, function () {
+                    // error handler
+                });
+            }
+
+        }, "Are you sure you want to delete the selected associated media?", "Delete", true, function () { $(confirmationBox).hide(); });
+        root.append(confirmationBox);
+        $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
+    }
+
+    //FOR THE WEB APP
+    function deleteAssociatedMediaSingle(media) {
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -4187,34 +4225,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
             TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
-            // success handler
-            TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
-                console.log("deleted");
-                loadAssocMediaView();
+                // success handler
+                TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
+                    console.log("deleted");
+                    loadAssocMediaView();
+                }, function () {
+                    console.log("noauth error");
+                }, function () {
+                    console.log("conflict error");
+                }, function () {
+                    console.log("general error");
+                });
             }, function () {
-                console.log("noauth error");
+                // unauth handler
             }, function () {
-                console.log("conflict error");
+                // conflict handler
             }, function () {
-                console.log("general error");
+                // error handler
             });
-            }, function () {
-            // unauth handler
-            }, function () {
-            // conflict handler
-            }, function () {
-            // error handler
-            });
-            }, "Are you sure you want to delete " + media.Name + "?", "Delete", true, function () { $(confirmationBox).hide(); });
-            root.append(confirmationBox);
-            $(confirmationBox).show();
-            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
-
+        }, "Are you sure you want to delete " + media.Name + "?", "Delete", true, function () { $(confirmationBox).hide(); });
+        root.append(confirmationBox);
+        $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
-    function deleteAssociatedMediaSingle(media){
-        
-    }
 
     /**Brings up an artwork chooser for a particular associated media
      * @method assocToArtworks
@@ -5497,7 +5531,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             editArt.attr("id", "artworkEditorButton");
 
             var deleteArt = createButton('Delete',
-                function () { deleteArtworkSingle(artwork); },
+                function () { deleteArtwork(multiSelected); },
                 {
                     'margin-left': '2%',
                     'margin-top': '1%',
@@ -6435,27 +6469,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
     }
 
-    function deleteArtworkSingle(artwork) {
-        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
-
-            // actually delete the artwork
-            TAG.Worktop.Database.deleteDoq(artwork.Identifier, function () {
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
-                    return;
-                }
-                console.log("complete")
-                loadArtView();
-            }, authError, authError);
-        }, "Are you sure you want to delete " + artwork.Name + " ?", "Delete", true, function () { $(confirmationBox).hide() });
-
-        root.append(confirmationBox);
-        $(confirmationBox).show();
-        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
-    }
-
     /**Save an artwork
      * @method saveArtwork
      * @param {Object} artwork      artwork to save
@@ -6941,7 +6954,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         container.unbind('click')
                         isSelected = true
                         check.css({ 'display': 'inherit' })
-                        multiSelected.push(id)
+                        if (!inAssociatedView){
+                            multiSelected.push(id)
+                        } else {
+                            multiSelected.push({Identifier:id, Name:text})
+                        }
                         console.log(multiSelected)
                         evt.stopPropagation()
                         evt.preventDefault()
@@ -7026,7 +7043,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         menuLabel.hide();
         addToArtworkLabel.hide();
-        searchbar.css({ width: '53%' });
         newButton.text(newText);
         newButton.unbind('click').click(newBehavior);
         if (!newText) { newButton.hide(); }
@@ -7034,7 +7050,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (inArtworkView){
             findBar.css("display","inline-block");
-
+            searchbar.css({ width: '53%' });
             //shows the second button
             addButton.text("Add to Collection")
             addButton.show();
@@ -7053,11 +7069,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.show()
             addButton.unbind('click').click(function () { addAssocMediaToArtworks(multiSelected) })
             findBar.css("display", "inline-block");
+            searchbar.css({ width: '75%' });
         } else {
             //hides the second button
             addButton.hide()
             addButton.unbind('click')
-            findBar.css("display","none");
+            findBar.css("display", "none");
         }
 
         prevSelectedMiddleLabel = null;

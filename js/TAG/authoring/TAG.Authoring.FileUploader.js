@@ -84,10 +84,13 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         });
 
         progressBar.append(innerProgressBar);
-        //uploadingOverlay.append(uploadOverlayText);
-        //uploadingOverlay.append(progressBar);
-        //uploadingOverlay.hide();
-        //root.append(uploadingOverlay);
+
+        if (fromImportPopup) {
+            uploadingOverlay.append(uploadOverlayText);
+            uploadingOverlay.append(progressBar);
+            uploadingOverlay.hide();
+            root.append(uploadingOverlay);
+        }
 
     })();
 
@@ -494,21 +497,23 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * (no idea if this will actually disable interactions too as is)
      */
     function addOverlay(elmt) {
-        //if ($("#uploadingOverlay").length === 0) {
-        //    elmt.append(uploadingOverlay);
-        //}
+        if (fromImportPopup) {
+            uploadingOverlay.show()
+            uploadingOverlay.css({ "display": "block" })
+        } else {
+            //updates loading UI
+            var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+            settingsViewTopBar.append(progressBar)
+            console.log("STARTING NEW UPLOAD")
+        }
 
-        //updates loading UI
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        settingsViewTopBar.append(progressBar)
-        console.log("STARTING NEW UPLOAD")
     }
 
     /**
      * Totally remove the overlay from the DOM / destroy
      */
     function removeOverlay() {
-        //uploadingOverlay.remove();
+        uploadingOverlay.remove();
     }
 
     /**
