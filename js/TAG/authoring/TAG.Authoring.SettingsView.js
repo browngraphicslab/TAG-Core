@@ -63,6 +63,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // = root.find('#importButton'),
 
+        
+
         primaryColorPicker,
         secondaryColorPicker,
         isArtView = false,
@@ -224,6 +226,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     //WEB ui
     if (!IS_WINDOWS) {
+        
         newButton.css({
             'width': 'auto',
             'font-size': '100%'
@@ -2451,9 +2454,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //deleteBlankButton.show();
 
+            if(IS_WINDOWS){
+                $('#setViewDeleteButton').css('display','block');
+                deleteBlankButton.unbind('click').click(function(){ deleteExhibition(exhibition)});
+                deleteBlankButton.text('Delete');
+            } else{
 
-            deleteBlankButton.unbind('click').click(function(){ deleteExhibition(exhibition)});
-            //deleteBlankButton.text("Delete");
+            }
 
             TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
                 tobj.element_type = "Collections";
@@ -2633,8 +2640,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             
 
-            buttonContainer.append(artPickerButton).append(saveButton);
-            
+            buttonContainer.append(artPickerButton).append(saveButton); //REAPPEND DELETE BUTTON HERE
+            if(!IS_WINDOWS){
+                buttonContainer.append(deleteButton);
+            }
         }
         cancelLastView = function () {
             cancelView = true;
@@ -3861,10 +3870,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left',
             });
 
+        if(IS_WINDOWS){
+            $('#setViewDeleteButton').css('display','block');
+            deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(media)});
+            deleteBlankButton.text("Delete");
+        } else{
 
-
-        deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(media)});
-        deleteBlankButton.text("Delete");
+        }
 
         var generateAssocMediaThumbnailButton = createButton('Generate Thumbnail',
             function () {
@@ -3961,7 +3973,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             // rather than http:// _______/Images/_______.__
             buttonContainer.append(generateAssocMediaThumbnailButton);
         }
-        buttonContainer.append(saveButton); //SAVE BUTTON//
+        buttonContainer.append(saveButton); //SAVE BUTTON// //REAPPEND DELETE BUTTON HERE
+        if(!IS_WINDOWS){
+            buttonContainer.append(deleteButton);
+        }
+
 
         saveButton.on("mousedown", function () {
             if (!saveButton.attr("disabled")) {
@@ -5523,8 +5539,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'float': 'left'
                 });
             thumbnailButton.attr('id', 'thumbnailButton');
-            if (artwork.Metadata.Type !== 'VideoArtwork') {
+            if (artwork.Metadata.Type !== 'VideoArtwork') { //REAPPEND DELETE BUTTON HERE
                 buttonContainer.append(editArt).append(saveButton); //.append(xmluploaderbtn); // for win8 aug 15 release only
+                if(!IS_WINDOWS){
+                    buttonContainer.append(deleteArt);
+                }
                 //searchContainer.append(deleteArt);
                 //deleteBlankButton = deleteArt;
             } else {
@@ -6970,8 +6989,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)});
 
             //deleteBlankButton.show();
-            deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
-            deleteBlankButton.text('Delete');
+            if(IS_WINDOWS){
+                $('#setViewDeleteButton').css('display','block');
+                deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
+                deleteBlankButton.text('Delete');
+            } 
 
         } else if (inAssociatedView) {
             findBar.css("display", "none");
