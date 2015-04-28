@@ -2445,7 +2445,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, true);
 
             var deleteButton = createButton('Delete', function () {
-                deleteExhibition(multiSelected);
+                deleteExhibitionSingle(exhibition);
             }, {
                 'margin-left': '2%',
                 'margin-top': '1%',
@@ -2749,7 +2749,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method deleteExhibition
      * @param {Object} exhibition     collection to delete
      */
-    function deleteExhibition(exhibition) {
+    function deleteExhibition(exhibitions) {
 
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
@@ -2757,13 +2757,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             prepareViewer(true);
 
             // actually delete the exhibition
-            TAG.Worktop.Database.deleteDoq(exhibition.Identifier, function () {
+            TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                     return;
                 }
                 loadExhibitionsView();
-            }, authError, conflict(exhibition, "Delete", loadExhibitionsView), error(loadExhibitionsView));
-        }, "Are you sure you want to delete " + exhibition.Name + "?", "Delete", true, function() { $(confirmationBox).hide(); });
+            }, authError, authError);
+        }, "Are you sure you want to delete the selected collections?", "Delete", true, function() { $(confirmationBox).hide(); });
+        root.append(confirmationBox);
+        $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
+    }
+
+    //FOR THE WEB APP ONLY
+    function deleteExhibitionSingle(exhibition) {
+
+        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
+            prepareNextView(false);
+            clearRight();
+            prepareViewer(true);
+
+            // actually delete the exhibition
+            TAG.Worktop.Database.deleteDoq(exhibition, function () {
+                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
+                    return;
+                }
+                loadExhibitionsView();
+            }, authError, authError);
+        }, "Are you sure you want to delete " + exhibition.Name + " ?", "Delete", true, function () { $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -3101,7 +3122,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
          if(IS_WINDOWS){
                 $('#setViewDeleteButton').css('display','block');
-                deleteBlankButton.unbind('click').click(function(){ deleteTour(tour)});
+                deleteBlankButton.unbind('click').click(function(){ deleteTour(multiSelected)});
                 deleteBlankButton.text('Delete');
         }
     
@@ -3237,20 +3258,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method deleteTour
      * @param {Object} tour     tour to delete
      */
-    function deleteTour(tour) {
+    function deleteTour(tours) {
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
             prepareViewer(true);
 
             // actually delete the tour
-            TAG.Worktop.Database.deleteDoq(tour.Identifier, function () {
+            TAG.Worktop.Database.batchDeleteDoq(tours, function () {
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                     return;
                 }
                 loadTourView();
-            }, authError, conflict(tour, "Delete", loadTourView), error(loadTourView));
-        }, "Are you sure you want to delete " + tour.Name + "?", "Delete", true, function () { 
+            }, authError, authError);
+        }, "Are you sure you want to delete the selected tours?", "Delete", true, function () { 
             $(confirmationBox).hide(); 
         });
         root.append(confirmationBox);
@@ -6390,13 +6411,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork      artwork to delete
      */
     function deleteArtwork(artworks) {
-        //single delete
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
             prepareViewer(true);
-
-            var doqsString = artworks.join(",");
 
             // actually delete the artwork
             TAG.Worktop.Database.batchDeleteDoq(artworks, function () {
