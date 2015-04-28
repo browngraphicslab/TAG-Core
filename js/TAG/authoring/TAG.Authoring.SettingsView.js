@@ -7075,7 +7075,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         } else if (inAssociatedView) {
             findBar.css("display", "none");
-            addButton.text("Associate to Artwork")
+            addButton.text("Add Associations")
             addButton.show()
             addButton.unbind('click').click(function () { addAssocMediaToArtworks(multiSelected) })
             findBar.css("display", "inline-block");
