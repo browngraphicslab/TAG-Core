@@ -6977,7 +6977,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             findBar.css("display", "none");
             addButton.text("Associate to Artwork")
             addButton.show()
-            addButton.unbind('click').click(function () { addAssocMediaToArtworks(multiSelected)})
+            addButton.unbind('click').click(function () { addAssocMediaToArtworks(multiSelected) })
+            findBar.css("display", "inline-block");
         } else {
             //hides the second button
             addButton.hide()
