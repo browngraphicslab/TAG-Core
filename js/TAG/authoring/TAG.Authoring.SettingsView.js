@@ -4185,15 +4185,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             clearRight();
             prepareViewer(true);
 
-            for (var i = 0; i < mediaMULTIPLE.length; i++) {
-                var media = mediaMULTIPLE[i]
-
+            //only way to get it to reload after all of them are done
+            var DEL = function (j, media) {
                 // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
-                TAG.Worktop.Database.changeHotspot(media.Identifier, {Name: media.Name }, function () {
+                TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
                     // success handler
-                    TAG.Worktop.Database.deleteDoq(media, function () {
-                        console.log("deleted");
-                        loadAssocMediaView();
+                    TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
+                        console.log("deleted" + j);
+                        if (j == mediaMULTIPLE.length - 1) {
+                            loadAssocMediaView();
+                        }
                     }, function () {
                         console.log("noauth error");
                     }, function () {
@@ -4208,6 +4209,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }, function () {
                     // error handler
                 });
+            };
+
+            for (var i = 0; i < mediaMULTIPLE.length; i++) {
+                var media = mediaMULTIPLE[i]
+                DEL(i, media)
             }
 
         }, "Are you sure you want to delete the selected associated media?", "Delete", true, function () { $(confirmationBox).hide(); });

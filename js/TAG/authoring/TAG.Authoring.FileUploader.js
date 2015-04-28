@@ -126,8 +126,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                             largeFiles = "";
                             longFiles = [];
                             shortFiles = [];
-                            var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
-                            bar.width("0%");
+                            //var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
+                            innerProgressBar.width("0%");
                             if (filesObject.length === 0) {
                                 removeOverlay();
                                 addLocalCallback([], [])();
@@ -709,7 +709,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * @param upload        upload object / info
      */
     function progress(upload) {        
-        var bar = innerProgBar || innerProgressBar;
+        //var bar = innerProgBar || innerProgressBar;
         totalBytesToSend[upload.guid] = upload.progress.totalBytesToSend;
         var bytesSent = upload.progress.bytesSent;
         totalBytesSent[upload.guid] = bytesSent;
@@ -720,7 +720,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
             }
         }        
-        bar.width(percentComplete * 90 + "%");
+        innerProgressBar.width(percentComplete * 90 + "%");
         updateProgressUI(guidsToFileNames[upload.guid], percentComplete)
     }
 
