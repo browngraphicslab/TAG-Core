@@ -572,7 +572,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         addRemoveMedia = $(document.createElement('button')); // TODO JADE/STYL
         addRemoveMedia.addClass('addRemoveMedia');
-        addRemoveMedia.text('Add/Remove').css('border-radius', '3.5px');
+        addRemoveMedia.text('Add/Remove Media').css('border-radius', '3.5px');
         addRemoveMedia.attr('type', 'button');
         addRemoveMedia.css(buttonCSS);
         addRemoveMedia.css({'font-size':TAG.Util.getMaxFontSizeEM("Add/Remove Media", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height)});
