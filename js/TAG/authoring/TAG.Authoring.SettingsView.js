@@ -6945,6 +6945,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     })
                     .addClass("check")
 
+                if (inCollectionsView || inToursView) {
+                    check.css({'right':'7.5%'})
+                }
+
                 checkboxContainer.append(check)
 
                 var isSelected = false;
