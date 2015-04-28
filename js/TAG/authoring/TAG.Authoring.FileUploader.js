@@ -23,7 +23,7 @@ TAG.Authoring.FileUploadTypes = {
  * @param useThumbs         Use thumbnail view mode?
  * @param progressFunc      Function to keep track of progress (e.g. for displaying a progress bar somewhere)
  */
-TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar) {
+TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp) {
     "use strict";
     var that = {};
     filters = filters || ["*"];
@@ -86,10 +86,12 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         progressBar.append(innerProgressBar);
 
         if (fromImportPopup) {
+
             uploadingOverlay.append(uploadOverlayText);
             uploadingOverlay.append(progressBar);
             uploadingOverlay.hide();
             root.append(uploadingOverlay);
+
         }
 
     })();

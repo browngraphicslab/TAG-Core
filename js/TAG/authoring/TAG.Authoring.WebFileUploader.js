@@ -11,7 +11,7 @@ TAG.Authoring.FileUploadTypes = {
     Map: 4
 };
 
-TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar) {
+TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp) {
 "use strict";
 
     var that = {};
@@ -70,10 +70,15 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         });
 
         progressBar.append(innerProgressBar);
-        //uploadingOverlay.append(uploadOverlayText);
-        //uploadingOverlay.append(progressBar);    
-        //root.append(uploadingOverlay);
-        //removeOverlay();
+        console.log(fromImportPopUp);
+        if(fromImportPopUp==true){
+            uploadingOverlay.append(uploadOverlayText);
+            uploadingOverlay.append(progressBar);    
+            root.append(uploadingOverlay);
+            removeOverlay();
+
+        }
+        
     })();
 
     (function uploadFile() {
@@ -343,10 +348,13 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
 
     function addOverlay(elmt) {
-        //uploadingOverlay.show();
+        if (fromImportPopUp){
+            uploadingOverlay.show();
+        } else {
 
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        settingsViewTopBar.append(progressBar)
+            var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+            settingsViewTopBar.append(progressBar)
+        }
     }
 
     /**

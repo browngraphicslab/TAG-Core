@@ -2503,7 +2503,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
             function importAndRefresh(){
                 //finalizeAssociations from TAG.Util.js
-                createArtwork();
+                createArtwork(true);
                 //makeManagePopUp();
             }
 
@@ -5758,7 +5758,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Create an artwork (import), possibly more than one
      * @method createArtwork
      */
-    function createArtwork() {
+    function createArtwork(fromImportPopUp) {
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
 
@@ -5892,7 +5892,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }*/
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv'], fromImportPopUp);
     }
 
    // var optionButtons = document.getElementById('optionButtons');
@@ -8267,7 +8267,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param multiple              for batch upload
      * @param filter    
      */
-    function uploadFile(type, callback, multiple, filter) {
+    function uploadFile(type, callback, multiple, filter, fromImportPopUp) {
         console.log("file upload!");
         console.log(IS_WINDOWS);
         if (!IS_WINDOWS){
@@ -8312,7 +8312,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function () {
                 root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
-            !!multiple // batch upload disabled
+            !!multiple, // batch upload disabled
+            fromImportPopUp
             );
         } else {
 
@@ -8379,7 +8380,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function () {
                 root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
-            !!multiple // batch upload disabled
+            !!multiple, // batch upload disabled
+            fromImportPopUp
             );
         }
     }
