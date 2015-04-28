@@ -362,7 +362,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
             $("#linkButton").stop();
             makeControlsVisible();
         });
-        playerParent.mouseleave(function(){
+        $("#bottomContainer").mouseleave(function(){
             setControlsFade();
         })
     };
