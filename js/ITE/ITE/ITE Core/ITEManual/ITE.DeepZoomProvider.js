@@ -123,7 +123,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
 			self.status = 2; 	
 			// Attach handlers.
-			attachHandlers();
+			attachHandlers1();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
 
 		}, self);
