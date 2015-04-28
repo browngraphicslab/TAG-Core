@@ -261,6 +261,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     });
     if (IS_WINDOWS) {
         findBarTextBox.css('font-size', '150%');
+        findButton.css('font-size','100%');
         findBarDropIcon.css({
             'float': 'left',
             'width': '5%',
@@ -2444,7 +2445,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, true);
 
             var deleteButton = createButton('Delete', function () {
-                deleteExhibition(exhibition);
+                deleteExhibition(multiSelected);
             }, {
                 'margin-left': '2%',
                 'margin-top': '1%',
@@ -2456,7 +2457,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             if(IS_WINDOWS){
                 $('#setViewDeleteButton').css('display','block');
-                deleteBlankButton.unbind('click').click(function(){ deleteExhibition(exhibition)});
+                deleteBlankButton.unbind('click').click(function(){ deleteExhibition(multiSelected)});
                 deleteBlankButton.text('Delete');
             } else{
 
@@ -3076,7 +3077,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         var deleteButton = createButton('Delete',
-            function () { deleteTour(tour); },
+            function () { deleteTour(multiSelected); },
             {
                 'margin-left': '2%',
                 'margin-top': '1%',
@@ -6839,7 +6840,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         //add the checkbox if in the artworks tab
-        if (inArtworkView || inAssociatedView ) {
+        if (inArtworkView || inAssociatedView || ((inToursView || inCollectionsView) && IS_WINDOWS)) {
             container.append(function () {
                 var checkboxContainer = $(document.createElement('div'))
                 .addClass('checkboxContainer')
