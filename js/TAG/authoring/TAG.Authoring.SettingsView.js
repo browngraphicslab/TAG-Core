@@ -3891,7 +3891,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         leftButton = addToArtworkLabel;
         var deleteButton = createButton('Delete',
-            function () { deleteAssociatedMedia(media); /*changesHaveBeenMade = true;*/ },
+            function () { deleteAssociatedMediaSingle(media); /*changesHaveBeenMade = true;*/ },
             {
                 'margin-right': '0%',
                 'margin-top': '1%',
@@ -3902,7 +3902,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if(IS_WINDOWS){
             $('#setViewDeleteButton').css('display','block');
-            deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(media)});
+            deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(multiSelected)});
             deleteBlankButton.text("Delete");
         } else{
 
@@ -4210,6 +4210,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             $(confirmationBox).show();
             TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
 
+    }
+
+    function deleteAssociatedMediaSingle(media){
+        
     }
 
     /**Brings up an artwork chooser for a particular associated media
@@ -5493,7 +5497,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             editArt.attr("id", "artworkEditorButton");
 
             var deleteArt = createButton('Delete',
-                function () { deleteArtwork(multiSelected); },
+                function () { deleteArtworkSingle(artwork); },
                 {
                     'margin-left': '2%',
                     'margin-top': '1%',
@@ -6425,6 +6429,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 loadArtView();
             }, authError, authError);
         }, "Are you sure you want to delete the selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
+
+        root.append(confirmationBox);
+        $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
+    }
+
+    function deleteArtworkSingle(artwork) {
+        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
+            prepareNextView(false);
+            clearRight();
+            prepareViewer(true);
+
+            // actually delete the artwork
+            TAG.Worktop.Database.deleteDoq(artwork.Identifier, function () {
+                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
+                    return;
+                }
+                console.log("complete")
+                loadArtView();
+            }, authError, authError);
+        }, "Are you sure you want to delete " + artwork.Name + " ?", "Delete", true, function () { $(confirmationBox).hide() });
 
         root.append(confirmationBox);
         $(confirmationBox).show();
