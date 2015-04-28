@@ -3098,8 +3098,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
-
+         if(IS_WINDOWS){
+                $('#setViewDeleteButton').css('display','block');
+                deleteBlankButton.unbind('click').click(function(){ deleteTour(tour)});
+                deleteBlankButton.text('Delete');
+        }
     
+
         TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
             //nothing to record
         });
@@ -3123,7 +3128,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
             tobj.element_type = "Tour";
         });
-        buttonContainer.append(editButton).append(duplicateButton).append(deleteButton).append(saveButton);
+        buttonContainer.append(editButton).append(duplicateButton).append(saveButton);
+        if(!IS_WINDOWS){
+            buttonContainer.append(deleteButton);
+        }
 
         saveButton.on("mousedown", function () {
             if (!saveButton.attr("disabled")) {
