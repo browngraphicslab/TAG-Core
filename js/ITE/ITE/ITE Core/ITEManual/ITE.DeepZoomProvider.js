@@ -204,7 +204,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.stopDelayStart();
 
-		if (self.animation) {//Kills opacity animation
+		if (self.animation) { //Kills opacity animation
 			self.animation.kill();
 		}
 
@@ -318,17 +318,20 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		//(where "true" refers to whether or not the player is updated immediately or with an animation time, 
 		//[this animation time is actually a property of the springs used in their animation system])
 		//doesn't always actually update the screen. That is, the bounds is set correctly but it doesn't look any different.
-		//What we're doing here is just setting a very low animation time and using fitBounds(bounds, false), and then 
-		//resetting the seadragonConfig (the animation times) after we're done.
-		//Yeah, it's pretty strange. But it seems to work.
-		_viewer.viewport.centerSpringY.animationTime 	= .000001;	
-		_viewer.viewport.centerSpringX.animationTime 	= .000001;
-		_viewer.viewport.zoomSpring.animationTime 		= .000001;
+		// The current way to get this to update is by zooming the viewport in a tiny bit, then zooming it back out.
+		// Don't know why it works, but it does.
+		// Just embrace the jank. Don't fight it. 
+		// _viewer.viewport.centerSpringY.animationTime 	= .000001;	// Old janky fix
+		// _viewer.viewport.centerSpringX.animationTime 	= .000001; 
+		// _viewer.viewport.zoomSpring.animationTime 		= .000001;
+		// _viewer.viewport.fitBounds(state.bounds, false);  // End of old janky fix.
 
 		_canvasHolder.css("opacity", state.opacity)
-		_viewer.viewport.fitBounds(state.bounds, false);
+		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
-		resetSeadragonConfig()
+        _viewer.viewport.zoomBy(1.01, new OpenSeadragon.Point(0,0), true);
+        _viewer.viewport.zoomBy(0.99, new OpenSeadragon.Point(0,0), true);
+        resetSeadragonConfig()
 	};
 
 	/* 
