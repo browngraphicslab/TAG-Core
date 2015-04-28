@@ -83,7 +83,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         previouslyClicked = null,
         artworkInCollectionList = [],
         lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
-
         // constants
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
@@ -139,22 +138,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
     backButton.attr('src', tagPath + 'images/icons/Back.svg');
 
-    backButton.mousedown(function () {
-            TAG.Util.UI.cgBackColor("backButton", backButton, false);
-    });
-            
-    backButton.mouseleave(function () {
-            TAG.Util.UI.cgBackColor("backButton", backButton, true);
-    });
-
     backButton.click(function () {    
         TAG.Layout.StartPage(null, function (page) {
             TAG.Util.UI.slidePageRight(page);
         });
     });
 
-    if (lockKioskMode=="true"){
-        backButton.css('display','none');
+    if (lockKioskMode == "true") {
+        backButton.css('display', 'none');
+    } else {
+        collectionMenu.css('left', '5%');
+        if (IS_WINDOWS) {
+            backButton.css('padding-top', '');
+        }
     }
 
     // get things rolling
