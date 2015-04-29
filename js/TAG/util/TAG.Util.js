@@ -2986,6 +2986,15 @@ TAG.Util.UI = (function () {
             'margin-top': '-1%',
             color: 'white',
         }).css('border-radius', '3.5px');
+
+        if (!IS_WINDOWS){
+            $(confirmButton).css({
+                "background-color":"black",
+                "padding-left":"4%",
+                "padding-right":"4%",
+            })
+        }
+
         buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
         $(confirmButton).text(buttonText);
         confirmButton.onclick = function () {
