@@ -97,7 +97,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         if (fromImportPopUp) {
 
             uploadingOverlay.append(uploadOverlayText);
-            uploadingOverlay.append(progressBar);
+            //uploadingOverlay.append(progressBar);
             uploadingOverlay.hide();
             root.append(uploadingOverlay);
 
