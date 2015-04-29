@@ -5763,6 +5763,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         console.log("FINISHED THE UPLOAD PROCESS")
         var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         $('.progressBarUploads').remove()
+        $('.progressBarUploadsButton').remove()
     }
 
     /**Create an artwork (import), possibly more than one
