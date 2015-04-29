@@ -531,6 +531,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      */
     function removeOverlay() {
         uploadingOverlay.remove();
+        $('.progressBarUploads').remove()
+        $('.progressBarUploadsButton').remove()
     }
 
     /**
