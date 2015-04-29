@@ -178,6 +178,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         //     $(popup).show();
         // });
         progressBarButton.click(function(){
+            $('body').append(popup);
             $(popup).css({ 'display': 'inherit' });
             $(popup).show();
         })
