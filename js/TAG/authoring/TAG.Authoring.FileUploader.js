@@ -70,7 +70,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             .css({
                 'border-radius':'3.5px','position': 'relative', 'top': '-7%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '20%', "display": "inline-block", "color":"white",
             })
-            .text("Upload Progress");
+            .text("Show Uploads");
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
