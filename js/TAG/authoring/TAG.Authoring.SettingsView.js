@@ -4185,14 +4185,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             clearRight();
             prepareViewer(true);
 
+            console.log(mediaMULTIPLE.length + " things to delete.")
+            var deleteCounter = 0;
+
             //only way to get it to reload after all of them are done
             var DEL = function (j, media) {
                 // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
                 TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
                     // success handler
                     TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
-                        console.log("deleted" + j);
-                        if (j == mediaMULTIPLE.length - 1) {
+                        deleteCounter += 1
+                        console.log("deleted item: " + j)
+                        if (deleteCounter == mediaMULTIPLE.length) {
                             loadAssocMediaView();
                         }
                     }, function () {
