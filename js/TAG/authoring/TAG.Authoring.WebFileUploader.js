@@ -62,7 +62,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
-        uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100 });
+        uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100000 });
 
         uploadOverlayText.css({ 'color': 'white', 'height': '5%', 'top': '35%', 'left': '35%', 'position': 'absolute', 'font-size': '150%' });
         uploadOverlayText.text('Uploading file(s). Please wait.');
@@ -81,13 +81,13 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         });
 
         progressBar.append(innerProgressBar);
-        console.log(fromImportPopUp);
-        if(fromImportPopUp==true){
-            uploadingOverlay.append(uploadOverlayText);
-            uploadingOverlay.append(progressBar);    
-            root.append(uploadingOverlay);
-            removeOverlay();
 
+        console.log("fromImportPopUp is " + (fromImportPopUp));
+        if (fromImportPopUp) {
+            uploadingOverlay.append(uploadOverlayText);
+            uploadingOverlay.append(progressBar);
+            uploadingOverlay.hide();
+            root.append(uploadingOverlay);
         }
         
     })();
@@ -364,9 +364,12 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
 
     function addOverlay(elmt) {
-        if (fromImportPopUp){
-            uploadingOverlay.show();
+        if (fromImportPopUp) {
+            uploadingOverlay.show()
+            uploadingOverlay.css({ "display": "block" })
         } else {
+            //updates loading UI
+            console.log("STARTING NEW UPLOAD")
 
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressBar)

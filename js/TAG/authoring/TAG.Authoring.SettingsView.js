@@ -8328,6 +8328,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
             !!multiple, // batch upload disabled
+            null,
             fromImportPopUp
             );
         } else {
