@@ -88,6 +88,9 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		_super.load();
 		self._ink.loadInk(trackData.datastring);
 
+		//Tell orchestrator to play (if other tracks are ready)
+		self.orchestrator.playWhenAllTracksReady()
+
 		// When finished loading, set status to 2 (paused).
 		self.status = 2; // TODO: should this be some kind of callback?
 	};

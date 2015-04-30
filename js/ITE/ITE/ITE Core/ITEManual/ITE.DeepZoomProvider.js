@@ -125,7 +125,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			// Attach handlers.
 			attachHandlers1();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
-
+		
+			//Tell orchestrator to play (if other tracks are ready)
+			self.orchestrator.playWhenAllTracksReady()
 		}, self);
 		// Sets the DeepZoom's URL source.
 		_viewer.open(self.trackData.assetUrl);
@@ -421,7 +423,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			setTimeout(function(){
 				addInk(inkTrack) } , 100);
 		} else {
-            console.log("we added an ink")
 			attachedInks.push(inkTrack)	
 			inkTrack._ink.setInitKeyframeData(inkTrack.trackData.initKeyframe)
 			inkTrack._ink.retrieveOrigDims();
@@ -487,8 +488,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
             pivot = res.pivot;
         var pivotRel;
         var transRel;
-        console.log(pivot.x + _proxy.position().left)
-        console.log( pivot.y + _proxy.height())
+
         pivotRel = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x + _proxy.position().left, pivot.y + _proxy.position().top));
         var piv = {
             x: pivotRel.x,
