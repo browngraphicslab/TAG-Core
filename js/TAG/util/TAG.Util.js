@@ -4681,9 +4681,16 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
-                    console.log("adding associated medias to artworks")
+                    var createMediaMultiList = function(){
+                        var l = []
+                        for (var k=0; k < target.comp.length; k ++){
+                            l.push(target.comp[k].Identifier)
+                        }
+                        return l
+                    }();
                     for (var i = 0; i < addedComps.length; i++) {
-                        TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: [target.comp] }, function () {
+                        console.log(target.comp)
+                        TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: createMediaMultiList }, function () {
                             if (i == addedComps.length - 1) {
                                 callback();
                                 pickerOverlay.fadeOut();
