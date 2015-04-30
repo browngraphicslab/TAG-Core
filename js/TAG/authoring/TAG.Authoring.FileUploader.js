@@ -32,7 +32,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
     var uploadingOverlay = $(document.createElement('div')),
         innerProgressBar = $(document.createElement('div')), // HTML upload overlay
-        progressBar;
+        progressBar,
+        progressBarButton;
     var filesFinished = 0;
     var numFiles = 100000;
     var dataReaderLoads = [];
@@ -62,6 +63,14 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             progressIcon = $(document.createElement('img'));
 
         progressBar = $(document.createElement('div')).addClass('progressBarUploads');
+        progressBarButton = $(document.createElement('button'))
+            .addClass('progressBarUploadsButton')
+            .addClass('button')
+            .attr('type', 'button')
+            .css({
+                'border-radius':'3.5px','position': 'relative', 'top': '-7%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '20%', "display": "inline-block", "color":"white",
+            })
+            .text("Show Uploads");
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
@@ -88,7 +97,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         if (fromImportPopUp) {
 
             uploadingOverlay.append(uploadOverlayText);
-            uploadingOverlay.append(progressBar);
+            //uploadingOverlay.append(progressBar);
             uploadingOverlay.hide();
             root.append(uploadingOverlay);
 
@@ -260,11 +269,16 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
                                                 $('body').append(popup);
                                                 $(popup).css({'display':'none'});
-                                                progressBar.click(function () {
+                                                //progressBar.click(function () {
+                                                //    $('body').append(popup);
+                                                //    $(popup).css({ 'display': 'inherit' });
+                                                //    $(popup).show();
+                                                //});
+                                                progressBarButton.click(function () {
                                                     $('body').append(popup);
                                                     $(popup).css({ 'display': 'inherit' });
                                                     $(popup).show();
-                                                });
+                                                })
 
                                                 numFiles = files.length; // global
                                                 globalUriStrings = uriStrings;
@@ -506,6 +520,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             //updates loading UI
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressBar)
+            settingsViewTopBar.append(progressBarButton)
             console.log("STARTING NEW UPLOAD")
         }
 
@@ -515,7 +530,12 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * Totally remove the overlay from the DOM / destroy
      */
     function removeOverlay() {
+
+        //uploadingOverlay.hide();
+
         uploadingOverlay.remove();
+        $('.progressBarUploads').remove()
+        $('.progressBarUploadsButton').remove()
     }
 
     /**
