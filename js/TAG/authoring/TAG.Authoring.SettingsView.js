@@ -3438,11 +3438,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             titleSort.css('background-color','white');
             collectionSort.css('background-color','initial');
             addedRecentlySort.css('background-color','initial');
-        } else if (sortByAssoc == "Collection"){
-            titleSort.css('background-color','initial');
-            collectionSort.css('background-color','white');
-            addedRecentlySort.css('background-color','initial');
-        } else if (sorByAssoc == "Recently Added"){
+        } else if (sortByAssoc == "Recently Added"){
             titleSort.css('background-color','initial');
             collectionSort.css('background-color','initial');
             addedRecentlySort.css('background-color','white');
