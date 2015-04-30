@@ -472,7 +472,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             h  		= _UIControl.height(),
             newW  	= w * scale,
             newH,
-            maxW 	= 10000,        // These values are somewhat arbitrary; TODO determine good values
+            maxW 	= 1000000,        // These values are somewhat arbitrary; TODO determine good values
             minW	= 200,
             newX,
             newY;

@@ -67,9 +67,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_proxy = $(document.createElement("div"))
         	.addClass("deepzoom_proxy")
 			.css({
-			    "postion": "absolute",
+			    "position": "absolute",
 			    "background-color": "orange",
-                "opacity": 0
+                 "opacity": 0
 			})
 
 		$("#ITEHolder")
@@ -86,7 +86,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// $("#ITEHolder").append(_UIControl);
 		$("#ITEHolder").append(_UIControl);
-				_UIControl.append(_proxy);
+		$("#ITEHolder").append(_proxy);
 
 		_UIControl.append(_canvasHolder);
 
@@ -98,7 +98,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2,
-			mouseNavEnabled 	: true
+			mouseNavEnabled 	: false
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
@@ -123,7 +123,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
 			self.status = 2; 	
 			// Attach handlers.
-			attachHandlers();
+			attachHandlers1();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
 
 		}, self);
@@ -474,9 +474,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
      * @param {Object} res             object containing hammer event info
      */
 
-    function dzManip(res) {
-        //Pause
+	function dzManip(res) {
 
+
+        //Pause
         (self.orchestrator.status === 1) ? self.player.pause() : null
       	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		resetSeadragonConfig()
@@ -486,8 +487,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
             pivot = res.pivot;
         var pivotRel;
         var transRel;
-
-        pivotRel = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y));
+        console.log(pivot.x + _proxy.position().left)
+        console.log( pivot.y + _proxy.height())
+        pivotRel = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x + _proxy.position().left, pivot.y + _proxy.position().top));
         var piv = {
             x: pivotRel.x,
             y: pivotRel.y
@@ -495,6 +497,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         transRel = _viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y));
         _viewer.viewport.zoomBy(scale, pivotRel, false);
         _viewer.viewport.panBy(transRel, false);
+        _viewer.viewport.applyConstraints()
+
     }
 
 
@@ -513,7 +517,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
             },
             pivot: pivot
         });
-        _viewer.viewport.applyConstraints()
     }
     
     /*
@@ -537,7 +540,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 
 			_proxy.css({
-				"position":"absolute",
 				"width": bounds.width,
 				"height": bounds.height,
 				"top": bounds.y,
@@ -556,6 +558,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	                dzScroll(delta, pivot);
 	            },
 	            onManipulate: function (res) {
+	                if (!res.translation || !res.pivot) { return; }
+
                     res.translation.x = -res.translation.x;        //Flip signs for dragging
                     res.translation.y = -res.translation.y;
                     dzManip(res);
@@ -615,13 +619,15 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
     	//set the z index to be -1 if the track is not displayed
 		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
-			_UIControl.css("z-index", -1)
+		    _UIControl.css("z-index", -1)
+		    _proxy.css("z-index", -1)
+
 		} 
 		else //Otherwise set it to its correct z index
 		{
 			_UIControl.css("z-index", index)
 			_canvasHolder.css("z-index", 1)
-    		_proxy.css("z-index", 2)
+    		_proxy.css("z-index", 2000)
 		}
     	self.zIndex = index
     }
