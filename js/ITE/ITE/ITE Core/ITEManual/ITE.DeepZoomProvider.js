@@ -571,6 +571,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	                dzScroll(delta, pivot);
 	            },
 	            onManipulate: function (res) {
+	            	if (!res.translation || !res.pivot) { return; }
                     res.translation.x = -res.translation.x;        //Flip signs for dragging
                     res.translation.y = -res.translation.y;
                     dzManip(res);
