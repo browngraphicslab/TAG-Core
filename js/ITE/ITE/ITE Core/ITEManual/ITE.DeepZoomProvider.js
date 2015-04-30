@@ -123,7 +123,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
 			self.status = 2; 	
 			// Attach handlers.
-			attachHandlers();
+			attachHandlers1();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
 
 		}, self);
@@ -602,16 +602,20 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
     function setZIndex(index){
-
+        console.log("Opacity: "+_UIControl[0].style.opacity+"     for "+self.trackData.name);
     	//set the z index to be -1 if the track is not displayed
 		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
-			_UIControl.css("z-index", -1)
+		    _UIControl.css("z-index", -1)
+            console.log('setting z index to -1 for ' + self.trackData.name)
 		} 
 		else //Otherwise set it to its correct z index
 		{
 			_UIControl.css("z-index", index)
 			_canvasHolder.css("z-index", 1)
-    		_proxy.css("z-index", 2)
+			_proxy.css("z-index", 2)
+			console.log('setting z index to normal for ' + self.trackData.name)
+			console.log('opacity ' + window.getComputedStyle(_UIControl[0]).opacity)
+
 		}
     	self.zIndex = index
     }

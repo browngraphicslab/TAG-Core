@@ -6730,7 +6730,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width' : '100%'
         });
 
-        
         var versionsButton = createButton("Provide Web Versions",
             function(){
                 var back = $(document.createElement("div"));
@@ -6886,7 +6885,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearMetadataDiv.append(yearDiv)
                        .append(yearDescriptionDiv)
                        .append(timelineYearDiv);
-        
         var typ = "";
         if (work.Metadata.Type) {
             typ = work.Metadata.Type.toLowerCase();
@@ -6894,7 +6892,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         else if (work.Metadata.ContentType) {
             typ = work.Metadata.ContentType.toLowerCase();
         }
-        if (typ=="video"||typ=="videoArtwork") {
+        if (typ.toLowerCase()=="video"||typ.toLowerCase()=="videoArtwork") {
             yearMetaDataDiv.append(versionsButton);
         }
         yearMetadataDivSpecs = {
