@@ -16,6 +16,7 @@ ITE.Orchestrator = function(player) {
 	self.prevStatus			= 0; // 0 means we're not scrubbing. 1 - previously playing. 2 - previously paused.
 	self.tourData 			= null;
     self.loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
+    self.loadedTracks = 0;
 
 	self.timeManager = new ITE.TimeManager();
 	self.getElapsedTime = function(){
@@ -56,11 +57,6 @@ ITE.Orchestrator = function(player) {
 	    	for (i = 0; i < trackManager.length; i++){
 	    		trackManager[i].load()
 	    	}
-
-	    	//...And plays them
-	    	if (areAllTracksReady()){
-				play();
-			}
 		}
 
 
@@ -84,7 +80,7 @@ ITE.Orchestrator = function(player) {
 					self.trackManager.push(new ITE.DeepZoomProvider(trackData, self.player, self.timeManager, self));
 					break;
 				case "ink" : 
-					//self.trackManager.push(new ITE.InkProvider(trackData, self.player, self.timeManager, self));
+					self.trackManager.push(new ITE.InkProvider(trackData, self.player, self.timeManager, self));
 					break;
 				default:
 					throw new Error("Unexpected providerID; '" + trackData.providerId + "' is not a valid providerID");
@@ -232,14 +228,10 @@ ITE.Orchestrator = function(player) {
 		track.unload();
 	}
 
-	function areAllTracksReady() {
-		var ready = true,
-			i;
-		for (i = 0; i < trackManager.length; i++){
-			var track = trackManager[i]
-			if (track.state !== 2) {  //(2 = paused)
-				ready = false
-			}
+	function playWhenAllTracksReady() {
+		self.loadedTracks++
+		if (self.loadedTracks == trackManager.length){
+			self.play()
 		}
 	}
 
@@ -293,7 +285,7 @@ ITE.Orchestrator = function(player) {
 	self.getElapsedTime = self.timeManager.getElapsedOffset;
 	self.getStatus = getStatus;
 	self.captureKeyframe = captureKeyframe;
-	self.areAllTracksReady = areAllTracksReady;
+	self.playWhenAllTracksReady = playWhenAllTracksReady;
 	self.initializeTracks = initializeTracks;
 	self.getTourData = getTourData;
 	self.status = status;

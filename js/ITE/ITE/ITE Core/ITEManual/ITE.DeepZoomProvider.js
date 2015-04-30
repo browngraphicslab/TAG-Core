@@ -67,9 +67,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_proxy = $(document.createElement("div"))
         	.addClass("deepzoom_proxy")
 			.css({
-			    "postion": "absolute",
+			    "position": "absolute",
 			    "background-color": "orange",
-                "opacity": 0
+                 "opacity": 0
 			})
 
 		$("#ITEHolder")
@@ -86,7 +86,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// $("#ITEHolder").append(_UIControl);
 		$("#ITEHolder").append(_UIControl);
-				_UIControl.append(_proxy);
+		$("#ITEHolder").append(_proxy);
 
 		_UIControl.append(_canvasHolder);
 
@@ -98,7 +98,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2,
-			mouseNavEnabled 	: true
+			mouseNavEnabled 	: false
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
@@ -125,7 +125,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			// Attach handlers.
 			attachHandlers1();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
-
+		
+			//Tell orchestrator to play (if other tracks are ready)
+			self.orchestrator.playWhenAllTracksReady()
 		}, self);
 		// Sets the DeepZoom's URL source.
 		_viewer.open(self.trackData.assetUrl);
@@ -204,7 +206,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.stopDelayStart();
 
-		if (self.animation) {//Kills opacity animation
+		if (self.animation) { //Kills opacity animation
 			self.animation.kill();
 		}
 
@@ -318,17 +320,26 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		//(where "true" refers to whether or not the player is updated immediately or with an animation time, 
 		//[this animation time is actually a property of the springs used in their animation system])
 		//doesn't always actually update the screen. That is, the bounds is set correctly but it doesn't look any different.
-		//What we're doing here is just setting a very low animation time and using fitBounds(bounds, false), and then 
-		//resetting the seadragonConfig (the animation times) after we're done.
-		//Yeah, it's pretty strange. But it seems to work.
-		_viewer.viewport.centerSpringY.animationTime 	= .000001;	
-		_viewer.viewport.centerSpringX.animationTime 	= .000001;
-		_viewer.viewport.zoomSpring.animationTime 		= .000001;
+		// The current way to get this to update is by zooming the viewport in a tiny bit, then zooming it back out.
+		// Don't know why it works, but it does.
+		// Just embrace the jank. Don't fight it. 
+		// _viewer.viewport.centerSpringY.animationTime 	= .000001;	// Old janky fix
+		// _viewer.viewport.centerSpringX.animationTime 	= .000001; 
+		// _viewer.viewport.zoomSpring.animationTime 		= .000001;
+		// _viewer.viewport.fitBounds(state.bounds, false);  // End of old janky fix.
 
 		_canvasHolder.css("opacity", state.opacity)
-		_viewer.viewport.fitBounds(state.bounds, false);
+		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
-		resetSeadragonConfig()
+        _viewer.viewport.zoomBy(1.01, new OpenSeadragon.Point(0,0), true);
+        _viewer.viewport.zoomBy(0.99, new OpenSeadragon.Point(0, 0), true);
+
+        there = _viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(.01, .01));
+        and_back_again = _viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(-.01, -.01));
+        _viewer.viewport.panBy(there, true);
+        _viewer.viewport.panBy(and_back_again, true);
+
+        resetSeadragonConfig()
 	};
 
 	/* 
@@ -464,9 +475,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
      * @param {Object} res             object containing hammer event info
      */
 
-    function dzManip(res) {
-        //Pause
+	function dzManip(res) {
 
+
+        //Pause
         (self.orchestrator.status === 1) ? self.player.pause() : null
       	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		resetSeadragonConfig()
@@ -477,7 +489,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         var pivotRel;
         var transRel;
 
-        pivotRel = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y));
+        pivotRel = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x + _proxy.position().left, pivot.y + _proxy.position().top));
         var piv = {
             x: pivotRel.x,
             y: pivotRel.y
@@ -485,6 +497,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         transRel = _viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y));
         _viewer.viewport.zoomBy(scale, pivotRel, false);
         _viewer.viewport.panBy(transRel, false);
+        _viewer.viewport.applyConstraints()
+
     }
 
 
@@ -503,7 +517,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
             },
             pivot: pivot
         });
-        _viewer.viewport.applyConstraints()
     }
     
     /*
@@ -527,7 +540,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 
 			_proxy.css({
-				"position":"absolute",
 				"width": bounds.width,
 				"height": bounds.height,
 				"top": bounds.y,
@@ -541,11 +553,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		})
 
 	   	if (IS_WINDOWS) {
-	        TAG.Util.makeManipulatableWin(_proxy[0], {
+	        TAG.Util_ITE.makeManipulatableWinITE(_proxy[0], {
 	            onScroll: function (delta, pivot) {
 	                dzScroll(delta, pivot);
 	            },
 	            onManipulate: function (res) {
+	                if (!res.translation || !res.pivot) { return; }
+
                     res.translation.x = -res.translation.x;        //Flip signs for dragging
                     res.translation.y = -res.translation.y;
                     dzManip(res);
@@ -557,6 +571,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	                dzScroll(delta, pivot);
 	            },
 	            onManipulate: function (res) {
+	            	if (!res.translation || !res.pivot) { return; }
                     res.translation.x = -res.translation.x;        //Flip signs for dragging
                     res.translation.y = -res.translation.y;
                     dzManip(res);
@@ -606,16 +621,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     	//set the z index to be -1 if the track is not displayed
 		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
 		    _UIControl.css("z-index", -1)
-            console.log('setting z index to -1 for ' + self.trackData.name)
+		    _proxy.css("z-index", -1)
 		} 
 		else //Otherwise set it to its correct z index
 		{
 			_UIControl.css("z-index", index)
 			_canvasHolder.css("z-index", 1)
-			_proxy.css("z-index", 2)
-			console.log('setting z index to normal for ' + self.trackData.name)
-			console.log('opacity ' + window.getComputedStyle(_UIControl[0]).opacity)
-
+    		_proxy.css("z-index", 2000)
 		}
     	self.zIndex = index
     }

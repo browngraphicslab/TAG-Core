@@ -88,6 +88,9 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		_super.load();
 		self._ink.loadInk(trackData.datastring);
 
+		//Tell orchestrator to play (if other tracks are ready)
+		self.orchestrator.playWhenAllTracksReady()
+
 		// When finished loading, set status to 2 (paused).
 		self.status = 2; // TODO: should this be some kind of callback?
 	};
@@ -330,16 +333,18 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * sets the track to the provided z-index
 	 * O/P: 	none
 	 */
-    function setZIndex(index){
-    	//set the z index to be -1 if the track is not displayed
-		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
+	function setZIndex(index) {
+        //set the z index to be -1 if the track is not displayed
+		/*if (window.getComputedStyle(_UIControl[0]).opacity == 0){
 			_UIControl.css("z-index", -1)
 		} 
 		else //Otherwise set it to its correct z index
 		{
 			_UIControl.css("z-index", index)
-		}
-    	self.zIndex = index
+		}*/
+		self.zIndex = index
+		_UIControl.css("z-index", index)
+
     }
     self.setZIndex = setZIndex;
 };

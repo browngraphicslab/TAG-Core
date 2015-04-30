@@ -86,7 +86,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
      * O/P:     none
      */
 	function poll() {
-	        console.log("-  Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _videoControls.currentTime + "        orch.status: " + orchestrator.getStatus());
+	        // console.log("-  Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _videoControls.currentTime + "        orch.status: " + orchestrator.getStatus());
 	        /*if (orchestrator.getStatus() == 1) {
 		        _videoControls.play();
 		    }
@@ -146,6 +146,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 			// When finished loading, set status to 2 (paused).
 			self.status = 2; 
+
+			//Tell orchestrator to play (if other tracks are ready)
+			self.orchestrator.playWhenAllTracksReady()
 		});
 
 		// // Ensure that the video is completely loaded.
@@ -309,7 +312,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		var onComplete = function () {
 			
 			//If we're fading out, set the z-index to -1 to prevent touches
-			(state.css.opacity === 0) && _UIControl.css("z-index", -1);
+			(state.opacity === 0) && _UIControl.css("z-index", -1);
 			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
 		};
 

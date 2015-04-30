@@ -84,6 +84,9 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 
 			// When finished loading, set status to 2 (paused).
 			self.status = 2; 
+
+			//Tell orchestrator to play (if other tracks are ready)
+			self.orchestrator.playWhenAllTracksReady()
 		});
 
 		// // Ensure that the audio is completely loaded.

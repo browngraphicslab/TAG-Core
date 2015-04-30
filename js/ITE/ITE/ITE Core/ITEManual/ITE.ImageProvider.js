@@ -39,7 +39,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	var attachedInks 				= [],
         
         //For mediamanip
-	    finalPosition,
         startLocation,
         pointerStartLocation;
 	// Start things up...
@@ -105,6 +104,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// When finished loading, set status to 2 (paused).
 		self.status = 2; 
+
+		//Tell orchestrator to play (if other tracks are ready)
+		self.orchestrator.playWhenAllTracksReady()
 	};
 
 	/*
@@ -392,39 +394,49 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         var top = _UIControl.position().top,
             left = _UIControl.position().left,
             width = _UIControl.width(),
-            height = _UIControl.height();
+            height = _UIControl.height(),
+            finalPosition;
         // If the player is playing, pause it.
     	if (self.orchestrator.status === 1) {
     		self.player.pause();
     	}
 
     	if (IS_WINDOWS) {
-            //Target location is just current location plus translation
-    	   // if (res.grEvent.type === 'manipulationstarted') {
-    	   //     startLocation = {
-    	   ///         x: left,
-    	   //         y: top
-    	   //     };
-                
-    	   //     pointerStartLocation = {
-    	   //         x: res.pivot.x,
-    	   //         y: res.pivot.y
-    	   //     }
-           // }
+    	    //Target location is just current location plus translation
 
-    	   // // Target location (where object should be moved to).
-    	   // finalPosition = {
-    	   //     x: res.pivot.x - (pointerStartLocation.x - startLocation.x),
-    	   //     y: res.pivot.y - (pointerStartLocation.y - startLocation.y)
-    	   // };
-    	   // _UIControl.css({
-    	   //     top: finalPosition.y,
-           //     left: finalPosition.x
-    	    // })
+    	    /*if (res.grEvent.type === 'manipulationstarted') {
+                console.log("STARTED")
+    	        startLocation = {
+    	            x: left,
+    	            y: top
+    	       };
+                
+    	        pointerStartLocation = {
+    	          x: res.pivot.x,
+    	          y: res.pivot.y
+    	       }
+            }
+    	    else {
+    	        // Target location (where object should be moved to).
+    	        finalPosition = {
+    	            x: startLocation.x + (res.pivot.x - pointerStartLocation.x),
+    	            y: startLocation.y + (res.pivot.y - pointerStartLocation.y)
+    	        };
+    	       // console.log(finalPosition)
+    	        _UIControl.css({
+    	            top: finalPosition.y,
+    	            left: finalPosition.x
+    	        })
+    	    }*/
+    	    if (!res.translation){ return }
+    	    var newTop = top + res.translation.y;
+    	    var newLeft = left + res.translation.x;
+
     	     _UIControl.css({
-    	         top: top + res.translation.y,
-    	         left: left + res.translation.x
+    	         top: newTop,
+    	         left: newLeft
     	     })
+           // console.log(res.pivot.x + _UIControl.position().left)
 
     	} else {
 
@@ -463,7 +475,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             h  		= _UIControl.height(),
             newW  	= w * scale,
             newH,
-            maxW 	= 10000,        // These values are somewhat arbitrary; TODO determine good values
+            maxW 	= 1000000,        // These values are somewhat arbitrary; TODO determine good values
             minW	= 200,
             newX,
             newY;
@@ -505,7 +517,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
         // Register handlers.
         if (IS_WINDOWS) {
-            TAG.Util.makeManipulatableWin(_UIControl[0], {
+            TAG.Util_ITE.makeManipulatableWinITE(_UIControl[0], {
                 onManipulate: mediaManip,
                 onScroll: mediaScroll
             }, null, true);
