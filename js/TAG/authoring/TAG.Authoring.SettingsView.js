@@ -3436,11 +3436,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (sortByAssoc == "Title"){
             titleSort.css('background-color','white');
-            collectionSort.css('background-color','initial');
-            addedRecentlySort.css('background-color','initial');
+            collectionSort.css('background','transparent');
+            addedRecentlySort.css('background','transparent');
         } else if (sortByAssoc == "Recently Added"){
-            titleSort.css('background-color','initial');
-            collectionSort.css('background-color','initial');
+            titleSort.css('background','transparent');
+            collectionSort.css('background','transparent');
             addedRecentlySort.css('background-color','white');
         }
         
@@ -4883,15 +4883,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (sortByArt == "Title"){
             titleSort.css('background-color','white');
-            collectionSort.css('background-color','initial');
-            addedRecentlySort.css('background-color','initial');
+            collectionSort.css('background','transparent');
+            addedRecentlySort.css('background','transparent');
         } else if (sortByArt == "Collection"){
-            titleSort.css('background-color','initial');
+            titleSort.css('background','transparent');
             collectionSort.css('background-color','white');
-            addedRecentlySort.css('background-color','initial');
+            addedRecentlySort.css('background','transparent');
         } else if (sortByArt == "Recently Added"){
-            titleSort.css('background-color','initial');
-            collectionSort.css('background-color','initial');
+            titleSort.css('background','transparent');
+            collectionSort.css('background','transparent');
             addedRecentlySort.css('background-color','white');
         }
         
@@ -8647,15 +8647,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (inArtworkView){
                         sortByArt = "Title";
                         titleSort.css('background-color','white');
-                        collectionSort.css('background-color','initial');
-                        addedRecentlySort.css('background-color','initial');
+                        collectionSort.css('background','transparent');
+                        addedRecentlySort.css('background','transparent');
                         loadArtView();
                     }
                     else if (inAssociatedView){
                         sortByAssoc = "Title";
                         titleSort.css('background-color','white');
-                        collectionSort.css('background-color','initial');
-                        addedRecentlySort.css('background-color','initial');
+                        collectionSort.css('background','transparent');
+                        addedRecentlySort.css('background','transparent');
                         loadAssocMediaView();
                     }
                   })
@@ -8664,16 +8664,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     .click(function(){
                         if (inArtworkView){
                             sortByArt = "Collection";
-                            titleSort.css('background-color','initial');
+                            titleSort.css('background','transparent');
                             collectionSort.css('background-color','white');
-                            addedRecentlySort.css('background-color','initial');
+                            addedRecentlySort.css('background','transparent');
                             loadArtView();
                         }
                         else if (inAssociatedView){
                             sortByAssoc = "Collection";
-                            titleSort.css('background-color','initial');
+                            titleSort.css('background','transparent');
                             collectionSort.css('background-color','white');
-                            addedRecentlySort.css('background-color','initial');
+                            addedRecentlySort.css('background','transparent');
                             loadAssocMediaView();
                         }
                     })
@@ -8682,15 +8682,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     .click(function(){
                         if (inArtworkView){
                             sortByArt = "Recently Added";
-                            titleSort.css('background-color','initial');
-                            collectionSort.css('background-color','initial');
+                            titleSort.css('background','transparent');
+                            collectionSort.css('background','transparent');
                             addedRecentlySort.css('background-color','white');
                             loadArtView();
                         }
                         else if (inAssociatedView){
                             sortByAssoc = "Recently Added";
-                            titleSort.css('background-color','initial');
-                            collectionSort.css('background-color','initial');
+                            titleSort.css('background','transparent');
+                            collectionSort.css('background','transparent');
                             addedRecentlySort.css('background-color','white');
                             loadAssocMediaView();
                         }
