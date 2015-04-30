@@ -68,9 +68,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             .addClass('button')
             .attr('type', 'button')
             .css({
-                'border-radius':'3.5px','position': 'relative', 'top': '-7%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '20%', "display": "inline-block", "color":"white",
+                'padding':'5px','font-size':'50%','border-radius':'3.5px','position': 'relative', 'top': '-7%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '10%', "display": "inline-block", "color":"white",
             })
-            .text("Show Uploads");
+            .text("View Queue");
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
