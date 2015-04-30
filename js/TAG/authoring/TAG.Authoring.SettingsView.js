@@ -553,7 +553,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                 tobj.item = "settings_view";
                 tobj.time_spent = SETTINGSVIEW_TIMER.get_elapsed();
-                //console.log("settings view spent time: " + tobj.time_spent);
+                console.log("settings view spent time: " + tobj.time_spent);
             });
 
             TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
@@ -3357,11 +3357,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
                     middleLoading.hide();
-                    hideUploadingProgress()
                 });
             } else {
                 middleLoading.hide();
-                hideUploadingProgress()
             }
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
@@ -4076,12 +4074,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function createAsset() {
         uploadFile(TAG.Authoring.FileUploadTypes.AssociatedMedia, function (urls, names, contentTypes, files) {
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
-
-            //implementing background uploads - david
-            console.log("createAsset called")
-            //prepareNextView(false);
-            //clearRight();
-            //prepareViewer(true);
+            prepareNextView(false);
+            clearRight();
+            prepareViewer(true);
 
             if(files.length > 0) {
                 durationHelper(0);
@@ -4111,11 +4106,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 if (done >= total) {
-                    if (inAssociatedView) {
-                        loadAssocMediaView(toScroll.Identifier);
-                    } else {
-                        hideUploadingProgress()
-                    }
+                    loadAssocMediaView(toScroll.Identifier);
                 } else {
                     durationHelper(done);
                 }
@@ -4565,11 +4556,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
                     middleLoading.hide();
-                    hideUploadingProgress()
                 });
             } else {
                 middleLoading.hide();
-                hideUploadingProgress()
             }
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
@@ -5158,34 +5147,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         $(popup).show();
     }
 
-    function hideUploadingProgress() {
-        //updates loading UI
-        console.log("FINISHED THE UPLOAD PROCESS")
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        $('.progressBarUploads').remove()
-    }
-
     /**Create an artwork (import), possibly more than one
      * @method createArtwork
      */
     function createArtwork() {
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
-            var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
-
-            //implementing background uploads - david
-            console.log("createArtwork called")
-            //prepareNextView(false);
-            //clearRight();
-            //prepareViewer(true);
+            var check, i, url, name, done=0, total=urls.length, durations=[], toScroll, alphaName;
+            prepareNextView(false);
+            clearRight();
+            prepareViewer(true);
 
             function incrDone() {
                 done++;
                 if (done >= total) {
-                    if (inArtworkView) {
-                        loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
-                    } else {
-                        hideUploadingProgress()
-                    }
+                    loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
                 } else {
                     durationHelper(done);
                 }
@@ -6867,7 +6842,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'width' : '100%'
         });
 
-        
         var versionsButton = createButton("Provide Web Versions",
             function(){
                 var back = $(document.createElement("div"));
@@ -7023,7 +6997,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearMetadataDiv.append(yearDiv)
                        .append(yearDescriptionDiv)
                        .append(timelineYearDiv);
-        
         var typ = "";
         if (work.Metadata.Type) {
             typ = work.Metadata.Type.toLowerCase();
@@ -7031,7 +7004,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         else if (work.Metadata.ContentType) {
             typ = work.Metadata.ContentType.toLowerCase();
         }
-        if (typ=="video"||typ=="videoArtwork") {
+        if (typ.toLowerCase()=="video"||typ.toLowerCase()=="videoArtwork") {
             yearMetaDataDiv.append(versionsButton);
         }
         yearMetadataDivSpecs = {
@@ -7137,7 +7110,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 option.text(options[i]);
                 option.attr('value', options[i]);
                 select.append(option);
-                //options[i].selected = true;
+                options[i].selected = true;
             }
             select.attr('value', value);
         }
@@ -7298,7 +7271,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             option.text(options[i]);
             option.attr('value', options[i]);
             selectElt.append(option);
-            //options[i].selected = true;
+            options[i].selected = true;
         }
         selectElt.change(function () {
             //$('.primaryFont').css('font-family', selectElt.find(":selected").text());
@@ -7632,7 +7605,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     names = [names];
                 }
                 for (i = 0; i < urls.length; i++) {
-                    //console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
+                    console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
                 }
                 callback(urls, names, contentTypes, fileArray);
             },

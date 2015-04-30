@@ -694,7 +694,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             toggler.mouseup();
 
             tobj.current_artwork = doq.Identifier;
-            tobj.next_page = prevCollection.Identifier;
+            tobj.next_page = prevCollection;
             tobj.time_spent = telemetry_timer.get_elapsed();
         });
         
@@ -995,17 +995,26 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
         });
 
+
+        /**
+         * Generates a click handler for a specific tour
+         * @method tour
+         * @param {Object} media       the tour object(from AnnotatedImage)
+         */
         function tourClicked(tour) {
             return function () {
-                TAG.Util.removeYoutubeVideo();
-                var rinData,
-                    parentid,
-                    prevInfo,
-                    rinPlayer,
-                    confirmationBox;
 
-                if (TAG.Util.Splitscreen.isOn()) {
-                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
+                //ereif: not sure why this is here, but it's undoubtedly important?
+                TAG.Util.removeYoutubeVideo();
+
+                var prevInfo, //Info about the artwork we're returning to
+                    messageBox,
+                    collectionOptions;
+
+                //If splitscreen is on, open confirmation box to tell user that splitscreen will exit.
+                if (TAG.Util.Splitscreen.isOn()) 
+                {
+                    var confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
                             TAG.Util.Splitscreen.exit(root.data('split') || 'L');
                             tourClicked(tour)();
                             TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -1018,19 +1027,23 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         },
                         root
                     ));
-                    confirmationBox.css({
-                        'z-index': 10001,
-                        'font-size': '60%'
-                    });
+                    confirmationBox.css('z-index', 10000001);
                     root.append(confirmationBox);
                     confirmationBox.show();
-                } else {
+                } 
+                else 
+                {
+                    //unload current image and set previous info
                     annotatedImage.unload();
                     prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll, prevTag: prevTag };
-                    rinData = JSON.parse(unescape(tour.Metadata.Content));
-                    rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options,tour);
 
-                    TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
+                    //Parse RIN data into ITE data
+                    var iteData = TAG.Util.RIN_TO_ITE(tour); 
+                    
+                    //Create tag tourplayer (which will in turn create an ITE player)
+                    var ITEPlayer = new TAG.Layout.TourPlayer(iteData, prevCollection, prevInfo, options,tour);
+                    TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), ITEPlayer.startPlayback);
+                    currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
                 }
             };
         }
