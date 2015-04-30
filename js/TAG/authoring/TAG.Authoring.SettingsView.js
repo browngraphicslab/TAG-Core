@@ -3392,7 +3392,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         findContainer.css('width','100%');
 
-        prepareNextView(true, "Add", createAsset);
+        prepareNextView(true, "Import", createAsset);
         prepareViewer(true);
         clearRight();
         var cancel = false;
@@ -4344,6 +4344,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method createAsset
      */
     function createAsset() {
+        if ($('.progressBarUploads').length != 0){
+            console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
+            return
+        }
+
         uploadFile(TAG.Authoring.FileUploadTypes.AssociatedMedia, function (urls, names, contentTypes, files) {
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
 
@@ -5770,6 +5775,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method createArtwork
      */
     function createArtwork(fromImportPopUp) {
+        if ($('.progressBarUploads').length != 0){
+            console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
+            return
+        }
+
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
 
