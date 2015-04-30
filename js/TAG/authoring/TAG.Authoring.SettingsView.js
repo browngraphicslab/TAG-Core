@@ -60,7 +60,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         searhBarContainer = root.find('#setViewSearchBarContainer'),
         menuLabel = root.find('#addMenuLabel'),
         dropDown = $(document.createElement('div')),
-
+        currCollection = null;
         // = root.find('#importButton'),
 
         
@@ -2509,6 +2509,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             function makeManagePopUp(){
                 console.log("Made Manage Pop Up");
+                currCollection= exhibition.Identifier;
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{

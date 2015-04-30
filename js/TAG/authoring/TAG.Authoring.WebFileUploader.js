@@ -41,6 +41,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     var filesAdded = 0;
     var filesCompleted = 0;
     var successfulUploads = false;
+    var toBeAdded = [];
 
 
 
@@ -194,6 +195,12 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             addLocalCallback([resumableFile.file], [localURL], [uriString])();            
             filesCompleted++;
             successfulUploads = true;
+            toBeAdded.append(resumableFile);
+            for(var i = 0; i < toBeAdded.length; i ++){
+                console.log(toBeAdded[i].file.name + "is in the array to be added");
+
+            }
+            console.log("END UP UPLOAD FUNCTION");
             //TODO progress bar
 
         });
