@@ -16,7 +16,7 @@ TAG.Util_ITE = (function () {
         getGestureRecognizer: getGestureRecognizer,
         makeXmlRequest: makeXmlRequest,
         makeManipulatableITE: makeManipulatableITE,
-        makeManipulatableWin: makeManipulatableWin,
+        makeManipulatableWinITE: makeManipulatableWinITE,
         applyD3DataRec: applyD3DataRec,
         elementInDocument: elementInDocument,
         fitText: fitText,
@@ -1226,44 +1226,64 @@ TAG.Util_ITE = (function () {
     //onScroll(delta,pivot) is the scroll wheel
     //onTapped
     //onHolding
-    function makeManipulatableWin(element, functions, stopOutside) {
+    function makeManipulatableWinITE(element, functions, stopOutside) {
 
         var lastTouched = null;
         var that = this;
-        var gr = TAG.Util_ITE.getGestureRecognizer();
+        var gr = TAG.Util.getGestureRecognizer();
         var manipulating = false;
 
         // general event handler
         function manipulationHandlerWin(evt) {
+            if (evt.type === 'manipulationcompleted') {
+                console.log("DONE")
+            }
             if (evt.delta) {
                 var pivot = { x: evt.position.x, y: evt.position.y };
                 var rotation = evt.delta.rotation / 180 * Math.PI;
                 var translation = { x: evt.delta.translation.x, y: evt.delta.translation.y };
                 var scale = evt.delta.scale;
-                if (typeof functions.onManipulate === "function")
-                    functions.onManipulate({ 
-
-                        pivot: pivot, 
-                        translation: translation, 
-                        rotation: rotation, 
-                        target: evt.gesture.target,
-                        touches: evt.gesture.touches,
-                        pointerType: evt.gesture.pointerType,
-                        center: evt.gesture.center,
-                        deltaTime: evt.gesture.deltaTime,
-                        deltaX: evt.gesture.deltaX,
-                        deltaY: evt.gesture.deltaY,
-                        velocityX: evt.gesture.velocityX,
-                        velocityY: evt.gesture.velocityY,
-                        angle: evt.gesture.angle,
-                        direction: evt.gesture.direction,
-                        distance: evt.gesture.distance,
-                        eventType: evt.gesture.eventType,
-                        srcEvent: evt.gesture.srcEvent,
-                        startEvent: evt.gesture.startEvent,
-                        scale: scale
-
-                     });
+                evt.target.autoProcessInertia = false;
+                if (typeof functions.onManipulate === "function") {
+                    if (evt.gesture) {
+                        functions.onManipulate({
+                            pivot: pivot,
+                            translation: translation,
+                            rotation: rotation,
+                            target: evt.gesture.target,
+                            touches: evt.gesture.touches,
+                            pointerType: evt.gesture.pointerType,
+                            center: evt.gesture.center,
+                            deltaTime: evt.gesture.deltaTime,
+                            deltaX: evt.gesture.deltaX,
+                            deltaY: evt.gesture.deltaY,
+                            velocityX: evt.gesture.velocityX,
+                            velocityY: evt.gesture.velocityY,
+                            angle: evt.gesture.angle,
+                            direction: evt.gesture.direction,
+                            distance: evt.gesture.distance,
+                            eventType: evt.gesture.eventType,
+                            srcEvent: evt.gesture.srcEvent,
+                            startEvent: evt.gesture.startEvent,
+                            scale: scale,
+                            grEvent: evt
+                        });
+                    } else {
+                        functions.onManipulate({
+                            pivot: pivot,
+                            translation: translation,
+                            rotation: rotation,
+                            scale: scale,
+                            grEvent: evt
+                        });
+                    }
+                }
+            }
+            else {
+                functions.onManipulate({
+                    pivot: { x: evt.position.x, y: evt.position.y },
+                    grEvent: evt
+                });
             }
         }
 
@@ -1287,7 +1307,7 @@ TAG.Util_ITE = (function () {
         // mouse move
         function processMoveWin(evt) {
             if (stopOutside) {
-               if (evt.x < 0 || evt.y < 0 || evt.x > $(element).width() || evt.y > $(element).height()) {
+                if (evt.x < 0 || evt.y < 0 || evt.x > $(element).width() || evt.y > $(element).height()) {
                     return;
                 }
             }
@@ -1349,7 +1369,7 @@ TAG.Util_ITE = (function () {
         // short tap, i.e. left-click
         var tappedHandlerWin = null;
         if (typeof functions.onTapped === "function") {
-            tappedHandlerWin = function(evt) {
+            tappedHandlerWin = function (evt) {
                 var event = {};
                 event.position = {};
                 if (evt.position.x < 50) {
@@ -1366,7 +1386,7 @@ TAG.Util_ITE = (function () {
         // long-press, i.e. right-click
         var rightTapHandlerWin = null;
         if (typeof functions.onTappedRight === "function") {
-            rightTapHandler = function (evt) {
+            rightTapHandlerWin = function (evt) {
                 var event = {};
                 event.position = {};
                 event.position.x = evt.position.x;
@@ -1375,7 +1395,7 @@ TAG.Util_ITE = (function () {
             };
             gr.addEventListener('righttapped', rightTapHandlerWin);
         }
-        
+
         return gr;
     }
 

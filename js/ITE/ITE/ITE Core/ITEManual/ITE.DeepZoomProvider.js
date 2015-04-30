@@ -123,7 +123,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
 			self.status = 2; 	
 			// Attach handlers.
-			attachHandlers1();
+			attachHandlers();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
 
 		}, self);
@@ -330,7 +330,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
         _viewer.viewport.zoomBy(1.01, new OpenSeadragon.Point(0,0), true);
-        _viewer.viewport.zoomBy(0.99, new OpenSeadragon.Point(0,0), true);
+        _viewer.viewport.zoomBy(0.99, new OpenSeadragon.Point(0, 0), true);
+
+        there = _viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(.01, .01));
+        and_back_again = _viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(-.01, -.01));
+        _viewer.viewport.panBy(there, true);
+        _viewer.viewport.panBy(and_back_again, true);
+
         resetSeadragonConfig()
 	};
 
@@ -415,6 +421,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			setTimeout(function(){
 				addInk(inkTrack) } , 100);
 		} else {
+            console.log("we added an ink")
 			attachedInks.push(inkTrack)	
 			inkTrack._ink.setInitKeyframeData(inkTrack.trackData.initKeyframe)
 			inkTrack._ink.retrieveOrigDims();
@@ -544,7 +551,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		})
 
 	   	if (IS_WINDOWS) {
-	        TAG.Util.makeManipulatableWin(_proxy[0], {
+	        TAG.Util_ITE.makeManipulatableWinITE(_proxy[0], {
 	            onScroll: function (delta, pivot) {
 	                dzScroll(delta, pivot);
 	            },

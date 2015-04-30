@@ -330,8 +330,8 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * sets the track to the provided z-index
 	 * O/P: 	none
 	 */
-    function setZIndex(index){
-    	//set the z index to be -1 if the track is not displayed
+	function setZIndex(index) {
+        //set the z index to be -1 if the track is not displayed
 		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
 			_UIControl.css("z-index", -1)
 		} 
