@@ -6974,7 +6974,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (!isSelected) {
                         container.unbind('click')
                         isSelected = true
-                        check.css({ 'display': 'inherit' })
+                        check.css({ 'display': 'block' })
                         if (!inAssociatedView){
                             multiSelected.push(id)
                         } else {
