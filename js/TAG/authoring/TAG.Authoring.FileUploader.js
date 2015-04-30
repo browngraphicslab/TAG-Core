@@ -94,7 +94,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
         progressBar.append(innerProgressBar);
 
-        if (fromImportPopUp) {
+        if (fromImportPopUp==true) {
 
             uploadingOverlay.append(uploadOverlayText);
             //uploadingOverlay.append(progressBar);
@@ -513,7 +513,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * (no idea if this will actually disable interactions too as is)
      */
     function addOverlay(elmt) {
-        if (fromImportPopUp) {
+        if (fromImportPopUp==true) {
             uploadingOverlay.show()
             uploadingOverlay.css({ "display": "block" })
         } else {

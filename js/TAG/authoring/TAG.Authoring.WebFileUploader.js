@@ -83,11 +83,12 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         progressBar.append(innerProgressBar);
 
         console.log("fromImportPopUp is " + (fromImportPopUp))
-        if (fromImportPopUp) {
+        if (fromImportPopUp==true) {
             uploadingOverlay.append(uploadOverlayText);
             //uploadingOverlay.append(progressBar);
             uploadingOverlay.hide();
             root.append(uploadingOverlay);
+            //console.log("SHOULD HAVE APPENDED overlay");
         }
         
     })();
@@ -364,7 +365,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
 
     function addOverlay(elmt) {
-        if (fromImportPopUp) {
+        if (fromImportPopUp==true) {
             uploadingOverlay.show()
             uploadingOverlay.css({ "display": "block" })
         } else {
