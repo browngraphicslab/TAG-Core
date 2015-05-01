@@ -7675,6 +7675,798 @@ TAG.Util.Artwork = (function () {
     }
 })();
 
+////////////////////////////////////////////////////////////////////////////////////
+//				ITE PARSING
+////////////////////////////////////////////////////////////////////////////////////
+/*	TEMPLATE FOR TOUR DATASTRUCTURE: {
+*
+*		guid: guid
+*		timestamp: time
+*		totalDuration: duration
+*		tourTitle: title
+*		tracks:[], an array of tracks (see below for structure)
+*}
+*
+*	TEMPLATE FOR TRACK DATASTRUCTURE: {
+*
+*	name: name of track,
+*	assetURL: url of where track resources are stored to be loaded. Inks DO NOT have asset URLs
+*	providerID: image, video, audio, deepZoom, or ink
+*	zIndex: zIndex for proper layering
+*	keyframes: an array of all keyframes. The specific properties depend on the track type, and are as follows:
+*
+*		IMAGE:
+*			dispNum: display number
+*			time: time
+*			opacity: opacity
+*			pos{x, y}: position in x, y
+*			size{x, y}: size
+*
+*		DEEPZOOM:
+*			dispNum: display number
+*			time: time
+*			opacity: opacity
+*			pos{x, y}: position in x, y
+*			scale: scale
+*
+*		AUDIO:
+*			dispNum: display number
+*			time: time
+*			audioOffset: offset from beginning of audio track itsself
+*			volume: volume
+*
+*		VIDEO:
+*			dispNum: display number
+*			time: time
+*			opacity: opacity
+*			pos{x, y}: position in x, y
+*			size{x, y}: size	
+*			volume: volume
+*			videoOffset: offset from the beginning of the video itsself
+*			
+*		INKS: TBD depending on implementation
+*	}
+*
+*/
+
+//Utilities for RIN parsing
+TAG.Util.RIN_TO_ITE = function (tour) {
+
+	console.log(">>>>>>>>>>>>> Starting ITE Parsing >>>>>>>>>>>>>");
+
+	if (!tour){
+		return {};
+	}
+
+	var rinData = JSON.parse(unescape(tour.Metadata.Content)); //the original RIN tour obj
+		console.log("rin data: ")
+		console.log(rinData)
+
+	//parses the referenceData to be used for the keyframes
+	//Object with the names of all of the *experience streams* as keys
+	var referenceDataMap;
+
+	if (!(rinData.screenplays && 
+		rinData.screenplays.SCP1 && 
+		rinData.screenplays.SCP1.data && 
+		rinData.screenplays.SCP1.data.experienceStreamReferences)) {
+			console.log("ERROR: no data for experience stream time offsets");
+			referenceDataMap = {};
+	} else {
+		referenceDataMap = function(){
+			var data = {};
+			$.each(rinData.screenplays.SCP1.data.experienceStreamReferences, 
+				function(key, value) {
+					data[value.experienceStreamId] = value
+				}
+			);
+			return data;
+		}();
+	}
+
+	// console.log("REFERENCE DATA")
+	// console.log(referenceDataMap)
+		
+	//parses keyframes from a RIN experience track
+	var ITE_keyframes = function(track, providerID){
+		var keyframes = []; //all of the keyframes for the entire track
+		var experienceStreamKeys = Object.keys(track.experienceStreams).sort(); //TODO test if the ordering of experience streams is preserved - I don't think it is
+
+		/*  RIN has multiple experience streams (each with its own keyframes) per track.
+			ITE gets rid of the middle layer and only has one set of keyframes per track. 
+			The keyframes are parsed from one experience stream at a time, then the initial
+			and final keyframes are added, and then these keyframes are added to the final 
+			keyframes array */
+
+		var k=0;
+		for (k=0; k<experienceStreamKeys.length; k++){
+			var currKeyframes = []; //the keyframes for the current experience stream
+			var currKey = experienceStreamKeys[k];
+			var currExperienceStream = track.experienceStreams[currKey]; //the current experience stream
+			if (!currExperienceStream.keyframes){
+				continue;
+			}
+
+			//parses time offset of current experience stream from a different section of the RIN metadata
+
+			var referenceData = referenceDataMap[currKey];
+			if (!referenceData) {
+				console.log("ERROR: no data for experience stream time offsets")
+			}
+			var time_offset = referenceData.begin;
+			var l = 0;
+			if (providerID == "video") {
+			    
+			}
+			for (l=0; l<currExperienceStream.keyframes.length; l++) {
+				var currKeyframe = currExperienceStream.keyframes[l]
+				var keyframeObject = {}; //represents one keyframe
+
+				//quick check to make sure that we're not adding keyframes after the track should be offscreen 
+				if(currKeyframe.offset > currExperienceStream.duration){
+					currKeyframe.offset = currExperienceStream.duration
+				}
+				
+				if (providerID == "image"){
+					keyframeObject = {
+						"dispNum": k,
+						"zIndex": track.data.zIndex,
+						"time": time_offset + currKeyframe.offset,
+						"opacity": 1, 
+						"size": {
+							"x": currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
+							"y": currKeyframe.state.viewport.region.span.y * $('#tagRoot').height()
+						},
+						"pos": {
+							"x": currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
+							"y": currKeyframe.state.viewport.region.center.y * $('#tagRoot').height()
+						},
+						"data": {}
+					}
+				}
+				else if (providerID == "deepZoom"){
+					keyframeObject = {
+						"dispNum": k,
+						"zIndex": track.data.zIndex,
+						"time": time_offset + currKeyframe.offset,
+						"opacity": 1, 
+						"scale": currKeyframe.state.viewport.region.span.x, //TODO
+						"pos": {
+							"x": currKeyframe.state.viewport.region.center.x,
+							"y": currKeyframe.state.viewport.region.center.y
+						},
+						"data": {}
+					}
+				}
+				else if (providerID == "audio"){
+					keyframeObject = {
+						"dispNum": k,
+						"time": time_offset + currKeyframe.offset,
+						"volume": currKeyframe.state.sound.volume,
+						"data": {},
+						"audioOffset": null, //TODO
+						"audioKeyframeType" : "INITIAL"
+					}
+				}
+				else if (providerID == "video"){
+					keyframeObject = { //TODO
+						"dispNum": k,
+						"zIndex": track.data.zIndex,
+						"time": time_offset + currKeyframe.offset,
+						"opacity": 1,
+						"size": {
+						    "x": currKeyframe.state.viewport.region.span.x * 100,
+						    "y": currKeyframe.state.viewport.region.span.y * 100,
+						},
+						"pos": {
+						    "x": currKeyframe.state.viewport.region.center.x * 100,
+						    "y": currKeyframe.state.viewport.region.center.y * 100,
+						},
+						"data": {},
+						"volume": currKeyframe.state.sound.volume,
+						"videoOffset": 0
+					}
+				}
+				
+				/* Ink tracks parsed separately in the ITE_parseInkKeyframes function below */
+
+				currKeyframes.push(keyframeObject);
+
+				//Backwards compatability for old RIN tours that stored audio as a single keyframe with a specific duration
+				if ((providerID == "audio") && (experienceStreamKeys.length == 1)){
+					currKeyframes.push({
+						"dispNum": k,
+						"time": time_offset + currKeyframe.offset + currExperienceStream.duration,
+						"volume": currKeyframe.state.sound.volume,
+						"data": {},
+						"audioOffset": null, //TODO
+						"audioKeyframeType": "FINAL"
+					})
+
+					//TODO - this is a really really janky fix for the audio problem
+					currKeyframes.push({
+						"dispNum": k,
+						"time": time_offset + currKeyframe.offset + currExperienceStream.duration + .01,
+						"volume": 0,
+						"data": {},
+						"audioOffset": null, //TODO
+						"audioKeyframeType": "FINAL"
+					})
+				}
+			}
+
+			//Adds a final keyframe using the duration of time for the experience stream, this is so items 
+			//don't prematurely disappear from the screen.  note - this is before the fade in/out keyframes are added.
+			//audio and video don't need this
+			if (providerID != "audio" && providerID != "video"){
+				var endKeyframe = $.extend({}, currKeyframes[currKeyframes.length - 1]);
+				endKeyframe.time = currKeyframes[0].time + currExperienceStream.duration
+				endKeyframe.SpecialKeyframeType = "HOLDING FOR DURATION" //for testing
+				currKeyframes.push(endKeyframe)
+			}
+
+			/*  This section deals with adding initial and final keyframes for the fade in and fade out.
+				Note - each experience stream in the RIN object needs its own fade in and fade out. */
+
+			//if the RIN object has transition data for the current experience stream
+			if (currExperienceStream.data['transition']){
+
+				var fadeInDuration = currExperienceStream.data.transition.inDuration,
+					fadeOutDuration = currExperienceStream.data.transition.outDuration
+
+				//assert that the duration of the asset is longer than RIN's inDuration + outDuration
+				if (track.data.duration < fadeInDuration + fadeOutDuration){
+					console.log("ERROR: track duration shorter than fadein/fadeout duration")
+				}
+
+				//each provider has this - the opacity is zero, and the time is -inDuration and +outDuration
+				var initialKeyframe = ITE_createTransitionKeyframe({
+						"keyframes" : currKeyframes, 
+						"providerID" : providerID, 
+						"ktype" : "initial", 
+						"duration" : fadeInDuration 
+					}),
+					finalKeyframe = ITE_createTransitionKeyframe({
+						"keyframes" : currKeyframes, 
+						"providerID" : providerID, 
+						"ktype" : "final",
+						"duration" : fadeOutDuration
+					})
+
+				//merges them into the array
+				currKeyframes.push(finalKeyframe)
+				currKeyframes.unshift(initialKeyframe)
+
+			} else {
+				console.log("ERROR: " + providerID + " track has no transition data available.")
+			}
+
+			//at the end - merges onto the end of the total keyframes array, preserving ordering of experience streams
+			keyframes = keyframes.concat(currKeyframes)
+
+		}
+
+		return keyframes
+	}
+
+	/* parses and returns keyframes for an ink track
+		args:
+			track: 		the ink track to be parsed
+	*/
+	var ITE_parseInkKeyframes = function(args){
+
+		/* IMPORTANT: for now, I am assuming that each ink track will have 4 keyframes:
+
+			1.  The start of the fadeIn (the start time - the fade in time)
+			2.  The start of the ink annotation (the start time)
+			3.  The end of the ink annotation (the start time + the duration)
+			4.  The end of the fadeOut (the start time + the duration + the fade out time)
+	
+			Emily - does this seem good?
+
+			Also - I'm assuming that each ink track in RIN only has one experience stream
+
+		*/
+
+		var track = args.track,
+			keyframes = [],
+			referenceData,
+			timeOffset = 0,
+			duration = 0,
+			fadeInDurationInk = 0,
+			fadeOutDurationInk = 0;
+
+		referenceData = referenceDataMap[Object.keys(track.experienceStreams)[0]];
+		if (!referenceData) {
+			//this shouldn't ever happen - but why is it?
+			console.log("An error occurred retrieving the reference data for: " + track)
+		} else {
+			timeOffset = referenceData.begin,
+			duration = referenceData.duration;
+		}
+
+		if (Object.keys(track.experienceStreams).length > 0) {
+			fadeInDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.inDuration,
+			fadeOutDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.outDuration;
+		}
+
+		//this is where the four keyframes are actually parsed
+
+		var keyframePrototype = {
+			"type" : track.data.linkToExperience.embedding.experienceId == "" ? "unattached" : "attached", //TODO - is this what differentiates attached vs. unattached ?????
+			"dispNum" : 1, //TODO - can this be hardcoded (are there ever multiple displays of inks)
+			"initKeyframe" : track.data.linkToExperience.embedding.initKeyframe,
+			"initproxy" : track.data.linkToExperience.embedding.initproxy,
+		}
+
+		//#1
+		keyframes.push($.extend({}, keyframePrototype, {
+			"time" : timeOffset - fadeInDurationInk,
+			"opacity" : 0,
+		}));
+
+		//#2
+		keyframes.push($.extend({}, keyframePrototype, {
+			"time" : timeOffset,
+			"opacity" : 1,
+		}));
+
+		//#3
+		keyframes.push($.extend({}, keyframePrototype, {
+			"time" : timeOffset + duration,
+			"opacity" : 1,
+		}));
+
+		//#4
+		keyframes.push($.extend({}, keyframePrototype, {
+			"time" : timeOffset + duration + fadeOutDurationInk,
+			"opacity" : 0,
+		}));
+
+		return keyframes
+	}
+
+	/** stolen from tagInk.js
+	 * Takes in a datastring and parses for a certain attribute by splitting at "[" and "]" (these surround
+	 * attribute names).
+	 * NOTE if errors are coming from this function, could be that the datastring is empty...
+	 * @param str        the datastring
+	 * @param attr       the attribute we'll parse for
+	 * @param parsetype  'i' (int), 's' (string), or 'f' (float)
+	 * @return  the value of the attribute in the correct format
+	 */
+	var ITE_get_attr = function(str, attr, parsetype) {
+		//checks if not in string to begin with
+		if (str.indexOf("["+attr+"]") == -1){
+			return parsetype == "s" ? null : 0
+		}
+
+		if (parsetype === "f") {
+			return parseFloat(str.split("[" + attr + "]")[1].split("[")[0]);
+		} else if (parsetype === "s") {
+			return str.split("[" + attr + "]")[1].split("[")[0];
+		} else {
+			return parseInt(str.split("[" + attr + "]")[1].split("[")[0]);
+		}
+	}
+
+	/* parses the datastring into an object for ink tracks
+		args:
+			datastring: 		the datastring to be parsed
+
+		(refer to tagInk.js)
+	*/
+	var ITE_parseInkDatastring = function(args){
+		var datastring = args.datastring,
+			type,
+			objects = [];
+
+		if (!datastring){
+			return objects
+		}
+
+		var inkObjects = datastring.split("|")
+		$.each(inkObjects, function(inkObjectNum, inkObject) {
+			if (inkObject && (inkObject != "")) {
+				
+				var type = inkObject.split("::")[0].toLowerCase(),
+					currObj = {},
+					willParsePathstring = false,
+					propertiesToParse = {};
+
+				switch (type) {
+					case "text":
+						// format: [str]<text>[font]<font>[fontsize]<fontsize>[color]<font color>[x]<x>[y]<y>[]
+						propertiesToParse = 
+						{
+							"str" 		: "s",
+							"font" 		: "s",
+							"fontsize" 	: "s",
+							"color" 	: "s",
+							"x" 		: "f",
+							"y" 		: "f",
+							"w" 		: "f",
+							"h" 		: "f"
+						};
+						break;
+					case "path":
+						// format: [pathstring]M284,193L284,193[stroke]000000[strokeo]1[strokew]10[]
+						propertiesToParse = 
+						{
+							"pathstring": "s",
+							"stroke"	: "s",
+							"strokeo"	: "f",
+							"strokew"	: "f",
+						}
+						willParsePathstring = true;
+						break;
+					case "bezier":
+						// format: [pathstring]M284,193L284,193[stroke]000000[strokeo]1[strokew]10[]
+						propertiesToParse = 
+						{
+							"pathstring": "s",
+							"stroke"	: "s",
+							"strokeo"	: "f",
+							"strokew"	: "f",
+						}
+						willParsePathstring = true;
+						break;
+					case "trans":
+						// format: [path]<path>[color]<color>[opac]<opac>[mode]<block or isolate>[]
+						propertiesToParse = 
+						{
+							"path" 		: "s",
+							"color" 	: "s",
+							"opac" 		: "f",
+							"mode" 		: "s"
+						}
+						break;
+					case "boundrect":
+						// format: BOUNDRECT::[x]<x>[y]<y>[w]<width>[h]<height>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
+						propertiesToParse = 
+						{
+							"x" 		: "f",
+							"y" 		: "f",
+							"w" 		: "f",
+							"h" 		: "f",
+							"fillc" 	: "s",
+							"fillo" 	: "f",
+							"strokec" 	: "s",
+							"strokeo" 	: "f",
+							"strokew" 	: "f"
+						}
+						break;
+					case "boundellipse":
+						// format: BOUNDELLIPSE::[cx]<center x>[cy]<center y>[rx]<x radius>[ry]<y radius>[fillc]<color>[fillo]<opac>[strokec]<color>[strokeo]<opac>[strokew]<width>[]
+						propertiesToParse = 
+						{
+							"cx" 		: "f",
+							"cy" 		: "f",
+							"rx" 		: "f",
+							"ry" 		: "f",
+							"fillc" 	: "s",
+							"fillo" 	: "f",
+							"strokec" 	: "s",
+							"strokeo" 	: "f",
+							"strokew" 	: "f"
+						}
+						break;
+				}
+
+				$.each(propertiesToParse, function(attrName, attrType){
+					var parsedAttr = ITE_get_attr(inkObject, attrName, attrType)
+					currObj[attrName] = parsedAttr
+				});
+
+				if (willParsePathstring) {
+					currObj["path"] = ITE_parsePathstring(currObj.pathstring)
+				}
+
+				objects.push({
+					"inkType" : type,
+					"inkProperties" : currObj
+				});
+			}
+		});
+		return objects
+	}
+
+	/* parses and returns the path (for an ink) from the pathstring
+		args:
+			pathstring: 		a pathstring
+	*/
+	var ITE_parsePathstring = function(pathstring){
+		var path = [],
+		coords = pathstring.split(" ");
+
+		$.each(coords, function(i, el){
+			var coordstring;
+			if (i == 0) {
+				el = el.split(/[RML]/).filter(
+					function(el){
+						return el !== "";
+					});
+			}
+			path = path.concat(function(){
+				if (Object.prototype.toString.call(el) === '[object Array]'){
+					var res = []
+					for (i=0; i<el.length; i++){
+						var xy = el[i].split(",");
+						res.push({
+							"x" : xy[0],
+							"y" : xy[1]
+						});
+					}
+					return res
+				} else {
+					var xy = el.split(",");
+					return [{
+						"x" : xy[0],
+						"y" : xy[1]
+					}];
+				}
+			}());
+		});
+		return path
+	}
+
+	/* creates final or initial keyframe for fade in and out
+		args:
+			keyframes:          array of keyframes
+			providerID:         providerID of this track
+			ktype:              "initial" or "final" specifying the type of keyframe
+			duration:           duration (either fadeInDuration or fadeOutDuration)
+	*/
+	var ITE_createTransitionKeyframe = function(args){
+		var keyframes   = args.keyframes,
+			providerID  = args.providerID,
+			ktype       = args.ktype,
+			duration    = args.duration,
+			transitionKeyframe = {}
+
+		//possible error - no keyframes to begin with
+		if (keyframes.length == 0) {
+			return transitionKeyframe
+		}
+
+		//current first and last keyframes
+		var firstKeyframe = keyframes[0],
+			lastKeyframe = keyframes[keyframes.length - 1]
+
+		//new one is the same as either the current first or last keyframe - except the time and the opacity
+		if (ktype == "initial") {
+			transitionKeyframe = $.extend({}, firstKeyframe); //need to make a copy of the first keyframe
+			transitionKeyframe.time = transitionKeyframe.time - duration
+
+			//TODO - is this a problem?
+			if (transitionKeyframe.time < 0){
+				console.log("ERROR: initial keyframe with time < 0")
+			}
+
+			transitionKeyframe.opacity = 0
+			transitionKeyframe['SpecialKeyframeType'] = "INITIAL" //for testing
+		} else {
+			transitionKeyframe = $.extend({}, lastKeyframe); //need to make a copy of the last keyframe
+			transitionKeyframe.time = transitionKeyframe.time + duration
+			transitionKeyframe.opacity = 0
+			transitionKeyframe['SpecialKeyframeType'] = "FINAL" //for testing
+		}
+
+		return transitionKeyframe
+	}
+
+	//parses asset URL(s) from a RIN experience track
+	var ITE_assetUrl = function(track){
+		var urls = [];
+		if (track.resourceReferences.length == 0){
+			return urls;
+		}
+		var j = 0;
+		for (j=0; j<track.resourceReferences.length; j++){
+			urls.push(rinData.resources[track.resourceReferences[j].resourceId].uriReference);
+		}
+
+		var URL;
+		//TO DO: figure out why url sometimes has server and sometimes not (?!)
+		if (urls.toString().substring(0, 4) == "http"){//if first 4 letters are "http"; that is, if server name is being appended
+			URL = urls;
+		} else { //if server name is NOT already appended, append it.
+			var serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8086' : "browntagserver.com:8080");
+			URL = serverURL + urls
+		}
+		return URL;
+	}
+
+	//returns a string of the providerID based on RIN's providerId's
+	var ITE_providerID = function (RINid) {
+		return {
+			"ImageES" : "image", 
+			"ZMES" : "deepZoom",
+			"AES" : "audio",
+			"InkES" : "ink",
+			"VideoES": "video" //TODO find out what this is
+		}[RINid] || "";
+	}
+
+	//parses the tracks from the rinData object
+	var ITE_tracks = function(){
+		var tracks = [],
+			rinDataExperiencesKeys = Object.keys(rinData.experiences);
+
+		var i = 0;
+		for (i=0; i < rinDataExperiencesKeys.length; i++){
+			var currExperience = rinData.experiences[rinDataExperiencesKeys[i]],
+				providerID = ITE_providerID(currExperience.providerId);
+
+			//ignore experiences with no experience streams
+			if (Object.keys(currExperience.experienceStreams).length == 0){
+				console.log("Found an experience with no experience streams")
+				continue;
+			}
+
+			//different structure for ink tracks vs. others
+			if (providerID == "ink") {
+				tracks.push({
+					"name" : rinDataExperiencesKeys[i],
+					"providerId" : providerID,
+					"experienceReference" : currExperience.data.linkToExperience.embedding.experienceId, //TODO - check this
+					"assetUrl" : "noAssetUrl",
+					"datastring" : currExperience.data.linkToExperience.embedding.element.datastring.str,
+					"inkObjects" : ITE_parseInkDatastring({
+						"datastring" : currExperience.data.linkToExperience.embedding.element.datastring.str
+					}),
+					"initKeyframe" : currExperience.data.linkToExperience.embedding.initKeyframe,
+					"keyframes" : ITE_parseInkKeyframes({
+						"track" : currExperience
+					}),
+					"zIndex" : currExperience.data.zIndex
+				})
+			}
+			else if (providerID == 'video') {
+			    keyFrames = [];
+			    currExperienceStreamKey = Object.keys(currExperience.experienceStreams).sort()[0]
+                currExperienceStream = currExperience.experienceStreams[currExperienceStreamKey]
+			    console.log("Experience: ");
+			    console.log(currExperience);
+			    console.log(currExperienceStream);
+			    /*
+			    keyframeObject = {
+			        "dispNum": k,
+			        "zIndex": track.data.zIndex,
+			        "time": time_offset + currKeyframe.offset,
+			        "opacity": 1,
+			        "size": {
+			            "x": currKeyframe.state.viewport.region.span.x * 100,
+			            "y": currKeyframe.state.viewport.region.span.y * 100
+			        },
+			        "pos": {
+			            "x": currKeyframe.state.viewport.region.center.x * 100,
+			            "y": currKeyframe.state.viewport.region.center.y * 100
+			        },
+			        "data": {}
+			    }
+                
+			    VIDEO:
+			        *			dispNum: display number
+                    *			time: time
+                    *			opacity: opacity
+                    *			pos{x, y}: position in x, y
+                    *			size{x, y}: size	
+                    *			volume: volume
+                    *			videoOffset: offset from the beginning of the video itsself
+                */
+			    keyFrame0 = {
+			        "dispNum": 1,
+			        "zIndex": currExperienceStream.data.zIndex,
+			        "time": 0,
+			        "opacity": 1,
+			        "size": {
+			            "x": 100,
+			            "y": 100
+			        },
+			        "pos": {
+			            "x": 0,
+			            "y": 0
+			        },
+			        "volume": 1,
+			        "videoOffset": 0,
+			        "data": {}
+			    }
+			    keyFrame1 = {
+			        "dispNum": 1,
+			        "zIndex": currExperienceStream.data.zIndex,
+			        "time": .05,
+			        "opacity": .95,
+			        "size": {
+			            "x": 100,
+			            "y": 100
+			        },
+			        "pos": {
+			            "x": 0,
+			            "y": 0
+			        },
+			        "volume": 1,
+			        "videoOffset": 0,
+			        "data": {}
+			    }
+			    keyFrame2 = {
+			        "dispNum": 1,
+			        "zIndex": currExperienceStream.data.zIndex,
+			        "time": currExperienceStream.duration - .05,
+			        "opacity": .95,
+			        "size": {
+			            "x": 100,
+			            "y": 100
+			        },
+			        "pos": {
+			            "x": 0,
+			            "y": 0
+			        },
+			        "volume": 1,
+			        "videoOffset": 0,
+			        "data": {}
+			    }
+			    keyFrame3 = {
+			        "dispNum": 1,
+			        "zIndex": currExperienceStream.data.zIndex,
+			        "time": currExperienceStream.duration,
+			        "opacity": 0,
+			        "size": {
+			            "x": 100,
+			            "y": 100
+			        },
+			        "pos": {
+			            "x": 0,
+			            "y": 0
+			        },
+			        "volume": 1,
+			        "videoOffset": 0,
+			        "data": {}
+			    }
+			    keyFrames.push(keyFrame0);
+			    keyFrames.push(keyFrame1);
+			    keyFrames.push(keyFrame2);
+			    keyFrames.push(keyFrame3);
+			    tracks.push({
+			        "name": rinDataExperiencesKeys[i],
+			        "providerId": providerID,
+			        "assetUrl": ITE_assetUrl(currExperience),
+			        "keyframes": keyFrames,
+			        "zIndex": currExperience.data.zIndex
+			    });
+
+			}else {
+				tracks.push({
+					"name" : rinDataExperiencesKeys[i],
+					"providerId" : providerID,
+					"assetUrl" : ITE_assetUrl(currExperience),
+					"keyframes" : ITE_keyframes(currExperience, providerID),
+					"zIndex" : currExperience.data.zIndex
+				});
+			}
+		}
+		//sorted from lowest to highest z-index
+		return tracks.sort(function(a, b){return a.zIndex - b.zIndex});
+	}
+
+	var ITE_tour = {
+		"tourTitle" : tour.Name,
+		"totalDuration" : rinData.data.narrativeData.estimatedDuration || 0,
+		"guid" : rinData.data.narrativeData.guid,
+		"timestamp" : rinData.data.narrativeData.timestamp,
+		"tracks" : ITE_tracks()
+	}
+
+	console.log("ITE tour object is: ");
+	console.log(ITE_tour);
+	console.log(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
+
+	return ITE_tour;
+}
+
+
+
+
 /**
  * Built-in object extensions
  */
