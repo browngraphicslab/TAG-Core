@@ -85,7 +85,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         progressIcon.attr('src', 'images/icons/progress-circle.gif');
 
         progressBar.css({
-            'position': 'relative', 'top': '0%', 'left': '5%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '20%', "display":"inline-block",
+            'position': 'relative', 'top': '42%', 'left': '45%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '2%'
         });
 
         innerProgressBar.css({
@@ -418,7 +418,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
                     });
             }
-
         } catch (e) {
             // file access failed
             console.log("file access failed: "+e.message);
@@ -523,7 +522,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             settingsViewTopBar.append(progressBarButton)
             console.log("STARTING NEW UPLOAD")
         }
-
     }
 
     /**
@@ -536,6 +534,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         uploadingOverlay.remove();
         $('.progressBarUploads').remove()
         $('.progressBarUploadsButton').remove()
+
     }
 
     /**
@@ -556,7 +555,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             var uriString = globalUriStrings[i], file = globalFiles[i];
             try {
                 addOverlay(root);
-                //uploadingOverlay.show();
+                uploadingOverlay.show();
 
                 uri = new Windows.Foundation.Uri(uriString);
                 uploader = new Windows.Networking.BackgroundTransfer.BackgroundUploader();

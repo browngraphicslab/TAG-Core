@@ -853,7 +853,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             // Add collection title
-            mainCollection.addClass('mainCollection');
+            mainCollection.addClass('mainCollection')
+                .css('text-align', 'left');
             titleBox.addClass('collection-title primaryFont').html(title);
             titleBox.css('display', 'inline');
 
@@ -1471,7 +1472,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             })
        
             loadQueue.add(function () {
-            	tileCircle.hide();
+                tileCircle.hide();
             })
             if (IS_WINDOWS){
             loadQueue.add(function () {
@@ -2764,38 +2765,38 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 function addAssociationRow(numberAssociatedDoqs){
                     var tileSpacing;
-                	if (numberAssociatedDoqs === 0){
-                		miniTilesHolder.hide();
-                		descSpan.css({"height": "92%"});
+                    if (numberAssociatedDoqs === 0){
+                        miniTilesHolder.hide();
+                        descSpan.css({"height": "92%"});
                         TAG.Util.removeProgressCircle(circle);
-                	} else {
+                    } else {
                         descSpan.css({'height':'33%'});
                         miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
                         tileSpacing = miniTilesHolder.height()/10;
-                	    if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
-                		    prevArrow = $(document.createElement('img'))
-                    			.addClass("miniTilesArrow")
-                    			.attr('src', tagPath + 'images/icons/Close.svg')
-                    			.on('mousedown', function(){
-                        				miniTilesHolder.stop();
-                        				miniTilesHolder.animate({
-                            			scrollLeft: miniTilesHolder.scrollLeft() - 50
-                        			}, ANIMATION_DURATION/2)
-                    			});
+                        if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
+                            prevArrow = $(document.createElement('img'))
+                                .addClass("miniTilesArrow")
+                                .attr('src', tagPath + 'images/icons/Close.svg')
+                                .on('mousedown', function(){
+                                        miniTilesHolder.stop();
+                                        miniTilesHolder.animate({
+                                        scrollLeft: miniTilesHolder.scrollLeft() - 50
+                                    }, ANIMATION_DURATION/2)
+                                });
 
-                		    nextArrow = $(document.createElement('img'))
-                    			.addClass("miniTilesArrow")
-                    			.attr('src', tagPath + 'images/icons/Open.svg')
-                    			.css('left', "94%")
-                    			.on('mousedown', function(){
-                        			miniTilesHolder.stop();
-                        			miniTilesHolder.animate({
-                            		scrollLeft: miniTilesHolder.scrollLeft() + 50
-                        		}, ANIMATION_DURATION/2)
-                    		});
-                    	    tileBottom.append(prevArrow);
-                    	    tileBottom.append(nextArrow);
-                	   }
+                            nextArrow = $(document.createElement('img'))
+                                .addClass("miniTilesArrow")
+                                .attr('src', tagPath + 'images/icons/Open.svg')
+                                .css('left', "94%")
+                                .on('mousedown', function(){
+                                    miniTilesHolder.stop();
+                                    miniTilesHolder.animate({
+                                    scrollLeft: miniTilesHolder.scrollLeft() + 50
+                                }, ANIMATION_DURATION/2)
+                            });
+                            tileBottom.append(prevArrow);
+                            tileBottom.append(nextArrow);
+                       }
                     }
                 }
 
@@ -2902,12 +2903,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         j++;
                     }
 
-                	addAssociationRow(numberAssociatedDoqs); 
-                	TAG.Util.removeProgressCircle(circle);
+                    addAssociationRow(numberAssociatedDoqs); 
+                    TAG.Util.removeProgressCircle(circle);
 
                     //Also add handlers to switch to first artwork if in assoc media view
-                	if (onAssocMediaView) {
-                	    exploreTab.on('mousedown', function(){
+                    if (onAssocMediaView) {
+                        exploreTab.on('mousedown', function(){
                             (switchPage(doqs[0], artwork, getContainerLeft(artwork, false)))();
 
                             //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
@@ -2930,7 +2931,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             });
 
                         });
-                	    currentThumbnail.on('mousedown', function(){
+                        currentThumbnail.on('mousedown', function(){
                             (switchPage(doqs[0], artwork, getContainerLeft(artwork, false)))();
 
 
@@ -2954,7 +2955,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             });
 
                         });
-                	}
+                    }
                 }
 
                 //Append everything
@@ -2973,14 +2974,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tileBottom.append(descSpan);
 
                 miniTilesLabel = $(document.createElement('div'))
-                    				.addClass("miniTilesLabel");
-				miniTilesHolder = $(document.createElement('div'))
-                    				.addClass('miniTilesHolder');
+                                    .addClass("miniTilesLabel");
+                miniTilesHolder = $(document.createElement('div'))
+                                    .addClass('miniTilesHolder');
                 tileBottom.append(miniTilesHolder)
-                    	   .append(miniTilesLabel);
+                           .append(miniTilesLabel);
 
                 previewTile.append(tileTop)
-                    	   .append(tileBottom);
+                           .append(tileBottom);
 
                 //selectedArtworkContainer.append(previewTile);
                 selectedArtworkContainer.append($(uiDocfrag));
@@ -3338,44 +3339,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {doq} tour    the relevant tour doq
      */
     function switchPageTour(tour, containerLeft) {
-        var rinData,
-            rinPlayer,
-            prevInfo,
+        var prevInfo,
             messageBox,
             collectionOptions,
             parentid;
 
-            if (TAG.Util.Splitscreen.isOn()) {
-                    confirmationBox = $(TAG.Util.UI.PopUpConfirmation(function () {
-                            TAG.Util.Splitscreen.exit(root.data('split') || 'L');
-                            tourClicked(tour)();
-                            TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
-                        },
-                        "By opening this tour, you will exit splitscreen mode. Would you like to continue?",
-                        "Continue",
-                        false,
-                        function () {
-                            confirmationBox.remove();
-                        },
-                        root
-                    ));
-
-                    confirmationBox.css('z-index', 10000001);
-                    root.append(confirmationBox);
-                    confirmationBox.show();
-                }
-
-
-        rinData = JSON.parse(unescape(tour.Metadata.Content));
-
-        if (!rinData || !rinData.data) {
-            messageBox = $(TAG.Util.UI.popUpMessage(null, "Cannot play empty tour.", null));
-            messageBox.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 7);
-            root.append(messageBox);
-            messageBox.fadeIn(500);
-            return;
-        }
-
+        //Options for when we return to the collections page
         collectionOptions = {
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
@@ -3385,14 +3354,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevMult : multipleShown
         }
 
-        rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour);
+        //Parse RIN data to ITE Data
+        var iteData = TAG.Util.RIN_TO_ITE(tour);
 
-        TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), rinPlayer.startPlayback);
-
+        //Create tag tourplayer (which will in turn create an ITE player)
+        var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
+        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), ITEPlayer.startPlayback);
         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
-        currentPage.obj  = rinPlayer;
     }
-
+    
     /**
      * Switch to the video player
      * @method switchPageVideo

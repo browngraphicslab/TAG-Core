@@ -2,40 +2,65 @@ window.ITE = window.ITE || {};
 
 ITE.TimeManager = function(){
 
-	this.isRunning = false; //stopwatch value indicating the time of the tour
-	this.startingOffset = 0; //the starting offset
-	this.elapsedOffset = 0; //how much time has elapsed
+	var self = this;
+
+	self.isRunning = false; //stopwatch value indicating the time of the tour
+	self.startingOffset = 0; //the starting offset
+	self.elapsedOffset = 0; //how much time has elapsed
+	self.end = false; //whether or not the end of tour has been reached
 
 	//getIsRunning
-	this.getIsRunning = function(){
-		return this.isRunning;
+	self.getIsRunning = function(){
+		return self.isRunning;
 	};
 
+    //check end of tour.
+	/*self.endTour = function (offset) {
+	    //if (offset > totalTourDuration) {
+	        self.isRunning = false;
+	        self.end = true;
+	    //}
+	}*/
+
+	//return status, depending on whether tour is over or not
+	self.isEnd = function() {
+		return self.end;
+	}
+
 	//getElapsedOffset
-	this.getElapsedOffset = function(){
-		var offset = (Date.now()/1000 - this.startingOffset) + this.elapsedOffset;
-		if (this.isRunning){
+	self.getElapsedOffset = function(){
+	    var offset = (Date.now() / 1000 - self.startingOffset) + self.elapsedOffset;
+	    //self.endTour(offset);
+
+		if (self.isRunning){
 			return offset;
 		}else {
-			return this.elapsedOffset;
+			return self.elapsedOffset;
 		}
 	};
 
-	this.addElapsedTime = function(offset) {
-		this.elapsedOffset += offset;
+	self.addElapsedTime = function(offset) {
+		var now = Date.now() / 1000;
+		if (self.isRunning) {
+			self.elapsedOffset = (now - self.startingOffset) + offset;
+			self.startingOffset = now;
+		} else {
+			self.elapsedOffset += offset;
+			self.startingOffset = now;
+		}
 	}
 
 		//start the timer
-	this.startTimer= function(){
-		this.startingOffset = Date.now() / 1000; //get startingOffset in seconds
-		this.isRunning = true;
+	self.startTimer= function(){
+		self.startingOffset = Date.now() / 1000; //get startingOffset in seconds
+		self.isRunning = true;
 	};
 
 	//pause the timer
-	this.stopTimer = function(){
-		if (this.isRunning){
-			this.elapsedOffset = this.getElapsedOffset();
+	self.stopTimer = function(){
+		if (self.isRunning){
+			self.elapsedOffset = self.getElapsedOffset();
 		}
-		this.isRunning = false;
+		self.isRunning = false;
 	};
 };
