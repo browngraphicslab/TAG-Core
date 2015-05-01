@@ -195,11 +195,11 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             addLocalCallback([resumableFile.file], [localURL], [uriString])();            
             filesCompleted++;
             successfulUploads = true;
-            toBeAdded.append(resumableFile);
-            for(var i = 0; i < toBeAdded.length; i ++){
-                console.log(toBeAdded[i].file.name + "is in the array to be added");
-
-            }
+            toBeAdded.push(resumableFile.file);
+            console.log(toBeAdded.length);
+            //for(var i = 0; i < toBeAdded.length; i ++){
+              //  console.log(toBeAdded[i].name + "is in the array to be added");
+            //}
             console.log("END UP UPLOAD FUNCTION");
             //TODO progress bar
 
@@ -311,6 +311,14 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         }
         
         
+    }
+
+    function recentImports(){
+        if(toBeAdded.length>0){
+            return toBeAdded;
+        } else{
+            return null;
+        }
     }
     //Check the duration of media files
     function checkDuration(resumableFile, good, long, short) {

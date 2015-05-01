@@ -60,7 +60,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         searhBarContainer = root.find('#setViewSearchBarContainer'),
         menuLabel = root.find('#addMenuLabel'),
         dropDown = $(document.createElement('div')),
-        currCollection = null;
+        currCollection = null,
         // = root.find('#importButton'),
 
         
@@ -206,6 +206,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Util.UI.initKeyHandler();
         TAG.Util.UI.getStack()[0] = settingsViewKeyHandler;
         var timelineShown;
+
         newButton.on("mousedown", function () {
             newButton.css({"background-color":"white"});
         });
@@ -240,12 +241,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         addToArtworkLabel.css('min-width', '0px');
         newButton.css('min-width', '0px');
     }
-    deleteBlankButton.css({
-        'min-width': '0px',
-        'width': '20%',
-        'font-size':'50%'
-    })
-    .text("Delete");
+    if(!IS_WINDOWS){
+        deleteBlankButton.css({
+        'display': 'none'
+        });
+    }
+    
+    //.text("Delete");
     findBarTextBox.css({
         'height': '100%',
         'font-size': '110%',
@@ -2456,11 +2458,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //deleteBlankButton.show();
 
             if(IS_WINDOWS){
-                $('#setViewDeleteButton').css('display','block');
+                //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteExhibition(multiSelected)});
                 deleteBlankButton.text('Delete');
             } else{
-
+                $('#setViewDeleteButton').css('display','none');
             }
 
             TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
@@ -3121,10 +3123,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
-         if(IS_WINDOWS){
-                $('#setViewDeleteButton').css('display','block');
+        if(IS_WINDOWS){
+                //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteTour(multiSelected)});
                 deleteBlankButton.text('Delete');
+        } else{
+            $('#setViewDeleteButton').css('display','none');   
         }
     
 
@@ -3572,7 +3576,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    associated media to load
      */
     function loadAssocMedia(media) {
-        
+        if(IS_WINDOWS){ 
+            //$('#setViewDeleteButton').css('display','block');
+            deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(multiSelected)});
+            deleteBlankButton.text("Delete");
+        } else{
+            $('#setViewDeleteButton').css('display','none');
+        }
+
         prepareViewer(true);
         clearRight();
         deleteType = deleteAssociatedMedia;
@@ -3897,13 +3908,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left',
             });
 
-        if(IS_WINDOWS){
+        /*if(IS_WINDOWS){
             $('#setViewDeleteButton').css('display','block');
             deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(multiSelected)});
             deleteBlankButton.text("Delete");
         } else{
 
-        }
+        } */
 
         var generateAssocMediaThumbnailButton = createButton('Generate Thumbnail',
             function () {
@@ -7080,10 +7091,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //deleteBlankButton.show();
             if(IS_WINDOWS){
-                $('#setViewDeleteButton').css('display','block');
+                //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
                 deleteBlankButton.text('Delete');
-            } 
+            } else{
+                $('#setViewDeleteButton').css('display','none');
+            }
 
         } else if (inAssociatedView) {
             findBar.css("display", "none");
@@ -8295,7 +8308,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!IS_WINDOWS){
         //webappfileupload:   
         var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
-        TAG.Authoring.WebFileUploader( // remember, this is a multi-file upload
+        return TAG.Authoring.WebFileUploader( // remember, this is a multi-file upload
             root,
             type,
             // local callback - get filename
@@ -8341,7 +8354,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
 
         var names = [], locals = [], contentTypes = [], fileArray, i;
-        TAG.Authoring.FileUploader( // remember, this is a multi-file upload
+        return TAG.Authoring.FileUploader( // remember, this is a multi-file upload
             root,
             type,
             // local callback - get filename
