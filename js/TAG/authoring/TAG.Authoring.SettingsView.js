@@ -4420,19 +4420,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function createAsset() {
         uploadFile(TAG.Authoring.FileUploadTypes.AssociatedMedia, function (urls, names, contentTypes, files) {
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
-<<<<<<< HEAD
+
 
             //implementing background uploads - david
-            console.log("createAsset called")
-            hideUploadingProgress();
+            // console.log("createAsset called")
+            // hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
-=======
+
             prepareNextView(false);
             clearRight();
             prepareViewer(true);
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
+
 
             if(files.length > 0) {
                 durationHelper(0);
