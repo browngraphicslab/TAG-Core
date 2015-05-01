@@ -112,185 +112,185 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             if (multiple) { // batch upload
                 filePicker.pickMultipleFilesAsync().then(
                     uploadFilesObject = function (filesObject) { // Now file has been picked
-                            var uriStrings = [],
-                                upload = new UploadOp(),
-                                localURLs = [],
-                                k, files = [],
-                                //largeFiles = [],
-                                hashedDate, newHashedDate; // local URL
-                            globalFilesObject = filesObject;
-                            totalBytesToSend = {};
-                            totalBytesSent = {};
-                            largeFiles = "";
-                            longFiles = [];
-                            shortFiles = [];
-                            var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
-                            bar.width("0%");
-                            if (filesObject.length === 0) {
-                                removeOverlay();
-                                addLocalCallback([], [])();
-                                return;
-                            }
-                            // create an actual array out of the windows files object -- filter out files that are too large/long
+                        var uriStrings = [],
+                            upload = new UploadOp(),
+                            localURLs = [],
+                            k, files = [],
+                            //largeFiles = [],
+                            hashedDate, newHashedDate; // local URL
+                        globalFilesObject = filesObject;
+                        totalBytesToSend = {};
+                        totalBytesSent = {};
+                        largeFiles = "";
+                        longFiles = [];
+                        shortFiles = [];
+                        var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
+                        bar.width("0%");
+                        if (filesObject.length === 0) {
+                            removeOverlay();
+                            addLocalCallback([], [])();
+                            return;
+                        }
+                        // create an actual array out of the windows files object -- filter out files that are too large/long
 
-                            function fileLimitHelper(file, i) {
-                                file.getBasicPropertiesAsync().then(
-                                    function (basicProperties) {
-                                        size = basicProperties.size;
+                        function fileLimitHelper(file, i) {
+                            file.getBasicPropertiesAsync().then(
+                                function (basicProperties) {
+                                    size = basicProperties.size;
 
-                                        numFiles = files.length; // global
-                                        var maxSize;
+                                    numFiles = files.length; // global
+                                    var maxSize;
+                                    switch (type) {
+                                        case TAG.Authoring.FileUploadTypes.VideoArtwork:
+                                        case TAG.Authoring.FileUploadTypes.AssociatedMedia:
+                                        case TAG.Authoring.FileUploadTypes.Standard:
+                                        case TAG.Authoring.FileUploadTypes.CSV:
+                                            maxSize = maxFileSize;
+                                            break;
+                                        case TAG.Authoring.FileUploadTypes.DeepZoom:
+                                            if (file.fileType === ".mp4" ||
+                                                file.fileType === ".ogv" ||
+                                                file.fileType === ".webm" ||
+                                                file.fileType === ".mov" ||
+                                                file.fileType === ".avi" ||
+                                                file.fileType === ".wmv") {
+                                                maxSize = maxVideoArtworkSize;
+                                                break;
+                                            }
+                                        case TAG.Authoring.FileUploadTypes.Map:
+                                            maxSize = maxDeepZoomFileSize;
+                                            break;
+                                    }
+                                    if (size < maxSize) {
+                                        files.push(file);
+                                        localURLs.push(window.URL.createObjectURL(file, { oneTimeOnly: true }));
+                                        var ext = file.fileType.toLowerCase();
                                         switch (type) {
                                             case TAG.Authoring.FileUploadTypes.VideoArtwork:
+                                                uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
+                                                break;
                                             case TAG.Authoring.FileUploadTypes.AssociatedMedia:
+                                                uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadAssociatedMedia&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
+                                                break;
                                             case TAG.Authoring.FileUploadTypes.Standard:
+                                                uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
+                                                break;
                                             case TAG.Authoring.FileUploadTypes.CSV:
-                                                maxSize = maxFileSize;
+                                                uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadCSV&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fielType.substr(1));
                                                 break;
                                             case TAG.Authoring.FileUploadTypes.DeepZoom:
-                                                if (file.fileType === ".mp4" ||
-                                                    file.fileType === ".ogv" ||
-                                                    file.fileType === ".webm" ||
-                                                    file.fileType === ".mov" ||
-                                                    file.fileType === ".avi" ||
-                                                    file.fileType === ".wmv") {
-                                                    maxSize = maxVideoArtworkSize;
-                                                    break;
-                                                }
-                                            case TAG.Authoring.FileUploadTypes.Map:
-                                                maxSize = maxDeepZoomFileSize;
-                                                break;
-                                        }
-                                        if (size < maxSize) {
-                                            files.push(file);
-                                            localURLs.push(window.URL.createObjectURL(file, { oneTimeOnly: true }));
-                                            var ext = file.fileType.toLowerCase();
-                                            switch (type) {
-                                                case TAG.Authoring.FileUploadTypes.VideoArtwork:
+                                                if (ext === ".mp4" || ext === ".webm" || ext === ".avi" || ext === ".mov" || ext === ".ogv" || ext === ".wmv" ) {
                                                     uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
-                                                    break;
-                                                case TAG.Authoring.FileUploadTypes.AssociatedMedia:
-                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadAssociatedMedia&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
-                                                    break;
-                                                case TAG.Authoring.FileUploadTypes.Standard:
-                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUpload&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
-                                                    break;
-                                                case TAG.Authoring.FileUploadTypes.CSV:
-                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadCSV&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fielType.substr(1));
-                                                    break;
-                                                case TAG.Authoring.FileUploadTypes.DeepZoom:
-                                                    if (ext === ".mp4" || ext === ".webm" || ext === ".avi" || ext === ".mov" || ext === ".ogv" || ext === ".wmv" ) {
-                                                        uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadVideoArtwork&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
-                                                    } else {
-                                                        uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
-                                                    }
-                                                    break;
-                                                case TAG.Authoring.FileUploadTypes.Map:
-                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadMap&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
-                                                    break;
+                                                } else {
+                                                    uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadDeepzoom&Client=Windows&ReturnDoq=true&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
+                                                }
+                                                break;
+                                            case TAG.Authoring.FileUploadTypes.Map:
+                                                uriStrings.push(TAG.Worktop.Database.getSecureURL() + "/?Type=FileUploadMap&Client=Windows&token=" + TAG.Auth.getToken() + "&Extension=" + file.fileType.substr(1));
+                                                break;
 
-                                            }
                                         }
-                                        else {                                            
-                                            largeFiles += ("<br />" + file.name);
-                                        }
+                                    }
+                                    else {                                            
+                                        largeFiles += ("<br />" + file.name);
+                                    }
                                         
-                                        // if we haven't hit all the files, keep going
-                                        if (i < filesObject.length - 1) {
-                                            fileLimitHelper(filesObject[i + 1], i + 1);
-                                        } else if (i === (filesObject.length - 1)) { // here we've reached the end
-                                            checkDurations(files, function () {
-                                                var mins, secs;
-                                                removeOverlay();
-                                                addLocalCallback([], [])();
-                                                //if(file.fileType.substr(1)!==".mp4")
-                                                if (files.length === 0 && largeFiles !== '') { //no > time-limit files
-                                                    //alert that all files failed.
-                                                    fileUploadError = uploadErrorAlert(null, "The selected file(s) could not be uploaded because they exceed the 50MB file limit.", null);
-                                                    $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
-                                                    $('body').append(fileUploadError);
-                                                    $(fileUploadError).fadeIn(500);
-                                                    return;
-                                                }
-                                                else if (files.length === 0 && longFiles.length > 0 && file.fileType !== ".webm" && file.fileType !== ".ogv") { // no > 50MB files
-                                                    mins = Math.floor(maxDuration / 60);
-                                                    secs = maxDuration % 60;
-                                                    if (secs === 0) secs = '00';
-                                                    else if (secs <= 9) secs = '0' + secs;
+                                    // if we haven't hit all the files, keep going
+                                    if (i < filesObject.length - 1) {
+                                        fileLimitHelper(filesObject[i + 1], i + 1);
+                                    } else if (i === (filesObject.length - 1)) { // here we've reached the end
+                                        checkDurations(files, function () {
+                                            var mins, secs;
+                                            removeOverlay();
+                                            addLocalCallback([], [])();
+                                            //if(file.fileType.substr(1)!==".mp4")
+                                            if (files.length === 0 && largeFiles !== '') { //no > time-limit files
+                                                //alert that all files failed.
+                                                fileUploadError = uploadErrorAlert(null, "The selected file(s) could not be uploaded because they exceed the 50MB file limit.", null);
+                                                $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                $('body').append(fileUploadError);
+                                                $(fileUploadError).fadeIn(500);
+                                                return;
+                                            }
+                                            else if (files.length === 0 && longFiles.length > 0 && file.fileType !== ".webm" && file.fileType !== ".ogv") { // no > 50MB files
+                                                mins = Math.floor(maxDuration / 60);
+                                                secs = maxDuration % 60;
+                                                if (secs === 0) secs = '00';
+                                                else if (secs <= 9) secs = '0' + secs;
 
-                                                    fileUploadError = uploadErrorAlert(null, "The selected file(s) could not uploaded because they exceed " + mins + ":" + secs + " in length.", null);
+                                                fileUploadError = uploadErrorAlert(null, "The selected file(s) could not uploaded because they exceed " + mins + ":" + secs + " in length.", null);
 
-                                                    $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
-                                                    $('body').append(fileUploadError);
-                                                    $(fileUploadError).fadeIn(500);
-                                                    return;
-                                                }
-                                                else if (files.length === 0 && shortFiles.length > 0 && file.fileType !== ".webm"&&file.fileType !== ".ogv") { // no > 50MB files
-                                                    mins = Math.floor(minDuration / 60);
-                                                    secs = minDuration % 60;
-                                                    if (secs === 0) secs = '00';
-                                                    else if (secs <= 9) secs = '0' + secs;
+                                                $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                $('body').append(fileUploadError);
+                                                $(fileUploadError).fadeIn(500);
+                                                return;
+                                            }
+                                            else if (files.length === 0 && shortFiles.length > 0 && file.fileType !== ".webm"&&file.fileType !== ".ogv") { // no > 50MB files
+                                                mins = Math.floor(minDuration / 60);
+                                                secs = minDuration % 60;
+                                                if (secs === 0) secs = '00';
+                                                else if (secs <= 9) secs = '0' + secs;
 
-                                                    fileUploadError = uploadErrorAlert(null, "The selected file(s) could not uploaded because they are shorter than " + mins + ":" + secs + " in length.", null);
+                                                fileUploadError = uploadErrorAlert(null, "The selected file(s) could not uploaded because they are shorter than " + mins + ":" + secs + " in length.", null);
 
-                                                    $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
-                                                    $('body').append(fileUploadError);
-                                                    $(fileUploadError).fadeIn(500);
-                                                    return;
-                                                }
-                                                else if (files.length === 0 && file.fileType !== ".webm" && file.fileType !== ".ogv") {
-                                                    mins = Math.floor(maxDuration / 60);
-                                                    secs = maxDuration % 60;
-                                                    if (secs === 0) secs = '00';
-                                                    else if (secs <= 9) secs = '0' + secs;
+                                                $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                $('body').append(fileUploadError);
+                                                $(fileUploadError).fadeIn(500);
+                                                return;
+                                            }
+                                            else if (files.length === 0 && file.fileType !== ".webm" && file.fileType !== ".ogv") {
+                                                mins = Math.floor(maxDuration / 60);
+                                                secs = maxDuration % 60;
+                                                if (secs === 0) secs = '00';
+                                                else if (secs <= 9) secs = '0' + secs;
 
-                                                    fileUploadError = uploadErrorAlert(null, "The selected file(s) could not be uploaded because they exceed the 50MB file limit or exceed the " + mins + ":" + secs + " duration limit.", null);
-                                                    $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
-                                                    $('body').append(fileUploadError);
-                                                    $(fileUploadError).fadeIn(500);
-                                                    return;
-                                                }
-                                                globalFiles = files;
+                                                fileUploadError = uploadErrorAlert(null, "The selected file(s) could not be uploaded because they exceed the 50MB file limit or exceed the " + mins + ":" + secs + " duration limit.", null);
+                                                $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                $('body').append(fileUploadError);
+                                                $(fileUploadError).fadeIn(500);
+                                                return;
+                                            }
+                                            globalFiles = files;
 
-                                                //sets up the upload progress popup as soon as the filenames are known
-                                                var filenames = []
-                                                for (var i = 0; i < globalFiles.length; i++) {
-                                                    filenames.push(globalFiles[i].name)
-                                                }
+                                            //sets up the upload progress popup as soon as the filenames are known
+                                            var filenames = []
+                                            for (var i = 0; i < globalFiles.length; i++) {
+                                                filenames.push(globalFiles[i].name)
+                                            }
 
-                                                //creates popup but doesn't show it
-                                                var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
+                                            //creates popup but doesn't show it
+                                            var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
+                                            $('body').append(popup);
+                                            $(popup).css({'display':'none'});
+                                            progressBar.click(function () {
                                                 $('body').append(popup);
-                                                $(popup).css({'display':'none'});
-                                                progressBar.click(function () {
-                                                    $('body').append(popup);
-                                                    $(popup).css({ 'display': 'inherit' });
-                                                    $(popup).show();
+                                                $(popup).css({ 'display': 'inherit' });
+                                                $(popup).show();
+                                            });
+
+                                            numFiles = files.length; // global
+                                            globalUriStrings = uriStrings;
+                                            globalUpload = upload;
+                                            var localResult = localCallback(files, localURLs,
+                                                uploadStart(0, upload),
+                                                function () {
+                                                    fileUploadError = uploadErrorAlert(null, "uploading canceled due to the unsupported format", null);
+                                                    $(fileUploadError).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
+                                                    $('body').append(fileUploadError);
+                                                    $(fileUploadError).fadeIn(500);
                                                 });
 
-                                                numFiles = files.length; // global
-                                                globalUriStrings = uriStrings;
-                                                globalUpload = upload;
-                                                var localResult = localCallback(files, localURLs,
-                                                    uploadStart(0, upload),
-                                                    function () {
-                                                        fileUploadError = uploadErrorAlert(null, "uploading canceled due to the unsupported format", null);
-                                                        $(fileUploadError).css('z-index', LADS.TourAuthoring.Constants.aboveRinZIndex + 1000);
-                                                        $('body').append(fileUploadError);
-                                                        $(fileUploadError).fadeIn(500);
-                                                    });
-
-                                                if (localResult !== 'uploading test!') {
-                                                    uploadStart(0, upload)();
-                                                }
-                                            });
-                                        }
-
+                                            if (localResult !== 'uploading test!') {
+                                                uploadStart(0, upload)();
+                                            }
+                                        });
                                     }
-                                );
-                            }
 
-                            fileLimitHelper(filesObject[0], 0);
+                                }
+                            );
+                        }
+
+                        fileLimitHelper(filesObject[0], 0);
                     });
             }
             else { // single upload
@@ -504,7 +504,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * (no idea if this will actually disable interactions too as is)
      */
     function addOverlay(elmt) {
-<<<<<<< HEAD
         //if ($("#uploadingOverlay").length === 0) {
         //    elmt.append(uploadingOverlay);
         //}
@@ -513,11 +512,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         settingsViewTopBar.append(progressBar)
         console.log("STARTING NEW UPLOAD")
-=======
-        if ($("#uploadingOverlay").length === 0) {
-            elmt.append(uploadingOverlay);
-        }
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
     }
 
     /**
@@ -562,9 +556,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                     function (basicProperties) {
                         size = basicProperties.size;
 
-                            // Start the upload and persist the promise to be able to cancel the upload.
-                            promise = upload.startAsync().then(interComplete(i), error, progress);
-                            promises.push(promise);
+                        // Start the upload and persist the promise to be able to cancel the upload.
+                        promise = upload.startAsync().then(interComplete(i), error, progress);
+                        promises.push(promise);
                     }
                 );
 
@@ -730,7 +724,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             }
         }        
         bar.width(percentComplete * 90 + "%");
-<<<<<<< HEAD
         updateProgressUI(guidsToFileNames[upload.guid], percentComplete)
     }
 
@@ -740,8 +733,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         percent = 1;
         $(".uploadProgressLabel" + name).text((percent*100).toString().substring(0, 4) + "%")
         $(".uploadProgressInner" + name).css({'width':percent*100+'%'});
-=======
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
     }
 
     function cancelPromises() {

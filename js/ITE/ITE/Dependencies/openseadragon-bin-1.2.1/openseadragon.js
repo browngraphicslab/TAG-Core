@@ -8358,8 +8358,8 @@ function onCanvasDblClick(event, first) {
 }
 
 function onCanvasDrag(event, first) {
-
-    var track = this.orchestrator.getTrackBehind(2, event, true);
+    var zIndex = this.ITE_track.trackData.zIndex;
+    var track = this.orchestrator.getTrackBehind(zIndex, event, true);
     if (track === "NOPE") {
         return;
     }
@@ -8410,7 +8410,8 @@ function onCanvasDrag(event, first) {
 }
 
 function onCanvasDragEnd(event, first) {
-    var track = this.orchestrator.getTrackBehind(2, event, true);
+    var zIndex = this.ITE_track.trackData.zIndex;
+    var track = this.orchestrator.getTrackBehind(zIndex, event, true);
 
     if (track === "NOPE") {
         this.orchestrator.manipTrack = null;
@@ -8502,7 +8503,8 @@ function onCanvasRelease(event, first) {
 }
 
 function onCanvasPinch(event, first) {
-    var track = this.orchestrator.getTrackBehind(2, event, false);
+    var zIndex = this.ITE_track.trackData.zIndex;
+    var track = this.orchestrator.getTrackBehind(zIndex, event, false);
     //if (track === "NOPE") {
     //    return;
     //}
@@ -8572,7 +8574,8 @@ function onCanvasPinch(event, first) {
 }
 
 function onCanvasScroll(event, first) {
-    var track = this.orchestrator.getTrackBehind(2, event, false);
+    var zIndex = this.ITE_track.trackData.zIndex;
+    var track = this.orchestrator.getTrackBehind(zIndex, event, false);
     //if (track === "NOPE") {
        // return;
     //}

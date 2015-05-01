@@ -273,7 +273,7 @@ ITE.Orchestrator = function(player) {
 	    cur_track = null;
 	    for (var i = 0; i < self.trackManager.length; i++) {
 	        index = self.trackManager[i].trackData.zIndex;
-	        if (cur < index && zIndex > index && self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
+	        if (cur < index && zIndex > index && self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt) && self.trackManager[i].trackData.providerId !== "ink") {
 	            cur = index;
 	            cur_track = self.trackManager[i];
 	        } else if (zIndex === index) {
@@ -291,7 +291,7 @@ ITE.Orchestrator = function(player) {
 	    }
 	    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
 	        console.log("dragging donedone");
-	        return "NOPE"
+	        return self.manipTrack
 	    }
 	    if (isDrag) {
 	        console.log("dragging same track");
