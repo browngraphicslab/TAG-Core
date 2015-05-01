@@ -260,28 +260,29 @@
                 TAG.Worktop.Database.getDoq(pageToLoad.guid, function (tour) {
                     if (pageToLoad.prevpage) {
                         TAG.Worktop.Database.getDoq(pageToLoad.prevpage, function (prevCollection) {
-                            var tourData = JSON.parse(unescape(tour.Metadata.Content)),
-                                rinPlayer = TAG.Layout.TourPlayer(tourData, prevCollection, {}, null, tour);
+                            var tourData = TAG.Util.RIN_TO_ITE(tour),
+                                itePlayer = TAG.Layout.TourPlayer(tourData, prevCollection, {}, null, tour);
 
                             tagContainer.css('overflow', 'hidden');
 
-                            tagContainer.append(rinPlayer.getRoot());
-                            rinPlayer.startPlayback();
+                            tagContainer.append(itePlayer.getRoot());
+                            itePlayer.startPlayback();
 
                             currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
-                            currentPage.obj = rinPlayer;
+                            currentPage.obj = itePlayer;
                         });
                     } else {
-                        var tourData = JSON.parse(unescape(tour.Metadata.Content)),
-                               rinPlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
+
+                        var tourData = TAG.Util.RIN_TO_ITE(tour),
+                        itePlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
 
                         tagContainer.css('overflow', 'hidden');
 
-                        tagContainer.append(rinPlayer.getRoot());
-                        rinPlayer.startPlayback();
+                        tagContainer.append(itePlayer.getRoot());
+                        itePlayer.startPlayback();
 
                         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
-                        currentPage.obj = rinPlayer;
+                        currentPage.obj = itePlayer;
                     }
                 }, function() {
                     // TODO error handling

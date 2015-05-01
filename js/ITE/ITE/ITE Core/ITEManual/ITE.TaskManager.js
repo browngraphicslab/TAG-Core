@@ -8,23 +8,16 @@ ITE.Task = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, ongo
 	self.nextKeyframeData 	= nextKeyframeData;
 	self.asset 				= asset;
 	self.ongoingTasks 		= ongoingTasks;
-	self.track 				= track
-
-	self.nextKeyframeData.ease = Linear.easeNone;
-
-	// self.nextKeyframeData.onComplete = function(){
-	// 	self.ongoingTasks.splice(self.ongoingTasks.indexOf(self), 1);
-	// }
+	self.track 				= track;
 	self.animation;
 
-	this.play = function(){
-		(track.trackData.providerId === 'image') && asset.stop();
+	self.play = function(){
+		(track.trackData.providerId === 'image') && asset.stop(); //TODO deal with self 
 		self.track.play(self.nextKeyframeTime, self.nextKeyframeData);
 	};
 
-	this.pause = function() {
+	self.pause = function() {
 		self.track.pause()
-		//self.track.animation.kill()
 	};
 
 };
@@ -37,108 +30,108 @@ ITE.TaskManager = function() {
 	self.scheduledTasks = []; 
 
 	//allow for the scheduling of items within a 0.2sec interval of the timer
-	this.timerPrecision = 0.2; 
+	self.timerPrecision = 0.2; 
 
 	//tracks which index in the scheduledTasks list the scheduler is currently at
-	this.currentTaskIndex = 0;
+	self.currentTaskIndex = 0;
 
 	//timer of entire tour
-	this.timeManager = new ITE.TimeManager();
+	self.timeManager = new ITE.TimeManager();
 
 	//to keep track of the setInterval of the next scheduled item
-	this.timerId = -1;
+	self.timerId = -1;
 
-	this.ongoingTasks = [];
-	this.status = "starting";
+	self.ongoingTasks = [];
+	self.status = "starting";
 
-	//getElaspedTime
-	this.getElapsedTime = function(){
-		return this.timeManager.getElapsedOffset();
+	//getElaspedTim+e
+	self.getElapsedTime = function(){
+		return self.timeManager.getElapsedOffset();
 	};	
 
 	//load tasks to be scheduled
-	this.loadTask = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, track) {
-		var newTask = new ITE.Task(timerOffset, nextKeyframeTime, nextKeyframeData, asset, this.ongoingTasks, track);
-		this.scheduledTasks.push(newTask);
+	self.loadTask = function(timerOffset, nextKeyframeTime, nextKeyframeData, asset, track) {
+		var newTask = new ITE.Task(timerOffset, nextKeyframeTime, nextKeyframeData, asset, self.ongoingTasks, track);
+		self.scheduledTasks.push(newTask);
 	};
 
 	//start the scheduler on current tasks
-	this.play = function() {
+	self.play = function() {
 		if (self.status === "paused"){
 
 			self.status = "playing";
 
-			this.scheduleNextTasks();
-			for (var i=0; i<this.ongoingTasks.length; i++){
-				this.ongoingTasks[i].play(true);
+			self.scheduleNextTasks();
+			for (var i=0; i<self.ongoingTasks.length; i++){
+				self.ongoingTasks[i].play(true);
 			}
-			this.timeManager.startTimer();
+			self.timeManager.startTimer();
 		} else {
-			this.triggerCurrentTasks();
-			this.scheduleNextTasks();
-			this.timeManager.startTimer();
+			self.triggerCurrentTasks();
+			self.scheduleNextTasks();
+			self.timeManager.startTimer();
 		}
 	};
 
 	//pause the scheduler
-	this.pause = function() {
-		this.timeManager.stopTimer();
+	self.pause = function() {
+		self.timeManager.stopTimer();
 		self.status = "paused"
-		clearTimeout(this.timerId);
-		this.timerId = -1;
-		for (var i=0; i<this.ongoingTasks.length; i++){
-			this.ongoingTasks[i].pause();
+		clearTimeout(self.timerId);
+		self.timerId = -1;
+		for (var i=0; i<self.ongoingTasks.length; i++){
+			self.ongoingTasks[i].pause();
 		}
 	};
 
 //seek to the correct point in the scheduler
-	this.seek = function(seekedOffset) {
-		this.pause();
-		this.timeManager.addElapsedTime(seekedOffset);
-		this.currentTaskIndex = this.getIndexAt(offset);
-		this.triggerCurrentTasks();
-		this.scheduleNextTasks();
+	self.seek = function(seekedOffset) {
+		self.pause();
+		self.timeManager.addElapsedTime(seekedOffset);
+		self.currentTaskIndex = self.getIndexAt(seekedOffset);
+		self.triggerCurrentTasks();
+		self.scheduleNextTasks();
 	};
 
-	this.triggerCurrentTasks = function() {
-		this.status = "playing";
-		var index 	= this.currentTaskIndex,
+	self.triggerCurrentTasks = function() {
+		self.status = "playing";
+		var index 	= self.currentTaskIndex,
 			i 		= 0,
 			task;
 
 		//interval in which to check for tasks to start
-		var curTime = this.getElapsedTime();
-		var scheduleInterval = curTime + this.timerPrecision;
+		var curTime = self.getElapsedTime();
+		var scheduleInterval = curTime + self.timerPrecision;
 
-		while (index < this.scheduledTasks.length && this.scheduledTasks[index].timerOffset <= scheduleInterval) {
-			task = this.scheduledTasks[index]
-			this.ongoingTasks.push(task);
+		while (index < self.scheduledTasks.length && self.scheduledTasks[index].timerOffset <= scheduleInterval) {
+			task = self.scheduledTasks[index]
+			self.ongoingTasks.push(task);
 			task.play();
 			task.track.currentAnimationTask && self.ongoingTasks.splice(self.ongoingTasks.indexOf(task.track.currentAnimationTask), 1);
 			task.track.currentAnimationTask = task;
 			index++;
 		}
 		//reset the current task index so that we can schedule subsequent tasks
-		this.currentTaskIndex = (index < this.scheduledTasks.length) ? index : -1;
+		self.currentTaskIndex = (index < self.scheduledTasks.length) ? index : -1;
 		
 	}
 
-	this.scheduleNextTasks = function() {
-		if (this.currentTaskIndex < 0){
-			clearInterval(this.timerId);
+	self.scheduleNextTasks = function() {
+		if (self.currentTaskIndex < 0){
+			clearInterval(self.timerId);
 			return; //there are no more tasks to be started/scheduled
 		}
 
-		var nextTask = this.scheduledTasks[this.currentTaskIndex];
+		var nextTask = self.scheduledTasks[self.currentTaskIndex];
 		//get the interval to wait until the next task is to be started
-		var waitInterval = Math.max((nextTask.timerOffset - this.getElapsedTime()), 0);
-		clearTimeout(this.timerId);
-		this.timerId = setTimeout(function () {self.nextTick();}, waitInterval * 1000);
+		var waitInterval = Math.max((nextTask.timerOffset - self.getElapsedTime()), 0);
+		clearTimeout(self.timerId);
+		self.timerId = setTimeout(function () {self.nextTick();}, waitInterval * 1000);
 	};
 
-	this.nextTick = function() {
-		this.triggerCurrentTasks();
-		this.scheduleNextTasks();
+	self.nextTick = function() {
+		self.triggerCurrentTasks();
+		self.scheduleNextTasks();
 	}
 
 };
