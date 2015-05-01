@@ -276,6 +276,39 @@ ITE.Orchestrator = function(player) {
 		return self.trackManger;
 	}
 
+	function getTrackBehind(zIndex, evt, isDrag) {
+	    cur = -99999999999999999999999999999999999999999999999999999999999999999999999999999;
+	    cur_track = null;
+	    for (var i = 0; i < self.trackManager.length; i++) {
+	        index = self.trackManager[i].trackData.zIndex;
+	        if (cur < index && zIndex > index && self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
+	            cur = index;
+	            cur_track = self.trackManager[i];
+	        } else if (zIndex === index) {
+	            if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
+	                if (isDrag && self.manipTrack != null && self.manipTrack === self.trackManager[i]) {
+	                    console.log("dragging same track");
+	                    return null;
+	                } else if (isDrag && self.manipTrack != null && self.manipTrack !== self.trackManager[i]) {
+                        //do nothing
+	                }else{
+	                    return null;
+	                }
+	            }
+	        }
+	    }
+	    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
+	        console.log("dragging donedone");
+	        return "NOPE"
+	    }
+	    if (isDrag) {
+	        console.log("dragging same track");
+	        self.manipTrack = cur_track;
+	    }
+	    return cur_track;
+	}
+
+	self.manipTrack = null;
 	self.getTrackManger = getTrackManger;
 	self.captureKeyframe = captureKeyframe;
 	self.changeKeyframe = changeKeyframe;
@@ -297,4 +330,5 @@ ITE.Orchestrator = function(player) {
 	self.initializeTracks = initializeTracks;
 	self.getTourData = getTourData;
 	self.status = status;
+	self.getTrackBehind = getTrackBehind;
 }
