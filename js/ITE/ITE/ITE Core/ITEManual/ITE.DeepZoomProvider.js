@@ -442,7 +442,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function addInk(inkTrack) {
 		if (!_viewer.viewport){
-			console.log("failed to load ink as DZ is not ready... trying again" );
+			// console.log("failed to load ink as DZ is not ready... trying again" );
 			setTimeout(function(){
 				addInk(inkTrack) } , 100);
 		} else {
@@ -640,7 +640,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
     function setZIndex(index){
-        console.log("Opacity: "+_UIControl[0].style.opacity+"     for "+self.trackData.name);
     	//set the z index to be -1 if the track is not displayed
 		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
 		    _UIControl.css("z-index", -1)
