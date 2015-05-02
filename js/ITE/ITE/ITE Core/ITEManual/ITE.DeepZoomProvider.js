@@ -35,8 +35,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     	_proxy,//For touch handling. We want to be able to click through the transparent parts of the layers, so we're just adding a div over the part of the canvas that has the image.
     			//TODO: there has GOT to be a better way to do this
     	_canvasHolder,
-    	_viewer,
-    	_shouldBeInvisible;//boolean for if the current keyframe dictates the image shouldn't be clickable
+    	_viewer;
     
     // Various animation/manipulation variables.
 	self.animationCallback;
@@ -63,19 +62,43 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
 
-		//
+
+	    /*OK, so here's the deal with all of these stupidly nested divs:
+          we have:
+
+          -ITEHolder
+          ----_proxy
+          --------_proxy2
+          ----_UIControl
+          --------_canvasHolder
+          -------------all other deep zoom stuff
+           
+          So the problem we were having is with layering multiple deepzooms; if you call makeManipulatable on them (or just use openseadragon's native handlers),
+          you can't click on anything below them because they're canvas elements that take up the entire screen.
+
+          Our fix for this is to have a proxy, which is always the size of where the actual image is (not just the canvas), that floats on top of it at a slightly higher z-index
+          and deals with interaction.  Note: the size is reset on every 'animation' event of the deep zoom. This method is in attachHandlers.
+
+          Basically, we call makeManipulatable on the proxy, which tells the deepzoom where to move (and then when the deepzoom moves the proxy moves as well)
+
+          Also, we have this weird other _proxy2 because for some reason _proxy only receives interaction if it has children (?!) 
+
+          IF ANYONE CAN FIND A BETTER SOLUTION TO THIS, THEY SHOULD ABSOLUTELY DO SO. Specifically one that allows us to use OSD's native handlers, which are vastly more performant and less janky than ours.
+        */
+
+		_proxy2 = $(document.createElement("img"))
+            .addClass("assetImage");
+
 		_proxy = $(document.createElement("div"))
-        	.addClass("deepzoom_proxy")
+        	.addClass("UIControl")
 			.css({
-			    "position": "absolute",
 			    "background-color": "orange",
                  "opacity": 0
 			})
 
-		$("#ITEHolder")
 		// Create UI and append to ITEHolder.
 		_canvasHolder = $(document.createElement("div"))
-        	.addClass("UIControl")
+        	.addClass("DeepZoomCanvasHolder")
         	.attr("id", trackData.name + "holder")
         	.css({
         		"position":"absolute",
@@ -85,9 +108,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         _UIControl = $(document.createElement("div"))
 
 		// $("#ITEHolder").append(_UIControl);
+        $("#ITEHolder").append(_proxy);
+        _proxy.append(_proxy2);
 		$("#ITEHolder").append(_UIControl);
-		$("#ITEHolder").append(_proxy);
-
 		_UIControl.append(_canvasHolder);
 
 		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
@@ -104,6 +127,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			"position":"absolute",
 		});
 		_viewer.clearControls();
+
         // Create _deepZoom, the canvas with the deepZoom image files.
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage"); 
@@ -270,7 +294,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_viewer.viewport.fitBounds(state.bounds, false);
 
 		//If we're fading in, set the z-index to be the track's real z-index (as opposed to -1)
-		(state.opacity !== 0) && _UIControl.css("z-index", self.zIndex)
+		if (state.opacity !== 0) {
+		    _UIControl.css("z-index", self.zIndex)
+		    _proxy.css("z-index", self.zIndex + 5)
+		}
 
 		self.animation = TweenLite.to(
 			// What object to animate.
@@ -284,16 +311,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 					self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
 					
 					//If we're fading out, set the z-index to -1 to prevent touches
-					(state.opacity === 0) && _UIControl.css("z-index", -1);
+					if (state.opacity == 0) {
+					    _UIControl.css("z-index",-1)
+					    _proxy.css("z-index", -1)
+					}
 				}
-			}
-		);
-		if(state.opacity==0){
-			_shouldBeInvisible = true;
-		}
-		else{
-			_shouldBeInvisible = false;
-		}
+			})
 	};
 
 	/*
@@ -564,7 +587,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
                     res.translation.y = -res.translation.y;
                     dzManip(res);
 	            }
-	        }, null, true); // NO ACCELERATION FOR NOW
+	        }, null, true); //this "true" means no acceleration.
 	    } else {
 	        TAG.Util.makeManipulatable(_proxy[0], {
 	            onScroll: function (delta, pivot) {
@@ -576,7 +599,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
                     res.translation.y = -res.translation.y;
                     dzManip(res);
 	            }
-	        }, null, true); // NO ACCELERATION FOR NOW
+	        }, null, true); //this "true" means no acceleration.
 	    }
 	}
 
@@ -627,7 +650,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		{
 			_UIControl.css("z-index", index)
 			_canvasHolder.css("z-index", 1)
-    		_proxy.css("z-index", 2000)
+			_proxy.css("z-index", index + 5)
 		}
     	self.zIndex = index
     }

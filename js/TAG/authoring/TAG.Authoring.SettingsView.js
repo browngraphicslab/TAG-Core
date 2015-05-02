@@ -29,7 +29,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar = root.find('#setViewNavBar'),
         searchbar = root.find('#setViewSearchBar'),
         newButton = root.find('#setViewNewButton'),
-        addButton = root.find('#setViewAddButton'),
         secondaryButton = root.find('#setViewSecondaryButton'),
         deleteBlankButton = root.find('#setViewDeleteButton'),
         middlebar = root.find('#setViewMiddleBar'),
@@ -52,6 +51,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findButton = root.find('#findButton'),
         addToArtworkLabel = root.find('#addToArtworkLabel'),
         addToArtworkDiv = root.find('#addToArtworkDiv'),
+        addButton = root.find('#setViewAddButton'),
         titleSort = root.find('#titleSort'),
         collectionSort = root.find('#collectionSort'),
         addedRecentlySort = root.find('#addedRecentlySort'),
@@ -173,8 +173,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         artmodeList, // list of all artworks in a collection
         infoSource = [], // array to hold sorting/searching information
         currDoq,//current selected artwork/associated media id
-        currArtwork,
-        currTour,
         // key handling stuff
         deleteType,
         toDelete,
@@ -764,9 +762,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
        // rootContainer.keydown(keyHandler);
         //searchbar.attr('placeholder', 'Search...');
-        newButton.text('New');
+        newButton.text('New').css('border-radius', '3.5px');
         secondaryButton.text('Video');
-        addButton.text("Add to Collection");
         label.text('Loading...');
         circle.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
@@ -1036,7 +1033,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColor = TAG.Worktop.Database.getPrimaryFontColor();
         var secondaryFontColor = TAG.Worktop.Database.getSecondaryFontColor();
         var fontFamily = TAG.Worktop.Database.getFontFamily();
-        var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration()/60000;
+        var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration() / 60000;
+
+        // TODO:
+        //var keywordSets = TAG.Worktop.Database.getKeywordSets();
+        var keywordSets = [{ guid: "1", csvUrl: "someurl", name: "set1", keywords: ["set1_obj1", "set1_obj2", "set1_obj3"] },
+                           { guid: "2", csvUrl: "someurl", name: "set2", keywords: ["set2_obj1", "set2_obj2", "set2_obj3"] }];
+        // TODO
 
         prevMiddleBarSelection = {
             type_representation: "Splash Screen",
@@ -1135,6 +1138,105 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
         });
+
+        // Delete function for keyword set inputs.
+        var deleteFunction = function (set) {
+            // Get index of set being deleted.
+            var deleteIndex = keywordSets.indexOf(set)
+
+            // Remove the DOM element containing inputs for the set.
+            settingsContainer[0].removeChild(keywordSetsSettings[deleteIndex][0]);
+
+            // Remove set from where it is being stored.
+            keywordSets.splice(deleteIndex, 1);
+            keywordSetsInputs.splice(deleteIndex, 1);
+            keywordSetsSettings.splice(deleteIndex, 1);
+
+            // Enable import button an allow saving.
+            importKeywordSetInput.prop("disabled", false);
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        };
+
+        // Create the inputs for keyword stuff.
+        // "AddInput" is a button to upload a csv file containing a keyword set.
+        var count = keywordSets.length;
+        var importKeywordSetInput = createButton('Import Keyword Set', function () {
+            //TODO: Actually upload and get DOQ object!
+            var csvUrl;
+            uploadFile(TAG.Authoring.FileUploadTypes.CSV, function (urls) {
+                var csvUrl = urls[0];
+            }, false, [".csv"]);
+
+            // Create a new set.
+            var newSet = { name: "set".concat(count.toString()), keywords: ["set_obj1", "set_obj2", "set_obj3"] };
+            count++;
+
+            // Add new set list.
+            keywordSets.push(newSet);
+            if (keywordSets.length > 2) {
+                importKeywordSetInput.prop("disabled", true);
+            }
+
+            var newInput = createKeywordSetInputs(newSet, deleteFunction);
+            newInput.nameInput.on('keyup', function (event) {
+                if (event.which === 13) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    saveButton.click();
+                } else {
+                    changesMade = true;
+                    saveButton.prop("disabled", false);
+                    saveButton.css("opacity", 1);
+                }
+
+            });
+            newInput.nameInput.on('change', function () {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            });
+            keywordSetsInputs.push(newInput);
+            var newSetting = createEditKeywordsSetting(newInput)
+            keywordSetsSettings.push(newSetting);
+            settingsContainer.append(newSetting);
+
+            // Allow saving.
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        });
+        if (keywordSets.length > 2) {
+            importKeywordSetInput.prop("disabled", true);
+        }
+        // "EditInput" is an array of composites, one for each existing uploaded keyword set. Each is composed as follows:
+        //      composite.name      --> text field allowing editing of set name.
+        //      composite.values    --> dropdown allowing user to view keywords in set, defaulting to value "View keywords"
+        //      composite.delete    --> button to delete this set.
+        var keywordSetsInputs = [];
+        keywordSets.forEach(function (set) {
+            var inputs = createKeywordSetInputs(set, deleteFunction);
+            inputs.nameInput.on('keyup', function (event) {
+                if (event.which === 13) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    saveButton.click();
+                } else {
+                    changesMade = true;
+                    saveButton.prop("disabled", false);
+                    saveButton.css("opacity", 1);
+                }
+
+            });
+            inputs.nameInput.on('change', function () {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            });
+            keywordSetsInputs.push(inputs);
+        });
+
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
         //var font = fontFamilyInput.find(":selected").text();
@@ -1190,6 +1292,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
         var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
+        var importKeywordSetSetting = createImportKeywordsSetting(importKeywordSetInput);
+        var keywordSetsSettings = [];
+        keywordSetsInputs.forEach(function (input) {
+            keywordSetsSettings.push(createEditKeywordsSetting(input));
+        });
+
+        //var keywordsSettings = createKeywordsSettings();
+
         settingsContainer.append(bgImage);
         /*settingsContainer.append(overlayColorSetting);
         settingsContainer.append(overlayAlpha);
@@ -1204,6 +1314,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(secondaryFontColorSetting);
         //settingsContainer.append(fontFamilySetting);
         settingsContainer.append(idleTimerDurationSetting);
+        settingsContainer.append(importKeywordSetSetting);
+        keywordSetsSettings.forEach(function (setting) {
+            settingsContainer.append(setting);
+        });
 		//automatically save General Settings - Customization
         onChangeUpdateText(idleTimerDurationInput, null, 3);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = idleTimerDurationInput.val();
@@ -1308,7 +1422,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 //fontFamilyInput: fontFamilyInput,
-                idleTimerDurationInput: idleTimerDurationInput
+                idleTimerDurationInput: idleTimerDurationInput,
+                keywordSetsInputs: keywordSetsInputs
             });
         }, {
             'margin-right': '3%',
@@ -1437,6 +1552,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var fontFamily = inputs.fontFamilyInput.val();
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
+
+        var keywordSets = [];
+        inputs.keywordSetsInputs.forEach(function (inputs) {
+            keywordSets.push({
+                guid:   inputs.guid,
+                csvUrl: inputs.csvUrl,    
+                name:   inputs.nameInput.val()
+            });
+        });
         
         //inputs.idleTimerDurationInput.val(idleTimerDuration);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(idleTimerDuration);
@@ -1454,7 +1578,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             isKioskLocked: isKioskLocked,
             //FontFamily: fontFamily,
             //BaseFontSize: baseFontSize,
-            IdleTimerDuration: idleTimerDuration
+            IdleTimerDuration: idleTimerDuration,
+            //KeywordSets: keywordSets
         };
         if (bgImg) { options.Background = bgImg; }
         //if (logo) options.Icon = logo;
@@ -2927,8 +3052,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         deleteType = deleteTour;
         toDelete = tour;
 
-        currTour = tour;
-
         prevMiddleBarSelection = {
             type_representation: "Tour",
             time_spent_timer: new TelemetryTimer()
@@ -4349,8 +4472,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
 
             //implementing background uploads - david
-            console.log("createAsset called")
-            hideUploadingProgress();
+            // console.log("createAsset called")
+            // hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
@@ -4412,12 +4535,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 if (done >= total) {
+
                     if (inAssociatedView) {
                         loadAssocMediaView(toScroll.Identifier);
                     } else {
                         
                     }
-
                 } else {
                     durationHelper(done);
                 }
@@ -5193,7 +5316,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         toDelete = artwork;
         clearInterval(checkConTimerId);
         currDoq = artwork.Identifier;
-        currArtwork = artwork;
         // Create an img element to load the image
         var mediaElement;
         var cancel = false;
@@ -5789,7 +5911,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //clearRight();
             //prepareViewer(true);
 
-
             //webappfileupload
             if (!IS_WINDOWS){
                 if(!total) {
@@ -5812,7 +5933,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     } else {
                         durationHelper(done);
                     }
-
                 } else {
                     if (done >= total) {
                         if(isArtView==true){
@@ -7100,7 +7220,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //hides the second button
             addButton.hide()
             addButton.unbind('click')
-            findBar.css("display", "none");
+            findBar.css("display","none");
         }
 
         prevSelectedMiddleLabel = null;
@@ -7361,6 +7481,80 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         return container;
     }
+
+
+    /**Creates a setting to import a set of keywords.
+     * @method createImportKeywordsSetting
+     * @param {Object} input        button to upload a csv file of keywords.
+     * @return container            container of setting
+     */
+    function createImportKeywordsSetting(input) {
+        var container = $(document.createElement('div'));
+        container.css({
+            'width': '100%',
+            'margin-bottom': '2%'
+        });
+
+        input.css({
+            'float': 'left',
+            'margin-right': '3%',
+            'box-sizing': 'border-box',
+        });
+
+        var label = $(document.createElement('div'));
+        label.css({
+            'overflow': 'hidden',
+            'text-overflow': 'ellipsis',
+            'font-style': 'italic',
+            'display': 'inline-block',
+        });
+        label.text('Upload a .CSV file of your set of keywords');
+
+        var clear = $(document.createElement('div'));
+        clear.css('clear', 'both');
+
+        container.append(input);
+        container.append(label);
+        container.append(clear);
+
+        return container;
+    }
+
+    /**Creates a composite settings line for keyword sets to be inserted into the settings container
+     * @method createEditKeywordsSetting
+     * @param {Object} inputs   inputs for the setting: text field for name, dropdown for keywords, and delete button
+     * @return container        container of new settings
+     */
+    function createEditKeywordsSetting(inputs) {
+        var container = $(document.createElement('div'));
+        var mb = "0%";
+        container.css({
+            'width': '100%',
+            'margin-bottom': mb
+        });
+
+        // Name text field.
+        var kw_css = {
+            'float': 'left',
+            'margin-right': '3%',
+            'display': 'inline-block',
+            'box-sizing': 'border-box',
+        }
+        inputs.nameInput.css(kw_css);
+        inputs.keywordsInput.css(kw_css);
+        inputs.deleteInput.css(kw_css);
+
+        var clear = $(document.createElement('div'));
+        clear.css('clear', 'both');
+
+        container.append(inputs.nameInput);
+        container.append(inputs.keywordsInput);
+        container.append(inputs.deleteInput);
+        container.append(clear);
+
+        return container;
+    }
+
 
     //Helper functions:
 
@@ -8089,6 +8283,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         return container;
     }
 
+    /**Creates the input elements for a row of "keywords settings".
+     * @method createKeyworSetInputs
+     * @param {Object} set                  set of keywords
+     * @param {Function} deleteFunction     function to be called when the delete button is pressed
+     */
+    function createKeywordSetInputs(set, deleteFunction) {
+        var options = set.keywords;
+        options.unshift('View Terms');
+        var inputs = {
+            guid: set.guid,
+            csvUrl: set.csvUrl,
+            nameInput: createTextInput(set.name, true),
+            keywordsInput: createSelectInput(options),
+            deleteInput: createButton('Delete', function () { deleteFunction(set); }, false)
+        };
+        for (var i = 1; i < inputs.keywordsInput[0].length; i++) {
+            inputs.keywordsInput[0][i].setAttribute('disabled', true);
+        }
+        return inputs;
+    };
+
     /**Set the bg color of elements maching jquery selector 'selector'
      * @method updateBGColor 
      * @param selector          jQuery selector of elements to be changed
@@ -8379,6 +8594,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             elementType = "Video Artwork";
                         case 4:
                             elementType = "Map";
+                            break;
+                        case 5:
+                            elementType = "CSV"
                             break;
                         default:
                             elementType = "Unkown";
