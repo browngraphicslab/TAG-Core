@@ -121,7 +121,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2,
-			mouseNavEnabled 	: false
+			mouseNavEnabled 	: true,
+			orchestrator        : orchestrator
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
@@ -132,6 +133,29 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage"); 
 	};
+    /* I/P: 	evt (a click/touch event)
+* 
+* O/P: 	bool, whether or not this event was within the image's bounds
+*/
+	function isInImageBounds(evt) {
+	    var x = evt.position.x
+	    var y = evt.position.y
+	    var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
+	    if (
+			(clickP.x < 1) &&
+			(clickP.x > 0) &&
+			(clickP.y < _viewer.viewport.contentAspectY) &&
+			(clickP.y > 0)) {
+	        return true
+	    } else {
+	        return false
+	    }
+	}
+	self.isInImageBounds = isInImageBounds;
+	self.raiseEvent = function (eventName, eventArgs) {
+	    _viewer.raiseEvent(eventName, eventArgs);
+	}
+	self.viewer = _viewer;
 
 	/*
 	 * I/P: 	none
@@ -147,7 +171,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
 			self.status = 2; 	
 			// Attach handlers.
-			attachHandlers1();
+			attachHandlers();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
 		
 			//Tell orchestrator to play (if other tracks are ready)
@@ -606,7 +630,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 
 	function attachHandlers() {
-
+	    _viewer.addHandler(
+            'canvas-scroll', function (evt) {
+                (self.orchestrator.status === 1) ? self.player.pause() : null
+                self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+                resetSeadragonConfig()
+            });
  		_viewer.addHandler(
  			'canvas-scroll', function(evt) {
  					(self.orchestrator.status === 1) ? self.player.pause() : null
