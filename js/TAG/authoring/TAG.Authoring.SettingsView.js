@@ -239,6 +239,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         addToArtworkLabel.css('min-width', '0px');
         newButton.css('min-width', '0px');
     }
+    deleteBlankButton.css({
+        'min-width': '0px',
+        'width': '20%',
+        'font-size':'50%'
+    })
+    .text("Delete");
     if(!IS_WINDOWS){
         deleteBlankButton.css({
         'display': 'none'
@@ -2585,7 +2591,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if(IS_WINDOWS){
                 //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteExhibition(multiSelected)});
-                deleteBlankButton.text('Delete');
+                //deleteBlankButton.text('Delete');
             } else{
                 $('#setViewDeleteButton').css('display','none');
             }
