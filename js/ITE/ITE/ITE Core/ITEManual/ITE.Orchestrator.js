@@ -279,7 +279,7 @@ ITE.Orchestrator = function(player) {
 	        } else if (zIndex === index) {
 	            if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
 	                if (isDrag && self.manipTrack != null && self.manipTrack === self.trackManager[i]) {
-	                    console.log("dragging same track");
+	                    // console.log("dragging same track");
 	                    return null;
 	                } else if (isDrag && self.manipTrack != null && self.manipTrack !== self.trackManager[i]) {
                         //do nothing
@@ -290,11 +290,11 @@ ITE.Orchestrator = function(player) {
 	        }
 	    }
 	    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
-	        console.log("dragging donedone");
+	        // console.log("dragging donedone");
 	        return "NOPE"
 	    }
 	    if (isDrag) {
-	        console.log("dragging same track");
+	        // console.log("dragging same track");
 	        self.manipTrack = cur_track;
 	    }
 	    return cur_track;
