@@ -501,7 +501,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         newX 	= l*scale + pivot.x*(1-scale);
        	newY 	= t*scale + pivot.y*(1-scale); 
 
-       	if (isFromTouch){
+       	if (isFromTouch || !IS_WINDOWS){
        	    newX = l * scale + (pivot.x + l)* (1 - scale);
        	    newY = t * scale + (pivot.y + t) * (1 - scale);
        	}
