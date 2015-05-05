@@ -504,7 +504,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * (no idea if this will actually disable interactions too as is)
      */
     function addOverlay(elmt) {
-<<<<<<< HEAD
         //if ($("#uploadingOverlay").length === 0) {
         //    elmt.append(uploadingOverlay);
         //}
@@ -513,11 +512,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         settingsViewTopBar.append(progressBar)
         console.log("STARTING NEW UPLOAD")
-=======
-        if ($("#uploadingOverlay").length === 0) {
-            elmt.append(uploadingOverlay);
-        }
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
     }
 
     /**
@@ -730,7 +724,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             }
         }        
         bar.width(percentComplete * 90 + "%");
-<<<<<<< HEAD
         updateProgressUI(guidsToFileNames[upload.guid], percentComplete)
     }
 
@@ -740,8 +733,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         percent = 1;
         $(".uploadProgressLabel" + name).text((percent*100).toString().substring(0, 4) + "%")
         $(".uploadProgressInner" + name).css({'width':percent*100+'%'});
-=======
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
     }
 
     function cancelPromises() {
