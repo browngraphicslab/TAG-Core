@@ -1167,8 +1167,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.css("opacity", 1);
         };
 
+        //Commenting out keyword stuff
+
         // Create the inputs for keyword stuff.
         // "AddInput" is a button to upload a csv file containing a keyword set.
+        /**
         var count = keywordSets.length;
         var importKeywordSetInput = createButton('Import Keyword Set', function () {
             //TODO: Actually upload and get DOQ object!
@@ -1244,6 +1247,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             keywordSetsInputs.push(inputs);
         });
+        **/
 
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
@@ -1300,11 +1304,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
         var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
+        /**
         var importKeywordSetSetting = createImportKeywordsSetting(importKeywordSetInput);
         var keywordSetsSettings = [];
         keywordSetsInputs.forEach(function (input) {
             keywordSetsSettings.push(createEditKeywordsSetting(input));
         });
+        **/
 
         //var keywordsSettings = createKeywordsSettings();
 
@@ -1322,10 +1328,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(secondaryFontColorSetting);
         //settingsContainer.append(fontFamilySetting);
         settingsContainer.append(idleTimerDurationSetting);
-        settingsContainer.append(importKeywordSetSetting);
+        //settingsContainer.append(importKeywordSetSetting);
+        /**
         keywordSetsSettings.forEach(function (setting) {
             settingsContainer.append(setting);
         });
+        **/
 		//automatically save General Settings - Customization
         onChangeUpdateText(idleTimerDurationInput, null, 3);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = idleTimerDurationInput.val();
@@ -1561,6 +1569,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
 
+        /**
         var keywordSets = [];
         inputs.keywordSetsInputs.forEach(function (inputs) {
             keywordSets.push({
@@ -1569,6 +1578,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 name:   inputs.nameInput.val()
             });
         });
+        **/
         
         //inputs.idleTimerDurationInput.val(idleTimerDuration);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(idleTimerDuration);
