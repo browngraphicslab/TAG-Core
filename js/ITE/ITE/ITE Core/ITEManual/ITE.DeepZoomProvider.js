@@ -138,8 +138,18 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 * O/P: 	bool, whether or not this event was within the image's bounds
 */
 	function isInImageBounds(evt) {
-	    var x = evt.position.x
-	    var y = evt.position.y
+	    if (evt.clientX && evt.clientY) {
+	        var x = evt.clientX;
+	        var y = evt.clientY;
+	    }
+	    else if (evt.center) {
+	        var x = evt.center.x;
+	        var y = evt.center.y;
+	    }
+	    else {
+	        var x = evt.position.x
+	        var y = evt.position.y
+	    }
 	    var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
 	    if (
 			(clickP.x < 1) &&

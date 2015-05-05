@@ -4490,15 +4490,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 if (done >= total) {
-<<<<<<< HEAD
                     if (inAssociatedView) {
                         loadAssocMediaView(toScroll.Identifier);
                     } else {
                         
                     }
-=======
-                    loadAssocMediaView(toScroll.Identifier);
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
                 } else {
                     durationHelper(done);
                 }
@@ -5135,17 +5131,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
                     middleLoading.hide();
-<<<<<<< HEAD
-
                 });
             } else {
                 middleLoading.hide();
-
-=======
-                });
-            } else {
-                middleLoading.hide();
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
             }
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
@@ -5155,8 +5143,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
         cancelLastSetting = function () { cancel = true; };
     }
-<<<<<<< HEAD
-
     function createSortLabel(text){
 
         var container = $(document.createElement('div'));
@@ -5259,9 +5245,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }
         );
     }
-
-=======
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
     /*nest source tag inside video element*/
     function addSourceToVideo(element, src, type) {
         var source = document.createElement('source');
@@ -5855,7 +5838,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createArtwork() {
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
-<<<<<<< HEAD
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
 
             //implementing background uploads - david
@@ -5864,12 +5846,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
-=======
-            var check, i, url, name, done=0, total=urls.length, durations=[], toScroll, alphaName;
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
 
             //webappfileupload
             if (!IS_WINDOWS){
@@ -5882,7 +5858,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             function incrDone() {
                 done++;
-<<<<<<< HEAD
                 //webappfileupload
                 if (!IS_WINDOWS){
                     if (done >= total || !total) {
@@ -5894,10 +5869,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     } else {
                         durationHelper(done);
                     }
-=======
-                if (done >= total) {
-                    loadArtView(toScroll.Identifier);       //Scroll down to a newly-added artwork
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
                 } else {
                     if (done >= total) {
                         if(isArtView==true){
@@ -7143,8 +7114,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (showDropdown) {
             menuLabel.click();
         }
-
-<<<<<<< HEAD
         menuLabel.hide();
         addToArtworkLabel.hide();
         searchbar.css({ width: '53%' });
@@ -7179,19 +7148,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.hide()
             addButton.unbind('click')
             findBar.css("display","none");
-=======
-        if (!inAssociatedView) {
-            menuLabel.hide();
-            searchbar.css({ width: '53%' });
-            newButton.text(newText);
-            newButton.unbind('click').click(newBehavior);
-            if (!newText) newButton.hide();
-            else newButton.show();
-        } else {
-            newButton.hide();
-            searchbar.css({width:'40%'});
-            menuLabel.show();
->>>>>>> e408178efec46afb4d5ed9da24949e8d3e6d5714
         }
 
         prevSelectedMiddleLabel = null;

@@ -1235,9 +1235,7 @@ TAG.Util_ITE = (function () {
 
         // general event handler
         function manipulationHandlerWin(evt) {
-            if (evt.type === 'manipulationcompleted') {
-                console.log("DONE")
-            }
+
             if (evt.delta) {
                 var pivot = { x: evt.position.x, y: evt.position.y };
                 var rotation = evt.delta.rotation / 180 * Math.PI;
@@ -1279,12 +1277,12 @@ TAG.Util_ITE = (function () {
                     }
                 }
             }
-            else {
+           /* else {
                 functions.onManipulate({
                     pivot: { x: evt.position.x, y: evt.position.y },
                     grEvent: evt
                 });
-            }
+            }*/
         }
 
         function isManipulatingWin() { return manipulating; }
