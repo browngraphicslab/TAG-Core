@@ -7830,7 +7830,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearMetadataDiv.css({
             'width' : '100%'
         });
-
+            /**
         var versionsButton = createButton("Provide Web Versions",
             function(){
                 var back = $(document.createElement("div"));
@@ -7983,9 +7983,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         versionsButton.attr("id","versionsButton");
         //Trent's version button work in progress
+        **/
         yearMetadataDiv.append(yearDiv)
                        .append(yearDescriptionDiv)
-                       .append(timelineYearDiv);
+                        .append(timelineYearDiv);
+        /**
         var typ = "";
         if (work.Metadata.Type) {
             typ = work.Metadata.Type.toLowerCase();
@@ -7996,6 +7998,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (typ.toLowerCase()=="video"||typ.toLowerCase()=="videoArtwork") {
             yearMetaDataDiv.append(versionsButton);
         }
+        **/
         yearMetadataDivSpecs = {
             yearMetadataDiv : yearMetadataDiv,
             yearInput : yearInput, 
@@ -8099,7 +8102,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 option.text(options[i]);
                 option.attr('value', options[i]);
                 select.append(option);
-                options[i].selected = true;
             }
             select.attr('value', value);
         }
@@ -8260,7 +8262,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             option.text(options[i]);
             option.attr('value', options[i]);
             selectElt.append(option);
-            options[i].selected = true;
         }
         selectElt.change(function () {
             //$('.primaryFont').css('font-family', selectElt.find(":selected").text());
