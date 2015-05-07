@@ -8260,7 +8260,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             option.text(options[i]);
             option.attr('value', options[i]);
             selectElt.append(option);
-            options[i].selected = true;
+            //options[i].selected = true;
         }
         selectElt.change(function () {
             //$('.primaryFont').css('font-family', selectElt.find(":selected").text());
