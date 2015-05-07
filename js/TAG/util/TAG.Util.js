@@ -7838,14 +7838,14 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"zIndex": track.data.zIndex,
 						"time": time_offset + currKeyframe.offset,
 						"opacity": 1,
-						"size": {
-						    "x": currKeyframe.state.viewport.region.span.x * 100,
-						    "y": currKeyframe.state.viewport.region.span.y * 100,
-						},
-						"pos": {
-						    "x": currKeyframe.state.viewport.region.center.x * 100,
-						    "y": currKeyframe.state.viewport.region.center.y * 100,
-						},
+                        "size": {
+                            "x": currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
+                            "y": currKeyframe.state.viewport.region.span.y * $('#tagRoot').height()
+                        },
+                        "pos": {
+                            "x": currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
+                            "y": currKeyframe.state.viewport.region.center.y * $('#tagRoot').height()
+                        },
 						"data": {},
 						"volume": currKeyframe.state.sound.volume,
 						"videoOffset": 0
