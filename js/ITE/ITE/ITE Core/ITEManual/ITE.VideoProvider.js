@@ -73,7 +73,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.lastKeyframe = self.keyframes.max();
 
 		// Attach Handlers.
-		attachHandlers();
+		//attachHandlers();
         
 		self.polling = true;
 		poll();
@@ -381,6 +381,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	        "width":		state.size.width,
 	        "opacity":		state.opacity
 	    });
+	    console.log("WIDTH: " + _UIControl.width())
+	    console.log("width of iteholder " + $('#tagRoot').width())
 	    _videoControls.volume = state.volume * self.player.currentVolumeLevel;
 	    if(orchestrator.getStatus()!=4){
 	        state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
@@ -396,11 +398,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		var state = {
 						"opacity"	: keyframe.opacity,
 						"pos" : {
-									"top"	: (500*keyframe.pos.y/100) + "px",
-								  	"left"	: (1000*keyframe.pos.x/100) + "px"
+									"top"	: keyframe.pos.y + "px",
+								  	"left"	: keyframe.pos.x + "px"
 								},
 						"size" : {
-						  			"width"	: (1000*keyframe.size.x/100) + "px"
+						  			"width"	: keyframe.size.x + "px"
 								},
 						"volume"	: keyframe.volume
 					};
@@ -428,11 +430,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		var state = {
 						"opacity"	: lerpOpacity,
 						"pos" : {
-									"top"	: (500 * lerpPosY / 100) + "px",
-								  	"left"	: (1000 * lerpPosX / 100) + "px"
+									"top"	: lerpPosY + "px",
+								  	"left"	: lerpPosX + "px"
 								},
 						"size" : {
-						  			"width"	: (1000 * lerpSizeX / 100) + "px"
+						  			"width"	: lerpSizeX + "px"
 								},
 						"volume"	: lerpVolume
 					};
