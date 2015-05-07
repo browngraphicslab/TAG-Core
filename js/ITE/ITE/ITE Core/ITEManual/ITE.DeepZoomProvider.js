@@ -122,7 +122,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2,
 			mouseNavEnabled 	: true,
-			orchestrator        : orchestrator
+			orchestrator: orchestrator,
+            ITE_track: self
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
