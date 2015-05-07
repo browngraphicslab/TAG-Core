@@ -77,7 +77,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
         
 		self.polling = true;
 		poll();
-        
+		_videoControls.removeAttribute("controls");
 	};
 
     /*
@@ -91,6 +91,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		        _videoControls.play();
 		    }
             */
+	    _videoControls.removeAttribute("controls");
 	        if (orchestrator.getStatus() != 2) {
 	            if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
 	                console.log("video controls played");
