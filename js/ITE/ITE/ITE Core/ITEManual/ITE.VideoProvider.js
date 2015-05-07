@@ -36,7 +36,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
     // DOM related.
     var _video,
     	_UIControl,
-    	_videoControls;
+    	_videoControls,
+        _coveringDiv;
 
     // Various animation/manipulation variables.
 	self.audioAnimation;
@@ -63,9 +64,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		_video		= $(document.createElement("video"))
 			.addClass("assetVideo");
 		_videoControls = _video[0];
-		_UIControl	= $(document.createElement("div"))
+		_UIControl = $(document.createElement("div"))
 			.addClass("UIControl")
-			.append(_video);
+			.append(_video)
+            .append(_coveringDiv);
+        
 		$("#ITEHolder").append(_UIControl);
 
 		// Get first and last keyframes.
@@ -78,6 +81,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.polling = true;
 		poll();
 		_videoControls.removeAttribute("controls");
+		_coveringDiv = $(document.createElement("div"));
+		_coveringDiv.css({
+            "background_color" : "blue"
+		})
 	};
 
     /*
@@ -91,7 +98,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		        _videoControls.play();
 		    }
             */
-	    _videoControls.removeAttribute("controls");
 	        if (orchestrator.getStatus() != 2) {
 	            if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
 	                console.log("video controls played");
@@ -121,6 +127,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    if (self.polling) {
 	        setTimeout(function () { poll(); }, 200);
 	    }
+	    _videoControls.removeAttribute("controls");
 	};
 
 	/*
