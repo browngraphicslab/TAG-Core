@@ -573,7 +573,33 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     function enableFullScreen() {
         isFullScreen = true;
         fullScreenButton.css("opacity" , "1")
+        // requestFullScreen($('#ITE')[0])
     };
+
+//TODO: implement this more fully at a later date-- we will need to:
+    //a) reset the canvas size
+    //b) reparse the keyframes (they're currently parsed based on the size of the ITE holder when the tour is loaded, so we'd have to reparse them to get the new correct sizes.)
+// function requestFullScreen(element) {
+//     // Supports most browsers and their versions.
+//     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+//     if (requestMethod) { // Native full screen.
+//             console.log("requesting full screen")
+//         requestMethod.call(element);
+//     } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+//         var wscript = new ActiveXObject("WScript.Shell");
+//         if (wscript !== null) {
+//             wscript.SendKeys("{F11}");
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
 
    /**
     * I/P:    none

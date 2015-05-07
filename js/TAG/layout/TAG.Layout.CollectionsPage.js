@@ -18,6 +18,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileDiv = $(document.createElement("div")).attr("id", "tileDiv"),//root.find('#tileDiv'),
         displayArea = root.find("#displayArea"),
         collectionArea = root.find('#collectionArea'),
+        backButtonArea = root.find('#backButtonArea'),
+        backButton = root.find('#backButton'),
         backArrowArea = root.find('#backArrowArea'),
         backArrow = root.find('#backArrow'),
         nextArrowArea = root.find('#nextArrowArea'),
@@ -80,7 +82,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-
+        lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
@@ -133,6 +135,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
         var cancelLoadCollection = null;
+
+    backButton.attr('src', tagPath + 'images/icons/Back.svg');
+
+    backButton.click(function () {    
+        TAG.Layout.StartPage(null, function (page) {
+            TAG.Util.UI.slidePageRight(page);
+        });
+    });
+
+    if (lockKioskMode == "true") {
+        backButton.css('display', 'none');
+    } else {
+        collectionMenu.css('left', '5%');
+        if (IS_WINDOWS) {
+            backButton.css('padding-top', '');
+        }
+    }
 
     // get things rolling
     init();
@@ -550,7 +569,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionsToShow = ((collectionsToShow) ? collectionsToShow : true);
                 toShowFirst = toShowFirst || c;
                 visibleCollections.push(collections[i]);
-            }
+            } 
         }
         if (!collectionsToShow && !previewing) {
             var infoOverlay = $(document.createElement('div'));
@@ -741,17 +760,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             if (!collectionDots[collection.Identifier]){
                 //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
-                dummyDot = $(document.createElement('div'))
-                    .addClass('collectionDot')
-                    .css({
-                        "width": COLLECTION_DOT_WIDTH,
-                        "height":  COLLECTION_DOT_WIDTH,
-                        "border-radius": COLLECTION_DOT_WIDTH / 2,
-                        "margin": COLLECTION_DOT_WIDTH/4,
-                        "background-color":'white'
-                    });
-                collectionDotHolder.append(dummyDot);
-                backArrowArea.css('display', 'none');
+                // dummyDot = $(document.createElement('div'))
+                //     .addClass('collectionDot')
+                //     .css({
+                //         "width": COLLECTION_DOT_WIDTH,
+                //         "height":  COLLECTION_DOT_WIDTH,
+                //         "border-radius": COLLECTION_DOT_WIDTH / 2,
+                //         "margin": COLLECTION_DOT_WIDTH/4,
+                //         "background-color":'white'
+                //     });
+                // collectionDotHolder.append(dummyDot);
+                // backArrowArea.css('display', 'none');
+
             } else {
                 //Make collection dot white and others gray
                 for(i = 0; i < visibleCollections.length; i++) { 
@@ -840,9 +860,31 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             titleBox.css('display', 'inline');
 
             var uiDocfrag = document.createDocumentFragment();
+
+
+
+            // hard coded setting for previewing purpose within the authoring mode
+            if (!IS_WINDOWS && previewing) {
+                // reduce the size of the dropdown menu when being previewed in authoring mode
+                backArrow.css({
+                    'width': '40%',
+                    'height': '40%',
+                    'top': '5%'
+                });
+
+                // to make the dropdown arrow menu appear in previewing mode for unpublished collections
+                backArrowArea.addClass('arrowArea');
+                backArrowArea.css('display', 'inline')
+                backArrow.attr('src', tagPath + 'images/icons/Close.svg');
+                backArrow.addClass('arrow');    
+                backArrowArea.show();
+            }
+
+
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
+
                 backArrowArea.addClass('arrowArea');
                 
                 backArrowArea.css('display', 'inline')
@@ -855,22 +897,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 backArrow.addClass('arrow');    
                 backArrowArea.show();
-                prevCollection.addClass('nextPrevCollection')
-                             .addClass('primaryFont')
-                             .attr({
-                               'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
-                             })
+                // prevCollection.addClass('nextPrevCollection')
+                //              .addClass('primaryFont')
+                //              .attr({
+                //                'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
+                //              })
                              //.css('left','3%')
                              //.html(prevTitle)
-                             .off()
+                             // .off()
                              //.on('mousedown', function(j){
                                 // return function () {
                                   //   prepareNextView();
                                     // loadCollection(visibleCollections[j.prevCollectionIndex])();
                                  //}
                             // }(collection));
-                collectionArea.append(prevCollection);
-                uiDocfrag.appendChild(prevCollection[0]);
+                // collectionArea.append(prevCollection);
+                // uiDocfrag.appendChild(prevCollection[0]);
                 //prevCollection.show();
                 // TAG.Telemetry.register(backArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
                 //     tobj.current_collection = currCollection.Identifier;
@@ -891,9 +933,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             // if (prevCollection){
-            //     prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
-            //     // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
-            // }
+            //      prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
+            //      prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
+            //  }
+
             // if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
             //     nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
             //     nextArrowArea.addClass('arrowArea');

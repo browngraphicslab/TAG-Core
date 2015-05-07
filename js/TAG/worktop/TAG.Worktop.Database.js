@@ -40,7 +40,7 @@ TAG.Worktop.Database = (function () {
         },
         hotspot: {
             url: ['Name', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'ContentType', 'Duration', 'Source', 'LinqTo', 'X', 'Y', 'W', 'H', 'LinqType', 'Thumbnail', "Converted"],
-            body: ['Description', 'AddIDs', 'RemoveIDs']
+            body: ['Description', 'AddIDs', 'RemoveIDs','Text']
         },
         map: {
             url: ['Name', 'Thumbnail', 'Source'],
@@ -51,7 +51,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description']
         },
         main: {
-            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'IdleTimerDuration'],
+            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'IdleTimerDuration','isKioskLocked'],
             body: ['Info']
         }
     };
@@ -96,6 +96,7 @@ TAG.Worktop.Database = (function () {
         getCustomFont: getCustomFont,
         getIdleTimerDuration: getIdleTimerDuration,
         getLocked: getLocked,
+        getKioskLocked : getKioskLocked,
 
         asyncRequest: asyncRequest,
         convertToDocHandler: convertToDocHandler,
@@ -128,8 +129,10 @@ TAG.Worktop.Database = (function () {
         getConvertedCheck: getConvertedCheck, //video conversion
         getConvertedVideoCheck: getConvertedVideoCheck, //video conversion
         convertVideo: convertVideo,
+
         // DELETE
         deleteDoq: deleteDoq,
+        batchDeleteDoq: batchDeleteDoq,
         deleteLinq: deleteLinq,
 
         // PUT
@@ -139,6 +142,7 @@ TAG.Worktop.Database = (function () {
         createArtwork: createArtwork,
         createHotspot: createHotspot,
         createIframeAssocMedia: createIframeAssocMedia,
+        createTextAssocMedia: createTextAssocMedia,
         createMap: createMap,
 
         // POST
@@ -712,6 +716,22 @@ TAG.Worktop.Database = (function () {
     }
 
     /*
+    Add a Text associated media
+        options: New values for the text assoc media in a dictionary:
+            Name: Name of the text
+            Text: Content of the text
+
+        success: Success handler (called if the hotspot is successfully changed)
+        unauth: Unauthorized handler (called when a user fails to login)
+        conflict: Called if the client's version of the doq is out of date
+        error: Called for any other errors
+    */
+    function createTextAssocMedia(options, success, unauth, conflict, error) {
+        _db = _db || new Worktop.Database();
+        _db.postTextAssocMedia(options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
+    }
+
+    /*
     Change a map doq
         guid: guid of map
         options:
@@ -797,6 +817,19 @@ TAG.Worktop.Database = (function () {
         _db = _db || new Worktop.Database();
         if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
         _db.deleteDoq(guid, { success: success, error: error, unauth: unauth, conflict: conflict });
+    }
+
+    /*
+        Delete multiple doqs
+            guids: GUIDs of the doqs to delete
+            success: See above
+            error: See above
+            unauth: See above
+            conflict: See above
+    */
+    function batchDeleteDoq(guids, success, unauth, conflict, error) {
+        _db = _db || new Worktop.Database();
+        _db.batchDeleteDoq(guids, { success: success, error: error, unauth: unauth, conflict: conflict });
     }
 
     /*
@@ -1121,6 +1154,10 @@ TAG.Worktop.Database = (function () {
     /////////
     function getMuseumBackgroundColor() {
         return _main.Metadata["BackgroundColor"] || '000000';
+    }
+
+    function getKioskLocked() {
+        return _main.Metadata["isKioskLocked"] || 'true';
     }
 
     function getMuseumBackgroundOpacity() {
