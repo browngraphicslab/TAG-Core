@@ -8224,7 +8224,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 			//TODO - is this a problem?
 			if (transitionKeyframe.time < 0){
-				console.log("ERROR: initial keyframe with time < 0")
+				// console.log("ERROR: initial keyframe with time < 0")
 			}
 
 			transitionKeyframe.opacity = 0
