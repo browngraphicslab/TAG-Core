@@ -36,6 +36,8 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         manipObjects = {},
         // undo
         undoManager = spec.undoManager,
+
+        ITE = spec.ITE,
         viewer = spec.viewer,
         verticalScroller,
         sliderPane,
@@ -1896,6 +1898,163 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         }
     }
     that.onUpdate = onUpdate;
+
+    function loadTour(tour, callback) {
+        var queue = TAG.Util.createQueue();
+        timeManager.setEnd(tour.totalDuration);
+        var tracks = tour.tracks;
+        //var tracks = ITE.getTracks();
+        var sorted = [];
+        var i;
+        for (i = tracks.length - 1; i >= 0; i--) {
+            sorted.push(tracks[i]);
+        }
+        tracks = sorted;
+        var inks = [];
+
+        for (i = 0; i < tracks.length; i++) {
+            var track = tracks[i];
+            var type = track.providerId;
+            var trackname = track.name;
+            if (type === "deepZoom") {
+                var trackobj = addArtworkTrack(track.assetUrl, trackname, track.guid, i);
+            } else if (type === "image") {
+                var trackobj = addImageTrack(track.assetUrl, trackname, i);
+            } else if (type === "audio") {
+                var mediaLength = track.mediaLength;
+                var trackobj = addAudioTrack(track.assetUrl, trackname, i, mediaLength);
+            } else if (type === "video") {
+                var mediaLength = track.mediaLength;
+
+                // todo: get actual status
+                var toConvert = true;
+                var converted = true;
+
+                var trackobj = addVideoTrack(track.assetUrl, trackname, i, mediaLength, toConvert, converted);
+            } else if (type === "ink") {
+                var trackobj = addInkTrack(null, trackname, 1, null, i);
+                trackobj.setInkPath(track.datastring);
+                trackobj.setInkEnabled(true);
+                trackobj.setInkInitKeyframe(track.initKeyframe);
+                trackobj.setInkRelativeArtPos([]);
+                trackobj.link = track.experienceReference;
+                trackobj.addInkTypeToTitle(track.datastring.split('::')[0].toLowerCase());
+                inks.push({ 'track': track, 'link': track.experienceReference });
+            }
+
+            // displays
+            if (trackobj) {
+                var keyframes = track.keyframes.slice();
+                while (keyframes.length > 0) {
+                    // start new display
+                    var dispNum = keyframes[0].dispNum;
+                    var members = [keyframes[0]];
+                    keyframes.splice(0, 1);
+                    var current = keyframes[0];
+
+                    // include all relevant displays
+                    while (current && current.dispNum == dispNum) {
+                        members.push(current);
+                        keyframes.splice(0, 1);
+                        current = keyframes[0];
+                    }
+
+                    var first = members[0];
+                    var second = members[1];
+                    var seclast = members[members.length - 2];
+                    var last = members[members.length - 1];
+                    var start = second.time;
+                    var main = seclast.time - second.time;
+                    var fadein = second.time - first.time;
+                    var fadeout = last.time - seclast.time;
+                    var display = trackobj.addDisplay(timeManager.timeToPx(start));
+                    display.setMain(main);
+                    display.setIn(fadein);
+                    display.setOut(fadeout);
+                    for (var mi = 1; mi < members.length - 1; mi++) {
+                        var kfobj;
+                        var kfpx = timeManager.timeToPx(members[mi].time);
+                        if (type !== "audio") {
+                            kfobj = display.addKeyframe(kfpx, TAG.TourAuthoring.Constants.trackHeight / 2);
+                        } else {
+                            var y = members[mi].volume;
+                            y = Math.constrain(TAG.TourAuthoring.Constants.trackHeight - TAG.TourAuthoring.Constants.trackHeight * y, 0, TAG.TourAuthoring.Constants.trackHeight);
+                            kfobj = display.addKeyframe(kfpx, y);
+                            if (kfobj) {
+                                trackobj.addKeyframeToLines(kfobj);
+                            }
+                            if (type === "deepZoom" || type === "image") {
+                                kfobj.loadData(members[mi]);
+                            }
+                        }
+                        
+                    }
+                }
+
+                var runOld = false;
+                if (runOld) {
+                    // to find start + end of displays, need to scan screenplay
+                    for (i = 1; i < keyframes.length; i++) {
+                        kf = keyframes[i];
+
+                        // note: scp length is fadeIn + main, expstr length is just main
+                        // easy shortcut for reading fades
+                        begin = currScp.begin;
+                        if (expstr.data.transition && expstr.data.transition.providerId) {
+                            fadeIn = expstr.data.transition.inDuration;
+                            fadeOut = expstr.data.transition.outDuration;
+                        } else {
+                            fadeIn = 0;
+                            fadeOut = 0;
+                        }
+                        display = track.addDisplay(timeManager.timeToPx(begin));
+                        display.setMain(length);
+                        display.setIn(fadeIn);
+                        display.setOut(fadeOut);
+
+                        // add keyframes
+                        if (exp.providerId !== 'InkES' && exp.providerId !== 'VideoES') {
+                            defaultseq = expstr.header.defaultKeyframeSequence;
+                            keyframes = expstr.keyframes;
+                            for (j = 0; j < keyframes.length; j++) {
+                                currKey = keyframes[j];
+
+                                // ignore initialization keyframe
+                                if (currKey.init) {
+                                    continue;
+                                }
+
+                                keyloc = timeManager.timeToPx(currKey.offset + display.getStart());
+                                if (type === 'ZMES' || type === 'ImageES') {
+                                    key = display.addKeyframe(keyloc, TAG.TourAuthoring.Constants.trackHeight / 2);
+                                    if (key) key.loadRIN(currKey);
+                                } else if (type === 'AES') {
+                                    // get audio to set y location
+                                    y = currKey.state.sound.volume;
+                                    y = Math.constrain(TAG.TourAuthoring.Constants.trackHeight - TAG.TourAuthoring.Constants.trackHeight * y, 0, TAG.TourAuthoring.Constants.trackHeight);
+                                    key = display.addKeyframe(keyloc, y);
+                                    if (key) track.addKeyframeToLines(key);
+                                } else if (type === 'VideoES') { //not used b/c of if check above
+                                    // get video to set y location
+                                    //y = 0;
+                                    //key = display.addKeyframe(keyloc, y);
+                                } else {
+                                    console.log('Experience not yet implemented');
+                                }
+                            }
+                        }
+
+                        // done with this display
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        setTimeout(callback, 25);
+    }
+    that.loadTour = loadTour;
 
     /**
      * Loads tour file and initializes timeline UI accordingly

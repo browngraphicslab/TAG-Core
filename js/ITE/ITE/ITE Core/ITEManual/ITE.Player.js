@@ -1,6 +1,6 @@
 window.ITE = window.ITE || {};
 
-ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains the orchestrator, etc
+ITE.Player = function (options, tourPlayer, container) { //acts as ITE object that contains the orchestrator, etc
    var totalTourDuration;
    var  orchestrator            = new ITE.Orchestrator(this),
         self = this,
@@ -59,8 +59,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     var onLoadPlayerEvent = new ITE.PubSubStruct();
     this.onTourEndEvent = new ITE.PubSubStruct();
 
-
-    this.playerParent = $("#tagRoot");
+    this.playerParent = container ? container : $("#tagRoot");
 
     //Start things up
     createITEPlayer(this.playerParent, options)
@@ -73,6 +72,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
         this.playerConfiguration    = playerConfiguration; 
         this.playerParent           = playerParent;
+        this.isAuthoring            = options.isAuthoring;
         self.currentVolumeLevel     = playerConfiguration.setInitVolume; // Value between 0 and 1
         self.previousVolumeLevel    = self.currentVolumeLevel;
 
@@ -262,9 +262,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
             if (isLooped)
             {
                 orchestrator.seek(0)
-            } 
-            else 
-            {
+            } else if (!isAuthoring) {
                 tourPlayer.goBack();
                 isUnloaded = true;
             }
@@ -312,8 +310,10 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         var timeString = makeTimeString(sec) + " / "+makeTimeString(totalTourDuration);
         progressIndicator.append(timeString);
         updateProgressBar(sec);
-        tourOver(sec);
-        if (!isUnloaded){
+        if (!isAuthoring) {
+            tourOver(sec);
+        }   
+        if (!isUnloaded && orchestrator.status === 1){
             window.setTimeout(function(){
                 updateProgressIndicator(orchestrator.getElapsedTime());
             },100); 
@@ -380,6 +380,10 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     function captureKeyframe(trackID) {
         return this.orchestrator.captureKeyframe(trackID);
     };
+
+    function getTime() {
+        return orchestrator.getElapsedTime();
+    }
 
 
 /*
@@ -477,6 +481,10 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
             orchestrator.scrub(timeOffset);
         }
     };
+
+    function scrubTimeline(time) {
+        orchestrator.seek(time);
+    }
 
     /*
     * I/P:   none
@@ -712,7 +720,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     * O/P:    trackManager of the orchestrator (list of tracks)
     */ 
     function getTracks(){
-        return Orchestrator.getTrackManager()
+        return this.Orchestrator.getTrackManager()
     }
 
     /**
@@ -736,10 +744,12 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     this.deleteTrack        = deleteTrack;
     this.changeTrackZIndex  = changeTrackZIndex;
     this.getRoot            = getRoot;
+    this.getTime            = getTime;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;
     this.pause              = pause;
     this.seek               = seek;
+    this.scrubTimeline      = scrubTimeline;
     this.load               = load;
     this.unload             = unload;
     this.captureKeyFrame    = captureKeyframe;

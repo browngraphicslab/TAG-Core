@@ -2780,7 +2780,7 @@ function trackTitleReleased(evt) {
                 start: my.timeManager.pxToTime(x),
                 length: length,
                 dataHolder: dataHolder,
-                canKeyframe: (my.type !== TAG.TourAuthoring.TrackType.ink && my.type !== TAG.TourAuthoring.TrackType.video),
+                canKeyframe: true,//(my.type !== TAG.TourAuthoring.TrackType.ink && my.type !== TAG.TourAuthoring.TrackType.video),
                 canFade: (my.type !== TAG.TourAuthoring.TrackType.audio)
             }, my),
 

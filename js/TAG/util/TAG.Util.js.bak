@@ -7376,15 +7376,10 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	if (!tour){
 		return {};
 	}
-    
-	var rinData;
-	if (!tour.Metadata) {
-	    rinData = tour;
-	} else {
-	    rinData = JSON.parse(unescape(tour.Metadata.Content)); //the original RIN tour obj
-	    console.log("rin data: ")
-	    console.log(rinData)
-	}
+
+	var rinData = JSON.parse(unescape(tour.Metadata.Content)); //the original RIN tour obj
+		console.log("rin data: ")
+		console.log(rinData)
 
 	//parses the referenceData to be used for the keyframes
 	//Object with the names of all of the *experience streams* as keys
@@ -7525,17 +7520,17 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"data": {},
 						"audioOffset": null, //TODO
 						"audioKeyframeType": "FINAL"
-					});
+					})
 
 					//TODO - this is a really really janky fix for the audio problem
 					currKeyframes.push({
-					    "dispNum": k,
-					    "time": time_offset + currKeyframe.offset + currExperienceStream.duration + .01,
-					    "volume": 0,
-					    "data": {},
-					    "audioOffset": null, //TODO
-					    "audioKeyframeType": "FINAL"
-					});
+						"dispNum": k,
+						"time": time_offset + currKeyframe.offset + currExperienceStream.duration + .01,
+						"volume": 0,
+						"data": {},
+						"audioOffset": null, //TODO
+						"audioKeyframeType": "FINAL"
+					})
 				}
 			}
 
@@ -7929,7 +7924,11 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			"ZMES" : "deepZoom",
 			"AES" : "audio",
 			"InkES" : "ink",
+<<<<<<< Updated upstream
+			"VideoES": "video" //TODO find out what this is
+=======
 			"VideoES" : "video" //TODO find out what this is
+>>>>>>> Stashed changes
 		}[RINid] || "";
 	}
 
@@ -7966,16 +7965,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					}),
 					"zIndex" : currExperience.data.zIndex
 				})
-			}
-			else if (providerID == "audio") {
-			    tracks.push({
-			        "name": rinDataExperiencesKeys[i],
-			        "providerId": providerID,
-			        "assetUrl": ITE_assetUrl(currExperience),
-			        "mediaLength": currExperience.data.mediaLength,
-			        "keyframes": ITE_keyframes(currExperience, providerID),
-			        "zIndex": currExperience.data.zIndex
-			    });
 			}
 			else if (providerID == 'video') {
 			    keyFrames = [];
@@ -8090,10 +8079,9 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        "zIndex": currExperience.data.zIndex
 			    });
 
-			} else {
+			}else {
 				tracks.push({
-				    "name": rinDataExperiencesKeys[i],
-                    "guid": currExperience.data.guid || "",
+					"name" : rinDataExperiencesKeys[i],
 					"providerId" : providerID,
 					"assetUrl" : ITE_assetUrl(currExperience),
 					"keyframes" : ITE_keyframes(currExperience, providerID),

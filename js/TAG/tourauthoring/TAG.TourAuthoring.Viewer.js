@@ -8,77 +8,91 @@
 TAG.TourAuthoring.Viewer = function (spec, my) {
     "use strict";
 
-    var player, timeline,
+    var player,
+        timeline,
         that = {},
-        artworkPanel = $(document.createElement('div')),
-        rinContainer = $(document.createElement('div')),
+        viewerPanel = $(document.createElement('div')),
+        ITEContainer = $(document.createElement('div')),
         timeManager = spec.timeManager,
         url = spec.url,
+        tourobj = spec.tourobj,
+        tour = TAG.Util.RIN_TO_ITE(tourobj),
 
         // viewer state
         playing = false,
         buffering = false,
         reloading = false,
-        needRefresh = false, ctime = null,
+        needRefresh = false,
+        ctime = null,
 
         // capturing keyframes?
         capturingOn = false,
         currentCapture = '',
         keyframingDisabled = false,
-            
-        // is the tour reloading?
-        isReloading = false,
-        rinPath = IS_WINDOWS ? tagPath + 'js/WIN8_RIN/web' : tagPath + 'js/RIN/web';
-    // Instantiate RIN player
-    (function _startRIN() {
-        // HTML containers
-        artworkPanel.attr('id', 'viewer');
-        artworkPanel.css({
+
+        ITEConfig = {
+            attachVolume: true,
+            attachLoop: true,
+            attachPlay: true,
+            attachProgressBar: true,
+            attachFullScreen: true,
+            attachProgressIndicator: true,
+            fadeControlskey: true,
+            hideControls: true,
+            autoPlay: false,
+            autoLoop: false,
+            setMute: false,
+            setInitVolume: 1,
+            allowSeek: true,
+            setFullScreen: false,
+            setStartingOffset: 0,
+            setEndTime: NaN,
+            isAuthoring: true
+        },
+
+        // reload state boolean
+        isReloading = false;
+
+    that.tour = tour;
+
+    // create ITE player
+    (function _createITE() {
+
+        // panels
+        viewerPanel.attr('id', 'viewer');
+        viewerPanel.css({
             "background-color": "rgb(0,0,0)", "height": "100%", "width": "80%",
             "position": "relative", "left": "20%"
         });
 
         // let's assume 16:9 ratio for now
-        rinContainer.attr('id', 'rinContainer');
-        rinContainer.css({
+        ITEContainer.attr('id', 'ITEContainer');
+        ITEContainer.css({
             'border-style': 'solid', 'border-width': TAG.TourAuthoring.Constants.rinBorder+'px', 'border-color': 'white',
             'height': '95%', 'width': '30%', 'top': '0%', 'left': '30%', 'position': 'absolute', 'z-index': 0
         });
-        artworkPanel.append(rinContainer);
+        viewerPanel.append(ITEContainer);
 
-        var playerElement = $(document.createElement('div'));
-        playerElement.attr('id', 'rinplayer');
-        playerElement.css({
-            'z-index': -100, 'overflow': 'hidden',
-            'height': '100%', 'width': '100%',
-            'position': 'absolute'
-        });
-        rinContainer.append(playerElement);
+        // create ITE player
+        player = new ITE.Player(ITEConfig, self, ITEContainer);
 
-        // creates actual RIN player
-        rin.processAll(null, rinPath).then(function () {
-            var options = 'systemRootUrl=' + rinPath + '/&hideAllControllers=true&playerMode=authorerEditor';;
-            player = rin.createPlayerControl(playerElement[0], options);
-            //player.interactionModeStarted.subscribe(_onInteraction);
-            player.orchestrator.playerESEvent.subscribe(_onPlayerESEvent, 'id');
-            player.orchestrator.isPlayerReadyChangedEvent.subscribe(_onPlayerStateEvent);
-            
-            timeManager.registerTime(getCurrentTime);
-        });
+        // load from URL (TODO)
+        //if (url) {
+        //    loadTour(url, function () { console.log('Viewer: initial loading complete'); });
+        //}
 
-        if (url) {
-            loadTour(url, function () { console.log('Viewer: initial loading complete'); });
-        }
     })();
 
-    //function _onInteraction(eventArgs) {
-    //    timeManager.stop();
-    //    capturingOn = true;
-    //    currentCapture = eventArgs.interactionES._esData.experienceId;
-    //    if (!reloading && timeManager.getReady()) {
-    //        _sendKeyframe(eventArgs.interactionES);
-    //    }
-    //}
+    function loadITE() {
+        player.load(tour);
+        timeManager.setPlayer(player);
+    }
+    that.loadITE = loadITE;
+
+    function getITE() {
+        return player;
+    }
+    that.getITE = getITE;
 
     /**
      * When RIN is interacted with, captures new keyframe data and sends it to timeline
@@ -194,7 +208,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      */
     function captureKeyframe(artname) {
         if (player) {
-            return player.captureKeyframe(artname); //grab artwork container? BREAKPOINT HERE
+            return null;
+            //return player.captureKeyframe(artname); //grab artwork container? BREAKPOINT HERE
         }
     }
     that.captureKeyframe = captureKeyframe;
@@ -204,13 +219,14 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @returns     current time in player
      */
     function getCurrentTime() {
-        return player.orchestrator.getCurrentLogicalTimeOffset();
+        return 0;
+        //return player.orchestrator.getCurrentLogicalTimeOffset();
     }
     that.getCurrentTime = getCurrentTime;
     
 
     function addToDOM (container) {
-        container.append(artworkPanel);
+        container.append(viewerPanel);
     }
     that.addToDOM = addToDOM;
 
@@ -218,7 +234,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * Get JQuery object containing rin player
      */
     function getContainer() {
-        return rinContainer;
+        return ITEContainer;
     }
     that.getContainer = getContainer;
 
@@ -226,13 +242,13 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * Updates size of viewer area on resize
      */
     function resize() {
-        var h = artworkPanel.height() - 2 * TAG.TourAuthoring.Constants.rinBorder,
-            w = artworkPanel.width() - 2 * TAG.TourAuthoring.Constants.rinBorder,
+        var h = viewerPanel.height() - 2 * TAG.TourAuthoring.Constants.rinBorder,
+            w = viewerPanel.width() - 2 * TAG.TourAuthoring.Constants.rinBorder,
             idealW = h * 16 / 9, idealH, // ideal W given h, vice-versa
             xoffset, yoffset;
         if (idealW <= w) {
             xoffset = (w - idealW) / 2;
-            rinContainer.css({
+            ITEContainer.css({
                 width: idealW + 'px',
                 height: h + 'px',
                 top: '0px',
@@ -241,7 +257,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         } else { // no room to support, use ideal H
             idealH = w * 9 / 16;
             yoffset = (h - idealH) / 2; // equal spacing on top and bottom
-            rinContainer.css({
+            ITEContainer.css({
                 width: w + 'px',
                 height: idealH + 'px',
                 top: yoffset + 'px',
@@ -255,14 +271,16 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     /**
      * Play viewer (should only be called from timeManager)
      */
-    function play(time) {
+    function play() {
         if (!playing) {
-            player.play(time);
+            player.play()
             playing = true;
         }
     }
     that.play = play;
-    timeManager.onPlayStart(function (ev) { play(ev.current); });
+    timeManager.onPlayStart(function (ev) {
+        play();
+    });
 
     /**
      * Stop viewer (should only be called from timeManager)
@@ -281,20 +299,15 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param time  location to seek to in units of seconds
      */
     function seek(time) {
-        if (player.orchestrator._isNarrativeLoaded) {
-            if (needRefresh) {
-                ctime = timeManager.timeToPx(time);
-            }
-
-            else if (player && !playing) {
-                stop();
-                playing = false;
-                player.pause(time);
-            }
-        }
+        player.scrubTimeline(time.percent);
+        // HACK TO GET IT TO REFRESH
+        //player.play();
+        //player.pause();
     }
     that.seek = seek;
-    timeManager.onSeek(function (ev) { seek(ev.current); });
+    timeManager.onSeek(function (time) {
+        seek(time);
+    });
 
     /**
      * Set volume
@@ -318,13 +331,14 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param url       URL of json tour
      */
     function loadTour(url, callback) {
-        if (player) {
-            player.load(url, callback);
-        } else {
-            setTimeout(function () {
-                loadTour(url, callback);
-            }, 50);
-        }
+        return;
+        //if (player) {
+        //    player.load(url, callback);
+        //} else {
+        //    setTimeout(function () {
+        //        loadTour(url, callback);
+        //    }, 50);
+        //}
     }
     that.loadTour = loadTour;
 
@@ -333,43 +347,16 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param data      Segment portion of RIN tour
      */
     function reloadTour(data, doNotUpdateReloading) {
-        if (!doNotUpdateReloading) {
-            isReloading = true;
-        }
-        //console.log("####################################################: "+isReloading);
-        // console.log("player: "+player);
-        for (var key in data.resources) {
-            if (data.resources.hasOwnProperty(key)) {
-                if (typeof data.resources[key].uriReference === 'string') {
-                    data.resources[key].uriReference = TAG.Worktop.Database.fixPath(data.resources[key].uriReference);
-                }               
-            }
-        }
         if (player) {
             reloading = true;
-            needRefresh = true;
-            player.orchestrator._isPlayerReady = false;
-            ctime = timeManager.getCurrentTime();
-            player.unload();
-            player.loadData(data, function () {
-                // if needRefresh is false we seeked too early?
-                if (!needRefresh) {
-                    seek(timeManager.getCurrentTime());
-                    setTimeout(function () {
-                        var readyEvent = document.createEvent('Event');
-                        readyEvent.initEvent('playerReady', true, true);
-                        $('body')[0].dispatchEvent(readyEvent);
-                    }, 500);
-                }
-                //setTimeout(function () { seek(ctime); reloading = false; }, 25);
-                if (!doNotUpdateReloading) {
-                    isReloading = false;
-
-                }
-                //console.log("##############################################: "+isReloading);
-            });
-        } else {
-            setTimeout(function () { reloadTour(data, true); }, 50);
+            // call reload
+            //var conv = {
+            //    Metadata: {
+            //        Content: JSON.stringify(data)
+            //    }
+            //};
+            player.load(TAG.Util.RIN_TO_ITE(data));
+            reloading = false;
         }
     }
     that.reloadTour = reloadTour;
@@ -392,13 +379,13 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         if (player) {
             ctime = timeManager.getCurrentTime();
             player.unload();
-            player.loadData(data, function () {
-                setTimeout(function () {
-                    seek(ctime);
-                    isReloading = false;
-                    console.log("isReloading: false, in initializeTour");
-                }, 50);
-            });
+            //player.loadData(data, function () {
+            //    setTimeout(function () {
+            //        seek(ctime);
+            //        isReloading = false;
+            //        console.log("isReloading: false, in initializeTour");
+            //    }, 50);
+            //});
         } else if (timeline.getTrackslength() === 0) {
             ctime = timeManager.getCurrentTime();
             setTimeout(function () {
@@ -425,6 +412,11 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         return player;
     }
     that.getPlayer = getPlayer;
+
+    function getTour() {
+        return tour;
+    }
+    that.getTour = getTour;
 
     return that;
 };

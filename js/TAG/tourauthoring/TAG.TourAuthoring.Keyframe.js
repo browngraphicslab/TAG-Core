@@ -687,6 +687,11 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
     }
     that.toRIN = toRIN;
 
+    function loadData(data) {
+        console.log("initializing keyframe with provided ITE data");
+    }
+    that.loadData = loadData;
+
     /**
      * Initializes keyframe using RIN data
      * @param data      keyframe in RIN xml format

@@ -2983,6 +2983,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         setTimeout(function () {
             var toureditor = new TAG.Layout.TourAuthoringNew(tour, function () {
                 TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
+                    toureditor.getViewer().loadITE();
                     TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                         tobj.source_page = "settings_view";
                         tobj.destination_page = "tour_authoring";
@@ -2991,6 +2992,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         //console.log("tour editor load time: " + tobj.load_time);
                     });
                     SPENT_TIMER.restart();
+                    //toureditor.getViewer().loadITE();
                 });
             });
         }, 1);

@@ -39,7 +39,7 @@ ITE.Orchestrator = function(player) {
 	  /**
 	    * I/P: none
 	  	* Helper function to load tour with AJAX (called below)
-	  	* Calls CreatTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
+	  	* Calls CreateTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
 	    * O/P: none
 	    */
 		function loadHelper(){
@@ -272,11 +272,11 @@ ITE.Orchestrator = function(player) {
 		}
 	}
 
-	function getTrackManger(){
-		return self.trackManger;
+	function getTrackManager(){
+		return self.trackManager;
 	}
 
-	self.getTrackManger = getTrackManger;
+	self.getTrackManager = getTrackManager;
 	self.captureKeyframe = captureKeyframe;
 	self.changeKeyframe = changeKeyframe;
 	self.deleteKeyframe = deleteKeyframe;

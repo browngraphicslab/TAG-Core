@@ -38,7 +38,8 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     /////////
     // PUBLIC
         that = {
-            setTime : setTime,
+            setTime: setTime,
+            setPlayer: setPlayer,
             setStart : setStart,
             setEnd : setEnd,
             setScale : setScale,
@@ -203,7 +204,6 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     function getReady() {
         return ready;
     }
-   
 
     function registerTime(func) {
         getViewerTime = func;
@@ -217,30 +217,20 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     /**
      * Drives forward current time to mimic playback
      */
+    function setPlayer(p) {
+        player = p;
+    }
+
     function play () {
-        var interval = 100, last = -10,//?
-            useInternalTime = false, lastInternalTime = Date.now(),//?
+        var interval = 100, last = -10,
             pct = ((current - start) / (end - start));
 
         _sendMove({ current: current, percent: pct });
         _sendPlayStart({ current: current, percent: pct });
 
-        player = window.requestAnimationFrame(function updatePlay(timestamp) {//window?
-            player = window.requestAnimationFrame(updatePlay);
-            // update program state
-            if (ready) {
-                if (!useInternalTime) {//internal time?
-                    current = getViewerTime();
-                    if (current === last) {
-                        useInternalTime = true;
-                        current += (timestamp - lastInternalTime) / 1000;
-                        //if(current > end)
-                        //    current = end;
-                        //stop();
-                    }
-                } else {
-                    current += (timestamp - lastInternalTime) / 1000;
-                }
+        function updateTime() {
+            if (player) {
+                current = player.getTime();
 
                 if (current >= end) {
                     current = end;
@@ -248,12 +238,12 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
                 }
 
                 _sendPlay({ current: current, percent: ((current - start) / (end - start)) });
-                
-                currentPx = null;
-                last = current;
-                lastInternalTime = timestamp;
+
+                setTimeout(updateTime, 33);
             }
-        });
+        }
+
+        setTimeout(updateTime, 33);
     }
    // that.play = play;
 
@@ -262,13 +252,10 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
      */
     function stop () {
         if (player) {
-            window.cancelAnimationFrame(player);
-            player = null;
             _sendStop();
         }
     }
     //that.stop = stop;
-    onSeek(stop); // Automatically stop playback when a seek occurs
 
     /**
      * Functions for converting btw pixel space and time space
@@ -312,9 +299,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     //that.getCurrentTime = getCurrentTime;
 
     function getCurrentPx() {
-        if (!currentPx) {
-            currentPx = timeToPx(current);
-        }
+        currentPx = timeToPx(current);
         return currentPx;
     }
    // that.getCurrentPx = getCurrentPx;
