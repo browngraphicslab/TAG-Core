@@ -31,6 +31,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
     // DOM related.
     var _UIControl,
    		_attachedAsset;
+    self._UIControl = _UIControl;
 
    	//Some other things to expose 
     self._UIControl = _UIControl;
@@ -101,6 +102,8 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
+		self.pause();
+		_UIControl.remove()
 		for(var v in self) {
 			v = null;
 		}
