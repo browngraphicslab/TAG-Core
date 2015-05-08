@@ -1886,10 +1886,9 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             viewer.reloadTour(data);
             
         }
-
         updateVerticalScroller();
         enableDisableDrag();
-        timeManager.seek(timeManager.getCurrentTime());
+        viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
         viewer.setIsReloading(false);
     }
 
