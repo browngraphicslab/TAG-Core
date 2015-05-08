@@ -350,7 +350,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         totalTourDuration = tourData.totalDuration;
         updateProgressIndicator(0);
 
-        playerParent.mousemove(function(){
+        playerParent.mousemove(function () {
             volumeButton.stop();
             volumeLevel.stop();
             playPauseButton.stop();
@@ -360,10 +360,12 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
             progressIndicator.stop();
             $("#backButton").stop();
             $("#linkButton").stop();
-            makeControlsVisible();
         });
-        playerParent.mouseleave(function(){
+        bottomContainer.mouseleave(function () {
             setControlsFade();
+        })
+        bottomContainer.mouseenter(function () {
+            makeControlsVisible();
         })
     };
 
@@ -420,7 +422,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     function setControlsFade(){
         if(playerConfiguration.fadeControls){
             window.setTimeout(function(){
-                if(!playerParent.is(":hover")){
+                if(!bottomContainer.is(":hover")){
                     time = 500
                     volumeButton.fadeTo(time,0,null);
                     volumeLevel.fadeTo(time,0,null);

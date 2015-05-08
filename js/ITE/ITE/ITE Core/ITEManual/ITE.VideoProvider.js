@@ -86,7 +86,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
      * O/P:     none
      */
 	function poll() {
-	        console.log("-  Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _videoControls.currentTime + "        orch.status: " + orchestrator.getStatus());
+	        // console.log("-  Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _videoControls.currentTime + "        orch.status: " + orchestrator.getStatus());
 	        /*if (orchestrator.getStatus() == 1) {
 		        _videoControls.play();
 		    }
@@ -146,6 +146,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 			// When finished loading, set status to 2 (paused).
 			self.status = 2; 
+
+			//Tell orchestrator to play (if other tracks are ready)
+			self.orchestrator.playWhenAllTracksReady()
 		});
 
 		// // Ensure that the video is completely loaded.
@@ -301,8 +304,15 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.animate = function(duration, state) {
+
+		//If we're fading in, set the z-index to be the track's real z-index (as opposed to -1)
+		(state.opacity !== 0) && _UIControl.css("z-index", self.zIndex)
+
 		// OnComplete function.
 		var onComplete = function () {
+			
+			//If we're fading out, set the z-index to -1 to prevent touches
+			(state.opacity === 0) && _UIControl.css("z-index", -1);
 			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
 		};
 
@@ -689,9 +699,16 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
     function setZIndex(index){
-    	_UIControl.css("z-index", index)
+    	//set the z index to be -1 if the track is not displayed
+		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
+			_UIControl.css("z-index", -1)
+		} 
+		else //Otherwise set it to its correct z index
+		{
+			_UIControl.css("z-index", index)
+		}
     	self.zIndex = index
     }
     self.setZIndex = setZIndex;
-    
 };
+

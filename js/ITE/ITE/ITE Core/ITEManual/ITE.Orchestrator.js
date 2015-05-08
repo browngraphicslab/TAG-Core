@@ -16,6 +16,7 @@ ITE.Orchestrator = function(player) {
 	self.prevStatus			= 0; // 0 means we're not scrubbing. 1 - previously playing. 2 - previously paused.
 	self.tourData 			= null;
     self.loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
+    self.loadedTracks = 0;
 
 	self.timeManager = new ITE.TimeManager();
 	self.getElapsedTime = function(){
@@ -56,11 +57,6 @@ ITE.Orchestrator = function(player) {
 	    	for (i = 0; i < trackManager.length; i++){
 	    		trackManager[i].load()
 	    	}
-
-	    	//...And plays them
-	    	if (areAllTracksReady()){
-				play();
-			}
 		}
 
 
@@ -232,14 +228,10 @@ ITE.Orchestrator = function(player) {
 		track.unload();
 	}
 
-	function areAllTracksReady() {
-		var ready = true,
-			i;
-		for (i = 0; i < trackManager.length; i++){
-			var track = trackManager[i]
-			if (track.state !== 2) {  //(2 = paused)
-				ready = false
-			}
+	function playWhenAllTracksReady() {
+		self.loadedTracks++
+		if (self.loadedTracks == trackManager.length){
+			self.play()
 		}
 	}
 
@@ -268,7 +260,7 @@ ITE.Orchestrator = function(player) {
 		for (i = 0; i < trackManager.length; i++){
 			var track = trackManager[i];
 			initializeTrack(track)
-			track.setZIndex(i)
+			track.setZIndex(10*i)
 		}
 	}
 
@@ -276,7 +268,40 @@ ITE.Orchestrator = function(player) {
 		return self.trackManager;
 	}
 
-	self.getTrackManager = getTrackManager;
+	function getTrackBehind(zIndex, evt, isDrag) {
+	    cur = -99999999999999999999999999999999999999999999999999999999999999999999999999999;
+	    cur_track = null;
+	    for (var i = 0; i < self.trackManager.length; i++) {
+	        index = self.trackManager[i].trackData.zIndex;
+	        if (cur < index && zIndex > index && self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt) && self.trackManager[i].trackData.providerId !== "ink") {
+	            cur = index;
+	            cur_track = self.trackManager[i];
+	        } else if (zIndex === index) {
+	            if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
+	                if (isDrag && self.manipTrack != null && self.manipTrack === self.trackManager[i]) {
+	                    console.log("dragging same track");
+	                    return null;
+	                } else if (isDrag && self.manipTrack != null && self.manipTrack !== self.trackManager[i]) {
+                        //do nothing
+	                }else{
+	                    return null;
+	                }
+	            }
+	        }
+	    }
+	    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
+	        console.log("dragging donedone");
+	        return self.manipTrack
+	    }
+	    if (isDrag) {
+	        console.log("dragging same track");
+	        self.manipTrack = cur_track;
+	    }
+	    return cur_track;
+	}
+
+	self.manipTrack = null;
+	self.getTrackManger = getTrackManger;
 	self.captureKeyframe = captureKeyframe;
 	self.changeKeyframe = changeKeyframe;
 	self.deleteKeyframe = deleteKeyframe;
@@ -293,8 +318,9 @@ ITE.Orchestrator = function(player) {
 	self.getElapsedTime = self.timeManager.getElapsedOffset;
 	self.getStatus = getStatus;
 	self.captureKeyframe = captureKeyframe;
-	self.areAllTracksReady = areAllTracksReady;
+	self.playWhenAllTracksReady = playWhenAllTracksReady;
 	self.initializeTracks = initializeTracks;
 	self.getTourData = getTourData;
 	self.status = status;
+	self.getTrackBehind = getTrackBehind;
 }

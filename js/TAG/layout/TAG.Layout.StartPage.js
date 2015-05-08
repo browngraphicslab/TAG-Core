@@ -495,7 +495,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //Comment out the if statement and the entire else block. 
         //Only leave the TAG.Auth.checkPassword() statement in.
 
-        if(IS_WINDOWS) {
+        //if(IS_WINDOWS) {
             TAG.Auth.checkPassword(authoringInput.val(), function () { 
                 enterAuthoringMode();
             }, function () {
@@ -505,12 +505,13 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
                 passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
             });  
-            
+        /**    
         } else {
             passwordError.html('Authoring mode is only accessible from the Windows 8 app');
             passwordError.css({'visibility':'visible'});
             passwordError.css({'color':'rgba(255, 255, 255, 1)'});
         }
+        **/
     });
 
 
