@@ -301,7 +301,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Creates a linearly interpolated state between start and end keyframes.
 	 * O/P: 	state : 			Object holding lerped keyframe's state, as used in animation.
 	 */
-	self.lerpState = function(startKeyframe, endKeyframe, interp) {
+	self.lerpState = function (startKeyframe, endKeyframe, interp) {
 		if (!endKeyframe) {
 			return self.getKeyframeState(startKeyframe);
 		}
@@ -402,6 +402,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	}
 
     	if (IS_WINDOWS) {
+
+    	    if (res.scroll != 1) {
+    	        mediaScroll(res.scale, res.pivot, true);//True is from touch
+    	    }
+
     	    //Target location is just current location plus translation
 
     	    /*if (res.grEvent.type === 'manipulationstarted') {
@@ -436,7 +441,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	         top: newTop,
     	         left: newLeft
     	     })
-           // console.log(res.pivot.x + _UIControl.position().left)
 
     	} else {
 
@@ -465,10 +469,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     /*
      * I/P: 	scale : 	Scale factor.	
      *			pivot : 	Location of event (x,y).
+     *          isFromTouch:    boolean of whether the scroll is from touch or mouse event
      * Scroll/pinch-zoom handler for makeManipulatable on the DeepZoom image.
      * O/P: 	none
      */
-    function mediaScroll(scale, pivot) {
+    function mediaScroll(scale, pivot, isFromTouch) {
     	var t    	= _UIControl.position().top,
             l    	= _UIControl.position().left,
             w   	= _UIControl.width(),
@@ -496,7 +501,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         newX 	= l*scale + pivot.x*(1-scale);
        	newY 	= t*scale + pivot.y*(1-scale); 
 
-       	// Animate _UIControl to self new position.
+       	if (isFromTouch || !IS_WINDOWS){
+       	    newX = l * scale + (pivot.x + l)* (1 - scale);
+       	    newY = t * scale + (pivot.y + t) * (1 - scale);
+       	}
+
+        // Animate _UIControl to self new position.
         self.interactionAnimation && self.interactionAnimation.kill();
         self.interactionAnimation = TweenLite.to(_UIControl, .2, {
         	top: newY,

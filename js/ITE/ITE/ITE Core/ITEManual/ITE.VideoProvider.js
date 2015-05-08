@@ -36,7 +36,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
     // DOM related.
     var _video,
     	_UIControl,
-    	_videoControls;
+    	_videoControls,
+        _coveringDiv;
 
     // Various animation/manipulation variables.
 	self.audioAnimation;
@@ -63,9 +64,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		_video		= $(document.createElement("video"))
 			.addClass("assetVideo");
 		_videoControls = _video[0];
-		_UIControl	= $(document.createElement("div"))
+		_UIControl = $(document.createElement("div"))
 			.addClass("UIControl")
-			.append(_video);
+			.append(_video)
+            .append(_coveringDiv);
+        
 		$("#ITEHolder").append(_UIControl);
 
 		// Get first and last keyframes.
@@ -73,11 +76,15 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.lastKeyframe = self.keyframes.max();
 
 		// Attach Handlers.
-		attachHandlers();
+		//attachHandlers();
         
 		self.polling = true;
 		poll();
-        
+		_videoControls.removeAttribute("controls");
+		_coveringDiv = $(document.createElement("div"));
+		_coveringDiv.css({
+            "background_color" : "blue"
+		})
 	};
 
     /*
@@ -120,6 +127,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    if (self.polling) {
 	        setTimeout(function () { poll(); }, 200);
 	    }
+	    _videoControls.removeAttribute("controls");
 	};
 
 	/*
@@ -380,6 +388,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	        "width":		state.size.width,
 	        "opacity":		state.opacity
 	    });
+	    console.log("WIDTH: " + _UIControl.width())
+	    console.log("width of iteholder " + $('#tagRoot').width())
 	    _videoControls.volume = state.volume * self.player.currentVolumeLevel;
 	    if(orchestrator.getStatus()!=4){
 	        state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
@@ -395,11 +405,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		var state = {
 						"opacity"	: keyframe.opacity,
 						"pos" : {
-									"top"	: (500*keyframe.pos.y/100) + "px",
-								  	"left"	: (1000*keyframe.pos.x/100) + "px"
+									"top"	: keyframe.pos.y + "px",
+								  	"left"	: keyframe.pos.x + "px"
 								},
 						"size" : {
-						  			"width"	: (1000*keyframe.size.x/100) + "px"
+						  			"width"	: keyframe.size.x + "px"
 								},
 						"volume"	: keyframe.volume
 					};
@@ -427,11 +437,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		var state = {
 						"opacity"	: lerpOpacity,
 						"pos" : {
-									"top"	: (500 * lerpPosY / 100) + "px",
-								  	"left"	: (1000 * lerpPosX / 100) + "px"
+									"top"	: lerpPosY + "px",
+								  	"left"	: lerpPosX + "px"
 								},
 						"size" : {
-						  			"width"	: (1000 * lerpSizeX / 100) + "px"
+						  			"width"	: lerpSizeX + "px"
 								},
 						"volume"	: lerpVolume
 					};

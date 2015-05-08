@@ -8415,7 +8415,7 @@ function onCanvasDragEnd(event, first) {
 
     if (track === "NOPE") {
         this.orchestrator.manipTrack = null;
-        console.log("manip track is null")
+        // console.log("manip track is null")
         return;
     }
     if ((first === undefined || first) && track != null) {
@@ -8465,7 +8465,7 @@ function onCanvasDragEnd(event, first) {
         });
     }
     this.orchestrator.manipTrack = null;
-    console.log("manip track is null")
+    // console.log("manip track is null")
 
 }
 
@@ -15930,7 +15930,7 @@ $.Viewport.prototype = /** @lends OpenSeadragon.Viewport.prototype */{
         }
 
         bounds = this.getBounds();
-
+        return this;
         constrainedBounds = this._applyBoundaryConstraints( bounds, immediately );
         
         if ( bounds.x !== constrainedBounds.x || bounds.y !== constrainedBounds.y || immediately ){
