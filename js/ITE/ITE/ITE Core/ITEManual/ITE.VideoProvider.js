@@ -70,6 +70,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
             .append(_coveringDiv);
         
 		$("#ITEHolder").append(_UIControl);
+		self._UIControl = _UIControl;
 
 		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
@@ -182,6 +183,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	self.unload = function () {
 	    console.log("unloading");
 	    self.polling = false;
+	    _UIControl.remove();
 		for(var v in self) {
 			v = null;
 		}

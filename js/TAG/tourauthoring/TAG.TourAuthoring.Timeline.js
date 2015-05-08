@@ -1874,7 +1874,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
 
         timeManager.stop();
 
-        var rin;
+        var data;
         if (loaded) {
             viewer.setIsReloading(true);
             timeManager.stop();
@@ -1882,8 +1882,9 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             viewer.capturingOff();
             capturingOff();
 
-            rin = toRIN();
-            viewer.reloadTour(rin);
+            data = toRIN();
+            viewer.reloadTour(data);
+            viewer.setIsReloading(false);
         }
 
         updateVerticalScroller();

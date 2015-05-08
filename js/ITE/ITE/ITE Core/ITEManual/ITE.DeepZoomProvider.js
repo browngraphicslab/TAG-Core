@@ -197,8 +197,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Unoads track asset.
 	 * O/P: 	none
 	 */
-	self.unload = function() {
-		_viewer.destroy();
+	self.unload = function () {
+	    _viewer.source = null;
+	    //var container = _viewer.container;
+	    _viewer.destroy();
+	    //$(container).remove();
+	    _UIControl.remove();
 		for(var v in self) {
 			v = null;
 		}

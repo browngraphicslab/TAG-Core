@@ -1,5 +1,5 @@
 window.ITE = window.ITE || {};
-ITE.Orchestrator = function(player) {
+ITE.Orchestrator = function(player, isAuthoring) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
 	var	self = this;
@@ -9,12 +9,12 @@ ITE.Orchestrator = function(player) {
 	self.stateChangeEvent 		= new ITE.PubSubStruct();
 	self.muteChangedEvent		= new ITE.PubSubStruct();
 	self.tourData;
-	self.player 			= player;
+	self.player = player;
+    self.isAuthoring = isAuthoring
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
 	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
 	self.prevStatus			= 0; // 0 means we're not scrubbing. 1 - previously playing. 2 - previously paused.
-	self.tourData 			= null;
     self.loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
     self.loadedTracks = 0;
 
@@ -87,6 +87,10 @@ ITE.Orchestrator = function(player) {
 			}
 		}
 	};
+
+	function reload(tourData) {
+	    self.tourData = tourData;
+	}
 
 	/**
 	    * I/P: none
@@ -230,7 +234,7 @@ ITE.Orchestrator = function(player) {
 
 	function playWhenAllTracksReady() {
 		self.loadedTracks++
-		if (self.loadedTracks == trackManager.length){
+		if (self.loadedTracks == trackManager.length && !self.isAuthoring){
 			self.play()
 		}
 	}
@@ -301,7 +305,7 @@ ITE.Orchestrator = function(player) {
 	}
 
 	self.manipTrack = null;
-	self.getTrackManger = getTrackManger;
+	self.getTrackManager = getTrackManager;
 	self.captureKeyframe = captureKeyframe;
 	self.changeKeyframe = changeKeyframe;
 	self.deleteKeyframe = deleteKeyframe;

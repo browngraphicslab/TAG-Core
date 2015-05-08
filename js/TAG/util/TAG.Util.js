@@ -8299,7 +8299,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					"name" : rinDataExperiencesKeys[i],
 					"providerId" : providerID,
 					"experienceReference" : currExperience.data.linkToExperience.embedding.experienceId, //TODO - check this
-					"assetUrl" : "noAssetUrl",
+					"assetUrl" : "noAssetUrl"+i,
 					"datastring" : currExperience.data.linkToExperience.embedding.element.datastring.str,
 					"inkObjects" : ITE_parseInkDatastring({
 						"datastring" : currExperience.data.linkToExperience.embedding.element.datastring.str

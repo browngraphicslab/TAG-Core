@@ -33,7 +33,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
    		_attachedAsset;
 
    	//Some other things to expose 
-    self._UIControl = _UIControl;
+    //self._UIControl = _UIControl;
     self._ink;
 
    	// Various animation/manipulation variables.
@@ -65,6 +65,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 			})
 	        .attr("id", trackData.assetUrl);
 		$("#ITEHolder").append(_UIControl);
+		self._UIControl = _UIControl;
 
 		// Create ink object.
 		self._ink = new tagInk(trackData.assetUrl, _UIControl[0]);
@@ -100,7 +101,9 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Unoads track asset.
 	 * O/P: 	none
 	 */
-	self.unload = function() {
+	self.unload = function () {
+	    this._ink.remove_all();
+	    _UIControl.remove();
 		for(var v in self) {
 			v = null;
 		}

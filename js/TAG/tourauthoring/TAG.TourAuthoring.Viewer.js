@@ -84,7 +84,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     })();
 
     function loadITE() {
-        player.load(tour);
+        //player.load(tour);
         timeManager.setPlayer(player);
     }
     that.loadITE = loadITE;
@@ -355,7 +355,9 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //        Content: JSON.stringify(data)
             //    }
             //};
+            this.unload();
             player.load(TAG.Util.RIN_TO_ITE(data));
+            //player.scrubTimeline(percent);
             reloading = false;
         }
     }

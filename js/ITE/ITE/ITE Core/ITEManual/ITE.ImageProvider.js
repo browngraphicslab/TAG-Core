@@ -64,6 +64,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			.append(_image)
 			.css("zIndex", -1)
 		$("#ITEHolder").append(_UIControl);
+		self._UIControl = _UIControl;
 
 		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
@@ -115,7 +116,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
-		TweenLite.ticker.removeEventListener("tick", updateInk);
+	    TweenLite.ticker.removeEventListener("tick", updateInk);
+	    _UIControl.remove();
 		for(var v in self) {
 			v = null;
 		}

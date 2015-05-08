@@ -8733,7 +8733,7 @@ function updateMulti( viewer ) {
     updateOnce( viewer );
 
     // Request the next frame, unless we've been closed during the updateOnce()
-    if ( viewer.source ) {
+    if (viewer.source) {
         viewer._updateRequestId = scheduleUpdate( viewer, updateMulti );
     }
 }

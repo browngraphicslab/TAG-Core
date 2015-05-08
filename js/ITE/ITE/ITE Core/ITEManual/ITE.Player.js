@@ -2,7 +2,7 @@ window.ITE = window.ITE || {};
 
 ITE.Player = function (options, tourPlayer, container) { //acts as ITE object that contains the orchestrator, etc
    var totalTourDuration;
-   var  orchestrator            = new ITE.Orchestrator(this),
+   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring),
         self = this,
         playerConfiguration = {
                 attachVolume:               true,
@@ -369,6 +369,31 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         })
     };
 
+    function reload(tourData) {
+        orchestrator.reload(tourData);
+        //progressIndicator.append(tourData.totalDuration)
+        totalTourDuration = tourData.totalDuration;
+        updateProgressIndicator(0);
+
+        playerParent.mousemove(function () {
+            volumeButton.stop();
+            volumeLevel.stop();
+            playPauseButton.stop();
+            loopButton.stop();
+            progressBar.stop();
+            fullScreenButton.stop();
+            progressIndicator.stop();
+            $("#backButton").stop();
+            $("#linkButton").stop();
+        });
+        bottomContainer.mouseleave(function () {
+            setControlsFade();
+        })
+        bottomContainer.mouseenter(function () {
+            makeControlsVisible();
+        })
+    }
+
     function unload() {
         orchestrator.unload();
     };
@@ -484,8 +509,8 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         }
     };
 
-    function scrubTimeline(time) {
-        orchestrator.seek(time);
+    function scrubTimeline(pct) {
+        orchestrator.seek(pct);
     }
 
     /*
@@ -791,5 +816,6 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     this.isFullScreen       = isFullScreen;
     this.updateProgressIndicator = updateProgressIndicator;
     this.setControlsFade    = setControlsFade;
-    this.makeControlsVisible= makeControlsVisible;
+    this.makeControlsVisible = makeControlsVisible;
+    this.reload = reload;
 };

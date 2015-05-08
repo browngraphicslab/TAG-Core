@@ -57,6 +57,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			.addClass("UIControl")
 			.append(_audio);
 		$("#ITEHolder").append(_UIControl);
+		self._UIControl = _UIControl;
 
 		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
@@ -113,7 +114,8 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Unoads track asset.
 	 * O/P: 	none
 	 */
-	self.unload = function() {
+	self.unload = function () {
+	    _UIControl.remove();
 		for(var v in self) {
 			v = null;
 		}
