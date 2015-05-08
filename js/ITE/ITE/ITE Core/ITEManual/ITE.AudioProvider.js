@@ -33,6 +33,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
     var _audio,
     	_UIControl,
     	_audioControls;
+    self._UIControl = _UIControl;
 
 	// Start things up...
     initialize();
@@ -114,8 +115,9 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Unoads track asset.
 	 * O/P: 	none
 	 */
-	self.unload = function () {
-	    _UIControl.remove();
+	self.unload = function() {
+		self.pause();
+		_UIControl.remove()
 		for(var v in self) {
 			v = null;
 		}

@@ -36,8 +36,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
     // DOM related.
     var _video,
     	_UIControl,
-    	_videoControls,
-        _coveringDiv;
+    	_coveringDiv,
+    	_videoControls;
+    self._UIControl = _UIControl;
 
     // Various animation/manipulation variables.
 	self.audioAnimation;
@@ -181,7 +182,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function () {
-	    console.log("unloading");
+		self.pause();
+		_UIControl.remove()
 	    self.polling = false;
 	    _UIControl.remove();
 		for(var v in self) {

@@ -33,6 +33,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     // DOM related.
     var _image,
     	_UIControl;
+    self._UIControl = _UIControl;
 
     // Various animation/manipulation variables.
 	self.interactionAnimation;
@@ -116,8 +117,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
-	    TweenLite.ticker.removeEventListener("tick", updateInk);
-	    _UIControl.remove();
+		self.pause();
+		_UIControl.remove()
+		TweenLite.ticker.removeEventListener("tick", updateInk);
 		for(var v in self) {
 			v = null;
 		}

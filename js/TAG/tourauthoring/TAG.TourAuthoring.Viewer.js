@@ -86,6 +86,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     function loadITE() {
         //player.load(tour);
         timeManager.setPlayer(player);
+        player.refresh();
     }
     that.loadITE = loadITE;
 

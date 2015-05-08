@@ -23,6 +23,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		return self.timeManager.getElapsedOffset();
 	};	
 
+
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
     * Loads and parses JSON data using AJAX, then figures out which assetProvider to use to actually load the asset.
@@ -134,7 +135,6 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		}
 		self.timeManager.startTimer();
 		self.status = 1;
-
 	}
 
 	function pause() {
@@ -156,13 +156,16 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
-		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+		// self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+		self.timeManager.addElapsedTime(seekTime - self.timeManager.getElapsedOffset());
+
 
 		// Inform tracks of seek.
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].seek();
 		}
 	}
+
 
 	function seek(seekPercent) {
 		self.updateZIndices()
@@ -176,7 +179,8 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
-		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+		//self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+		self.timeManager.addElapsedTime(seekTime - self.timeManager.getElapsedOffset());
 
 		// Inform tracks of seek.
 		var nextKeyframes = new Array(trackManager.length);
@@ -193,6 +197,14 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			self.status = 1;
 		}
 		self.prevStatus = 0;
+	}
+
+
+
+	function refresh(){
+		var currTime = self.timeManager.getElapsedOffset(),
+			timePercent = currTime/self.tourData.totalDuration;
+		seek(timePercent);
 	}
 
 	function setVolume(newVolumeLevel){
@@ -225,7 +237,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function deleteTrack(track){
-		var index = trackManager[indexOf(track)]
+		var index = trackManager.indexOf(track)
 		if (index > -1) {
 		    trackManager.splice(index, 1);
 		}
@@ -317,6 +329,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.pause = pause;
 	self.scrub = scrub;
 	self.seek = seek;
+	self.refresh = refresh;
 	self.setVolume = setVolume;
 	self.toggleMute = toggleMute;
 	self.getElapsedTime = self.timeManager.getElapsedOffset;

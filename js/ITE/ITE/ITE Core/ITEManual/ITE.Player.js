@@ -367,31 +367,12 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         bottomContainer.mouseenter(function () {
             makeControlsVisible();
         })
+        
+        orchestrator.refresh();
     };
 
-    function reload(tourData) {
-        orchestrator.reload(tourData);
-        //progressIndicator.append(tourData.totalDuration)
-        totalTourDuration = tourData.totalDuration;
-        updateProgressIndicator(0);
-
-        playerParent.mousemove(function () {
-            volumeButton.stop();
-            volumeLevel.stop();
-            playPauseButton.stop();
-            loopButton.stop();
-            progressBar.stop();
-            fullScreenButton.stop();
-            progressIndicator.stop();
-            $("#backButton").stop();
-            $("#linkButton").stop();
-        });
-        bottomContainer.mouseleave(function () {
-            setControlsFade();
-        })
-        bottomContainer.mouseenter(function () {
-            makeControlsVisible();
-        })
+    function refresh() {
+        orchestrator.refresh();
     }
 
     function unload() {
@@ -817,5 +798,5 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     this.updateProgressIndicator = updateProgressIndicator;
     this.setControlsFade    = setControlsFade;
     this.makeControlsVisible = makeControlsVisible;
-    this.reload = reload;
+    this.refresh = refresh;
 };

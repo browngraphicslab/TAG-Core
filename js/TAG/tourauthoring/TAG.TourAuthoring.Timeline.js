@@ -1884,11 +1884,13 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
 
             data = toRIN();
             viewer.reloadTour(data);
-            viewer.setIsReloading(false);
+            
         }
 
         updateVerticalScroller();
         enableDisableDrag();
+        timeManager.seek(timeManager.getCurrentTime());
+        viewer.setIsReloading(false);
     }
 
     function onUpdate(noDebounce) {

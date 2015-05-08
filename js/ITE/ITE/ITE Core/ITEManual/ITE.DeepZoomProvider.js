@@ -36,7 +36,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     			//TODO: there has GOT to be a better way to do this
     	_canvasHolder,
     	_viewer;
-    
+        self._UIControl = _UIControl;
+
     // Various animation/manipulation variables.
 	self.animationCallback;
 
@@ -108,8 +109,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         _UIControl = $(document.createElement("div"))
 
 		// $("#ITEHolder").append(_UIControl);
-        $("#ITEHolder").append(_proxy);
-        _proxy.append(_proxy2);
+        // $("#ITEHolder").append(_proxy);
+        // _proxy.append(_proxy2);
 		$("#ITEHolder").append(_UIControl);
 		_UIControl.append(_canvasHolder);
 
@@ -197,15 +198,15 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Unoads track asset.
 	 * O/P: 	none
 	 */
-	self.unload = function () {
-	    _viewer.source = null;
-	    //var container = _viewer.container;
-	    _viewer.destroy();
-	    //$(container).remove();
-	    _UIControl.remove();
+	self.unload = function() {
+		self.pause();
+		_viewer.source = null;
+		_UIControl.remove()
+		_viewer.destroy();
 		for(var v in self) {
 			v = null;
 		}
+
 	};
 
 	/*
