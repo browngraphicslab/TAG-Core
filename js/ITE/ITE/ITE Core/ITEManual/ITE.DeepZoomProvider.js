@@ -140,6 +140,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 * O/P: 	bool, whether or not this event was within the image's bounds
 */
 	function isInImageBounds(evt) {
+
+		//If the current time is after the last keyframe of the deepzoom, we're defintely out of bounds.
+		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
+			return false;
+		}
+
+		//Otherwise, check position of click against image bounds
 	    if (evt.clientX && evt.clientY) {
 	        var x = evt.clientX;
 	        var y = evt.clientY;
@@ -219,6 +226,11 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
+
+		//If the current time is after the last keyframe of the deepzoom, don't do anything
+		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
+			return;
+		}
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;

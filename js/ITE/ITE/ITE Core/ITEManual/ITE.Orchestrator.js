@@ -310,7 +310,6 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	        }
 	    }
 	    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
-	        console.log("dragging donedone");
 	        return self.manipTrack
 	    }
 	    if (isDrag) {
