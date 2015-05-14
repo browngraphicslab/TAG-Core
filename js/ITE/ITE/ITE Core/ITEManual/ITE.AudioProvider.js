@@ -129,6 +129,8 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.play = function(endKeyframe) {
+		_audioControls.pause();
+		
 		if (self.status === 3) {
 			return;
 		}
@@ -142,6 +144,11 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			self.savedState = null;
 		} else {
 			startTime = self.timeManager.getElapsedOffset();
+		}
+
+		//If the current time is after the last keyframe of the deepzoom, don't do anything
+		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
+			return;
 		}
 
 		// If the track hasn't started yet, set a trigger.
