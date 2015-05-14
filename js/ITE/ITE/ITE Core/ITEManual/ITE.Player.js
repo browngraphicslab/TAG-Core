@@ -313,7 +313,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         if (!isAuthoring) {
             tourOver(sec);
         }   
-        if (!isUnloaded && orchestrator.status === 1){
+        if (!isUnloaded){
             window.setTimeout(function(){
                 updateProgressIndicator(orchestrator.getElapsedTime());
             },100); 
