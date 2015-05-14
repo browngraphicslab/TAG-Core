@@ -88,6 +88,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
             attachFullScreen();
             attachProgressIndicator();
         };
+        play();
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
     };
