@@ -340,7 +340,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.animate = function(duration, state) {
 		self.imageHasBeenManipulated = false;
-
+		//self.opacity = 1;
 		setSeadragonConfig(duration);
 		_viewer.viewport.fitBounds(state.bounds, false);
 
@@ -352,7 +352,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.animation = TweenLite.to(
 			// What object to animate.
-			_UIControl, 
+			_canvasHolder,
 			// Duration of animation.
 			duration, 
 			// Define animation:
@@ -379,7 +379,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		self.savedState = {
 			time	: self.timeManager.getElapsedOffset(),
 			bounds 	: _viewer.viewport.getBounds(true),
-			opacity : window.getComputedStyle(_UIControl[0]).opacity
+			opacity : window.getComputedStyle(_canvasHolder[0]).opacity
 		};	
 		return self.savedState;
 	};
@@ -403,7 +403,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// _viewer.viewport.zoomSpring.animationTime 		= .000001;
 		// _viewer.viewport.fitBounds(state.bounds, false);  // End of old janky fix.
 
-		_UIControl.css("opacity", state.opacity)
+	    _canvasHolder.css("opacity", state.opacity)
+	    //console.log("setting opacity to " + state.opacity + " : " + self.trackData.name)
+        setZIndex(self.zIndex)
 		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
         _viewer.viewport.zoomBy(1.01, new OpenSeadragon.Point(0,0), true);
@@ -696,17 +698,21 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * sets the track to the provided z-index
 	 * O/P: 	none
 	 */
-    function setZIndex(index){
+	function setZIndex(index) {
+	    index = 100000000;
     	//set the z index to be -1 if the track is not displayed
-		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
+		if (window.getComputedStyle(_canvasHolder[0]).opacity == 0){
 		    _UIControl.css("z-index", -1)
 		    _proxy.css("z-index", -1)
+           // console.log("zindex being set for "+ self.trackData.name + " to -1")
 		} 
 		else //Otherwise set it to its correct z index
 		{
 			_UIControl.css("z-index", index)
 			_canvasHolder.css("z-index", 1)
 			_proxy.css("z-index", index + 5)
+			//console.log("zindex being set for " + self.trackData.name + " to " + index)
+
 		}
     	self.zIndex = index
     }
