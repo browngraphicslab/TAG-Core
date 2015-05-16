@@ -251,7 +251,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	function playWhenAllTracksReady() {
 		self.loadedTracks++
 		if (self.loadedTracks == trackManager.length && !self.isAuthoring){
-			self.play()
+			self.player.play()
 		}
 	}
 

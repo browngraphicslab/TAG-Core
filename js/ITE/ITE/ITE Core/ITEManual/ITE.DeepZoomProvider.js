@@ -339,7 +339,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.animate = function(duration, state) {
-		self.opacity = 1;
 		self.imageHasBeenManipulated = false;
 
 		setSeadragonConfig(duration);
@@ -353,7 +352,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.animation = TweenLite.to(
 			// What object to animate.
-			_canvasHolder, 
+			_UIControl, 
 			// Duration of animation.
 			duration, 
 			// Define animation:
@@ -380,6 +379,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		self.savedState = {
 			time	: self.timeManager.getElapsedOffset(),
 			bounds 	: _viewer.viewport.getBounds(true),
+			opacity : window.getComputedStyle(_UIControl[0]).opacity
 		};	
 		return self.savedState;
 	};
@@ -403,7 +403,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// _viewer.viewport.zoomSpring.animationTime 		= .000001;
 		// _viewer.viewport.fitBounds(state.bounds, false);  // End of old janky fix.
 
-		_canvasHolder.css("opacity", state.opacity)
+		_UIControl.css("opacity", state.opacity)
 		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
         _viewer.viewport.zoomBy(1.01, new OpenSeadragon.Point(0,0), true);
