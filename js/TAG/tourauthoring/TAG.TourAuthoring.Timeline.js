@@ -1719,8 +1719,8 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
      * Grabs current keyframe state from viewer
      * @returns     Keyframe data in xml
      */
-    function captureKeyframe(artname) {
-        return viewer.captureKeyframe(artname);
+    function captureKeyframe(tracknum) {
+        return viewer.captureKeyframe(tracknum);
     }
     that.captureKeyframe = captureKeyframe;
 
@@ -2402,7 +2402,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
 
                                         keyloc = timeManager.timeToPx(currKey.offset + display.getStart());
                                         if (type === 'ZMES' || type === 'ImageES') {
-                                            key = display.addKeyframe(keyloc, TAG.TourAuthoring.Constants.trackHeight/2);
+                                            key = display.addKeyframeWithData(keyloc, TAG.TourAuthoring.Constants.trackHeight/2, currKey.state);
                                             if (key) key.loadRIN(currKey);
                                         } else if (type === 'AES') {
                                             // get audio to set y location

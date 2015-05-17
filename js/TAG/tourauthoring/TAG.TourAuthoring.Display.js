@@ -2336,6 +2336,86 @@ TAG.TourAuthoring.Display = function (spec, my) {
     that.addKeyframe = addKeyframe;
 
     /**
+     * Adds a keyframe to the display / sequence using prespecified data
+     * @param x         x location in px
+     * @param y         y location in px
+     * @param capture   whether the keyframe should immediately capture the state of the player
+     * @returns     keyframe%A
+     */
+    function addKeyframeWithData(x, y, data) {
+        if (canKeyframe) {
+            var keyframe, command, i;
+
+            var keyspec = {
+                loc: {
+                    x: Math.twoDecPlaces(my.timeManager.pxToTime(x)),
+                    y: (my.type === TAG.TourAuthoring.TrackType.audio) ? y : 48
+                },
+                gkey: gkey,
+                display: that,
+                data: data,
+                displayDiv: mainD
+            };
+
+            // check that you are not making a keyframe right on top of another
+            var neighbors = currkeyframes.nearestNeighbors(keyspec.loc.x, 1);
+            if ((neighbors[0] && Math.abs(neighbors[0].getTime() - keyspec.loc.x) < 0.05) ||
+                  (neighbors[1] && Math.abs(neighbors[1].getTime() - keyspec.loc.x) < 0.05)) {
+                return null;
+            }
+            //for (i = 0; i < keyframes.length; i++) {
+            //    if (keyframes[i].getTime() === keyspec.loc.x) {
+            //        return null; // no keyframe for u
+            //    }
+            //}
+            //var isUnique = currkeyframes.map(function (i) {
+            //    if (Math.twoDecPlaces(i.getTime()) === keyspec.loc.x) {
+            //        return null;
+            //    }
+            //});
+
+            keyframe = TAG.TourAuthoring.Keyframe(keyspec, my),
+            command = TAG.TourAuthoring.Command({ // NOTE: don't execute command or call update! might screw up user editing
+                execute: function () {
+                    //keyframes.push(keyframe);
+                    //sortKeyframes();
+                    currkeyframes.add(keyframe);
+                    keyframe.reactivateKeyframe();
+                    keyframe.restoreHandlers();
+                    my.that.addKeyframeToLines(keyframe);
+                    my.update();
+                },
+                unexecute: function () {
+                    // keyframe.remove() // TODO: add svg removal
+                    keyframe.remove(false, true);
+                    keyframe.setDeselected();
+                    //keyframes.remove(keyframe);
+                    my.update();
+                }
+            });
+            my.undoManager.logCommand(command);
+            console.log('logging');
+
+            //keyframes.push(keyframe);
+            //sortKeyframes();
+            currkeyframes.add(keyframe);
+
+            if (my.that.getMinimizedState()) {
+                keyframe.toggleCircle();
+            }
+
+            var reloadingEvent = document.createEvent('Event');
+            reloadingEvent.initEvent('playerReloading', true, true);
+            $('body')[0].dispatchEvent(reloadingEvent);
+
+            return keyframe;
+        } else {
+            return null;
+        }
+    }
+    that.addKeyframeWithData = addKeyframeWithData;
+
+    /**
     * Function to remove keyframe from keyframe array
     */
     function removeKeyframe(keyframe) {

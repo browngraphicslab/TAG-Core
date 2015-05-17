@@ -44,6 +44,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	// miscellaneous
 	var attachedInks = [];
 	var seeked;
+	var captureHandlers = [];
 
 	// Start things up...
     initialize();
@@ -144,6 +145,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		//If the current time is after the last keyframe of the deepzoom, we're defintely out of bounds.
 		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
 			return false;
+		}
+
+		if (this.firstKeyframe.time > self.timeManager.getElapsedOffset()) {
+		    return false;
 		}
 
 		//Otherwise, check position of click against image bounds
@@ -460,6 +465,28 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		return state;
 	};
 
+    // keyframe capture pub/sub methods
+	self.registerCaptureHandler = function (handler) {
+	    captureHandlers.push(handler);
+	    _viewer.addHandler('canvas-scroll',
+            function (evt) {
+                handler(evt);
+            });
+	    _viewer.addHandler('canvas-drag',
+            function (evt) {
+                handler(evt);
+            });
+	}
+
+	self.removeCaptureHandler = function (handler) {
+	    var idx = captureHandlers.indexOf(handler);
+	    captureHandlers.splice(idx, 1);
+	    _viewer.removeHandler('canvas-scroll',
+            function (evt) {
+                handler(evt);
+	        });
+	}
+
 	///////////////////////////////////////////////////////////////////////////
 	// DeepZoomProvider functions.
 	///////////////////////////////////////////////////////////////////////////
@@ -666,12 +693,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
                 self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
                 resetSeadragonConfig()
             });
- 		_viewer.addHandler(
- 			'canvas-scroll', function(evt) {
- 					(self.orchestrator.status === 1) ? self.player.pause() : null
- 			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
- 			    	resetSeadragonConfig()
- 	    	});
+ 		//_viewer.addHandler(
+ 		//	'canvas-scroll', function(evt) {
+ 		//			(self.orchestrator.status === 1) ? self.player.pause() : null
+ 		//	    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+ 		//	    	resetSeadragonConfig()
+ 	    //	});
  		_viewer.addHandler(
  			'canvas-drag', function(evt) {
  					(self.orchestrator.status === 1) ? self.player.pause() : null

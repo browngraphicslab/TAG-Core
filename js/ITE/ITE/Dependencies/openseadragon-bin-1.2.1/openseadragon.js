@@ -8357,15 +8357,27 @@ function onCanvasDblClick(event, first) {
    // }
 }
 
-function onCanvasDrag(event, first) {
+function onCanvasDrag(event, rescan) {
     var zIndex = this.ITE_track.trackData.zIndex;
-    var track = this.orchestrator.getTrackBehind(zIndex, event, true);
-    if (track === "NOPE") {
+
+    // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
+    if (this.orchestrator.currentManipulatedObject && (rescan !== false)) {
+        this.orchestrator.currentManipulatedObject.viewer.onCanvasDrag(event, false);
         return;
     }
-    if ((first === undefined || first) && track != null) {
-        track.viewer.onCanvasDrag(event, false);
+
+    // otherwise, check if we need to rescan
+    if ((rescan === undefined) || (rescan === true)) {
+        // if rescan necessary, perform and call movement handlers on rescanned track
+        var track = this.orchestrator.getTrackBehind(zIndex, event);
+        this.orchestrator.currentManipulatedObject = track;
+
+        // check nullity for safety reasons
+        if (track) {
+            track.viewer.onCanvasDrag(event, false);
+        }
     } else {
+        // if the "false" flag is set then the manipulation object should already be set and we have just called movement on the active manipulation object.
         var gestureSettings;
 
         if (!event.preventDefaultAction && this.viewport) {
@@ -8381,6 +8393,7 @@ function onCanvasDrag(event, first) {
                 this.viewport.applyConstraints();
             }
         }
+
         /**
          * Raised when a mouse or touch drag operation occurs on the {@link OpenSeadragon.Viewer#canvas} element.
          *
@@ -8410,62 +8423,49 @@ function onCanvasDrag(event, first) {
 }
 
 function onCanvasDragEnd(event, first) {
-    var zIndex = this.ITE_track.trackData.zIndex;
-    var track = this.orchestrator.getTrackBehind(zIndex, event, true);
+    var gestureSettings;
 
-    if (track === "NOPE") {
-        this.orchestrator.manipTrack = null;
-        // console.log("manip track is null")
-        return;
-    }
-    if ((first === undefined || first) && track != null) {
-        track.viewer.onCanvasDragEnd(event, false);
-    } else {
-        var gestureSettings;
-
-        if (!event.preventDefaultAction && this.viewport) {
-            gestureSettings = this.gestureSettingsByDeviceType(event.pointerType);
-            if (gestureSettings.flickEnabled && event.speed >= gestureSettings.flickMinSpeed) {
-                var amplitudeX = gestureSettings.flickMomentum * (event.speed * Math.cos(event.direction - (Math.PI / 180 * this.viewport.degrees))),
-                    amplitudeY = gestureSettings.flickMomentum * (event.speed * Math.sin(event.direction - (Math.PI / 180 * this.viewport.degrees))),
-                    center = this.viewport.pixelFromPoint(this.viewport.getCenter(true)),
-                    target = this.viewport.pointFromPixel(new $.Point(center.x - amplitudeX, center.y - amplitudeY));
-                if (!this.panHorizontal) {
-                    target.x = center.x;
-                }
-                if (!this.panVertical) {
-                    target.y = center.y;
-                }
-                this.viewport.panTo(target, false);
+    if (!event.preventDefaultAction && this.viewport) {
+        gestureSettings = this.gestureSettingsByDeviceType(event.pointerType);
+        if (gestureSettings.flickEnabled && event.speed >= gestureSettings.flickMinSpeed) {
+            var amplitudeX = gestureSettings.flickMomentum * (event.speed * Math.cos(event.direction - (Math.PI / 180 * this.viewport.degrees))),
+                amplitudeY = gestureSettings.flickMomentum * (event.speed * Math.sin(event.direction - (Math.PI / 180 * this.viewport.degrees))),
+                center = this.viewport.pixelFromPoint(this.viewport.getCenter(true)),
+                target = this.viewport.pointFromPixel(new $.Point(center.x - amplitudeX, center.y - amplitudeY));
+            if (!this.panHorizontal) {
+                target.x = center.x;
             }
-            this.viewport.applyConstraints();
+            if (!this.panVertical) {
+                target.y = center.y;
+            }
+            this.viewport.panTo(target, false);
         }
-        /**
-         * Raised when a mouse or touch drag operation ends on the {@link OpenSeadragon.Viewer#canvas} element.
-         *
-         * @event canvas-drag-end
-         * @memberof OpenSeadragon.Viewer
-         * @type {object}
-         * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised this event.
-         * @property {OpenSeadragon.MouseTracker} tracker - A reference to the MouseTracker which originated this event.
-         * @property {OpenSeadragon.Point} position - The position of the event relative to the tracked element.
-         * @property {Number} speed - Speed at the end of a drag gesture, in pixels per second.
-         * @property {Number} direction - Direction at the end of a drag gesture, expressed as an angle counterclockwise relative to the positive X axis (-pi to pi, in radians). Only valid if speed > 0.
-         * @property {Boolean} shift - True if the shift key was pressed during this event.
-         * @property {Object} originalEvent - The original DOM event.
-         * @property {?Object} userData - Arbitrary subscriber-defined object.
-         */
-        this.raiseEvent('canvas-drag-end', {
-            tracker: event.eventSource,
-            position: event.position,
-            speed: event.speed,
-            direction: event.direction,
-            shift: event.shift,
-            originalEvent: event.originalEvent
-        });
+        this.viewport.applyConstraints();
     }
-    this.orchestrator.manipTrack = null;
-    // console.log("manip track is null")
+    /**
+        * Raised when a mouse or touch drag operation ends on the {@link OpenSeadragon.Viewer#canvas} element.
+        *
+        * @event canvas-drag-end
+        * @memberof OpenSeadragon.Viewer
+        * @type {object}
+        * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised this event.
+        * @property {OpenSeadragon.MouseTracker} tracker - A reference to the MouseTracker which originated this event.
+        * @property {OpenSeadragon.Point} position - The position of the event relative to the tracked element.
+        * @property {Number} speed - Speed at the end of a drag gesture, in pixels per second.
+        * @property {Number} direction - Direction at the end of a drag gesture, expressed as an angle counterclockwise relative to the positive X axis (-pi to pi, in radians). Only valid if speed > 0.
+        * @property {Boolean} shift - True if the shift key was pressed during this event.
+        * @property {Object} originalEvent - The original DOM event.
+        * @property {?Object} userData - Arbitrary subscriber-defined object.
+        */
+    this.raiseEvent('canvas-drag-end', {
+        tracker: event.eventSource,
+        position: event.position,
+        speed: event.speed,
+        direction: event.direction,
+        shift: event.shift,
+        originalEvent: event.originalEvent
+    });
+    this.orchestrator.currentManipulatedObject = null;
 
 }
 

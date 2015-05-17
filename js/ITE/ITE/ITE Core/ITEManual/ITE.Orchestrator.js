@@ -10,7 +10,8 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.muteChangedEvent		= new ITE.PubSubStruct();
 	self.tourData;
 	self.player = player;
-    self.isAuthoring = isAuthoring
+	self.isAuthoring = isAuthoring;
+	self.currentManipulatedObject = null;
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
 	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
@@ -249,10 +250,12 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function playWhenAllTracksReady() {
-		self.loadedTracks++
-		if (self.loadedTracks == trackManager.length && !self.isAuthoring){
-			self.player.play()
-		}
+	    self.loadedTracks++
+	    if (self.loadedTracks == trackManager.length && !self.isAuthoring){
+	        self.player.play()
+	    } else {
+	        self.player.pause();
+	    }
 	}
 
 	/**
@@ -288,36 +291,47 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		return self.trackManager;
 	}
 
-	function getTrackBehind(zIndex, evt, isDrag) {
-	    cur = -99999999999999999999999999999999999999999999999999999999999999999999999999999;
-	    cur_track = null;
-	    for (var i = 0; i < self.trackManager.length; i++) {
-	        index = self.trackManager[i].trackData.zIndex;
-	        if (cur < index && zIndex > index && self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt) && self.trackManager[i].trackData.providerId !== "ink") {
-	            cur = index;
-	            cur_track = self.trackManager[i];
-	        } else if (zIndex === index) {
-	            if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
-	                if (isDrag && self.manipTrack != null && self.manipTrack === self.trackManager[i]) {
-	                    // console.log("dragging same track");
-	                    return null;
-	                } else if (isDrag && self.manipTrack != null && self.manipTrack !== self.trackManager[i]) {
-                        //do nothing
-	                }else{
-	                    return null;
-	                }
-	            }
+	function getTrackBehind(zIndex, evt) {
+	    manipulated = null;
+	    for (var i = zIndex - 1; i >= 0; i--) {
+	        depth = self.trackManager[i].trackData.zIndex;
+	        if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
+	            return self.trackManager[i];
 	        }
 	    }
-	    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
-	        return self.manipTrack
-	    }
-	    if (isDrag) {
-	        // console.log("dragging same track");
-	        self.manipTrack = cur_track;
-	    }
-	    return cur_track;
+	    return manipulated;
 	}
+
+	//function getTrackBehind(zIndex, evt, isDrag) {
+	//    cur = -99999999999999999999999999999999999999999999999999999999999999999999999999999;
+	//    cur_track = null;
+	//    for (var i = 0; i < self.trackManager.length; i++) {
+	//        index = self.trackManager[i].trackData.zIndex;
+	//        if (cur < index && zIndex > index && self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt) && self.trackManager[i].trackData.providerId !== "ink") {
+	//            cur = index;
+	//            cur_track = self.trackManager[i];
+	//        } else if (zIndex === index) {
+	//            if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
+	//                if (isDrag && self.manipTrack != null && self.manipTrack === self.trackManager[i]) {
+	//                    // console.log("dragging same track");
+	//                    return null;
+	//                } else if (isDrag && self.manipTrack != null && self.manipTrack !== self.trackManager[i]) {
+    //                    //do nothing
+	//                }else{
+	//                    return null;
+	//                }
+	//            }
+	//        }
+	//    }
+	//    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
+	//        return self.manipTrack
+	//    }
+	//    if (isDrag) {
+	//        // console.log("dragging same track");
+	//        self.manipTrack = cur_track;
+	//    }
+	//    return cur_track;
+	//}
 
 	self.manipTrack = null;
 	self.getTrackManager = getTrackManager;

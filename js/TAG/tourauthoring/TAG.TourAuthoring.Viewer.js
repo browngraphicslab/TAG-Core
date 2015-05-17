@@ -207,10 +207,10 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     /**
      * @returns     current keyframe state data
      */
-    function captureKeyframe(artname) {
+    function captureKeyframe(tracknum) {
         if (player) {
-            return null;
-            //return player.captureKeyframe(artname); //grab artwork container? BREAKPOINT HERE
+            //return null;
+            return player.captureKeyframe(tracknum); //grab artwork container? BREAKPOINT HERE
         }
     }
     that.captureKeyframe = captureKeyframe;

@@ -687,8 +687,12 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * Creates a keyframe based on the current state of the track
     * O/P:    none
     */ 
-    function addKeyframe(track){
+    function addKeyframe(track) {
         Orchestrator.captureKeyframe(track)
+    }
+
+    function captureKeyframe(tracknum) {
+        return Orchestrator.captureKeyframe(tracknum);
     }
 
     /**
@@ -696,7 +700,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * Changes a keyframe from the old state to the new state
     * O/P:    none
     */ 
-    function changeKeyframe(track, oldKeyFrame, newKeyFrame){
+    function changeKeyframe(track, oldKeyFrame, newKeyFrame) {
         Orchestrator.changeKeyframe(track, oldKeyFrame, newKeyFrame)
     }
 
@@ -705,7 +709,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * Deletes said keyframe
     * O/P:    none
     */ 
-    function removeKeyframe(track, keyframe){
+    function removeKeyframe(track, keyframe) {
         Orchestrator.deleteKeyframe(track, oldKeyFrame)
     }
 
@@ -714,7 +718,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * Deletes a track
     * O/P:    none
     */ 
-    function deleteTrack(track){
+    function deleteTrack(track) {
         Orchestrator.deleteTrack(track)
     }
 
