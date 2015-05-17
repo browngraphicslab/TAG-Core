@@ -141,9 +141,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 */
 	function isInImageBounds(evt) {
 
-		//If the current time is after the last keyframe of the deepzoom, we're defintely out of bounds.
-		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
-			return false;
+		//If the current time is after the last keyframe of the deepzoom, or before the first, or the asset is current trasnparent, we're defintely out of bounds.
+		var notOnScreen = 	(window.getComputedStyle(_canvasHolder[0]).opacity == 0) || 
+						(this.lastKeyframe.time < self.timeManager.getElapsedOffset()) ||
+						(this.firstKeyframe.time > self.timeManager.getElapsedOffset());
+
+		if (notOnScreen){
+			return
 		}
 
 		//Otherwise, check position of click against image bounds
