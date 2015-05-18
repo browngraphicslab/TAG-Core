@@ -206,10 +206,12 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 
 
-	function refresh(){
-		var currTime = self.timeManager.getElapsedOffset(),
-			timePercent = currTime/self.tourData.totalDuration;
-		seek(timePercent);
+	function refresh() {
+	    if (self.tourData) {
+	        var currTime = self.timeManager.getElapsedOffset(),
+                timePercent = currTime / self.tourData.totalDuration;
+	        seek(timePercent);
+	    }
 	}
 
 	function setVolume(newVolumeLevel){
