@@ -27,7 +27,8 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
-    self.loadKeyframes(trackData.keyframes);
+	self.loadKeyframes(trackData.keyframes);
+	self.type = "audio";
 
     // DOM related.
     var _audio,

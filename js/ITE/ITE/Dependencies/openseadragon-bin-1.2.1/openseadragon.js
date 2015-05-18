@@ -3157,10 +3157,15 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
          * @returns {OpenSeadragon.MouseTracker.GesturePointList}
          */
         getActivePointersListByType: function ( type ) {
-            var delegate = THIS[ this.hash ],
-                i,
-                len = delegate.activePointersLists.length,
+            var delegate = THIS[this.hash],
+                i;
+            // WIP for ITE authoring
+            if (!delegate) {
+                return;
+            }
+            var len = delegate.activePointersLists.length,
                 list;
+
 
             for ( i = 0; i < len; i++ ) {
                 if ( delegate.activePointersLists[ i ].type === type ) {
@@ -4715,7 +4720,10 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      * @inner
      */
     function onPointerUpCaptured( tracker, event ) {
-        var pointsList = tracker.getActivePointersListByType( getPointerType( event ) );
+        var pointsList = tracker.getActivePointersListByType(getPointerType(event));
+        if (!pointsList) {
+            return;
+        }
         if ( pointsList.getById( event.pointerId ) ) {
             handlePointerUp( tracker, event );
         }
@@ -4762,7 +4770,10 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      * @inner
      */
     function onPointerMoveCaptured( tracker, event ) {
-        var pointsList = tracker.getActivePointersListByType( getPointerType( event ) );
+        var pointsList = tracker.getActivePointersListByType(getPointerType(event));
+        if (!pointsList) {
+            return;
+        }
         if ( pointsList.getById( event.pointerId ) ) {
             handlePointerMove( tracker, event );
         }

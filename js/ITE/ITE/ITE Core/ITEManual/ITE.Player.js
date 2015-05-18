@@ -607,14 +607,6 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
 //     }
 // }
 
-
-
-
-
-
-
-
-
    /**
     * I/P:    none
     * Removes fullscreen and changes UI accordingly
@@ -681,17 +673,22 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
 // AUTHORING API
 ////////////////////////////////////////////////////////////////////////////
 
+    function bindCaptureHandlers(handlers) {
+        console.log("binding handlers now");
+        orchestrator.bindCaptureHandlers(handlers);
+    }
+
     /**
     * I/P:    A track to which a keyframe will be added at the current state
     * Creates a keyframe based on the current state of the track
     * O/P:    none
     */ 
     function addKeyframe(track) {
-        Orchestrator.captureKeyframe(track)
+        orchestrator.captureKeyframe(track)
     }
 
-    function captureKeyframe(tracknum) {
-        return Orchestrator.captureKeyframe(tracknum);
+    function captureKeyframe(title) {
+        return orchestrator.captureKeyframeFromTitle(title);
     }
 
     /**
@@ -700,7 +697,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * O/P:    none
     */ 
     function changeKeyframe(track, oldKeyFrame, newKeyFrame) {
-        Orchestrator.changeKeyframe(track, oldKeyFrame, newKeyFrame)
+        orchestrator.changeKeyframe(track, oldKeyFrame, newKeyFrame)
     }
 
     /**
@@ -709,7 +706,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * O/P:    none
     */ 
     function removeKeyframe(track, keyframe) {
-        Orchestrator.deleteKeyframe(track, oldKeyFrame)
+        orchestrator.deleteKeyframe(track, oldKeyFrame)
     }
 
     /**
@@ -718,7 +715,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * O/P:    none
     */ 
     function deleteTrack(track) {
-        Orchestrator.deleteTrack(track)
+        orchestrator.deleteTrack(track)
     }
 
     /**
@@ -803,4 +800,6 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     this.setControlsFade    = setControlsFade;
     this.makeControlsVisible = makeControlsVisible;
     this.refresh = refresh;
+    this.captureKeyframe = captureKeyframe;
+    this.bindCaptureHandlers = bindCaptureHandlers;
 };

@@ -28,7 +28,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
-    self.loadKeyframes(trackData.keyframes);
+	self.loadKeyframes(trackData.keyframes);
+	self.type = "image";
 
     // DOM related.
     var _image,
@@ -42,6 +43,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         //For mediamanip
         startLocation,
         pointerStartLocation;
+
+    // keyframing
+	var captureHandlers = [];
+	var captureFinishedHandlers = [];
+
+
 	// Start things up...
     initialize();
 
@@ -119,6 +126,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	self.unload = function() {
 		self.pause();
 		_UIControl.remove()
+		self.removeCaptureHandler(captureHandlers);
+		self.removeCaptureFinishedHandler(captureFinishedHandlers);
 		TweenLite.ticker.removeEventListener("tick", updateInk);
 		for(var v in self) {
 			v = null;
@@ -324,6 +333,49 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 					};
 		return state;
 	};
+
+    // keyframe capture pub/sub methods
+	self.registerCaptureHandler = function (handler) {
+	    captureHandlers = handler;
+
+        // add image equivalents
+	    //_viewer.addHandler('canvas-scroll',
+        //    function (evt) {
+        //        handler(evt);
+        //    });
+	    //_viewer.addHandler('canvas-drag',
+        //    function (evt) {
+        //        handler(evt);
+        //    });
+	}
+
+	self.registerCaptureFinishedHandler = function (handler) {
+	    captureFinishedHandlers = handler;
+	    // add image equivalents
+	    //_viewer.addHandler('canvas-drag-end',
+	    //    function (evt) {
+	    //        handler(evt);
+	    //    });
+	}
+
+	self.removeCaptureHandler = function (handler) {
+	    captureHandlers = null;
+	    // add image equivalents
+	    //_viewer.removeHandler('canvas-scroll',
+	    //    function (evt) {
+	    //        handler(evt);
+	    //    });
+	}
+
+	self.removeCaptureFinishedHandler = function (handler) {
+	    captureHandlers = null;
+	    //_viewer.removeHandler('canvas-drag-end',
+        //    function (evt) {
+        //        handler(evt);
+        //    });
+	}
+
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// ImageProvider functions.

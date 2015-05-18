@@ -27,7 +27,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
-    self.loadKeyframes(trackData.keyframes);
+	self.loadKeyframes(trackData.keyframes);
+	self.type = "dz";
 
     // DOM related.
     var _deepZoom,
@@ -45,6 +46,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	var attachedInks = [];
 	var seeked;
 	var captureHandlers = [];
+	var captureEndHandlers = [];
 
 	// Start things up...
     initialize();
@@ -151,10 +153,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			return
 		}
 
-		if (this.firstKeyframe.time > self.timeManager.getElapsedOffset()) {
-		    return false;
-		}
-
 		//Otherwise, check position of click against image bounds
 	    if (evt.clientX && evt.clientY) {
 	        var x = evt.clientX;
@@ -215,10 +213,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
-		self.pause();
+	    self.pause();
+	    self.removeCaptureHandler(captureHandlers);
+	    self.removeCaptureFinishedHandler(captureFinishedHandlers);
+	    _viewer.destroy();
 		_viewer.source = null;
 		_UIControl.remove()
-		_viewer.destroy();
 		for(var v in self) {
 			v = null;
 		}
@@ -471,7 +471,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
     // keyframe capture pub/sub methods
 	self.registerCaptureHandler = function (handler) {
-	    captureHandlers.push(handler);
+	    captureHandlers = handler;
 	    _viewer.addHandler('canvas-scroll',
             function (evt) {
                 handler(evt);
@@ -482,14 +482,35 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
             });
 	}
 
+	self.registerCaptureFinishedHandler = function (handler) {
+	    captureFinishedHandlers = handler;
+	    _viewer.addHandler('canvas-drag-end',
+            function (evt) {
+	            handler(evt);
+	        });
+	}
+
 	self.removeCaptureHandler = function (handler) {
-	    var idx = captureHandlers.indexOf(handler);
-	    captureHandlers.splice(idx, 1);
+	    captureHandlers = null;
 	    _viewer.removeHandler('canvas-scroll',
             function (evt) {
                 handler(evt);
+            });
+	    _viewer.removeHandler('canvas-drag',
+            function (evt) {
+                handler(evt);
+            });
+	}
+
+	self.removeCaptureFinishedHandler = function (handler) {
+	    captureHandlers = null;
+	    _viewer.removeHandler('canvas-drag-end',
+            function (evt) {
+	            handler(evt);
 	        });
 	}
+
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// DeepZoomProvider functions.
