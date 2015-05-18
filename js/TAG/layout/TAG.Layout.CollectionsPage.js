@@ -758,29 +758,29 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             
 
-            if (!collectionDots[collection.Identifier]){
-                //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
-                // dummyDot = $(document.createElement('div'))
-                //     .addClass('collectionDot')
-                //     .css({
-                //         "width": COLLECTION_DOT_WIDTH,
-                //         "height":  COLLECTION_DOT_WIDTH,
-                //         "border-radius": COLLECTION_DOT_WIDTH / 2,
-                //         "margin": COLLECTION_DOT_WIDTH/4,
-                //         "background-color":'white'
-                //     });
-                // collectionDotHolder.append(dummyDot);
-                // backArrowArea.css('display', 'none');
+            // if (!collectionDots[collection.Identifier]){
+            //     //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
+            //     dummyDot = $(document.createElement('div'))
+            //         .addClass('collectionDot')
+            //         .css({
+            //             "width": COLLECTION_DOT_WIDTH,
+            //             "height":  COLLECTION_DOT_WIDTH,
+            //             "border-radius": COLLECTION_DOT_WIDTH / 2,
+            //             "margin": COLLECTION_DOT_WIDTH/4,
+            //             "background-color":'white'
+            //         });
+            //     collectionDotHolder.append(dummyDot);
+            //     backArrowArea.css('display', 'none');
 
-            } else {
-                //Make collection dot white and others gray
-                for(i = 0; i < visibleCollections.length; i++) { 
-                    collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
-                }
-                collectionDots[collection.Identifier].css('background-color', 'white');
-            }                
+            // } else {
+            //     //Make collection dot white and others gray
+            //     for(i = 0; i < visibleCollections.length; i++) { 
+            //         collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
+            //     }
+            //     collectionDots[collection.Identifier].css('background-color', 'white');
+            // }                
 
-            // makeOptionsClick('collectionMenu');
+            makeOptionsClick('collectionMenu');
            
             /*
             function loadPage(index) {
