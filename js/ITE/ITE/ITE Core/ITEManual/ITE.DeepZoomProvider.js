@@ -215,7 +215,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.unload = function() {
 	    self.pause();
-	    self.removeCaptureHandler(captureHandlers);
+	    self.removeCaptureHandlers({
+	        drag: dragCaptureHandler,
+            scroll: scrollCaptureHandler
+	    });
 	    self.removeCaptureFinishedHandler(captureFinishedHandlers);
 	    _viewer.destroy();
 		_viewer.source = null;
@@ -492,7 +495,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	        });
 	}
 
-	self.removeCaptureHandler = function (handlers) {
+	self.removeCaptureHandlers = function (handlers) {
 	    scrollCaptureHandler = null;
 	    dragCaptureHandler = null;
 	    _viewer.removeHandler('canvas-scroll',
