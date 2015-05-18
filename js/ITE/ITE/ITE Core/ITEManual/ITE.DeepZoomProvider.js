@@ -470,15 +470,15 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 
     // keyframe capture pub/sub methods
-	self.registerCaptureHandler = function (handler) {
+	self.registerCaptureHandler = function (handlers) {
 	    captureHandlers = handler;
 	    _viewer.addHandler('canvas-scroll',
             function (evt) {
-                handler(evt);
+                handlers.scroll(evt);
             });
 	    _viewer.addHandler('canvas-drag',
             function (evt) {
-                handler(evt);
+                handlers.drag(evt);
             });
 	}
 
@@ -486,7 +486,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	    captureFinishedHandlers = handler;
 	    _viewer.addHandler('canvas-drag-end',
             function (evt) {
-	            handler(evt);
+	            handler.end(evt);
 	        });
 	}
 

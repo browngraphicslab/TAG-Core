@@ -1896,7 +1896,8 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         var handlers = [];
         for (var i = 0; i < dataHolder.numTracks() ; i++) {
             handlers.push({
-                handler: dataHolder.getTrackByIndex(i).captureHandler,
+                drag: dataHolder.getTrackByIndex(i).captureHandler,
+                scroll: dataHolder.getTrackByIndex(i).captureFinishedHandler,
                 end: dataHolder.getTrackByIndex(i).captureFinishedHandler,
                 trackname: dataHolder.getTrackByIndex(i).getTitle()
             });

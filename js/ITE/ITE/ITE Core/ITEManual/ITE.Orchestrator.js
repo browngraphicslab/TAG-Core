@@ -319,8 +319,8 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    for (i = 0; i < trackManager.length; i++) {
 	        var track = trackManager[i];
 	        if (track.type === "dz" || track.type === "image") {
-	            track.registerCaptureHandler(handlers[i].handler);
-	            track.registerCaptureFinishedHandler(handlers[i].end);
+	            track.registerCaptureHandler(handlers[i]);
+	            track.registerCaptureFinishedHandler(handlers[i]);
 	        }
 	    }
 	}
