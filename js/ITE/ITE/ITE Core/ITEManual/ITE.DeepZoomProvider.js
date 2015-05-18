@@ -45,8 +45,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	// miscellaneous
 	var attachedInks = [];
 	var seeked;
-	var captureHandlers = [];
-	var captureEndHandlers = [];
+	var scrollCaptureHandler = [];
+	var dragCaptureHandler = [];
+	var captureFinishedHandler = [];
 
 	// Start things up...
     initialize();
@@ -471,7 +472,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
     // keyframe capture pub/sub methods
 	self.registerCaptureHandler = function (handlers) {
-	    captureHandlers = handler;
+	    scrollCaptureHandler = handlers.scroll;
+	    dragCaptureHandler = handlers.drag;
 	    _viewer.addHandler('canvas-scroll',
             function (evt) {
                 handlers.scroll(evt);
@@ -482,31 +484,32 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
             });
 	}
 
-	self.registerCaptureFinishedHandler = function (handler) {
-	    captureFinishedHandlers = handler;
+	self.registerCaptureFinishedHandler = function (handlers) {
+	    captureFinishedHandlers = handlers.end;
 	    _viewer.addHandler('canvas-drag-end',
             function (evt) {
-	            handler.end(evt);
+	            handlers.end(evt);
 	        });
 	}
 
-	self.removeCaptureHandler = function (handler) {
-	    captureHandlers = null;
+	self.removeCaptureHandler = function (handlers) {
+	    scrollCaptureHandler = null;
+	    dragCaptureHandler = null;
 	    _viewer.removeHandler('canvas-scroll',
             function (evt) {
-                handler(evt);
+                handlers.scroll(evt);
             });
 	    _viewer.removeHandler('canvas-drag',
             function (evt) {
-                handler(evt);
+                handlers.drag(evt);
             });
 	}
 
 	self.removeCaptureFinishedHandler = function (handler) {
-	    captureHandlers = null;
+	    captureFinishedHandler = null;
 	    _viewer.removeHandler('canvas-drag-end',
             function (evt) {
-	            handler(evt);
+	            handlers.end(evt);
 	        });
 	}
 
