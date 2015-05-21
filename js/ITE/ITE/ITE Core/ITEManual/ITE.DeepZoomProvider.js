@@ -224,7 +224,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	        drag: dragCaptureHandler,
             scroll: scrollCaptureHandler
 	    });
-	    self.removeCaptureFinishedHandler(captureFinishedHandlers);
+	    //self.removeCaptureFinishedHandler(captureFinishedHandlers);
 	    _viewer.destroy();
 		_viewer.source = null;
 		_UIControl.remove()
