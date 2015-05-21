@@ -84,7 +84,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     //Comment out this conditional block to disable access to authoring for the web
     if (!IS_WINDOWS) {
-        authoringInput.prop('disabled', true);
+        //authoringInput.prop('disabled', true);
         authoringInput.css('opacity', '0.5');
         passwordSubmit.css('opacity', '0.5');
     }

@@ -288,6 +288,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             linkButton.css("float", "left");
             root.find('#mainCollection').css('width', '60%');
         }
+
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
             // IE9, Chrome, Safari, Opera
@@ -780,6 +781,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //     collectionDots[collection.Identifier].css('background-color', 'white');
             // }                
 
+            // formatting adjustments during splitscreen mode 
+            if (TAG.Util.Splitscreen.isOn()) {
+                root.find('.collection-title').css('margin-left', '12%'); //to make the spacing between dropdown arrow and collection title consistent
+                root.find('#collectionMenu').css('width','70%');
+            }
+
             makeOptionsClick('collectionMenu');
            
             /*
@@ -861,7 +868,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             var uiDocfrag = document.createDocumentFragment();
 
-            // hard coded setting for previewing purpose within the authoring mode
+            // for previewing purpose in the authoring mode so that the menu arrow position does not change
             if (!IS_WINDOWS && previewing) {
                 // reduce the size of the dropdown menu when being previewed in authoring mode
                 backArrow.css({
@@ -878,13 +885,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 backArrowArea.show();
             }
 
+            backArrowArea.addClass('arrowArea'); 
+                backArrowArea.css('display', 'inline')
+                    .off()
+                    .on('mousedown', function(j){
+                        return function () {
+                            showMenu('collectionMenu');
+                        }
+                    }(collection));
+            backArrow.attr('src', tagPath + 'images/icons/Close.svg');
+            backArrow.addClass('arrow');    
+            backArrowArea.show();
+
 
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
-                backArrowArea.addClass('arrowArea');
-                
+                //backArrowArea.addClass('arrowArea'); 
                 backArrowArea.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
