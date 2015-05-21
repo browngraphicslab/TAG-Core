@@ -2646,7 +2646,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
             function importAndRefresh(){
                 //finalizeAssociations from TAG.Util.js
-                createArtwork(true);
+                createArtwork(true, makeManagePopUp);
                 //makeManagePopUp();
             }
 
@@ -2671,7 +2671,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         prepareViewer(true);
                         loadExhibitionsView(exhibition.Identifier);
                     }, importAndRefresh);
-
+                return currCollection;
             }
 
             var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
@@ -5922,7 +5922,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Create an artwork (import), possibly more than one
      * @method createArtwork
      */
-    function createArtwork(fromImportPopUp) {
+    function createArtwork(fromImportPopUp, remakePopUp) {
         if ($('.progressBarUploads').length != 0){
             console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
             return
@@ -5938,7 +5938,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
-
+            console.log("IS ART VIEW IS:");
+            console.log(isArtView);
             //webappfileupload
             if (!IS_WINDOWS){
                 if(!total) {
@@ -5949,13 +5950,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             function incrDone() {
-                done++;
                 //webappfileupload
+                console.log("in IncrDone function");
+                /*var progressIcon = $(document.createElement('img'));
+                /progressIcon.css({
+                    'position': 'relative', 'top': '50%', 'left': '14%', 'display': 'none'
+                });
+                progressIcon.attr('src', 'images/icons/progress-circle.gif'); */
+                //while((done<total || total) && isArtView != true){ //while upload is happening from pop up - show loading image
+                    //progressIcon.style.display == 'block';
+                  //  middleLoading.show();
+                //} 
+                done++;
+
                 if (!IS_WINDOWS){
+                    
+
                     if (done >= total || !total) {
                         middleLoading.hide();
                         if(isArtView==true){ //scroll down to newly-added artwork
-                            loadArtView(toScroll.Identifier);   
+                            loadArtView(toScroll.Identifier);
+                        } else{ 
+                            console.log("Should remake pop up now!");
+                            remakePopUp();
                         }
 
                     } else {
@@ -5964,8 +5981,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else {
                     if (done >= total) {
                         if(isArtView==true){
-                            loadArtView(toScroll.Identifier);   
-                        }    //Scroll down to a newly-added artwork
+                            loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
+                        } else{
+                            remakePopUp();
+                        }    
                     } else {
                         durationHelper(done);
                     }

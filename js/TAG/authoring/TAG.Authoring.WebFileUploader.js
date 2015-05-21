@@ -87,6 +87,9 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         if (fromImportPopUp==true) {
             uploadingOverlay.append(uploadOverlayText);
             //uploadingOverlay.append(progressBar);
+            //progressBar.css({
+              //  ''
+            //});
             uploadingOverlay.hide();
             root.append(uploadingOverlay);
             console.log("SHOULD HAVE APPENDED overlay");
