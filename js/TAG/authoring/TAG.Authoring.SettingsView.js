@@ -1439,7 +1439,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 //fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput,
-                keywordSetsInputs: keywordSetsInputs
+                //keywordSetsInputs: keywordSetsInputs
             });
         }, {
             'margin-right': '3%',
