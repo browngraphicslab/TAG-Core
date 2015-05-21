@@ -89,7 +89,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             //uploadingOverlay.append(progressBar);
             uploadingOverlay.hide();
             root.append(uploadingOverlay);
-            //console.log("SHOULD HAVE APPENDED overlay");
+            console.log("SHOULD HAVE APPENDED overlay");
         }
         
     })();
