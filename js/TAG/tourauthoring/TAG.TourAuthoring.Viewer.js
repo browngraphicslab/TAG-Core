@@ -207,10 +207,10 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     /**
      * @returns     current keyframe state data
      */
-    function captureKeyframe(tracknum) {
+    function captureKeyframe(title) {
         if (player) {
             //return null;
-            return player.captureKeyframe(tracknum); //grab artwork container? BREAKPOINT HERE
+            return player.captureKeyframe(title); //grab artwork container? BREAKPOINT HERE
         }
     }
     that.captureKeyframe = captureKeyframe;
@@ -220,8 +220,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @returns     current time in player
      */
     function getCurrentTime() {
-        return 0;
-        //return player.orchestrator.getCurrentLogicalTimeOffset();
+        //return 0;
+        return player.orchestrator.getElapsedTime();
     }
     that.getCurrentTime = getCurrentTime;
     
@@ -347,7 +347,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * Load / reload tour into viewer
      * @param data      Segment portion of RIN tour
      */
-    function reloadTour(data, doNotUpdateReloading) {
+    function reloadTour(data, handlers) {
         if (player) {
             reloading = true;
             // call reload
@@ -358,6 +358,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //};
             this.unload();
             player.load(TAG.Util.RIN_TO_ITE(data));
+            player.bindCaptureHandlers(handlers);
             //player.scrubTimeline(percent);
             reloading = false;
         }

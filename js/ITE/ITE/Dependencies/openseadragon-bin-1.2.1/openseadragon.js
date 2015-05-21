@@ -3157,10 +3157,15 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
          * @returns {OpenSeadragon.MouseTracker.GesturePointList}
          */
         getActivePointersListByType: function ( type ) {
-            var delegate = THIS[ this.hash ],
-                i,
-                len = delegate.activePointersLists.length,
+            var delegate = THIS[this.hash],
+                i;
+            // WIP for ITE authoring
+            if (!delegate) {
+                return;
+            }
+            var len = delegate.activePointersLists.length,
                 list;
+
 
             for ( i = 0; i < len; i++ ) {
                 if ( delegate.activePointersLists[ i ].type === type ) {
@@ -4715,7 +4720,10 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      * @inner
      */
     function onPointerUpCaptured( tracker, event ) {
-        var pointsList = tracker.getActivePointersListByType( getPointerType( event ) );
+        var pointsList = tracker.getActivePointersListByType(getPointerType(event));
+        if (!pointsList) {
+            return;
+        }
         if ( pointsList.getById( event.pointerId ) ) {
             handlePointerUp( tracker, event );
         }
@@ -4762,7 +4770,10 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      * @inner
      */
     function onPointerMoveCaptured( tracker, event ) {
-        var pointsList = tracker.getActivePointersListByType( getPointerType( event ) );
+        var pointsList = tracker.getActivePointersListByType(getPointerType(event));
+        if (!pointsList) {
+            return;
+        }
         if ( pointsList.getById( event.pointerId ) ) {
             handlePointerMove( tracker, event );
         }
@@ -8275,13 +8286,6 @@ function onBlur(){
 }
 
 function onCanvasClick(event, first) {
-    /*var track = this.orchestrator.getTrackBehind(2, event);
-    if (track === "NOPE") {
-        return;
-    }
-    if ((first === undefined || first) && track != null) {
-        track.viewer.onCanvasClick(event, false);
-    } else {*/
         var gestureSettings;
 
         if (!event.preventDefaultAction && this.viewport && event.quick) {
@@ -8319,60 +8323,57 @@ function onCanvasClick(event, first) {
 }
 
 function onCanvasDblClick(event, first) {
-    /*var track = this.orchestrator.getTrackBehind(2, event);
-    if ((first === undefined || first) && track != null) {
-        track.viewer.onCanvasDblClick(event, false);
-    } else {*/
-        var gestureSettings;
+    var gestureSettings;
 
-        if (!event.preventDefaultAction && this.viewport) {
-            gestureSettings = this.gestureSettingsByDeviceType(event.pointerType);
-            if (gestureSettings.dblClickToZoom) {
-                this.viewport.zoomBy(
-                    event.shift ? 1.0 / this.zoomPerClick : this.zoomPerClick,
-                    this.viewport.pointFromPixel(event.position, true)
-                );
-                this.viewport.applyConstraints();
-            }
+    if (!event.preventDefaultAction && this.viewport) {
+        gestureSettings = this.gestureSettingsByDeviceType(event.pointerType);
+        if (gestureSettings.dblClickToZoom) {
+            this.viewport.zoomBy(
+                event.shift ? 1.0 / this.zoomPerClick : this.zoomPerClick,
+                this.viewport.pointFromPixel(event.position, true)
+            );
+            this.viewport.applyConstraints();
         }
-        /**
-         * Raised when a double mouse press/release or touch/remove occurs on the {@link OpenSeadragon.Viewer#canvas} element.
-         *
-         * @event canvas-double-click
-         * @memberof OpenSeadragon.Viewer
-         * @type {object}
-         * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised this event.
-         * @property {OpenSeadragon.MouseTracker} tracker - A reference to the MouseTracker which originated this event.
-         * @property {OpenSeadragon.Point} position - The position of the event relative to the tracked element.
-         * @property {Boolean} shift - True if the shift key was pressed during this event.
-         * @property {Object} originalEvent - The original DOM event.
-         * @property {?Object} userData - Arbitrary subscriber-defined object.
-         */
-        this.raiseEvent('canvas-double-click', {
-            tracker: event.eventSource,
-            position: event.position,
-            shift: event.shift,
-            originalEvent: event.originalEvent
-        });
-   // }
+    }
+    /**
+        * Raised when a double mouse press/release or touch/remove occurs on the {@link OpenSeadragon.Viewer#canvas} element.
+        *
+        * @event canvas-double-click
+        * @memberof OpenSeadragon.Viewer
+        * @type {object}
+        * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised this event.
+        * @property {OpenSeadragon.MouseTracker} tracker - A reference to the MouseTracker which originated this event.
+        * @property {OpenSeadragon.Point} position - The position of the event relative to the tracked element.
+        * @property {Boolean} shift - True if the shift key was pressed during this event.
+        * @property {Object} originalEvent - The original DOM event.
+        * @property {?Object} userData - Arbitrary subscriber-defined object.
+        */
+    this.raiseEvent('canvas-double-click', {
+        tracker: event.eventSource,
+        position: event.position,
+        shift: event.shift,
+        originalEvent: event.originalEvent
+    });
 }
 
-function onCanvasDrag(event, rescan) {
+/*Augmented function for layers fix*/
+function onCanvasDrag(event, isTopTrack) {
+    //get zindex of current dz track
     var zIndex = this.ITE_track.trackData.zIndex;
 
     // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
-    if (this.orchestrator.currentManipulatedObject && (rescan !== false)) {
+    if (this.orchestrator.currentManipulatedObject && (isTopTrack !== false)) {
         this.orchestrator.currentManipulatedObject.viewer.onCanvasDrag(event, false);
         return;
     }
 
-    // otherwise, check if we need to rescan
-    if ((rescan === undefined) || (rescan === true)) {
-        // if rescan necessary, perform and call movement handlers on rescanned track
+    // otherwise, check if this is the top dz track
+    if ((isTopTrack === undefined) || (isTopTrack === true)) {
+        //find the first dz track in the stack to have the click/touch event in bounds
         var track = this.orchestrator.getTrackBehind(zIndex, event);
         this.orchestrator.currentManipulatedObject = track;
 
-        // check nullity for safety reasons
+        //if the track exists, pass the event to that track 
         if (track) {
             track.viewer.onCanvasDrag(event, false);
         }
@@ -8465,19 +8466,13 @@ function onCanvasDragEnd(event, first) {
         shift: event.shift,
         originalEvent: event.originalEvent
     });
+
+    //for layers fix: when drag ends, set the current manipulated object to be null
     this.orchestrator.currentManipulatedObject = null;
 
 }
 
 function onCanvasRelease(event, first) {
-    /*var track = this.orchestrator.getTrackBehind(2, event);
-    if (track === "NOPE") {
-        return;
-    }
-    if ((first === undefined || first) && track != null) {
-        track.viewer.onCanvasRelease(event, false);
-        this.orchestrator.manipTrack = null;
-    } else {*/
         /**
          * Raised when the mouse button is released or touch ends on the {@link OpenSeadragon.Viewer#canvas} element.
          *
@@ -8502,13 +8497,15 @@ function onCanvasRelease(event, first) {
    // }
 }
 
-function onCanvasPinch(event, first) {
+/*Augmented function for layers fix*/
+function onCanvasPinch(event, isTopLayer) {
     var zIndex = this.ITE_track.trackData.zIndex;
+
+    //takes the first dz track in the stack that has the click/touch event in bounds
     var track = this.orchestrator.getTrackBehind(zIndex, event, false);
-    //if (track === "NOPE") {
-    //    return;
-    //}
-    if ((first === undefined || first) && track != null) {
+
+    //if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
+    if ((isTopLayer === undefined || isTopLayer) && track != null) {
         track.viewer.onCanvasPinch(event, false);
     } else {
         var gestureSettings,
@@ -8573,13 +8570,15 @@ function onCanvasPinch(event, first) {
     }
 }
 
-function onCanvasScroll(event, first) {
+/*Augmented function for layers fix*/
+function onCanvasScroll(event, isTopLayer) {
     var zIndex = this.ITE_track.trackData.zIndex;
+
+    //takes the first dz track in the stack that has the click/touch event in bounds
     var track = this.orchestrator.getTrackBehind(zIndex, event, false);
-    //if (track === "NOPE") {
-       // return;
-    //}
-    if ((first === undefined || first) && track != null) {
+
+    //if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
+    if ((isTopLayer === undefined || isTopLayer) && track != null) {
         track.viewer.onCanvasScroll(event, false);
     } else {
         var gestureSettings,

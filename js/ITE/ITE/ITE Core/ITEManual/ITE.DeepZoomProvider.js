@@ -27,7 +27,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
-    self.loadKeyframes(trackData.keyframes);
+	self.loadKeyframes(trackData.keyframes);
+	self.type = "dz";
 
     // DOM related.
     var _deepZoom,
@@ -44,7 +45,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	// miscellaneous
 	var attachedInks = [];
 	var seeked;
-	var captureHandlers = [];
+	var scrollCaptureHandler = [];
+	var dragCaptureHandler = [];
+	var captureFinishedHandler = [];
 
 	// Start things up...
     initialize();
@@ -115,7 +118,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		$("#ITEHolder").append(_UIControl);
 		_UIControl.append(_canvasHolder);
 
-		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
+	    // Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
+        // This currently relies on an augmented OSD library where we are using their touch/click handlers + our own edits to deal with the layers issue 
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: trackData.name + "holder",
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
@@ -123,8 +127,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2,
-			mouseNavEnabled 	: true,
-			orchestrator: orchestrator,
+			mouseNavEnabled 	: true, //enables their own touch/click handlers
+			orchestrator        : orchestrator, //passes in a reference to orchestrator for layers fix
             ITE_track: self
 		});
 		$(_viewer.container).css({
@@ -136,10 +140,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage"); 
 	};
+
+
     /* I/P: 	evt (a click/touch event)
-* 
-* O/P: 	bool, whether or not this event was within the image's bounds
-*/
+    * O/P:   	bool, whether or not this event was within the image's bounds
+    *This function determines if a touch/click event is within the bounds of this dz on screen
+    *Used as a component in the layers issue fix 
+    */
 	function isInImageBounds(evt) {
 
 		//If the current time is after the last keyframe of the deepzoom, or before the first, or the asset is current trasnparent, we're defintely out of bounds.
@@ -149,10 +156,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		if (notOnScreen){
 			return
-		}
-
-		if (this.firstKeyframe.time > self.timeManager.getElapsedOffset()) {
-		    return false;
 		}
 
 		//Otherwise, check position of click against image bounds
@@ -180,6 +183,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	    }
 	}
 	self.isInImageBounds = isInImageBounds;
+
 	self.raiseEvent = function (eventName, eventArgs) {
 	    _viewer.raiseEvent(eventName, eventArgs);
 	}
@@ -215,10 +219,15 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
-		self.pause();
+	    self.pause();
+	    self.removeCaptureHandlers({
+	        drag: dragCaptureHandler,
+            scroll: scrollCaptureHandler
+	    });
+	    //self.removeCaptureFinishedHandler(captureFinishedHandlers);
+	    _viewer.destroy();
 		_viewer.source = null;
 		_UIControl.remove()
-		_viewer.destroy();
 		for(var v in self) {
 			v = null;
 		}
@@ -470,26 +479,49 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 
     // keyframe capture pub/sub methods
-	self.registerCaptureHandler = function (handler) {
-	    captureHandlers.push(handler);
+	self.registerCaptureHandler = function (handlers) {
+	    scrollCaptureHandler = handlers.scroll;
+	    dragCaptureHandler = handlers.drag;
 	    _viewer.addHandler('canvas-scroll',
             function (evt) {
-                handler(evt);
+                handlers.scroll(evt);
             });
 	    _viewer.addHandler('canvas-drag',
             function (evt) {
-                handler(evt);
+                handlers.drag(evt);
             });
 	}
 
-	self.removeCaptureHandler = function (handler) {
-	    var idx = captureHandlers.indexOf(handler);
-	    captureHandlers.splice(idx, 1);
-	    _viewer.removeHandler('canvas-scroll',
+	self.registerCaptureFinishedHandler = function (handlers) {
+	    captureFinishedHandlers = handlers.end;
+	    _viewer.addHandler('canvas-drag-end',
             function (evt) {
-                handler(evt);
+	            handlers.end(evt);
 	        });
 	}
+
+	self.removeCaptureHandlers = function (handlers) {
+	    scrollCaptureHandler = null;
+	    dragCaptureHandler = null;
+	    _viewer.removeHandler('canvas-scroll',
+            function (evt) {
+                handlers.scroll(evt);
+            });
+	    _viewer.removeHandler('canvas-drag',
+            function (evt) {
+                handlers.drag(evt);
+            });
+	}
+
+	self.removeCaptureFinishedHandler = function (handler) {
+	    captureFinishedHandler = null;
+	    _viewer.removeHandler('canvas-drag-end',
+            function (evt) {
+	            handlers.end(evt);
+	        });
+	}
+
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// DeepZoomProvider functions.

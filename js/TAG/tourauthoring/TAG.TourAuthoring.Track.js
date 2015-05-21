@@ -2431,14 +2431,6 @@ function trackTitleReleased(evt) {
         if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
             var artDisplays = getInkLink().getStorageContainer().displays.getContents();
             var indisp = false;
-            //for (i = 0; i < artDisplays.length; i++) {
-            //    if (newTime <= artDisplays[i].display.getEnd() && newTime >= artDisplays[i].display.getStart()) {
-            //        indisp = true;
-            //        artDisplay = artDisplays[i].display;
-
-            //        break;
-            //    }
-            //}
             var artDisplays = getInkLink().getStorageContainer().displays.nearestNeighbors(newTime);
             for (i = 0; i < artDisplays.length; i++) { //will only be up to 2 elements in artDisplays -- the 2 closest ones
                 if (artDisplays[i] && newTime <= artDisplays[i].display.getEnd() && newTime >= artDisplays[i].display.getStart()){//check to make sure display is not null
@@ -2538,6 +2530,89 @@ function trackTitleReleased(evt) {
             }
         } 
     }
+
+    function captureHandler(evt) {
+        var origin = evt.eventSource.ITE_track;
+        var time = origin.timeManager.elapsedOffset;
+        
+        // enabled and disabled via custom event framework - see Viewer's event listener for playerReady event
+        if (my.timeline.getViewer().isKeyframingDisabled()) {
+            return;
+        }
+
+        if (my.type === TAG.TourAuthoring.TrackType.ink || my.type === TAG.TourAuthoring.TrackType.video) {
+            return;
+        }
+
+        var currentDisplay;
+
+        // find containing display
+        var minSpace = Infinity;
+        var displays = that.getStorageContainer().displays.getContents();
+        for (i = 0; i < displays.length; i++) {
+            var disp = displays[i].display;
+
+            // displays are ordered so just iterate and find first where time < last keyframe in display
+            if (time <= disp.getEnd()) {
+                currentDisplay = disp;
+                break;
+            }
+        }
+
+        // check to make sure we are adding keyframe to valid position, i.e. not in a fade
+        if (currentDisplay && time >= currentDisplay.getStart() && time <= currentDisplay.getEnd()) {
+            var time_px = my.timeManager.timeToPx(time);
+            keyframe = currentDisplay.addKeyframe(time_px, 48, true);
+
+            if (keyframe) {
+                my.timeline.allDeselected();
+                if (my.type == TAG.TourAuthoring.TrackType.audio) {
+                    my.allKeyframes.push(keyframe);
+                    that.drawLines();
+                }
+                else { // initialize keyframe and select it for further movements
+                    keyframe.loadRIN(my.timeline.captureKeyframe(my.title)); // send in my.title to specify which keyframe should be captured (works for images and artworks)
+                    keyframe.setSelected(true); // delay logging of edits
+                    my.dirtyKeyframe = true; // dirty b/c it's new
+                }
+                //my.update();
+            }
+            else {
+                var time_2dec = Math.twoDecPlaces(time);
+
+                // check that you are not making a keyframe right on top of another
+                var neighbors = currentDisplay.getKeyframes().nearestNeighbors(time_2dec, 1);
+                if (neighbors[0] && (Math.abs(neighbors[0].getTime() - time_2dec) < 0.05)) {
+                    if (neighbors[1] && (Math.abs(neighbors[1].getTime() - time_2dec) < 0.05)) {
+                        keyframe = (Math.abs(neighbors[0].getTime() - time_2dec) - Math.abs(neighbors[1].getTime() - time_2dec) > 0) ? neighbors[1] : neighbors[0];
+                    } else {
+                        keyframe = neighbors[0];
+                    }
+                } else if (neighbors[1] && (Math.abs(neighbors[1].getTime() - time_2dec) < 0.05)) {
+                    keyframe = neighbors[1];
+                }
+
+                my.timeline.allDeselected();
+                if (my.type == TAG.TourAuthoring.TrackType.audio) {
+                    my.allKeyframes.push(keyframe);
+                    that.drawLines();
+                }
+                else { // initialize keyframe and select it for further movements
+                    keyframe.loadRIN(my.timeline.captureKeyframe(my.title)); // send in my.title to specify which keyframe should be captured (works for images and artworks)
+                    keyframe.setSelected(true); // delay logging of edits
+                    my.dirtyKeyframe = true; // dirty b/c it's new
+                }
+            }
+        }
+    }
+    that.captureHandler = captureHandler;
+
+    // canvas-drag-end handler
+    function captureFinishedHandler(evt) {
+        captureHandler(evt);
+        my.update();
+    }
+    that.captureFinishedHandler = captureFinishedHandler;
 
     //Deselects any active keyframes
     function deselectKeyframe() {

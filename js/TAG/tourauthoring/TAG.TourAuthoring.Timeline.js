@@ -1719,8 +1719,8 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
      * Grabs current keyframe state from viewer
      * @returns     Keyframe data in xml
      */
-    function captureKeyframe(tracknum) {
-        return viewer.captureKeyframe(tracknum);
+    function captureKeyframe(title) {
+        return viewer.captureKeyframe(title);
     }
     that.captureKeyframe = captureKeyframe;
 
@@ -1868,7 +1868,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
     // debounce will prevent the function from being called
     // until the debounce function hasn't been called for
     // the specified number of milliseconds
-    var debounce = $.debounce(200, coreUpdate);
+    var debounce = $.debounce(1400, coreUpdate);
     function coreUpdate() {
         onUpdateNumCalls = onUpdateNumCalls + 1;
 
@@ -1883,13 +1883,26 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             capturingOff();
 
             data = toRIN();
-            viewer.reloadTour(data);
+            viewer.reloadTour(data, getAllCaptureHandlers());
             
         }
         updateVerticalScroller();
         enableDisableDrag();
         viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
         viewer.setIsReloading(false);
+    }
+
+    function getAllCaptureHandlers() {
+        var handlers = [];
+        for (var i = 0; i < dataHolder.numTracks() ; i++) {
+            handlers.push({
+                drag: dataHolder.getTrackByIndex(i).captureHandler,
+                scroll: dataHolder.getTrackByIndex(i).captureFinishedHandler,
+                end: dataHolder.getTrackByIndex(i).captureFinishedHandler,
+                trackname: dataHolder.getTrackByIndex(i).getTitle()
+            });
+        }
+        return handlers;
     }
 
     function onUpdate(noDebounce) {

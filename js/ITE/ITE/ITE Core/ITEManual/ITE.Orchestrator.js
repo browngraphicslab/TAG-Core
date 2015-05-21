@@ -206,10 +206,12 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 
 
-	function refresh(){
-		var currTime = self.timeManager.getElapsedOffset(),
-			timePercent = currTime/self.tourData.totalDuration;
-		seek(timePercent);
+	function refresh() {
+	    if (self.tourData) {
+	        var currTime = self.timeManager.getElapsedOffset(),
+                timePercent = currTime / self.tourData.totalDuration;
+	        seek(timePercent);
+	    }
 	}
 
 	function setVolume(newVolumeLevel){
@@ -223,6 +225,15 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	function captureKeyframe(track) {
 		var keyFrameData = track.getKeyframeState()
 		track.addKeyframe(keyFrameData)
+	}
+
+	function captureKeyframeFromTitle(title) {
+	    for (var i = 0; i < trackManager.length; i++) {
+	        track = trackManager[i];
+	        if (title === trackManager[i].trackData.name) {
+	            return track.getState();
+	        }
+	    }
 	}
 
 	function changeKeyframe(track, oldKeyFrame, newKeyFrame) {
@@ -302,36 +313,17 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    return manipulated;
 	}
 
-	//function getTrackBehind(zIndex, evt, isDrag) {
-	//    cur = -99999999999999999999999999999999999999999999999999999999999999999999999999999;
-	//    cur_track = null;
-	//    for (var i = 0; i < self.trackManager.length; i++) {
-	//        index = self.trackManager[i].trackData.zIndex;
-	//        if (cur < index && zIndex > index && self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt) && self.trackManager[i].trackData.providerId !== "ink") {
-	//            cur = index;
-	//            cur_track = self.trackManager[i];
-	//        } else if (zIndex === index) {
-	//            if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
-	//                if (isDrag && self.manipTrack != null && self.manipTrack === self.trackManager[i]) {
-	//                    // console.log("dragging same track");
-	//                    return null;
-	//                } else if (isDrag && self.manipTrack != null && self.manipTrack !== self.trackManager[i]) {
-    //                    //do nothing
-	//                }else{
-	//                    return null;
-	//                }
-	//            }
-	//        }
-	//    }
-	//    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
-	//        return self.manipTrack
-	//    }
-	//    if (isDrag) {
-	//        // console.log("dragging same track");
-	//        self.manipTrack = cur_track;
-	//    }
-	//    return cur_track;
-	//}
+	function bindCaptureHandlers(handlers) {
+	    var i;
+	    handlers = handlers.reverse();
+	    for (i = 0; i < trackManager.length; i++) {
+	        var track = trackManager[i];
+	        if (track.type === "dz" || track.type === "image") {
+	            track.registerCaptureHandler(handlers[i]);
+	            track.registerCaptureFinishedHandler(handlers[i]);
+	        }
+	    }
+	}
 
 	self.manipTrack = null;
 	self.getTrackManager = getTrackManager;
@@ -351,10 +343,11 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.toggleMute = toggleMute;
 	self.getElapsedTime = self.timeManager.getElapsedOffset;
 	self.getStatus = getStatus;
-	self.captureKeyframe = captureKeyframe;
+	self.captureKeyframeFromTitle = captureKeyframeFromTitle;
 	self.playWhenAllTracksReady = playWhenAllTracksReady;
 	self.initializeTracks = initializeTracks;
 	self.getTourData = getTourData;
 	self.status = status;
 	self.getTrackBehind = getTrackBehind;
+	self.bindCaptureHandlers = bindCaptureHandlers;
 }

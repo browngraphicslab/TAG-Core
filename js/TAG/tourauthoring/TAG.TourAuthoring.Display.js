@@ -2266,6 +2266,21 @@ TAG.TourAuthoring.Display = function (spec, my) {
             var data = my.timeline.captureKeyframe(my.title),
                 keyframe, command, i;
 
+            var rinData = {
+                viewport: {
+                    region: {
+                        center: {
+                            x: data.bounds.x,
+                            y: data.bounds.y
+                        },
+                        span: {
+                            x: data.bounds.width,
+                            y: data.bounds.height
+                        }
+                    }
+                }
+            }
+
             var keyspec = {
                     loc: {
                         x: Math.twoDecPlaces(my.timeManager.pxToTime(x)),
@@ -2273,7 +2288,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                     },
                     gkey: gkey,
                     display: that,
-                    data: data,
+                    data: rinData,
                     displayDiv: mainD
                 };
 
