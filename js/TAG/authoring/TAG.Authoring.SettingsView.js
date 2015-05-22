@@ -1439,7 +1439,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 //fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput,
-                keywordSetsInputs: keywordSetsInputs
+                //keywordSetsInputs: keywordSetsInputs
             });
         }, {
             'margin-right': '3%',
@@ -2646,7 +2646,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
             function importAndRefresh(){
                 //finalizeAssociations from TAG.Util.js
-                createArtwork(true);
+                createArtwork(true, makeManagePopUp);
                 //makeManagePopUp();
             }
 
@@ -5924,7 +5924,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Create an artwork (import), possibly more than one
      * @method createArtwork
      */
-    function createArtwork(fromImportPopUp) {
+    function createArtwork(fromImportPopUp, remakePopUp) {
         if ($('.progressBarUploads').length != 0){
             console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
             return
@@ -5958,6 +5958,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         middleLoading.hide();
                         if(isArtView==true){ //scroll down to newly-added artwork
                             loadArtView(toScroll.Identifier);   
+                        } else if(inCollectionsView==true){
+
+                            remakePopUp();
                         }
 
                     } else {
@@ -5965,9 +5968,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                 } else {
                     if (done >= total) {
+                        console.log("upload is ACTUALLY done");
                         if(isArtView==true){
-                            loadArtView(toScroll.Identifier);   
-                        }    //Scroll down to a newly-added artwork
+                            loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
+                        } else{
+                            remakePopUp();
+                        }    
                     } else {
                         durationHelper(done);
                     }
