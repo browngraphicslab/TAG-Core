@@ -11,7 +11,7 @@ TAG.Authoring.FileUploadTypes = {
     Map: 4
 };
 
-TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar) {
+TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp) {
 "use strict";
 
     var that = {};
@@ -73,6 +73,13 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         //uploadingOverlay.append(uploadOverlayText);
         //uploadingOverlay.append(progressBar);    
         //root.append(uploadingOverlay);
+        
+        if (fromImportPopUp==true) {
+            uploadingOverlay.append(uploadOverlayText);
+            uploadingOverlay.hide();
+            root.append(uploadingOverlay);
+            console.log("SHOULD HAVE APPENDED overlay");
+        }
         //removeOverlay();
     })();
 
@@ -344,9 +351,20 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     function addOverlay(elmt) {
         //uploadingOverlay.show();
+        if (fromImportPopUp==true) {
+            uploadingOverlay.show();
+            uploadingOverlay.css({ "display": "block" });
+            console.log("Overlay should be visible");
+        } else {
+            //updates loading UI
+            console.log("STARTING NEW UPLOAD")
 
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        settingsViewTopBar.append(progressBar)
+            var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+            settingsViewTopBar.append(progressBar)
+            //settingsViewTopBar.append(progressBarButton)
+        }
+        //var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+        //settingsViewTopBar.append(progressBar)
     }
 
     /**
@@ -354,6 +372,8 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
      */
     function removeOverlay() {
         uploadingOverlay.hide();
+        $('.progressBarUploads').remove();
+        $('.progressBarUploadsButton').remove();
     }
 
 

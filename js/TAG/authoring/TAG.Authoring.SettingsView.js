@@ -61,6 +61,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         menuLabel = root.find('#addMenuLabel'),
         dropDown = $(document.createElement('div')),
         currCollection = null,
+        uploadingOverlay = $(document.createElement('div')),
+        uploadOverlayText = $(document.createElement('label')),
+        textAppended = false,
         // = root.find('#importButton'),
 
         
@@ -222,6 +225,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         type_representation: null,
         time_spent_timer: null
     };
+
+    
+        
 
     //WEB ui
     if (!IS_WINDOWS) {
@@ -2645,7 +2651,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             
             function importAndRefresh(){
-                //finalizeAssociations from TAG.Util.js
+                uploadingOverlay.attr("id", "uploadingOverlay");
+                uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100000000000000000000000 });
+
+                uploadOverlayText.css({ 'color': 'white', 'height': '5%', 'top': '35%', 'left': '35%', 'position': 'absolute', 'font-size': '150%' });
+                uploadOverlayText.text('Uploading file(s). Please wait.');
+                if(textAppended==false){
+                   uploadingOverlay.append(uploadOverlayText); 
+                   textAppended = true;
+                }
+                
+                uploadingOverlay.hide();
+                
+                console.log("SHOULD HAVE APPENDED overlay")
+
                 createArtwork(true, makeManagePopUp);
                 //makeManagePopUp();
             }
@@ -2653,6 +2672,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function makeManagePopUp(){
                 console.log("Made Manage Pop Up");
                 currCollection= exhibition.Identifier;
+                //root.append(uploadingOverlay);
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{
@@ -5933,18 +5953,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
 
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
-
+            var progressCircCSS = {
+                'position': 'absolute',
+                'left': '40%',
+                'top': '40%',
+                'z-index': '50',
+                'height': 'auto',
+                'width': '20%',
+                'z-index': '9999999999999999999999999999'
+            };
+            
             //implementing background uploads - david
             console.log("createArtwork called")
             hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
-
+            if(inCollectionsView==true){
+                console.log("new progress circle should appear");
+                var anotherCircle = TAG.Util.showProgressCircle(root, progressCircCSS, '0px', '0px', true);
+            }
+            
             //webappfileupload
             if (!IS_WINDOWS){
                 if(!total) {
-                    if(isArtView==true){
+                    if(inArtworkView==true){
                         loadArtView();
                     }
                 }
@@ -5956,10 +5989,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (!IS_WINDOWS){
                     if (done >= total || !total) {
                         middleLoading.hide();
-                        if(isArtView==true){ //scroll down to newly-added artwork
+                        if(inArtworkView==true){ //scroll down to newly-added artwork
                             loadArtView(toScroll.Identifier);   
                         } else if(inCollectionsView==true){
-
+                            middleLoading.hide();
+                            console.log("should remove new progress circle now");
+                            TAG.Util.removeProgressCircle(anotherCircle);
+                            //uploadingOverlay.hide();
+                            //uploadingOverlay.css({"display": "none"});
                             remakePopUp();
                         }
 
@@ -5969,9 +6006,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else {
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
-                        if(isArtView==true){
+                        if(inArtworkView==true){
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
-                        } else{
+                        } else if(inCollectionsView==true){
+                            TAG.Util.removeProgressCircle(anotherCircle);
                             remakePopUp();
                         }    
                     } else {
