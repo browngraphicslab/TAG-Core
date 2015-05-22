@@ -788,6 +788,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             makeOptionsClick('collectionMenu');
+            hideCollectionMenu();
            
             /*
             function loadPage(index) {
@@ -824,7 +825,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             // To show/hide dropdown menu
-            function showMenu(id) {
+            function showCollectionMenu(id) {
                 console.log("Called Show Menu");
                 
                 var menu = document.getElementById(id);
@@ -886,11 +887,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             backArrowArea.addClass('arrowArea'); 
-                backArrowArea.css('display', 'inline')
+                backArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
-                            showMenu('collectionMenu');
+                            showCollectionMenu();
                         }
                     }(collection));
             backArrow.attr('src', tagPath + 'images/icons/Close.svg');
@@ -903,11 +904,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
                 //backArrowArea.addClass('arrowArea'); 
-                backArrowArea.css('display', 'inline')
+                backArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
-                            showMenu('collectionMenu');
+                            showCollectionMenu();
                         }
                     }(collection));
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
@@ -1134,17 +1135,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
     //To make the dropdown menu a list of clickable buttons that correspond to collections
     function makeOptionsClick(id) {
-        var menu = document.getElementById(id);
-        var menuArray = [];
+        var menu,
+            menuArray;
+
+        menu = document.getElementById(id);
+        menuArray = [];
         menu.innerHTML = "";
         
         if (menu.hasChildNodes() == false) {
             for (var i = 0; i < visibleCollections.length; i++) {
-                var para = document.createElement("p");
-                
+                var para = document.createElement("div");
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
+                menuArray[i].setAttribute("class", menu);
                 $("#" + i).addClass('secondaryFont');
                 menuArray[i].style.border = "none";
                 menuArray[i].style.marginLeft = "2%";
@@ -1154,6 +1158,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 menuArray[i].onclick = function () {
                     loadPage(this.id);
+                    showCollectionMenu();
                 }
                 para.appendChild(menuArray[i]);
                 menuArray[i].appendChild(txtNode);
@@ -1161,20 +1166,46 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
     }
 
-    // To show/hide dropdown menu
-    function showMenu(id) {
-
-        var menu = document.getElementById(id);
-
+    /**
+     * Helper function to show/hide dropdown collection menu
+     * @method showCollectionMenu
+     */
+    function showCollectionMenu() {
+        var menu,
+            arrow;
+        menu = document.getElementById('collectionMenu');
+        arrow = document.getElementById('backArrow');
         if (menu.style.display == 'block') {
             menu.style.display = 'none';
+            arrow.style.transform = 'rotate(270deg)';
+            arrow.style.webkitTransform = 'rotate(270deg)';
         } else {
             menu.style.display = 'block';
+            arrow.style.transform = 'rotate(90deg)';
+            arrow.style.webkitTransform = 'rotate(90deg)';
         }
-
     }
 
-
+    /**
+     * Hide the dropdown collection menu if the user clicks something outside the menu
+     * @method hideCollectionMenu
+     */
+    function hideCollectionMenu() {
+        var menu,
+            arrow;
+        menu = document.getElementById('collectionMenu');
+        arrow = document.getElementById('backArrow');
+        $(document).click(function(event) {
+            console.log(event.target.id);
+            if (event.target.id != 'backArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+                if (menu.style.display == 'block') {
+                    menu.style.display = 'none';
+                    arrow.style.transform = 'rotate(270deg)';
+                    arrow.style.webkitTransform = 'rotate(270deg)';
+                }
+            }
+        });
+    }
 
     /**
      * Helper function to load first collection
