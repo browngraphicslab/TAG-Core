@@ -32,7 +32,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
 
     var uploadingOverlay = $(document.createElement('div')),
-        innerProgressBar = $(document.createElement('div')); // HTML upload overlay
+        innerProgressBar = $(document.createElement('div')), // HTML upload overlay
+        progressBar,
+        progressBarButton;
     var filesFinished = 0;
     var numFiles = 100000;
     var dataReaderLoads = [];
@@ -59,11 +61,21 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     // Basic HTML initialization
     (function init() {
         var uploadOverlayText = $(document.createElement('label')),
+            progressIcon = $(document.createElement('img'));
 
-        //progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
-            progressIcon = $(document.createElement('img')),
-            progressBar = $(document.createElement('div'));
+        progressBar = $(document.createElement('div')).addClass('progressBarUploads');
+        progressBarButton = $(document.createElement('button'))
+            .addClass('progressBarUploadsButton')
+            .addClass('button')
+            .attr('type', 'button')
+            .css({
+                'padding': '5px', 'font-size': '50%', 'border-radius': '3.5px', 'position': 'relative', 'top': '-7%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '10%', "display": "inline-block", "color": "white",
+            })
+            .text("View Queue");
+
+            //progressIcon = $(document.createElement('img')),
+            //progressBar = $(document.createElement('div'));
 
 
         // Progress / spinner wheel overlay to display while uploading
