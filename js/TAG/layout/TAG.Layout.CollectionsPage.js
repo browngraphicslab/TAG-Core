@@ -1153,7 +1153,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
-                menuArray[i].setAttribute("class", menu);
+               // menuArray[i].setAttribute("class", menu);
                 $("#" + i).addClass('secondaryFont');
                 menuArray[i].style.border = "none";
                 menuArray[i].style.marginLeft = "2%";
