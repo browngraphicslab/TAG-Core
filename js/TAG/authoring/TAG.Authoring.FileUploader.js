@@ -24,7 +24,7 @@ TAG.Authoring.FileUploadTypes = {
  * @param useThumbs         Use thumbnail view mode?
  * @param progressFunc      Function to keep track of progress (e.g. for displaying a progress bar somewhere)
  */
-TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar) {
+TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp) {
     "use strict";
     var that = {};
     filters = filters || ["*"];
@@ -87,10 +87,14 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         });
 
         progressBar.append(innerProgressBar);
-        uploadingOverlay.append(uploadOverlayText);
-        uploadingOverlay.append(progressBar);
-        uploadingOverlay.hide();
-        root.append(uploadingOverlay);
+
+        if(fromImportPopUp==true){
+            uploadingOverlay.append(uploadOverlayText);
+            //uploadingOverlay.append(progressBar);
+            uploadingOverlay.hide();
+            root.append(uploadingOverlay);
+        }
+        
     })();
 
     /**
@@ -507,11 +511,15 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         //if ($("#uploadingOverlay").length === 0) {
         //    elmt.append(uploadingOverlay);
         //}
-
+        if(fromImportPopUp==true){
+            uploadingOverlay.show()
+            uploadingOverlay.css({"display": "block"});    
+        } else{
         //updates loading UI
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        settingsViewTopBar.append(progressBar)
-        console.log("STARTING NEW UPLOAD")
+            var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+            settingsViewTopBar.append(progressBar)
+            console.log("STARTING NEW UPLOAD")
+        }
     }
 
     /**
