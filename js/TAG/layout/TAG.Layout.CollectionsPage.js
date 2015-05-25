@@ -757,8 +757,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.empty();
             catalogDiv.stop();
 
-            
-
             // if (!collectionDots[collection.Identifier]){
             //     //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
             //     dummyDot = $(document.createElement('div'))
@@ -783,9 +781,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // formatting adjustments during splitscreen mode 
             if (TAG.Util.Splitscreen.isOn()) {
-                root.find('.collection-title').css('margin-left', '12%'); //to make the spacing between dropdown arrow and collection title consistent
+                root.find('.collection-title').css('margin-left', '12%'); // make spacing between dropdown arrow and collection title consistent
                 root.find('#collectionMenu').css('width','70%');
             }
+
+            // resize the size of the collection menu after exiting splitscreen mode
+            $(document).click(function(event) {
+                if (!TAG.Util.Splitscreen.isOn()) {
+                    root.find('#collectionMenu').css('width','35%');
+                }
+            });
 
             makeOptionsClick('collectionMenu');
             hideCollectionMenu();
