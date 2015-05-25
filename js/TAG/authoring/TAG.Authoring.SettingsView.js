@@ -1065,6 +1065,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bgImgInput = createButton('Change Image', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                 var url = urls[0];
                 bgImgInput.val(url);
@@ -5957,7 +5958,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'position': 'absolute',
                 'left': '40%',
                 'top': '40%',
-                'z-index': '50',
+                //'z-index': '50',
                 'height': 'auto',
                 'width': '20%',
                 'z-index': '9999999999999999999999999999'
@@ -8703,6 +8704,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function () {
                 root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
+            //commenting out to test
             !!multiple, // batch upload disabled
             fromImportPopUp
             );

@@ -76,7 +76,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         progressIcon.css({
             'position': 'relative', 'top': '50%', 'left': '14%'
         });
-        progressIcon.attr('src', 'images/icons/progress-circle.gif');
+        progressIcon.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
         progressBar.css({
             'position': 'relative', 'top': '42%', 'left': '45%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '2%'
