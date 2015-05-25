@@ -6008,6 +6008,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
                         if(inArtworkView==true){
+                            
                             TAG.Util.removeProgressCircle(anotherCircle);
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
                         } else if(inCollectionsView==true){
