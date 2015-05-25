@@ -1145,7 +1145,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         menu = document.getElementById(id);
         menuArray = [];
-        menu.innerHTML = "";
+
         
         if (menu.hasChildNodes() == false) {
             for (var i = 0; i < visibleCollections.length; i++) {
@@ -1153,7 +1153,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
-               // menuArray[i].setAttribute("class", menu);
                 $("#" + i).addClass('secondaryFont');
                 menuArray[i].style.border = "none";
                 menuArray[i].style.marginLeft = "2%";
