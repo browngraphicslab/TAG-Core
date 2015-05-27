@@ -1065,6 +1065,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bgImgInput = createButton('Change Image', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                 var url = urls[0];
                 bgImgInput.val(url);
@@ -5957,7 +5958,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'position': 'absolute',
                 'left': '40%',
                 'top': '40%',
-                'z-index': '50',
+                //'z-index': '50',
                 'height': 'auto',
                 'width': '20%',
                 'z-index': '9999999999999999999999999999'
@@ -5969,7 +5970,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
-            if(inCollectionsView==true){
+            if(inCollectionsView==true || inArtworkView ==true){
                 console.log("new progress circle should appear");
                 var anotherCircle = TAG.Util.showProgressCircle(root, progressCircCSS, '0px', '0px', true);
             }
@@ -5990,6 +5991,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (done >= total || !total) {
                         middleLoading.hide();
                         if(inArtworkView==true){ //scroll down to newly-added artwork
+                            TAG.Util.removeProgressCircle(anotherCircle);
                             loadArtView(toScroll.Identifier);   
                         } else if(inCollectionsView==true){
                             middleLoading.hide();
@@ -6007,6 +6009,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
                         if(inArtworkView==true){
+                            
+                            TAG.Util.removeProgressCircle(anotherCircle);
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
                         } else if(inCollectionsView==true){
                             TAG.Util.removeProgressCircle(anotherCircle);
@@ -8700,6 +8704,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function () {
                 root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
+            //commenting out to test
             !!multiple, // batch upload disabled
             fromImportPopUp
             );

@@ -1148,7 +1148,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         menu = document.getElementById('collectionMenu');
         menuArray = [];
-        //menu.innerHTML = "";
         
         if (!menu.hasChildNodes()) {
             for (var i = 0; i < visibleCollections.length; i++) {
