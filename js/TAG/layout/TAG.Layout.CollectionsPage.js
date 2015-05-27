@@ -792,7 +792,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
             });
 
-            makeOptionsClick('collectionMenu');
+            makeOptionsClick();
             hideCollectionMenu();
            
             /*
@@ -1138,22 +1138,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadCollection(visibleCollections[index])();
     }
 
-    //To make the dropdown menu a list of clickable buttons that correspond to collections
-    function makeOptionsClick(id) {
+    /**
+     * To make the dropdown menu a list of clickable buttons that correspond to collections
+     * @method makeOptionsClick
+     */
+    function makeOptionsClick() {
         var menu,
             menuArray;
 
-        menu = document.getElementById(id);
+        menu = document.getElementById('collectionMenu');
         menuArray = [];
-        menu.innerHTML = "";
+        //menu.innerHTML = "";
         
-        if (menu.hasChildNodes() == false) {
+        if (!menu.hasChildNodes()) {
             for (var i = 0; i < visibleCollections.length; i++) {
                 var para = document.createElement("div");
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
-                menuArray[i].setAttribute("class", menu);
                 $("#" + i).addClass('secondaryFont');
                 menuArray[i].style.border = "none";
                 menuArray[i].style.marginLeft = "2%";
@@ -1201,7 +1203,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         menu = document.getElementById('collectionMenu');
         arrow = document.getElementById('backArrow');
         $(document).click(function(event) {
-            console.log(event.target.id);
             if (event.target.id != 'backArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
                 if (menu.style.display == 'block') {
                     menu.style.display = 'none';
