@@ -119,6 +119,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         showArtworkTimeout,
         searchResultsLength,
         tileCircle,                     // loading circle for artwork tiles
+        menuCreated,
 
         //TELEMETRY
         nav_timer = new TelemetryTimer(),
@@ -327,6 +328,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
+
+        menuCreated = false;
     }
 
     /**
@@ -791,10 +794,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     root.find('#collectionMenu').css('width','35%');
                 }
             });
-
-            makeOptionsClick();
-            hideCollectionMenu();
            
+           makeOptionsClick();
+           hideCollectionMenu();
             /*
             function loadPage(index) {
                 //makeOptionsClick('collectionsMenu');
@@ -1146,10 +1148,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var menu,
             menuArray;
 
-        menu = document.getElementById('collectionMenu');
+        menu = collectionMenu;
         menuArray = [];
-        
-        if (!menu.hasChildNodes()) {
+        console.log(menuCreated);
+
+        if (!menuCreated) {
             for (var i = 0; i < visibleCollections.length; i++) {
                 var para = document.createElement("div");
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
@@ -1160,7 +1163,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 menuArray[i].style.marginLeft = "2%";
                 menuArray[i].style.fontSize = "100%";
                 menuArray[i].style.padding = ".5%";
-                menu.appendChild(para);
+                menu.append(para);
 
                 menuArray[i].onclick = function () {
                     loadPage(this.id);
@@ -1169,6 +1172,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 para.appendChild(menuArray[i]);
                 menuArray[i].appendChild(txtNode);
             }
+            menuCreated = true;
         }
     }
 
@@ -1179,17 +1183,35 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function showCollectionMenu() {
         var menu,
             arrow;
-        menu = document.getElementById('collectionMenu');
-        arrow = document.getElementById('backArrow');
-        if (menu.style.display == 'block') {
-            menu.style.display = 'none';
-            arrow.style.transform = 'rotate(270deg)';
-            arrow.style.webkitTransform = 'rotate(270deg)';
+        menu = root.find('#collectionMenu');
+        arrow = root.find('#backArrow');
+        if (menu.css('display') == 'block') {
+            menu.css({
+                'display':'none'
+            });
+            arrow.css({
+                'transform':'rotate(270deg)',
+                'webkitTransform':'rotate(270deg)'
+            });
         } else {
-            menu.style.display = 'block';
-            arrow.style.transform = 'rotate(90deg)';
-            arrow.style.webkitTransform = 'rotate(90deg)';
-        }
+            menu.css({
+                'display':'block'
+            });
+            arrow.css({
+                'transform':'rotate(90deg)',
+                'webkitTransform':'rotate(90deg)'
+            });
+        };
+
+        // if (menu.style.display == 'block') {
+        //     menu.style.display = 'none';
+        //     arrow.style.transform = 'rotate(270deg)';
+        //     arrow.style.webkitTransform = 'rotate(270deg)';
+        // } else {
+        //     menu.style.display = 'block';
+        //     arrow.style.transform = 'rotate(90deg)';
+        //     arrow.style.webkitTransform = 'rotate(90deg)';
+        // }
     }
 
     /**
@@ -1201,7 +1223,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             arrow;
         menu = document.getElementById('collectionMenu');
         arrow = document.getElementById('backArrow');
-        $(document).click(function(event) {
+        $(root).click(function(event) {
             if (event.target.id != 'backArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
                 if (menu.style.display == 'block') {
                     menu.style.display = 'none';

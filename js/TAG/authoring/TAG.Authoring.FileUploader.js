@@ -141,7 +141,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                         longFiles = [];
                         shortFiles = [];
                         var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
-                        bar.width("0%");
+                        bar.css("width", "0%");
                         if (filesObject.length === 0) {
                             removeOverlay();
                             addLocalCallback([], [])();
