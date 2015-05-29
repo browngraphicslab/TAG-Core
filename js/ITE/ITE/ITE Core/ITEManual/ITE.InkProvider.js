@@ -26,14 +26,16 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
-    self.loadKeyframes(trackData.keyframes);
+	self.loadKeyframes(trackData.keyframes);
+	self.type = "ink";
 
     // DOM related.
     var _UIControl,
    		_attachedAsset;
+    self._UIControl = _UIControl;
 
    	//Some other things to expose 
-    self._UIControl = _UIControl;
+    //self._UIControl = _UIControl;
     self._ink;
 
    	// Various animation/manipulation variables.
@@ -65,6 +67,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 			})
 	        .attr("id", trackData.assetUrl);
 		$("#ITEHolder").append(_UIControl);
+		self._UIControl = _UIControl;
 
 		// Create ink object.
 		self._ink = new tagInk(trackData.assetUrl, _UIControl[0]);
@@ -101,6 +104,9 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
+		self.pause();
+		this._ink.remove_all();
+		_UIControl.remove()
 		for(var v in self) {
 			v = null;
 		}

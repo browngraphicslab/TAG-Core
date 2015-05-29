@@ -1,5 +1,5 @@
 window.ITE = window.ITE || {};
-ITE.Orchestrator = function(player) {
+ITE.Orchestrator = function(player, isAuthoring) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
 	var	self = this;
@@ -9,12 +9,13 @@ ITE.Orchestrator = function(player) {
 	self.stateChangeEvent 		= new ITE.PubSubStruct();
 	self.muteChangedEvent		= new ITE.PubSubStruct();
 	self.tourData;
-	self.player 			= player;
+	self.player = player;
+	self.isAuthoring = isAuthoring;
+	self.currentManipulatedObject = null;
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
 	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
 	self.prevStatus			= 0; // 0 means we're not scrubbing. 1 - previously playing. 2 - previously paused.
-	self.tourData 			= null;
     self.loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
     self.loadedTracks = 0;
 
@@ -22,6 +23,7 @@ ITE.Orchestrator = function(player) {
 	self.getElapsedTime = function(){
 		return self.timeManager.getElapsedOffset();
 	};	
+
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -40,7 +42,7 @@ ITE.Orchestrator = function(player) {
 	  /**
 	    * I/P: none
 	  	* Helper function to load tour with AJAX (called below)
-	  	* Calls CreatTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
+	  	* Calls CreateTrackByProvider, initializes the tracks, load their actual sources, and if they're ready, plays them
 	    * O/P: none
 	    */
 		function loadHelper(){
@@ -88,6 +90,10 @@ ITE.Orchestrator = function(player) {
 		}
 	};
 
+	function reload(tourData) {
+	    self.tourData = tourData;
+	}
+
 	/**
 	    * I/P: none
 	  	* unloads the tour
@@ -130,7 +136,6 @@ ITE.Orchestrator = function(player) {
 		}
 		self.timeManager.startTimer();
 		self.status = 1;
-
 	}
 
 	function pause() {
@@ -152,13 +157,16 @@ ITE.Orchestrator = function(player) {
 
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
-		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+		// self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+		self.timeManager.addElapsedTime(seekTime - self.timeManager.getElapsedOffset());
+
 
 		// Inform tracks of seek.
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].seek();
 		}
 	}
+
 
 	function seek(seekPercent) {
 		self.updateZIndices()
@@ -170,9 +178,14 @@ ITE.Orchestrator = function(player) {
 			self.pause();
 		}
 
+		if (!self.tourData || !self.tourData.totalDuration) {
+		    return;
+		}
+
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
-		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+		//self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
+		self.timeManager.addElapsedTime(seekTime - self.timeManager.getElapsedOffset());
 
 		// Inform tracks of seek.
 		var nextKeyframes = new Array(trackManager.length);
@@ -191,6 +204,16 @@ ITE.Orchestrator = function(player) {
 		self.prevStatus = 0;
 	}
 
+
+
+	function refresh() {
+	    if (self.tourData) {
+	        var currTime = self.timeManager.getElapsedOffset(),
+                timePercent = currTime / self.tourData.totalDuration;
+	        seek(timePercent);
+	    }
+	}
+
 	function setVolume(newVolumeLevel){
 	    self.volumeChangedEvent.publish(newVolumeLevel)
 	}
@@ -202,6 +225,15 @@ ITE.Orchestrator = function(player) {
 	function captureKeyframe(track) {
 		var keyFrameData = track.getKeyframeState()
 		track.addKeyframe(keyFrameData)
+	}
+
+	function captureKeyframeFromTitle(title) {
+	    for (var i = 0; i < trackManager.length; i++) {
+	        track = trackManager[i];
+	        if (title === trackManager[i].trackData.name) {
+	            return track.getState();
+	        }
+	    }
 	}
 
 	function changeKeyframe(track, oldKeyFrame, newKeyFrame) {
@@ -221,7 +253,7 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function deleteTrack(track){
-		var index = trackManager[indexOf(track)]
+		var index = trackManager.indexOf(track)
 		if (index > -1) {
 		    trackManager.splice(index, 1);
 		}
@@ -229,10 +261,12 @@ ITE.Orchestrator = function(player) {
 	}
 
 	function playWhenAllTracksReady() {
-		self.loadedTracks++
-		if (self.loadedTracks == trackManager.length){
-			self.play()
-		}
+	    self.loadedTracks++
+	    if (self.loadedTracks == trackManager.length && !self.isAuthoring){
+	        self.player.play()
+	    } else {
+	        self.player.pause();
+	    }
 	}
 
 	/**
@@ -264,11 +298,35 @@ ITE.Orchestrator = function(player) {
 		}
 	}
 
-	function getTrackManger(){
-		return self.trackManger;
+	function getTrackManager(){
+		return self.trackManager;
 	}
 
-	self.getTrackManger = getTrackManger;
+	function getTrackBehind(zIndex, evt) {
+	    manipulated = null;
+	    for (var i = zIndex - 1; i >= 0; i--) {
+	        depth = self.trackManager[i].trackData.zIndex;
+	        if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
+	            return self.trackManager[i];
+	        }
+	    }
+	    return manipulated;
+	}
+
+	function bindCaptureHandlers(handlers) {
+	    var i;
+	    handlers = handlers.reverse();
+	    for (i = 0; i < trackManager.length; i++) {
+	        var track = trackManager[i];
+	        if (track.type === "dz" || track.type === "image") {
+	            track.registerCaptureHandler(handlers[i]);
+	            track.registerCaptureFinishedHandler(handlers[i]);
+	        }
+	    }
+	}
+
+	self.manipTrack = null;
+	self.getTrackManager = getTrackManager;
 	self.captureKeyframe = captureKeyframe;
 	self.changeKeyframe = changeKeyframe;
 	self.deleteKeyframe = deleteKeyframe;
@@ -280,13 +338,16 @@ ITE.Orchestrator = function(player) {
 	self.pause = pause;
 	self.scrub = scrub;
 	self.seek = seek;
+	self.refresh = refresh;
 	self.setVolume = setVolume;
 	self.toggleMute = toggleMute;
 	self.getElapsedTime = self.timeManager.getElapsedOffset;
 	self.getStatus = getStatus;
-	self.captureKeyframe = captureKeyframe;
+	self.captureKeyframeFromTitle = captureKeyframeFromTitle;
 	self.playWhenAllTracksReady = playWhenAllTracksReady;
 	self.initializeTracks = initializeTracks;
 	self.getTourData = getTourData;
 	self.status = status;
+	self.getTrackBehind = getTrackBehind;
+	self.bindCaptureHandlers = bindCaptureHandlers;
 }

@@ -18,6 +18,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileDiv = $(document.createElement("div")).attr("id", "tileDiv"),//root.find('#tileDiv'),
         displayArea = root.find("#displayArea"),
         collectionArea = root.find('#collectionArea'),
+        backButtonArea = root.find('#backButtonArea'),
+        backButton = root.find('#backButton'),
         backArrowArea = root.find('#backArrowArea'),
         backArrow = root.find('#backArrow'),
         nextArrowArea = root.find('#nextArrowArea'),
@@ -80,7 +82,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-
+        lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
@@ -117,6 +119,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         showArtworkTimeout,
         searchResultsLength,
         tileCircle,                     // loading circle for artwork tiles
+        menuCreated,
 
         //TELEMETRY
         nav_timer = new TelemetryTimer(),
@@ -133,6 +136,23 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     root.data('split',options.splitscreen);
         options.backCollection ? comingBack = true : comingBack = false;
         var cancelLoadCollection = null;
+
+    backButton.attr('src', tagPath + 'images/icons/Back.svg');
+
+    backButton.click(function () {    
+        TAG.Layout.StartPage(null, function (page) {
+            TAG.Util.UI.slidePageRight(page);
+        });
+    });
+
+    if (lockKioskMode == "true") {
+        backButton.css('display', 'none');
+    } else {
+        collectionMenu.css('left', '5%');
+        if (IS_WINDOWS) {
+            backButton.css('padding-top', '');
+        }
+    }
 
     // get things rolling
     init();
@@ -269,6 +289,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             linkButton.css("float", "left");
             root.find('#mainCollection').css('width', '60%');
         }
+
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
             // IE9, Chrome, Safari, Opera
@@ -307,6 +328,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
+
+        menuCreated = false;
     }
 
     /**
@@ -550,7 +573,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 collectionsToShow = ((collectionsToShow) ? collectionsToShow : true);
                 toShowFirst = toShowFirst || c;
                 visibleCollections.push(collections[i]);
-            }
+            } 
         }
         if (!collectionsToShow && !previewing) {
             var infoOverlay = $(document.createElement('div'));
@@ -737,31 +760,43 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.empty();
             catalogDiv.stop();
 
-            
+            // if (!collectionDots[collection.Identifier]){
+            //     //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
+            //     dummyDot = $(document.createElement('div'))
+            //         .addClass('collectionDot')
+            //         .css({
+            //             "width": COLLECTION_DOT_WIDTH,
+            //             "height":  COLLECTION_DOT_WIDTH,
+            //             "border-radius": COLLECTION_DOT_WIDTH / 2,
+            //             "margin": COLLECTION_DOT_WIDTH/4,
+            //             "background-color":'white'
+            //         });
+            //     collectionDotHolder.append(dummyDot);
+            //     backArrowArea.css('display', 'none');
 
-            if (!collectionDots[collection.Identifier]){
-                //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
-                dummyDot = $(document.createElement('div'))
-                    .addClass('collectionDot')
-                    .css({
-                        "width": COLLECTION_DOT_WIDTH,
-                        "height":  COLLECTION_DOT_WIDTH,
-                        "border-radius": COLLECTION_DOT_WIDTH / 2,
-                        "margin": COLLECTION_DOT_WIDTH/4,
-                        "background-color":'white'
-                    });
-                collectionDotHolder.append(dummyDot);
-                backArrowArea.css('display', 'none');
-            } else {
-                //Make collection dot white and others gray
-                for(i = 0; i < visibleCollections.length; i++) { 
-                    collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
+            // } else {
+            //     //Make collection dot white and others gray
+            //     for(i = 0; i < visibleCollections.length; i++) { 
+            //         collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
+            //     }
+            //     collectionDots[collection.Identifier].css('background-color', 'white');
+            // }                
+
+            // formatting adjustments during splitscreen mode 
+            if (TAG.Util.Splitscreen.isOn()) {
+                root.find('.collection-title').css('margin-left', '12%'); // make spacing between dropdown arrow and collection title consistent
+                root.find('#collectionMenu').css('width','70%');
+            }
+
+            // resize the size of the collection menu after exiting splitscreen mode
+            $(document).click(function(event) {
+                if (!TAG.Util.Splitscreen.isOn()) {
+                    root.find('#collectionMenu').css('width','35%');
                 }
-                collectionDots[collection.Identifier].css('background-color', 'white');
-            }                
-
-            makeOptionsClick('collectionMenu');
+            });
            
+           makeOptionsClick();
+           hideCollectionMenu();
             /*
             function loadPage(index) {
                 //makeOptionsClick('collectionsMenu');
@@ -797,7 +832,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             // To show/hide dropdown menu
-            function showMenu(id) {
+            function showCollectionMenu(id) {
                 console.log("Called Show Menu");
                 
                 var menu = document.getElementById(id);
@@ -840,37 +875,68 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             titleBox.css('display', 'inline');
 
             var uiDocfrag = document.createDocumentFragment();
-            // Add previous and next collection titles
-            if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
-                prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
+
+            // for previewing purpose in the authoring mode so that the menu arrow position does not change
+            if (!IS_WINDOWS && previewing) {
+                // reduce the size of the dropdown menu when being previewed in authoring mode
+                backArrow.css({
+                    'width': '40%',
+                    'height': '40%',
+                    'top': '5%'
+                });
+
+                // to make the dropdown arrow menu appear in previewing mode for unpublished collections
                 backArrowArea.addClass('arrowArea');
-                
                 backArrowArea.css('display', 'inline')
+                backArrow.attr('src', tagPath + 'images/icons/Close.svg');
+                backArrow.addClass('arrow');    
+                backArrowArea.show();
+            }
+
+            backArrowArea.addClass('arrowArea'); 
+                backArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
-                            showMenu('collectionMenu');
+                            showCollectionMenu();
+                        }
+                    }(collection));
+            backArrow.attr('src', tagPath + 'images/icons/Close.svg');
+            backArrow.addClass('arrow');    
+            backArrowArea.show();
+
+
+            // Add previous and next collection titles
+            if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
+                prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
+
+                //backArrowArea.addClass('arrowArea'); 
+                backArrow.css('display', 'inline')
+                    .off()
+                    .on('mousedown', function(j){
+                        return function () {
+                            showCollectionMenu();
                         }
                     }(collection));
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 backArrow.addClass('arrow');    
                 backArrowArea.show();
-                prevCollection.addClass('nextPrevCollection')
-                             .addClass('primaryFont')
-                             .attr({
-                               'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
-                             })
+                // prevCollection.addClass('nextPrevCollection')
+                //              .addClass('primaryFont')
+                //              .attr({
+                //                'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
+                //              })
                              //.css('left','3%')
                              //.html(prevTitle)
-                             .off()
+                             // .off()
                              //.on('mousedown', function(j){
                                 // return function () {
                                   //   prepareNextView();
                                     // loadCollection(visibleCollections[j.prevCollectionIndex])();
                                  //}
                             // }(collection));
-                collectionArea.append(prevCollection);
-                uiDocfrag.appendChild(prevCollection[0]);
+                // collectionArea.append(prevCollection);
+                // uiDocfrag.appendChild(prevCollection[0]);
                 //prevCollection.show();
                 // TAG.Telemetry.register(backArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
                 //     tobj.current_collection = currCollection.Identifier;
@@ -891,9 +957,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             // if (prevCollection){
-            //     prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
-            //     // prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
-            // }
+            //      prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
+            //      prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
+            //  }
+
             // if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
             //     nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
             //     nextArrowArea.addClass('arrowArea');
@@ -1073,16 +1140,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadCollection(visibleCollections[index])();
     }
 
-    //To make the dropdown menu a list of clickable buttons that correspond to collections
-    function makeOptionsClick(id) {
-        var menu = document.getElementById(id);
-        var menuArray = [];
-        menu.innerHTML = "";
-        
-        if (menu.hasChildNodes() == false) {
+    /**
+     * To make the dropdown menu a list of clickable buttons that correspond to collections
+     * @method makeOptionsClick
+     */
+    function makeOptionsClick() {
+        var menu,
+            menuArray;
+
+        menu = collectionMenu;
+        menuArray = [];
+        console.log(menuCreated);
+
+        if (!menuCreated) {
             for (var i = 0; i < visibleCollections.length; i++) {
-                var para = document.createElement("p");
-                
+                var para = document.createElement("div");
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
@@ -1091,31 +1163,76 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 menuArray[i].style.marginLeft = "2%";
                 menuArray[i].style.fontSize = "100%";
                 menuArray[i].style.padding = ".5%";
-                menu.appendChild(para);
+                menu.append(para);
 
                 menuArray[i].onclick = function () {
                     loadPage(this.id);
+                    showCollectionMenu();
                 }
                 para.appendChild(menuArray[i]);
                 menuArray[i].appendChild(txtNode);
             }
+            menuCreated = true;
         }
     }
 
-    // To show/hide dropdown menu
-    function showMenu(id) {
-
-        var menu = document.getElementById(id);
-
-        if (menu.style.display == 'block') {
-            menu.style.display = 'none';
+    /**
+     * Helper function to show/hide dropdown collection menu
+     * @method showCollectionMenu
+     */
+    function showCollectionMenu() {
+        var menu,
+            arrow;
+        menu = root.find('#collectionMenu');
+        arrow = root.find('#backArrow');
+        if (menu.css('display') == 'block') {
+            menu.css({
+                'display':'none'
+            });
+            arrow.css({
+                'transform':'rotate(270deg)',
+                'webkitTransform':'rotate(270deg)'
+            });
         } else {
-            menu.style.display = 'block';
-        }
+            menu.css({
+                'display':'block'
+            });
+            arrow.css({
+                'transform':'rotate(90deg)',
+                'webkitTransform':'rotate(90deg)'
+            });
+        };
 
+        // if (menu.style.display == 'block') {
+        //     menu.style.display = 'none';
+        //     arrow.style.transform = 'rotate(270deg)';
+        //     arrow.style.webkitTransform = 'rotate(270deg)';
+        // } else {
+        //     menu.style.display = 'block';
+        //     arrow.style.transform = 'rotate(90deg)';
+        //     arrow.style.webkitTransform = 'rotate(90deg)';
+        // }
     }
 
-
+    /**
+     * Hide the dropdown collection menu if the user clicks something outside the menu
+     * @method hideCollectionMenu
+     */
+    function hideCollectionMenu() {
+        var menu,
+            arrow;
+        menu = document.getElementById('collectionMenu');
+        arrow = document.getElementById('backArrow');
+        $(root).click(function(event) {
+            if (event.target.id != 'backArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+                if (menu.style.display == 'block') {
+                    menu.style.display = 'none';
+                    arrow.style.transform = 'rotate(270deg)';
+                    arrow.style.webkitTransform = 'rotate(270deg)';
+                }
+            }
+        });
+    }
 
     /**
      * Helper function to load first collection
@@ -2261,7 +2378,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
                 //console.log(tobj.time_spent);
                 //timer reset in showArtwork
-                console.log("ARTWORK PREVIEWER WAS CLOSED");
+                // console.log("ARTWORK PREVIEWER WAS CLOSED");
             });
             
         };
@@ -2663,7 +2780,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
                         //console.log(tobj.time_spent);
                         //timer reset in showArtwork
-                        console.log("CLICKED ON THE ARTWORK TILE");
+                        // console.log("CLICKED ON THE ARTWORK TILE");
                     });
 
                 });

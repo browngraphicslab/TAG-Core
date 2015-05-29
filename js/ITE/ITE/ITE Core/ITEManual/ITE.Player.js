@@ -1,8 +1,8 @@
 window.ITE = window.ITE || {};
 
-ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains the orchestrator, etc
+ITE.Player = function (options, tourPlayer, container) { //acts as ITE object that contains the orchestrator, etc
    var totalTourDuration;
-   var  orchestrator            = new ITE.Orchestrator(this),
+   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring),
         self = this,
         playerConfiguration = {
                 attachVolume:               true,
@@ -59,8 +59,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     var onLoadPlayerEvent = new ITE.PubSubStruct();
     this.onTourEndEvent = new ITE.PubSubStruct();
 
-
-    this.playerParent = $("#tagRoot");
+    this.playerParent = container ? container : $("#tagRoot");
 
     //Start things up
     createITEPlayer(this.playerParent, options)
@@ -73,6 +72,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
         this.playerConfiguration    = playerConfiguration; 
         this.playerParent           = playerParent;
+        this.isAuthoring            = options.isAuthoring;
         self.currentVolumeLevel     = playerConfiguration.setInitVolume; // Value between 0 and 1
         self.previousVolumeLevel    = self.currentVolumeLevel;
 
@@ -262,9 +262,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
             if (isLooped)
             {
                 orchestrator.seek(0)
-            } 
-            else 
-            {
+            } else if (!isAuthoring) {
                 tourPlayer.goBack();
                 isUnloaded = true;
             }
@@ -312,7 +310,9 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         var timeString = makeTimeString(sec) + " / "+makeTimeString(totalTourDuration);
         progressIndicator.append(timeString);
         updateProgressBar(sec);
-        tourOver(sec);
+        if (!isAuthoring) {
+            tourOver(sec);
+        }   
         if (!isUnloaded){
             window.setTimeout(function(){
                 updateProgressIndicator(orchestrator.getElapsedTime());
@@ -367,7 +367,13 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         bottomContainer.mouseenter(function () {
             makeControlsVisible();
         })
+        
+        orchestrator.refresh();
     };
+
+    function refresh() {
+        orchestrator.refresh();
+    }
 
     function unload() {
         orchestrator.unload();
@@ -382,6 +388,10 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     function captureKeyframe(trackID) {
         return this.orchestrator.captureKeyframe(trackID);
     };
+
+    function getTime() {
+        return orchestrator.getElapsedTime();
+    }
 
 
 /*
@@ -480,6 +490,10 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
         }
     };
 
+    function scrubTimeline(pct) {
+        orchestrator.seek(pct);
+    }
+
     /*
     * I/P:   none
     * Seeks tour to a specfied spot, then continue playing (if previously playing).
@@ -573,7 +587,25 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     function enableFullScreen() {
         isFullScreen = true;
         fullScreenButton.css("opacity" , "1")
+        // requestFullScreen($('#ITE')[0])
     };
+
+//TODO: implement this more fully at a later date-- we will need to:
+    //a) reset the canvas size
+    //b) reparse the keyframes (they're currently parsed based on the size of the ITE holder when the tour is loaded, so we'd have to reparse them to get the new correct sizes.)
+// function requestFullScreen(element) {
+//     // Supports most browsers and their versions.
+//     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+//     if (requestMethod) { // Native full screen.
+//             console.log("requesting full screen")
+//         requestMethod.call(element);
+//     } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+//         var wscript = new ActiveXObject("WScript.Shell");
+//         if (wscript !== null) {
+//             wscript.SendKeys("{F11}");
+//         }
+//     }
+// }
 
    /**
     * I/P:    none
@@ -641,13 +673,22 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
 // AUTHORING API
 ////////////////////////////////////////////////////////////////////////////
 
+    function bindCaptureHandlers(handlers) {
+        console.log("binding handlers now");
+        orchestrator.bindCaptureHandlers(handlers);
+    }
+
     /**
     * I/P:    A track to which a keyframe will be added at the current state
     * Creates a keyframe based on the current state of the track
     * O/P:    none
     */ 
-    function addKeyframe(track){
-        Orchestrator.captureKeyframe(track)
+    function addKeyframe(track) {
+        orchestrator.captureKeyframe(track)
+    }
+
+    function captureKeyframe(title) {
+        return orchestrator.captureKeyframeFromTitle(title);
     }
 
     /**
@@ -655,8 +696,8 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     * Changes a keyframe from the old state to the new state
     * O/P:    none
     */ 
-    function changeKeyframe(track, oldKeyFrame, newKeyFrame){
-        Orchestrator.changeKeyframe(track, oldKeyFrame, newKeyFrame)
+    function changeKeyframe(track, oldKeyFrame, newKeyFrame) {
+        orchestrator.changeKeyframe(track, oldKeyFrame, newKeyFrame)
     }
 
     /**
@@ -664,8 +705,8 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     * Deletes said keyframe
     * O/P:    none
     */ 
-    function removeKeyframe(track, keyframe){
-        Orchestrator.deleteKeyframe(track, oldKeyFrame)
+    function removeKeyframe(track, keyframe) {
+        orchestrator.deleteKeyframe(track, oldKeyFrame)
     }
 
     /**
@@ -673,8 +714,8 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     * Deletes a track
     * O/P:    none
     */ 
-    function deleteTrack(track){
-        Orchestrator.deleteTrack(track)
+    function deleteTrack(track) {
+        orchestrator.deleteTrack(track)
     }
 
     /**
@@ -714,7 +755,7 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     * O/P:    trackManager of the orchestrator (list of tracks)
     */ 
     function getTracks(){
-        return Orchestrator.getTrackManager()
+        return this.Orchestrator.getTrackManager()
     }
 
     /**
@@ -738,10 +779,12 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     this.deleteTrack        = deleteTrack;
     this.changeTrackZIndex  = changeTrackZIndex;
     this.getRoot            = getRoot;
+    this.getTime            = getTime;
     this.togglePlayPause    = togglePlayPause;
     this.play               = play;
     this.pause              = pause;
     this.seek               = seek;
+    this.scrubTimeline      = scrubTimeline;
     this.load               = load;
     this.unload             = unload;
     this.captureKeyFrame    = captureKeyframe;
@@ -755,5 +798,8 @@ ITE.Player = function (options, tourPlayer) { //acts as ITE object that contains
     this.isFullScreen       = isFullScreen;
     this.updateProgressIndicator = updateProgressIndicator;
     this.setControlsFade    = setControlsFade;
-    this.makeControlsVisible= makeControlsVisible;
+    this.makeControlsVisible = makeControlsVisible;
+    this.refresh = refresh;
+    this.captureKeyframe = captureKeyframe;
+    this.bindCaptureHandlers = bindCaptureHandlers;
 };

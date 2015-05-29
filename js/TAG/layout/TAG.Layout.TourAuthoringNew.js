@@ -13,6 +13,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     var root = $(document.createElement('div')),
         resizableArea = $(document.createElement('div')),
         originalHeightSize = window.innerHeight * 0.3,
+        ITE,
         timeManager,
         undoManager,
         viewer,
@@ -202,14 +203,18 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         timeManager = TAG.TourAuthoring.TimeManager();
         undoManager = TAG.TourAuthoring.UndoManager();
         viewer = TAG.TourAuthoring.Viewer({
-            timeManager: timeManager
+            timeManager: timeManager,
+            tourobj: tourobj
         });
+        var tour = viewer.getTour();
+        ITE = viewer.getPlayer();
         timeline = TAG.TourAuthoring.Timeline({
             timeManager: timeManager,
             undoManager: undoManager,
-            dataHolder: dataHolder,
             viewer: viewer,
-            root: root
+            root: root,
+            ITE: ITE,
+            dataHolder: dataHolder
         });
         viewer.setTimeline(timeline);
         playbackControls = TAG.TourAuthoring.PlaybackControl({
@@ -251,18 +256,27 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         root.append(uiDocfrag);
 
         // Load tour from the rin object
-        var rin = JSON.parse(unescape(tourobj.Metadata.Content));   
-        if (jQuery.isEmptyObject(rin)) {
-            rin = timeline.toRIN();
+        var tourdata = JSON.parse(unescape(tourobj.Metadata.Content));   
+        if (jQuery.isEmptyObject(tourdata)) {
+            tourdata = timeline.toRIN();
         }
 
-        viewer.initializeTour(rin);
-        timeline.loadRIN(rin, onLoadCallback);
+        viewer.initializeTour(tourdata);
+        //timeline.loadTour(tour, onLoadCallback);
+        timeline.loadRIN(tourdata, onLoadCallback);
         timeline.updateVerticalScroller();
         //timeline.setLoaded();
     })();
 
     this.getRoot = function() {
         return root;
+    };
+
+    this.getITE = function () {
+        return ITE;
+    };
+
+    this.getViewer = function () {
+        return viewer;
     };
 };

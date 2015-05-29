@@ -89,11 +89,13 @@ Worktop.Database = function (mainID) {
         postArtwork: postArtwork,
         postHotspot: postHotspot,
         postIframeAssocMedia: postIframeAssocMedia,
+        postTextAssocMedia: postTextAssocMedia,
         postMap: postMap,
         postMain: postMain,
         addSortOptions: addSortOptions,
 
         deleteDoq: deleteDoq,
+        batchDeleteDoq: batchDeleteDoq,
         deleteLinq: deleteLinq,
     };
 
@@ -294,6 +296,18 @@ Worktop.Database = function (mainID) {
             true);
     }
 
+    function postTextAssocMedia(options, handlers, throwOnWarn) {
+        options = options || {};
+        var sortedOptions = checkKeys(options, _static.params.hotspot, "CreateTextAssocMedia", throwOnWarn);
+        sortedOptions.urlOptions.ReturnDoq = "true";
+        postRequest(
+            'CreateTextAssocMedia',
+            handlers,
+            sortedOptions.urlOptions,
+            sortedOptions.bodyOptions,
+            true);
+    }
+
     function postMain(options, handlers, throwOnWarn) {
         options = options || {};
         var sortedOptions = checkKeys(options, _static.params.main, "ChangeMain", throwOnWarn);
@@ -387,6 +401,16 @@ Worktop.Database = function (mainID) {
             true);
     }
 
+    function batchDeleteDoq(guids, handlers) {
+        console.log("GuidList: " + guids)
+        batchDeleteRequest(
+            'Doq',
+            handlers,
+            {isBatch: true},
+            {GuidList: guids},
+            true);
+    }
+
     function deleteLinq(guid, handlers) {
         deleteRequest(
             'Linq',
@@ -471,7 +495,12 @@ Worktop.Database = function (mainID) {
         handlers = handlers || {};
         urlOptions = urlOptions || {};
         urlOptions.Token = LADS.Auth.getToken();
-        urlOptions.Count = safeCache('doqs', urlOptions.Guid).get().Metadata.Count || 0;
+
+        if (safeCache('doqs', urlOptions.Guid).get()) {
+            urlOptions.Count = safeCache('doqs', urlOptions.Guid).get().Metadata.Count || 0;
+        } else {
+            urlOptions.Count = 1;
+        }
 
         var ajaxHandlers = {
             200: handlers.success,
@@ -480,6 +509,26 @@ Worktop.Database = function (mainID) {
             error: handlers.error,
         }
         _static.asyncRequest('DELETE', type, urlOptions, null, ajaxHandlers, secure);
+    }
+
+
+    function batchDeleteRequest(type, handlers, urlOptions, bodyOptions, secure, cacheCount) {
+        handlers = handlers || {};
+        urlOptions = urlOptions || {};
+        urlOptions.Token = LADS.Auth.getToken();
+        var cacheLoc = safeCache('doqs', urlOptions.Guid).get();
+        if (cacheCount !== 0) {
+            cacheCount = cacheCount || (cacheLoc && cacheLoc.Metadata && safeCache('doqs', urlOptions.Guid).get().Metadata.Count) || 0;
+        }
+        urlOptions.Count = cacheCount;
+
+        var ajaxHandlers = {
+            200: handlers.success,
+            401: handleAuth(handlers.unauth),
+            409: handlers.conflict,
+            error: handlers.error,
+        }
+        _static.asyncRequest('DELETE', type, urlOptions, bodyOptions, ajaxHandlers, secure);
     }
 
     /*

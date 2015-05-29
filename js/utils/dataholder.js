@@ -170,6 +170,10 @@ DataHolder.prototype.numTracks = function () {
     return this._trackArray.length;
 };
 
+DataHolder.prototype.getTrackByIndex = function (index) {
+    return this._trackArray[index].track;
+}
+
 DataHolder.prototype.findTrackByTitle = function (title) {
     var i;
     for (i = 0; i < this._trackArray.length; i++) {

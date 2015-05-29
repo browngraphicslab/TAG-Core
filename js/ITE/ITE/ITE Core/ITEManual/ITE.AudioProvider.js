@@ -27,12 +27,14 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
-    self.loadKeyframes(trackData.keyframes);
+	self.loadKeyframes(trackData.keyframes);
+	self.type = "audio";
 
     // DOM related.
     var _audio,
     	_UIControl,
     	_audioControls;
+    self._UIControl = _UIControl;
 
 	// Start things up...
     initialize();
@@ -57,6 +59,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			.addClass("UIControl")
 			.append(_audio);
 		$("#ITEHolder").append(_UIControl);
+		self._UIControl = _UIControl;
 
 		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
@@ -114,6 +117,8 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
+		self.pause();
+		_UIControl.remove()
 		for(var v in self) {
 			v = null;
 		}
@@ -125,6 +130,8 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.play = function(endKeyframe) {
+		_audioControls.pause();
+		
 		if (self.status === 3) {
 			return;
 		}
@@ -138,6 +145,11 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			self.savedState = null;
 		} else {
 			startTime = self.timeManager.getElapsedOffset();
+		}
+
+		//If the current time is after the last keyframe of the deepzoom, don't do anything
+		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
+			return;
 		}
 
 		// If the track hasn't started yet, set a trigger.

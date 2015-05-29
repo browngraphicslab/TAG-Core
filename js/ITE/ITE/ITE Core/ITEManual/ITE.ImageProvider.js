@@ -28,11 +28,13 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
-    self.loadKeyframes(trackData.keyframes);
+	self.loadKeyframes(trackData.keyframes);
+	self.type = "image";
 
     // DOM related.
     var _image,
     	_UIControl;
+    self._UIControl = _UIControl;
 
     // Various animation/manipulation variables.
 	self.interactionAnimation;
@@ -41,6 +43,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         //For mediamanip
         startLocation,
         pointerStartLocation;
+
+    // keyframing
+	var captureHandlers = [];
+	var captureFinishedHandlers = [];
+
+
 	// Start things up...
     initialize();
 
@@ -64,6 +72,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			.append(_image)
 			.css("zIndex", -1)
 		$("#ITEHolder").append(_UIControl);
+		self._UIControl = _UIControl;
 
 		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
@@ -115,6 +124,10 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
+		self.pause();
+		_UIControl.remove()
+		self.removeCaptureHandler(captureHandlers);
+		self.removeCaptureFinishedHandler(captureFinishedHandlers);
 		TweenLite.ticker.removeEventListener("tick", updateInk);
 		for(var v in self) {
 			v = null;
@@ -301,7 +314,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Creates a linearly interpolated state between start and end keyframes.
 	 * O/P: 	state : 			Object holding lerped keyframe's state, as used in animation.
 	 */
-	self.lerpState = function(startKeyframe, endKeyframe, interp) {
+	self.lerpState = function (startKeyframe, endKeyframe, interp) {
 		if (!endKeyframe) {
 			return self.getKeyframeState(startKeyframe);
 		}
@@ -320,6 +333,49 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 					};
 		return state;
 	};
+
+    // keyframe capture pub/sub methods
+	self.registerCaptureHandler = function (handler) {
+	    captureHandlers = handler;
+
+        // add image equivalents
+	    //_viewer.addHandler('canvas-scroll',
+        //    function (evt) {
+        //        handler(evt);
+        //    });
+	    //_viewer.addHandler('canvas-drag',
+        //    function (evt) {
+        //        handler(evt);
+        //    });
+	}
+
+	self.registerCaptureFinishedHandler = function (handler) {
+	    captureFinishedHandlers = handler;
+	    // add image equivalents
+	    //_viewer.addHandler('canvas-drag-end',
+	    //    function (evt) {
+	    //        handler(evt);
+	    //    });
+	}
+
+	self.removeCaptureHandler = function (handler) {
+	    captureHandlers = null;
+	    // add image equivalents
+	    //_viewer.removeHandler('canvas-scroll',
+	    //    function (evt) {
+	    //        handler(evt);
+	    //    });
+	}
+
+	self.removeCaptureFinishedHandler = function (handler) {
+	    captureHandlers = null;
+	    //_viewer.removeHandler('canvas-drag-end',
+        //    function (evt) {
+        //        handler(evt);
+        //    });
+	}
+
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// ImageProvider functions.
@@ -402,6 +458,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	}
 
     	if (IS_WINDOWS) {
+
+    	    if (res.scroll != 1) {
+    	        mediaScroll(res.scale, res.pivot, true);//True is from touch
+    	    }
+
     	    //Target location is just current location plus translation
 
     	    /*if (res.grEvent.type === 'manipulationstarted') {
@@ -436,7 +497,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	         top: newTop,
     	         left: newLeft
     	     })
-           // console.log(res.pivot.x + _UIControl.position().left)
 
     	} else {
 
@@ -465,10 +525,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     /*
      * I/P: 	scale : 	Scale factor.	
      *			pivot : 	Location of event (x,y).
+     *          isFromTouch:    boolean of whether the scroll is from touch or mouse event
      * Scroll/pinch-zoom handler for makeManipulatable on the DeepZoom image.
      * O/P: 	none
      */
-    function mediaScroll(scale, pivot) {
+    function mediaScroll(scale, pivot, isFromTouch) {
     	var t    	= _UIControl.position().top,
             l    	= _UIControl.position().left,
             w   	= _UIControl.width(),
@@ -496,7 +557,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         newX 	= l*scale + pivot.x*(1-scale);
        	newY 	= t*scale + pivot.y*(1-scale); 
 
-       	// Animate _UIControl to self new position.
+       	if (isFromTouch || !IS_WINDOWS){
+       	    newX = l * scale + (pivot.x + l)* (1 - scale);
+       	    newY = t * scale + (pivot.y + t) * (1 - scale);
+       	}
+
+        // Animate _UIControl to self new position.
         self.interactionAnimation && self.interactionAnimation.kill();
         self.interactionAnimation = TweenLite.to(_UIControl, .2, {
         	top: newY,

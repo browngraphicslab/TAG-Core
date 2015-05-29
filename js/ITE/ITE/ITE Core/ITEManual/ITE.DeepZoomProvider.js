@@ -27,7 +27,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
-    self.loadKeyframes(trackData.keyframes);
+	self.loadKeyframes(trackData.keyframes);
+	self.type = "dz";
 
     // DOM related.
     var _deepZoom,
@@ -36,13 +37,17 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     			//TODO: there has GOT to be a better way to do this
     	_canvasHolder,
     	_viewer;
-    
+        self._UIControl = _UIControl;
+
     // Various animation/manipulation variables.
 	self.animationCallback;
 
 	// miscellaneous
 	var attachedInks = [];
 	var seeked;
+	var scrollCaptureHandler = [];
+	var dragCaptureHandler = [];
+	var captureFinishedHandler = [];
 
 	// Start things up...
     initialize();
@@ -108,12 +113,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         _UIControl = $(document.createElement("div"))
 
 		// $("#ITEHolder").append(_UIControl);
-        $("#ITEHolder").append(_proxy);
-        _proxy.append(_proxy2);
+        // $("#ITEHolder").append(_proxy);
+        // _proxy.append(_proxy2);
 		$("#ITEHolder").append(_UIControl);
 		_UIControl.append(_canvasHolder);
 
-		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
+	    // Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
+        // This currently relies on an augmented OSD library where we are using their touch/click handlers + our own edits to deal with the layers issue 
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: trackData.name + "holder",
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
@@ -121,7 +127,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2,
-			mouseNavEnabled 	: false
+			mouseNavEnabled 	: true, //enables their own touch/click handlers
+			orchestrator        : orchestrator, //passes in a reference to orchestrator for layers fix
+            ITE_track: self
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
@@ -132,6 +140,54 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage"); 
 	};
+
+
+    /* I/P: 	evt (a click/touch event)
+    * O/P:   	bool, whether or not this event was within the image's bounds
+    *This function determines if a touch/click event is within the bounds of this dz on screen
+    *Used as a component in the layers issue fix 
+    */
+	function isInImageBounds(evt) {
+
+		//If the current time is after the last keyframe of the deepzoom, or before the first, or the asset is current trasnparent, we're defintely out of bounds.
+		var notOnScreen = 	(window.getComputedStyle(_canvasHolder[0]).opacity == 0) || 
+						(this.lastKeyframe.time < self.timeManager.getElapsedOffset()) ||
+						(this.firstKeyframe.time > self.timeManager.getElapsedOffset());
+
+		if (notOnScreen){
+			return
+		}
+
+		//Otherwise, check position of click against image bounds
+	    if (evt.clientX && evt.clientY) {
+	        var x = evt.clientX;
+	        var y = evt.clientY;
+	    }
+	    else if (evt.center) {
+	        var x = evt.center.x;
+	        var y = evt.center.y;
+	    }
+	    else {
+	        var x = evt.position.x
+	        var y = evt.position.y
+	    }
+	    var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
+	    if (
+			(clickP.x < 1) &&
+			(clickP.x > 0) &&
+			(clickP.y < _viewer.viewport.contentAspectY) &&
+			(clickP.y > 0)) {
+	        return true
+	    } else {
+	        return false
+	    }
+	}
+	self.isInImageBounds = isInImageBounds;
+
+	self.raiseEvent = function (eventName, eventArgs) {
+	    _viewer.raiseEvent(eventName, eventArgs);
+	}
+	self.viewer = _viewer;
 
 	/*
 	 * I/P: 	none
@@ -147,7 +203,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			provider.setState(provider.getKeyframeState(provider.firstKeyframe));	
 			self.status = 2; 	
 			// Attach handlers.
-			attachHandlers1();
+			attachHandlers();
 			_viewer.raiseEvent("animation");//This is just to get the proxy in the right place.  TODO: make less janky.
 		
 			//Tell orchestrator to play (if other tracks are ready)
@@ -163,10 +219,19 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.unload = function() {
-		_viewer.destroy();
+	    self.pause();
+	    self.removeCaptureHandlers({
+	        drag: dragCaptureHandler,
+            scroll: scrollCaptureHandler
+	    });
+	    //self.removeCaptureFinishedHandler(captureFinishedHandlers);
+	    _viewer.destroy();
+		_viewer.source = null;
+		_UIControl.remove()
 		for(var v in self) {
 			v = null;
 		}
+
 	};
 
 	/*
@@ -179,6 +244,11 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
+
+		//If the current time is after the last keyframe of the deepzoom, don't do anything
+		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
+			return;
+		}
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;
@@ -287,9 +357,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.animate = function(duration, state) {
-		self.opacity = 1;
 		self.imageHasBeenManipulated = false;
-
+		//self.opacity = 1;
 		setSeadragonConfig(duration);
 		_viewer.viewport.fitBounds(state.bounds, false);
 
@@ -301,7 +370,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.animation = TweenLite.to(
 			// What object to animate.
-			_canvasHolder, 
+			_canvasHolder,
 			// Duration of animation.
 			duration, 
 			// Define animation:
@@ -328,6 +397,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		self.savedState = {
 			time	: self.timeManager.getElapsedOffset(),
 			bounds 	: _viewer.viewport.getBounds(true),
+			opacity : window.getComputedStyle(_canvasHolder[0]).opacity
 		};	
 		return self.savedState;
 	};
@@ -351,7 +421,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// _viewer.viewport.zoomSpring.animationTime 		= .000001;
 		// _viewer.viewport.fitBounds(state.bounds, false);  // End of old janky fix.
 
-		_canvasHolder.css("opacity", state.opacity)
+	    _canvasHolder.css("opacity", state.opacity)
+	    //console.log("setting opacity to " + state.opacity + " : " + self.trackData.name)
+        setZIndex(self.zIndex)
 		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
         _viewer.viewport.zoomBy(1.01, new OpenSeadragon.Point(0,0), true);
@@ -406,6 +478,51 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		return state;
 	};
 
+    // keyframe capture pub/sub methods
+	self.registerCaptureHandler = function (handlers) {
+	    scrollCaptureHandler = handlers.scroll;
+	    dragCaptureHandler = handlers.drag;
+	    _viewer.addHandler('canvas-scroll',
+            function (evt) {
+                handlers.scroll(evt);
+            });
+	    _viewer.addHandler('canvas-drag',
+            function (evt) {
+                handlers.drag(evt);
+            });
+	}
+
+	self.registerCaptureFinishedHandler = function (handlers) {
+	    captureFinishedHandlers = handlers.end;
+	    _viewer.addHandler('canvas-drag-end',
+            function (evt) {
+	            handlers.end(evt);
+	        });
+	}
+
+	self.removeCaptureHandlers = function (handlers) {
+	    scrollCaptureHandler = null;
+	    dragCaptureHandler = null;
+	    _viewer.removeHandler('canvas-scroll',
+            function (evt) {
+                handlers.scroll(evt);
+            });
+	    _viewer.removeHandler('canvas-drag',
+            function (evt) {
+                handlers.drag(evt);
+            });
+	}
+
+	self.removeCaptureFinishedHandler = function (handler) {
+	    captureFinishedHandler = null;
+	    _viewer.removeHandler('canvas-drag-end',
+            function (evt) {
+	            handlers.end(evt);
+	        });
+	}
+
+
+
 	///////////////////////////////////////////////////////////////////////////
 	// DeepZoomProvider functions.
 	///////////////////////////////////////////////////////////////////////////
@@ -442,7 +559,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function addInk(inkTrack) {
 		if (!_viewer.viewport){
-			console.log("failed to load ink as DZ is not ready... trying again" );
+			// console.log("failed to load ink as DZ is not ready... trying again" );
 			setTimeout(function(){
 				addInk(inkTrack) } , 100);
 		} else {
@@ -606,13 +723,18 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 
 	function attachHandlers() {
-
- 		_viewer.addHandler(
- 			'canvas-scroll', function(evt) {
- 					(self.orchestrator.status === 1) ? self.player.pause() : null
- 			    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
- 			    	resetSeadragonConfig()
- 	    	});
+	    _viewer.addHandler(
+            'canvas-scroll', function (evt) {
+                (self.orchestrator.status === 1) ? self.player.pause() : null
+                self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+                resetSeadragonConfig()
+            });
+ 		//_viewer.addHandler(
+ 		//	'canvas-scroll', function(evt) {
+ 		//			(self.orchestrator.status === 1) ? self.player.pause() : null
+ 		//	    	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
+ 		//	    	resetSeadragonConfig()
+ 	    //	});
  		_viewer.addHandler(
  			'canvas-drag', function(evt) {
  					(self.orchestrator.status === 1) ? self.player.pause() : null
@@ -639,18 +761,21 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * sets the track to the provided z-index
 	 * O/P: 	none
 	 */
-    function setZIndex(index){
-        console.log("Opacity: "+_UIControl[0].style.opacity+"     for "+self.trackData.name);
+	function setZIndex(index) {
+	    index = 100000000;
     	//set the z index to be -1 if the track is not displayed
-		if (window.getComputedStyle(_UIControl[0]).opacity == 0){
+		if (window.getComputedStyle(_canvasHolder[0]).opacity == 0){
 		    _UIControl.css("z-index", -1)
 		    _proxy.css("z-index", -1)
+           // console.log("zindex being set for "+ self.trackData.name + " to -1")
 		} 
 		else //Otherwise set it to its correct z index
 		{
 			_UIControl.css("z-index", index)
 			_canvasHolder.css("z-index", 1)
 			_proxy.css("z-index", index + 5)
+			//console.log("zindex being set for " + self.trackData.name + " to " + index)
+
 		}
     	self.zIndex = index
     }

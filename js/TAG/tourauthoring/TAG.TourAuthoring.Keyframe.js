@@ -389,20 +389,6 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
      * functions for changing keyframe style based on selected status
      */
     function setSelected(forceInstant) {
-        //if (my.type !== TAG.TourAuthoring.TrackType.audio) {
-        //    my.selectedKeyframe = that;
-        //    $("circle").css({ 'fill': 'white' });
-        //    innerCircle.attr('style', 'display: inherit; fill: #296b2f');
-
-        //    var currData = _data;
-        //    var command = createKeyframeCommand();
-        //    if (!delayLogging) {
-        //        my.undoManager.logCommand(command);
-        //    }
-        //    needsLogging = !!delayLogging; // convert null or undefined to false
-        //    _updateKeyFrameCommand = command;
-        //}
-
         function createKeyframeCommand() {
             return TAG.TourAuthoring.Command({
                 execute: function () {
@@ -687,6 +673,11 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
     }
     that.toRIN = toRIN;
 
+    function loadData(data) {
+        console.log("initializing keyframe with provided ITE data");
+    }
+    that.loadData = loadData;
+
     /**
      * Initializes keyframe using RIN data
      * @param data      keyframe in RIN xml format
@@ -715,6 +706,22 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 }
             };
             // parse into new format
+        } else {
+            var rinData = {
+                viewport: {
+                    region: {
+                        center: {
+                            x: data.bounds.x,
+                            y: data.bounds.y
+                        },
+                        span: {
+                            x: data.bounds.width,
+                            y: data.bounds.height
+                        }
+                    }
+                }
+            }
+            _data = rinData;
         }
         if (_updateKeyFrameCommand) {
             (function (command) {
