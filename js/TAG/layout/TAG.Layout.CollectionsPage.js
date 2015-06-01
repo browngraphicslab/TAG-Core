@@ -673,14 +673,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function addKeywords() {
 
-        // TODO: get actual keywords
+        // TODO: get actual keywords!
+
+        // Uncomment for 3 categories.
         // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-        //                 ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia'],
+        //                 ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
         //                 ['Tropical House', 'Hardstyle', 'Crunkcore', 'Nerdcore', 'Tagcore', 
         //                 'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Realism',
         //                 'Escapism', 'Genre', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
         //                 'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'OMNONNONOMONOM', '^_^']];
+
+        // Uncomment for 2 categories.
+        // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
+        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+        //                 ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
+
+        // Uncomment for 1 category.
+        // var keywordCategories = ['Fruit, but this category title is going to be really long'];
+        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
+
         var keywordsCategories = [];
         var keywords = [[],[],[]];
 
