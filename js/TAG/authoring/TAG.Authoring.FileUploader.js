@@ -24,7 +24,7 @@ TAG.Authoring.FileUploadTypes = {
  * @param useThumbs         Use thumbnail view mode?
  * @param progressFunc      Function to keep track of progress (e.g. for displaying a progress bar somewhere)
  */
-TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar) {
+TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp) {
     "use strict";
     var that = {};
     filters = filters || ["*"];
@@ -32,7 +32,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
 
     var uploadingOverlay = $(document.createElement('div')),
-        innerProgressBar = $(document.createElement('div')); // HTML upload overlay
+        innerProgressBar = $(document.createElement('div')), // HTML upload overlay
+        progressBar,
+        progressBarButton;
     var filesFinished = 0;
     var numFiles = 100000;
     var dataReaderLoads = [];
@@ -59,11 +61,21 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     // Basic HTML initialization
     (function init() {
         var uploadOverlayText = $(document.createElement('label')),
+            progressIcon = $(document.createElement('img'));
 
-        //progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
-            progressIcon = $(document.createElement('img')),
-            progressBar = $(document.createElement('div'));
+        progressBar = $(document.createElement('div')).addClass('progressBarUploads');
+        progressBarButton = $(document.createElement('button'))
+            .addClass('progressBarUploadsButton')
+            .addClass('button')
+            .attr('type', 'button')
+            .css({
+                'padding': '5px', 'font-size': '50%', 'border-radius': '3.5px', 'position': 'relative', 'top': '-7%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '10%', "display": "inline-block", "color": "white",
+            })
+            .text("View Queue");
+
+            //progressIcon = $(document.createElement('img')),
+            //progressBar = $(document.createElement('div'));
 
 
         // Progress / spinner wheel overlay to display while uploading
@@ -76,7 +88,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         progressIcon.css({
             'position': 'relative', 'top': '50%', 'left': '14%'
         });
-        progressIcon.attr('src', 'images/icons/progress-circle.gif');
+        progressIcon.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
         progressBar.css({
             'position': 'relative', 'top': '42%', 'left': '45%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '2%'
@@ -87,10 +99,14 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         });
 
         progressBar.append(innerProgressBar);
-        uploadingOverlay.append(uploadOverlayText);
-        uploadingOverlay.append(progressBar);
-        uploadingOverlay.hide();
-        root.append(uploadingOverlay);
+
+        if(fromImportPopUp==true){
+            uploadingOverlay.append(uploadOverlayText);
+            //uploadingOverlay.append(progressBar);
+            uploadingOverlay.hide();
+            root.append(uploadingOverlay);
+        }
+        
     })();
 
     /**
@@ -125,7 +141,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                         longFiles = [];
                         shortFiles = [];
                         var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
-                        bar.width("0%");
+                        bar.css("width", "0%");
                         if (filesObject.length === 0) {
                             removeOverlay();
                             addLocalCallback([], [])();
@@ -507,11 +523,15 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         //if ($("#uploadingOverlay").length === 0) {
         //    elmt.append(uploadingOverlay);
         //}
-
+        if(fromImportPopUp==true){
+            uploadingOverlay.show()
+            uploadingOverlay.css({"display": "block"});    
+        } else{
         //updates loading UI
-        var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        settingsViewTopBar.append(progressBar)
-        console.log("STARTING NEW UPLOAD")
+            var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+            settingsViewTopBar.append(progressBar)
+            console.log("STARTING NEW UPLOAD")
+        }
     }
 
     /**

@@ -125,6 +125,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         showArtworkTimeout,
         searchResultsLength,
         tileCircle,                     // loading circle for artwork tiles
+        menuCreated,
 
         //TELEMETRY
         nav_timer = new TelemetryTimer(),
@@ -294,6 +295,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             linkButton.css("float", "left");
             root.find('#mainCollection').css('width', '60%');
         }
+
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
             // IE9, Chrome, Safari, Opera
@@ -333,6 +335,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
+
+        menuCreated = false;
     }
 
     /**
@@ -670,13 +674,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function addKeywords() {
 
         // TODO: get actual keywords
-        var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
-        var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-                        ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia'],
-                        ['Tropical House', 'Hardstyle', 'Crunkcore', 'Nerdcore', 'Tagcore', 
-                        'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Realism',
-                        'Escapism', 'Genre', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
-                        'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'OMNONNONOMONOM', '^_^']];
+        // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
+        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+        //                 ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia'],
+        //                 ['Tropical House', 'Hardstyle', 'Crunkcore', 'Nerdcore', 'Tagcore', 
+        //                 'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Realism',
+        //                 'Escapism', 'Genre', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
+        //                 'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'OMNONNONOMONOM', '^_^']];
+        var keywordsCategories = [];
+        var keywords = [[],[],[]];
 
         // Start off by creating basic 'select' inputs. We will use jQuery 
         // library 'dropdownchecklist' to make them look nicer. 
@@ -875,8 +881,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.empty();
             catalogDiv.stop();
 
-            
-
             // if (!collectionDots[collection.Identifier]){
             //     //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
             //     dummyDot = $(document.createElement('div'))
@@ -899,8 +903,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //     collectionDots[collection.Identifier].css('background-color', 'white');
             // }                
 
-            makeOptionsClick('collectionMenu');
+            // formatting adjustments during splitscreen mode 
+            if (TAG.Util.Splitscreen.isOn()) {
+                root.find('.collection-title').css('margin-left', '12%'); // make spacing between dropdown arrow and collection title consistent
+                root.find('#collectionMenu').css('width','70%');
+            }
+
+            // resize the size of the collection menu after exiting splitscreen mode
+            $(document).click(function(event) {
+                if (!TAG.Util.Splitscreen.isOn()) {
+                    root.find('#collectionMenu').css('width','35%');
+                }
+            });
            
+           makeOptionsClick();
+           hideCollectionMenu();
             /*
             function loadPage(index) {
                 //makeOptionsClick('collectionsMenu');
@@ -936,7 +953,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             // To show/hide dropdown menu
-            function showMenu(id) {
+            function showCollectionMenu(id) {
                 console.log("Called Show Menu");
                 
                 var menu = document.getElementById(id);
@@ -980,7 +997,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             var uiDocfrag = document.createDocumentFragment();
 
-            // hard coded setting for previewing purpose within the authoring mode
+            // for previewing purpose in the authoring mode so that the menu arrow position does not change
             if (!IS_WINDOWS && previewing) {
                 // reduce the size of the dropdown menu when being previewed in authoring mode
                 backArrow.css({
@@ -997,18 +1014,29 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 backArrowArea.show();
             }
 
+            backArrowArea.addClass('arrowArea'); 
+                backArrow.css('display', 'inline')
+                    .off()
+                    .on('mousedown', function(j){
+                        return function () {
+                            showCollectionMenu();
+                        }
+                    }(collection));
+            backArrow.attr('src', tagPath + 'images/icons/Close.svg');
+            backArrow.addClass('arrow');    
+            backArrowArea.show();
+
 
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
-                backArrowArea.addClass('arrowArea');
-                
-                backArrowArea.css('display', 'inline')
+                //backArrowArea.addClass('arrowArea'); 
+                backArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
-                            showMenu('collectionMenu');
+                            showCollectionMenu();
                         }
                     }(collection));
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
@@ -1236,16 +1264,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadCollection(visibleCollections[index])();
     }
 
-    //To make the dropdown menu a list of clickable buttons that correspond to collections
-    function makeOptionsClick(id) {
-        var menu = document.getElementById(id);
-        var menuArray = [];
-        menu.innerHTML = "";
-        
-        if (menu.hasChildNodes() == false) {
+    /**
+     * To make the dropdown menu a list of clickable buttons that correspond to collections
+     * @method makeOptionsClick
+     */
+    function makeOptionsClick() {
+        var menu,
+            menuArray;
+
+        menu = collectionMenu;
+        menuArray = [];
+        console.log(menuCreated);
+
+        if (!menuCreated) {
             for (var i = 0; i < visibleCollections.length; i++) {
-                var para = document.createElement("p");
-                
+                var para = document.createElement("div");
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
@@ -1254,31 +1287,76 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 menuArray[i].style.marginLeft = "2%";
                 menuArray[i].style.fontSize = "100%";
                 menuArray[i].style.padding = ".5%";
-                menu.appendChild(para);
+                menu.append(para);
 
                 menuArray[i].onclick = function () {
                     loadPage(this.id);
+                    showCollectionMenu();
                 }
                 para.appendChild(menuArray[i]);
                 menuArray[i].appendChild(txtNode);
             }
+            menuCreated = true;
         }
     }
 
-    // To show/hide dropdown menu
-    function showMenu(id) {
-
-        var menu = document.getElementById(id);
-
-        if (menu.style.display == 'block') {
-            menu.style.display = 'none';
+    /**
+     * Helper function to show/hide dropdown collection menu
+     * @method showCollectionMenu
+     */
+    function showCollectionMenu() {
+        var menu,
+            arrow;
+        menu = root.find('#collectionMenu');
+        arrow = root.find('#backArrow');
+        if (menu.css('display') == 'block') {
+            menu.css({
+                'display':'none'
+            });
+            arrow.css({
+                'transform':'rotate(270deg)',
+                'webkitTransform':'rotate(270deg)'
+            });
         } else {
-            menu.style.display = 'block';
-        }
+            menu.css({
+                'display':'block'
+            });
+            arrow.css({
+                'transform':'rotate(90deg)',
+                'webkitTransform':'rotate(90deg)'
+            });
+        };
 
+        // if (menu.style.display == 'block') {
+        //     menu.style.display = 'none';
+        //     arrow.style.transform = 'rotate(270deg)';
+        //     arrow.style.webkitTransform = 'rotate(270deg)';
+        // } else {
+        //     menu.style.display = 'block';
+        //     arrow.style.transform = 'rotate(90deg)';
+        //     arrow.style.webkitTransform = 'rotate(90deg)';
+        // }
     }
 
-
+    /**
+     * Hide the dropdown collection menu if the user clicks something outside the menu
+     * @method hideCollectionMenu
+     */
+    function hideCollectionMenu() {
+        var menu,
+            arrow;
+        menu = document.getElementById('collectionMenu');
+        arrow = document.getElementById('backArrow');
+        $(root).click(function(event) {
+            if (event.target.id != 'backArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+                if (menu.style.display == 'block') {
+                    menu.style.display = 'none';
+                    arrow.style.transform = 'rotate(270deg)';
+                    arrow.style.webkitTransform = 'rotate(270deg)';
+                }
+            }
+        });
+    }
 
     /**
      * Helper function to load first collection
