@@ -18,7 +18,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     var isPreview;
     options && function () {isPreview = options.isPreview; }();
-    console.log(isPreview);
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
@@ -43,8 +42,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         tagContainer,
         newUser = options.newUser,
         mainDoq,
-        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : '#FFFFFF',
-        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : '#FFFFFF';
+        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : null,
+        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : null;
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
@@ -316,9 +315,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @param {Object} main     contains all image paths and museum info
     */
     function loadHelper(main) {
-        // mainDoq = main;
-        // PRIMARY_FONT_COLOR = mainDoq.Metadata["PrimaryFontColor"];
-        // SECONDARY_FONT_COLOR = mainDoq.Metadata["SecondaryFontColor"];
+        mainDoq = main;
+        if (PRIMARY_FONT_COLOR == null) {
+            PRIMARY_FONT_COLOR = mainDoq.Metadata["PrimaryFontColor"];
+        }
+
+        if (SECONDARY_FONT_COLOR == null) {
+            SECONDARY_FONT_COLOR = mainDoq.Metadata["SecondaryFontColor"];
+        }
 
         if (SECONDARY_FONT_COLOR[0] !== '#') {
             SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
@@ -914,11 +918,17 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     function applyCustomization(main) {
         // var color = '#' + main.Metadata["PrimaryFontColor"];
         var color = PRIMARY_FONT_COLOR;
+        var secColor = SECONDARY_FONT_COLOR;
         $('.primaryFont').css({ 
             'color': color
             //'font-family': main.Metadata["FontFamily"]
         });
-        console.log(color);
+
+        $('.secondaryFont').css({ 
+            'color': secColor
+            //'font-family': main.Metadata["FontFamily"]
+        });
+
         serverInput.css({
             'border-color': color,
             'color' : color

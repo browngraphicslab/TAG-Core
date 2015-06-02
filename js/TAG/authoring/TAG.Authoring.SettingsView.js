@@ -680,7 +680,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     var bpage = backPage();
                     TAG.Util.UI.slidePageRight(bpage);
                 } else {
-                    TAG.Layout.StartPage(null, function (page) {
+                    TAG.Layout.StartPage({ primaryFontColor: TAG.Worktop.Database.getPrimaryFontColor(), secondaryFontColor: TAG.Worktop.Database.getSecondaryFontColor(), isPreview: false}, function (page) {
                         TAG.Util.UI.slidePageRight(page);
                     });
                 }
