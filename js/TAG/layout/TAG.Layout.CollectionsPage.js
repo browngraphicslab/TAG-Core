@@ -676,13 +676,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // TODO: get actual keywords from the server!
 
         // 3 categories.
-        var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
-        var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-                        ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
-                        ['Tropical House', 'Hardstyle', 'Crunkcore', 'Nerdcore', 'Tagcore', 
-                        'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Realism',
-                        'Escapism', 'Genre', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
-                        'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'OMNONNONOMONOM', '^_^']];
+        // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
+        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+        //                 ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
+        //                 ['Tropical House', 'Hardstyle', 'Crunkcore', 'Nerdcore', 'Tagcore', 
+        //                 'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Realism',
+        //                 'Escapism', 'Genre', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
+        //                 'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'OMNONNONOMONOM', '^_^']];
 
         // 2 categories.
         // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
@@ -694,8 +694,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
 
         // No categories, no keywords. Capiche??
-        // var keywordsCategories = [];
-        // var keywords = [[],[],[]];
+        var keywordsCategories = [];
+        var keywords = [[],[],[]];
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
         if (keywordCategories.length > 0) {
