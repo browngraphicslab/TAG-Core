@@ -5658,7 +5658,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             var lockedDiv = $(document.createElement('div'));
-            lockedDiv.append(lockedInput).append(unlockedInput);
+            lockedDiv.append(unlockedInput).append(lockedInput);
 
             lockedInput.click(function () {
                 changesMade = true;
