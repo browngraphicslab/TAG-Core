@@ -1819,7 +1819,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         	viewer.append(aroot);
         	// Don't allow the viewer to be clicked
         	preventClickthrough(viewer);
-        	
         });      
     }
 

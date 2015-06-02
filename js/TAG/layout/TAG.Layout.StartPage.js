@@ -18,6 +18,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     var isPreview;
     options && function () {isPreview = options.isPreview; }();
+    console.log(isPreview);
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
@@ -42,8 +43,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         tagContainer,
         newUser = options.newUser,
         mainDoq,
-        PRIMARY_FONT_COLOR,
-        SECONDARY_FONT_COLOR;
+        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : '#FFFFFF',
+        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : '#FFFFFF';
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
@@ -83,11 +84,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     tagContainer = options.tagContainer || $('body');
 
     //Comment out this conditional block to disable access to authoring for the web
-    if (!IS_WINDOWS) {
-        //authoringInput.prop('disabled', true);
-        authoringInput.css('opacity', '0.5');
-        passwordSubmit.css('opacity', '0.5');
-    }
+    // if (!IS_WINDOWS) {
+    //     authoringInput.prop('disabled', true);
+    //     authoringInput.css('opacity', '0.5');
+    //     passwordSubmit.css('opacity', '0.5');
+    // }
     
     testConnection();
     if(newUser){
@@ -315,9 +316,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @param {Object} main     contains all image paths and museum info
     */
     function loadHelper(main) {
-        mainDoq = main;
-        PRIMARY_FONT_COLOR = mainDoq.Metadata["PrimaryFontColor"];
-        SECONDARY_FONT_COLOR = mainDoq.Metadata["SecondaryFontColor"];
+        // mainDoq = main;
+        // PRIMARY_FONT_COLOR = mainDoq.Metadata["PrimaryFontColor"];
+        // SECONDARY_FONT_COLOR = mainDoq.Metadata["SecondaryFontColor"];
 
         if (SECONDARY_FONT_COLOR[0] !== '#') {
             SECONDARY_FONT_COLOR = '#' + SECONDARY_FONT_COLOR;
@@ -325,14 +326,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         if (PRIMARY_FONT_COLOR[0] !== '#') {
             PRIMARY_FONT_COLOR = '#' + PRIMARY_FONT_COLOR;
         }
+
         if (startPageCallback) {
             startPageCallback(root);
         }
 
         TAG.Util.Constants.set("START_PAGE_SPLASH", tagPath+"images/birdtextile.jpg");
-        //if(!allowServerChange) {
+        // if(!allowServerChange) {
         //  $('#serverTagBuffer').remove();
-        //}
+        // }
     
         // if(!allowAuthoringMode){
         //     $('#authoringButtonBuffer').remove();
@@ -504,9 +506,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             }, function () {
                 passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
                 passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
-            });  
-        /**    
-        } else {
+            });     
+        //} 
+        /**
+        else {
             passwordError.html('Authoring mode is only accessible from the Windows 8 app');
             passwordError.css({'visibility':'visible'});
             passwordError.css({'color':'rgba(255, 255, 255, 1)'});
@@ -909,11 +912,13 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @method applyCustomization
     */
     function applyCustomization(main) {
-        var color = '#' + main.Metadata["PrimaryFontColor"];
+        // var color = '#' + main.Metadata["PrimaryFontColor"];
+        var color = PRIMARY_FONT_COLOR;
         $('.primaryFont').css({ 
             'color': color
             //'font-family': main.Metadata["FontFamily"]
         });
+        console.log(color);
         serverInput.css({
             'border-color': color,
             'color' : color
