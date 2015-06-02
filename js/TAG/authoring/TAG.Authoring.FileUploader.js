@@ -34,6 +34,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     var uploadingOverlay = $(document.createElement('div')),
         innerProgressBar = $(document.createElement('div')), // HTML upload overlay
         progressBar,
+        progressText,
         progressBarButton;
     var filesFinished = 0;
     var numFiles = 100000;
@@ -64,13 +65,46 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             progressIcon = $(document.createElement('img'));
 
 
+        progressText = $(document.createElement('div'))
+                .addClass('progressText')
+                .text("Upload Progress:")
+                 .css({
+                       'display': 'inline-block',
+                       'float': 'left',
+                       'margin-left': '1.2%',
+                       'color': 'white',
+                       'font-size': '60%',
+                        'position' : 'relative',
+                        'top': '31%',
+                 });
         progressBar = $(document.createElement('div')).addClass('progressBarUploads');
+        progressBar.css({
+            'position': 'relative',
+            'top': '42%',
+            'border-style': 'solid',
+            'border-color': 'white',
+            'width': '10%',
+            'height': '4%',
+            'display': 'inline-block',
+            'float': 'left',
+            'margin-left' : '1.2%',
+        });
         progressBarButton = $(document.createElement('button'))
             .addClass('progressBarUploadsButton')
             .addClass('button')
             .attr('type', 'button')
             .css({
-                'padding': '5px', 'font-size': '50%', 'border-radius': '3.5px', 'position': 'relative', 'top': '-7%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '10%', "display": "inline-block", "color": "white",
+                'font-size': '50%',
+                'border-radius': '3.5px',
+                'position': 'relative',
+                'top': '20%',
+                'margin-left':'1.2%',
+                'border-style': 'solid',
+                'border-color': 'white',
+                'height': '9%',
+                "display": "inline-block",
+                "color": "white",
+                'float': 'left'
             })
             .text("View Queue");
 
@@ -80,9 +114,25 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
-        uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100 });
+        uploadingOverlay.css({
+            'position': 'absolute',
+            'left': '0%',
+            'top': '0%',
+            'background-color': 'rgba(0, 0, 0, .5)',
+            'width': '100%',
+            'height': '100%',
+            'z-index': 100000100
+        });
 
-        uploadOverlayText.css({ 'color': 'white', 'width': '10%', 'height': '5%', 'top': '38%', 'left': '40%', 'position': 'relative', 'font-size': '100%' });
+        uploadOverlayText.css({
+            'color':'white',
+            'width': '10%',
+            'height': '5%',
+            'top': '38%',
+            'left': '40%',
+            'position': 'relative',
+            'font-size': '100%'
+        });
         uploadOverlayText.text('Uploading file(s). Please wait.');
 
         progressIcon.css({
@@ -90,12 +140,10 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         });
         progressIcon.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
-        progressBar.css({
-            'position': 'relative', 'top': '42%', 'left': '45%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '2%'
-        });
-
         innerProgressBar.css({
-            'background-color': 'white', 'width': '0%', 'height': '100%'
+            'background-color': 'white',
+            'width': '0%',
+            'height': '100%'
         });
 
         progressBar.append(innerProgressBar);
@@ -140,8 +188,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                         largeFiles = "";
                         longFiles = [];
                         shortFiles = [];
-                        var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
-                        bar.css("width", "0%");
+                        //var bar = innerProgBar || innerProgressBar; // reset the width of the uploading bar
+                        //bar.css("width", "0%");
+                        innerProgressBar.width("0%");
                         if (filesObject.length === 0) {
                             removeOverlay();
                             addLocalCallback([], [])();
@@ -277,12 +326,19 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                             //creates popup but doesn't show it
                                             var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
                                             $('body').append(popup);
-                                            $(popup).css({'display':'none'});
+                                            $(popup).css({ 'display': 'none' });
+                                            /**
                                             progressBar.click(function () {
                                                 $('body').append(popup);
                                                 $(popup).css({ 'display': 'inherit' });
                                                 $(popup).show();
                                             });
+                                            **/
+                                            progressBarButton.click(function(){
+                                                $('body').append(popup);
+                                                $(popup).css({ 'display': 'inherit' });
+                                                $(popup).show();
+                                            })
 
                                             numFiles = files.length; // global
                                             globalUriStrings = uriStrings;
@@ -520,16 +576,15 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * (no idea if this will actually disable interactions too as is)
      */
     function addOverlay(elmt) {
-        //if ($("#uploadingOverlay").length === 0) {
-        //    elmt.append(uploadingOverlay);
-        //}
         if(fromImportPopUp==true){
             uploadingOverlay.show()
             uploadingOverlay.css({"display": "block"});    
         } else{
         //updates loading UI
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-            settingsViewTopBar.append(progressBar)
+            settingsViewTopBar.append(progressText);
+            settingsViewTopBar.append(progressBar);
+            settingsViewTopBar.append(progressBarButton);
             console.log("STARTING NEW UPLOAD")
         }
     }
@@ -539,6 +594,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      */
     function removeOverlay() {
         uploadingOverlay.remove();
+        progressText.remove();
+        $('progressBarUploads').remove();
+        $('progressBarUploadsButton').remove();
     }
 
     /**
@@ -732,7 +790,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * @param upload        upload object / info
      */
     function progress(upload) {        
-        var bar = innerProgBar || innerProgressBar;
+        //var bar = innerProgBar || innerProgressBar;
         totalBytesToSend[upload.guid] = upload.progress.totalBytesToSend;
         var bytesSent = upload.progress.bytesSent;
         totalBytesSent[upload.guid] = bytesSent;
@@ -743,7 +801,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
             }
         }        
-        bar.width(percentComplete * 90 + "%");
+        innerProgressBar.width(percentComplete * 90 + "%");
         updateProgressUI(guidsToFileNames[upload.guid], percentComplete)
     }
 

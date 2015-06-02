@@ -638,6 +638,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Setting up UI:
         backButton = root.find('#setViewBackButton');
         backButton.attr('src', tagPath + 'images/icons/Back.svg');
+        backButton.css({
+            'float': 'left',
+            'display':'inline-block'
+        });
 
         backButton.mousedown(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
@@ -676,7 +680,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     var bpage = backPage();
                     TAG.Util.UI.slidePageRight(bpage);
                 } else {
-                    TAG.Layout.StartPage(null, function (page) {
+                    TAG.Layout.StartPage({ primaryFontColor: TAG.Worktop.Database.getPrimaryFontColor(), secondaryFontColor: TAG.Worktop.Database.getSecondaryFontColor(), isPreview: false}, function (page) {
                         TAG.Util.UI.slidePageRight(page);
                     });
                 }
@@ -1819,7 +1823,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         	viewer.append(aroot);
         	// Don't allow the viewer to be clicked
         	preventClickthrough(viewer);
-        	
         });      
     }
 
@@ -2003,8 +2006,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                         "cursor": "pointer",
                                         "float": "left",
                                         "font-size": "92.5%",
-                                        "margin-top": "0.475%",
-                                        "margin-right": "2%",
+                                        "margin-top": "0.27%",
+                                        "margin-right": "1%",
                                         "height": "100%",
                                         "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
                                     });
@@ -5655,7 +5658,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             var lockedDiv = $(document.createElement('div'));
-            lockedDiv.append(lockedInput).append(unlockedInput);
+            lockedDiv.append(unlockedInput).append(lockedInput);
 
             lockedInput.click(function () {
                 changesMade = true;

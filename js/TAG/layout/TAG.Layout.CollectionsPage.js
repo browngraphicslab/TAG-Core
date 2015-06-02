@@ -673,9 +673,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function addKeywords() {
 
-        // TODO: get actual keywords!
+        // TODO: get actual keywords from the server!
 
-        // Uncomment for 3 categories.
+        // 3 categories.
         // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
         //                 ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
@@ -684,60 +684,66 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         //                 'Escapism', 'Genre', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
         //                 'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'OMNONNONOMONOM', '^_^']];
 
-        // Uncomment for 2 categories.
+        // 2 categories.
         // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
         //                 ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
 
-        // Uncomment for 1 category.
+        // 1 category.
         // var keywordCategories = ['Fruit, but this category title is going to be really long'];
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
 
-        var keywordsCategories = [];
+        // No categories, no keywords. Capiche??
+        var keywordCategories = [];
         var keywords = [[],[],[]];
 
-        // Start off by creating basic 'select' inputs. We will use jQuery 
-        // library 'dropdownchecklist' to make them look nicer. 
+        // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
         if (keywordCategories.length > 0) {
-            // Create unordered list of dropdowns.
-            var ddList = $(document.createElement('ul')).addClass('rowLeft'); // class keeps stuff inline and hides bullets
+            // Create unordered list of select elements.
+            var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
 
             // Loop through the categories of keywords. 
             keywordCategories.forEach(function(element, index, array) {
-                // Each category has 2 dropdowns, one for the operator AND/NOT, and one for selecting multiple keywords.
-                // All dropdowns are added to the unordered list and kept inline.
+                // Each category has 2 select elements: 
+                //      1. Operator select: AND/NOT (think radio buttons) 
+                //      2. Keywords select (think checklist).
+                // All select elements are added to the unordered list and kept inline.
 
-                // Create operator dropdown. 
+                // Create operator select element. 
                 var listItem1 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
-                var select1 = $(document.createElement('select')).addClass('keywordsSelect'); // Class stylizes dropdown.
+                var select1 = $(document.createElement('select')).addClass('keywordsSelect'); // Class stylizes select element.
                 var andOptn = $('<option>AND</option>').attr('value', '0'); // AND option.
                 var notOptn = $('<option>NOT</option>').attr('value', '1'); // NOT option.
                 select1.append(andOptn); // Add AND option.
                 select1.append(notOptn); // Add NOT option.
-                listItem1.append(select1); // Add actual dropdown to li.
-                ddList.append(listItem1); // Add the item to the list.
-                keywordOperatorSelects.push(select1); // Also add dropdown to stored list of operator dropdowns. 
+                listItem1.append(select1); // Wrap the select element in a list item.
+                selectList.append(listItem1); // Then add the list item to our list of selects.
+                keywordOperatorSelects.push(select1); // Also add select element to stored list of operator selects. 
 
-                // Create keywords dropdown.
+                // Create keywords select element.
                 var listItem2 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
-                var select2 = $(document.createElement('select')).addClass('keywordsSelect') // Class stylizes dropdown.
+                var select2 = $(document.createElement('select')).addClass('keywordsSelect') // Class stylizes select element.
                                                                  .addClass('multiselect') // Class to help distinguish multiselects. Might be unused.
                                                                  .attr('multiple', 'multiple'); // Make this a multi-select element. jQuery lib will turn into dropdown.
+                
+                // Add each of the keywords in this category.
                 for (var i = 0; i < keywords[index].length; i++) {
-                    // Add each of the keywords in this category.
                     select2.append($('<option>' + keywords[index][i] + '</option>').attr('value', i.toString())); 
                 }
-                listItem2.append(select2); // Add actual dropdown to li.
-                ddList.append(listItem2); // Add the item to the list.
-                keywordSelects.push(select2); // Also add dropdown to stored list of keyword dropdowns.
+                listItem2.append(select2); // Wrap the select element in a list item.
+                selectList.append(listItem2); // Then add the list item to our list of selects.
+                keywordSelects.push(select2); // Also add select element to stored list of keyword selects.
 
             }); 
 
-            // Finally, add the list of all the dropdowns to the keywords div.
-            keywordsDiv.append(ddList);
+            // Finally, add the list of select elements to the keywords div.
+            keywordsDiv.append(selectList);
 
             // Now run the dropdowncheclist jQuery library to turn the select elements into basic dropdown lists.
-            $('select.keywordsSelect').dropdownchecklist({maxDropHeight: $('#tagRootContainer').height() / 2, closeRadioOnClick: true});
+            $('select.keywordsSelect').dropdownchecklist({
+                maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
+            });
             
             // Unfortunately, the dropdownchecklists are minimally stylized, so we need to do some cleaning up. 
 
@@ -927,7 +933,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     root.find('#collectionMenu').css('width','35%');
                 }
             });
-           
+        
            makeOptionsClick();
            hideCollectionMenu();
             /*
@@ -1282,11 +1288,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function makeOptionsClick() {
         var menu,
-            menuArray;
+            menuArray,
+            arrow;
 
-        menu = collectionMenu;
+        menu = $(root).find('#collectionMenu');
+        arrow = $(root).find('#backArrow');
         menuArray = [];
-        console.log(menuCreated);
 
         if (!menuCreated) {
             for (var i = 0; i < visibleCollections.length; i++) {
@@ -1319,8 +1326,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function showCollectionMenu() {
         var menu,
             arrow;
-        menu = root.find('#collectionMenu');
-        arrow = root.find('#backArrow');
+        menu = $(root).find('#collectionMenu');
+        arrow = $(root).find('#backArrow');
         if (menu.css('display') == 'block') {
             menu.css({
                 'display':'none'
