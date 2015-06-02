@@ -694,7 +694,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
 
         // No categories, no keywords. Capiche??
-        var keywordsCategories = [];
+        var keywordCategories = [];
         var keywords = [[],[],[]];
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
