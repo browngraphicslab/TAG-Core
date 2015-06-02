@@ -2003,8 +2003,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                         "cursor": "pointer",
                                         "float": "left",
                                         "font-size": "92.5%",
-                                        "margin-top": "0.475%",
-                                        "margin-right": "2%",
+                                        "margin-top": "0.27%",
+                                        "margin-right": "1%",
                                         "height": "100%",
                                         "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
                                     });

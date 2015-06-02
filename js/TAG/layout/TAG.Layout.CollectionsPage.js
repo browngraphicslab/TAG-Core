@@ -794,7 +794,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     root.find('#collectionMenu').css('width','35%');
                 }
             });
-           
+        
            makeOptionsClick();
            hideCollectionMenu();
             /*
@@ -1146,11 +1146,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function makeOptionsClick() {
         var menu,
-            menuArray;
+            menuArray,
+            arrow;
 
-        menu = collectionMenu;
+        menu = $(root).find('#collectionMenu');
+        arrow = $(root).find('#backArrow');
         menuArray = [];
-        console.log(menuCreated);
 
         if (!menuCreated) {
             for (var i = 0; i < visibleCollections.length; i++) {
@@ -1183,8 +1184,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function showCollectionMenu() {
         var menu,
             arrow;
-        menu = root.find('#collectionMenu');
-        arrow = root.find('#backArrow');
+        menu = $(root).find('#collectionMenu');
+        arrow = $(root).find('#backArrow');
         if (menu.css('display') == 'block') {
             menu.css({
                 'display':'none'
