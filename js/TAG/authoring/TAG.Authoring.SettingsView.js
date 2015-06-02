@@ -638,6 +638,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Setting up UI:
         backButton = root.find('#setViewBackButton');
         backButton.attr('src', tagPath + 'images/icons/Back.svg');
+        backButton.css({
+            'float': 'left',
+            'display':'inline-block'
+        });
 
         backButton.mousedown(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
