@@ -37,7 +37,7 @@
 	font-size 100%
 	overflow hidden
 	text-align center         
-	text-overflow ellipsis                
+	text-overflow ellipsis        
 	white-space nowrap
 	width 90%
 	position relative
@@ -71,6 +71,24 @@
 	position absolute
 	wh 100%
 
+#newCatalogRoot .bottomButton
+	cursor pointer
+	display block
+	float right
+	height  60%
+	top 10%
+	margin 0px .7% 0px .7%
+	position relative
+	width auto
+
+#newCatalogRoot #bottomButtonsContainer
+	height 6%
+	left 0%
+	position absolute
+	bottom 0%  
+	width 99%
+	z-index 10
+
 #newCatalogRoot #bottomContainer
 	width 100%
 	position absolute
@@ -87,7 +105,7 @@
 	display inline-block
 
 #newCatalogRoot #catalogDiv
-	height 90%
+	height 85%
 	overflow-x auto
 	overflow-y hidden
 	position absolute
@@ -95,6 +113,27 @@
 	right 0
 	width 100%
 	z-index 49  
+
+#newCatalogRoot #collection-label
+	height 7%
+	left 19%
+	margin-left 1.22%
+	padding 0px 0px 0px 10px
+	position absolute
+	top 2.45%
+	text-align center
+	width 45%   
+	font-size 1.7em
+
+#newCatalogRoot #collection-selection
+	border solid transparent
+	border-width 5px 0px 5px 0px
+	display inline-block
+	height 9.6%
+	position relative
+	padding-bottom 0.75%
+	overflow none
+	width 100%
 
 #newCatalogRoot #collectionArea
 	height 40%
@@ -124,26 +163,23 @@
 	position absolute
 	top 26.5%
 
-#newCatalogRoot #collection-label
-	height 7%
-	left 19%
-	margin-left 1.22%
-	padding 0px 0px 0px 10px
+#newCatalogRoot #collectionMenu
+	width 35%
+	height 25%
+	display inline-block
+	top 8%
+	left .5%	
 	position absolute
-	top 2.45%
-	text-align center
-	width 45%   
-	font-size 1.7em
-
-#newCatalogRoot #collection-selection
-	border solid transparent
-	border-width 5px 0px 5px 0px
-	display inline-block 
-	height 9.6%
-	position relative
-	padding-bottom 0.75%
-	overflow none
-	width 100%
+	padding-top .5%
+	padding-bottom 1%
+	opacity .95
+	background-color black
+	border-radius 3%
+	overflow auto
+	font-size 100%
+	list-style square none none
+	display none
+	z-index 90000000
 
 #newCatalogRoot #backButton
 	width 60%
@@ -214,6 +250,10 @@
 	text-align center
 	width 60%
 
+#newCatalogRoot #divide
+	float left
+	margin-left 2%
+
 #newCatalogRoot .exploreTab
 	background-color rgba(0,0,0,0.6)
 	color white
@@ -253,6 +293,13 @@
 	vertical-align middle
 	width auto
 
+#newCatalogRoot #filterContainer
+	position relative
+	width 100%
+
+#newCatalogRoot #filters
+	display inline
+
 #newCatalogRoot .imgDiv
 	width 85%
 	height 77%
@@ -281,23 +328,24 @@
 	height 100%
 	width 75%
 
-#newCatalogRoot .bottomButton
-	cursor pointer
-	display block
-	float right
-	height  60%
-	top 10%
-	margin 0px .7% 0px .7%
-	position relative
-	width auto
+#newCatalogRoot #keywords
+	display inline
 
-#newCatalogRoot #bottomButtonsContainer
-	height 6%
-	left 0%
+#newCatalogRoot .keywordsSelect
+	font-size 70%
+	margin-top 0.5%
+	z-index 1000
+
+#newCatalogRoot #leftContainer
+	display inline
 	position absolute
-	bottom 0%  
-	width 99%
-	z-index 10
+	width 98%
+	margin-left 2%
+	margin-bottom 2%
+
+#newCatalogRoot li.rowItem
+	display inline
+	margin-left 10px
 
 #newCatalogRoot #loadingArea
 	background-color rgba(0, 0, 0,1)
@@ -385,8 +433,9 @@
 	cursor pointer
 	float left
 	font-size 92.5%
-	margin-right 2%
+	margin-left 2%
 	height 100%
+	display inline
 
 #newCatalogRoot #backArrow
 	transform rotate(270deg)
@@ -401,23 +450,11 @@
 	z-index 100
 	display block
 
-#newCatalogRoot #collectionMenu
-	width 35%
-	height 25%
-	display inline-block
-	top 8%
-	left .5%	
-	position absolute
-	padding-top .5%
-	padding-bottom 1%
-	opacity .95
-	background-color black
-	border-radius 3%
-	overflow auto
-	font-size 100%
-	list-style square none none
-	display none
-	z-index 90000000
+#newCatalogRoot #sorts
+	display inline
+
+#newCatalogRoot #search
+	display inline
 
 #newCatalogRoot #searchFilter
 	height 100%
@@ -434,15 +471,9 @@
 	border-color rgb(167,180,174)
 	border-style solid
 	border-width 0.05em
-	margin-right 2%
 	color rgb(120,128,119)
-	float right
 	font-size 80%
-	width 100%
 	margin-top 0.5%
-	position absolute
-	left 861%
-	margin-left 1.5%
 	z-index 1000
 	border-radius 2%
 
@@ -504,21 +535,21 @@
 	overflow visible !important
 	width 100%
 	height 3%
-	top 45%
+	top 65%
 
 
 #newCatalogRoot #timelineArea
 	position absolute
 	width 90%
 	left 5%
-	height 60%
+	height 40%
 	bottom 0
 
 #newCatalogRoot .timelineCircleArea
 	position absolute
 	width 100%
 	height 3%
-	top 45%
+	top 65%
 	overflow visible !important
 
 #newCatalogRoot .timelineDateLabel
@@ -572,7 +603,7 @@
 	display none
 
 #newCatalogRoot #topBar
-	height 25%
+	height 17%
 	position absolute
 	top 0%
 	width 100%
@@ -588,6 +619,67 @@
 	bottom 1%
 	position absolute
 	wh 30%
+
+#newCatalogRoot ul.rowLeft
+	list-style-type none
+	display inline
+
+#newCatalogRoot ul.rowRight
+	list-style-type none
+	display inline
+	right 0%
+
+#newCatalogRoot .ui-dropdownchecklist 
+	color black
+
+#newCatalogRoot .ui-dropdownchecklist-item
+	color black
+	overflow hidden
+	text-overflow ellipsis
+	font-size 80%
+	margin-left 2%
+	margin-right 2%
+
+#newCatalogRoot .ui-dropdownchecklist-item label
+	margin-left 1%
+
+#newCatalogRoot .ui-dropdownchecklist-selector 
+	background #fff
+
+#newCatalogRoot .ui-state-hover, .ui-state-active 
+	border-color #5794bf
+
+#newCatalogRoot .ui-dropdownchecklist-dropcontainer 
+	background-color #fff
+
+#newCatalogRoot .ui-state-hover 
+	background-color #39f
+
+#newCatalogRoot .ui-state-disabled label 
+	color #ccc
+
+#newCatalogRoot .ui-dropdownchecklist-group 
+	font-weight bold
+	font-style italic
+
+#newCatalogRoot .ui-dropdownchecklist-indent 
+	padding-left 7px
+
+#newCatalogRoot .ui-dropdownchecklist-selector-wrapper 
+	background-color #fff
+	border 1px solid #999
+	vertical-align middle
+	font-size 0px
+
+#newCatalogRoot .ui-dropdownchecklist-selector 
+	padding 1px 2px 2px 2px
+	font-size 0px
+
+#newCatalogRoot .ui-dropdownchecklist-selector.ui-state-hover 
+	background-color #fff
+
+#newCatalogRoot .ui-dropdownchecklist-group 
+	padding: 1px 2px 2px 2px;
 
 #newCatalogRoot .videoLabel
 	bottom -5%

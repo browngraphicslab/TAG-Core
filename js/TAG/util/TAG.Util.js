@@ -4246,7 +4246,7 @@ TAG.Util.UI = (function () {
             }); //Josh L -- fix so the div actually fades out
             globalKeyHandler[0] = currentKeyHandler;
         });
-        TAG.Telemetry.register(cancelButton, 'click', 'CancelAssociatedMediaPicker', null);
+        //TAG.Telemetry.register(cancelButton, 'click', 'CancelAssociatedMediaPicker', null);
 
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
@@ -4672,9 +4672,36 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
+                    /**
                     console.log("adding associated medias to artworks")
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: [target.comp] }, function () {
+                            if (i == addedComps.length - 1) {
+                                callback();
+                                pickerOverlay.fadeOut();
+                                pickerOverlay.empty();
+                                pickerOverlay.remove();
+                            }
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
+                }
+                **/
+                    var createMediaMultiList = function () {
+                        var l = []
+                        for (var k = 0; k < target.comp.length; k++) {
+                            l.push(target.comp[k].Identifier)
+                        }
+                        return l
+                    }();
+                    for (var i = 0; i < addedComps.length; i++) {
+                        console.log(target.comp)
+                        TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: createMediaMultiList }, function () {
                             if (i == addedComps.length - 1) {
                                 callback();
                                 pickerOverlay.fadeOut();

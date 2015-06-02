@@ -604,13 +604,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function createMediaPicker() {
             TAG.Util.UI.createAssociationPicker(root,
                 "Choose the media you wish to associate with this artwork",
-                {comp: artwork, type: 'artwork'},
+                {comp: artwork, type: 'artwork', modifiedButtons: true},
                 "artwork",
                 [{
-                    name: "all media",
+                    name: "All Media",
                     getObjs: TAG.Worktop.Database.getAssocMedia,
                 }, {
-                    name: "currently associated",
+                    name: "Currently Associated",
                     getObjs: TAG.Worktop.Database.getAssocMediaTo,
                     args: [artwork.Identifier]
                 }], {
