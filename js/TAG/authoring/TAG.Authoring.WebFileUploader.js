@@ -167,6 +167,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             //$('body').append(popup);
             $(popup).css({ 'display': 'inherit' });
             $(popup).show();
+            console.log("popup.show called");
         });
 
         resumableUploader.on('fileSuccess', function(resumableFile, message) {

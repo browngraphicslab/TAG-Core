@@ -2643,7 +2643,7 @@ TAG.Util.UI = (function () {
         }else{
             overlay = blockInteractionOverlay();
             first = true;
-            $(overlay).attr('id', 'popupblockInteractionOverlay');
+            $(overlay).attr('id', 'Overlay');
         }
         var confirmBox = document.createElement('div');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
@@ -2791,6 +2791,7 @@ TAG.Util.UI = (function () {
     function uploadProgressPopup(clickAction, message, filesArray) {
         var buttonText, noFade, useHTML, onDialogClick;
         var overlay, first;
+
         if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
@@ -3037,13 +3038,19 @@ TAG.Util.UI = (function () {
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
         var overlay;
         var origin;
-        if (document.getElementById("popupblockInteractionOverlay")) {
+        /*if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
             origin = true;
             overlay = blockInteractionOverlay();
             $(overlay).attr('id', 'popupblockInteractionOverlay');
-        }
+        }*/
+
+        origin = true;
+        overlay = blockInteractionOverlay();
+        console.log("Made new overlay");
+
+        origin
         container = container || window;
         var confirmBox = document.createElement('div');
         var popUpHandler = {
