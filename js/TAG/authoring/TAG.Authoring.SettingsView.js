@@ -8709,6 +8709,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             },
             //commenting out to test
             !!multiple, // batch upload disabled
+            null,
             fromImportPopUp
             );
         }
