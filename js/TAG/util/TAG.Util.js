@@ -2643,7 +2643,7 @@ TAG.Util.UI = (function () {
         }else{
             overlay = blockInteractionOverlay();
             first = true;
-            $(overlay).attr('id', 'popupblockInteractionOverlay');
+            $(overlay).attr('id', 'Overlay');
         }
         var confirmBox = document.createElement('div');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
@@ -2791,6 +2791,7 @@ TAG.Util.UI = (function () {
     function uploadProgressPopup(clickAction, message, filesArray) {
         var buttonText, noFade, useHTML, onDialogClick;
         var overlay, first;
+
         if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
@@ -3037,13 +3038,19 @@ TAG.Util.UI = (function () {
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
         var overlay;
         var origin;
-        if (document.getElementById("popupblockInteractionOverlay")) {
+        /*if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
             origin = true;
             overlay = blockInteractionOverlay();
             $(overlay).attr('id', 'popupblockInteractionOverlay');
-        }
+        }*/
+
+        origin = true;
+        overlay = blockInteractionOverlay();
+        console.log("Made new overlay");
+
+        origin
         container = container || window;
         var confirmBox = document.createElement('div');
         var popUpHandler = {
@@ -3858,6 +3865,7 @@ TAG.Util.UI = (function () {
         'margin-left': '20px'
     };
 
+    var importButton;
     /**
      * Creates a picker (e.g. click add/remove media in the artwork editor) to manage
      *   associations between different TAG components (exhib, artworks, assoc media)
@@ -3982,7 +3990,7 @@ TAG.Util.UI = (function () {
                     'font-size':'0.8em'
                 });
                 tab.text(tabs[i].name);
-                tab.on('click', tabHelper(i));
+                tab.on('click', tabHelper(i, tabs[i].name));
                 tabBanner.append(tab);
             }
             tab = $(document.createElement('div'));
@@ -4173,11 +4181,12 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        var importButton = $(document.createElement('button'));
-        importButton.css({
+        importButton = $(document.createElement('button'));
+        importButton.css({ //initially greyed out
             'margin': '1%',
             'border': '1px solid white',
             'color': 'white',
+            'opacity': '.4',
             'padding-left': '1%',
             'padding-right': '1%',
             'background-color': 'black',
@@ -4271,7 +4280,7 @@ TAG.Util.UI = (function () {
         // helper functions
 
         // click handler for tabs
-        function tabHelper(j) {            
+        function tabHelper(j, tabName) {            
             return function () {                
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
@@ -4299,6 +4308,15 @@ TAG.Util.UI = (function () {
                     tabs[j].getObjs.apply(null, tabArgs);
                 } else {
                     success(tabCache[j].comps); // used cached results if possible
+                }
+                if(tabName == 'Artworks in this Collection'){
+                    $(importButton).prop('disabled', false);
+                    importButton.css({'opacity': '1'});
+                    console.log("import button should be enabled");
+                } else{
+                    importButton.css({'opacity': '.4'});
+                    $(importButton).prop('disabled', true);
+                    console.log("import button should be disabled");
                 }
 
             }
