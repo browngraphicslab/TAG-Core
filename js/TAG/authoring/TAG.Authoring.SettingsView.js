@@ -1006,7 +1006,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if(collectionCircle != undefined){
             TAG.Util.removeProgressCircle(collectionCircle);
         }
-        
+
 
         if (prevLeftBarSelection.categoryName == null) {
             prevLeftBarSelection = {
@@ -2721,7 +2721,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 uploadingOverlay.hide();
                 
                 console.log("SHOULD HAVE APPENDED overlay")
-
                 createArtwork(true, makeManagePopUp);
                 //makeManagePopUp();
             }
