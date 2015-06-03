@@ -2717,10 +2717,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                    uploadingOverlay.append(uploadOverlayText); 
                    textAppended = true;
                 }
-                
                 uploadingOverlay.hide();
                 
                 console.log("SHOULD HAVE APPENDED overlay")
+
+
                 createArtwork(true, makeManagePopUp);
                 //makeManagePopUp();
             }
@@ -2746,8 +2747,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         clearRight();
                         prepareViewer(true);
                         loadExhibitionsView(exhibition.Identifier);
-                    }, importAndRefresh);
+                    }, importAndRefresh, $('.progressBarUploads').length);
 
+/*                if ($('.progressBarUploads').length != 0){ //disable import button if upload queue isn't empty
+                    console.log("Cannot import while upload is already happening");
+                    TAG.Util.UI.aFunction();
+                    //TAG.Util.UI.disableImportButton()
+                    return
+                }*/
             }
 
             var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
@@ -6030,7 +6037,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createArtwork(fromImportPopUp, remakePopUp) {
         if ($('.progressBarUploads').length != 0){
-            console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
+            console.log("THERE IS ALREADY AN UPLOAD HAPPENING");
+            //TAG.Util.UI.disableImportButton();
+
             return
         }
 
@@ -6077,7 +6086,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //webappfileupload
                 if (!IS_WINDOWS){
  
-
                     if (done >= total || !total) {
                         middleLoading.hide();
                         if(inArtworkView==true && artworkCircle!=undefined){ //scroll down to newly-added artwork
