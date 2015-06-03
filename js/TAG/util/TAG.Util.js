@@ -2050,6 +2050,8 @@ TAG.Util.UI = (function () {
 
     //initKeyHandler();
 
+
+
     function initKeyHandler() {
         window.focus();
         window.addEventListener('keydown', keyHandler);
@@ -2643,7 +2645,7 @@ TAG.Util.UI = (function () {
         }else{
             overlay = blockInteractionOverlay();
             first = true;
-            $(overlay).attr('id', 'popupblockInteractionOverlay');
+            $(overlay).attr('id', 'Overlay');
         }
         var confirmBox = document.createElement('div');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
@@ -2791,6 +2793,7 @@ TAG.Util.UI = (function () {
     function uploadProgressPopup(clickAction, message, filesArray) {
         var buttonText, noFade, useHTML, onDialogClick;
         var overlay, first;
+
         if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
@@ -3037,13 +3040,19 @@ TAG.Util.UI = (function () {
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
         var overlay;
         var origin;
-        if (document.getElementById("popupblockInteractionOverlay")) {
+        /*if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
             origin = true;
             overlay = blockInteractionOverlay();
             $(overlay).attr('id', 'popupblockInteractionOverlay');
-        }
+        }*/
+
+        origin = true;
+        overlay = blockInteractionOverlay();
+        console.log("Made new overlay");
+
+        origin
         container = container || window;
         var confirmBox = document.createElement('div');
         var popUpHandler = {
@@ -3858,6 +3867,17 @@ TAG.Util.UI = (function () {
         'margin-left': '20px'
     };
 
+    var importButton;
+
+    function disableImportButton() {
+        if(importButton != undefined){
+            importButton.css({'opacity': '.4'});
+            $(importButton).prop('disabled', true);
+            console.log("import button should be disabled from function");
+        }   
+    }
+
+
     /**
      * Creates a picker (e.g. click add/remove media in the artwork editor) to manage
      *   associations between different TAG components (exhib, artworks, assoc media)
@@ -3873,7 +3893,7 @@ TAG.Util.UI = (function () {
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -3982,7 +4002,7 @@ TAG.Util.UI = (function () {
                     'font-size':'0.8em'
                 });
                 tab.text(tabs[i].name);
-                tab.on('click', tabHelper(i));
+                tab.on('click', tabHelper(i, tabs[i].name, queueLength));
                 tabBanner.append(tab);
             }
             tab = $(document.createElement('div'));
@@ -4173,11 +4193,12 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        var importButton = $(document.createElement('button'));
-        importButton.css({
+        importButton = $(document.createElement('button'));
+        importButton.css({ //initially greyed out
             'margin': '1%',
             'border': '1px solid white',
             'color': 'white',
+            'opacity': '.4',
             'padding-left': '1%',
             'padding-right': '1%',
             'background-color': 'black',
@@ -4271,7 +4292,7 @@ TAG.Util.UI = (function () {
         // helper functions
 
         // click handler for tabs
-        function tabHelper(j) {            
+        function tabHelper(j, tabName, queueLength) {            
             return function () {                
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
@@ -4299,6 +4320,15 @@ TAG.Util.UI = (function () {
                     tabs[j].getObjs.apply(null, tabArgs);
                 } else {
                     success(tabCache[j].comps); // used cached results if possible
+                }
+                if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
+                    $(importButton).prop('disabled', false);
+                    importButton.css({'opacity': '1'});
+                    console.log("import button should be enabled");
+                } else{
+                    importButton.css({'opacity': '.4'});
+                    $(importButton).prop('disabled', true);
+                    console.log("import button should be disabled");
                 }
 
             }
@@ -5587,6 +5617,9 @@ TAG.Util.RLH = function (input) {
                     mapGuids.push(mps[i].Identifier);
                 }
             }
+            if (!defaultMapShown) { // do not show bing map if it is disabled
+                mapGuids.remove(null);
+            }
             loadMaps(callback);
             createDots();
         }, function () {
@@ -5745,7 +5778,6 @@ TAG.Util.RLH = function (input) {
                 tobj.map_interaction = "show_map";
                 console.log("show map");
             });
-        //}
 
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
         currentIndex = mapGuids.indexOf(guid);
