@@ -5617,6 +5617,9 @@ TAG.Util.RLH = function (input) {
                     mapGuids.push(mps[i].Identifier);
                 }
             }
+            if (!defaultMapShown) { // do not show bing map if it is disabled
+                mapGuids.remove(null);
+            }
             loadMaps(callback);
             createDots();
         }, function () {
@@ -5775,7 +5778,6 @@ TAG.Util.RLH = function (input) {
                 tobj.map_interaction = "show_map";
                 console.log("show map");
             });
-        //}
 
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
         currentIndex = mapGuids.indexOf(guid);
