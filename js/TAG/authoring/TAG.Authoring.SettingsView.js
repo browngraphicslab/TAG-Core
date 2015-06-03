@@ -64,6 +64,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadingOverlay = $(document.createElement('div')),
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
+        artworkCircle,
+        collectionCircle,
         // = root.find('#importButton'),
 
         
@@ -816,39 +818,74 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prevSelectedSetting = nav[NAV_TEXT.exhib.text];
                 loadExhibitionsView(id);
                 isArtView = false;
+                if(artworkCircle != undefined){
+                    TAG.Util.removeProgressCircle(artworkCircle);
+                }
                 break;
             case "Artworks":
                 selectLabel(nav[NAV_TEXT.art.text]);
                 prevSelectedSetting = nav[NAV_TEXT.art.text];
                 loadArtView(id);
                 isArtView = true;
+                if(collectionCircle != undefined){
+                    TAG.Util.removeProgressCircle(collectionCircle);
+                }
                 break;
             case "Associated Media": 
                 selectLabel(nav[NAV_TEXT.media.text]);
                 prevSelectedSetting = nav[NAV_TEXT.media.text];
                 loadAssocMediaView(id);
                 isArtView = false;
+                if(collectionCircle != undefined){
+                    TAG.Util.removeProgressCircle(collectionCircle);
+                }
+                if(artworkCircle != undefined){
+                    TAG.Util.removeProgressCircle(artworkCircle);
+                }
                 break;
             case "Tours":
                 selectLabel(nav[NAV_TEXT.tour.text]);
                 prevSelectedSetting = nav[NAV_TEXT.tour.text];
                 loadTourView(id);
                 isArtView = false;
+                if(collectionCircle != undefined){
+                    TAG.Util.removeProgressCircle(collectionCircle);
+                }
+                if(artworkCircle != undefined){
+                    TAG.Util.removeProgressCircle(artworkCircle);
+                }
                 break;
             case "Feedback":
                 selectLabel(nav[NAV_TEXT.feedback.text]);
                 prevSelectedSetting = nav[NAV_TEXT.feedback.text];
-                loadFeedbackView(id);
-                isArtView = false;
+                loadFeedbackView(id)                                      
                 break;
+                if(collectionCircle != undefined){
+                    TAG.Util.removeProgressCircle(collectionCircle);
+                }
+                if(artworkCircle != undefined){
+                    TAG.Util.removeProgressCircle(artworkCircle);
+                }
             case "General Settings":
                 isArtView = false;
+                if(collectionCircle != undefined){
+                    TAG.Util.removeProgressCircle(collectionCircle);
+                }
+                if(artworkCircle != undefined){
+                    TAG.Util.removeProgressCircle(artworkCircle);
+                }
 
             default:
                 selectLabel(nav[NAV_TEXT.general.text]);
                 prevSelectedSetting = nav[NAV_TEXT.general.text];
                 loadGeneralView();
                 isArtView = false;
+                if(collectionCircle != undefined){
+                    TAG.Util.removeProgressCircle(collectionCircle);
+                }
+                if(artworkCircle != undefined){
+                    TAG.Util.removeProgressCircle(artworkCircle);
+                }
                 break;
         }
     }
@@ -963,6 +1000,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         prepareNextView(false);
+        if(artworkCircle != undefined){
+            TAG.Util.removeProgressCircle(artworkCircle);
+        }
+        if(collectionCircle != undefined){
+            TAG.Util.removeProgressCircle(collectionCircle);
+        }
+        
+
         if (prevLeftBarSelection.categoryName == null) {
             prevLeftBarSelection = {
                 timeSpentTimer: new TelemetryTimer(),
@@ -1846,6 +1891,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         var cancel = false;
         currentIndex = 0;
+        
+        if(artworkCircle != undefined){
+            TAG.Util.removeProgressCircle(artworkCircle);
+        }
+        
+        //if(collectionCircle != undefined){
+          //  TAG.Util.removeProgressCircle(collectionCircle);
+        //}
 
         // Set the new button text to "New"
         prepareNextView(true, "New", createExhibition);
@@ -2977,6 +3030,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         changesMade = false;
 
+        if(artworkCircle != undefined){
+            TAG.Util.removeProgressCircle(artworkCircle);
+        }
+        if(collectionCircle != undefined){
+            TAG.Util.removeProgressCircle(collectionCircle);
+        }
         var list;
         currentIndex = 0;
 
@@ -3548,6 +3607,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         changesMade = false;
 
+        if(artworkCircle != undefined){
+            TAG.Util.removeProgressCircle(artworkCircle);
+        }
+        if(collectionCircle != undefined){
+            TAG.Util.removeProgressCircle(collectionCircle);
+        }
         var list;
         //var sortBy = "Title";
         currentIndex = 0;
@@ -5009,6 +5074,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         changesMade = false;
 
+        //if(artworkCircle != undefined){
+            //TAG.Util.removeProgressCircle(artworkCircle);
+        //}
+        if(collectionCircle != undefined){
+            TAG.Util.removeProgressCircle(collectionCircle);
+        }
         var list;
         var collectionList = {};
         var guidsInCollection = [];
@@ -5363,6 +5434,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function loadArtwork(artwork) {
         //$(document).off();
+        //if(artworkCircle != undefined){
+            //TAG.Util.removeProgressCircle(artworkCircle);
+        //}
+        if(collectionCircle != undefined){
+            TAG.Util.removeProgressCircle(collectionCircle);
+        }
+        if(artworkCircle != undefined){
+            TAG.Util.removeProgressCircle(artworkCircle);
+        }
+
         if (cancelArtworkLoad) cancelArtworkLoad();
         prepareViewer(true);
         clearRight();
@@ -5973,9 +6054,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //prepareNextView(false);
             //clearRight();
             //prepareViewer(true);
-            if(inCollectionsView==true || inArtworkView ==true){
+
+            //different circles for different pages
+            if(inCollectionsView==true){
                 console.log("new progress circle should appear");
-                var anotherCircle = TAG.Util.showProgressCircle(root, progressCircCSS, '0px', '0px', true);
+                collectionCircle = TAG.Util.showProgressCircle(root, progressCircCSS, '0px', '0px', true);
+            }
+            if(inArtworkView==true){
+                artworkCircle = TAG.Util.showProgressCircle(root, progressCircCSS, '0px', '0px', true);
             }
             
             //webappfileupload
@@ -5991,15 +6077,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 done++;
                 //webappfileupload
                 if (!IS_WINDOWS){
+ 
+
                     if (done >= total || !total) {
                         middleLoading.hide();
-                        if(inArtworkView==true){ //scroll down to newly-added artwork
-                            TAG.Util.removeProgressCircle(anotherCircle);
+                        if(inArtworkView==true && artworkCircle!=undefined){ //scroll down to newly-added artwork
+                            console.log("should remove artworkCircle now");
+                            TAG.Util.removeProgressCircle(artworkCircle);
                             loadArtView(toScroll.Identifier);   
-                        } else if(inCollectionsView==true){
+                        } else if(inCollectionsView==true && collectionCircle != undefined){
                             middleLoading.hide();
-                            console.log("should remove new progress circle now");
-                            TAG.Util.removeProgressCircle(anotherCircle);
+                            console.log("should remove collection circle now");
+                            TAG.Util.removeProgressCircle(collectionCircle);   
+                            
+
                             //uploadingOverlay.hide();
                             //uploadingOverlay.css({"display": "none"});
                             remakePopUp();
