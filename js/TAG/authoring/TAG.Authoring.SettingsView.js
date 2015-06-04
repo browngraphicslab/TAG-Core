@@ -2733,7 +2733,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //root.append(uploadingOverlay);
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
-                    'exhib', [{
+                    'exhib', [{ //Creates tabs - one for all artworks, one for all artworks in this collection
                         name: 'All Artworks',
                         getObjs: TAG.Worktop.Database.getArtworksAndTours,
                     }, {
@@ -2741,7 +2741,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         getObjs: TAG.Worktop.Database.getArtworksIn,
                         args: [exhibition.Identifier]
                     }], {
-                        getObjs: TAG.Worktop.Database.getArtworksIn,
+                        getObjs: TAG.Worktop.Database.getArtworksIn, //Artworks in this collection
                         args: [exhibition.Identifier]
                     }, function () {
                         prepareNextView(true, "New", createExhibition);
@@ -6094,7 +6094,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if(inCollectionsView==true && collectionCircle != undefined){
                             middleLoading.hide();
                             console.log("should remove collection circle now");
-                            TAG.Util.removeProgressCircle(collectionCircle);   
+                            TAG.Util.removeProgressCircle(collectionCircle);
+                            //add artworks to collections here   
                             
 
                             //uploadingOverlay.hide();
