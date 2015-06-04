@@ -3869,13 +3869,6 @@ TAG.Util.UI = (function () {
 
     var importButton;
 
-    function disableImportButton() {
-        if(importButton != undefined){
-            importButton.css({'opacity': '.4'});
-            $(importButton).prop('disabled', true);
-            console.log("import button should be disabled from function");
-        }   
-    }
 
 
     /**
