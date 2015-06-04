@@ -2050,6 +2050,8 @@ TAG.Util.UI = (function () {
 
     //initKeyHandler();
 
+
+
     function initKeyHandler() {
         window.focus();
         window.addEventListener('keydown', keyHandler);
@@ -2643,7 +2645,7 @@ TAG.Util.UI = (function () {
         }else{
             overlay = blockInteractionOverlay();
             first = true;
-            $(overlay).attr('id', 'popupblockInteractionOverlay');
+            $(overlay).attr('id', 'Overlay');
         }
         var confirmBox = document.createElement('div');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
@@ -2791,6 +2793,7 @@ TAG.Util.UI = (function () {
     function uploadProgressPopup(clickAction, message, filesArray) {
         var buttonText, noFade, useHTML, onDialogClick;
         var overlay, first;
+
         if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
@@ -3037,13 +3040,19 @@ TAG.Util.UI = (function () {
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
         var overlay;
         var origin;
-        if (document.getElementById("popupblockInteractionOverlay")) {
+        /*if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
             origin = true;
             overlay = blockInteractionOverlay();
             $(overlay).attr('id', 'popupblockInteractionOverlay');
-        }
+        }*/
+
+        origin = true;
+        overlay = blockInteractionOverlay();
+        console.log("Made new overlay");
+
+        origin
         container = container || window;
         var confirmBox = document.createElement('div');
         var popUpHandler = {
@@ -3858,6 +3867,17 @@ TAG.Util.UI = (function () {
         'margin-left': '20px'
     };
 
+    var importButton;
+
+    function disableImportButton() {
+        if(importButton != undefined){
+            importButton.css({'opacity': '.4'});
+            $(importButton).prop('disabled', true);
+            console.log("import button should be disabled from function");
+        }   
+    }
+
+
     /**
      * Creates a picker (e.g. click add/remove media in the artwork editor) to manage
      *   associations between different TAG components (exhib, artworks, assoc media)
@@ -3873,7 +3893,7 @@ TAG.Util.UI = (function () {
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -3982,7 +4002,7 @@ TAG.Util.UI = (function () {
                     'font-size':'0.8em'
                 });
                 tab.text(tabs[i].name);
-                tab.on('click', tabHelper(i));
+                tab.on('click', tabHelper(i, tabs[i].name, queueLength));
                 tabBanner.append(tab);
             }
             tab = $(document.createElement('div'));
@@ -4143,7 +4163,7 @@ TAG.Util.UI = (function () {
             'width': '40px',
             'height': 'auto',
             'position': 'relative',
-            'z-index': 50
+            'z-index': 100000000
         };
 
         var progressCirc;
@@ -4162,6 +4182,17 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         });
 
+        var loadingCSS = $(document.createElement('div'));
+            loadingCSS.css({ // TODO STYL
+                    'width': '1000%',
+                    'height': '1000%',
+                    'position': 'absolute',
+                    'background-color': 'rgba(0,0,0,.85)',
+                    'top': $('.topbar').css('height'),
+                    'right': '0%',
+                    'z-index': 1000000000000
+                });
+
         confirmButton.text("Save");
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
@@ -4173,11 +4204,12 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        var importButton = $(document.createElement('button'));
-        importButton.css({
+        importButton = $(document.createElement('button'));
+        importButton.css({ //initially greyed out
             'margin': '1%',
             'border': '1px solid white',
             'color': 'white',
+            'opacity': '.4',
             'padding-left': '1%',
             'padding-right': '1%',
             'background-color': 'black',
@@ -4271,7 +4303,7 @@ TAG.Util.UI = (function () {
         // helper functions
 
         // click handler for tabs
-        function tabHelper(j) {            
+        function tabHelper(j, tabName, queueLength) {            
             return function () {                
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
@@ -4299,6 +4331,15 @@ TAG.Util.UI = (function () {
                     tabs[j].getObjs.apply(null, tabArgs);
                 } else {
                     success(tabCache[j].comps); // used cached results if possible
+                }
+                if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
+                    $(importButton).prop('disabled', false);
+                    importButton.css({'opacity': '1'});
+                    console.log("import button should be enabled");
+                } else{
+                    importButton.css({'opacity': '.4'});
+                    $(importButton).prop('disabled', true);
+                    console.log("import button should be disabled");
                 }
 
             }
@@ -4578,6 +4619,33 @@ TAG.Util.UI = (function () {
         function finalizeAssociations() {
             var options = {};
 
+
+            // progress circle CSS to be displayed on the top bar next to the back button, while the process is loading
+            var progressCircCSS = {
+                'position': 'absolute',
+                'left': '40%',
+                'top': '40%',
+                'z-index': '50',
+                'height': 0.5*($("#setViewTopBar").height()),
+                'width': 'auto'
+            };
+
+            // progress text to notify the users that the process is loading
+            var progressText = $(document.createElement('div'))
+                .addClass('progressText')
+                .css({
+                       'display': 'inline-block',
+                       'float': 'left',
+                       'margin-left': '1.2%',
+                       'color': 'white',
+                       'font-size': '60%',
+                        'position' : 'relative',
+                        'top': '31%',
+                }),
+                viewer = $("#setViewTopBar"),
+                vert = viewer.height() / 2,
+                horz = viewer.width() / 5;
+
             // only update recentlyAssociated if the target is an artwork and we're managing an artwork-media assoc
             if (type === 'artwork' && target.type === 'artwork') {
                 for (var i = 0; i < addedComps.length; i++) {
@@ -4638,9 +4706,12 @@ TAG.Util.UI = (function () {
                         console.log(err.message);
                     });
                 } else if (type === 'exhib' && target.type === 'artwork') {
+                    //(addedComps.length > 1) ? progressText.text("Adding Artwork to Collections...") : progressText.text("Adding Artwork to Collection...");
+                    //viewer.append(progressText);
+                    //TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], {AddIDs : [target.comp.Identifier]}, function () {
-                            if (i == addedComps.length - 1) {
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -4655,9 +4726,17 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'exhib' && target.type === 'artworkMulti') {
+                    if (addedComps.length > 1) {
+                        (target.comp.length > 1) ? progressText.text("Adding Artworks to Collections...") : progressText.text("Adding Artwork to Collections...");
+                    } else {
+                        (target.comp.length > 1) ? progressText.text("Adding Artworks to Collection...") : progressText.text("Adding Artwork to Collection...");
+                    }
+                    viewer.append(progressText);
+                    TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
+
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], { AddIDs: [target.comp] }, function () {
-                            if (i == addedComps.length - 1) {
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -4672,6 +4751,10 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
+                    horz = viewer.width() / 6; // adjusting the formatting of the progress circle position 
+                    progressText.text("Adding Associations...");
+                    viewer.append(progressText);
+                    TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     /**
                     console.log("adding associated medias to artworks")
                     for (var i = 0; i < addedComps.length; i++) {
@@ -4699,10 +4782,11 @@ TAG.Util.UI = (function () {
                         }
                         return l
                     }();
+
                     for (var i = 0; i < addedComps.length; i++) {
-                        console.log(target.comp)
                         TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: createMediaMultiList }, function () {
-                            if (i == addedComps.length - 1) {
+                            // success handler
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -5587,6 +5671,9 @@ TAG.Util.RLH = function (input) {
                     mapGuids.push(mps[i].Identifier);
                 }
             }
+            if (!defaultMapShown) { // do not show bing map if it is disabled
+                mapGuids.remove(null);
+            }
             loadMaps(callback);
             createDots();
         }, function () {
@@ -5745,7 +5832,6 @@ TAG.Util.RLH = function (input) {
                 tobj.map_interaction = "show_map";
                 console.log("show map");
             });
-        //}
 
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
         currentIndex = mapGuids.indexOf(guid);

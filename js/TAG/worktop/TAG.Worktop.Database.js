@@ -829,6 +829,13 @@ TAG.Worktop.Database = (function () {
     */
     function batchDeleteDoq(guids, success, unauth, conflict, error) {
         _db = _db || new Worktop.Database();
+        //Lucy- experimenting with single request for each artwork
+        /**
+        for (var x = 0; x < guids.length; x++) {
+            //if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
+            _db.deleteDoq(guids[x], { success: success, error: error, unauth: unauth, conflict: conflict });
+        }
+        **/
         _db.batchDeleteDoq(guids, { success: success, error: error, unauth: unauth, conflict: conflict });
     }
 
