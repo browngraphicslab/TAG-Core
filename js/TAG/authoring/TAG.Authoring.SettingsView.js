@@ -6037,6 +6037,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method createArtwork
      */
     function createArtwork(fromImportPopUp, remakePopUp) {
+        
         if ($('.progressBarUploads').length != 0){
             console.log("THERE IS ALREADY AN UPLOAD HAPPENING");
             return
