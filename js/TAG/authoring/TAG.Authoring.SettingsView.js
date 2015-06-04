@@ -4523,7 +4523,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }], {
             getObjs: TAG.Worktop.Database.getArtworksAssocTo,
             args: [media.Identifier]
-        }, function () { });
+        }, function () { 
+
+        });
     }
 
     /**Generate thumbnail for associated media
@@ -5412,7 +5414,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     }
 
     /**Add associated medias to artworks
-     * @method addToursToCollections
+     * @method addAssocMediaToArtworks
      */
     function addAssocMediaToArtworks(assocMedia) {
         if (!assocMedia.length) {
@@ -5428,12 +5430,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }], {
                     getObjs: function () { return []; }, 
                 }, function () {
-                    prepareNextView(true, "New", createArtwork);
-                    clearRight();
-                    prepareViewer(true);
-                    loadExhibitionsView(currArtwork.Identifier);
-                }
-        );
+                    TAG.Util.removeProgressCircle($('.progressCircle')); // remove progress circle
+                    $('.progressText').remove(); // remove progress text
+                    // refresh the page only if the user stays in associated media tab
+                    if (inAssociatedView) { 
+                        prepareNextView(true, "New", createArtwork);
+                        clearRight();
+                        prepareViewer(true);
+                        resetView();
+                    } 
+                    //loadExhibitionsView();
+                // }, function() {
+                //     resetView();
+                //     console.log("FINISHED");
+                });
     }
 
     /*nest source tag inside video element*/
@@ -6122,10 +6132,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         console.log("upload is ACTUALLY done");
                         if(inArtworkView==true){
                             
-                            TAG.Util.removeProgressCircle(anotherCircle);
+                            //TAG.Util.removeProgressCircle(anotherCircle);
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
                         } else if(inCollectionsView==true){
-                            TAG.Util.removeProgressCircle(anotherCircle);
+                            //TAG.Util.removeProgressCircle(anotherCircle);
                             remakePopUp();
                         }    
                     } else {

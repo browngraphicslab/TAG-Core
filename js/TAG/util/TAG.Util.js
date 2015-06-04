@@ -4163,7 +4163,7 @@ TAG.Util.UI = (function () {
             'width': '40px',
             'height': 'auto',
             'position': 'relative',
-            'z-index': 50
+            'z-index': 100000000
         };
 
         var progressCirc;
@@ -4181,6 +4181,17 @@ TAG.Util.UI = (function () {
             'float': "right",
             'border-radius': '3.5px'
         });
+
+        var loadingCSS = $(document.createElement('div'));
+            loadingCSS.css({ // TODO STYL
+                    'width': '1000%',
+                    'height': '1000%',
+                    'position': 'absolute',
+                    'background-color': 'rgba(0,0,0,.85)',
+                    'top': $('.topbar').css('height'),
+                    'right': '0%',
+                    'z-index': 1000000000000
+                });
 
         confirmButton.text("Save");
         confirmButton.on('click', function () {
@@ -4608,6 +4619,31 @@ TAG.Util.UI = (function () {
         function finalizeAssociations() {
             var options = {};
 
+
+            // progress circle CSS to be displayed on the top bar next to the back button, while the process is loading
+            var progressCircCSS = {
+                'position': 'absolute',
+                'left': '40%',
+                'top': '40%',
+                'z-index': '50',
+                'height': 0.5*($("#setViewTopBar").height()),
+                'width': 'auto'
+            };
+
+            // progress text to notify the users that the process is loading
+            var progressText = $(document.createElement('div'))
+                .addClass('progressText')
+                .text("Adding Associations...")
+                .css({
+                       'display': 'inline-block',
+                       'float': 'left',
+                       'margin-left': '1.2%',
+                       'color': 'white',
+                       'font-size': '60%',
+                        'position' : 'relative',
+                        'top': '31%',
+                });
+
             // only update recentlyAssociated if the target is an artwork and we're managing an artwork-media assoc
             if (type === 'artwork' && target.type === 'artwork') {
                 for (var i = 0; i < addedComps.length; i++) {
@@ -4702,6 +4738,12 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
+                    var viewer = $("#setViewTopBar");
+                    var vert = viewer.height() / 2;
+                    var horz = viewer.width() / 6;
+
+                    viewer.append(progressText);
+                    TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     /**
                     console.log("adding associated medias to artworks")
                     for (var i = 0; i < addedComps.length; i++) {
@@ -4729,10 +4771,11 @@ TAG.Util.UI = (function () {
                         }
                         return l
                     }();
+
                     for (var i = 0; i < addedComps.length; i++) {
-                        console.log(target.comp)
                         TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: createMediaMultiList }, function () {
-                            if (i == addedComps.length - 1) {
+                            // success handler
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
