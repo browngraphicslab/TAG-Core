@@ -64,6 +64,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadingOverlay = $(document.createElement('div')),
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
+        guidsToBeDeleted = [],
         artworkCircle,
         collectionCircle,
         // = root.find('#importButton'),
@@ -5235,6 +5236,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         var label;
                         var imagesrc;
+                        //check if artwork has been marked for delete by batch operation
+                        var artguid = val.Identifier;
+                        var markedForDelete = false;
+                        if (guidsToBeDeleted.indexOf(artguid) >= 0) {
+                            markedForDelete = true;
+                        }
                         switch (val.Metadata.Type) {
                             case 'Artwork':
                                 imagesrc = TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail);
@@ -5257,7 +5264,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 if (val.Metadata.Type === "Artwork") {
                                     editArtwork(val);
                                 }
-                            }, true, val.Extension), true));
+                            }, true, val.Extension, markedForDelete), true));
 
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -5286,7 +5293,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 if (val.Metadata.Type === "Artwork") {
                                     editArtwork(val);
                                 }
-                            }, true, val.Extension));
+                            }, true, val.Extension, markedForDelete));
                         }
 
                     });
@@ -6762,20 +6769,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork      artwork to delete
      */
     function deleteArtwork(artworks) {
+        guidsToBeDeleted = guidsToBeDeleted.concat(artworks);
+        var numDelete = artworks.length;
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
             prepareViewer(true);
-
+            //lucy experimenting with single delete request
+            /**
+            for (var y = 0; y < artworks.length; y++) {
+                TAG.Worktop.Database.deleteDoq(artworks[y], function () {
+                    console.log("complete");
+                }, authError, authError);
+            }
+            **/
             // actually delete the artwork
-            TAG.Worktop.Database.batchDeleteDoq(artworks, function () {
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
-                    return;
-                }
+            TAG.Worktop.Database.batchDeleteDoq(artworks, function () {          
                 console.log("complete")
+                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
+                         return;
+                 }
                 loadArtView();
             }, authError, authError);
-        }, "Are you sure you want to delete the selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
+        }, "Are you sure you want to delete the " + numDelete + " selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
 
         root.append(confirmationBox);
         $(confirmationBox).show();
@@ -7061,9 +7077,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Function} onDoubleClick  function for double click
      * @param {Boolean} inArtMode 
      * @param extension                 to check if is video or static art
+     * @param markedForDelete           check if artwork has been marked for delete by batch op
      * @return {Object} container       the container of the new label
      */
-    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension) {
+    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension, markedForDelete) {
         var container = $(document.createElement('div'));
         text = TAG.Util.htmlEntityDecode(text);
         container.attr('class', 'middleLabel');
@@ -7071,6 +7088,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             container.attr('id', id);
         }
 
+    
+        if (markedForDelete) {
+            container.css({
+                'opacity': '0.4',
+            });
+        }
 
         if (inArtMode) {
             if (extension.match(/mp4/) || extension.match(/ogv/) || extension.match(/webm/) || extension.match(/avi/) || extension.match(/mov/)) {
@@ -7080,62 +7103,63 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
         }
 
-        var mousedownFn = 
-        function () {
-            container.css({
-                'background': HIGHLIGHT
-            });
-        }
-        container.mousedown(mousedownFn);
-
-        container.mouseup(function () {
-           container.css({
-                'background': 'transparent'
-            });
-        });
-        container.mouseleave(function () {
-            container.css({
-                'background': 'transparent'
-            });
-        });
-
-        var clickFn = 
-        function () {
-            //if (prevSelectedMiddleLabel == container) {
-            //    return;
-            //} else {
-            //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-            //    changesHaveBeenMade = false;
-            //}
-            //autosave for general settings - switching between customization and password settings
-            //if (inGeneralView && changesHaveBeenMade) {
-            //    currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-            //    changesHaveBeenMade = false;
-            //    //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
-            //}
-
-            TAG.Util.removeYoutubeVideo();
-            resetLabels('.middleLabel');
-            selectLabel(container, !noexpand);
-
-            TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
-                tobj.type_representation = prevMiddleBarSelection.type_representation;
-                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
-            });
-
-            if (onclick) {
-                onclick();
+        if (!markedForDelete) {
+            var mousedownFn =
+            function () {
+                container.css({
+                    'background': HIGHLIGHT
+                });
             }
-            prevSelectedMiddleLabel = container;
-            currentSelected = container;
+            container.mousedown(mousedownFn);
+
+            container.mouseup(function () {
+                container.css({
+                    'background': 'transparent'
+                });
+            });
+            container.mouseleave(function () {
+                container.css({
+                    'background': 'transparent'
+                });
+            });
+
+            var clickFn =
+            function () {
+                //if (prevSelectedMiddleLabel == container) {
+                //    return;
+                //} else {
+                //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                //    changesHaveBeenMade = false;
+                //}
+                //autosave for general settings - switching between customization and password settings
+                //if (inGeneralView && changesHaveBeenMade) {
+                //    currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                //    changesHaveBeenMade = false;
+                //    //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
+                //}
+
+                TAG.Util.removeYoutubeVideo();
+                resetLabels('.middleLabel');
+                selectLabel(container, !noexpand);
+
+                TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+                    tobj.type_representation = prevMiddleBarSelection.type_representation;
+                    tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+                });
+
+                if (onclick) {
+                    onclick();
+                }
+                prevSelectedMiddleLabel = container;
+                currentSelected = container;
+            }
+
+            container.click(clickFn);
+
+            if (onDoubleClick) {
+                container.dblclick(onDoubleClick);
+            }
         }
-
-        container.click(clickFn);
-
-        if (onDoubleClick) {
-            container.dblclick(onDoubleClick);
-        }
-
         var width;
 
         // BUILD VERTICAL CENTERING HELPER FUCK YEAH
@@ -7217,104 +7241,106 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         //add the checkbox if in the artworks tab
-        if (inArtworkView || inAssociatedView || ((inToursView || inCollectionsView) && IS_WINDOWS)) {
-            container.append(function () {
-                var checkboxContainer = $(document.createElement('div'))
-                .addClass('checkboxContainer')
-                .css({
-                    'width': '7%',
-                    'height': '100%',
-                    'vertical-align': 'middle',
-                    'display': 'inline-block',
-                    'margin-left':'2%'
-                })
-
-                var checkboxColor = 'rgb(230, 235, 235)';
-                var checkbox = $(document.createElement('div'))
-                .addClass('checkbox')
-                .css({
-                    'width': '100%',
-                    'height':'0',
-                    'padding-top': '100%',
-                    'margin-top':'85%',
-                    'vertical-align': 'middle',
-                    'position': 'relative',
-                    'display': 'block',
-                    'background-color': checkboxColor,
-                })
-
-                checkboxContainer.append(checkbox);
-
-                var check = $(document.createElement('img'))
-                    .attr('src', tagPath + 'images/icons/checkmark.svg')
+        if (!markedForDelete) {
+            if (inArtworkView || inAssociatedView || ((inToursView || inCollectionsView) && IS_WINDOWS)) {
+                container.append(function () {
+                    var checkboxContainer = $(document.createElement('div'))
+                    .addClass('checkboxContainer')
                     .css({
-                        'width': '5%',
-                        'height': 'auto',
+                        'width': '7%',
+                        'height': '100%',
                         'vertical-align': 'middle',
-                        'position': 'absolute',
-                        'top': '40%',
-                        'right': '6%',
-                        'display':'none'
+                        'display': 'inline-block',
+                        'margin-left': '2%'
                     })
-                    .addClass("check")
 
-                if (inCollectionsView || inToursView) {
-                    check.css({'right':'7.5%'})
-                }
+                    var checkboxColor = 'rgb(230, 235, 235)';
+                    var checkbox = $(document.createElement('div'))
+                    .addClass('checkbox')
+                    .css({
+                        'width': '100%',
+                        'height': '0',
+                        'padding-top': '100%',
+                        'margin-top': '85%',
+                        'vertical-align': 'middle',
+                        'position': 'relative',
+                        'display': 'block',
+                        'background-color': checkboxColor,
+                    })
 
-                checkboxContainer.append(check)
+                    checkboxContainer.append(checkbox);
 
-                var isSelected = false;
+                    var check = $(document.createElement('img'))
+                        .attr('src', tagPath + 'images/icons/checkmark.svg')
+                        .css({
+                            'width': '5%',
+                            'height': 'auto',
+                            'vertical-align': 'middle',
+                            'position': 'absolute',
+                            'top': '40%',
+                            'right': '6%',
+                            'display': 'none'
+                        })
+                        .addClass("check")
 
-                checkbox.on("click", function (evt) {
-                    if (!isSelected) {
-                        container.unbind('click')
-                        isSelected = true
-                        check.css({ 'display': 'block' })
-                        if (!inAssociatedView){
-                            multiSelected.push(id)
-                        } else {
-                            multiSelected.push({Identifier:id, Name:text})
+                    if (inCollectionsView || inToursView) {
+                        check.css({ 'right': '7.5%' })
+                    }
+
+                    checkboxContainer.append(check)
+
+                    var isSelected = false;
+
+                    checkbox.on("click", function (evt) {
+                        if (!isSelected) {
+                            container.unbind('click')
+                            isSelected = true
+                            check.css({ 'display': 'block' })
+                            if (!inAssociatedView) {
+                                multiSelected.push(id)
+                            } else {
+                                multiSelected.push({ Identifier: id, Name: text })
+                            }
+                            console.log(multiSelected)
+                            evt.stopPropagation()
+                            evt.preventDefault()
+                            container.click(clickFn)
                         }
-                        console.log(multiSelected)
-                        evt.stopPropagation()
-                        evt.preventDefault()
-                        container.click(clickFn)
-                    }
-                })
+                    })
 
-                check.on("click", function (evt) {
-                    if (isSelected) {
-                        container.unbind('click')
-                        isSelected = false
-                        check.css({ 'display': 'none' })
-                        multiSelected.splice(multiSelected.indexOf(id), 1)
-                        console.log(multiSelected)
-                        evt.stopPropagation()
-                        evt.preventDefault()
-                        container.click(clickFn)
-                    }
+                    check.on("click", function (evt) {
+                        if (isSelected) {
+                            container.unbind('click')
+                            isSelected = false
+                            check.css({ 'display': 'none' })
+                            multiSelected.splice(multiSelected.indexOf(id), 1)
+                            console.log(multiSelected)
+                            evt.stopPropagation()
+                            evt.preventDefault()
+                            container.click(clickFn)
+                        }
+                    });
+
+                    checkbox.on('mousedown', function () {
+                        container.unbind('mousedown')
+                    })
+
+                    checkbox.on('mouseup', function () {
+                        container.mousedown(mousedownFn)
+                    })
+
+                    check.on('mousedown', function () {
+                        container.unbind('mousedown')
+                    })
+
+                    check.on('mouseup', function () {
+                        container.mousedown(mousedownFn)
+                    })
+
+
+                    return checkboxContainer
                 });
-
-                checkbox.on('mousedown', function(){
-                    container.unbind('mousedown')
-                })
-
-                checkbox.on('mouseup', function () {
-                    container.mousedown(mousedownFn)
-                })
-
-                check.on('mousedown', function () {
-                    container.unbind('mousedown')
-                })
-
-                check.on('mouseup', function () {
-                    container.mousedown(mousedownFn)
-                })
-
-
-                return checkboxContainer
-            });
+            }
         }
 
 
