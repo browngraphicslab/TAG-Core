@@ -6118,10 +6118,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         console.log("upload is ACTUALLY done");
                         if(inArtworkView==true){
                             
-                            TAG.Util.removeProgressCircle(anotherCircle);
+                            //TAG.Util.removeProgressCircle(anotherCircle);
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
                         } else if(inCollectionsView==true){
-                            TAG.Util.removeProgressCircle(anotherCircle);
+                            //TAG.Util.removeProgressCircle(anotherCircle);
                             remakePopUp();
                         }    
                     } else {
