@@ -4633,7 +4633,6 @@ TAG.Util.UI = (function () {
             // progress text to notify the users that the process is loading
             var progressText = $(document.createElement('div'))
                 .addClass('progressText')
-                .text("Adding Associations...")
                 .css({
                        'display': 'inline-block',
                        'float': 'left',
@@ -4642,7 +4641,10 @@ TAG.Util.UI = (function () {
                        'font-size': '60%',
                         'position' : 'relative',
                         'top': '31%',
-                });
+                }),
+                viewer = $("#setViewTopBar"),
+                vert = viewer.height() / 2,
+                horz = viewer.width() / 5;
 
             // only update recentlyAssociated if the target is an artwork and we're managing an artwork-media assoc
             if (type === 'artwork' && target.type === 'artwork') {
@@ -4704,9 +4706,12 @@ TAG.Util.UI = (function () {
                         console.log(err.message);
                     });
                 } else if (type === 'exhib' && target.type === 'artwork') {
+                    //(addedComps.length > 1) ? progressText.text("Adding Artwork to Collections...") : progressText.text("Adding Artwork to Collection...");
+                    //viewer.append(progressText);
+                    //TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], {AddIDs : [target.comp.Identifier]}, function () {
-                            if (i == addedComps.length - 1) {
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -4721,9 +4726,17 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'exhib' && target.type === 'artworkMulti') {
+                    if (addedComps.length > 1) {
+                        (target.comp.length > 1) ? progressText.text("Adding Artworks to Collections...") : progressText.text("Adding Artwork to Collections...");
+                    } else {
+                        (target.comp.length > 1) ? progressText.text("Adding Artworks to Collection...") : progressText.text("Adding Artwork to Collection...");
+                    }
+                    viewer.append(progressText);
+                    TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
+
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], { AddIDs: [target.comp] }, function () {
-                            if (i == addedComps.length - 1) {
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -4738,10 +4751,8 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
-                    var viewer = $("#setViewTopBar");
-                    var vert = viewer.height() / 2;
-                    var horz = viewer.width() / 6;
-
+                    horz = viewer.width() / 6; // adjusting the formatting of the progress circle position 
+                    progressText.text("Adding Associations...");
                     viewer.append(progressText);
                     TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     /**

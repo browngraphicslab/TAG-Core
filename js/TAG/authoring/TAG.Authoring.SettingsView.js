@@ -5376,10 +5376,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }], {
                     getObjs: function () { return [];}, //TODO how to get the collections that an artwork is already in
                 }, function () {
-                    prepareNextView(true, "New", createExhibition);
-                    clearRight();
-                    prepareViewer(true);
-                    loadExhibitionsView(currArtwork.Identifier);
+                    TAG.Util.removeProgressCircle($('.progressCircle')); // remove progress circle
+                    $('.progressText').remove(); // remove progress text
+                    // refresh the page only if the user stays in artworks tab
+                    if (inArtworkView) { 
+                        prepareNextView(true, "New", createArtwork);
+                        clearRight();
+                        prepareViewer(true);
+                        resetView();
+                    } 
+                    //loadExhibitionsView(currArtwork.Identifier);
                 }
         );
     }
@@ -5436,9 +5442,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         resetView();
                     } 
                     //loadExhibitionsView();
-                // }, function() {
-                //     resetView();
-                //     console.log("FINISHED");
                 });
     }
 
