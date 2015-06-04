@@ -2050,6 +2050,8 @@ TAG.Util.UI = (function () {
 
     //initKeyHandler();
 
+
+
     function initKeyHandler() {
         window.focus();
         window.addEventListener('keydown', keyHandler);
@@ -3866,6 +3868,16 @@ TAG.Util.UI = (function () {
     };
 
     var importButton;
+
+    function disableImportButton() {
+        if(importButton != undefined){
+            importButton.css({'opacity': '.4'});
+            $(importButton).prop('disabled', true);
+            console.log("import button should be disabled from function");
+        }   
+    }
+
+
     /**
      * Creates a picker (e.g. click add/remove media in the artwork editor) to manage
      *   associations between different TAG components (exhib, artworks, assoc media)
@@ -3881,7 +3893,7 @@ TAG.Util.UI = (function () {
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -3990,7 +4002,7 @@ TAG.Util.UI = (function () {
                     'font-size':'0.8em'
                 });
                 tab.text(tabs[i].name);
-                tab.on('click', tabHelper(i, tabs[i].name));
+                tab.on('click', tabHelper(i, tabs[i].name, queueLength));
                 tabBanner.append(tab);
             }
             tab = $(document.createElement('div'));
@@ -4291,7 +4303,7 @@ TAG.Util.UI = (function () {
         // helper functions
 
         // click handler for tabs
-        function tabHelper(j, tabName) {            
+        function tabHelper(j, tabName, queueLength) {            
             return function () {                
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
@@ -4320,7 +4332,7 @@ TAG.Util.UI = (function () {
                 } else {
                     success(tabCache[j].comps); // used cached results if possible
                 }
-                if(tabName == 'Artworks in this Collection'){
+                if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
                     $(importButton).prop('disabled', false);
                     importButton.css({'opacity': '1'});
                     console.log("import button should be enabled");

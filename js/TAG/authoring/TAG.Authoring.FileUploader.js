@@ -576,17 +576,17 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * (no idea if this will actually disable interactions too as is)
      */
     function addOverlay(elmt) {
-        if(fromImportPopUp==true){
-            uploadingOverlay.show()
-            uploadingOverlay.css({"display": "block"});    
-        } else{
+        //if(fromImportPopUp==true){
+            //uploadingOverlay.show()
+            //uploadingOverlay.css({"display": "block"});    
+        //} else{
         //updates loading UI
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressText);
             settingsViewTopBar.append(progressBar);
             settingsViewTopBar.append(progressBarButton);
             console.log("STARTING NEW UPLOAD")
-        }
+        //}
     }
 
     /**
