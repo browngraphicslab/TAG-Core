@@ -3722,6 +3722,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         function displayLabels() {
+            var selectNext = false;
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -3752,7 +3753,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 break;
                         }
                         if (!prevSelectedMiddleLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0))) {
+                            ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
@@ -3789,6 +3790,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             console.log(val);
                             middleLoading.before(label = createSortLabel(val));
                         });
+                        selectNext = true;
                     }
                 });
                 // Hide the loading label when we're done
@@ -5228,6 +5230,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         function displayLabels() {
+            var selectNext = false;
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -5259,7 +5262,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = null;
                         }
                         if (!prevSelectedMiddleLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0))) {
+                            ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
@@ -5271,7 +5274,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     editArtwork(val);
                                 }
                             }, true, val.Extension, markedForDelete), true));
-
+                            selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
                             if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -5310,6 +5313,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             console.log(val);
                             middleLoading.before(label= createSortLabel(val));
                         });
+                        selectNext = true;
                     }
                 });
                 // Hide the loading label when we're done
