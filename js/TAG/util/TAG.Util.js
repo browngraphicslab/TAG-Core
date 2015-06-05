@@ -3888,7 +3888,8 @@ TAG.Util.UI = (function () {
      * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media), "bg"- background image : type of the association
      * @param tabs           array: list of tab objects. Each has a name property (string, title of tab), a getObjs
      *                              property (a function to be called to get each entity listed in the tab), and a
-     *                              args property (which will be extra arguments sent to getObjs)
+     *                              args property (which will be extra arguments sent to getObjs), also an excluded property
+     *                              which is a list of guids of elements that should not be displayed 
      * @param filter         object: a getObjs property to get components that are already associated with target
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
@@ -4326,11 +4327,11 @@ TAG.Util.UI = (function () {
                     var tabArgs = (tabs[j].args || []).concat([function (comps) {
                         tabCache[j].cached = true;
                         tabCache[j].comps = comps;
-                        success(comps);
+                        success(comps,tabs[j].excluded);
                     }, error, cacheError]);
                     tabs[j].getObjs.apply(null, tabArgs);
                 } else {
-                    success(tabCache[j].comps); // used cached results if possible
+                    success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
                 if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
                     $(importButton).prop('disabled', false);
@@ -4345,14 +4346,16 @@ TAG.Util.UI = (function () {
             }
         }
 
-        function success(comps) {
+        function success(comps, excluded) {
             var newComps = [];
             for (var i = 0; i < comps.length; i++) {
-                if (!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork')) {
+                //if guid of comp obj is in excluded guid list, don't show it in pop-up
+                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))&& //exclude videos because not 
+                    (comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) < 0))) {
                     newComps.push(comps[i]);
                 }
             }
-            drawComps(newComps, compSingleDoubleClick);
+            drawComps(newComps, compSingleDoubleClick,excluded);
             TAG.Util.removeProgressCircle(progressCirc);
         }
 
@@ -4369,11 +4372,18 @@ TAG.Util.UI = (function () {
          * @param compArray   the list of media to appear in the panel
          * @param applyClick  function to add handlers to each holder element
          */
-        function drawComps(compArray, applyClick) {
+        function drawComps(compArray, applyClick, excluded) {
             if (compArray) {
                 addedComps.length = 0;
                 addedCompsObjs.length = 0;
                 removedComps.length = 0;
+                if (excluded) {
+                    for (var x = 0; x < compArray.length; x++) {
+                        if (compArray[x].Identifier && (excluded.indexOf(compArray[x].Identifier) >= 0)) {
+                            compArray.remove(compArray[x]);
+                        }
+                    }
+                }
                 compArray.sort(function (a, b) {
                     return (a.Name.toLowerCase() < b.Name.toLowerCase()) ? -1 : 1;
                 });
