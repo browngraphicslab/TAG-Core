@@ -3918,6 +3918,7 @@ TAG.Util.UI = (function () {
         if (type == "bg"){
             origComps= filter.args;
         } else {
+        
         var filterArgs = (filter.args || []).concat([function (comps) { // this has async stuff, make sure it gets called by the time it needs to be
             for (i = 0; i < comps.length; i++) {
                 origComps.push(comps[i].Identifier);

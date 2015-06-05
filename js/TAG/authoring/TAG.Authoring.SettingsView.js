@@ -2723,8 +2723,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 console.log("SHOULD HAVE APPENDED overlay")
 
 
-                createArtwork(true, makeManagePopUp);
+
+                createArtwork(true, makeManagePopUp, exhibition);
                 //makeManagePopUp();
+                
             }
 
             function makeManagePopUp(){
@@ -2733,7 +2735,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //root.append(uploadingOverlay);
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
-                    'exhib', [{ //Creates tabs - one for all artworks, one for all artworks in this collection
+                    'exhib', [{ //Creates tabs - one for all artworks, one for artworks in this collection
                         name: 'All Artworks',
                         getObjs: TAG.Worktop.Database.getArtworksAndTours,
                     }, {
@@ -6046,7 +6048,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Create an artwork (import), possibly more than one
      * @method createArtwork
      */
-    function createArtwork(fromImportPopUp, remakePopUp) {
+    function createArtwork(fromImportPopUp, remakePopUp, currCollection) {
         
         if ($('.progressBarUploads').length != 0){
             console.log("THERE IS ALREADY AN UPLOAD HAPPENING");
@@ -6106,8 +6108,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             middleLoading.hide();
                             console.log("should remove collection circle now");
                             TAG.Util.removeProgressCircle(collectionCircle);
-                            //add artworks to collections here   
-                            
+                            //try adding artworks to collection here
+                            //HOW TO GET THE ARTWORKS THAT HAVE JUST BEEN IMPORTED?
+                            var origFiles = files;
+                            var addIDs = files.join(",");
+                            console.log(addIDs);
+                            //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
+                            for (var i = 0; i < files.length; i++) {
+                                TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
+                            }                    
+
+
+
+
+
+                            console.log("the exhibition name is " + currCollection.Name);                  
 
                             //uploadingOverlay.hide();
                             //uploadingOverlay.css({"display": "none"});
@@ -6121,11 +6136,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
                         if(inArtworkView==true){
-                            
+                            TAG.Util.removeProgressCircle(artworkCircle);
                             //TAG.Util.removeProgressCircle(anotherCircle);
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
                         } else if(inCollectionsView==true){
-                            //TAG.Util.removeProgressCircle(anotherCircle);
+                            TAG.Util.removeProgressCircle(collectionCircle);
                             remakePopUp();
                         }    
                     } else {
