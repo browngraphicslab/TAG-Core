@@ -3869,13 +3869,6 @@ TAG.Util.UI = (function () {
 
     var importButton;
 
-    function disableImportButton() {
-        if(importButton != undefined){
-            importButton.css({'opacity': '.4'});
-            $(importButton).prop('disabled', true);
-            console.log("import button should be disabled from function");
-        }   
-    }
 
 
     /**
@@ -3892,6 +3885,8 @@ TAG.Util.UI = (function () {
      * @param filter         object: a getObjs property to get components that are already associated with target
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
+     * @param importBehavior
+     * @param queueLength        
      */
     function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength) {
         var pickerOverlay,
@@ -3923,6 +3918,7 @@ TAG.Util.UI = (function () {
         if (type == "bg"){
             origComps= filter.args;
         } else {
+        
         var filterArgs = (filter.args || []).concat([function (comps) { // this has async stuff, make sure it gets called by the time it needs to be
             for (i = 0; i < comps.length; i++) {
                 origComps.push(comps[i].Identifier);
@@ -4725,6 +4721,7 @@ TAG.Util.UI = (function () {
                             console.log(err.message);
                         });
                     }
+
                 } else if (type === 'exhib' && target.type === 'artworkMulti') {
                     if (addedComps.length > 1) {
                         (target.comp.length > 1) ? progressText.text("Adding Artworks to Collections...") : progressText.text("Adding Artwork to Collections...");
