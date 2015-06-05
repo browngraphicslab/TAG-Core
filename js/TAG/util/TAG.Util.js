@@ -3869,13 +3869,6 @@ TAG.Util.UI = (function () {
 
     var importButton;
 
-    function disableImportButton() {
-        if(importButton != undefined){
-            importButton.css({'opacity': '.4'});
-            $(importButton).prop('disabled', true);
-            console.log("import button should be disabled from function");
-        }   
-    }
 
 
     /**
@@ -3893,6 +3886,8 @@ TAG.Util.UI = (function () {
      * @param filter         object: a getObjs property to get components that are already associated with target
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
+     * @param importBehavior
+     * @param queueLength        
      */
     function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength) {
         var pickerOverlay,
@@ -3924,6 +3919,7 @@ TAG.Util.UI = (function () {
         if (type == "bg"){
             origComps= filter.args;
         } else {
+        
         var filterArgs = (filter.args || []).concat([function (comps) { // this has async stuff, make sure it gets called by the time it needs to be
             for (i = 0; i < comps.length; i++) {
                 origComps.push(comps[i].Identifier);
@@ -4643,7 +4639,6 @@ TAG.Util.UI = (function () {
             // progress text to notify the users that the process is loading
             var progressText = $(document.createElement('div'))
                 .addClass('progressText')
-                .text("Adding Associations...")
                 .css({
                        'display': 'inline-block',
                        'float': 'left',
@@ -4652,7 +4647,10 @@ TAG.Util.UI = (function () {
                        'font-size': '60%',
                         'position' : 'relative',
                         'top': '31%',
-                });
+                }),
+                viewer = $("#setViewTopBar"),
+                vert = viewer.height() / 2,
+                horz = viewer.width() / 5;
 
             // only update recentlyAssociated if the target is an artwork and we're managing an artwork-media assoc
             if (type === 'artwork' && target.type === 'artwork') {
@@ -4714,9 +4712,12 @@ TAG.Util.UI = (function () {
                         console.log(err.message);
                     });
                 } else if (type === 'exhib' && target.type === 'artwork') {
+                    //(addedComps.length > 1) ? progressText.text("Adding Artwork to Collections...") : progressText.text("Adding Artwork to Collection...");
+                    //viewer.append(progressText);
+                    //TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], {AddIDs : [target.comp.Identifier]}, function () {
-                            if (i == addedComps.length - 1) {
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -4730,10 +4731,19 @@ TAG.Util.UI = (function () {
                             console.log(err.message);
                         });
                     }
+
                 } else if (type === 'exhib' && target.type === 'artworkMulti') {
+                    if (addedComps.length > 1) {
+                        (target.comp.length > 1) ? progressText.text("Adding Artworks to Collections...") : progressText.text("Adding Artwork to Collections...");
+                    } else {
+                        (target.comp.length > 1) ? progressText.text("Adding Artworks to Collection...") : progressText.text("Adding Artwork to Collection...");
+                    }
+                    viewer.append(progressText);
+                    TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
+
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], { AddIDs: [target.comp] }, function () {
-                            if (i == addedComps.length - 1) {
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -4748,10 +4758,8 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
-                    var viewer = $("#setViewTopBar");
-                    var vert = viewer.height() / 2;
-                    var horz = viewer.width() / 6;
-
+                    horz = viewer.width() / 6; // adjusting the formatting of the progress circle position 
+                    progressText.text("Adding Associations...");
                     viewer.append(progressText);
                     TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     /**

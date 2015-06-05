@@ -679,10 +679,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
         //                 ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
-        //                 ['Tropical House', 'Hardstyle', 'Crunkcore', 'Nerdcore', 'Tagcore', 
-        //                 'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Realism',
-        //                 'Escapism', 'Genre', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
-        //                 'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'OMNONNONOMONOM', '^_^']];
+        //                 ['Tropical House', 'Hardstyle', 'Disco', 'Hardcore', 'Tagcore', 
+        //                 'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Genre',
+        //                 'Escapism', 'Realism', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
+        //                 'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'List Item', '^_^']];
 
         // 2 categories.
         // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
@@ -698,7 +698,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var keywords = [[],[],[]];
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
-        if (keywordCategories.length > 0) {
+        if (keywordCategories && keywords && keywordCategories.length > 0) {
             // Create unordered list of select elements.
             var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
 
@@ -748,6 +748,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // Unfortunately, the dropdownchecklists are minimally stylized, so we need to do some cleaning up. 
 
             // Format the dropdown selector box (what you click on to make dropdown appear).
+            var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
             $('.ui-dropdownchecklist-selector').each(function(index, element) {
                 // Set the text inside the selector box.
                 if (index % 2 == 0) {
@@ -773,7 +774,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
 
                 // Further stylization of selector box.
-                var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
                 var selectorFontSize = 0.8 * elementHeight; // We want our font size to be slightly smaller than the box's height.
                 $(element).parent().css('height', elementHeight + 'px'); // This element uses padding, so we actually change the height of its parent, a wrapper span. 
                 $(element).css('line-height', selectorFontSize + 'px') // This centers the text in the selector box.
@@ -795,6 +795,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                           .css('width', $(element).parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
 
             });
+
+            // The last thing we do is add a search button. 
+            var searchButtonListItem = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
+            var searchButton = $(document.createElement('div')).text('Search')
+                .attr('id', 'searchButton')
+                .css('height', elementHeight + 'px')
+                .hover(
+                    function() {
+                        $( this ).css('background-color', '#39f');
+                    }, function() {
+                        $( this ).css('background-color', '#fff');
+                })
+                .click(
+                    function() {
+                        doSearch();
+                });
+            searchButtonListItem.append(searchButton);
+            selectList.append(searchButtonListItem);
+        } else {
+            var divHeight = $('#leftContainer').height()/2;
+            $('#leftContainer').css('margin-top', divHeight + 'px');
+            $('#leftContainer').css('margin-bottom', divHeight + 'px');
         }
     }
 
