@@ -3037,7 +3037,7 @@ TAG.Util.UI = (function () {
     }
 
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry, cancelOption, displayNames) {
         var overlay;
         var origin;
         /*if (document.getElementById("popupblockInteractionOverlay")) {
@@ -3109,6 +3109,18 @@ TAG.Util.UI = (function () {
         }
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
+
+        if(cancelOption == false){
+            for (var i = 0; i < displayNames.length; i++) {
+
+                var para = document.createElement('div');
+                $(para).text(displayNames[i]);
+                $(para).css({color: 'white', 'z-index': '99999999999'});
+                $(messageLabel).append(para);
+                TAG.Util.multiLineEllipsis($(para));
+            }
+        }
+
         $(confirmBox).append(messageLabel);
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
@@ -3173,7 +3185,11 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         }).attr('id', 'popupCancelButton');
         $cancelButton.text('Cancel');
-        $(optionButtonDiv).append(cancelButton);
+
+        if(cancelOption != false){
+            $(optionButtonDiv).append(cancelButton);
+        }
+        
 
         if (forTourBack) {
             $cancelButton.text('Don\'t Save');
