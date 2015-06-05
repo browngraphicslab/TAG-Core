@@ -1941,6 +1941,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
 
         function displayLabels() {
+            var selectNext = false;
             $.each(list, function (i, val) {
                 if (cancel) {
                     return;
@@ -1954,8 +1955,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         return;
                     }
                     var label;
-                    if (!prevSelectedMiddleLabel &&
-                        ((id && val.Identifier === id) || (!id && i === 0))) {
+                    var collectguid = val.Identifier;
+                    var markedForDelete = false;
+                    if (guidsToBeDeleted.indexOf(collectguid) >= 0) {
+                        markedForDelete = true;
+                    }
+                    if (!markedForDelete && !prevSelectedMiddleLabel &&
+                        ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
 
                         // Select the first one or the specified id
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
@@ -1963,7 +1969,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
-                        }, val.Identifier), true));
+                        }, val.Identifier, 0, 0, 0, 0, markedForDelete), true));
+                        selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
                         if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -1977,6 +1984,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         if (cancelLastView) cancelLastView();
                         loadExhibition(val);
                     } else {
+                        if (markedForDelete) {
+                            selectNext = true;
+                        }
                         middleLoading.before(label = createMiddleLabel(val.Name, null, function () {
                             //if (changesHaveBeenMade) {
                             //    //saveArray.push(previousIdentifier);
@@ -1987,7 +1997,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             loadExhibition(val);
                             previousIdentifier = val.Identifier;
                             currentIndex = i;
-                        }, val.Identifier));
+                        }, val.Identifier,0,0,0,0,markedForDelete));
                         //prevSelectedMiddleLabel = label;
                         //currentSelected = prevSelectedMiddleLabel;
                     }
@@ -2974,7 +2984,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} exhibition     collection to delete
      */
     function deleteExhibition(exhibitions) {
-
+        var numEx = exhibitions.length;
+        guidsToBeDeleted = guidsToBeDeleted.concat(exhibitions);
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -2982,12 +2993,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             // actually delete the exhibition
             TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
+                console.log("collection deletion done");
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                     return;
                 }
                 loadExhibitionsView();
             }, authError, authError);
-        }, "Are you sure you want to delete the selected collections?", "Delete", true, function() { $(confirmationBox).hide(); });
+        }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function() { $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -3082,6 +3094,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         function displayLabels() {
+            var selectNext = false;
             $.each(list, function (i, val) {
                 if (cancel) return false;
                 // Add each label as a separate function to the queue so the UI doesn't lock up
@@ -3091,8 +3104,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         return;
                     }
                     var label;
-                    if (!prevSelectedMiddleLabel &&
-                        ((id && val.Identifier === id) || (!id && i === 0))) {
+                    var tourGuid = val.Identifier;
+                    var markedForDelete = false;
+                    if (guidsToBeDeleted.indexOf(tourGuid) >= 0) {
+                        markedForDelete = true;
+                    }
+                    if (!markedForDelete && !prevSelectedMiddleLabel &&
+                        ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
                         // Select the first one
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
                             previousIdentifier = val.Identifier;
@@ -3100,7 +3118,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                         }, val.Identifier, false, function () {
                             editTour(val);
-                        }), true));
+                        }, 0, 0, markedForDelete), true));
+                        selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
                         if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -3114,7 +3133,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         currentIndex = i;
                         loadTour(val);
                     } else {
-
+                        if (markedForDelete) {
+                            selectNext = true;
+                        }
                         middleLoading.before(label = createMiddleLabel(val.Name, null, function () {
                             //if (changesHaveBeenMade) {
                             //    //saveArray.push(previousIdentifier);
@@ -3127,7 +3148,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }, val.Identifier, false, function () {
                             editTour(val);
 
-                        }));
+                        },0,0,markedForDelete));
                         //prevSelectedMiddleLabel = label;
                         //currentSelected = prevSelectedMiddleLabel;
                     }
@@ -3491,6 +3512,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} tour     tour to delete
      */
     function deleteTour(tours) {
+        var numTours = tours.length;
+        guidsToBeDeleted = guidsToBeDeleted.concat(tours);
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -3498,12 +3521,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             // actually delete the tour
             TAG.Worktop.Database.batchDeleteDoq(tours, function () {
+                console.log("done deleting tours");
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                     return;
                 }
                 loadTourView();
             }, authError, authError);
-        }, "Are you sure you want to delete the selected tours?", "Delete", true, function () { 
+        }, "Are you sure you want to delete the " +numTours+ " selected tours?", "Delete", true, function () { 
             $(confirmationBox).hide(); 
         });
         root.append(confirmationBox);
@@ -3730,6 +3754,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         var label;
                         var imagesrc;
+                        var assocguid = val.Identifier;
+                        var markedForDelete = false;
+                        if (guidsToBeDeleted.indexOf(assocguid) >= 0) {
+                            markedForDelete = true;
+                        }
                         switch (val.Metadata.ContentType.toLowerCase()) {
                             case 'video':
                                 imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg';
@@ -3747,15 +3776,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = null;
                                 break;
                         }
-                        if (!prevSelectedMiddleLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0))) {
+
+                        if (!markedForDelete && !prevSelectedMiddleLabel &&
+                            ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
                                 previousIdentifier = val.identifier;
                                 loadAssocMedia(val);
                                 currentIndex = i;
-                            }, val.Identifier, false), true));
+                            }, val.Identifier, false, 0, 0, 0, markedForDelete), true));
+                            selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
                             if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -3768,6 +3799,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentSelected = prevSelectedMiddleLabel;
                             loadAssocMedia(val);
                         } else {
+                            if (markedForDelete) {
+                                selectNext = true;
+                            }
                             middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //if (changesHaveBeenMade) {
                                 //    //saveArray.push(previousIdentifier);
@@ -3777,7 +3811,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 loadAssocMedia(val);
                                 previousIdentifier = val.Identifier;
                                 currentIndex = i;
-                            }, val.Identifier, false));
+                            }, val.Identifier, false,0,0,0,markedForDelete));
                         }
                     });
                     } else if (val){
@@ -4421,6 +4455,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    media to be deleted
      */
     function deleteAssociatedMedia(mediaMULTIPLE) {
+        var numMed = mediaMULTIPLE.length;
+        var mediaGuids = [];
+        for (var u = 0; u < numMed; u++) {
+            mediaGuids[u] = mediaMULTIPLE[u].Identifier;
+        }
+        guidsToBeDeleted = guidsToBeDeleted.concat(mediaGuids);
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -4437,7 +4477,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
                         deleteCounter += 1
                         console.log("deleted item: " + j)
-                        if (deleteCounter == mediaMULTIPLE.length) {
+                        if (deleteCounter == mediaMULTIPLE.length&&(prevSelectedSetting&&prevSelectedSetting===nav[NAV_TEXT.media.text])) {
                             loadAssocMediaView();
                         }
                     }, function () {
@@ -4461,7 +4501,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 DEL(i, media)
             }
 
-        }, "Are you sure you want to delete the selected associated media?", "Delete", true, function () { $(confirmationBox).hide(); });
+        }, "Are you sure you want to delete the " +numMed + " selected associated media?", "Delete", true, function () { $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -5256,8 +5296,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             default:
                                 imagesrc = null;
                         }
-                        if (!prevSelectedMiddleLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0))) {
+                        if (!markedForDelete && !prevSelectedMiddleLabel &&
+                            ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
+
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
@@ -5283,6 +5324,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                             loadArtwork(val);
                         } else {
+                            if (markedForDelete) {
+                                selectNext = true;
+                            }
                             middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
                                 //if (changesHaveBeenMade) {
@@ -5369,6 +5413,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'exhib', [{
                     name: 'All Collections',
                     getObjs: TAG.Worktop.Database.getExhibitions,
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: function () { return [];}, //TODO how to get the collections that an artwork is already in
                 }, function () {
@@ -5425,6 +5470,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'artwork', [{
                     name: 'All Artworks',
                     getObjs: TAG.Worktop.Database.getArtworks,
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: function () { return []; }, 
                 }, function () {
