@@ -3753,6 +3753,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             return;
                         }
                         var label;
+                        var selectNext;
                         var imagesrc;
                         var assocguid = val.Identifier;
                         var markedForDelete = false;
@@ -3771,6 +3772,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 break;
                             case 'image':
                                 imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';
+                                break;
+                            case 'text':
+                                imagesrc = tagPath + '/images/text_icon.svg';
                                 break;
                             default:
                                 imagesrc = null;
