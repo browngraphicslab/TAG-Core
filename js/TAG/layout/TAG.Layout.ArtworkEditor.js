@@ -1813,7 +1813,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'border': '2px solid white',
                         'position': 'relative',
                         'font-size': $('.addRemoveMedia').css('font-size')
-                    }).css('border-radius','3.5px')
+                    })
+                    //.css('border-radius','3.5px')
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
                 $toggleLayer = $(document.createElement('button'))
@@ -1823,7 +1824,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'height': 'auto',
                         'max-height': '45%', 
                         'margin-top': '5%', 
-                        'border': '2px solid white',
+                        //'border': '2px solid white',
                         'position': 'relative',
                         'font-size': $('.addRemoveMedia').css('font-size')
                     })
