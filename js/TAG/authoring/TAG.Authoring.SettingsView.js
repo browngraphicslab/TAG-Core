@@ -65,8 +65,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
         guidsToBeDeleted = [],
-        artworkCircle,
-        collectionCircle,
         // = root.find('#importButton'),
 
         
@@ -819,74 +817,41 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prevSelectedSetting = nav[NAV_TEXT.exhib.text];
                 loadExhibitionsView(id);
                 isArtView = false;
-                if(artworkCircle != undefined){
-                    TAG.Util.removeProgressCircle(artworkCircle);
-                }
                 break;
             case "Artworks":
                 selectLabel(nav[NAV_TEXT.art.text]);
                 prevSelectedSetting = nav[NAV_TEXT.art.text];
                 loadArtView(id);
                 isArtView = true;
-                if(collectionCircle != undefined){
-                    TAG.Util.removeProgressCircle(collectionCircle);
-                }
                 break;
             case "Associated Media": 
                 selectLabel(nav[NAV_TEXT.media.text]);
                 prevSelectedSetting = nav[NAV_TEXT.media.text];
                 loadAssocMediaView(id);
                 isArtView = false;
-                if(collectionCircle != undefined){
-                    TAG.Util.removeProgressCircle(collectionCircle);
-                }
-                if(artworkCircle != undefined){
-                    TAG.Util.removeProgressCircle(artworkCircle);
-                }
                 break;
             case "Tours":
                 selectLabel(nav[NAV_TEXT.tour.text]);
                 prevSelectedSetting = nav[NAV_TEXT.tour.text];
                 loadTourView(id);
                 isArtView = false;
-                if(collectionCircle != undefined){
-                    TAG.Util.removeProgressCircle(collectionCircle);
-                }
-                if(artworkCircle != undefined){
-                    TAG.Util.removeProgressCircle(artworkCircle);
-                }
                 break;
             case "Feedback":
                 selectLabel(nav[NAV_TEXT.feedback.text]);
                 prevSelectedSetting = nav[NAV_TEXT.feedback.text];
                 loadFeedbackView(id)                                      
                 break;
-                if(collectionCircle != undefined){
-                    TAG.Util.removeProgressCircle(collectionCircle);
-                }
-                if(artworkCircle != undefined){
-                    TAG.Util.removeProgressCircle(artworkCircle);
-                }
+
             case "General Settings":
                 isArtView = false;
-                if(collectionCircle != undefined){
-                    TAG.Util.removeProgressCircle(collectionCircle);
-                }
-                if(artworkCircle != undefined){
-                    TAG.Util.removeProgressCircle(artworkCircle);
-                }
+
 
             default:
                 selectLabel(nav[NAV_TEXT.general.text]);
                 prevSelectedSetting = nav[NAV_TEXT.general.text];
                 loadGeneralView();
                 isArtView = false;
-                if(collectionCircle != undefined){
-                    TAG.Util.removeProgressCircle(collectionCircle);
-                }
-                if(artworkCircle != undefined){
-                    TAG.Util.removeProgressCircle(artworkCircle);
-                }
+
                 break;
         }
     }
@@ -1001,13 +966,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         prepareNextView(false);
-        if(artworkCircle != undefined){
-            TAG.Util.removeProgressCircle(artworkCircle);
-        }
-        if(collectionCircle != undefined){
-            TAG.Util.removeProgressCircle(collectionCircle);
-        }
-
 
         if (prevLeftBarSelection.categoryName == null) {
             prevLeftBarSelection = {
@@ -1893,13 +1851,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var cancel = false;
         currentIndex = 0;
         
-        if(artworkCircle != undefined){
-            TAG.Util.removeProgressCircle(artworkCircle);
-        }
-        
-        //if(collectionCircle != undefined){
-          //  TAG.Util.removeProgressCircle(collectionCircle);
-        //}
 
         // Set the new button text to "New"
         prepareNextView(true, "New", createExhibition);
@@ -3033,12 +2984,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         changesMade = false;
 
-        if(artworkCircle != undefined){
-            TAG.Util.removeProgressCircle(artworkCircle);
-        }
-        if(collectionCircle != undefined){
-            TAG.Util.removeProgressCircle(collectionCircle);
-        }
         var list;
         currentIndex = 0;
 
@@ -3610,12 +3555,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         changesMade = false;
 
-        if(artworkCircle != undefined){
-            TAG.Util.removeProgressCircle(artworkCircle);
-        }
-        if(collectionCircle != undefined){
-            TAG.Util.removeProgressCircle(collectionCircle);
-        }
         var list;
         //var sortBy = "Title";
         currentIndex = 0;
@@ -5081,12 +5020,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         changesMade = false;
 
-        //if(artworkCircle != undefined){
-            //TAG.Util.removeProgressCircle(artworkCircle);
-        //}
-        if(collectionCircle != undefined){
-            TAG.Util.removeProgressCircle(collectionCircle);
-        }
         var list;
         var collectionList = {};
         var guidsInCollection = [];
@@ -5459,16 +5392,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork  artwork to load
      */
     function loadArtwork(artwork) {
-        //$(document).off();
-        //if(artworkCircle != undefined){
-            //TAG.Util.removeProgressCircle(artworkCircle);
-        //}
-        if(collectionCircle != undefined){
-            TAG.Util.removeProgressCircle(collectionCircle);
-        }
-        if(artworkCircle != undefined){
-            TAG.Util.removeProgressCircle(artworkCircle);
-        }
+        //$(document).off();}
 
         if (cancelArtworkLoad) cancelArtworkLoad();
         prepareViewer(true);
@@ -6083,13 +6007,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //prepareViewer(true);
 
             //different circles for different pages
-            if(inCollectionsView==true){
-                console.log("new progress circle should appear");
-                collectionCircle = TAG.Util.showProgressCircle(root, progressCircCSS, '0px', '0px', true);
-            }
-            if(inArtworkView==true){
-                artworkCircle = TAG.Util.showProgressCircle(root, progressCircCSS, '0px', '0px', true);
-            }
             
             //webappfileupload
             if (!IS_WINDOWS){
@@ -6107,14 +6024,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
  
                     if (done >= total || !total) {
                         middleLoading.hide();
-                        if(inArtworkView==true && artworkCircle!=undefined){ //scroll down to newly-added artwork
-                            console.log("should remove artworkCircle now");
-                            TAG.Util.removeProgressCircle(artworkCircle);
+                        if(inArtworkView==true){ //scroll down to newly-added artwork
                             loadArtView(toScroll.Identifier);   
-                        } else if(inCollectionsView==true && collectionCircle != undefined){
+                        } else if(inCollectionsView==true){
                             middleLoading.hide();
-                            console.log("should remove collection circle now");
-                            TAG.Util.removeProgressCircle(collectionCircle);
+
                             //try adding artworks to collection here
                             //HOW TO GET THE ARTWORKS THAT HAVE JUST BEEN IMPORTED?
                             var origFiles = files;
@@ -6122,34 +6036,83 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             console.log(addIDs);
                             //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
                             for (var i = 0; i < files.length; i++) {
-                                TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
+                                //TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
                             }                    
-
-
-
-
-
-                            console.log("the exhibition name is " + currCollection.Name);                  
-
-                            //uploadingOverlay.hide();
-                            //uploadingOverlay.css({"display": "none"});
-                            remakePopUp();
+                            //console.log("the exhibition name is " + currCollection.Name);
+                            //remakePopUp();
                         }
 
-                    } else {
+                        var duplicates = new HashTable();
+                        var editedNames = names;
+
+                        //Remove duplicate names
+                        for (var i = 0; i < editedNames.length; i ++){
+
+                            if(duplicates._hasItem(editedNames[i])){
+                                editedNames[i] = null;
+                            }else{
+                                duplicates.insert(editedNames[i], editedNames[i]);
+                            }
+                        }
+                        for (var i = 0; i<editedNames.length; i++){
+                            if(editedNames[i] != null){
+                                var stringName =  editedNames[i].toString();
+                                editedNames[i] = stringName;   
+                            }
+                            
+                        }
+                        //Confirmation pop up that artworks have been imported
+                        var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
+                            $(importConfirmedBox).hide();
+                            },
+                            "The following files have been successfully imported: ",
+                            "OK",
+                            false, null, null, null, null, null, false, editedNames);
+                        root.append(importConfirmedBox);
+                        $(importConfirmedBox).show();
+                        TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                 
+                   } else {
                         durationHelper(done);
                     }
                 } else {
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
                         if(inArtworkView==true){
-                            TAG.Util.removeProgressCircle(artworkCircle);
-                            //TAG.Util.removeProgressCircle(anotherCircle);
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
                         } else if(inCollectionsView==true){
-                            TAG.Util.removeProgressCircle(collectionCircle);
                             remakePopUp();
-                        }    
+                        }
+
+                        var duplicates = new HashTable();
+                        var editedNames = names;
+                        for (var i = 0; i < editedNames.length; i ++){
+
+                            if(duplicates._hasItem(editedNames[i])){
+                                editedNames[i] = null;
+                            }else{
+                                duplicates.insert(editedNames[i], editedNames[i]);
+                            }
+                        }
+                        for (var i = 0; i<editedNames.length; i++){
+                            if(editedNames[i] != null){
+                                var stringName =  editedNames[i].toString();
+                                editedNames[i] = stringName;   
+                            }
+                            
+                        }
+
+                        var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                            $(importConfirmedBox).hide();
+                            },
+                            "The following files were successfully imported: ",
+                            "OK",
+                            false, null, null, null, null, null, false, editedNames);
+
+                        root.append(importConfirmedBox);
+                        $(importConfirmedBox).show();
+                        TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                     
                     } else {
                         durationHelper(done);
                     }
