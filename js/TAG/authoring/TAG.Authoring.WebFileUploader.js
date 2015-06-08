@@ -55,7 +55,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             .addClass('button')
             .attr('type', 'button')
             .css({
-                'border-radius':'3.5px','position': 'relative', 'top': '-4%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '60%', "display": "inline-block", "color":"white",
+                'border-radius':'3.5px','position': 'relative', 'top': '20%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '60%', "display": "inline-block", "color":"white",
             })
             .text("Show Uploads");
 
@@ -72,7 +72,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         progressIcon.attr('src', 'images/icons/progress-circle.gif');
         */
         progressBar.css({
-            'position': 'relative', 'top': '0%', 'left': '5%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '20%', "display":"inline-block",
+            'position': 'relative', 'top': '20%', 'left': '5%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '20%', "display":"inline-block",
         });
 
         innerProgressBar.css({
