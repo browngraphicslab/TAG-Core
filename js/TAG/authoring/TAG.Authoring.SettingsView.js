@@ -7339,6 +7339,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     })
 
                     var checkboxColor = 'rgb(230, 235, 235)';
+                    var checkbox = $(document.createElement('input'))
+                                    .attr('type','checkbox')
+                                    .attr('value',id)
+                                    .attr('id',"checkbox"+id)
+                                    .prop('checked',false)
+                                    .on("click", function () {
+                                        if (!this.prop('checked')) {
+                                            container.unbind('click')
+                                            this.prop('checked', true);
+                                            //check.css({ 'display': 'block' })
+                                            if (!inAssociatedView) {
+                                                multiSelected.push(id)
+                                            } else {
+                                                multiSelected.push({ Identifier: id, Name: text })
+                                            }
+                                            console.log(multiSelected)
+                                            evt.stopPropagation()
+                                            evt.preventDefault()
+                                            container.click(clickFn)
+                                        }
+                                    })
+                    checkboxContainer.append(checkbox);
+                    /**
                     var checkbox = $(document.createElement('div'))
                     .addClass('checkbox')
                     .css({
@@ -7372,6 +7395,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
                     checkboxContainer.append(check)
+
 
                     var isSelected = false;
 
@@ -7420,7 +7444,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     check.on('mouseup', function () {
                         container.mousedown(mousedownFn)
                     })
-
+                    **/
 
                     return checkboxContainer
                 });
