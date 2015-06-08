@@ -8918,7 +8918,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //commenting out to test
             !!multiple, // batch upload disabled
             null,
-            fromImportPopUp
+            fromImportPopUp,
+            function(){
+                if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
+                    $(newButton).prop('disabled', true);
+                    newButton.css({'opacity': '.4'});
+                }
+            },
+            function(){
+                $(newButton).prop('disabled', false);
+                newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
+
             );
         }
     }
