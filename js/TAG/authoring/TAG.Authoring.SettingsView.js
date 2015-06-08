@@ -8957,8 +8957,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $(newButton).prop('disabled', false);
                 newButton.css({'opacity': '1', 'background-color': 'transparent'});
 
-
-            );
+            }
+        );
         }
     }
 
