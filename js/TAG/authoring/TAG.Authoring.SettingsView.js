@@ -7340,26 +7340,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                     var checkboxColor = 'rgb(230, 235, 235)';
                     var checkbox = $(document.createElement('input'))
-                                    .attr('type','checkbox')
-                                    .attr('value',id)
-                                    .attr('id',"checkbox"+id)
-                                    .prop('checked',false)
-                                    .on("click", function () {
-                                        if (!this.prop('checked')) {
-                                            container.unbind('click')
-                                            this.prop('checked', true);
-                                            //check.css({ 'display': 'block' })
+                                    .attr('type', 'checkbox')
+                                    .attr('value', id)
+                                    .css('background-color','gray')
+                                    .attr('id', "checkbox" + id)
+                                    .attr('checked', false)
+                                    .on("click", function (evt) {
+                                        var currCheck = $('#' + this.id);
+                                        if (currCheck.prop("checked")) {
                                             if (!inAssociatedView) {
-                                                multiSelected.push(id)
+                                                multiSelected.push(id);
                                             } else {
-                                                multiSelected.push({ Identifier: id, Name: text })
+                                                multiSelected.push({ Identifier: id, Name: text });
                                             }
                                             console.log(multiSelected)
-                                            evt.stopPropagation()
-                                            evt.preventDefault()
-                                            container.click(clickFn)
+                                        } else {  
+                                            multiSelected.splice(multiSelected.indexOf(id), 1);
+                                            console.log(multiSelected);
                                         }
-                                    })
+                                     });
                     checkboxContainer.append(checkbox);
                     /**
                     var checkbox = $(document.createElement('div'))
