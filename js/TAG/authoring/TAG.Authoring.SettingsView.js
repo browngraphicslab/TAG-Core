@@ -2911,7 +2911,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (bg){
             options.Background = bg;
         }
-
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
             //refreshExhibition(exhibition);
             //collectionsIsLoading = false;
@@ -6158,15 +6157,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         if(inArtworkView==true){
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
                         } else if(inCollectionsView==true){
-                            var origFiles = files;
-                            var addIDs = files.join(",");
-                            console.log(addIDs);
-                            //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
-                            if(fromImportPopUp==true){
-                                for (var i = 0; i < files.length; i++) {
-                                    TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
-                                }   
-                            }
+                           //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
 
                             //remakePopUp();
                         }
@@ -6266,6 +6257,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     TAG.Worktop.Database.convertVideo(function () {
                     }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
                 }
+                if (fromImportPopUp == true) {
+                    TAG.Worktop.Database.changeExhibition(currCollection.Identifier, { AddIDs: [newDoq.Identifier] }, console.log("This worked maybe"));
+                }
                 /*var source = newDoq.Metadata.Source;
                 if (contentTypes[j] === "Video") {
                     var newFileName = source.slice(8, source.length);
@@ -6294,6 +6288,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     root.append(confirmBox);
                     $(confirmBox).show();
                 }*/
+
             }
 
         }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv'], fromImportPopUp);
