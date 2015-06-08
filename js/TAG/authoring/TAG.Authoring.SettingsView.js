@@ -6154,7 +6154,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         if(inArtworkView==true){
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
                         } else if(inCollectionsView==true){
-                            remakePopUp();
+                            var origFiles = files;
+                            var addIDs = files.join(",");
+                            console.log(addIDs);
+                            //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
+                            if(fromImportPopUp==true){
+                                for (var i = 0; i < files.length; i++) {
+                                    TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
+                                }   
+                            }
+
+                            //remakePopUp();
                         }
 
                         var duplicates = new HashTable();
