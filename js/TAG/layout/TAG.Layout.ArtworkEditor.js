@@ -1813,7 +1813,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'border': '2px solid white',
                         'position': 'relative',
                         'font-size': $('.addRemoveMedia').css('font-size')
-                    }).css('border-radius','3.5px')
+                    })
+                    //.css('border-radius','3.5px')
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
                 $toggleLayer = $(document.createElement('button'))
@@ -1823,7 +1824,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         'height': 'auto',
                         'max-height': '45%', 
                         'margin-top': '5%', 
-                        'border': '2px solid white',
+                        //'border': '2px solid white',
                         'position': 'relative',
                         'font-size': $('.addRemoveMedia').css('font-size')
                     })
@@ -2083,6 +2084,20 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 if (creatingText) {
                     createTextAsset(titleTextVal, $descArea.val());
 
+                    // add the loading circle right after the "save" button is clicked
+                    var buttonbarLoadingDelete = $(document.createElement('div'));
+                    buttonbarLoadingDelete.css({ // TODO STYL
+                        'width': '90%',
+                        'height': '52%',
+                        'position': 'absolute',
+                        'top': '33%',
+                        'right': '0%',
+                        'z-index': 10000
+                    });
+                    $('.sidebar').append(buttonbarLoadingDelete);
+                    buttonbarLoadingDelete.attr('class','buttonbarLoadingDelete');
+                    TAG.Util.showLoading(buttonbarLoadingDelete, '20%', '40%', '40%');
+                    buttonbarLoadingDelete.css('background-color','black'); 
                     creatingText = false;
                     close();
                 } else {
@@ -2438,6 +2453,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 //rightbarLoadingSave.fadeOut();
                 
                 //reloadAssocMedia(newDoq.Identifier);
+                TAG.Util.hideLoading($('.buttonbarLoadingDelete'));
+                $('.buttonbarLoadingDelete').remove();
                 $('.assetContainer').empty();
                 createMediaList($('.assetContainer'));
                 //thumbnailLoadingSave.fadeOut();

@@ -24,7 +24,7 @@ TAG.Authoring.FileUploadTypes = {
  * @param useThumbs         Use thumbnail view mode?
  * @param progressFunc      Function to keep track of progress (e.g. for displaying a progress bar somewhere)
  */
-TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp) {
+TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp, disableButton, enableButton) {
     "use strict";
     var that = {};
     filters = filters || ["*"];
@@ -594,6 +594,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      */
     function removeOverlay() {
         uploadingOverlay.remove();
+        enableButton();
         progressText.remove();
         $('progressBarUploads').remove();
         $('progressBarUploadsButton').remove();
@@ -618,6 +619,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             try {
                 addOverlay(root);
                 uploadingOverlay.show();
+                disableButton();
 
                 uri = new Windows.Foundation.Uri(uriString);
                 uploader = new Windows.Networking.BackgroundTransfer.BackgroundUploader();
