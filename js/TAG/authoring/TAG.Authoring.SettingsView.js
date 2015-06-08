@@ -3605,7 +3605,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         findContainer.css('width','100%');
 
         //Enables new button - might be initially disabled if upload is happening
-        
+
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
             $(newButton).prop('disabled', true);
             newButton.css({'opacity': '.4'});
@@ -6105,9 +6105,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             var addIDs = files.join(",");
                             console.log(addIDs);
                             //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
-                            for (var i = 0; i < files.length; i++) {
-                                //TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
-                            }                    
+                            if(fromImportPopUp==true){
+                                for (var i = 0; i < files.length; i++) {
+                                    TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
+                                }   
+                            }
+                                                
                             //console.log("the exhibition name is " + currCollection.Name);
                             //remakePopUp();
                         }
