@@ -2692,13 +2692,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
                 createArtwork(true, makeManagePopUp, exhibition);
+
                 //makeManagePopUp();
                 
             }
 
             function makeManagePopUp(){
                 console.log("Made Manage Pop Up");
-                currCollection= exhibition.Identifier;
+                //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
@@ -4661,12 +4662,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 if (done >= total) {
+                    var duplicates = new HashTable();
+                        var editedNames = names;
 
+                        //Remove duplicate names
+                        for (var i = 0; i < editedNames.length; i ++){
+
+                            if(duplicates._hasItem(editedNames[i])){
+                                editedNames[i] = null;
+                            }else{
+                                duplicates.insert(editedNames[i], editedNames[i]);
+                            }
+                        }
+                        for (var i = 0; i<editedNames.length; i++){
+                            if(editedNames[i] != null){
+                                var stringName =  editedNames[i].toString();
+                                editedNames[i] = stringName;   
+                            } 
+                        }
+
+                    var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                        $(importConfirmedBox).hide();
+                        },
+                        "The following media files were successfully imported:",
+                        "OK",
+                        false, null, null, null, null, null, false, editedNames);
+
+                    root.append(importConfirmedBox);
+                    $(importConfirmedBox).show();
+                    TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                    
                     if (inAssociatedView) {
                         loadAssocMediaView(toScroll.Identifier);
-                    } else {
-                        
-                    }
+                    } 
                 } else {
                     durationHelper(done);
                 }
@@ -6101,21 +6129,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             loadArtView(toScroll.Identifier);   
                         } else if(inCollectionsView==true){
                             middleLoading.hide();
-
-                            //try adding artworks to collection here
-                            //HOW TO GET THE ARTWORKS THAT HAVE JUST BEEN IMPORTED?
-                            var origFiles = files;
-                            var addIDs = files.join(",");
-                            console.log(addIDs);
-                            //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
-                            if(fromImportPopUp==true){
-                                for (var i = 0; i < files.length; i++) {
-                                    TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
-                                }   
-                            }
-                                                
-                            //console.log("the exhibition name is " + currCollection.Name);
-                            //remakePopUp();
                         }
 
                         var duplicates = new HashTable();
@@ -6137,11 +6150,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }
                             
                         }
+
+                        var message;
+                        if(fromImportPopUp==true){
+                            message = "The following files were successfully imported into " + currCollection.Name + ":";
+                        } else{
+                            message = "The following files were successfully imported: "
+                        }
+
                         //Confirmation pop up that artworks have been imported
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
                             $(importConfirmedBox).hide();
                             },
-                            "The following files have been successfully imported: ",
+                            message,
                             "OK",
                             false, null, null, null, null, null, false, editedNames);
                         root.append(importConfirmedBox);
@@ -6154,12 +6175,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else {
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
+                        
+
+
                         if(inArtworkView==true){
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
-                        } else if(inCollectionsView==true){
-                           //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
-
-                            //remakePopUp();
                         }
 
                         var duplicates = new HashTable();
@@ -6180,10 +6200,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             
                         }
 
+                        var message;
+                        if(fromImportPopUp==true){
+                            message = "The following files were successfully imported into " + currCollection.title + ":";
+                        } else{
+                            message = "The following files were successfully imported: "
+                        }
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             $(importConfirmedBox).hide();
                             },
-                            "The following files were successfully imported: ",
+                            message,
                             "OK",
                             false, null, null, null, null, null, false, editedNames);
 

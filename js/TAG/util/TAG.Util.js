@@ -2995,11 +2995,11 @@ TAG.Util.UI = (function () {
             if (clickAction) {
                 clickAction();
             }
-            //if (first) {
+            if (first) {
                 removeAll();
-            //} else {
+            } else {
                 $(confirmBox).remove();
-            //}
+            }
         };
 
         function onEnter() {
