@@ -11,7 +11,7 @@ TAG.Authoring.FileUploadTypes = {
     Map: 4
 };
 
-TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp) {
+TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp, disableButton, enableButton) {
 "use strict";
 
     var that = {};
@@ -186,6 +186,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         resumableUploader.on('complete', function(file) {   //Entire upload operation is complete
             //console.log("COMPLETE");
             finishedUpload();
+            enableButton();
             removeOverlay();
         });
 
@@ -196,13 +197,17 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         resumableUploader.on('fileProgress', function(resumableFile) {
             popup.setProgress(resumableFile.fileName, resumableFile._prevProgress)
-
+            disableButton();
+            //disabled import button
             var percentComplete = resumableUploader.progress();
             innerProgressBar.width(percentComplete * 90 + "%"); // * 90 or * 100?
         });
 
         resumableUploader.on('fileAdded', function(resumableFile){
             addOverlay();
+            //if(progBarLength <=0){
+            disableButton();
+            //}
             popup.createProgressElement(resumableFile.fileName)
 
             filesAdded++;

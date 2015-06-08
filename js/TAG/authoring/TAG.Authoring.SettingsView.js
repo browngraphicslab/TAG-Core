@@ -1854,6 +1854,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Set the new button text to "New"
         prepareNextView(true, "New", createExhibition);
+        
+        //Enables newButton - might be disabled initially because upload is happening
+        $(newButton).prop('disabled', false);
+        newButton.css({'opacity': '1', 'background-color': 'transparent'});
+        
+        
         clearRight();
         prepareViewer(true);
 
@@ -2999,7 +3005,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         currentIndex = 0;
 
+        //Enables new button
+        $(newButton).prop('disabled', false);
+        newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
         prepareNextView(true, "New", createTour);
+
         clearRight();
         prepareViewer(true);
         var cancel = false;
@@ -3592,6 +3603,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         collectionSort.css('display','none');
 
         findContainer.css('width','100%');
+
+        //Enables new button - might be initially disabled if upload is happening
+        
+        if($('.progressBarUploads').length>0){ //upload happening - disable import button
+            $(newButton).prop('disabled', true);
+            newButton.css({'opacity': '.4'});
+        }
 
         prepareNextView(true, "Import", createAsset);
         prepareViewer(true);
@@ -5068,6 +5086,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var sortBy = "Title";
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork, null, true);
+        
+        if($('.progressBarUploads').length>0){ //upload happening - disable import button
+            $(newButton).prop('disabled', true);
+            newButton.css({'opacity': '.4'});
+        }
+        
         prepareViewer(true);
         clearRight();
         var cancel = false;
@@ -8796,7 +8820,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             },
             !!multiple, // batch upload disabled
             null,
-            fromImportPopUp
+            fromImportPopUp,
+            //$('.progressBarUploads').length, //determines if an upload is happening 
+            function(){
+                if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
+                    $(newButton).prop('disabled', true);
+                    newButton.css({'opacity': '.4'});
+                }
+            },
+            function(){
+                $(newButton).prop('disabled', false);
+                newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
+            }
             );
         } else {
 
