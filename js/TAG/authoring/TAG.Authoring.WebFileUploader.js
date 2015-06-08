@@ -19,6 +19,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     multiple = multiple || false;
     var uploadingOverlay = $(document.createElement('div')),
     innerProgressBar = $(document.createElement('div')); // HTML upload overlay
+    var progressBarButton;
     var progressBar;
     var dataReaderLoads = [];       //To pass into the finishedCallback, parsed as urls (paths to be precise)
     var maxDuration = Infinity;
@@ -49,6 +50,15 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             //progressIcon = $(document.createElement('img')),
         progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
+        progressBarButton = $(document.createElement('button'))
+            .addClass('progressBarUploadsButton')
+            .addClass('button')
+            .attr('type', 'button')
+            .css({
+                'border-radius':'3.5px','position': 'relative', 'top': '-4%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '60%', "display": "inline-block", "color":"white",
+            })
+            .text("Show Uploads");
+
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
         uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100 });
@@ -74,12 +84,12 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         //uploadingOverlay.append(progressBar);    
         //root.append(uploadingOverlay);
         
-        if (fromImportPopUp==true) {
+        /*if (fromImportPopUp==true) {
             uploadingOverlay.append(uploadOverlayText);
             uploadingOverlay.hide();
             root.append(uploadingOverlay);
             console.log("SHOULD HAVE APPENDED overlay");
-        }
+        }*/
         //removeOverlay();
     })();
 
@@ -163,12 +173,18 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
         $('body').append(popup);
         $(popup).css({'display':'none'});
-        progressBar.unbind('click').click(function () {
+        /*progressBar.unbind('click').click(function () {
             //$('body').append(popup);
             $(popup).css({ 'display': 'inherit' });
             $(popup).show();
             console.log("popup.show called");
-        });
+        });*/
+
+        progressBarButton.click(function(){
+            $('body').append(popup);
+            $(popup).css({ 'display': 'inherit' });
+            $(popup).show();
+        })
 
         resumableUploader.on('fileSuccess', function(resumableFile, message) {
             popup.setProgress(resumableFile.fileName, 1.0)
@@ -357,18 +373,18 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     function addOverlay(elmt) {
         //uploadingOverlay.show();
-        if (fromImportPopUp==true) {
+        /*if (fromImportPopUp==true) {
             uploadingOverlay.show();
             uploadingOverlay.css({ "display": "block" });
             console.log("Overlay should be visible");
-        } else {
+        } else {*/
             //updates loading UI
             console.log("STARTING NEW UPLOAD")
 
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressBar)
-            //settingsViewTopBar.append(progressBarButton)
-        }
+            settingsViewTopBar.append(progressBarButton)
+        //}
         //var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         //settingsViewTopBar.append(progressBar)
     }
