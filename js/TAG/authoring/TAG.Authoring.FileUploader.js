@@ -594,6 +594,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      */
     function removeOverlay() {
         uploadingOverlay.remove();
+        enableButton();
         progressText.remove();
         $('progressBarUploads').remove();
         $('progressBarUploadsButton').remove();
@@ -618,6 +619,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             try {
                 addOverlay(root);
                 uploadingOverlay.show();
+                disableButton();
 
                 uri = new Windows.Foundation.Uri(uriString);
                 uploader = new Windows.Networking.BackgroundTransfer.BackgroundUploader();
