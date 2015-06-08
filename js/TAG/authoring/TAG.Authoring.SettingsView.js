@@ -67,7 +67,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = [],
         // = root.find('#importButton'),
 
-        
+
 
         primaryColorPicker,
         secondaryColorPicker,
@@ -108,7 +108,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 text: 'Tours',
                 subtext: 'Build interactive tours'
             },
-            dummytour:{
+            dummytour: {
                 text: 'Tours',
                 subtext: 'Tours are disabled on the web'
             },
@@ -189,6 +189,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false,
         pickerOpen = false,
         multiSelected = [],
+        toBeUnselected = null,
 
         // booleans
 		inGeneralView = false,
@@ -1926,7 +1927,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
-                        }, val.Identifier, 0, 0, 0, 0, markedForDelete), true));
+                        }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true));
                         selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -3074,7 +3075,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                         }, val.Identifier, false, function () {
                             editTour(val);
-                        }, 0, 0, markedForDelete), true));
+                        }, 0, 0, markedForDelete,true), true));
                         selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -3747,7 +3748,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 previousIdentifier = val.identifier;
                                 loadAssocMedia(val);
                                 currentIndex = i;
-                            }, val.Identifier, false, 0, 0, 0, markedForDelete), true));
+                            }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true));
                             selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -5300,7 +5301,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 if (val.Metadata.Type === "Artwork") {
                                     editArtwork(val);
                                 }
-                            }, true, val.Extension, markedForDelete), true));
+                            }, true, val.Extension, markedForDelete,true), true));
                             selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -7183,9 +7184,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Boolean} inArtMode 
      * @param extension                 to check if is video or static art
      * @param markedForDelete           check if artwork has been marked for delete by batch op
+     * @param checkMe                   if the checkbox should start out checked
      * @return {Object} container       the container of the new label
      */
-    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension, markedForDelete) {
+    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension, markedForDelete,checkMe) {
         var container = $(document.createElement('div'));
         text = TAG.Util.htmlEntityDecode(text);
         container.attr('class', 'middleLabel');
@@ -7360,6 +7362,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     })
 
                     var checkboxColor = 'rgb(230, 235, 235)';
+                    var checkbox = $(document.createElement('input'))
+                                    .attr('type', 'checkbox')
+                                    .attr('value', id)
+                                    .css('background-color','gray')
+                                    .attr('id', "checkbox" + id)
+                                    .attr('checked', false)
+                                    .on("click", function (evt) {
+                                        var currCheck = $('#' + this.id);
+                                        if (currCheck.prop("checked")) {
+                                            if (!inAssociatedView) {
+                                                multiSelected.push(id);
+                                            } else {
+                                                multiSelected.push({ Identifier: id, Name: text });
+                                            }
+                                            console.log(multiSelected)
+                                        } else {  
+                                            multiSelected.splice(multiSelected.indexOf(id), 1);
+                                            console.log(multiSelected);
+                                        }
+                                        evt.stopPropagation();
+                                    });
+                    if (checkMe) {
+                        checkbox.attr('checked', true);
+                        if (!inAssociatedView) {
+                            multiSelected.push(id);
+                        } else {
+                            multiSelected.push({ Identifier: id, Name: text });
+                        }
+                        console.log(multiSelected)
+                        toBeUnselected = checkbox;
+                    }
+                    checkboxContainer.append(checkbox);
+                    /**
                     var checkbox = $(document.createElement('div'))
                     .addClass('checkbox')
                     .css({
@@ -7393,6 +7428,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
                     checkboxContainer.append(check)
+
 
                     var isSelected = false;
 
@@ -7441,7 +7477,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     check.on('mouseup', function () {
                         container.mousedown(mousedownFn)
                     })
-
+                    **/
 
                     return checkboxContainer
                 });
@@ -7676,13 +7712,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method selectLabel
      * @param {Object} label    label to select
      * @param {Boolean} expand  if label expands when selected 
-     * @param {Integer} index   index of the selected label in it's relvant list.  
      * @return {Object} label   selected label   
      */
     function selectLabel(label, expand) {
         label.css('background', HIGHLIGHT);
         label.unbind('mousedown').unbind('mouseleave').unbind('mouseup');
-        
+        var labelId = label.attr('id');
+        var text = label.text();
+        var checkBox = $("#checkbox" + labelId);
+        //check that it is a check-able label (not a nav label)
+        if (toBeUnselected && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
+            toBeUnselected.prop('checked', false);
+            multiSelected.splice(multiSelected.indexOf(labelId), 1);
+            console.log(multiSelected);
+            toBeUnselected = null;
+        }
+        if (checkBox.prop("checked") !== undefined){
+            checkBox.prop('checked', true);
+            if (!inAssociatedView) {
+                multiSelected.push(labelId);
+            } else {
+                multiSelected.push({ Identifier: labelId, Name: text });
+            }
+            console.log(multiSelected)
+            toBeUnselected = checkBox;
+        }
         if (expand) {
             label.css('height', '');
             label.children('div').css('white-space', '');
