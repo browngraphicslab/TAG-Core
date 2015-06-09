@@ -4682,7 +4682,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } 
                         }
 
+                    //Get rid of progress bar here    
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                        $('.progressBarUploads').remove();
+                        $('.progressBarUploadsButton').remove();
+                        $(newButton).prop('disabled', false);
+                        newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
                         $(importConfirmedBox).hide();
                         },
                         "The following media files were successfully imported:",
@@ -6073,8 +6079,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //updates loading UI
         console.log("FINISHED THE UPLOAD PROCESS")
         var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        $('.progressBarUploads').remove()
-        $('.progressBarUploadsButton').remove()
+        // $('.progressBarUploads').remove()
+        // $('.progressBarUploadsButton').remove()
     }
 
 
@@ -6152,6 +6158,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             
                         }
 
+                        //Gets rid of progress bar and progress bar button
+                        //$('.progressBarUploads').remove();
+                        //$('.progressBarUploadsButton').remove();
+
                         var message;
                         if(fromImportPopUp==true){
                             message = "The following files were successfully imported into " + currCollection.Name + ":";
@@ -6161,6 +6171,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         //Confirmation pop up that artworks have been imported
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
+                            
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
                             $(importConfirmedBox).hide();
                             },
                             message,

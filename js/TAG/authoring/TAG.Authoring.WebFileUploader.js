@@ -80,17 +80,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         });
 
         progressBar.append(innerProgressBar);
-        //uploadingOverlay.append(uploadOverlayText);
-        //uploadingOverlay.append(progressBar);    
-        //root.append(uploadingOverlay);
-        
-        /*if (fromImportPopUp==true) {
-            uploadingOverlay.append(uploadOverlayText);
-            uploadingOverlay.hide();
-            root.append(uploadingOverlay);
-            console.log("SHOULD HAVE APPENDED overlay");
-        }*/
-        //removeOverlay();
+
     })();
 
     (function uploadFile() {
@@ -187,7 +177,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         })
 
         resumableUploader.on('fileSuccess', function(resumableFile, message) {
-            popup.setProgress(resumableFile.fileName, 1.0)
+            popup.setProgress(resumableFile.fileName, 0.9);
 
             //Gets back the relative path of the uploaded file on the server
             globalFiles.push(resumableFile.file);
@@ -203,7 +193,6 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             //console.log("COMPLETE");
             finishedUpload();
             enableButton();
-            removeOverlay();
         });
 
         resumableUploader.on('fileError', function(file, message){
@@ -401,7 +390,8 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     function finishedUpload() {
         console.log("Called finishedUpload");
-        removeOverlay();
+        //removeOverlay();
+        console.log("Would remove overlay now");
         addLocalCallback(globalFiles, localURLs, globalUriStrings)();
         finishedCallback(dataReaderLoads);
 
