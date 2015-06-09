@@ -4684,12 +4684,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                     //Get rid of progress bar here    
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
-                        $('.progressBarUploads').remove();
-                        $('.progressBarUploadsButton').remove();
-                        $(newButton).prop('disabled', false);
-                        newButton.css({'opacity': '1', 'background-color': 'transparent'});
 
-                        $(importConfirmedBox).hide();
+                            //remove progress stuff
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+
+                            //enable import buttons
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                                //hide confirmation box
+                            $(importConfirmedBox).hide();
+
+                            if(inAssociatedView==true){ //reload artworks tab if in artworks
+                                loadAssocMediaView(toScroll.Identifier);
+                            }
                         },
                         "The following media files were successfully imported:",
                         "OK",
@@ -4699,9 +4708,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     $(importConfirmedBox).show();
                     TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                     
-                    if (inAssociatedView) {
-                        loadAssocMediaView(toScroll.Identifier);
-                    } 
                 } else {
                     durationHelper(done);
                 }
@@ -6131,12 +6137,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
  
                     if (done >= total || !total) {
                         middleLoading.hide();
-                        if(inArtworkView==true){ //scroll down to newly-added artwork
-                            loadArtView(toScroll.Identifier);   
-                        } else if(inCollectionsView==true){
-                            middleLoading.hide();
-                        }
-
+                        //if(inArtworkView==true){ //scroll down to newly-added artwork
+                        //    loadArtView(toScroll.Identifier);   
+                        
                         var duplicates = new HashTable();
                         var editedNames = names;
 
@@ -6157,10 +6160,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             
                         }
 
-                        //Gets rid of progress bar and progress bar button
-                        //$('.progressBarUploads').remove();
-                        //$('.progressBarUploadsButton').remove();
-
                         var message;
                         if(fromImportPopUp==true){
                             message = "The following files were successfully imported into " + currCollection.Name + ":";
@@ -6170,12 +6169,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         //Confirmation pop up that artworks have been imported
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
-                            
+                            //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
+
+                            //enable import buttons
                             $(newButton).prop('disabled', false);
                             newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                            //hide confirmation box
                             $(importConfirmedBox).hide();
+
+                            if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
+                                loadExhibitionsView();
+                            }
+                            if(inArtworkView==true){ //reload artworks tab if in artworks
+                                loadArtView(toScroll.Identifier);
+                            }                            
                             },
                             message,
                             "OK",
@@ -6193,9 +6203,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         
 
 
-                        if(inArtworkView==true){
-                            loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
-                        }
+                        
 
                         var duplicates = new HashTable();
                         var editedNames = names;
@@ -6222,7 +6230,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             message = "The following files were successfully imported: "
                         }
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                            //remove progress stuff
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+
+                            //enable import buttons
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                            //hide confirmation box
                             $(importConfirmedBox).hide();
+
+                            if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
+                                loadExhibitionsView();
+                            }
+                            if(inArtworkView==true){ //reload artworks tab if in artworks
+                                loadArtView(toScroll.Identifier);
+                            }
                             },
                             message,
                             "OK",
