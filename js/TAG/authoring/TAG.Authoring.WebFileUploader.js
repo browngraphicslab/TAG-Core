@@ -11,7 +11,7 @@ TAG.Authoring.FileUploadTypes = {
     Map: 4
 };
 
-TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp) {
+TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp, disableButton, enableButton) {
 "use strict";
 
     var that = {};
@@ -19,6 +19,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     multiple = multiple || false;
     var uploadingOverlay = $(document.createElement('div')),
     innerProgressBar = $(document.createElement('div')); // HTML upload overlay
+    var progressBarButton;
     var progressBar;
     var dataReaderLoads = [];       //To pass into the finishedCallback, parsed as urls (paths to be precise)
     var maxDuration = Infinity;
@@ -49,6 +50,15 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             //progressIcon = $(document.createElement('img')),
         progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
+        progressBarButton = $(document.createElement('button'))
+            .addClass('progressBarUploadsButton')
+            .addClass('button')
+            .attr('type', 'button')
+            .css({
+                'border-radius':'3.5px','position': 'relative', 'top': '20%', 'left': '8%', 'border-style': 'solid', 'border-color': 'white', 'height': '60%', "display": "inline-block", "color":"white",
+            })
+            .text("Show Uploads");
+
         // Progress / spinner wheel overlay to display while uploading
         uploadingOverlay.attr("id", "uploadingOverlay");
         uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100 });
@@ -62,7 +72,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         progressIcon.attr('src', 'images/icons/progress-circle.gif');
         */
         progressBar.css({
-            'position': 'relative', 'top': '0%', 'left': '5%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '20%', "display":"inline-block",
+            'position': 'relative', 'top': '20%', 'left': '5%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '20%', "display":"inline-block",
         });
 
         innerProgressBar.css({
@@ -70,17 +80,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         });
 
         progressBar.append(innerProgressBar);
-        //uploadingOverlay.append(uploadOverlayText);
-        //uploadingOverlay.append(progressBar);    
-        //root.append(uploadingOverlay);
-        
-        if (fromImportPopUp==true) {
-            uploadingOverlay.append(uploadOverlayText);
-            uploadingOverlay.hide();
-            root.append(uploadingOverlay);
-            console.log("SHOULD HAVE APPENDED overlay");
-        }
-        //removeOverlay();
+
     })();
 
     (function uploadFile() {
@@ -163,15 +163,21 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
         $('body').append(popup);
         $(popup).css({'display':'none'});
-        progressBar.unbind('click').click(function () {
+        /*progressBar.unbind('click').click(function () {
             //$('body').append(popup);
             $(popup).css({ 'display': 'inherit' });
             $(popup).show();
             console.log("popup.show called");
-        });
+        });*/
+
+        progressBarButton.click(function(){
+            $('body').append(popup);
+            $(popup).css({ 'display': 'inherit' });
+            $(popup).show();
+        })
 
         resumableUploader.on('fileSuccess', function(resumableFile, message) {
-            popup.setProgress(resumableFile.fileName, 1.0)
+            popup.setProgress(resumableFile.fileName, 0.9);
 
             //Gets back the relative path of the uploaded file on the server
             globalFiles.push(resumableFile.file);
@@ -186,7 +192,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         resumableUploader.on('complete', function(file) {   //Entire upload operation is complete
             //console.log("COMPLETE");
             finishedUpload();
-            removeOverlay();
+            enableButton();
         });
 
         resumableUploader.on('fileError', function(file, message){
@@ -196,13 +202,17 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         resumableUploader.on('fileProgress', function(resumableFile) {
             popup.setProgress(resumableFile.fileName, resumableFile._prevProgress)
-
+            disableButton();
+            //disabled import button
             var percentComplete = resumableUploader.progress();
             innerProgressBar.width(percentComplete * 90 + "%"); // * 90 or * 100?
         });
 
         resumableUploader.on('fileAdded', function(resumableFile){
             addOverlay();
+            //if(progBarLength <=0){
+            disableButton();
+            //}
             popup.createProgressElement(resumableFile.fileName)
 
             filesAdded++;
@@ -352,18 +362,18 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     function addOverlay(elmt) {
         //uploadingOverlay.show();
-        if (fromImportPopUp==true) {
+        /*if (fromImportPopUp==true) {
             uploadingOverlay.show();
             uploadingOverlay.css({ "display": "block" });
             console.log("Overlay should be visible");
-        } else {
+        } else {*/
             //updates loading UI
             console.log("STARTING NEW UPLOAD")
 
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressBar)
-            //settingsViewTopBar.append(progressBarButton)
-        }
+            settingsViewTopBar.append(progressBarButton)
+        //}
         //var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         //settingsViewTopBar.append(progressBar)
     }
@@ -380,7 +390,8 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     function finishedUpload() {
         console.log("Called finishedUpload");
-        removeOverlay();
+        //removeOverlay();
+        console.log("Would remove overlay now");
         addLocalCallback(globalFiles, localURLs, globalUriStrings)();
         finishedCallback(dataReaderLoads);
 

@@ -3,16 +3,16 @@
 TAG.Auth = (function () {
     "use strict";
     if (!TAG.AuthOverlay) {
-        var overlay = generateOverlay();
+        /*var overlay = generateOverlay();
         TAG.AuthOverlay = overlay.overlay;
         TAG.AuthSubmit = overlay.submit;
         TAG.AuthCancel = overlay.cancel;
         TAG.AuthInput = overlay.input;
         TAG.AuthError = overlay.error;
-        TAG.AuthCircle = overlay.circle;
+        TAG.AuthCircle = overlay.circle; */
         var successFunction;
         var passwordDialogBox;
-        
+ 
     }
 
     return {
@@ -127,7 +127,7 @@ TAG.Auth = (function () {
         successFunction = onSuccess;
         if (TAG.AuthToken) {
             TAG.Worktop.Database.checkToken(TAG.AuthToken, onSuccess, showForm, showForm);
-        } else { 
+        } /*else { 
             showForm(); 
         }
         function showForm() {
@@ -140,7 +140,7 @@ TAG.Auth = (function () {
             TAG.AuthCancel.click(function () {
                 TAG.AuthError.hide();
                 TAG.AuthCircle.hide();
-                TAG.AuthOverlay.fadeOut(500, function () {
+                /*TAG.AuthOverlay.fadeOut(500, function () {
                     TAG.AuthOverlay.remove();
                     if (onCancel) {
                         onCancel();
@@ -159,7 +159,7 @@ TAG.Auth = (function () {
                 checkPassword(TAG.AuthInput.val(), function () {
                     TAG.AuthError.hide();
                     TAG.AuthCircle.hide();
-                    TAG.AuthOverlay.remove();
+                    //TAG.AuthOverlay.remove();
                     onSuccess();
                 }, function () {
                     TAG.AuthError.html('Invalid Password. Please try again...');
@@ -189,7 +189,7 @@ TAG.Auth = (function () {
                     checkPassword(TAG.AuthInput.val(), function () {
                         TAG.AuthError.hide();
                         TAG.AuthCircle.hide();
-                        TAG.AuthOverlay.remove();
+                        //TAG.AuthOverlay.remove();
                         onSuccess();
                 
                     }, function () {
@@ -212,11 +212,11 @@ TAG.Auth = (function () {
                     });
                 }
             });
-        }
+        }*/
     }
 
 
-    function generateOverlay(onSuccess, onCancel) {
+/*    function generateOverlay(onSuccess, onCancel) {
        
 
         var overlay = $(document.createElement('div'));
@@ -274,7 +274,7 @@ TAG.Auth = (function () {
         //    'background-color': 'black',
         //    'padding': '2.5% 2.5%',
         //});
-        overlay.append(loginDialog); 
+        //overlay.append(loginDialog); 
         var dialogTitle = $(document.createElement('div'));
         dialogTitle.attr('id', 'dialogTitle');
         dialogTitle.css({
@@ -394,5 +394,5 @@ TAG.Auth = (function () {
             error: errorMessage,
             circle: circle
         };
-    }
+    }*/
 })();

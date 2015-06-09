@@ -2840,7 +2840,7 @@ TAG.Util.UI = (function () {
             'height': '15%',
             'left': '10%',
             'top': '12.5%',
-            //'font-size': '1.20em',
+            //'font-size': '1.20em', 
             'position': 'relative',
             'text-align': 'left',
             'word-wrap': 'break-word',
@@ -3037,7 +3037,7 @@ TAG.Util.UI = (function () {
     }
 
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry, cancelOption, displayNames) {
         var overlay;
         var origin;
         /*if (document.getElementById("popupblockInteractionOverlay")) {
@@ -3109,6 +3109,18 @@ TAG.Util.UI = (function () {
         }
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
+
+        if(cancelOption == false){
+            for (var i = 0; i < displayNames.length; i++) {
+
+                var para = document.createElement('div');
+                $(para).text(displayNames[i]);
+                $(para).css({color: 'white', 'z-index': '99999999999'});
+                $(messageLabel).append(para);
+                TAG.Util.multiLineEllipsis($(para));
+            }
+        }
+
         $(confirmBox).append(messageLabel);
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
@@ -3173,7 +3185,11 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         }).attr('id', 'popupCancelButton');
         $cancelButton.text('Cancel');
-        $(optionButtonDiv).append(cancelButton);
+
+        if(cancelOption != false){
+            $(optionButtonDiv).append(cancelButton);
+        }
+        
 
         if (forTourBack) {
             $cancelButton.text('Don\'t Save');
@@ -3869,13 +3885,6 @@ TAG.Util.UI = (function () {
 
     var importButton;
 
-    function disableImportButton() {
-        if(importButton != undefined){
-            importButton.css({'opacity': '.4'});
-            $(importButton).prop('disabled', true);
-            console.log("import button should be disabled from function");
-        }   
-    }
 
 
     /**
@@ -3888,10 +3897,13 @@ TAG.Util.UI = (function () {
      * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media), "bg"- background image : type of the association
      * @param tabs           array: list of tab objects. Each has a name property (string, title of tab), a getObjs
      *                              property (a function to be called to get each entity listed in the tab), and a
-     *                              args property (which will be extra arguments sent to getObjs)
+     *                              args property (which will be extra arguments sent to getObjs), also an excluded property
+     *                              which is a list of guids of elements that should not be displayed 
      * @param filter         object: a getObjs property to get components that are already associated with target
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
+     * @param importBehavior
+     * @param queueLength        
      */
     function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength) {
         var pickerOverlay,
@@ -3923,6 +3935,7 @@ TAG.Util.UI = (function () {
         if (type == "bg"){
             origComps= filter.args;
         } else {
+        
         var filterArgs = (filter.args || []).concat([function (comps) { // this has async stuff, make sure it gets called by the time it needs to be
             for (i = 0; i < comps.length; i++) {
                 origComps.push(comps[i].Identifier);
@@ -4326,12 +4339,13 @@ TAG.Util.UI = (function () {
                     var tabArgs = (tabs[j].args || []).concat([function (comps) {
                         tabCache[j].cached = true;
                         tabCache[j].comps = comps;
-                        success(comps);
+                        success(comps,tabs[j].excluded);
                     }, error, cacheError]);
                     tabs[j].getObjs.apply(null, tabArgs);
                 } else {
-                    success(tabCache[j].comps); // used cached results if possible
+                    success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
+
                 if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
                     $(importButton).prop('disabled', false);
                     importButton.css({'opacity': '1'});
@@ -4345,14 +4359,16 @@ TAG.Util.UI = (function () {
             }
         }
 
-        function success(comps) {
+        function success(comps, excluded) {
             var newComps = [];
             for (var i = 0; i < comps.length; i++) {
-                if (!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork')) {
+                //if guid of comp obj is in excluded guid list, don't show it in pop-up
+                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))&& //exclude videos because not 
+                    (comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) < 0))) {
                     newComps.push(comps[i]);
                 }
             }
-            drawComps(newComps, compSingleDoubleClick);
+            drawComps(newComps, compSingleDoubleClick,excluded);
             TAG.Util.removeProgressCircle(progressCirc);
         }
 
@@ -4369,11 +4385,18 @@ TAG.Util.UI = (function () {
          * @param compArray   the list of media to appear in the panel
          * @param applyClick  function to add handlers to each holder element
          */
-        function drawComps(compArray, applyClick) {
+        function drawComps(compArray, applyClick, excluded) {
             if (compArray) {
                 addedComps.length = 0;
                 addedCompsObjs.length = 0;
                 removedComps.length = 0;
+                if (excluded) {
+                    for (var x = 0; x < compArray.length; x++) {
+                        if (compArray[x].Identifier && (excluded.indexOf(compArray[x].Identifier) >= 0)) {
+                            compArray.remove(compArray[x]);
+                        }
+                    }
+                }
                 compArray.sort(function (a, b) {
                     return (a.Name.toLowerCase() < b.Name.toLowerCase()) ? -1 : 1;
                 });
@@ -4725,6 +4748,7 @@ TAG.Util.UI = (function () {
                             console.log(err.message);
                         });
                     }
+
                 } else if (type === 'exhib' && target.type === 'artworkMulti') {
                     if (addedComps.length > 1) {
                         (target.comp.length > 1) ? progressText.text("Adding Artworks to Collections...") : progressText.text("Adding Artwork to Collections...");
