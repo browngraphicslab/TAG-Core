@@ -2696,6 +2696,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 console.log("Made Manage Pop Up");
                 //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
+
+                //console.log(exhibition.Identifier);
+
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{ //Creates tabs - one for all artworks, one for artworks in this collection
