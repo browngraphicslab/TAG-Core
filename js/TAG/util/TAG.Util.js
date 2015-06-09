@@ -4346,6 +4346,7 @@ TAG.Util.UI = (function () {
                 } else {
                     success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
+
                 if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
                     $(importButton).prop('disabled', false);
                     importButton.css({'opacity': '1'});

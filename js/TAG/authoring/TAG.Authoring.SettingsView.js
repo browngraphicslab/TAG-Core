@@ -2686,12 +2686,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                    uploadingOverlay.append(uploadOverlayText); 
                    textAppended = true;
                 }
-                uploadingOverlay.hide();
-                
-                console.log("SHOULD HAVE APPENDED overlay")
-
-
-
                 createArtwork(true, makeManagePopUp, exhibition);
 
                 //makeManagePopUp();
@@ -4510,6 +4504,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    media to associate to artworks
      */
     function assocToArtworks(media) {
+        console.log("called assocToArtworks");
         if (!media) {
             return;
         }
@@ -4682,8 +4677,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } 
                         }
 
+                    //Get rid of progress bar here    
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
-                        $(importConfirmedBox).hide();
+
+                            //remove progress stuff
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+
+                            //enable import buttons
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                                //hide confirmation box
+                            $(importConfirmedBox).hide();
+
+                            if(inAssociatedView==true){ //reload artworks tab if in artworks
+                                loadAssocMediaView(toScroll.Identifier);
+                            }
                         },
                         "The following media files were successfully imported:",
                         "OK",
@@ -4693,9 +4703,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     $(importConfirmedBox).show();
                     TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                     
-                    if (inAssociatedView) {
-                        loadAssocMediaView(toScroll.Identifier);
-                    } 
                 } else {
                     durationHelper(done);
                 }
@@ -5395,6 +5402,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method addArtworksToCollections 
      */
     function addArtworksToCollections(artworks) { 
+        console.log("called addArtworksToCollections");
         if (!artworks.length) {
             return;
         }
@@ -5452,6 +5460,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method addAssocMediaToArtworks
      */
     function addAssocMediaToArtworks(assocMedia) {
+        console.log("called addAssocMediaToArtworks");
         if (!assocMedia.length) {
             return;
         }
@@ -6072,8 +6081,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //updates loading UI
         console.log("FINISHED THE UPLOAD PROCESS")
         var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        $('.progressBarUploads').remove()
-        $('.progressBarUploadsButton').remove()
+        // $('.progressBarUploads').remove()
+        // $('.progressBarUploadsButton').remove()
     }
 
 
@@ -6125,12 +6134,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
  
                     if (done >= total || !total) {
                         middleLoading.hide();
-                        if(inArtworkView==true){ //scroll down to newly-added artwork
-                            loadArtView(toScroll.Identifier);   
-                        } else if(inCollectionsView==true){
-                            middleLoading.hide();
-                        }
-
+                        //if(inArtworkView==true){ //scroll down to newly-added artwork
+                        //    loadArtView(toScroll.Identifier);   
+                        
                         var duplicates = new HashTable();
                         var editedNames = names;
 
@@ -6160,7 +6166,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         //Confirmation pop up that artworks have been imported
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
+                            //remove progress stuff
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+
+                            //enable import buttons
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                            //hide confirmation box
                             $(importConfirmedBox).hide();
+
+                            if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
+                                loadExhibitionsView();
+                            }
+                            if(inArtworkView==true){ //reload artworks tab if in artworks
+                                loadArtView(toScroll.Identifier);
+                            }                            
                             },
                             message,
                             "OK",
@@ -6178,9 +6200,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         
 
 
-                        if(inArtworkView==true){
-                            loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
-                        }
+                        
 
                         var duplicates = new HashTable();
                         var editedNames = names;
@@ -6207,7 +6227,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             message = "The following files were successfully imported: "
                         }
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                            //remove progress stuff
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+
+                            //enable import buttons
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                            //hide confirmation box
                             $(importConfirmedBox).hide();
+
+                            if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
+                                loadExhibitionsView();
+                            }
+                            if(inArtworkView==true){ //reload artworks tab if in artworks
+                                loadArtView(toScroll.Identifier);
+                            }
                             },
                             message,
                             "OK",

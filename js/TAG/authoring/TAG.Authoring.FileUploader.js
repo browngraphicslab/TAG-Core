@@ -147,13 +147,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         });
 
         progressBar.append(innerProgressBar);
-
-        if(fromImportPopUp==true){
-            uploadingOverlay.append(uploadOverlayText);
-            //uploadingOverlay.append(progressBar);
-            uploadingOverlay.hide();
-            root.append(uploadingOverlay);
-        }
         
     })();
 
@@ -266,11 +259,11 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                     } else if (i === (filesObject.length - 1)) { // here we've reached the end
                                         checkDurations(files, function () {
                                             var mins, secs;
-                                            removeOverlay();
                                             addLocalCallback([], [])();
                                             //if(file.fileType.substr(1)!==".mp4")
                                             if (files.length === 0 && largeFiles !== '') { //no > time-limit files
                                                 //alert that all files failed.
+                                                removeOverlay();
                                                 fileUploadError = uploadErrorAlert(null, "The selected file(s) could not be uploaded because they exceed the 50MB file limit.", null);
                                                 $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
                                                 $('body').append(fileUploadError);
@@ -278,6 +271,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 return;
                                             }
                                             else if (files.length === 0 && longFiles.length > 0 && file.fileType !== ".webm" && file.fileType !== ".ogv") { // no > 50MB files
+                                                removeOverlay();
                                                 mins = Math.floor(maxDuration / 60);
                                                 secs = maxDuration % 60;
                                                 if (secs === 0) secs = '00';
@@ -293,6 +287,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                             else if (files.length === 0 && shortFiles.length > 0 && file.fileType !== ".webm"&&file.fileType !== ".ogv") { // no > 50MB files
                                                 mins = Math.floor(minDuration / 60);
                                                 secs = minDuration % 60;
+                                                removeOverlay();
                                                 if (secs === 0) secs = '00';
                                                 else if (secs <= 9) secs = '0' + secs;
 
@@ -304,6 +299,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                                 return;
                                             }
                                             else if (files.length === 0 && file.fileType !== ".webm" && file.fileType !== ".ogv") {
+                                                removeOverlay();
                                                 mins = Math.floor(maxDuration / 60);
                                                 secs = maxDuration % 60;
                                                 if (secs === 0) secs = '00';
@@ -594,10 +590,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      */
     function removeOverlay() {
         uploadingOverlay.remove();
-        //enableButton();
+        enableButton();
         progressText.remove();
-        $('progressBarUploads').remove();
-        $('progressBarUploadsButton').remove();
     }
 
     /**
@@ -619,7 +613,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             try {
                 addOverlay(root);
                 uploadingOverlay.show();
-                //disableButton();
+                disableButton();
 
                 uri = new Windows.Foundation.Uri(uriString);
                 uploader = new Windows.Networking.BackgroundTransfer.BackgroundUploader();

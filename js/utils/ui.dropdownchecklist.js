@@ -469,7 +469,7 @@
 				// Use the same tab index as the selector replacement
 				var tabIndex = self.controlSelector.attr("tabindex");
             	var item = self._createDropItem(index, tabIndex, value, text, optCss, selected, disabled, indent);
-            	container.append(item);
+                container.append(item);
             }
         },
         // Synchronizes the items checked and the source select
