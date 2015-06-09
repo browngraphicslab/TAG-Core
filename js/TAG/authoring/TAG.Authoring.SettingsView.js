@@ -2686,12 +2686,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                    uploadingOverlay.append(uploadOverlayText); 
                    textAppended = true;
                 }
-                uploadingOverlay.hide();
-                
-                console.log("SHOULD HAVE APPENDED overlay")
-
-
-
                 createArtwork(true, makeManagePopUp, exhibition);
 
                 //makeManagePopUp();
@@ -4510,6 +4504,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    media to associate to artworks
      */
     function assocToArtworks(media) {
+        console.log("called assocToArtworks");
         if (!media) {
             return;
         }
@@ -5407,6 +5402,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method addArtworksToCollections 
      */
     function addArtworksToCollections(artworks) { 
+        console.log("called addArtworksToCollections");
         if (!artworks.length) {
             return;
         }
@@ -5464,6 +5460,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method addAssocMediaToArtworks
      */
     function addAssocMediaToArtworks(assocMedia) {
+        console.log("called addAssocMediaToArtworks");
         if (!assocMedia.length) {
             return;
         }
