@@ -3463,6 +3463,7 @@ TAG.Util.UI = (function () {
 
     // slide towards left (splitscreen)
     function slidePageLeftSplit(oldpage, newpage, callback) {
+        console.log("sliding page left")
         var outgoingDone = false,
             incomingDone = false,
             metaContainer = oldpage.parent(),
@@ -4641,6 +4642,11 @@ TAG.Util.UI = (function () {
         function finalizeAssociations() {
             var options = {};
 
+            //to prevent multiple uploading texts and loading circles from appearing simultanesouly
+            if ($(".progressText").length > 0 && $(".progressCircle").length > 0) {
+                $(".progressText").remove()
+                $(".progressCircle").remove()
+            }
 
             // progress circle CSS to be displayed on the top bar next to the back button, while the process is loading
             var progressCircCSS = {
