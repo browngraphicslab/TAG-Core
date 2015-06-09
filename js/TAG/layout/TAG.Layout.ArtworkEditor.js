@@ -77,6 +77,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             height: (100 - topbarHeight) + '%'
         }).addClass("mainPanel");
 
+        root[0].onkeydown = function (e) {
+            if (e.which == 9) {
+                return false;
+            }
+        }
+
+
         //creates deep zoom image
         if (artwork) {
             
@@ -2180,6 +2187,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     rect,
                     key,
                     rightbar = $('.rightbar'); // TODO get this from JADE, store as a 'global' variable at top of file
+
 
                 isHotspot = linq.Metadata.Type === "Hotspot";
                 isLayer = linq.Metadata.Type === "Layer";

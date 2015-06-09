@@ -5050,7 +5050,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadArtView(id, matches) {
-
         console.log(sortByArt);
         
         inGeneralView = false;
