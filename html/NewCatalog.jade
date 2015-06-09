@@ -13,8 +13,8 @@
 					img#backArrow
 					.arrowArea
 				.collection-title
-			#nextArrowArea
-				img#nextArrow
+			//#nextArrowArea
+				//img#nextArrow
 		#timelineArea
 
 		#collectionDotHolder
@@ -22,16 +22,24 @@
 		
 	#bottomContainer
 		#catalogDivContainer
-			#sortRow.background
-				#searchFilter
-					input#searchInput
-					
-				#buttonRow.background
-				#toggleRow.background
-					#artworksButton.toggleButton
-						|Artworks
-					#assocMediaButton.toggleButton
-						|Associated Media	
+			#filterContainer
+				#leftContainer
+					#search
+						ul.rowLeft
+							li.rowItem
+								input#searchInput
+					#sorts	
+					#divide
+						span |
+					#filters
+						ul.rowLeft
+							li.rowItem
+								#artworksButton.rowButton.secondaryFont Artworks
+							li.rowItem
+								#assocMediaButton.rowButton.secondaryFont Associated Media
+					br
+					#keywords
+				
 			#catalogDiv.background
 		#searchTxt	
 			

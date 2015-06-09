@@ -633,6 +633,8 @@ TAG.Worktop.Database = (function () {
         error: Called for any other errors
     */
     function changeExhibition(guid, options, success, unauth, conflict, error) {
+        console.log("CHANGE EXHIBITION")
+        console.log(guid)
         _db = _db || new Worktop.Database();
         if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
         _db.postExhibition(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);
@@ -829,6 +831,13 @@ TAG.Worktop.Database = (function () {
     */
     function batchDeleteDoq(guids, success, unauth, conflict, error) {
         _db = _db || new Worktop.Database();
+        //Lucy- experimenting with single request for each artwork
+        /**
+        for (var x = 0; x < guids.length; x++) {
+            //if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
+            _db.deleteDoq(guids[x], { success: success, error: error, unauth: unauth, conflict: conflict });
+        }
+        **/
         _db.batchDeleteDoq(guids, { success: success, error: error, unauth: unauth, conflict: conflict });
     }
 
