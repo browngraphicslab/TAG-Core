@@ -2840,7 +2840,7 @@ TAG.Util.UI = (function () {
             'height': '15%',
             'left': '10%',
             'top': '12.5%',
-            //'font-size': '1.20em',
+            //'font-size': '1.20em', 
             'position': 'relative',
             'text-align': 'left',
             'word-wrap': 'break-word',

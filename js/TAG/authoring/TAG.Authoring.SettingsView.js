@@ -67,7 +67,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = [],
         // = root.find('#importButton'),
 
-        
+
 
         primaryColorPicker,
         secondaryColorPicker,
@@ -108,7 +108,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 text: 'Tours',
                 subtext: 'Build interactive tours'
             },
-            dummytour:{
+            dummytour: {
                 text: 'Tours',
                 subtext: 'Tours are disabled on the web'
             },
@@ -189,6 +189,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false,
         pickerOpen = false,
         multiSelected = [],
+        toBeUnselected = null,
 
         // booleans
 		inGeneralView = false,
@@ -1854,6 +1855,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Set the new button text to "New"
         prepareNextView(true, "New", createExhibition);
+        
+        //Enables newButton - might be disabled initially because upload is happening
+        $(newButton).prop('disabled', false);
+        newButton.css({'opacity': '1', 'background-color': 'transparent'});
+        
+        
         clearRight();
         prepareViewer(true);
 
@@ -1920,7 +1927,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
-                        }, val.Identifier, 0, 0, 0, 0, markedForDelete), true));
+                        }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true));
                         selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -2686,13 +2693,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
                 createArtwork(true, makeManagePopUp, exhibition);
+
                 //makeManagePopUp();
                 
             }
 
             function makeManagePopUp(){
                 console.log("Made Manage Pop Up");
-                currCollection= exhibition.Identifier;
+                //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
@@ -2905,7 +2913,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (bg){
             options.Background = bg;
         }
-
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
             //refreshExhibition(exhibition);
             //collectionsIsLoading = false;
@@ -2999,7 +3006,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         currentIndex = 0;
 
+        //Enables new button
+        $(newButton).prop('disabled', false);
+        newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
         prepareNextView(true, "New", createTour);
+
         clearRight();
         prepareViewer(true);
         var cancel = false;
@@ -3063,7 +3075,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                         }, val.Identifier, false, function () {
                             editTour(val);
-                        }, 0, 0, markedForDelete), true));
+                        }, 0, 0, markedForDelete,true), true));
                         selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -3593,6 +3605,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         findContainer.css('width','100%');
 
+        //Enables new button - might be initially disabled if upload is happening
+
+        if($('.progressBarUploads').length>0){ //upload happening - disable import button
+            $(newButton).prop('disabled', true);
+            newButton.css({'opacity': '.4'});
+        }
+
         prepareNextView(true, "Import", createAsset);
         prepareViewer(true);
         clearRight();
@@ -3681,6 +3700,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         function displayLabels() {
+            var selectNext = false;
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -3728,7 +3748,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 previousIdentifier = val.identifier;
                                 loadAssocMedia(val);
                                 currentIndex = i;
-                            }, val.Identifier, false, 0, 0, 0, markedForDelete), true));
+                            }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true));
                             selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -3762,6 +3782,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             console.log(val);
                             middleLoading.before(label = createSortLabel(val));
                         });
+                        selectNext = true;
                     }
                 });
                 // Hide the loading label when we're done
@@ -4642,12 +4663,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 if (done >= total) {
+                    var duplicates = new HashTable();
+                        var editedNames = names;
 
+                        //Remove duplicate names
+                        for (var i = 0; i < editedNames.length; i ++){
+
+                            if(duplicates._hasItem(editedNames[i])){
+                                editedNames[i] = null;
+                            }else{
+                                duplicates.insert(editedNames[i], editedNames[i]);
+                            }
+                        }
+                        for (var i = 0; i<editedNames.length; i++){
+                            if(editedNames[i] != null){
+                                var stringName =  editedNames[i].toString();
+                                editedNames[i] = stringName;   
+                            } 
+                        }
+
+                    var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                        $(importConfirmedBox).hide();
+                        },
+                        "The following media files were successfully imported:",
+                        "OK",
+                        false, null, null, null, null, null, false, editedNames);
+
+                    root.append(importConfirmedBox);
+                    $(importConfirmedBox).show();
+                    TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                    
                     if (inAssociatedView) {
                         loadAssocMediaView(toScroll.Identifier);
-                    } else {
-                        
-                    }
+                    } 
                 } else {
                     durationHelper(done);
                 }
@@ -5067,6 +5115,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var sortBy = "Title";
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork, null, true);
+        
+        if($('.progressBarUploads').length>0){ //upload happening - disable import button
+            $(newButton).prop('disabled', true);
+            newButton.css({'opacity': '.4'});
+        }
+        
         prepareViewer(true);
         clearRight();
         var cancel = false;
@@ -5202,6 +5256,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         function displayLabels() {
+            var selectNext= false;
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -5245,8 +5300,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 if (val.Metadata.Type === "Artwork") {
                                     editArtwork(val);
                                 }
-                            }, true, val.Extension, markedForDelete), true));
-
+                            }, true, val.Extension, markedForDelete,true), true));
+                            selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
                             if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -5289,6 +5344,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             middleLoading.before(label= createSortLabel(val));
                         });
                     }
+                    selectNext = true;
                 });
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
@@ -6073,18 +6129,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             loadArtView(toScroll.Identifier);   
                         } else if(inCollectionsView==true){
                             middleLoading.hide();
-
-                            //try adding artworks to collection here
-                            //HOW TO GET THE ARTWORKS THAT HAVE JUST BEEN IMPORTED?
-                            var origFiles = files;
-                            var addIDs = files.join(",");
-                            console.log(addIDs);
-                            //TAG.Worktop.Database.changeExhibition(currCollection.Identifier, {AddIDs: addIDs}, console.log("Artwork added to a collection"));
-                            for (var i = 0; i < files.length; i++) {
-                                //TAG.Worktop.Database.changeExhibition(origFiles[i], { AddIDs: [currCollection.Identifier] }, console.log("Artwork added to a collection"));
-                            }                    
-                            //console.log("the exhibition name is " + currCollection.Name);
-                            //remakePopUp();
                         }
 
                         var duplicates = new HashTable();
@@ -6106,11 +6150,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }
                             
                         }
+
+                        var message;
+                        if(fromImportPopUp==true){
+                            message = "The following files were successfully imported into " + currCollection.Name + ":";
+                        } else{
+                            message = "The following files were successfully imported: "
+                        }
+
                         //Confirmation pop up that artworks have been imported
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
                             $(importConfirmedBox).hide();
                             },
-                            "The following files have been successfully imported: ",
+                            message,
                             "OK",
                             false, null, null, null, null, null, false, editedNames);
                         root.append(importConfirmedBox);
@@ -6123,10 +6175,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else {
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
+                        
+
+
                         if(inArtworkView==true){
                             loadArtView(toScroll.Identifier);   //Scroll down to a newly-added artwork
-                        } else if(inCollectionsView==true){
-                            remakePopUp();
                         }
 
                         var duplicates = new HashTable();
@@ -6147,10 +6200,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             
                         }
 
+                        var message;
+                        if(fromImportPopUp==true){
+                            message = "The following files were successfully imported into " + currCollection.title + ":";
+                        } else{
+                            message = "The following files were successfully imported: "
+                        }
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             $(importConfirmedBox).hide();
                             },
-                            "The following files were successfully imported: ",
+                            message,
                             "OK",
                             false, null, null, null, null, null, false, editedNames);
 
@@ -6224,6 +6283,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     TAG.Worktop.Database.convertVideo(function () {
                     }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
                 }
+                if (fromImportPopUp == true) {
+                    TAG.Worktop.Database.changeExhibition(currCollection.Identifier, { AddIDs: [newDoq.Identifier] }, console.log("This worked maybe"));
+                }
                 /*var source = newDoq.Metadata.Source;
                 if (contentTypes[j] === "Video") {
                     var newFileName = source.slice(8, source.length);
@@ -6252,6 +6314,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     root.append(confirmBox);
                     $(confirmBox).show();
                 }*/
+
             }
 
         }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv'], fromImportPopUp);
@@ -7120,9 +7183,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Boolean} inArtMode 
      * @param extension                 to check if is video or static art
      * @param markedForDelete           check if artwork has been marked for delete by batch op
+     * @param checkMe                   if the checkbox should start out checked
      * @return {Object} container       the container of the new label
      */
-    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension, markedForDelete) {
+    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension, markedForDelete,checkMe) {
         var container = $(document.createElement('div'));
         text = TAG.Util.htmlEntityDecode(text);
         container.attr('class', 'middleLabel');
@@ -7297,6 +7361,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     })
 
                     var checkboxColor = 'rgb(230, 235, 235)';
+                    var checkbox = $(document.createElement('input'))
+                                    .attr('type', 'checkbox')
+                                    .attr('value', id)
+                                    .css('background-color','gray')
+                                    .attr('id', "checkbox" + id)
+                                    .attr('checked', false)
+                                    .on("click", function (evt) {
+                                        var currCheck = $('#' + this.id);
+                                        if (currCheck.prop("checked")) {
+                                            if (!inAssociatedView) {
+                                                multiSelected.push(id);
+                                            } else {
+                                                multiSelected.push({ Identifier: id, Name: text });
+                                            }
+                                            console.log(multiSelected)
+                                        } else {  
+                                            multiSelected.splice(multiSelected.indexOf(id), 1);
+                                            console.log(multiSelected);
+                                        }
+                                        evt.stopPropagation();
+                                    });
+                    if (checkMe) {
+                        checkbox.attr('checked', true);
+                        if (!inAssociatedView) {
+                            multiSelected.push(id);
+                        } else {
+                            multiSelected.push({ Identifier: id, Name: text });
+                        }
+                        console.log(multiSelected)
+                        toBeUnselected = checkbox;
+                    }
+                    checkboxContainer.append(checkbox);
+                    /**
                     var checkbox = $(document.createElement('div'))
                     .addClass('checkbox')
                     .css({
@@ -7330,6 +7427,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
                     checkboxContainer.append(check)
+
 
                     var isSelected = false;
 
@@ -7378,7 +7476,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     check.on('mouseup', function () {
                         container.mousedown(mousedownFn)
                     })
-
+                    **/
 
                     return checkboxContainer
                 });
@@ -7613,13 +7711,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method selectLabel
      * @param {Object} label    label to select
      * @param {Boolean} expand  if label expands when selected 
-     * @param {Integer} index   index of the selected label in it's relvant list.  
      * @return {Object} label   selected label   
      */
     function selectLabel(label, expand) {
         label.css('background', HIGHLIGHT);
         label.unbind('mousedown').unbind('mouseleave').unbind('mouseup');
-        
+        var labelId = label.attr('id');
+        var text = label.text();
+        var checkBox = $("#checkbox" + labelId);
+        //check that it is a check-able label (not a nav label)
+        if (toBeUnselected && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
+            toBeUnselected.prop('checked', false);
+            multiSelected.splice(multiSelected.indexOf(labelId), 1);
+            console.log(multiSelected);
+            toBeUnselected = null;
+        }
+        if (checkBox.prop("checked") !== undefined){
+            checkBox.prop('checked', true);
+            if (!inAssociatedView) {
+                multiSelected.push(labelId);
+            } else {
+                multiSelected.push({ Identifier: labelId, Name: text });
+            }
+            console.log(multiSelected)
+            toBeUnselected = checkBox;
+        }
         if (expand) {
             label.css('height', '');
             label.children('div').css('white-space', '');
@@ -8795,7 +8911,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             },
             !!multiple, // batch upload disabled
             null,
-            fromImportPopUp
+            fromImportPopUp,
+            //$('.progressBarUploads').length, //determines if an upload is happening 
+            function(){
+                if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
+                    $(newButton).prop('disabled', true);
+                    newButton.css({'opacity': '.4'});
+                }
+            },
+            function(){
+                $(newButton).prop('disabled', false);
+                newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
+            }
             );
         } else {
 
@@ -8868,8 +8996,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //commenting out to test
             !!multiple, // batch upload disabled
             null,
-            fromImportPopUp
-            );
+            fromImportPopUp,
+            function(){
+                if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
+                    $(newButton).prop('disabled', true);
+                    newButton.css({'opacity': '.4'});
+                }
+            },
+            function(){
+                $(newButton).prop('disabled', false);
+                newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
+            }
+        );
         }
     }
 
