@@ -13,6 +13,33 @@
 TAG.Layout.ArtworkEditor = function (artwork) {
     "use strict";
 
+    // TODO: get actual keywords from the server!
+
+    // 3 categories.
+
+    //var keywordCategories = ['fruit, but this category title is going to be really long', 'color', 'genre'];
+    //var keywords = [['platonia', 'bael', 'cherymoya', 'rambutan', 'jabuticaba', 'breadfruit', 'noni'],
+    //                ['vermillion', 'cerulean', 'cinnabar', 'viridian', 'saffron', 'fuschia'],
+    //                ['tropical house', 'hardstyle', 'disco', 'hardcore', 'tagcore',
+    //                'ambient post-noise-metalcoretronicastep', 'classical', 'metamodernism', 'genre',
+    //                'escapism', 'realism', 'meso-american', 'brutalism', 'grilled cheese', 'chuckie cheese',
+    //                'charles darwinism', 'socialism', 'schism', 'sshh', 'shitake', 'list item', '^_^']];
+    //var keywordsCheckboxDict = [[],[],[]];
+
+
+    // 2 categories.
+    //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
+    //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+    //                ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
+
+    // 1 category.
+    //var keywordCategories = ['Fruit, but this category title is going to be really long'];
+    //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
+
+    // No categories, no keywords. Capiche??
+    var keywordCategories = [];
+    var keywords = [[], [], []];
+
     var // DOM-related
         root = $(document.createElement('div')),                    // get via Util.getHtmlAjax in web app
         topbar = $(document.createElement('div')),                  // get via root.find(...) in web app, set up in JADE
@@ -124,7 +151,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         METADATA_EDITOR.init();     // initialize different parts of the editor
         LOCATION_HISTORY.init();
         THUMBNAIL_EDITOR.init();
-        KEYWORDS_EDITOR.init();
+        if (keywordCategories.length > 0) {
+            KEYWORDS_EDITOR.init();
+        }
         MEDIA_EDITOR.init();
     }
 
@@ -578,35 +607,37 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         }
 
         // Keywords button.
-        keywordsButton = $(document.createElement('div')) // TODO J/S
-            .css(newButtonCSS)
-            .on('click', function () {
-                KEYWORDS_EDITOR.toggle();
-            });
-        // Keywords button's right arrow.
-        rightArrowKeywords = $(document.createElement('img')) // TODO J/S
-            .attr('src', tagPath + 'images/icons/Right.png')
-            .css({
-                "position": "absolute",
-                "right": "5%",
-                top: "30%",
-                width: "auto",
-                height: "40%"
-            });
-        keywordsButton.append(rightArrowKeywords); // Append it to the button.
-        // Keywords button's label.
-        keywordsLabel = $(document.createElement('label')) // TODO J/S
-            .text("Keywords  ")
-            .css({
-                "width": "100%",
-                "height": "100%",
-                "text-align": "center",
-                "line-height": keywordsButton.height() + "px", 
-                "font-size": sidePanelFontSize
-            });
-        keywordsButton.append(keywordsLabel); // Append it to the button.
-        if (IS_WINDOWS) {
-            buttonContainer.append(keywordsButton); // Append the keywords button!
+        if (keywordCategories.length > 0) {
+            keywordsButton = $(document.createElement('div')) // TODO J/S
+                .css(newButtonCSS)
+                .on('click', function () {
+                    KEYWORDS_EDITOR.toggle();
+                });
+            // Keywords button's right arrow.
+            rightArrowKeywords = $(document.createElement('img')) // TODO J/S
+                .attr('src', tagPath + 'images/icons/Right.png')
+                .css({
+                    "position": "absolute",
+                    "right": "5%",
+                    top: "30%",
+                    width: "auto",
+                    height: "40%"
+                });
+            keywordsButton.append(rightArrowKeywords); // Append it to the button.
+            // Keywords button's label.
+            keywordsLabel = $(document.createElement('label')) // TODO J/S
+                .text("Keywords  ")
+                .css({
+                    "width": "100%",
+                    "height": "100%",
+                    "text-align": "center",
+                    "line-height": keywordsButton.height() + "px",
+                    "font-size": sidePanelFontSize
+                });
+            keywordsButton.append(keywordsLabel); // Append it to the button.
+            if (IS_WINDOWS) {
+                buttonContainer.append(keywordsButton); // Append the keywords button!
+            }
         }
 
         assocMediaLabel = $(document.createElement('div')); // TODO JADE/STYL
@@ -779,7 +810,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         THUMBNAIL_EDITOR.close();
         LOCATION_HISTORY.close();
         METADATA_EDITOR.close();
-        KEYWORDS_EDITOR.close();
+        if (keywordCategories > 0) {
+            KEYWORDS_EDITOR.close();
+        }
     }
 
     /**
@@ -2957,81 +2990,15 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             $saveContainer,     // Div holding the save button.
             $saveButton;         // Save button.
 
-        /**
-         * Create initial select elements. Another method will call the jQuery library "dropdownchecklist"
-         * that will format the select elements, then that method will do some styling.
-         * @method createSelects
-         * @param {Array} categories - Array of categories.
-         * @param {Array} keywords - Array of arrays containing keywords. 
-         */
-        function createSelects(categories, keywords, container) {
-            // Make sure everything's coo.
-            if (!keywords || !categories || !categorySelects) {
-                console.log('Tried creating selects before initializing the keywords editor!');
-                return;
-            }
-            // Create a list to store checklists in.
-            var $selectList = $(document.createElement('ul'))
-                .addClass('keywords-ul');
-
-            // Create one select element for each category.
-            categories.forEach(function (category, categoryIndex) {
-                // Create list item to hold the select.
-                var $listItem = $(document.createElement('li')) // List item to hold select.
-                    .addClass('keywords-item'); // Class stylizes the item.
-
-                // Create the select.
-                var $select = $(document.createElement('select')) // Select element.
-                    .addClass('keywords-select') // Class stylizes the select.
-                    .attr('multiple', 'multiple'); // Make this a multi-select element. jQuery library will make it a nice dropdown checklist.
-                keywords[categoryIndex].forEach(function (keyword, keywordIndex) {
-                    var $keywordOption = $(document.createElement('option'))
-                        .addClass('keywords-option')
-                        .text(keyword) // Set the text to the keyword.
-                        .attr('value', keywordIndex.toString()) // Set the value to its index.
-                    $select.append($keywordOption); // Add each of the keywords as an option.
-                });
-
-                // Add stuff to the actual DOM and store it for reference.
-                categorySelects.push($select); // Add the select to our internal array for reference.
-                $listItem.append($select); // Add the select to the list item.
-                $selectList.append($listItem); // Add the list item to the main list.
-                container.append($selectList);
-            });
-        }
+        // TODO: GET FROM METADATA
+        var currentKeywords = [['breadfruit'], ['saffron'], ['charles darwinism', '^_^']];
 
         /**
          * Initialize the keywords editor UI
          * @method init
          */
         function init() {
-            var formTitle;
-
-            // TODO: get actual keywords from the server!
-
-            // 3 categories.
-            
-            //var keywordCategories = ['fruit, but this category title is going to be really long', 'color', 'genre'];
-            //var keywords = [['platonia', 'bael', 'cherymoya', 'rambutan', 'jabuticaba', 'breadfruit', 'noni'],
-            //                ['vermillion', 'cerulean', 'cinnabar', 'viridian', 'saffron', 'fuschia'],
-            //                ['tropical house', 'hardstyle', 'disco', 'hardcore', 'tagcore', 
-            //                'ambient post-noise-metalcoretronicastep', 'classical', 'metamodernism', 'genre',
-            //                'escapism', 'realism', 'meso-american', 'brutalism', 'grilled cheese', 'chuckie cheese',
-            //                'charles darwinism', 'socialism', 'schism', 'sshh', 'shitake', 'list item', '^_^']];
-            
-
-            // 2 categories.
-            var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
-            var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-                            ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
-
-            // 1 category.
-            //var keywordCategories = ['Fruit, but this category title is going to be really long'];
-            //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
-
-            // No categories, no keywords. Capiche??
-            //var keywordCategories = [];
-            //var keywords = [[], [], []];
+            var formTitle
 
             $keywordsForm = $(document.createElement('div')) // TODO JADE/STYL
                 .attr("id", "keywordsForm")
@@ -3172,25 +3139,45 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                                 $(this).css({ 'background-color': '#fff' });
                             }
                         )
+                        .click(function() {
+                            $(this).find('input:checkbox').attr('checked', !$(this).find('input:checkbox').attr('checked'));
+                        })
                         .appendTo($checklist);
                     var $keywordCheckbox = $(document.createElement('input'))
+                        .addClass('keyword-checkbox')
                         .attr('type', 'checkbox')
-                        .attr('id', 'keyword-checkbox-' + categoryIndex + '-' + keywordIndex)
+                        .attr('id', 'keyword-checkbox_' + categoryIndex + '_' + keywordIndex)
                         .attr('index', keywordIndex)
                         .attr('value', keywordIndex)
                         .css({
                             'border': '1px solid #777',
                             'background-color': '#fff'
                         })
+                        .click(function(e) {
+                            e.stopPropagation();
+                        })
                         .appendTo($keywordDiv);
+                    keywordsCheckboxDict[categoryIndex][keyword] = $keywordCheckbox;
                     var $keywordLabel = $(document.createElement('label'))
                         .text(keyword)
-                        .attr('for', 'keyword-checkbox-' + categoryIndex + '-' + keywordIndex)
+                        .attr('index', keywordIndex)
+                        .attr('value', keywordIndex)
+                        .attr('for', 'keyword-checkbox_' + categoryIndex + '_' + keywordIndex)
                         .css({
                             'cursor': 'default',
                             'font-size': '0.7em'
                         })
+                        .click(function (e) {
+                            e.stopPropagation();
+                        })
                         .appendTo($keywordDiv);  
+                });
+            });
+
+            // Check off the current keywords.
+            keywordCategories.forEach(function (category, categoryIndex) {
+                currentKeywords[categoryIndex].forEach(function (keyword, keywordIndex) {
+                    keywordsCheckboxDict[categoryIndex][keyword][0].checked = true;
                 });
             });
 
@@ -3203,15 +3190,6 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'position': 'relative'
                 })
                 .appendTo($keywordsForm);
-            var $saveMessage = $(document.createElement('div'))
-                .text('SOME DEFAULT TEXT')
-                .css({
-                    'font-size': '11pt',
-                    'position': 'absolute',
-                    'left': '5.5%',
-                    'top': '0px'
-                })
-                .appendTo($saveContainer);
             var $saveButton = $(document.createElement('button'))
                 .attr('id', 'save-keywords-button')
                 .text("Save Keywords").css('border-radius', '3.5px')
@@ -3219,6 +3197,23 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                     'position': 'absolute',
                     'right': '5.5%',
                     'top': '0px'
+                })
+                .click(function() {
+                    var i,
+                        j,
+                        checkboxes = $('input.keyword-checkbox:checked'),
+                        artworkKeywords = [[], [], []];
+                    for (i = 0; i < checkboxes.length; i++) {
+                        var categoryIndex = $(checkboxes[i]).attr('id').split('_')[1];
+                        artworkKeywords[categoryIndex].push($(checkboxes[i]).parent().find('label').text());
+                    }
+
+                    for (i = 0; i < artworkKeywords.length; i++) {
+                        console.log(keywordCategories[i]);
+                        for (j = 0; j < artworkKeywords[i].length; j++) {
+                            console.log('    ' + artworkKeywords[i][j]);
+                        }
+                    }
                 })
                 .appendTo($saveContainer);
         }
