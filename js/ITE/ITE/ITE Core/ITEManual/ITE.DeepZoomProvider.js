@@ -34,7 +34,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     var _deepZoom,
     	_UIControl,
     	_proxy,//For touch handling. We want to be able to click through the transparent parts of the layers, so we're just adding a div over the part of the canvas that has the image.
-    			//TODO: there has GOT to be a better way to do this
+    			//TOD
++O: there has GOT to be a better way to do this
     	_canvasHolder,
     	_viewer;
         self._UIControl = _UIControl;
