@@ -2840,7 +2840,7 @@ TAG.Util.UI = (function () {
             'height': '15%',
             'left': '10%',
             'top': '12.5%',
-            //'font-size': '1.20em',
+            //'font-size': '1.20em', 
             'position': 'relative',
             'text-align': 'left',
             'word-wrap': 'break-word',
@@ -3463,6 +3463,7 @@ TAG.Util.UI = (function () {
 
     // slide towards left (splitscreen)
     function slidePageLeftSplit(oldpage, newpage, callback) {
+        console.log("sliding page left")
         var outgoingDone = false,
             incomingDone = false,
             metaContainer = oldpage.parent(),
@@ -3885,7 +3886,33 @@ TAG.Util.UI = (function () {
 
     var importButton;
 
+    /*
+    This function will be the backend that will merge multiple collections into a specified collection
 
+    param guids         array: list of guids that will be merged into the target collection
+    param targetguid    string: the guid of the target collection to be merged into
+    param callback      function:  the callback function
+
+    */
+
+    function mergeCollectionsIntoOneCollection(guids, targetguid, callback) {
+        console.log("about to merge collections into another collection")
+        var totalGuids = [] // the compilation of all artwork guids in all the collections being merged
+        for (i = 0; i < guids.length; i++){
+            TAG.Worktop.Database.getArtworksIn(guids[i],addArtworks,function(err){console.log(err.message)},function(err){console.log(err.message)})
+        }
+        function addArtworks(artworks) {
+            if (artworks) {
+                totalGuids.concat(artworks)
+            }
+        }
+        var options = {}
+        console.log("total guids: "+totalGuids)
+        if(totalGuids.length > 0){
+            options.AddIDs = totalGuids.join(',')
+        }
+        TAG.Worktop.Database.changeExhibition(targetguid, options , callback, function (err) { console.log(err.message) }, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
+    }
 
     /**
      * Creates a picker (e.g. click add/remove media in the artwork editor) to manage
@@ -4345,6 +4372,7 @@ TAG.Util.UI = (function () {
                 } else {
                     success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
+
                 if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
                     $(importButton).prop('disabled', false);
                     importButton.css({'opacity': '1'});
@@ -4641,6 +4669,11 @@ TAG.Util.UI = (function () {
         function finalizeAssociations() {
             var options = {};
 
+            //to prevent multiple uploading texts and loading circles from appearing simultanesouly
+            if ($(".progressText").length > 0 && $(".progressCircle").length > 0) {
+                $(".progressText").remove()
+                $(".progressCircle").remove()
+            }
 
             // progress circle CSS to be displayed on the top bar next to the back button, while the process is loading
             var progressCircCSS = {

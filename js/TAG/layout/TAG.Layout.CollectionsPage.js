@@ -676,13 +676,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // TODO: get actual keywords from the server!
 
         // 3 categories.
-        // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
-        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-        //                 ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
-        //                 ['Tropical House', 'Hardstyle', 'Disco', 'Hardcore', 'Tagcore', 
-        //                 'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Genre',
-        //                 'Escapism', 'Realism', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
-        //                 'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'List Item', '^_^']];
+         //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
+         //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+         //                ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
+         //                ['Tropical House', 'Hardstyle', 'Disco', 'Hardcore', 'Tagcore', 
+         //                'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Genre',
+         //                'Escapism', 'Realism', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
+         //                'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'List Item', '^_^']];
 
         // 2 categories.
         // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
@@ -740,10 +740,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             keywordsDiv.append(selectList);
 
             // Now run the dropdowncheclist jQuery library to turn the select elements into basic dropdown lists.
-            $('select.keywordsSelect').dropdownchecklist({
-                maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
-                closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
-            });
+            if (IS_WINDOWS) {
+                MSApp.execUnsafeLocalFunction(function () { // You got a deathwish, Truant?
+                    $('select.keywordsSelect').dropdownchecklist({
+                        maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                        closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
+                    });
+                });
+            } else {
+                $('select.keywordsSelect').dropdownchecklist({
+                    maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                    closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
+                });
+            }
             
             // Unfortunately, the dropdownchecklists are minimally stylized, so we need to do some cleaning up. 
 
