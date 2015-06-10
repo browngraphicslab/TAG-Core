@@ -4400,7 +4400,7 @@ TAG.Util.UI = (function () {
         }
 
         function error() {
-            console.log("ERROR IN TABHELPER");
+            consolelog("ERROR IN TABHELPER");
         }
 
         function cacheError() {
