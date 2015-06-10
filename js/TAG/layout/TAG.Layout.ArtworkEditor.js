@@ -13,6 +13,33 @@
 TAG.Layout.ArtworkEditor = function (artwork) {
     "use strict";
 
+    // TODO: get actual keywords from the server!
+
+    // 3 categories.
+
+    //var keywordCategories = ['fruit, but this category title is going to be really long', 'color', 'genre'];
+    //var keywords = [['platonia', 'bael', 'cherymoya', 'rambutan', 'jabuticaba', 'breadfruit', 'noni'],
+    //                ['vermillion', 'cerulean', 'cinnabar', 'viridian', 'saffron', 'fuschia'],
+    //                ['tropical house', 'hardstyle', 'disco', 'hardcore', 'tagcore',
+    //                'ambient post-noise-metalcoretronicastep', 'classical', 'metamodernism', 'genre',
+    //                'escapism', 'realism', 'meso-american', 'brutalism', 'grilled cheese', 'chuckie cheese',
+    //                'charles darwinism', 'socialism', 'schism', 'sshh', 'shitake', 'list item', '^_^']];
+    //var keywordsCheckboxDict = [[],[],[]];
+
+
+    // 2 categories.
+    //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
+    //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+    //                ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
+
+    // 1 category.
+    //var keywordCategories = ['Fruit, but this category title is going to be really long'];
+    //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
+
+    // No categories, no keywords. Capiche??
+    var keywordCategories = [];
+    var keywords = [[], [], []];
+
     var // DOM-related
         root = $(document.createElement('div')),                    // get via Util.getHtmlAjax in web app
         topbar = $(document.createElement('div')),                  // get via root.find(...) in web app, set up in JADE
@@ -34,6 +61,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         METADATA_EDITOR = MetadataEditor(),                                               // MetadataEditor object to deal with metadata-related business
         THUMBNAIL_EDITOR = ThumbnailEditor(),                                             // ThumbnailEditor object to deal with setting up thumbnail editing
         LOCATION_HISTORY = RichLocationHistory(),                                         // RichLocationHistory object ................................
+        KEYWORDS_EDITOR = KeywordsEditor(),                                               // Keywords Editor object to deal with keywords
         MEDIA_EDITOR = AssocMediaEditor(),                                                // AssocMediaEditor object ................................
         TEXT_EDITOR = AssocTextEditor(),
 
@@ -46,6 +74,8 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         rightArrowEditThumb,          // right arrow in "Edit Thumbnail" button
         editLocButton,                // "Edit Location History" button
         rightArrowEditLoc,            // right arrow in "Edit Location History" button
+        keywordsButton,               // "Keywords" button
+        rightArrowKeywords,           // right arrow in "Keywords" button
         sidebarHideButtonContainer,   // tab to expand/contract side bar
         creatingText,                  // editing text associated media
         rightbarIsOpen;               // rightbar status
@@ -121,6 +151,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         METADATA_EDITOR.init();     // initialize different parts of the editor
         LOCATION_HISTORY.init();
         THUMBNAIL_EDITOR.init();
+        if (keywordCategories.length > 0) {
+            KEYWORDS_EDITOR.init();
+        }
         MEDIA_EDITOR.init();
     }
 
@@ -414,6 +447,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             editLocLabel,      // "Edit Location History" label
             editThumbLabel,    // "Edit Thumbnail" label
             assocMediaLabel,   // "Associated Media" label
+            keywordsLabel,     // "Keywords" label
             addRemoveMedia,    // "Add/Remove Media" button
             addText,      // "Add Text" button
             assetContainer,    // contains assoc media thumbnail buttons
@@ -476,84 +510,135 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         });
         buttonContainer.append(artworkInfoLabel);
 
-        rightArrow = $(document.createElement('img')); // TODO J/S
-        rightArrow.attr('src', tagPath+'images/icons/Right.png'); // TODO keep this in js, tack on tagPath in web app
-        rightArrow.css({
-            "position": "absolute",
-            "right": "5%",
-            top: "30%",
-            width: "auto",
-            height: "40%"
-        });
-
+        // Metadata button.
         metadataButton = $(document.createElement('div')) // TODO J/S
-                            .css(newButtonCSS);
-        metadataButton.append(rightArrow);
-
-        metaDataLabel = $(document.createElement('label')); // TODO J/S
-        metaDataLabel.text("Metadata  ");
-        metaDataLabel.css({
-            "width": "100%",
-            "height": "100%",
-            "text-align": "center",
-            "line-height": metadataButton.height() + "px",
-            "font-size": sidePanelFontSize
-        });
-
-        metadataButton.append(metaDataLabel);
+            .css(newButtonCSS)
+            .on('click', function () {
+                METADATA_EDITOR.toggle();
+            });
+        // Metadata button's right arrow.
+        rightArrow = $(document.createElement('img')) // TODO J/S
+            .attr('src', tagPath+'images/icons/Right.png') // TODO keep this in js, tack on tagPath in web app
+            .css({
+                "position": "absolute",
+                "right": "5%",
+                top: "30%",
+                width: "auto",
+                height: "40%"
+            });
+        metadataButton.append(rightArrow); // Append it to the button.
+        // Metadata button's label.
+        metaDataLabel = $(document.createElement('label')) // TODO J/S
+            .text("Metadata  ")
+            .css({
+                "width": "100%",
+                "height": "100%",
+                "text-align": "center",
+                "line-height": metadataButton.height() + "px",
+                "font-size": sidePanelFontSize
+            });
+        metadataButton.append(metaDataLabel); // Append it to the button.
+        // Append the metadata button!
         buttonContainer.append(metadataButton);
 
-        rightArrowEditLoc = $(document.createElement('img')); // TODO J/S
-        rightArrowEditLoc.attr('src', tagPath+'images/icons/Right.png');
-        rightArrowEditLoc.css({ "position": "absolute", "right": "5%", top: "30%", width: "auto", height: "40%" });
-
-        editLocLabel = $(document.createElement('label')); // TODO J/S
-        editLocLabel.text("Edit Maps  ");
-        editLocLabel.css({ "width": "100%", "height": "100%", "line-height": "100%", "text-align": "center" });
-
-        editLocButton = $(document.createElement('div')); // TODO J/S
-        editLocButton.css(newButtonCSS);
-        if (IS_WINDOWS){
-            buttonContainer.append(editLocButton);
+        // Edit maps button.
+        editLocButton = $(document.createElement('div')) // TODO J/S
+            .css(newButtonCSS)
+            .on('click', function () {
+                LOCATION_HISTORY.toggle();
+            });
+        // Edit maps button's right arrow.
+        rightArrowEditLoc = $(document.createElement('img')) // TODO J/S
+            .attr('src', tagPath+'images/icons/Right.png')
+            .css({
+                "position": "absolute",
+                "right": "5%",
+                top: "30%",
+                width: "auto",
+                height: "40%"
+            });
+        editLocButton.append(rightArrowEditLoc); // Append it to the button.
+        // Edit maps button's label.
+        editLocLabel = $(document.createElement('label')) // TODO J/S
+            .text("Edit Maps  ")
+            .css({
+                "width": "100%",
+                "height": "100%",
+                "text-align": "center",
+                "line-height": editLocButton.height() + "px",
+                "font-size": sidePanelFontSize
+            });
+        editLocButton.append(editLocLabel); // Append it to the button.
+        if (IS_WINDOWS) {
+            buttonContainer.append(editLocButton); // Append the edit maps button!
         }   
-        editLocButton.append(rightArrowEditLoc);
-        editLocButton.append(editLocLabel);
-        editLocLabel.css({ "line-height": editLocButton.height() + "px", "font-size": sidePanelFontSize });
 
-        editThumbLabel = $(document.createElement('label')); // TODO J/S
-        editThumbLabel.text("Capture Thumbnail  ");
-        editThumbLabel.css({ "width": "100%", "height": "100%", "line-height": "100%", "text-align": "center" });
-
-        rightArrowEditThumb = $(document.createElement('img')); // TODO J/S
-        rightArrowEditThumb.attr('src', tagPath+'images/icons/Right.png');
-        rightArrowEditThumb.css({ "position": "absolute", "right": "5%", top: "30%", width: "auto", height: "40%" });
-
-        editThumbnailButton = $(document.createElement('div')); // TODO J/S
-        editThumbnailButton.addClass("editThumbnailButton");
-        editThumbnailButton.attr('type', 'button');
-        editThumbnailButton.css(newButtonCSS);
-
-        if (IS_WINDOWS){
-            buttonContainer.append(editThumbnailButton); // TODO J/S
+        // Edit thumbnail button.
+        editThumbnailButton = $(document.createElement('div')) // TODO J/S
+            .addClass("editThumbnailButton")
+            .attr('type', 'button')
+            .css(newButtonCSS)
+            .on('click', function () {
+                THUMBNAIL_EDITOR.toggle();
+            });
+        // Edit thumbnail button's right arrow.
+        rightArrowEditThumb = $(document.createElement('img')) // TODO J/S
+            .attr('src', tagPath + 'images/icons/Right.png')
+            .css({
+                "position": "absolute",
+                "right": "5%",
+                top: "30%",
+                width: "auto",
+                height: "40%"
+            });
+        editThumbnailButton.append(rightArrowEditThumb); // Append it to the button.
+        // Edit thumbnail button's label.
+        editThumbLabel = $(document.createElement('label')) // TODO J/S
+            .text("Capture Thumbnail  ")
+            .css({
+                "width": "100%",
+                "height": "100%",
+                "line-height": editThumbnailButton.height() + "px",
+                "font-size": sidePanelFontSize
+            });
+        editThumbnailButton.append(editThumbLabel); // Append it to the button.
+        if (IS_WINDOWS) {
+            buttonContainer.append(editThumbnailButton); // Append the edit thumnbail button!
         }
-        editThumbnailButton.append(rightArrowEditThumb);
-        editThumbnailButton.append(editThumbLabel);
-        editThumbLabel.css({ "line-height": editLocButton.height() + "px", "font-size": sidePanelFontSize });
 
-        // toggles metadata form and button
-        metadataButton.on('click', function () {
-            METADATA_EDITOR.toggle();
-        });
-
-        // toggles location history editing panel and button
-        editLocButton.on('click', function () {
-            LOCATION_HISTORY.toggle();
-        });
-        
-        // toggles edit thumbnail functionality
-        editThumbnailButton.on('click', function () {
-            THUMBNAIL_EDITOR.toggle();
-        });
+        // Keywords button.
+        if (keywordCategories.length > 0) {
+            keywordsButton = $(document.createElement('div')) // TODO J/S
+                .css(newButtonCSS)
+                .on('click', function () {
+                    KEYWORDS_EDITOR.toggle();
+                });
+            // Keywords button's right arrow.
+            rightArrowKeywords = $(document.createElement('img')) // TODO J/S
+                .attr('src', tagPath + 'images/icons/Right.png')
+                .css({
+                    "position": "absolute",
+                    "right": "5%",
+                    top: "30%",
+                    width: "auto",
+                    height: "40%"
+                });
+            keywordsButton.append(rightArrowKeywords); // Append it to the button.
+            // Keywords button's label.
+            keywordsLabel = $(document.createElement('label')) // TODO J/S
+                .text("Keywords  ")
+                .css({
+                    "width": "100%",
+                    "height": "100%",
+                    "text-align": "center",
+                    "line-height": keywordsButton.height() + "px",
+                    "font-size": sidePanelFontSize
+                });
+            keywordsButton.append(keywordsLabel); // Append it to the button.
+            if (IS_WINDOWS) {
+                buttonContainer.append(keywordsButton); // Append the keywords button!
+            }
+        }
 
         assocMediaLabel = $(document.createElement('div')); // TODO JADE/STYL
         assocMediaLabel.addClass('assocMediaLabel');
@@ -725,6 +810,9 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         THUMBNAIL_EDITOR.close();
         LOCATION_HISTORY.close();
         METADATA_EDITOR.close();
+        if (keywordCategories > 0) {
+            KEYWORDS_EDITOR.close();
+        }
     }
 
     /**
@@ -2869,6 +2957,301 @@ TAG.Layout.ArtworkEditor = function (artwork) {
 
         /**
          * Toggle the metadata editor open and closed
+         * @method toggle
+         */
+        function toggle() {
+            isOpen ? close() : open();
+        }
+
+        /**
+         * Returns whether the editing panel is open
+         * @method returnIsOpen
+         * @return {Boolean}      true if open
+         */
+        function returnIsOpen() {
+            return isOpen;
+        }
+
+        return {
+            init: init,
+            open: open,
+            close: close,
+            toggle: toggle,
+            isOpen: returnIsOpen
+        };
+    }
+
+    
+    function KeywordsEditor() {
+        var isOpen,             // Is this editor open?
+            categorySelects = [],    // Array holding select elements (jQuery objects) for keyword categories.
+            $keywordsForm,      // Div holding all our stuff.
+            $keywordsContainer, // Div holding the checkboxes for keywords.
+            $saveContainer,     // Div holding the save button.
+            $saveButton;         // Save button.
+
+        // TODO: GET FROM METADATA
+        var currentKeywords = [['breadfruit'], ['saffron'], ['charles darwinism', '^_^']];
+
+        /**
+         * Initialize the keywords editor UI
+         * @method init
+         */
+        function init() {
+            var formTitle
+
+            $keywordsForm = $(document.createElement('div')) // TODO JADE/STYL
+                .attr("id", "keywordsForm")
+                .css({
+                    'background': 'rgba(0, 0, 0, 0.85)',
+                    'border-radius': '0px 10px 10px 0px',
+                    'left': '20%',
+                    'width': '45%',
+                    'position': 'absolute',
+                    'display': 'none',
+                    'color': 'white',
+                    'padding-top': '1%',
+                    'margin-top': '1%',
+                    'z-index': 100000,
+                    'max-height': '70%',
+                    'overflow-y': 'hidden'
+                })
+                .appendTo(mainPanel);
+
+            formTitle = $(document.createElement('div')) // TODO JADE/STYL
+                .text('Keywords Editor')
+                .css({
+                    'width': '100%',
+                    'text-align': 'center',
+                    'font-size': '150%',
+                })
+                .appendTo($keywordsForm);
+
+            $keywordsContainer = $(document.createElement('div')) // TODO JADE/STYL
+                .attr('id', 'keywordsContainer')
+                .css({
+                    'position': 'relative',
+                    'height': '25%',
+                    'overflow': 'hidden',
+                    'margin': '30px 4%'
+                })
+                .appendTo($keywordsForm);
+            //createSelects(keywordcategories, keywords, $keywordsContainer);
+
+            // Make sure everything's coo.
+            if (!keywords || !keywordCategories || !categorySelects) {
+                console.log('Tried creating selects before initializing the keywords editor!');
+                return;
+            }
+
+            // Define some height values.
+            var checklistContainerHeight = $('#tagRoot').height() / 3;
+            var numItemsShown = 10;
+            var checklistItemHeight = checklistContainerHeight / (numItemsShown + 1);
+
+            // Create a list to store checklists in.
+            var $checklistList = $(document.createElement('ul'))
+                .addClass('checklist-list')
+                .css({
+                    'display': 'block',
+                    'list-style-type': 'none',
+                    'width': '100%',
+                    'height': checklistContainerHeight + 'px',
+                    'margin': '0px',
+                    'padding': '0px',
+                })
+                .appendTo($keywordsContainer);
+
+            // Create one checklist for each category.
+            keywordCategories.forEach(function (category, categoryIndex) {
+                var $checklistListItem = $(document.createElement('li'))
+                    .addClass('checklist-listItem')
+                    .css({
+                        'display': 'inline-block',
+                        'margin': '0px 1.5%', // No top/bot margin; each of 3 containers width is 30% + (2*1.5)% = 99%
+                        'width': '30%',
+                        'height': '100%'
+                    })
+                    .appendTo($checklistList);
+                var $checklistContainer = $(document.createElement('div'))
+                    .addClass('checkList-container')
+                    .css({
+                        'background-color': '#d9000000',
+                        'color': '#000',
+                        'width': '100%',
+                        'height': '100%'
+                    })
+                    .appendTo($checklistListItem);
+                var $checklistTitleConatiner = $(document.createElement('div'))
+                    .addClass('checkList-title-container')
+                    .text(category)
+                    .css({
+                        'color': '#fff',
+                        'background-color': '#d9000000',
+                        'height': checklistItemHeight + 'px',
+                        'line-height': checklistItemHeight + 'px',
+                        'font-size': (0.8 * checklistItemHeight) + 'px',
+                        'padding': '0px 3%',
+                        'width': '94%',
+                        'overflow': 'hidden',
+                        'text-overflow': 'ellipsis',
+                        'white-space': 'nowrap',
+
+                    })
+                    .appendTo($checklistContainer);
+                var $checklistWrapper = $(document.createElement('div'))
+                    .addClass('checklist-wrapper')
+                    .css({
+                        'background-color': '#fff',
+                        'color': '#000',
+                        'height': (checklistContainerHeight - checklistItemHeight) + 'px',
+                        'width': '100%'
+                    })
+                    .appendTo($checklistContainer);
+                var $checklist = $(document.createElement('div'))
+                    .addClass('checklist')
+                    .css({
+                        'height': '100%',
+                        'width': '100%',
+                        'overflow-y': 'auto'
+                    })
+                    .appendTo($checklistWrapper);
+
+                keywords[categoryIndex].forEach(function (keyword, keywordIndex) {
+                    var $keywordDiv = $(document.createElement('div'))
+                        .css({
+                            'color': '#000',
+                            'display': 'block',
+                            'height': checklistItemHeight + 'px',
+                            'line-height': checklistItemHeight + 'px',
+                            'font-size': (0.8 * checklistItemHeight) + 'px',
+                            'padding': '0px 7% 0px 3%',
+                            'width': '90%',
+                            'overflow': 'hidden',
+                            'text-overflow': 'ellipsis',
+                            'white-space': 'nowrap'
+                        })
+                        .hover(
+                            function () {
+                                $(this).css({'background-color': '#39f'});
+                            },
+                            function () {
+                                $(this).css({ 'background-color': '#fff' });
+                            }
+                        )
+                        .click(function() {
+                            $(this).find('input:checkbox').attr('checked', !$(this).find('input:checkbox').attr('checked'));
+                        })
+                        .appendTo($checklist);
+                    var $keywordCheckbox = $(document.createElement('input'))
+                        .addClass('keyword-checkbox')
+                        .attr('type', 'checkbox')
+                        .attr('id', 'keyword-checkbox_' + categoryIndex + '_' + keywordIndex)
+                        .attr('index', keywordIndex)
+                        .attr('value', keywordIndex)
+                        .css({
+                            'border': '1px solid #777',
+                            'background-color': '#fff'
+                        })
+                        .click(function(e) {
+                            e.stopPropagation();
+                        })
+                        .appendTo($keywordDiv);
+                    keywordsCheckboxDict[categoryIndex][keyword] = $keywordCheckbox;
+                    var $keywordLabel = $(document.createElement('label'))
+                        .text(keyword)
+                        .attr('index', keywordIndex)
+                        .attr('value', keywordIndex)
+                        .attr('for', 'keyword-checkbox_' + categoryIndex + '_' + keywordIndex)
+                        .css({
+                            'cursor': 'default',
+                            'font-size': '0.7em'
+                        })
+                        .click(function (e) {
+                            e.stopPropagation();
+                        })
+                        .appendTo($keywordDiv);  
+                });
+            });
+
+            // Check off the current keywords.
+            keywordCategories.forEach(function (category, categoryIndex) {
+                currentKeywords[categoryIndex].forEach(function (keyword, keywordIndex) {
+                    keywordsCheckboxDict[categoryIndex][keyword][0].checked = true;
+                });
+            });
+
+            // Add save button.
+            var $saveContainer = $(document.createElement('div'))
+                .attr('id', 'save-keywords-container')
+                .css({
+                    'width': '100%',
+                    'padding-bottom': '7%',
+                    'position': 'relative'
+                })
+                .appendTo($keywordsForm);
+            var $saveButton = $(document.createElement('button'))
+                .attr('id', 'save-keywords-button')
+                .text("Save Keywords").css('border-radius', '3.5px')
+                .css({
+                    'position': 'absolute',
+                    'right': '5.5%',
+                    'top': '0px'
+                })
+                .click(function() {
+                    var i,
+                        j,
+                        checkboxes = $('input.keyword-checkbox:checked'),
+                        artworkKeywords = [[], [], []];
+                    for (i = 0; i < checkboxes.length; i++) {
+                        var categoryIndex = $(checkboxes[i]).attr('id').split('_')[1];
+                        artworkKeywords[categoryIndex].push($(checkboxes[i]).parent().find('label').text());
+                    }
+
+                    for (i = 0; i < artworkKeywords.length; i++) {
+                        console.log(keywordCategories[i]);
+                        for (j = 0; j < artworkKeywords[i].length; j++) {
+                            console.log('    ' + artworkKeywords[i][j]);
+                        }
+                    }
+                })
+                .appendTo($saveContainer);
+        }
+
+
+
+        /**
+         * Open the keywords editor
+         * @method open
+         */
+        function open() {
+            if (!isOpen) {
+                closeAllPanels();
+                $keywordsForm.toggle();
+                keywordsButton.css({ 'background-color': 'white', 'color': 'black' }); // TODO could do css toggling using classes and static css
+                rightArrowKeywords.attr('src', tagPath + 'images/icons/RightB.png');
+                sidebarHideButtonContainer.hide();
+                isOpen = true;
+            }
+        }
+
+        /**
+         * Close the keywords editor
+         * @method close
+         */
+        function close() {
+            if (isOpen) {
+                $keywordsForm.toggle();
+                keywordsButton.css({ 'background-color': 'transparent', 'color': 'white' });
+                rightArrowKeywords.attr('src', tagPath + 'images/icons/Right.png');
+                sidebarHideButtonContainer.show();
+                isOpen = false;
+            }
+        }
+
+
+        /**
+         * Toggle the keywords editor open and closed
          * @method toggle
          */
         function toggle() {
