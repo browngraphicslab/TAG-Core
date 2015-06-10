@@ -2105,10 +2105,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'exhib', [{
                     name: 'All Artworks',
                     getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                    excluded: guidsToBeDeleted
                 }, {
                     name: 'Artworks in this Collection',
                     getObjs: TAG.Worktop.Database.getArtworksIn,
-                    args: [exhibition.Identifier]
+                    args: [exhibition.Identifier],
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: TAG.Worktop.Database.getArtworksIn,
                     args: [exhibition.Identifier]
@@ -2704,10 +2706,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'exhib', [{ //Creates tabs - one for all artworks, one for artworks in this collection
                         name: 'All Artworks',
                         getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                        excluded: guidsToBeDeleted
                     }, {
                         name: 'Artworks in this Collection',
                         getObjs: TAG.Worktop.Database.getArtworksIn,
-                        args: [exhibition.Identifier]
+                        args: [exhibition.Identifier],
+                        excluded: guidsToBeDeleted
                     }], {
                         getObjs: TAG.Worktop.Database.getArtworksIn, //Artworks in this collection
                         args: [exhibition.Identifier]
@@ -4515,7 +4519,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         numFiles = 1;
         TAG.Util.UI.createAssociationPicker(root, "Choose artworks", { comp: media, type: 'media' }, "artwork", [{
             name: "All Artworks",
-            getObjs: TAG.Worktop.Database.getArtworks
+            getObjs: TAG.Worktop.Database.getArtworks,
+            excluded: guidsToBeDeleted
         }], {
             getObjs: TAG.Worktop.Database.getArtworksAssocTo,
             args: [media.Identifier]
@@ -5448,6 +5453,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'exhib', [{
                     name: 'All Collections',
                     getObjs: TAG.Worktop.Database.getExhibitions,
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: function () { return []; }, //TODO how to get the collections that the tour is already in
                 }, function () {

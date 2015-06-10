@@ -4390,8 +4390,9 @@ TAG.Util.UI = (function () {
             var newComps = [];
             for (var i = 0; i < comps.length; i++) {
                 //if guid of comp obj is in excluded guid list, don't show it in pop-up
-                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))/*&& //exclude videos because not 
-                    (comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) < 0))*/) {
+
+                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))&& //exclude videos because not 
+                    !(comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) >=0))) {
                     newComps.push(comps[i]);
                 }
             }
