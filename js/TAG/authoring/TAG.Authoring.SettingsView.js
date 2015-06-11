@@ -2699,6 +2699,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 console.log("Made Manage Pop Up");
                 //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
+
+                //console.log(exhibition.Identifier);
+
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{ //Creates tabs - one for all artworks, one for artworks in this collection
@@ -6195,7 +6198,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var message;
                     
                         if(fromImportPopUp==true){
-                            message = "The following files were successfully imported into " + collection.Title + ":";
+                            message = "The following files were successfully imported into " + currCollection.Name + ":";
                         } else{
                             message = "The following files were successfully imported: "
                         }
@@ -6230,7 +6233,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                    } else {
                         durationHelper(done);
                     }
-                } else {
+                } else { //win8 app
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
                         
@@ -6258,7 +6261,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         var message;
                         if(fromImportPopUp==true){
-                            message = "The following files were successfully imported into " + collection.Title + ":";
+                            message = "The following files were successfully imported into " + currCollection.Name + ":";
                         } else{
                             message = "The following files were successfully imported: "
                         }
@@ -6267,6 +6270,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
                             $('.progressText').remove();
+
+
 
                             //enable import buttons
                             $(newButton).prop('disabled', false);
