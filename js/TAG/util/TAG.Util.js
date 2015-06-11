@@ -3896,44 +3896,37 @@ TAG.Util.UI = (function () {
     */
 
     function mergeCollectionsIntoOneCollection(guids, targetguid, callback) {
-        console.log("about to merge collections into another collection with the guid "+targetguid)
+        console.log("about to merge collections into another collection with the guid "+targetguid)//TODO: add in telemetry call?
         var totalGuids = [], // the compilation of all artwork guids in all the collections being merged
-            j=0
+            j=0//counter to see how many getArtworksIn calls have been recieved
 
-        for (var i = 0; i < guids.length; i++) {
-            console.log("trying to get artworks in: "+guids[i])
-            TAG.Worktop.Database.getArtworksIn(guids[i], addArtworks, function (err) { console.log(err.message + " here1") }, function (err) { console.log(err.message + " here2") })
+        for (var i = 0; i < guids.length; i++) {//for every collection in guids
+            TAG.Worktop.Database.getArtworksIn(guids[i], addArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
         }
         function addArtworks(artworks) {
             j++
-            console.log("j: " + j + "  out of  "+guids.length)
-            console.log("add artworks: ")
-            console.log(artworks)
-            console.log("-----------------------")
             if (artworks) {
                 for (var k = 0; k < artworks.length; k++) {
-                    totalGuids.push(artworks[k].Identifier)
+                    totalGuids.push(artworks[k].Identifier)//add the artwork guid to the total guids of all artworks
                 }
-                console.log("guids: ")
-                console.log(totalGuids)
-                console.log("-----------------------------------------------")
             }
-            if (j === guids.length) {
-                console.log("called ChangeExhib")
-                changeExhib();
+            if (j === guids.length) {//when the coutner has recieved every 'addArtworks' call, call the server to get the guids of the artworks in the original collection
+                TAG.Worktop.Database.getArtworksIn(targetguid, getPreviousArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
             }
         }
-        function changeExhib() {
-            //get rid of duplicates
 
-
-            var options = {}
-            console.log("total guids: " + totalGuids)
-            if (totalGuids.length > 0) {
-                options.AddIDs = totalGuids.join(',')
+        function getPreviousArtworks(artworks) {
+            var finalGuids = []//these will be an array of all the unique guids that are not already in the target collection
+            for (var j = 0; j < totalGuids.length; j++) {
+                if (finalGuids.indexOf(totalGuids[j]) < 0 && artworks.indexOf(totalGuids[j]) < 0) {
+                    finalGuids.push(totalGuids[j])//add to the final guid array in meets criteria
+                }
             }
-            console.log("params given:        targetguid: "+targetguid+"   options: "+options+"   callback: "+callback)
-            TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { console.log(err.message + " here4") }, function (err) { console.log(err.message + " here5") }, function (err) { console.log(err.message + " here11") })
+            var options = {}
+            if (finalGuids.length > 0) {
+                options.AddIDs = finalGuids.join(',')//join to make into the neede string format
+            }
+            TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { console.log(err.message) }, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
         }
     }
 
