@@ -2381,7 +2381,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             curr = avlTree.min();
             art = curr.artwork;
        
-            while (curr&& curr.yearKey!==Number.POSITIVE_INFINITY){
+            while (curr&& curr.yearKey<999999){
                 if (!isNaN(curr.yearKey)){
                     positionOnTimeline = 100*(curr.yearKey - minDate)/timeRange;
                     var correctedPosition = (positionOnTimeline - 1.25);
@@ -3549,13 +3549,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             artworkDate,
             yearKey,
             nameKey,
+            usedkeys,
             i;
         comparator = sortComparator('yearKey', 'nameKey');
         valuation  = sortValuation('yearKey');
         avlTree = new AVLTree(comparator, valuation);
+        usedkeys = [];
         for (i = 0; i < artworks.length; i++) {
             if (timelineDate){
-                artworkDate = getArtworkDate(artworks[i],true);
+                artworkDate = getArtworkDate(artworks[i], true);
             } else {
                 artworkDate = getArtworkDate(artworks[i],false);
             }
@@ -3565,19 +3567,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nameKey = '~~~~';
             }
             yearKey = TAG.Util.parseDateToYear(artworkDate);
-            if (!isNaN(yearKey)){
+            if (!isNaN(yearKey)) {
+                yearKey = artworks[i].Type === 'Empty' ? 999999 : yearKey
+                while (usedkeys.indexOf(yearKey) >= 0) {
+                    yearKey+=.0001
+                }
                 artNode = {
                     artwork: artworks[i],
                     nameKey: nameKey,
-                    yearKey: artworks[i].Type === 'Empty' ? Number.POSITIVE_INFINITY : yearKey //Tours set to Infinity to show up at end of 'Year' sort
+                    yearKey: yearKey //Tours set to Infinity to show up at end of 'Year' sort
                 };
-            } else{                        
+            } else {
+                yearKey = 999999
+                while (usedkeys.indexOf(yearKey) >= 0) {
+                    yearKey += .0001
+                }
                 artNode = {
                     artwork: artworks[i],
                     nameKey: nameKey,
-                    yearKey: Number.POSITIVE_INFINITY //Set unintelligible dates to show up at end of 'Year' sort 
+                    yearKey: 999999 //Set unintelligible dates to show up at end of 'Year' sort 
                 };
             }
+            usedkeys.push(yearKey)
             avlTree.add(artNode);
         }
         return avlTree;
