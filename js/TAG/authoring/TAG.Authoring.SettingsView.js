@@ -15,9 +15,10 @@ TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
  *      slidePageRight.
  *   @param startLabelID selects a middle label automatically if it matches that id.
  *      The label will be scrolled to if it is off screen
+ *   @param guidsToBeDeleted list of things that have recently been marked for delete, so that they show up grayed out
  *   @return {Object} public methods and variables
  */
-TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID) {
+TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID, guidsToBeDeleted) {
     "use strict";
     //$(document).off();                   
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
@@ -64,7 +65,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadingOverlay = $(document.createElement('div')),
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
-        guidsToBeDeleted = [],
+        guidsToBeDeleted = guidsToBeDeleted ||[],
         // = root.find('#importButton'),
 
 
@@ -6901,7 +6902,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearTimeout(checkConTimerId);
         rightQueue.clear();
         setTimeout(function () {
-            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork)).getRoot(), function () {
+            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted)).getRoot(), function () {
                 TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                     tobj.source_page = "settings_view";
                     tobj.destination_page = "artwork_editor";
