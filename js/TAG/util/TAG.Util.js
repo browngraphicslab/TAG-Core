@@ -4261,11 +4261,11 @@ TAG.Util.UI = (function () {
         });
 
         importButton = $(document.createElement('button'));
-        importButton.css({ //initially greyed out
+        importButton.css({ //initially invisible
             'margin': '1%',
             'border': '1px solid white',
             'color': 'white',
-            'opacity': '.4',
+            'opacity': '0',
             'padding-left': '1%',
             'padding-right': '1%',
             'background-color': 'black',
@@ -4284,7 +4284,10 @@ TAG.Util.UI = (function () {
             importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             console.log("Called import on click");
             $('.compHolder').off();
-            finalizeAssociations();
+            picker.remove();
+            pickerOverlay.fadeOut();
+            pickerOverlay.empty();
+            pickerOverlay.remove();
             globalKeyHandler[0] = currentKeyHandler;
             importBehavior();
 
@@ -4396,7 +4399,7 @@ TAG.Util.UI = (function () {
                     importButton.css({'opacity': '1'});
                     console.log("import button should be enabled");
                 } else{
-                    importButton.css({'opacity': '.4'});
+                    importButton.css({'opacity': '0'}); //invisible in 'all artworks tab'
                     $(importButton).prop('disabled', true);
                     console.log("import button should be disabled");
                 }
@@ -4695,7 +4698,8 @@ TAG.Util.UI = (function () {
         }
 
         // adds media as an associated media of each artwork in artworks
-        function finalizeAssociations() {
+        //@importing - if file picker is simply coming up, don't refresh the page bc it's visually confusing
+        function finalizeAssociations() { 
             var options = {};
 
             //to prevent multiple uploading texts and loading circles from appearing simultanesouly
@@ -4786,8 +4790,10 @@ TAG.Util.UI = (function () {
                         })
                     }
                     else {
+                        console.log("in correct statement");
                         TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {
-                            callback();
+                           
+                            
                             pickerOverlay.fadeOut();
                             pickerOverlay.empty();
                             pickerOverlay.remove();
