@@ -3896,22 +3896,38 @@ TAG.Util.UI = (function () {
     */
 
     function mergeCollectionsIntoOneCollection(guids, targetguid, callback) {
-        console.log("about to merge collections into another collection")
-        var totalGuids = [] // the compilation of all artwork guids in all the collections being merged
-        for (i = 0; i < guids.length; i++){
-            TAG.Worktop.Database.getArtworksIn(guids[i],addArtworks,function(err){console.log(err.message)},function(err){console.log(err.message)})
+        console.log("about to merge collections into another collection with the guid "+targetguid)//TODO: add in telemetry call?
+        var totalGuids = [], // the compilation of all artwork guids in all the collections being merged
+            j=0//counter to see how many getArtworksIn calls have been recieved
+
+        for (var i = 0; i < guids.length; i++) {//for every collection in guids
+            TAG.Worktop.Database.getArtworksIn(guids[i], addArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
         }
         function addArtworks(artworks) {
+            j++
             if (artworks) {
-                totalGuids.concat(artworks)
+                for (var k = 0; k < artworks.length; k++) {
+                    totalGuids.push(artworks[k].Identifier)//add the artwork guid to the total guids of all artworks
+                }
+            }
+            if (j === guids.length) {//when the counter has recieved every 'addArtworks' call, call the server to get the guids of the artworks in the original collection
+                TAG.Worktop.Database.getArtworksIn(targetguid, getPreviousArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
             }
         }
-        var options = {}
-        console.log("total guids: "+totalGuids)
-        if(totalGuids.length > 0){
-            options.AddIDs = totalGuids.join(',')
+
+        function getPreviousArtworks(artworks) {
+            var finalGuids = []//these will be an array of all the unique guids that are not already in the target collection
+            for (var j = 0; j < totalGuids.length; j++) {
+                if (finalGuids.indexOf(totalGuids[j]) < 0 && artworks.indexOf(totalGuids[j]) < 0) {
+                    finalGuids.push(totalGuids[j])//add to the final guid array in meets criteria
+                }
+            }
+            var options = {}
+            if (finalGuids.length > 0) {
+                options.AddIDs = finalGuids.join(',')//join to make into the neede string format
+            }
+            TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { console.log(err.message) }, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
         }
-        TAG.Worktop.Database.changeExhibition(targetguid, options , callback, function (err) { console.log(err.message) }, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
     }
 
     /**
@@ -3932,7 +3948,7 @@ TAG.Util.UI = (function () {
      * @param importBehavior
      * @param queueLength        
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength, mergeBoolean) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -4343,7 +4359,9 @@ TAG.Util.UI = (function () {
         // helper functions
 
         // click handler for tabs
-        function tabHelper(j, tabName, queueLength) {            
+        function tabHelper(j, tabName, queueLength) {
+            console.log("J and tabs: "+j)
+            console.log(tabs)
             return function () {                
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
@@ -4390,6 +4408,7 @@ TAG.Util.UI = (function () {
             var newComps = [];
             for (var i = 0; i < comps.length; i++) {
                 //if guid of comp obj is in excluded guid list, don't show it in pop-up
+
                 if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))&& //exclude videos because not 
                     !(comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) >=0))) {
                     newComps.push(comps[i]);
@@ -4400,7 +4419,7 @@ TAG.Util.UI = (function () {
         }
 
         function error() {
-            console.log("ERROR IN TABHELPER");
+            consolelog("ERROR IN TABHELPER");
         }
 
         function cacheError() {
@@ -4417,6 +4436,7 @@ TAG.Util.UI = (function () {
                 addedComps.length = 0;
                 addedCompsObjs.length = 0;
                 removedComps.length = 0;
+
                 if (excluded) {
                     for (var x = 0; x < compArray.length; x++) {
                         if (compArray[x].Identifier && (excluded.indexOf(compArray[x].Identifier) >= 0)) {
@@ -4424,6 +4444,8 @@ TAG.Util.UI = (function () {
                         }
                     }
                 }
+
+                
                 compArray.sort(function (a, b) {
                     return (a.Name.toLowerCase() < b.Name.toLowerCase()) ? -1 : 1;
                 });
@@ -4433,7 +4455,9 @@ TAG.Util.UI = (function () {
             }
         }
 
-        function drawComp(comp, applyClick,i) {
+        function drawComp(comp, applyClick, i) {
+            console.log("drawing component: ")
+            console.log(comp)
             return function () {
                 var compHolder = $(document.createElement('div'));
                 compHolder.addClass("compHolder");
@@ -4504,6 +4528,11 @@ TAG.Util.UI = (function () {
                     compHolderImage.attr('src', imageSrc);
                 } else if (comp.Metadata.ContentType === 'iframe') {
                     compHolderImage.attr('src', tagPath + 'images/video_icon.svg'); // TODO iframe fix this with new icon
+
+                } else if ((comp.Type === 'Empty' && comp.Metadata.ContentType === "Text") || comp.Metadata.ContentType === "Text") {//text associated media
+                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/text_icon_2.svg');
+                    //shouldAppendTII = true;
+                    //typeIndicatorImage.attr('src', tagPath + 'images/icons/text_icon_2.svg');
                 } else if (comp.Type === 'Empty' || comp.Metadata.ContentType === "Tour") { // tours....don't know why the type is 'Empty'
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;
@@ -4748,18 +4777,28 @@ TAG.Util.UI = (function () {
                         console.log(err.message);
                     });
                 } else if (type === 'exhib' && target.type === 'exhib') {
-                    TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function() {
-                        callback();
-                        pickerOverlay.fadeOut();
-                        pickerOverlay.empty();
-                        pickerOverlay.remove();
-                    }, function (err) {
-                        console.log(err.message);
-                    }, function (err) {
-                        console.log(err.message);
-                    }, function (err) {
-                        console.log(err.message);
-                    });
+                    if (mergeBoolean) {
+                        mergeCollectionsIntoOneCollection(addedComps, target.comp.Identifier, function () {
+                            callback();
+                            pickerOverlay.fadeOut();
+                            pickerOverlay.empty();
+                            pickerOverlay.remove();
+                        })
+                    }
+                    else {
+                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {
+                            callback();
+                            pickerOverlay.fadeOut();
+                            pickerOverlay.empty();
+                            pickerOverlay.remove();
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
                 } else if (type === 'exhib' && target.type === 'artwork') {
                     //(addedComps.length > 1) ? progressText.text("Adding Artwork to Collections...") : progressText.text("Adding Artwork to Collection...");
                     //viewer.append(progressText);

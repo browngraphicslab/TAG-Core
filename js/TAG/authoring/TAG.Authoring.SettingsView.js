@@ -2699,6 +2699,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 console.log("Made Manage Pop Up");
                 //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
+
+                //console.log(exhibition.Identifier);
+
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{ //Creates tabs - one for all artworks, one for artworks in this collection
@@ -2721,6 +2724,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }, importAndRefresh, $('.progressBarUploads').length);
 
             }
+
+            function mergeCollectionsPopUp(){
+                TAG.Util.UI.createAssociationPicker(
+                    root,
+                    "Select Collections to Merge", 
+                    {comp: exhibition, type: "exhib"},
+                    "exhib",
+                    [{name:"All Collections",getObjs:TAG.Worktop.Database.getExhibitions}],
+                    {getObjs: function(){return []},args: [exhibition.Identifier]},
+                    function(){loadExhibitionsView(exhibition.Identifier)},
+                    null,
+                    null,
+                    true)
+            }
+
+            var mergeButton = createButton('Merge other collections into this one',
+                mergeCollectionsPopUp, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0%',
+                'margin-bottom': '3%',
+            });
+
 
             var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
@@ -2777,10 +2803,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             deleteButton.on("mousedown", function () {
                 deleteButton.css({ "background-color": "white" });
             });
+            mergeButton.on("mousedown", function () {
+                deleteButton.css({ "background-color": "white" });
+            });
             saveButton.on("mouseleave", function () {
                 if (!saveButton.attr("disabled")) {
                     saveButton.css({ "background-color": "transparent" });
                 }
+            });
+            mergeButton.on("mouseleave", function () {
+                artPickerButton.css({ "background-color": "transparent" });
             });
             artPickerButton.on("mouseleave", function () {
                 artPickerButton.css({ "background-color": "transparent" });
@@ -2833,7 +2865,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             
 
-            buttonContainer.append(artPickerButton).append(saveButton); //REAPPEND DELETE BUTTON HERE
+            buttonContainer.append(artPickerButton).append(saveButton).append(mergeButton); //REAPPEND DELETE BUTTON HERE
             if(!IS_WINDOWS){
                 buttonContainer.append(deleteButton);
             }
@@ -4725,7 +4757,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                     root.append(importConfirmedBox);
                     $(importConfirmedBox).show();
-                    TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                    //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                     
                 } else {
                     durationHelper(done);
@@ -6183,6 +6215,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                         var message;
+                    
                         if(fromImportPopUp==true){
                             message = "The following files were successfully imported into " + currCollection.Name + ":";
                         } else{
@@ -6219,7 +6252,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                    } else {
                         durationHelper(done);
                     }
-                } else {
+                } else { //win8 app
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
                         
@@ -6247,7 +6280,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         var message;
                         if(fromImportPopUp==true){
-                            message = "The following files were successfully imported into " + currCollection.title + ":";
+                            message = "The following files were successfully imported into " + currCollection.Name + ":";
                         } else{
                             message = "The following files were successfully imported: "
                         }
@@ -6255,6 +6288,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
+
+
 
                             //enable import buttons
                             $(newButton).prop('disabled', false);
@@ -6276,7 +6311,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         root.append(importConfirmedBox);
                         $(importConfirmedBox).show();
-                        TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                        //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                      
                     } else {
                         durationHelper(done);
