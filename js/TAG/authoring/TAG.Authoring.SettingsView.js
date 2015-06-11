@@ -6266,6 +6266,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
+                            $('.progressText').remove();
 
                             //enable import buttons
                             $(newButton).prop('disabled', false);
