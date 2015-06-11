@@ -2878,7 +2878,7 @@ function trackTitleReleased(evt) {
         //for (i = index+1; i < my.displays.length; i++) {
         //    my.displays[i].setID(i);
         //}
-        my.update();
+        my.update(true);
         my.undoManager.logCommand(command);
         return newDisplay; // for testing
     }

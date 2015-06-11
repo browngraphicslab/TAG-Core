@@ -8027,12 +8027,21 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"zIndex": track.data.zIndex,
 						"time": time_offset + currKeyframe.offset,
 						"opacity": 1, 
-						"scale": currKeyframe.state.viewport.region.span.x, //TODO
-						"pos": {
-							"x": currKeyframe.state.viewport.region.center.x,
-							"y": currKeyframe.state.viewport.region.center.y
-						},
 						"data": {}
+					}
+
+					if (currKeyframe.state) {
+					    keyframeObject.scale = currKeyframe.state.viewport.region.span.x;
+                        keyframeObject.pos = {
+                            "x": currKeyframe.state.viewport.region.center.x,
+                            "y": currKeyframe.state.viewport.region.center.y
+                        };
+					} else {
+					    keyframeObject.scale = currKeyframe.bounds.x;
+					    keyframeObject.pos = {
+					        "x": currKeyframe.bounds.x,
+					        "y": currKeyframe.bounds.y
+					    };
 					}
 				}
 				else if (providerID == "audio"){
@@ -8657,19 +8666,29 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		return tracks.sort(function(a, b){return a.zIndex - b.zIndex});
 	}
 
-	var ITE_tour = {
-		"tourTitle" : tour.Name,
-		"totalDuration" : rinData.data.narrativeData.estimatedDuration || 0,
-		"guid" : rinData.data.narrativeData.guid,
-		"timestamp" : rinData.data.narrativeData.timestamp,
-		"tracks" : ITE_tracks()
+	if (rinData.data) {
+	    var ITE_tour = {
+	        "tourTitle": tour.Name,
+	        "totalDuration": rinData.data.narrativeData.estimatedDuration || 0,
+	        "guid": rinData.data.narrativeData.guid,
+	        "timestamp": rinData.data.narrativeData.timestamp,
+	        "tracks": ITE_tracks()
+	    };
+
+	    console.log("ITE tour object is: ");
+	    console.log(ITE_tour);
+	    console.log(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
+
+	    return ITE_tour;
 	}
 
-	console.log("ITE tour object is: ");
-	console.log(ITE_tour);
-	console.log(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
-
-	return ITE_tour;
+	return {
+	    "tourTitle": tour.Name,
+	    "totalDuration": 0,
+	    "guid": tour.Identifier,
+	    "timestamp": tour.Metadata.__Created,
+	    "tracks": []
+	};
 }
 
 
