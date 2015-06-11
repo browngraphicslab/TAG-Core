@@ -2997,7 +2997,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     guidsToBeDeleted.splice(remIndex, 1);
                 }
             }
-        });
+        }, null, null, null, null, true, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -4539,7 +4539,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     guidsToBeDeleted.splice(remIndex, 1);
                 }
             }
-        });
+        }, null, null, null, null, null, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -7115,7 +7115,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     guidsToBeDeleted.splice(remIndex, 1);
                 }
             }
-        });
+        }, null, null, null, null, null, null, true);
 
         root.append(confirmationBox);
         $(confirmationBox).show();

@@ -3037,7 +3037,7 @@ TAG.Util.UI = (function () {
     }
 
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry, cancelOption, displayNames) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry, cancelOption, displayNames, useTeleFormat) {
         var overlay;
         var origin;
         /*if (document.getElementById("popupblockInteractionOverlay")) {
@@ -3064,7 +3064,7 @@ TAG.Util.UI = (function () {
         //temp solution for telemetry box in all resolutions and browsers. 
         var maxw = 600,
             maxh=300;
-        if (fortelemetry) {
+        if (fortelemetry || useTeleFormat) {
             maxw = $('body').width() * 0.45;
             maxh = $('body').height() * 0.33;
         }
@@ -3104,7 +3104,7 @@ TAG.Util.UI = (function () {
             'word-wrap': 'break-word'
         });
         var fontsize =TAG.Util.getMaxFontSizeEM(message, 1, $(messageLabel).width(), $(messageLabel).height());
-        if (fortelemetry&&IS_WINDOWS) {
+        if (fortelemetry&&IS_WINDOWS || (useTeleFormat&&IS_WINDOWS)) {
             fontsize = TAG.Util.getMaxFontSizeEM(message, 0.8, $(messageLabel).width(), $(messageLabel).height());
         }
         $(messageLabel).css('font-size', fontsize);
@@ -3242,7 +3242,7 @@ TAG.Util.UI = (function () {
         
         if(fortelemetry){
             $cancelButton.text("No, I don't mind")
-                .css({
+               .css({
                     "border-radius":'3.5px',
                     "background-color": "white",
                     "color":'black',
