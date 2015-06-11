@@ -4398,7 +4398,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay = inputs.timelineDayInput.val(),
             desc = inputs.descInput.val(),
             source = embeddedURL || "";
-            
+         
+        if (!checkValidYear(timelineYear)) {
+            timelineYear = media.Metadata.TimelineYear;
+        }
         //pCL = displayLoadingSettings();
         clearRight();
         prepareViewer(true);
@@ -4407,6 +4410,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var name = inputs.titleInput.val();
         var desc = inputs.descInput.val();
         //prepareViewer(true);
+
+        //helper
+        function checkValidYear(dateString) {
+            //remove characters that are okay and white space
+            dateString = dateString.replace(/bce?/gi, '')
+                                   .replace(/ce/gi, '')
+                                   .replace(/ad/gi, '')
+                                   .replace(/,/g, '')
+                                   .replace(/\s/gi, '');
+            //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
+            if (dateString.search(/[^0-9]/) > 0 || dateString.length === 0 || dateString[0].search(/[0-9||-]/) < 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
 
         TAG.Worktop.Database.changeHotspot(media, {
             Name: name,
@@ -6997,6 +7016,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             description = inputs.descInput.val(),
             isLocked = inputs.locked;
 
+        //don't save an invalid timeline year 
+        if (!checkValidYear(timelineYear)) {
+            timelineYear = artwork.Metadata.TimelineYear
+        }
+
         var infoFields = {};
         $.each(inputs.customInputs, function (key, val) {
             infoFields[key] = val.val();
@@ -7008,6 +7032,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(true);
         prepareNextView(false, null, null, "Saving...");
         
+        //helper
+        function checkValidYear(dateString) {
+            //remove characters that are okay and white space
+            dateString = dateString.replace(/bce?/gi, '')
+                                   .replace(/ce/gi, '')
+                                   .replace(/ad/gi, '')
+                                   .replace(/,/g, '')
+                                   .replace(/\s/gi, '');
+            //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
+            if (dateString.search(/[^0-9]/) > 0 || dateString.length === 0 || dateString[0].search(/[0-9||-]/) < 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
         TAG.Worktop.Database.changeArtwork(artwork, {
             Name: name,
             Artist: artist,
