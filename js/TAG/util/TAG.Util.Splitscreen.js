@@ -156,7 +156,7 @@ TAG.Util.Splitscreen = (function () {
             root = $(pickedScreen.children('.rootPage')[0]); // only child should be root
 
         on = false;
-        
+        console.log($("#annotatedImageViewer").length)
         root.data('split', 'L');
         
         // remove all unnecessary metacontainers and contents
@@ -275,6 +275,8 @@ TAG.Util.Splitscreen = (function () {
                 root.find('.nextPrevCollection').css({
                     'width': (.95 * root.find("#collectionArea").width() - root.find('.mainCollection').width()) / 2 - root.find(".arrow").width(),
                 });
+                root.find('.collection-title').css('margin-left','8%');
+
                 root.find('#infoButton').show();
                 if (root.find('#infoDiv').width() !== 0) {
                     root.find('#infoDiv').css('width', '25%');

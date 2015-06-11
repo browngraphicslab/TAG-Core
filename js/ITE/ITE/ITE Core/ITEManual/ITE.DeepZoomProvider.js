@@ -118,7 +118,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		$("#ITEHolder").append(_UIControl);
 		_UIControl.append(_canvasHolder);
 
-		// Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
+	    // Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
+        // This currently relies on an augmented OSD library where we are using their touch/click handlers + our own edits to deal with the layers issue 
 		_viewer	= new OpenSeadragon.Viewer({
 			id 			 		: trackData.name + "holder",
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
@@ -126,8 +127,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			minZoomImageRatio	: .5,
 			maxZoomImageRatio	: 2,
 			visibilityRatio		: .2,
-			mouseNavEnabled 	: true,
-			orchestrator: orchestrator,
+			mouseNavEnabled 	: true, //enables their own touch/click handlers
+			orchestrator        : orchestrator, //passes in a reference to orchestrator for layers fix
             ITE_track: self
 		});
 		$(_viewer.container).css({
@@ -139,10 +140,13 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         _deepZoom = $(_viewer.canvas)
 			.addClass("deepZoomImage"); 
 	};
+
+
     /* I/P: 	evt (a click/touch event)
-* 
-* O/P: 	bool, whether or not this event was within the image's bounds
-*/
+    * O/P:   	bool, whether or not this event was within the image's bounds
+    *This function determines if a touch/click event is within the bounds of this dz on screen
+    *Used as a component in the layers issue fix 
+    */
 	function isInImageBounds(evt) {
 
 		//If the current time is after the last keyframe of the deepzoom, or before the first, or the asset is current trasnparent, we're defintely out of bounds.
@@ -179,6 +183,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	    }
 	}
 	self.isInImageBounds = isInImageBounds;
+
 	self.raiseEvent = function (eventName, eventArgs) {
 	    _viewer.raiseEvent(eventName, eventArgs);
 	}
@@ -219,7 +224,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	        drag: dragCaptureHandler,
             scroll: scrollCaptureHandler
 	    });
-	    self.removeCaptureFinishedHandler(captureFinishedHandlers);
+	    //self.removeCaptureFinishedHandler(captureFinishedHandlers);
 	    _viewer.destroy();
 		_viewer.source = null;
 		_UIControl.remove()

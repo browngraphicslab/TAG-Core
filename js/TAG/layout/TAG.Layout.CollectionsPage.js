@@ -33,11 +33,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         sortRow = root.find('#sortRow'),
         collectionMenu = root.find('#collectionMenu'),
         searchInput = root.find('#searchInput'),
+        keywordsDiv = root.find("#keywords"),
         searchTxt = root.find('#searchTxt'),
-        buttonRow = root.find('#buttonRow'),
+        // buttonRow = root.find('#buttonRow'), // replaced with #sorts (sortsDiv)
         artworksButton = root.find('#artworksButton'),
         assocMediaButton = root.find('#assocMediaButton'),
-        toggleRow = root.find('#toggleRow'),
+        // toggleRow = root.find('#toggleRow'), // replaced with #filters (filtersDiv)
         selectedArtworkContainer = root.find('#selectedArtworkContainer'),
         timelineArea = root.find('#timelineArea'),
         topBar = root.find('#topBar'),
@@ -45,6 +46,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         infoButton = root.find('#infoButton'),
         tutorialButton = root.find('#tutorialButton'),
         linkButton = root.find('#linkButton'),
+        sortsDiv = root.find('#sorts'),
+        filtersDiv = root.find('#filters'),
+        divideDiv = root.find('#divide'),
+        keywordSelects = [], // Will be filled in later.
+        keywordOperatorSelects = [], // Will be filled in later.
         // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay = root.find('#overlay'),
         tileLoadingArea = root.find('#tileLoadingArea'),
@@ -119,6 +125,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         showArtworkTimeout,
         searchResultsLength,
         tileCircle,                     // loading circle for artwork tiles
+        menuCreated,
 
         //TELEMETRY
         nav_timer = new TelemetryTimer(),
@@ -196,8 +203,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // search on keyup
         searchInput.on('keyup', function (e) {
             if (!searchInput.val()) {
-                searchTxt.text("");
-                drawCatalog(currentArtworks, currentTag, 0, false);
+                clearSearchResults();
             }
             else if (e.which === 13) {
                 doSearch();   
@@ -288,6 +294,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             linkButton.css("float", "left");
             root.find('#mainCollection').css('width', '60%');
         }
+
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
             // IE9, Chrome, Safari, Opera
@@ -318,6 +325,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'width'   : 'auto',
             'top'     : '22%',
         };
+
         /*
         var tileCircle = TAG.Util.showProgressCircle(tileDiv, progressCircCSS, '0px', '0px', false);
         tileLoadingArea.append(tileCircle);
@@ -326,6 +334,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
+
+        menuCreated = false;
     }
 
     /**
@@ -653,6 +663,169 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         loadingArea.hide();
         searchInput.show();
+        addKeywords();
+    }
+
+    /**
+     * Adds keyword dropdowns to the search area.
+     * @method addKeywords
+     */
+    function addKeywords() {
+
+        // TODO: get actual keywords from the server!
+
+        // 3 categories.
+         //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
+         //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+         //                ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
+         //                ['Tropical House', 'Hardstyle', 'Disco', 'Hardcore', 'Tagcore', 
+         //                'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Genre',
+         //                'Escapism', 'Realism', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
+         //                'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'List Item', '^_^']];
+
+        // 2 categories.
+        // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
+        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+        //                 ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
+
+        // 1 category.
+        // var keywordCategories = ['Fruit, but this category title is going to be really long'];
+        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
+
+        // No categories, no keywords. Capiche??
+        var keywordCategories = [];
+        var keywords = [[],[],[]];
+
+        // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
+        if (keywordCategories && keywords && keywordCategories.length > 0) {
+            // Create unordered list of select elements.
+            var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
+
+            // Loop through the categories of keywords. 
+            keywordCategories.forEach(function(element, index, array) {
+                // Each category has 2 select elements: 
+                //      1. Operator select: AND/NOT (think radio buttons) 
+                //      2. Keywords select (think checklist).
+                // All select elements are added to the unordered list and kept inline.
+
+                // Create operator select element. 
+                var listItem1 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
+                var select1 = $(document.createElement('select')).addClass('keywordsSelect'); // Class stylizes select element.
+                var andOptn = $('<option>AND</option>').attr('value', '0'); // AND option.
+                var notOptn = $('<option>NOT</option>').attr('value', '1'); // NOT option.
+                select1.append(andOptn); // Add AND option.
+                select1.append(notOptn); // Add NOT option.
+                listItem1.append(select1); // Wrap the select element in a list item.
+                selectList.append(listItem1); // Then add the list item to our list of selects.
+                keywordOperatorSelects.push(select1); // Also add select element to stored list of operator selects. 
+
+                // Create keywords select element.
+                var listItem2 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
+                var select2 = $(document.createElement('select')).addClass('keywordsSelect') // Class stylizes select element.
+                                                                 .addClass('multiselect') // Class to help distinguish multiselects. Might be unused.
+                                                                 .attr('multiple', 'multiple'); // Make this a multi-select element. jQuery lib will turn into dropdown.
+                
+                // Add each of the keywords in this category.
+                for (var i = 0; i < keywords[index].length; i++) {
+                    select2.append($('<option>' + keywords[index][i] + '</option>').attr('value', i.toString())); 
+                }
+                listItem2.append(select2); // Wrap the select element in a list item.
+                selectList.append(listItem2); // Then add the list item to our list of selects.
+                keywordSelects.push(select2); // Also add select element to stored list of keyword selects.
+
+            }); 
+
+            // Finally, add the list of select elements to the keywords div.
+            keywordsDiv.append(selectList);
+
+            // Now run the dropdowncheclist jQuery library to turn the select elements into basic dropdown lists.
+            if (IS_WINDOWS) {
+                MSApp.execUnsafeLocalFunction(function () { // You got a deathwish, Truant?
+                    $('select.keywordsSelect').dropdownchecklist({
+                        maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                        closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
+                    });
+                });
+            } else {
+                $('select.keywordsSelect').dropdownchecklist({
+                    maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                    closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
+                });
+            }
+            
+            // Unfortunately, the dropdownchecklists are minimally stylized, so we need to do some cleaning up. 
+
+            // Format the dropdown selector box (what you click on to make dropdown appear).
+            var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
+            $('.ui-dropdownchecklist-selector').each(function(index, element) {
+                // Set the text inside the selector box.
+                if (index % 2 == 0) {
+                    // Even numbered dropdowns are operator dropdowns.
+                    $(element).find('.ui-dropdownchecklist-text') // Get the text span element.
+                        .css('display', 'inline') // Make it inline so the div with our dropdown arrow will be inline.
+                        .css('color', '#000'); // Make the text black. TAG defaults spans to light gray.
+                    $(element).parent().parent().find('input').hide();//.css('opacity', '0'); // TODO: hiding the radio button creates bug where clicking item twice allows empty selection.
+                    //$(element).parent().parent().find('.ui-dropdownchecklist-text').css('margin-left', '15%'); // 
+
+                } else {
+                    // Odd numbered dropdowns are for keywords.
+                    var categoryIndex = (index - 1) / 2; // 1 --> 0, 3 --> 1, 5 --> 2, etc.
+                    $(element).text(function() { return keywordCategories[categoryIndex]; }); // Change the inner text of this selector element to category title.
+                    // Note: here we do not change the '.ui-dropdownchecklist-text' element (as we do above) to eliminate the functionality of updating
+                    // the selector with selected text. I.e., when a user selects a keyword, the selector box text will not change to that keyword, 
+                    // it will stay as the category title. 
+
+                    // Set the width of keywords dropdowns and make overflowing text have an ellipsis.
+                    $(element).css('width', $('#searchInput').width() + 'px')
+                              .css('overflow', 'hidden')
+                              .css('text-overflow', 'ellipsis');
+                }
+
+                // Further stylization of selector box.
+                var selectorFontSize = 0.8 * elementHeight; // We want our font size to be slightly smaller than the box's height.
+                $(element).parent().css('height', elementHeight + 'px'); // This element uses padding, so we actually change the height of its parent, a wrapper span. 
+                $(element).css('line-height', selectorFontSize + 'px') // This centers the text in the selector box.
+                          .css('font-size', selectorFontSize + 'px') 
+                          .css('color', '#000'); // Make the text black.
+                          //.css('padding-right', elementHeight/2 + 'px'); // Add half the height to the width. This will leave room for a dropdown arrow.
+
+                // Create a dropdown arrow.
+                var arrowSize = elementHeight / 3; // Arrow is one third the box's height. Looks about right.
+                var downArrow = $(document.createElement('div')).css('float', 'right') // All done in css. Is only a div floating right in selector box.
+                            .css('width', '0')
+                            .css('height', '0')
+                            .css('margin-top', elementHeight/2 - arrowSize/2 + 'px') // This centers the arrow. Top margin is half the box's height minus half the arrow's height.
+                            .css('border-left', arrowSize + 'px solid transparent') 
+                            .css('border-right', arrowSize + 'px solid transparent') // Note to keep left and right borders transparent.
+                            .css('border-top',  arrowSize + 'px solid #000'); // Here we make the arrow black.
+                $(element).parent().append(downArrow); // Add the arrow the selector box.
+                $(element).parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
+                          .css('width', $(element).parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
+
+            });
+
+            // The last thing we do is add a search button. 
+            var searchButtonListItem = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
+            var searchButton = $(document.createElement('div')).text('Search')
+                .attr('id', 'searchButton')
+                .css('height', elementHeight + 'px')
+                .hover(
+                    function() {
+                        $( this ).css('background-color', '#39f');
+                    }, function() {
+                        $( this ).css('background-color', '#fff');
+                })
+                .click(
+                    function() {
+                        doSearch();
+                });
+            searchButtonListItem.append(searchButton);
+            selectList.append(searchButtonListItem);
+        } else {
+            var divHeight = $('#leftContainer').height()/2;
+            $('#leftContainer').css('margin-top', divHeight + 'px');
+            $('#leftContainer').css('margin-bottom', divHeight + 'px');
+        }
     }
 
     /**
@@ -698,6 +871,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 counter = 0,
                 collectionLength,
                 collectionDescription = $(document.createElement('div')),
+                searchDescription = $(document.createElement('div')),
                 dummyDot,
                 dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR),
                 str,
@@ -731,7 +905,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (onAssocMediaView && collection.collectionMediaMinYear===Infinity){
                 timelineShown = false;
             }
-            buttonRow.empty();
+            sortsDiv.empty();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
                 TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
@@ -756,8 +930,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.empty();
             catalogDiv.stop();
 
-            
-
             // if (!collectionDots[collection.Identifier]){
             //     //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
             //     dummyDot = $(document.createElement('div'))
@@ -780,8 +952,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //     collectionDots[collection.Identifier].css('background-color', 'white');
             // }                
 
-            makeOptionsClick('collectionMenu');
-           
+            // formatting adjustments during splitscreen mode 
+            if (TAG.Util.Splitscreen.isOn()) {
+                root.find('.collection-title').css('margin-left', '12%'); // make spacing between dropdown arrow and collection title consistent
+                root.find('#collectionMenu').css('width','70%');
+            }
+
+            // resize the size of the collection menu after exiting splitscreen mode
+            $(document).click(function(event) {
+                if (!TAG.Util.Splitscreen.isOn()) {
+                    root.find('#collectionMenu').css('width','35%');
+                }
+            });
+        
+            makeOptionsClick();
+            hideCollectionMenu();
             /*
             function loadPage(index) {
                 //makeOptionsClick('collectionsMenu');
@@ -817,7 +1002,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             // To show/hide dropdown menu
-            function showMenu(id) {
+            function showCollectionMenu(id) {
                 console.log("Called Show Menu");
                 
                 var menu = document.getElementById(id);
@@ -861,7 +1046,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             var uiDocfrag = document.createDocumentFragment();
 
-            // hard coded setting for previewing purpose within the authoring mode
+            // for previewing purpose in the authoring mode so that the menu arrow position does not change
             if (!IS_WINDOWS && previewing) {
                 // reduce the size of the dropdown menu when being previewed in authoring mode
                 backArrow.css({
@@ -878,18 +1063,29 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 backArrowArea.show();
             }
 
+            backArrowArea.addClass('arrowArea'); 
+            backArrow.css('display', 'inline')
+                .off()
+                .on('mousedown', function(j){
+                    return function () {
+                        showCollectionMenu();
+                    }
+                }(collection));
+            backArrow.attr('src', tagPath + 'images/icons/Close.svg');
+            backArrow.addClass('arrow');    
+            backArrowArea.show();
+
 
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
-                backArrowArea.addClass('arrowArea');
-                
-                backArrowArea.css('display', 'inline')
+                //backArrowArea.addClass('arrowArea'); 
+                backArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
-                            showMenu('collectionMenu');
+                            showCollectionMenu();
                         }
                     }(collection));
                 backArrow.attr('src', tagPath + 'images/icons/Close.svg');
@@ -900,15 +1096,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //              .attr({
                 //                'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
                 //              })
-                             //.css('left','3%')
-                             //.html(prevTitle)
-                             // .off()
-                             //.on('mousedown', function(j){
-                                // return function () {
-                                  //   prepareNextView();
-                                    // loadCollection(visibleCollections[j.prevCollectionIndex])();
-                                 //}
-                            // }(collection));
+                //.css('left','3%')
+                //.html(prevTitle)
+                // .off()
+                //.on('mousedown', function(j){
+                // return function () {
+                //   prepareNextView();
+                // loadCollection(visibleCollections[j.prevCollectionIndex])();
+                //}
+                // }(collection));
                 // collectionArea.append(prevCollection);
                 // uiDocfrag.appendChild(prevCollection[0]);
                 //prevCollection.show();
@@ -968,26 +1164,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //                         loadCollection(visibleCollections[j.nextCollectionIndex])();
             //                     }
             //                 }(collection));
-                nextCollection.show();
-                TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
-                    //tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
-                    tobj.current_collection = currCollection.Identifier;
-                    tobj.next_collection = nextTitle;
-                    tobj.time_spent = nav_timer.get_elapsed();
-                    //console.log("nav timer: " + tobj.time_spent);
-                    nav_timer.restart();
-                    tobj.navigation_type = "arrow";
-                });
-                TAG.Telemetry.register(nextCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
-                    tobj.current_collection = currCollection.Identifier;
-                    tobj.next_collection = nextTitle;
-                    tobj.time_spent = nav_timer.get_elapsed();
-                    //console.log("nav timer: " + tobj.time_spent);
-                    nav_timer.restart();
-                    tobj.navigation_type = "collection_name";
-                });
-                //collectionArea.append(nextCollection);
-                uiDocfrag.appendChild(nextCollection[0]);
+            nextCollection.show();
+            TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
+                //tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
+                tobj.current_collection = currCollection.Identifier;
+                tobj.next_collection = nextTitle;
+                tobj.time_spent = nav_timer.get_elapsed();
+                //console.log("nav timer: " + tobj.time_spent);
+                nav_timer.restart();
+                tobj.navigation_type = "arrow";
+            });
+            TAG.Telemetry.register(nextCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
+                tobj.current_collection = currCollection.Identifier;
+                tobj.next_collection = nextTitle;
+                tobj.time_spent = nav_timer.get_elapsed();
+                //console.log("nav timer: " + tobj.time_spent);
+                nav_timer.restart();
+                tobj.navigation_type = "collection_name";
+            });
+            //collectionArea.append(nextCollection);
+            uiDocfrag.appendChild(nextCollection[0]);
             // }
             collectionArea.append($(uiDocfrag));
 
@@ -1004,27 +1200,63 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
             collectionDescription.css({'word-wrap': 'break-word', "height": "98%", "color": SECONDARY_FONT_COLOR});
-                str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
-                collectionDescription.css({
-                    'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
-                });
-                collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
-                if (IS_WINDOWS) {
-                    if (collectionDescription) {
-                        var links = collectionDescription.find('a');
-                        links.each(function (index, element) {
-                            $(element).replaceWith(function () {
-                                return $.text([this]);
-                            });
-                        }); 
-                    }
+            str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
+            collectionDescription.css({
+                'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+            });
+            collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
+            if (IS_WINDOWS) {
+                if (collectionDescription) {
+                    var links = collectionDescription.find('a');
+                    links.each(function (index, element) {
+                        $(element).replaceWith(function () {
+                            return $.text([this]);
+                        });
+                    }); 
                 }
+            }
+            searchDescription.attr('id', 'searchDescription');
+            searchDescription.addClass('secondaryFont');
+            searchDescription.css({ "color": SECONDARY_FONT_COLOR });
+            searchDescription.css({
+                'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+            });
+
+            var clearSearchButton = $(document.createElement('div'))
+                .addClass('secondaryFont')
+                .attr('id', 'clearSearchButton')
+                .css({
+                    'color': SECONDARY_FONT_COLOR,
+                    'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+                })
+                .text('Clear search results')
+                .hover(
+                    function () {
+                        $(this).css({ 
+                            'background-color': SECONDARY_FONT_COLOR,
+                            'color': '#000'
+                        });
+                    },
+                    function () {
+                        $(this).css({
+                            'background-color': 'rgba(0, 0, 0, 0.6)',
+                            'color': SECONDARY_FONT_COLOR
+                        })
+                    }
+
+                )
+                .click(function () {
+                    searchInput.val('');
+                    searchTxt.text('');
+                    clearSearchResults();
+                });
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
+            infoDiv.css('width', '25%');
             if (collection.Metadata.Description && !onAssocMediaView) {
-                infoDiv.css('width', '25%'); 
+                infoDiv.css('margin-left', '0%'); 
             } else { 
-                infoDiv.css('width', '0%');
+                infoDiv.css('margin-left', '-25%');
             }
 
             // Hide selected artwork container, as nothing is selected yet
@@ -1034,6 +1266,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tileDiv.empty();
             catalogDiv.append(tileDiv);
             infoDiv.empty();
+            infoDiv.append(searchDescription);
+            infoDiv.append(clearSearchButton);
             infoDiv.append(collectionDescription);
             catalogDiv.append(infoDiv);
             timelineArea.empty();
@@ -1044,13 +1278,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.append(tileCircle);
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
-
-                toggleRow.css({
-                    'display': 'block',
-                });
-                if (TAG.Util.Splitscreen.isOn()) {
-                    toggleRow.css('width', '40%');
-                }
+                // toggleRow.css({
+                //     'display': 'block',
+                // });
+                // if (TAG.Util.Splitscreen.isOn()) {
+                //     toggleRow.css('width', '40%');
+                // }
+                filtersDiv.css('display','inline');
+                divideDiv.css('display','inline');
                 artworksButton.off()
                               .on('mousedown', function(){
                                     artworksButton.css('color', SECONDARY_FONT_COLOR);
@@ -1073,7 +1308,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     }
                                 });
             } else {
-                toggleRow.css('display','none');
+                console.log(collection.Metadata);
+                filtersDiv.css('display','none');
+                divideDiv.css('display','none');
             }
            
             currCollection = collection;
@@ -1114,16 +1351,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         loadCollection(visibleCollections[index])();
     }
 
-    //To make the dropdown menu a list of clickable buttons that correspond to collections
-    function makeOptionsClick(id) {
-        var menu = document.getElementById(id);
-        var menuArray = [];
-        menu.innerHTML = "";
-        
-        if (menu.hasChildNodes() == false) {
+    /**
+     * To make the dropdown menu a list of clickable buttons that correspond to collections
+     * @method makeOptionsClick
+     */
+    function makeOptionsClick() {
+        var menu,
+            menuArray,
+            arrow;
+
+        menu = $(root).find('#collectionMenu');
+        arrow = $(root).find('#backArrow');
+        menuArray = [];
+
+        if (!menuCreated) {
             for (var i = 0; i < visibleCollections.length; i++) {
-                var para = document.createElement("p");
-                
+                var para = document.createElement("div");
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
@@ -1132,31 +1375,76 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 menuArray[i].style.marginLeft = "2%";
                 menuArray[i].style.fontSize = "100%";
                 menuArray[i].style.padding = ".5%";
-                menu.appendChild(para);
+                menu.append(para);
 
                 menuArray[i].onclick = function () {
                     loadPage(this.id);
+                    showCollectionMenu();
                 }
                 para.appendChild(menuArray[i]);
                 menuArray[i].appendChild(txtNode);
             }
+            menuCreated = true;
         }
     }
 
-    // To show/hide dropdown menu
-    function showMenu(id) {
-
-        var menu = document.getElementById(id);
-
-        if (menu.style.display == 'block') {
-            menu.style.display = 'none';
+    /**
+     * Helper function to show/hide dropdown collection menu
+     * @method showCollectionMenu
+     */
+    function showCollectionMenu() {
+        var menu,
+            arrow;
+        menu = $(root).find('#collectionMenu');
+        arrow = $(root).find('#backArrow');
+        if (menu.css('display') == 'block') {
+            menu.css({
+                'display':'none'
+            });
+            arrow.css({
+                'transform':'rotate(270deg)',
+                'webkitTransform':'rotate(270deg)'
+            });
         } else {
-            menu.style.display = 'block';
-        }
+            menu.css({
+                'display':'block'
+            });
+            arrow.css({
+                'transform':'rotate(90deg)',
+                'webkitTransform':'rotate(90deg)'
+            });
+        };
 
+        // if (menu.style.display == 'block') {
+        //     menu.style.display = 'none';
+        //     arrow.style.transform = 'rotate(270deg)';
+        //     arrow.style.webkitTransform = 'rotate(270deg)';
+        // } else {
+        //     menu.style.display = 'block';
+        //     arrow.style.transform = 'rotate(90deg)';
+        //     arrow.style.webkitTransform = 'rotate(90deg)';
+        // }
     }
 
-
+    /**
+     * Hide the dropdown collection menu if the user clicks something outside the menu
+     * @method hideCollectionMenu
+     */
+    function hideCollectionMenu() {
+        var menu,
+            arrow;
+        menu = document.getElementById('collectionMenu');
+        arrow = document.getElementById('backArrow');
+        $(root).click(function(event) {
+            if (event.target.id != 'backArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+                if (menu.style.display == 'block') {
+                    menu.style.display = 'none';
+                    arrow.style.transform = 'rotate(270deg)';
+                    arrow.style.webkitTransform = 'rotate(270deg)';
+                }
+            }
+        });
+    }
 
     /**
      * Helper function to load first collection
@@ -1221,11 +1509,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         function appendTags() {
             var i,
                 text;
-            buttonRow.empty();
+            //buttonRow.empty();
+            sortsDiv.empty();
             var uiDocfrag = document.createDocumentFragment();
+            var rowList = $(document.createElement('ul')).addClass('rowLeft');
             for (i = 0; i < sortOptions.length; i++) {
+                var listItem = $(document.createElement('li')).addClass('rowItem');
                 sortButton = $(document.createElement('div'));
-                uiDocfrag.appendChild(sortButton[0]);
+                // uiDocfrag.appendChild(sortButton[0]);
                 //Because stored on server as "Tour" but should be displayed as "Tours"
                 sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
                 sortButton.addClass('secondaryFont');
@@ -1248,6 +1539,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //sortButton.css("height", newPos.height + 'px');
                 //buttonRow.append(sortButton);
                 sortButtonTags[sortButton.attr('id')] = sortOptions[i];
+                listItem.append(sortButton);
+                rowList.append(listItem);
 
                 //Sort telemetry register
                 TAG.Telemetry.register(sortButton, 'mousedown', 'SortOptions', function (tobj) {
@@ -1255,7 +1548,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     tobj.current_collection = currCollection.Identifier;
                 });
             }
-            buttonRow.append($(uiDocfrag));
+            uiDocfrag.appendChild(rowList[0]);
+            sortsDiv.append($(uiDocfrag));
             if (!comingBack || !currentTag) {
                 //If currentTag not defined currentTag is either 'year' or 'title' depending on if timeline is shown
                 if (timelineShown && (sortOptions.indexOf('Date')>=0)) {
@@ -1349,7 +1643,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var content = searchInput.val().toLowerCase(),
             matchedArts = [],
             unmatchedArts = [],
-            i;
+            i;       
 
         if (!content) {
             searchTxt.text("");
@@ -1365,6 +1659,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
         }
 
+        var searchDescriptionText = 'Found ' + matchedArts.length +
+            ' result' + ((matchedArts.length == 1) ? '' : 's') +
+            ' for \'' + content + '\'.';
+
+        $('#searchDescription').text(searchDescriptionText);
+        $('#clearSearchButton').css({ 'display': 'block' });
+        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+        if (description === "" + "\n\n   ") {
+            $('#tileDiv').animate({ 'left': $('#infoDiv').width() + 'px' }, 1000, function () { });
+            $('#infoDiv').animate({ 'margin-left': '0%' }, 1000, function () { });
+        }
+
         //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
         searchResultsLength = matchedArts.length;
         TAG.Telemetry.recordEvent('Search', function (tobj) {
@@ -1377,6 +1683,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
 
     /**
+     * Method to clear the results of a search.
+     * {method} clearSearchResults
+     */
+    function clearSearchResults() {
+        // Clear the search text.
+        searchTxt.text("");
+
+        // Clear the results description.
+        $('#searchDescription').text('');
+        $('#clearSearchButton').css({ 'display': 'none' });
+
+        // If there is no description, hide the infoDiv.
+        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+        if (description === "" + "\n\n   ") {
+            $('#tileDiv').animate({ 'left': '0%' }, 1000, function () { });
+            $('#infoDiv').animate({ 'margin-left': '-25%' }, 1000, function () { });
+        }
+
+        drawCatalog(currentArtworks, currentTag, 0, false);
+    }
+
+    /**
      * Create tiles for each artwork/tour in a collection
      * @method createArtTiles
      * @param {Array} artworks     an array of doq objects
@@ -1385,6 +1713,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtworks = artworks;
         currentTag && colorSortTags(currentTag);
         drawCatalog(currentArtworks, currentTag, 0, null, cancel);
+
+        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+        if (description === "" + "\n\n   ") {
+            $('#tileDiv').css({ 'left': '0%' });
+        } else {
+            $('#tileDiv').css({ 'left': '25%' });
+        }
         //drawCatalog(artworks, currentTag, 0);
     }
 
@@ -1501,12 +1836,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 showArtwork(currentArtwork, multipleShown && multipleShown)();
             })
             }
-            tileDiv.css({'left': infoDiv.width()});
-            if (infoDiv.width()===0){
-                tileDiv.css({'margin-left':'2%'});
-            } else{
-                tileDiv.css({'margin-left':'0%'});
-            }
+
+            //if (infoDiv.width()===0){
+            //    tileDiv.css({'margin-left':'2%'});
+            //} else{
+            //    tileDiv.css({'margin-left':'0%'});
+            //}
             catalogDiv.append(tileDiv);
             clearTimeline(artworks);
            
@@ -1547,8 +1882,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function styleBottomContainer(){
         if (timelineShown){   
                 bottomContainer.css({
-                    'height' : '69%',
-                    'top' : '25%',
+                    'height' : '75%',
+                    'top' : '17%',
                     'z-index': '',
                 });
                 selectedArtworkContainer.css({
@@ -1558,7 +1893,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         } else {
             bottomContainer.css({
                 'height':'79%',
-                'top':'15%',
+                'top':'13%',
                 'z-index':'100005',
             });
             selectedArtworkContainer.css({

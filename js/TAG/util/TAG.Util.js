@@ -2050,6 +2050,8 @@ TAG.Util.UI = (function () {
 
     //initKeyHandler();
 
+
+
     function initKeyHandler() {
         window.focus();
         window.addEventListener('keydown', keyHandler);
@@ -2643,7 +2645,7 @@ TAG.Util.UI = (function () {
         }else{
             overlay = blockInteractionOverlay();
             first = true;
-            $(overlay).attr('id', 'popupblockInteractionOverlay');
+            $(overlay).attr('id', 'Overlay');
         }
         var confirmBox = document.createElement('div');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
@@ -2791,6 +2793,7 @@ TAG.Util.UI = (function () {
     function uploadProgressPopup(clickAction, message, filesArray) {
         var buttonText, noFade, useHTML, onDialogClick;
         var overlay, first;
+
         if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
@@ -2837,7 +2840,7 @@ TAG.Util.UI = (function () {
             'height': '15%',
             'left': '10%',
             'top': '12.5%',
-            //'font-size': '1.20em',
+            //'font-size': '1.20em', 
             'position': 'relative',
             'text-align': 'left',
             'word-wrap': 'break-word',
@@ -3034,16 +3037,22 @@ TAG.Util.UI = (function () {
     }
 
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry, cancelOption, displayNames) {
         var overlay;
         var origin;
-        if (document.getElementById("popupblockInteractionOverlay")) {
+        /*if (document.getElementById("popupblockInteractionOverlay")) {
             overlay = $(document.getElementById("popupblockInteractionOverlay"));
         } else {
             origin = true;
             overlay = blockInteractionOverlay();
             $(overlay).attr('id', 'popupblockInteractionOverlay');
-        }
+        }*/
+
+        origin = true;
+        overlay = blockInteractionOverlay();
+        console.log("Made new overlay");
+
+        origin
         container = container || window;
         var confirmBox = document.createElement('div');
         var popUpHandler = {
@@ -3100,6 +3109,18 @@ TAG.Util.UI = (function () {
         }
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
+
+        if(cancelOption == false){
+            for (var i = 0; i < displayNames.length; i++) {
+
+                var para = document.createElement('div');
+                $(para).text(displayNames[i]);
+                $(para).css({color: 'white', 'z-index': '99999999999'});
+                $(messageLabel).append(para);
+                TAG.Util.multiLineEllipsis($(para));
+            }
+        }
+
         $(confirmBox).append(messageLabel);
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
@@ -3164,7 +3185,11 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         }).attr('id', 'popupCancelButton');
         $cancelButton.text('Cancel');
-        $(optionButtonDiv).append(cancelButton);
+
+        if(cancelOption != false){
+            $(optionButtonDiv).append(cancelButton);
+        }
+        
 
         if (forTourBack) {
             $cancelButton.text('Don\'t Save');
@@ -3438,6 +3463,7 @@ TAG.Util.UI = (function () {
 
     // slide towards left (splitscreen)
     function slidePageLeftSplit(oldpage, newpage, callback) {
+        console.log("sliding page left")
         var outgoingDone = false,
             incomingDone = false,
             metaContainer = oldpage.parent(),
@@ -3858,6 +3884,52 @@ TAG.Util.UI = (function () {
         'margin-left': '20px'
     };
 
+    var importButton;
+
+    /*
+    This function will be the backend that will merge multiple collections into a specified collection
+
+    param guids         array: list of guids that will be merged into the target collection
+    param targetguid    string: the guid of the target collection to be merged into
+    param callback      function:  the callback function
+
+    */
+
+    function mergeCollectionsIntoOneCollection(guids, targetguid, callback) {
+        console.log("about to merge collections into another collection with the guid "+targetguid)//TODO: add in telemetry call?
+        var totalGuids = [], // the compilation of all artwork guids in all the collections being merged
+            j=0//counter to see how many getArtworksIn calls have been recieved
+
+        for (var i = 0; i < guids.length; i++) {//for every collection in guids
+            TAG.Worktop.Database.getArtworksIn(guids[i], addArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
+        }
+        function addArtworks(artworks) {
+            j++
+            if (artworks) {
+                for (var k = 0; k < artworks.length; k++) {
+                    totalGuids.push(artworks[k].Identifier)//add the artwork guid to the total guids of all artworks
+                }
+            }
+            if (j === guids.length) {//when the counter has recieved every 'addArtworks' call, call the server to get the guids of the artworks in the original collection
+                TAG.Worktop.Database.getArtworksIn(targetguid, getPreviousArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
+            }
+        }
+
+        function getPreviousArtworks(artworks) {
+            var finalGuids = []//these will be an array of all the unique guids that are not already in the target collection
+            for (var j = 0; j < totalGuids.length; j++) {
+                if (finalGuids.indexOf(totalGuids[j]) < 0 && artworks.indexOf(totalGuids[j]) < 0) {
+                    finalGuids.push(totalGuids[j])//add to the final guid array in meets criteria
+                }
+            }
+            var options = {}
+            if (finalGuids.length > 0) {
+                options.AddIDs = finalGuids.join(',')//join to make into the neede string format
+            }
+            TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { console.log(err.message) }, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
+        }
+    }
+
     /**
      * Creates a picker (e.g. click add/remove media in the artwork editor) to manage
      *   associations between different TAG components (exhib, artworks, assoc media)
@@ -3868,12 +3940,15 @@ TAG.Util.UI = (function () {
      * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media), "bg"- background image : type of the association
      * @param tabs           array: list of tab objects. Each has a name property (string, title of tab), a getObjs
      *                              property (a function to be called to get each entity listed in the tab), and a
-     *                              args property (which will be extra arguments sent to getObjs)
+     *                              args property (which will be extra arguments sent to getObjs), also an excluded property
+     *                              which is a list of guids of elements that should not be displayed 
      * @param filter         object: a getObjs property to get components that are already associated with target
      *                               (e.g. getAssocMediaTo if type='artwork') and an args property (extra args to getObjs)
      * @param callback       function: function to be called when import is clicked or a component is double clicked
+     * @param importBehavior
+     * @param queueLength        
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength, mergeBoolean) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -3903,6 +3978,7 @@ TAG.Util.UI = (function () {
         if (type == "bg"){
             origComps= filter.args;
         } else {
+        
         var filterArgs = (filter.args || []).concat([function (comps) { // this has async stuff, make sure it gets called by the time it needs to be
             for (i = 0; i < comps.length; i++) {
                 origComps.push(comps[i].Identifier);
@@ -3982,7 +4058,7 @@ TAG.Util.UI = (function () {
                     'font-size':'0.8em'
                 });
                 tab.text(tabs[i].name);
-                tab.on('click', tabHelper(i));
+                tab.on('click', tabHelper(i, tabs[i].name, queueLength));
                 tabBanner.append(tab);
             }
             tab = $(document.createElement('div'));
@@ -4143,7 +4219,7 @@ TAG.Util.UI = (function () {
             'width': '40px',
             'height': 'auto',
             'position': 'relative',
-            'z-index': 50
+            'z-index': 100000000
         };
 
         var progressCirc;
@@ -4162,6 +4238,17 @@ TAG.Util.UI = (function () {
             'border-radius': '3.5px'
         });
 
+        var loadingCSS = $(document.createElement('div'));
+            loadingCSS.css({ // TODO STYL
+                    'width': '1000%',
+                    'height': '1000%',
+                    'position': 'absolute',
+                    'background-color': 'rgba(0,0,0,.85)',
+                    'top': $('.topbar').css('height'),
+                    'right': '0%',
+                    'z-index': 1000000000000
+                });
+
         confirmButton.text("Save");
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
@@ -4173,11 +4260,12 @@ TAG.Util.UI = (function () {
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        var importButton = $(document.createElement('button'));
-        importButton.css({
+        importButton = $(document.createElement('button'));
+        importButton.css({ //initially greyed out
             'margin': '1%',
             'border': '1px solid white',
             'color': 'white',
+            'opacity': '.4',
             'padding-left': '1%',
             'padding-right': '1%',
             'background-color': 'black',
@@ -4246,7 +4334,7 @@ TAG.Util.UI = (function () {
             }); //Josh L -- fix so the div actually fades out
             globalKeyHandler[0] = currentKeyHandler;
         });
-        TAG.Telemetry.register(cancelButton, 'click', 'CancelAssociatedMediaPicker', null);
+        //TAG.Telemetry.register(cancelButton, 'click', 'CancelAssociatedMediaPicker', null);
 
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
@@ -4271,7 +4359,9 @@ TAG.Util.UI = (function () {
         // helper functions
 
         // click handler for tabs
-        function tabHelper(j) {            
+        function tabHelper(j, tabName, queueLength) {
+            console.log("J and tabs: "+j)
+            console.log(tabs)
             return function () {                
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
@@ -4294,29 +4384,42 @@ TAG.Util.UI = (function () {
                     var tabArgs = (tabs[j].args || []).concat([function (comps) {
                         tabCache[j].cached = true;
                         tabCache[j].comps = comps;
-                        success(comps);
+                        success(comps,tabs[j].excluded);
                     }, error, cacheError]);
                     tabs[j].getObjs.apply(null, tabArgs);
                 } else {
-                    success(tabCache[j].comps); // used cached results if possible
+                    success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
+                }
+
+                if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
+                    $(importButton).prop('disabled', false);
+                    importButton.css({'opacity': '1'});
+                    console.log("import button should be enabled");
+                } else{
+                    importButton.css({'opacity': '.4'});
+                    $(importButton).prop('disabled', true);
+                    console.log("import button should be disabled");
                 }
 
             }
         }
 
-        function success(comps) {
+        function success(comps, excluded) {
             var newComps = [];
             for (var i = 0; i < comps.length; i++) {
-                if (!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork')) {
+                //if guid of comp obj is in excluded guid list, don't show it in pop-up
+
+                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))&& //exclude videos because not 
+                    !(comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) >=0))) {
                     newComps.push(comps[i]);
                 }
             }
-            drawComps(newComps, compSingleDoubleClick);
+            drawComps(newComps, compSingleDoubleClick,excluded);
             TAG.Util.removeProgressCircle(progressCirc);
         }
 
         function error() {
-            console.log("ERROR IN TABHELPER");
+            consolelog("ERROR IN TABHELPER");
         }
 
         function cacheError() {
@@ -4328,11 +4431,21 @@ TAG.Util.UI = (function () {
          * @param compArray   the list of media to appear in the panel
          * @param applyClick  function to add handlers to each holder element
          */
-        function drawComps(compArray, applyClick) {
+        function drawComps(compArray, applyClick, excluded) {
             if (compArray) {
                 addedComps.length = 0;
                 addedCompsObjs.length = 0;
                 removedComps.length = 0;
+
+                if (excluded) {
+                    for (var x = 0; x < compArray.length; x++) {
+                        if (compArray[x].Identifier && (excluded.indexOf(compArray[x].Identifier) >= 0)) {
+                            compArray.remove(compArray[x]);
+                        }
+                    }
+                }
+
+                
                 compArray.sort(function (a, b) {
                     return (a.Name.toLowerCase() < b.Name.toLowerCase()) ? -1 : 1;
                 });
@@ -4342,7 +4455,9 @@ TAG.Util.UI = (function () {
             }
         }
 
-        function drawComp(comp, applyClick,i) {
+        function drawComp(comp, applyClick, i) {
+            console.log("drawing component: ")
+            console.log(comp)
             return function () {
                 var compHolder = $(document.createElement('div'));
                 compHolder.addClass("compHolder");
@@ -4413,6 +4528,11 @@ TAG.Util.UI = (function () {
                     compHolderImage.attr('src', imageSrc);
                 } else if (comp.Metadata.ContentType === 'iframe') {
                     compHolderImage.attr('src', tagPath + 'images/video_icon.svg'); // TODO iframe fix this with new icon
+
+                } else if ((comp.Type === 'Empty' && comp.Metadata.ContentType === "Text") || comp.Metadata.ContentType === "Text") {//text associated media
+                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/text_icon_2.svg');
+                    //shouldAppendTII = true;
+                    //typeIndicatorImage.attr('src', tagPath + 'images/icons/text_icon_2.svg');
                 } else if (comp.Type === 'Empty' || comp.Metadata.ContentType === "Tour") { // tours....don't know why the type is 'Empty'
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;
@@ -4578,6 +4698,38 @@ TAG.Util.UI = (function () {
         function finalizeAssociations() {
             var options = {};
 
+            //to prevent multiple uploading texts and loading circles from appearing simultanesouly
+            if ($(".progressText").length > 0 && $(".progressCircle").length > 0) {
+                $(".progressText").remove()
+                $(".progressCircle").remove()
+            }
+
+            // progress circle CSS to be displayed on the top bar next to the back button, while the process is loading
+            var progressCircCSS = {
+                'position': 'absolute',
+                'left': '40%',
+                'top': '40%',
+                'z-index': '50',
+                'height': 0.5*($("#setViewTopBar").height()),
+                'width': 'auto'
+            };
+
+            // progress text to notify the users that the process is loading
+            var progressText = $(document.createElement('div'))
+                .addClass('progressText')
+                .css({
+                       'display': 'inline-block',
+                       'float': 'left',
+                       'margin-left': '1.2%',
+                       'color': 'white',
+                       'font-size': '60%',
+                        'position' : 'relative',
+                        'top': '31%',
+                }),
+                viewer = $("#setViewTopBar"),
+                vert = viewer.height() / 2,
+                horz = viewer.width() / 5;
+
             // only update recentlyAssociated if the target is an artwork and we're managing an artwork-media assoc
             if (type === 'artwork' && target.type === 'artwork') {
                 for (var i = 0; i < addedComps.length; i++) {
@@ -4625,22 +4777,35 @@ TAG.Util.UI = (function () {
                         console.log(err.message);
                     });
                 } else if (type === 'exhib' && target.type === 'exhib') {
-                    TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function() {
-                        callback();
-                        pickerOverlay.fadeOut();
-                        pickerOverlay.empty();
-                        pickerOverlay.remove();
-                    }, function (err) {
-                        console.log(err.message);
-                    }, function (err) {
-                        console.log(err.message);
-                    }, function (err) {
-                        console.log(err.message);
-                    });
+                    if (mergeBoolean) {
+                        mergeCollectionsIntoOneCollection(addedComps, target.comp.Identifier, function () {
+                            callback();
+                            pickerOverlay.fadeOut();
+                            pickerOverlay.empty();
+                            pickerOverlay.remove();
+                        })
+                    }
+                    else {
+                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {
+                            callback();
+                            pickerOverlay.fadeOut();
+                            pickerOverlay.empty();
+                            pickerOverlay.remove();
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
                 } else if (type === 'exhib' && target.type === 'artwork') {
+                    //(addedComps.length > 1) ? progressText.text("Adding Artwork to Collections...") : progressText.text("Adding Artwork to Collection...");
+                    //viewer.append(progressText);
+                    //TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], {AddIDs : [target.comp.Identifier]}, function () {
-                            if (i == addedComps.length - 1) {
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -4654,10 +4819,19 @@ TAG.Util.UI = (function () {
                             console.log(err.message);
                         });
                     }
+
                 } else if (type === 'exhib' && target.type === 'artworkMulti') {
+                    if (addedComps.length > 1) {
+                        (target.comp.length > 1) ? progressText.text("Adding Artworks to Collections...") : progressText.text("Adding Artwork to Collections...");
+                    } else {
+                        (target.comp.length > 1) ? progressText.text("Adding Artworks to Collection...") : progressText.text("Adding Artwork to Collection...");
+                    }
+                    viewer.append(progressText);
+                    TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
+
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], { AddIDs: [target.comp] }, function () {
-                            if (i == addedComps.length - 1) {
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -4672,10 +4846,42 @@ TAG.Util.UI = (function () {
                         });
                     }
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
+                    horz = viewer.width() / 6; // adjusting the formatting of the progress circle position 
+                    progressText.text("Adding Associations...");
+                    viewer.append(progressText);
+                    TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
+                    /**
                     console.log("adding associated medias to artworks")
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: [target.comp] }, function () {
                             if (i == addedComps.length - 1) {
+                                callback();
+                                pickerOverlay.fadeOut();
+                                pickerOverlay.empty();
+                                pickerOverlay.remove();
+                            }
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
+                }
+                **/
+                    var createMediaMultiList = function () {
+                        var l = []
+                        for (var k = 0; k < target.comp.length; k++) {
+                            l.push(target.comp[k].Identifier)
+                        }
+                        return l
+                    }();
+
+                    for (var i = 0; i < addedComps.length; i++) {
+                        TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: createMediaMultiList }, function () {
+                            // success handler
+                            if (i == addedComps.length) {
                                 callback();
                                 pickerOverlay.fadeOut();
                                 pickerOverlay.empty();
@@ -5560,6 +5766,9 @@ TAG.Util.RLH = function (input) {
                     mapGuids.push(mps[i].Identifier);
                 }
             }
+            if (!defaultMapShown) { // do not show bing map if it is disabled
+                mapGuids.remove(null);
+            }
             loadMaps(callback);
             createDots();
         }, function () {
@@ -5718,7 +5927,6 @@ TAG.Util.RLH = function (input) {
                 tobj.map_interaction = "show_map";
                 console.log("show map");
             });
-        //}
 
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
         currentIndex = mapGuids.indexOf(guid);

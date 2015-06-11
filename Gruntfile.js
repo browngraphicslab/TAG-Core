@@ -67,8 +67,8 @@ var JSSRC = [
 		'js/utils/CryptoJS/rollups/sha224.js',                 // TAGCORE
 		'js/utils/CryptoJS/rollups/sha256.js',                 // TAGCORE
 		'js/utils/CryptoJS/rollups/sha384.js',                 // TAGCORE
-		'js/utils/CryptoJS/rollups/sha512.js',                 //TAGCORE
-		'js/utils/CryptoJS/rollups/tripledes.js',              //TAGCORE
+		'js/utils/CryptoJS/rollups/sha512.js',                 // TAGCORE
+		'js/utils/CryptoJS/rollups/tripledes.js',              // TAGCORE
 		'js/utils/CryptoJS/rollups/aes.js',                    // TAGCORE
 		'js/utils/jquery.getScrollbarWidth.js',                // TAGCORE
 		'js/utils/jquery.throttle-debounce.js',                // TAGCORE
@@ -90,6 +90,7 @@ var JSSRC = [
 		'js/utils/jquery.livequery.js',                        // TAGCORE
 		'js/utils/resumable_edit.js',
 		'js/utils/Autolinker.js-master/dist/Autolinker.js',    // TAGCORE
+		'js/utils/ui.dropdownchecklist.js',			   		   // TAGCORE
 
 		'js/TAG/tourauthoring/TAG.TourAuthoring.Constants.js', // TAGCORE
 		'js/TAG/util/TAG.Util.Constants.js',                   // TAGCORE

@@ -15,9 +15,10 @@ TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
  *      slidePageRight.
  *   @param startLabelID selects a middle label automatically if it matches that id.
  *      The label will be scrolled to if it is off screen
+ *   @param guidsToBeDeleted list of things that have recently been marked for delete, so that they show up grayed out
  *   @return {Object} public methods and variables
  */
-TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID) {
+TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID, guidsToBeDeleted) {
     "use strict";
     //$(document).off();                   
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
@@ -61,9 +62,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         menuLabel = root.find('#addMenuLabel'),
         dropDown = $(document.createElement('div')),
         currCollection = null,
+        uploadingOverlay = $(document.createElement('div')),
+        uploadOverlayText = $(document.createElement('label')),
+        textAppended = false,
+        guidsToBeDeleted = guidsToBeDeleted ||[],
         // = root.find('#importButton'),
 
-        
+
 
         primaryColorPicker,
         secondaryColorPicker,
@@ -104,7 +109,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 text: 'Tours',
                 subtext: 'Build interactive tours'
             },
-            dummytour:{
+            dummytour: {
                 text: 'Tours',
                 subtext: 'Tours are disabled on the web'
             },
@@ -185,6 +190,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false,
         pickerOpen = false,
         multiSelected = [],
+        toBeUnselected = null,
 
         // booleans
 		inGeneralView = false,
@@ -222,6 +228,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         type_representation: null,
         time_spent_timer: null
     };
+
+    
+        
 
     //WEB ui
     if (!IS_WINDOWS) {
@@ -632,6 +641,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Setting up UI:
         backButton = root.find('#setViewBackButton');
         backButton.attr('src', tagPath + 'images/icons/Back.svg');
+        backButton.css({
+            'float': 'left',
+            'display':'inline-block'
+        });
 
         backButton.mousedown(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
@@ -670,7 +683,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     var bpage = backPage();
                     TAG.Util.UI.slidePageRight(bpage);
                 } else {
-                    TAG.Layout.StartPage(null, function (page) {
+                    TAG.Layout.StartPage({ primaryFontColor: TAG.Worktop.Database.getPrimaryFontColor(), secondaryFontColor: TAG.Worktop.Database.getSecondaryFontColor(), isPreview: false}, function (page) {
                         TAG.Util.UI.slidePageRight(page);
                     });
                 }
@@ -828,17 +841,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             case "Feedback":
                 selectLabel(nav[NAV_TEXT.feedback.text]);
                 prevSelectedSetting = nav[NAV_TEXT.feedback.text];
-                loadFeedbackView(id);
-                isArtView = false;
+                loadFeedbackView(id)                                      
                 break;
+
             case "General Settings":
                 isArtView = false;
+
 
             default:
                 selectLabel(nav[NAV_TEXT.general.text]);
                 prevSelectedSetting = nav[NAV_TEXT.general.text];
                 loadGeneralView();
                 isArtView = false;
+
                 break;
         }
     }
@@ -953,6 +968,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         changesMade = false;
 
         prepareNextView(false);
+
         if (prevLeftBarSelection.categoryName == null) {
             prevLeftBarSelection = {
                 timeSpentTimer: new TelemetryTimer(),
@@ -1059,6 +1075,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var bgImgInput = createButton('Change Image', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
 			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
                 var url = urls[0];
                 bgImgInput.val(url);
@@ -1439,7 +1456,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 //fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput,
-                keywordSetsInputs: keywordSetsInputs
+                //keywordSetsInputs: keywordSetsInputs
             });
         }, {
             'margin-right': '3%',
@@ -1812,7 +1829,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         	viewer.append(aroot);
         	// Don't allow the viewer to be clicked
         	preventClickthrough(viewer);
-        	
         });      
     }
 
@@ -1836,9 +1852,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         var cancel = false;
         currentIndex = 0;
+        
 
         // Set the new button text to "New"
         prepareNextView(true, "New", createExhibition);
+        
+        //Enables newButton - might be disabled initially because upload is happening
+        $(newButton).prop('disabled', false);
+        newButton.css({'opacity': '1', 'background-color': 'transparent'});
+        
+        
         clearRight();
         prepareViewer(true);
 
@@ -1877,6 +1900,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
 
         function displayLabels() {
+            var selectNext = false;
             $.each(list, function (i, val) {
                 if (cancel) {
                     return;
@@ -1890,8 +1914,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         return;
                     }
                     var label;
-                    if (!prevSelectedMiddleLabel &&
-                        ((id && val.Identifier === id) || (!id && i === 0))) {
+                    var collectguid = val.Identifier;
+                    var markedForDelete = false;
+                    if (guidsToBeDeleted.indexOf(collectguid) >= 0) {
+                        markedForDelete = true;
+                    }
+                    if (!markedForDelete && !prevSelectedMiddleLabel &&
+                        ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
 
                         // Select the first one or the specified id
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
@@ -1899,7 +1928,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
-                        }, val.Identifier), true));
+                        }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true));
+                        selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
                         if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -1913,6 +1943,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         if (cancelLastView) cancelLastView();
                         loadExhibition(val);
                     } else {
+                        if (markedForDelete) {
+                            selectNext = true;
+                        }
                         middleLoading.before(label = createMiddleLabel(val.Name, null, function () {
                             //if (changesHaveBeenMade) {
                             //    //saveArray.push(previousIdentifier);
@@ -1923,7 +1956,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             loadExhibition(val);
                             previousIdentifier = val.Identifier;
                             currentIndex = i;
-                        }, val.Identifier));
+                        }, val.Identifier,0,0,0,0,markedForDelete));
                         //prevSelectedMiddleLabel = label;
                         //currentSelected = prevSelectedMiddleLabel;
                     }
@@ -1996,8 +2029,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                         "cursor": "pointer",
                                         "float": "left",
                                         "font-size": "92.5%",
-                                        "margin-top": "0.475%",
-                                        "margin-right": "2%",
+                                        "margin-top": "0.27%",
+                                        "margin-right": "1%",
                                         "height": "100%",
                                         "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
                                     });
@@ -2073,10 +2106,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'exhib', [{
                     name: 'All Artworks',
                     getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                    excluded: guidsToBeDeleted
                 }, {
                     name: 'Artworks in this Collection',
                     getObjs: TAG.Worktop.Database.getArtworksIn,
-                    args: [exhibition.Identifier]
+                    args: [exhibition.Identifier],
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: TAG.Worktop.Database.getArtworksIn,
                     args: [exhibition.Identifier]
@@ -2645,34 +2680,73 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             
             function importAndRefresh(){
-                //finalizeAssociations from TAG.Util.js
-                createArtwork(true);
+                uploadingOverlay.attr("id", "uploadingOverlay");
+                uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100000000000000000000000 });
+
+                uploadOverlayText.css({ 'color': 'white', 'height': '5%', 'top': '35%', 'left': '35%', 'position': 'absolute', 'font-size': '150%' });
+                uploadOverlayText.text('Uploading file(s). Please wait.');
+                if(textAppended==false){
+                   uploadingOverlay.append(uploadOverlayText); 
+                   textAppended = true;
+                }
+                createArtwork(true, makeManagePopUp, exhibition);
+
                 //makeManagePopUp();
+                
             }
 
             function makeManagePopUp(){
                 console.log("Made Manage Pop Up");
-                currCollection= exhibition.Identifier;
+                //currCollection= exhibition.Identifier;
+                //root.append(uploadingOverlay);
+
+                //console.log(exhibition.Identifier);
+
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
-                    'exhib', [{
+                    'exhib', [{ //Creates tabs - one for all artworks, one for artworks in this collection
                         name: 'All Artworks',
                         getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                        excluded: guidsToBeDeleted
                     }, {
                         name: 'Artworks in this Collection',
                         getObjs: TAG.Worktop.Database.getArtworksIn,
-                        args: [exhibition.Identifier]
+                        args: [exhibition.Identifier],
+                        excluded: guidsToBeDeleted
                     }], {
-                        getObjs: TAG.Worktop.Database.getArtworksIn,
+                        getObjs: TAG.Worktop.Database.getArtworksIn, //Artworks in this collection
                         args: [exhibition.Identifier]
                     }, function () {
                         prepareNextView(true, "New", createExhibition);
                         clearRight();
                         prepareViewer(true);
                         loadExhibitionsView(exhibition.Identifier);
-                    }, importAndRefresh);
+                    }, importAndRefresh, $('.progressBarUploads').length);
 
             }
+
+            function mergeCollectionsPopUp(){
+                TAG.Util.UI.createAssociationPicker(
+                    root,
+                    "Select Collections to Merge", 
+                    {comp: exhibition, type: "exhib"},
+                    "exhib",
+                    [{name:"All Collections",getObjs:TAG.Worktop.Database.getExhibitions}],
+                    {getObjs: function(){return []},args: [exhibition.Identifier]},
+                    function(){loadExhibitionsView(exhibition.Identifier)},
+                    null,
+                    null,
+                    true)
+            }
+
+            var mergeButton = createButton('Merge other collections into this one',
+                mergeCollectionsPopUp, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0%',
+                'margin-bottom': '3%',
+            });
+
 
             var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
@@ -2729,10 +2803,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             deleteButton.on("mousedown", function () {
                 deleteButton.css({ "background-color": "white" });
             });
+            mergeButton.on("mousedown", function () {
+                deleteButton.css({ "background-color": "white" });
+            });
             saveButton.on("mouseleave", function () {
                 if (!saveButton.attr("disabled")) {
                     saveButton.css({ "background-color": "transparent" });
                 }
+            });
+            mergeButton.on("mouseleave", function () {
+                artPickerButton.css({ "background-color": "transparent" });
             });
             artPickerButton.on("mouseleave", function () {
                 artPickerButton.css({ "background-color": "transparent" });
@@ -2785,7 +2865,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             
 
-            buttonContainer.append(artPickerButton).append(saveButton); //REAPPEND DELETE BUTTON HERE
+            buttonContainer.append(artPickerButton).append(saveButton).append(mergeButton); //REAPPEND DELETE BUTTON HERE
             if(!IS_WINDOWS){
                 buttonContainer.append(deleteButton);
             }
@@ -2864,7 +2944,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (bg){
             options.Background = bg;
         }
-
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
             //refreshExhibition(exhibition);
             //collectionsIsLoading = false;
@@ -2894,7 +2973,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} exhibition     collection to delete
      */
     function deleteExhibition(exhibitions) {
-
+        var numEx = exhibitions.length;
+        guidsToBeDeleted = guidsToBeDeleted.concat(exhibitions);
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -2902,12 +2982,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             // actually delete the exhibition
             TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
+                console.log("collection deletion done");
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                     return;
                 }
                 loadExhibitionsView();
             }, authError, authError);
-        }, "Are you sure you want to delete the selected collections?", "Delete", true, function() { $(confirmationBox).hide(); });
+        }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function() { $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -2956,7 +3037,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         currentIndex = 0;
 
+        //Enables new button
+        $(newButton).prop('disabled', false);
+        newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
         prepareNextView(true, "New", createTour);
+
         clearRight();
         prepareViewer(true);
         var cancel = false;
@@ -2996,6 +3082,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         function displayLabels() {
+            var selectNext = false;
             $.each(list, function (i, val) {
                 if (cancel) return false;
                 // Add each label as a separate function to the queue so the UI doesn't lock up
@@ -3005,8 +3092,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         return;
                     }
                     var label;
-                    if (!prevSelectedMiddleLabel &&
-                        ((id && val.Identifier === id) || (!id && i === 0))) {
+                    var tourGuid = val.Identifier;
+                    var markedForDelete = false;
+                    if (guidsToBeDeleted.indexOf(tourGuid) >= 0) {
+                        markedForDelete = true;
+                    }
+                    if (!markedForDelete && !prevSelectedMiddleLabel &&
+                        ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
                         // Select the first one
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
                             previousIdentifier = val.Identifier;
@@ -3014,7 +3106,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                         }, val.Identifier, false, function () {
                             editTour(val);
-                        }), true));
+                        }, 0, 0, markedForDelete,true), true));
+                        selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
                         if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -3028,7 +3121,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         currentIndex = i;
                         loadTour(val);
                     } else {
-
+                        if (markedForDelete) {
+                            selectNext = true;
+                        }
                         middleLoading.before(label = createMiddleLabel(val.Name, null, function () {
                             //if (changesHaveBeenMade) {
                             //    //saveArray.push(previousIdentifier);
@@ -3041,7 +3136,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }, val.Identifier, false, function () {
                             editTour(val);
 
-                        }));
+                        },0,0,markedForDelete));
                         //prevSelectedMiddleLabel = label;
                         //currentSelected = prevSelectedMiddleLabel;
                     }
@@ -3405,6 +3500,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} tour     tour to delete
      */
     function deleteTour(tours) {
+        var numTours = tours.length;
+        guidsToBeDeleted = guidsToBeDeleted.concat(tours);
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -3412,12 +3509,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             // actually delete the tour
             TAG.Worktop.Database.batchDeleteDoq(tours, function () {
+                console.log("done deleting tours");
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                     return;
                 }
                 loadTourView();
             }, authError, authError);
-        }, "Are you sure you want to delete the selected tours?", "Delete", true, function () { 
+        }, "Are you sure you want to delete the " +numTours+ " selected tours?", "Delete", true, function () { 
             $(confirmationBox).hide(); 
         });
         root.append(confirmationBox);
@@ -3538,6 +3636,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         findContainer.css('width','100%');
 
+        //Enables new button - might be initially disabled if upload is happening
+
+        if($('.progressBarUploads').length>0){ //upload happening - disable import button
+            $(newButton).prop('disabled', true);
+            newButton.css({'opacity': '.4'});
+        }
+
         prepareNextView(true, "Import", createAsset);
         prepareViewer(true);
         clearRight();
@@ -3626,6 +3731,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         function displayLabels() {
+            var selectNext = false;
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -3638,6 +3744,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         var label;
                         var imagesrc;
+                        var assocguid = val.Identifier;
+                        var markedForDelete = false;
+                        if (guidsToBeDeleted.indexOf(assocguid) >= 0) {
+                            markedForDelete = true;
+                        }
                         switch (val.Metadata.ContentType.toLowerCase()) {
                             case 'video':
                                 imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg';
@@ -3651,19 +3762,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             case 'image':
                                 imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';
                                 break;
+                            case 'text':
+                                imagesrc = tagPath + '/images/text_icon.svg';
+                                break;
                             default:
                                 imagesrc = null;
                                 break;
                         }
-                        if (!prevSelectedMiddleLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0))) {
+
+                        if (!markedForDelete && !prevSelectedMiddleLabel &&
+                            ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
                                 previousIdentifier = val.identifier;
                                 loadAssocMedia(val);
                                 currentIndex = i;
-                            }, val.Identifier, false), true));
+                            }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true));
+                            selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
                             if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -3676,6 +3792,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentSelected = prevSelectedMiddleLabel;
                             loadAssocMedia(val);
                         } else {
+                            if (markedForDelete) {
+                                selectNext = true;
+                            }
                             middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //if (changesHaveBeenMade) {
                                 //    //saveArray.push(previousIdentifier);
@@ -3685,15 +3804,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 loadAssocMedia(val);
                                 previousIdentifier = val.Identifier;
                                 currentIndex = i;
-                            }, val.Identifier, false));
+                            }, val.Identifier, false,0,0,0,markedForDelete));
                         }
                     });
-                    } else if (val){
+                    } else if (val) {                        
                         middleQueue.add(function(){
                             console.log(val);
                             middleLoading.before(label = createSortLabel(val));
                         });
                     }
+                    selectNext = true;
                 });
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
@@ -4329,6 +4449,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    media to be deleted
      */
     function deleteAssociatedMedia(mediaMULTIPLE) {
+        var numMed = mediaMULTIPLE.length;
+        var mediaGuids = [];
+        for (var u = 0; u < numMed; u++) {
+            mediaGuids[u] = mediaMULTIPLE[u].Identifier;
+        }
+        guidsToBeDeleted = guidsToBeDeleted.concat(mediaGuids);
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -4345,7 +4471,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
                         deleteCounter += 1
                         console.log("deleted item: " + j)
-                        if (deleteCounter == mediaMULTIPLE.length) {
+                        if (deleteCounter == mediaMULTIPLE.length&&(prevSelectedSetting&&prevSelectedSetting===nav[NAV_TEXT.media.text])) {
                             loadAssocMediaView();
                         }
                     }, function () {
@@ -4369,7 +4495,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 DEL(i, media)
             }
 
-        }, "Are you sure you want to delete the selected associated media?", "Delete", true, function () { $(confirmationBox).hide(); });
+        }, "Are you sure you want to delete the " +numMed + " selected associated media?", "Delete", true, function () { $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -4414,6 +4540,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    media to associate to artworks
      */
     function assocToArtworks(media) {
+        console.log("called assocToArtworks");
         if (!media) {
             return;
         }
@@ -4421,11 +4548,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         numFiles = 1;
         TAG.Util.UI.createAssociationPicker(root, "Choose artworks", { comp: media, type: 'media' }, "artwork", [{
             name: "All Artworks",
-            getObjs: TAG.Worktop.Database.getArtworks
+            getObjs: TAG.Worktop.Database.getArtworks,
+            excluded: guidsToBeDeleted
         }], {
             getObjs: TAG.Worktop.Database.getArtworksAssocTo,
             args: [media.Identifier]
-        }, function () { });
+        }, function () { 
+
+        });
     }
 
     /**Generate thumbnail for associated media
@@ -4565,12 +4695,51 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 if (done >= total) {
+                    var duplicates = new HashTable();
+                        var editedNames = names;
 
-                    if (inAssociatedView) {
-                        loadAssocMediaView(toScroll.Identifier);
-                    } else {
-                        
-                    }
+                        //Remove duplicate names
+                        for (var i = 0; i < editedNames.length; i ++){
+
+                            if(duplicates._hasItem(editedNames[i])){
+                                editedNames[i] = null;
+                            }else{
+                                duplicates.insert(editedNames[i], editedNames[i]);
+                            }
+                        }
+                        for (var i = 0; i<editedNames.length; i++){
+                            if(editedNames[i] != null){
+                                var stringName =  editedNames[i].toString();
+                                editedNames[i] = stringName;   
+                            } 
+                        }
+
+                    //Get rid of progress bar here    
+                    var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+
+                            //remove progress stuff
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+
+                            //enable import buttons
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                                //hide confirmation box
+                            $(importConfirmedBox).hide();
+
+                            if(inAssociatedView==true){ //reload artworks tab if in artworks
+                                loadAssocMediaView(toScroll.Identifier);
+                            }
+                        },
+                        "The following media files were successfully imported:",
+                        "OK",
+                        false, null, null, null, null, null, false, editedNames);
+
+                    root.append(importConfirmedBox);
+                    $(importConfirmedBox).show();
+                    //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                    
                 } else {
                     durationHelper(done);
                 }
@@ -4973,7 +5142,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id   id of middle label to start on
      */
     function loadArtView(id, matches) {
-
         console.log(sortByArt);
         
         inGeneralView = false;
@@ -4991,6 +5159,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var sortBy = "Title";
         currentIndex = 0;
         prepareNextView(true, "Import", createArtwork, null, true);
+        
+        if($('.progressBarUploads').length>0){ //upload happening - disable import button
+            $(newButton).prop('disabled', true);
+            newButton.css({'opacity': '.4'});
+        }
+        
         prepareViewer(true);
         clearRight();
         var cancel = false;
@@ -5126,6 +5300,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         function displayLabels() {
+            var selectNext= false;
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -5140,6 +5315,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         var label;
                         var imagesrc;
+                        //check if artwork has been marked for delete by batch operation
+                        var artguid = val.Identifier;
+                        var markedForDelete = false;
+                        if (guidsToBeDeleted.indexOf(artguid) >= 0) {
+                            markedForDelete = true;
+                        }
                         switch (val.Metadata.Type) {
                             case 'Artwork':
                                 imagesrc = TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail);
@@ -5150,8 +5331,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             default:
                                 imagesrc = null;
                         }
-                        if (!prevSelectedMiddleLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0))) {
+                        if (!markedForDelete && !prevSelectedMiddleLabel &&
+                            ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
+
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
@@ -5162,8 +5344,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 if (val.Metadata.Type === "Artwork") {
                                     editArtwork(val);
                                 }
-                            }, true, val.Extension), true));
-
+                            }, true, val.Extension, markedForDelete,true), true));
+                            selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
                             if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -5177,6 +5359,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                             loadArtwork(val);
                         } else {
+                            if (markedForDelete) {
+                                selectNext = true;
+                            }
                             middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
                                 //if (changesHaveBeenMade) {
@@ -5191,7 +5376,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 if (val.Metadata.Type === "Artwork") {
                                     editArtwork(val);
                                 }
-                            }, true, val.Extension));
+                            }, true, val.Extension, markedForDelete));
                         }
 
                     });
@@ -5203,6 +5388,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             middleLoading.before(label= createSortLabel(val));
                         });
                     }
+                    selectNext = true;
                 });
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
@@ -5253,6 +5439,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method addArtworksToCollections 
      */
     function addArtworksToCollections(artworks) { 
+        console.log("called addArtworksToCollections");
         if (!artworks.length) {
             return;
         }
@@ -5263,13 +5450,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'exhib', [{
                     name: 'All Collections',
                     getObjs: TAG.Worktop.Database.getExhibitions,
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: function () { return [];}, //TODO how to get the collections that an artwork is already in
                 }, function () {
-                    prepareNextView(true, "New", createExhibition);
-                    clearRight();
-                    prepareViewer(true);
-                    loadExhibitionsView(currArtwork.Identifier);
+                    TAG.Util.removeProgressCircle($('.progressCircle')); // remove progress circle
+                    $('.progressText').remove(); // remove progress text
+                    // refresh the page only if the user stays in artworks tab
+                    if (inArtworkView) { 
+                        prepareNextView(true, "New", createArtwork);
+                        clearRight();
+                        prepareViewer(true);
+                        resetView();
+                    } 
+                    //loadExhibitionsView(currArtwork.Identifier);
                 }
         );
     }
@@ -5288,6 +5482,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'exhib', [{
                     name: 'All Collections',
                     getObjs: TAG.Worktop.Database.getExhibitions,
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: function () { return []; }, //TODO how to get the collections that the tour is already in
                 }, function () {
@@ -5300,9 +5495,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     }
 
     /**Add associated medias to artworks
-     * @method addToursToCollections
+     * @method addAssocMediaToArtworks
      */
     function addAssocMediaToArtworks(assocMedia) {
+        console.log("called addAssocMediaToArtworks");
         if (!assocMedia.length) {
             return;
         }
@@ -5313,15 +5509,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'artwork', [{
                     name: 'All Artworks',
                     getObjs: TAG.Worktop.Database.getArtworks,
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: function () { return []; }, 
                 }, function () {
-                    prepareNextView(true, "New", createArtwork);
-                    clearRight();
-                    prepareViewer(true);
-                    loadExhibitionsView(currArtwork.Identifier);
-                }
-        );
+                    TAG.Util.removeProgressCircle($('.progressCircle')); // remove progress circle
+                    $('.progressText').remove(); // remove progress text
+                    // refresh the page only if the user stays in associated media tab
+                    if (inAssociatedView) { 
+                        prepareNextView(true, "New", createArtwork);
+                        clearRight();
+                        prepareViewer(true);
+                        resetView();
+                    } 
+                    //loadExhibitionsView();
+                });
     }
 
     /*nest source tag inside video element*/
@@ -5338,7 +5540,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork  artwork to load
      */
     function loadArtwork(artwork) {
-        //$(document).off();
+        //$(document).off();}
+
         if (cancelArtworkLoad) cancelArtworkLoad();
         prepareViewer(true);
         clearRight();
@@ -5634,7 +5837,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             var lockedDiv = $(document.createElement('div'));
-            lockedDiv.append(lockedInput).append(unlockedInput);
+            lockedDiv.append(unlockedInput).append(lockedInput);
 
             lockedInput.click(function () {
                 changesMade = true;
@@ -5916,24 +6119,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //updates loading UI
         console.log("FINISHED THE UPLOAD PROCESS")
         var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
-        $('.progressBarUploads').remove()
-        $('.progressBarUploadsButton').remove()
+        // $('.progressBarUploads').remove()
+        // $('.progressBarUploadsButton').remove()
     }
 
 
     /**Create an artwork (import), possibly more than one
      * @method createArtwork
      */
-    function createArtwork(fromImportPopUp) {
+    function createArtwork(fromImportPopUp, remakePopUp, currCollection) {
+        
         if ($('.progressBarUploads').length != 0){
-            console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
+            console.log("THERE IS ALREADY AN UPLOAD HAPPENING");
             return
         }
 
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
 
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
-
+            var progressCircCSS = {
+                'position': 'absolute',
+                'left': '40%',
+                'top': '40%',
+                //'z-index': '50',
+                'height': 'auto',
+                'width': '20%',
+                'z-index': '9999999999999999999999999999'
+            };
+            
             //implementing background uploads - david
             console.log("createArtwork called")
             hideUploadingProgress();
@@ -5941,10 +6154,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //clearRight();
             //prepareViewer(true);
 
+            //different circles for different pages
+            
             //webappfileupload
             if (!IS_WINDOWS){
                 if(!total) {
-                    if(isArtView==true){
+                    if(inArtworkView==true){
                         loadArtView();
                     }
                 }
@@ -5954,20 +6169,131 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 done++;
                 //webappfileupload
                 if (!IS_WINDOWS){
+ 
                     if (done >= total || !total) {
                         middleLoading.hide();
-                        if(isArtView==true){ //scroll down to newly-added artwork
-                            loadArtView(toScroll.Identifier);   
+                        //if(inArtworkView==true){ //scroll down to newly-added artwork
+                        //    loadArtView(toScroll.Identifier);   
+                        
+                        var duplicates = new HashTable();
+                        var editedNames = names;
+
+                        //Remove duplicate names
+                        for (var i = 0; i < editedNames.length; i ++){
+
+                            if(duplicates._hasItem(editedNames[i])){
+                                editedNames[i] = null;
+                            }else{
+                                duplicates.insert(editedNames[i], editedNames[i]);
+                            }
+                        }
+                        for (var i = 0; i<editedNames.length; i++){
+                            if(editedNames[i] != null){
+                                var stringName =  editedNames[i].toString();
+                                editedNames[i] = stringName;   
+                            }
+                            
                         }
 
-                    } else {
+                        var message;
+                    
+                        if(fromImportPopUp==true){
+                            message = "The following files were successfully imported into " + currCollection.Name + ":";
+                        } else{
+                            message = "The following files were successfully imported: "
+                        }
+
+                        //Confirmation pop up that artworks have been imported
+                        var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
+                            //remove progress stuff
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+
+                            //enable import buttons
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                            //hide confirmation box
+                            $(importConfirmedBox).hide();
+
+                            if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
+                                loadExhibitionsView();
+                            }
+                            if(inArtworkView==true){ //reload artworks tab if in artworks
+                                loadArtView(toScroll.Identifier);
+                            }                            
+                            },
+                            message,
+                            "OK",
+                            false, null, null, null, null, null, false, editedNames);
+                        root.append(importConfirmedBox);
+                        $(importConfirmedBox).show();
+                        TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                 
+                   } else {
                         durationHelper(done);
                     }
-                } else {
+                } else { //win8 app
                     if (done >= total) {
-                        if(isArtView==true){
-                            loadArtView(toScroll.Identifier);   
-                        }    //Scroll down to a newly-added artwork
+                        console.log("upload is ACTUALLY done");
+                        
+
+
+                        
+
+                        var duplicates = new HashTable();
+                        var editedNames = names;
+                        for (var i = 0; i < editedNames.length; i ++){
+
+                            if(duplicates._hasItem(editedNames[i])){
+                                editedNames[i] = null;
+                            }else{
+                                duplicates.insert(editedNames[i], editedNames[i]);
+                            }
+                        }
+                        for (var i = 0; i<editedNames.length; i++){
+                            if(editedNames[i] != null){
+                                var stringName =  editedNames[i].toString();
+                                editedNames[i] = stringName;   
+                            }
+                            
+                        }
+
+                        var message;
+                        if(fromImportPopUp==true){
+                            message = "The following files were successfully imported into " + currCollection.Name + ":";
+                        } else{
+                            message = "The following files were successfully imported: "
+                        }
+                        var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                            //remove progress stuff
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+
+
+
+                            //enable import buttons
+                            $(newButton).prop('disabled', false);
+                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
+                            
+                            //hide confirmation box
+                            $(importConfirmedBox).hide();
+
+                            if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
+                                loadExhibitionsView();
+                            }
+                            if(inArtworkView==true){ //reload artworks tab if in artworks
+                                loadArtView(toScroll.Identifier);
+                            }
+                            },
+                            message,
+                            "OK",
+                            false, null, null, null, null, null, false, editedNames);
+
+                        root.append(importConfirmedBox);
+                        $(importConfirmedBox).show();
+                        //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                     
                     } else {
                         durationHelper(done);
                     }
@@ -6034,6 +6360,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     TAG.Worktop.Database.convertVideo(function () {
                     }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
                 }
+                if (fromImportPopUp == true) {
+                    TAG.Worktop.Database.changeExhibition(currCollection.Identifier, { AddIDs: [newDoq.Identifier] }, console.log("This worked maybe"));
+                }
                 /*var source = newDoq.Metadata.Source;
                 if (contentTypes[j] === "Video") {
                     var newFileName = source.slice(8, source.length);
@@ -6062,6 +6391,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     root.append(confirmBox);
                     $(confirmBox).show();
                 }*/
+
             }
 
         }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv'], fromImportPopUp);
@@ -6603,7 +6933,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearTimeout(checkConTimerId);
         rightQueue.clear();
         setTimeout(function () {
-            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork)).getRoot(), function () {
+            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted)).getRoot(), function () {
                 TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                     tobj.source_page = "settings_view";
                     tobj.destination_page = "artwork_editor";
@@ -6621,20 +6951,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} artwork      artwork to delete
      */
     function deleteArtwork(artworks) {
+        guidsToBeDeleted = guidsToBeDeleted.concat(artworks);
+        var numDelete = artworks.length;
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
             prepareViewer(true);
-
+            //lucy experimenting with single delete request
+            /**
+            for (var y = 0; y < artworks.length; y++) {
+                TAG.Worktop.Database.deleteDoq(artworks[y], function () {
+                    console.log("complete");
+                }, authError, authError);
+            }
+            **/
             // actually delete the artwork
-            TAG.Worktop.Database.batchDeleteDoq(artworks, function () {
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
-                    return;
-                }
+            TAG.Worktop.Database.batchDeleteDoq(artworks, function () {          
                 console.log("complete")
+                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
+                         return;
+                 }
                 loadArtView();
             }, authError, authError);
-        }, "Are you sure you want to delete the selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
+        }, "Are you sure you want to delete the " + numDelete + " selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
 
         root.append(confirmationBox);
         $(confirmationBox).show();
@@ -6920,9 +7259,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Function} onDoubleClick  function for double click
      * @param {Boolean} inArtMode 
      * @param extension                 to check if is video or static art
+     * @param markedForDelete           check if artwork has been marked for delete by batch op
+     * @param checkMe                   if the checkbox should start out checked
      * @return {Object} container       the container of the new label
      */
-    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension) {
+    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension, markedForDelete,checkMe) {
         var container = $(document.createElement('div'));
         text = TAG.Util.htmlEntityDecode(text);
         container.attr('class', 'middleLabel');
@@ -6930,6 +7271,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             container.attr('id', id);
         }
 
+    
+        if (markedForDelete) {
+            container.css({
+                'opacity': '0.4',
+            });
+        }
 
         if (inArtMode) {
             if (extension.match(/mp4/) || extension.match(/ogv/) || extension.match(/webm/) || extension.match(/avi/) || extension.match(/mov/)) {
@@ -6939,62 +7286,63 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
         }
 
-        var mousedownFn = 
-        function () {
-            container.css({
-                'background': HIGHLIGHT
-            });
-        }
-        container.mousedown(mousedownFn);
-
-        container.mouseup(function () {
-           container.css({
-                'background': 'transparent'
-            });
-        });
-        container.mouseleave(function () {
-            container.css({
-                'background': 'transparent'
-            });
-        });
-
-        var clickFn = 
-        function () {
-            //if (prevSelectedMiddleLabel == container) {
-            //    return;
-            //} else {
-            //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-            //    changesHaveBeenMade = false;
-            //}
-            //autosave for general settings - switching between customization and password settings
-            //if (inGeneralView && changesHaveBeenMade) {
-            //    currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-            //    changesHaveBeenMade = false;
-            //    //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
-            //}
-
-            TAG.Util.removeYoutubeVideo();
-            resetLabels('.middleLabel');
-            selectLabel(container, !noexpand);
-
-            TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
-                tobj.type_representation = prevMiddleBarSelection.type_representation;
-                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
-            });
-
-            if (onclick) {
-                onclick();
+        if (!markedForDelete) {
+            var mousedownFn =
+            function () {
+                container.css({
+                    'background': HIGHLIGHT
+                });
             }
-            prevSelectedMiddleLabel = container;
-            currentSelected = container;
+            container.mousedown(mousedownFn);
+
+            container.mouseup(function () {
+                container.css({
+                    'background': 'transparent'
+                });
+            });
+            container.mouseleave(function () {
+                container.css({
+                    'background': 'transparent'
+                });
+            });
+
+            var clickFn =
+            function () {
+                //if (prevSelectedMiddleLabel == container) {
+                //    return;
+                //} else {
+                //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                //    changesHaveBeenMade = false;
+                //}
+                //autosave for general settings - switching between customization and password settings
+                //if (inGeneralView && changesHaveBeenMade) {
+                //    currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                //    changesHaveBeenMade = false;
+                //    //generalProgressCircle && hideLoadingSettings(generalProgressCircle);
+                //}
+
+                TAG.Util.removeYoutubeVideo();
+                resetLabels('.middleLabel');
+                selectLabel(container, !noexpand);
+
+                TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+                    tobj.type_representation = prevMiddleBarSelection.type_representation;
+                    tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+                });
+
+                if (onclick) {
+                    onclick();
+                }
+                prevSelectedMiddleLabel = container;
+                currentSelected = container;
+            }
+
+            container.click(clickFn);
+
+            if (onDoubleClick) {
+                container.dblclick(onDoubleClick);
+            }
         }
-
-        container.click(clickFn);
-
-        if (onDoubleClick) {
-            container.dblclick(onDoubleClick);
-        }
-
         var width;
 
         // BUILD VERTICAL CENTERING HELPER FUCK YEAH
@@ -7062,7 +7410,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         if (!imagesrc) {
             label.css({
-                'padding-left': '4%'
+                'padding-left': '6%'
             });
         } else {
             label.css({
@@ -7076,104 +7424,56 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         //add the checkbox if in the artworks tab
-        if (inArtworkView || inAssociatedView || ((inToursView || inCollectionsView) && IS_WINDOWS)) {
-            container.append(function () {
-                var checkboxContainer = $(document.createElement('div'))
-                .addClass('checkboxContainer')
-                .css({
-                    'width': '7%',
-                    'height': '100%',
-                    'vertical-align': 'middle',
-                    'display': 'inline-block',
-                    'margin-left':'2%'
-                })
-
-                var checkboxColor = 'rgb(230, 235, 235)';
-                var checkbox = $(document.createElement('div'))
-                .addClass('checkbox')
-                .css({
-                    'width': '100%',
-                    'height':'0',
-                    'padding-top': '100%',
-                    'margin-top':'85%',
-                    'vertical-align': 'middle',
-                    'position': 'relative',
-                    'display': 'block',
-                    'background-color': checkboxColor,
-                })
-
-                checkboxContainer.append(checkbox);
-
-                var check = $(document.createElement('img'))
-                    .attr('src', tagPath + 'images/icons/checkmark.svg')
+        if (!markedForDelete) {
+            if (inArtworkView || inAssociatedView || ((inToursView || inCollectionsView) && IS_WINDOWS)) {
+                container.append(function () {
+                    var checkboxContainer = $(document.createElement('div'))
+                    .addClass('checkboxContainer')
                     .css({
-                        'width': '5%',
-                        'height': 'auto',
+                        'width': '7%',
+                        'height': '100%',
                         'vertical-align': 'middle',
-                        'position': 'absolute',
-                        'top': '40%',
-                        'right': '6%',
-                        'display':'none'
+                        'display': 'inline-block',
+                        'margin-left': '2%'
                     })
-                    .addClass("check")
 
-                if (inCollectionsView || inToursView) {
-                    check.css({'right':'7.5%'})
-                }
-
-                checkboxContainer.append(check)
-
-                var isSelected = false;
-
-                checkbox.on("click", function (evt) {
-                    if (!isSelected) {
-                        container.unbind('click')
-                        isSelected = true
-                        check.css({ 'display': 'block' })
-                        if (!inAssociatedView){
-                            multiSelected.push(id)
+                    var checkboxColor = 'rgb(230, 235, 235)';
+                    var checkbox = $(document.createElement('input'))
+                                    .attr('type', 'checkbox')
+                                    .attr('value', id)
+                                    .css('background-color','gray')
+                                    .attr('id', "checkbox" + id)
+                                    .attr('checked', false)
+                                    .on("click", function (evt) {
+                                        var currCheck = $('#' + this.id);
+                                        if (currCheck.prop("checked")) {
+                                            if (!inAssociatedView) {
+                                                multiSelected.push(id);
+                                            } else {
+                                                multiSelected.push({ Identifier: id, Name: text });
+                                            }
+                                            console.log(multiSelected)
+                                        } else {  
+                                            multiSelected.splice(multiSelected.indexOf(id), 1);
+                                            console.log(multiSelected);
+                                        }
+                                        evt.stopPropagation();
+                                    });
+                    if (checkMe) {
+                        checkbox.attr('checked', true);
+                        if (!inAssociatedView) {
+                            multiSelected.push(id);
                         } else {
-                            multiSelected.push({Identifier:id, Name:text})
+                            multiSelected.push({ Identifier: id, Name: text });
                         }
                         console.log(multiSelected)
-                        evt.stopPropagation()
-                        evt.preventDefault()
-                        container.click(clickFn)
+                        toBeUnselected = checkbox;
                     }
-                })
+                    checkboxContainer.append(checkbox);
 
-                check.on("click", function (evt) {
-                    if (isSelected) {
-                        container.unbind('click')
-                        isSelected = false
-                        check.css({ 'display': 'none' })
-                        multiSelected.splice(multiSelected.indexOf(id), 1)
-                        console.log(multiSelected)
-                        evt.stopPropagation()
-                        evt.preventDefault()
-                        container.click(clickFn)
-                    }
+                    return checkboxContainer
                 });
-
-                checkbox.on('mousedown', function(){
-                    container.unbind('mousedown')
-                })
-
-                checkbox.on('mouseup', function () {
-                    container.mousedown(mousedownFn)
-                })
-
-                check.on('mousedown', function () {
-                    container.unbind('mousedown')
-                })
-
-                check.on('mouseup', function () {
-                    container.mousedown(mousedownFn)
-                })
-
-
-                return checkboxContainer
-            });
+            }
         }
 
 
@@ -7404,13 +7704,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method selectLabel
      * @param {Object} label    label to select
      * @param {Boolean} expand  if label expands when selected 
-     * @param {Integer} index   index of the selected label in it's relvant list.  
      * @return {Object} label   selected label   
      */
     function selectLabel(label, expand) {
         label.css('background', HIGHLIGHT);
         label.unbind('mousedown').unbind('mouseleave').unbind('mouseup');
-        
+        var labelId = label.attr('id');
+        var text = label.text();
+        var checkBox = $("#checkbox" + labelId);
+        //check that it is a check-able label (not a nav label)
+        if (toBeUnselected && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
+            toBeUnselected.prop('checked', false);
+            multiSelected.splice(multiSelected.indexOf(labelId), 1);
+            console.log(multiSelected);
+            toBeUnselected = null;
+        }
+        if (checkBox.prop("checked") !== undefined){
+            checkBox.prop('checked', true);
+            if (!inAssociatedView) {
+                multiSelected.push(labelId);
+            } else {
+                multiSelected.push({ Identifier: labelId, Name: text });
+            }
+            console.log(multiSelected)
+            toBeUnselected = checkBox;
+        }
         if (expand) {
             label.css('height', '');
             label.children('div').css('white-space', '');
@@ -7594,7 +7912,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /* Create a linked year metadata input div 
     * @method createYearMetadataDiv
     * @param {Object} work                      artwork or media you are editting
-    * @param {Object} saveButton                jQuery DOM object representing the save button to be enabled when settings are changed
+    * @param {Function} callback                save button to be enabled when settings are changed
     * @return {Object} yearMetadataDivSpecs     div with year and timeline year options, list of input fields
     */
     function createYearMetadataDiv(work, callback){
@@ -7634,6 +7952,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         timelineMonthInput.css('margin-right','0%');
         timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value'),timelineYearInput,timelineMonthInput), work.Metadata.TimelineDay);
         timelineDayInput.css('margin-right', '0%');
+        var showAsRangeDiv = $(document.createElement('div'));
+        
         yearInput.attr('id', 'yearInput');
         //Add focus to inputs:
         yearInput.focus(function () {
@@ -7753,6 +8073,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
         yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
+        showAsRangeDiv.css({
+            'width': '60%',
+            'height': '10%',
+            'position': 'relative',
+            'font-size': '70%',
+            'font-style': 'italic',
+            'white-space': 'nowrap',
+            'display': 'none'
+        });
+        if (IS_WINDOWS) {
+            showAsRangeDiv.css({
+                'top': '-12px'
+            });
+        }
+        showAsRangeDiv.text("Show this date as a range on the timeline");
+        /**
+        if (isRange(yearInput.attr('value')).isRange){
+            showAsRangeDiv.css('display','inline-block');
+        }
+        **/
+        var showAsRangeCheck = $(document.createElement('input')).attr('type', 'checkbox')
+               .css({
+                   'margin-left': '5%'
+               })
+               .on("click", function (event) {
+                   callback(event)
+               });
+        showAsRangeDiv.append(showAsRangeCheck);
         yearInput.on('keyup', function (event) {
             callback(event)
         });
@@ -7768,13 +8116,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             toggleAllow(dayInput);
             if (!timelineYearJustChanged|| timelineYearInput.val()===''){
                 timelineYearInput.val(getTimelineInputText(yearInput));
-
                 timelineYearJustChanged = false;
                 setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr("value")));
                 toggleAllow(timelineMonthInput);
                 setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"),timelineYearInput,timelineMonthInput));
                 toggleAllow(timelineDayInput);
             }
+            /**
+            if (isRange(yearInput.attr('value')).isRange) {
+                showAsRangeDiv.css('display', 'inline-block');
+                timelineYearInput.val(yearInput.attr('value'));
+                toggleAllow(timelineMonthInput, "false");
+                toggleAllow(timelineDayInput, "false");
+            } else {
+                showAsRangeDiv.css('display', 'none');
+            }
+            **/
             timelineYearAutofilled = false;
         });
         monthInput.change(function () {
@@ -7832,175 +8189,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearMetadataDiv.css({
             'width' : '100%'
         });
-            /**
-        var versionsButton = createButton("Provide Web Versions",
-            function(){
-                var back = $(document.createElement("div"));
-                var centerDiv = $(document.createElement("div"));
-                centerDiv.attr("id","centerDivForVersionsButton");
-                back.attr("id","backgroundForVersionsButton");
-                back.css({
-                    //"color": "black",
-                    'z-index': "9999999999999999999999999999999999999999999999999999999999999999999999",
-                    //'float':'right',
-                    //'font-size':'50%',
-                    'height':'100%',
-                    //'margin-top':'2.8%',
-                    //'padding-bottom':'1%',
-                    'width': '100%',
-                    'position' : "absolute",
-                    'background-color' : "gray",
-                    "opacity" : ".75",
-                    //'border': '1px solid black',
-                    //'padding': '1.5% 0px 0px 0px',
-                    //'padding-top':'-10%',
-                    //'display': 'block',
-                });
-                centerDiv.css({
-                    "background-color" : "#3f3735",
-                    'z-index': "99999999999999999999999999999999999999999999999999999999999999999999999999999991",
-                    "height" : "50%",
-                    "width" : "50%",
-                    "position" : "absolute",
-                    "top" : "25%",
-                    "left" : "25%",
-                    "opacity" : "1",
-                });
-                $('#tagContainer').append(back);
-                $('#tagContainer').append(centerDiv);
-                function filesChosen(data){
-                    console.log("Data uploading: " + data);
-                }
-                var uploadButton = createButton("Upload File(s)",
-                    function(){
-                        uploadFile(3,filesChosen,false,[".mp4",".ogv",".webm"]);
-                    }
 
-                );
-                uploadButton.css({
-                    "bottom" : "20%",
-                    "position" : "absolute",
-                    "left" : "40%",
-                    "width" : "20%",
-                })
-                var exitButton = createButton("Exit",
-                    function(){
-                        $("#centerDivForVersionsButton").remove();
-                        $("#backgroundForVersionsButton").remove();
-                    }
-                );
-                
-                exitButton.css({
-                    "bottom" : "5%",
-                    "position" : "absolute",
-                    "left" : "40%",
-                    "width" : "20%",
-                })
-                var webm = $(document.createElement("div"));
-                var webmButton = createButton("Browse", function(){
-                    uploadFile(3, filesChosen, false, [".webm"]);
-                    webm.css({
-                        "color": "green",
-                    })
-                })
-                webmButton.css({
-                    "left": "20%",
-                    "position": "absolute",
-                    "height": "8%",
-                    "width": "20%",
-                    "top": "9%",
-                });
-                webm.text("webm");
-                webm.css({
-                    "left" : "5%",
-                    "position" : "absolute",
-                    "height": "10%",
-                    "width" : "90%",
-                    "top": "10%",
-                })
-                
-                var ogv = $(document.createElement("div"));
-                var ogvButton = createButton("Browse", function () {
-                    uploadFile(3, filesChosen, false, [".ogv"]);
-                    ogv.css({
-                        "color" : "green",
-                    })
-                });
-                ogvButton.css({
-                    "left": "20%",
-                    "position": "absolute",
-                    "height": "8%",
-                    "width": "20%",
-                    "top": "24%",
-                });
-                ogv.text("ogv");
-                ogv.css({
-                    "left": "5%",
-                    "position": "absolute",
-                    "height": "10%",
-                    "width": "90%",
-                    "top": "25%",
-                })
-                var mp4 = $(document.createElement("div"));
-                var mp4Button = createButton("Browse", function () {
-                    uploadFile(3, filesChosen, false, [".mp4"]);
-                    mp4.css({ 
-                        "color": "green",
-                    })
-                });
-                mp4Button.css({
-                    "left": "20%",
-                    "position": "absolute",
-                    "height": "8%",
-                    "width": "20%",
-                    "top": "39%",
-                });
-                mp4.text("mp4");
-                mp4.css({
-                    "left": "5%",
-                    "position": "absolute",
-                    "height": "10%",
-                    "width": "90%",
-                    "top": "40%",
-                })
-
-                centerDiv.append(webm);
-                centerDiv.append(webmButton);
-                centerDiv.append(ogv);
-                centerDiv.append(ogvButton);
-                centerDiv.append(mp4);
-                centerDiv.append(mp4Button);
-                centerDiv.append(uploadButton);
-                centerDiv.append(exitButton);
-
-
-            },
-            
-            {
-                'margin-right': '0%',
-                'margin-top': '1%',
-                'margin-bottom': '3%',
-                'margin-left': '2%',
-                'float': 'left',
-            });
-        versionsButton.attr("id","versionsButton");
-        //Trent's version button work in progress
-        **/
         yearMetadataDiv.append(yearDiv)
                        .append(yearDescriptionDiv)
-                        .append(timelineYearDiv);
-        /**
-        var typ = "";
-        if (work.Metadata.Type) {
-            typ = work.Metadata.Type.toLowerCase();
-        }
-        else if (work.Metadata.ContentType) {
-            typ = work.Metadata.ContentType.toLowerCase();
-        }
-        if (typ.toLowerCase()=="video"||typ.toLowerCase()=="videoArtwork") {
-            yearMetaDataDiv.append(versionsButton);
-        }
-        **/
+                        .append(timelineYearDiv)
+                        .append(showAsRangeDiv);
+
         yearMetadataDivSpecs = {
             yearMetadataDiv : yearMetadataDiv,
             yearInput : yearInput, 
@@ -8008,7 +8202,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             dayInput: dayInput,
             timelineYearInput: timelineYearInput,
             timelineMonthInput: timelineMonthInput,
-            timelineDayInput: timelineDayInput
+            timelineDayInput: timelineDayInput,
+            showDateAsRange: showAsRangeCheck.prop("checked")
         }
 
         return yearMetadataDivSpecs;
@@ -8065,6 +8260,55 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             } else {
                 return true;
             }
+        }
+
+        /*returns whether a date is a range
+        * @method isRange
+        * @param dateString     string to parse
+        *@return {Object}       isRange- boolean representing if was range
+        *                       start- start date
+        *                       end - end date
+        */
+        function isRange(dateString) {
+            var rangeSpecs = {'isRange':false};
+            //remove characters that are okay and white space
+            dateString = dateString.replace(/bce?/gi, '')
+                                   .replace(/ce/gi, '')
+                                   .replace(/ad/gi, '')
+                                   .replace(/,/g, '')
+                                   .replace(/\s/gi, '');
+            //make sure no non-numeric characters except for dash
+            if (dateString.search(/[^0-9||-]/) > 0 || dateString.length === 0) {
+                return rangeSpecs;
+            } else {
+                var firstDateNeg = false;
+                //search for a dash 
+                var dashIndex = dateString.search(/[-]/);
+                if (dashIndex < 0 ||dashIndex=== dateString.length) {
+                    return rangeSpecs;
+                }
+                if (dashIndex === 0) {
+                    firsDateNeg = true;
+                    //take out first dash
+                    dateString = dateString.slice(1);
+                }
+                dashIndex = dateString.search(/[-]/);
+                if (dashIndex < 0 || dashIndex === dateString.length) {
+                    return rangeSpecs;
+                }
+                var startDate = dateString.slice(0, dashIndex);
+                var endDate = dateString.slice(dashIndex + 1, dateString.length);
+                //check that it is in fact a valid range
+                if (endDate === "") {
+                    return rangeSpecs;
+                }
+                if (parseInt(startDate) >= parseInt(endDate)) {
+                    return rangeSpecs;
+                }
+                rangeSpecs = { 'isRange': true, 'start': startDate, 'end': endDate };
+                return rangeSpecs;
+            }
+           
         }
         
         /*Get day options based on month using test date
@@ -8586,7 +8830,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             },
             !!multiple, // batch upload disabled
             null,
-            fromImportPopUp
+            fromImportPopUp,
+            //$('.progressBarUploads').length, //determines if an upload is happening 
+            function(){
+                if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
+                    $(newButton).prop('disabled', true);
+                    newButton.css({'opacity': '.4'});
+                }
+            },
+            function(){
+                $(newButton).prop('disabled', false);
+                newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
+            }
             );
         } else {
 
@@ -8656,9 +8912,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function () {
                 root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
+            //commenting out to test
             !!multiple, // batch upload disabled
-            fromImportPopUp
-            );
+            null,
+            fromImportPopUp,
+            function(){
+                if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
+                    $(newButton).prop('disabled', true);
+                    newButton.css({'opacity': '.4'});
+                }
+            },
+            function(){
+                $(newButton).prop('disabled', false);
+                newButton.css({'opacity': '1', 'background-color': 'transparent'});
+
+            }
+        );
         }
     }
 
