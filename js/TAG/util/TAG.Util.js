@@ -3898,12 +3898,21 @@ TAG.Util.UI = (function () {
     function mergeCollectionsIntoOneCollection(guids, targetguid, callback) {
         console.log("about to merge collections into another collection")
         var totalGuids = [] // the compilation of all artwork guids in all the collections being merged
-        for (i = 0; i < guids.length; i++){
-            TAG.Worktop.Database.getArtworksIn(guids[i],addArtworks,function(err){console.log(err.message)},function(err){console.log(err.message)})
+        for (var i = 0; i < guids.length; i++) {
+            console.log("trying to get artworks in: "+guids[i])
+            TAG.Worktop.Database.getArtworksIn(guids[i], addArtworks, function (err) { console.log(err.message + " here1") }, function (err) { console.log(err.message + " here2") })
         }
         function addArtworks(artworks) {
+            console.log("add artworks: ")
+            console.log(artworks)
+            console.log("-----------------------")
             if (artworks) {
-                totalGuids.concat(artworks)
+                for (var k = 0; k < artworks.length; k++) {
+                    totalGuids.push(artworks[k].Identifier)
+                }
+                console.log("guids: ")
+                console.log(totalGuids)
+                console.log("-----------------------------------------------")
             }
         }
         var options = {}
@@ -3911,7 +3920,7 @@ TAG.Util.UI = (function () {
         if(totalGuids.length > 0){
             options.AddIDs = totalGuids.join(',')
         }
-        TAG.Worktop.Database.changeExhibition(targetguid, options , callback, function (err) { console.log(err.message) }, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
+        TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { console.log(err.message + " here4") }, function (err) { console.log(err.message + " here5") }, function (err) { console.log(err.message + " here11") })
     }
 
     /**
@@ -3932,7 +3941,7 @@ TAG.Util.UI = (function () {
      * @param importBehavior
      * @param queueLength        
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength, mergeBoolean) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -4343,7 +4352,9 @@ TAG.Util.UI = (function () {
         // helper functions
 
         // click handler for tabs
-        function tabHelper(j, tabName, queueLength) {            
+        function tabHelper(j, tabName, queueLength) {
+            console.log("J and tabs: "+j)
+            console.log(tabs)
             return function () {                
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
@@ -4390,8 +4401,8 @@ TAG.Util.UI = (function () {
             var newComps = [];
             for (var i = 0; i < comps.length; i++) {
                 //if guid of comp obj is in excluded guid list, don't show it in pop-up
-                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))&& //exclude videos because not 
-                    (comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) < 0))) {
+                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))//&& //exclude videos because not 
+                    ){//(comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) < 0))) {
                     newComps.push(comps[i]);
                 }
             }
@@ -4417,6 +4428,7 @@ TAG.Util.UI = (function () {
                 addedComps.length = 0;
                 addedCompsObjs.length = 0;
                 removedComps.length = 0;
+                /*
                 if (excluded) {
                     for (var x = 0; x < compArray.length; x++) {
                         if (compArray[x].Identifier && (excluded.indexOf(compArray[x].Identifier) >= 0)) {
@@ -4424,6 +4436,7 @@ TAG.Util.UI = (function () {
                         }
                     }
                 }
+                */
                 compArray.sort(function (a, b) {
                     return (a.Name.toLowerCase() < b.Name.toLowerCase()) ? -1 : 1;
                 });
@@ -4748,18 +4761,28 @@ TAG.Util.UI = (function () {
                         console.log(err.message);
                     });
                 } else if (type === 'exhib' && target.type === 'exhib') {
-                    TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function() {
-                        callback();
-                        pickerOverlay.fadeOut();
-                        pickerOverlay.empty();
-                        pickerOverlay.remove();
-                    }, function (err) {
-                        console.log(err.message);
-                    }, function (err) {
-                        console.log(err.message);
-                    }, function (err) {
-                        console.log(err.message);
-                    });
+                    if (mergeBoolean) {
+                        mergeCollectionsIntoOneCollection(addedComps, target.Identifier, function () {
+                            callback();
+                            pickerOverlay.fadeOut();
+                            pickerOverlay.empty();
+                            pickerOverlay.remove();
+                        })
+                    }
+                    else {
+                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {
+                            callback();
+                            pickerOverlay.fadeOut();
+                            pickerOverlay.empty();
+                            pickerOverlay.remove();
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        }, function (err) {
+                            console.log(err.message);
+                        });
+                    }
                 } else if (type === 'exhib' && target.type === 'artwork') {
                     //(addedComps.length > 1) ? progressText.text("Adding Artwork to Collections...") : progressText.text("Adding Artwork to Collection...");
                     //viewer.append(progressText);

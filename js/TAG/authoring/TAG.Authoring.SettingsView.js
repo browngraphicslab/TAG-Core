@@ -2717,6 +2717,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             }
 
+            function mergeCollectionsPopUp(){
+                TAG.Util.UI.createAssociationPicker(
+                    root,
+                    "Select Collections to Merge", 
+                    {comp: exhibition, type: "exhib"},
+                    "exhib",
+                    [{name:"All Collections",getObjs:TAG.Worktop.Database.getExhibitions}],
+                    {getObjs: function(){return []},args: [exhibition.Identifier]},
+                    function(){console.log("DONE merging collections")},
+                    null,
+                    null,
+                    true)
+            }
+
+            var mergeButton = createButton('Merge other collections into this one',
+                mergeCollectionsPopUp, {
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0%',
+                'margin-bottom': '3%',
+            });
+
+
             var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
@@ -2772,10 +2795,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             deleteButton.on("mousedown", function () {
                 deleteButton.css({ "background-color": "white" });
             });
+            mergeButton.on("mousedown", function () {
+                deleteButton.css({ "background-color": "white" });
+            });
             saveButton.on("mouseleave", function () {
                 if (!saveButton.attr("disabled")) {
                     saveButton.css({ "background-color": "transparent" });
                 }
+            });
+            mergeButton.on("mouseleave", function () {
+                artPickerButton.css({ "background-color": "transparent" });
             });
             artPickerButton.on("mouseleave", function () {
                 artPickerButton.css({ "background-color": "transparent" });
@@ -2828,7 +2857,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             
 
-            buttonContainer.append(artPickerButton).append(saveButton); //REAPPEND DELETE BUTTON HERE
+            buttonContainer.append(artPickerButton).append(saveButton).append(mergeButton); //REAPPEND DELETE BUTTON HERE
             if(!IS_WINDOWS){
                 buttonContainer.append(deleteButton);
             }
