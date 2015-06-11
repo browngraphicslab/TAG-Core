@@ -3910,7 +3910,7 @@ TAG.Util.UI = (function () {
                     totalGuids.push(artworks[k].Identifier)//add the artwork guid to the total guids of all artworks
                 }
             }
-            if (j === guids.length) {//when the coutner has recieved every 'addArtworks' call, call the server to get the guids of the artworks in the original collection
+            if (j === guids.length) {//when the counter has recieved every 'addArtworks' call, call the server to get the guids of the artworks in the original collection
                 TAG.Worktop.Database.getArtworksIn(targetguid, getPreviousArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
             }
         }
@@ -4453,7 +4453,9 @@ TAG.Util.UI = (function () {
             }
         }
 
-        function drawComp(comp, applyClick,i) {
+        function drawComp(comp, applyClick, i) {
+            console.log("drawing component: ")
+            console.log(comp)
             return function () {
                 var compHolder = $(document.createElement('div'));
                 compHolder.addClass("compHolder");
@@ -4524,6 +4526,11 @@ TAG.Util.UI = (function () {
                     compHolderImage.attr('src', imageSrc);
                 } else if (comp.Metadata.ContentType === 'iframe') {
                     compHolderImage.attr('src', tagPath + 'images/video_icon.svg'); // TODO iframe fix this with new icon
+
+                } else if ((comp.Type === 'Empty' && comp.Metadata.ContentType === "Text") || comp.Metadata.ContentType === "Text") {//text associated media
+                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/text_icon_2.svg');
+                    //shouldAppendTII = true;
+                    //typeIndicatorImage.attr('src', tagPath + 'images/icons/text_icon_2.svg');
                 } else if (comp.Type === 'Empty' || comp.Metadata.ContentType === "Tour") { // tours....don't know why the type is 'Empty'
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;
