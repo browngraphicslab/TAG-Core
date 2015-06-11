@@ -2731,8 +2731,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "Select Collections from which to Add Artworks", 
                     {comp: exhibition, type: "exhib"},
                     "exhib",
-                    [{name:"All Collections",getObjs:TAG.Worktop.Database.getExhibitions}],
-                    {getObjs: function(){return []},args: [exhibition.Identifier]},
+                    [{
+                        name: "All Collections",
+                        getObjs: TAG.Worktop.Database.getExhibitions,
+                        excluded: exhibition.Identifier
+                    }],
+                    {
+                        getObjs: function () { return [] },
+                        args: [exhibition.Identifier]
+                    },
                     function(){loadExhibitionsView(exhibition.Identifier)},
                     null,
                     null,
