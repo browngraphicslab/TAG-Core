@@ -2699,6 +2699,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 console.log("Made Manage Pop Up");
                 //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
+
+                //console.log(exhibition.Identifier);
+
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{ //Creates tabs - one for all artworks, one for artworks in this collection
@@ -4735,7 +4738,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                     root.append(importConfirmedBox);
                     $(importConfirmedBox).show();
-                    TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                    //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                     
                 } else {
                     durationHelper(done);
@@ -6193,6 +6196,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                         var message;
+                    
                         if(fromImportPopUp==true){
                             message = "The following files were successfully imported into " + currCollection.Name + ":";
                         } else{
@@ -6229,7 +6233,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                    } else {
                         durationHelper(done);
                     }
-                } else {
+                } else { //win8 app
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
                         
@@ -6257,7 +6261,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         var message;
                         if(fromImportPopUp==true){
-                            message = "The following files were successfully imported into " + currCollection.title + ":";
+                            message = "The following files were successfully imported into " + currCollection.Name + ":";
                         } else{
                             message = "The following files were successfully imported: "
                         }
@@ -6265,6 +6269,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
+
+
 
                             //enable import buttons
                             $(newButton).prop('disabled', false);
@@ -6286,7 +6292,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         root.append(importConfirmedBox);
                         $(importConfirmedBox).show();
-                        TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                        //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                      
                     } else {
                         durationHelper(done);

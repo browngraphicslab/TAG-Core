@@ -591,7 +591,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     function removeOverlay() {
         uploadingOverlay.remove();
         enableButton();
-        progressText.remove();
+        //progressText.remove();
     }
 
     /**
