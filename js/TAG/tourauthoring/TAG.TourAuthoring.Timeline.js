@@ -1868,12 +1868,12 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
     // debounce will prevent the function from being called
     // until the debounce function hasn't been called for
     // the specified number of milliseconds
-    var debounce = $.debounce(1400, coreUpdate);
+    var debounce = $.debounce(1000, coreUpdate);
     function coreUpdate() {
         onUpdateNumCalls = onUpdateNumCalls + 1;
 
         timeManager.stop();
-
+        
         var data;
         if (loaded) {
             viewer.setIsReloading(true);
