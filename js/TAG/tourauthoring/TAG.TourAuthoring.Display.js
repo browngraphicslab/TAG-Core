@@ -2632,6 +2632,24 @@ TAG.TourAuthoring.Display = function (spec, my) {
                         },
                     },
                 };
+            } else {
+                var rin_first = {
+                    state: {
+                        viewport: {
+                            region: {
+                                center: {
+                                    x: first.bounds.x,
+                                    y: first.bounds.y
+                                },
+                                span: {
+                                    x: first.bounds.width,
+                                    y: first.bounds.height
+                                }
+                            },
+                        },
+                    },
+                };
+                first = rin_first;
             }
             //first.holdDuration = 0;
             first.offset = 0;
