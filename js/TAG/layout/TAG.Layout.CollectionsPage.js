@@ -203,8 +203,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // search on keyup
         searchInput.on('keyup', function (e) {
             if (!searchInput.val()) {
-                searchTxt.text("");
-                drawCatalog(currentArtworks, currentTag, 0, false);
+                clearSearchResults();
             }
             else if (e.which === 13) {
                 doSearch();   
@@ -872,6 +871,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 counter = 0,
                 collectionLength,
                 collectionDescription = $(document.createElement('div')),
+                searchDescription = $(document.createElement('div')),
                 dummyDot,
                 dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR),
                 str,
@@ -965,8 +965,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
             });
         
-           makeOptionsClick();
-           hideCollectionMenu();
+            makeOptionsClick();
+            hideCollectionMenu();
             /*
             function loadPage(index) {
                 //makeOptionsClick('collectionsMenu');
@@ -1064,13 +1064,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             backArrowArea.addClass('arrowArea'); 
-                backArrow.css('display', 'inline')
-                    .off()
-                    .on('mousedown', function(j){
-                        return function () {
-                            showCollectionMenu();
-                        }
-                    }(collection));
+            backArrow.css('display', 'inline')
+                .off()
+                .on('mousedown', function(j){
+                    return function () {
+                        showCollectionMenu();
+                    }
+                }(collection));
             backArrow.attr('src', tagPath + 'images/icons/Close.svg');
             backArrow.addClass('arrow');    
             backArrowArea.show();
@@ -1096,15 +1096,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //              .attr({
                 //                'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
                 //              })
-                             //.css('left','3%')
-                             //.html(prevTitle)
-                             // .off()
-                             //.on('mousedown', function(j){
-                                // return function () {
-                                  //   prepareNextView();
-                                    // loadCollection(visibleCollections[j.prevCollectionIndex])();
-                                 //}
-                            // }(collection));
+                //.css('left','3%')
+                //.html(prevTitle)
+                // .off()
+                //.on('mousedown', function(j){
+                // return function () {
+                //   prepareNextView();
+                // loadCollection(visibleCollections[j.prevCollectionIndex])();
+                //}
+                // }(collection));
                 // collectionArea.append(prevCollection);
                 // uiDocfrag.appendChild(prevCollection[0]);
                 //prevCollection.show();
@@ -1164,26 +1164,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //                         loadCollection(visibleCollections[j.nextCollectionIndex])();
             //                     }
             //                 }(collection));
-                nextCollection.show();
-                TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
-                    //tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
-                    tobj.current_collection = currCollection.Identifier;
-                    tobj.next_collection = nextTitle;
-                    tobj.time_spent = nav_timer.get_elapsed();
-                    //console.log("nav timer: " + tobj.time_spent);
-                    nav_timer.restart();
-                    tobj.navigation_type = "arrow";
-                });
-                TAG.Telemetry.register(nextCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
-                    tobj.current_collection = currCollection.Identifier;
-                    tobj.next_collection = nextTitle;
-                    tobj.time_spent = nav_timer.get_elapsed();
-                    //console.log("nav timer: " + tobj.time_spent);
-                    nav_timer.restart();
-                    tobj.navigation_type = "collection_name";
-                });
-                //collectionArea.append(nextCollection);
-                uiDocfrag.appendChild(nextCollection[0]);
+            nextCollection.show();
+            TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
+                //tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
+                tobj.current_collection = currCollection.Identifier;
+                tobj.next_collection = nextTitle;
+                tobj.time_spent = nav_timer.get_elapsed();
+                //console.log("nav timer: " + tobj.time_spent);
+                nav_timer.restart();
+                tobj.navigation_type = "arrow";
+            });
+            TAG.Telemetry.register(nextCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
+                tobj.current_collection = currCollection.Identifier;
+                tobj.next_collection = nextTitle;
+                tobj.time_spent = nav_timer.get_elapsed();
+                //console.log("nav timer: " + tobj.time_spent);
+                nav_timer.restart();
+                tobj.navigation_type = "collection_name";
+            });
+            //collectionArea.append(nextCollection);
+            uiDocfrag.appendChild(nextCollection[0]);
             // }
             collectionArea.append($(uiDocfrag));
 
@@ -1200,27 +1200,63 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
             collectionDescription.css({'word-wrap': 'break-word', "height": "98%", "color": SECONDARY_FONT_COLOR});
-                str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
-                collectionDescription.css({
-                    'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
-                });
-                collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
-                if (IS_WINDOWS) {
-                    if (collectionDescription) {
-                        var links = collectionDescription.find('a');
-                        links.each(function (index, element) {
-                            $(element).replaceWith(function () {
-                                return $.text([this]);
-                            });
-                        }); 
-                    }
+            str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
+            collectionDescription.css({
+                'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+            });
+            collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
+            if (IS_WINDOWS) {
+                if (collectionDescription) {
+                    var links = collectionDescription.find('a');
+                    links.each(function (index, element) {
+                        $(element).replaceWith(function () {
+                            return $.text([this]);
+                        });
+                    }); 
                 }
+            }
+            searchDescription.attr('id', 'searchDescription');
+            searchDescription.addClass('secondaryFont');
+            searchDescription.css({ "color": SECONDARY_FONT_COLOR });
+            searchDescription.css({
+                'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+            });
+
+            var clearSearchButton = $(document.createElement('div'))
+                .addClass('secondaryFont')
+                .attr('id', 'clearSearchButton')
+                .css({
+                    'color': SECONDARY_FONT_COLOR,
+                    'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+                })
+                .text('Clear search results')
+                .hover(
+                    function () {
+                        $(this).css({ 
+                            'background-color': SECONDARY_FONT_COLOR,
+                            'color': '#000'
+                        });
+                    },
+                    function () {
+                        $(this).css({
+                            'background-color': 'rgba(0, 0, 0, 0.6)',
+                            'color': SECONDARY_FONT_COLOR
+                        })
+                    }
+
+                )
+                .click(function () {
+                    searchInput.val('');
+                    searchTxt.text('');
+                    clearSearchResults();
+                });
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
+            infoDiv.css('width', '25%');
             if (collection.Metadata.Description && !onAssocMediaView) {
-                infoDiv.css('width', '25%'); 
+                infoDiv.css('margin-left', '0%'); 
             } else { 
-                infoDiv.css('width', '0%');
+                infoDiv.css('margin-left', '-25%');
             }
 
             // Hide selected artwork container, as nothing is selected yet
@@ -1230,6 +1266,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tileDiv.empty();
             catalogDiv.append(tileDiv);
             infoDiv.empty();
+            infoDiv.append(searchDescription);
+            infoDiv.append(clearSearchButton);
             infoDiv.append(collectionDescription);
             catalogDiv.append(infoDiv);
             timelineArea.empty();
@@ -1605,7 +1643,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var content = searchInput.val().toLowerCase(),
             matchedArts = [],
             unmatchedArts = [],
-            i;
+            i;       
 
         if (!content) {
             searchTxt.text("");
@@ -1621,6 +1659,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
         }
 
+        var searchDescriptionText = 'Found ' + matchedArts.length +
+            ' result' + ((matchedArts.length == 1) ? '' : 's') +
+            ' for \'' + content + '\'.';
+
+        $('#searchDescription').text(searchDescriptionText);
+        $('#clearSearchButton').css({ 'display': 'block' });
+        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+        if (description === "" + "\n\n   ") {
+            $('#tileDiv').animate({ 'left': $('#infoDiv').width() + 'px' }, 1000, function () { });
+            $('#infoDiv').animate({ 'margin-left': '0%' }, 1000, function () { });
+        }
+
         //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
         searchResultsLength = matchedArts.length;
         TAG.Telemetry.recordEvent('Search', function (tobj) {
@@ -1633,6 +1683,28 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
 
     /**
+     * Method to clear the results of a search.
+     * {method} clearSearchResults
+     */
+    function clearSearchResults() {
+        // Clear the search text.
+        searchTxt.text("");
+
+        // Clear the results description.
+        $('#searchDescription').text('');
+        $('#clearSearchButton').css({ 'display': 'none' });
+
+        // If there is no description, hide the infoDiv.
+        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+        if (description === "" + "\n\n   ") {
+            $('#tileDiv').animate({ 'left': '0%' }, 1000, function () { });
+            $('#infoDiv').animate({ 'margin-left': '-25%' }, 1000, function () { });
+        }
+
+        drawCatalog(currentArtworks, currentTag, 0, false);
+    }
+
+    /**
      * Create tiles for each artwork/tour in a collection
      * @method createArtTiles
      * @param {Array} artworks     an array of doq objects
@@ -1641,6 +1713,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtworks = artworks;
         currentTag && colorSortTags(currentTag);
         drawCatalog(currentArtworks, currentTag, 0, null, cancel);
+
+        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+        if (description === "" + "\n\n   ") {
+            $('#tileDiv').css({ 'left': '0%' });
+        } else {
+            $('#tileDiv').css({ 'left': '25%' });
+        }
         //drawCatalog(artworks, currentTag, 0);
     }
 
@@ -1757,12 +1836,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 showArtwork(currentArtwork, multipleShown && multipleShown)();
             })
             }
-            tileDiv.css({'left': infoDiv.width()});
-            if (infoDiv.width()===0){
-                tileDiv.css({'margin-left':'2%'});
-            } else{
-                tileDiv.css({'margin-left':'0%'});
-            }
+
+            //if (infoDiv.width()===0){
+            //    tileDiv.css({'margin-left':'2%'});
+            //} else{
+            //    tileDiv.css({'margin-left':'0%'});
+            //}
             catalogDiv.append(tileDiv);
             clearTimeline(artworks);
            
