@@ -2728,7 +2728,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function mergeCollectionsPopUp(){
                 TAG.Util.UI.createAssociationPicker(
                     root,
-                    "Select Collections to Merge", 
+                    "Select Collections from which to Add Artworks", 
                     {comp: exhibition, type: "exhib"},
                     "exhib",
                     [{name:"All Collections",getObjs:TAG.Worktop.Database.getExhibitions}],
@@ -2739,7 +2739,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     true)
             }
 
-            var mergeButton = createButton('Merge other collections into this one',
+            var mergeButton = createButton('Add from Collection',
                 mergeCollectionsPopUp, {
                 'margin-left': '2%',
                 'margin-top': '1%',
@@ -2988,7 +2988,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }
                 loadExhibitionsView();
             }, authError, authError);
-        }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function() { $(confirmationBox).hide(); });
+        }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function () {
+            $(confirmationBox).hide();
+            var remIndex;
+            for (var x = 0; x < numEx; x++) {
+                remIndex = guidsToBeDeleted.indexOf(exhibitions[x]);
+                if (remIndex >= 0) {
+                    guidsToBeDeleted.splice(remIndex, 1);
+                }
+            }
+        });
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -3516,7 +3525,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 loadTourView();
             }, authError, authError);
         }, "Are you sure you want to delete the " +numTours+ " selected tours?", "Delete", true, function () { 
-            $(confirmationBox).hide(); 
+            $(confirmationBox).hide();
+            var remIndex;
+            for (var x=0;x<numTours;x++){
+                remIndex = guidsToBeDeleted.indexOf(tours[x]);
+                if (remIndex >= 0) {
+                    guidsToBeDeleted.splice(remIndex, 1);
+                }
+            }
         });
         root.append(confirmationBox);
         $(confirmationBox).show();
@@ -4398,7 +4414,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay = inputs.timelineDayInput.val(),
             desc = inputs.descInput.val(),
             source = embeddedURL || "";
-            
+         
+        if (!checkValidYear(timelineYear)) {
+            timelineYear = media.Metadata.TimelineYear;
+        }
         //pCL = displayLoadingSettings();
         clearRight();
         prepareViewer(true);
@@ -4407,6 +4426,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var name = inputs.titleInput.val();
         var desc = inputs.descInput.val();
         //prepareViewer(true);
+
+        //helper
+        function checkValidYear(dateString) {
+            //remove characters that are okay and white space
+            dateString = dateString.replace(/bce?/gi, '')
+                                   .replace(/ce/gi, '')
+                                   .replace(/ad/gi, '')
+                                   .replace(/,/g, '')
+                                   .replace(/\s/gi, '');
+            //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
+            if (dateString.search(/[^0-9]/) > 0 || dateString.length === 0 || dateString[0].search(/[0-9||-]/) < 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
 
         TAG.Worktop.Database.changeHotspot(media, {
             Name: name,
@@ -4495,7 +4530,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 DEL(i, media)
             }
 
-        }, "Are you sure you want to delete the " +numMed + " selected associated media?", "Delete", true, function () { $(confirmationBox).hide(); });
+        }, "Are you sure you want to delete the " + numMed + " selected associated media?", "Delete", true, function () {
+            $(confirmationBox).hide();
+            var remIndex;
+            for (var x = 0; x < mediaGuids.length; x++) {
+                remIndex = guidsToBeDeleted.indexOf(mediaGuids[x]);
+                if (remIndex >= 0) {
+                    guidsToBeDeleted.splice(remIndex, 1);
+                }
+            }
+        });
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -7062,7 +7106,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                  }
                 loadArtView();
             }, authError, authError);
-        }, "Are you sure you want to delete the " + numDelete + " selected artworks?", "Delete", true, function () { $(confirmationBox).hide() });
+        }, "Are you sure you want to delete the " + numDelete + " selected artworks?", "Delete", true, function () {
+            $(confirmationBox).hide();
+            var remIndex;
+            for (var x = 0; x < numDelete; x++) {
+                remIndex = guidsToBeDeleted.indexOf(artworks[x]);
+                if (remIndex >= 0) {
+                    guidsToBeDeleted.splice(remIndex, 1);
+                }
+            }
+        });
 
         root.append(confirmationBox);
         $(confirmationBox).show();
@@ -7086,6 +7139,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             description = inputs.descInput.val(),
             isLocked = inputs.locked;
 
+        //don't save an invalid timeline year 
+        if (!checkValidYear(timelineYear)) {
+            timelineYear = artwork.Metadata.TimelineYear
+        }
+
         var infoFields = {};
         $.each(inputs.customInputs, function (key, val) {
             infoFields[key] = val.val();
@@ -7097,6 +7155,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(true);
         prepareNextView(false, null, null, "Saving...");
         
+        //helper
+        function checkValidYear(dateString) {
+            //remove characters that are okay and white space
+            dateString = dateString.replace(/bce?/gi, '')
+                                   .replace(/ce/gi, '')
+                                   .replace(/ad/gi, '')
+                                   .replace(/,/g, '')
+                                   .replace(/\s/gi, '');
+            //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
+            if (dateString.search(/[^0-9]/) > 0 || dateString.length === 0 || dateString[0].search(/[0-9||-]/) < 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
         TAG.Worktop.Database.changeArtwork(artwork, {
             Name: name,
             Artist: artist,
