@@ -2728,7 +2728,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function mergeCollectionsPopUp(){
                 TAG.Util.UI.createAssociationPicker(
                     root,
-                    "Select Collections to Merge", 
+                    "Select Collections from which to Add Artworks", 
                     {comp: exhibition, type: "exhib"},
                     "exhib",
                     [{name:"All Collections",getObjs:TAG.Worktop.Database.getExhibitions}],
@@ -2739,7 +2739,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     true)
             }
 
-            var mergeButton = createButton('Merge other collections into this one',
+            var mergeButton = createButton('Add from Collection',
                 mergeCollectionsPopUp, {
                 'margin-left': '2%',
                 'margin-top': '1%',
