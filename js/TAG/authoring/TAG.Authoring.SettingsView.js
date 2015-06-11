@@ -15,9 +15,10 @@ TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
  *      slidePageRight.
  *   @param startLabelID selects a middle label automatically if it matches that id.
  *      The label will be scrolled to if it is off screen
+ *   @param guidsToBeDeleted list of things that have recently been marked for delete, so that they show up grayed out
  *   @return {Object} public methods and variables
  */
-TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID) {
+TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID, guidsToBeDeleted) {
     "use strict";
     //$(document).off();                   
     var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
@@ -64,7 +65,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadingOverlay = $(document.createElement('div')),
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
-        guidsToBeDeleted = [],
+        guidsToBeDeleted = guidsToBeDeleted ||[],
         // = root.find('#importButton'),
 
 
@@ -2105,10 +2106,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'exhib', [{
                     name: 'All Artworks',
                     getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                    excluded: guidsToBeDeleted
                 }, {
                     name: 'Artworks in this Collection',
                     getObjs: TAG.Worktop.Database.getArtworksIn,
-                    args: [exhibition.Identifier]
+                    args: [exhibition.Identifier],
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: TAG.Worktop.Database.getArtworksIn,
                     args: [exhibition.Identifier]
@@ -2701,10 +2704,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'exhib', [{ //Creates tabs - one for all artworks, one for artworks in this collection
                         name: 'All Artworks',
                         getObjs: TAG.Worktop.Database.getArtworksAndTours,
+                        excluded: guidsToBeDeleted
                     }, {
                         name: 'Artworks in this Collection',
                         getObjs: TAG.Worktop.Database.getArtworksIn,
-                        args: [exhibition.Identifier]
+                        args: [exhibition.Identifier],
+                        excluded: guidsToBeDeleted
                     }], {
                         getObjs: TAG.Worktop.Database.getArtworksIn, //Artworks in this collection
                         args: [exhibition.Identifier]
@@ -3706,7 +3711,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             return;
                         }
                         var label;
-                        var selectNext;
                         var imagesrc;
                         var assocguid = val.Identifier;
                         var markedForDelete = false;
@@ -3771,13 +3775,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }, val.Identifier, false,0,0,0,markedForDelete));
                         }
                     });
-                    } else if (val){
+                    } else if (val) {                        
                         middleQueue.add(function(){
                             console.log(val);
                             middleLoading.before(label = createSortLabel(val));
                         });
-                        selectNext = true;
                     }
+                    selectNext = true;
                 });
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
@@ -4512,7 +4516,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         numFiles = 1;
         TAG.Util.UI.createAssociationPicker(root, "Choose artworks", { comp: media, type: 'media' }, "artwork", [{
             name: "All Artworks",
-            getObjs: TAG.Worktop.Database.getArtworks
+            getObjs: TAG.Worktop.Database.getArtworks,
+            excluded: guidsToBeDeleted
         }], {
             getObjs: TAG.Worktop.Database.getArtworksAssocTo,
             args: [media.Identifier]
@@ -5445,6 +5450,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'exhib', [{
                     name: 'All Collections',
                     getObjs: TAG.Worktop.Database.getExhibitions,
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: function () { return []; }, //TODO how to get the collections that the tour is already in
                 }, function () {
@@ -6892,7 +6898,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearTimeout(checkConTimerId);
         rightQueue.clear();
         setTimeout(function () {
-            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork)).getRoot(), function () {
+            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted)).getRoot(), function () {
                 TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                     tobj.source_page = "settings_view";
                     tobj.destination_page = "artwork_editor";
@@ -7429,90 +7435,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         toBeUnselected = checkbox;
                     }
                     checkboxContainer.append(checkbox);
-                    /**
-                    var checkbox = $(document.createElement('div'))
-                    .addClass('checkbox')
-                    .css({
-                        'width': '100%',
-                        'height': '0',
-                        'padding-top': '100%',
-                        'margin-top': '85%',
-                        'vertical-align': 'middle',
-                        'position': 'relative',
-                        'display': 'block',
-                        'background-color': checkboxColor,
-                    })
-
-                    checkboxContainer.append(checkbox);
-
-                    var check = $(document.createElement('img'))
-                        .attr('src', tagPath + 'images/icons/checkmark.svg')
-                        .css({
-                            'width': '5%',
-                            'height': 'auto',
-                            'vertical-align': 'middle',
-                            'position': 'absolute',
-                            'top': '40%',
-                            'right': '6%',
-                            'display': 'none'
-                        })
-                        .addClass("check")
-
-                    if (inCollectionsView || inToursView) {
-                        check.css({ 'right': '7.5%' })
-                    }
-
-                    checkboxContainer.append(check)
-
-
-                    var isSelected = false;
-
-                    checkbox.on("click", function (evt) {
-                        if (!isSelected) {
-                            container.unbind('click')
-                            isSelected = true
-                            check.css({ 'display': 'block' })
-                            if (!inAssociatedView) {
-                                multiSelected.push(id)
-                            } else {
-                                multiSelected.push({ Identifier: id, Name: text })
-                            }
-                            console.log(multiSelected)
-                            evt.stopPropagation()
-                            evt.preventDefault()
-                            container.click(clickFn)
-                        }
-                    })
-
-                    check.on("click", function (evt) {
-                        if (isSelected) {
-                            container.unbind('click')
-                            isSelected = false
-                            check.css({ 'display': 'none' })
-                            multiSelected.splice(multiSelected.indexOf(id), 1)
-                            console.log(multiSelected)
-                            evt.stopPropagation()
-                            evt.preventDefault()
-                            container.click(clickFn)
-                        }
-                    });
-
-                    checkbox.on('mousedown', function () {
-                        container.unbind('mousedown')
-                    })
-
-                    checkbox.on('mouseup', function () {
-                        container.mousedown(mousedownFn)
-                    })
-
-                    check.on('mousedown', function () {
-                        container.unbind('mousedown')
-                    })
-
-                    check.on('mouseup', function () {
-                        container.mousedown(mousedownFn)
-                    })
-                    **/
 
                     return checkboxContainer
                 });
@@ -7955,7 +7877,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /* Create a linked year metadata input div 
     * @method createYearMetadataDiv
     * @param {Object} work                      artwork or media you are editting
-    * @param {Object} saveButton                jQuery DOM object representing the save button to be enabled when settings are changed
+    * @param {Function} callback                save button to be enabled when settings are changed
     * @return {Object} yearMetadataDivSpecs     div with year and timeline year options, list of input fields
     */
     function createYearMetadataDiv(work, callback){
@@ -7995,6 +7917,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         timelineMonthInput.css('margin-right','0%');
         timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value'),timelineYearInput,timelineMonthInput), work.Metadata.TimelineDay);
         timelineDayInput.css('margin-right', '0%');
+        var showAsRangeDiv = $(document.createElement('div'));
+        
         yearInput.attr('id', 'yearInput');
         //Add focus to inputs:
         yearInput.focus(function () {
@@ -8114,6 +8038,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
         yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
+        showAsRangeDiv.css({
+            'width': '60%',
+            'height': '10%',
+            'position': 'relative',
+            'font-size': '70%',
+            'font-style': 'italic',
+            'white-space': 'nowrap',
+            'display': 'none'
+        });
+        if (IS_WINDOWS) {
+            showAsRangeDiv.css({
+                'top': '-12px'
+            });
+        }
+        showAsRangeDiv.text("Show this date as a range on the timeline");
+        /**
+        if (isRange(yearInput.attr('value')).isRange){
+            showAsRangeDiv.css('display','inline-block');
+        }
+        **/
+        var showAsRangeCheck = $(document.createElement('input')).attr('type', 'checkbox')
+               .css({
+                   'margin-left': '5%'
+               })
+               .on("click", function (event) {
+                   callback(event)
+               });
+        showAsRangeDiv.append(showAsRangeCheck);
         yearInput.on('keyup', function (event) {
             callback(event)
         });
@@ -8129,13 +8081,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             toggleAllow(dayInput);
             if (!timelineYearJustChanged|| timelineYearInput.val()===''){
                 timelineYearInput.val(getTimelineInputText(yearInput));
-
                 timelineYearJustChanged = false;
                 setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr("value")));
                 toggleAllow(timelineMonthInput);
                 setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"),timelineYearInput,timelineMonthInput));
                 toggleAllow(timelineDayInput);
             }
+            /**
+            if (isRange(yearInput.attr('value')).isRange) {
+                showAsRangeDiv.css('display', 'inline-block');
+                timelineYearInput.val(yearInput.attr('value'));
+                toggleAllow(timelineMonthInput, "false");
+                toggleAllow(timelineDayInput, "false");
+            } else {
+                showAsRangeDiv.css('display', 'none');
+            }
+            **/
             timelineYearAutofilled = false;
         });
         monthInput.change(function () {
@@ -8193,175 +8154,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         yearMetadataDiv.css({
             'width' : '100%'
         });
-            /**
-        var versionsButton = createButton("Provide Web Versions",
-            function(){
-                var back = $(document.createElement("div"));
-                var centerDiv = $(document.createElement("div"));
-                centerDiv.attr("id","centerDivForVersionsButton");
-                back.attr("id","backgroundForVersionsButton");
-                back.css({
-                    //"color": "black",
-                    'z-index': "9999999999999999999999999999999999999999999999999999999999999999999999",
-                    //'float':'right',
-                    //'font-size':'50%',
-                    'height':'100%',
-                    //'margin-top':'2.8%',
-                    //'padding-bottom':'1%',
-                    'width': '100%',
-                    'position' : "absolute",
-                    'background-color' : "gray",
-                    "opacity" : ".75",
-                    //'border': '1px solid black',
-                    //'padding': '1.5% 0px 0px 0px',
-                    //'padding-top':'-10%',
-                    //'display': 'block',
-                });
-                centerDiv.css({
-                    "background-color" : "#3f3735",
-                    'z-index': "99999999999999999999999999999999999999999999999999999999999999999999999999999991",
-                    "height" : "50%",
-                    "width" : "50%",
-                    "position" : "absolute",
-                    "top" : "25%",
-                    "left" : "25%",
-                    "opacity" : "1",
-                });
-                $('#tagContainer').append(back);
-                $('#tagContainer').append(centerDiv);
-                function filesChosen(data){
-                    console.log("Data uploading: " + data);
-                }
-                var uploadButton = createButton("Upload File(s)",
-                    function(){
-                        uploadFile(3,filesChosen,false,[".mp4",".ogv",".webm"]);
-                    }
 
-                );
-                uploadButton.css({
-                    "bottom" : "20%",
-                    "position" : "absolute",
-                    "left" : "40%",
-                    "width" : "20%",
-                })
-                var exitButton = createButton("Exit",
-                    function(){
-                        $("#centerDivForVersionsButton").remove();
-                        $("#backgroundForVersionsButton").remove();
-                    }
-                );
-                
-                exitButton.css({
-                    "bottom" : "5%",
-                    "position" : "absolute",
-                    "left" : "40%",
-                    "width" : "20%",
-                })
-                var webm = $(document.createElement("div"));
-                var webmButton = createButton("Browse", function(){
-                    uploadFile(3, filesChosen, false, [".webm"]);
-                    webm.css({
-                        "color": "green",
-                    })
-                })
-                webmButton.css({
-                    "left": "20%",
-                    "position": "absolute",
-                    "height": "8%",
-                    "width": "20%",
-                    "top": "9%",
-                });
-                webm.text("webm");
-                webm.css({
-                    "left" : "5%",
-                    "position" : "absolute",
-                    "height": "10%",
-                    "width" : "90%",
-                    "top": "10%",
-                })
-                
-                var ogv = $(document.createElement("div"));
-                var ogvButton = createButton("Browse", function () {
-                    uploadFile(3, filesChosen, false, [".ogv"]);
-                    ogv.css({
-                        "color" : "green",
-                    })
-                });
-                ogvButton.css({
-                    "left": "20%",
-                    "position": "absolute",
-                    "height": "8%",
-                    "width": "20%",
-                    "top": "24%",
-                });
-                ogv.text("ogv");
-                ogv.css({
-                    "left": "5%",
-                    "position": "absolute",
-                    "height": "10%",
-                    "width": "90%",
-                    "top": "25%",
-                })
-                var mp4 = $(document.createElement("div"));
-                var mp4Button = createButton("Browse", function () {
-                    uploadFile(3, filesChosen, false, [".mp4"]);
-                    mp4.css({ 
-                        "color": "green",
-                    })
-                });
-                mp4Button.css({
-                    "left": "20%",
-                    "position": "absolute",
-                    "height": "8%",
-                    "width": "20%",
-                    "top": "39%",
-                });
-                mp4.text("mp4");
-                mp4.css({
-                    "left": "5%",
-                    "position": "absolute",
-                    "height": "10%",
-                    "width": "90%",
-                    "top": "40%",
-                })
-
-                centerDiv.append(webm);
-                centerDiv.append(webmButton);
-                centerDiv.append(ogv);
-                centerDiv.append(ogvButton);
-                centerDiv.append(mp4);
-                centerDiv.append(mp4Button);
-                centerDiv.append(uploadButton);
-                centerDiv.append(exitButton);
-
-
-            },
-            
-            {
-                'margin-right': '0%',
-                'margin-top': '1%',
-                'margin-bottom': '3%',
-                'margin-left': '2%',
-                'float': 'left',
-            });
-        versionsButton.attr("id","versionsButton");
-        //Trent's version button work in progress
-        **/
         yearMetadataDiv.append(yearDiv)
                        .append(yearDescriptionDiv)
-                        .append(timelineYearDiv);
-        /**
-        var typ = "";
-        if (work.Metadata.Type) {
-            typ = work.Metadata.Type.toLowerCase();
-        }
-        else if (work.Metadata.ContentType) {
-            typ = work.Metadata.ContentType.toLowerCase();
-        }
-        if (typ.toLowerCase()=="video"||typ.toLowerCase()=="videoArtwork") {
-            yearMetaDataDiv.append(versionsButton);
-        }
-        **/
+                        .append(timelineYearDiv)
+                        .append(showAsRangeDiv);
+
         yearMetadataDivSpecs = {
             yearMetadataDiv : yearMetadataDiv,
             yearInput : yearInput, 
@@ -8369,7 +8167,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             dayInput: dayInput,
             timelineYearInput: timelineYearInput,
             timelineMonthInput: timelineMonthInput,
-            timelineDayInput: timelineDayInput
+            timelineDayInput: timelineDayInput,
+            showDateAsRange: showAsRangeCheck.prop("checked")
         }
 
         return yearMetadataDivSpecs;
@@ -8426,6 +8225,55 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             } else {
                 return true;
             }
+        }
+
+        /*returns whether a date is a range
+        * @method isRange
+        * @param dateString     string to parse
+        *@return {Object}       isRange- boolean representing if was range
+        *                       start- start date
+        *                       end - end date
+        */
+        function isRange(dateString) {
+            var rangeSpecs = {'isRange':false};
+            //remove characters that are okay and white space
+            dateString = dateString.replace(/bce?/gi, '')
+                                   .replace(/ce/gi, '')
+                                   .replace(/ad/gi, '')
+                                   .replace(/,/g, '')
+                                   .replace(/\s/gi, '');
+            //make sure no non-numeric characters except for dash
+            if (dateString.search(/[^0-9||-]/) > 0 || dateString.length === 0) {
+                return rangeSpecs;
+            } else {
+                var firstDateNeg = false;
+                //search for a dash 
+                var dashIndex = dateString.search(/[-]/);
+                if (dashIndex < 0 ||dashIndex=== dateString.length) {
+                    return rangeSpecs;
+                }
+                if (dashIndex === 0) {
+                    firsDateNeg = true;
+                    //take out first dash
+                    dateString = dateString.slice(1);
+                }
+                dashIndex = dateString.search(/[-]/);
+                if (dashIndex < 0 || dashIndex === dateString.length) {
+                    return rangeSpecs;
+                }
+                var startDate = dateString.slice(0, dashIndex);
+                var endDate = dateString.slice(dashIndex + 1, dateString.length);
+                //check that it is in fact a valid range
+                if (endDate === "") {
+                    return rangeSpecs;
+                }
+                if (parseInt(startDate) >= parseInt(endDate)) {
+                    return rangeSpecs;
+                }
+                rangeSpecs = { 'isRange': true, 'start': startDate, 'end': endDate };
+                return rangeSpecs;
+            }
+           
         }
         
         /*Get day options based on month using test date
