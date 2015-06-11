@@ -7,10 +7,11 @@
  * @class TAG.Layout.ArtworkEditor
  * @constructor
  * @param {doq} artwork          doq of the relevant artwork (see github wiki for doq structure)
+ * @param {Array} guidsToBeDeleted a list of elements that have been marked for delete in settingsview
  * @return {Object}              any public methods or properties
  */
 
-TAG.Layout.ArtworkEditor = function (artwork) {
+TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     "use strict";
 
     // TODO: get actual keywords from the server!
@@ -64,6 +65,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         KEYWORDS_EDITOR = KeywordsEditor(),                                               // Keywords Editor object to deal with keywords
         MEDIA_EDITOR = AssocMediaEditor(),                                                // AssocMediaEditor object ................................
         TEXT_EDITOR = AssocTextEditor(),
+        guidsToBeDeleted = guidsToBeDeleted,
 
         // misc uninitialized variables
         annotatedImage,               // AnnotatedImage object
@@ -126,7 +128,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                         var popup = TAG.Util.UI.popUpMessage(function () {
                             TAG.Authoring.SettingsView("Artworks", function (settingsView) {
                                 TAG.Util.UI.slidePageRight(settingsView.getRoot());
-                            }, null, artwork.Identifier);
+                            }, null, artwork.Identifier,guidsToBeDeleted);
                         }, "There was an error loading the image.", "Go Back", true);
                         root.append(popup);
                         $(popup).show();
@@ -223,7 +225,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             if (shouldSave) {
                 saveMetadata();
             } else {
-                var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+                var authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier,guidsToBeDeleted);
                 TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             }
             
@@ -314,6 +316,13 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         annotatedImage.loadAssociatedMedia(function(mediaList) {
             var assocMediaHolder = $('#' + assocMediaIdentifier);
             mediaList = annotatedImage.getAssociatedMedia();
+
+            for (var x = 0; x < mediaList.guids.length; x++) {
+                if (guidsToBeDeleted.indexOf(mediaList.guids[x]) >= 0) {
+                    mediaList.guids.splice(x, 1);
+                }
+            }
+
             for (var i = 0; i < mediaList.guids.length; i++) {
                 var mediadoq = mediaList[mediaList.guids[i]].doq;
                 if (mediadoq.Identifier == assocMediaIdentifier) {
@@ -353,7 +362,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             mediaList = annotatedImage.getAssociatedMedia();
             var i,
                 src;
-
+            
+            for (var x = 0; x < mediaList.guids.length; x++) {
+                if (guidsToBeDeleted.indexOf(mediaList.guids[x]) >= 0) {
+                    mediaList.guids.splice(x, 1);
+                }
+            }
             // sort alphabetically
             mediaList.guids.sort(function (a, b) {
                 return mediaList[a].doq.Name < mediaList[b].doq.Name ? -1 : 1;
@@ -701,10 +715,12 @@ TAG.Layout.ArtworkEditor = function (artwork) {
                 [{
                     name: "All Media",
                     getObjs: TAG.Worktop.Database.getAssocMedia,
+                    excluded: guidsToBeDeleted
                 }, {
                     name: "Currently Associated",
                     getObjs: TAG.Worktop.Database.getAssocMediaTo,
-                    args: [artwork.Identifier]
+                    args: [artwork.Identifier],
+                    excluded: guidsToBeDeleted
                 }], {
                     getObjs: TAG.Worktop.Database.getAssocMediaTo,
                     args: [artwork.Identifier]
@@ -2632,7 +2648,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         // success handler for save button
         function saveSuccess() {
             titleArea.text(artworkMetadata.Title.val());
-            var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+            var authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier,guidsToBeDeleted);
             TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             //saveMetadataButton.text('Save Changes');
             //saveMetadataButton[0].removeAttribute('disabled');
@@ -2642,7 +2658,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
         function saveFail() {
             titleArea.text(artworkMetadata.Title.val());
             var popup = $(TAG.Util.UI.popUpMessage(function () {
-                var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+                var authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier,guidsToBeDeleted);
                 TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             }, "Changes to " + artwork.Name + " have not been saved.  You must log in to save changes."));
             $('body').append(popup);
@@ -2657,7 +2673,7 @@ TAG.Layout.ArtworkEditor = function (artwork) {
             titleArea.text(artworkMetadata.Title.val());
             var popup;
             popup = $(TAG.Util.UI.popUpMessage(function () {
-                var authoringHub = new LADS.Authoring.SettingsView("Artworks", null, null, artwork.Identifier);
+                var authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier,guidsToBeDeleted);
                 TAG.Util.UI.slidePageRight(authoringHub.getRoot());
             }, "Changes to " + artwork.Name + " have not been saved.  There was an error contacting the server."));
             $('body').append(popup); // TODO ('body' might not be quite right in web app)

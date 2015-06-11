@@ -3896,13 +3896,17 @@ TAG.Util.UI = (function () {
     */
 
     function mergeCollectionsIntoOneCollection(guids, targetguid, callback) {
-        console.log("about to merge collections into another collection")
-        var totalGuids = [] // the compilation of all artwork guids in all the collections being merged
+        console.log("about to merge collections into another collection with the guid "+targetguid)
+        var totalGuids = [], // the compilation of all artwork guids in all the collections being merged
+            j=0
+
         for (var i = 0; i < guids.length; i++) {
             console.log("trying to get artworks in: "+guids[i])
             TAG.Worktop.Database.getArtworksIn(guids[i], addArtworks, function (err) { console.log(err.message + " here1") }, function (err) { console.log(err.message + " here2") })
         }
         function addArtworks(artworks) {
+            j++
+            console.log("j: " + j + "  out of  "+guids.length)
             console.log("add artworks: ")
             console.log(artworks)
             console.log("-----------------------")
@@ -3914,13 +3918,23 @@ TAG.Util.UI = (function () {
                 console.log(totalGuids)
                 console.log("-----------------------------------------------")
             }
+            if (j === guids.length) {
+                console.log("called ChangeExhib")
+                changeExhib();
+            }
         }
-        var options = {}
-        console.log("total guids: "+totalGuids)
-        if(totalGuids.length > 0){
-            options.AddIDs = totalGuids.join(',')
+        function changeExhib() {
+            //get rid of duplicates
+
+
+            var options = {}
+            console.log("total guids: " + totalGuids)
+            if (totalGuids.length > 0) {
+                options.AddIDs = totalGuids.join(',')
+            }
+            console.log("params given:        targetguid: "+targetguid+"   options: "+options+"   callback: "+callback)
+            TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { console.log(err.message + " here4") }, function (err) { console.log(err.message + " here5") }, function (err) { console.log(err.message + " here11") })
         }
-        TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { console.log(err.message + " here4") }, function (err) { console.log(err.message + " here5") }, function (err) { console.log(err.message + " here11") })
     }
 
     /**
@@ -4401,8 +4415,8 @@ TAG.Util.UI = (function () {
             var newComps = [];
             for (var i = 0; i < comps.length; i++) {
                 //if guid of comp obj is in excluded guid list, don't show it in pop-up
-                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))//&& //exclude videos because not 
-                    ){//(comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) < 0))) {
+                if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))&& //exclude videos because not 
+                    !(comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) >=0))) {
                     newComps.push(comps[i]);
                 }
             }
@@ -4762,7 +4776,7 @@ TAG.Util.UI = (function () {
                     });
                 } else if (type === 'exhib' && target.type === 'exhib') {
                     if (mergeBoolean) {
-                        mergeCollectionsIntoOneCollection(addedComps, target.Identifier, function () {
+                        mergeCollectionsIntoOneCollection(addedComps, target.comp.Identifier, function () {
                             callback();
                             pickerOverlay.fadeOut();
                             pickerOverlay.empty();
