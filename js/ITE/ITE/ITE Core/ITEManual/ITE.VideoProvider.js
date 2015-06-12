@@ -83,6 +83,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
         
 		self.polling = true;
 		poll();
+		_UIControl.css({
+            "opacity" : "1"
+		})
+		_videoControls.opacity = 1;
 		_videoControls.removeAttribute("controls");
 		_coveringDiv = $(document.createElement("div"));
 		_coveringDiv.css({
@@ -96,12 +100,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
      * O/P:     none
      */
 	function poll() {
-	        // console.log("-  Orchestrator Time: " + orchestrator.getElapsedTime() + "   first keyframe Time: " + self.firstKeyframe.time + "         video time: " + _videoControls.currentTime + "        orch.status: " + orchestrator.getStatus());
-	        /*if (orchestrator.getStatus() == 1) {
-		        _videoControls.play();
-		    }
-            */
-	        if (orchestrator.getStatus() != 2) {
+	        if (orchestrator.getStatus() != 2 && orchestrator.currentTime<self.lastKeyframe.time) {
 	            if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
 	                console.log("video controls played");
 	                _videoControls.play();
@@ -111,6 +110,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	                }
 	            }
 	            else if (_videoControls.readyState < 3) {
+
 	                console.log("readystate was below 3, pausing orchestrator and changing status to 4")
 	                orchestrator.pause();
 	                orchestrator.status = 4;

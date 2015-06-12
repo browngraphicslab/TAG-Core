@@ -262,7 +262,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 	function playWhenAllTracksReady() {
 	    self.loadedTracks++
-	    if (self.loadedTracks == trackManager.length && !self.isAuthoring){
+	    if (self.loadedTracks == trackManager.length && !self.isAuthoring) {
 	        self.player.play()
 	    } else {
 	        self.player.pause();
