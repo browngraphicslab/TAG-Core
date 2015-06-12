@@ -3110,7 +3110,7 @@ TAG.Util.UI = (function () {
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
 
-        if(cancelOption == false){
+        if(displayNames){
             for (var i = 0; i < displayNames.length; i++) {
 
                 var para = document.createElement('div');
@@ -4380,6 +4380,7 @@ TAG.Util.UI = (function () {
                     if (tabs[j].getObjs != null) { // don't do for import tab in add/remove artworks
                         tabs[j].getObjs.apply(null, tabArgs);
                     } else {
+                        picker.remove();
                         importOnClick(); //import tab should simply bring up file picker
                     }
                     

@@ -1883,13 +1883,16 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             capturingOff();
 
             data = toRIN();
-            viewer.reloadTour(data, getAllCaptureHandlers());
-            
+            viewer.reloadTour(data, getAllCaptureHandlers(), function () {
+                setTimeout(function () {
+                    viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
+                    viewer.setIsReloading(false);
+                }, 500);
+            });
         }
         updateVerticalScroller();
         enableDisableDrag();
-        viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
-        viewer.setIsReloading(false);
+        
     }
 
     function getAllCaptureHandlers() {

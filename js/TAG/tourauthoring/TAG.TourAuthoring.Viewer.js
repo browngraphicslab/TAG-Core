@@ -347,7 +347,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * Load / reload tour into viewer
      * @param data      Segment portion of RIN tour
      */
-    function reloadTour(data, handlers) {
+    function reloadTour(data, handlers, callback) {
         if (player) {
             reloading = true;
             // call reload
@@ -358,6 +358,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //};
             this.unload();
             player.load(TAG.Util.RIN_TO_ITE(data));
+            player.getOrchestrator().setPendingCallback(callback);
             player.bindCaptureHandlers(handlers);
             //player.scrubTimeline(percent);
             reloading = false;
