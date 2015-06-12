@@ -91,6 +91,11 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
     };
+
+    function getOrchestrator() {
+        return orchestrator;
+    }
+
     /*
     * I/P:   none
     * Attach volume button container and volume button
@@ -480,10 +485,10 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * This is designed to be called as the user drags on the progress bar.
     * O/P:   none
     */
-    function scrub(e) {
+    function scrub(evt) {
         if (playerConfiguration.allowSeek){
             progressBar.css({
-                width : e.pageX - ITEHolder.offset().left
+                width : evt.pageX - ITEHolder.offset().left
             })
             timeOffset = progressBar.width()/(progressBar.parent().width()) //timeOffset is currently a percentage of the total time
             orchestrator.scrub(timeOffset);
@@ -802,4 +807,5 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     this.refresh = refresh;
     this.captureKeyframe = captureKeyframe;
     this.bindCaptureHandlers = bindCaptureHandlers;
+    this.getOrchestrator = getOrchestrator;
 };
