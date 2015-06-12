@@ -2102,7 +2102,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             var c1 = (doq.Metadata.ContentType === 'Video' || doq.Metadata.ContentType === 'Audio');
                             var c2 = (doq.Metadata.Duration <= TAG.TourAuthoring.Constants.maxTourLength && doq.Metadata.Duration >= TAG.TourAuthoring.Constants.minMediaLength);
                             var c3 = (c2 || doq.Metadata.Duration === undefined);
-                            if ((c1 && c3) || doq.Metadata.ContentType === 'Image') {//make sure no text associated media for now
+                            if (((c1 && c3) || doq.Metadata.ContentType === 'Image') && (!doq.Extension || doq.Extension!=".gif")) {//make sure no text associated media for now /// and also no gifs
                                 mediaArray.push(doq);
                             }
                             if (k === doqs.length) { // just put this outside loop
