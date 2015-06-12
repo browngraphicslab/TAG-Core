@@ -1837,8 +1837,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Loads the collections view
      * @method loadExhibitionsView
      * @param {Object} id       id of middle label to start on
+     * @param {Array} matches list of search results
+     * @param {boolean} justMiddle only reload middle
      */
-    function loadExhibitionsView(id, matches) {
+    function loadExhibitionsView(id, matches, justMiddle) {
 
         inGeneralView = false;
         inCollectionsView = true;
@@ -1861,9 +1863,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         $(newButton).prop('disabled', false);
         newButton.css({'opacity': '1', 'background-color': 'transparent'});
         
-        
-        clearRight();
-        prepareViewer(true);
+        if (!(justMiddle === true)) {
+            clearRight();
+            prepareViewer(true);
+        }
 
         //if (generalIsLoading || collectionsIsLoading ||
         //         artworksIsLoading || associatedMediaIsLoading || toursIsLoading) {
@@ -1919,8 +1922,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (guidsToBeDeleted.indexOf(collectguid) >= 0) {
                         markedForDelete = true;
                     }
-                    if (!markedForDelete && !prevSelectedMiddleLabel &&
-                        ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
+                    if (!markedForDelete && 
+                        ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
 
                         // Select the first one or the specified id
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
@@ -1928,7 +1931,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
-                        }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true));
+                        }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true, '.middleLabel',true));
                         selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -1941,7 +1944,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         currentSelected = prevSelectedMiddleLabel;
                         currentIndex = i;
                         if (cancelLastView) cancelLastView();
-                        loadExhibition(val);
+                        if (!(justMiddle === true)){
+                            loadExhibition(val);
+                        }
                     } else {
                         if (markedForDelete) {
                             selectNext = true;
@@ -2133,6 +2138,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //$(document).off();
         deleteType = deleteExhibition;
         toDelete = exhibition;
+        currDoq = exhibition.Identifier;
         var cancelView = false;
         clearRight();
         viewer.empty();
@@ -2998,7 +3004,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                     return;
                 }
-                loadExhibitionsView();
+                loadExhibitionsView(currDoq, undefined, true);
             }, authError, authError);
         }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function () {
             $(confirmationBox).hide();
@@ -3042,8 +3048,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Load the tour view
      * @method loadTourView
      * @param {Object} id   id of middle label to start on
+     * @param {array} search results? (isn't actually used now)
+     * @param justMiddle only reload middle bar
      */
-    function loadTourView(id, matches) {
+    function loadTourView(id, matches, justMiddle) {
         
 
         inGeneralView = false;
@@ -3064,8 +3072,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         prepareNextView(true, "New", createTour);
 
-        clearRight();
-        prepareViewer(true);
+        if (!(justMiddle===true)) {
+            clearRight();
+            prepareViewer(true);
+
+        }
         var cancel = false;
 
         //if (generalIsLoading || collectionsIsLoading ||
@@ -3118,8 +3129,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (guidsToBeDeleted.indexOf(tourGuid) >= 0) {
                         markedForDelete = true;
                     }
-                    if (!markedForDelete && !prevSelectedMiddleLabel &&
-                        ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
+                    if (!markedForDelete && 
+                        ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
                         // Select the first one
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
                             previousIdentifier = val.Identifier;
@@ -3127,7 +3138,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                         }, val.Identifier, false, function () {
                             editTour(val);
-                        }, 0, 0, markedForDelete,true), true));
+                        }, 0, 0, markedForDelete,true), true,'.middleLabel',true));
                         selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -3140,7 +3151,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         prevSelectedMiddleLabel = label;
                         currentSelected = prevSelectedMiddleLabel;
                         currentIndex = i;
-                        loadTour(val);
+                        if (!(justMiddle===true)) {
+                            loadTour(val);
+                        }
                     } else {
                         if (markedForDelete) {
                             selectNext = true;
@@ -3186,7 +3199,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearRight();
         deleteType = deleteTour;
         toDelete = tour;
-
+        currDoq = tour.Identifier;
         prevMiddleBarSelection = {
             type_representation: "Tour",
             time_spent_timer: new TelemetryTimer()
@@ -3534,7 +3547,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                     return;
                 }
-                loadTourView();
+                loadTourView(currDoq, undefined, true);
             }, authError, authError);
         }, "Are you sure you want to delete the " +numTours+ " selected tours?", "Delete", true, function () { 
             $(confirmationBox).hide();
@@ -3635,8 +3648,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Load Associated Media view
      * @method load AssocMediaView
      * @param {Object} id   id of middle label to start on
+     * @param {Array} matches search results
+     * @param {Boolean} justMiddle true if you should only reload middle
      */
-    function loadAssocMediaView(id, matches) {
+    function loadAssocMediaView(id, matches, justMiddle) {
 
         console.log(sortByAssoc);
 
@@ -3672,8 +3687,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         prepareNextView(true, "Import", createAsset);
-        prepareViewer(true);
-        clearRight();
+        if (!(justMiddle===true)) {
+            prepareViewer(true);
+            clearRight();
+        }
         var cancel = false;
 
         //if (generalIsLoading || collectionsIsLoading ||
@@ -3798,15 +3815,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 break;
                         }
 
-                        if (!markedForDelete && !prevSelectedMiddleLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
+                        if (!markedForDelete && 
+                            ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
                                 //keep track of identifiers for autosaving
                                 previousIdentifier = val.identifier;
                                 loadAssocMedia(val);
                                 currentIndex = i;
-                            }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true));
+                            }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true,'.middleLabel',true));
                             selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -3818,7 +3835,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             prevSelectedMiddleLabel = label;
                             currentSelected = prevSelectedMiddleLabel;
-                            loadAssocMedia(val);
+                            if (!(justMiddle === true)) {
+                                loadAssocMedia(val);
+                            }
                         } else {
                             if (markedForDelete) {
                                 selectNext = true;
@@ -4519,7 +4538,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         deleteCounter += 1
                         console.log("deleted item: " + j)
                         if (deleteCounter == mediaMULTIPLE.length&&(prevSelectedSetting&&prevSelectedSetting===nav[NAV_TEXT.media.text])) {
-                            loadAssocMediaView();
+                            loadAssocMediaView(currDoq, undefined, true);
                         }
                     }, function () {
                         console.log("noauth error");
@@ -4797,7 +4816,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $(importConfirmedBox).hide();
 
                             if(inAssociatedView==true){ //reload artworks tab if in artworks
-                                loadAssocMediaView(toScroll.Identifier);
+                                loadAssocMediaView(currDoq, undefined, true);
                             }
                         },
                         "The following media files were successfully imported:",
@@ -5564,7 +5583,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (inArtworkView) { 
                         loadArtView(currDoq,undefined,true);
                     } 
-                    //loadExhibitionsView(currArtwork.Identifier);
                 }
         );
     }
@@ -5618,10 +5636,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     $('.progressText').remove(); // remove progress text
                     // refresh the page only if the user stays in associated media tab
                     if (inAssociatedView) { 
-                        prepareNextView(true, "New", createArtwork);
-                        clearRight();
-                        prepareViewer(true);
-                        resetView();
+                        loadAssocMediaView(currDoq, undefined, true);
                     } 
                     //loadExhibitionsView();
                 });
@@ -6328,7 +6343,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $(importConfirmedBox).hide();
 
                             if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
-                                loadExhibitionsView();
+                                loadExhibitionsView(currDoq, undefined, true);
                             }
                             if(inArtworkView==true){ //reload artworks tab if in artworks
                                 loadArtView(currDoq, undefined, true);
@@ -6396,7 +6411,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $(importConfirmedBox).hide();
 
                             if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
-                                loadExhibitionsView();
+                                loadExhibitionsView(currDoq, undefined, true);
                             }
                             if(inArtworkView==true){ //reload artworks tab if in artworks
                                 loadArtView(currDoq,undefined,true);
