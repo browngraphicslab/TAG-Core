@@ -380,7 +380,14 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         isReloading = true;
         console.log("isReloading: true, in initializeTour");
         // console.log("player: "+player);
-        if (player) {
+        if (timeline.getTrackslength() === 0) {
+            ctime = timeManager.getCurrentTime();
+            //setTimeout(function () {
+            //seek(ctime);
+            isReloading = false;
+            console.log("no tracks. isReloading: false, in initializeTour");
+            //}, 50);
+        } else if (player) {
             ctime = timeManager.getCurrentTime();
             player.unload();
             //player.loadData(data, function () {
@@ -390,13 +397,6 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //        console.log("isReloading: false, in initializeTour");
             //    }, 50);
             //});
-        } else if (timeline.getTrackslength() === 0) {
-            ctime = timeManager.getCurrentTime();
-            setTimeout(function () {
-                //seek(ctime);
-                isReloading = false;
-                console.log("isReloading: false, in initializeTour");
-            }, 50);
         } else {
             setTimeout(function () { reloadTour(data, true); }, 50);
         }

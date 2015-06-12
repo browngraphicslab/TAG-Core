@@ -3541,7 +3541,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Boolean} timelineDate  whether you are sorting by timeline date (for now both timeline and tiles do)
      * @return {AVLTree} avlTree      sorted tree so order can be easily accessed
     **/
-    function sortByYear(artworks, timelineDate){
+    function sortByYear(artworks, timelineDate) {
         var comparator,
             valuation,
             avlTree,
@@ -3585,7 +3585,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 artNode = {
                     artwork: artworks[i],
                     nameKey: nameKey,
-                    yearKey: 999999 //Set unintelligible dates to show up at end of 'Year' sort 
+                    yearKey: yearKey //Set unintelligible dates to show up at end of 'Year' sort 
                 };
             }
             usedkeys.push(yearKey)

@@ -2713,6 +2713,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         getObjs: TAG.Worktop.Database.getArtworksIn,
                         args: [exhibition.Identifier],
                         excluded: guidsToBeDeleted
+                    }, {
+                        name: 'Import',
+                        getObjs: null,
+                        args: null,
+                 
                     }], {
                         getObjs: TAG.Worktop.Database.getArtworksIn, //Artworks in this collection
                         args: [exhibition.Identifier]
@@ -2731,8 +2736,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     "Select Collections from which to Add Artworks", 
                     {comp: exhibition, type: "exhib"},
                     "exhib",
-                    [{name:"All Collections",getObjs:TAG.Worktop.Database.getExhibitions}],
-                    {getObjs: function(){return []},args: [exhibition.Identifier]},
+                    [{
+                        name: "All Collections",
+                        getObjs: TAG.Worktop.Database.getExhibitions,
+                        excluded: exhibition.Identifier
+                    }],
+                    {
+                        getObjs: function () { return [] },
+                        args: [exhibition.Identifier]
+                    },
                     function(){loadExhibitionsView(exhibition.Identifier)},
                     null,
                     null,
@@ -2997,7 +3009,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     guidsToBeDeleted.splice(remIndex, 1);
                 }
             }
-        });
+        }, null, null, null, null, true, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -3533,7 +3545,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     guidsToBeDeleted.splice(remIndex, 1);
                 }
             }
-        });
+        }, null, null, null, null, null, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -4539,7 +4551,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     guidsToBeDeleted.splice(remIndex, 1);
                 }
             }
-        });
+        }, null, null, null, null, null, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
@@ -4753,8 +4765,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         for (var i = 0; i<editedNames.length; i++){
                             if(editedNames[i] != null){
-                                var stringName =  editedNames[i].toString();
-                                editedNames[i] = stringName;   
+                                var stringName = editedNames[i].toString();
+                                if (stringName.length >= 30) { //name too long - needs ellipsis
+                                    console.log("NAME IS TOO LONG");
+                                    var shortName = stringName;
+
+                                    while (shortName.length>29) {
+                                        console.log("shortening long name!");
+                                        shortName = shortName.substr(0, shortName.length - 1);
+                                    }
+                                    stringName = shortName + "...";
+                                }
+
+                                editedNames[i] = stringName;
                             } 
                         }
 
@@ -4764,6 +4787,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
+                            $('.progressText').remove();
 
                             //enable import buttons
                             $(newButton).prop('disabled', false);
@@ -4778,7 +4802,37 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         },
                         "The following media files were successfully imported:",
                         "OK",
-                        false, null, null, null, null, null, false, editedNames);
+                        false, null, null, null, null, true, false, editedNames); //not actually fortelemetry, but formatting works nicely
+                    
+                    //maybe multiline ellipsis will work now?!
+                    var textHolder = $($($(importConfirmedBox).children()[0]).children()[0]);
+                    var text = textHolder.html();
+                    var t = $(textHolder.clone(true))
+                        .hide()
+                        .css('position', 'absolute')
+                        .css('overflow', 'visible')
+                        .width(textHolder.width())
+                        .height('auto');
+
+                    /*function height() {
+                        var bool = t.height() > textHolder.height();
+                        return bool;
+                    }; */
+
+                    if (textHolder.css("overflow") == "hidden") {
+                        $(textHolder).css({ 'overflow-y': 'auto' });
+                        textHolder.parent().append(t);
+                        var func = t.height() > textHolder.height();
+                        console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
+                        while (text.length > 0 && (t.height() > textHolder.height())) {
+                            console.log("in while loop")
+                            text = text.substr(0, text.length - 1);
+                            t.html(text + "...");
+                        }
+
+                        textHolder.html(t.html());
+                        t.remove();
+                    }
 
                     root.append(importConfirmedBox);
                     $(importConfirmedBox).show();
@@ -6236,7 +6290,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         for (var i = 0; i<editedNames.length; i++){
                             if(editedNames[i] != null){
-                                var stringName =  editedNames[i].toString();
+                                var stringName = editedNames[i].toString();
+                                if (stringName.length >= 21) { //name too long - needs ellipsis
+                                    console.log("NAME IS TOO LONG");
+                                    var shortName = stringName;
+
+                                    while (shortName.length > 21) {
+                                        console.log("shortening long name!");
+                                        shortName = shortName.substr(0, shortName.length - 1);
+                                    }
+                                    stringName = shortName + "...";
+                                }
                                 editedNames[i] = stringName;   
                             }
                             
@@ -6283,11 +6347,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else { //win8 app
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
-                        
-
-
-                        
-
+                     
                         var duplicates = new HashTable();
                         var editedNames = names;
                         for (var i = 0; i < editedNames.length; i ++){
@@ -6300,7 +6360,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         for (var i = 0; i<editedNames.length; i++){
                             if(editedNames[i] != null){
-                                var stringName =  editedNames[i].toString();
+                                var stringName = editedNames[i].toString();
+                                if (stringName.length >= 30) { //name too long - needs ellipsis
+                                    console.log("NAME IS TOO LONG");
+                                    var shortName = stringName;
+
+                                    while (shortName.length > 29) {
+                                        console.log("shortening long name!");
+                                        shortName = shortName.substr(0, shortName.length - 1);
+                                    }
+                                    stringName = shortName + "...";
+                                }
                                 editedNames[i] = stringName;   
                             }
                             
@@ -6316,8 +6386,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
-
-
+                            $('.progressText').remove();
 
                             //enable import buttons
                             $(newButton).prop('disabled', false);
@@ -6335,12 +6404,44 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             },
                             message,
                             "OK",
-                            false, null, null, null, null, null, false, editedNames);
+                            false, null, null, null, null, true, false, editedNames);
 
+                        //maybe multiline ellipsis will work now?!
+                        var textHolder = $($($(importConfirmedBox).children()[0]).children()[0]);
+                        var text = textHolder.html();
+                        var t = $(textHolder.clone(true))
+                            .hide()
+                            .css('position', 'absolute')
+                            .css('overflow', 'visible')
+                            .width(textHolder.width())
+                            .height('auto');
+
+                        /*function height() {
+                            var bool = t.height() > textHolder.height();
+                            return bool;
+                        }; */
+        
+                        if(textHolder.css("overflow") == "hidden")
+                        {
+                            $(textHolder).css({ 'overflow-y': 'auto' });
+                            textHolder.parent().append(t);
+                            var func = t.height() > textHolder.height();
+                            console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
+                            while (text.length > 0 && (t.height()>textHolder.height()))
+                            {
+                                console.log("in while loop")
+                                text = text.substr(0, text.length - 1);
+                                t.html(text + "...");
+                            }
+
+                            textHolder.html(t.html());
+                            t.remove();
+                        }
+                        //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
+                        
                         root.append(importConfirmedBox);
                         $(importConfirmedBox).show();
-                        //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
-                     
+
                     } else {
                         durationHelper(done);
                     }
@@ -7022,7 +7123,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     guidsToBeDeleted.splice(remIndex, 1);
                 }
             }
-        });
+        }, null, null, null, null, null, null, true);
 
         root.append(confirmationBox);
         $(confirmationBox).show();
