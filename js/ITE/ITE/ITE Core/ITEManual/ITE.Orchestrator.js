@@ -2,7 +2,9 @@ window.ITE = window.ITE || {};
 ITE.Orchestrator = function(player, isAuthoring) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
-	var	self = this;
+	var self = this;
+	var pctTime = null;
+	var reloadCallback = null;
 	self.narrativeSeekedEvent 	= new ITE.PubSubStruct();
 	self.narrativeLoadedEvent 	= new ITE.PubSubStruct();
 	self.volumeChangedEvent		= new ITE.PubSubStruct();
@@ -147,6 +149,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function scrub(seekPercent) {
+	    if (!self.tourData) return;
 		// Pause.
 		if (self.prevStatus === 0) {
 			self.prevStatus = self.status;
@@ -262,11 +265,24 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 	function playWhenAllTracksReady() {
 	    self.loadedTracks++
-	    if (self.loadedTracks == trackManager.length && !self.isAuthoring){
-	        self.player.play()
+	    if (self.loadedTracks == trackManager.length) {
+	        if (!self.isAuthoring) {
+	            self.player.play()
+	        } else {
+	            if (reloadCallback) {
+	                reloadCallback();
+	            }
+	            reloadCallback = null;
+	        }
+
+	        self.loadedTracks = 0;
 	    } else {
 	        self.player.pause();
 	    }
+	}
+
+	function setPendingCallback(callback) {
+	    reloadCallback = callback;
 	}
 
 	/**
@@ -350,4 +366,5 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.status = status;
 	self.getTrackBehind = getTrackBehind;
 	self.bindCaptureHandlers = bindCaptureHandlers;
+	self.setPendingCallback = setPendingCallback;
 }

@@ -524,8 +524,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (prevSelectedMiddleLabel && prevSelectedMiddleLabel === currentSelected) {
                 if (currentSelected.prev()) {
                     if (currentIndex > 0) {
-                        resetLabels('.middleLabel');
-                        selectLabel(currentSelected.prev());
+                        //resetLabels('.middleLabel');
+                        selectLabel(currentSelected.prev(),false,'.middleLabel');
                         currentSelected = currentSelected.prev();
                         prevSelectedMiddleLabel = currentSelected;
                         currentIndex--;
@@ -553,13 +553,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         if (inGeneralView) {
             if (currentSelected === labelTwo) {
-                resetLabels('.leftLabel');
-                selectLabel(labelOne);
+                //resetLabels('.leftLabel');
+                selectLabel(labelOne, false, '.leftLabel');
                 currentSelected = labelOne;
                 loadSplashScreen();
             } else if (currentSelected === labelOne) {
-                resetLabels('.leftLabel');
-                selectLabel(labelTwo);
+                //resetLabels('.leftLabel');
+                selectLabel(labelTwo, false, '.leftLabel');
                 currentSelected = labelTwo;
                 loadPasswordScreen();
             }
@@ -575,8 +575,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (prevSelectedMiddleLabel && prevSelectedMiddleLabel === currentSelected) {
                 if (currentSelected.next()) {
                     if (currentIndex < (currentList.length - 1)) {
-                        resetLabels('.middleLabel');
-                        selectLabel(currentSelected.next());
+                        //resetLabels('.middleLabel');
+                        selectLabel(currentSelected.next(), false, '.middleLabel');
                         currentSelected = currentSelected.next();
                         prevSelectedMiddleLabel = currentSelected;
                         currentIndex++;
@@ -602,13 +602,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         if (inGeneralView) {
             if (currentSelected === labelOne) {
-                resetLabels('.leftLabel');
-                selectLabel(labelTwo);
+                //resetLabels('.leftLabel');
+                selectLabel(labelTwo, false, '.leftLabel');
                 currentSelected = labelTwo;
                 loadPasswordScreen();
             } else if (currentSelected === labelTwo) {
-                resetLabels('.leftLabel');
-                selectLabel(labelOne);
+                //resetLabels('.leftLabel');
+                selectLabel(labelOne,false, '.leftLabel');
                 currentSelected = labelOne;
                 loadSplashScreen();
             }
@@ -924,8 +924,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Util.removeYoutubeVideo();
             searchbar[0].value = "";
 
-            resetLabels('.navContainer');
-            selectLabel(container);
+            //resetLabels('.navContainer');
+            selectLabel(container, false, '.navContainer');
             // Do the onclick function
             if (onclick) {
                 onclick();
@@ -5398,8 +5398,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Loads art view
      * @method loadArtView
      * @param {Object} id   id of middle label to start on
+     * @param {Array} matches list of search result matches
+     * @param {Boolean} justMiddle true if you should only reload middle
      */
-    function loadArtView(id, matches) {
+    function loadArtView(id, matches,justMiddle) {
         console.log(sortByArt);
         
         inGeneralView = false;
@@ -5423,10 +5425,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             newButton.css({'opacity': '.4'});
         }
         
-        prepareViewer(true);
-        clearRight();
+        if (!(justMiddle === true)) {
+            prepareViewer(true);
+            clearRight();
+        }
         var cancel = false;
-
         collectionSort.css('display','inline-block');
 
         findContainer.css('width','140%');
@@ -5589,8 +5592,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             default:
                                 imagesrc = null;
                         }
-                        if (!markedForDelete && !prevSelectedMiddleLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0)||selectNext)) {
+                        //lucy- removing a piece of logic here cause not sure what its doing but will monitor
+                        if (!markedForDelete &&
+                            ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
 
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
@@ -5602,7 +5606,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 if (val.Metadata.Type === "Artwork") {
                                     editArtwork(val);
                                 }
-                            }, true, val.Extension, markedForDelete,true), true));
+                            }, true, val.Extension, markedForDelete,true), true,'.middleLabel',true));
                             selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -5615,7 +5619,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             prevSelectedMiddleLabel = label;
                             currentSelected = prevSelectedMiddleLabel;
                             currentIndex = i;
-                            loadArtwork(val);
+                            if (!(justMiddle===true)) {
+                                loadArtwork(val);
+                            }
                         } else {
                             if (markedForDelete) {
                                 selectNext = true;
@@ -5716,10 +5722,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     $('.progressText').remove(); // remove progress text
                     // refresh the page only if the user stays in artworks tab
                     if (inArtworkView) { 
-                        prepareNextView(true, "New", createArtwork);
-                        clearRight();
-                        prepareViewer(true);
-                        resetView();
+                        loadArtView(currDoq,undefined,true);
                     } 
                     //loadExhibitionsView(currArtwork.Identifier);
                 }
@@ -6497,7 +6500,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 loadExhibitionsView();
                             }
                             if(inArtworkView==true){ //reload artworks tab if in artworks
-                                loadArtView(toScroll.Identifier);
+                                loadArtView(currDoq, undefined, true);
                             }                            
                             },
                             message,
@@ -6574,7 +6577,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 loadExhibitionsView();
                             }
                             if(inArtworkView==true){ //reload artworks tab if in artworks
-                                loadArtView(toScroll.Identifier);
+                                loadArtView(currDoq,undefined,true);
                             }
                             },
                             message,
@@ -7280,24 +7283,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             prepareNextView(false);
             clearRight();
             prepareViewer(true);
-            //lucy experimenting with single delete request
-            /**
-            for (var y = 0; y < artworks.length; y++) {
-                TAG.Worktop.Database.deleteDoq(artworks[y], function () {
-                    console.log("complete");
-                }, authError, authError);
-            }
-            **/
             // actually delete the artwork
             TAG.Worktop.Database.batchDeleteDoq(artworks, function () {          
                 console.log("complete")
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
                          return;
                  }
-                loadArtView();
+                loadArtView(currDoq,undefined,true);
             }, authError, authError);
         }, "Are you sure you want to delete the " + numDelete + " selected artworks?", "Delete", true, function () {
             $(confirmationBox).hide();
+            //remove guids from list to be greyed out if someone hits cancel
             var remIndex;
             for (var x = 0; x < numDelete; x++) {
                 remIndex = guidsToBeDeleted.indexOf(artworks[x]);
@@ -7675,8 +7671,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //}
 
                 TAG.Util.removeYoutubeVideo();
-                resetLabels('.middleLabel');
-                selectLabel(container, !noexpand);
+                //resetLabels('.middleLabel');
+                selectLabel(container, !noexpand,'.middleLabel');
 
                 TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
                     tobj.type_representation = prevMiddleBarSelection.type_representation;
@@ -7794,6 +7790,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     var checkbox = $(document.createElement('input'))
                                     .attr('type', 'checkbox')
                                     .attr('value', id)
+                                    .addClass('middleCheck')
                                     .css('background-color','gray')
                                     .attr('id', "checkbox" + id)
                                     .attr('checked', false)
@@ -8057,9 +8054,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method selectLabel
      * @param {Object} label    label to select
      * @param {Boolean} expand  if label expands when selected 
+     * @param {string} selector selector of labels to reset
+     * @param {Boolean} singleSelect only select one label
      * @return {Object} label   selected label   
      */
-    function selectLabel(label, expand) {
+    function selectLabel(label, expand, selector, singleSelect) {
+        if (selector) {
+            resetLabels(selector)
+        }
+        if (singleSelect) {
+            //uncheck all the middle check boxes and remove them from list
+            $('.middleCheck').prop('checked', false);
+            multiSelected = [];
+        }
         label.css('background', HIGHLIGHT);
         label.unbind('mousedown').unbind('mouseleave').unbind('mouseup');
         var labelId = label.attr('id');
@@ -8300,11 +8307,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
         timelineYearInput = createTextInput(timelineInputText, "Enter valid year", 100);
-
         timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),work.Metadata.TimelineMonth);
-        timelineMonthInput.css('margin-right','0%');
+        timelineMonthInput.css({ 'margin-right': '0%' });
         timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value'),timelineYearInput,timelineMonthInput), work.Metadata.TimelineDay);
-        timelineDayInput.css('margin-right', '0%');
+        timelineDayInput.css({'margin-right': '0%'});
         var showAsRangeDiv = $(document.createElement('div'));
         
         yearInput.attr('id', 'yearInput');
@@ -8344,14 +8350,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //TO-DO: add (?) icon w/ pop-up
         yearDiv.css({
             width : '100%',
-            height : '20px'
         });
         year = createSetting('Year', yearInput, 60, null, true);
         year.css({
             width: '32%',
             display: 'inline-block',
             position: 'relative',
-            'float': 'left'
         });
         month = createSetting('Month', monthInput, 60, null, true);
         month.css({
@@ -8359,7 +8363,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'padding-left': '1%',
             'position':'relative',
             display: 'inline-block',
-            'float': 'left'
         });
         toggleAllow(monthInput);
         day = createSetting('Day', dayInput, 70, null, true);
@@ -8368,7 +8371,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'padding-left': '2%',
             'position': 'relative',
             display: 'inline-block',
-            'float': 'left'
         });
         toggleAllow(dayInput);
         yearDiv.append(year)
@@ -8379,7 +8381,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //TO-DO add (?) icon w/ pop-up
         timelineYearDiv.css({
             width: '100%',
-            height: '20px',
             'padding-top':'2%'
         });
         timelineYear = createSetting('Date on Timeline', timelineYearInput, 40);
@@ -8387,7 +8388,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             width: '44%',
             display: 'inline-block',
             position: 'relative',
-            'float': 'left'
         });
         timelineMonth = createSetting('Month', timelineMonthInput, 50);
         timelineMonth.css({
@@ -8395,7 +8395,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'padding-left': '1%',
             'position': 'relative',
             display: 'inline-block',
-            'float': 'left'
         });
         toggleAllow(timelineMonthInput);
         timelineDay = createSetting('Day', timelineDayInput, 60);
@@ -8404,7 +8403,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'padding-left': '2%',
             'position': 'relative',
             display: 'inline-block',
-            'float': 'left'
         });
         toggleAllow(timelineDayInput);
         timelineYearDiv.append(timelineYear)

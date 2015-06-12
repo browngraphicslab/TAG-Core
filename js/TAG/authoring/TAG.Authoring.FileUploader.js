@@ -592,8 +592,10 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * Totally remove the overlay from the DOM / destroy
      */
     function removeOverlay() {
+
         //uploadingOverlay.remove();
         //enableButton();
+
         //progressText.remove();
     }
 
@@ -616,7 +618,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             try {
                 addOverlay(root);
                 uploadingOverlay.show();
-                disableButton();
+                if (disableButton) {
+                    disableButton();
+                }
 
                 uri = new Windows.Foundation.Uri(uriString);
                 uploader = new Windows.Networking.BackgroundTransfer.BackgroundUploader();
