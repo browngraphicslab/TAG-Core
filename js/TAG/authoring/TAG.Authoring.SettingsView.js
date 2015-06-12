@@ -2713,6 +2713,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         getObjs: TAG.Worktop.Database.getArtworksIn,
                         args: [exhibition.Identifier],
                         excluded: guidsToBeDeleted
+                    }, {
+                        name: 'Import',
+                        getObjs: null,
+                        args: null,
+                 
                     }], {
                         getObjs: TAG.Worktop.Database.getArtworksIn, //Artworks in this collection
                         args: [exhibition.Identifier]
