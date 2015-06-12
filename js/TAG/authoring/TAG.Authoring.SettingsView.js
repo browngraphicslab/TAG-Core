@@ -1074,7 +1074,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create inputs
         //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
-        bgImgInput = createButton('Change Image', function () {
+        bgImgInput = createButton('Import', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
@@ -2552,7 +2552,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             nameInput = createTextInput(TAG.Util.htmlEntityDecode(exhibition.Name), 'Title', 40);
             descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false, 2000);
-            bgInput = createButton('Select...', function () {
+            bgInput = createButton('Import', function () {
                 //changesHaveBeenMade = true;    
                 console.log("collection bg");
 
