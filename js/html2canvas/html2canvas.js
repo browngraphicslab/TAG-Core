@@ -779,7 +779,7 @@ _html2canvas.Parse = function ( images, options ) {
 
         })()
     },
-    element = (( options.elements === undefined ) ? document.body : options.elements[0]), // select body by default
+    element = (( options.elements === undefined) ? document.body : options.elements[0]), // select body by default
     needReorder = false,
     numDraws = 0,
     fontData = {},
@@ -787,7 +787,7 @@ _html2canvas.Parse = function ( images, options ) {
     ignoreElementsRegExp = new RegExp("(" + options.ignoreElements + ")"),
     body = doc.body,
     r,
-    testElement,
+    testElement, n
     rangeBounds,
     rangeHeight,
     stack,

@@ -8572,14 +8572,21 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                     *			volume: volume
                     *			videoOffset: offset from the beginning of the video itsself
                 */
+			    console.log("Video Keyframes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                console.log("ITEContainer: "+$("#ITEContainer"))
+                console.log("ITEContainer width: " + $("#ITEContainer").width() + "   height: " + $("#ITEContainer").height())
+                console.log("TAG Root  Container width: " + $("#tagRoot").width() + "   height: " + $("#tagRoot").height())
+                var w = $("#ITEContainer").width() ? $("#ITEContainer").width() : $("#tagRoot").width();
+                var h = $("#ITEContainer").height() ? $("#ITEContainer").height() : $("#tagRoot").height();
+                console.log("w: "+w+"    h: "+h)
 			    keyFrame0 = {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
 			        "time": 0,
 			        "opacity": 1,
 			        "size": {
-			            "x": $('#tagRoot').width(),
-			            "y": $('#tagRoot').height()
+			            "x": w,
+			            "y": h
 			        },
 			        "pos": {
 			            "x": 0,
@@ -8593,10 +8600,10 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
 			        "time": .05,
-			        "opacity": .95,
+			        "opacity": 1,
 			        "size": {
-			            "x": $('#tagRoot').width(),
-			            "y": $('#tagRoot').height()
+			            "x": w,
+			            "y": h
 			        },
 			        "pos": {
 			            "x": 0,
@@ -8610,10 +8617,10 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
 			        "time": currExperienceStream.duration - .05,
-			        "opacity": .95,
+			        "opacity": 1,
 			        "size": {
-			            "x": $('#tagRoot').width(),
-			            "y": $('#tagRoot').height()
+			            "x": w,
+			            "y": h
 			        },
 			        "pos": {
 			            "x": 0,
@@ -8629,8 +8636,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        "time": currExperienceStream.duration,
 			        "opacity": 0,
 			        "size": {
-			            "x": $('#tagRoot').width(),
-			            "y": $('#tagRoot').height()
+			            "x": w,
+			            "y": h
 			        },
 			        "pos": {
 			            "x": 0,
