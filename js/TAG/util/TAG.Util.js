@@ -3169,8 +3169,9 @@ TAG.Util.UI = (function () {
                     confirmAction();
             }
         }
-        $(optionButtonDiv).append(confirmButton);
-
+        if (!(confirmButtonText==="no confirm")){
+            $(optionButtonDiv).append(confirmButton);
+        }
         var cancelButton = document.createElement('button');
         var $cancelButton = $(cancelButton);
         $cancelButton.css({
