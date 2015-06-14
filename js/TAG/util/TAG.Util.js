@@ -4047,7 +4047,9 @@ TAG.Util.UI = (function () {
                 if (queueLength > 0 && tabs[i].name == 'Import') { //already upload happening - grey out and disable import tab only 
                     console.log("disable import tab");
                     tab.css({ 'opacity': '.4' });
-                    $(tab).prop('disabled', true); 
+                    tab.unbind('click');
+                } else{
+                    tab.on('click', tabHelper(i, tabs[i].name));
                 }
                 tab.css({
                     'display': 'inline-block',
@@ -4066,7 +4068,7 @@ TAG.Util.UI = (function () {
                     'font-size':'0.8em'
                 });
                 
-                tab.on('click', tabHelper(i, tabs[i].name));
+                
                 tabBanner.append(tab);
             }
             tab = $(document.createElement('div'));
