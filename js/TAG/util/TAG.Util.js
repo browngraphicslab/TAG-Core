@@ -2027,6 +2027,7 @@ TAG.Util.UI = (function () {
         addPushpinToLoc: addPushpinToLoc,
         getLocationList: getLocationList,
         popUpMessage: popUpMessage,
+        popUpCustom: popUpCustom,
         PopUpConfirmation: PopUpConfirmation,
         popupInputBox: popupInputBox,
         cgBackColor: cgBackColor,
@@ -2789,6 +2790,69 @@ TAG.Util.UI = (function () {
     }
 
    
+    // generate a custom popup, where you pass in all the content
+    function popUpCustom(content, noFade, onDialogClick) {
+        var overlay, first;
+        if (document.getElementById("popupblockInteractionOverlay")) {
+            overlay = $(document.getElementById("popupblockInteractionOverlay"));
+        } else {
+            overlay = blockInteractionOverlay();
+            first = true;
+            $(overlay).attr('id', 'Overlay');
+        }
+        var popup = document.createElement('div');
+        var popupSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
+           {
+               center_h: true,
+               center_v: true,
+               width: 0.25,
+               height: 0.5,
+               max_width: 400,
+               max_height: 600,
+           });
+        var leftPos = ($('#tagRoot').width() - popupSpecs.width) * 0.5;
+        var currentKeyHandler = globalKeyHandler[0];
+
+        $(popup).css({
+            position: 'absolute',
+            left: leftPos + 'px',
+            top: popupSpecs.y + 'px',
+            width: popupSpecs.width + 'px',
+            height: popupSpecs.height + 'px',
+            border: '3px double white',
+            'background-color': 'black',
+
+        });
+
+        var contentContainer = document.createElement('div');
+        $(contentContainer).css({
+            'width': '100%',
+            'height': '100%'
+        });
+        $(contentContainer).append(content);
+
+        if (onDialogClick) {
+            $(overlay).click(removeAll);
+            $(popup).click(function (event) {
+                event.stopPropagation();
+            });
+        }
+
+
+        function removeAll() {
+            if (noFade) {
+                $(overlay).hide();
+                $(overlay).remove();
+            } else {
+                $(overlay).fadeOut(500, function () { $(overlay).remove(); });
+            }
+        }
+
+        $(popup).append(contentContainer);
+        $(overlay).append(popup);
+        return overlay;
+    }
+
     //generates upload progress popup
     function uploadProgressPopup(clickAction, message, filesArray) {
         var buttonText, noFade, useHTML, onDialogClick;
