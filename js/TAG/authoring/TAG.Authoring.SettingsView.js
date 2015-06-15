@@ -3147,24 +3147,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(exhibitions);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numEx + " selected collections?";
+        var confirmButtonText = "Delete";
+        if (numEx === 0) {
+            confirmText = "You have not selected any collections to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numEx > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            // actually delete the exhibition
-            TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
-                console.log("collection deletion done");
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
-                    return;
-                }
-                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                    toLoad = currDoq;
-                    onlyMiddle = true;
-                }
-                loadExhibitionsView(toLoad, undefined, onlyMiddle);
-            }, authError, authError);
-        }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function () {
+                // actually delete the exhibition
+                TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
+
+                    console.log("collection deletion done");
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
+                        return;
+                    }
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    loadExhibitionsView(toLoad, undefined, onlyMiddle);
+                }, authError, authError);
+            }
+        },confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             var remIndex;
             for (var x = 0; x < numEx; x++) {
@@ -3696,32 +3705,40 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(tours);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numTours + " selected tours?";
+        var confirmButtonText = "Delete";
+        if (numTours === 0) {
+            confirmText = "You have not selected any tours to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numTours > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            // actually delete the tour
-            TAG.Worktop.Database.batchDeleteDoq(tours, function () {
-                console.log("done deleting tours");
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
-                    return;
-                }
-                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                    toLoad = currDoq;
-                    onlyMiddle = true;
-                }
-                loadTourView(toLoad, undefined, onlyMiddle);
-            }, authError, authError);
-        }, "Are you sure you want to delete the " +numTours+ " selected tours?", "Delete", true, function () { 
-            $(confirmationBox).hide();
-            var remIndex;
-            for (var x=0;x<numTours;x++){
-                remIndex = guidsToBeDeleted.indexOf(tours[x]);
-                if (remIndex >= 0) {
-                    guidsToBeDeleted.splice(remIndex, 1);
-                }
+                // actually delete the tour
+                TAG.Worktop.Database.batchDeleteDoq(tours, function () {
+                    console.log("done deleting tours");
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
+                        return;
+                    }
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    loadTourView(toLoad, undefined, onlyMiddle);
+                }, authError, authError);
             }
+            }, confirmText, confirmButtonText, true, function () { 
+                $(confirmationBox).hide();
+                var remIndex;
+                for (var x=0;x<numTours;x++){
+                    remIndex = guidsToBeDeleted.indexOf(tours[x]);
+                    if (remIndex >= 0) {
+                        guidsToBeDeleted.splice(remIndex, 1);
+                    }
+                }
         }, null, null, null, null, null, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
@@ -4687,51 +4704,58 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(mediaGuids);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numMed + " selected associated media?";
+        var confirmButtonText = "Delete";
+        if (numMed === 0) {
+            confirmText = "You have not selected any associated media to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numMed > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            console.log(mediaMULTIPLE.length + " things to delete.")
-            var deleteCounter = 0;
+                console.log(mediaMULTIPLE.length + " things to delete.")
+                var deleteCounter = 0;
 
-            //only way to get it to reload after all of them are done
-            var DEL = function (j, media) {
-                // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
-                TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
-                    // success handler
-                    TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
-                        deleteCounter += 1
-                        console.log("deleted item: " + j)
-                        if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
-                            if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                                toLoad = currDoq;
-                                onlyMiddle = true;
+                //only way to get it to reload after all of them are done
+                var DEL = function (j, media) {
+                    // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
+                    TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
+                        // success handler
+                        TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
+                            deleteCounter += 1
+                            console.log("deleted item: " + j)
+                            if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
+                                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                                    toLoad = currDoq;
+                                    onlyMiddle = true;
+                                }
+                                loadAssocMediaView(toLoad, undefined, onlyMiddle);
                             }
-                            loadAssocMediaView(toLoad, undefined, onlyMiddle);
-                        }
+                        }, function () {
+                            console.log("noauth error");
+                        }, function () {
+                            console.log("conflict error");
+                        }, function () {
+                            console.log("general error");
+                        });
                     }, function () {
-                        console.log("noauth error");
+                        // unauth handler
                     }, function () {
-                        console.log("conflict error");
+                        // conflict handler
                     }, function () {
-                        console.log("general error");
+                        // error handler
                     });
-                }, function () {
-                    // unauth handler
-                }, function () {
-                    // conflict handler
-                }, function () {
-                    // error handler
-                });
-            };
+                };
 
-            for (var i = 0; i < mediaMULTIPLE.length; i++) {
-                var media = mediaMULTIPLE[i]
-                DEL(i, media)
+                for (var i = 0; i < mediaMULTIPLE.length; i++) {
+                    var media = mediaMULTIPLE[i]
+                    DEL(i, media)
+                }
             }
-
-        }, "Are you sure you want to delete the " + numMed + " selected associated media?", "Delete", true, function () {
+        }, confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             var remIndex;
             for (var x = 0; x < mediaGuids.length; x++) {
