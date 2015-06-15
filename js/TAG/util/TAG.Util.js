@@ -3101,7 +3101,7 @@ TAG.Util.UI = (function () {
     }
 
     // popup message to ask for user confirmation of an action e.g. deleting a tour
-    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry, cancelOption, displayNames) {
+    function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry, cancelOption, displayNames, useTeleFormat) {
         var overlay;
         var origin;
         /*if (document.getElementById("popupblockInteractionOverlay")) {
@@ -3128,7 +3128,7 @@ TAG.Util.UI = (function () {
         //temp solution for telemetry box in all resolutions and browsers. 
         var maxw = 600,
             maxh=300;
-        if (fortelemetry) {
+        if (fortelemetry || useTeleFormat) {
             maxw = $('body').width() * 0.45;
             maxh = $('body').height() * 0.33;
         }
@@ -3168,13 +3168,13 @@ TAG.Util.UI = (function () {
             'word-wrap': 'break-word'
         });
         var fontsize =TAG.Util.getMaxFontSizeEM(message, 1, $(messageLabel).width(), $(messageLabel).height());
-        if (fortelemetry&&IS_WINDOWS) {
+        if (fortelemetry&&IS_WINDOWS || (useTeleFormat&&IS_WINDOWS)) {
             fontsize = TAG.Util.getMaxFontSizeEM(message, 0.8, $(messageLabel).width(), $(messageLabel).height());
         }
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
 
-        if(cancelOption == false){
+        if(displayNames){
             for (var i = 0; i < displayNames.length; i++) {
 
                 var para = document.createElement('div');
@@ -3233,8 +3233,9 @@ TAG.Util.UI = (function () {
                     confirmAction();
             }
         }
-        $(optionButtonDiv).append(confirmButton);
-
+        if (!(confirmButtonText==="no confirm")){
+            $(optionButtonDiv).append(confirmButton);
+        }
         var cancelButton = document.createElement('button');
         var $cancelButton = $(cancelButton);
         $cancelButton.css({
@@ -3306,7 +3307,7 @@ TAG.Util.UI = (function () {
         
         if(fortelemetry){
             $cancelButton.text("No, I don't mind")
-                .css({
+               .css({
                     "border-radius":'3.5px',
                     "background-color": "white",
                     "color":'black',
@@ -3948,7 +3949,7 @@ TAG.Util.UI = (function () {
         'margin-left': '20px'
     };
 
-    var importButton;
+    
 
     /*
     This function will be the backend that will merge multiple collections into a specified collection
@@ -3974,7 +3975,7 @@ TAG.Util.UI = (function () {
                     totalGuids.push(artworks[k].Identifier)//add the artwork guid to the total guids of all artworks
                 }
             }
-            if (j === guids.length) {//when the coutner has recieved every 'addArtworks' call, call the server to get the guids of the artworks in the original collection
+            if (j === guids.length) {//when the counter has recieved every 'addArtworks' call, call the server to get the guids of the artworks in the original collection
                 TAG.Worktop.Database.getArtworksIn(targetguid, getPreviousArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
             }
         }
@@ -4105,6 +4106,15 @@ TAG.Util.UI = (function () {
                 tab = $(document.createElement('div'));
                 tab.addClass('tab');
                 tab.attr('id', 'tab' + i);
+                tab.text(tabs[i].name);
+
+                if (queueLength > 0 && tabs[i].name == 'Import') { //already upload happening - grey out and disable import tab only 
+                    console.log("disable import tab");
+                    tab.css({ 'opacity': '.4' });
+                    tab.unbind('click');
+                } else{
+                    tab.on('click', tabHelper(i, tabs[i].name));
+                }
                 tab.css({
                     'display': 'inline-block',
                     'min-width': '18%',
@@ -4121,8 +4131,8 @@ TAG.Util.UI = (function () {
                     'text-align': 'center',
                     'font-size':'0.8em'
                 });
-                tab.text(tabs[i].name);
-                tab.on('click', tabHelper(i, tabs[i].name, queueLength));
+                
+                
                 tabBanner.append(tab);
             }
             tab = $(document.createElement('div'));
@@ -4317,38 +4327,24 @@ TAG.Util.UI = (function () {
         confirmButton.on('click', function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
-            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             $('.compHolder').off();
             progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
             finalizeAssociations();
             globalKeyHandler[0] = currentKeyHandler;
         });
 
-        importButton = $(document.createElement('button'));
-        importButton.css({ //initially greyed out
-            'margin': '1%',
-            'border': '1px solid white',
-            'color': 'white',
-            'opacity': '.4',
-            'padding-left': '1%',
-            'padding-right': '1%',
-            'background-color': 'black',
-            'width': 'auto',
-            'position': 'relative',
-            'float': "right",
-            'border-radius': '3.5px'
-        });
-        importButton.text('Import');
-        importButton.click(importOnClick);
-        $(importButton).attr("id", "importButton");
+        
         
         function importOnClick(){
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
-            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            
             console.log("Called import on click");
             $('.compHolder').off();
-            finalizeAssociations();
+            picker.remove();
+            pickerOverlay.fadeOut();
+            pickerOverlay.empty();
+            pickerOverlay.remove();
             globalKeyHandler[0] = currentKeyHandler;
             importBehavior();
 
@@ -4391,7 +4387,7 @@ TAG.Util.UI = (function () {
             $('.compHolder').off();
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
-            importButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            
             pickerOverlay.fadeOut(function () { 
                 pickerOverlay.empty(); 
                 pickerOverlay.remove(); 
@@ -4402,12 +4398,9 @@ TAG.Util.UI = (function () {
 
         optionButtonDiv.append(cancelButton);
         optionButtonDiv.append(confirmButton);
-        //optionButtonDiv.append(importButton);
+       
 
-        //don't want import button to appear if this is in the add to collections popup
-        if (!modifiedButtons) {
-           optionButtonDiv.append(importButton);
-        }
+       
 
         picker.append(optionButtonDiv);
 
@@ -4450,20 +4443,27 @@ TAG.Util.UI = (function () {
                         tabCache[j].comps = comps;
                         success(comps,tabs[j].excluded);
                     }, error, cacheError]);
-                    tabs[j].getObjs.apply(null, tabArgs);
+
+                    if (tabs[j].getObjs != null) { // don't do for import tab in add/remove artworks
+                        tabs[j].getObjs.apply(null, tabArgs);
+                    } else {
+                        picker.remove();
+                        importOnClick(); //import tab should simply bring up file picker
+                    }
+                    
                 } else {
                     success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
 
-                if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
+                /*if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
                     $(importButton).prop('disabled', false);
                     importButton.css({'opacity': '1'});
                     console.log("import button should be enabled");
                 } else{
-                    importButton.css({'opacity': '.4'});
+                    importButton.css({'opacity': '0'}); //invisible in 'all artworks tab'
                     $(importButton).prop('disabled', true);
                     console.log("import button should be disabled");
-                }
+                } */
 
             }
         }
@@ -4472,6 +4472,7 @@ TAG.Util.UI = (function () {
             var newComps = [];
             for (var i = 0; i < comps.length; i++) {
                 //if guid of comp obj is in excluded guid list, don't show it in pop-up
+
                 if ((!(type === 'artwork' && comps[i].Metadata.Type === 'VideoArtwork'))&& //exclude videos because not 
                     !(comps[i].Identifier && excluded && (excluded.indexOf(comps[i].Indentifier) >=0))) {
                     newComps.push(comps[i]);
@@ -4482,7 +4483,7 @@ TAG.Util.UI = (function () {
         }
 
         function error() {
-            console.log("ERROR IN TABHELPER");
+            consolelog("ERROR IN TABHELPER");
         }
 
         function cacheError() {
@@ -4499,7 +4500,7 @@ TAG.Util.UI = (function () {
                 addedComps.length = 0;
                 addedCompsObjs.length = 0;
                 removedComps.length = 0;
-                /*
+
                 if (excluded) {
                     for (var x = 0; x < compArray.length; x++) {
                         if (compArray[x].Identifier && (excluded.indexOf(compArray[x].Identifier) >= 0)) {
@@ -4507,7 +4508,8 @@ TAG.Util.UI = (function () {
                         }
                     }
                 }
-                */
+
+                
                 compArray.sort(function (a, b) {
                     return (a.Name.toLowerCase() < b.Name.toLowerCase()) ? -1 : 1;
                 });
@@ -4517,7 +4519,9 @@ TAG.Util.UI = (function () {
             }
         }
 
-        function drawComp(comp, applyClick,i) {
+        function drawComp(comp, applyClick, i) {
+            console.log("drawing component: ")
+            console.log(comp)
             return function () {
                 var compHolder = $(document.createElement('div'));
                 compHolder.addClass("compHolder");
@@ -4588,6 +4592,11 @@ TAG.Util.UI = (function () {
                     compHolderImage.attr('src', imageSrc);
                 } else if (comp.Metadata.ContentType === 'iframe') {
                     compHolderImage.attr('src', tagPath + 'images/video_icon.svg'); // TODO iframe fix this with new icon
+
+                } else if ((comp.Type === 'Empty' && comp.Metadata.ContentType === "Text") || comp.Metadata.ContentType === "Text") {//text associated media
+                    compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/text_icon_2.svg');
+                    //shouldAppendTII = true;
+                    //typeIndicatorImage.attr('src', tagPath + 'images/icons/text_icon_2.svg');
                 } else if (comp.Type === 'Empty' || comp.Metadata.ContentType === "Tour") { // tours....don't know why the type is 'Empty'
                     compHolderImage.attr('src', comp.Metadata.Thumbnail ? FIXPATH(comp.Metadata.Thumbnail) : tagPath + 'images/icons/catalog_tour_icon.svg');
                     shouldAppendTII = true;
@@ -4750,7 +4759,8 @@ TAG.Util.UI = (function () {
         }
 
         // adds media as an associated media of each artwork in artworks
-        function finalizeAssociations() {
+        //@importing - if file picker is simply coming up, don't refresh the page bc it's visually confusing
+        function finalizeAssociations() { 
             var options = {};
 
             //to prevent multiple uploading texts and loading circles from appearing simultanesouly
@@ -4841,8 +4851,10 @@ TAG.Util.UI = (function () {
                         })
                     }
                     else {
+                        console.log("in correct statement");
                         TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {
-                            callback();
+                           
+                            
                             pickerOverlay.fadeOut();
                             pickerOverlay.empty();
                             pickerOverlay.remove();
@@ -8082,12 +8094,21 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"zIndex": track.data.zIndex,
 						"time": time_offset + currKeyframe.offset,
 						"opacity": 1, 
-						"scale": currKeyframe.state.viewport.region.span.x, //TODO
-						"pos": {
-							"x": currKeyframe.state.viewport.region.center.x,
-							"y": currKeyframe.state.viewport.region.center.y
-						},
 						"data": {}
+					}
+
+					if (currKeyframe.state) {
+					    keyframeObject.scale = currKeyframe.state.viewport.region.span.x;
+                        keyframeObject.pos = {
+                            "x": currKeyframe.state.viewport.region.center.x,
+                            "y": currKeyframe.state.viewport.region.center.y
+                        };
+					} else {
+					    keyframeObject.scale = currKeyframe.bounds.x;
+					    keyframeObject.pos = {
+					        "x": currKeyframe.bounds.x,
+					        "y": currKeyframe.bounds.y
+					    };
 					}
 				}
 				else if (providerID == "audio"){
@@ -8617,14 +8638,21 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                     *			volume: volume
                     *			videoOffset: offset from the beginning of the video itsself
                 */
+			    console.log("Video Keyframes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                console.log("ITEContainer: "+$("#ITEContainer"))
+                console.log("ITEContainer width: " + $("#ITEContainer").width() + "   height: " + $("#ITEContainer").height())
+                console.log("TAG Root  Container width: " + $("#tagRoot").width() + "   height: " + $("#tagRoot").height())
+                var w = $("#ITEContainer").width() ? $("#ITEContainer").width() : $("#tagRoot").width();
+                var h = $("#ITEContainer").height() ? $("#ITEContainer").height() : $("#tagRoot").height();
+                console.log("w: "+w+"    h: "+h)
 			    keyFrame0 = {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
 			        "time": 0,
 			        "opacity": 1,
 			        "size": {
-			            "x": $('#tagRoot').width(),
-			            "y": $('#tagRoot').height()
+			            "x": w,
+			            "y": h
 			        },
 			        "pos": {
 			            "x": 0,
@@ -8638,10 +8666,10 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
 			        "time": .05,
-			        "opacity": .95,
+			        "opacity": 1,
 			        "size": {
-			            "x": $('#tagRoot').width(),
-			            "y": $('#tagRoot').height()
+			            "x": w,
+			            "y": h
 			        },
 			        "pos": {
 			            "x": 0,
@@ -8655,10 +8683,10 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
 			        "time": currExperienceStream.duration - .05,
-			        "opacity": .95,
+			        "opacity": 1,
 			        "size": {
-			            "x": $('#tagRoot').width(),
-			            "y": $('#tagRoot').height()
+			            "x": w,
+			            "y": h
 			        },
 			        "pos": {
 			            "x": 0,
@@ -8674,8 +8702,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        "time": currExperienceStream.duration,
 			        "opacity": 0,
 			        "size": {
-			            "x": $('#tagRoot').width(),
-			            "y": $('#tagRoot').height()
+			            "x": w,
+			            "y": h
 			        },
 			        "pos": {
 			            "x": 0,
@@ -8712,19 +8740,29 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		return tracks.sort(function(a, b){return a.zIndex - b.zIndex});
 	}
 
-	var ITE_tour = {
-		"tourTitle" : tour.Name,
-		"totalDuration" : rinData.data.narrativeData.estimatedDuration || 0,
-		"guid" : rinData.data.narrativeData.guid,
-		"timestamp" : rinData.data.narrativeData.timestamp,
-		"tracks" : ITE_tracks()
+	if (rinData.data) {
+	    var ITE_tour = {
+	        "tourTitle": tour.Name,
+	        "totalDuration": rinData.data.narrativeData.estimatedDuration || 0,
+	        "guid": rinData.data.narrativeData.guid,
+	        "timestamp": rinData.data.narrativeData.timestamp,
+	        "tracks": ITE_tracks()
+	    };
+
+	    console.log("ITE tour object is: ");
+	    console.log(ITE_tour);
+	    console.log(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
+
+	    return ITE_tour;
 	}
 
-	console.log("ITE tour object is: ");
-	console.log(ITE_tour);
-	console.log(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
-
-	return ITE_tour;
+	return {
+	    "tourTitle": tour.Name,
+	    "totalDuration": 0,
+	    "guid": tour.Identifier,
+	    "timestamp": tour.Metadata.__Created,
+	    "tracks": []
+	};
 }
 
 

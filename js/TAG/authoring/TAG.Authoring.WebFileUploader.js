@@ -11,7 +11,7 @@ TAG.Authoring.FileUploadTypes = {
     Map: 4
 };
 
-TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp, disableButton, enableButton) {
+TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, useOverlay, disableButton, enableButton) {
 "use strict";
 
     var that = {};
@@ -19,6 +19,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     multiple = multiple || false;
     var uploadingOverlay = $(document.createElement('div')),
     innerProgressBar = $(document.createElement('div')); // HTML upload overlay
+    var uploadOverlayText;
     var progressBarButton;
     var progressBar;
     var dataReaderLoads = [];       //To pass into the finishedCallback, parsed as urls (paths to be precise)
@@ -46,7 +47,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     //Basic HTML initialization
     (function init() {
-        var uploadOverlayText = $(document.createElement('label'));
+        uploadOverlayText = $(document.createElement('label'));
             //progressIcon = $(document.createElement('img')),
         progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
@@ -368,14 +369,29 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             console.log("Overlay should be visible");
         } else {*/
             //updates loading UI
-            console.log("STARTING NEW UPLOAD")
+           /* console.log("STARTING NEW UPLOAD")
 
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressBar)
-            settingsViewTopBar.append(progressBarButton)
+            settingsViewTopBar.append(progressBarButton)*/
         //}
         //var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         //settingsViewTopBar.append(progressBar)
+
+        if (useOverlay == true) { //do not append other progress things
+            console.log("overlay should be visible here")
+            uploadingOverlay.append(uploadOverlayText);
+
+            root.append(uploadingOverlay);
+            uploadingOverlay.show()
+            uploadingOverlay.css({"display": "block"});    
+        } else{
+        //updates loading UI
+            var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
+            settingsViewTopBar.append(progressBar);
+            settingsViewTopBar.append(progressBarButton);
+            console.log("STARTING NEW UPLOAD")
+        }
     }
 
     /**

@@ -1868,12 +1868,12 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
     // debounce will prevent the function from being called
     // until the debounce function hasn't been called for
     // the specified number of milliseconds
-    var debounce = $.debounce(1400, coreUpdate);
+    var debounce = $.debounce(1000, coreUpdate);
     function coreUpdate() {
         onUpdateNumCalls = onUpdateNumCalls + 1;
 
         timeManager.stop();
-
+        
         var data;
         if (loaded) {
             viewer.setIsReloading(true);
@@ -1883,13 +1883,16 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             capturingOff();
 
             data = toRIN();
-            viewer.reloadTour(data, getAllCaptureHandlers());
-            
+            viewer.reloadTour(data, getAllCaptureHandlers(), function () {
+                setTimeout(function () {
+                    viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
+                    viewer.setIsReloading(false);
+                }, 500);
+            });
         }
         updateVerticalScroller();
         enableDisableDrag();
-        viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
-        viewer.setIsReloading(false);
+        
     }
 
     function getAllCaptureHandlers() {

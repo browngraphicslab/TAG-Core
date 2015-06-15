@@ -24,7 +24,7 @@ TAG.Authoring.FileUploadTypes = {
  * @param useThumbs         Use thumbnail view mode?
  * @param progressFunc      Function to keep track of progress (e.g. for displaying a progress bar somewhere)
  */
-TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, fromImportPopUp, disableButton, enableButton) {
+TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallback, filters, useThumbs, errorCallback, multiple, innerProgBar, useOverlay, disableButton, enableButton) {
     "use strict";
     var that = {};
     filters = filters || ["*"];
@@ -121,7 +121,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             'background-color': 'rgba(0, 0, 0, .5)',
             'width': '100%',
             'height': '100%',
-            'z-index': 100000100
+            'z-index': 10000000000000000000000000000000000000000000000000000000000000000000000000000
         });
 
         uploadOverlayText.css({
@@ -134,6 +134,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             'font-size': '100%'
         });
         uploadOverlayText.text('Uploading file(s). Please wait.');
+        uploadingOverlay.append(uploadOverlayText);
 
         progressIcon.css({
             'position': 'relative', 'top': '50%', 'left': '14%'
@@ -571,27 +572,32 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * Appends overlay to root
      * (no idea if this will actually disable interactions too as is)
      */
+     
     function addOverlay(elmt) {
-        //if(fromImportPopUp==true){
-            //uploadingOverlay.show()
-            //uploadingOverlay.css({"display": "block"});    
-        //} else{
+        if (useOverlay == true) { //do not append other progress things
+            console.log("overlay should be visible here")
+            root.append(uploadingOverlay);
+            uploadingOverlay.show()
+            uploadingOverlay.css({"display": "block"});    
+        } else{
         //updates loading UI
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressText);
             settingsViewTopBar.append(progressBar);
             settingsViewTopBar.append(progressBarButton);
             console.log("STARTING NEW UPLOAD")
-        //}
+        }
     }
 
     /**
      * Totally remove the overlay from the DOM / destroy
      */
     function removeOverlay() {
-        uploadingOverlay.remove();
-        enableButton();
-        progressText.remove();
+
+        //uploadingOverlay.remove();
+        //enableButton();
+
+        //progressText.remove();
     }
 
     /**
@@ -613,7 +619,9 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             try {
                 addOverlay(root);
                 uploadingOverlay.show();
-                disableButton();
+                if (disableButton) {
+                    disableButton();
+                }
 
                 uri = new Windows.Foundation.Uri(uriString);
                 uploader = new Windows.Networking.BackgroundTransfer.BackgroundUploader();

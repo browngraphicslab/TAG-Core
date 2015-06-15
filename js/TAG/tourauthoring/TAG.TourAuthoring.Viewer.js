@@ -347,7 +347,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * Load / reload tour into viewer
      * @param data      Segment portion of RIN tour
      */
-    function reloadTour(data, handlers) {
+    function reloadTour(data, handlers, callback) {
         if (player) {
             reloading = true;
             // call reload
@@ -358,6 +358,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //};
             this.unload();
             player.load(TAG.Util.RIN_TO_ITE(data));
+            player.getOrchestrator().setPendingCallback(callback);
             player.bindCaptureHandlers(handlers);
             //player.scrubTimeline(percent);
             reloading = false;
@@ -380,7 +381,14 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         isReloading = true;
         console.log("isReloading: true, in initializeTour");
         // console.log("player: "+player);
-        if (player) {
+        if (timeline.getTrackslength() === 0) {
+            ctime = timeManager.getCurrentTime();
+            //setTimeout(function () {
+            //seek(ctime);
+            isReloading = false;
+            console.log("no tracks. isReloading: false, in initializeTour");
+            //}, 50);
+        } else if (player) {
             ctime = timeManager.getCurrentTime();
             player.unload();
             //player.loadData(data, function () {
@@ -390,13 +398,6 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //        console.log("isReloading: false, in initializeTour");
             //    }, 50);
             //});
-        } else if (timeline.getTrackslength() === 0) {
-            ctime = timeManager.getCurrentTime();
-            setTimeout(function () {
-                //seek(ctime);
-                isReloading = false;
-                console.log("isReloading: false, in initializeTour");
-            }, 50);
         } else {
             setTimeout(function () { reloadTour(data, true); }, 50);
         }

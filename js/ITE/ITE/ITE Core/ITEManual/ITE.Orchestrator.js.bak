@@ -1,23 +1,20 @@
 window.ITE = window.ITE || {};
-ITE.Orchestrator = function(player, isAuthoring) {
+ITE.Orchestrator = function(player) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
 									// Defaulted to ‘loading’
-	var self = this;
-	var pctTime = null;
-	var reloadCallback = null;
+	var	self = this;
 	self.narrativeSeekedEvent 	= new ITE.PubSubStruct();
 	self.narrativeLoadedEvent 	= new ITE.PubSubStruct();
 	self.volumeChangedEvent		= new ITE.PubSubStruct();
 	self.stateChangeEvent 		= new ITE.PubSubStruct();
 	self.muteChangedEvent		= new ITE.PubSubStruct();
 	self.tourData;
-	self.player = player;
-	self.isAuthoring = isAuthoring;
-	self.currentManipulatedObject = null;
+	self.player 			= player;
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
 	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
 	self.prevStatus			= 0; // 0 means we're not scrubbing. 1 - previously playing. 2 - previously paused.
+	self.tourData 			= null;
     self.loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
     self.loadedTracks = 0;
 
@@ -25,7 +22,6 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.getElapsedTime = function(){
 		return self.timeManager.getElapsedOffset();
 	};	
-
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -92,10 +88,6 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		}
 	};
 
-	function reload(tourData) {
-	    self.tourData = tourData;
-	}
-
 	/**
 	    * I/P: none
 	  	* unloads the tour
@@ -138,6 +130,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		}
 		self.timeManager.startTimer();
 		self.status = 1;
+
 	}
 
 	function pause() {
@@ -149,7 +142,6 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function scrub(seekPercent) {
-	    if (!self.tourData) return;
 		// Pause.
 		if (self.prevStatus === 0) {
 			self.prevStatus = self.status;
@@ -160,16 +152,13 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
-		// self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
-		self.timeManager.addElapsedTime(seekTime - self.timeManager.getElapsedOffset());
-
+		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
 
 		// Inform tracks of seek.
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].seek();
 		}
 	}
-
 
 	function seek(seekPercent) {
 		self.updateZIndices()
@@ -181,14 +170,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			self.pause();
 		}
 
-		if (!self.tourData || !self.tourData.totalDuration) {
-		    return;
-		}
-
 		// Change time.
 		var seekTime = seekPercent * self.tourData.totalDuration;
-		//self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
-		self.timeManager.addElapsedTime(seekTime - self.timeManager.getElapsedOffset());
+		self.timeManager.addElapsedTime(seekTime - this.timeManager.getElapsedOffset());
 
 		// Inform tracks of seek.
 		var nextKeyframes = new Array(trackManager.length);
@@ -207,16 +191,6 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		self.prevStatus = 0;
 	}
 
-
-
-	function refresh() {
-	    if (self.tourData) {
-	        var currTime = self.timeManager.getElapsedOffset(),
-                timePercent = currTime / self.tourData.totalDuration;
-	        seek(timePercent);
-	    }
-	}
-
 	function setVolume(newVolumeLevel){
 	    self.volumeChangedEvent.publish(newVolumeLevel)
 	}
@@ -228,15 +202,6 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	function captureKeyframe(track) {
 		var keyFrameData = track.getKeyframeState()
 		track.addKeyframe(keyFrameData)
-	}
-
-	function captureKeyframeFromTitle(title) {
-	    for (var i = 0; i < trackManager.length; i++) {
-	        track = trackManager[i];
-	        if (title === trackManager[i].trackData.name) {
-	            return track.getState();
-	        }
-	    }
 	}
 
 	function changeKeyframe(track, oldKeyFrame, newKeyFrame) {
@@ -256,7 +221,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function deleteTrack(track){
-		var index = trackManager.indexOf(track)
+		var index = trackManager[indexOf(track)]
 		if (index > -1) {
 		    trackManager.splice(index, 1);
 		}
@@ -264,25 +229,10 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function playWhenAllTracksReady() {
-	    self.loadedTracks++
-	    if (self.loadedTracks == trackManager.length) {
-	        if (!self.isAuthoring) {
-	            self.player.play()
-	        } else {
-	            if (reloadCallback) {
-	                reloadCallback();
-	            }
-	            reloadCallback = null;
-	        }
-
-	        self.loadedTracks = 0;
-	    } else {
-	        self.player.pause();
-	    }
-	}
-
-	function setPendingCallback(callback) {
-	    reloadCallback = callback;
+		self.loadedTracks++
+		if (self.loadedTracks == trackManager.length){
+			self.play()
+		}
 	}
 
 	/**
@@ -318,31 +268,44 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		return self.trackManager;
 	}
 
-	function getTrackBehind(zIndex, evt) {
-	    manipulated = null;
-	    for (var i = zIndex - 1; i >= 0; i--) {
-	        depth = self.trackManager[i].trackData.zIndex;
-	        if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
-	            return self.trackManager[i];
+<<<<<<< HEAD
+	self.getTrackManager = getTrackManager;
+=======
+	function getTrackBehind(zIndex, evt, isDrag) {
+	    cur = -99999999999999999999999999999999999999999999999999999999999999999999999999999;
+	    cur_track = null;
+	    for (var i = 0; i < self.trackManager.length; i++) {
+	        index = self.trackManager[i].trackData.zIndex;
+	        if (cur < index && zIndex > index && self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt) && self.trackManager[i].trackData.providerId !== "ink") {
+	            cur = index;
+	            cur_track = self.trackManager[i];
+	        } else if (zIndex === index) {
+	            if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
+	                if (isDrag && self.manipTrack != null && self.manipTrack === self.trackManager[i]) {
+	                    console.log("dragging same track");
+	                    return null;
+	                } else if (isDrag && self.manipTrack != null && self.manipTrack !== self.trackManager[i]) {
+                        //do nothing
+	                }else{
+	                    return null;
+	                }
+	            }
 	        }
 	    }
-	    return manipulated;
-	}
-
-	function bindCaptureHandlers(handlers) {
-	    var i;
-	    handlers = handlers.reverse();
-	    for (i = 0; i < trackManager.length; i++) {
-	        var track = trackManager[i];
-	        if (track.type === "dz" || track.type === "image") {
-	            track.registerCaptureHandler(handlers[i]);
-	            track.registerCaptureFinishedHandler(handlers[i]);
-	        }
+	    if (isDrag && self.manipTrack != null && self.manipTrack !== cur_track) {
+	        console.log("dragging donedone");
+	        return self.manipTrack
 	    }
+	    if (isDrag) {
+	        console.log("dragging same track");
+	        self.manipTrack = cur_track;
+	    }
+	    return cur_track;
 	}
 
 	self.manipTrack = null;
-	self.getTrackManager = getTrackManager;
+	self.getTrackManger = getTrackManger;
+>>>>>>> 00222c07b9d76cdb821ebfb6a8ed62272a3c1ad2
 	self.captureKeyframe = captureKeyframe;
 	self.changeKeyframe = changeKeyframe;
 	self.deleteKeyframe = deleteKeyframe;
@@ -354,17 +317,18 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.pause = pause;
 	self.scrub = scrub;
 	self.seek = seek;
-	self.refresh = refresh;
 	self.setVolume = setVolume;
 	self.toggleMute = toggleMute;
 	self.getElapsedTime = self.timeManager.getElapsedOffset;
 	self.getStatus = getStatus;
-	self.captureKeyframeFromTitle = captureKeyframeFromTitle;
+	self.captureKeyframe = captureKeyframe;
 	self.playWhenAllTracksReady = playWhenAllTracksReady;
 	self.initializeTracks = initializeTracks;
 	self.getTourData = getTourData;
 	self.status = status;
-	self.getTrackBehind = getTrackBehind;
-	self.bindCaptureHandlers = bindCaptureHandlers;
-	self.setPendingCallback = setPendingCallback;
+<<<<<<< HEAD
 }
+=======
+	self.getTrackBehind = getTrackBehind;
+}
+>>>>>>> 00222c07b9d76cdb821ebfb6a8ed62272a3c1ad2
