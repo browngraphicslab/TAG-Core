@@ -398,16 +398,20 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
      * Totally remove the overlay from the DOM / destroy
      */
     function removeOverlay() {
-        uploadingOverlay.hide();
-        $('.progressBarUploads').remove();
-        $('.progressBarUploadsButton').remove();
+        console.log("remove progress stuff on web now");
+        enableButton();
+        uploadingOverlay.remove();
+        uploadOverlayText.remove();
+        progressBar.remove();
+        progressText.remove();
+        progressBarButton.remove();
     }
 
 
     function finishedUpload() {
         console.log("Called finishedUpload");
         //removeOverlay();
-        console.log("Would remove overlay now");
+     
         addLocalCallback(globalFiles, localURLs, globalUriStrings)();
         finishedCallback(dataReaderLoads);
 

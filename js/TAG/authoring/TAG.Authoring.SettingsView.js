@@ -9270,8 +9270,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 
             },
             function(){
-               $(newButton).prop('disabled', false);
+                $(newButton).prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                if (inCollectionsView == true) {
+                    $(bgInput).prop('disabled', false);
+                    bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                }
+                if (inGeneralView == true) {
+                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                }
                
 
             }
@@ -9367,6 +9377,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function(){
                 $(newButton).prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                if (inCollectionsView == true) {
+                    $(bgInput).prop('disabled', false);
+                    bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                }
+                if (inGeneralView == true) {
+                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                }
+
             
                     
                 }
