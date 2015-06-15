@@ -9078,6 +9078,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // Add keyword text input.
         var keywordAddInput = $(document.createElement('input'))
             .attr('id', 'keywordAddInput')
+            .bind("enterKey",function(e){
+                keywordAddButton.click();
+            })
+            .keyup(function(e){
+                if(e.keyCode == 13) {
+                    $(this).trigger("enterKey");
+                }
+                e.stopPropagation();
+            })
             .appendTo(addKeywordContainer);
 
         // Add button.
