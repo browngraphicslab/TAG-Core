@@ -2007,7 +2007,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
-                        }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true, '.middleLabel',true));
+                        }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true, '.middleLabel'));
                         selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -3145,6 +3145,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function deleteExhibition(exhibitions) {
         var numEx = exhibitions.length;
         guidsToBeDeleted = guidsToBeDeleted.concat(exhibitions);
+        var toLoad;
+        var onlyMiddle = false;
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -3156,7 +3158,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                     return;
                 }
-                loadExhibitionsView(currDoq, undefined, true);
+                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                    toLoad = currDoq;
+                    onlyMiddle = true;
+                }
+                loadExhibitionsView(toLoad, undefined, onlyMiddle);
             }, authError, authError);
         }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function () {
             $(confirmationBox).hide();
@@ -3290,7 +3296,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                         }, val.Identifier, false, function () {
                             editTour(val);
-                        }, 0, 0, markedForDelete,true), true,'.middleLabel',true));
+                        }, 0, 0, markedForDelete,true), true,'.middleLabel'));
                         selectNext = false;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -3688,6 +3694,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function deleteTour(tours) {
         var numTours = tours.length;
         guidsToBeDeleted = guidsToBeDeleted.concat(tours);
+        var toLoad;
+        var onlyMiddle = false;
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -3699,7 +3707,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                     return;
                 }
-                loadTourView(currDoq, undefined, true);
+                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                    toLoad = currDoq;
+                    onlyMiddle = true;
+                }
+                loadTourView(toLoad, undefined, onlyMiddle);
             }, authError, authError);
         }, "Are you sure you want to delete the " +numTours+ " selected tours?", "Delete", true, function () { 
             $(confirmationBox).hide();
@@ -3975,7 +3987,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 previousIdentifier = val.identifier;
                                 loadAssocMedia(val);
                                 currentIndex = i;
-                            }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true,'.middleLabel',true));
+                            }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true,'.middleLabel'));
                             selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -4673,6 +4685,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaGuids[u] = mediaMULTIPLE[u].Identifier;
         }
         guidsToBeDeleted = guidsToBeDeleted.concat(mediaGuids);
+        var toLoad;
+        var onlyMiddle = false;
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             prepareNextView(false);
             clearRight();
@@ -4689,8 +4703,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
                         deleteCounter += 1
                         console.log("deleted item: " + j)
-                        if (deleteCounter == mediaMULTIPLE.length&&(prevSelectedSetting&&prevSelectedSetting===nav[NAV_TEXT.media.text])) {
-                            loadAssocMediaView(currDoq, undefined, true);
+                        if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
+                            if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                                toLoad = currDoq;
+                                onlyMiddle = true;
+                            }
+                            loadAssocMediaView(toLoad, undefined, onlyMiddle);
                         }
                     }, function () {
                         console.log("noauth error");
@@ -5625,7 +5643,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 if (val.Metadata.Type === "Artwork") {
                                     editArtwork(val);
                                 }
-                            }, true, val.Extension, markedForDelete,true), true,'.middleLabel',true));
+                            }, true, val.Extension, markedForDelete,true), true,'.middleLabel'));
                             selectNext = false;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
@@ -6173,8 +6191,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             leftButton = editArt;
             editArt.attr("id", "artworkEditorButton");
 
-            var deleteArt = createButton('Delete',
-                function () { deleteArtwork(multiSelected); },
+            var deleteArt = createButton('Delete', //Delete artwork for web app
+                function () { deleteArtworkSingle(artwork); },
                 {
                     'margin-left': '2%',
                     'margin-top': '1%',
@@ -7287,6 +7305,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, 1);
     }
 
+
+    //FOR THE WEB APP ONLY
+    function deleteArtworkSingle(artwork) {
+
+        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
+            prepareNextView(false);
+            clearRight();
+            prepareViewer(true);
+
+            // actually delete the exhibition
+            TAG.Worktop.Database.deleteDoq(artwork.Identifier, function () {
+               
+                loadArtView();
+            }, function () {
+                    console.log("noauth error");
+                }, function () {
+                    console.log("conflict error");
+                }, function () {
+                    console.log("general error");
+            });
+        }, "Are you sure you want to delete " + artwork.Name + " ?", "Delete", true, function () { $(confirmationBox).hide(); });
+        root.append(confirmationBox);
+        $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
+    }
+
+
     /**Delete an artwork
      * @method deleteArtwork
      * @param {Object} artwork      artwork to delete
@@ -7294,19 +7339,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function deleteArtwork(artworks) {
         guidsToBeDeleted = guidsToBeDeleted.concat(artworks);
         var numDelete = artworks.length;
+        var confirmText = "Are you sure you want to delete the " + numDelete + " selected artworks?";
+        var confirmButtonText = "Delete";
+        if (numDelete === 0) {
+            confirmText = "You have not selected any artworks to delete";
+            confirmButtonText = "no confirm";
+        }
+        var toLoad;
+        var onlyMiddle = false;
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
-            // actually delete the artwork
-            TAG.Worktop.Database.batchDeleteDoq(artworks, function () {          
-                console.log("complete")
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
-                         return;
-                 }
-                loadArtView(currDoq,undefined,true);
-            }, authError, authError);
-        }, "Are you sure you want to delete the " + numDelete + " selected artworks?", "Delete", true, function () {
+            if (numDelete > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
+                // actually delete the artwork
+                TAG.Worktop.Database.batchDeleteDoq(artworks, function () {
+                    console.log("complete")
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
+                        return;
+                    }
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    loadArtView(toLoad, undefined, onlyMiddle);
+                }, authError, authError);
+            }
+        },confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             //remove guids from list to be greyed out if someone hits cancel
             var remIndex;
@@ -8070,30 +8129,25 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} label    label to select
      * @param {Boolean} expand  if label expands when selected 
      * @param {string} selector selector of labels to reset
-     * @param {Boolean} singleSelect only select one label
      * @return {Object} label   selected label   
      */
-    function selectLabel(label, expand, selector, singleSelect) {
+    function selectLabel(label, expand, selector) {
         if (selector) {
             resetLabels(selector)
         }
-        if (singleSelect) {
-            //uncheck all the middle check boxes and remove them from list
-            $('.middleCheck').prop('checked', false);
-            multiSelected = [];
-        }
+
         label.css('background', HIGHLIGHT);
         label.unbind('mousedown').unbind('mouseleave').unbind('mouseup');
         var labelId = label.attr('id');
         var text = label.text();
         var checkBox = $("#checkbox" + labelId);
-        //check that it is a check-able label (not a nav label)
-        if (toBeUnselected && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
+        if (!(toBeUnselected===null) && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
             toBeUnselected.prop('checked', false);
             multiSelected.splice(multiSelected.indexOf(labelId), 1);
             console.log(multiSelected);
             toBeUnselected = null;
         }
+        //check that it is a check-able label (not a nav label)
         if (checkBox.prop("checked") !== undefined){
             checkBox.prop('checked', true);
             if (!inAssociatedView) {
