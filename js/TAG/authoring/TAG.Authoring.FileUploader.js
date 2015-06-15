@@ -572,6 +572,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * Appends overlay to root
      * (no idea if this will actually disable interactions too as is)
      */
+     
     function addOverlay(elmt) {
         if (useOverlay == true) { //do not append other progress things
             console.log("overlay should be visible here")

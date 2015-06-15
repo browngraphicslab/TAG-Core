@@ -6191,8 +6191,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             leftButton = editArt;
             editArt.attr("id", "artworkEditorButton");
 
-            var deleteArt = createButton('Delete',
-                function () { deleteArtwork(multiSelected); },
+            var deleteArt = createButton('Delete', //Delete artwork for web app
+                function () { deleteArtworkSingle(artwork); },
                 {
                     'margin-left': '2%',
                     'margin-top': '1%',
@@ -7304,6 +7304,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }, 1);
     }
+
+
+    //FOR THE WEB APP ONLY
+    function deleteArtworkSingle(artwork) {
+
+        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
+            prepareNextView(false);
+            clearRight();
+            prepareViewer(true);
+
+            // actually delete the exhibition
+            TAG.Worktop.Database.deleteDoq(artwork.Identifier, function () {
+               
+                loadArtView();
+            }, function () {
+                    console.log("noauth error");
+                }, function () {
+                    console.log("conflict error");
+                }, function () {
+                    console.log("general error");
+            });
+        }, "Are you sure you want to delete " + artwork.Name + " ?", "Delete", true, function () { $(confirmationBox).hide(); });
+        root.append(confirmationBox);
+        $(confirmationBox).show();
+        TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
+    }
+
 
     /**Delete an artwork
      * @method deleteArtwork
