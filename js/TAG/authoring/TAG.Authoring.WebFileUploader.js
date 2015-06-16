@@ -22,6 +22,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     var uploadOverlayText;
     var progressBarButton;
     var progressBar;
+    var uploadErrors = [];
     var dataReaderLoads = [];       //To pass into the finishedCallback, parsed as urls (paths to be precise)
     var maxDuration = Infinity;
     var minDuration = -1;
@@ -193,12 +194,16 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         resumableUploader.on('complete', function(file) {   //Entire upload operation is complete
             //console.log("COMPLETE");
             finishedUpload();
-            enableButton();
+            
         });
 
         resumableUploader.on('fileError', function(file, message){
             console.log("Error: " + message)
             popup.setError(file.fileName)
+
+            uploadErrors.push(file); //keep track of ALL files that had errors - will alert user at end of batch upload
+            console.log("upload errors length = " + uploadErrors.length);
+
         })
 
         resumableUploader.on('fileProgress', function(resumableFile) {
@@ -403,7 +408,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         uploadingOverlay.remove();
         uploadOverlayText.remove();
         progressBar.remove();
-        progressText.remove();
+        //progressText.remove();
         progressBarButton.remove();
     }
 
@@ -414,12 +419,21 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
      
         addLocalCallback(globalFiles, localURLs, globalUriStrings)();
         finishedCallback(dataReaderLoads);
+        var knownErrors = new HashTable();
 
         var msg = "", str, mins, secs;
         var longFilesExist = false;
         var i;
         if (largeFiles !== "") {
             msg = "The following file(s) exceeded the 50MB file limit:" + largeFiles + "<br />";
+            for(var i =0; i<largeFiles.length; i++){
+                if(!knownErrors._hasItem(largeFiles[i])){
+                    knownErrors.insert(largeFiles[i], largeFiles[i]);  
+                }
+                
+            }
+
+
         }
         if (longFiles.length) {
             longFilesExist = true;
@@ -434,6 +448,9 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             str = "The following file(s) exceeded the " + mins + ":" + secs + " duration limit:<br />";
             for (i = 0; i < longFiles.length; i++) {
                 str = str + longFiles[i].name + "<br />";
+                if(!knownErrors._hasItem(longFiles[i])){
+                    knownErrors.insert(longFiles[i],longFiles[i]);
+                }
             }
             msg = msg + str;
         }
@@ -452,14 +469,37 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             str = "The following file(s) are shorter than the " + mins + ":" + secs + " lower duration limit:<br />";
             for (i = 0; i < shortFiles.length; i++) {
                 str = str + shortFiles[i].name + "<br />";
+                if(!knownErrors._hasItem(shortFiles[i])){
+                    knownErrors.insert(shortFiles[i], shortFiles[i]);
+                }
             }
             msg = msg + str;
         }
+
+        var unknownErrors = [];
+        for(i = 0; i<uploadErrors.length; i++){
+            if(knownErrors._hasItem(uploadErrors[i]) != true){
+                    unknownErrors.push(uploadErrors[i].name);
+            }
+        }
+
+        if(unknownErrors.length >0){
+            //removeOverlay();
+            msg = "An unknown error occurred when uploading the following files: " + unknownErrors + "<br />";
+            
+        }
+
+
+
+        console.log("msg = " + msg);
         if (msg) {
-            var fileUploadError = uploadErrorAlert(null, msg, null, false, true);
+            console.log("error uploading - fix UI");
+            var fileUploadError = uploadErrorAlert(removeOverlay, msg, null, false, true);
+
             $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
             $('body').append(fileUploadError);
-            $(fileUploadError).fadeIn(500);        
+            $(fileUploadError).fadeIn(500);   
+            //removeOverlay();     
         }
     }
 
