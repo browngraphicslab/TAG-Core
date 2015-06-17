@@ -5096,7 +5096,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (durations[j]) {
                         options.Duration = durations[j];
                     }
-                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function(){
+                        if(done>=total){ //unknown error alert should come up ONCE
+                            error(incrDone)
+                        }
+                    });
                     if (contentTypes[j] === "Video") {
                         var source = newDoq.Metadata.Source;
                         var newFileName = source.slice(8, source.length);
@@ -6757,7 +6761,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     toScroll = newDoq;                          //Alphabetical order
                     alphaName = names[j];
                 }
-                TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function(){
+                        if(done>=total){ //unknown error alert should come up ONCE
+                            error(incrDone);
+                        }
+                    });
                 var source = newDoq.Metadata.Source;
                 var newFileName = source.slice(8, source.length);
                 var index = newFileName.lastIndexOf(".");
