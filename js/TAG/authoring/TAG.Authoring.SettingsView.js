@@ -7903,9 +7903,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     .css({
                         'width': '7%',
                         'height': '100%',
-                        'vertical-align': 'middle',
-                        'display': 'inline-block',
-                        'margin-left': '2%'
+                        'display': 'inline-block'
                     })
 
                     var checkboxColor = 'rgb(230, 235, 235)';
@@ -8183,7 +8181,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @return {Object} label   selected label   
      */
     function selectLabel(label, expand, selector) {
-        //if (selector) {
+        if (selector) {
             resetLabels(selector)
         }
 
