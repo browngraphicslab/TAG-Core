@@ -29,7 +29,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     var size;
     var globalUriStrings = [], globalFiles = [], globalUpload = null;
     var globalFilesArray = [];
-    var largeFiles = "";
+    var largeFiles = [];
     var longFiles = [];
     var shortFiles = [];
     var fileUploadError;
@@ -49,7 +49,6 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     //Basic HTML initialization
     (function init() {
         uploadOverlayText = $(document.createElement('label'));
-            //progressIcon = $(document.createElement('img')),
         progressBar = $(document.createElement('div')).addClass('progressBarUploads');
 
         progressBarButton = $(document.createElement('button'))
@@ -67,12 +66,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         uploadOverlayText.css({ 'color': 'white', 'height': '5%', 'top': '35%', 'left': '35%', 'position': 'absolute', 'font-size': '150%' });
         uploadOverlayText.text('Uploading file(s). Please wait.');
-        /*
-        progressIcon.css({
-          //  'position': 'relative', 'top': '50%', 'left': '14%'
-        });
-        progressIcon.attr('src', 'images/icons/progress-circle.gif');
-        */
+
         progressBar.css({
             'position': 'relative', 'top': '20%', 'left': '5%', 'border-style': 'solid', 'border-color': 'white', 'width': '10%', 'height': '20%', "display":"inline-block",
         });
@@ -184,7 +178,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             //Gets back the relative path of the uploaded file on the server
             globalFiles.push(resumableFile.file);
             dataReaderLoads.push($.trim(message));
-            console.log("fileSuccess! The file added was " + resumableFile.file.name);
+            console.log("fileSuccess! The file that was successful was " + resumableFile.file.name);
             addLocalCallback([resumableFile.file], [localURL], [uriString])();            
             filesCompleted++;
             successfulUploads = true;
@@ -192,7 +186,6 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         });
         resumableUploader.on('complete', function(file) {   //Entire upload operation is complete
-            //console.log("COMPLETE");
             finishedUpload();
             
         });
@@ -208,17 +201,16 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         resumableUploader.on('fileProgress', function(resumableFile) {
             popup.setProgress(resumableFile.fileName, resumableFile._prevProgress)
-            disableButton();
-            //disabled import button
+            disableButton(); //disabled import buttons
             var percentComplete = resumableUploader.progress();
             innerProgressBar.width(percentComplete * 90 + "%"); // * 90 or * 100?
         });
 
         resumableUploader.on('fileAdded', function(resumableFile){
+            console.log("the file added was " + resumableFile.file.name);
             addOverlay();
-            //if(progBarLength <=0){
             disableButton();
-            //}
+
             popup.createProgressElement(resumableFile.fileName)
 
             filesAdded++;
@@ -283,7 +275,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             } else {    //Size > maxSize
                 resumableUploader.removeFile(resumableFile);    //Remove the file from the upload operation
                 console.log("Too big!");
-                largeFiles += ("<br />" + resumableFile.file.name);
+                largeFiles.push(resumableFile.file);
                 filesCompleted++;
                 checkCompleted();
                
@@ -424,14 +416,16 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         var msg = "", str, mins, secs;
         var longFilesExist = false;
         var i;
-        if (largeFiles !== "") {
-            msg = "The following file(s) exceeded the 50MB file limit:" + largeFiles + "<br />";
+        if (largeFiles.length > 0) {
+            msg = "The following file(s) exceeded the 50MB file limit: <br />";
             for(var i =0; i<largeFiles.length; i++){
+                str = str + largeFiles[i].name + "<br />";
                 if(!knownErrors._hasItem(largeFiles[i])){
                     knownErrors.insert(largeFiles[i], largeFiles[i]);  
                 }
                 
             }
+            msg = msg+str;
 
 
         }
@@ -477,29 +471,41 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         }
 
         var unknownErrors = [];
-        for(i = 0; i<uploadErrors.length; i++){
+        for(i = 0; i<uploadErrors.length; i++){ //Filter out known errors from unknown errors
             if(knownErrors._hasItem(uploadErrors[i]) != true){
-                    unknownErrors.push(uploadErrors[i].name);
+                    unknownErrors.push(uploadErrors[i]);
             }
         }
 
+
+        //CHANGE THE TYPES OF ALL THE ERROR ARRAYS SO YOU CAN ACTUALLY CHECK IF THERE ARE DUPLICATES- UGH WHYYYY WHO DID THIS >:( 
         if(unknownErrors.length >0){
             //removeOverlay();
-            msg = "An unknown error occurred when uploading the following files: " + unknownErrors + "<br />";
-            
+            console.log("unknown errors = " + unknownErrors);
+            str = "An unknown error occurred when uploading the following files: <br />";
+            for(i=0; i<unknownErrors.length; i++){
+                str = str + unknownErrors[i].file.name + "<br />";
+            }
+            msg = msg + str;    
         }
 
 
 
-        console.log("msg = " + msg);
+        console.log("filesCompleted = " + filesCompleted + " and uploadErrors = " + uploadErrors.length);
+
+
         if (msg) {
-            console.log("error uploading - fix UI");
-            var fileUploadError = uploadErrorAlert(removeOverlay, msg, null, false, true);
+        
+            var fileUploadError = uploadErrorAlert(function(){
+                if(filesAdded == uploadErrors.length){ //all files failed
+                    removeOverlay();
+                }
+            }, msg, null, false, true);
 
             $(fileUploadError).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
             $('body').append(fileUploadError);
             $(fileUploadError).fadeIn(500);   
-            //removeOverlay();     
+                
         }
     }
 
@@ -545,16 +551,19 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         var messageLabel = document.createElement('div');
         $(messageLabel).css({
             'color': 'white',
-            'width': '90%',
-            'height': '57.5%',
-            'left': '5%',
+            'width': '80%',
+            'height': '50%',
+            'left': '10%',
             'top': '12.5%',
-            'font-size': '1.25em',
+            'font-size': '0.8em',
             'position': 'relative',
             'text-align': 'center',
             'word-wrap': 'break-word',
+            'font-family': 'Segoe UI',
             'overflow-y': 'auto',
         });
+
+
         if (useHTML) {
             $(messageLabel).html(message);
         } else {
@@ -576,10 +585,15 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             'border': '1px solid white',
             'width': 'auto',
             'position': 'relative',
-            'float': "right",
-            'margin-right': '3%',
-            'margin-top': '0%',
+            'float': "left",
+            'margin-left': '12%',
+            'color': 'white',
+            'border-radius': '3.5px',
+            'margin-top': '1%',
+
+            'background-color': 'transparent',
         });
+
         buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
         $(confirmButton).text(buttonText);
         confirmButton.onclick = function () {
