@@ -4751,42 +4751,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 console.log(mediaMULTIPLE.length + " things to delete.")
                 var deleteCounter = 0;
-
-                //only way to get it to reload after all of them are done
-                var DEL = function (j, media) {
-                    // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
-                    TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
-                        // success handler
-                        TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
-                            deleteCounter += 1
-                            console.log("deleted item: " + j)
-                            if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
-                                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                                    toLoad = currDoq;
-                                    onlyMiddle = true;
-                                }
-                                loadAssocMediaView(toLoad, undefined, onlyMiddle);
-                            }
-                        }, function () {
-                            console.log("noauth error");
-                        }, function () {
-                            console.log("conflict error");
-                        }, function () {
-                            console.log("general error");
-                        });
-                    }, function () {
-                        // unauth handler
-                    }, function () {
-                        // conflict handler
-                    }, function () {
-                        // error handler
-                    });
-                };
-
-                for (var i = 0; i < mediaMULTIPLE.length; i++) {
-                    var media = mediaMULTIPLE[i]
-                    DEL(i, media)
-                }
+                chunkDeleteArtworks(mediaGuids.slice(0), function () {
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    console.log("done chunk deleting");
+                    loadAssocMediaView(toLoad, undefined, onlyMiddle);
+                }, function () {
+                    console.log("noauth error");
+                }, function () {
+                    console.log("conflict error");
+                }, function () {
+                    console.log("general error");
+                });
             }
         }, confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
@@ -5560,7 +5538,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             // Make an async call to get artworks and then display
             TAG.Worktop.Database.getArtworks(function (result) {
                 for (var i = 0; i < result.length; i++) {
-                    console.log("artwork i: ");
+                    console.log("artwork "+i+":");
                     console.log(result[i]);
                 }
                 if (cancel) return;
@@ -7487,9 +7465,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 TAG.Worktop.Database.batchDeleteDoq(
                     chunks.shift(),
                     function () { console.log("success of chunk"); nextChunk() },
-                    function () { console.log("unauth error"); nextChunk(); unauth() },
-                    function () { console.log("conflict error"); nextChunk(); conflict() },
-                    function () { console.log("general error in batch doq delete"); nextChunk(); error() });
+                    function () { console.log("unauth error"); nextChunk(); if (unauth) { unauth() } },
+                    function () { console.log("conflict error"); nextChunk(); if (conflict) { conflict() } },
+                    function () { console.log("general error in batch doq delete"); nextChunk(); if (error) { error() } });
             }
             else {
                 console.log("chunking delete finished, calling callback...");
