@@ -3193,7 +3193,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prepareViewer(true);
 
                 // actually delete the exhibition
-                TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
+                chunkDelete(exhibitions, function () {
 
                     console.log("collection deletion done");
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
@@ -3751,7 +3751,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prepareViewer(true);
 
                 // actually delete the tour
-                TAG.Worktop.Database.batchDeleteDoq(tours, function () {
+                chunkDelete(tours, function () {
                     console.log("done deleting tours");
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                         return;
@@ -4751,7 +4751,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 console.log(mediaMULTIPLE.length + " things to delete.")
                 var deleteCounter = 0;
-                chunkDeleteArtworks(mediaGuids.slice(0), function () {
+                chunkDelete(mediaGuids.slice(0), function () {
                     if (guidsToBeDeleted.indexOf(currDoq) < 0) {
                         toLoad = currDoq;
                         onlyMiddle = true;
@@ -7400,7 +7400,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 clearRight();
                 prepareViewer(true);
                 // actually delete the artwork
-                chunkDeleteArtworks(artworks, function () {
+                chunkDelete(artworks, function () {
                     console.log("complete")
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
                         return;
@@ -7441,7 +7441,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
     */
-    function chunkDeleteArtworks(guids, success, unauth, conflict, error) {
+    function chunkDelete(guids, success, unauth, conflict, error) {
 
         var chunkSize = 5;//change to affect the size of the chunk
         var chunks = [];
