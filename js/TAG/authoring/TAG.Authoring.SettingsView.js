@@ -7903,9 +7903,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     .css({
                         'width': '7%',
                         'height': '100%',
-                        'vertical-align': 'middle',
-                        'display': 'inline-block',
-                        'margin-left': '2%'
+                        'display': 'inline-block'
                     })
 
                     var checkboxColor = 'rgb(230, 235, 235)';
@@ -7918,6 +7916,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     .attr('checked', false)
                                     .on("click", function (evt) {
                                         var currCheck = $('#' + this.id);
+                                        if (toBeUnselected && (toBeUnselected.attr('id') === this.id)) {
+                                            toBeUnselected = null;
+                                        }
                                         if (currCheck.prop("checked")) {
                                             if (!inAssociatedView) {
                                                 multiSelected.push(id);
@@ -8191,7 +8192,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var checkBox = $("#checkbox" + labelId);
         if (!(toBeUnselected===null) && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
             toBeUnselected.prop('checked', false);
-            multiSelected.splice(multiSelected.indexOf(labelId), 1);
+            var justGuid = toBeUnselected.attr('id').replace("checkbox","");
+            multiSelected.splice(multiSelected.indexOf(justGuid), 1);
             console.log(multiSelected);
             toBeUnselected = null;
         }
