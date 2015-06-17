@@ -34,6 +34,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     var uploadingOverlay = $(document.createElement('div')),
         innerProgressBar = $(document.createElement('div')), // HTML upload overlay
         progressBar,
+        uploadOverlayText,
         progressText,
         progressBarButton;
     var filesFinished = 0;
@@ -61,8 +62,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
     // Basic HTML initialization
     (function init() {
-        var uploadOverlayText = $(document.createElement('label')),
-            progressIcon = $(document.createElement('img'));
+        uploadOverlayText = $(document.createElement('label'));
+        var progressIcon = $(document.createElement('img'));
 
 
         progressText = $(document.createElement('div'))
@@ -593,11 +594,13 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * Totally remove the overlay from the DOM / destroy
      */
     function removeOverlay() {
-
-        //uploadingOverlay.remove();
-        //enableButton();
-
-        //progressText.remove();
+        console.log("should remove progress stuff now");
+        enableButton();
+        uploadingOverlay.remove();
+        uploadOverlayText.remove();
+        progressBar.remove();
+        progressText.remove();
+        progressBarButton.remove();
     }
 
     /**
@@ -698,7 +701,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         console.log("FINISHED UPLOAD CALLED");
         filesFinished += 1;
         if (filesFinished === numFiles) {
-            removeOverlay();
+            //removeOverlay();
             finishedCallback(dataReaderLoads);
             var msg = "", str, mins, secs;
             var longFilesExist = false;

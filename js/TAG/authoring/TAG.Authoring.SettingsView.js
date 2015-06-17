@@ -65,10 +65,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadingOverlay = $(document.createElement('div')),
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
-        guidsToBeDeleted = guidsToBeDeleted ||[],
+        guidsToBeDeleted = guidsToBeDeleted || [],
         // = root.find('#importButton'),
 
-
+        keywordSets,
 
         primaryColorPicker,
         secondaryColorPicker,
@@ -1022,6 +1022,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, false);
     }
 
+    /** Shows a popup confirmation for deleting a set of keywords.
+     * @param set {Object}      The set of keywords to delete.
+     * @param deleteFunction {Function}     Function to call on delete; this will likely update UI.
+     */
+    function deleteKeywordSet(set, deleteFunction) {
+        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
+            // TODO-KEYWORDS actually delete the set on the server side.
+            deleteFunction(set);
+        }, "Are you sure you want to delete this keyword set?", "Delete", true, function () { $(confirmationBox).hide(); });
+        root.append(confirmationBox);
+        $(confirmationBox).show();
+    }
+
+    /** Shows a popup confirmation for deleting a set of keywords.
+     * @param set {Object}      The set of keywords to delete from.
+     * @param keyword {Object}      The keywords to delete.
+     * @param deleteFunction {Function}     Function to call on delete; this will likely update UI.
+     */
+    function deleteKeyword(set, keyword, deleteFunction) {
+        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
+            // TODO-KEYWORDS actually delete the set on the server side.
+            deleteFunction(set, keyword);
+        }, "Are you sure you want to delete this keyword?", "Delete", true, function () { $(confirmationBox).hide(); });
+        root.append(confirmationBox);
+        $(confirmationBox).show();
+    }
+
     /**Sets up the right side of the UI for the splash screen
      * including the viewer, buttons, and settings container.
      * @method loadSplashScreen
@@ -1062,11 +1089,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var fontFamily = TAG.Worktop.Database.getFontFamily();
         var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration() / 60000;
 
-        // TODO:
+        // TODO-KEYWORDS: get these from the server!
         //var keywordSets = TAG.Worktop.Database.getKeywordSets();
-        var keywordSets = [{ guid: "1", csvUrl: "someurl", name: "set1", keywords: ["set1_obj1", "set1_obj2", "set1_obj3"] },
-                           { guid: "2", csvUrl: "someurl", name: "set2", keywords: ["set2_obj1", "set2_obj2", "set2_obj3"] }];
-        // TODO
+        keywordSets = [{ guid: "1", csvUrl: "someurl", name: "set1", keywords: ["set1_obj1", "set1_obj2", "set1_obj3"] },
+                       { guid: "2", csvUrl: "someurl", name: "set2", keywords: ["set2_obj1", "set2_obj2", "set2_obj3"] }],
 
         prevMiddleBarSelection = {
             type_representation: "Splash Screen",
@@ -1249,9 +1275,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         // Delete function for keyword set inputs.
+        var importKeywordContainer = $(document.createElement('div'));
         var deleteFunction = function (set) {
             // Get index of set being deleted.
-            var deleteIndex = keywordSets.indexOf(set)
+            var deleteIndex = keywordSets.indexOf(set);
 
             // Remove the DOM element containing inputs for the set.
             settingsContainer[0].removeChild(keywordSetsSettings[deleteIndex][0]);
@@ -1262,36 +1289,37 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             keywordSetsSettings.splice(deleteIndex, 1);
 
             // Enable import button an allow saving.
-            importKeywordSetInput.prop("disabled", false);
+            importKeywordContainer.css({ 'display': 'block' }); // Show the import keyword set container
             changesMade = true;
-            saveButton.prop("disabled", false);
+            saveButton.attr("disabled", false);
             saveButton.css("opacity", 1);
         };
 
-        //Commenting out keyword stuff
+        var editFunction = function (set) {
+
+        };
 
         // Create the inputs for keyword stuff.
         // "AddInput" is a button to upload a csv file containing a keyword set.
-        /**
         var count = keywordSets.length;
-        var importKeywordSetInput = createButton('Import Keyword Set', function () {
-            //TODO: Actually upload and get DOQ object!
+        var importKeywordSetInput = createButton('Add Keyword Set', function () {
+            // TODO-KEYWORDS: Actually upload and get DOQ object!
             var csvUrl;
-            uploadFile(TAG.Authoring.FileUploadTypes.CSV, function (urls) {
-                var csvUrl = urls[0];
-            }, false, [".csv"]);
+            //uploadFile(TAG.Authoring.FileUploadTypes.CSV, function (urls) {
+            //    var csvUrl = urls[0];
+            //}, false, [".csv"]);
+            // TODO - handle success vs failure on server upload
 
             // Create a new set.
-            var newSet = { name: "set".concat(count.toString()), keywords: ["set_obj1", "set_obj2", "set_obj3"] };
-            count++;
+            var newSet = { name: "untitled set", keywords: [] };
 
             // Add new set list.
             keywordSets.push(newSet);
             if (keywordSets.length > 2) {
-                importKeywordSetInput.prop("disabled", true);
+                importKeywordContainer.css({ 'display': 'none' });
             }
 
-            var newInput = createKeywordSetInputs(newSet, deleteFunction);
+            var newInput = createKeywordSetInputs(newSet, deleteFunction, editFunction);
             newInput.nameInput.on('keyup', function (event) {
                 if (event.which === 13) {
                     event.preventDefault();
@@ -1312,23 +1340,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             keywordSetsInputs.push(newInput);
             var newSetting = createEditKeywordsSetting(newInput)
             keywordSetsSettings.push(newSetting);
-            settingsContainer.append(newSetting);
+            newSetting.insertBefore(importKeywordContainer);
 
             // Allow saving.
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
         });
-        if (keywordSets.length > 2) {
-            importKeywordSetInput.prop("disabled", true);
-        }
+
         // "EditInput" is an array of composites, one for each existing uploaded keyword set. Each is composed as follows:
         //      composite.name      --> text field allowing editing of set name.
         //      composite.values    --> dropdown allowing user to view keywords in set, defaulting to value "View keywords"
         //      composite.delete    --> button to delete this set.
         var keywordSetsInputs = [];
         keywordSets.forEach(function (set) {
-            var inputs = createKeywordSetInputs(set, deleteFunction);
+            var inputs = createKeywordSetInputs(set, deleteFunction, editFunction);
             inputs.nameInput.on('keyup', function (event) {
                 if (event.which === 13) {
                     event.preventDefault();
@@ -1348,7 +1374,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             keywordSetsInputs.push(inputs);
         });
-        **/
 
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
@@ -1405,15 +1430,40 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
         var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
-        /**
-        var importKeywordSetSetting = createImportKeywordsSetting(importKeywordSetInput);
+        // Kiosk locked setting.
+        var kioskIsLocked = TAG.Worktop.Database.getKioskLocked(); //need server request
+        var unlockedKioskInput = createButton('Unlocked', function () {
+            kioskIsLocked = false;
+            unlockedKioskInput.css('background-color', 'white');
+            lockedKioskInput.css('background-color', '');
+        }, {
+            'min-height': '0px',
+            'margin-right': '4%',
+            'width': '48%',
+        });
+        var lockedKioskInput = createButton('Locked', function () {
+            kioskIsLocked = true;
+            lockedKioskInput.css('background-color', 'white');
+            unlockedKioskInput.css('background-color', '');
+        }, {
+            'min-height': '0px',
+            'width': '48%',
+        });
+        if (kioskIsLocked == "true") {
+            lockedKioskInput.css('background-color', 'white');
+        } else {
+            unlockedKioskInput.css('background-color', 'white');
+        }
+        var kioskOptionsDiv = $(document.createElement('div'));
+        kioskOptionsDiv.append(unlockedKioskInput).append(lockedKioskInput);
+        var lockKioskSetting = createSetting("Lock Kiosk Mode", kioskOptionsDiv);
+
+        // TODO-KEYWORDS
+        var importKeywordSetSetting = createImportKeywordsSetting(importKeywordContainer, importKeywordSetInput);
         var keywordSetsSettings = [];
         keywordSetsInputs.forEach(function (input) {
             keywordSetsSettings.push(createEditKeywordsSetting(input));
         });
-        **/
-
-        //var keywordsSettings = createKeywordsSettings();
 
         settingsContainer.append(bgImage);
         /*settingsContainer.append(overlayColorSetting);
@@ -1429,12 +1479,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         settingsContainer.append(secondaryFontColorSetting);
         //settingsContainer.append(fontFamilySetting);
         settingsContainer.append(idleTimerDurationSetting);
-        //settingsContainer.append(importKeywordSetSetting);
-        /**
+        settingsContainer.append(lockKioskSetting);
         keywordSetsSettings.forEach(function (setting) {
             settingsContainer.append(setting);
         });
-        **/
+        settingsContainer.append(importKeywordSetSetting); // TODO-KEYWORDS
+        
 		//automatically save General Settings - Customization
         onChangeUpdateText(idleTimerDurationInput, null, 3);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = idleTimerDurationInput.val();
@@ -1468,31 +1518,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //    });
         //};
 
-        var kioskIsLocked = TAG.Worktop.Database.getKioskLocked(); //need server request
-        var unlockedKioskInput = createButton('Unlocked', function () {
-                kioskIsLocked = false;
-                unlockedKioskInput.css('background-color', 'white');
-                lockedKioskInput.css('background-color', '');
-            }, {
-                'min-height': '0px',
-                'margin-right': '4%',
-                'width': '48%',
-            });
-        var lockedKioskInput = createButton('Locked', function () {
-                kioskIsLocked = true;
-                lockedKioskInput.css('background-color', 'white');
-                unlockedKioskInput.css('background-color', '');
-            }, {
-                'min-height': '0px',
-                'width': '48%',
-            });
-        if (kioskIsLocked == "true") {
-            lockedKioskInput.css('background-color', 'white');
-        } else {
-            unlockedKioskInput.css('background-color', 'white');
-        }
-        var kioskOptionsDiv = $(document.createElement('div'));
-        kioskOptionsDiv.append(unlockedKioskInput).append(lockedKioskInput);
+        
 
         //to-do create save function for kiosk locking
 
@@ -1508,8 +1534,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.css("opacity", 1);
         });
 
-        var lockKioskSetting = createSetting("Lock Kiosk Mode", kioskOptionsDiv);
-        settingsContainer.append(lockKioskSetting);
+        
 
         // Save buttton
 
@@ -1540,7 +1565,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 //fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput,
-                //keywordSetsInputs: keywordSetsInputs
+                //keywordSetsInputs: keywordSetsInputs // TODO-KEYWORDS
             });
         }, {
             'margin-right': '3%',
@@ -1671,7 +1696,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
 
-        /**
+        // TODO-KEYWORDS
         var keywordSets = [];
         inputs.keywordSetsInputs.forEach(function (inputs) {
             keywordSets.push({
@@ -1680,7 +1705,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 name:   inputs.nameInput.val()
             });
         });
-        **/
         
         //inputs.idleTimerDurationInput.val(idleTimerDuration);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(idleTimerDuration);
@@ -3156,24 +3180,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(exhibitions);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numEx + " selected collections?";
+        var confirmButtonText = "Delete";
+        if (numEx === 0) {
+            confirmText = "You have not selected any collections to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numEx > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            // actually delete the exhibition
-            TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
-                console.log("collection deletion done");
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
-                    return;
-                }
-                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                    toLoad = currDoq;
-                    onlyMiddle = true;
-                }
-                loadExhibitionsView(toLoad, undefined, onlyMiddle);
-            }, authError, authError);
-        }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function () {
+                // actually delete the exhibition
+                TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
+
+                    console.log("collection deletion done");
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
+                        return;
+                    }
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    loadExhibitionsView(toLoad, undefined, onlyMiddle);
+                }, authError, authError);
+            }
+        },confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             var remIndex;
             for (var x = 0; x < numEx; x++) {
@@ -3705,32 +3738,40 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(tours);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numTours + " selected tours?";
+        var confirmButtonText = "Delete";
+        if (numTours === 0) {
+            confirmText = "You have not selected any tours to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numTours > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            // actually delete the tour
-            TAG.Worktop.Database.batchDeleteDoq(tours, function () {
-                console.log("done deleting tours");
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
-                    return;
-                }
-                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                    toLoad = currDoq;
-                    onlyMiddle = true;
-                }
-                loadTourView(toLoad, undefined, onlyMiddle);
-            }, authError, authError);
-        }, "Are you sure you want to delete the " +numTours+ " selected tours?", "Delete", true, function () { 
-            $(confirmationBox).hide();
-            var remIndex;
-            for (var x=0;x<numTours;x++){
-                remIndex = guidsToBeDeleted.indexOf(tours[x]);
-                if (remIndex >= 0) {
-                    guidsToBeDeleted.splice(remIndex, 1);
-                }
+                // actually delete the tour
+                TAG.Worktop.Database.batchDeleteDoq(tours, function () {
+                    console.log("done deleting tours");
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
+                        return;
+                    }
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    loadTourView(toLoad, undefined, onlyMiddle);
+                }, authError, authError);
             }
+            }, confirmText, confirmButtonText, true, function () { 
+                $(confirmationBox).hide();
+                var remIndex;
+                for (var x=0;x<numTours;x++){
+                    remIndex = guidsToBeDeleted.indexOf(tours[x]);
+                    if (remIndex >= 0) {
+                        guidsToBeDeleted.splice(remIndex, 1);
+                    }
+                }
         }, null, null, null, null, null, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
@@ -4696,70 +4737,58 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(mediaGuids);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numMed + " selected associated media?";
+        var confirmButtonText = "Delete";
+        if (numMed === 0) {
+            confirmText = "You have not selected any associated media to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numMed > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            console.log(mediaMULTIPLE.length + " things to delete.")
-            var deleteCounter = 0;
+                console.log(mediaMULTIPLE.length + " things to delete.")
+                var deleteCounter = 0;
 
-            //only way to get it to reload after all of them are done
-            
-            var DEL = function (j, media) {
-                // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
-                TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
-                    // success handler
-                    TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
-                        deleteCounter += 1
-                        console.log("deleted item: " + j)
-                        if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
-                            if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                                toLoad = currDoq;
-                                onlyMiddle = true;
+                //only way to get it to reload after all of them are done
+                var DEL = function (j, media) {
+                    // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
+                    TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
+                        // success handler
+                        TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
+                            deleteCounter += 1
+                            console.log("deleted item: " + j)
+                            if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
+                                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                                    toLoad = currDoq;
+                                    onlyMiddle = true;
+                                }
+                                loadAssocMediaView(toLoad, undefined, onlyMiddle);
                             }
-                            loadAssocMediaView(toLoad, undefined, onlyMiddle);
-                        }
+                        }, function () {
+                            console.log("noauth error");
+                        }, function () {
+                            console.log("conflict error");
+                        }, function () {
+                            console.log("general error");
+                        });
                     }, function () {
-                        console.log("noauth error");
+                        // unauth handler
                     }, function () {
-                        console.log("conflict error");
+                        // conflict handler
                     }, function () {
-                        console.log("general error");
+                        // error handler
                     });
-                }, function () {
-                    // unauth handler
-                }, function () {
-                    // conflict handler
-                }, function () {
-                    // error handler
-                });
-            };
-            chunkDeleteArtworks(mediaGuids, function () {
-                deleteCounter += 1
-                //console.log("deleted item: " + j)
-                if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
-                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                        toLoad = currDoq;
-                        onlyMiddle = true;
-                    }
-                    console.log("should be reloading the associations page");
-                    loadAssocMediaView(toLoad, undefined, onlyMiddle);
+                };
+
+                for (var i = 0; i < mediaMULTIPLE.length; i++) {
+                    var media = mediaMULTIPLE[i]
+                    DEL(i, media)
                 }
-            }, function () {
-                console.log("noauth error");
-            }, function () {
-                console.log("conflict error");
-            }, function () {
-                console.log("general error");
-            });
-            /*
-            for (var i = 0; i < mediaMULTIPLE.length; i++) {
-                var media = mediaMULTIPLE[i]
-                DEL(i, media)
             }
-            */
-        }, "Are you sure you want to delete the " + numMed + " selected associated media?", "Delete", true, function () {
+        }, confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             var remIndex;
             for (var x = 0; x < mediaGuids.length; x++) {
@@ -5076,7 +5105,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (durations[j]) {
                         options.Duration = durations[j];
                     }
-                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function(){
+                        if(done>=total){ //unknown error alert should come up ONCE
+                            error(incrDone)
+                        }
+                    });
                     if (contentTypes[j] === "Video") {
                         var source = newDoq.Metadata.Source;
                         var newFileName = source.slice(8, source.length);
@@ -6741,7 +6774,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     toScroll = newDoq;                          //Alphabetical order
                     alphaName = names[j];
                 }
-                TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function(){
+                        if(done>=total){ //unknown error alert should come up ONCE
+                            error(incrDone);
+                        }
+                    });
                 var source = newDoq.Metadata.Source;
                 var newFileName = source.slice(8, source.length);
                 var index = newFileName.lastIndexOf(".");
@@ -7935,9 +7972,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     .css({
                         'width': '7%',
                         'height': '100%',
-                        'vertical-align': 'middle',
-                        'display': 'inline-block',
-                        'margin-left': '2%'
+                        'display': 'inline-block'
                     })
 
                     var checkboxColor = 'rgb(230, 235, 235)';
@@ -7950,6 +7985,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     .attr('checked', false)
                                     .on("click", function (evt) {
                                         var currCheck = $('#' + this.id);
+                                        if (toBeUnselected && (toBeUnselected.attr('id') === this.id)) {
+                                            toBeUnselected = null;
+                                        }
                                         if (currCheck.prop("checked")) {
                                             if (!inAssociatedView) {
                                                 multiSelected.push(id);
@@ -8223,7 +8261,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var checkBox = $("#checkbox" + labelId);
         if (!(toBeUnselected===null) && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
             toBeUnselected.prop('checked', false);
-            multiSelected.splice(multiSelected.indexOf(labelId), 1);
+            var justGuid = toBeUnselected.attr('id').replace("checkbox","");
+            multiSelected.splice(multiSelected.indexOf(justGuid), 1);
             console.log(multiSelected);
             toBeUnselected = null;
         }
@@ -8344,14 +8383,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     /**Creates a setting to import a set of keywords.
      * @method createImportKeywordsSetting
+     * @param {Object} container    div to hold import setting.
      * @param {Object} input        button to upload a csv file of keywords.
      * @return container            container of setting
      */
-    function createImportKeywordsSetting(input) {
-        var container = $(document.createElement('div'));
+    function createImportKeywordsSetting(container, input) {
         container.css({
             'width': '100%',
-            'margin-bottom': '2%'
+            'margin-top': '1%'
         });
 
         input.css({
@@ -8360,14 +8399,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'box-sizing': 'border-box',
         });
 
-        var label = $(document.createElement('div'));
-        label.css({
-            'overflow': 'hidden',
-            'text-overflow': 'ellipsis',
-            'font-style': 'italic',
-            'display': 'inline-block',
-        });
-        label.text('Upload a .CSV file of your set of keywords');
+        var label = $(document.createElement('div'))
+            .attr('id', 'upload-keywords-label')
+            .text('Upload a .csv file of your keywords')
+            .css({
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis',
+                'font-style': 'italic',
+                'display': 'inline-block',
+            });
 
         var clear = $(document.createElement('div'));
         clear.css('clear', 'both');
@@ -8402,6 +8442,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         inputs.nameInput.css(kw_css);
         inputs.keywordsInput.css(kw_css);
         inputs.deleteInput.css(kw_css);
+        inputs.editInput.css(kw_css);
 
         var clear = $(document.createElement('div'));
         clear.css('clear', 'both');
@@ -8409,6 +8450,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         container.append(inputs.nameInput);
         container.append(inputs.keywordsInput);
         container.append(inputs.deleteInput);
+        container.append(inputs.editInput);
         container.append(clear);
 
         return container;
@@ -9060,12 +9102,177 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         return container;
     }
 
+    /** Creates the content for the popup to edit a keyword set.
+     * @method createKeywordSetPopup
+     * @param {Object} set          set of keywords
+     */
+    function createKeywordSetPopup(set) {
+        var mainPadding = 3;
+        var innerPadding = 2;
+        var fullLength = 100 - (2 * mainPadding);
+        var fullWidthInnerPadding = 100 - (2 * mainPadding) - (2 * innerPadding);
+
+        // Main container.
+        var setEditorContainer = $(document.createElement('div'))
+            .attr('id', 'setEditorContainer');
+
+        // Header/title container
+        var setEditorHeading = $(document.createElement('div'))
+            .attr('id', 'setEditorHeading')
+            .text(set.name)
+            .appendTo(setEditorContainer);
+
+        // View/delete keywords scrollable area.
+        var keywordListContainer = $(document.createElement('div'))
+            .attr('id', 'keywordListContainer')
+            .appendTo(setEditorContainer);
+
+        // Add in keywords.
+        set.keywords.forEach(function (keyword, keywordIndex) {
+            var keywordEditDiv = $(document.createElement('div'))
+                .addClass('keywordDeleteDiv')
+                .hover(
+                    function () { $(this).css( {'background-color': '#555'} ); },
+                    function () { $(this).css( {'background-color': '#000'} ); }
+                )
+                .appendTo(keywordListContainer);
+            
+            // Label.
+            var keywordsEditLabel = $(document.createElement('div'))
+                .addClass('keywordDeleteLabel')
+                .text(keyword)
+                .appendTo(keywordEditDiv);
+
+            // Function for deleting a keyword from a set
+            var deleteFunction = function (set, keyword) {
+                keywordEditDiv.remove();
+            };
+
+            // Delete button.
+            var keywordDeleteButton = $(document.createElement('button'))
+                .attr('type', 'button')
+                .addClass('button')
+                .addClass('keywordDeleteButton')
+                .text('Delete')
+                .css({
+                    'color': '#fff',
+                    'border-color': '#fff',
+                    'border-radius': '3.5px',
+                    'float': 'right',
+                    'margin-right': '5%'
+                })
+                .click(function() {deleteKeyword(set, keyword, deleteFunction)})
+                .appendTo(keywordEditDiv);
+        });
+
+        // Add keywords area.
+        var addKeywordContainer = $(document.createElement('div'))
+            .attr('id', 'keywordAddContainer')
+            .appendTo(setEditorContainer);
+
+        // Add keyword text input.
+        var keywordAddInput = $(document.createElement('input'))
+            .attr('id', 'keywordAddInput')
+            .bind("enterKey",function(e){
+                keywordAddButton.click();
+            })
+            .keyup(function(e){
+                if(e.keyCode == 13) {
+                    $(this).trigger("enterKey");
+                }
+                e.stopPropagation();
+            })
+            .appendTo(addKeywordContainer);
+
+        // Add button.
+        var keywordAddButton = $(document.createElement('button'))
+            .attr('type', 'button')
+            .addClass('button')
+            .attr('id', 'keywordAddButton')
+            .text('Add')
+            .css({
+                'color': '#fff',
+                'border-color': '#fff',
+                'border-radius': '3.5px',
+                'float': 'right',
+                'margin-right': '5%'
+            })
+            .click(function () {
+                var newKeywordDeleteDiv = $(document.createElement('div'))
+                    .addClass('keywordDeleteDiv')
+                        .hover(
+                        function () { $(this).css({ 'background-color': '#555' }); },
+                        function () { $(this).css({ 'background-color': '#000' }); }
+                    )
+                    .appendTo(keywordListContainer);
+
+                // Label.
+                var newKeywordsEditLabel = $(document.createElement('div'))
+                    .addClass('keywordDeleteLabel')
+                    .text(keywordAddInput.val())
+                    .appendTo(newKeywordDeleteDiv);
+
+                // Function for deleting a keyword from a set
+                var newDeleteFunction = function (set, keyword) {
+                    newKeywordDeleteDiv.remove();
+                };
+
+                // Delete button.
+                var newKeywordDeleteButton = $(document.createElement('button'))
+                    .attr('type', 'button')
+                    .addClass('button')
+                    .addClass('keywordDeleteButton')
+                    .text('Delete')
+                    .css({
+                        'color': '#fff',
+                        'border-color': '#fff',
+                        'border-radius': '3.5px',
+                        'float': 'right',
+                        'margin-right': '5%'
+                    })
+                    .click(function () { deleteKeyword(set, keywordAddInput.val(), newDeleteFunction) })
+                    .appendTo(newKeywordDeleteDiv);
+
+                keywordAddInput.val('');
+            })
+            .appendTo(addKeywordContainer);
+
+        // Close editor area.
+        var closeContainer = $(document.createElement('div'))
+            .attr('id', 'closeSetEditorContainer')
+            .appendTo(setEditorContainer);
+
+        // Add button.
+        var closeSetEditorButton = $(document.createElement('button'))
+            .attr('type', 'button')
+            .attr('id', 'closeSetEditorButton')
+            .addClass('button')
+            .text('Close')
+            .css({
+                'color': '#fff',
+                'border-color': '#fff',
+                'border-radius': '3.5px',
+                'width': (90 * .97) + '%',
+                'margin-left': '5%',
+                'margin-top': '2%'
+            })
+            .click(function () {
+                var overlay = $('#Overlay');
+                overlay.hide();
+                overlay.remove();
+            })
+            .appendTo(closeContainer);
+
+        return setEditorContainer;
+    }
+
     /**Creates the input elements for a row of "keywords settings".
      * @method createKeyworSetInputs
      * @param {Object} set                  set of keywords
      * @param {Function} deleteFunction     function to be called when the delete button is pressed
+     * @param {Function} editFunction     function to be called when the delete button is pressed
      */
-    function createKeywordSetInputs(set, deleteFunction) {
+    function createKeywordSetInputs(set, deleteFunction, editFunction) {
         var options = set.keywords;
         options.unshift('View Terms');
         var inputs = {
@@ -9073,7 +9280,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             csvUrl: set.csvUrl,
             nameInput: createTextInput(set.name, true),
             keywordsInput: createSelectInput(options),
-            deleteInput: createButton('Delete', function () { deleteFunction(set); }, false)
+            deleteInput: createButton('Delete Set', function () { deleteKeywordSet(set, deleteFunction); }, false)
+                .css('margin-top', '0.5%'),
+            editInput: createButton('Edit Set', function () {
+                var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(set), false, false);
+                root.append(popup);
+                $(popup).show();
+            }, false)
+                .css('margin-top', '0.5%')
         };
         for (var i = 1; i < inputs.keywordsInput[0].length; i++) {
             inputs.keywordsInput[0][i].setAttribute('disabled', true);
@@ -9350,8 +9564,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 
             },
             function(){
-               $(newButton).prop('disabled', false);
+                $(newButton).prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                if (inCollectionsView == true) {
+                    $(bgInput).prop('disabled', false);
+                    bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                }
+                if (inGeneralView == true) {
+                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                }
                
 
             }
@@ -9447,6 +9671,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function(){
                 $(newButton).prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                if (inCollectionsView == true) {
+                    $(bgInput).prop('disabled', false);
+                    bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                }
+                if (inGeneralView == true) {
+                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                }
+
             
                     
                 }
