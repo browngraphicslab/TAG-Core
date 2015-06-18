@@ -1059,6 +1059,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(true);
         clearRight();
 
+
         // Load the start page, the callback will add it to the viewer when its done
 		//if (generalIsLoading) {
         //    generalProgressCircle = displayLoadingSettings();
@@ -1208,6 +1209,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
+            saveButton.focus();
             saveButton.css("opacity", 1);
             return 100;
         });
@@ -1217,6 +1219,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 event.preventDefault();
                 event.stopPropagation();
                 saveButton.click();
+                saveButton.focus();
             } else {
                 changesMade = true;
                 saveButton.prop("disabled", false);
@@ -1229,12 +1232,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
+            saveButton.focus();
         });
 
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
+            saveButton.focus();
             return 100;
         });
 
@@ -1243,6 +1248,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 event.preventDefault();
                 event.stopPropagation();
                 saveButton.click();
+                saveButton.focus();
             } else {
                 changesMade = true;
                 saveButton.prop("disabled", false);
@@ -1254,6 +1260,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
+            saveButton.focus();
         });
 
 
@@ -1263,6 +1270,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
+            saveButton.focus();
         });
 
         // Create the inputs for keyword stuff.
@@ -1514,6 +1522,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-left': '.5%',
             'float': 'right'
         }, true);
+        
         TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
             tobj.element_type = "Splash Screen";
         });
@@ -1528,7 +1537,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-right': '0%',
             'margin-bottom': '3%',
         });
-
+        previewStartPageButton.focus();
         var previewCollectionsPageButton = createButton('Collections Page', function () {
                 previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
                 primaryColorPicker.hidePicker();
@@ -1857,7 +1866,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      		for (i=0;i<result.length;i++){
      			//set the preview doq to the first artwork (not video or tour)
      			if (!(result[i].Metadata.Medium === "Video")&& !(result[i].Type === "Empty")){
-     				doq = result[i];
+     			    doq = result[i];
      				break;
      			}
      		}
@@ -3122,24 +3131,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(exhibitions);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numEx + " selected collections?";
+        var confirmButtonText = "Delete";
+        if (numEx === 0) {
+            confirmText = "You have not selected any collections to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numEx > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            // actually delete the exhibition
-            TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
-                console.log("collection deletion done");
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
-                    return;
-                }
-                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                    toLoad = currDoq;
-                    onlyMiddle = true;
-                }
-                loadExhibitionsView(toLoad, undefined, onlyMiddle);
-            }, authError, authError);
-        }, "Are you sure you want to delete the " + numEx + " selected collections?", "Delete", true, function () {
+                // actually delete the exhibition
+                chunkDelete(exhibitions, function () {
+
+                    console.log("collection deletion done");
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
+                        return;
+                    }
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    loadExhibitionsView(toLoad, undefined, onlyMiddle);
+                }, authError, authError);
+            }
+        },confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             var remIndex;
             for (var x = 0; x < numEx; x++) {
@@ -3671,32 +3689,40 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(tours);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numTours + " selected tours?";
+        var confirmButtonText = "Delete";
+        if (numTours === 0) {
+            confirmText = "You have not selected any tours to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numTours > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            // actually delete the tour
-            TAG.Worktop.Database.batchDeleteDoq(tours, function () {
-                console.log("done deleting tours");
-                if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
-                    return;
-                }
-                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                    toLoad = currDoq;
-                    onlyMiddle = true;
-                }
-                loadTourView(toLoad, undefined, onlyMiddle);
-            }, authError, authError);
-        }, "Are you sure you want to delete the " +numTours+ " selected tours?", "Delete", true, function () { 
-            $(confirmationBox).hide();
-            var remIndex;
-            for (var x=0;x<numTours;x++){
-                remIndex = guidsToBeDeleted.indexOf(tours[x]);
-                if (remIndex >= 0) {
-                    guidsToBeDeleted.splice(remIndex, 1);
-                }
+                // actually delete the tour
+                chunkDelete(tours, function () {
+                    console.log("done deleting tours");
+                    if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
+                        return;
+                    }
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    loadTourView(toLoad, undefined, onlyMiddle);
+                }, authError, authError);
             }
+            }, confirmText, confirmButtonText, true, function () { 
+                $(confirmationBox).hide();
+                var remIndex;
+                for (var x=0;x<numTours;x++){
+                    remIndex = guidsToBeDeleted.indexOf(tours[x]);
+                    if (remIndex >= 0) {
+                        guidsToBeDeleted.splice(remIndex, 1);
+                    }
+                }
         }, null, null, null, null, null, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
@@ -4662,51 +4688,36 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(mediaGuids);
         var toLoad;
         var onlyMiddle = false;
+        var confirmText = "Are you sure you want to delete the " + numMed + " selected associated media?";
+        var confirmButtonText = "Delete";
+        if (numMed === 0) {
+            confirmText = "You have not selected any associated media to delete";
+            confirmButtonText = "no confirm";
+        }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            prepareNextView(false);
-            clearRight();
-            prepareViewer(true);
+            if (numMed > 0) {
+                prepareNextView(false);
+                clearRight();
+                prepareViewer(true);
 
-            console.log(mediaMULTIPLE.length + " things to delete.")
-            var deleteCounter = 0;
-
-            //only way to get it to reload after all of them are done
-            var DEL = function (j, media) {
-                // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
-                TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
-                    // success handler
-                    TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
-                        deleteCounter += 1
-                        console.log("deleted item: " + j)
-                        if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
-                            if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                                toLoad = currDoq;
-                                onlyMiddle = true;
-                            }
-                            loadAssocMediaView(toLoad, undefined, onlyMiddle);
-                        }
-                    }, function () {
-                        console.log("noauth error");
-                    }, function () {
-                        console.log("conflict error");
-                    }, function () {
-                        console.log("general error");
-                    });
+                console.log(mediaMULTIPLE.length + " things to delete.")
+                var deleteCounter = 0;
+                chunkDelete(mediaGuids.slice(0), function () {
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    console.log("done chunk deleting");
+                    loadAssocMediaView(toLoad, undefined, onlyMiddle);
                 }, function () {
-                    // unauth handler
+                    console.log("noauth error");
                 }, function () {
-                    // conflict handler
+                    console.log("conflict error");
                 }, function () {
-                    // error handler
+                    console.log("general error");
                 });
-            };
-
-            for (var i = 0; i < mediaMULTIPLE.length; i++) {
-                var media = mediaMULTIPLE[i]
-                DEL(i, media)
             }
-
-        }, "Are you sure you want to delete the " + numMed + " selected associated media?", "Delete", true, function () {
+        }, confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             var remIndex;
             for (var x = 0; x < mediaGuids.length; x++) {
@@ -5023,7 +5034,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (durations[j]) {
                         options.Duration = durations[j];
                     }
-                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function(){
+                        if(done>=total){ //unknown error alert should come up ONCE
+                            error(incrDone)
+                        }
+                    });
                     if (contentTypes[j] === "Video") {
                         var source = newDoq.Metadata.Source;
                         var newFileName = source.slice(8, source.length);
@@ -5473,6 +5488,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             // Make an async call to get artworks and then display
             TAG.Worktop.Database.getArtworks(function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    console.log("artwork "+i+":");
+                    console.log(result[i]);
+                }
                 if (cancel) return;
                 sortAZ(result);
                 currentList = result;
@@ -6684,7 +6703,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     toScroll = newDoq;                          //Alphabetical order
                     alphaName = names[j];
                 }
-                TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), error(incrDone));
+                TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function(){
+                        if(done>=total){ //unknown error alert should come up ONCE
+                            error(incrDone);
+                        }
+                    });
                 var source = newDoq.Metadata.Source;
                 var newFileName = source.slice(8, source.length);
                 var index = newFileName.lastIndexOf(".");
@@ -7328,7 +7351,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 clearRight();
                 prepareViewer(true);
                 // actually delete the artwork
-                TAG.Worktop.Database.batchDeleteDoq(artworks, function () {
+                chunkDelete(artworks, function () {
                     console.log("complete")
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
                         return;
@@ -7355,6 +7378,54 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
+    }
+
+    /*
+    function to delete batch artworks in chunks of  defined sizes.  this is too lighten the load on the server
+    the parameters are the same for calling TAG.Worktop.Database.batchDeleteDoq
+
+        guids:  Array of guids in string form to be deleted
+        success: the function to call upon success
+        unauth: Unauthorized handler (called when a user fails to login)
+        conflict: Called if the client's version of the doq is out of date
+        error: Called for any other errors
+
+
+    */
+    function chunkDelete(guids, success, unauth, conflict, error) {
+
+        var chunkSize = 5;//change to affect the size of the chunk
+        var chunks = [];
+
+        chunks.push([guids[0]]);
+
+        for (var i = 1; i < guids.length; i++) {//for loop to create the chunks
+
+            if (chunks[chunks.length - 1].length < chunkSize) {
+                chunks[chunks.length - 1].push(guids[i])
+            }
+            else {
+                chunks.push([guids[i]])
+            }
+        }
+        console.log("number of chunks: " + chunks.length);
+        function nextChunk() {
+            console.log("next Chunk called for batch artwork delete")
+            if (chunks.length > 0) {
+                console.log("sending out next request")
+                TAG.Worktop.Database.batchDeleteDoq(
+                    chunks.shift(),
+                    function () { console.log("success of chunk"); nextChunk() },
+                    function () { console.log("unauth error"); nextChunk(); if (unauth) { unauth() } },
+                    function () { console.log("conflict error"); nextChunk(); if (conflict) { conflict() } },
+                    function () { console.log("general error in batch doq delete"); nextChunk(); if (error) { error() } });
+            }
+            else {
+                console.log("chunking delete finished, calling callback...");
+                success();
+            }
+        }
+        nextChunk();
     }
 
     /**Save an artwork
@@ -7830,9 +7901,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     .css({
                         'width': '7%',
                         'height': '100%',
-                        'vertical-align': 'middle',
-                        'display': 'inline-block',
-                        'margin-left': '2%'
+                        'display': 'inline-block'
                     })
 
                     var checkboxColor = 'rgb(230, 235, 235)';
@@ -7845,6 +7914,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     .attr('checked', false)
                                     .on("click", function (evt) {
                                         var currCheck = $('#' + this.id);
+                                        if (toBeUnselected && (toBeUnselected.attr('id') === this.id)) {
+                                            toBeUnselected = null;
+                                        }
                                         if (currCheck.prop("checked")) {
                                             if (!inAssociatedView) {
                                                 multiSelected.push(id);
@@ -8118,7 +8190,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var checkBox = $("#checkbox" + labelId);
         if (!(toBeUnselected===null) && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
             toBeUnselected.prop('checked', false);
-            multiSelected.splice(multiSelected.indexOf(labelId), 1);
+            var justGuid = toBeUnselected.attr('id').replace("checkbox","");
+            multiSelected.splice(multiSelected.indexOf(justGuid), 1);
             console.log(multiSelected);
             toBeUnselected = null;
         }
@@ -9517,8 +9590,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 
             },
             function(){
-               $(newButton).prop('disabled', false);
+                $(newButton).prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                if (inCollectionsView == true) {
+                    $(bgInput).prop('disabled', false);
+                    bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                }
+                if (inGeneralView == true) {
+                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                }
                
 
             }
@@ -9614,6 +9697,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function(){
                 $(newButton).prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                if (inCollectionsView == true) {
+                    $(bgInput).prop('disabled', false);
+                    bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                }
+                if (inGeneralView == true) {
+                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                }
+
             
                     
                 }

@@ -28,12 +28,13 @@ TAG.TourAuthoring.InkCallers = {
 TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec) {
     "use strict";
 
+
     // set up the Raphael paper/canvas
     var that = {};
     var canvid = canvId;
     that.canvid = canvId;
-    html_elt = (html_elt) ? html_elt : $("#" + canvid)[0];
-    var domelement = $(html_elt);
+    html_elt = (html_elt) ? html_elt : $("#"+canvid)[0];
+    var domelement = (html_elt.jquery) ? html_elt : $(html_elt);
     var textElt;
     var dataHolder = spec.dataHolder;
 
