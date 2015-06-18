@@ -4702,6 +4702,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 console.log(mediaMULTIPLE.length + " things to delete.")
                 var deleteCounter = 0;
+
                 chunkDelete(mediaGuids.slice(0), function () {
                     if (guidsToBeDeleted.indexOf(currDoq) < 0) {
                         toLoad = currDoq;
@@ -4716,6 +4717,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }, function () {
                     console.log("general error");
                 });
+
             }
         }, confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
@@ -10050,12 +10052,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //'padding': '1.5% 0px 0px 0px',
             'padding-top': '-5%',
             'display': 'block',
-            //<<<<<<< HEAD
-            //                'position': 'absolute,
-            //            }).css('border-radius', '3.5px');
-            //        var addToArtworkDiv = $(document.createElement('div'))
-            //            .css({
-            //=======
+
         }).css('border-radius', '3.5px')
         //var addToArtworkDiv = $(document.createElement('div'))
         /**

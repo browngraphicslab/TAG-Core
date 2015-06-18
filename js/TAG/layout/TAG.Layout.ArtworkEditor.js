@@ -2847,7 +2847,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          * @return {Boolean}         whether or not we should disable the button
          */
         function shouldDisableAddButton() {
-            return $('.additionalField').length >= 4;
+            return $('.additionalField').length >= 10;
         }
 
         /**
