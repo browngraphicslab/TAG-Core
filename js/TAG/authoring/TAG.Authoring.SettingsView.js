@@ -68,7 +68,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted || [],
         // = root.find('#importButton'),
 
-        keywordSets,
+        // Format of keyword sets: [{keywordSet1}, {keywordSet2}, {keywordSet3}]
+        // Where {keywordSetX} = {"name": "XXXX", "set": ["XXXX", "XXXX", "XXXX", "XXXX" ...]}
+        keywordSets, 
 
         primaryColorPicker,
         secondaryColorPicker,
@@ -1023,28 +1025,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     }
 
     /** Shows a popup confirmation for deleting a set of keywords.
-     * @param set {Object}      The set of keywords to delete.
-     * @param deleteFunction {Function}     Function to call on delete; this will likely update UI.
+     * @param setIndex {Number}             The index of the set to delete from.
+     * @param keyword {Object}              The keyword to delete.
+     * @param deleteFunction {Function}     Function to call on successful delete; this will likely update UI.
      */
-    function deleteKeywordSet(set, deleteFunction) {
+    function deleteKeyword(setIndex, keyword, deleteFunction) {
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            // TODO-KEYWORDS actually delete the set on the server side.
-            deleteFunction(set);
-        }, "Are you sure you want to delete this keyword set?", "Delete", true, function () { $(confirmationBox).hide(); });
-        root.append(confirmationBox);
-        $(confirmationBox).show();
-    }
-
-    /** Shows a popup confirmation for deleting a set of keywords.
-     * @param set {Object}      The set of keywords to delete from.
-     * @param keyword {Object}      The keywords to delete.
-     * @param deleteFunction {Function}     Function to call on delete; this will likely update UI.
-     */
-    function deleteKeyword(set, keyword, deleteFunction) {
-        var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
-            // TODO-KEYWORDS actually delete the set on the server side.
-            deleteFunction(set, keyword);
-        }, "Are you sure you want to delete this keyword?", "Delete", true, function () { $(confirmationBox).hide(); });
+            //Change the settings in the database
+            var set = keywordSets[setIndex];
+            if (keywordSets) {
+                var keywordIndex = set.keywords.indexOf(keyword);
+                set.keywords.splice(keywordIndex, 1);
+                var optns = {};
+                switch (setIndex) {
+                    case 0: optns.KeywordSet1 = TAG.Util.convertArrayToSetString(set.keywords); break;
+                    case 1: optns.KeywordSet2 = TAG.Util.convertArrayToSetString(set.keywords); break;
+                    case 2: optns.KeywordSet3 = TAG.Util.convertArrayToSetString(set.keywords); break;
+                    default: break;
+                }
+                TAG.Worktop.Database.changeMain(optns, deleteFunction, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
+            }
+        }, "Are you sure you want to delete this keyword?", "Delete Keyword", true, function () { $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
     }
@@ -1088,10 +1089,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var fontFamily = TAG.Worktop.Database.getFontFamily();
         var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration() / 60000;
 
-        // TODO-KEYWORDS: get these from the server!
-        //var keywordSets = TAG.Worktop.Database.getKeywordSets();
-        keywordSets = [{ guid: "1", csvUrl: "someurl", name: "set1", keywords: ["set1_obj1", "set1_obj2", "set1_obj3"] },
-                       { guid: "2", csvUrl: "someurl", name: "set2", keywords: ["set2_obj1", "set2_obj2", "set2_obj3"] }],
+        // TODO-KEYWORDS
+        keywordSets = TAG.Worktop.Database.getKeywordSets();
 
         prevMiddleBarSelection = {
             type_representation: "Splash Screen",
@@ -1266,87 +1265,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.css("opacity", 1);
         });
 
-        // Delete function for keyword set inputs.
-        var importKeywordContainer = $(document.createElement('div'));
-        var deleteFunction = function (set) {
-            // Get index of set being deleted.
-            var deleteIndex = keywordSets.indexOf(set);
-
-            // Remove the DOM element containing inputs for the set.
-            settingsContainer[0].removeChild(keywordSetsSettings[deleteIndex][0]);
-
-            // Remove set from where it is being stored.
-            keywordSets.splice(deleteIndex, 1);
-            keywordSetsInputs.splice(deleteIndex, 1);
-            keywordSetsSettings.splice(deleteIndex, 1);
-
-            // Enable import button an allow saving.
-            importKeywordContainer.css({ 'display': 'block' }); // Show the import keyword set container
-            changesMade = true;
-            saveButton.attr("disabled", false);
-            saveButton.css("opacity", 1);
-        };
-
-        var editFunction = function (set) {
-
-        };
-
         // Create the inputs for keyword stuff.
-        // "AddInput" is a button to upload a csv file containing a keyword set.
-        var count = keywordSets.length;
-        var importKeywordSetInput = createButton('Add Keyword Set', function () {
-            // TODO-KEYWORDS: Actually upload and get DOQ object!
-            var csvUrl;
-            //uploadFile(TAG.Authoring.FileUploadTypes.CSV, function (urls) {
-            //    var csvUrl = urls[0];
-            //}, false, [".csv"]);
-            // TODO - handle success vs failure on server upload
-
-            // Create a new set.
-            var newSet = { name: "untitled set", keywords: [] };
-
-            // Add new set list.
-            keywordSets.push(newSet);
-            if (keywordSets.length > 2) {
-                importKeywordContainer.css({ 'display': 'none' });
-            }
-
-            var newInput = createKeywordSetInputs(newSet, deleteFunction, editFunction);
-            newInput.nameInput.on('keyup', function (event) {
-                if (event.which === 13) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    saveButton.click();
-                } else {
-                    changesMade = true;
-                    saveButton.prop("disabled", false);
-                    saveButton.css("opacity", 1);
-                }
-
-            });
-            newInput.nameInput.on('change', function () {
-                changesMade = true;
-                saveButton.prop("disabled", false);
-                saveButton.css("opacity", 1);
-            });
-            keywordSetsInputs.push(newInput);
-            var newSetting = createEditKeywordsSetting(newInput)
-            keywordSetsSettings.push(newSetting);
-            newSetting.insertBefore(importKeywordContainer);
-
-            // Allow saving.
-            changesMade = true;
-            saveButton.prop("disabled", false);
-            saveButton.css("opacity", 1);
-        });
-
-        // "EditInput" is an array of composites, one for each existing uploaded keyword set. Each is composed as follows:
-        //      composite.name      --> text field allowing editing of set name.
-        //      composite.values    --> dropdown allowing user to view keywords in set, defaulting to value "View keywords"
-        //      composite.delete    --> button to delete this set.
         var keywordSetsInputs = [];
-        keywordSets.forEach(function (set) {
-            var inputs = createKeywordSetInputs(set, deleteFunction, editFunction);
+        $.each(keywordSets, function (setIndex, set) {
+            var inputs = createKeywordSetInputs(setIndex, set);
             inputs.nameInput.on('keyup', function (event) {
                 if (event.which === 13) {
                     event.preventDefault();
@@ -1360,6 +1282,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             });
             inputs.nameInput.on('change', function () {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            });
+            inputs.showKeywords.click(function (e) {
+                changesMade = true;
+                saveButton.prop("disabled", false);
+                saveButton.css("opacity", 1);
+            });
+            inputs.hideKeywords.click(function (e) {
                 changesMade = true;
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
@@ -1451,7 +1383,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var lockKioskSetting = createSetting("Lock Kiosk Mode", kioskOptionsDiv);
 
         // TODO-KEYWORDS
-        var importKeywordSetSetting = createImportKeywordsSetting(importKeywordContainer, importKeywordSetInput);
+        var keywordsLabelContainer = $(document.createElement('div'))
+            .css({
+                'width': '100%',
+                'margin-bottom': '0px'
+            });
+
+        var keywordsLabel = $(document.createElement('div'))
+            .css({
+                'width': '45%',
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis',
+                'font-style': 'italic',
+                'display': 'inline-block'
+            })
+            .text('Keywords')
+            .appendTo(keywordsLabelContainer);
+
         var keywordSetsSettings = [];
         keywordSetsInputs.forEach(function (input) {
             keywordSetsSettings.push(createEditKeywordsSetting(input));
@@ -1472,10 +1420,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //settingsContainer.append(fontFamilySetting);
         settingsContainer.append(idleTimerDurationSetting);
         settingsContainer.append(lockKioskSetting);
+        settingsContainer.append(keywordsLabelContainer);
         keywordSetsSettings.forEach(function (setting) {
             settingsContainer.append(setting);
         });
-        settingsContainer.append(importKeywordSetSetting); // TODO-KEYWORDS
         
 		//automatically save General Settings - Customization
         onChangeUpdateText(idleTimerDurationInput, null, 3);
@@ -1557,7 +1505,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
                 //fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput,
-                //keywordSetsInputs: keywordSetsInputs // TODO-KEYWORDS
+                keywordSetsInputs: keywordSetsInputs // TODO-KEYWORDS
             });
         }, {
             'margin-right': '3%',
@@ -1687,15 +1635,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
 
-        // TODO-KEYWORDS
-        var keywordSets = [];
-        inputs.keywordSetsInputs.forEach(function (inputs) {
-            keywordSets.push({
-                guid:   inputs.guid,
-                csvUrl: inputs.csvUrl,    
-                name:   inputs.nameInput.val()
-            });
-        });
         
         //inputs.idleTimerDurationInput.val(idleTimerDuration);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(idleTimerDuration);
@@ -1714,10 +1653,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //FontFamily: fontFamily,
             //BaseFontSize: baseFontSize,
             IdleTimerDuration: idleTimerDuration,
-            //KeywordSets: keywordSets
+
         };
         if (bgImg) { options.Background = bgImg; }
         //if (logo) options.Icon = logo;
+
+        if (keywordSets) {
+            options.KeywordSet1Title = keywordSets[0].name;
+            options.KeywordSet2Title = keywordSets[1].name;
+            options.KeywordSet3Title = keywordSets[2].name;
+            options.KeywordSet1 = TAG.Util.convertArrayToSetString(keywordSets[0].keywords);
+            options.KeywordSet2 = TAG.Util.convertArrayToSetString(keywordSets[1].keywords);
+            options.KeywordSet3 = TAG.Util.convertArrayToSetString(keywordSets[2].keywords);
+            options.KeywordSet1Shown = keywordSets[0].shown;
+            options.KeywordSet2Shown = keywordSets[1].shown;
+            options.KeywordSet3Shown = keywordSets[2].shown;
+        }
 
         //Change the settings in the database
         TAG.Worktop.Database.changeMain(options, function () {
@@ -8285,45 +8236,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         return container;
     }
 
-
-    /**Creates a setting to import a set of keywords.
-     * @method createImportKeywordsSetting
-     * @param {Object} container    div to hold import setting.
-     * @param {Object} input        button to upload a csv file of keywords.
-     * @return container            container of setting
-     */
-    function createImportKeywordsSetting(container, input) {
-        container.css({
-            'width': '100%',
-            'margin-top': '1%'
-        });
-
-        input.css({
-            'float': 'left',
-            'margin-right': '3%',
-            'box-sizing': 'border-box',
-        });
-
-        var label = $(document.createElement('div'))
-            .attr('id', 'upload-keywords-label')
-            .text('Upload a .csv file of your keywords')
-            .css({
-                'overflow': 'hidden',
-                'text-overflow': 'ellipsis',
-                'font-style': 'italic',
-                'display': 'inline-block',
-            });
-
-        var clear = $(document.createElement('div'));
-        clear.css('clear', 'both');
-
-        container.append(input);
-        container.append(label);
-        container.append(clear);
-
-        return container;
-    }
-
     /**Creates a composite settings line for keyword sets to be inserted into the settings container
      * @method createEditKeywordsSetting
      * @param {Object} inputs   inputs for the setting: text field for name, dropdown for keywords, and delete button
@@ -8331,10 +8243,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createEditKeywordsSetting(inputs) {
         var container = $(document.createElement('div'));
-        var mb = "0%";
         container.css({
             'width': '100%',
-            'margin-bottom': mb
+            'margin-bottom': '0%'
         });
 
         // Name text field.
@@ -8344,18 +8255,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'display': 'inline-block',
             'box-sizing': 'border-box',
         }
+        inputs.setLabel.css(kw_css);
         inputs.nameInput.css(kw_css);
         inputs.keywordsInput.css(kw_css);
-        inputs.deleteInput.css(kw_css);
         inputs.editInput.css(kw_css);
+        inputs.showKeywords.css(kw_css);
+        inputs.hideKeywords.css(kw_css);
 
         var clear = $(document.createElement('div'));
         clear.css('clear', 'both');
 
+        container.append(inputs.setLabel);
         container.append(inputs.nameInput);
         container.append(inputs.keywordsInput);
-        container.append(inputs.deleteInput);
         container.append(inputs.editInput);
+        container.append(inputs.showKeywords);
+        container.append(inputs.hideKeywords);
         container.append(clear);
 
         return container;
@@ -9009,9 +8924,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     /** Creates the content for the popup to edit a keyword set.
      * @method createKeywordSetPopup
-     * @param {Object} set          set of keywords
+     * @param {Number} setIndex          index of the set of keywords
      */
-    function createKeywordSetPopup(set) {
+    function createKeywordSetPopup(setIndex) {
+        var set = keywordSets[setIndex];
+
         var mainPadding = 3;
         var innerPadding = 2;
         var fullLength = 100 - (2 * mainPadding);
@@ -9024,8 +8941,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // Header/title container
         var setEditorHeading = $(document.createElement('div'))
             .attr('id', 'setEditorHeading')
-            .text(set.name)
+            .text(set.name !== '' ? set.name : 'untitled set')
             .appendTo(setEditorContainer);
+
+        // Top bar area.
+        var setEditorTopContainer = $(document.createElement('div'))
+            .attr('id', 'setEditorTopContainer')
+            .appendTo(setEditorContainer);
+
+        // Upload CSV button
+        var uploadCsvButton = $(document.createElement('button'))
+            .attr('type', 'button')
+            .addClass('button')
+            .attr('id', 'uploadCsvButton')
+            .text('Upload CSV')
+            .css({
+                'color': '#fff',
+                'border-color': '#fff',
+                'border-radius': '3.5px',
+                'width': (90 * .97) + '%',
+                'margin-left': '5%',
+                'margin-top': '2%'
+            })
+            .click(function () { })
+            .appendTo(setEditorTopContainer);
 
         // View/delete keywords scrollable area.
         var keywordListContainer = $(document.createElement('div'))
@@ -9033,7 +8972,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .appendTo(setEditorContainer);
 
         // Add in keywords.
-        set.keywords.forEach(function (keyword, keywordIndex) {
+        set.keywords.forEach(function (keyword) {
             var keywordEditDiv = $(document.createElement('div'))
                 .addClass('keywordDeleteDiv')
                 .hover(
@@ -9048,11 +8987,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 .text(keyword)
                 .appendTo(keywordEditDiv);
 
-            // Function for deleting a keyword from a set
-            var deleteFunction = function (set, keyword) {
-                keywordEditDiv.remove();
-            };
-
             // Delete button.
             var keywordDeleteButton = $(document.createElement('button'))
                 .attr('type', 'button')
@@ -9066,7 +9000,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'float': 'right',
                     'margin-right': '5%'
                 })
-                .click(function() {deleteKeyword(set, keyword, deleteFunction)})
+                .click(function () { deleteKeyword(setIndex, keyword, function () { keywordEditDiv.remove(); })})
                 .appendTo(keywordEditDiv);
         });
 
@@ -9103,51 +9037,99 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '5%'
             })
             .click(function () {
-                var newKeywordDeleteDiv = $(document.createElement('div'))
+                $('#setEditorMessageContainer').text('');
+
+                // Extract new keyword.
+                var newKeyword = keywordAddInput.val().toLowerCase().trim(); 
+
+                // Make sure that it is length > 0.
+                var notEmpty = newKeyword.length > 0;
+
+                // Make sure that it is numbers, letters, and spaces.
+                var isAlphanumeric = true;
+                for (var i = 0; i < newKeyword.length; i++) {
+                    var chr = newKeyword.charAt(i);
+                    isAlphanumeric = isAlphanumeric && (('a' <= chr && chr <= 'z') || ('0' <= chr && chr <= '9') || (chr === ' '));
+                }
+
+                // Make sure that this isn't a duplicated keyword.
+                var isDuplicate = keywordSets[setIndex].keywords.indexOf(newKeyword) > -1;
+
+                // Alert user that there was a validation error.
+                if (!notEmpty) {
+                    $('#setEditorMessageContainer').text('No empty keywords allowed!');
+                    return;
+                }
+                if (!isAlphanumeric) {
+                    $('#setEditorMessageContainer').text('No special characters allowed!');
+                    return;
+                }
+                if (isDuplicate) {
+                    $('#setEditorMessageContainer').text('No duplicate keywords allowed!');
+                    return;
+                }
+
+                // This is what we do if the server succeeds in updating main, i.e., adding the new keyword. Basically it adds UI to delete the new keyword.
+                var keywordAddSuccess = function () {
+                    var newKeywordDeleteDiv = $(document.createElement('div'))
                     .addClass('keywordDeleteDiv')
-                        .hover(
+                    .hover(
                         function () { $(this).css({ 'background-color': '#555' }); },
                         function () { $(this).css({ 'background-color': '#000' }); }
                     )
                     .appendTo(keywordListContainer);
 
-                // Label.
-                var newKeywordsEditLabel = $(document.createElement('div'))
-                    .addClass('keywordDeleteLabel')
-                    .text(keywordAddInput.val())
-                    .appendTo(newKeywordDeleteDiv);
+                    // Label.
+                    var newKeywordsEditLabel = $(document.createElement('div'))
+                        .addClass('keywordDeleteLabel')
+                        .text(keywordAddInput.val())
+                        .appendTo(newKeywordDeleteDiv);
 
-                // Function for deleting a keyword from a set
-                var newDeleteFunction = function (set, keyword) {
-                    newKeywordDeleteDiv.remove();
+                    // Delete button.
+                    var newKeywordDeleteButton = $(document.createElement('button'))
+                        .attr('type', 'button')
+                        .addClass('button')
+                        .addClass('keywordDeleteButton')
+                        .text('Delete')
+                        .css({
+                            'color': '#fff',
+                            'border-color': '#fff',
+                            'border-radius': '3.5px',
+                            'float': 'right',
+                            'margin-right': '5%'
+                        })
+                        .click(function () { deleteKeyword(setIndex, keywordAddInput.val(), function () { newKeywordDeleteDiv.remove(); }) })
+                        .appendTo(newKeywordDeleteDiv);
+
+                    keywordAddInput.val('');
                 };
 
-                // Delete button.
-                var newKeywordDeleteButton = $(document.createElement('button'))
-                    .attr('type', 'button')
-                    .addClass('button')
-                    .addClass('keywordDeleteButton')
-                    .text('Delete')
-                    .css({
-                        'color': '#fff',
-                        'border-color': '#fff',
-                        'border-radius': '3.5px',
-                        'float': 'right',
-                        'margin-right': '5%'
-                    })
-                    .click(function () { deleteKeyword(set, keywordAddInput.val(), newDeleteFunction) })
-                    .appendTo(newKeywordDeleteDiv);
-
-                keywordAddInput.val('');
+                //Change the settings in the database
+                if (keywordSets) {
+                    keywordSets[setIndex].keywords.push(newKeyword);
+                    var optns = {};
+                    switch (setIndex) {
+                        case 0: optns.KeywordSet1 = TAG.Util.convertArrayToSetString(keywordSets[0].keywords); break;
+                        case 1: optns.KeywordSet2 = TAG.Util.convertArrayToSetString(keywordSets[1].keywords); break;
+                        case 2: optns.KeywordSet3 = TAG.Util.convertArrayToSetString(keywordSets[2].keywords); break;
+                        default: break;
+                    }
+                    TAG.Worktop.Database.changeMain(optns, keywordAddSuccess, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
+                }
             })
             .appendTo(addKeywordContainer);
+
+        // Message bar area.
+        var setEditorMessageContainer = $(document.createElement('div'))
+            .attr('id', 'setEditorMessageContainer')
+            .appendTo(setEditorContainer);
 
         // Close editor area.
         var closeContainer = $(document.createElement('div'))
             .attr('id', 'closeSetEditorContainer')
             .appendTo(setEditorContainer);
 
-        // Add button.
+        // Close button.
         var closeSetEditorButton = $(document.createElement('button'))
             .attr('type', 'button')
             .attr('id', 'closeSetEditorButton')
@@ -9165,6 +9147,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var overlay = $('#Overlay');
                 overlay.hide();
                 overlay.remove();
+
+                // Update the view terms element.
+                var oldViewTerms = $($('.keyword-set-view-terms')[setIndex]);
+                oldViewTerms.find('option').remove(); // Remove old options.
+
+                var options = keywordSets[setIndex].keywords.slice(); // Make new options.
+                options.unshift('View Terms');
+
+                for (var i = 0; i < options.length; i++) {
+                    var option = $(document.createElement('option'));
+                    option.text(options[i]);
+                    option.attr('value', options[i]);
+                    if (i > 0) {
+                        option.attr('disabled', 'true');
+                    }
+                    oldViewTerms.append(option);
+                }
+
             })
             .appendTo(closeContainer);
 
@@ -9173,27 +9173,75 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     /**Creates the input elements for a row of "keywords settings".
      * @method createKeyworSetInputs
+     * @param {Number} setIndex             this set's index
      * @param {Object} set                  set of keywords
-     * @param {Function} deleteFunction     function to be called when the delete button is pressed
-     * @param {Function} editFunction     function to be called when the delete button is pressed
      */
-    function createKeywordSetInputs(set, deleteFunction, editFunction) {
-        var options = set.keywords;
+    function createKeywordSetInputs(setIndex, set) {
+        var options = set.keywords.slice();
         options.unshift('View Terms');
         var inputs = {
-            guid: set.guid,
-            csvUrl: set.csvUrl,
-            nameInput: createTextInput(set.name, true),
-            keywordsInput: createSelectInput(options),
-            deleteInput: createButton('Delete Set', function () { deleteKeywordSet(set, deleteFunction); }, false)
-                .css('margin-top', '0.5%'),
+            setLabel: $(document.createElement('div'))
+                .attr('for', 'keyword-set-name-input-' + (setIndex+1))
+                .text('Set ' + (setIndex+1)),
+            nameInput: createTextInput(set.name, 'untitled set')
+                .addClass('keyword-set-name-input')
+                .attr('id', 'keyword-set-name-input-' + (setIndex + 1))
+                .attr('disabled', keywordSets[setIndex].shown !== 'true')
+                .blur(function (e) {
+                    if (keywordSets) {
+                        keywordSets[setIndex].name = $(this).val();
+                    }
+                }),
+            keywordsInput: createSelectInput(options)
+                .addClass('keyword-set-view-terms')
+                .attr('disabled', keywordSets[setIndex].shown !== 'true'),
             editInput: createButton('Edit Set', function () {
-                var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(set), false, false);
-                root.append(popup);
-                $(popup).show();
-            }, false)
-                .css('margin-top', '0.5%')
+                    if (keywordSets) {
+                        var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(setIndex), false, false);
+                        root.append(popup);
+                        $(popup).show();
+                    }
+                }, false)
+                .addClass('keyword-set-edit-button')
+                .attr('disabled', keywordSets[setIndex].shown !== 'true')
+                .css({
+                    'margin-top': '0.5%',
+                    'opacity': (keywordSets[setIndex].shown === 'true' ? '1' : '0.4')
+                }),
+            showKeywords: createButton('Show Set', function () {
+                    $($('.keyword-set-show-button')[setIndex]).css('background-color', 'white');
+                    $($('.keyword-set-hide-button')[setIndex]).css('background-color', '');
+
+                    $($('.keyword-set-name-input')[setIndex]).removeAttr('disabled');
+                    $($('.keyword-set-view-terms')[setIndex]).removeAttr('disabled');
+                    $($('.keyword-set-edit-button')[setIndex]).removeAttr('disabled');
+                    $($('.keyword-set-edit-button')[setIndex]).css('opacity', '1');
+
+                    keywordSets[setIndex].shown = 'true';
+                })
+                .addClass('keyword-set-show-button')
+                .css({
+                    'margin-top': '0.5%',
+                    'background-color': (keywordSets[setIndex].shown === 'true' ? 'white' : '')
+                }),
+            hideKeywords: createButton('Hide Set', function () {
+                    $($('.keyword-set-hide-button')[setIndex]).css('background-color', 'white');
+                    $($('.keyword-set-show-button')[setIndex]).css('background-color', '');
+
+                    $($('.keyword-set-name-input')[setIndex]).attr('disabled', 'disabled');
+                    $($('.keyword-set-view-terms')[setIndex]).attr('disabled', 'disabled');
+                    $($('.keyword-set-edit-button')[setIndex]).attr('disabled', 'disabled');
+                    $($('.keyword-set-edit-button')[setIndex]).css('opacity', '.4');
+
+                    keywordSets[setIndex].shown = 'false';
+                })
+                .addClass('keyword-set-hide-button')
+                .css({
+                    'margin-top': '0.5%',
+                    'background-color': (keywordSets[setIndex].shown !== 'true' ? 'white' : '')
+                }),
         };
+        // Disable the keywords in the "view terms" dropdown.
         for (var i = 1; i < inputs.keywordsInput[0].length; i++) {
             inputs.keywordsInput[0][i].setAttribute('disabled', true);
         }

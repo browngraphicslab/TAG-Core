@@ -25,8 +25,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     //                'ambient post-noise-metalcoretronicastep', 'classical', 'metamodernism', 'genre',
     //                'escapism', 'realism', 'meso-american', 'brutalism', 'grilled cheese', 'chuckie cheese',
     //                'charles darwinism', 'socialism', 'schism', 'sshh', 'shitake', 'list item', '^_^']];
-    //var keywordsCheckboxDict = [[],[],[]];
-
 
     // 2 categories.
     //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
@@ -38,8 +36,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
 
     // No categories, no keywords. Capiche??
-    var keywordCategories = [];
-    var keywords = [[], [], []];
+    //var keywordCategories = [];
+    //var keywords = [[], [], []];
 
     var // DOM-related
         root = $(document.createElement('div')),                    // get via Util.getHtmlAjax in web app
@@ -80,6 +78,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         rightArrowKeywords,           // right arrow in "Keywords" button
         sidebarHideButtonContainer,   // tab to expand/contract side bar
         creatingText,                  // editing text associated media
+        keywordSets,                  // Original object extracted from db
+        keywordsCheckboxDict = [[], [], []],
         rightbarIsOpen;               // rightbar status
 
     LADS.Util.UI.getStack()[0] = null;
@@ -115,6 +115,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             }
         }
 
+        keywordSets = TAG.Worktop.Database.getKeywordSets();
 
         //creates deep zoom image
         if (artwork) {
@@ -153,7 +154,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         METADATA_EDITOR.init();     // initialize different parts of the editor
         LOCATION_HISTORY.init();
         THUMBNAIL_EDITOR.init();
-        if (keywordCategories.length > 0) {
+        if (keywordSets && (keywordSets[0].shown === 'true' || keywordSets[1].shown === 'true' || keywordSets[2].shown === 'true')) {
             KEYWORDS_EDITOR.init();
         }
         MEDIA_EDITOR.init();
@@ -621,7 +622,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         }
 
         // Keywords button.
-        if (keywordCategories.length > 0) {
+        if (keywordSets[0].shown === 'true' || keywordSets[2].shown === 'true' || keywordSets[2].shown === 'true') {
             keywordsButton = $(document.createElement('div')) // TODO J/S
                 .css(newButtonCSS)
                 .on('click', function () {
@@ -826,7 +827,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         THUMBNAIL_EDITOR.close();
         LOCATION_HISTORY.close();
         METADATA_EDITOR.close();
-        if (keywordCategories > 0) {
+        if (keywordSets && (keywordSets[0].shown === 'true' || keywordSets[1].shown === 'true' || keywordSets[2].shown === 'true')) {
             KEYWORDS_EDITOR.close();
         }
     }
@@ -2997,6 +2998,63 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         };
     }
 
+    function saveKeywords(setString1, setString2, setString3) {
+        var i;
+        titleArea.text("Saving keywords for " + artworkMetadata.Title.val() + "...");
+        var transOverlay = $(TAG.Util.UI.blockInteractionOverlay(0.6));
+        $("#tagRoot").append(transOverlay);
+        var vert = $("#tagRoot").height() / 2;
+        var horz = $("#tagRoot").width() / 2;
+        var progressCircCSS = {
+            'position': 'absolute',
+            'z-index': '50',
+            'height': 'auto',
+            'width': ($("#tagRoot").width() * 0.1) + "px"
+        };
+        var circle = TAG.Util.showProgressCircle(transOverlay, progressCircCSS, horz, vert, true);
+        transOverlay.show();
+        TAG.Worktop.Database.changeArtwork(artwork.Identifier, {
+            "KeywordsSet1": setString1,
+            "KeywordsSet2": setString2,
+            "KeywordsSet3": setString3
+        }, saveSuccess, saveFail, conflict, saveError);
+
+        // success handler for save button
+        function saveSuccess() {
+            transOverlay.show();
+            transOverlay.remove();
+            titleArea.text(artworkMetadata.Title.val());
+        }
+
+        // general failure callback for save button
+        function saveFail() {
+            transOverlay.show();
+            transOverlay.remove();
+            titleArea.text(artworkMetadata.Title.val());
+            var popup = $(TAG.Util.UI.popUpMessage(function () {
+                var authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier, guidsToBeDeleted);
+                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            }, "Changes to " + artwork.Name + " have not been saved.  You must log in to save changes."));
+            $('body').append(popup);
+            popup.show();
+        }
+
+        // error handler for save button
+        function saveError() {
+            transOverlay.show();
+            transOverlay.remove();
+            titleArea.text(artworkMetadata.Title.val());
+            var popup;
+            popup = $(TAG.Util.UI.popUpMessage(function () {
+                var authoringHub = new TAG.Authoring.SettingsView("Artworks", null, null, artwork.Identifier, guidsToBeDeleted);
+                TAG.Util.UI.slidePageRight(authoringHub.getRoot());
+            }, "Changes to " + artwork.Name + " have not been saved.  There was an error contacting the server."));
+            $('body').append(popup); // TODO ('body' might not be quite right in web app)
+            popup.show();
+        }
+    }
+
+
     
     function KeywordsEditor() {
         var isOpen,             // Is this editor open?
@@ -3006,8 +3064,16 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             $saveContainer,     // Div holding the save button.
             $saveButton;         // Save button.
 
-        // TODO: GET FROM METADATA
-        var currentKeywords = [['breadfruit'], ['saffron'], ['charles darwinism', '^_^']];
+        // TODO: So, this seems to be how we deal with new metadata fields, which is super janky. 
+        // These fields should definitely be set on the server if the DOQ is missing them. 
+        var currentKeywords = [[], [], []];
+        if (artwork.Metadata.KeywordsSet1) {
+            currentKeywords[0] = artwork.Metadata.KeywordsSet1.split(',');
+        } if (artwork.Metadata.KeywordsSet2) {
+            currentKeywords[1] = artwork.Metadata.KeywordsSet2.split(',');
+        } if (artwork.Metadata.KeywordsSet3) {
+            currentKeywords[2] = artwork.Metadata.KeywordsSet3.split(',');
+        }
 
         /**
          * Initialize the keywords editor UI
@@ -3055,7 +3121,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             //createSelects(keywordcategories, keywords, $keywordsContainer);
 
             // Make sure everything's coo.
-            if (!keywords || !keywordCategories || !categorySelects) {
+            if (!keywordSets || !categorySelects) {
                 console.log('Tried creating selects before initializing the keywords editor!');
                 return;
             }
@@ -3079,7 +3145,13 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 .appendTo($keywordsContainer);
 
             // Create one checklist for each category.
-            keywordCategories.forEach(function (category, categoryIndex) {
+            keywordSets.forEach(function (set, setIndex) {
+                if (set.shown !== 'true') {
+                    return;
+                }
+
+                var setName = (set.name !== '' ? set.name : 'untitled set');
+
                 var $checklistListItem = $(document.createElement('li'))
                     .addClass('checklist-listItem')
                     .css({
@@ -3100,7 +3172,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     .appendTo($checklistListItem);
                 var $checklistTitleConatiner = $(document.createElement('div'))
                     .addClass('checkList-title-container')
-                    .text(category)
+                    .text(setName)
                     .css({
                         'color': '#fff',
                         'background-color': '#d9000000',
@@ -3133,7 +3205,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     })
                     .appendTo($checklistWrapper);
 
-                keywords[categoryIndex].forEach(function (keyword, keywordIndex) {
+                set.keywords.forEach(function (keyword, keywordIndex) {
                     var $keywordDiv = $(document.createElement('div'))
                         .css({
                             'color': '#000',
@@ -3162,7 +3234,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     var $keywordCheckbox = $(document.createElement('input'))
                         .addClass('keyword-checkbox')
                         .attr('type', 'checkbox')
-                        .attr('id', 'keyword-checkbox_' + categoryIndex + '_' + keywordIndex)
+                        .attr('id', 'keyword-checkbox_' + setIndex + '_' + keywordIndex)
                         .attr('index', keywordIndex)
                         .attr('value', keywordIndex)
                         .css({
@@ -3173,12 +3245,12 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                             e.stopPropagation();
                         })
                         .appendTo($keywordDiv);
-                    keywordsCheckboxDict[categoryIndex][keyword] = $keywordCheckbox;
+                    keywordsCheckboxDict[setIndex][keyword] = $keywordCheckbox;
                     var $keywordLabel = $(document.createElement('label'))
                         .text(keyword)
                         .attr('index', keywordIndex)
                         .attr('value', keywordIndex)
-                        .attr('for', 'keyword-checkbox_' + categoryIndex + '_' + keywordIndex)
+                        .attr('for', 'keyword-checkbox_' + setIndex + '_' + keywordIndex)
                         .css({
                             'cursor': 'default',
                             'font-size': '0.7em'
@@ -3191,9 +3263,13 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             });
 
             // Check off the current keywords.
-            keywordCategories.forEach(function (category, categoryIndex) {
-                currentKeywords[categoryIndex].forEach(function (keyword, keywordIndex) {
-                    keywordsCheckboxDict[categoryIndex][keyword][0].checked = true;
+            keywordSets.forEach(function (set, setIndex) {
+                if (set.shown !== 'true') {
+                    return;
+                }
+
+                currentKeywords[setIndex].forEach(function (keyword, keywordIndex) {
+                    keywordsCheckboxDict[setIndex][keyword][0].checked = true;
                 });
             });
 
@@ -3206,6 +3282,13 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     'position': 'relative'
                 })
                 .appendTo($keywordsForm);
+            var $saveMessage = $(document.createElement('div'))
+                .attr('id', 'save-keywords-message')
+                .css({
+                    'position': 'absolute',
+                    'left': '5.5%',
+                    'top': '0px'
+                })
             var $saveButton = $(document.createElement('button'))
                 .attr('id', 'save-keywords-button')
                 .text("Save Keywords").css('border-radius', '3.5px')
@@ -3220,16 +3303,28 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         checkboxes = $('input.keyword-checkbox:checked'),
                         artworkKeywords = [[], [], []];
                     for (i = 0; i < checkboxes.length; i++) {
-                        var categoryIndex = $(checkboxes[i]).attr('id').split('_')[1];
-                        artworkKeywords[categoryIndex].push($(checkboxes[i]).parent().find('label').text());
+                        var setIndex = $(checkboxes[i]).attr('id').split('_')[1];
+                        artworkKeywords[setIndex].push($(checkboxes[i]).parent().find('label').text());
                     }
 
-                    for (i = 0; i < artworkKeywords.length; i++) {
-                        console.log(keywordCategories[i]);
-                        for (j = 0; j < artworkKeywords[i].length; j++) {
-                            console.log('    ' + artworkKeywords[i][j]);
+                    var keywordStrings = [];
+                    for (i = 0; i < keywordSets.length; i++) {
+                        // Build a combined, comma-separated string of keywords.
+                        var catString = '';
+                        if (keywordSets[i].shown !== 'true') {
+                            keywordStrings.push(catString);
+                        } else {
+                            for (j = 0; j < artworkKeywords[i].length; j++) {
+                                catString = catString + artworkKeywords[i][j] + ',';
+                            }
+                            if (catString.length > 0) {
+                                catString = catString.substring(0, catString.length - 1); // Remove last comma.
+                            }
+                            keywordStrings.push(catString);
                         }
                     }
+
+                    saveKeywords(keywordStrings[0], keywordStrings[1], keywordStrings[2]);
                 })
                 .appendTo($saveContainer);
         }

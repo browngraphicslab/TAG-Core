@@ -127,6 +127,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         tileCircle,                     // loading circle for artwork tiles
         menuCreated,
 
+        // KEYWORDS
+        keywordSets,
+
         //TELEMETRY
         nav_timer = new TelemetryTimer(),
         global_artwork_prev_timer = new TelemetryTimer(); //initialized here, restarted when previewer is opened
@@ -672,7 +675,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function addKeywords() {
 
-        // TODO: get actual keywords from the server!
+        // Get keywords from the server!
+        keywordSets = TAG.Worktop.Database.getKeywordSets();
 
         // 3 categories.
          //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
@@ -693,20 +697,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
 
         // No categories, no keywords. Capiche??
-        var keywordCategories = [];
-        var keywords = [[],[],[]];
+        //var keywordCategories = [];
+        //var keywords = [[],[],[]];
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
-        if (keywordCategories && keywords && keywordCategories.length > 0) {
+        if (keywordSets) {
             // Create unordered list of select elements.
             var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
 
             // Loop through the categories of keywords. 
-            keywordCategories.forEach(function(element, index, array) {
-                // Each category has 2 select elements: 
-                //      1. Operator select: AND/NOT (think radio buttons) 
-                //      2. Keywords select (think checklist).
-                // All select elements are added to the unordered list and kept inline.
+            keywordSets.forEach(function(set, setIndex) {
+                if (set.shown !== 'true') {
+                    return;
+                }
 
                 // Create operator select element. 
                 var listItem1 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
@@ -726,8 +729,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                                                  .attr('multiple', 'multiple'); // Make this a multi-select element. jQuery lib will turn into dropdown.
                 
                 // Add each of the keywords in this category.
-                for (var i = 0; i < keywords[index].length; i++) {
-                    select2.append($('<option>' + keywords[index][i] + '</option>').attr('value', i.toString())); 
+                for (var i = 0; i < set.keywords.length; i++) {
+                    select2.append($('<option>' + set.keywords[i] + '</option>').attr('value', i.toString()));
                 }
                 listItem2.append(select2); // Wrap the select element in a list item.
                 selectList.append(listItem2); // Then add the list item to our list of selects.
@@ -769,8 +772,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 } else {
                     // Odd numbered dropdowns are for keywords.
-                    var categoryIndex = (index - 1) / 2; // 1 --> 0, 3 --> 1, 5 --> 2, etc.
-                    $(element).text(function() { return keywordCategories[categoryIndex]; }); // Change the inner text of this selector element to category title.
+                    var setIndex = (index - 1) / 2; // 1 --> 0, 3 --> 1, 5 --> 2, etc.
+                    var setName = (keywordSets[setIndex].name !== '') ? keywordSets[setIndex] : 'untitled set';
+                    $(element).text(setName); // Change the inner text of this selector element to category title.
                     // Note: here we do not change the '.ui-dropdownchecklist-text' element (as we do above) to eliminate the functionality of updating
                     // the selector with selected text. I.e., when a user selects a keyword, the selector box text will not change to that keyword, 
                     // it will stay as the category title. 
