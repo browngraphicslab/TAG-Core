@@ -325,13 +325,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                             var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
                                             $('body').append(popup);
                                             $(popup).css({ 'display': 'none' });
-                                            /**
-                                            progressBar.click(function () {
-                                                $('body').append(popup);
-                                                $(popup).css({ 'display': 'inherit' });
-                                                $(popup).show();
-                                            });
-                                            **/
+                                            
                                             progressBarButton.click(function(){
                                                 $('body').append(popup);
                                                 $(popup).css({ 'display': 'inherit' });
@@ -757,7 +751,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      */
     function error(err) {
         var shouldContinue = false,
-            popup;
+            errorAlert;
         if (err.message.split(" ")[0] === "Unauthorized") {
             removeOverlay();
             console.log("unauthorized");
@@ -769,17 +763,17 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                 },
                 function () {
                     shouldContinue = true;
-                    popup = TAG.Util.UI.popUpMessage(null, "File(s) not uploaded. You must login to upload files.");
-                    $('body').append(popup);
-                    $(popup).show();
+                    errorAlert = TAG.Util.UI.popUpMessage(null, "File(s) not uploaded. You must login to upload files.");
+                    $('body').append(errorAlert);
+                    $(errorAlert).show();
                 }
             );
         } else {
             removeOverlay();
             console.log("internal server error: possibly not enough RAM on the server VM to handle this upload");
-            popup = TAG.Util.UI.popUpMessage(null, "A server error occurred. This image may need to be uploaded into TAG directly through the server. Contact server administrator for more information.");
-            $('body').append(popup);
-            $(popup).show();
+            errorAlert = TAG.Util.UI.popUpMessage(null, "A server error occurred. This image may need to be uploaded into TAG directly through the server. Contact server administrator for more information.");
+            $('body').append(errorAlert);
+            $(errorAlert).show();
         }
         if (shouldContinue) {
             console.log('file upload error: ' + err.message);
@@ -812,7 +806,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         updateProgressUI(guidsToFileNames[upload.guid], percentComplete)
     }
 
-    //updates the progress information in the upload queue popup
+    //updates the progress information in the upload queue 
     //right now - only shows 100% or 0% for each individual file
     function updateProgressUI(name, percent) {
         percent = 1;

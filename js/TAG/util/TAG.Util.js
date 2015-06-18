@@ -2908,8 +2908,11 @@ TAG.Util.UI = (function () {
             'position': 'relative',
             'text-align': 'left',
             'word-wrap': 'break-word',
+            'font-family': 'Segoe UI',
 
         });
+
+
 
         if (IS_WINDOWS) {
             $(messageLabel).css({'font-size':'1.20em'})
@@ -2976,6 +2979,8 @@ TAG.Util.UI = (function () {
                 'overflow': 'hidden',
                 'text-overflow':'ellipsis',
                 'height': '90%',
+                'font-family': 'Segoe UI',
+                'font-weight': 'lighter',
                 'max-width':'500px'
             }).text(function () {
                 if (realname.length > 20) {
@@ -3005,6 +3010,7 @@ TAG.Util.UI = (function () {
                 'white-space': 'nowrap',
                 'overflow': 'hidden',
                 'text-overflow': 'ellipsis',
+                'font-family': 'Segoe UI',
                 'max-width': '500px',
                 'vertical-align':'middle'
             }).text("0%");
@@ -3051,7 +3057,8 @@ TAG.Util.UI = (function () {
             'float': "right",
             'margin-right': '3%',
             'margin-top': '-1%',
-            color: 'white',
+            'color': 'white',
+            'background-color': 'transparent',
         }).css('border-radius', '3.5px');
         buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
         $(confirmButton).text(buttonText);
@@ -3160,7 +3167,7 @@ TAG.Util.UI = (function () {
             'height': '50%',
             'left': '10%',
             'top': '12.5%',
-            'font-size': '0.8em',
+            'font-size': '1em',
             'overflow': 'hidden',
             'position': 'relative',
             'text-align': 'center',
@@ -8662,13 +8669,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                     *			volume: volume
                     *			videoOffset: offset from the beginning of the video itsself
                 */
-			    console.log("Video Keyframes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                console.log("ITEContainer: "+$("#ITEContainer"))
-                console.log("ITEContainer width: " + $("#ITEContainer").width() + "   height: " + $("#ITEContainer").height())
-                console.log("TAG Root  Container width: " + $("#tagRoot").width() + "   height: " + $("#tagRoot").height())
                 var w = $("#ITEContainer").width() ? $("#ITEContainer").width() : $("#tagRoot").width();
                 var h = $("#ITEContainer").height() ? $("#ITEContainer").height() : $("#tagRoot").height();
-                console.log("w: "+w+"    h: "+h)
 			    keyFrame0 = {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
