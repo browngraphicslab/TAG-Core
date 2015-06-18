@@ -2908,8 +2908,11 @@ TAG.Util.UI = (function () {
             'position': 'relative',
             'text-align': 'left',
             'word-wrap': 'break-word',
+            'font-family': 'Segoe UI',
 
         });
+
+
 
         if (IS_WINDOWS) {
             $(messageLabel).css({'font-size':'1.20em'})
@@ -2976,6 +2979,8 @@ TAG.Util.UI = (function () {
                 'overflow': 'hidden',
                 'text-overflow':'ellipsis',
                 'height': '90%',
+                'font-family': 'Segoe UI',
+                'font-weight': 'lighter',
                 'max-width':'500px'
             }).text(function () {
                 if (realname.length > 20) {
@@ -3005,6 +3010,7 @@ TAG.Util.UI = (function () {
                 'white-space': 'nowrap',
                 'overflow': 'hidden',
                 'text-overflow': 'ellipsis',
+                'font-family': 'Segoe UI',
                 'max-width': '500px',
                 'vertical-align':'middle'
             }).text("0%");
@@ -3051,7 +3057,8 @@ TAG.Util.UI = (function () {
             'float': "right",
             'margin-right': '3%',
             'margin-top': '-1%',
-            color: 'white',
+            'color': 'white',
+            'background-color': 'transparent',
         }).css('border-radius', '3.5px');
         buttonText = (!buttonText || buttonText === "") ? "OK" : buttonText;
         $(confirmButton).text(buttonText);

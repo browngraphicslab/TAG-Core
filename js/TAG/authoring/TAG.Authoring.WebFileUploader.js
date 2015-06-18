@@ -40,6 +40,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     var resumableUploader;
     var localURL;
     var uriString;
+    var popup;
     var filesAdded = 0;
     var filesCompleted = 0;
     var successfulUploads = false;
@@ -64,7 +65,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         uploadingOverlay.attr("id", "uploadingOverlay");
         uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100 });
 
-        uploadOverlayText.css({ 'color': 'white', 'height': '5%', 'top': '35%', 'left': '35%', 'position': 'absolute', 'font-size': '150%' });
+        uploadOverlayText.css({ 'color': 'white', 'height': '5%', 'top': '35%', 'left': '35%', 'position': 'absolute', 'font-size': '150%'});
         uploadOverlayText.text('Uploading file(s). Please wait.');
 
         progressBar.css({
@@ -156,8 +157,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         console.log("If you're seeing this, the file picker should be open");
 
         //sets up the progress popup - creates popup but doesn't show it
-        var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
-        $('body').append(popup);
+        popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
         $(popup).css({'display':'none'});
         /*progressBar.unbind('click').click(function () {
             //$('body').append(popup);
@@ -400,6 +400,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         uploadingOverlay.remove();
         uploadOverlayText.remove();
         progressBar.remove();
+        popup.remove(); //will this fix the double pop up problem?
         //progressText.remove();
         progressBarButton.remove();
     }
