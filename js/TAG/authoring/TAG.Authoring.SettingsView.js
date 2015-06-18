@@ -1058,6 +1058,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareViewer(true);
         clearRight();
 
+
         // Load the start page, the callback will add it to the viewer when its done
 		//if (generalIsLoading) {
         //    generalProgressCircle = displayLoadingSettings();
@@ -1209,6 +1210,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
+            saveButton.focus();
             saveButton.css("opacity", 1);
             return 100;
         });
@@ -1218,6 +1220,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 event.preventDefault();
                 event.stopPropagation();
                 saveButton.click();
+                saveButton.focus();
             } else {
                 changesMade = true;
                 saveButton.prop("disabled", false);
@@ -1230,12 +1233,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
+            saveButton.focus();
         });
 
         var secondaryFontColorInput = createBGColorInput(secondaryFontColor, null, '.secondaryFont', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
+            saveButton.focus();
             return 100;
         });
 
@@ -1244,6 +1249,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 event.preventDefault();
                 event.stopPropagation();
                 saveButton.click();
+                saveButton.focus();
             } else {
                 changesMade = true;
                 saveButton.prop("disabled", false);
@@ -1255,6 +1261,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
+            saveButton.focus();
         });
 
 
@@ -1264,6 +1271,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
+            saveButton.focus();
         });
 
         // Delete function for keyword set inputs.
@@ -1566,6 +1574,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-left': '.5%',
             'float': 'right'
         }, true);
+        
         TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
             tobj.element_type = "Splash Screen";
         });
@@ -1580,7 +1589,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-right': '0%',
             'margin-bottom': '3%',
         });
-
+        previewStartPageButton.focus();
         var previewCollectionsPageButton = createButton('Collections Page', function () {
                 previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
                 primaryColorPicker.hidePicker();
@@ -1906,7 +1915,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      		for (i=0;i<result.length;i++){
      			//set the preview doq to the first artwork (not video or tour)
      			if (!(result[i].Metadata.Medium === "Video")&& !(result[i].Type === "Empty")){
-     				doq = result[i];
+     			    doq = result[i];
      				break;
      			}
      		}
@@ -3184,7 +3193,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prepareViewer(true);
 
                 // actually delete the exhibition
-                TAG.Worktop.Database.batchDeleteDoq(exhibitions, function () {
+                chunkDelete(exhibitions, function () {
 
                     console.log("collection deletion done");
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
@@ -3742,7 +3751,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prepareViewer(true);
 
                 // actually delete the tour
-                TAG.Worktop.Database.batchDeleteDoq(tours, function () {
+                chunkDelete(tours, function () {
                     console.log("done deleting tours");
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                         return;
@@ -4742,42 +4751,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 console.log(mediaMULTIPLE.length + " things to delete.")
                 var deleteCounter = 0;
-
-                //only way to get it to reload after all of them are done
-                var DEL = function (j, media) {
-                    // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
-                    TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
-                        // success handler
-                        TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
-                            deleteCounter += 1
-                            console.log("deleted item: " + j)
-                            if (deleteCounter == mediaMULTIPLE.length && (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.media.text])) {
-                                if (guidsToBeDeleted.indexOf(currDoq) < 0) {
-                                    toLoad = currDoq;
-                                    onlyMiddle = true;
-                                }
-                                loadAssocMediaView(toLoad, undefined, onlyMiddle);
-                            }
-                        }, function () {
-                            console.log("noauth error");
-                        }, function () {
-                            console.log("conflict error");
-                        }, function () {
-                            console.log("general error");
-                        });
-                    }, function () {
-                        // unauth handler
-                    }, function () {
-                        // conflict handler
-                    }, function () {
-                        // error handler
-                    });
-                };
-
-                for (var i = 0; i < mediaMULTIPLE.length; i++) {
-                    var media = mediaMULTIPLE[i]
-                    DEL(i, media)
-                }
+                chunkDelete(mediaGuids.slice(0), function () {
+                    if (guidsToBeDeleted.indexOf(currDoq) < 0) {
+                        toLoad = currDoq;
+                        onlyMiddle = true;
+                    }
+                    console.log("done chunk deleting");
+                    loadAssocMediaView(toLoad, undefined, onlyMiddle);
+                }, function () {
+                    console.log("noauth error");
+                }, function () {
+                    console.log("conflict error");
+                }, function () {
+                    console.log("general error");
+                });
             }
         }, confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
@@ -5550,6 +5537,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             // Make an async call to get artworks and then display
             TAG.Worktop.Database.getArtworks(function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    console.log("artwork "+i+":");
+                    console.log(result[i]);
+                }
                 if (cancel) return;
                 sortAZ(result);
                 currentList = result;
@@ -7409,7 +7400,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 clearRight();
                 prepareViewer(true);
                 // actually delete the artwork
-                TAG.Worktop.Database.batchDeleteDoq(artworks, function () {
+                chunkDelete(artworks, function () {
                     console.log("complete")
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
                         return;
@@ -7436,6 +7427,54 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         root.append(confirmationBox);
         $(confirmationBox).show();
         TAG.Util.multiLineEllipsis($($($(confirmationBox).children()[0]).children()[0]));
+    }
+
+    /*
+    function to delete batch artworks in chunks of  defined sizes.  this is too lighten the load on the server
+    the parameters are the same for calling TAG.Worktop.Database.batchDeleteDoq
+
+        guids:  Array of guids in string form to be deleted
+        success: the function to call upon success
+        unauth: Unauthorized handler (called when a user fails to login)
+        conflict: Called if the client's version of the doq is out of date
+        error: Called for any other errors
+
+
+    */
+    function chunkDelete(guids, success, unauth, conflict, error) {
+
+        var chunkSize = 5;//change to affect the size of the chunk
+        var chunks = [];
+
+        chunks.push([guids[0]]);
+
+        for (var i = 1; i < guids.length; i++) {//for loop to create the chunks
+
+            if (chunks[chunks.length - 1].length < chunkSize) {
+                chunks[chunks.length - 1].push(guids[i])
+            }
+            else {
+                chunks.push([guids[i]])
+            }
+        }
+        console.log("number of chunks: " + chunks.length);
+        function nextChunk() {
+            console.log("next Chunk called for batch artwork delete")
+            if (chunks.length > 0) {
+                console.log("sending out next request")
+                TAG.Worktop.Database.batchDeleteDoq(
+                    chunks.shift(),
+                    function () { console.log("success of chunk"); nextChunk() },
+                    function () { console.log("unauth error"); nextChunk(); if (unauth) { unauth() } },
+                    function () { console.log("conflict error"); nextChunk(); if (conflict) { conflict() } },
+                    function () { console.log("general error in batch doq delete"); nextChunk(); if (error) { error() } });
+            }
+            else {
+                console.log("chunking delete finished, calling callback...");
+                success();
+            }
+        }
+        nextChunk();
     }
 
     /**Save an artwork

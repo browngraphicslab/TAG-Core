@@ -1546,7 +1546,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
                         //create an ink canvas and inkController
                         var inkdiv = createInkCanv();
-                        var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
+                        var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", $(inkdiv), "componentControls", spec);
                         $('#inkCanv').css("background", "rgba(0,0,0,0.01)");
                         inkAuthoring = p1;
                         p1.resetText();
@@ -5132,6 +5132,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             var inkdiv = document.createElement("div");
             inkdiv.setAttribute("id", "inkCanv");
             inkdiv.setAttribute("class", "inkCanv");
+            var nothing = $(inkdiv)
             //set rinplayer's position to absolute so our canvas isn't pushed down
             $("#rinplayer").css({
                 "position": "absolute",
