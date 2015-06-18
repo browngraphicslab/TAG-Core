@@ -3268,8 +3268,10 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     return;
                 }
 
-                currentKeywords[setIndex].forEach(function (keyword, keywordIndex) {
-                    keywordsCheckboxDict[setIndex][keyword][0].checked = true;
+                currentKeywords[setIndex].forEach(function (keyword) {
+                    if (keywordsCheckboxDict[setIndex][keyword]) {
+                        keywordsCheckboxDict[setIndex][keyword][0].checked = true;
+                    }
                 });
             });
 

@@ -773,7 +773,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 } else {
                     // Odd numbered dropdowns are for keywords.
                     var setIndex = (index - 1) / 2; // 1 --> 0, 3 --> 1, 5 --> 2, etc.
-                    var setName = (keywordSets[setIndex].name !== '') ? keywordSets[setIndex] : 'untitled set';
+                    var setName = (keywordSets[setIndex].name !== '') ? keywordSets[setIndex].name : 'untitled set';
                     $(element).text(setName); // Change the inner text of this selector element to category title.
                     // Note: here we do not change the '.ui-dropdownchecklist-text' element (as we do above) to eliminate the functionality of updating
                     // the selector with selected text. I.e., when a user selects a keyword, the selector box text will not change to that keyword, 
@@ -809,22 +809,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
 
             // The last thing we do is add a search button. 
-            var searchButtonListItem = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
-            var searchButton = $(document.createElement('div')).text('Search')
-                .attr('id', 'searchButton')
-                .css('height', elementHeight + 'px')
-                .hover(
-                    function() {
-                        $( this ).css('background-color', '#39f');
-                    }, function() {
-                        $( this ).css('background-color', '#fff');
-                })
-                .click(
-                    function() {
-                        doSearch();
-                });
-            searchButtonListItem.append(searchButton);
-            selectList.append(searchButtonListItem);
+            if (keywordSets && (keywordSets[0].shown === 'true' || keywordSets[1].shown === 'true' || keywordSets[2].shown === 'true')) {
+                var searchButtonListItem = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
+                var searchButton = $(document.createElement('div')).text('Search')
+                    .attr('id', 'searchButton')
+                    .css('height', elementHeight + 'px')
+                    .hover(
+                        function () {
+                            $(this).css('background-color', '#39f');
+                        }, function () {
+                            $(this).css('background-color', '#fff');
+                        })
+                    .click(
+                        function () {
+                            doSearch();
+                        });
+                searchButtonListItem.append(searchButton);
+                selectList.append(searchButtonListItem);
+            }
         } else {
             var divHeight = $('#leftContainer').height()/2;
             $('#leftContainer').css('margin-top', divHeight + 'px');
