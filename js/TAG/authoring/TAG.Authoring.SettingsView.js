@@ -4747,6 +4747,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var DEL = function (j, media) {
                     // stupid way to force associated artworks to increment their linq counts and refresh their lists of media
                     TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
+                        console.log("assoc media changed " + j);
                         // success handler
                         TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
                             deleteCounter += 1
@@ -7402,7 +7403,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prepareViewer(true);
                 // actually delete the artwork
                 TAG.Worktop.Database.batchDeleteDoq(artworks, function () {
-                    console.log("complete")
+                    console.log("batch delete of artworks complete")
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
                         return;
                     }

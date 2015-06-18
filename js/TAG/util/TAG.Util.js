@@ -5298,7 +5298,11 @@ TAG.Util.RLH = function (input) {
         richLocationData = artwork.Metadata.RichLocationHistory ? JSON.parse(unescape(artwork.Metadata.RichLocationHistory)) : locationToRichLocation(artwork.Metadata.Location);
         locations = richLocationData.locations || [];
         defaultMapShown = richLocationData.defaultMapShown;
-        currentIndex = 0;
+        if (defaultMapShown) {
+            currentIndex = 0;
+        } else {
+            currentIndex = 1;
+        }
         if (!IS_WINDOWS) {
             var script = document.createElement('script');
             script.type = 'text/javascript';
@@ -5479,7 +5483,8 @@ TAG.Util.RLH = function (input) {
                         height: 'auto',
                         right: '10%',
                         top: '50%',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        display:'none'
                     })
                     .appendTo(leftArrowContainer)
 
@@ -5508,16 +5513,17 @@ TAG.Util.RLH = function (input) {
 
         rightArrowButton = $(document.createElement('img'))
                     .attr('id', 'locationHistoryRightArrowButton')
-                    .attr('src', tagPath+'images/icons/Right.png')
+                    .attr('src', tagPath + 'images/icons/Right.png')
                     .css({
                         position: 'absolute',
                         width: '13px',
                         height: 'auto',
                         left: '10%',
                         top: '50%',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        display: 'none'
                     })
-                    .appendTo(rightArrowContainer)
+                    .appendTo(rightArrowContainer);
 
         disabledOverlay = $(document.createElement('div'))
                     .attr('id', 'defaultMapDisabledOverlay')
@@ -5833,17 +5839,14 @@ TAG.Util.RLH = function (input) {
                     mapGuids.push(mps[i].Identifier);
                 }
             }
-            if (!defaultMapShown) { // do not show bing map if it is disabled
-                mapGuids.remove(null);
-            }
             loadMaps(callback);
-            createDots();
+            createDots(input.authoring);
         }, function () {
             loadMaps(callback);
-            createDots();
+            createDots(input.authoring);
         }, function () {
             loadMaps(callback);
-            createDots();
+            createDots(input.authoring);
         });
     }
 
@@ -5872,29 +5875,29 @@ TAG.Util.RLH = function (input) {
             createLocationList();
         };
 
-        for (i = 0; i < mapGuids.length; i++) {
-            holder = $(document.createElement('div'))
-                        .addClass('locationHistoryMapHolder')
-                        .css({
-                            //'background-color': 'rgba(0,0,0,0.8)',
-                            //'border': '1px solid white',
-                            position: 'absolute',
-                            width: '100%',
-                            height: '100%',
-                            left: '0%',
-                            top: '0%',
-                            'text-align': 'center',
-                            display: 'none'
-                        })
-                        .appendTo(mapContainer);
-            mapHolders[mapGuids[i]] = holder;
-            helper = mapGuids[i] ? customMapHelper : bingMapHelper;
-            helper.init({
-                container: holder,
-                mapdoq: mapDoqs[mapGuids[i]],
-                progress: progress,
-                loadCallback: loadCallback
-            });
+        for (i = 0; i < mapGuids.length; i++) {         
+                holder = $(document.createElement('div'))
+                            .addClass('locationHistoryMapHolder')
+                            .css({
+                                //'background-color': 'rgba(0,0,0,0.8)',
+                                //'border': '1px solid white',
+                                position: 'absolute',
+                                width: '100%',
+                                height: '100%',
+                                left: '0%',
+                                top: '0%',
+                                'text-align': 'center',
+                                display: 'none'
+                            });
+                holder.appendTo(mapContainer);
+                mapHolders[mapGuids[i]] = holder;
+                helper = mapGuids[i] ? customMapHelper : bingMapHelper;
+                helper.init({
+                    container: holder,
+                    mapdoq: mapDoqs[mapGuids[i]],
+                    progress: progress,
+                    loadCallback: loadCallback
+                });
         }
     }
 
@@ -5985,6 +5988,23 @@ TAG.Util.RLH = function (input) {
     function showMap(guid) {
         var i;
 
+        //If bing maps is disabled and in art viewer, don't show it
+        if (!guid && !input.authoring && !defaultMapShown) {
+            return;
+        }
+
+        if (currentIndex === (mapGuids.length - 1)) {
+            rightArrowButton.css('display', 'none');
+        } else {
+            rightArrowButton.css('display', 'block');
+        }
+
+        if (currentIndex === 0 || (!input.authoring && !defaultMapShown && (currentIndex===1))){
+            leftArrowButton.css('display', 'none');
+        } else {
+            leftArrowButton.css('display','block');
+        }
+
         //if (!(mapGuids[currentIndex] == guid)){ //don't register if already being shown
             TAG.Telemetry.recordEvent("Maps", function(tobj) {
                 tobj.current_artwork = artwork.Identifier;            
@@ -6074,8 +6094,9 @@ TAG.Util.RLH = function (input) {
     /**
      * Creates map dots (below the map)
      * @method createDots
+     * @param inAuthoring - if we are in authoring (vs viewer)
      */
-    function createDots() {
+    function createDots(inAuthoring) {
         var i,
             dot;
         dotsContainer.empty();
@@ -6094,8 +6115,11 @@ TAG.Util.RLH = function (input) {
                         height: '6px',
                         'margin-left': '5px',
                         opacity:'1'
-                    })
-                    .appendTo(dotsContainer);
+                    });
+            //don't append dot of bing map if bing map hidden and we are not in authoring 
+            if (!(mapGuids[i]===null && !defaultMapShown && !inAuthoring)){
+                dot.appendTo(dotsContainer);
+            }
             dot.on('click', dotClickHelper(i));
         }
     }
@@ -6345,7 +6369,7 @@ TAG.Util.RLH = function (input) {
                 });
             }
 
-            map.entities.push(pushpin);
+            map && map.entities.push(pushpin);
 
             return pushpin;
         }
