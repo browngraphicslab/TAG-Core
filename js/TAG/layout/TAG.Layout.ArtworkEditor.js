@@ -1190,7 +1190,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             layerContainer,
             currSource,
             toggleHotspotButton = $('.toggleHotspot'),
-            toggleLayerButton = $('.toggleLayer'),
+            //toggleLayerButton = $('.toggleLayer'),
             activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
             isHotspot = false, // whether the current media is a hotspot
             isLayer = false,
@@ -1198,7 +1198,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             oldDescription, // description text when the editor is opened
             positionChanged = false; // whether the hotspot is added, moved, or deleted
         toggleHotspotButton.css('border-radius','3.5px');
-        toggleLayerButton.css('border-radius', '3.5px');
+       // toggleLayerButton.css({ 'border-radius': '3.5px', 'display': 'none' });
         rightbarIsOpen = false;
         creatingText = false;
         /**
@@ -1314,8 +1314,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             isLayer && toggleFromLayer();
 
             toggleHotspotButton.text('Remove Hotspot');
-            toggleLayerButton.attr('disabled', 'disabled');
-            toggleLayerButton.css('opacity', '0.5');
+           // toggleLayerButton.attr('disabled', 'disabled');
+           // toggleLayerButton.css('opacity', '0.5');
 
             annotatedImage.addOverlay(hotspotAnchor[0], point_adj, Seadragon.OverlayPlacement.TOP_LEFT); // TODO see new AnnotatedImage; also, do we really want to be adding a new overlay each time? we only have one hotspot circle, so maybe just want to update the existing overlay
             annotatedImage.viewer.viewport.panTo(new Seadragon.Point(point.x, point.y), false);
@@ -1329,14 +1329,14 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          */
         function toggleFromHotspot() {
             toggleHotspotButton.text('Set as Hotspot');
-            toggleLayerButton.removeAttr('disabled');
+           // toggleLayerButton.removeAttr('disabled');
             toggleHotspotButton.on("mousedown", function () {
                 toggleHotspotButton.css({ "background-color": "white", "color": "black" });
             });
             toggleHotspotButton.on("mouseleave", function () {
                 toggleHotspotButton.css({ "background-color": "transparent", "color": "white" });
             });
-            toggleLayerButton.css('opacity', '1.0');
+          //  toggleLayerButton.css('opacity', '1.0');
 
             annotatedImage.removeOverlay(hotspotAnchor[0]); // TODO check
             hotspotAnchor.fadeOut(100);
@@ -1469,7 +1469,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
             makeLayerContainer();
 
-            toggleLayerButton.text('Remove Layer');
+           // toggleLayerButton.text('Remove Layer');
             toggleHotspotButton.attr('disabled', 'disabled'); 
             toggleHotspotButton.css('opacity', '0.5');
 
@@ -1506,16 +1506,16 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          */
         function toggleFromLayer() {
             isLayer = false;
-            toggleLayerButton.text('Set as Layer');
+           // toggleLayerButton.text('Set as Layer');
             toggleHotspotButton.removeAttr('disabled');
             toggleHotspotButton.css('opacity', '1.0');
            
-            toggleLayerButton.on("mousedown", function () {
-                toggleLayerButton.css({ "background-color": "white", "color": "black" });
-            });
-            toggleLayerButton.on("mouseleave", function () {
-                toggleLayerButton.css({ "background-color": "transparent", "color": "white" });
-            });
+           // toggleLayerButton.on("mousedown", function () {
+          //      toggleLayerButton.css({ "background-color": "white", "color": "black" });
+          //  });
+           // toggleLayerButton.on("mouseleave", function () {
+         //       toggleLayerButton.css({ "background-color": "transparent", "color": "white" });
+         //   });
             if (layerContainer) {
                 annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
                 layerContainer.remove();
@@ -1929,6 +1929,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     //.css('border-radius','3.5px')
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer),
+                /**
                 $toggleLayer = $(document.createElement('button'))
                     .addClass('toggleLayer').css('border-radius','3.5px')
                     .css({
@@ -1942,6 +1943,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     })
                     .attr('type', 'button')
                     .appendTo($toggleModeContainer), 
+                    **/
                 $titleContainer = $(document.createElement('div'))
                     .addClass('textareaContainer')
                     .css({
@@ -1950,7 +1952,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         'position': 'relative',
                         'height': 'auto', 
                         'max-height': '10%',
-                        'margin-top': '5%',
+                        'margin-top': '10%',
                     })
                     .appendTo($rightbar),
                 $titleText = $(document.createElement('input'))
@@ -2022,7 +2024,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     .attr('type', 'button')
                     .css({
                         'float': 'right',
-                        'border': '2px solid white',
+                        //'border': '2px solid white',
                         'max-width': '43%',
                         'width': '43%',
                         'display': 'inline-block',
@@ -2092,10 +2094,12 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 $saveAssocMediaButton.css('opacity', '1');
             });
 
+            /**
             $toggleLayer.on('click', function () {
                 $saveAssocMediaButton.prop('disabled', false);
                 $saveAssocMediaButton.css('opacity', '1');
             });
+            **/
 
             makeHotspotAnchor();
             // makeLayerContainer(); -- called in toggleToLayer now
@@ -2104,13 +2108,14 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 positionChanged = true;
                 isHotspot ? toggleFromHotspot() : toggleToHotspot();
             });
-
+            /**
             $toggleLayer.on('click', function () {
                 isLayer ? toggleFromLayer() : toggleToLayer();
             });
+            **/
 
             toggleHotspotButton = $toggleHotspot; // get rid of these intermediate variables...
-            toggleLayerButton = $toggleLayer;
+           // toggleLayerButton = $toggleLayer;
 
             $unassociateAssocMediaButton.on('click', function () {
                 TAG.Util.removeYoutubeVideo();
@@ -2195,11 +2200,11 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
                 if (creatingText) {
                     createTextAsset(titleTextVal, $descArea.val());
-
+                    /**
                     // add the loading circle right after the "save" button is clicked
                     var buttonbarLoadingDelete = $(document.createElement('div'));
                     buttonbarLoadingDelete.css({ // TODO STYL
-                        'width': '90%',
+                        'width': '100%',
                         'height': '52%',
                         'position': 'absolute',
                         'top': '33%',
@@ -2209,7 +2214,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     $('.sidebar').append(buttonbarLoadingDelete);
                     buttonbarLoadingDelete.attr('class','buttonbarLoadingDelete');
                     TAG.Util.showLoading(buttonbarLoadingDelete, '20%', '40%', '40%');
-                    buttonbarLoadingDelete.css('background-color','black'); 
+                    buttonbarLoadingDelete.css('background-color', 'black');
+                    **/
                     creatingText = false;
                     close();
                 } else {
@@ -2319,15 +2325,15 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 }
 
                 toggleHotspotButton.text(isHotspot ? 'Remove Hotspot' : 'Create Hotspot');
-                toggleLayerButton.text(isLayer ? 'Remove Layer' : 'Create Layer');
+              //  toggleLayerButton.text(isLayer ? 'Remove Layer' : 'Create Layer');
 
                 isHotspot ? toggleToHotspot(point) : toggleFromHotspot();
                 isLayer ? toggleToLayer(rect) : toggleFromLayer();
 
                 // don't show the toggle layer button if we're dealing with audio/video or an older server
-                toggleLayerButton.css({
-                    'display': enableLayering ? 'inline-block' : 'none'
-                });
+            //    toggleLayerButton.css({
+                  //  'display': enableLayering ? 'inline-block' : 'none'
+               // });
 
                 
                 rightbar.find('.header').text("Edit Associated Media");
@@ -2411,7 +2417,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             layerContainer,
             currSource,
             toggleHotspotButton = $('.toggleHotspot'),
-            toggleLayerButton = $('.toggleLayer'),
+            //toggleLayerButton = $('.toggleLayer'),
             //activeAssocMedia, // TODO in web app, this should be current assoc media object (of the type created by AnnotatedImage)
             isHotspot = false, // whether the current media is a hotspot
             isLayer = false,
@@ -2422,7 +2428,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             positionChanged = false; // whether the hotspot is added, moved, or deleted
             
         toggleHotspotButton.css('border-radius', '3.5px');
-        toggleLayerButton.css('border-radius', '3.5px');
+        //toggleLayerButton.css('border-radius', '3.5px');
 
         //closeButton.on('click', function () {
         //    close();
@@ -2489,7 +2495,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             //}
 
            
-            toggleLayerButton.text(isLayer ? 'Remove Layer' : 'Create Layer');
+           // toggleLayerButton.text(isLayer ? 'Remove Layer' : 'Create Layer');
 
             //isHotspot ? toggleToHotspot(point) : toggleFromHotspot();
             //isLayer ? toggleToLayer(rect) : toggleFromLayer();
