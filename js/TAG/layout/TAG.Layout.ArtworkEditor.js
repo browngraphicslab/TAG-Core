@@ -1138,6 +1138,17 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 sidebarHideButtonContainer.hide();
                 locationPanelDiv.show("slide", { direction: 'left' }, 500);
                 locationPanelDiv.css({ display: 'inline' });
+
+               
+                var progressBar = $(document.getElementById("progressBarUploads"));
+                
+
+                if ($(progressBar).length >0) {
+                    console.log("upload is happening, disable import maps PLEASE!!");
+                    $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
+                    $(importMapButton).prop('disabled', 'true');
+
+                } 
                 
                 isOpen = true;
             }

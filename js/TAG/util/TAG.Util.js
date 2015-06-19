@@ -3131,6 +3131,8 @@ TAG.Util.UI = (function () {
         return overlay;
     }
 
+    
+
     // popup message to ask for user confirmation of an action e.g. deleting a tour
     function PopUpConfirmation(confirmAction, message, confirmButtonText, noFade, cancelAction, container, onkeydown,forTourBack,fortelemetry, cancelOption, displayNames, useTeleFormat) {
         var overlay;
@@ -5688,6 +5690,16 @@ TAG.Util.RLH = function (input) {
                     })
                     .appendTo(buttonsRegion)
                     .text('Import Map').css('border-radius', '3.5px');
+            
+            var progressBar = $(document.getElementById("progressBarUploads"));
+            //console.log("prog bar length = " + $(progressBar).length);
+            if ($(progressBar).length > 0) {
+                console.log("progressBar l")
+                $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
+                $(importMapButton).prop('disabled', 'true');
+                
+            }
+
 
             deleteButton = $(document.createElement('button'))
                         .attr({
@@ -5887,6 +5899,7 @@ TAG.Util.RLH = function (input) {
      * @param {Function} callback      function to call when loading is complete
      */
     function loadMaps(callback) {
+        //console.log("loading maps called");
         var i,
             holder,
             m,
@@ -5900,6 +5913,8 @@ TAG.Util.RLH = function (input) {
 
         mapHolders = {};
         mapContainer.empty(); // TODO this is inefficient, just here for rapid prototyping
+        $(importMapButton).prop('disabled', false);
+        $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 1.0)' });
 
         loadCallback = function () {
             callback && callback();
@@ -5929,6 +5944,16 @@ TAG.Util.RLH = function (input) {
                     progress: progress,
                     loadCallback: loadCallback
                 });
+        }
+        var progressBar = $(document.getElementById("progressBarUploads"));
+
+
+        console.log("loading maps called, prog bar length = " + $(progressBar).length);
+        if ($(progressBar).length > 0) {
+            console.log("other upload is happening, disable import maps PLEASE!!!!!");
+            $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
+            $(importMapButton).prop('disabled', 'true');
+
         }
     }
 
@@ -7607,7 +7632,18 @@ TAG.Util.RLH = function (input) {
             function () {
                 root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
             },
-            false // batch upload disabled for now
+            false, // batch upload disabled for now
+            null,
+            null,
+            function () {
+                console.log("import maps should be disabled while map uploads");
+                $(importMapButton).prop('disabled', true);
+                $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+            },
+            function () {
+                $(importMapButton).prop('disabled', false);
+                $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+            }
         );
         }
 
