@@ -622,7 +622,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         }
 
         // Keywords button.
-        if (keywordSets[0].shown === 'true' || keywordSets[2].shown === 'true' || keywordSets[2].shown === 'true') {
+        if (keywordSets[0].shown === 'true' || keywordSets[1].shown === 'true' || keywordSets[2].shown === 'true') {
             keywordsButton = $(document.createElement('div')) // TODO J/S
                 .css(newButtonCSS)
                 .on('click', function () {
@@ -1138,6 +1138,17 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 sidebarHideButtonContainer.hide();
                 locationPanelDiv.show("slide", { direction: 'left' }, 500);
                 locationPanelDiv.css({ display: 'inline' });
+
+               
+                var progressBar = $(document.getElementById("progressBarUploads"));
+                
+
+                if ($(progressBar).length >0) {
+                    console.log("upload is happening, disable import maps PLEASE!!");
+                    $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
+                    $(importMapButton).prop('disabled', 'true');
+
+                } 
                 
                 isOpen = true;
             }

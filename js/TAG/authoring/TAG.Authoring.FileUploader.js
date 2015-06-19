@@ -79,6 +79,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                         'top': '31%',
                  });
         progressBar = $(document.createElement('div')).addClass('progressBarUploads');
+        $(progressBar).attr('id', 'progressBarUploads');
         progressBar.css({
             'position': 'relative',
             'top': '42%',

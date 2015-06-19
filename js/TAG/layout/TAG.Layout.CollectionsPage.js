@@ -77,6 +77,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         firstLoad = true,                             // TODO is this necessary? what is it doing?
         currentArtworks = [],                               // array of artworks in current collection
         infoSource = [],                               // array to hold sorting/searching information
+        keywordHash = {},                               // hash for keywords
         timelineEventCircles = [],                               // circles for timeline
         timelineTicks = [],                               // timeline ticks
         scaleTicks = [],                               // timeline scale ticks
@@ -708,25 +709,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Loop through the categories of keywords. 
             keywordSets.forEach(function(set, setIndex) {
-                if (set.shown !== 'true') {
-                    return;
-                }
 
                 // Create operator select element. 
                 var listItem1 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
-                var select1 = $(document.createElement('select')).addClass('keywordsSelect'); // Class stylizes select element.
+                var select1 = $(document.createElement('select')).addClass('keywordsSelect') // Class stylizes select element.
+                                                                 .addClass('operationSelect'); // Class to distinguish this as AND/NOT.
                 var andOptn = $('<option>AND</option>').attr('value', '0'); // AND option.
                 var notOptn = $('<option>NOT</option>').attr('value', '1'); // NOT option.
                 select1.append(andOptn); // Add AND option.
                 select1.append(notOptn); // Add NOT option.
                 listItem1.append(select1); // Wrap the select element in a list item.
+                // Hide if not shown.
+                if (set.shown !== 'true') {
+                    listItem1.css('display', 'none');
+                }
                 selectList.append(listItem1); // Then add the list item to our list of selects.
                 keywordOperatorSelects.push(select1); // Also add select element to stored list of operator selects. 
 
                 // Create keywords select element.
                 var listItem2 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
                 var select2 = $(document.createElement('select')).addClass('keywordsSelect') // Class stylizes select element.
-                                                                 .addClass('multiselect') // Class to help distinguish multiselects. Might be unused.
+                                                                 .addClass('keywordsMultiselect') // Class to help distinguish keyword selection from operation select.
                                                                  .attr('multiple', 'multiple'); // Make this a multi-select element. jQuery lib will turn into dropdown.
                 
                 // Add each of the keywords in this category.
@@ -734,8 +737,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     select2.append($('<option>' + set.keywords[i] + '</option>').attr('value', i.toString()));
                 }
                 listItem2.append(select2); // Wrap the select element in a list item.
+                // Hide if not shown.
+                if (set.shown !== 'true') {
+                    listItem2.css('display', 'none');
+                }
                 selectList.append(listItem2); // Then add the list item to our list of selects.
                 keywordSelects.push(select2); // Also add select element to stored list of keyword selects.
+
 
             }); 
 
@@ -1624,7 +1632,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         searchInput[0].value = "";
         infoSource = [];
+        keywordHash = {};
 
+        // Normal metadata
         $.each(contents, function (i, cts) {
             if (!cts) {
                 return false;
@@ -1641,6 +1651,84 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "keys": info.toLowerCase()
             });
         });
+
+        // Keywords.
+        if (keywordSets) {
+            // First create an empty hash table, the keys are "[set.name]_[keyword]", the values are empty arrays to be filled with tagged artworks.
+            $.each(keywordSets, function (setIndex, set) {
+                if (keywordSets[setIndex].shown) {
+                    $.each(keywordSets[setIndex].keywords, function (keywordIndex, keyword) {
+                        keywordHash[set.name + '_' + keyword] = [];
+                    });
+                }
+            });
+
+            //  Add the artworks to the hash.
+            $.each(contents, function (i, cts) {
+                if (!cts) {
+                    return false;
+                }
+                info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
+                if (cts.Metadata.InfoFields) {
+                    $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+                        info += " " + field;
+                        info += " " + fieldText;
+                    });
+                }
+                if (cts.Metadata.KeywordsSet1 && keywordSets[0].shown) {
+                    var artworksKeywordsSet1 = cts.Metadata.KeywordsSet1.split(',');
+                    $.each(artworksKeywordsSet1, function (index, artworkKeyword) {
+                        if (keywordHash[keywordSets[0].name + '_' + artworkKeyword]) {
+                            keywordHash[keywordSets[0].name + '_' + artworkKeyword].push({ "id": i, "keys": info.toLowerCase() });
+                        }
+                    });
+                }
+                if (cts.Metadata.KeywordsSet2 && keywordSets[1].shown) {
+                    var artworksKeywordsSet2 = cts.Metadata.KeywordsSet2.split(',');
+                    $.each(artworksKeywordsSet2, function (index, artworkKeyword) {
+                        if (keywordHash[keywordSets[1].name + '_' + artworkKeyword]) {
+                            keywordHash[keywordSets[1].name + '_' + artworkKeyword].push({ "id": i, "keys": info.toLowerCase() });
+                        }
+                    });
+                }
+                if (cts.Metadata.KeywordsSet3 && keywordSets[2].shown) {
+                    var artworksKeywordsSet3 = cts.Metadata.KeywordsSet3.split(',');
+                    $.each(artworksKeywordsSet1, function (index, artworkKeyword) {
+                        if (keywordHash[keywordSets[2].name + '_' + artworkKeyword]) {
+                            keywordHash[keywordSets[2].name + '_' + artworkKeyword].push({ "id": i, "keys": info.toLowerCase() });
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    /*
+     * Method to pull the checked off keywords from the UI for search
+     * @method getCheckedKeywords
+     * @return      array of strings of each checked off keyword, in format [set.name]_[keyword]
+     */
+    function getCheckedKeywords() {
+        var andKeys = [],
+            notKeys = [];
+        for (var i = 0; i < 3; i++) {
+            if (keywordSets[i].shown !== 'true') {
+                continue;
+            }
+
+            var setName = keywordSets[i].name;
+
+            // Find out if this is an AND or NOT.
+            var operation = $('#ddcl-' + ((i*2) + 1)).parent().find('.operationSelect :selected').text();
+            $('#ddcl-' + ((i * 2) + 2)).parent().find('.keywordsMultiselect :selected').each(function (i, selected) {
+                if (operation === 'AND') {
+                    andKeys.push(setName + '_' + $(selected).text());
+                } else {
+                    notKeys.push(setName + '_' + $(selected).text());
+                }
+            });
+
+        }
     }
 
     /**
@@ -1657,6 +1745,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             searchTxt.text("");
             drawCatalog(currentArtworks, currentTag, 0, false);
             return;
+        }
+
+        if (keywordSets) {
+            getCheckedKeywords();
         }
 
         for (i = 0; i < infoSource.length; i++) {
