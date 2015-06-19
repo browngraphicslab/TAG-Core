@@ -676,17 +676,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function addKeywords() {
 
         // Get keywords from the server!
-        keywordSets = TAG.Worktop.Database.getKeywordSets();
+         keywordSets = TAG.Worktop.Database.getKeywordSets();
 
         // 3 categories.
-         //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
-         //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-         //                ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
-         //                ['Tropical House', 'Hardstyle', 'Disco', 'Hardcore', 'Tagcore', 
-         //                'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Genre',
-         //                'Escapism', 'Realism', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
-         //                'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'List Item', '^_^']];
-
+        /**
+         var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
+         var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
+                        ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
+                        ['Tropical House', 'Hardstyle', 'Disco', 'Hardcore', 'Tagcore', 
+                        'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Genre',
+                         'Escapism', 'Realism', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
+                         'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'List Item', '^_^']];
+        **/
         // 2 categories.
         // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
         // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
@@ -701,7 +702,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         //var keywords = [[],[],[]];
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
-        if (keywordSets) {
+      if (keywordSets) {
             // Create unordered list of select elements.
             var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
 
@@ -827,6 +828,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 searchButtonListItem.append(searchButton);
                 selectList.append(searchButtonListItem);
             }
+
         } else {
             var divHeight = $('#leftContainer').height()/2;
             $('#leftContainer').css('margin-top', divHeight + 'px');
@@ -2292,7 +2294,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         maxNode = avlTree.max();
 
         //Hide timeline if there are no compatible dates-- mostly for backwards compatibility
-        if (avlTree.min().yearKey === Number.POSITIVE_INFINITY){
+        if (avlTree.min().yearKey >= 999999){
             timelineShown = false;
             clearTimeline();
             //TO-DO coming back isn't right here, so coming back from artwork viewer fails in this specific case
@@ -2309,7 +2311,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         
         //Skip before tours and artworks with incompatible dates
-        while (maxNode.yearKey === Number.POSITIVE_INFINITY){
+        while (maxNode.yearKey >= 999999){
             maxNode = avlTree.findPrevious(maxNode);
         }
 
