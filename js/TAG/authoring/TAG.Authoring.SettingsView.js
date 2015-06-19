@@ -7302,6 +7302,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
                 SPENT_TIMER.restart();
             });
+            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+            if (($('.progressBarUploads').length > 0)) { //disable import map button here?!
+                console.log("disable import maps!?!?!?");
+                $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
+                $(importMapButton).prop('disabled', 'true');
+            }
         }, 1);
     }
 
@@ -9519,6 +9525,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         return Object.prototype.toString.apply(value) === '[object Array]';
     }
 
+    function uploadHappening() {
+        var uploading = false;
+        if ($('.progressBarUploads').length > 0) {
+            uploading = true;
+        }
+        return uploading;
+    }
+
     /** Upload a file then calls the callback with the url and name of the file.
      * @method uploadFIle
      * @param type                  See TAG.Authoring.FileUploader for 'type' values
@@ -9589,6 +9603,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     bgImgInput.css({ 'opacity': '.4' });
 
                 }
+
+                
                 
                 
             },
@@ -9681,8 +9697,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             !!multiple, // batch upload disabled
             null,
             useOverlay,
-            function(){
-                if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
+            function(){//disables all import buttons if upload is happening - this automatically disables the button the user imported from
+                if(inArtworkView==true || inAssociatedView ==true){ 
                     $(newButton).prop('disabled', true);
                     newButton.css({'opacity': '.4'});
                 }
@@ -9695,6 +9711,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     bgImgInput.css({ 'opacity': '.4' });
 
                 }
+
+                
                 
             },
             function(){
