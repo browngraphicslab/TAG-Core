@@ -31,7 +31,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description', 'AddIDs', 'RemoveIDs']
         },
         artwork: {
-            url: ['Name', 'Title', 'Artist', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted', 'Locked'],
+            url: ['Name', 'Title', 'Artist', 'Year', 'Month', 'Day', 'TimelineYear', 'TimelineMonth', 'TimelineDay', 'Preview', 'Thumbnail', 'Deepzoom', 'Source', 'Duration', 'Converted', 'Locked', 'KeywordsSet1', 'KeywordsSet2', 'KeywordsSet3'],
             body: ['Description', 'Location', 'AddIDs', 'RemoveIDs', 'InfoFields', 'Duration', 'RichLocationHistory', 'AddMaps', 'RemoveMaps']
         },
         tour: {
@@ -51,7 +51,7 @@ TAG.Worktop.Database = (function () {
             body: ['Description']
         },
         main: {
-            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'IdleTimerDuration','isKioskLocked'],
+            url: ['Name', 'OverlayColor', 'OverlayTrans', 'Location', 'Background', 'Icon', 'IconColor', 'BackgroundColor', 'BackgroundOpacity', 'FontFamily', 'PrimaryFontColor', 'SecondaryFontColor', 'BaseFontSize', 'Font', 'IdleTimerDuration', 'isKioskLocked', 'KeywordSet1Title', 'KeywordSet2Title', 'KeywordSet3Title', 'KeywordSet1Shown', 'KeywordSet2Shown', 'KeywordSet3Shown', 'KeywordSet1', 'KeywordSet2', 'KeywordSet3'],
             body: ['Info']
         }
     };
@@ -96,7 +96,8 @@ TAG.Worktop.Database = (function () {
         getCustomFont: getCustomFont,
         getIdleTimerDuration: getIdleTimerDuration,
         getLocked: getLocked,
-        getKioskLocked : getKioskLocked,
+        getKioskLocked: getKioskLocked,
+        getKeywordSets: getKeywordSets,
 
         asyncRequest: asyncRequest,
         convertToDocHandler: convertToDocHandler,
@@ -1167,6 +1168,23 @@ TAG.Worktop.Database = (function () {
 
     function getKioskLocked() {
         return _main.Metadata["isKioskLocked"] || 'true';
+    }
+
+    function getKeywordSets() {
+        return [{
+            "name": _main.Metadata["KeywordSet1Title"] || "",
+            "keywords": (_main.Metadata["KeywordSet1"] ? _main.Metadata["KeywordSet1"].split(",") : []),
+            "shown": _main.Metadata["KeywordSet1Shown"] || "false"
+        }, {
+            "name": _main.Metadata["KeywordSet2Title"] || "",
+            "keywords": (_main.Metadata["KeywordSet2"] ? _main.Metadata["KeywordSet2"].split(",") : []),
+            "shown": _main.Metadata["KeywordSet2Shown"] || "false"
+        }, {
+            "name": _main.Metadata["KeywordSet3Title"] || "",
+            "keywords": (_main.Metadata["KeywordSet3"] ? _main.Metadata["KeywordSet3"].split(",") : []),
+            "shown": _main.Metadata["KeywordSet3Shown"] || "false"
+        }];
+
     }
 
     function getMuseumBackgroundOpacity() {

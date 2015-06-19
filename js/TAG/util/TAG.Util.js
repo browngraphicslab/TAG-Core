@@ -19,7 +19,8 @@ TAG.Util = (function () {
         encodeText: encodeText,
         disableDrag: disableDrag,
         getFontSize: getFontSize,
-        parseDateToYear : parseDateToYear,
+        parseDateToYear: parseDateToYear,
+        convertArrayToSetString: convertArrayToSetString,
         showLoading: showLoading,
         hideLoading: hideLoading,
         removeProgressCircle: removeProgressCircle,
@@ -531,6 +532,29 @@ TAG.Util = (function () {
             }
             return year;
         }
+    }
+
+    /* Take an array of strings (used in keywords) and return a string with the values separated by commas.
+     * @method convertArrayToSetString
+     * @param {Array} arr       array of strings to convert into a single comma-separated string
+     * @return {string}         string of comma separated values in the array.
+     */
+    function convertArrayToSetString(arr) {
+        var dict = {},
+            str = '';
+
+        // Use array items to fill a dictionary - this removes duplicates.
+        arr.forEach(function (item) {
+            dict[item] = item;
+        });
+
+        // Extract dictionary elements to construct string.
+        $.each(dict, function (key, value) {
+            str = str + value + ',';
+        });
+        str = str.substring(0, str.length - 1); // Cut off the last comma.
+
+        return str;
     }
 
     // Replace SVG img with inline SVG
