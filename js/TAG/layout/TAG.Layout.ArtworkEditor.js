@@ -622,7 +622,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         }
 
         // Keywords button.
-        if (keywordSets[0].shown === 'true' || keywordSets[2].shown === 'true' || keywordSets[2].shown === 'true') {
+        if (keywordSets[0].shown === 'true' || keywordSets[1].shown === 'true' || keywordSets[2].shown === 'true') {
             keywordsButton = $(document.createElement('div')) // TODO J/S
                 .css(newButtonCSS)
                 .on('click', function () {

@@ -9269,7 +9269,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }),
             keywordsInput: createSelectInput(options)
                 .addClass('keyword-set-view-terms')
-                .attr('disabled', keywordSets[setIndex].shown !== 'true'),
+                .attr('disabled', keywordSets[setIndex].shown !== 'true')
+                .css({'width': '15%'}),
             editInput: createButton('Edit Set', function () {
                     if (keywordSets) {
                         var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(setIndex), false, false);
