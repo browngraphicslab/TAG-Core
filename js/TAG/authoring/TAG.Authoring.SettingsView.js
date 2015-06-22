@@ -8464,6 +8464,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         dayInput = createSelectInput(getDayOptions(monthInput.attr('value'),yearInput,monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
+        if (timelineInputText === "undefined"){
+            timelineInputText = getTimelineInputText(yearInput);
+        }
         timelineYearInput = createTextInput(timelineInputText, "Enter valid year", 100);
         timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),work.Metadata.TimelineMonth);
         timelineMonthInput.css({ 'margin-right': '0%' });
