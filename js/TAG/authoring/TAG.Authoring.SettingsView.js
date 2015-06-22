@@ -1825,7 +1825,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             viewer.empty();
             viewer.append(startPage);
-            preventClickthrough(viewer);
         });
         return startPage;
     }
@@ -5505,10 +5504,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             // Make an async call to get artworks and then display
             TAG.Worktop.Database.getArtworks(function (result) {
-                for (var i = 0; i < result.length; i++) {
-                    console.log("artwork "+i+":");
-                    console.log(result[i]);
-                }
                 if (cancel) return;
                 sortAZ(result);
                 currentList = result;
@@ -5611,6 +5606,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         function displayLabels() {
             var selectNext = false;
             var selectedLabel = false;
+            //middleQueue.clear();
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;

@@ -20,17 +20,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         collectionArea = root.find('#collectionArea'),
         backButtonArea = root.find('#backButtonArea'),
         backButton = root.find('#backButton'),
-        backArrowArea = root.find('#backArrowArea'),
-        backArrow = root.find('#backArrow'),
-        nextArrowArea = root.find('#nextArrowArea'),
-        nextArrow = root.find('#nextArrow'),
-        collectionHeader = root.find('#collectionHeader'),
+        dropDownArrowArea = root.find('#dropDownArrowArea'),
+        dropDownArrow = root.find('#dropDownArrow'),
+        //nextArrowArea = root.find('#nextArrowArea'),
+        //nextArrow = root.find('#nextArrow'),
+        //collectionHeader = root.find('#collectionHeader'),
         collectionDotHolder = root.find('#collectionDotHolder'),
         bgimage = root.find('#bgimage'),
         bottomContainer = root.find('#bottomContainer'),
         catalogDiv = root.find('#catalogDiv'),
-        infoTilesContainer = root.find('#infoTilesContainer'),
-        sortRow = root.find('#sortRow'),
+        //infoTilesContainer = root.find('#infoTilesContainer'),
+        //sortRow = root.find('#sortRow'),
         collectionMenu = root.find('#collectionMenu'),
         searchInput = root.find('#searchInput'),
         keywordsDiv = root.find("#keywords"),
@@ -53,7 +53,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         keywordOperatorSelects = [], // Will be filled in later.
         // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay = root.find('#overlay'),
-        tileLoadingArea = root.find('#tileLoadingArea'),
+        //tileLoadingArea = root.find('#tileLoadingArea'),
         nextCollection = $(document.createElement('div')).attr('id', 'nextCollection'),
         prevCollection = $(document.createElement('div')).attr('id', 'prevCollection'),
 
@@ -290,14 +290,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             linkButton.remove();
         }
 
-        if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
-            $('.mainCollection').css('width', '60%');
-        }
         if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
             infoButton.hide();
             tutorialButton.hide();
             linkButton.css("float", "left");
-            root.find('#mainCollection').css('width', '60%');
         }
 
         //Scrolling closes popup
@@ -330,11 +326,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'width'   : 'auto',
             'top'     : '22%',
         };
-
-        /*
-        var tileCircle = TAG.Util.showProgressCircle(tileDiv, progressCircCSS, '0px', '0px', false);
-        tileLoadingArea.append(tileCircle);
-        */
         
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
@@ -883,7 +874,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextTitle,
                 prevTitle,
                 mainCollection = root.find('#mainCollection'),
-                titleBox = root.find('.collection-title'),
+                titleBox = root.find('#collection-title'),
                 collectionMedia = [],
                 counter = 0,
                 collectionLength,
@@ -959,7 +950,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //             "background-color":'white'
             //         });
             //     collectionDotHolder.append(dummyDot);
-            //     backArrowArea.css('display', 'none');
+            //     dropDownArrowArea.css('display', 'none');
 
             // } else {
             //     //Make collection dot white and others gray
@@ -971,16 +962,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // formatting adjustments during splitscreen mode 
             if (TAG.Util.Splitscreen.isOn()) {
-                root.find('.collection-title').css('margin-left', '12%'); // make spacing between dropdown arrow and collection title consistent
-                root.find('#collectionMenu').css('width','70%');
+                root.find('#collectionMenu').css('width', '70%');
+                root.find('#backButtonArea').css('display', 'none');
+                root.find('#dropDownArrowArea').css('width', '6%');
+                root.find('#collection-title').css('margin-left', '6%');
             }
 
+            /**
             // resize the size of the collection menu after exiting splitscreen mode
             $(document).click(function(event) {
                 if (!TAG.Util.Splitscreen.isOn()) {
                     root.find('#collectionMenu').css('width','35%');
                 }
             });
+            **/
         
             makeOptionsClick();
             hideCollectionMenu();
@@ -1058,7 +1053,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // Add collection title
             mainCollection.addClass('mainCollection')
                 .css('text-align', 'left');
-            titleBox.addClass('collection-title primaryFont').html(title);
+            titleBox.addClass('primaryFont').text(title);
             titleBox.css('display', 'inline');
 
             var uiDocfrag = document.createDocumentFragment();
@@ -1066,48 +1061,48 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // for previewing purpose in the authoring mode so that the menu arrow position does not change
             if (!IS_WINDOWS && previewing) {
                 // reduce the size of the dropdown menu when being previewed in authoring mode
-                backArrow.css({
+                dropDownArrow.css({
                     'width': '40%',
                     'height': '40%',
                     'top': '5%'
                 });
 
                 // to make the dropdown arrow menu appear in previewing mode for unpublished collections
-                backArrowArea.addClass('arrowArea');
-                backArrowArea.css('display', 'inline')
-                backArrow.attr('src', tagPath + 'images/icons/Close.svg');
-                backArrow.addClass('arrow');    
-                backArrowArea.show();
+                dropDownArrowArea.addClass('arrowArea');
+                dropDownArrowArea.css('display', 'inline')
+                dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
+                dropDownArrow.addClass('arrow');    
+                dropDownArrowArea.show();
             }
 
-            backArrowArea.addClass('arrowArea'); 
-            backArrow.css('display', 'inline')
+            dropDownArrowArea.addClass('arrowArea'); 
+            dropDownArrow.css('display', 'inline')
                 .off()
                 .on('mousedown', function(j){
                     return function () {
                         showCollectionMenu();
                     }
                 }(collection));
-            backArrow.attr('src', tagPath + 'images/icons/Close.svg');
-            backArrow.addClass('arrow');    
-            backArrowArea.show();
+            dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
+            dropDownArrow.addClass('arrow');    
+            dropDownArrowArea.show();
 
 
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
-                //backArrowArea.addClass('arrowArea'); 
-                backArrow.css('display', 'inline')
+                //dropDownArrowArea.addClass('arrowArea'); 
+                dropDownArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
                             showCollectionMenu();
                         }
                     }(collection));
-                backArrow.attr('src', tagPath + 'images/icons/Close.svg');
-                backArrow.addClass('arrow');    
-                backArrowArea.show();
+                dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
+                dropDownArrow.addClass('arrow');    
+                dropDownArrowArea.show();
                 // prevCollection.addClass('nextPrevCollection')
                 //              .addClass('primaryFont')
                 //              .attr({
@@ -1125,7 +1120,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 // collectionArea.append(prevCollection);
                 // uiDocfrag.appendChild(prevCollection[0]);
                 //prevCollection.show();
-                // TAG.Telemetry.register(backArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
+                // TAG.Telemetry.register(dropDownArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
                 //     tobj.current_collection = currCollection.Identifier;
                 //     tobj.next_collection = prevTitle;
                 //     tobj.time_spent = nav_timer.get_elapsed();
@@ -1144,7 +1139,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             // if (prevCollection){
-            //      prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - backArrowArea.width());
+            //      prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - dropDownArrowArea.width());
             //      prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
             //  }
 
@@ -1181,7 +1176,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //                         loadCollection(visibleCollections[j.nextCollectionIndex])();
             //                     }
             //                 }(collection));
-            nextCollection.show();
+            //nextCollection.show();
+            /**
             TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
                 //tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
                 tobj.current_collection = currCollection.Identifier;
@@ -1191,6 +1187,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nav_timer.restart();
                 tobj.navigation_type = "arrow";
             });
+            **/
+            /**
             TAG.Telemetry.register(nextCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
                 tobj.current_collection = currCollection.Identifier;
                 tobj.next_collection = nextTitle;
@@ -1199,19 +1197,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nav_timer.restart();
                 tobj.navigation_type = "collection_name";
             });
+            **/
             //collectionArea.append(nextCollection);
             uiDocfrag.appendChild(nextCollection[0]);
             // }
             collectionArea.append($(uiDocfrag));
 
             if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
-                backArrowArea.hide();
-                nextArrowArea.hide();
+                dropDownArrowArea.hide();
+                //nextArrowArea.hide();
             } else if (collection.prevCollectionIndex === null) {
-                backArrowArea.hide();
+                dropDownArrowArea.hide();
                 prevCollection.hide();
             } else if (collection.nextCollectionIndex === null) {
-                nextArrowArea.hide();
+                //nextArrowArea.hide();
                 nextCollection.hide();
             }
             collectionDescription.attr('id', 'collectionDescription');
@@ -1379,18 +1378,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             arrow;
 
         menu = $(root).find('#collectionMenu');
-        arrow = $(root).find('#backArrow');
+        arrow = $(root).find('#dropDownArrow');
         menuArray = [];
 
         if (!menuCreated) {
             for (var i = 0; i < visibleCollections.length; i++) {
-                var para = document.createElement("div");
+                var para = $(document.createElement("div"))
+                    .css({
+                        'height': '25%',
+                        'text-align': 'center',
+                        'overflow':'ellipsis'
+                    });
                 var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
                 menuArray[i] = document.createElement("BUTTON");
                 menuArray[i].setAttribute("id", i);
                 $("#" + i).addClass('secondaryFont');
                 menuArray[i].style.border = "none";
-                menuArray[i].style.marginLeft = "2%";
                 menuArray[i].style.fontSize = "100%";
                 menuArray[i].style.padding = ".5%";
                 menu.append(para);
@@ -1399,7 +1402,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     loadPage(this.id);
                     showCollectionMenu();
                 }
-                para.appendChild(menuArray[i]);
+                para.append(menuArray[i]);
                 menuArray[i].appendChild(txtNode);
             }
             menuCreated = true;
@@ -1414,7 +1417,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var menu,
             arrow;
         menu = $(root).find('#collectionMenu');
-        arrow = $(root).find('#backArrow');
+        arrow = $(root).find('#dropDownArrow');
         if (menu.css('display') == 'block') {
             menu.css({
                 'display':'none'
@@ -1452,9 +1455,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var menu,
             arrow;
         menu = document.getElementById('collectionMenu');
-        arrow = document.getElementById('backArrow');
+        arrow = document.getElementById('dropDownArrow');
         $(root).click(function(event) {
-            if (event.target.id != 'backArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+            if (event.target.id != 'dropDownArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
                 if (menu.style.display == 'block') {
                     menu.style.display = 'none';
                     arrow.style.transform = 'rotate(270deg)';
@@ -3433,6 +3436,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             case 'iframe':
                                 src = tagPath + 'images/video_icon.svg';
                                 break;
+                            case 'Text':
+                                src = tagPath + 'images/text_icon.svg';
+                                break;
                             case 'Image':
                                 if (thumb) {
                                     src = FIX_PATH(thumb);
@@ -3442,8 +3448,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     src = tagPath + 'images/no_thumbnail.svg';
                                 }
                                 break;
-                            case 'Text':
-                                src = tagPath + 'images/text_icon.svg';
                             default:
                                 if (thumb) {
                                     src = FIX_PATH(thumb);
