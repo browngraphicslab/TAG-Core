@@ -5497,10 +5497,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             // Make an async call to get artworks and then display
             TAG.Worktop.Database.getArtworks(function (result) {
-                for (var i = 0; i < result.length; i++) {
-                    console.log("artwork "+i+":");
-                    console.log(result[i]);
-                }
                 if (cancel) return;
                 sortAZ(result);
                 currentList = result;
