@@ -5598,7 +5598,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         function displayLabels() {
             var selectNext = false;
             var selectedLabel = false;
-            //middleQueue.clear();
+            middleQueue.clear();
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
