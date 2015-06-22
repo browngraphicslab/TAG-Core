@@ -2021,7 +2021,7 @@ TAG.Util = (function () {
 })();
 
 /**
- * Utils for Animation, splitscreen, colors and the like
+ * Utils for Animation,splitscren, colors and the like
  */
 TAG.Util.UI = (function () {
     "use strict";

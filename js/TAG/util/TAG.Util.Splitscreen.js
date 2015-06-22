@@ -267,16 +267,21 @@ TAG.Util.Splitscreen = (function () {
                 //locationHistoryText.css("opacity", "1.0"); // reset location history opacity to 1.0
                 //locationHistoryIcon.css("opacity", "1.0");
                 //lhmap.attr('id', 'lpMapDiv');
-            } else if(root.attr('id') === 'newCatalogRoot') {
+            } else if (root.attr('id') === 'newCatalogRoot') {
+                root.find('#backButtonArea').css('display', 'inline');
+                root.find('#dropDownArrowArea').css('width', '3%');
+                root.find('#collection-title').css('margin-left', '4%');
                 root.find('.bottomButton').css({
                     "float": "right",
                     "display" : "block"
                 });
+                root.find('#collectionMenu').css('width', '35%');
+                /**
                 root.find('.nextPrevCollection').css({
                     'width': (.95 * root.find("#collectionArea").width() - root.find('.mainCollection').width()) / 2 - root.find(".arrow").width(),
                 });
                 root.find('.collection-title').css('margin-left','8%');
-
+                **/
                 root.find('#infoButton').show();
                 if (root.find('#infoDiv').width() !== 0) {
                     root.find('#infoDiv').css('width', '25%');
