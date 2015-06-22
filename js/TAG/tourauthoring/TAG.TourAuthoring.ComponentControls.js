@@ -1020,7 +1020,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var artButton = _createAddComponentButton("Artwork", dropMain);
         var assetButton = _createAddComponentButton("Associated Media", dropMain);
         var fileButton = _createAddComponentButton("From File", dropMain);
+        $(fileButton).attr('id', 'importToTour');
         var inkButton = _createAddComponentButton("Annotate", dropMain);
+
+        var progressBar = $(document.getElementById("progressBarUploads"));
+        if ($(progressBar).length > 0) {
+            console.log("upload is happening, disable import from file");
+            $(fileButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
+            $(fileButton).prop('disabled', 'true');
+
+        }
 
         //File uploading subsection -Xiaoyi
         var dropFile = $(document.createElement('div'));
