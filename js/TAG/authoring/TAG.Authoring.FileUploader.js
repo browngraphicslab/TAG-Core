@@ -36,6 +36,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         progressBar,
         uploadOverlayText,
         progressText,
+        popup,
         progressBarButton;
     var filesFinished = 0;
     var numFiles = 100000;
@@ -110,6 +111,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             })
             .text("View Queue");
 
+
+           
             //progressIcon = $(document.createElement('img')),
             //progressBar = $(document.createElement('div'));
 
@@ -317,18 +320,22 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                             globalFiles = files;
 
                                             //sets up the upload progress popup as soon as the filenames are known
+
                                             var filenames = []
                                             for (var i = 0; i < globalFiles.length; i++) {
                                                 filenames.push(globalFiles[i].name)
                                             }
 
                                             //creates popup but doesn't show it
-                                            var popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
+                                            popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
                                             $('body').append(popup);
                                             $(popup).css({ 'display': 'none' });
                                             
-                                            progressBarButton.click(function(){
+                                            progressBarButton.click(function () {
+                                                console.log("progress bar button was clicked");
                                                 $('body').append(popup);
+                                                //root = $(document.getElementById("setViewRoot"));
+                                                //root.append(popup2);
                                                 $(popup).css({ 'display': 'inherit' });
                                                 $(popup).show();
                                             })
@@ -576,12 +583,22 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             uploadingOverlay.show()
             uploadingOverlay.css({"display": "block"});    
         } else{
-        //updates loading UI
+            //updates loading UI
+            disableButton();
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressText);
             settingsViewTopBar.append(progressBar);
             settingsViewTopBar.append(progressBarButton);
-            console.log("STARTING NEW UPLOAD")
+
+            
+            progressBarButton.click(function () {
+                console.log("progress bar button was clicked");
+                
+                $('body').append(popup);
+                $(popup).css({ 'display': 'inherit' });
+                $(popup).show();
+            })
+            console.log("just appended progress stuff")
         }
     }
 
@@ -811,8 +828,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     //right now - only shows 100% or 0% for each individual file
     function updateProgressUI(name, percent) {
         percent = 1;
-        $(".uploadProgressLabel" + name).text((percent*100).toString().substring(0, 4) + "%")
-        $(".uploadProgressInner" + name).css({'width':percent*100+'%'});
+        $(".uploadProgressLabel" + name).text((percent*90).toString().substring(0, 4) + "%")
+        $(".uploadProgressInner" + name).css({'width':percent*90+'%'});
     }
 
     function cancelPromises() {

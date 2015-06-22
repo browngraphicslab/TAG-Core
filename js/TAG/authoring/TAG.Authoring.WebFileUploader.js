@@ -387,6 +387,14 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressBar);
             settingsViewTopBar.append(progressBarButton);
+
+            progressBarButton.click(function () {
+                console.log("progress bar button was clicked");
+
+                $('body').append(popup);
+                $(popup).css({ 'display': 'inherit' });
+                $(popup).show();
+            })
             console.log("STARTING NEW UPLOAD")
         }
     }

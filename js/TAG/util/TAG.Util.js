@@ -2021,7 +2021,7 @@ TAG.Util = (function () {
 })();
 
 /**
- * Utils for Animation, splitscreen, colors and the like
+ * Utils for Animation,splitscren, colors and the like
  */
 TAG.Util.UI = (function () {
     "use strict";
@@ -2993,6 +2993,7 @@ TAG.Util.UI = (function () {
             }
 
             var nameLabel = $(document.createElement('div')).addClass("uploadProgressName" + name).css({
+                color: 'white',
                 'text-align': 'left',
                 'position': 'absolute',
                 'display': 'inline-block',
