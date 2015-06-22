@@ -77,7 +77,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         firstLoad = true,                             // TODO is this necessary? what is it doing?
         currentArtworks = [],                               // array of artworks in current collection
         infoSource = [],                               // array to hold sorting/searching information
-        keywordHash = {},                               // hash for keywords
+        keywordSearchOptions = [],                      // object to hold details of keywords search
+        keywordDictionary = [],                          // hash for keywords
         timelineEventCircles = [],                               // circles for timeline
         timelineTicks = [],                               // timeline ticks
         scaleTicks = [],                               // timeline scale ticks
@@ -1264,6 +1265,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .click(function () {
                     searchInput.val('');
                     searchTxt.text('');
+                    clearKeywordCheckBoxes();
                     clearSearchResults();
                 });
 
@@ -1621,10 +1623,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
 
     /**
-     * Store the search strings for each artwork/tour
-     * @method initSearch
-     * @param {Array} contents    the contents of this collection (array of doqs)
-     */
+         * Store the search strings for each artwork/tour
+         * @method initSearch
+         * @param {Array} contents    the contents of this collection (array of doqs)
+         */
     function initSearch(contents) {
         var info,
             i,
@@ -1632,7 +1634,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         searchInput[0].value = "";
         infoSource = [];
-        keywordHash = {};
+        keywordDictionary = [];
 
         // Normal metadata
         $.each(contents, function (i, cts) {
@@ -1654,20 +1656,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // Keywords.
         if (keywordSets) {
-            // First create an empty hash table, the keys are "[set.name]_[keyword]", the values are empty arrays to be filled with tagged artworks.
+            // Build hash for keywords to artworks. Each set has dictionaries for AND and NOT.
+            // keywordDictionary[setIndex].and["keyword"] --> [artworks with "keyword"] in set
+            // keywordDictionary[setIndex].not["keyword"] --> [artworks without "keyword"] in set
             $.each(keywordSets, function (setIndex, set) {
-                if (keywordSets[setIndex].shown) {
-                    $.each(keywordSets[setIndex].keywords, function (keywordIndex, keyword) {
-                        keywordHash[set.name + '_' + keyword] = [];
-                    });
-                }
+                // Create dictionaries.
+                keywordDictionary.push({ "and": {}, "not": {} });
+                $.each(keywordSets[setIndex].keywords, function (keywordIndex, keyword) {
+                    keywordDictionary[setIndex].and[keyword] = []; // Empty dictionary for and.
+                    keywordDictionary[setIndex].not[keyword] = []; // Empty dictionary for not.
+                });
             });
 
-            //  Add the artworks to the hash.
+            //  Fill the dictionaries.
             $.each(contents, function (i, cts) {
                 if (!cts) {
                     return false;
                 }
+                // Get the info.
                 info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
                 if (cts.Metadata.InfoFields) {
                     $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
@@ -1675,60 +1681,68 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         info += " " + fieldText;
                     });
                 }
-                if (cts.Metadata.KeywordsSet1 && keywordSets[0].shown) {
-                    var artworksKeywordsSet1 = cts.Metadata.KeywordsSet1.split(',');
-                    $.each(artworksKeywordsSet1, function (index, artworkKeyword) {
-                        if (keywordHash[keywordSets[0].name + '_' + artworkKeyword]) {
-                            keywordHash[keywordSets[0].name + '_' + artworkKeyword].push({ "id": i, "keys": info.toLowerCase() });
-                        }
-                    });
-                }
-                if (cts.Metadata.KeywordsSet2 && keywordSets[1].shown) {
-                    var artworksKeywordsSet2 = cts.Metadata.KeywordsSet2.split(',');
-                    $.each(artworksKeywordsSet2, function (index, artworkKeyword) {
-                        if (keywordHash[keywordSets[1].name + '_' + artworkKeyword]) {
-                            keywordHash[keywordSets[1].name + '_' + artworkKeyword].push({ "id": i, "keys": info.toLowerCase() });
-                        }
-                    });
-                }
-                if (cts.Metadata.KeywordsSet3 && keywordSets[2].shown) {
-                    var artworksKeywordsSet3 = cts.Metadata.KeywordsSet3.split(',');
-                    $.each(artworksKeywordsSet1, function (index, artworkKeyword) {
-                        if (keywordHash[keywordSets[2].name + '_' + artworkKeyword]) {
-                            keywordHash[keywordSets[2].name + '_' + artworkKeyword].push({ "id": i, "keys": info.toLowerCase() });
-                        }
-                    });
-                }
+
+                // Create a dictionary of each set for this artwork. Just an object that has a field for every keyword the artwork has, arbitrarily set to 'true'
+                var set1 = (cts.Metadata.KeywordsSet1) ? cts.Metadata.KeywordsSet1.split(',') : [''], set1Lookup = {};
+                $.each(set1, function (i, word) { set1Lookup[word] = 'true'; });
+                var set2 = (cts.Metadata.KeywordsSet2) ? cts.Metadata.KeywordsSet2.split(',') : [''], set2Lookup = {};
+                $.each(set2, function (i, word) { set2Lookup[word] = 'true'; });
+                var set3 = (cts.Metadata.KeywordsSet3) ? cts.Metadata.KeywordsSet3.split(',') : [''], set3Lookup = {};
+                $.each(set3, function (i, word) { set3Lookup[word] = 'true'; });
+
+                // Fill the AND and NOT dictionaries for set 1. Each artwork appears in one of the two dictionaries for each keyword: AND if an artwork has a keyword, NOT if, well, not. 
+                $.each(keywordSets[0].keywords, function (keywordIndex, keyword) {
+                    var op = (set1Lookup[keyword] === 'true') ? 'and' : 'not';
+                    keywordDictionary[0][op][keyword].push({ "id": i, "keys": info.toLowerCase() });
+                });
+                // Fill the AND and NOT dictionaries for set 2.
+                $.each(keywordSets[1].keywords, function (keywordIndex, keyword) {
+                    var op = (set2Lookup[keyword] === 'true') ? 'and' : 'not';
+                    keywordDictionary[1][op][keyword].push({ "id": i, "keys": info.toLowerCase() });
+                });
+                // Fill the AND and NOT dictionaries for set 3.
+                $.each(keywordSets[2].keywords, function (keywordIndex, keyword) {
+                    var op = (set3Lookup[keyword] === 'true') ? 'and' : 'not';
+                    keywordDictionary[2][op][keyword].push({ "id": i, "keys": info.toLowerCase() });
+                });
             });
         }
     }
 
     /*
-     * Method to pull the checked off keywords from the UI for search
-     * @method getCheckedKeywords
-     * @return      array of strings of each checked off keyword, in format [set.name]_[keyword]
+     * Helper method to extract the details defining a keywords search.
+     * @method getKeywordSearchOptions
+     * @return      array of objects (one per set), each with format {"operation": [AND/NOT], "keywords": [array of checked keywords]}
      */
-    function getCheckedKeywords() {
-        var andKeys = [],
-            notKeys = [];
-        for (var i = 0; i < 3; i++) {
+    function getKeywordSearchOptions() {
+        keywordSearchOptions = [];
+        for (var i = 0; i < keywordSets.length; i++) {
+            // Check to see if this set is shown.
+            var setOption = {};
             if (keywordSets[i].shown !== 'true') {
+                setOption['operation'] = '';
+                setOption['keywords'] = [];
+                keywordSearchOptions.push(setOption);
                 continue;
             }
 
-            var setName = keywordSets[i].name;
+            // Find out if operation is AND or NOT.
+            var operation = $('#ddcl-' + ((i * 2) + 1)).parent().find('.operationSelect :selected').text();
+            if (operation === '') {
+                operation = 'AND';
+            }
+            setOption['operation'] = operation.toLowerCase();
 
-            // Find out if this is an AND or NOT.
-            var operation = $('#ddcl-' + ((i*2) + 1)).parent().find('.operationSelect :selected').text();
+            // Extract keywords checked off for this set.
+            var keywords = [];
             $('#ddcl-' + ((i * 2) + 2)).parent().find('.keywordsMultiselect :selected').each(function (i, selected) {
-                if (operation === 'AND') {
-                    andKeys.push(setName + '_' + $(selected).text());
-                } else {
-                    notKeys.push(setName + '_' + $(selected).text());
-                }
+                keywords.push($(selected).text().toLowerCase());
             });
+            setOption["keywords"] = keywords;
 
+            keywordSearchOptions.push(setOption);
         }
+        return keywordSearchOptions;
     }
 
     /**
@@ -1739,29 +1753,70 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var content = searchInput.val().toLowerCase(),
             matchedArts = [],
             unmatchedArts = [],
-            i;       
+            i;
 
+        var keywordMatches = {}; // Object with fields keywordMatches['id'] === 'true' for matching artworks with that "id"
+        if (keywordSets) {
+            // Get the details of our keyword search. 
+            keywordSearchOptions = getKeywordSearchOptions();
+
+            // If no keywords are checked, don't do the keywords search.
+            var doKeywordSearch = false;
+            for (i = 0; i < keywordSearchOptions.length; i++) {
+                doKeywordSearch = doKeywordSearch || (keywordSearchOptions[i]['keywords'].length > 0); // This cancels search if all categories are hidden, or if no keywords are checked
+            }
+            if (doKeywordSearch) {
+                keywordMatches = keywordSearch(keywordSearchOptions);
+            }
+        }
+
+        var doTextSearch = true;
         if (!content) {
+            doTextSearch = false;
+        }
+        if (!content && keywordMatches.length === 0) {
             searchTxt.text("");
             drawCatalog(currentArtworks, currentTag, 0, false);
             return;
         }
 
-        if (keywordSets) {
-            getCheckedKeywords();
-        }
-
         for (i = 0; i < infoSource.length; i++) {
-            if (infoSource[i].keys.indexOf(content) > -1) {
+            if ((doTextSearch && infoSource[i].keys.indexOf(content) > -1) || keywordMatches[infoSource[i].id] === 'true') {
                 matchedArts.push(currentArtworks[i]);
             } else {
                 unmatchedArts.push(currentArtworks[i]);
             }
         }
 
+        var andKeywordsString = '',
+            notKeywordsString = '',
+            andCount = 0,
+            notCount = 0;
+        $.each(keywordSearchOptions, function (optionIndex, option) {
+            $.each(option['keywords'], function (checkedKeywordIndex, checkedKeyword) {
+                if (option['operation'] === 'and') {
+                    andKeywordsString = andKeywordsString + (' ' + checkedKeyword + ',');
+                    andCount++;
+                } else if (option['operation'] === 'not') {
+                    notKeywordsString = notKeywordsString + (' ' + checkedKeyword + ',');
+                    notCount++;
+                }
+            });
+        });
+        if (andKeywordsString !== '') {
+            andKeywordsString = andKeywordsString.substring(0, andKeywordsString.length - 1);
+        }
+        if (notKeywordsString !== '') {
+            notKeywordsString = notKeywordsString.substring(0, notKeywordsString.length - 1);
+        }
+
         var searchDescriptionText = 'Found ' + matchedArts.length +
             ' result' + ((matchedArts.length == 1) ? '' : 's') +
-            ' for \'' + content + '\'.';
+            ((doTextSearch) ? (' for \'' + content + '\'') : '') +
+            ((andKeywordsString !== '') ? (' with the keyword' + (andCount > 1 ? 's ' : ' ') + andKeywordsString) : '') +
+            ((andKeywordsString !== '' && notKeywordsString !== '') ? ' and' : '') +
+            ((notKeywordsString !== '') ? (' without the keyword' + (notCount > 1 ? 's ' : ' ') + notKeywordsString) : '') +
+            '.';
 
         $('#searchDescription').text(searchDescriptionText);
         $('#clearSearchButton').css({ 'display': 'block' });
@@ -1782,6 +1837,59 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         drawCatalog(unmatchedArts, currentTag, searchResultsLength, false);
     }
 
+    /*
+     * Method to get artworks that fit the quiery defined in keywordSearchOptions. 
+     * @param   keywordSearchOptions  (see return value of getKeywordSearchOptions)
+     */
+    function keywordSearch(keywordSearchOptions, contents) {
+        // Start with all artworks.
+        var matches = {};
+        $.each(infoSource, function (i, art) {
+            matches[art.id] = 'true';
+        });
+
+
+        // Go through each set of keywords.
+        $.each(keywordSearchOptions, function (setIndex, searchOptions) {
+            // Ignore any hidden sets.
+            if (searchOptions['operation'] === '') {
+                return;
+            }
+
+            // Use the operation to select what dictionary we are pulling from.
+            var dict = keywordDictionary[setIndex][searchOptions['operation']];
+            var newMatches = {};
+
+            // Go through each keyword that is checked in the set, provided by keywordSearchOptions.
+            $.each(keywordSearchOptions[setIndex].keywords, function (checkedKeywordIndex, checkedKeyword) {
+                // Get all the artworks that have/do not have (according to operation) the checked keyword.
+                var artworks = dict[checkedKeyword];
+
+                // Go through each of these matchoing artworks and see that it already is part of our set
+                $.each(artworks, function (artworkIndex, artwork) {
+                    if (matches[artwork.id] === 'true') {
+                        newMatches[artwork.id] = 'true';
+                    }
+                });
+
+            });
+
+            matches = newMatches;
+        });
+
+        return matches;
+
+    }
+    /*
+     * Method to clear all the checked-off keyword boxes.
+     * {method} clearSearchResults
+     */
+    function clearKeywordCheckBoxes() {
+        keywordSearchOptions = [];
+        $('.keywordSelect option').each(function () { $(this).removeAttr('selected'); });
+        $('#keywords input:checkbox').each(function () { $(this).removeAttr('checked'); });
+    }
+
     /**
      * Method to clear the results of a search.
      * {method} clearSearchResults
@@ -1789,6 +1897,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function clearSearchResults() {
         // Clear the search text.
         searchTxt.text("");
+
 
         // Clear the results description.
         $('#searchDescription').text('');
@@ -2264,7 +2373,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             artTitle.append(artText);
 
             // Styling for searches
-            if (!onSearch && searchInput.val() !== '') {
+            if (!onSearch && (searchInput.val() !== '' || keywordSearchOptions.length !== 0)) {
                 main.css({ 'opacity': '0.2' });
                 main.css('border', '1px solid black');
             } else if (onSearch) {
