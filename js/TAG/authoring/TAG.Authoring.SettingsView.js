@@ -1821,7 +1821,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             viewer.empty();
             viewer.append(startPage);
-            preventClickthrough(viewer);
         });
         return startPage;
     }
@@ -5599,6 +5598,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         function displayLabels() {
             var selectNext = false;
             var selectedLabel = false;
+            //middleQueue.clear();
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
