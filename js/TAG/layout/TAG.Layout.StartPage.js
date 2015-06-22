@@ -469,9 +469,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
     });
 
-    serverSubmit.on('click', saveClick);
+    serverSubmit.on('click', function (e) { if (!isPreview) { saveClick(e) } });
     serverInput.keypress(function(e){
-        if (e.which === 13) {
+        if (e.which === 13 && !isPreview) {
             saveClick();
         }
     });
