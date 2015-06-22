@@ -5606,7 +5606,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         function displayLabels() {
             var selectNext = false;
             var selectedLabel = false;
-            //middleQueue.clear();
+            middleQueue.clear();
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -7308,10 +7308,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
         });
 
-        TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
-            tobj.type_representation = prevMiddleBarSelection.type_representation;
-            tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
-        });
+        if (prevMiddleBarSelection.time_spent_timer) {
+            TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
+                tobj.type_representation = prevMiddleBarSelection.type_representation;
+                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+            });
+        }
         var timer = new TelemetryTimer();
         // Overlay doesn't spin... not sure how to fix without redoing tour authoring to be more async
         loadingOverlay('Loading Artwork...', 1);
