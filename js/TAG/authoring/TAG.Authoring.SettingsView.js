@@ -1964,6 +1964,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         function displayLabels() {
             var selectNext = false;
+            var selectedLabel = false;
+
             $.each(list, function (i, val) {
                 if (cancel) {
                     return;
@@ -1982,7 +1984,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (guidsToBeDeleted.indexOf(collectguid) >= 0) {
                         markedForDelete = true;
                     }
-                    if (!markedForDelete && 
+                    if (!markedForDelete && !selectedLabel && 
                         ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
 
                         // Select the first one or the specified id
@@ -1993,6 +1995,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                         }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true, '.middleLabel'));
                         selectNext = false;
+                        selectedLabel = true;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
                         if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -3266,6 +3269,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         function displayLabels() {
             var selectNext = false;
+            var selectedLabel = false;
             $.each(list, function (i, val) {
                 if (cancel) return false;
                 // Add each label as a separate function to the queue so the UI doesn't lock up
@@ -3280,7 +3284,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (guidsToBeDeleted.indexOf(tourGuid) >= 0) {
                         markedForDelete = true;
                     }
-                    if (!markedForDelete && 
+                    if (!markedForDelete && !selectedLabel &&
                         ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
                         // Select the first one
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
@@ -3291,6 +3295,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             editTour(val);
                         }, 0, 0, markedForDelete,true), true,'.middleLabel'));
                         selectNext = false;
+                        selectedLabel = true;
 
                         // Scroll to the selected label if the user hasn't already scrolled somewhere
                         if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -3942,6 +3947,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         function displayLabels() {
             var selectNext = false;
+            var selectedLabel = false;
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -3980,7 +3986,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 break;
                         }
 
-                        if (!markedForDelete && 
+                        if (!markedForDelete && !selectedLabel &&
                             ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
                             // Select the first one
                             middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
@@ -3990,6 +3996,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 currentIndex = i;
                             }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true,'.middleLabel'));
                             selectNext = false;
+                            selectedLabel = true;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
                             if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -5594,7 +5601,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         function displayLabels() {
-            var selectNext= false;
+            var selectNext = false;
+            var selectedLabel = false;
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
@@ -5626,7 +5634,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 imagesrc = null;
                         }
                         //lucy- removing a piece of logic here cause not sure what its doing but will monitor
-                        if (!markedForDelete &&
+                        if (!markedForDelete && !selectedLabel &&
                             ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
 
                             // Select the first one
@@ -5641,6 +5649,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 }
                             }, true, val.Extension, markedForDelete,true), true,'.middleLabel'));
                             selectNext = false;
+                            selectedLabel = true;
 
                             // Scroll to the selected label if the user hasn't already scrolled somewhere
                             if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
@@ -7927,23 +7936,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                         }
                                         if (currCheck.prop("checked")) {
                                             if (!inAssociatedView) {
-                                                multiSelected.push(id);
+                                                if (multiSelectedUnique(id)) {
+                                                    multiSelected.push(id);
+                                                }
                                             } else {
-                                                multiSelected.push({ Identifier: id, Name: text });
+                                                if (multiSelectedUnique(id)) {
+                                                    multiSelected.push({ Identifier: id, Name: text });
+                                                }
                                             }
                                             console.log(multiSelected)
-                                        } else {  
-                                            multiSelected.splice(multiSelected.indexOf(id), 1);
-                                            console.log(multiSelected);
+                                        } else {
+                                            removeIdFromMulti(id);
                                         }
                                         evt.stopPropagation();
                                     });
                     if (checkMe) {
                         checkbox.attr('checked', true);
                         if (!inAssociatedView) {
-                            multiSelected.push(id);
+                            if (multiSelectedUnique(id)){
+                                multiSelected.push(id);
+                            }
                         } else {
-                            multiSelected.push({ Identifier: id, Name: text });
+                            if (multiSelectedUnique(id)) {
+                                multiSelected.push({ Identifier: id, Name: text });
+                            }
                         }
                         console.log(multiSelected)
                         toBeUnselected = checkbox;
@@ -8198,18 +8214,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var checkBox = $("#checkbox" + labelId);
         if (!(toBeUnselected===null) && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
             toBeUnselected.prop('checked', false);
-            var justGuid = toBeUnselected.attr('id').replace("checkbox","");
-            multiSelected.splice(multiSelected.indexOf(justGuid), 1);
-            console.log(multiSelected);
+            var justGuid = toBeUnselected.attr('id').replace("checkbox", "");
+            removeIdFromMulti(justGuid);
             toBeUnselected = null;
         }
         //check that it is a check-able label (not a nav label)
         if (checkBox.prop("checked") !== undefined){
             checkBox.prop('checked', true);
             if (!inAssociatedView) {
-                multiSelected.push(labelId);
+                if (multiSelectedUnique(labelId)){
+                    multiSelected.push(labelId);
+                }
             } else {
-                multiSelected.push({ Identifier: labelId, Name: text });
+                if (multiSelectedUnique(labelId)) {
+                    multiSelected.push({ Identifier: labelId, Name: text });
+                }
             }
             console.log(multiSelected)
             toBeUnselected = checkBox;
@@ -10314,6 +10333,44 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
        
         
         //return addMenuLabel;
+    }
+
+    /** helper function to check if id is already in multiSelected list
+    * @method multiSelectedUnique
+    * @param {String} id - what you are trying to append to list
+    * @return {Boolean} if id is unique (not in list)
+    */
+    function multiSelectedUnique(id) {
+        if (!inAssociatedView) {
+            if (multiSelected.indexOf(id) < 0) {
+                return true;
+            } else { return false;}
+        } else {
+            for (var w = 0; w < multiSelected.length; w++) {
+                if (multiSelected[w].Identifier === id) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+    }
+
+    /** helper function to remove id from multiselected list
+    * @method removeIdFromMulit
+    * @param {String} id
+    */
+    function removeIdFromMulti(id) {
+        if (!inAssociatedView) {
+            multiSelected.splice(multiSelected.indexOf(id), 1);
+        } else {
+            for (var w = 0; w < multiSelected.length; w++) {
+                if (multiSelected[w].Identifier === id) {
+                    multiSelected.splice(w, 1);
+                }
+            }
+        }
+        console.log(multiSelected);
     }
 
     return that;
