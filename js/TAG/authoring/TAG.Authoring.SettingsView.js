@@ -18,11 +18,11 @@ TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
  *   @param guidsToBeDeleted list of things that have recently been marked for delete, so that they show up grayed out
  *   @return {Object} public methods and variables
  */
-TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID, guidsToBeDeleted) {
+TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabelID, guidsToBeDeleted, useRoot) {
     "use strict";
     //$(document).off();                   
-    var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
 
+    var root= TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
         //get all of the ui elements from the root and save them in variables
         middleLoading = root.find('#setViewLoadingCircle'),
         settingsContainer = root.find('#setViewSettingsContainer'),
@@ -66,6 +66,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
         guidsToBeDeleted = guidsToBeDeleted || [],
+
         // = root.find('#importButton'),
 
         // Format of keyword sets: [{keywordSet1}, {keywordSet2}, {keywordSet3}]
@@ -1176,7 +1177,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     textHolder.html(t.html());
                     t.remove();
                 }
-
+                root = $(document.getElementById("setViewRoot"));
                 root.append(importConfirmedBox);
                 $(importConfirmedBox).show();
             }, null, null, true);
@@ -2641,7 +2642,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         textHolder.html(t.html());
                         t.remove();
                     }
-
+                    root = $(document.getElementById("setViewRoot"));
                     root.append(importConfirmedBox);
                     $(importConfirmedBox).show();
                 }, null, null, true);
@@ -5025,7 +5026,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         textHolder.html(t.html());
                         t.remove();
                     }
-
+                    root = $(document.getElementById("setViewRoot"));
                     root.append(importConfirmedBox);
                     $(importConfirmedBox).show();
                     //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
@@ -6544,6 +6545,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             message,
                             "OK",
                             false, null, null, null, null, null, false, editedNames);
+
+                        root = $(document.getElementById("setViewRoot"));
+                        
                         root.append(importConfirmedBox);
                         $(importConfirmedBox).show();
                         TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
@@ -6589,6 +6593,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else{
                             message = "The following files were successfully imported: "
                         }
+                        
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             //remove progress stuff
                             $('.progressBarUploads').remove();
@@ -6654,9 +6659,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             t.remove();
                         }
                         //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
-                        
+                        root = $(document.getElementById("setViewRoot"));
                         root.append(importConfirmedBox);
+                       
                         $(importConfirmedBox).show();
+                        console.log("importConfirmed box should be visible");
 
                     } else {
                         durationHelper(done);
@@ -7318,6 +7325,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $(importMapButton).prop('disabled', 'true');
             }
         }, 1);
+
     }
 
 

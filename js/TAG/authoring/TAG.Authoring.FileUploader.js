@@ -327,8 +327,10 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                                             $('body').append(popup);
                                             $(popup).css({ 'display': 'none' });
                                             
-                                            progressBarButton.click(function(){
-                                                $('body').append(popup);
+                                            progressBarButton.click(function () {
+                                                console.log("progress bar button was clicked");
+                                                root = $(document.getElementById("setViewRoot"));
+                                                root.append(popup);
                                                 $(popup).css({ 'display': 'inherit' });
                                                 $(popup).show();
                                             })
@@ -581,7 +583,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             settingsViewTopBar.append(progressText);
             settingsViewTopBar.append(progressBar);
             settingsViewTopBar.append(progressBarButton);
-            console.log("STARTING NEW UPLOAD")
+            console.log("just appended progress stuff")
         }
     }
 
