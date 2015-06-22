@@ -828,8 +828,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     //right now - only shows 100% or 0% for each individual file
     function updateProgressUI(name, percent) {
         percent = 1;
-        $(".uploadProgressLabel" + name).text((percent*100).toString().substring(0, 4) + "%")
-        $(".uploadProgressInner" + name).css({'width':percent*100+'%'});
+        $(".uploadProgressLabel" + name).text((percent*90).toString().substring(0, 4) + "%")
+        $(".uploadProgressInner" + name).css({'width':percent*90+'%'});
     }
 
     function cancelPromises() {
