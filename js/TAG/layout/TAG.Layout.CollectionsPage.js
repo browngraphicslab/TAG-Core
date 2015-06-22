@@ -3433,6 +3433,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             case 'iframe':
                                 src = tagPath + 'images/video_icon.svg';
                                 break;
+                            case 'Text':
+                                src = tagPath + 'images/text_icon.svg';
+                                break;
                             case 'Image':
                                 if (thumb) {
                                     src = FIX_PATH(thumb);
@@ -3442,8 +3445,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                     src = tagPath + 'images/no_thumbnail.svg';
                                 }
                                 break;
-                            case 'Text':
-                                src = tagPath + 'images/text_icon.svg';
                             default:
                                 if (thumb) {
                                     src = FIX_PATH(thumb);
