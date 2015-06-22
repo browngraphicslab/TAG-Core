@@ -1124,6 +1124,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     $('.progressText').remove();
 
                     //enable import buttons
+                    root = $(document.getElementById("setViewRoot"));
+                    
+                    newButton = root.find('#setViewNewButton');
                     $(newButton).prop('disabled', false);
                     newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
                     if (inCollectionsView == true) {
@@ -2589,6 +2592,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $('.progressText').remove();
 
                         //enable import buttons
+                        newButton = root.find('#setViewNewButton');
                         $(newButton).prop('disabled', false);
                         newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
                         if (inCollectionsView == true) {
@@ -4974,6 +4978,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $('.progressBarUploadsButton').remove();
                             $('.progressText').remove();
 
+                            root = $(document.getElementById("setViewRoot"));
+                            newButton = root.find('#setViewNewButton');
+
                             //enable import buttons
                             $(newButton).prop('disabled', false);
                             newButton.css({'opacity': '1', 'background-color': 'transparent'});
@@ -6514,10 +6521,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                         //Confirmation pop up that artworks have been imported
+                        
+
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
                             //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
+                            
+                            root = $(document.getElementById("setViewRoot"));
+                            newButton = root.find('#setViewNewButton');
 
                             //enable import buttons
                             $(newButton).prop('disabled', false);
@@ -6599,6 +6611,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
                             $('.progressText').remove();
+
+                            root = $(document.getElementById("setViewRoot"));
+                            newButton = root.find('#setViewNewButton');
 
                             //enable import buttons
                             $(newButton).prop('disabled', false);
@@ -9616,7 +9631,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             null,
             useOverlay,
             //$('.progressBarUploads').length, //determines if an upload is happening 
-            function(){
+            function () {
+                root = $(document.getElementById("setViewRoot"));
+                newButton = root.find('#setViewNewButton');
+
                 if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
                     $(newButton).prop('disabled', true);
                     newButton.css({'opacity': '.4'});
@@ -9635,7 +9653,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 
                 
             },
-            function(){
+            function () {
+                root = $(document.getElementById("setViewRoot"));
+                newButton = root.find('#setViewNewButton');
+
                 $(newButton).prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
 
@@ -9725,7 +9746,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             null,
             useOverlay,
             function(){//disables all import buttons if upload is happening - this automatically disables the button the user imported from
-                if(inArtworkView==true || inAssociatedView ==true){ 
+                root = $(document.getElementById("setViewRoot"));
+                newButton = root.find('#setViewNewButton');
+
+                if (inArtworkView == true || inAssociatedView == true) {
                     $(newButton).prop('disabled', true);
                     newButton.css({'opacity': '.4'});
                 }

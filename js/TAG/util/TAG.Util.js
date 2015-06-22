@@ -2993,6 +2993,7 @@ TAG.Util.UI = (function () {
             }
 
             var nameLabel = $(document.createElement('div')).addClass("uploadProgressName" + name).css({
+                color: 'white',
                 'text-align': 'left',
                 'position': 'absolute',
                 'display': 'inline-block',
