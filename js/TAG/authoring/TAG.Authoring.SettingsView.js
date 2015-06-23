@@ -2089,8 +2089,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     //if the button already exists
                     if ($("[id='" + buttonId + "']")[0]) {
                         $("[id='" + buttonId + "']").show()
-                            .css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) })
-                    } else { //or if you're making it (sort option was origionally deselected)
+                        if (buttonId === "dateButton") {
+                            $(".sortButton").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)});
+                            $("[id='" + buttonId + "']").css('color', 'white');
+                        } else {
+                            $("[id='" + buttonId + "']").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) })
+                        }
+                   } else { //or if you're making it (sort option was origionally deselected)
                         var listItem = $(document.createElement('li')).addClass('rowItem');
                         sortButton = $(document.createElement('div'));
                         //Because stored on server as "Tour" but should be displayed as "Tours"
@@ -2098,11 +2103,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         sortButton.addClass('secondaryFont');
                         sortButton.addClass('rowButton')
                                     .text(sortDiv.text())
-                                    .attr('id', buttonId)
-                                    .css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) });
+                                    .attr('id', buttonId);
+                        if (buttonId === "dateButton") {
+                            sortButton.css("color", "white");
+                        } else {
+                            sortButton.css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) });
+                        }
                         listItem.append(sortButton);
                         $(".sortRowLeft").append(listItem);
-                        //$("#buttonRow").append(sortButton);
+                        
                     }
 
                     if (sortDiv.text() === "Date") {

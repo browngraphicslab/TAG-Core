@@ -1543,7 +1543,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //Because stored on server as "Tour" but should be displayed as "Tours"
                 sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
                 sortButton.addClass('secondaryFont');
-                sortButton.addClass('rowButton')
+                sortButton.addClass('rowButton').addClass('sortButton')
                             .text(text)   
                             .attr('id', sortOptions[i].toLowerCase() + "Button")
                          .off()
