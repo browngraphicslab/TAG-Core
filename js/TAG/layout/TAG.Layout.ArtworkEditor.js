@@ -3231,7 +3231,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         .attr('value', keywordIndex)
                         .css({
                             'border': '1px solid #777',
-                            'background-color': '#fff'
+                            'background-color': '#fff',
+                            'height': (checklistItemHeight / 2) + 'px',
+                            'width': (checklistItemHeight / 2) + 'px'
                         })
                         .click(function(e) {
                             e.stopPropagation();
