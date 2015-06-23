@@ -20,9 +20,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         collectionArea = root.find('#collectionArea'),
         backButtonArea = root.find('#backButtonArea'),
         backButton = root.find('#backButton'),
-        dropDownArrowArea = root.find('#dropDownArrowArea'),
+
+        centeredCollectionHeader  = root.find("#centeredCollectionHeader"),
         dropDownArrow = root.find('#dropDownArrow'),
-        //nextArrowArea = root.find('#nextArrowArea'),
         //nextArrow = root.find('#nextArrow'),
         //collectionHeader = root.find('#collectionHeader'),
         collectionDotHolder = root.find('#collectionDotHolder'),
@@ -873,6 +873,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'top'     : '22%',
                 };
             artworkShown = false;
+            mainCollection.css({
+                "text-align" : "center"
+            })
             // if the idle timer hasn't started already, start it
             if (!idleTimer && evt && !previewing) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
@@ -943,7 +946,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (TAG.Util.Splitscreen.isOn()) {
                 root.find('#collectionMenu').css('width', '70%');
                 root.find('#backButtonArea').css('display', 'none');
-                root.find('#dropDownArrowArea').css('width', '6%');
                 root.find('#collection-title').css('margin-left', '6%');
             }
 
@@ -1030,13 +1032,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             // Add collection title
-            mainCollection.addClass('mainCollection')
-                .css('text-align', 'left');
+            mainCollection.addClass('mainCollection');
             titleBox.addClass('primaryFont').text(title);
             titleBox.css('display', 'inline');
 
             var uiDocfrag = document.createDocumentFragment();
-
+            collectionArea.css({
+                "height" : "75%"
+            })
             // for previewing purpose in the authoring mode so that the menu arrow position does not change
             if (!IS_WINDOWS && previewing) {
                 // reduce the size of the dropdown menu when being previewed in authoring mode
@@ -1047,41 +1050,63 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
 
                 // to make the dropdown arrow menu appear in previewing mode for unpublished collections
-                dropDownArrowArea.addClass('arrowArea');
-                dropDownArrowArea.css('display', 'inline')
                 dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 dropDownArrow.addClass('arrow');    
-                dropDownArrowArea.show();
             }
 
-            dropDownArrowArea.addClass('arrowArea'); 
-            dropDownArrow.css('display', 'inline')
-                .off()
-                .on('mousedown', function(j){
+
+            var collectionTitle = $("#collection-title");
+            collectionTitle.css({
+                "display": "inline-block",
+                "position": "relative",
+                "padding-right": "18px",
+                "height": "100%",
+                "text-overflow": "ellipsis",
+                "overflow": "hidden",
+                "white-space": "nowrap"
+            })
+
+            mainCollection.append(centeredCollectionHeader);
+            centeredCollectionHeader.append(collectionTitle[0]);
+            centeredCollectionHeader.append(dropDownArrow);
+            centeredCollectionHeader.css({
+                "text-align": "center",
+                "display": "inline-block",
+                "height": "90%",
+                "top": "10%",
+                "cursor": "pointer"
+            }).off()
+                .on('mousedown', function (j) {
                     return function () {
                         showCollectionMenu();
                     }
                 }(collection));
+
+            dropDownArrow.css({
+                'display': 'inline-block',
+                'left': "auto",
+                'position': "relative",
+                'height': "55%",
+                'width': '3%',
+                'top': '18%'
+            });
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
-            dropDownArrowArea.show();
 
 
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
-                //dropDownArrowArea.addClass('arrowArea'); 
-                dropDownArrow.css('display', 'inline')
+                /*dropDownArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
                             showCollectionMenu();
                         }
-                    }(collection));
+                    }(collection));*/
                 dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 dropDownArrow.addClass('arrow');    
-                dropDownArrowArea.show();
                 // prevCollection.addClass('nextPrevCollection')
                 //              .addClass('primaryFont')
                 //              .attr({
@@ -1183,13 +1208,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionArea.append($(uiDocfrag));
 
             if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
-                dropDownArrowArea.hide();
-                //nextArrowArea.hide();
+                dropDownArrow.hide();
             } else if (collection.prevCollectionIndex === null) {
-                dropDownArrowArea.hide();
                 prevCollection.hide();
             } else if (collection.nextCollectionIndex === null) {
-                //nextArrowArea.hide();
                 nextCollection.hide();
             }
             collectionDescription.attr('id', 'collectionDescription');
@@ -1397,6 +1419,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             arrow;
         menu = $(root).find('#collectionMenu');
         arrow = $(root).find('#dropDownArrow');
+
+        var w = (root.width() - menu.width()) / 2;
+        menu.css({
+            "left" : w+"px"
+        })
+
         if (menu.css('display') == 'block') {
             menu.css({
                 'display':'none'
@@ -1436,8 +1464,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         menu = document.getElementById('collectionMenu');
         arrow = document.getElementById('dropDownArrow');
         $(root).click(function(event) {
-            if (event.target.id != 'dropDownArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+            if (event.target.id != 'dropDownArrow' && event.target.id !='collection-title' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
                 if (menu.style.display == 'block') {
+                    console.log("here " + event.target.id)
                     menu.style.display = 'none';
                     arrow.style.transform = 'rotate(270deg)';
                     arrow.style.webkitTransform = 'rotate(270deg)';
@@ -2877,6 +2906,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             containerLeft;
             rootWidth = root.width();
             infoWidth = infoDiv.width();
+            if (!(currCollection.Metadata.Description && !onAssocMediaView)) {
+                infoWidth = 0;
+            }
             if (comingBack && previewPos){
                 containerLeft = previewPos;
             } else {

@@ -9176,7 +9176,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 e.stopPropagation();
             })
             .appendTo(addKeywordContainer);
-
         
 
         // to focus the 'add' button on the enter key
@@ -9186,7 +9185,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $("#keywordAddButton").click();
             }
         });
-
 
 
         // Add button.
