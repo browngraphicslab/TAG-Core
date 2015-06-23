@@ -1535,7 +1535,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //buttonRow.empty();
             sortsDiv.empty();
             var uiDocfrag = document.createDocumentFragment();
-            var rowList = $(document.createElement('ul')).addClass('rowLeft');
+            var rowList = $(document.createElement('ul')).addClass('rowLeft').addClass('sortRowLeft');
             for (i = 0; i < sortOptions.length; i++) {
                 var listItem = $(document.createElement('li')).addClass('rowItem');
                 sortButton = $(document.createElement('div'));

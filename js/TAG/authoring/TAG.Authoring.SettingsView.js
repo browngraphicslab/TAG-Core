@@ -2089,8 +2089,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     //if the button already exists
                     if ($("[id='" + buttonId + "']")[0]) {
                         $("[id='" + buttonId + "']").show()
-                            .css({"color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)})
+                            .css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) })
                     } else { //or if you're making it (sort option was origionally deselected)
+                        var listItem = $(document.createElement('li')).addClass('rowItem');
                         sortButton = $(document.createElement('div'));
                         //Because stored on server as "Tour" but should be displayed as "Tours"
                         //sortDiv.text()==="Tour" ? text = "Tours" : text = sortDiv.text();
@@ -2098,17 +2099,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         sortButton.addClass('rowButton')
                                     .text(sortDiv.text())
                                     .attr('id', buttonId)
-                                    //TODO: make sortButton have the same class as the same ones that are created in the collections page
-                                    .css({
-                                        "cursor": "pointer",
-                                        "float": "left",
-                                        "font-size": "92.5%",
-                                        "margin-top": "0.27%",
-                                        "margin-right": "1%",
-                                        "height": "100%",
-                                        "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
-                                    });
-                        $("#buttonRow").append(sortButton);
+                                    .css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) });
+                        listItem.append(sortButton);
+                        $(".sortRowLeft").append(listItem);
+                        //$("#buttonRow").append(sortButton);
                     }
 
                     if (sortDiv.text() === "Date") {
@@ -2327,7 +2321,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = true;
             showAssocMedia.css({'background-color':'white'});
             hideAssocMedia.css({'background-color':''});
-            $('#toggleRow').css('display','block');
+            $('#assocMediaButton').css('display','block');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -2340,7 +2334,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
-            $('#toggleRow').css('display','none');
+            $('#assocMediaButton').css('display','none');
             }, {
             'min-height': '0px',
             'width': '48%',
