@@ -2871,6 +2871,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             containerLeft;
             rootWidth = root.width();
             infoWidth = infoDiv.width();
+            if (!(currCollection.Metadata.Description && !onAssocMediaView)) {
+                infoWidth = 0;
+            }
             if (comingBack && previewPos){
                 containerLeft = previewPos;
             } else {
