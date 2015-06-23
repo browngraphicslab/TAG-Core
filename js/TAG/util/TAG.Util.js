@@ -1874,7 +1874,9 @@ TAG.Util = (function () {
 
         TAG.Telemetry.register(closeButton, 'mousedown', 'Overlay', function(tobj){
             tobj.overlay_type = "tutorial";
-            tobj.current_collection = collection.Identifier;
+            if (collection) {
+                tobj.current_collection = collection.Identifier;
+            }
             tobj.time_spent = telemetry_timer.get_elapsed();
             //console.log("current collection " + tobj.current_collection);
             //console.log("elapsed " + tobj.time_spent);
@@ -4451,6 +4453,7 @@ TAG.Util.UI = (function () {
 
         // click handler for tabs
         function tabHelper(j, tabName, queueLength) {
+            $(progressCirc).remove();
             console.log("J and tabs: "+j)
             console.log(tabs)
             return function () {                
@@ -4486,7 +4489,7 @@ TAG.Util.UI = (function () {
                     }
                     
                 } else {
-                    success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
+                    //success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
 
                 /*if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already

@@ -158,6 +158,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         //sets up the progress popup - creates popup but doesn't show it
         popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
+        $('body').append(popup);
         $(popup).css({'display':'none'});
         /*progressBar.unbind('click').click(function () {
             //$('body').append(popup);
@@ -167,12 +168,14 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         });*/
 
         progressBarButton.click(function(){
+            console.log("progress bar button was clicked");
             $('body').append(popup);
             $(popup).css({ 'display': 'inherit' });
             $(popup).show();
         })
 
         resumableUploader.on('fileSuccess', function(resumableFile, message) {
+            addOverlay();
             popup.setProgress(resumableFile.fileName, 0.9);
 
             //Gets back the relative path of the uploaded file on the server
@@ -200,6 +203,8 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         })
 
         resumableUploader.on('fileProgress', function(resumableFile) {
+            addOverlay(); //Maybe reappend after coming back from artwork editor?
+
             popup.setProgress(resumableFile.fileName, resumableFile._prevProgress)
             disableButton(); //disabled import buttons
             var percentComplete = resumableUploader.progress();
@@ -384,6 +389,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
             uploadingOverlay.css({"display": "block"});    
         } else{
         //updates loading UI
+            disableButton();
             var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
             settingsViewTopBar.append(progressBar);
             settingsViewTopBar.append(progressBarButton);
