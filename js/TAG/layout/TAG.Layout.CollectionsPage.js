@@ -560,6 +560,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method getCollectionsHelper
      * @param collections               list of collections to add to page
      */
+
     function getCollectionsHelper(collections) {
         var i,
            privateState,   // Is collection private?
@@ -1077,8 +1078,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "white-space" : "nowrap"
             }).off()
                 .on('mousedown', function (j) {
-                    return function () {
-                        showCollectionMenu();
+                    if (visibleCollections.length > 1) {
+                        return function () {
+                            showCollectionMenu();
+                        }
                     }
                 }(collection));
 
@@ -1093,6 +1096,38 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
 
+            if (visibleCollections.length < 2) {
+                dropDownArrow.css({
+                    "display": "none",
+                    "opacity": "0",
+                    "pointer-events": "none",
+                    "cursor": "auto"
+                });
+                $("#centeredCollectionHeader").css({
+                    "cursor": "auto",
+                    "pointer-events": "none"
+                })
+                $("#collection-title").css({
+                    "cursor": "auto",
+                    "pointer-events": "none"
+                })
+            }
+            else {
+                dropDownArrow.css({
+                    "display": "inline-block",
+                    "opacity": "1",
+                    "pointer-events": "auto",
+                    "cursor": "pointer"
+                });
+                $("#centeredCollectionHeader").css({
+                    "cursor": "pointer",
+                    "pointer-events": "auto"
+                })
+                $("#collection-title").css({
+                    "cursor": "pointer",
+                    "pointer-events": "auto"
+                })
+            };
 
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
