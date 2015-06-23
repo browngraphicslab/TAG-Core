@@ -4453,10 +4453,14 @@ TAG.Util.UI = (function () {
 
         // click handler for tabs
         function tabHelper(j, tabName, queueLength) {
-            $(progressCirc).remove();
+            
+            
             console.log("J and tabs: "+j)
             console.log(tabs)
             return function () {                
+                if (progressCirc != undefined || progressCirc != null) {
+                    TAG.Util.removeProgressCircle(progressCirc);
+                }
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
                 pickerSearchBar.attr("value", "");
@@ -4487,9 +4491,11 @@ TAG.Util.UI = (function () {
                         picker.remove();
                         importOnClick(); //import tab should simply bring up file picker
                     }
+                    console.log("tab not cached!");
                     
                 } else {
-                    //success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
+                    console.log("tab cached")
+                    success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
 
                 /*if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
