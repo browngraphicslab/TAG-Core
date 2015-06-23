@@ -10240,7 +10240,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 width: '6%',
                 height: '6%',
                 'margin-top': '2%',
-                'margin-right': '2%'
+                'margin-right': '2%',
+                'float': 'right'
             });
         } 
         var addMenuLabelDiv = $(document.createElement('div'))
@@ -10271,14 +10272,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'top': '50%',
                 'clear': 'left',
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                'border': '1px solid white',
+                'border': '1px solid black',
             });
         if (IS_WINDOWS) {
             dropDown.css({
                 'font-size': '70%',
-                'right': '4%',
-                'left': '',
-                 width: '37%'
+                'left': '0%',
+                'width': '37%',
+                'top' : '40%'
             })
         }
         dropDown.hide();
@@ -10307,13 +10308,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
                     'padding-right':'7%',
-                    'float':'left'
+                    'float':'right'
                 });
                 console.log(findContainer.css('display'));
-                if (findContainer.css('display') != 'none'){
-                        dropDown.css('top',(searchContainer.height()-findContainer.height())*0.5 + 'px');
+                if (findContainer.css('display') != 'none') {
+                    if (!IS_WINDOWS) {
+                        dropDown.css('top', (searchContainer.height() - findContainer.height()) * 0.5 + 'px');
+                    } else {
+                        dropDown.css('top', ((searchContainer.height() - findContainer.height()) * 0.4) - 5+ 'px' );
+                    }
                 } else {
-                    dropDown.css('top','50%');
+                    if (!IS_WINDOWS) {
+                        dropDown.css('top', '50%');
+                    } else {
+                        dropDown.css('top', '40%');
+                    }
                 }
                 dropDown.show();
             }
