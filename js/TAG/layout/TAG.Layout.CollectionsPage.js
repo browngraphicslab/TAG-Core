@@ -1555,7 +1555,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                          .off()
                             .on('mousedown', function () {
                                 //currentArtwork = null;
-                                changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
+                                console.log($(this).attr('id'));
+                                console.log(sortButtonTags[$(this).attr('id')]);
+                                changeDisplayTag(currentArtworks, sortButtonTags[this.textContent == "Tours" ? 'Tour' : this.textContent]);
                             });
                
                 //var spec = {
@@ -1567,13 +1569,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //sortButton.css("top", newPos.y + 'px');
                 //sortButton.css("height", newPos.height + 'px');
                 //buttonRow.append(sortButton);
-                sortButtonTags[sortButton.attr('id')] = sortOptions[i];
+                sortButtonTags[text == "Tours" ? 'Tour' : text] = sortOptions[i];
                 listItem.append(sortButton);
                 rowList.append(listItem);
 
                 //Sort telemetry register
                 TAG.Telemetry.register(sortButton, 'mousedown', 'SortOptions', function (tobj) {
-                    tobj.sort_type = sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                    tobj.sort_type = sortButtonTags[text == "Tours" ? 'Tour' : text].toLowerCase();
                     tobj.current_collection = currCollection.Identifier;
                 });
             }
@@ -3917,12 +3919,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {String} tag    the name of the sort tag
      */
     function colorSortTags(tag) {
-       var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR);
-       $('.rowButton').css('color', unselectedColor);
+        var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR);
+       root.find('.rowButton').css('color', unselectedColor);
        if (tag){
-            $('#' + tag.toLowerCase() + 'Button').css('color', SECONDARY_FONT_COLOR);
+            root.find('#' + tag.toLowerCase() + 'Button').css('color', SECONDARY_FONT_COLOR);
        }
     }
+
 
     /**
      * Changes the selected tag and re-sorts
