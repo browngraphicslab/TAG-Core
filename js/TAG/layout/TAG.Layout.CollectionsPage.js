@@ -946,7 +946,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (TAG.Util.Splitscreen.isOn()) {
                 root.find('#collectionMenu').css('width', '70%');
                 root.find('#backButtonArea').css('display', 'none');
-                root.find('#collection-title').css('margin-left', '6%');
             }
 
             /**
@@ -1062,7 +1061,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "padding-right": "18px",
                 "height": "100%",
                 "text-overflow": "ellipsis",
-                "overflow": "hidden",
                 "white-space": "nowrap"
             })
 
@@ -1073,8 +1071,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-align": "center",
                 "display": "inline-block",
                 "height": "90%",
+                "overflow": "hidden",
                 "top": "10%",
-                "cursor": "pointer"
+                "cursor": "pointer",
+                "white-space" : "nowrap"
             }).off()
                 .on('mousedown', function (j) {
                     return function () {

@@ -269,8 +269,6 @@ TAG.Util.Splitscreen = (function () {
                 //lhmap.attr('id', 'lpMapDiv');
             } else if (root.attr('id') === 'newCatalogRoot') {
                 root.find('#backButtonArea').css('display', 'inline');
-                root.find('#dropDownArrowArea').css('width', '3%');
-                root.find('#collection-title').css('margin-left', '4%');
                 root.find('.bottomButton').css({
                     "float": "right",
                     "display" : "block"
