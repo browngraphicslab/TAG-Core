@@ -1060,7 +1060,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "display": "inline-block",
                 "position": "relative",
                 "padding-right": "18px",
-                "height" : "100%"
+                "height": "100%",
+                "text-overflow": "ellipsis",
+                "overflow": "hidden",
+                "white-space": "nowrap"
             })
 
             mainCollection.append(centeredCollectionHeader);
@@ -1070,8 +1073,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-align": "center",
                 "display": "inline-block",
                 "height": "90%",
-                "top" : "10%"
-            })
+                "top": "10%",
+                "cursor": "pointer"
+            }).off()
+                .on('mousedown', function (j) {
+                    return function () {
+                        showCollectionMenu();
+                    }
+                }(collection));
 
             dropDownArrow.css({
                 'display': 'inline-block',
@@ -1080,13 +1089,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'height': "55%",
                 'width': '3%',
                 'top': '18%'
-                })
-                .off()
-                .on('mousedown', function(j){
-                    return function () {
-                        showCollectionMenu();
-                    }
-                }(collection));
+            });
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
 
@@ -1095,13 +1098,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
-                dropDownArrow.css('display', 'inline')
+                /*dropDownArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
                             showCollectionMenu();
                         }
-                    }(collection));
+                    }(collection));*/
                 dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 dropDownArrow.addClass('arrow');    
                 // prevCollection.addClass('nextPrevCollection')
@@ -1418,9 +1421,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         arrow = $(root).find('#dropDownArrow');
 
         var w = (root.width() - menu.width()) / 2;
-        console.log(w)
-        console.log(root)
-        console.log(menu)
         menu.css({
             "left" : w+"px"
         })
@@ -1464,8 +1464,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         menu = document.getElementById('collectionMenu');
         arrow = document.getElementById('dropDownArrow');
         $(root).click(function(event) {
-            if (event.target.id != 'dropDownArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+            if (event.target.id != 'dropDownArrow' && event.target.id !='collection-title' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
                 if (menu.style.display == 'block') {
+                    console.log("here " + event.target.id)
                     menu.style.display = 'none';
                     arrow.style.transform = 'rotate(270deg)';
                     arrow.style.webkitTransform = 'rotate(270deg)';
