@@ -1464,7 +1464,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         menu = document.getElementById('collectionMenu');
         arrow = document.getElementById('dropDownArrow');
         $(root).click(function(event) {
-            if (event.target.id != 'dropDownArrow' && event.target.id !='collection-title' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+            if (event.target.id != 'dropDownArrow' && event.target.id !='collection-title' && event.target.id != 'centeredCollectionHeader' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
                 if (menu.style.display == 'block') {
                     console.log("here " + event.target.id)
                     menu.style.display = 'none';
