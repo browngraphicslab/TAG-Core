@@ -6572,6 +6572,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         
                         root.append(importConfirmedBox);
                         $(importConfirmedBox).show();
+                        console.log("importConfirmedBox should be visible here!!");
                         TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                  
                    } else {
@@ -9165,15 +9166,28 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .bind("enterKey",function(e){
                 keywordAddButton.click();
             })
-            .keyup(function(e){
-                if(e.keyCode == 13) {
+            .keyup(function (e) {
+                if (e.keyCode == 13) {
                     $(this).trigger("enterKey");
                 }
                 e.stopPropagation();
             })
             .appendTo(addKeywordContainer);
 
+        
+
+        // to focus the 'add' button on the enter key
+        addKeywordContainer.keypress(function (e) {
+            if (e.which == 13)
+            {
+                $("#keywordAddButton").click();
+            }
+        });
+
+
+
         // Add button.
+        
         var keywordAddButton = $(document.createElement('button'))
             .attr('type', 'button')
             .addClass('button')
@@ -9190,7 +9204,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $('#setEditorMessageContainer').text('');
 
                 // Extract new keyword.
-                var newKeyword = keywordAddInput.val().toLowerCase().trim(); 
+                var newKeyword = keywordAddInput.val().toLowerCase().trim();
 
                 // Make sure that it is length > 0.
                 var notEmpty = newKeyword.length > 0;
@@ -9252,6 +9266,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         .appendTo(newKeywordDeleteDiv);
 
                     keywordAddInput.val('');
+                    keywordAddInput.focus();
                 };
 
                 //Change the settings in the database
