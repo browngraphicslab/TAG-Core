@@ -6572,6 +6572,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         
                         root.append(importConfirmedBox);
                         $(importConfirmedBox).show();
+                        console.log("importConfirmedBox should be visible here!!");
                         TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                  
                    } else {
