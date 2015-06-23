@@ -9314,12 +9314,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 overlay.hide();
                 overlay.remove();
 
-                // Update the view terms element.
+                // Update the view element.
                 var oldViewTerms = $($('.keyword-set-view-terms')[setIndex]);
                 oldViewTerms.find('option').remove(); // Remove old options.
 
                 var options = keywordSets[setIndex].keywords.slice(); // Make new options.
-                options.unshift('View Terms');
+                options.unshift('View');
 
                 for (var i = 0; i < options.length; i++) {
                     var option = $(document.createElement('option'));
@@ -9344,7 +9344,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createKeywordSetInputs(setIndex, set) {
         var options = set.keywords.slice();
-        options.unshift('View Terms');
+        options.unshift('View');
         var inputs = {
             setLabel: $(document.createElement('div'))
                 .attr('for', 'keyword-set-name-input-' + (setIndex+1))
@@ -9353,6 +9353,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 .addClass('keyword-set-name-input')
                 .attr('id', 'keyword-set-name-input-' + (setIndex + 1))
                 .attr('disabled', keywordSets[setIndex].shown !== 'true')
+                .css({'width': '20%'})
                 .blur(function (e) {
                     if (keywordSets) {
                         keywordSets[setIndex].name = $(this).val();
@@ -9361,8 +9362,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             keywordsInput: createSelectInput(options)
                 .addClass('keyword-set-view-terms')
                 .attr('disabled', keywordSets[setIndex].shown !== 'true')
-                .css({'width': '15%'}),
-            editInput: createButton('Edit Set', function () {
+                .css({'width': '10%'}),
+            editInput: createButton('Edit', function () {
                     if (keywordSets) {
                         var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(setIndex), false, false);
                         root.append(popup);
@@ -9375,7 +9376,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-top': '0.5%',
                     'opacity': (keywordSets[setIndex].shown === 'true' ? '1' : '0.4')
                 }),
-            showKeywords: createButton('Show Set', function () {
+            showKeywords: createButton('Show', function () {
                     $($('.keyword-set-show-button')[setIndex]).css('background-color', 'white');
                     $($('.keyword-set-hide-button')[setIndex]).css('background-color', '');
 
@@ -9391,7 +9392,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-top': '0.5%',
                     'background-color': (keywordSets[setIndex].shown === 'true' ? 'white' : '')
                 }),
-            hideKeywords: createButton('Hide Set', function () {
+            hideKeywords: createButton('Hide', function () {
                     $($('.keyword-set-hide-button')[setIndex]).css('background-color', 'white');
                     $($('.keyword-set-show-button')[setIndex]).css('background-color', '');
 
@@ -9408,7 +9409,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'background-color': (keywordSets[setIndex].shown !== 'true' ? 'white' : '')
                 }),
         };
-        // Disable the keywords in the "view terms" dropdown.
+        // Disable the keywords in the "view" dropdown.
         for (var i = 1; i < inputs.keywordsInput[0].length; i++) {
             inputs.keywordsInput[0][i].setAttribute('disabled', true);
         }

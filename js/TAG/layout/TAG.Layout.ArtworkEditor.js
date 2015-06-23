@@ -14,31 +14,6 @@
 TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     "use strict";
 
-    // TODO: get actual keywords from the server!
-
-    // 3 categories.
-
-    //var keywordCategories = ['fruit, but this category title is going to be really long', 'color', 'genre'];
-    //var keywords = [['platonia', 'bael', 'cherymoya', 'rambutan', 'jabuticaba', 'breadfruit', 'noni'],
-    //                ['vermillion', 'cerulean', 'cinnabar', 'viridian', 'saffron', 'fuschia'],
-    //                ['tropical house', 'hardstyle', 'disco', 'hardcore', 'tagcore',
-    //                'ambient post-noise-metalcoretronicastep', 'classical', 'metamodernism', 'genre',
-    //                'escapism', 'realism', 'meso-american', 'brutalism', 'grilled cheese', 'chuckie cheese',
-    //                'charles darwinism', 'socialism', 'schism', 'sshh', 'shitake', 'list item', '^_^']];
-
-    // 2 categories.
-    //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
-    //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-    //                ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
-
-    // 1 category.
-    //var keywordCategories = ['Fruit, but this category title is going to be really long'];
-    //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
-
-    // No categories, no keywords. Capiche??
-    //var keywordCategories = [];
-    //var keywords = [[], [], []];
-
     var // DOM-related
         root = $(document.createElement('div')),                    // get via Util.getHtmlAjax in web app
         topbar = $(document.createElement('div')),                  // get via root.find(...) in web app, set up in JADE
@@ -3270,7 +3245,11 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         .attr('for', 'keyword-checkbox_' + setIndex + '_' + keywordIndex)
                         .css({
                             'cursor': 'default',
-                            'font-size': '0.7em'
+                            'font-size': '0.7em',
+                            'position': 'absolute',
+                            'overflow': 'hidden',
+                            'text-overflow': 'ellipsis',
+                            'width': '20%'
                         })
                         .click(function (e) {
                             e.stopPropagation();
