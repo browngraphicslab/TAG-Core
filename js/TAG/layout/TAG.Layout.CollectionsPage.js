@@ -1887,7 +1887,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // Clear the search text.
         searchTxt.text("");
 
-
         // Clear the results description.
         root.find('#searchDescription').text('');
         root.find('#clearSearchButton').css({ 'display': 'none' });
@@ -1899,8 +1898,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
         }
 
-        drawCatalog(currentArtworks, currentTag, 0, false);
+        // See if we will need to redraw the timeline
+        if (currCollection.Metadata.Timeline === "true" || currCollection.Metadata.Timeline === "false") {
+            currCollection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
+        } else {
+            timelineShown = true; //default to true for backwards compatibility
+        }
 
+        drawCatalog(currentArtworks, currentTag, 0, false);
+        
         keywordSearchOptions = [];
     }
 
