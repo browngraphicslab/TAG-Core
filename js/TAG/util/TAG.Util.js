@@ -1874,7 +1874,9 @@ TAG.Util = (function () {
 
         TAG.Telemetry.register(closeButton, 'mousedown', 'Overlay', function(tobj){
             tobj.overlay_type = "tutorial";
-            tobj.current_collection = collection.Identifier;
+            if (collection) {
+                tobj.current_collection = collection.Identifier;
+            }
             tobj.time_spent = telemetry_timer.get_elapsed();
             //console.log("current collection " + tobj.current_collection);
             //console.log("elapsed " + tobj.time_spent);

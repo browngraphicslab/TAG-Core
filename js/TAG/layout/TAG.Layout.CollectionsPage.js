@@ -498,7 +498,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var telemetry_timer = new TelemetryTimer();
         TAG.Telemetry.register(closeButton, 'mousedown', 'Overlay', function(tobj){
             tobj.overlay_type = "info"; //info or tutorial page
-            tobj.current_collection = currCollection.Identifier;
+            if (currCollection) {
+                tobj.current_collection = currCollection.Identifier;
+            }
             tobj.time_spent = telemetry_timer.get_elapsed();
         });
     }
