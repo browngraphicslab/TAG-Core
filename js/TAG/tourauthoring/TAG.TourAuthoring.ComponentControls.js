@@ -161,10 +161,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
                     kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
+                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
                     kfvh = keyframe.state.viewport.region.span.y; // not used
                     kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
                 }
             }
             //hide any open component controls, show inkEditDraw
@@ -433,10 +433,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 else if (track.getInkLink().getType() === TAG.TourAuthoring.TrackType.image) {
                     kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
+                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
                     kfvh = keyframe.state.viewport.region.span.y; // not used
                     kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
                 }
             }
             
@@ -710,10 +710,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
                     kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
+                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
                     kfvh = keyframe.state.viewport.region.span.y; // not used
                     kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
                 }
             }
             
@@ -5172,7 +5172,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if ($("#inkCanv").length)
                 $("#inkCanv").remove();
 
-            $("#rinplayer").css({
+            $("#ITEHolder").css({
                 
             });
         }
@@ -5190,18 +5190,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             var inkdiv = document.createElement("div");
             inkdiv.setAttribute("id", "inkCanv");
             inkdiv.setAttribute("class", "inkCanv");
-            var nothing = $(inkdiv)
+            var nothing = $(inkdiv);
             //set rinplayer's position to absolute so our canvas isn't pushed down
-            $("#rinplayer").css({
+            $("#ITEHolder").css({
                 "position": "absolute",
             });
 
             // set css of inkdiv, making sure that its z-index is greater than those of all images and artworks (artwork in track i has z-index 20000+i)
             var num_tracks = timeline.getTrackslength();
             inkdiv.setAttribute("style", "overflow:hidden; position:absolute; width:100%; height:100%; background:transparent; pointer-events: all; z-index:" + (20100 + num_tracks) + ";");
-            var view_elt = $("#rinContainer"); // change to #rinplayer if we can figure out how to keep it around during tour reloads (if in #rinplayer, we can capture inks in thumbnails)
+            var view_elt = $("#ITEHolder"); // change to #rinplayer if we can figure out how to keep it around during tour reloads (if in #rinplayer, we can capture inks in thumbnails)
             //view_elt.append(inkdiv);
-            $("#rinplayer").before(inkdiv);
+            $("#ITEHolder").before(inkdiv);
             return inkdiv;
         }
 
