@@ -20,6 +20,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         mainPanel = $(document.createElement('div')),
         titleArea = $(document.createElement('div')),
         //rightbarLoadingDelete = $(document.createElement('div')),
+        importMapButton = root.find('#locationHistoryImportMapButton'),
+
+
 
         // misc initialized variables
         helpText = "To select a location, type into the search field or \
@@ -39,6 +42,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         MEDIA_EDITOR = AssocMediaEditor(),                                                // AssocMediaEditor object ................................
         TEXT_EDITOR = AssocTextEditor(),
         guidsToBeDeleted = guidsToBeDeleted,
+        uploadHappening = false,
 
         // misc uninitialized variables
         annotatedImage,               // AnnotatedImage object
@@ -64,9 +68,12 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     init();
 
     return {
-        getRoot: getRoot
+        getRoot: getRoot,
+        uploadStillHappening: uploadStillHappening
     };
     
+
+
     /**
      * Loads deepzoom image and creates UI (via a call to initUI)
      * @method init
@@ -794,6 +801,17 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     }
 
     /**
+    *
+    * @method uploadStillHappening
+    * @return boolean           if external upload is happening - import maps needs to be disabled
+    *
+    **/
+    function uploadStillHappening(bool) {
+        uploadHappening = bool;
+        return uploadHappening;
+    }
+
+    /**
      * Closes all open panels (metadata editing panel, location history
      * panel, and thumbnail editing panel).
      * @method closeAllPanels
@@ -1115,15 +1133,19 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 locationPanelDiv.css({ display: 'inline' });
 
                
-                var progressBar = $(document.getElementById("progressBarUploads"));
-                
+                //var progressBar = $(document.getElementById("progressBarUploads"));
+                if (uploadHappening === true) {
+                    importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
+                    importMapButton.prop('disabled', 'true');
+                }
 
-                if ($(progressBar).length >0) {
+               /* if ($(progressBar).length >0) {
                     console.log("upload is happening, disable import maps PLEASE!!");
                     $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
                     $(importMapButton).prop('disabled', 'true');
 
-                } 
+                }*/
+
                 
                 isOpen = true;
             }

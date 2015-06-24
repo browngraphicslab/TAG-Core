@@ -22,7 +22,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     "use strict";
     //$(document).off();                   
 
-    var root= TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
         //get all of the ui elements from the root and save them in variables
         middleLoading = root.find('#setViewLoadingCircle'),
         settingsContainer = root.find('#setViewSettingsContainer'),
@@ -66,6 +66,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         textAppended = false,
         guidsToBeDeleted = guidsToBeDeleted || [],
         toureditor,
+        artworkeditor;
 
         // = root.find('#importButton'),
 
@@ -3706,7 +3707,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         }, 1);
 
-        var progressBar = $(document.getElementById("progressBarUploads"));
+        //var progressBar = $(document.getElementById("progressBarUploads"));
         
     }
 
@@ -7347,6 +7348,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!artwork) {
             return;
         }
+
+        var progressBarLength = $(document.getElementById("progressBarUploads")).length;
+
         TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
             tobj.category_name = prevLeftBarSelection.categoryName;
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
@@ -7365,8 +7369,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleQueue.clear();
         clearTimeout(checkConTimerId);
         rightQueue.clear();
+
+
         setTimeout(function () {
-            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted)).getRoot(), function () {
+            artworkeditor = TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted);
+            TAG.Util.UI.slidePageLeft(artworkeditor.getRoot(), function () {
                 TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                     tobj.source_page = "settings_view";
                     tobj.destination_page = "artwork_editor";
@@ -7375,12 +7382,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     //console.log("artwork editor load time: " + tobj.load_time);
                 });
                 SPENT_TIMER.restart();
+
             });
-            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
-            if (($('.progressBarUploads').length > 0)) { //disable import map button here?!
-                console.log("disable import maps!?!?!?");
-                importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
-                importMapButton.prop('disabled', 'true');
+
+            if (progressBarLength > 0) { //other upload happening - disable import maps
+                artworkeditor.uploadStillHappening(true);
+
             }
         }, 1);
 

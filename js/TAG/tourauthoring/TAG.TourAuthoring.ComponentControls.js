@@ -1531,7 +1531,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             });
 
                         } else {
-                            console.log("upload happening - from file button disabled ON CLICK?");
                             self.css({ 'background-color': 'transparent', 'color': 'gray' });
                         }
 
