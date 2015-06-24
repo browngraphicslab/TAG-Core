@@ -66,7 +66,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         textAppended = false,
         guidsToBeDeleted = guidsToBeDeleted || [],
         toureditor,
-        artworkeditor;
+        artworkeditor,
 
         // = root.find('#importButton'),
 
@@ -4990,9 +4990,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $(importInTours).prop('disabled', 'false');
                     }*/
                         var importToTour = $(document.getElementById("importToTour"));
-                        if (importToTour) {
+                        if (importToTour && toureditor) {
                             importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
                             toureditor.uploadStillHappening(false);
+                        }
+
+                        if (artworkeditor) {
+                            artworkeditor.uploadStillHappening(false);
+                            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                            importMapButton.prop('disabled', false);
+                            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                         }
                         console.log("confirmation that assoc media uploaded");
 
@@ -6548,7 +6555,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                         //Confirmation pop up that artworks have been imported
-                        
+                        console.log("confirm that artworks were imported");
 
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
                             //remove progress stuff
@@ -6638,10 +6645,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             message = "The following files were successfully imported: "
                         }
                         
+                        
+
                         var importToTour = $(document.getElementById("importToTour"));
-                        if (importToTour) {
+                        if (importToTour && toureditor) {
                             importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
                             toureditor.uploadStillHappening(false);
+                        }
+                        if (artworkeditor) {
+                            artworkeditor.uploadStillHappening(false);
+                            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                            importMapButton.prop('disabled', false);
+                            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                         }
 
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
@@ -7386,6 +7401,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
             if (progressBarLength > 0) { //other upload happening - disable import maps
+                console.log("import map should be disabled - settings view slidePageLeft")
                 artworkeditor.uploadStillHappening(true);
 
             }
@@ -9854,7 +9870,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({'opacity':'.4'});
                 }
 
-                var importToTour = $(document.getElementById("importToTour"));
+                //var importToTour = $(document.getElementById("importToTour"));
                 
                 
             },
@@ -9879,9 +9895,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 var importToTour = $(document.getElementById("importToTour"));
 
-                if (importToTour) {
+                if (importToTour && toureditor) {
                     importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
                     toureditor.uploadStillHappening(false);
+                }
+
+
+                if (artworkeditor) {
+                    artworkeditor.uploadStillHappening(false);
+                    var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                    importMapButton.prop('disabled', false);
+                    importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                 }
                     
                 }

@@ -1116,6 +1116,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             RLH = TAG.Util.RLH({
                 artwork: artwork,
                 root: root,
+                uploadHappening: uploadHappening,
                 authoring: true
             });
             locationPanelDiv = RLH.init();
@@ -1135,6 +1136,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                
                 //var progressBar = $(document.getElementById("progressBarUploads"));
                 if (uploadHappening === true) {
+                    console.log("import map should be disabled - artwork editor");
                     importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
                     importMapButton.prop('disabled', 'true');
                 }
@@ -1163,6 +1165,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         sidebarHideButtonContainer.show();
                     }
                 });
+
                 
                 isOpen = false;
             }
