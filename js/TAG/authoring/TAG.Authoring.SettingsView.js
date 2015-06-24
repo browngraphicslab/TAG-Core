@@ -2795,13 +2795,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //deleteBlankButton.show();
 
-            if(IS_WINDOWS){
+            /*if(IS_WINDOWS){
                 //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteExhibition(multiSelected)});
                 //deleteBlankButton.text('Delete');
             } else{
                 $('#setViewDeleteButton').css('display','none');
-            }
+            }*/
 
             TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
                 tobj.element_type = "Collections";
@@ -3564,13 +3564,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
-        if(IS_WINDOWS){
+        /*if(IS_WINDOWS){
                 //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteTour(multiSelected)});
                 deleteBlankButton.text('Delete');
         } else{
             $('#setViewDeleteButton').css('display','none');   
-        }
+        }*/
     
 
         TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
@@ -4072,13 +4072,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    associated media to load
      */
     function loadAssocMedia(media) {
-        if(IS_WINDOWS){ 
+        /*if(IS_WINDOWS){ 
             //$('#setViewDeleteButton').css('display','block');
             deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(multiSelected)});
             deleteBlankButton.text("Delete");
         } else{
             $('#setViewDeleteButton').css('display','none');
-        }
+        }*/
 
         prepareViewer(true);
         clearRight();
@@ -4982,6 +4982,46 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                     //Get rid of progress bar here    
+                    /*var importInTours = $(document.getElementById("importToTours"));
+                    if (importInTours != null) {
+                        $(importInTours).css({ 'color': 'rgb(256, 256, 256)' });
+                        $(importInTours).prop('disabled', 'false');
+                    }*/
+                        var importToTour = $(document.getElementById("importToTour"));
+                        if (importToTour) {
+
+                            var dropInk = $(document.getElementById("dropInk"));
+                            var dropFile = $(document.getElementById("dropFile"));
+
+                            importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                            importToTour.on('mouseenter', function () {
+                                importToTour.css({ 'background-color': 'white', 'color': 'black' });
+                                dropFile.show();
+                                dropInk.hide();
+                            })
+                            importToTour.on('mouseleave', function () {
+                                importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                            })
+
+                            importToTour.on('click', function () {
+                                importToTour.css({
+                                    'background-color': 'white',
+                                    'color': 'black'
+                                });
+
+                                dropFile.show();
+                                dropInk.hide();
+                                //assetButton.data('selected', false);
+                                //fileClick = true;
+                            })
+
+                            console.log("enable from file button");
+                            //$(importToTour).css({ 'color': 'rgb(256, 256, 256)' });
+
+                        }
+
+
+
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
 
                             //remove progress stuff
@@ -6623,6 +6663,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             message = "The following files were successfully imported: "
                         }
                         
+                        var importToTour = $(document.getElementById("importToTour"));
+                        if (importToTour) {
+                            var dropInk = $(document.getElementById("dropInk"));
+                            var dropFile = $(document.getElementById("dropFile"));
+
+                            importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                            importToTour.on('mouseenter', function () {
+                                importToTour.css({ 'background-color': 'white', 'color': 'black' });
+                                dropFile.show();
+                                dropInk.hide();
+                            })
+                            importToTour.on('mouseleave', function () {
+                                importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                            })
+                            
+                            
+                            importToTour.on('click', function () {
+                                importToTour.css({
+                                    'background-color': 'white',
+                                    'color': 'black'
+                                });
+
+                                dropFile.show();
+                                dropInk.hide();
+                                //assetButton.data('selected', false);
+                                //fileClick = true;
+                            })
+                            
+                            console.log("enable from file button");
+                            //$(importToTour).css({ 'color': 'rgb(256, 256, 256)' });
+                            
+                        }
+
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             //remove progress stuff
                             $('.progressBarUploads').remove();
@@ -8076,13 +8149,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.show();
             addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)});
 
-            //deleteBlankButton.show();
+       
             if(IS_WINDOWS){
-                //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
                 deleteBlankButton.text('Delete');
             } else{
-                $('#setViewDeleteButton').css('display','none');
+                $('#setViewDeleteButton').css('display','none'); //web app - delete button disabled
             }
 
         } else if (inAssociatedView) {
@@ -8095,7 +8167,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.unbind('click').click(function () { addAssocMediaToArtworks(multiSelected) })
             findBar.css("display", "inline-block");
             searchbar.css({ width: '75%' });
+            if (IS_WINDOWS) {
+                
+                deleteBlankButton.unbind('click').click(function () { deleteAssociatedMedia(multiSelected) });
+                deleteBlankButton.text('Delete');
+            } else {
+                $('#setViewDeleteButton').css('display', 'none'); //web app - delete button disabled
+            }
+
         } else {
+            if (inCollectionsView) {
+                if (IS_WINDOWS) {
+                    deleteBlankButton.unbind('click').click(function () { deleteExhibition(multiSelected) });
+                    deleteBlankButton.text('Delete');
+                } else {
+                    $(deleteBlankButton).css('display', 'none'); //web app - delete button disabled
+                }
+                
+            } else if (inToursView) {
+                if (IS_WINDOWS) {
+                    deleteBlankButton.unbind('click').click(function () { deleteTour(multiSelected) });
+                    deleteBlankButton.text('Delete');
+                } else {
+                    $('#setViewDeleteButton').css('display', 'none');
+                }
+            }
             //hides the second button
             menuLabel.hide();
             addButton.hide();
@@ -9825,6 +9921,39 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
             
+
+                var importToTour = $(document.getElementById("importToTour"));
+                if (importToTour) {
+                    $(importToTour).attr('id', 'notUploading');
+                    var dropInk = $(document.getElementById("dropInk"));
+                    var dropFile = $(document.getElementById("dropFile"));
+
+                    importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                    importToTour.on('mouseenter', function () {
+                        importToTour.css({ 'background-color': 'white', 'color': 'black' });
+                        dropFile.show();
+                        dropInk.hide();
+                    })
+                    importToTour.on('mouseleave', function () {
+                        importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                    })
+
+                    importToTour.on('click', function () {
+                        importToTour.css({
+                            'background-color': 'white',
+                            'color': 'black'
+                        });
+
+                        dropFile.show();
+                        dropInk.hide();
+                        //assetButton.data('selected', false);
+                        //fileClick = true;
+                    })
+
+                    console.log("enable from file button");
+                    //$(importToTour).css({ 'color': 'rgb(256, 256, 256)' });
+
+                }
                     
                 }
 
