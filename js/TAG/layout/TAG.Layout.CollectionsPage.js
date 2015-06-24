@@ -560,6 +560,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method getCollectionsHelper
      * @param collections               list of collections to add to page
      */
+
     function getCollectionsHelper(collections) {
         var i,
            privateState,   // Is collection private?
@@ -1077,8 +1078,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "white-space" : "nowrap"
             }).off()
                 .on('mousedown', function (j) {
-                    return function () {
-                        showCollectionMenu();
+                    if (visibleCollections.length > 1) {
+                        return function () {
+                            showCollectionMenu();
+                        }
                     }
                 }(collection));
 
@@ -1093,6 +1096,38 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
 
+            if (visibleCollections.length < 2) {
+                dropDownArrow.css({
+                    "display": "none",
+                    "opacity": "0",
+                    "pointer-events": "none",
+                    "cursor": "auto"
+                });
+                $("#centeredCollectionHeader").css({
+                    "cursor": "auto",
+                    "pointer-events": "none"
+                })
+                $("#collection-title").css({
+                    "cursor": "auto",
+                    "pointer-events": "none"
+                })
+            }
+            else {
+                dropDownArrow.css({
+                    "display": "inline-block",
+                    "opacity": "1",
+                    "pointer-events": "auto",
+                    "cursor": "pointer"
+                });
+                $("#centeredCollectionHeader").css({
+                    "cursor": "pointer",
+                    "pointer-events": "auto"
+                })
+                $("#collection-title").css({
+                    "cursor": "pointer",
+                    "pointer-events": "auto"
+                })
+            };
 
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
@@ -1555,7 +1590,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                          .off()
                             .on('mousedown', function () {
                                 //currentArtwork = null;
-                                changeDisplayTag(currentArtworks, sortButtonTags[$(this).attr('id')]);
+                                console.log($(this).attr('id'));
+                                console.log(sortButtonTags[$(this).attr('id')]);
+                                changeDisplayTag(currentArtworks, sortButtonTags[this.textContent == "Tours" ? 'Tour' : this.textContent]);
                             });
                
                 //var spec = {
@@ -1567,13 +1604,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //sortButton.css("top", newPos.y + 'px');
                 //sortButton.css("height", newPos.height + 'px');
                 //buttonRow.append(sortButton);
-                sortButtonTags[sortButton.attr('id')] = sortOptions[i];
+                sortButtonTags[text == "Tours" ? 'Tour' : text] = sortOptions[i];
                 listItem.append(sortButton);
                 rowList.append(listItem);
 
                 //Sort telemetry register
                 TAG.Telemetry.register(sortButton, 'mousedown', 'SortOptions', function (tobj) {
-                    tobj.sort_type = sortButtonTags[$(sortButton).attr('id')].toLowerCase();
+                    tobj.sort_type = sortButtonTags[text == "Tours" ? 'Tour' : text].toLowerCase();
                     tobj.current_collection = currCollection.Identifier;
                 });
             }
@@ -3917,12 +3954,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {String} tag    the name of the sort tag
      */
     function colorSortTags(tag) {
-       var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR);
-       $('.rowButton').css('color', unselectedColor);
+        var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR);
+       root.find('.rowButton').css('color', unselectedColor);
        if (tag){
-            $('#' + tag.toLowerCase() + 'Button').css('color', SECONDARY_FONT_COLOR);
+            root.find('#' + tag.toLowerCase() + 'Button').css('color', SECONDARY_FONT_COLOR);
        }
     }
+
 
     /**
      * Changes the selected tag and re-sorts
