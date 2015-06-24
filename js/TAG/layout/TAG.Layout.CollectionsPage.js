@@ -1908,25 +1908,35 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 return;
             }
 
-            // Use the operation to select what dictionary we are pulling from.
-            var dict = keywordDictionary[setIndex][searchOptions['operation']];
-            var newMatches = {};
-
-            // Go through each keyword that is checked in the set, provided by keywordSearchOptions.
-            $.each(keywordSearchOptions[setIndex].keywords, function (checkedKeywordIndex, checkedKeyword) {
-                // Get all the artworks that have/do not have (according to operation) the checked keyword.
-                var artworks = dict[checkedKeyword];
-
-                // Go through each of these matchoing artworks and see that it already is part of our set
-                $.each(artworks, function (artworkIndex, artwork) {
-                    if (matches[artwork.id] === 'true') {
-                        newMatches[artwork.id] = 'true';
-                    }
+            if (searchOptions['operation'] === 'and') {
+                var newMatches = {};
+                var dict = keywordDictionary[setIndex].and;
+                // Go through each keyword that is checked in the set, provided by keywordSearchOptions.
+                $.each(keywordSearchOptions[setIndex].keywords, function (checkedKeywordIndex, checkedKeyword) {
+                    // Get all the artworks that have the checked keyword.
+                    var artworks = dict[checkedKeyword];
+                    // Go through each of these matching artworks and see that it already is part of our set
+                    $.each(artworks, function (artworkIndex, artwork) {
+                        if (matches[artwork.id] === 'true') {
+                            newMatches[artwork.id] = 'true';
+                        }
+                    });
                 });
-
-            });
-
-            matches = newMatches;
+                matches = newMatches;
+            } else if (searchOptions['operation'] === 'not') {
+                var dict = keywordDictionary[setIndex].and;
+                // Go through each keyword that is checked in the set, provided by keywordSearchOptions.
+                $.each(keywordSearchOptions[setIndex].keywords, function (checkedKeywordIndex, checkedKeyword) {
+                    // Get all the artworks that have that keyword and remove them from the set of matches.
+                    var artworks = dict[checkedKeyword];
+                    // Go through each of the checked artworks 
+                    $.each(artworks, function (artworkIndex, artwork) {
+                        if (matches[artwork.id] === 'true') {
+                            delete matches[artwork.id];
+                        }
+                    });
+                });
+            }
         });
 
         return matches;

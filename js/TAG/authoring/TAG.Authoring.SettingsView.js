@@ -9167,7 +9167,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '5%',
                 'margin-top': '2%'
             })
-            .click(function () { })
+            .click(function () { getSetFromCSV(function(){},function(){}) })
             .appendTo(setEditorTopContainer);
 
         // View/delete keywords scrollable area.
@@ -9883,6 +9883,51 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         );
         }
     }
+
+
+
+
+    /** Method creataes a popup for a user to select a csv file, parses it, and if free of errors, makes it the keyword set.
+     * @method getSetFromCSV
+     * @param {Function} success    Callback if the file was successful   
+     * @param {Function} error      Callback if the file had an error
+     */
+    function getSetFromCSV(success, error) {
+        console.log("csv keyword set!");
+        var keywordsList = [];
+
+        // Get our file.
+        var fileContent;
+        if (IS_WINDOWS) {
+            // Windows filepicker.
+            var filePicker = new Windows.Storage.Pickers.FileOpenPicker();
+            filePicker.viewMode = Windows.Storage.Pickers.PickerViewMode.list;
+            filePicker.fileTypeFilter.replaceAll(['.csv']);
+            filePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.desktop;
+            filePicker.pickSingleFileAsync().then(function (file) {
+                if (file) {
+                    try {
+                        var csvFile = new XMLHttpRequest();
+                        csvFile.open("GET", file.name, true);
+                        csvFile.onreadystatechange = function () {
+                            allText = csvFile.responseText;
+                            allTextLines = csvFile.split(/\r\n|\n/);
+                        };
+                        console.log('FILE:');
+                        console.log(allText);
+                        console.log('EOF');
+                    } catch (e) {
+                        error();
+                    }
+                } else {
+                    error();
+                }
+            });
+        } else {
+
+        }
+    }
+
 
     /**Create an overlay over the whole settings view with a spinning circle and centered text. This overlay is intended to be used 
      * only when the page is 'done'.  The overlay doesn't support being removed from the page, so only call this when the page will 
