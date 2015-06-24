@@ -951,6 +951,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (TAG.Util.Splitscreen.isOn()) {
                 root.find('#collectionMenu').css('width', '70%');
                 root.find('#backButtonArea').css('display', 'none');
+                root.find("#keywords").hide();
             }
 
             /**
