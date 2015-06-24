@@ -5953,9 +5953,9 @@ TAG.Util.RLH = function (input) {
                     loadCallback: loadCallback
                 });
         }
-        var progressBar = $(document.getElementById("progressBarUploads"));
+        //var progressBar = $(document.getElementById("progressBarUploads"));
 
-
+        /**
         console.log("loading maps called, prog bar length = " + $(progressBar).length);
         if ($(progressBar).length > 0) {
             console.log("other upload is happening, disable import maps PLEASE!!!!!");
@@ -5963,6 +5963,7 @@ TAG.Util.RLH = function (input) {
             $(importMapButton).prop('disabled', 'true');
 
         }
+        **/
     }
 
     /**
@@ -6052,6 +6053,8 @@ TAG.Util.RLH = function (input) {
     function showMap(guid) {
         var i;
 
+        currentIndex = mapGuids.indexOf(guid);
+
         //If bing maps is disabled and in art viewer, don't show it
         if (!guid && !input.authoring && !defaultMapShown) {
             return;
@@ -6080,7 +6083,7 @@ TAG.Util.RLH = function (input) {
             });
 
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
-        currentIndex = mapGuids.indexOf(guid);
+
 
         // style map dots
         $('.locationHistoryMapDot').css('opacity', '0.4'); //resets all dots to the unselected state
@@ -7509,11 +7512,13 @@ TAG.Util.RLH = function (input) {
             saveRichLocationHistory({
                 toremove: mapguid
             });
+            //showMap(currentIndex - 1);
         } else {
             toggleDefaultMap();
             saveRichLocationHistory({
                 noReload: true
             });
+            //showMap(currentIndex);
         }
     }
 
