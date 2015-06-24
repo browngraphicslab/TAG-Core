@@ -1848,35 +1848,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
         }
 
-        var andKeywordsString = '',
-            notKeywordsString = '',
-            andCount = 0,
-            notCount = 0;
-        $.each(keywordSearchOptions, function (optionIndex, option) {
-            $.each(option['keywords'], function (checkedKeywordIndex, checkedKeyword) {
-                if (option['operation'] === 'and') {
-                    andKeywordsString = andKeywordsString + (' ' + checkedKeyword + ',');
-                    andCount++;
-                } else if (option['operation'] === 'not') {
-                    notKeywordsString = notKeywordsString + (' ' + checkedKeyword + ',');
-                    notCount++;
-                }
-            });
-        });
-        if (andKeywordsString !== '') {
-            andKeywordsString = andKeywordsString.substring(0, andKeywordsString.length - 1);
-        }
-        if (notKeywordsString !== '') {
-            notKeywordsString = notKeywordsString.substring(0, notKeywordsString.length - 1);
-        }
-
-        var searchDescriptionText = 'Found ' + matchedArts.length +
-            ' result' + ((matchedArts.length == 1) ? '' : 's') +
-            ((doTextSearch) ? (' for \'' + content + '\'') : '') +
-            ((andKeywordsString !== '') ? (' with the keyword' + (andCount > 1 ? 's ' : ' ') + andKeywordsString) : '') +
-            ((andKeywordsString !== '' && notKeywordsString !== '') ? ' and' : '') +
-            ((notKeywordsString !== '') ? (' without the keyword' + (notCount > 1 ? 's ' : ' ') + notKeywordsString) : '') +
-            '.';
+        var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
 
         root.find('#searchDescription').text(searchDescriptionText);
         root.find('#clearSearchButton').css({ 'display': 'block' });
@@ -1895,6 +1867,35 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
         drawCatalog(matchedArts, currentTag, 0, true);
         drawCatalog(unmatchedArts, currentTag, searchResultsLength, false);
+    }
+
+    function getSearchDescription(matchedArts, content, doTextSearch) {
+        var andKeywordsString = '',
+            notKeywordsString = '',
+            andCount = 0,
+            notCount = 0;
+
+        var searchDescriptionText = 'Found ' + matchedArts.length +
+            ' result' + ((matchedArts.length == 1) ? '' : 's') +
+            ((doTextSearch) ? (' for \'' + content + '\'') : '');
+
+        var getSetListString = function (op, keywords) {
+            if (op === '') return '';
+            var listString = '';
+            for (var i = 0; i < keywords.length; i++) {
+                listString = listString + (((i == keywords.length - 1) && keywords.length != 1 ? 'or ' : '') + '\'' + keywords[i] + '\'' +
+                    (((i == 0 && keywords.length == 2) || i == keywords.length-1) ? '' : ','));
+            }
+            return listString;
+        };
+        $.each(keywordSearchOptions, function (optionIndex, option) {
+            var listString = getSetListString(option.operation, option.keywords);
+            searchDescriptionText = searchDescriptionText +
+                ((listString !== '') ? (' with' + (option.operation == 'and' ? '' : 'out') + ' the keyword' + (option.keywords.length > 1 ? 's ' : ' ') + listString) : '');
+        });
+        searchDescriptionText = searchDescriptionText + '.';
+
+        return searchDescriptionText;
     }
 
     /*
