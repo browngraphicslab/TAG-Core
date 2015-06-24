@@ -22,7 +22,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     "use strict";
     //$(document).off();                   
 
-    var root= TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
         //get all of the ui elements from the root and save them in variables
         middleLoading = root.find('#setViewLoadingCircle'),
         settingsContainer = root.find('#setViewSettingsContainer'),
@@ -65,7 +65,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
         guidsToBeDeleted = guidsToBeDeleted || [],
+        uploadInProgress = false,
         toureditor,
+        artworkeditor,
 
         // = root.find('#importButton'),
 
@@ -1153,7 +1155,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             menuLabel.prop('disabled', false);
                             menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                         }
-
                         bgImgInput.prop('disabled', false);
                         bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
@@ -3738,7 +3739,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         }, 1);
 
-        var progressBar = $(document.getElementById("progressBarUploads"));
+        //var progressBar = $(document.getElementById("progressBarUploads"));
         
     }
 
@@ -5021,9 +5022,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $(importInTours).prop('disabled', 'false');
                     }*/
                         var importToTour = $(document.getElementById("importToTour"));
-                        if (importToTour) {
+                        if (importToTour && toureditor) {
                             importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
                             toureditor.uploadStillHappening(false);
+                        }
+
+                        if (artworkeditor) {
+                            artworkeditor.uploadStillHappening(false);
+                            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                            importMapButton.prop('disabled', false);
+                            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                         }
                         console.log("confirmation that assoc media uploaded");
 
@@ -6579,7 +6587,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                         //Confirmation pop up that artworks have been imported
-                        
+                        console.log("confirm that artworks were imported");
 
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
                             //remove progress stuff
@@ -6669,10 +6677,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             message = "The following files were successfully imported: "
                         }
                         
+                        
+
                         var importToTour = $(document.getElementById("importToTour"));
-                        if (importToTour) {
+                        if (importToTour && toureditor) {
                             importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
                             toureditor.uploadStillHappening(false);
+                        }
+                        if (artworkeditor) {
+                            artworkeditor.uploadStillHappening(false);
+                            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                            importMapButton.prop('disabled', false);
+                            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                         }
 
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
@@ -7379,6 +7395,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!artwork) {
             return;
         }
+
+        var progressBarLength = $(document.getElementById("progressBarUploads")).length;
+
         TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
             tobj.category_name = prevLeftBarSelection.categoryName;
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
@@ -7397,8 +7416,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleQueue.clear();
         clearTimeout(checkConTimerId);
         rightQueue.clear();
+
+
         setTimeout(function () {
-            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted)).getRoot(), function () {
+            artworkeditor = TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted);
+            TAG.Util.UI.slidePageLeft(artworkeditor.getRoot(), function () {
                 TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                     tobj.source_page = "settings_view";
                     tobj.destination_page = "artwork_editor";
@@ -7407,12 +7429,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     //console.log("artwork editor load time: " + tobj.load_time);
                 });
                 SPENT_TIMER.restart();
+
             });
-            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
-            if (($('.progressBarUploads').length > 0)) { //disable import map button here?!
-                console.log("disable import maps!?!?!?");
-                importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
-                importMapButton.prop('disabled', 'true');
+
+            if (progressBarLength > 0) { //other upload happening - disable import maps
+                console.log("import map should be disabled - settings view slidePageLeft")
+                artworkeditor.uploadStillHappening(true);
+
             }
         }, 1);
 
@@ -9688,7 +9711,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function uploadFile(type, callback, multiple, filter, useOverlay) {
         console.log("file upload!");
-        console.log(IS_WINDOWS);
+        console.log(IS_WINDOWS); 
         if (!IS_WINDOWS){
         //webappfileupload:   
         var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
@@ -9757,9 +9780,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({'opacity':'.4'})
                 }
 
-                
-                
-                
+                uploadInProgress = true;
+            
             },
             function () {
                 root = $(document.getElementById("setViewRoot"));
@@ -9782,7 +9804,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
                
-
+                uploadInProgress = false;
             }
             );
         } else {
@@ -9879,7 +9901,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({'opacity':'.4'});
                 }
 
-                var importToTour = $(document.getElementById("importToTour"));
+                uploadInProgress = true;
+                //var importToTour = $(document.getElementById("importToTour"));
                 
                 
             },
@@ -9904,11 +9927,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 var importToTour = $(document.getElementById("importToTour"));
 
-                if (importToTour) {
+                if (importToTour && toureditor) {
                     importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
                     toureditor.uploadStillHappening(false);
                 }
+
+
+                if (artworkeditor) {
+                    artworkeditor.uploadStillHappening(false);
+                    var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                    importMapButton.prop('disabled', false);
+                    importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+                }
                     
+                uploadInProgress = false;
+
                 }
 
             

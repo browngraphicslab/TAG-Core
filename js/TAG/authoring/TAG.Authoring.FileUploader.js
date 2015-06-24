@@ -39,6 +39,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         popup,
         progressBarButton;
     var filesFinished = 0;
+    var uploadHappening = false;
     var numFiles = 100000;
     var dataReaderLoads = [];
     var uploadQueue = TAG.Util.createQueue();
@@ -66,6 +67,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         uploadOverlayText = $(document.createElement('label'));
         var progressIcon = $(document.createElement('img'));
 
+        uploadHappening = true;
 
         progressText = $(document.createElement('div'))
                 .addClass('progressText')
@@ -849,6 +851,12 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         minDuration = seconds;
     }
     that.setMinDuration = setMinDuration;
+
+    function uploadInProgress() {
+        return uploadHappening;
+    }
+    that.uploadInProgress = uploadInProgress;
+
 
     /**
     * copied from TAG.Util.UI because the boxes have crap CSS. tru fax.

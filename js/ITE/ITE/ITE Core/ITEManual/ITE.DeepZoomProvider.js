@@ -394,11 +394,20 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	state : 	Object holding track's current state, as used in animation.
 	 */
 	self.getState = function() {
-		self.savedState = {
-			time	: self.timeManager.getElapsedOffset(),
-			bounds 	: _viewer.viewport.getBounds(true),
-			opacity : window.getComputedStyle(_canvasHolder[0]).opacity
-		};	
+	    self.savedState = {
+	        time: self.timeManager.getElapsedOffset(),
+	        bounds: (_viewer.viewport ? _viewer.viewport.getBounds(true) : {
+	            x: 0,
+	            y: 0,
+	            width: 500,
+	            height: 500,
+	            error: "no viewport!"
+	        }),
+	        opacity: window.getComputedStyle(_canvasHolder[0]).opacity
+	    };
+	    if (!_viewer.viewport) {
+	        console.log("viewport undefined when getting OSD state");
+	    }
 		return self.savedState;
 	};
 
