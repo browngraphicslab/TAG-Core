@@ -597,7 +597,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                 displayError("The annotation must be loaded and on screen in order to edit it.");
                 return;
             }
-            var rinplayer = $('#rinplayer');
+            var rinplayer = $('#ITEHolder');
             var dims = {
                 x: text_elt.offset().left - rinplayer.offset().left,
                 y: text_elt.offset().top - rinplayer.offset().top,
