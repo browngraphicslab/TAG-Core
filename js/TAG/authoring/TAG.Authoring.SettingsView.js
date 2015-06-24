@@ -65,6 +65,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
         guidsToBeDeleted = guidsToBeDeleted || [],
+        toureditor,
 
         // = root.find('#importButton'),
 
@@ -125,6 +126,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         that = {
             getRoot: getRoot,
+           
         },
 
         //AUTOSAVING HAS BEEN REMOVED - SAVE BUTTONS ARE BACK!
@@ -3657,9 +3659,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} tour     tour to edit
      */
     function editTour(tour) {
+        
         if (!tour) {
             return;
         }
+
+        var progressBarLength =  $(document.getElementById("progressBarUploads")).length;
+
+
         TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
             tobj.category_name = prevLeftBarSelection.categoryName;
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
@@ -3677,7 +3684,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleQueue.clear();
         rightQueue.clear();
         setTimeout(function () {
-            var toureditor = new TAG.Layout.TourAuthoringNew(tour, function () {
+            toureditor = new TAG.Layout.TourAuthoringNew(tour, function () {
                 TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
                     TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                         tobj.source_page = "settings_view";
@@ -3688,10 +3695,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     });
                     SPENT_TIMER.restart();
                     toureditor.getViewer().loadITE();
+
                     //toureditor.getViewer().loadITE();
                 });
             });
+            if (progressBarLength > 0) { //other upload happening - disable import
+                toureditor.uploadStillHappening(true);
+
+            }
+
         }, 1);
+
+        var progressBar = $(document.getElementById("progressBarUploads"));
+        
     }
 
     /**Delete a tour
@@ -4974,37 +4990,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }*/
                         var importToTour = $(document.getElementById("importToTour"));
                         if (importToTour) {
-
-                            var dropInk = $(document.getElementById("dropInk"));
-                            var dropFile = $(document.getElementById("dropFile"));
-
                             importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
-                            importToTour.on('mouseenter', function () {
-                                importToTour.css({ 'background-color': 'white', 'color': 'black' });
-                                dropFile.show();
-                                dropInk.hide();
-                            })
-                            importToTour.on('mouseleave', function () {
-                                importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
-                            })
-
-                            importToTour.on('click', function () {
-                                importToTour.css({
-                                    'background-color': 'white',
-                                    'color': 'black'
-                                });
-
-                                dropFile.show();
-                                dropInk.hide();
-                                //assetButton.data('selected', false);
-                                //fileClick = true;
-                            })
-
-                            console.log("enable from file button");
-                            //$(importToTour).css({ 'color': 'rgb(256, 256, 256)' });
-
+                            toureditor.uploadStillHappening(false);
                         }
-
+                        console.log("confirmation that assoc media uploaded");
 
 
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
@@ -6650,33 +6639,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         
                         var importToTour = $(document.getElementById("importToTour"));
                         if (importToTour) {
-                            var dropInk = $(document.getElementById("dropInk"));
-                            var dropFile = $(document.getElementById("dropFile"));
-
                             importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
-                            importToTour.on('mouseenter', function () {
-                                importToTour.css({ 'background-color': 'white', 'color': 'black' });
-                                dropFile.show();
-                                dropInk.hide();
-                            })
-                            importToTour.on('mouseleave', function () {
-                                importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
-                            })    
-                            
-                            
-                            importToTour.on('click', function () {
-                                importToTour.css({
-                                    'background-color': 'white',
-                                    'color': 'black'
-                                });
-
-                                dropFile.show();
-                                dropInk.hide();
-                                //assetButton.data('selected', false);
-                                //fileClick = true;
-                            })
-                            
-                            console.log("enable from file button");
+                            toureditor.uploadStillHappening(false);
                         }
 
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
@@ -9203,7 +9167,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '5%',
                 'margin-top': '2%'
             })
-            .click(function () { })
+            .click(function () { getSetFromCSV(function(){},function(){}) })
             .appendTo(setEditorTopContainer);
 
         // View/delete keywords scrollable area.
@@ -9883,6 +9847,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({'opacity':'.4'});
                 }
 
+                var importToTour = $(document.getElementById("importToTour"));
                 
                 
             },
@@ -9906,36 +9871,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             
 
                 var importToTour = $(document.getElementById("importToTour"));
+
                 if (importToTour) {
-                    importToTour.attr('id', 'notUploading');
-                    var dropInk = $(document.getElementById("dropInk"));
-                    var dropFile = $(document.getElementById("dropFile"));
-
                     importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
-                    importToTour.on('mouseenter', function () {
-                        importToTour.css({ 'background-color': 'white', 'color': 'black' });
-                        dropFile.show();
-                        dropInk.hide();
-                    })
-                    importToTour.on('mouseleave', function () {
-                        importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
-                    })
-
-                    importToTour.on('click', function () {
-                        importToTour.css({
-                            'background-color': 'white',
-                            'color': 'black'
-                        });
-
-                        dropFile.show();
-                        dropInk.hide();
-                        //assetButton.data('selected', false);
-                        //fileClick = true;
-                    })
-
-                    console.log("enable from file button");
-                    //$(importToTour).css({ 'color': 'rgb(256, 256, 256)' });
-
+                    toureditor.uploadStillHappening(false);
                 }
                     
                 }
@@ -9944,6 +9883,51 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         );
         }
     }
+
+
+
+
+    /** Method creataes a popup for a user to select a csv file, parses it, and if free of errors, makes it the keyword set.
+     * @method getSetFromCSV
+     * @param {Function} success    Callback if the file was successful   
+     * @param {Function} error      Callback if the file had an error
+     */
+    function getSetFromCSV(success, error) {
+        console.log("csv keyword set!");
+        var keywordsList = [];
+
+        // Get our file.
+        var fileContent;
+        if (IS_WINDOWS) {
+            // Windows filepicker.
+            var filePicker = new Windows.Storage.Pickers.FileOpenPicker();
+            filePicker.viewMode = Windows.Storage.Pickers.PickerViewMode.list;
+            filePicker.fileTypeFilter.replaceAll(['.csv']);
+            filePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.desktop;
+            filePicker.pickSingleFileAsync().then(function (file) {
+                if (file) {
+                    try {
+                        var csvFile = new XMLHttpRequest();
+                        csvFile.open("GET", file.name, true);
+                        csvFile.onreadystatechange = function () {
+                            allText = csvFile.responseText;
+                            allTextLines = csvFile.split(/\r\n|\n/);
+                        };
+                        console.log('FILE:');
+                        console.log(allText);
+                        console.log('EOF');
+                    } catch (e) {
+                        error();
+                    }
+                } else {
+                    error();
+                }
+            });
+        } else {
+
+        }
+    }
+
 
     /**Create an overlay over the whole settings view with a spinning circle and centered text. This overlay is intended to be used 
      * only when the page is 'done'.  The overlay doesn't support being removed from the page, so only call this when the page will 
