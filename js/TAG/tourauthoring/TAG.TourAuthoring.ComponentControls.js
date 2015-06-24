@@ -60,6 +60,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         timeline.onUpdate(true);
     }
 
+    function otherUpload(bool) {
+        uploadHappening = bool;
+    }
+    that.otherUpload = otherUpload;
+
+
+
     (function _createHTML() {
 
         function ctrlZHandler(evt) {
@@ -1025,12 +1032,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(fileButton).attr('id', 'importToTour');
         var inkButton = _createAddComponentButton("Annotate", dropMain);
 
-        progressBar = $(document.getElementById("progressBarUploads"));
-        if ($(progressBar).length > 0) {
-            //fileButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
-            fileButton.css({ 'background-color': 'transparent', 'color': 'gray' });
-            uploadHappening = true;
 
+        if (uploadHappening === true) {
+            fileButton.css({ 'background-color': 'transparent', 'color': 'gray' });
         }
 
         //File uploading subsection -Xiaoyi
@@ -1448,14 +1452,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     self.css({ 'background-color': 'transparent', 'color': 'gray' });
                 } else if (self.text() === "From File" && uploadHappening ===true ) {
                     self.css({ 'background-color': 'transparent', 'color': 'gray' });
-                    console.log("fileButton SHOULD be greyed out");
                 }else{
-                    console.log("button should NOT be greyed out");
                     self.css({ 'background-color': 'transparent', 'color': 'white' });
                 }
-                
-
-
+                 
                 if (fileClick || inkClick || isInFileSubMenu || isInInkSubMenu) {
                     return;
                 }
@@ -1531,7 +1531,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             });
 
                         } else {
-                            console.log("upload happening - from file button disabled ON CLICK?");
                             self.css({ 'background-color': 'transparent', 'color': 'gray' });
                         }
 

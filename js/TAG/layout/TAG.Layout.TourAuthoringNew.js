@@ -231,7 +231,8 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             timeline: timeline,
             dataHolder: dataHolder,
             viewer: viewer,
-            timeManager: timeManager
+            timeManager: timeManager,
+            
         });
         topbar = TAG.TourAuthoring.TopMenu({
             viewer: viewer,
@@ -279,4 +280,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     this.getViewer = function () {
         return viewer;
     };
+    this.uploadStillHappening = function (uploadDone) {
+        return componentControls.otherUpload(uploadDone);
+    }
 };
