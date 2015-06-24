@@ -789,6 +789,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                 **/
                 var downArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/blackclose.svg').addClass('selector-dropdown').addClass('arrow');
+                //adjust hard-coded size of drop down arrows if in previewer
+                if (previewing) { downArrow.css({ 'width': '5px', 'margin-right': '1px', 'top': '0%' }); }
                 $(element).parent().append(downArrow); // Add the arrow the selector box.
                 if (index % 2 != 0) {
                     $(element).parent().css('width', ($(element).parent().outerWidth() * 1.5) + 'px'); //set width of wrapper to fit in drop down arrow
@@ -817,6 +819,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 searchButtonListItem.append(searchButton);
                 selectList.append(searchButtonListItem);
             }
+            
+            //ui fixes for when in previewer
+            if (previewing) {
+                $('li.rowItem').css('margin-left', '5px');
+                $('.ui-dropdownchecklist-group').css('padding', '0.2px');
+                $('#searchInput').css('height', '15px');
+            }
+            
 
         } else {
             //var divHeight = $('#leftContainer').height()/2;
