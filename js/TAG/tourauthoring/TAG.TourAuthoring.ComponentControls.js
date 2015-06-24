@@ -20,6 +20,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         playbackControls = spec.playbackControls,
         timeManager = spec.timeManager,
         timeline = spec.timeline,
+        progressBar,
         viewer = spec.viewer,
         tourobj = spec.tourobj,
         undoManager = spec.undoManager,
@@ -34,6 +35,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         rinContainer = viewer.getContainer(),
         isUploading = false,
         allArtworks,
+        uploadHappening = false,
         pickerloaded = false;
     functionsPanelDocfrag.appendChild(functionsPanel[0]);
     timeline.setCompControl(that);
@@ -1023,11 +1025,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         $(fileButton).attr('id', 'importToTour');
         var inkButton = _createAddComponentButton("Annotate", dropMain);
 
-        var progressBar = $(document.getElementById("progressBarUploads"));
+        progressBar = $(document.getElementById("progressBarUploads"));
         if ($(progressBar).length > 0) {
-            console.log("upload is happening, disable import from file");
-            $(fileButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
-            $(fileButton).prop('disabled', 'true');
+            //fileButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
+            fileButton.css({ 'background-color': 'transparent', 'color': 'gray' });
+            uploadHappening = true;
 
         }
 
@@ -1044,6 +1046,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         }); 
         functionsPanel.append(dropFile);
+        $(dropFile).attr('id', 'dropFile');
         dropFile.hide();
 
         var audioButton = _createAddComponentButton("Audio (MP3)", dropFile);
@@ -1360,6 +1363,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'float': 'left',
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         });
+        $(dropInk).attr('id', 'dropInk');
         functionsPanel.append(dropInk);
         dropInk.hide();
 
@@ -1370,7 +1374,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         /**
          * Creates component menu buttons
-         * @param title         Name of button
+         * @param title         Name of buttonfunction _createAddComponent
          * @param component     DOM element to add button to
          *@return addComponentButton     the button created.
          */
@@ -1403,8 +1407,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         dropFile.hide();
                         break;
                     case "From File":
-                        dropFile.show();
-                        dropInk.hide();
+                        
+                        if (uploadHappening===false) {
+                            dropFile.show();
+                            dropInk.hide();
+                        } else {
+                             self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                        }
+                        
                         break;
                     case "Audio (MP3)":
                     case "Video (MP4, WEBM, OGV)":
@@ -1434,12 +1444,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             addComponentButton.on('mouseleave', function () {
                 var self = $(this);
-
-                self.css({ 'background-color': 'transparent', 'color': 'white' });
-
                 if (self.text() === "Annotate" && !allowInk) {
                     self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                } else if (self.text() === "From File" && uploadHappening ===true ) {
+                    self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                    console.log("fileButton SHOULD be greyed out");
+                }else{
+                    console.log("button should NOT be greyed out");
+                    self.css({ 'background-color': 'transparent', 'color': 'white' });
                 }
+                
+
 
                 if (fileClick || inkClick || isInFileSubMenu || isInInkSubMenu) {
                     return;
@@ -1502,7 +1517,25 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "From File":
-                        self.css({
+                        
+                        if (uploadHappening ===false) {
+                            dropFile.show();
+                            dropInk.hide();
+                            assetButton.data('selected', false);
+                            fileClick = true;
+                            console.log("no upload happening - from file button enabled");
+
+                            self.css({
+                                'background-color': 'white',
+                                'color': 'black'
+                            });
+
+                        } else {
+                            console.log("upload happening - from file button disabled ON CLICK?");
+                            self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                        }
+
+                        /*self.css({
                             'background-color': 'white',
                             'color': 'black'
                         });
@@ -1510,6 +1543,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         dropInk.hide();
                         assetButton.data('selected', false);
                         fileClick = true;
+                        */
                         break;
 
                     case "Audio (MP3)":
@@ -1644,6 +1678,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 if (!allowInk) {
                     inkButton.css({ 'background-color': 'transparent', 'color': 'gray' });
                 }
+                if (uploadHappening === true) {
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'gray' });
+                }
             });
 
             component.append(addComponentButton);
@@ -1753,6 +1790,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 else {
                     allowInk = true;
                     inkButton.css({
+                        'background-color': 'transparent',
+                        'color': 'white'
+                    });
+                }
+
+                if (uploadHappening == true) {
+
+                    fileButton.css({
+                        'background-color': 'transparent',
+                        'color': 'gray'
+                    });
+                } else {
+                    fileButton.css({
                         'background-color': 'transparent',
                         'color': 'white'
                     });

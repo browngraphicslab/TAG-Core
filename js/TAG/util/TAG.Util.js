@@ -4491,10 +4491,8 @@ TAG.Util.UI = (function () {
                         picker.remove();
                         importOnClick(); //import tab should simply bring up file picker
                     }
-                    console.log("tab not cached!");
                     
                 } else {
-                    console.log("tab cached")
                     success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
 
