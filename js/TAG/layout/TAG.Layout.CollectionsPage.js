@@ -747,7 +747,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     // Even numbered dropdowns are operator dropdowns.
                     $(element).find('.ui-dropdownchecklist-text') // Get the text span element.
                         .css('display', 'inline') // Make it inline so the div with our dropdown arrow will be inline.
-                        .css('color', '#000'); // Make the text black. TAG defaults spans to light gray.
+                        .css('color', '#000') // Make the text black. TAG defaults spans to light gray.
+                        .css('width','auto');
                     $(element).parent().parent().find('input').hide();//.css('opacity', '0'); // TODO: hiding the radio button creates bug where clicking item twice allows empty selection.
                     //$(element).parent().parent().find('.ui-dropdownchecklist-text').css('margin-left', '15%'); // 
 
@@ -761,31 +762,26 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     // it will stay as the category title. 
 
                     // Set the width of keywords dropdowns and make overflowing text have an ellipsis.
-                    $(element).css('width', searchInput.width() + 'px')
+                    $(element)//.css('width', searchInput.width() + 'px')
+                              .css('width','auto')
                               .css('overflow', 'hidden')
                               .css('text-overflow', 'ellipsis');
                 }
 
                 // Further stylization of selector box.
-                var selectorFontSize = 0.8 * elementHeight; // We want our font size to be slightly smaller than the box's height.
                 $(element).parent().css('height', elementHeight + 'px'); // This element uses padding, so we actually change the height of its parent, a wrapper span. 
-                $(element).css('line-height', selectorFontSize + 'px') // This centers the text in the selector box.
-                          .css('font-size', selectorFontSize + 'px') 
-                          .css('color', '#000'); // Make the text black.
-                          //.css('padding-right', elementHeight/2 + 'px'); // Add half the height to the width. This will leave room for a dropdown arrow.
+                $(element).css('color', '#000'); // Make the text black.
 
                 // Create a dropdown arrow.
-                var arrowSize = elementHeight / 3; // Arrow is one third the box's height. Looks about right.
-                var downArrow = $(document.createElement('div')).css('float', 'right') // All done in css. Is only a div floating right in selector box.
-                            .css('width', '0')
-                            .css('height', '0')
-                            .css('margin-top', elementHeight/2 - arrowSize/2 + 'px') // This centers the arrow. Top margin is half the box's height minus half the arrow's height.
-                            .css('border-left', arrowSize + 'px solid transparent') 
-                            .css('border-right', arrowSize + 'px solid transparent') // Note to keep left and right borders transparent.
-                            .css('border-top',  arrowSize + 'px solid #000'); // Here we make the arrow black.
+                var downArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/blackclose.svg').addClass('selector-dropdown').addClass('arrow');
+                //adjust hard-coded size of drop down arrows if in previewer
+                if (previewing) { downArrow.css({ 'width': '5px', 'margin-right': '1px', 'top': '0%' }); }
                 $(element).parent().append(downArrow); // Add the arrow the selector box.
+                if (index % 2 != 0) {
+                    $(element).parent().css('width', ($(element).parent().outerWidth() * 1.5) + 'px'); //set width of wrapper to fit in drop down arrow
+                }
                 $(element).parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
-                          .css('width', $(element).parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
+                         .css('width', $(element).parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
 
             });
 
@@ -808,6 +804,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 searchButtonListItem.append(searchButton);
                 selectList.append(searchButtonListItem);
             }
+            
+            //ui fixes for when in previewer
+            if (previewing) {
+                $('li.rowItem').css('margin-left', '5px');
+                $('.ui-dropdownchecklist-group').css('padding', '0.2px');
+                $('#searchInput').css('height', '15px');
+            }
+            
 
         } else {
             //var divHeight = $('#leftContainer').height()/2;
