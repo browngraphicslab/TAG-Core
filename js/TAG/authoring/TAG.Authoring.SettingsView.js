@@ -2792,13 +2792,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //deleteBlankButton.show();
 
-            if(IS_WINDOWS){
+            /*if(IS_WINDOWS){
                 //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteExhibition(multiSelected)});
                 //deleteBlankButton.text('Delete');
             } else{
                 $('#setViewDeleteButton').css('display','none');
-            }
+            }*/
 
             TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
                 tobj.element_type = "Collections";
@@ -3561,13 +3561,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
             });
 
-        if(IS_WINDOWS){
+        /*if(IS_WINDOWS){
                 //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteTour(multiSelected)});
                 deleteBlankButton.text('Delete');
         } else{
             $('#setViewDeleteButton').css('display','none');   
-        }
+        }*/
     
 
         TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
@@ -4069,13 +4069,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    associated media to load
      */
     function loadAssocMedia(media) {
-        if(IS_WINDOWS){ 
+        /*if(IS_WINDOWS){ 
             //$('#setViewDeleteButton').css('display','block');
             deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(multiSelected)});
             deleteBlankButton.text("Delete");
         } else{
             $('#setViewDeleteButton').css('display','none');
-        }
+        }*/
 
         prepareViewer(true);
         clearRight();
@@ -8146,13 +8146,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.show();
             addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)});
 
-            //deleteBlankButton.show();
+       
             if(IS_WINDOWS){
-                //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
                 deleteBlankButton.text('Delete');
             } else{
-                $('#setViewDeleteButton').css('display','none');
+                $('#setViewDeleteButton').css('display','none'); //web app - delete button disabled
             }
 
         } else if (inAssociatedView) {
@@ -8165,7 +8164,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.unbind('click').click(function () { addAssocMediaToArtworks(multiSelected) })
             findBar.css("display", "inline-block");
             searchbar.css({ width: '75%' });
+            if (IS_WINDOWS) {
+                
+                deleteBlankButton.unbind('click').click(function () { deleteAssociatedMedia(multiSelected) });
+                deleteBlankButton.text('Delete');
+            } else {
+                $('#setViewDeleteButton').css('display', 'none'); //web app - delete button disabled
+            }
+
         } else {
+            if (inCollectionsView) {
+                if (IS_WINDOWS) {
+                    deleteBlankButton.unbind('click').click(function () { deleteExhibition(multiSelected) });
+                    deleteBlankButton.text('Delete');
+                } else {
+                    $(deleteBlankButton).css('display', 'none'); //web app - delete button disabled
+                }
+                
+            } else if (inToursView) {
+                if (IS_WINDOWS) {
+                    deleteBlankButton.unbind('click').click(function () { deleteTour(multiSelected) });
+                    deleteBlankButton.text('Delete');
+                } else {
+                    $('#setViewDeleteButton').css('display', 'none');
+                }
+            }
             //hides the second button
             menuLabel.hide();
             addButton.hide();
