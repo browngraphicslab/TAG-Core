@@ -278,6 +278,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         height: '70%',
         display: 'inline-block',
     });
+    if (idleTimer) {
+        idleTimer.kill();
+    }
     if (IS_WINDOWS) {
         findBarTextBox.css('font-size', '150%');
         findButton.css('font-size','100%');
@@ -1100,7 +1103,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create inputs
         //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
-        bgImgInput = createButton('Import', function () {
+        bgImgInput = $(createButton('Import', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
@@ -1126,14 +1129,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     root = $(document.getElementById("setViewRoot"));
                     
                     newButton = root.find('#setViewNewButton');
-                    $(newButton).prop('disabled', false);
+                    newButton.prop('disabled', false);
                     newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
                     if (inCollectionsView === true) {
-                        $(bgInput).prop('disabled', false);
+                        bgInput.prop('disabled', false);
                         bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                     }
                     if (inGeneralView === true) {
-                        $(bgImgInput).prop('disabled', false);
+                        bgImgInput.prop('disabled', false);
                         bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                     }
@@ -1142,7 +1145,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                     }
 
-                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.prop('disabled', false);
                     bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                     //hide confirmation box
@@ -1170,7 +1173,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }; */
 
                 if (textHolder.css("overflow") == "hidden") {
-                    $(textHolder).css({ 'overflow-y': 'auto' });
+                    textHolder.css({ 'overflow-y': 'auto' });
                     textHolder.parent().append(t);
                     var func = t.height() > textHolder.height();
                     console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
@@ -1187,11 +1190,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 root.append(importConfirmedBox);
                 $(importConfirmedBox).show();
             }, null, null, true);
-        });
+        }));
        
             if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
                 console.log("select background image button disabled");
-                $(bgImgInput).prop('disabled', true);
+                bgImgInput.prop('disabled', true);
                 bgImgInput.css({ 'opacity': '.4' });
             }
         TAG.Telemetry.register(bgImgInput, "click", "BackgroundImage", function (tobj) {
@@ -1926,7 +1929,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareNextView(true, "New", createExhibition);
         
         //Enables newButton - might be disabled initially because upload is happening
-        $(newButton).prop('disabled', false);
+        newButton.prop('disabled', false);
         newButton.css({'opacity': '1', 'background-color': 'transparent'});
         
         if (!(justMiddle === true)) {
@@ -2595,17 +2598,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $('.progressBarUploads').remove();
                         $('.progressBarUploadsButton').remove();
                         $('.progressText').remove();
-
+                        saveButton.click();
                         //enable import buttons
                         newButton = root.find('#setViewNewButton');
-                        $(newButton).prop('disabled', false);
+                        newButton.prop('disabled', false);
                         newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
                         if (inCollectionsView == true) {
-                            $(bgInput).prop('disabled', false);
+                            bgInput.prop('disabled', false);
                             bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                         }
                         if (inGeneralView == true) {
-                            $(bgImgInput).prop('disabled', false);
+                            bgImgInput.prop('disabled', false);
                             bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                         }
@@ -2614,7 +2617,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                         }
 
-                        $(bgImgInput).prop('disabled', false);
+                       bgImgInput.prop('disabled', false);
                         bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                         //hide confirmation box
@@ -2663,7 +2666,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
                 console.log("select background image button disabled from collection");
-                $(bgInput).prop('disabled', true);
+                bgInput.prop('disabled', true);
                 bgInput.css({ 'opacity': '.4' });
             }
             
@@ -3235,7 +3238,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         currentIndex = 0;
 
         //Enables new button
-        $(newButton).prop('disabled', false);
+        newButton.prop('disabled', false);
         newButton.css({'opacity': '1', 'background-color': 'transparent'});
 
         prepareNextView(true, "New", createTour);
@@ -3560,14 +3563,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-
-        /*if(IS_WINDOWS){
-                //$('#setViewDeleteButton').css('display','block');
-                deleteBlankButton.unbind('click').click(function(){ deleteTour(multiSelected)});
-                deleteBlankButton.text('Delete');
-        } else{
-            $('#setViewDeleteButton').css('display','none');   
-        }*/
     
 
         TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
@@ -4401,13 +4396,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left',
             });
 
-        /*if(IS_WINDOWS){
-            $('#setViewDeleteButton').css('display','block');
-            deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(multiSelected)});
-            deleteBlankButton.text("Delete");
-        } else{
-
-        } */
 
         var generateAssocMediaThumbnailButton = createButton('Generate Thumbnail',
             function () {
@@ -5030,14 +5018,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             newButton = root.find('#setViewNewButton');
 
                             //enable import buttons
-                            $(newButton).prop('disabled', false);
+                            newButton.prop('disabled', false);
                             newButton.css({'opacity': '1', 'background-color': 'transparent'});
                             if (inCollectionsView == true) {
-                                $(bgInput).prop('disabled', false);
+                                bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             if (inGeneralView == true) {
-                                $(bgImgInput).prop('disabled', false);
+                                bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
@@ -5517,7 +5505,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareNextView(true, "Import", createArtwork, null, true);
         
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
-            $(newButton).prop('disabled', true);
+            newButton.prop('disabled', true);
             newButton.css({'opacity': '.4'});
         }
         
@@ -6581,14 +6569,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             newButton = root.find('#setViewNewButton');
 
                             //enable import buttons
-                            $(newButton).prop('disabled', false);
+                            newButton.prop('disabled', false);
                             newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
                             if (inCollectionsView == true) {
-                                $(bgInput).prop('disabled', false);
+                                bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             if (inGeneralView == true) {
-                                $(bgImgInput).prop('disabled', false);
+                                bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
@@ -6673,7 +6661,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             })
                             importToTour.on('mouseleave', function () {
                                 importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
-                            })
+                            })    
                             
                             
                             importToTour.on('click', function () {
@@ -6689,8 +6677,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             })
                             
                             console.log("enable from file button");
-                            //$(importToTour).css({ 'color': 'rgb(256, 256, 256)' });
-                            
                         }
 
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
@@ -6703,14 +6689,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             newButton = root.find('#setViewNewButton');
 
                             //enable import buttons
-                            $(newButton).prop('disabled', false);
+                            newButton.prop('disabled', false);
                             newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
                             if (inCollectionsView == true) {
-                                $(bgInput).prop('disabled', false);
+                                bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             if (inGeneralView == true) {
-                                $(bgImgInput).prop('disabled', false);
+                                bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
@@ -7429,8 +7415,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
             if (($('.progressBarUploads').length > 0)) { //disable import map button here?!
                 console.log("disable import maps!?!?!?");
-                $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
-                $(importMapButton).prop('disabled', 'true');
+                importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
+                importMapButton.prop('disabled', 'true');
             }
         }, 1);
 
@@ -8151,7 +8137,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
                 deleteBlankButton.text('Delete');
             } else{
-                $('#setViewDeleteButton').css('display','none'); //web app - delete button disabled
+                deleteBlankButton.css('display','none'); //web app - delete button disabled
             }
 
         } else if (inAssociatedView) {
@@ -8169,7 +8155,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 deleteBlankButton.unbind('click').click(function () { deleteAssociatedMedia(multiSelected) });
                 deleteBlankButton.text('Delete');
             } else {
-                $('#setViewDeleteButton').css('display', 'none'); //web app - delete button disabled
+                deleteBlankButton.css('display', 'none'); //web app - delete button disabled
             }
 
         } else {
@@ -8178,7 +8164,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     deleteBlankButton.unbind('click').click(function () { deleteExhibition(multiSelected) });
                     deleteBlankButton.text('Delete');
                 } else {
-                    $(deleteBlankButton).css('display', 'none'); //web app - delete button disabled
+                    deleteBlankButton.css('display', 'none'); //web app - delete button disabled
                 }
                 
             } else if (inToursView) {
@@ -8186,7 +8172,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     deleteBlankButton.unbind('click').click(function () { deleteTour(multiSelected) });
                     deleteBlankButton.text('Delete');
                 } else {
-                    $('#setViewDeleteButton').css('display', 'none');
+                    deleteBlankButton.css('display', 'none');
                 }
             }
             //hides the second button
@@ -9758,15 +9744,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 newButton = root.find('#setViewNewButton');
 
                 if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
-                    $(newButton).prop('disabled', true);
+                    newButton.prop('disabled', true);
                     newButton.css({'opacity': '.4'});
                 }
                 if (inCollectionsView == true) {
-                    $(bgInput).prop('disabled', true);
+                    bgInput.prop('disabled', true);
                     bgInput.css({ 'opacity': '.4' });
                 }
                 if (inGeneralView == true) {
-                    $(bgImgInput).prop('disabled', true);
+                    bgImgInput.prop('disabled', true);
                     bgImgInput.css({ 'opacity': '.4' });
 
                 }
@@ -9783,15 +9769,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 root = $(document.getElementById("setViewRoot"));
                 newButton = root.find('#setViewNewButton');
 
-                $(newButton).prop('disabled', false);
+                newButton.prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                 if (inCollectionsView == true) {
-                    $(bgInput).prop('disabled', false);
+                    bgInput.prop('disabled', false);
                     bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
                 if (inGeneralView == true) {
-                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.prop('disabled', false);
                     bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                 }
@@ -9880,15 +9866,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 newButton = root.find('#setViewNewButton');
 
                 if (inArtworkView == true || inAssociatedView == true) {
-                    $(newButton).prop('disabled', true);
+                    newButton.prop('disabled', true);
                     newButton.css({'opacity': '.4'});
                 }
                 if (inCollectionsView == true) {
-                    $(bgInput).prop('disabled', true);
+                    bgInput.prop('disabled', true);
                     bgInput.css({ 'opacity': '.4' });
                 }
                 if (inGeneralView == true) {
-                    $(bgImgInput).prop('disabled', true);
+                    bgImgInput.prop('disabled', true);
                     bgImgInput.css({ 'opacity': '.4' });
 
                 }
@@ -9901,15 +9887,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 
             },
             function(){
-                $(newButton).prop('disabled', false);
+                newButton.prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                 if (inCollectionsView == true) {
-                    $(bgInput).prop('disabled', false);
+                    bgInput.prop('disabled', false);
                     bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
                 if (inGeneralView == true) {
-                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.prop('disabled', false);
                     bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                 }
@@ -9921,7 +9907,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 var importToTour = $(document.getElementById("importToTour"));
                 if (importToTour) {
-                    $(importToTour).attr('id', 'notUploading');
+                    importToTour.attr('id', 'notUploading');
                     var dropInk = $(document.getElementById("dropInk"));
                     var dropFile = $(document.getElementById("dropFile"));
 
