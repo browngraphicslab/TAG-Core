@@ -65,6 +65,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
         guidsToBeDeleted = guidsToBeDeleted || [],
+        uploadInProgress = false,
         toureditor,
         artworkeditor,
 
@@ -1122,6 +1123,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 console.log("should remove overlay now!!");
 
                 var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+
+
 
                     //remove progress stuff
                     $('.progressBarUploads').remove();
@@ -9679,7 +9682,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function uploadFile(type, callback, multiple, filter, useOverlay) {
         console.log("file upload!");
-        console.log(IS_WINDOWS);
+        console.log(IS_WINDOWS); 
         if (!IS_WINDOWS){
         //webappfileupload:   
         var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
@@ -9748,9 +9751,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({'opacity':'.4'})
                 }
 
-                
-                
-                
+                uploadInProgress = true;
+            
             },
             function () {
                 root = $(document.getElementById("setViewRoot"));
@@ -9773,7 +9775,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
                
-
+                uploadInProgress = false;
             }
             );
         } else {
@@ -9870,6 +9872,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({'opacity':'.4'});
                 }
 
+                uploadInProgress = true;
                 //var importToTour = $(document.getElementById("importToTour"));
                 
                 
@@ -9908,6 +9911,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                 }
                     
+                uploadInProgress = false;
+
                 }
 
             
