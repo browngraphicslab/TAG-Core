@@ -7864,6 +7864,10 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
 function _getSafeElemSize (oElement) {
     oElement = $.getElement( oElement );
 
+    if (!oElement) {
+        return new $.Point(1,1);
+    }
+
     return new $.Point(
         (oElement.clientWidth === 0 ? 1 : oElement.clientWidth),
         (oElement.clientHeight === 0 ? 1 : oElement.clientHeight)
