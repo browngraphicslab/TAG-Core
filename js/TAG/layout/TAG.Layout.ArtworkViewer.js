@@ -267,7 +267,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         root.append(splitscreenContainer);
         console.log('locked' + locked);
         console.log(!locked);
-        if (TAG.Util.Splitscreen.isOn() || locked) {
+        if (TAG.Util.Splitscreen.isOn() || (locked !== undefined && locked !== 'undefined')) {
             splitscreenContainer.css('display', 'none');
         }
         else {

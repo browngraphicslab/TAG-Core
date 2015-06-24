@@ -20,9 +20,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         collectionArea = root.find('#collectionArea'),
         backButtonArea = root.find('#backButtonArea'),
         backButton = root.find('#backButton'),
-        dropDownArrowArea = root.find('#dropDownArrowArea'),
+
+        centeredCollectionHeader  = root.find("#centeredCollectionHeader"),
         dropDownArrow = root.find('#dropDownArrow'),
-        //nextArrowArea = root.find('#nextArrowArea'),
         //nextArrow = root.find('#nextArrow'),
         //collectionHeader = root.find('#collectionHeader'),
         collectionDotHolder = root.find('#collectionDotHolder'),
@@ -207,7 +207,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         // search on keyup
         searchInput.on('keyup', function (e) {
-            if (!searchInput.val()) {
+            if (!searchInput.val() && keywordSearchOptions.length == 0) {
                 clearSearchResults();
             }
             else if (e.which === 13) {
@@ -247,7 +247,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } 
         });
           
-        // initSplitscreen();
+        //initSplitscreen();
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
             .addClass('bottomButton')
@@ -673,29 +673,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // Get keywords from the server!
          keywordSets = TAG.Worktop.Database.getKeywordSets();
 
-        // 3 categories.
-        /**
-         var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color', 'Genre'];
-         var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-                        ['Vermillion', 'Cerulean', 'Cinnabar', 'Viridian', 'Saffron', 'Fuschia'],
-                        ['Tropical House', 'Hardstyle', 'Disco', 'Hardcore', 'Tagcore', 
-                        'Ambient Post-Noise-Metalcoretronicastep', 'Classical', 'Metamodernism', 'Genre',
-                         'Escapism', 'Realism', 'Meso-American', 'Brutalism', 'Grilled Cheese', 'Chuckie Cheese',
-                         'Charles Darwinism', 'Socialism', 'Schism', 'Sshh', 'Shitake', 'List Item', '^_^']];
-        **/
-        // 2 categories.
-        // var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
-        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-        //                 ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
-
-        // 1 category.
-        // var keywordCategories = ['Fruit, but this category title is going to be really long'];
-        // var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
-
-        // No categories, no keywords. Capiche??
-        //var keywordCategories = [];
-        //var keywords = [[],[],[]];
-
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
       if (keywordSets) {
             // Create unordered list of select elements.
@@ -747,13 +724,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // Now run the dropdowncheclist jQuery library to turn the select elements into basic dropdown lists.
             if (IS_WINDOWS) {
                 MSApp.execUnsafeLocalFunction(function () { // You got a deathwish, Truant?
-                    $('select.keywordsSelect').dropdownchecklist({
+                    root.find('select.keywordsSelect').dropdownchecklist({
                         maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
                         closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                     });
                 });
             } else {
-                $('select.keywordsSelect').dropdownchecklist({
+                root.find('select.keywordsSelect').dropdownchecklist({
                     maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
                     closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                 });
@@ -763,7 +740,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Format the dropdown selector box (what you click on to make dropdown appear).
             var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
-            $('.ui-dropdownchecklist-selector').each(function(index, element) {
+            root.find('.ui-dropdownchecklist-selector').each(function(index, element) {
                 // Set the text inside the selector box.
                 if (index % 2 == 0) {
                     // Even numbered dropdowns are operator dropdowns.
@@ -783,7 +760,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     // it will stay as the category title. 
 
                     // Set the width of keywords dropdowns and make overflowing text have an ellipsis.
-                    $(element).css('width', $('#searchInput').width() + 'px')
+                    $(element).css('width', searchInput.width() + 'px')
                               .css('overflow', 'hidden')
                               .css('text-overflow', 'ellipsis');
                 }
@@ -832,9 +809,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
         } else {
-            var divHeight = $('#leftContainer').height()/2;
-            $('#leftContainer').css('margin-top', divHeight + 'px');
-            $('#leftContainer').css('margin-bottom', divHeight + 'px');
+            //var divHeight = $('#leftContainer').height()/2;
+            //$('#leftContainer').css('margin-top', divHeight + 'px');
+            //$('#leftContainer').css('margin-bottom', divHeight + 'px');
         }
     }
 
@@ -896,6 +873,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'top'     : '22%',
                 };
             artworkShown = false;
+            mainCollection.css({
+                "text-align" : "center"
+            })
             // if the idle timer hasn't started already, start it
             if (!idleTimer && evt && !previewing) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
@@ -966,8 +946,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (TAG.Util.Splitscreen.isOn()) {
                 root.find('#collectionMenu').css('width', '70%');
                 root.find('#backButtonArea').css('display', 'none');
-                root.find('#dropDownArrowArea').css('width', '6%');
-                root.find('#collection-title').css('margin-left', '6%');
             }
 
             /**
@@ -1053,13 +1031,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
             // Add collection title
-            mainCollection.addClass('mainCollection')
-                .css('text-align', 'left');
+            mainCollection.addClass('mainCollection');
             titleBox.addClass('primaryFont').text(title);
             titleBox.css('display', 'inline');
 
             var uiDocfrag = document.createDocumentFragment();
-
+            collectionArea.css({
+                "height" : "75%"
+            })
             // for previewing purpose in the authoring mode so that the menu arrow position does not change
             if (!IS_WINDOWS && previewing) {
                 // reduce the size of the dropdown menu when being previewed in authoring mode
@@ -1070,41 +1049,64 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
 
                 // to make the dropdown arrow menu appear in previewing mode for unpublished collections
-                dropDownArrowArea.addClass('arrowArea');
-                dropDownArrowArea.css('display', 'inline')
                 dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 dropDownArrow.addClass('arrow');    
-                dropDownArrowArea.show();
             }
 
-            dropDownArrowArea.addClass('arrowArea'); 
-            dropDownArrow.css('display', 'inline')
-                .off()
-                .on('mousedown', function(j){
+
+            var collectionTitle = $("#collection-title");
+            collectionTitle.css({
+                "display": "inline-block",
+                "position": "relative",
+                "padding-right": "18px",
+                "height": "100%",
+                "text-overflow": "ellipsis",
+                "white-space": "nowrap"
+            })
+
+            mainCollection.append(centeredCollectionHeader);
+            centeredCollectionHeader.append(collectionTitle[0]);
+            centeredCollectionHeader.append(dropDownArrow);
+            centeredCollectionHeader.css({
+                "text-align": "center",
+                "display": "inline-block",
+                "height": "90%",
+                "overflow": "hidden",
+                "top": "10%",
+                "cursor": "pointer",
+                "white-space" : "nowrap"
+            }).off()
+                .on('mousedown', function (j) {
                     return function () {
                         showCollectionMenu();
                     }
                 }(collection));
+
+            dropDownArrow.css({
+                'display': 'inline-block',
+                'left': "auto",
+                'position': "relative",
+                'height': "55%",
+                'width': '3%',
+                'top': '18%'
+            });
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
-            dropDownArrowArea.show();
 
 
             // Add previous and next collection titles
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
-                //dropDownArrowArea.addClass('arrowArea'); 
-                dropDownArrow.css('display', 'inline')
+                /*dropDownArrow.css('display', 'inline')
                     .off()
                     .on('mousedown', function(j){
                         return function () {
                             showCollectionMenu();
                         }
-                    }(collection));
+                    }(collection));*/
                 dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 dropDownArrow.addClass('arrow');    
-                dropDownArrowArea.show();
                 // prevCollection.addClass('nextPrevCollection')
                 //              .addClass('primaryFont')
                 //              .attr({
@@ -1206,13 +1208,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionArea.append($(uiDocfrag));
 
             if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
-                dropDownArrowArea.hide();
-                //nextArrowArea.hide();
+                dropDownArrow.hide();
             } else if (collection.prevCollectionIndex === null) {
-                dropDownArrowArea.hide();
                 prevCollection.hide();
             } else if (collection.nextCollectionIndex === null) {
-                //nextArrowArea.hide();
                 nextCollection.hide();
             }
             collectionDescription.attr('id', 'collectionDescription');
@@ -1420,6 +1419,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             arrow;
         menu = $(root).find('#collectionMenu');
         arrow = $(root).find('#dropDownArrow');
+
+        var w = (root.width() - menu.width()) / 2;
+        menu.css({
+            "left" : w+"px"
+        })
+
         if (menu.css('display') == 'block') {
             menu.css({
                 'display':'none'
@@ -1459,8 +1464,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         menu = document.getElementById('collectionMenu');
         arrow = document.getElementById('dropDownArrow');
         $(root).click(function(event) {
-            if (event.target.id != 'dropDownArrow' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
+            if (event.target.id != 'dropDownArrow' && event.target.id !='collection-title' && event.target.id != 'centeredCollectionHeader' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
                 if (menu.style.display == 'block') {
+                    console.log("here " + event.target.id)
                     menu.style.display = 'none';
                     arrow.style.transform = 'rotate(270deg)';
                     arrow.style.webkitTransform = 'rotate(270deg)';
@@ -1535,7 +1541,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //buttonRow.empty();
             sortsDiv.empty();
             var uiDocfrag = document.createDocumentFragment();
-            var rowList = $(document.createElement('ul')).addClass('rowLeft');
+            var rowList = $(document.createElement('ul')).addClass('rowLeft').addClass('sortRowLeft');
             for (i = 0; i < sortOptions.length; i++) {
                 var listItem = $(document.createElement('li')).addClass('rowItem');
                 sortButton = $(document.createElement('div'));
@@ -1543,7 +1549,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //Because stored on server as "Tour" but should be displayed as "Tours"
                 sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
                 sortButton.addClass('secondaryFont');
-                sortButton.addClass('rowButton')
+                sortButton.addClass('rowButton').addClass('sortButton')
                             .text(text)   
                             .attr('id', sortOptions[i].toLowerCase() + "Button")
                          .off()
@@ -1732,7 +1738,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             // Find out if operation is AND or NOT.
-            var operation = $('#ddcl-' + ((i * 2) + 1)).parent().find('.operationSelect :selected').text();
+            var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
             if (operation === '') {
                 operation = 'AND';
             }
@@ -1740,7 +1746,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Extract keywords checked off for this set.
             var keywords = [];
-            $('#ddcl-' + ((i * 2) + 2)).parent().find('.keywordsMultiselect :selected').each(function (i, selected) {
+            $(root.find('.keywordsMultiselect')[i]).find(':selected').each(function (i, selected) {
                 keywords.push($(selected).text().toLowerCase());
             });
             setOption["keywords"] = keywords;
@@ -1759,6 +1765,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             matchedArts = [],
             unmatchedArts = [],
             i;
+
+        // Clear the results description.
+        root.find('#searchDescription').text('');
+        root.find('#clearSearchButton').css({ 'display': 'none' });
 
         var keywordMatches = {}; // Object with fields keywordMatches['id'] === 'true' for matching artworks with that "id"
         if (keywordSets) {
@@ -1779,7 +1789,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (!content) {
             doTextSearch = false;
         }
-        if (!content && keywordMatches.length === 0) {
+        if (!content && Object.keys(keywordMatches).length == 0) {
             searchTxt.text("");
             drawCatalog(currentArtworks, currentTag, 0, false);
             return;
@@ -1823,12 +1833,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             ((notKeywordsString !== '') ? (' without the keyword' + (notCount > 1 ? 's ' : ' ') + notKeywordsString) : '') +
             '.';
 
-        $('#searchDescription').text(searchDescriptionText);
-        $('#clearSearchButton').css({ 'display': 'block' });
+        root.find('#searchDescription').text(searchDescriptionText);
+        root.find('#clearSearchButton').css({ 'display': 'block' });
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
         if (description === "" + "\n\n   ") {
-            $('#tileDiv').animate({ 'left': $('#infoDiv').width() + 'px' }, 1000, function () { });
-            $('#infoDiv').animate({ 'margin-left': '0%' }, 1000, function () { });
+            tileDiv.animate({ 'left': infoDiv.width() + 'px' }, 1000, function () { });
+            infoDiv.animate({ 'margin-left': '0%' }, 1000, function () { });
         }
 
         //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
@@ -1856,8 +1866,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // Go through each set of keywords.
         $.each(keywordSearchOptions, function (setIndex, searchOptions) {
-            // Ignore any hidden sets.
-            if (searchOptions['operation'] === '') {
+            // Ignore any hidden sets or sets not selected.
+            if (searchOptions['keywords'].length === 0) {
                 return;
             }
 
@@ -1891,8 +1901,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function clearKeywordCheckBoxes() {
         keywordSearchOptions = [];
-        $('.keywordSelect option').each(function () { $(this).removeAttr('selected'); });
-        $('#keywords input:checkbox').each(function () { $(this).removeAttr('checked'); });
+        root.find('.operationSelect :selected').each(function () { $(this).removeAttr('selected'); });
+        root.find('.operationSelect').val('');
+        root.find('.keywordsMultiselect :selected').each(function () { $(this).removeAttr('selected'); });
+        root.find('.keywordsMultiselect').val('');
+        root.find('#keywords input:checkbox').each(function () { $(this).removeAttr('checked'); });
     }
 
     /**
@@ -1903,19 +1916,27 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // Clear the search text.
         searchTxt.text("");
 
-
         // Clear the results description.
-        $('#searchDescription').text('');
-        $('#clearSearchButton').css({ 'display': 'none' });
+        root.find('#searchDescription').text('');
+        root.find('#clearSearchButton').css({ 'display': 'none' });
 
         // If there is no description, hide the infoDiv.
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
         if (description === "" + "\n\n   ") {
-            $('#tileDiv').animate({ 'left': '0%' }, 1000, function () { });
-            $('#infoDiv').animate({ 'margin-left': '-25%' }, 1000, function () { });
+            tileDiv.animate({ 'left': '0%' }, 1000, function () { });
+            infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+        }
+
+        // See if we will need to redraw the timeline
+        if (currCollection.Metadata.Timeline === "true" || currCollection.Metadata.Timeline === "false") {
+            currCollection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
+        } else {
+            timelineShown = true; //default to true for backwards compatibility
         }
 
         drawCatalog(currentArtworks, currentTag, 0, false);
+        
+        keywordSearchOptions = [];
     }
 
     /**
@@ -1930,9 +1951,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
         if (description === "" + "\n\n   ") {
-            $('#tileDiv').css({ 'left': '0%' });
+            tileDiv.css({ 'left': '0%' });
         } else {
-            $('#tileDiv').css({ 'left': '25%' });
+            tileDiv.css({ 'left': '25%' });
         }
         //drawCatalog(artworks, currentTag, 0);
     }
@@ -2378,7 +2399,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             artTitle.append(artText);
 
             // Styling for searches
-            if (!onSearch && (searchInput.val() !== '' || keywordSearchOptions.length !== 0)) {
+            var numKeywordsChecked = 0;
+            $.each(keywordSearchOptions, function(setIndex, set) {
+                numKeywordsChecked += keywordSearchOptions[setIndex].keywords.length;
+            });
+            if (!onSearch && (searchInput.val() !== '' || numKeywordsChecked !== 0)) {
                 main.css({ 'opacity': '0.2' });
                 main.css('border', '1px solid black');
             } else if (onSearch) {
@@ -2881,6 +2906,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             containerLeft;
             rootWidth = root.width();
             infoWidth = infoDiv.width();
+            if (!(currCollection.Metadata.Description && !onAssocMediaView)) {
+                infoWidth = 0;
+            }
             if (comingBack && previewPos){
                 containerLeft = previewPos;
             } else {

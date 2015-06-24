@@ -2089,26 +2089,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     //if the button already exists
                     if ($("[id='" + buttonId + "']")[0]) {
                         $("[id='" + buttonId + "']").show()
-                            .css({"color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)})
-                    } else { //or if you're making it (sort option was origionally deselected)
+                        if (buttonId === "dateButton") {
+                            $(".sortButton").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)});
+                            $("[id='" + buttonId + "']").css('color', 'white');
+                        } else {
+                            $("[id='" + buttonId + "']").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) })
+                        }
+                   } else { //or if you're making it (sort option was origionally deselected)
+                        var listItem = $(document.createElement('li')).addClass('rowItem');
                         sortButton = $(document.createElement('div'));
                         //Because stored on server as "Tour" but should be displayed as "Tours"
                         //sortDiv.text()==="Tour" ? text = "Tours" : text = sortDiv.text();
                         sortButton.addClass('secondaryFont');
                         sortButton.addClass('rowButton')
                                     .text(sortDiv.text())
-                                    .attr('id', buttonId)
-                                    //TODO: make sortButton have the same class as the same ones that are created in the collections page
-                                    .css({
-                                        "cursor": "pointer",
-                                        "float": "left",
-                                        "font-size": "92.5%",
-                                        "margin-top": "0.27%",
-                                        "margin-right": "1%",
-                                        "height": "100%",
-                                        "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
-                                    });
-                        $("#buttonRow").append(sortButton);
+                                    .attr('id', buttonId);
+                        if (buttonId === "dateButton") {
+                            sortButton.css("color", "white");
+                        } else {
+                            sortButton.css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) });
+                        }
+                        listItem.append(sortButton);
+                        $(".sortRowLeft").append(listItem);
+                        
                     }
 
                     if (sortDiv.text() === "Date") {
@@ -2327,7 +2330,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = true;
             showAssocMedia.css({'background-color':'white'});
             hideAssocMedia.css({'background-color':''});
-            $('#toggleRow').css('display','block');
+            $('#assocMediaButton').css('display','block');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -2340,7 +2343,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
-            $('#toggleRow').css('display','none');
+            $('#assocMediaButton').css('display','none');
             }, {
             'min-height': '0px',
             'width': '48%',
@@ -8471,27 +8474,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Name text field.
         var kw_css = {
-            'float': 'left',
             'margin-right': '3%',
             'display': 'inline-block',
             'box-sizing': 'border-box',
+            'min-width': '0px'
         }
-        inputs.setLabel.css(kw_css);
-        inputs.nameInput.css(kw_css);
-        inputs.keywordsInput.css(kw_css);
-        inputs.editInput.css(kw_css);
-        inputs.showKeywords.css(kw_css);
-        inputs.hideKeywords.css(kw_css);
+        inputs.setLabel.css(kw_css).css({ 'width': '17%', 'float': 'left' });
+        inputs.nameInput.css(kw_css).css({ 'width': '57%' });
+        inputs.editInput.css({'min-width': '0px', 'width': '20%'});
+
+        var editDiv = $(document.createElement('div')).css(kw_css).css({ 'width': '43%', 'float': 'left' });
+        editDiv.append(inputs.setLabel).append(inputs.nameInput).append(inputs.editInput);
+
+        var showDiv = $(document.createElement('div')).css({
+            'width': '50%',
+            'float': 'right',
+            'margin-right': '3%',
+            'box-sizing': 'border-box',
+        });
+        showDiv.append(inputs.showKeywords).append(inputs.hideKeywords);
 
         var clear = $(document.createElement('div'));
         clear.css('clear', 'both');
 
-        container.append(inputs.setLabel);
-        container.append(inputs.nameInput);
-        container.append(inputs.keywordsInput);
-        container.append(inputs.editInput);
-        container.append(inputs.showKeywords);
-        container.append(inputs.hideKeywords);
+        container.append(editDiv);
+        container.append(showDiv);
         container.append(clear);
 
         return container;
@@ -9246,7 +9253,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 e.stopPropagation();
             })
             .appendTo(addKeywordContainer);
-
         
 
         // to focus the 'add' button on the enter key
@@ -9256,7 +9262,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $("#keywordAddButton").click();
             }
         });
-
 
 
         // Add button.
@@ -9385,24 +9390,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var overlay = $('#Overlay');
                 overlay.hide();
                 overlay.remove();
-
-                // Update the view terms element.
-                var oldViewTerms = $($('.keyword-set-view-terms')[setIndex]);
-                oldViewTerms.find('option').remove(); // Remove old options.
-
-                var options = keywordSets[setIndex].keywords.slice(); // Make new options.
-                options.unshift('View Terms');
-
-                for (var i = 0; i < options.length; i++) {
-                    var option = $(document.createElement('option'));
-                    option.text(options[i]);
-                    option.attr('value', options[i]);
-                    if (i > 0) {
-                        option.attr('disabled', 'true');
-                    }
-                    oldViewTerms.append(option);
-                }
-
             })
             .appendTo(closeContainer);
 
@@ -9416,7 +9403,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createKeywordSetInputs(setIndex, set) {
         var options = set.keywords.slice();
-        options.unshift('View Terms');
         var inputs = {
             setLabel: $(document.createElement('div'))
                 .attr('for', 'keyword-set-name-input-' + (setIndex+1))
@@ -9425,16 +9411,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 .addClass('keyword-set-name-input')
                 .attr('id', 'keyword-set-name-input-' + (setIndex + 1))
                 .attr('disabled', keywordSets[setIndex].shown !== 'true')
+                .css({'width': '20%'})
                 .blur(function (e) {
                     if (keywordSets) {
                         keywordSets[setIndex].name = $(this).val();
                     }
                 }),
-            keywordsInput: createSelectInput(options)
-                .addClass('keyword-set-view-terms')
-                .attr('disabled', keywordSets[setIndex].shown !== 'true')
-                .css({'width': '15%'}),
-            editInput: createButton('Edit Set', function () {
+            editInput: createButton('Edit', function () {
                     if (keywordSets) {
                         var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(setIndex), false, false);
                         root.append(popup);
@@ -9447,32 +9430,37 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-top': '0.5%',
                     'opacity': (keywordSets[setIndex].shown === 'true' ? '1' : '0.4')
                 }),
-            showKeywords: createButton('Show Set', function () {
+            showKeywords: createButton('Show', function () {
                     $($('.keyword-set-show-button')[setIndex]).css('background-color', 'white');
                     $($('.keyword-set-hide-button')[setIndex]).css('background-color', '');
 
                     $($('.keyword-set-name-input')[setIndex]).removeAttr('disabled');
-                    $($('.keyword-set-view-terms')[setIndex]).removeAttr('disabled');
                     $($('.keyword-set-edit-button')[setIndex]).removeAttr('disabled');
                     $($('.keyword-set-edit-button')[setIndex]).css('opacity', '1');
 
                     keywordSets[setIndex].shown = 'true';
+                }, {
+                    'min-height': '0px',
+                    'margin-right': '4%',
+                    'width': '48%',
                 })
                 .addClass('keyword-set-show-button')
                 .css({
                     'margin-top': '0.5%',
                     'background-color': (keywordSets[setIndex].shown === 'true' ? 'white' : '')
                 }),
-            hideKeywords: createButton('Hide Set', function () {
+            hideKeywords: createButton('Hide', function () {
                     $($('.keyword-set-hide-button')[setIndex]).css('background-color', 'white');
                     $($('.keyword-set-show-button')[setIndex]).css('background-color', '');
 
                     $($('.keyword-set-name-input')[setIndex]).attr('disabled', 'disabled');
-                    $($('.keyword-set-view-terms')[setIndex]).attr('disabled', 'disabled');
                     $($('.keyword-set-edit-button')[setIndex]).attr('disabled', 'disabled');
                     $($('.keyword-set-edit-button')[setIndex]).css('opacity', '.4');
 
                     keywordSets[setIndex].shown = 'false';
+                }, {
+                    'min-height': '0px',
+                    'width': '48%',
                 })
                 .addClass('keyword-set-hide-button')
                 .css({
@@ -9480,10 +9468,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'background-color': (keywordSets[setIndex].shown !== 'true' ? 'white' : '')
                 }),
         };
-        // Disable the keywords in the "view terms" dropdown.
-        for (var i = 1; i < inputs.keywordsInput[0].length; i++) {
-            inputs.keywordsInput[0][i].setAttribute('disabled', true);
-        }
         return inputs;
     };
 
@@ -10361,7 +10345,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 width: '6%',
                 height: '6%',
                 'margin-top': '2%',
-                'margin-right': '2%'
+                'margin-right': '2%',
+                'float': 'right'
             });
         } 
         var addMenuLabelDiv = $(document.createElement('div'))
@@ -10392,14 +10377,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'top': '50%',
                 'clear': 'left',
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                'border': '1px solid white',
+                'border': '1px solid black',
             });
         if (IS_WINDOWS) {
             dropDown.css({
                 'font-size': '70%',
-                'right': '4%',
-                'left': '',
-                 width: '37%'
+                'left': '0%',
+                'width': '37%',
+                'top' : '40%'
             })
         }
         dropDown.hide();
@@ -10428,13 +10413,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
                     'padding-right':'7%',
-                    'float':'left'
+                    'float':'right'
                 });
                 console.log(findContainer.css('display'));
-                if (findContainer.css('display') != 'none'){
-                        dropDown.css('top',(searchContainer.height()-findContainer.height())*0.5 + 'px');
+                if (findContainer.css('display') != 'none') {
+                    if (!IS_WINDOWS) {
+                        dropDown.css('top', (searchContainer.height() - findContainer.height()) * 0.5 + 'px');
+                    } else {
+                        dropDown.css('top', ((searchContainer.height() - findContainer.height()) * 0.4) - 5+ 'px' );
+                    }
                 } else {
-                    dropDown.css('top','50%');
+                    if (!IS_WINDOWS) {
+                        dropDown.css('top', '50%');
+                    } else {
+                        dropDown.css('top', '40%');
+                    }
                 }
                 dropDown.show();
             }
