@@ -33,7 +33,13 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     var that = {};
     var canvid = canvId;
     that.canvid = canvId;
-    html_elt = (html_elt) ? html_elt : $("#"+canvid)[0];
+    if (html_elt) {
+        if (html_elt.jquery) {
+            html_elt = html_elt[0];
+        }
+    } else {
+        html_elt = $("#" + canvid)[0];
+    }
     var domelement = (html_elt.jquery) ? html_elt : $(html_elt);
     var textElt;
     var dataHolder = spec.dataHolder;
@@ -2202,17 +2208,26 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             linkType = track.getType();
         // get initial keyframe for the artwork/image we're attaching to
         if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-            kfvx = keyframe.state.viewport.region.center.x;
-            kfvy = keyframe.state.viewport.region.center.y;
-            kfvw = keyframe.state.viewport.region.span.x;
-            kfvh = keyframe.state.viewport.region.span.y;
+            kfvx = keyframe.bounds.x;
+            kfvy = keyframe.bounds.y;
+            kfvw = keyframe.bounds.width;
+            kfvh = keyframe.bounds.height;
+            //kfvx = keyframe.state.viewport.region.center.x;
+            //kfvy = keyframe.state.viewport.region.center.y;
+            //kfvw = keyframe.state.viewport.region.span.x;
+            //kfvh = keyframe.state.viewport.region.span.y;
         }
         else if (linkType === TAG.TourAuthoring.TrackType.image) {
-            kfvw = 1.0 / keyframe.state.viewport.region.span.x;//$("#" + canvid).width() / (keyframe.state.viewport.region.span.x * cw);
-            var rw = keyframe.state.viewport.region.span.x * domelement.width();
-            kfvh = keyframe.state.viewport.region.span.y; /////bogus entry, not used
-            kfvx = -keyframe.state.viewport.region.center.x * kfvw;// /
-            kfvy = -(domelement.height() / rw) * keyframe.state.viewport.region.center.y;// / (.5*(keyframe.state.viewport.region.span.x
+            kfvw = 1.0 / keyframe.bounds.width;
+            kfvh = keyframe.bounds.height;
+            kfvx = -keyframe.bounds.x * kfvw;
+            var rw = keyframe.bounds.width * domelement.width();
+            kfvy = -(domelement.height() / rw) * keyframe.bounds.y;
+            //kfvw = 1.0 / keyframe.state.viewport.region.span.x;//$("#" + canvid).width() / (keyframe.state.viewport.region.span.x * cw);
+            //var rw = keyframe.state.viewport.region.span.x * domelement.width();
+            //kfvh = keyframe.state.viewport.region.span.y; /////bogus entry, not used
+            //kfvx = -keyframe.state.viewport.region.center.x * kfvw;// /
+            //kfvy = -(domelement.height() / rw) * keyframe.state.viewport.region.center.y;// / (.5*(keyframe.state.viewport.region.span.x
         }
         // set track data
         var inkType = datastr.split("::")[0].toLowerCase();
