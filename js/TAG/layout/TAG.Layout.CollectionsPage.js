@@ -514,6 +514,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         comingBack = false;
         tileDiv.empty();
         tileCircle.show();
+        clearKeywordCheckBoxes();
+        clearSearchResults();
+        infoSource = [];
+        keywordDictionary = [];
         if (cancelLoadCollection) cancelLoadCollection();
        
     }
@@ -1950,6 +1954,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         keywordSearchOptions = [];
         root.find('.operationSelect :selected').each(function () { $(this).removeAttr('selected'); });
         root.find('.operationSelect').val('');
+        root.find('.operationSelect').parent().find('span.ui-dropdownchecklist-text').each(function () { $(this).attr('title', 'AND').text('AND') });
         root.find('.keywordsMultiselect :selected').each(function () { $(this).removeAttr('selected'); });
         root.find('.keywordsMultiselect').val('');
         root.find('#keywords input:checkbox').each(function () { $(this).removeAttr('checked'); });
@@ -1967,18 +1972,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         root.find('#searchDescription').text('');
         root.find('#clearSearchButton').css({ 'display': 'none' });
 
-        // If there is no description, hide the infoDiv.
-        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-        if (description === "" + "\n\n   ") {
-            tileDiv.animate({ 'left': '0%' }, 1000, function () { });
-            infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
-        }
+        if (currCollection) {
+            // If there is no description, hide the infoDiv.
+            var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+            if (description === "" + "\n\n   ") {
+                tileDiv.animate({ 'left': '0%' }, 1000, function () { });
+                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+            }
 
-        // See if we will need to redraw the timeline
-        if (currCollection.Metadata.Timeline === "true" || currCollection.Metadata.Timeline === "false") {
-            currCollection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
-        } else {
-            timelineShown = true; //default to true for backwards compatibility
+            // See if we will need to redraw the timeline
+            if (currCollection.Metadata.Timeline === "true" || currCollection.Metadata.Timeline === "false") {
+                currCollection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
+            } else {
+                timelineShown = true; //default to true for backwards compatibility
+            }
         }
 
         drawCatalog(currentArtworks, currentTag, 0, false);
