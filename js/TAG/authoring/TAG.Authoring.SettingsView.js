@@ -278,6 +278,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         height: '70%',
         display: 'inline-block',
     });
+    if (idleTimer) {
+        idleTimer.kill();
+    }
     if (IS_WINDOWS) {
         findBarTextBox.css('font-size', '150%');
         findButton.css('font-size','100%');
@@ -2595,7 +2598,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $('.progressBarUploads').remove();
                         $('.progressBarUploadsButton').remove();
                         $('.progressText').remove();
-
+                        saveButton.click();
                         //enable import buttons
                         newButton = root.find('#setViewNewButton');
                         $(newButton).prop('disabled', false);
