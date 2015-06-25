@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../telemetry/telemetry.js" />
+/// <reference path="../../../telemetry/telemetry.js" />
 TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
 
 /*  Creates a SettingsView, which is the first UI in authoring mode.  
@@ -6842,6 +6842,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (fromImportPopUp == true) {
                     TAG.Worktop.Database.changeExhibition(currCollection.Identifier, { AddIDs: [newDoq.Identifier] }, console.log("This worked maybe"));
                 }
+                var progressPopUp = $(document.getElementById("uploadProgressPopUp"));
+
+                /*var elementClassName = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (newDoq.name)
+                $(".uploadProgressLabel" + elementClassName).text((100).toString().substring(0, 4) + "%")
+                $(".uploadProgressInner" + elementClassName).css({'width': 100+'%'}); */
+                
                 /*var source = newDoq.Metadata.Source;
                 if (contentTypes[j] === "Video") {
                     var newFileName = source.slice(8, source.length);
