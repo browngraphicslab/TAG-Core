@@ -1080,7 +1080,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-align": "center",
                 "display": "inline-block",
                 "height": "90%",
-                "overflow": "hidden",
+                //"overflow": "hidden",
                 "top": "10%",
                 "cursor": "pointer",
                 "white-space" : "nowrap"
@@ -1097,8 +1097,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'display': 'inline-block',
                 'left': "auto",
                 'position': "relative",
-                'height': "55%",
-                'width': '3%',
+                'height': "101px",
+                'width': '24.5px',
                 'top': '18%'
             });
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
