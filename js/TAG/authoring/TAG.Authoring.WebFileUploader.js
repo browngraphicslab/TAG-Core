@@ -158,6 +158,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         //sets up the progress popup - creates popup but doesn't show it
         popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
+        $(popup).attr('id', 'uploadProgressPopup');
         $('body').append(popup);
         $(popup).css({'display':'none'});
         /*progressBar.unbind('click').click(function () {

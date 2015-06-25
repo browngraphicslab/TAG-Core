@@ -3055,8 +3055,8 @@ TAG.Util.UI = (function () {
 
         var setProgress = function (name, percent) {
             var elementClassName = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (name)
-            $(".uploadProgressLabel" + elementClassName).text((percent*100).toString().substring(0, 4) + "%")
-            $(".uploadProgressInner" + elementClassName).css({'width':percent*100+'%'});
+           $(".uploadProgressLabel" + elementClassName).text((percent*100).toString().substring(0, 4) + "%")
+            $(".uploadProgressInner" + elementClassName).css({'width':percent*100+'%'}); 
         }
 
         var setError = function(name) {
