@@ -9203,31 +9203,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .text(set.name !== '' ? set.name : 'untitled set')
             .appendTo(setEditorContainer);
 
-        // Top bar area.
-        var setEditorTopContainer = $(document.createElement('div'))
-            .attr('id', 'setEditorTopContainer')
-            .appendTo(setEditorContainer);
-
-        // Upload CSV button
-        var uploadCsvButton = $(document.createElement('button'))
-            .attr('type', 'button')
-            .addClass('button')
-            .attr('id', 'uploadCsvButton')
-            .text('Upload CSV')
-            .css({
-                'color': '#fff',
-                'border-color': '#fff',
-                'border-radius': '3.5px',
-                'width': (90 * .97) + '%',
-                'margin-left': '5%',
-                'margin-top': '2%'
-            })
-            .click(function () { getSetFromCSV(function(){},function(){}) })
-            .appendTo(setEditorTopContainer);
-
         // View/delete keywords scrollable area.
         var keywordListContainer = $(document.createElement('div'))
             .attr('id', 'keywordListContainer')
+            .appendTo(setEditorContainer);
+
+        // Instructions for adding keywords.
+        var setEditorAddInstructions = $(document.createElement('div'))
+            .text('List keywords here:')
+            .attr('id', 'setEditorAddInstructions')
             .appendTo(setEditorContainer);
 
         // Add in keywords.
@@ -9257,7 +9241,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'border-color': '#fff',
                     'border-radius': '3.5px',
                     'float': 'right',
-                    'margin-right': '5%'
+                    'margin-right': '5%',
+                    'height': '80%',
+                    'min-height': '20px',
+                    'line-height': '80%'
                 })
                 .click(function () { deleteKeyword(setIndex, keyword, function () { keywordEditDiv.remove(); })})
                 .appendTo(keywordEditDiv);
@@ -9269,9 +9256,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .appendTo(setEditorContainer);
 
         // Add keyword text input.
-        var keywordAddInput = $(document.createElement('input'))
+        var keywordAddInput = $(document.createElement('textarea'))
             .attr('id', 'keywordAddInput')
-            .bind("enterKey",function(e){
+            .attr('cols', '10')
+            .attr('rows', '2')
+            .attr('maxlength', '2000')
+            .bind("enterKey",function(e) {
                 keywordAddButton.click();
             })
             .keyup(function (e) {
@@ -9279,21 +9269,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     $(this).trigger("enterKey");
                 }
                 e.stopPropagation();
+                return false;
             })
             .appendTo(addKeywordContainer);
         
 
-        // to focus the 'add' button on the enter key
-        addKeywordContainer.keypress(function (e) {
-            if (e.which == 13)
-            {
-                $("#keywordAddButton").click();
-            }
-        });
+        //// to focus the 'add' button on the enter key
+        //addKeywordContainer.keypress(function (e) {
+        //    if (e.which == 13) {
+        //        $("#keywordAddButton").click();
+        //    }
+        //});
 
 
         // Add button.
-        
         var keywordAddButton = $(document.createElement('button'))
             .attr('type', 'button')
             .addClass('button')
@@ -9304,80 +9293,116 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'border-color': '#fff',
                 'border-radius': '3.5px',
                 'float': 'right',
-                'margin-right': '5%'
+                'margin-right': '5%',
+                'min-width': '20px',
+                'width': '20%'
             })
             .click(function () {
                 $('#setEditorMessageContainer').text('');
 
-                // Extract new keyword.
-                var newKeyword = keywordAddInput.val().toLowerCase().trim();
+                // Remove breaklines.
+                keywordAddInput.val(keywordAddInput.val().replace(/\n\r?/g, ''));
 
-                // Make sure that it is length > 0.
-                var notEmpty = newKeyword.length > 0;
+                // Error flags.
+                var emptyWords = false;
+                var specialCharWords = false;
+                var duplicateWords = false;
 
-                // Make sure that it is numbers, letters, and spaces.
-                var isAlphanumeric = true;
-                for (var i = 0; i < newKeyword.length; i++) {
-                    var chr = newKeyword.charAt(i);
-                    isAlphanumeric = isAlphanumeric && (('a' <= chr && chr <= 'z') || ('0' <= chr && chr <= '9') || (chr === ' '));
-                }
+                // Extract new keywords and validate.
+                var newKeywords = [];
+                var extractedKeywordsArray = keywordAddInput.val().toLowerCase().trim().split(',');
+                $.each(extractedKeywordsArray, function (extractedKeywordIndex, extractedKeyword) {
+                    // Pull out the new keyword.
+                    var newKeyword = extractedKeyword.trim();
+                    var valid = true;
 
-                // Make sure that this isn't a duplicated keyword.
-                var isDuplicate = keywordSets[setIndex].keywords.indexOf(newKeyword) > -1;
+                    // Check for empty keyword.
+                    if (newKeyword.length < 1) {
+                        valid = false;
+                        emptyWords = true;
+                    }
+
+                    // Check for special characters.
+                    for (var i = 0; i < newKeyword.length; i++) {
+                        var chr = newKeyword.charAt(i);
+                        if (!(('a' <= chr && chr <= 'z') || ('0' <= chr && chr <= '9') || (chr === ' '))) {
+                            valid = false;
+                            specialCharWords = true;
+                        }
+                    }
+
+                    // Check for duplicates.
+                    if (keywordSets[setIndex].keywords.indexOf(newKeyword) > -1 || newKeywords.indexOf(newKeyword) > -1) {
+                        valid = false;
+                        duplicateWords = true;
+                    }
+
+                    // If this keyword is good, add it to newKeywords.
+                    if (valid) {
+                        newKeywords.push(newKeyword);
+                    }
+                });
+
 
                 // Alert user that there was a validation error.
-                if (!notEmpty) {
+                if (emptyWords) {
                     $('#setEditorMessageContainer').text('No empty keywords allowed!');
                     return;
                 }
-                if (!isAlphanumeric) {
+                if (specialCharWords) {
                     $('#setEditorMessageContainer').text('No special characters allowed!');
                     return;
                 }
-                if (isDuplicate) {
+                if (duplicateWords) {
                     $('#setEditorMessageContainer').text('No duplicate keywords allowed!');
                     return;
                 }
 
                 // This is what we do if the server succeeds in updating main, i.e., adding the new keyword. Basically it adds UI to delete the new keyword.
                 var keywordAddSuccess = function () {
-                    var newKeywordDeleteDiv = $(document.createElement('div'))
-                    .addClass('keywordDeleteDiv')
-                    .hover(
-                        function () { $(this).css({ 'background-color': '#555' }); },
-                        function () { $(this).css({ 'background-color': '#000' }); }
-                    )
-                    .appendTo(keywordListContainer);
+                    for (var i = 0; i < newKeywords.length; i++) {
+                        var newKeyword = newKeywords[i];
+                        var newKeywordDeleteDiv = $(document.createElement('div'))
+                            .addClass('keywordDeleteDiv')
+                            .hover(
+                                function () { $(this).css({ 'background-color': '#555' }); },
+                                function () { $(this).css({ 'background-color': '#000' }); }
+                            )
+                            .appendTo(keywordListContainer);
 
-                    // Label.
-                    var newKeywordsEditLabel = $(document.createElement('div'))
-                        .addClass('keywordDeleteLabel')
-                        .text(keywordAddInput.val())
-                        .appendTo(newKeywordDeleteDiv);
+                        // Label.
+                        var newKeywordsEditLabel = $(document.createElement('div'))
+                            .addClass('keywordDeleteLabel')
+                            .text(newKeyword)
+                            .appendTo(newKeywordDeleteDiv);
 
-                    // Delete button.
-                    var newKeywordDeleteButton = $(document.createElement('button'))
-                        .attr('type', 'button')
-                        .addClass('button')
-                        .addClass('keywordDeleteButton')
-                        .text('Delete')
-                        .css({
-                            'color': '#fff',
-                            'border-color': '#fff',
-                            'border-radius': '3.5px',
-                            'float': 'right',
-                            'margin-right': '5%'
-                        })
-                        .click(function () { deleteKeyword(setIndex, keywordAddInput.val(), function () { newKeywordDeleteDiv.remove(); }) })
-                        .appendTo(newKeywordDeleteDiv);
+                        // Delete button.
+                        var newKeywordDeleteButton = $(document.createElement('button'))
+                            .attr('type', 'button')
+                            .addClass('button')
+                            .addClass('keywordDeleteButton')
+                            .text('Delete')
+                            .css({
+                                'color': '#fff',
+                                'border-color': '#fff',
+                                'border-radius': '3.5px',
+                                'float': 'right',
+                                'margin-right': '5%'
+                            })
+                            .click(function () { deleteKeyword(setIndex, newKeyword, function () { newKeywordDeleteDiv.remove(); }) })
+                            .appendTo(newKeywordDeleteDiv);
 
-                    keywordAddInput.val('');
-                    keywordAddInput.focus();
+                        keywordAddInput.val('');
+                        keywordAddInput.focus();
+                    }
                 };
 
                 //Change the settings in the database
                 if (keywordSets) {
-                    keywordSets[setIndex].keywords.push(newKeyword);
+                    for (var i = 0; i < newKeywords.length; i++) {
+                        var newKeyword = newKeywords[i];
+                        keywordSets[setIndex].keywords.push(newKeyword);
+                    }
                     var optns = {};
                     switch (setIndex) {
                         case 0: optns.KeywordSet1 = TAG.Util.convertArrayToSetString(keywordSets[0].keywords); break;
@@ -9948,51 +9973,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         );
         }
     }
-
-
-
-
-    /** Method creataes a popup for a user to select a csv file, parses it, and if free of errors, makes it the keyword set.
-     * @method getSetFromCSV
-     * @param {Function} success    Callback if the file was successful   
-     * @param {Function} error      Callback if the file had an error
-     */
-    function getSetFromCSV(success, error) {
-        console.log("csv keyword set!");
-        var keywordsList = [];
-
-        // Get our file.
-        var fileContent;
-        if (IS_WINDOWS) {
-            // Windows filepicker.
-            var filePicker = new Windows.Storage.Pickers.FileOpenPicker();
-            filePicker.viewMode = Windows.Storage.Pickers.PickerViewMode.list;
-            filePicker.fileTypeFilter.replaceAll(['.csv']);
-            filePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.desktop;
-            filePicker.pickSingleFileAsync().then(function (file) {
-                if (file) {
-                    try {
-                        var csvFile = new XMLHttpRequest();
-                        csvFile.open("GET", file.name, true);
-                        csvFile.onreadystatechange = function () {
-                            allText = csvFile.responseText;
-                            allTextLines = csvFile.split(/\r\n|\n/);
-                        };
-                        console.log('FILE:');
-                        console.log(allText);
-                        console.log('EOF');
-                    } catch (e) {
-                        error();
-                    }
-                } else {
-                    error();
-                }
-            });
-        } else {
-
-        }
-    }
-
 
     /**Create an overlay over the whole settings view with a spinning circle and centered text. This overlay is intended to be used 
      * only when the page is 'done'.  The overlay doesn't support being removed from the page, so only call this when the page will 
