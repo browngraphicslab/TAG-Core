@@ -5272,7 +5272,8 @@ TAG.Util.UI = (function () {
  */
 TAG.Util.RLH = function (input) {
     var artwork = input.artwork, // artwork doq
-        root = input.root,       // root of current page
+        root = input.root, // root of current page
+        uploadHappening = input.uploadHappening, //if an external upload is happening
         bingMapHelper,       // helper object for Bing map
         customMapHelper,     // helper object for custom maps
         richLocationData,    // object containing rich location data (e.g., 
@@ -5701,10 +5702,12 @@ TAG.Util.RLH = function (input) {
             
             var progressBar = $(document.getElementById("progressBarUploads"));
             //console.log("prog bar length = " + $(progressBar).length);
-            if ($(progressBar).length > 0) {
-                console.log("progressBar l")
-                $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
-                $(importMapButton).prop('disabled', 'true');
+
+            if (uploadHappening === true) {
+                
+                console.log("upload happening - disable import maps TAG.Util")
+                importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
+                importMapButton.prop('disabled', 'true');
                 
             }
 
@@ -5921,8 +5924,12 @@ TAG.Util.RLH = function (input) {
 
         mapHolders = {};
         mapContainer.empty(); // TODO this is inefficient, just here for rapid prototyping
-        $(importMapButton).prop('disabled', false);
-        $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+        console.log("loading maps - maybe causing importmapbutton to be enabled?");
+        if (uploadHappening === false) {
+            importMapButton.prop('disabled', false);
+            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+        }
+        
 
         loadCallback = function () {
             callback && callback();
@@ -5957,10 +5964,12 @@ TAG.Util.RLH = function (input) {
 
         /**
         console.log("loading maps called, prog bar length = " + $(progressBar).length);
-        if ($(progressBar).length > 0) {
+
+        
+        if (uploadHappening===false) {
             console.log("other upload is happening, disable import maps PLEASE!!!!!");
-            $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
-            $(importMapButton).prop('disabled', 'true');
+            importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
+            importMapButton.prop('disabled', 'true');
 
         }
         **/

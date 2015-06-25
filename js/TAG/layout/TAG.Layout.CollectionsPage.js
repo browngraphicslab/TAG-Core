@@ -514,6 +514,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         comingBack = false;
         tileDiv.empty();
         tileCircle.show();
+        clearKeywordCheckBoxes();
+        clearSearchResults();
+        infoSource = [];
+        keywordDictionary = [];
         if (cancelLoadCollection) cancelLoadCollection();
        
     }
@@ -1845,35 +1849,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
         }
 
-        var andKeywordsString = '',
-            notKeywordsString = '',
-            andCount = 0,
-            notCount = 0;
-        $.each(keywordSearchOptions, function (optionIndex, option) {
-            $.each(option['keywords'], function (checkedKeywordIndex, checkedKeyword) {
-                if (option['operation'] === 'and') {
-                    andKeywordsString = andKeywordsString + (' ' + checkedKeyword + ',');
-                    andCount++;
-                } else if (option['operation'] === 'not') {
-                    notKeywordsString = notKeywordsString + (' ' + checkedKeyword + ',');
-                    notCount++;
-                }
-            });
-        });
-        if (andKeywordsString !== '') {
-            andKeywordsString = andKeywordsString.substring(0, andKeywordsString.length - 1);
-        }
-        if (notKeywordsString !== '') {
-            notKeywordsString = notKeywordsString.substring(0, notKeywordsString.length - 1);
-        }
-
-        var searchDescriptionText = 'Found ' + matchedArts.length +
-            ' result' + ((matchedArts.length == 1) ? '' : 's') +
-            ((doTextSearch) ? (' for \'' + content + '\'') : '') +
-            ((andKeywordsString !== '') ? (' with the keyword' + (andCount > 1 ? 's ' : ' ') + andKeywordsString) : '') +
-            ((andKeywordsString !== '' && notKeywordsString !== '') ? ' and' : '') +
-            ((notKeywordsString !== '') ? (' without the keyword' + (notCount > 1 ? 's ' : ' ') + notKeywordsString) : '') +
-            '.';
+        var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
 
         root.find('#searchDescription').text(searchDescriptionText);
         root.find('#clearSearchButton').css({ 'display': 'block' });
@@ -1892,6 +1868,35 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
         drawCatalog(matchedArts, currentTag, 0, true);
         drawCatalog(unmatchedArts, currentTag, searchResultsLength, false);
+    }
+
+    function getSearchDescription(matchedArts, content, doTextSearch) {
+        var andKeywordsString = '',
+            notKeywordsString = '',
+            andCount = 0,
+            notCount = 0;
+
+        var searchDescriptionText = 'Found ' + matchedArts.length +
+            ' result' + ((matchedArts.length == 1) ? '' : 's') +
+            ((doTextSearch) ? (' for \'' + content + '\'') : '');
+
+        var getSetListString = function (op, keywords) {
+            if (op === '') return '';
+            var listString = '';
+            for (var i = 0; i < keywords.length; i++) {
+                listString = listString + (((i == keywords.length - 1) && keywords.length != 1 ? 'or ' : '') + '\'' + keywords[i] + '\'' +
+                    (((i == 0 && keywords.length == 2) || i == keywords.length-1) ? '' : ','));
+            }
+            return listString;
+        };
+        $.each(keywordSearchOptions, function (optionIndex, option) {
+            var listString = getSetListString(option.operation, option.keywords);
+            searchDescriptionText = searchDescriptionText +
+                ((listString !== '') ? (' with' + (option.operation == 'and' ? '' : 'out') + ' the keyword' + (option.keywords.length > 1 ? 's ' : ' ') + listString) : '');
+        });
+        searchDescriptionText = searchDescriptionText + '.';
+
+        return searchDescriptionText;
     }
 
     /*
@@ -1955,6 +1960,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         keywordSearchOptions = [];
         root.find('.operationSelect :selected').each(function () { $(this).removeAttr('selected'); });
         root.find('.operationSelect').val('');
+        root.find('.operationSelect').parent().find('span.ui-dropdownchecklist-text').each(function () { $(this).attr('title', 'AND').text('AND') });
         root.find('.keywordsMultiselect :selected').each(function () { $(this).removeAttr('selected'); });
         root.find('.keywordsMultiselect').val('');
         root.find('#keywords input:checkbox').each(function () { $(this).removeAttr('checked'); });
@@ -1972,18 +1978,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         root.find('#searchDescription').text('');
         root.find('#clearSearchButton').css({ 'display': 'none' });
 
-        // If there is no description, hide the infoDiv.
-        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-        if (description === "" + "\n\n   ") {
-            tileDiv.animate({ 'left': '0%' }, 1000, function () { });
-            infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
-        }
+        if (currCollection) {
+            // If there is no description, hide the infoDiv.
+            var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+            if (description === "" + "\n\n   ") {
+                tileDiv.animate({ 'left': '0%' }, 1000, function () { });
+                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+            }
 
-        // See if we will need to redraw the timeline
-        if (currCollection.Metadata.Timeline === "true" || currCollection.Metadata.Timeline === "false") {
-            currCollection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
-        } else {
-            timelineShown = true; //default to true for backwards compatibility
+            // See if we will need to redraw the timeline
+            if (currCollection.Metadata.Timeline === "true" || currCollection.Metadata.Timeline === "false") {
+                currCollection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
+            } else {
+                timelineShown = true; //default to true for backwards compatibility
+            }
         }
 
         drawCatalog(currentArtworks, currentTag, 0, false);
