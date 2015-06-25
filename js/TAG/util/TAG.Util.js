@@ -55,6 +55,7 @@ TAG.Util = (function () {
         makeBorderRadius: makeBorderRadius,
         createTutorialPopup: createTutorialPopup,
         removeYoutubeVideo: removeYoutubeVideo
+
     };
 
     function removeYoutubeVideo(){
@@ -2055,6 +2056,7 @@ TAG.Util.UI = (function () {
         popUpMessage: popUpMessage,
         popUpCustom: popUpCustom,
         PopUpConfirmation: PopUpConfirmation,
+        ConfirmUploadPopUp: ConfirmUploadPopUp,
         popupInputBox: popupInputBox,
         cgBackColor: cgBackColor,
         setUpBackButton: setUpBackButton,
@@ -2072,7 +2074,8 @@ TAG.Util.UI = (function () {
         initKeyHandler: initKeyHandler,
         keyHandler: keyHandler,
         showPageLink: showPageLink,
-        uploadProgressPopup : uploadProgressPopup,
+        uploadProgressPopup: uploadProgressPopup,
+        
     };
 
     //initKeyHandler();
@@ -3134,6 +3137,153 @@ TAG.Util.UI = (function () {
         return overlay;
     }
 
+    function ConfirmUploadPopUp(confirmAction, message, title, confirmButtonText, noFade, displayNames, useTeleformat) {
+        var overlay;
+        var origin;
+
+        origin = true;
+        overlay = blockInteractionOverlay();
+        console.log("Made new overlay");
+
+        origin
+        container = container || window;
+        var confirmBox = document.createElement('div');
+        var popUpHandler = {
+            13: doOnEnter,
+        }
+        var currKeyHandler = globalKeyHandler[0];
+        globalKeyHandler[0] = popUpHandler;
+
+        //temp solution for telemetry box in all resolutions and browsers. 
+        var maxw = 600,
+            maxh = 300;
+        if (useTeleFormat) {
+            maxw = $('body').width() * 0.45;
+            maxh = $('body').height() * 0.33;
+        }
+        var confirmBoxSpecs = TAG.Util.constrainAndPosition($(container).width(), $(container).height(),
+            {
+                center_h: true,
+                center_v: true,
+                width: 0.5,
+                height: 0.35,
+                max_width: maxw,// $('body').width()*0.33,
+                max_height: maxh//$('body').height()*0.2,
+            });
+
+        $(confirmBox).css({
+            position: 'absolute',
+            left: confirmBoxSpecs.x + 'px',
+            top: confirmBoxSpecs.y + 'px',
+            width: confirmBoxSpecs.width + 'px',
+            height: confirmBoxSpecs.height + 'px',
+            border: '3px double white',
+            'background-color': 'black'
+        });
+
+        var messageLabel = document.createElement('div');
+
+        $(messageLabel).css({
+            color: 'white',
+            'width': '80%',
+            'height': '50%',
+            'left': '10%',
+            'top': '12.5%',
+            'font-size': '1em',
+            'overflow': 'hidden',
+            'position': 'relative',
+            'text-align': 'center',
+            'text-overflow': 'ellipsis',
+            'word-wrap': 'break-word'
+        });
+        var fontsize = TAG.Util.getMaxFontSizeEM(message, 1, $(messageLabel).width(), $(messageLabel).height());
+        if (useTeleFormat && IS_WINDOWS) {
+            fontsize = TAG.Util.getMaxFontSizeEM(message, 0.8, $(messageLabel).width(), $(messageLabel).height());
+        }
+        $(messageLabel).css('font-size', fontsize);
+        $(messageLabel).text(message).attr("id", "popupmessage");
+
+        if (displayNames) {
+            for (var i = 0; i < displayNames.length; i++) {
+
+                var para = document.createElement('div');
+                $(para).text(displayNames[i]);
+                $(para).css({ color: 'white', 'z-index': '99999999999' });
+                $(messageLabel).append(para);
+                TAG.Util.multiLineEllipsis($(para));
+            }
+        }
+
+        $(confirmBox).append(messageLabel);
+        TAG.Util.multiLineEllipsis($(messageLabel));
+        var optionButtonDiv = document.createElement('div');
+        $(optionButtonDiv).addClass('optionButtonDiv');
+        $(optionButtonDiv).css({
+            'height': '20%',
+            'width': '100%',
+            'position': 'absolute',
+            'color': 'white',
+            'bottom': '5%',
+            'right': '5%',
+            'text-align': 'center'
+        });
+        $(confirmBox).append(optionButtonDiv);
+
+        $(overlay).append(confirmBox);
+        var confirmButton = document.createElement('button');
+        $(confirmButton).css({
+            'padding': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'position': 'relative',
+            'float': "left",
+            'margin-left': '12%',
+            'color': 'white',
+            'border-radius': '3.5px',
+            'margin-top': '1%'
+
+        }).attr('id', 'popupConfirmButton');
+        confirmButtonText = (!confirmButtonText || confirmButtonText === "") ? "Confirm" : confirmButtonText;
+        $(confirmButton).text(confirmButtonText);
+
+        confirmButton.onclick = function () {
+            if (origin) {
+                removeAll();
+            } else {
+                $(confirmBox).remove()
+            }
+            confirmAction();
+        };
+
+        confirmButton.onkeydown = function (event) {
+            switch (event.which) {
+                case 13: // enter key
+                    removeAll();
+                    confirmAction();
+            }
+        }
+        if (!(confirmButtonText === "no confirm")) {
+            $(optionButtonDiv).append(confirmButton);
+        }
+
+        function doOnEnter() {
+            removeAll();
+            confirmAction();
+        }
+
+
+        function removeAll() {
+            if (noFade) {
+                $(overlay).hide();
+                $(overlay).remove();
+            } else {
+                $(overlay).fadeOut(500, function () { $(overlay).remove(); });
+            }
+            globalKeyHandler[0] = currKeyHandler;
+        }
+        return overlay;
+    }
+    
     
 
     // popup message to ask for user confirmation of an action e.g. deleting a tour
@@ -3210,13 +3360,27 @@ TAG.Util.UI = (function () {
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
 
-        if(displayNames){
+        if (displayNames) {
+            var namesLabel = document.createElement('div');
+            $(namesLabel).css({
+                color: 'white',
+                'width': '80%',
+                'height': '50%',
+                'left': '10%',
+                'top': '12.5%',
+                'font-size': '1em',
+                'overflow': 'auto',
+                'position': 'relative',
+                'text-align': 'center',
+                'text-overflow': 'ellipsis',
+                'word-wrap': 'break-word'
+            });
             for (var i = 0; i < displayNames.length; i++) {
 
                 var para = document.createElement('div');
                 $(para).text(displayNames[i]);
                 $(para).css({color: 'white', 'z-index': '99999999999'});
-                $(messageLabel).append(para);
+                $(namesLabel).append(para);
                 TAG.Util.multiLineEllipsis($(para));
             }
         }
@@ -3368,10 +3532,7 @@ TAG.Util.UI = (function () {
                 $(overlay).fadeOut(500, function () { $(overlay).remove(); });
             }
             globalKeyHandler[0] = currKeyHandler;
-        }
-
-
-       
+        }   
         return overlay;
     }
 
