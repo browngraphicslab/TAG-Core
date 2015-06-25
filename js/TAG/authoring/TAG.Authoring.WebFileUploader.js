@@ -20,6 +20,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
     var uploadingOverlay = $(document.createElement('div')),
     innerProgressBar = $(document.createElement('div')); // HTML upload overlay
     var uploadOverlayText;
+    var names = [];
     var progressBarButton;
     var progressBar;
     var uploadErrors = [];
@@ -158,6 +159,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
         //sets up the progress popup - creates popup but doesn't show it
         popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
+        $(popup).attr('id', 'uploadProgressPopup');
         $('body').append(popup);
         $(popup).css({ 'display': 'none' });
 
@@ -178,6 +180,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         resumableUploader.on('fileSuccess', function(resumableFile, message) {
             addOverlay();
             popup.setProgress(resumableFile.fileName, 0.9);
+            names.push(resumableFile.fileName);
 
             //Gets back the relative path of the uploaded file on the server
             globalFiles.push(resumableFile.file);
@@ -427,6 +430,12 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
      
         addLocalCallback(globalFiles, localURLs, globalUriStrings)();
         finishedCallback(dataReaderLoads);
+        for(var i =0; i<names.length-1; i++){
+            popup.setProgress(names[i], 1);
+            console.log("set all to 100%");
+        }
+
+
         var knownErrors = new HashTable();
 
         var msg = "", str, mins, secs;
