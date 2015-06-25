@@ -21,6 +21,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         timeManager = spec.timeManager,
         timeline = spec.timeline,
         progressBar,
+        fileButton,
         viewer = spec.viewer,
         tourobj = spec.tourobj,
         undoManager = spec.undoManager,
@@ -1028,7 +1029,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // create the buttons to add various components
         var artButton = _createAddComponentButton("Artwork", dropMain);
         var assetButton = _createAddComponentButton("Associated Media", dropMain);
-        var fileButton = _createAddComponentButton("From File", dropMain);
+        fileButton = _createAddComponentButton("From File", dropMain);
         $(fileButton).attr('id', 'importToTour');
         var inkButton = _createAddComponentButton("Annotate", dropMain);
 
@@ -1159,6 +1160,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             tobj.track_type = "Audio File";
                             tobj.quantity = urls.length;
                         });
+
+                        uploadHappening = false; //enables button
+                        fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
                     }
                 },
                 ['.mp3'],
@@ -1166,7 +1170,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file. Please try again later."));
                 },
-                true);
+                true, null, false,
+                function () {
+                    uploadHappening = true;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'gray' })
+                    console.log("disable import from tours")
+
+                },
+                function () {
+                    uploadHappening = false;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
+                    console.log("enable import from tours");
+                });
                 upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
                 upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
             }
@@ -1303,16 +1318,31 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             tobj.quantity = urls.length;
                         });
                     }
+                    uploadHappening = false; //enables button
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
                 },
             ['.mp4', '.webm', '.ogv','.avi','.mov','.wma'],//'.avi','.mov','.wma'
                 false,
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
                 },
-                true);
+                true, null, false,
+                function () {
+                    uploadHappening = true;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'gray' })
+                    console.log("disable import from tours")
+
+                },
+                function () {
+                    uploadHappening = false;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
+                    console.log("enable import from tours");
+                });
                 upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
                 upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
             }
+
+
             if (title === "Image") {
                 TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files) {
@@ -1344,13 +1374,27 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         tobj.track_type = "Image File";
                         tobj.quantity = urls.length;
                     });
+
+                    uploadHappening = false; //enables button
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
                 },
                 ['.jpg', '.png', '.gif', '.tif', '.tiff'],
                 false,
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
                 },
-                true);
+                true, null, false,
+                function () {
+                    uploadHappening = true;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'gray' })
+                    console.log("disable import from tours")
+
+                },
+                function () {
+                    uploadHappening = false;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
+                    console.log("enable import from tours");
+                });
             }
 
         }

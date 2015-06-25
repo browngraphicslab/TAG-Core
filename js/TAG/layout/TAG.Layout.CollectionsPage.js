@@ -1067,7 +1067,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionTitle.css({
                 "display": "inline-block",
                 "position": "relative",
-                "padding-right": "18px",
+                "padding-right": .001125*root.height()+"px",
                 "height": "100%",
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
@@ -1080,7 +1080,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-align": "center",
                 "display": "inline-block",
                 "height": "90%",
-                "overflow": "hidden",
+                //"overflow": "hidden",
                 "top": "10%",
                 "cursor": "pointer",
                 "white-space" : "nowrap"
@@ -1097,8 +1097,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'display': 'inline-block',
                 'left': "auto",
                 'position': "relative",
-                'height': "55%",
-                'width': '3%',
+                'height': .063125*root.height()+"px",
+                'width': .0153125*root.height()+'px',
                 'top': '18%'
             });
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
