@@ -1259,7 +1259,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
-            collectionDescription.css({'word-wrap': 'break-word', "height": "98%", "color": SECONDARY_FONT_COLOR});
+            collectionDescription.css({'word-wrap': 'break-word', "color": SECONDARY_FONT_COLOR});
             str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
             collectionDescription.css({
                 'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
@@ -1277,9 +1277,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             searchDescription.attr('id', 'searchDescription');
             searchDescription.addClass('secondaryFont');
-            searchDescription.css({ "color": SECONDARY_FONT_COLOR });
             searchDescription.css({
+                "color": SECONDARY_FONT_COLOR,
                 'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+                'max-height': '88%'
             });
 
             var clearSearchButton = $(document.createElement('div'))
@@ -1806,6 +1807,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method doSearch
      */
     function doSearch() {
+
         var content = searchInput.val().toLowerCase(),
             matchedArts = [],
             unmatchedArts = [],
@@ -1849,9 +1851,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
-
         root.find('#searchDescription').text(searchDescriptionText);
         root.find('#clearSearchButton').css({ 'display': 'block' });
+        root.find('#collectionDescription').hide();
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
         if (description === "" + "\n\n   ") {
             tileDiv.animate({ 'left': infoDiv.width() + 'px' }, 1000, function () { });
@@ -1883,7 +1885,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (op === '') return '';
             var listString = '';
             for (var i = 0; i < keywords.length; i++) {
-                listString = listString + (((i == keywords.length - 1) && keywords.length != 1 ? 'or ' : '') + '\'' + keywords[i] + '\'' +
+                listString = listString + (((i == keywords.length - 1) && keywords.length != 1 ? ' or ' : ' ') + '\'' + keywords[i] + '\'' +
                     (((i == 0 && keywords.length == 2) || i == keywords.length-1) ? '' : ','));
             }
             return listString;
@@ -1891,7 +1893,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         $.each(keywordSearchOptions, function (optionIndex, option) {
             var listString = getSetListString(option.operation, option.keywords);
             searchDescriptionText = searchDescriptionText +
-                ((listString !== '') ? (' with' + (option.operation == 'and' ? '' : 'out') + ' the keyword' + (option.keywords.length > 1 ? 's ' : ' ') + listString) : '');
+                ((listString !== '') ? (' with' + (option.operation == 'and' ? '' : 'out') + ' the keyword' + (option.keywords.length > 1 ? 's' : '') + listString) : '');
         });
         searchDescriptionText = searchDescriptionText + '.';
 
@@ -1976,6 +1978,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // Clear the results description.
         root.find('#searchDescription').text('');
         root.find('#clearSearchButton').css({ 'display': 'none' });
+        root.find('#collectionDescription').show();
 
         if (currCollection) {
             // If there is no description, hide the infoDiv.
