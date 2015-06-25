@@ -1067,7 +1067,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionTitle.css({
                 "display": "inline-block",
                 "position": "relative",
-                "padding-right": .001125*root.height()+"px",
+                "padding-right": .01125*root.height()+"px",
                 "height": "100%",
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
