@@ -1051,12 +1051,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // for previewing purpose in the authoring mode so that the menu arrow position does not change
             if (!IS_WINDOWS && previewing) {
                 // reduce the size of the dropdown menu when being previewed in authoring mode
-                dropDownArrow.css({
-                    'width': '40%',
-                    'height': '40%',
-                    'top': '5%'
-                });
-
                 // to make the dropdown arrow menu appear in previewing mode for unpublished collections
                 dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 dropDownArrow.addClass('arrow');    
