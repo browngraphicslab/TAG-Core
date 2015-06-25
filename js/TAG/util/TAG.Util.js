@@ -7641,8 +7641,11 @@ TAG.Util.RLH = function (input) {
                 });
 
                 //reload (which will show the map that has just been imported)
+                
                 loadMaps();
-
+                uploadHappening = false;
+                importMapButton.prop('disabled', false);
+                importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                 //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
                 // TODO this is just in here for testing purposes
                 //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
@@ -7659,11 +7662,13 @@ TAG.Util.RLH = function (input) {
             null,
             function () {
                 console.log("import maps should be disabled while map uploads");
+                uploadHappening = true;
                 $(importMapButton).prop('disabled', true);
                 $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             },
             function () {
                 $(importMapButton).prop('disabled', false);
+                uploadHappening = false;
                 $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 1.0)' });
             }
         );
