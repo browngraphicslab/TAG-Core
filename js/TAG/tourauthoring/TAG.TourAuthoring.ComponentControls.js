@@ -20,6 +20,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         playbackControls = spec.playbackControls,
         timeManager = spec.timeManager,
         timeline = spec.timeline,
+        progressBar,
+        fileButton,
         viewer = spec.viewer,
         tourobj = spec.tourobj,
         undoManager = spec.undoManager,
@@ -34,6 +36,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         rinContainer = viewer.getContainer(),
         isUploading = false,
         allArtworks,
+        uploadHappening = false,
         pickerloaded = false;
     functionsPanelDocfrag.appendChild(functionsPanel[0]);
     timeline.setCompControl(that);
@@ -57,6 +60,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         timeline.onUpdate(true);
     }
+
+    function otherUpload(bool) {
+        uploadHappening = bool;
+    }
+    that.otherUpload = otherUpload;
+
+
 
     (function _createHTML() {
 
@@ -152,10 +162,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
                     kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
+                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
                     kfvh = keyframe.state.viewport.region.span.y; // not used
                     kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
                 }
             }
             //hide any open component controls, show inkEditDraw
@@ -424,10 +434,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 else if (track.getInkLink().getType() === TAG.TourAuthoring.TrackType.image) {
                     kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
+                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
                     kfvh = keyframe.state.viewport.region.span.y; // not used
                     kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
                 }
             }
             
@@ -701,10 +711,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
                     kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#rinplayer").width();
+                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
                     kfvh = keyframe.state.viewport.region.span.y; // not used
                     kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#rinplayer").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
                 }
             }
             
@@ -1019,16 +1029,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // create the buttons to add various components
         var artButton = _createAddComponentButton("Artwork", dropMain);
         var assetButton = _createAddComponentButton("Associated Media", dropMain);
-        var fileButton = _createAddComponentButton("From File", dropMain);
+        fileButton = _createAddComponentButton("From File", dropMain);
         $(fileButton).attr('id', 'importToTour');
         var inkButton = _createAddComponentButton("Annotate", dropMain);
 
-        var progressBar = $(document.getElementById("progressBarUploads"));
-        if ($(progressBar).length > 0) {
-            console.log("upload is happening, disable import from file");
-            $(fileButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
-            $(fileButton).prop('disabled', 'true');
 
+        if (uploadHappening === true) {
+            fileButton.css({ 'background-color': 'transparent', 'color': 'gray' });
         }
 
         //File uploading subsection -Xiaoyi
@@ -1044,6 +1051,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         }); 
         functionsPanel.append(dropFile);
+        $(dropFile).attr('id', 'dropFile');
         dropFile.hide();
 
         var audioButton = _createAddComponentButton("Audio (MP3)", dropFile);
@@ -1152,6 +1160,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             tobj.track_type = "Audio File";
                             tobj.quantity = urls.length;
                         });
+
+                        uploadHappening = false; //enables button
+                        fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
                     }
                 },
                 ['.mp3'],
@@ -1159,7 +1170,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file. Please try again later."));
                 },
-                true);
+                true, null, false,
+                function () {
+                    uploadHappening = true;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'gray' })
+                    console.log("disable import from tours")
+
+                },
+                function () {
+                    uploadHappening = false;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
+                    console.log("enable import from tours");
+                });
                 upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
                 upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
             }
@@ -1296,16 +1318,31 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             tobj.quantity = urls.length;
                         });
                     }
+                    uploadHappening = false; //enables button
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
                 },
             ['.mp4', '.webm', '.ogv','.avi','.mov','.wma'],//'.avi','.mov','.wma'
                 false,
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
                 },
-                true);
+                true, null, false,
+                function () {
+                    uploadHappening = true;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'gray' })
+                    console.log("disable import from tours")
+
+                },
+                function () {
+                    uploadHappening = false;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
+                    console.log("enable import from tours");
+                });
                 upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
                 upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
             }
+
+
             if (title === "Image") {
                 TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files) {
@@ -1337,13 +1374,27 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         tobj.track_type = "Image File";
                         tobj.quantity = urls.length;
                     });
+
+                    uploadHappening = false; //enables button
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
                 },
                 ['.jpg', '.png', '.gif', '.tif', '.tiff'],
                 false,
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
                 },
-                true);
+                true, null, false,
+                function () {
+                    uploadHappening = true;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'gray' })
+                    console.log("disable import from tours")
+
+                },
+                function () {
+                    uploadHappening = false;
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
+                    console.log("enable import from tours");
+                });
             }
 
         }
@@ -1360,6 +1411,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'float': 'left',
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex + 19
         });
+        $(dropInk).attr('id', 'dropInk');
         functionsPanel.append(dropInk);
         dropInk.hide();
 
@@ -1370,7 +1422,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         /**
          * Creates component menu buttons
-         * @param title         Name of button
+         * @param title         Name of buttonfunction _createAddComponent
          * @param component     DOM element to add button to
          *@return addComponentButton     the button created.
          */
@@ -1403,8 +1455,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         dropFile.hide();
                         break;
                     case "From File":
-                        dropFile.show();
-                        dropInk.hide();
+                        
+                        if (uploadHappening===false) {
+                            dropFile.show();
+                            dropInk.hide();
+                        } else {
+                             self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                        }
+                        
                         break;
                     case "Audio (MP3)":
                     case "Video (MP4, WEBM, OGV)":
@@ -1434,13 +1492,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
             addComponentButton.on('mouseleave', function () {
                 var self = $(this);
-
-                self.css({ 'background-color': 'transparent', 'color': 'white' });
-
                 if (self.text() === "Annotate" && !allowInk) {
                     self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                } else if (self.text() === "From File" && uploadHappening ===true ) {
+                    self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                }else{
+                    self.css({ 'background-color': 'transparent', 'color': 'white' });
                 }
-
+                 
                 if (fileClick || inkClick || isInFileSubMenu || isInInkSubMenu) {
                     return;
                 }
@@ -1502,7 +1561,24 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "From File":
-                        self.css({
+                        
+                        if (uploadHappening ===false) {
+                            dropFile.show();
+                            dropInk.hide();
+                            assetButton.data('selected', false);
+                            fileClick = true;
+                            console.log("no upload happening - from file button enabled");
+
+                            self.css({
+                                'background-color': 'white',
+                                'color': 'black'
+                            });
+
+                        } else {
+                            self.css({ 'background-color': 'transparent', 'color': 'gray' });
+                        }
+
+                        /*self.css({
                             'background-color': 'white',
                             'color': 'black'
                         });
@@ -1510,6 +1586,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         dropInk.hide();
                         assetButton.data('selected', false);
                         fileClick = true;
+                        */
                         break;
 
                     case "Audio (MP3)":
@@ -1644,6 +1721,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 if (!allowInk) {
                     inkButton.css({ 'background-color': 'transparent', 'color': 'gray' });
                 }
+                if (uploadHappening === true) {
+                    fileButton.css({ 'background-color': 'transparent', 'color': 'gray' });
+                }
             });
 
             component.append(addComponentButton);
@@ -1753,6 +1833,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 else {
                     allowInk = true;
                     inkButton.css({
+                        'background-color': 'transparent',
+                        'color': 'white'
+                    });
+                }
+
+                if (uploadHappening == true) {
+
+                    fileButton.css({
+                        'background-color': 'transparent',
+                        'color': 'gray'
+                    });
+                } else {
+                    fileButton.css({
                         'background-color': 'transparent',
                         'color': 'white'
                     });
@@ -5123,7 +5216,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if ($("#inkCanv").length)
                 $("#inkCanv").remove();
 
-            $("#rinplayer").css({
+            $("#ITEHolder").css({
                 
             });
         }
@@ -5141,18 +5234,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             var inkdiv = document.createElement("div");
             inkdiv.setAttribute("id", "inkCanv");
             inkdiv.setAttribute("class", "inkCanv");
-            var nothing = $(inkdiv)
+            var nothing = $(inkdiv);
             //set rinplayer's position to absolute so our canvas isn't pushed down
-            $("#rinplayer").css({
+            $("#ITEHolder").css({
                 "position": "absolute",
             });
 
             // set css of inkdiv, making sure that its z-index is greater than those of all images and artworks (artwork in track i has z-index 20000+i)
             var num_tracks = timeline.getTrackslength();
             inkdiv.setAttribute("style", "overflow:hidden; position:absolute; width:100%; height:100%; background:transparent; pointer-events: all; z-index:" + (20100 + num_tracks) + ";");
-            var view_elt = $("#rinContainer"); // change to #rinplayer if we can figure out how to keep it around during tour reloads (if in #rinplayer, we can capture inks in thumbnails)
+            var view_elt = $("#ITEHolder"); // change to #rinplayer if we can figure out how to keep it around during tour reloads (if in #rinplayer, we can capture inks in thumbnails)
             //view_elt.append(inkdiv);
-            $("#rinplayer").before(inkdiv);
+            $("#ITEHolder").before(inkdiv);
             return inkdiv;
         }
 

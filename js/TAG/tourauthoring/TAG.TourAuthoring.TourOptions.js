@@ -193,7 +193,7 @@ TAG.TourAuthoring.TourOptions = function (spec) {
             hideMenu();
             thumbnailcaptured.fadeIn('fast');
             //capture the thumbnail and upload it.
-            var rinplayer = $('#rinplayer');
+            var rinplayer = $('#ITEHolder');
             html2canvas([rinplayer[0]], {
                 onrendered: function (canvas) {
                     // no need for cropping anymore, since the rinplayer is always 16:9

@@ -160,7 +160,8 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", []);
         $(popup).attr('id', 'uploadProgressPopup');
         $('body').append(popup);
-        $(popup).css({'display':'none'});
+        $(popup).css({ 'display': 'none' });
+
         /*progressBar.unbind('click').click(function () {
             //$('body').append(popup);
             $(popup).css({ 'display': 'inherit' });

@@ -22,7 +22,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     "use strict";
     //$(document).off();                   
 
-    var root= TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/SettingsView.html'), //Get html from html file
         //get all of the ui elements from the root and save them in variables
         middleLoading = root.find('#setViewLoadingCircle'),
         settingsContainer = root.find('#setViewSettingsContainer'),
@@ -65,6 +65,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         uploadOverlayText = $(document.createElement('label')),
         textAppended = false,
         guidsToBeDeleted = guidsToBeDeleted || [],
+        uploadInProgress = false,
+        toureditor,
+        artworkeditor,
 
         // = root.find('#importButton'),
 
@@ -125,6 +128,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         that = {
             getRoot: getRoot,
+           
         },
 
         //AUTOSAVING HAS BEEN REMOVED - SAVE BUTTONS ARE BACK!
@@ -278,6 +282,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         height: '70%',
         display: 'inline-block',
     });
+    if (idleTimer) {
+        idleTimer.kill();
+    }
     if (IS_WINDOWS) {
         findBarTextBox.css('font-size', '150%');
         findButton.css('font-size','100%');
@@ -1100,98 +1107,105 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create inputs
         //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
-        bgImgInput = createButton('Import', function () {
+        bgImgInput = $(createButton('Import', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
-			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
+            uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
+                
                 var url = urls[0];
                 bgImgInput.val(url);
                 $('#innerContainer').css({
                     'background-image': 'url("' + TAG.Worktop.Database.fixPath(url) + '")',
                     'background-size': 'cover',
                 });
+                saveSplashScreen({
+                    isKioskLocked: kioskIsLocked,
+                    bgImgInput: bgImgInput,                             //Background image
+                    primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
+                    secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
+                    idleTimerDurationInput: idleTimerDurationInput,
+                    keywordSetsInputs: keywordSetsInputs // TODO-KEYWORDS
+                }, function () {
+                    $('#uploadingOverlay').remove();
+                    console.log("should remove overlay now!!");
 
-                $('#uploadingOverlay').remove();
-                console.log("should remove overlay now!!");
+                    var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
 
-                var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                        //remove progress stuff
+                        $('.progressBarUploads').remove();
+                        $('.progressBarUploadsButton').remove();
+                        $('.progressText').remove();
+                        //enable import buttons
+                        root = $(document.getElementById("setViewRoot"));
 
-                    //remove progress stuff
-                    $('.progressBarUploads').remove();
-                    $('.progressBarUploadsButton').remove();
-                    $('.progressText').remove();
+                        newButton = root.find('#setViewNewButton');
+                        newButton.prop('disabled', false);
+                        newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+                        if (inCollectionsView === true) {
+                            bgInput.prop('disabled', false);
+                            bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                        }
+                        if (inGeneralView === true) {
+                            bgImgInput.prop('disabled', false);
+                            bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
-                    //enable import buttons
-                    root = $(document.getElementById("setViewRoot"));
-                    
-                    newButton = root.find('#setViewNewButton');
-                    $(newButton).prop('disabled', false);
-                    newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
-                    if (inCollectionsView === true) {
-                        $(bgInput).prop('disabled', false);
-                        bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
-                    }
-                    if (inGeneralView === true) {
-                        $(bgImgInput).prop('disabled', false);
+                        }
+                        if (inAssociatedView) {
+                            menuLabel.prop('disabled', false);
+                            menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
+                        }
+                        bgImgInput.prop('disabled', false);
                         bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
+                        //hide confirmation box
+                        $(importConfirmedBox).hide();
+
+
+                    },
+                           "The splash screen background image was successfully changed.",
+                           "OK",
+                           false, null, null, null, null, true, false, null, true); //not actually fortelemetry, but formatting works nicely
+
+                    //maybe multiline ellipsis will work now?!
+                    var textHolder = $($($(importConfirmedBox).children()[0]).children()[0]);
+                    var text = textHolder.html();
+                    var t = $(textHolder.clone(true))
+                        .hide()
+                        .css('position', 'absolute')
+                        .css('overflow', 'visible')
+                        .width(textHolder.width())
+                        .height('auto');
+
+                    /*function height() {
+                        var bool = t.height() > textHolder.height();
+                        return bool;
+                    }; */
+
+                    if (textHolder.css("overflow") == "hidden") {
+                        textHolder.css({ 'overflow-y': 'auto' });
+                        textHolder.parent().append(t);
+                        var func = t.height() > textHolder.height();
+                        console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
+                        while (text.length > 0 && (t.height() > textHolder.height())) {
+                            console.log("in while loop")
+                            text = text.substr(0, text.length - 1);
+                            t.html(text + "...");
+                        }
+
+                        textHolder.html(t.html());
+                        t.remove();
                     }
-                    if (inAssociatedView){
-                        menuLabel.prop('disabled',false);
-                        menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
-                    }
-
-                    $(bgImgInput).prop('disabled', false);
-                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
-
-                    //hide confirmation box
-                    $(importConfirmedBox).hide();
-
-                   
-                },
-                       "The splash screen background image was successfully changed.",
-                       "OK",
-                       false, null, null, null, null, true, false, null, true); //not actually fortelemetry, but formatting works nicely
-
-			    //maybe multiline ellipsis will work now?!
-                var textHolder = $($($(importConfirmedBox).children()[0]).children()[0]);
-                var text = textHolder.html();
-                var t = $(textHolder.clone(true))
-                    .hide()
-                    .css('position', 'absolute')
-                    .css('overflow', 'visible')
-                    .width(textHolder.width())
-                    .height('auto');
-
-			    /*function height() {
-                    var bool = t.height() > textHolder.height();
-                    return bool;
-                }; */
-
-                if (textHolder.css("overflow") == "hidden") {
-                    $(textHolder).css({ 'overflow-y': 'auto' });
-                    textHolder.parent().append(t);
-                    var func = t.height() > textHolder.height();
-                    console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
-                    while (text.length > 0 && (t.height() > textHolder.height())) {
-                        console.log("in while loop")
-                        text = text.substr(0, text.length - 1);
-                        t.html(text + "...");
-                    }
-
-                    textHolder.html(t.html());
-                    t.remove();
-                }
-                root = $(document.getElementById("setViewRoot"));
-                root.append(importConfirmedBox);
-                $(importConfirmedBox).show();
+                    root = $(document.getElementById("setViewRoot"));
+                    root.append(importConfirmedBox);
+                    $(importConfirmedBox).show();
+                });
             }, null, null, true);
-        });
+        }));
        
             if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
                 console.log("select background image button disabled");
-                $(bgImgInput).prop('disabled', true);
+                bgImgInput.prop('disabled', true);
                 bgImgInput.css({ 'opacity': '.4' });
             }
         TAG.Telemetry.register(bgImgInput, "click", "BackgroundImage", function (tobj) {
@@ -1625,8 +1639,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /**Saves the splash screen settings
      * @method saveSplashScreen
      * @param {Object} inputs       information from setting inputs
+     * param function callback      function to be called after done
      */
-    function saveSplashScreen(inputs) {
+    function saveSplashScreen(inputs, callback) {
         //pCL = displayLoadingSettings();
         //backButtonClicked && prepareNextView(false, null, null, "Saving...");
 		//generalIsLoading = true;
@@ -1705,6 +1720,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }, error(loadGeneralView), null);
             //hideLoading();
             //hideLoadingSettings(pCL);
+            if (callback) {
+                console.log("callback!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                callback()
+            }
         }, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
     }
 
@@ -1926,7 +1945,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareNextView(true, "New", createExhibition);
         
         //Enables newButton - might be disabled initially because upload is happening
-        $(newButton).prop('disabled', false);
+        newButton.prop('disabled', false);
         newButton.css({'opacity': '1', 'background-color': 'transparent'});
         
         if (!(justMiddle === true)) {
@@ -2089,26 +2108,29 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     //if the button already exists
                     if ($("[id='" + buttonId + "']")[0]) {
                         $("[id='" + buttonId + "']").show()
-                            .css({"color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)})
-                    } else { //or if you're making it (sort option was origionally deselected)
+                        if (buttonId === "dateButton") {
+                            $(".sortButton").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)});
+                            $("[id='" + buttonId + "']").css('color', 'white');
+                        } else {
+                            $("[id='" + buttonId + "']").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) })
+                        }
+                   } else { //or if you're making it (sort option was origionally deselected)
+                        var listItem = $(document.createElement('li')).addClass('rowItem');
                         sortButton = $(document.createElement('div'));
                         //Because stored on server as "Tour" but should be displayed as "Tours"
                         //sortDiv.text()==="Tour" ? text = "Tours" : text = sortDiv.text();
                         sortButton.addClass('secondaryFont');
                         sortButton.addClass('rowButton')
                                     .text(sortDiv.text())
-                                    .attr('id', buttonId)
-                                    //TODO: make sortButton have the same class as the same ones that are created in the collections page
-                                    .css({
-                                        "cursor": "pointer",
-                                        "float": "left",
-                                        "font-size": "92.5%",
-                                        "margin-top": "0.27%",
-                                        "margin-right": "1%",
-                                        "height": "100%",
-                                        "color":TAG.Util.UI.dimColor( "#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)
-                                    });
-                        $("#buttonRow").append(sortButton);
+                                    .attr('id', buttonId);
+                        if (buttonId === "dateButton") {
+                            sortButton.css("color", "white");
+                        } else {
+                            sortButton.css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) });
+                        }
+                        listItem.append(sortButton);
+                        $(".sortRowLeft").append(listItem);
+                        
                     }
 
                     if (sortDiv.text() === "Date") {
@@ -2327,7 +2349,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = true;
             showAssocMedia.css({'background-color':'white'});
             hideAssocMedia.css({'background-color':''});
-            $('#toggleRow').css('display','block');
+            $('#assocMediaButton').css('display','block');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -2340,7 +2362,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
-            $('#toggleRow').css('display','none');
+            $('#assocMediaButton').css('display','none');
             }, {
             'min-height': '0px',
             'width': '48%',
@@ -2580,87 +2602,96 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         'background-image': 'url("' + TAG.Worktop.Database.fixPath(url) + '")',
                         'background-size': 'cover',
                     });
+                    LADS.Util.localVisibility(exhibition.Identifier, { visible: localVisibility });
+                    if (nameInput.val() === undefined || nameInput.val() === "") {
+                        nameInput.val("Untitled Collection");
+                    }
+                    saveExhibition(exhibition, {
+                        privateInput: privateState,  //default set unpublished
+                        nameInput: nameInput,        //Collection name
+                        descInput: descInput,        //Collection description
+                        bgInput: bgInput,            //Collection background image
+                        sortOptions: sortDropDown,
+                        timelineInput: timelineShown,
+                        assocMediaInput: assocMediaShown
+                    }, function () {
+                        $('#uploadingOverlay').remove();
+                        console.log("should remove overlay now!!");
+                        var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
+                            //remove progress stuff
+                            $('#uploadingOverlay').remove();
+                            $('.progressBarUploads').remove();
+                            $('.progressBarUploadsButton').remove();
+                            $('.progressText').remove();
+                            //enable import buttons
+                            newButton = root.find('#setViewNewButton');
+                            newButton.prop('disabled', false);
+                            newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+                            if (inCollectionsView == true) {
+                                bgInput.prop('disabled', false);
+                                bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                            }
+                            if (inGeneralView == true) {
+                                bgImgInput.prop('disabled', false);
+                                bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
+                            }
+                            if (inAssociatedView){
+                                menuLabel.prop('disabled',false);
+                                menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
+                            }
 
-
-                    $('#uploadingOverlay').remove();
-                    console.log("should remove overlay now!!");
-
-                    var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
-
-                        //remove progress stuff
-                        $('.progressBarUploads').remove();
-                        $('.progressBarUploadsButton').remove();
-                        $('.progressText').remove();
-
-                        //enable import buttons
-                        newButton = root.find('#setViewNewButton');
-                        $(newButton).prop('disabled', false);
-                        newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
-                        if (inCollectionsView == true) {
-                            $(bgInput).prop('disabled', false);
-                            bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
-                        }
-                        if (inGeneralView == true) {
-                            $(bgImgInput).prop('disabled', false);
+                            bgImgInput.prop('disabled', false);
                             bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
+                            //hide confirmation box
+                            $(importConfirmedBox).hide();
+
+
+                        },
+                            "The collection background image was successfully changed.",
+                            "OK",
+                            false, null, null, null, null, true, false, null, true); //not actually fortelemetry, but formatting works nicely
+
+                        //maybe multiline ellipsis will work now?!
+                        var textHolder = $($($(importConfirmedBox).children()[0]).children()[0]);
+                        var text = textHolder.html();
+                        var t = $(textHolder.clone(true))
+                            .hide()
+                            .css('position', 'absolute')
+                            .css('overflow', 'visible')
+                            .width(textHolder.width())
+                            .height('auto');
+
+                        /*function height() {
+                            var bool = t.height() > textHolder.height();
+                            return bool;
+                        }; */
+
+                        if (textHolder.css("overflow") == "hidden") {
+                            $(textHolder).css({ 'overflow-y': 'auto' });
+                            textHolder.parent().append(t);
+                            var func = t.height() > textHolder.height();
+                            console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
+                            while (text.length > 0 && (t.height() > textHolder.height())) {
+                                console.log("in while loop")
+                                text = text.substr(0, text.length - 1);
+                                t.html(text + "...");
+                            }
+
+                            textHolder.html(t.html());
+                            t.remove();
                         }
-                        if (inAssociatedView){
-                            menuLabel.prop('disabled',false);
-                            menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
-                        }
-
-                        $(bgImgInput).prop('disabled', false);
-                        bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
-
-                        //hide confirmation box
-                        $(importConfirmedBox).hide();
-
-
-                    },
-                           "The collection background image was successfully changed.",
-                           "OK",
-                           false, null, null, null, null, true, false, null, true); //not actually fortelemetry, but formatting works nicely
-
-                    //maybe multiline ellipsis will work now?!
-                    var textHolder = $($($(importConfirmedBox).children()[0]).children()[0]);
-                    var text = textHolder.html();
-                    var t = $(textHolder.clone(true))
-                        .hide()
-                        .css('position', 'absolute')
-                        .css('overflow', 'visible')
-                        .width(textHolder.width())
-                        .height('auto');
-
-                    /*function height() {
-                        var bool = t.height() > textHolder.height();
-                        return bool;
-                    }; */
-
-                    if (textHolder.css("overflow") == "hidden") {
-                        $(textHolder).css({ 'overflow-y': 'auto' });
-                        textHolder.parent().append(t);
-                        var func = t.height() > textHolder.height();
-                        console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
-                        while (text.length > 0 && (t.height() > textHolder.height())) {
-                            console.log("in while loop")
-                            text = text.substr(0, text.length - 1);
-                            t.html(text + "...");
-                        }
-
-                        textHolder.html(t.html());
-                        t.remove();
-                    }
-                    root = $(document.getElementById("setViewRoot"));
-                    root.append(importConfirmedBox);
-                    $(importConfirmedBox).show();
+                        root = $(document.getElementById("setViewRoot"));
+                        root.append(importConfirmedBox);
+                        $(importConfirmedBox).show();
+                    });
                 }, null, null, true);
             });
 
             if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
                 console.log("select background image button disabled from collection");
-                $(bgInput).prop('disabled', true);
+                bgInput.prop('disabled', true);
                 bgInput.css({ 'opacity': '.4' });
             }
             
@@ -2789,13 +2820,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //deleteBlankButton.show();
 
-            if(IS_WINDOWS){
+            /*if(IS_WINDOWS){
                 //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteExhibition(multiSelected)});
                 //deleteBlankButton.text('Delete');
             } else{
                 $('#setViewDeleteButton').css('display','none');
-            }
+            }*/
 
             TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
                 tobj.element_type = "Collections";
@@ -3068,8 +3099,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method saveExhibition
      * @param {Object} exhibition   collection to save
      * @inputs {Object} inputs      keys from input fields
+     * @callback function           the callback function to call afterwards
      */
-    function saveExhibition(exhibition, inputs) {
+    function saveExhibition(exhibition, inputs, callback) {
+        console.log("save exhibiton called with callback function: " + callback);
         //pCL = displayLoadingSettings();
         //prepareNextView(false, null, null, "Saving...");
         clearRight();
@@ -3109,7 +3142,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             AssocMediaView: assocMedia
         }
 
-        if (bg){
+        if (bg) {
+            console.log("has bg");
             options.Background = bg;
         }
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
@@ -3125,12 +3159,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //hideLoading();
             //hideLoadingSettings(pCL);
             //saveArray.splice(saveArray.indexOf(exhibition.Identifier), 1); //removes identifier from save array
+            
             if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                 LADS.Worktop.Database.getExhibitions();
+                if (callback) {
+                    callback();
+                }
                 return;
             }
             if (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.exhib.text]) {
                 loadExhibitionsView(exhibition.Identifier);
+                if (callback) {
+                    callback();
+                }
                 return;
             }
         }, authError, conflict(exhibition, "Update", loadExhibitionsView), error(loadExhibitionsView));
@@ -3232,7 +3273,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         currentIndex = 0;
 
         //Enables new button
-        $(newButton).prop('disabled', false);
+        newButton.prop('disabled', false);
         newButton.css({'opacity': '1', 'background-color': 'transparent'});
 
         prepareNextView(true, "New", createTour);
@@ -3557,14 +3598,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-
-        if(IS_WINDOWS){
-                //$('#setViewDeleteButton').css('display','block');
-                deleteBlankButton.unbind('click').click(function(){ deleteTour(multiSelected)});
-                deleteBlankButton.text('Delete');
-        } else{
-            $('#setViewDeleteButton').css('display','none');   
-        }
     
 
         TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
@@ -3659,9 +3692,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} tour     tour to edit
      */
     function editTour(tour) {
+        
         if (!tour) {
             return;
         }
+
+        var progressBarLength =  $(document.getElementById("progressBarUploads")).length;
+
+
         TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
             tobj.category_name = prevLeftBarSelection.categoryName;
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
@@ -3679,7 +3717,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleQueue.clear();
         rightQueue.clear();
         setTimeout(function () {
-            var toureditor = new TAG.Layout.TourAuthoringNew(tour, function () {
+            toureditor = new TAG.Layout.TourAuthoringNew(tour, function () {
                 TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
                     TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                         tobj.source_page = "settings_view";
@@ -3690,10 +3728,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     });
                     SPENT_TIMER.restart();
                     toureditor.getViewer().loadITE();
+
                     //toureditor.getViewer().loadITE();
                 });
             });
+            if (progressBarLength > 0) { //other upload happening - disable import
+                toureditor.uploadStillHappening(true);
+
+            }
+
         }, 1);
+
+        //var progressBar = $(document.getElementById("progressBarUploads"));
+        
     }
 
     /**Delete a tour
@@ -4066,13 +4113,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    associated media to load
      */
     function loadAssocMedia(media) {
-        if(IS_WINDOWS){ 
+        /*if(IS_WINDOWS){ 
             //$('#setViewDeleteButton').css('display','block');
             deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(multiSelected)});
             deleteBlankButton.text("Delete");
         } else{
             $('#setViewDeleteButton').css('display','none');
-        }
+        }*/
 
         prepareViewer(true);
         clearRight();
@@ -4398,13 +4445,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'left',
             });
 
-        /*if(IS_WINDOWS){
-            $('#setViewDeleteButton').css('display','block');
-            deleteBlankButton.unbind('click').click(function(){ deleteAssociatedMedia(multiSelected)});
-            deleteBlankButton.text("Delete");
-        } else{
-
-        } */
 
         var generateAssocMediaThumbnailButton = createButton('Generate Thumbnail',
             function () {
@@ -4976,6 +5016,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                     //Get rid of progress bar here    
+                    /*var importInTours = $(document.getElementById("importToTours"));
+                    if (importInTours != null) {
+                        $(importInTours).css({ 'color': 'rgb(256, 256, 256)' });
+                        $(importInTours).prop('disabled', 'false');
+                    }*/
+                        var importToTour = $(document.getElementById("importToTour"));
+                        if (importToTour && toureditor) {
+                            importToTour.css({ 'background-color': 'transparent', 'color': 'white' }); //enables
+                            toureditor.uploadStillHappening(false);
+                        }
+
+                        if (artworkeditor) {
+                            artworkeditor.uploadStillHappening(false);
+                            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                            importMapButton.prop('disabled', false);
+                            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+                        }
+                        console.log("confirmation that assoc media uploaded");
+
+
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
 
                             //remove progress stuff
@@ -4987,14 +5047,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             newButton = root.find('#setViewNewButton');
 
                             //enable import buttons
-                            $(newButton).prop('disabled', false);
+                            newButton.prop('disabled', false);
                             newButton.css({'opacity': '1', 'background-color': 'transparent'});
                             if (inCollectionsView == true) {
-                                $(bgInput).prop('disabled', false);
+                                bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             if (inGeneralView == true) {
-                                $(bgImgInput).prop('disabled', false);
+                                bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
@@ -5474,7 +5534,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         prepareNextView(true, "Import", createArtwork, null, true);
         
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
-            $(newButton).prop('disabled', true);
+            newButton.prop('disabled', true);
             newButton.css({'opacity': '.4'});
         }
         
@@ -6527,7 +6587,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                         //Confirmation pop up that artworks have been imported
-                        
+                        console.log("confirm that artworks were imported");
 
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
                             //remove progress stuff
@@ -6538,14 +6598,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             newButton = root.find('#setViewNewButton');
 
                             //enable import buttons
-                            $(newButton).prop('disabled', false);
+                            newButton.prop('disabled', false);
                             newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
                             if (inCollectionsView == true) {
-                                $(bgInput).prop('disabled', false);
+                                bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             if (inGeneralView == true) {
-                                $(bgImgInput).prop('disabled', false);
+                                bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
@@ -6617,6 +6677,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             message = "The following files were successfully imported: "
                         }
                         
+                        
+
+                        var importToTour = $(document.getElementById("importToTour"));
+                        if (importToTour && toureditor) {
+                            importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                            toureditor.uploadStillHappening(false);
+                        }
+                        if (artworkeditor) {
+                            artworkeditor.uploadStillHappening(false);
+                            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                            importMapButton.prop('disabled', false);
+                            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+                        }
+
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             //remove progress stuff
                             $('.progressBarUploads').remove();
@@ -6627,14 +6701,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             newButton = root.find('#setViewNewButton');
 
                             //enable import buttons
-                            $(newButton).prop('disabled', false);
+                            newButton.prop('disabled', false);
                             newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
                             if (inCollectionsView == true) {
-                                $(bgInput).prop('disabled', false);
+                                bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             if (inGeneralView == true) {
-                                $(bgImgInput).prop('disabled', false);
+                                bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
@@ -7327,6 +7401,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!artwork) {
             return;
         }
+
+        var progressBarLength = $(document.getElementById("progressBarUploads")).length;
+
         TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
             tobj.category_name = prevLeftBarSelection.categoryName;
             tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
@@ -7345,8 +7422,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         middleQueue.clear();
         clearTimeout(checkConTimerId);
         rightQueue.clear();
+
+
         setTimeout(function () {
-            TAG.Util.UI.slidePageLeft((TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted)).getRoot(), function () {
+            artworkeditor = TAG.Layout.ArtworkEditor(artwork, guidsToBeDeleted);
+            TAG.Util.UI.slidePageLeft(artworkeditor.getRoot(), function () {
                 TAG.Telemetry.recordEvent("PageLoadTime", function (tobj) {
                     tobj.source_page = "settings_view";
                     tobj.destination_page = "artwork_editor";
@@ -7355,12 +7435,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     //console.log("artwork editor load time: " + tobj.load_time);
                 });
                 SPENT_TIMER.restart();
+
             });
-            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
-            if (($('.progressBarUploads').length > 0)) { //disable import map button here?!
-                console.log("disable import maps!?!?!?");
-                $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
-                $(importMapButton).prop('disabled', 'true');
+
+            if (progressBarLength > 0) { //other upload happening - disable import maps
+                console.log("import map should be disabled - settings view slidePageLeft")
+                artworkeditor.uploadStillHappening(true);
+
             }
         }, 1);
 
@@ -8076,13 +8157,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.show();
             addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)});
 
-            //deleteBlankButton.show();
+       
             if(IS_WINDOWS){
-                //$('#setViewDeleteButton').css('display','block');
                 deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
                 deleteBlankButton.text('Delete');
             } else{
-                $('#setViewDeleteButton').css('display','none');
+                deleteBlankButton.css('display','none'); //web app - delete button disabled
             }
 
         } else if (inAssociatedView) {
@@ -8095,7 +8175,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.unbind('click').click(function () { addAssocMediaToArtworks(multiSelected) })
             findBar.css("display", "inline-block");
             searchbar.css({ width: '75%' });
+            if (IS_WINDOWS) {
+                
+                deleteBlankButton.unbind('click').click(function () { deleteAssociatedMedia(multiSelected) });
+                deleteBlankButton.text('Delete');
+            } else {
+                deleteBlankButton.css('display', 'none'); //web app - delete button disabled
+            }
+
         } else {
+            if (inCollectionsView) {
+                if (IS_WINDOWS) {
+                    deleteBlankButton.unbind('click').click(function () { deleteExhibition(multiSelected) });
+                    deleteBlankButton.text('Delete');
+                } else {
+                    deleteBlankButton.css('display', 'none'); //web app - delete button disabled
+                }
+                
+            } else if (inToursView) {
+                if (IS_WINDOWS) {
+                    deleteBlankButton.unbind('click').click(function () { deleteTour(multiSelected) });
+                    deleteBlankButton.text('Delete');
+                } else {
+                    deleteBlankButton.css('display', 'none');
+                }
+            }
             //hides the second button
             menuLabel.hide();
             addButton.hide();
@@ -8404,27 +8508,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Name text field.
         var kw_css = {
-            'float': 'left',
             'margin-right': '3%',
             'display': 'inline-block',
             'box-sizing': 'border-box',
+            'min-width': '0px'
         }
-        inputs.setLabel.css(kw_css);
-        inputs.nameInput.css(kw_css);
-        inputs.keywordsInput.css(kw_css);
-        inputs.editInput.css(kw_css);
-        inputs.showKeywords.css(kw_css);
-        inputs.hideKeywords.css(kw_css);
+        inputs.setLabel.css(kw_css).css({ 'width': '17%', 'float': 'left' });
+        inputs.nameInput.css(kw_css).css({ 'width': '57%' });
+        inputs.editInput.css({'min-width': '0px', 'width': '20%'});
+
+        var editDiv = $(document.createElement('div')).css(kw_css).css({ 'width': '43%', 'float': 'left' });
+        editDiv.append(inputs.setLabel).append(inputs.nameInput).append(inputs.editInput);
+
+        var showDiv = $(document.createElement('div')).css({
+            'width': '50%',
+            'float': 'right',
+            'margin-right': '3%',
+            'box-sizing': 'border-box',
+        });
+        showDiv.append(inputs.showKeywords).append(inputs.hideKeywords);
 
         var clear = $(document.createElement('div'));
         clear.css('clear', 'both');
 
-        container.append(inputs.setLabel);
-        container.append(inputs.nameInput);
-        container.append(inputs.keywordsInput);
-        container.append(inputs.editInput);
-        container.append(inputs.showKeywords);
-        container.append(inputs.hideKeywords);
+        container.append(editDiv);
+        container.append(showDiv);
         container.append(clear);
 
         return container;
@@ -9120,7 +9228,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-left': '5%',
                 'margin-top': '2%'
             })
-            .click(function () { })
+            .click(function () { getSetFromCSV(function(){},function(){}) })
             .appendTo(setEditorTopContainer);
 
         // View/delete keywords scrollable area.
@@ -9172,15 +9280,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .bind("enterKey",function(e){
                 keywordAddButton.click();
             })
-            .keyup(function(e){
-                if(e.keyCode == 13) {
+            .keyup(function (e) {
+                if (e.keyCode == 13) {
                     $(this).trigger("enterKey");
                 }
                 e.stopPropagation();
             })
             .appendTo(addKeywordContainer);
+        
+
+        // to focus the 'add' button on the enter key
+        addKeywordContainer.keypress(function (e) {
+            if (e.which == 13)
+            {
+                $("#keywordAddButton").click();
+            }
+        });
+
 
         // Add button.
+        
         var keywordAddButton = $(document.createElement('button'))
             .attr('type', 'button')
             .addClass('button')
@@ -9197,7 +9316,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $('#setEditorMessageContainer').text('');
 
                 // Extract new keyword.
-                var newKeyword = keywordAddInput.val().toLowerCase().trim(); 
+                var newKeyword = keywordAddInput.val().toLowerCase().trim();
 
                 // Make sure that it is length > 0.
                 var notEmpty = newKeyword.length > 0;
@@ -9259,6 +9378,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         .appendTo(newKeywordDeleteDiv);
 
                     keywordAddInput.val('');
+                    keywordAddInput.focus();
                 };
 
                 //Change the settings in the database
@@ -9304,24 +9424,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var overlay = $('#Overlay');
                 overlay.hide();
                 overlay.remove();
-
-                // Update the view terms element.
-                var oldViewTerms = $($('.keyword-set-view-terms')[setIndex]);
-                oldViewTerms.find('option').remove(); // Remove old options.
-
-                var options = keywordSets[setIndex].keywords.slice(); // Make new options.
-                options.unshift('View Terms');
-
-                for (var i = 0; i < options.length; i++) {
-                    var option = $(document.createElement('option'));
-                    option.text(options[i]);
-                    option.attr('value', options[i]);
-                    if (i > 0) {
-                        option.attr('disabled', 'true');
-                    }
-                    oldViewTerms.append(option);
-                }
-
             })
             .appendTo(closeContainer);
 
@@ -9335,7 +9437,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createKeywordSetInputs(setIndex, set) {
         var options = set.keywords.slice();
-        options.unshift('View Terms');
         var inputs = {
             setLabel: $(document.createElement('div'))
                 .attr('for', 'keyword-set-name-input-' + (setIndex+1))
@@ -9344,16 +9445,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 .addClass('keyword-set-name-input')
                 .attr('id', 'keyword-set-name-input-' + (setIndex + 1))
                 .attr('disabled', keywordSets[setIndex].shown !== 'true')
+                .css({'width': '20%'})
                 .blur(function (e) {
                     if (keywordSets) {
                         keywordSets[setIndex].name = $(this).val();
                     }
                 }),
-            keywordsInput: createSelectInput(options)
-                .addClass('keyword-set-view-terms')
-                .attr('disabled', keywordSets[setIndex].shown !== 'true')
-                .css({'width': '15%'}),
-            editInput: createButton('Edit Set', function () {
+            editInput: createButton('Edit', function () {
                     if (keywordSets) {
                         var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(setIndex), false, false);
                         root.append(popup);
@@ -9366,32 +9464,37 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'margin-top': '0.5%',
                     'opacity': (keywordSets[setIndex].shown === 'true' ? '1' : '0.4')
                 }),
-            showKeywords: createButton('Show Set', function () {
+            showKeywords: createButton('Show', function () {
                     $($('.keyword-set-show-button')[setIndex]).css('background-color', 'white');
                     $($('.keyword-set-hide-button')[setIndex]).css('background-color', '');
 
                     $($('.keyword-set-name-input')[setIndex]).removeAttr('disabled');
-                    $($('.keyword-set-view-terms')[setIndex]).removeAttr('disabled');
                     $($('.keyword-set-edit-button')[setIndex]).removeAttr('disabled');
                     $($('.keyword-set-edit-button')[setIndex]).css('opacity', '1');
 
                     keywordSets[setIndex].shown = 'true';
+                }, {
+                    'min-height': '0px',
+                    'margin-right': '4%',
+                    'width': '48%',
                 })
                 .addClass('keyword-set-show-button')
                 .css({
                     'margin-top': '0.5%',
                     'background-color': (keywordSets[setIndex].shown === 'true' ? 'white' : '')
                 }),
-            hideKeywords: createButton('Hide Set', function () {
+            hideKeywords: createButton('Hide', function () {
                     $($('.keyword-set-hide-button')[setIndex]).css('background-color', 'white');
                     $($('.keyword-set-show-button')[setIndex]).css('background-color', '');
 
                     $($('.keyword-set-name-input')[setIndex]).attr('disabled', 'disabled');
-                    $($('.keyword-set-view-terms')[setIndex]).attr('disabled', 'disabled');
                     $($('.keyword-set-edit-button')[setIndex]).attr('disabled', 'disabled');
                     $($('.keyword-set-edit-button')[setIndex]).css('opacity', '.4');
 
                     keywordSets[setIndex].shown = 'false';
+                }, {
+                    'min-height': '0px',
+                    'width': '48%',
                 })
                 .addClass('keyword-set-hide-button')
                 .css({
@@ -9399,10 +9502,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'background-color': (keywordSets[setIndex].shown !== 'true' ? 'white' : '')
                 }),
         };
-        // Disable the keywords in the "view terms" dropdown.
-        for (var i = 1; i < inputs.keywordsInput[0].length; i++) {
-            inputs.keywordsInput[0][i].setAttribute('disabled', true);
-        }
         return inputs;
     };
 
@@ -9618,7 +9717,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function uploadFile(type, callback, multiple, filter, useOverlay) {
         console.log("file upload!");
-        console.log(IS_WINDOWS);
+        console.log(IS_WINDOWS); 
         if (!IS_WINDOWS){
         //webappfileupload:   
         var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
@@ -9670,15 +9769,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 newButton = root.find('#setViewNewButton');
 
                 if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
-                    $(newButton).prop('disabled', true);
+                    newButton.prop('disabled', true);
                     newButton.css({'opacity': '.4'});
                 }
                 if (inCollectionsView == true) {
-                    $(bgInput).prop('disabled', true);
+                    bgInput.prop('disabled', true);
                     bgInput.css({ 'opacity': '.4' });
                 }
                 if (inGeneralView == true) {
-                    $(bgImgInput).prop('disabled', true);
+                    bgImgInput.prop('disabled', true);
                     bgImgInput.css({ 'opacity': '.4' });
 
                 }
@@ -9687,23 +9786,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({'opacity':'.4'})
                 }
 
-                
-                
-                
+                uploadInProgress = true;
+            
             },
             function () {
                 root = $(document.getElementById("setViewRoot"));
                 newButton = root.find('#setViewNewButton');
 
-                $(newButton).prop('disabled', false);
+                newButton.prop('disabled', false);
                 newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                 if (inCollectionsView == true) {
-                    $(bgInput).prop('disabled', false);
+                    bgInput.prop('disabled', false);
                     bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
                 if (inGeneralView == true) {
-                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.prop('disabled', false);
                     bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                 }
@@ -9712,7 +9810,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
                
-
+                uploadInProgress = false;
             }
             );
         } else {
@@ -9792,15 +9890,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 newButton = root.find('#setViewNewButton');
 
                 if (inArtworkView == true || inAssociatedView == true) {
-                    $(newButton).prop('disabled', true);
+                    newButton.prop('disabled', true);
                     newButton.css({'opacity': '.4'});
                 }
                 if (inCollectionsView == true) {
-                    $(bgInput).prop('disabled', true);
+                    bgInput.prop('disabled', true);
                     bgInput.css({ 'opacity': '.4' });
                 }
                 if (inGeneralView == true) {
-                    $(bgImgInput).prop('disabled', true);
+                    bgImgInput.prop('disabled', true);
                     bgImgInput.css({ 'opacity': '.4' });
 
                 }
@@ -9809,19 +9907,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({'opacity':'.4'});
                 }
 
+                uploadInProgress = true;
+                //var importToTour = $(document.getElementById("importToTour"));
                 
                 
             },
             function(){
-                $(newButton).prop('disabled', false);
-                newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+                if (inArtworkView || inAssociatedView) {
+                    newButton.prop('disabled', false);
+                    newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+                }
+                
 
                 if (inCollectionsView == true) {
-                    $(bgInput).prop('disabled', false);
+                    bgInput.prop('disabled', false);
                     bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
                 if (inGeneralView == true) {
-                    $(bgImgInput).prop('disabled', false);
+                    bgImgInput.prop('disabled', false);
                     bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                 }
@@ -9830,13 +9933,75 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                 }
             
+
+                var importToTour = $(document.getElementById("importToTour"));
+
+                if (importToTour && toureditor) {
+                    importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                    toureditor.uploadStillHappening(false);
+                }
+
+
+                if (artworkeditor) {
+                    artworkeditor.uploadStillHappening(false);
+                    var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                    importMapButton.prop('disabled', false);
+                    importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+                }
                     
+                uploadInProgress = false;
+
                 }
 
             
         );
         }
     }
+
+
+
+
+    /** Method creataes a popup for a user to select a csv file, parses it, and if free of errors, makes it the keyword set.
+     * @method getSetFromCSV
+     * @param {Function} success    Callback if the file was successful   
+     * @param {Function} error      Callback if the file had an error
+     */
+    function getSetFromCSV(success, error) {
+        console.log("csv keyword set!");
+        var keywordsList = [];
+
+        // Get our file.
+        var fileContent;
+        if (IS_WINDOWS) {
+            // Windows filepicker.
+            var filePicker = new Windows.Storage.Pickers.FileOpenPicker();
+            filePicker.viewMode = Windows.Storage.Pickers.PickerViewMode.list;
+            filePicker.fileTypeFilter.replaceAll(['.csv']);
+            filePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.desktop;
+            filePicker.pickSingleFileAsync().then(function (file) {
+                if (file) {
+                    try {
+                        var csvFile = new XMLHttpRequest();
+                        csvFile.open("GET", file.name, true);
+                        csvFile.onreadystatechange = function () {
+                            allText = csvFile.responseText;
+                            allTextLines = csvFile.split(/\r\n|\n/);
+                        };
+                        console.log('FILE:');
+                        console.log(allText);
+                        console.log('EOF');
+                    } catch (e) {
+                        error();
+                    }
+                } else {
+                    error();
+                }
+            });
+        } else {
+
+        }
+    }
+
 
     /**Create an overlay over the whole settings view with a spinning circle and centered text. This overlay is intended to be used 
      * only when the page is 'done'.  The overlay doesn't support being removed from the page, so only call this when the page will 
@@ -10247,7 +10412,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 width: '6%',
                 height: '6%',
                 'margin-top': '2%',
-                'margin-right': '2%'
+                'margin-right': '2%',
+                'float': 'right'
             });
         } 
         var addMenuLabelDiv = $(document.createElement('div'))
@@ -10278,14 +10444,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'top': '50%',
                 'clear': 'left',
                 'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                'border': '1px solid white',
+                'border': '1px solid black',
             });
         if (IS_WINDOWS) {
             dropDown.css({
                 'font-size': '70%',
-                'right': '4%',
-                'left': '',
-                 width: '37%'
+                'left': '0%',
+                'width': '37%',
+                'top' : '40%'
             })
         }
         dropDown.hide();
@@ -10314,13 +10480,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
                     'padding-right':'7%',
-                    'float':'left'
+                    'float':'right'
                 });
                 console.log(findContainer.css('display'));
-                if (findContainer.css('display') != 'none'){
-                        dropDown.css('top',(searchContainer.height()-findContainer.height())*0.5 + 'px');
+                if (findContainer.css('display') != 'none') {
+                    if (!IS_WINDOWS) {
+                        dropDown.css('top', (searchContainer.height() - findContainer.height()) * 0.5 + 'px');
+                    } else {
+                        dropDown.css('top', ((searchContainer.height() - findContainer.height()) * 0.4) - 5+ 'px' );
+                    }
                 } else {
-                    dropDown.css('top','50%');
+                    if (!IS_WINDOWS) {
+                        dropDown.css('top', '50%');
+                    } else {
+                        dropDown.css('top', '40%');
+                    }
                 }
                 dropDown.show();
             }

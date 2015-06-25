@@ -14,37 +14,15 @@
 TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     "use strict";
 
-    // TODO: get actual keywords from the server!
-
-    // 3 categories.
-
-    //var keywordCategories = ['fruit, but this category title is going to be really long', 'color', 'genre'];
-    //var keywords = [['platonia', 'bael', 'cherymoya', 'rambutan', 'jabuticaba', 'breadfruit', 'noni'],
-    //                ['vermillion', 'cerulean', 'cinnabar', 'viridian', 'saffron', 'fuschia'],
-    //                ['tropical house', 'hardstyle', 'disco', 'hardcore', 'tagcore',
-    //                'ambient post-noise-metalcoretronicastep', 'classical', 'metamodernism', 'genre',
-    //                'escapism', 'realism', 'meso-american', 'brutalism', 'grilled cheese', 'chuckie cheese',
-    //                'charles darwinism', 'socialism', 'schism', 'sshh', 'shitake', 'list item', '^_^']];
-
-    // 2 categories.
-    //var keywordCategories = ['Fruit, but this category title is going to be really long', 'Color'];
-    //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni'],
-    //                ['Vermillion', 'Cerulean', 'Cinnibar', 'Viridian', 'Saffron', 'Fuschia']];
-
-    // 1 category.
-    //var keywordCategories = ['Fruit, but this category title is going to be really long'];
-    //var keywords = [['Platonia', 'Bael', 'Cherymoya', 'Rambutan', 'Jabuticaba', 'Breadfruit', 'Noni']];
-
-    // No categories, no keywords. Capiche??
-    //var keywordCategories = [];
-    //var keywords = [[], [], []];
-
     var // DOM-related
         root = $(document.createElement('div')),                    // get via Util.getHtmlAjax in web app
         topbar = $(document.createElement('div')),                  // get via root.find(...) in web app, set up in JADE
         mainPanel = $(document.createElement('div')),
         titleArea = $(document.createElement('div')),
         //rightbarLoadingDelete = $(document.createElement('div')),
+        importMapButton = root.find('#locationHistoryImportMapButton'),
+
+
 
         // misc initialized variables
         helpText = "To select a location, type into the search field or \
@@ -64,6 +42,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         MEDIA_EDITOR = AssocMediaEditor(),                                                // AssocMediaEditor object ................................
         TEXT_EDITOR = AssocTextEditor(),
         guidsToBeDeleted = guidsToBeDeleted,
+        uploadHappening = false,
 
         // misc uninitialized variables
         annotatedImage,               // AnnotatedImage object
@@ -89,9 +68,12 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     init();
 
     return {
-        getRoot: getRoot
+        getRoot: getRoot,
+        uploadStillHappening: uploadStillHappening
     };
     
+
+
     /**
      * Loads deepzoom image and creates UI (via a call to initUI)
      * @method init
@@ -819,6 +801,17 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     }
 
     /**
+    *
+    * @method uploadStillHappening
+    * @return boolean           if external upload is happening - import maps needs to be disabled
+    *
+    **/
+    function uploadStillHappening(bool) {
+        uploadHappening = bool;
+        return uploadHappening;
+    }
+
+    /**
      * Closes all open panels (metadata editing panel, location history
      * panel, and thumbnail editing panel).
      * @method closeAllPanels
@@ -1123,6 +1116,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             RLH = TAG.Util.RLH({
                 artwork: artwork,
                 root: root,
+                uploadHappening: uploadHappening,
                 authoring: true
             });
             locationPanelDiv = RLH.init();
@@ -1140,15 +1134,20 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 locationPanelDiv.css({ display: 'inline' });
 
                
-                var progressBar = $(document.getElementById("progressBarUploads"));
-                
+                //var progressBar = $(document.getElementById("progressBarUploads"));
+                if (uploadHappening === true) {
+                    console.log("import map should be disabled - artwork editor");
+                    importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
+                    importMapButton.prop('disabled', 'true');
+                }
 
-                if ($(progressBar).length >0) {
+               /* if ($(progressBar).length >0) {
                     console.log("upload is happening, disable import maps PLEASE!!");
                     $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
                     $(importMapButton).prop('disabled', 'true');
 
-                } 
+                }*/
+
                 
                 isOpen = true;
             }
@@ -1166,6 +1165,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         sidebarHideButtonContainer.show();
                     }
                 });
+
                 
                 isOpen = false;
             }
@@ -3256,7 +3256,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         .attr('value', keywordIndex)
                         .css({
                             'border': '1px solid #777',
-                            'background-color': '#fff'
+                            'background-color': '#fff',
+                            'height': (checklistItemHeight / 2) + 'px',
+                            'width': (checklistItemHeight / 2) + 'px'
                         })
                         .click(function(e) {
                             e.stopPropagation();
@@ -3270,7 +3272,11 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         .attr('for', 'keyword-checkbox_' + setIndex + '_' + keywordIndex)
                         .css({
                             'cursor': 'default',
-                            'font-size': '0.7em'
+                            'font-size': '0.7em',
+                            'position': 'absolute',
+                            'overflow': 'hidden',
+                            'text-overflow': 'ellipsis',
+                            'width': '20%'
                         })
                         .click(function (e) {
                             e.stopPropagation();

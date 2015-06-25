@@ -4453,10 +4453,14 @@ TAG.Util.UI = (function () {
 
         // click handler for tabs
         function tabHelper(j, tabName, queueLength) {
-            $(progressCirc).remove();
+            
+            
             console.log("J and tabs: "+j)
             console.log(tabs)
             return function () {                
+                if (progressCirc != undefined || progressCirc != null) {
+                    TAG.Util.removeProgressCircle(progressCirc);
+                }
                 loadQueue.clear();
                 progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
                 pickerSearchBar.attr("value", "");
@@ -4489,7 +4493,7 @@ TAG.Util.UI = (function () {
                     }
                     
                 } else {
-                    //success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
+                    success(tabCache[j].comps,tabs[j].excluded); // used cached results if possible
                 }
 
                 /*if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
@@ -5268,7 +5272,8 @@ TAG.Util.UI = (function () {
  */
 TAG.Util.RLH = function (input) {
     var artwork = input.artwork, // artwork doq
-        root = input.root,       // root of current page
+        root = input.root, // root of current page
+        uploadHappening = input.uploadHappening, //if an external upload is happening
         bingMapHelper,       // helper object for Bing map
         customMapHelper,     // helper object for custom maps
         richLocationData,    // object containing rich location data (e.g., 
@@ -5697,10 +5702,12 @@ TAG.Util.RLH = function (input) {
             
             var progressBar = $(document.getElementById("progressBarUploads"));
             //console.log("prog bar length = " + $(progressBar).length);
-            if ($(progressBar).length > 0) {
-                console.log("progressBar l")
-                $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
-                $(importMapButton).prop('disabled', 'true');
+
+            if (uploadHappening === true) {
+                
+                console.log("upload happening - disable import maps TAG.Util")
+                importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
+                importMapButton.prop('disabled', 'true');
                 
             }
 
@@ -5917,8 +5924,12 @@ TAG.Util.RLH = function (input) {
 
         mapHolders = {};
         mapContainer.empty(); // TODO this is inefficient, just here for rapid prototyping
-        $(importMapButton).prop('disabled', false);
-        $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+        console.log("loading maps - maybe causing importmapbutton to be enabled?");
+        if (uploadHappening === false) {
+            importMapButton.prop('disabled', false);
+            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+        }
+        
 
         loadCallback = function () {
             callback && callback();
@@ -5949,16 +5960,19 @@ TAG.Util.RLH = function (input) {
                     loadCallback: loadCallback
                 });
         }
-        var progressBar = $(document.getElementById("progressBarUploads"));
+        //var progressBar = $(document.getElementById("progressBarUploads"));
 
-
+        /**
         console.log("loading maps called, prog bar length = " + $(progressBar).length);
-        if ($(progressBar).length > 0) {
+
+        
+        if (uploadHappening===false) {
             console.log("other upload is happening, disable import maps PLEASE!!!!!");
-            $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
-            $(importMapButton).prop('disabled', 'true');
+            importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
+            importMapButton.prop('disabled', 'true');
 
         }
+        **/
     }
 
     /**
@@ -6048,6 +6062,8 @@ TAG.Util.RLH = function (input) {
     function showMap(guid) {
         var i;
 
+        currentIndex = mapGuids.indexOf(guid);
+
         //If bing maps is disabled and in art viewer, don't show it
         if (!guid && !input.authoring && !defaultMapShown) {
             return;
@@ -6076,7 +6092,7 @@ TAG.Util.RLH = function (input) {
             });
 
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
-        currentIndex = mapGuids.indexOf(guid);
+
 
         // style map dots
         $('.locationHistoryMapDot').css('opacity', '0.4'); //resets all dots to the unselected state
@@ -7505,11 +7521,13 @@ TAG.Util.RLH = function (input) {
             saveRichLocationHistory({
                 toremove: mapguid
             });
+            //showMap(currentIndex - 1);
         } else {
             toggleDefaultMap();
             saveRichLocationHistory({
                 noReload: true
             });
+            //showMap(currentIndex);
         }
     }
 
@@ -7623,8 +7641,11 @@ TAG.Util.RLH = function (input) {
                 });
 
                 //reload (which will show the map that has just been imported)
+                
                 loadMaps();
-
+                uploadHappening = false;
+                importMapButton.prop('disabled', false);
+                importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                 //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
                 // TODO this is just in here for testing purposes
                 //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
@@ -7641,11 +7662,13 @@ TAG.Util.RLH = function (input) {
             null,
             function () {
                 console.log("import maps should be disabled while map uploads");
+                uploadHappening = true;
                 $(importMapButton).prop('disabled', true);
                 $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             },
             function () {
                 $(importMapButton).prop('disabled', false);
+                uploadHappening = false;
                 $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 1.0)' });
             }
         );
