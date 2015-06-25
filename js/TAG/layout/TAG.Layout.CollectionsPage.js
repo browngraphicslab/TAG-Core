@@ -1072,11 +1072,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
             })
-            if (previewing) {
-                collectionTitle.css({
-                    "padding-right": .165 * centeredCollectionHeader.height() + "px"
-                })
-            }
             mainCollection.append(centeredCollectionHeader);
             centeredCollectionHeader.append(collectionTitle[0]);
             centeredCollectionHeader.append(dropDownArrow);
@@ -1096,7 +1091,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         }
                     }
                 }(collection));
-
+            if (previewing) {
+                collectionTitle.css({
+                    "padding-right": .165 * centeredCollectionHeader.height() + "px"
+                })
+            }
             dropDownArrow.css({
                 'display': 'inline-block',
                 'left': "auto",
