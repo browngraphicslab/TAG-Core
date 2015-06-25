@@ -1111,9 +1111,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             if (!IS_WINDOWS) {
                 dropDownArrow.css({
-                    'height': .59 * centeredCollectionHeader.height() + "px",
-                    'width': .14 * centeredCollectionHeader.height() + 'px',
-                    'top': "14.5%"
+                    'height': .64 * centeredCollectionHeader.height() + "px",
+                    'width': .149 * centeredCollectionHeader.height() + 'px'
                 });
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
