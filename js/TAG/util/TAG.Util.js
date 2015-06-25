@@ -3381,7 +3381,7 @@ TAG.Util.UI = (function () {
                 var para = document.createElement('div');
                 $(para).text(displayNames[i]);
                 $(para).css({color: 'white', 'z-index': '99999999999'});
-                $(namesLabel).append(para);
+                $(messageLabel).append(para);
                 TAG.Util.multiLineEllipsis($(para));
             }
         }
