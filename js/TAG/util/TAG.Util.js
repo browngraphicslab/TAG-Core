@@ -2926,6 +2926,7 @@ TAG.Util.UI = (function () {
         $(messageLabel).css({
 
             color: 'white',
+            'overflow': 'visible',
             'width': '80%',
             'height': '15%',
             'left': '10%',
@@ -3003,7 +3004,7 @@ TAG.Util.UI = (function () {
                 'left': '0%',
                 'top':'10%',
                 'white-space': 'nowrap',
-                'overflow': 'hidden',
+                'overflow': 'visible',
                 'text-overflow':'ellipsis',
                 'height': '90%',
                 'font-family': 'Segoe UI',
@@ -3035,7 +3036,7 @@ TAG.Util.UI = (function () {
                 'height': '90%',
                 'top': '10%',
                 'white-space': 'nowrap',
-                'overflow': 'hidden',
+                'overflow': 'visible',
                 'text-overflow': 'ellipsis',
                 'font-family': 'Segoe UI',
                 'max-width': '500px',
