@@ -1068,7 +1068,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             })
             if (previewing) {
                 collectionTitle.css({
-                    "padding-right": .0113 * root.height() + "px"
+                    "padding-right": .165 * centeredCollectionHeader.height() + "px"
                 })
             }
             mainCollection.append(centeredCollectionHeader);
@@ -1095,15 +1095,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'display': 'inline-block',
                 'left': "auto",
                 'position': "relative",
-                'height': .063125*root.height()+"px",
-                'width': .0153125 * root.height() + 'px',
-                'top' : "16%"
+                'height': .55*centeredCollectionHeader.height()+"px",
+                'width': .13344* centeredCollectionHeader.height() + 'px',
+                'top' : "16.5%"
             });
-            if (!iS_WINDOWS && !previewing) {
+            if (previewing) {
                 dropDownArrow.css({
-                    'height': .07 * root.height() + "px",
-                    'width': .017 * root.height() + 'px',
-                    'top': "12.5%"
+                    'top': "19%"
                 });
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
