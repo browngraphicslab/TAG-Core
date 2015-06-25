@@ -5023,7 +5023,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }*/
                         var importToTour = $(document.getElementById("importToTour"));
                         if (importToTour && toureditor) {
-                            importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                            importToTour.css({ 'background-color': 'transparent', 'color': 'white' }); //enables
                             toureditor.uploadStillHappening(false);
                         }
 
@@ -9907,8 +9907,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 
             },
             function(){
-                newButton.prop('disabled', false);
-                newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+                if (inArtworkView || inAssociatedView) {
+                    newButton.prop('disabled', false);
+                    newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+                }
+                
 
                 if (inCollectionsView == true) {
                     bgInput.prop('disabled', false);
