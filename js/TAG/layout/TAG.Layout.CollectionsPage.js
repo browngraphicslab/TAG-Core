@@ -1112,6 +1112,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             if (IS_WINDOWS) {
                 dropDownArrow.css({
+                    'height': .59 * centeredCollectionHeader.height() + "px",
                     'top': "13%"
                 });
             }
