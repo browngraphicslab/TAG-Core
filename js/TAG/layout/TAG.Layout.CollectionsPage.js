@@ -1091,7 +1091,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         }
                     }
                 }(collection));
-            if (previewing) {
+            if (previewing || !IS_WINDOWS) {
                 collectionTitle.css({
                     "padding-right": .165 * centeredCollectionHeader.height() + "px"
                 })
@@ -1109,7 +1109,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'top': "19%"
                 });
             }
-            if (IS_WINDOWS) {
+            if (!IS_WINDOWS) {
                 dropDownArrow.css({
                     'height': .59 * centeredCollectionHeader.height() + "px",
                     'top': "13%"
