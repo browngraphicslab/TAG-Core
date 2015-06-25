@@ -207,11 +207,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         // search on keyup
         searchInput.on('keyup', function (e) {
-            if (!searchInput.val() && keywordSearchOptions.length == 0) {
-                clearSearchResults();
-            }
-            else if (e.which === 13) {
-                doSearch();   
+            if (!infoDiv.is(':animated')) {
+                var keywordsInputEmpty = true;
+                for (var i = 0; i < keywordSearchOptions.length; i++) {
+                    keywordsInputEmpty = keywordsInputEmpty && (keywordSearchOptions[i].keywords.length == 0);
+                }
+                if (!searchInput.val() && keywordsInputEmpty && e.which !== 13) {
+                    clearSearchResults();
+                }
+                else if (e.which === 13) {
+                    doSearch(true);
+                }
             }
         });
 
@@ -803,7 +809,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         })
                     .click(
                         function () {
-                            doSearch();
+                            doSearch(true);
                         });
                 searchButtonListItem.append(searchButton);
                 selectList.append(searchButtonListItem);
@@ -1805,8 +1811,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     /**
      * Search collection using string in search input box
      * @method doSearch
+     * @param {Boolean}         explicitSearch - true if the search is explicit, and we need to display results, even if no input was provided.
      */
-    function doSearch() {
+    function doSearch(explicitSearch) {
 
         var content = searchInput.val().toLowerCase(),
             matchedArts = [],
@@ -1836,8 +1843,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (!content) {
             doTextSearch = false;
         }
-        if (!content && Object.keys(keywordMatches).length == 0) {
+        var keywordsInputEmpty = true;
+        for (var i = 0; i < keywordSearchOptions.length; i++) {
+            keywordsInputEmpty = keywordsInputEmpty && (keywordSearchOptions[i].keywords.length == 0);
+        }
+        if (!doTextSearch && keywordsInputEmpty && !explicitSearch) {
             searchTxt.text("");
+            // If there is no description, hide the infoDiv.
+            var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+            if (description === "" + "\n\n   ") {
+                tileDiv.animate({ 'left': '0%' }, 1000, function () { });
+                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+            }
             drawCatalog(currentArtworks, currentTag, 0, false);
             return;
         }
@@ -4004,7 +4021,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentTag = tag;
         colorSortTags(currentTag);
         drawCatalog(artworks, currentTag, 0, false);
-        doSearch(); // search with new tag
+        doSearch(false); // search with new tag
     }
 
     /**
