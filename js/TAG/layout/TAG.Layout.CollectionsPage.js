@@ -1099,7 +1099,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'width': .0153125 * root.height() + 'px',
                 'top' : "16%"
             });
-            if (!iS_WINDOWS) {
+            if (!iS_WINDOWS && !previewing) {
                 dropDownArrow.css({
                     'top': "14%"
                 });
