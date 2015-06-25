@@ -1110,6 +1110,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'top': "19%"
                 });
             }
+            if (IS_WINDOWS) {
+                dropDownArrow.css({
+                    'top': "13%"
+                });
+            }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
 
