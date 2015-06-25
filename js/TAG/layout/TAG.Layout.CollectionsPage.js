@@ -1061,12 +1061,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionTitle.css({
                 "display": "inline-block",
                 "position": "relative",
-                "padding-right": .01125*root.height()+"px",
+                "padding-right": "18px",
                 "height": "100%",
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
             })
-
+            if (previewing) {
+                collectionTitle.css({
+                    "padding-right": .0113 * root.height() + "px"
+                })
+            }
             mainCollection.append(centeredCollectionHeader);
             centeredCollectionHeader.append(collectionTitle[0]);
             centeredCollectionHeader.append(dropDownArrow);
@@ -1092,9 +1096,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'left': "auto",
                 'position': "relative",
                 'height': .063125*root.height()+"px",
-                'width': .0153125*root.height()+'px',
-                'top': '18%'
+                'width': .0153125 * root.height() + 'px',
+                'top' : "16%"
             });
+            if (!iS_WINDOWS) {
+                dropDownArrow.css({
+                    'top': "14%"
+                });
+            }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
 
