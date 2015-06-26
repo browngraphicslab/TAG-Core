@@ -155,17 +155,26 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 var kfvx, kfvy, kfvw, kfvh,
                     linkType = linkedTrack.getType();
                 if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                    kfvx = keyframe.state.viewport.region.center.x;
-                    kfvy = keyframe.state.viewport.region.center.y;
-                    kfvw = keyframe.state.viewport.region.span.x;
-                    kfvh = keyframe.state.viewport.region.span.y;
+                    kfvx = keyframe.bounds.x;
+                    kfvy = keyframe.bounds.y;
+                    kfvw = keyframe.bounds.width;
+                    kfvh = keyframe.bounds.height;
+                    //kfvx = keyframe.state.viewport.region.center.x;
+                    //kfvy = keyframe.state.viewport.region.center.y;
+                    //kfvw = keyframe.state.viewport.region.span.x;
+                    //kfvh = keyframe.state.viewport.region.span.y;
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
-                    kfvh = keyframe.state.viewport.region.span.y; // not used
-                    kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvw = 1.0 / keyframe.width;
+                    var rw = keyframe.width * $("#ITEHolder").width();
+                    kfvh = keyframe.height; // not used
+                    kfvx = -keyframe.left * kfvw;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    //kfvw = 1.0 / keyframe.state.viewport.region.span.x;
+                    //var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
+                    //kfvh = keyframe.state.viewport.region.span.y; // not used
+                    //kfvx = -keyframe.state.viewport.region.center.x * kfvw;
+                    //kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
                 }
             }
             //hide any open component controls, show inkEditDraw
@@ -286,17 +295,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
                         linkType = linkedTrack.getType();
                     if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                        new_kfvx = new_keyframe.state.viewport.region.center.x;
-                        new_kfvy = new_keyframe.state.viewport.region.center.y;
-                        new_kfvw = new_keyframe.state.viewport.region.span.x;
-                        new_kfvh = new_keyframe.state.viewport.region.span.y;
+                        new_kfvx = new_keyframe.bounds.x;
+                        new_kfvy = new_keyframe.bounds.y;
+                        new_kfvw = new_keyframe.bounds.width;
+                        new_kfvh = new_keyframe.bounds.height;
                     }
                     else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.state.viewport.region.span.x;
-                        var rw = new_keyframe.state.viewport.region.span.x * currcanv.width();
-                        new_kfvh = new_keyframe.state.viewport.region.span.y; // not used
-                        new_kfvx = -new_keyframe.state.viewport.region.center.x * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
+                        new_kfvw = 1.0 / new_keyframe.width;
+                        var rw = new_keyframe.width * currcanv.width();
+                        new_kfvh = new_keyframe.height; // not used
+                        new_kfvx = -new_keyframe.left * new_kfvw;
+                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
                     }
                     track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
                     track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
@@ -427,17 +436,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
 
                 if (track.getInkLink().getType() === TAG.TourAuthoring.TrackType.artwork) {
-                    kfvx = keyframe.state.viewport.region.center.x;
-                    kfvy = keyframe.state.viewport.region.center.y;
-                    kfvw = keyframe.state.viewport.region.span.x;
-                    kfvh = keyframe.state.viewport.region.span.y;
+                    kfvx = keyframe.bounds.x;
+                    kfvy = keyframe.bounds.y;
+                    kfvw = keyframe.bounds.width;
+                    kfvh = keyframe.bounds.height;
                 }
                 else if (track.getInkLink().getType() === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
-                    kfvh = keyframe.state.viewport.region.span.y; // not used
-                    kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvw = 1.0 / keyframe.width;
+                    var rw = keyframe.width * $("#ITEHolder").width();
+                    kfvh = keyframe.height; // not used
+                    kfvx = -keyframe.left * kfvw;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
                 }
             }
             
@@ -552,17 +561,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
                         linkType = linkedTrack.getType();
                     if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                        new_kfvx = new_keyframe.state.viewport.region.center.x;
-                        new_kfvy = new_keyframe.state.viewport.region.center.y;
-                        new_kfvw = new_keyframe.state.viewport.region.span.x;
-                        new_kfvh = new_keyframe.state.viewport.region.span.y;
+                        new_kfvx = new_keyframe.bounds.x;
+                        new_kfvy = new_keyframe.bounds.y;
+                        new_kfvw = new_keyframe.bounds.width;
+                        new_kfvh = new_keyframe.bounds.height;
                     }
                     else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.state.viewport.region.span.x;
-                        var rw = new_keyframe.state.viewport.region.span.x * currcanv.width();
-                        new_kfvh = new_keyframe.state.viewport.region.span.y; // not used
-                        new_kfvx = -new_keyframe.state.viewport.region.center.x * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
+                        new_kfvw = 1.0 / new_keyframe.width;
+                        var rw = new_keyframe.width * currcanv.width();
+                        new_kfvh = new_keyframe.height; // not used
+                        new_kfvx = -new_keyframe.left * new_kfvw;
+                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
                     }
                     track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
                     track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
@@ -704,17 +713,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 var kfvx, kfvy, kfvw, kfvh,
                     linkType = linkedTrack.getType();
                 if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                    kfvx = keyframe.state.viewport.region.center.x;
-                    kfvy = keyframe.state.viewport.region.center.y;
-                    kfvw = keyframe.state.viewport.region.span.x;
-                    kfvh = keyframe.state.viewport.region.span.y;
+                    kfvx = keyframe.bounds.x;
+                    kfvy = keyframe.bounds.y;
+                    kfvw = keyframe.bounds.width;
+                    kfvh = keyframe.bounds.height;
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.state.viewport.region.span.x;
-                    var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
-                    kfvh = keyframe.state.viewport.region.span.y; // not used
-                    kfvx = -keyframe.state.viewport.region.center.x * kfvw;
-                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.state.viewport.region.center.y;
+                    kfvw = 1.0 / keyframe.width;
+                    var rw = keyframe.width * $("#ITEHolder").width();
+                    kfvh = keyframe.height; // not used
+                    kfvx = -keyframe.left * kfvw;
+                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
                 }
             }
             
@@ -827,17 +836,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     var new_kfvx, new_kfvy, new_kfvw, new_kfvh,
                         linkType = linkedTrack.getType();
                     if (linkType === TAG.TourAuthoring.TrackType.artwork) {
-                        new_kfvx = new_keyframe.state.viewport.region.center.x;
-                        new_kfvy = new_keyframe.state.viewport.region.center.y;
-                        new_kfvw = new_keyframe.state.viewport.region.span.x;
-                        new_kfvh = new_keyframe.state.viewport.region.span.y;
+                        new_kfvx = new_keyframe.bounds.x;
+                        new_kfvy = new_keyframe.bounds.y;
+                        new_kfvw = new_keyframe.bounds.width;
+                        new_kfvh = new_keyframe.bounds.height;
                     }
                     else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.state.viewport.region.span.x;
-                        var rw = new_keyframe.state.viewport.region.span.x * currcanv.width();
-                        new_kfvh = new_keyframe.state.viewport.region.span.y; // not used
-                        new_kfvx = -new_keyframe.state.viewport.region.center.x * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.state.viewport.region.center.y;
+                        new_kfvw = 1.0 / new_keyframe.width;
+                        var rw = new_keyframe.width * currcanv.width();
+                        new_kfvh = new_keyframe.height; // not used
+                        new_kfvx = -new_keyframe.left * new_kfvw;
+                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
                     }
                     track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
                     track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
