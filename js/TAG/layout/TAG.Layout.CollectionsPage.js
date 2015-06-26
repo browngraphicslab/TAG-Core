@@ -801,7 +801,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({ 'width': ($("#tagRoot").width() * 0.01015) + 'px' });
                 //adjust hard-coded size of drop down arrows if in previewer
                 if (previewing) {
-                    downArrow.css({ 'min-width': '0px', 'width': $("#setViewViewer").width() * 0.01015 + 'px', 'height': '35%'});
+                    downArrow.css({ 'min-width': '0px', 'width': $("#setViewViewer").width() * 0.01015 + 'px', 'height': '35%','top': '0%'});
                 }
                 selector.parent().append(downArrow); // Add the arrow the selector box.
   
