@@ -3340,10 +3340,48 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 num===0 ? descSpan = firstDescSpan: descSpan = $(document.createElement('div'));
                 descSpan.addClass('descSpan');
 
-                //Div for above description
+                //Div for above description. First get the content.
+                var descriptionContent = artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '';
+                if (keywordSets && keywordSets[0] && keywordSets[0].keywords && keywordSets[0].shown && artwork.Metadata.KeywordsSet1) {
+                    var artworksKeywordList = '';
+                    $.each(artwork.Metadata.KeywordsSet1.split(','), function (keywordIndex, keyword) {
+                        if (keywordSets[0].keywords.indexOf(keyword) > -1) {
+                            artworksKeywordList = artworksKeywordList + ' ' + keyword + ',';
+                        }
+                    });
+                    if (artworksKeywordList !== '') {
+                        artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
+                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[0].name + ': </span>' + artworksKeywordList + '</p>';
+                    }
+                }
+                if (keywordSets && keywordSets[1] && keywordSets[1].keywords && keywordSets[1].shown && artwork.Metadata.KeywordsSet2) {
+                    var artworksKeywordList = '';
+                    $.each(artwork.Metadata.KeywordsSet2.split(','), function (keywordIndex, keyword) {
+                        if (keywordSets[1].keywords.indexOf(keyword) > -1) {
+                            artworksKeywordList = artworksKeywordList + ' ' + keyword + ',';
+                        }
+                    });
+                    if (artworksKeywordList !== '') {
+                        artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
+                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[1].name + ': </span>' + artworksKeywordList + '</p>';
+                    }
+                }
+                if (keywordSets && keywordSets[2] && keywordSets[2].keywords && keywordSets[2].shown && artwork.Metadata.KeywordsSet3) {
+                    var artworksKeywordList = '';
+                    $.each(artwork.Metadata.KeywordsSet3.split(','), function (keywordIndex, keyword) {
+                        if (keywordSets[2].keywords.indexOf(keyword) > -1) {
+                            artworksKeywordList = artworksKeywordList + ' ' + keyword + ',';
+                        }
+                    });
+                    if (artworksKeywordList !== '') {
+                        artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
+                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[2].name + ': </span>' + artworksKeywordList + '</p>';
+                    }
+                   
+                }
                 descText = $(document.createElement('div'))
                     .addClass('descText secondaryFontColor')
-                    .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
+                    .html(Autolinker.link(descriptionContent, {email: false, twitter: false}))
                     .css({
                     'color': SECONDARY_FONT_COLOR,
                     //'font-family': FONT,
