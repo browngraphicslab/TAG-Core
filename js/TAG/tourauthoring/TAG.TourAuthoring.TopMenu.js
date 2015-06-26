@@ -345,10 +345,16 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             ev.stopImmediatePropagation();
         });
         textArea.on('keyup', function (ev) {
+            saveButton.prop('disabled', false);
+            saveButton.css({
+                "background-color": "transparent",
+                "border-color": "white",
+                "opacity" : "1"
+            });
             nameChanged = true;
             ev.stopImmediatePropagation();
         });
-
+        
         topbar.append(textArea);
 
         // NOTE: save button click event handler is below dialog code
@@ -361,6 +367,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         saveButton.css('opacity', '0.4');
 
         //Save button highlighting
+        
         saveButton.on('mousedown', function () {
             if (!saveButton.is(":disabled")) {
                 saveButton.css({ "background-color": "white", "color": "black" });
