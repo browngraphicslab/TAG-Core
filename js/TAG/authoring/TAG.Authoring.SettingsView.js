@@ -1,4 +1,4 @@
-/// <reference path="../../../telemetry/telemetry.js" />
+﻿/// <reference path="../../../telemetry/telemetry.js" />
 TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
 
 /*  Creates a SettingsView, which is the first UI in authoring mode.  
@@ -5757,6 +5757,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     editArtwork(val);
                                 }
                             }, true, val.Extension, markedForDelete));
+                        }
+                        if (i == list.length - 1) {
+                            middleQueue.add(function () {
+                                console.log("adding extra space");
+                                var extraSpace = $(document.createElement("div"));
+                                extraSpace.width(middleLabelContainer.width());
+                                extraSpace.height($($(".middleLabel")[0]).height()/2);
+                                console.log($(".middleLabel"));
+                                middleLoading.before(extraSpace)
+                            });
                         }
 
                     });
