@@ -3138,7 +3138,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     'position': 'relative',
                     'height': '25%',
                     'overflow': 'hidden',
-                    'margin': '30px 4%'
+                    'margin': '3%'
                 })
                 .appendTo($keywordsForm);
             //createSelects(keywordcategories, keywords, $keywordsContainer);
@@ -3151,7 +3151,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
             // Define some height values.
             var checklistContainerHeight = $('#tagRoot').height() / 3;
-            var numItemsShown = 10;
+            var numItemsShown = 8;
             var checklistItemHeight = checklistContainerHeight / (numItemsShown + 1);
 
             // Create a list to store checklists in.
@@ -3263,8 +3263,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         .css({
                             'border': '1px solid #777',
                             'background-color': '#fff',
-                            'height': (checklistItemHeight / 2) + 'px',
-                            'width': (checklistItemHeight / 2) + 'px'
+                            'height': Math.floor(checklistItemHeight / 3) + 'px',
+                            'width': Math.floor(checklistItemHeight / 3) + 'px',
+                            'font-size': Math.floor(checklistItemHeight / 3) + 'px'
                         })
                         .click(function(e) {
                             e.stopPropagation();
@@ -3279,7 +3280,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         .css({
                             'cursor': 'default',
                             'font-size': '0.7em',
-                            'position': 'absolute',
                             'overflow': 'hidden',
                             'text-overflow': 'ellipsis',
                             'width': '20%'
@@ -3309,7 +3309,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 .attr('id', 'save-keywords-container')
                 .css({
                     'width': '100%',
-                    'padding-bottom': '7%',
+                    'min-height': '32px', // Same as button it contains.
+                    'padding-bottom': '5%',
                     'position': 'relative'
                 })
                 .appendTo($keywordsForm);
