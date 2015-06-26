@@ -20,6 +20,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         prevTag,
         prevMult,
         prevPreviewPos,
+        prevSearch,
 	    prevExhib = collection;
 
     if (prevInfo) {
@@ -27,7 +28,9 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         prevScroll = prevInfo.prevScroll || 0,
         prevMult = prevInfo.prevMult,
         prevTag = prevInfo.prevTag,
+        prevSearch = prevSearch,
         prevPreviewPos = prevInfo.prevPreviewPos;
+
     }
 
     var that = {};
@@ -84,7 +87,8 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
             backCollection: collection,
             backTag : prevTag,
             backMult : prevMult,
-            backPreviewPos : prevPreviewPos
+            backPreviewPos: prevPreviewPos,
+            backSearch: prevSearch
         });
 
         // collectionsPage.getRoot().css({ 'overflow-x': 'hidden' }); // TODO should be default in .styl file

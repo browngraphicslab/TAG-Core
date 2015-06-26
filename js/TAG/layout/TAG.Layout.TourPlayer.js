@@ -18,6 +18,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 	var prevExhib = exhibition;
     var prevTag = prevInfo.prevTag;
     var prevMult = prevInfo.prevMult;
+    var prevSearch = prevSearch;
     var prevS;
     var self = this;
     var rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
@@ -156,7 +157,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                 backCollection: exhibition,
                 backTag : prevTag,
                 backMult : prevMult,
-                backPreviewPos : prevPreviewPos
+                backPreviewPos: prevPreviewPos,
+                backSearch: prevSearch
             });
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
                 artworkPrev = "catalog";

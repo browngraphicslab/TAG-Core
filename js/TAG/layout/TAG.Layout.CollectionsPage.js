@@ -64,6 +64,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtwork = options.backArtwork,         // the currently selected artwork
         currentTag = options.backTag,             // current sort tag for collection
         multipleShown = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
+        backSearch = options.backSearch,
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
         previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
 
@@ -145,8 +146,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
     root[0].collectionsPage = this;
     root.data('split',options.splitscreen);
-        options.backCollection ? comingBack = true : comingBack = false;
-        var cancelLoadCollection = null;
+    options.backCollection ? comingBack = true : comingBack = false;
+    var cancelLoadCollection = null;
 
     backButton.attr('src', tagPath + 'images/icons/Back.svg');
 
@@ -333,11 +334,70 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'top'     : '22%',
         };
         
+        if (backSearch) {
+            updateSearchInput(backSearch.searchText, backSearch.keywordSearchOptions);
+        }
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
 
         menuCreated = false;
+    }
+
+    /**
+     * Fill in the appropriate UI pieces so that they reflect the search as defined by parameters.
+     * @method updateSearchInput
+     * @param searchText {String}               The text to be entered in the search bar.
+     * @param keywordSearchOptions {Object}     Object containing info on keywords search (see getKeywordSearchOptions())
+     */
+    function updateSearchInput(searchText, keywordSearchOptions) {
+        // Search bar.
+        if (searchText) {
+            searchInput.val(searchText);
+        }
+
+        // Keywords search.
+        if (keywordSearchOptions) {
+            for (var i = 0; i < keywordSearchOptions.length; i++) {
+                var options = keywordSearchOptions[i];
+                // Set the operation.
+                if (options.operation && options.operation !== '') {
+                    // Update hidden select element.
+                    var selOptions = $(root.find('.operationSelect')[i]).find('option');
+                    $.each(selOptions, function (selOptionIndex, selOption) {
+                        if ($(selOption).text().toLowerCase() === options.operation) {
+                            $(selOption).attr('selected', 'selected');
+                            return;
+                        }
+                    });
+
+                    // Update selector text.
+                    $(root.find('.operationSelect').parent().find('span.ui-dropdownchecklist-text')[i])
+                        .attr('title', options.operation.toUpperCase())
+                        .text(options.operation.toUpperCase());
+                }
+
+                // Set the selected keywords.
+                if (options.keywords) {
+                    for (var j = 0; j < options.keywords.length; j++) {
+                        var keyword = options.keywords[j];
+
+                        // Update hidden select element.
+                        var selOptions = $(root.find('.keywordsMultiselect')[i]).find(options)
+                        $.each(selOptions, function (selOptionIndex, selOption) {
+                            if ($(selOption).text().toLowerCase() === keyword) {
+                                $(selOption).attr('selected', 'selected');
+                                return;
+                            }
+                        });
+
+                        // Update checkbox.
+
+                    }
+                }
+            }
+        }
+
     }
 
     /**
@@ -1105,7 +1165,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'width': .0153125 * root.height() + 'px',
                 'top' : "16%"
             });
-            if (!iS_WINDOWS && !previewing) {
+            if (!IS_WINDOWS && !previewing) {
                 dropDownArrow.css({
                     'height': .07 * root.height() + "px",
                     'width': .017 * root.height() + 'px',
@@ -4045,6 +4105,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
             backCollection: currCollection,
+            prevSearch: {'searchText': searchInput.val(), 'keywordSearchOptions': getKeywordSearchOptions()},
             prevTag : currentTag,
             backArtwork: tour,
             prevMult : multipleShown
@@ -4073,6 +4134,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos : containerLeft || selectedArtworkContainer.position().left,
             prevTag: currentTag,
+            prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': getKeywordSearchOptions() },
             prevMult: multipleShown
         };
         videoPlayer = TAG.Layout.VideoPlayer(video, currCollection, prevInfo);
@@ -4152,6 +4214,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     prevCollection: currCollection,
                     prevPage: 'catalog',
                     prevMult: multipleShown,
+                    prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': getKeywordSearchOptions() },
                     assocMediaToShow: associatedMedia,
                     onAssocMediaView : onAssocMediaView
                 });
