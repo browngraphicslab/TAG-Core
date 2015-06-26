@@ -1781,6 +1781,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
+        var duration = ANIMATION_DURATION/5;
+        catalogDiv.animate({
+            scrollLeft: 0
+        }, duration, "easeInOutQuint");
         root.find('#searchDescription').text(searchDescriptionText);
         root.find('#clearSearchButton').css({ 'display': 'block' });
         root.find('#collectionDescription').hide();
