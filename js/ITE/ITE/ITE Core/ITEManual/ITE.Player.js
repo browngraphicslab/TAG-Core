@@ -29,9 +29,10 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
             .attr("id", "bottomContainer"),
         buttonContainer = $(document.createElement("div"))
             .attr("id", "buttonContainer");
-
-    ITEHolder.append(bottomContainer);
-    bottomContainer.append(buttonContainer);
+   if (!options.isAuthoring) {
+       ITEHolder.append(bottomContainer);
+       bottomContainer.append(buttonContainer);
+   }
 
     //Buttons
     var volumeButton            = $(document.createElement("img")),

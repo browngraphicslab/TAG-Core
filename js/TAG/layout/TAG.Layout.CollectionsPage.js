@@ -150,7 +150,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     if (lockKioskMode == "true") {
         backButton.css('display', 'none');
     } else {
-        collectionMenu.css('left', '5%');
+        //collectionMenu.css('left', '5%');
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
         }

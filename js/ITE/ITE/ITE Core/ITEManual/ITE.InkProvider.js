@@ -65,7 +65,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 				"background":"transparent",
 				"pointer-events":"none",
 			})
-	        .attr("id", trackData.assetUrl);
+	        .attr("id", trackData.name);
 		$("#ITEHolder").append(_UIControl);
 		self._UIControl = _UIControl;
 
