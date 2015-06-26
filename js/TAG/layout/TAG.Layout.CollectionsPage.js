@@ -1132,11 +1132,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
             })
-            if (previewing) {
-                collectionTitle.css({
-                    "padding-right": .0113 * root.height() + "px"
-                })
-            }
             mainCollection.append(centeredCollectionHeader);
             centeredCollectionHeader.append(collectionTitle[0]);
             centeredCollectionHeader.append(dropDownArrow);
@@ -1156,20 +1151,29 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         }
                     }
                 }(collection));
-
+            if (!IS_WINDOWS) {
+                collectionTitle.css({
+                    "padding-right": .165 * centeredCollectionHeader.height() + "px"
+                })
+            }
+            if (previewing) {
+                collectionTitle.css({
+                    "padding-right": .133 * centeredCollectionHeader.height() + "px"
+                })
+            }
             dropDownArrow.css({
                 'display': 'inline-block',
                 'left': "auto",
                 'position': "relative",
-                'height': .063125*root.height()+"px",
-                'width': .0153125 * root.height() + 'px',
-                'top' : "16%"
+                'height': .55*centeredCollectionHeader.height()+"px",
+                'width': .13344* centeredCollectionHeader.height() + 'px',
+                'top' : "17.5%"
             });
             if (!IS_WINDOWS && !previewing) {
                 dropDownArrow.css({
-                    'height': .07 * root.height() + "px",
-                    'width': .017 * root.height() + 'px',
-                    'top': "12.5%"
+                    'height': .64 * centeredCollectionHeader.height() + "px",
+                    'width': .149 * centeredCollectionHeader.height() + 'px',
+                    'top' : "18.25%"
                 });
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
