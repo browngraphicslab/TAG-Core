@@ -750,13 +750,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (IS_WINDOWS) {
                 MSApp.execUnsafeLocalFunction(function () { // You got a deathwish, Truant?
                     root.find('select.keywordsSelect').dropdownchecklist({
-                        maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                       // maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
                         closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                     });
                 });
             } else {
                 root.find('select.keywordsSelect').dropdownchecklist({
-                    maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                   // maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
                     closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                 });
             }
@@ -842,7 +842,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
 
                selector.parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
-                         .css('width', selector.parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
+                         .css({'width': selector.parent().outerWidth() + 'px'}); // Change the width of the actual dropdownchecklist to be the same.
 
             });
 
@@ -1021,7 +1021,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineShown = true; //default to true for backwards compatibility
             }
             //If on associated media view and there are no associated media with valid dates, hide the timeline
-            if (onAssocMediaView && collection.collectionMediaMinYear===Infinity){
+            if (onAssocMediaView && collection.collectionMediaMinYear===999999){
                 timelineShown = false;
             }
             sortsDiv.empty();
@@ -1277,8 +1277,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 divideDiv.css('display','inline');
                 artworksButton.off()
                               .on('mousedown', function(){
-                                    artworksButton.css('color', SECONDARY_FONT_COLOR);
-                                    assocMediaButton.css('color', dimmedColor);
+                                    //artworksButton.css('color', SECONDARY_FONT_COLOR);
+                                    //assocMediaButton.css('color', dimmedColor);
                                     if (onAssocMediaView){
                                         artworkShown = false;
                                         onAssocMediaView = false;
@@ -1288,8 +1288,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 
                 assocMediaButton.off()
                                 .on('mousedown', function(){
-                                    artworksButton.css('color', dimmedColor);
-                                    assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
+                                    //artworksButton.css('color', dimmedColor);
+                                    //assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView) {
                                         currentArtwork && hideArtwork(currentArtwork)()
                                         onAssocMediaView = true;
@@ -1996,8 +1996,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!artworks || artworks.length === 0){
                 tileCircle.hide();
                 if (onAssocMediaView) {
-                    assocMediaButton.css({ "color": SECONDARY_FONT_COLOR });
-                    artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                    $("#assocMediaButton").css({ "color": SECONDARY_FONT_COLOR });
+                    $("#artworksButton").css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
                 } else {
                     assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
                     artworksButton.css({ "color": SECONDARY_FONT_COLOR });
