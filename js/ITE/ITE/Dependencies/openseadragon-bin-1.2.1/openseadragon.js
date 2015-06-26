@@ -8754,7 +8754,7 @@ function updateOnce( viewer ) {
 
     if ( viewer.autoResize ) {
         containerSize = _getSafeElemSize( viewer.container );
-        if ( !containerSize.equals( THIS[ viewer.hash ].prevContainerSize ) ) {
+        if ( THIS[ viewer.hash ] && !containerSize.equals( THIS[ viewer.hash ].prevContainerSize ) ) {
             // maintain image position
             var oldBounds = viewer.viewport.getBounds();
             var oldCenter = viewer.viewport.getCenter();
