@@ -2926,6 +2926,7 @@ TAG.Util.UI = (function () {
         $(messageLabel).css({
 
             color: 'white',
+            'overflow': 'visible',
             'width': '80%',
             'height': '15%',
             'left': '10%',
@@ -3003,7 +3004,7 @@ TAG.Util.UI = (function () {
                 'left': '0%',
                 'top':'10%',
                 'white-space': 'nowrap',
-                'overflow': 'hidden',
+                'overflow': 'visible',
                 'text-overflow':'ellipsis',
                 'height': '90%',
                 'font-family': 'Segoe UI',
@@ -3035,7 +3036,7 @@ TAG.Util.UI = (function () {
                 'height': '90%',
                 'top': '10%',
                 'white-space': 'nowrap',
-                'overflow': 'hidden',
+                'overflow': 'visible',
                 'text-overflow': 'ellipsis',
                 'font-family': 'Segoe UI',
                 'max-width': '500px',
@@ -3055,8 +3056,8 @@ TAG.Util.UI = (function () {
 
         var setProgress = function (name, percent) {
             var elementClassName = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (name)
-            $(".uploadProgressLabel" + elementClassName).text((percent*100).toString().substring(0, 4) + "%")
-            $(".uploadProgressInner" + elementClassName).css({'width':percent*100+'%'});
+           $(".uploadProgressLabel" + elementClassName).text((percent*100).toString().substring(0, 4) + "%")
+            $(".uploadProgressInner" + elementClassName).css({'width':percent*100+'%'}); 
         }
 
         var setError = function(name) {
@@ -7641,8 +7642,11 @@ TAG.Util.RLH = function (input) {
                 });
 
                 //reload (which will show the map that has just been imported)
+                
                 loadMaps();
-
+                uploadHappening = false;
+                importMapButton.prop('disabled', false);
+                importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                 //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
                 // TODO this is just in here for testing purposes
                 //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
@@ -7659,11 +7663,13 @@ TAG.Util.RLH = function (input) {
             null,
             function () {
                 console.log("import maps should be disabled while map uploads");
+                uploadHappening = true;
                 $(importMapButton).prop('disabled', true);
                 $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             },
             function () {
                 $(importMapButton).prop('disabled', false);
+                uploadHappening = false;
                 $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 1.0)' });
             }
         );

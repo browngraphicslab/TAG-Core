@@ -197,11 +197,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         // search on keyup
         searchInput.on('keyup', function (e) {
-            if (!searchInput.val() && keywordSearchOptions.length == 0) {
-                clearSearchResults();
-            }
-            else if (e.which === 13) {
-                doSearch();   
+            if (!infoDiv.is(':animated')) {
+                var keywordsInputEmpty = true;
+                for (var i = 0; i < keywordSearchOptions.length; i++) {
+                    keywordsInputEmpty = keywordsInputEmpty && (keywordSearchOptions[i].keywords.length == 0);
+                }
+                if (!searchInput.val() && keywordsInputEmpty && e.which !== 13) {
+                    clearSearchResults();
+                }
+                else if (e.which === 13) {
+                    doSearch(true);
+                }
             }
         });
 
@@ -789,7 +795,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             if (TAG.Util.Splitscreen.isOn()) {
                                 root.find("#filterByKeywords").click();
                             }
-                            doSearch();
+                            doSearch(true);
                         });
                 searchButtonListItem.append(searchButton);
                 selectList.append(searchButtonListItem);
@@ -992,12 +998,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // for previewing purpose in the authoring mode so that the menu arrow position does not change
             if (!IS_WINDOWS && previewing) {
                 // reduce the size of the dropdown menu when being previewed in authoring mode
-                dropDownArrow.css({
-                    'width': '40%',
-                    'height': '40%',
-                    'top': '5%'
-                });
-
                 // to make the dropdown arrow menu appear in previewing mode for unpublished collections
                 dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 dropDownArrow.addClass('arrow');    
@@ -1013,7 +1013,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
             })
-
             mainCollection.append(centeredCollectionHeader);
             centeredCollectionHeader.append(collectionTitle[0]);
             centeredCollectionHeader.append(dropDownArrow);
@@ -1021,7 +1020,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-align": "center",
                 "display": "inline-block",
                 "height": "90%",
-                "overflow": "hidden",
+                //"overflow": "hidden",
                 "top": "10%",
                 "cursor": "pointer",
                 "white-space" : "nowrap"
@@ -1033,15 +1032,31 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         }
                     }
                 }(collection));
-
+            if (!IS_WINDOWS) {
+                collectionTitle.css({
+                    "padding-right": .165 * centeredCollectionHeader.height() + "px"
+                })
+            }
+            if (previewing) {
+                collectionTitle.css({
+                    "padding-right": .133 * centeredCollectionHeader.height() + "px"
+                })
+            }
             dropDownArrow.css({
                 'display': 'inline-block',
                 'left': "auto",
                 'position': "relative",
-                'height': "55%",
-                'width': '3%',
-                'top': '18%'
+                'height': .55*centeredCollectionHeader.height()+"px",
+                'width': .13344* centeredCollectionHeader.height() + 'px',
+                'top' : "17.5%"
             });
+            if (!IS_WINDOWS) {
+                dropDownArrow.css({
+                    'height': .64 * centeredCollectionHeader.height() + "px",
+                    'width': .149 * centeredCollectionHeader.height() + 'px',
+                    'top' : "18.25%"
+                });
+            }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
 
@@ -1096,7 +1111,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
-            collectionDescription.css({'word-wrap': 'break-word', "height": "98%", "color": SECONDARY_FONT_COLOR});
+            collectionDescription.css({'word-wrap': 'break-word', "color": SECONDARY_FONT_COLOR});
             str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
             collectionDescription.css({
                 'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
@@ -1114,9 +1129,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             searchDescription.attr('id', 'searchDescription');
             searchDescription.addClass('secondaryFont');
-            searchDescription.css({ "color": SECONDARY_FONT_COLOR });
             searchDescription.css({
+                "color": SECONDARY_FONT_COLOR,
                 'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+                'max-height': '88%'
             });
 
             var clearSearchButton = $(document.createElement('div'))
@@ -1626,8 +1642,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     /**
      * Search collection using string in search input box
      * @method doSearch
+     * @param {Boolean}         explicitSearch - true if the search is explicit, and we need to display results, even if no input was provided.
      */
-    function doSearch() {
+    function doSearch(explicitSearch) {
+
         var content = searchInput.val().toLowerCase(),
             matchedArts = [],
             unmatchedArts = [],
@@ -1656,8 +1674,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (!content) {
             doTextSearch = false;
         }
-        if (!content && Object.keys(keywordMatches).length == 0) {
+        var keywordsInputEmpty = true;
+        for (var i = 0; i < keywordSearchOptions.length; i++) {
+            keywordsInputEmpty = keywordsInputEmpty && (keywordSearchOptions[i].keywords.length == 0);
+        }
+        if (!doTextSearch && keywordsInputEmpty && !explicitSearch) {
             searchTxt.text("");
+            // If there is no description, hide the infoDiv.
+            var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+            if (description === "" + "\n\n   ") {
+                tileDiv.animate({ 'left': '0%' }, 1000, function () { });
+                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+            }
             drawCatalog(currentArtworks, currentTag, 0, false);
             return;
         }
@@ -1671,9 +1699,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
-
         root.find('#searchDescription').text(searchDescriptionText);
         root.find('#clearSearchButton').css({ 'display': 'block' });
+        root.find('#collectionDescription').hide();
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
         if (description === "" + "\n\n   ") {
             tileDiv.animate({ 'left': infoDiv.width() + 'px' }, 1000, function () { });
@@ -1705,7 +1733,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (op === '') return '';
             var listString = '';
             for (var i = 0; i < keywords.length; i++) {
-                listString = listString + (((i == keywords.length - 1) && keywords.length != 1 ? 'or ' : '') + '\'' + keywords[i] + '\'' +
+                listString = listString + (((i == keywords.length - 1) && keywords.length != 1 ? ' or ' : ' ') + '\'' + keywords[i] + '\'' +
                     (((i == 0 && keywords.length == 2) || i == keywords.length-1) ? '' : ','));
             }
             return listString;
@@ -1713,7 +1741,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         $.each(keywordSearchOptions, function (optionIndex, option) {
             var listString = getSetListString(option.operation, option.keywords);
             searchDescriptionText = searchDescriptionText +
-                ((listString !== '') ? (' with' + (option.operation == 'and' ? '' : 'out') + ' the keyword' + (option.keywords.length > 1 ? 's ' : ' ') + listString) : '');
+                ((listString !== '') ? (' with' + (option.operation == 'and' ? '' : 'out') + ' the keyword' + (option.keywords.length > 1 ? 's' : '') + listString) : '');
         });
         searchDescriptionText = searchDescriptionText + '.';
 
@@ -1798,6 +1826,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         // Clear the results description.
         root.find('#searchDescription').text('');
         root.find('#clearSearchButton').css({ 'display': 'none' });
+        root.find('#collectionDescription').show();
 
         if (currCollection) {
             // If there is no description, hide the infoDiv.
@@ -3823,7 +3852,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentTag = tag;
         colorSortTags(currentTag);
         drawCatalog(artworks, currentTag, 0, false);
-        doSearch(); // search with new tag
+        doSearch(false); // search with new tag
     }
 
     /**

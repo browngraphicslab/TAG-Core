@@ -356,6 +356,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 return mediaList[a].doq.Name < mediaList[b].doq.Name ? -1 : 1;
             });
 
+            var extraSpace = $(document.createElement('div'));//to add extra space at botttom of scrolling list of associated media
+
             // create divs for each media
             for (i = 0; i < mediaList.guids.length; i++) {
                 var mediadoq = mediaList[mediaList.guids[i]].doq;
@@ -394,8 +396,12 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     });
                     thumbnailButton.attr("id", mediadoq.Identifier);
                     container.append(thumbnailButton);
+                    extraSpace.width(thumbnailButton.width());
+                    extraSpace.height(thumbnailButton.height() / 2);
                 })(i));
             }
+
+            container.append(extraSpace);
             TAG.Util.hideLoading(container);
         });
 

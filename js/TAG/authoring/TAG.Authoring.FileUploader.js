@@ -194,6 +194,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                         //bar.css("width", "0%");
                         innerProgressBar.width("0%");
                         if (filesObject.length === 0) {
+                           
                             removeOverlay();
                             addLocalCallback([], [])();
                             return;
@@ -666,6 +667,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
             } catch (err) {
                 removeOverlay();
+                console.log("is this where the error is?");
                 console.log(err.message);
             }
         };
