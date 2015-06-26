@@ -57,7 +57,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             }
         });
 
-        $('#rinContainer').on('click', function (event) {
+        $('#ITEContainer').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
         });

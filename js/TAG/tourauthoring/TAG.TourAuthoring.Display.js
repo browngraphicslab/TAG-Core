@@ -2632,7 +2632,8 @@ TAG.TourAuthoring.Display = function (spec, my) {
                         },
                     },
                 };
-            } else {
+            } else if (first.bounds) {
+                // from ITE DZ format
                 var rin_first = {
                     state: {
                         viewport: {
@@ -2644,6 +2645,25 @@ TAG.TourAuthoring.Display = function (spec, my) {
                                 span: {
                                     x: first.bounds.width,
                                     y: first.bounds.height
+                                }
+                            },
+                        },
+                    },
+                };
+                first = rin_first;
+            } else {
+                // from ITE image format
+                var rin_first = {
+                    state: {
+                        viewport: {
+                            region: {
+                                center: {
+                                    x: first.left,
+                                    y: first.top
+                                },
+                                span: {
+                                    x: first.width,
+                                    y: first.height
                                 }
                             },
                         },
