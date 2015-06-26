@@ -9341,7 +9341,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'right',
                 'margin-right': '5%',
                 'min-width': '20px',
-                'width': '20%'
+                'width': '20%',
+                'margin-top':'3%'
             })
             .click(function () {
                 $('#setEditorMessageContainer').text('');

@@ -799,10 +799,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 // Create a dropdown arrow.
                 var downArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/blackclose.svg').addClass('selector-dropdown').addClass('arrow')
                     .css({ 'width': ($("#tagRoot").width() * 0.01015) + 'px' });
-                selector.parent().append(downArrow); // Add the arrow the selector box.
                 //adjust hard-coded size of drop down arrows if in previewer
-                if (previewing) { downArrow.css({ 'width': '5px', 'margin-right': '1px', 'top': '0%' }); }
-
+                if (previewing) {
+                    downArrow.css({ 'min-width': '0px', 'width': $("#setViewViewer").width() * 0.01015 + 'px', 'height': '35%','top': '0%'});
+                }
+                selector.parent().append(downArrow); // Add the arrow the selector box.
+  
                 if (TAG.Util.Splitscreen.isOn()) { //experimenting for splitscreen
                     if (index % 2 != 0) {
                         //set width of text element appropriately
@@ -827,7 +829,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     selector.parent().css('height', $(element).parent().height()+ downArrow.height() + 'px'); //experimenting with splitscreen
                     downArrow.css({ 'float': 'none', 'top': '-25%' });
                 } else {
-                    selector.parent().css({ 'width': $(element).parent().outerWidth() * 1.3 + 'px' });
+                    var mult = 1.3
+                    selector.parent().css({ 'width': $(element).parent().outerWidth() * mult + 'px' });
                 }
 
                 //tool tip on mouseenter when ellipsis
