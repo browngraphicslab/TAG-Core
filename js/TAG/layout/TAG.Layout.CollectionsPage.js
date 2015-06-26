@@ -326,17 +326,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         var progressCircCSS = {
             'position': 'absolute',
-            'float'   : 'left',
-            'left'    : '40%',
-            'z-index' : '50',
-            'height'  : '10%',
-            'width'   : 'auto',
-            'top'     : '22%',
+            'float': 'left',
+            'left': '40%',
+            'z-index': '50',
+            'height': '10%',
+            'width': 'auto',
+            'top': '22%',
         };
-        
-        if (backSearch) {
-            updateSearchInput(backSearch.searchText, backSearch.keywordSearchOptions);
-        }
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
@@ -367,7 +363,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     $.each(selOptions, function (selOptionIndex, selOption) {
                         if ($(selOption).text().toLowerCase() === options.operation) {
                             $(selOption).attr('selected', 'selected');
-                            return;
+                        } else {
+                            $(selOption).removeAttr('selected');
                         }
                     });
 
@@ -383,16 +380,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         var keyword = options.keywords[j];
 
                         // Update hidden select element.
-                        var selOptions = $(root.find('.keywordsMultiselect')[i]).find(options)
+                        var selOptions = $(root.find('.keywordsMultiselect')[i]).find('option')
                         $.each(selOptions, function (selOptionIndex, selOption) {
                             if ($(selOption).text().toLowerCase() === keyword) {
                                 $(selOption).attr('selected', 'selected');
-                                return;
                             }
                         });
 
                         // Update checkbox.
-
+                        var labels = $(root.find('.keywordsMultiselect')[i]).parent().find('.ui-dropdownchecklist-dropcontainer label');
+                        $.each(labels, function (labelIndex, label) {
+                            if ($(label).text().toLowerCase() === keyword) {
+                                $(label).parent().find(':checkbox').attr('checked', 'checked');
+                            }
+                        });
                     }
                 }
             }
@@ -732,7 +733,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         loadingArea.hide();
         searchInput.show();
-        addKeywords();
     }
 
     /**
@@ -740,12 +740,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method addKeywords
      */
     function addKeywords() {
-
-        // Get keywords from the server!
-         keywordSets = TAG.Worktop.Database.getKeywordSets();
+        // Don't repeat this.
+        if (root.find('.ui-dropdownchecklist').length > 0) {
+            return;
+        }
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
-      if (keywordSets) {
+        if (keywordSets) {
             // Create unordered list of select elements.
             var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
 
@@ -882,12 +883,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 $('#searchInput').css('height', '15px');
             }
             
+          // If we are coming back and there was a previous search, execute that search.
+            if (backSearch) {
+                updateSearchInput(backSearch.searchText, backSearch.keywordSearchOptions);
+                var emptySearch = backSearch.searchText === '';
+                $.each(backSearch.keywordSearchOptions, function (setIndex, options) {
+                    emptySearch = emptySearch && options.keywords.length === 0;
+                });
+                if (!emptySearch) {
+                    doSearch(true);
+                }
+            }
 
-        } else {
-            //var divHeight = $('#leftContainer').height()/2;
-            //$('#leftContainer').css('margin-top', divHeight + 'px');
-            //$('#leftContainer').css('margin-bottom', divHeight + 'px');
-        }
+        } 
     }
 
     /**
@@ -1456,7 +1464,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //scrollPos = sPos || 0;
             applyCustomization();
             if (!onAssocMediaView || !currCollection.collectionMedia) {
-                getCollectionContents(currCollection, null, function () { return cancelLoad;});
+                getCollectionContents(currCollection, function () { addKeywords(); }, function () { return cancelLoad;});
             } else {
                 if (onAssocMediaView && artworkInCollectionList.length == 0) {
                     TAG.Worktop.Database.getArtworksIn(collection.Identifier,
@@ -1469,11 +1477,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             createArtTiles(currCollection.collectionMedia);
                             loadSortTags(currCollection, currCollection.collectionMedia)
                             initSearch(currCollection.collectionMedia);
+                            addKeywords();
                         }, null, null);
                 } else {
                     createArtTiles(currCollection.collectionMedia);
                     loadSortTags(currCollection, currCollection.collectionMedia)
                     initSearch(currCollection.collectionMedia);
+                    addKeywords();
                 }
             }
             cancelLoadCollection = function () { cancelLoad = true; };
@@ -1787,6 +1797,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
 
         // Keywords.
+        // Get keywords from the server!
+        keywordSets = TAG.Worktop.Database.getKeywordSets();
         if (keywordSets) {
             // Build hash for keywords to artworks. Each set has dictionaries for AND and NOT.
             // keywordDictionary[setIndex].and["keyword"] --> [artworks with "keyword"] in set
@@ -4109,7 +4121,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
             backCollection: currCollection,
-            prevSearch: {'searchText': searchInput.val(), 'keywordSearchOptions': getKeywordSearchOptions()},
+            prevSearch: {'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions},
             prevTag : currentTag,
             backArtwork: tour,
             prevMult : multipleShown
@@ -4138,7 +4150,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos : containerLeft || selectedArtworkContainer.position().left,
             prevTag: currentTag,
-            prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': getKeywordSearchOptions() },
+            prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions },
             prevMult: multipleShown
         };
         videoPlayer = TAG.Layout.VideoPlayer(video, currCollection, prevInfo);
@@ -4218,7 +4230,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     prevCollection: currCollection,
                     prevPage: 'catalog',
                     prevMult: multipleShown,
-                    prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': getKeywordSearchOptions() },
+                    prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions },
                     assocMediaToShow: associatedMedia,
                     onAssocMediaView : onAssocMediaView
                 });
