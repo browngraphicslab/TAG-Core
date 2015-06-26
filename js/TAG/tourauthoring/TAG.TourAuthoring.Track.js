@@ -573,7 +573,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         }
 
 
-        var ES = $("[ES_ID='" + my.title + "']");
+        var ES = $("div[id='" + my.title + "']");
         if (!ES[0]) {
             displayError("The annotation must be visible in the preview window in order to edit it.");
             return;
@@ -2882,7 +2882,7 @@ function trackTitleReleased(evt) {
                 start: my.timeManager.pxToTime(x),
                 length: length,
                 dataHolder: dataHolder,
-                canKeyframe: true,//(my.type !== TAG.TourAuthoring.TrackType.ink && my.type !== TAG.TourAuthoring.TrackType.video),
+                canKeyframe: (my.type !== TAG.TourAuthoring.TrackType.ink && my.type !== TAG.TourAuthoring.TrackType.video),
                 canFade: (my.type !== TAG.TourAuthoring.TrackType.audio)
             }, my),
 

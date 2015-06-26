@@ -103,9 +103,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     // set up the coordinates for adjustViewBox
     var viewerElt;
     if (calling_file === 'inkes')
-        viewerElt = ($("#rinplayer").length) ? $("#rinplayer") : $("#rinPlayer");
+        viewerElt = ($("#ITEContainer").length) ? $("#ITEContainer") : $("#ITEContainer");
     else
-        viewerElt = $("#rinContainer");
+        viewerElt = $("#ITEContainer");
     var origPaperX = 0; // original coordinates of the paper (match with rinContainer)
     var origPaperY = 0;
     var origPaperW = viewerElt.width();
