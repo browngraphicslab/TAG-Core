@@ -2055,6 +2055,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
                 });
+                if (i == list.length - 1 && i > 1) {
+                    middleQueue.add(function () {
+                        console.log("adding extra space");
+                        var extraSpace = $(document.createElement("div"));
+                        extraSpace.width(middleLabelContainer.width());
+                        extraSpace.height($($(".middleLabel")[0]).height() / 2);
+                        console.log($(".middleLabel"));
+                        middleLoading.before(extraSpace)
+                    });
+                }
             });
             // Hide the loading label when we're done
             middleQueue.add(function () {
@@ -3384,6 +3394,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
                 });
+                if (i == list.length - 1 && i > 1) {
+                    middleQueue.add(function () {
+                        console.log("adding extra space");
+                        var extraSpace = $(document.createElement("div"));
+                        extraSpace.width(middleLabelContainer.width());
+                        extraSpace.height($($(".middleLabel")[0]).height() / 2);
+                        console.log($(".middleLabel"));
+                        middleLoading.before(extraSpace)
+                    });
+                }
             });
             // Hide the loading label when we're done
             middleQueue.add(function () {
@@ -4090,6 +4110,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         });
                     }
                     selectNext = true;
+                    if (i == list.length - 1 && i > 1) {
+                        middleQueue.add(function () {
+                            console.log("adding extra space");
+                            var extraSpace = $(document.createElement("div"));
+                            extraSpace.width(middleLabelContainer.width());
+                            extraSpace.height($($(".middleLabel")[0]).height() / 2);
+                            console.log($(".middleLabel"));
+                            middleLoading.before(extraSpace)
+                        });
+                    }
                 });
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
@@ -5758,7 +5788,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 }
                             }, true, val.Extension, markedForDelete));
                         }
-                        if (i == list.length - 1) {
+                        if (i == list.length - 1 && i>1) {
                             middleQueue.add(function () {
                                 console.log("adding extra space");
                                 var extraSpace = $(document.createElement("div"));
