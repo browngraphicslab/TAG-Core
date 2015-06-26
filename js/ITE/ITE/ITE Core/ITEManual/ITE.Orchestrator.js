@@ -262,7 +262,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		}
 		track.unload();
 	}
-
+	function authoring() {
+	    return self.isAuthoring;
+	}
 	function playWhenAllTracksReady() {
 	    self.loadedTracks++
 	    if (self.loadedTracks == trackManager.length) {
@@ -367,4 +369,5 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.getTrackBehind = getTrackBehind;
 	self.bindCaptureHandlers = bindCaptureHandlers;
 	self.setPendingCallback = setPendingCallback;
+	self.authoring = authoring;
 }
