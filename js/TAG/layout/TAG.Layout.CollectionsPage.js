@@ -20,25 +20,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         collectionArea = root.find('#collectionArea'),
         backButtonArea = root.find('#backButtonArea'),
         backButton = root.find('#backButton'),
-
         centeredCollectionHeader  = root.find("#centeredCollectionHeader"),
         dropDownArrow = root.find('#dropDownArrow'),
-        //nextArrow = root.find('#nextArrow'),
-        //collectionHeader = root.find('#collectionHeader'),
         collectionDotHolder = root.find('#collectionDotHolder'),
         bgimage = root.find('#bgimage'),
         bottomContainer = root.find('#bottomContainer'),
         catalogDiv = root.find('#catalogDiv'),
-        //infoTilesContainer = root.find('#infoTilesContainer'),
-        //sortRow = root.find('#sortRow'),
         collectionMenu = root.find('#collectionMenu'),
         searchInput = root.find('#searchInput'),
         keywordsDiv = root.find("#keywords"),
         searchTxt = root.find('#searchTxt'),
-        // buttonRow = root.find('#buttonRow'), // replaced with #sorts (sortsDiv)
         artworksButton = root.find('#artworksButton'),
         assocMediaButton = root.find('#assocMediaButton'),
-        // toggleRow = root.find('#toggleRow'), // replaced with #filters (filtersDiv)
         selectedArtworkContainer = root.find('#selectedArtworkContainer'),
         timelineArea = root.find('#timelineArea'),
         topBar = root.find('#topBar'),
@@ -51,10 +44,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         divideDiv = root.find('#divide'),
         keywordSelects = [], // Will be filled in later.
         keywordOperatorSelects = [], // Will be filled in later.
-        // splitscreenIcon          = root.find('#splitscreenIcon'),
         overlay = root.find('#overlay'),
-        //tileLoadingArea = root.find('#tileLoadingArea'),
-        nextCollection = $(document.createElement('div')).attr('id', 'nextCollection'),
         prevCollection = $(document.createElement('div')).attr('id', 'prevCollection'),
 
         // input options
@@ -64,6 +54,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtwork = options.backArtwork,         // the currently selected artwork
         currentTag = options.backTag,             // current sort tag for collection
         multipleShown = options.backMult,            // whether multiple artworks shown at a specific year, if applicable
+        backSearch = options.backSearch,
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
         previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
 
@@ -145,8 +136,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
     root[0].collectionsPage = this;
     root.data('split',options.splitscreen);
-        options.backCollection ? comingBack = true : comingBack = false;
-        var cancelLoadCollection = null;
+    options.backCollection ? comingBack = true : comingBack = false;
+    var cancelLoadCollection = null;
 
     backButton.attr('src', tagPath + 'images/icons/Back.svg');
 
@@ -302,6 +293,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             linkButton.css("float", "left");
         }
 
+        catalogDiv.css('bottom', - (0.01 * $("#tagRoot").height()) + 'px');
+
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
             // IE9, Chrome, Safari, Opera
@@ -325,19 +318,79 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         var progressCircCSS = {
             'position': 'absolute',
-            'float'   : 'left',
-            'left'    : '40%',
-            'z-index' : '50',
-            'height'  : '10%',
-            'width'   : 'auto',
-            'top'     : '22%',
+            'float': 'left',
+            'left': '40%',
+            'z-index': '50',
+            'height': '10%',
+            'width': 'auto',
+            'top': '22%',
         };
-        
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
 
         menuCreated = false;
+    }
+
+    /**
+     * Fill in the appropriate UI pieces so that they reflect the search as defined by parameters.
+     * @method updateSearchInput
+     * @param searchText {String}               The text to be entered in the search bar.
+     * @param keywordSearchOptions {Object}     Object containing info on keywords search (see getKeywordSearchOptions())
+     */
+    function updateSearchInput(searchText, keywordSearchOptions) {
+        // Search bar.
+        if (searchText) {
+            searchInput.val(searchText);
+        }
+
+        // Keywords search.
+        if (keywordSearchOptions) {
+            for (var i = 0; i < keywordSearchOptions.length; i++) {
+                var options = keywordSearchOptions[i];
+                // Set the operation.
+                if (options.operation && options.operation !== '') {
+                    // Update hidden select element.
+                    var selOptions = $(root.find('.operationSelect')[i]).find('option');
+                    $.each(selOptions, function (selOptionIndex, selOption) {
+                        if ($(selOption).text().toLowerCase() === options.operation) {
+                            $(selOption).attr('selected', 'selected');
+                        } else {
+                            $(selOption).removeAttr('selected');
+                        }
+                    });
+
+                    // Update selector text.
+                    $(root.find('.operationSelect').parent().find('span.ui-dropdownchecklist-text')[i])
+                        .attr('title', options.operation.toUpperCase())
+                        .text(options.operation.toUpperCase());
+                }
+
+                // Set the selected keywords.
+                if (options.keywords) {
+                    for (var j = 0; j < options.keywords.length; j++) {
+                        var keyword = options.keywords[j];
+
+                        // Update hidden select element.
+                        var selOptions = $(root.find('.keywordsMultiselect')[i]).find('option')
+                        $.each(selOptions, function (selOptionIndex, selOption) {
+                            if ($(selOption).text().toLowerCase() === keyword) {
+                                $(selOption).attr('selected', 'selected');
+                            }
+                        });
+
+                        // Update checkbox.
+                        var labels = $(root.find('.keywordsMultiselect')[i]).parent().find('.ui-dropdownchecklist-dropcontainer label');
+                        $.each(labels, function (labelIndex, label) {
+                            if ($(label).text().toLowerCase() === keyword) {
+                                $(label).parent().find(':checkbox').attr('checked', 'checked');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
     }
 
     /**
@@ -598,55 +651,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             $('#catalogDivContainer').hide();
             TAG.Util.hideLoading(bottomContainer);
         }
-
-        // Iterate through visible/not private/published collections, and set their prev and next values
-        // Also create a scroll dot for each (under main collection title)
-        collectionDotHolder.empty();
-        var uiDocfrag = document.createDocumentFragment();
-        for(i = 0; i < visibleCollections.length; i++) {
-            if(visibleCollections.length<=2){ 
-                lastCollectionIndex = null;
-                firstCollectionIndex = null;
-            } else {
-                lastCollectionIndex = visibleCollections.length - 1;
-                firstCollectionIndex = 0;
-            }
-            visibleCollections[i].prevCollectionIndex = visibleCollections[i - 1] ? i - 1 : lastCollectionIndex;
-            visibleCollections[i].nextCollectionIndex = visibleCollections[i + 1] ? i + 1 : firstCollectionIndex;
-            
-            if (previewing) {
-                COLLECTION_DOT_WIDTH = root.width() / 120; //for previewing collections page in authoring
-            }
-            collectionDot = $(document.createElement('div'))
-                        .addClass('collectionDot')
-                        .css({
-                            "width": COLLECTION_DOT_WIDTH,
-                            "height":  COLLECTION_DOT_WIDTH,
-                            "border-radius": COLLECTION_DOT_WIDTH / 2,
-                            "margin": COLLECTION_DOT_WIDTH/4
-                        }).on('click', function(j){
-                           return function(){
-                                prepareNextView();
-                                loadCollection(visibleCollections[j])();
-                            }
-                        }(i));
-
-            //Register the collections dots (wrapped in a function so that the next collection can be known)
-            (function(dot_index) {
-                TAG.Telemetry.register(collectionDot, 'mousedown', 'CollectionsNavigation', function(tobj){
-                    tobj.current_collection = currCollection.Identifier;
-                    tobj.next_collection = visibleCollections[dot_index].Identifier;
-                    tobj.time_spent = nav_timer.get_elapsed();
-                    nav_timer.restart();
-                    tobj.navigation_type = "navigation_dot";
-                });
-            })(i);
-
-            uiDocfrag.appendChild(collectionDot[0]);
-            //collectionDotHolder.append(collectionDot);
-            collectionDots[visibleCollections[i].Identifier] = collectionDot;
-        }
-        // collectionDotHolder.append($(uiDocfrag));
+      
         // Load collection
         if (currCollection) {
             //Quick check for specific load
@@ -672,7 +677,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         loadingArea.hide();
         searchInput.show();
-        addKeywords();
     }
 
     /**
@@ -680,12 +684,22 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method addKeywords
      */
     function addKeywords() {
+        // Don't repeat this.
+        if (root.find('.ui-dropdownchecklist').length > 0) {
+            return;
+        }
 
         // Get keywords from the server!
-         keywordSets = TAG.Worktop.Database.getKeywordSets();
+        keywordSets = TAG.Worktop.Database.getKeywordSets();
+        var showKeywords = false;
+        for (var x = 0; x < keywordSets.length; x++) {
+            if ((keywordSets[x].shown) === "true") {
+                showKeywords = true;
+            }
+        }
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
-      if (keywordSets) {
+      if (showKeywords) {
             // Create unordered list of select elements.
             var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
 
@@ -751,69 +765,104 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Format the dropdown selector box (what you click on to make dropdown appear).
             var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
-            root.find('.ui-dropdownchecklist-selector').each(function(index, element) {
+            var selector;
+            root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
+                selector = $(element);
                 // Set the text inside the selector box.
                 if (index % 2 == 0) {
                     // Even numbered dropdowns are operator dropdowns.
-                    $(element).find('.ui-dropdownchecklist-text') // Get the text span element.
+                    selector.find('.ui-dropdownchecklist-text') // Get the text span element.
                         .css('display', 'inline') // Make it inline so the div with our dropdown arrow will be inline.
                         .css('color', '#000') // Make the text black. TAG defaults spans to light gray.
                         .css('width','auto');
-                    $(element).parent().parent().find('input').hide();//.css('opacity', '0'); // TODO: hiding the radio button creates bug where clicking item twice allows empty selection.
-                    //$(element).parent().parent().find('.ui-dropdownchecklist-text').css('margin-left', '15%'); // 
+                    selector.parent().parent().find('input').hide();//.css('opacity', '0'); // TODO: hiding the radio button creates bug where clicking item twice allows empty selection.
 
                 } else {
                     // Odd numbered dropdowns are for keywords.
                     var setIndex = (index - 1) / 2; // 1 --> 0, 3 --> 1, 5 --> 2, etc.
                     var setName = (keywordSets[setIndex].name !== '') ? keywordSets[setIndex].name : 'untitled set';
-                    $(element).text(setName); // Change the inner text of this selector element to category title.
+                    selector.text(setName); // Change the inner text of this selector element to category title.
                     // Note: here we do not change the '.ui-dropdownchecklist-text' element (as we do above) to eliminate the functionality of updating
                     // the selector with selected text. I.e., when a user selects a keyword, the selector box text will not change to that keyword, 
                     // it will stay as the category title. 
 
                     // Set the width of keywords dropdowns and make overflowing text have an ellipsis.
-                    $(element)//.css('width', searchInput.width() + 'px')
-                              .css('width','auto')
+                    selector.css('width','auto') 
                               .css('overflow', 'hidden')
                               .css('text-overflow', 'ellipsis');
                 }
 
                 // Further stylization of selector box.
-                $(element).parent().css('height', elementHeight + 'px'); // This element uses padding, so we actually change the height of its parent, a wrapper span. 
-                $(element).css('color', '#000'); // Make the text black.
+                selector.parent().css('height', elementHeight + 'px'); // This element uses padding, so we actually change the height of its parent, a wrapper span. 
+                selector.css('color', '#000'); // Make the text black.
 
                 // Create a dropdown arrow.
-                var downArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/blackclose.svg').addClass('selector-dropdown').addClass('arrow');
+                var downArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/blackclose.svg').addClass('selector-dropdown').addClass('arrow')
+                    .css({ 'width': ($("#tagRoot").width() * 0.01015) + 'px' });
+                selector.parent().append(downArrow); // Add the arrow the selector box.
                 //adjust hard-coded size of drop down arrows if in previewer
                 if (previewing) { downArrow.css({ 'width': '5px', 'margin-right': '1px', 'top': '0%' }); }
-                $(element).parent().append(downArrow); // Add the arrow the selector box.
-                if (index % 2 != 0) {
-                    $(element).parent().css('width', ($(element).parent().outerWidth() * 1.5) + 'px'); //set width of wrapper to fit in drop down arrow
+
+                if (TAG.Util.Splitscreen.isOn()) { //experimenting for splitscreen
+                    if (index % 2 != 0) {
+                        //set width of text element appropriately
+                        var minKeywordWidth = $("#tagRoot").width()*0.058565;
+                        var maxKeywordWidth = $("#tagRoot").width() * 0.0732;
+                        var elWidth = parseInt(selector.width());
+                        if (elWidth > minKeywordWidth) {
+                            if (elWidth > maxKeywordWidth) {
+                               selector.css('width', maxKeywordWidth + 'px')
+                            }
+                        } else {
+                            selector.css('width', minKeywordWidth + 'px');
+                        }
+                    } else {
+                        //set widths of boolean drop downs
+                        var booleanWidth = $("#tagRoot").width()*0.0366;
+                        selector.parent().css('width', booleanWidth + 'px');
+                    }
+                                       
+                    //add drop down arrow underneath text of keyword dropdown instead of on side
+                    selector.parent().css('width', $(element).width());
+                    selector.parent().css('height', $(element).parent().height()+ downArrow.height() + 'px'); //experimenting with splitscreen
+                    downArrow.css({ 'float': 'none', 'top': '-25%' });
+                } else {
+                    selector.parent().css({ 'width': $(element).parent().outerWidth() * 1.3 + 'px' });
                 }
-                $(element).parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
-                         .css('width', $(element).parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
+
+                //tool tip on mouseenter when ellipsis
+                selector.bind('mouseenter', function () {
+                    var $this = $(this);
+                    if (this.offsetWidth < this.scrollWidth && !$this.attr('title')) {
+                        $this.attr('title', $this.text());
+                    }
+                });
+
+               selector.parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
+                         .css('width', selector.parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
 
             });
 
             // The last thing we do is add a search button. 
-            if (keywordSets && (keywordSets[0].shown === 'true' || keywordSets[1].shown === 'true' || keywordSets[2].shown === 'true')) {
-                var searchButtonListItem = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
-                var searchButton = $(document.createElement('div')).text('Search')
-                    .attr('id', 'searchButton')
-                    .css('height', elementHeight + 'px')
-                    .hover(
-                        function () {
-                            $(this).css('background-color', '#39f');
-                        }, function () {
-                            $(this).css('background-color', '#fff');
-                        })
-                    .click(
-                        function () {
-                            doSearch(true);
-                        });
-                searchButtonListItem.append(searchButton);
-                selectList.append(searchButtonListItem);
-            }
+            var searchButtonListItem = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
+            var searchButton = $(document.createElement('div')).text('Search')
+                .attr('id', 'searchButton')
+                .css('height', elementHeight + 'px')
+                .hover(
+                    function () {
+                        $(this).css('background-color', '#39f');
+                    }, function () {
+                        $(this).css('background-color', '#fff');
+                    })
+                .click(
+                    function () {
+                        if (TAG.Util.Splitscreen.isOn()) {
+                            root.find("#filterByKeywords").click();
+                        }
+                        doSearch(true);
+                    });
+            searchButtonListItem.append(searchButton);
+            selectList.append(searchButtonListItem);
             
             //ui fixes for when in previewer
             if (previewing) {
@@ -823,12 +872,74 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
             
 
+            //other styling if in splitscreen
+            if (TAG.Util.Splitscreen.isOn()) {
+                root.find('#keywords').css({
+                    'display': 'none',
+                    'z-index': '50',
+                    'padding-top': '3%',
+                    'padding-bottom': '3%',
+                    'width': '99%',
+                    'background-color': 'rgba(0,0,0,.85)',
+                    'border-radius': '3.5px',
+                    'text-align': 'center'
+                });
+                root.find("#searchButton").css({
+                    'font-size': '70%',
+                    'padding-bottom': '0%',
+                    'padding-top': '0.5%'
+                });
+                var filterText = $(document.createElement('div')).text('Filter By Keywords')
+                    .css({
+                        'display': 'inline-block',
+                        'margin-left': '2%',
+                        'margin-right': '2%'
+                    });
+                var filterArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/Close.svg').attr('id','filterArrow')
+                    .css({
+                        'transform' : 'rotate(270deg)',
+                        '-webkit-transform': 'rotate(270deg)',
+                        'width' : '1.5%',
+                        'height': 'auto'
+                    });
+                root.find('#filterByKeywords').css({ 'display': 'inline', 'height': elementHeight + 'px', 'cursor' : 'pointer' })
+                    .append(filterText)
+                    .append(filterArrow)
+                    .toggle(function () {
+                        root.find('#keywords').css('display', 'inline');
+                        root.find("#filterArrow").css({
+                            'transform': 'rotate(90deg)',
+                            '-webkit-transform': 'rotate(90deg)'
+                        });
+                    }, function () {
+                        root.find('#keywords').css('display', 'none');
+                        root.find("#filterArrow").css({
+                            'transform': 'rotate(270deg)',
+                            '-webkit-transform': 'rotate(270deg)'
+                        });
+                    });                  
+            }
+
+            // If we are coming back and there was a previous search, execute that search.
+            if (backSearch) {
+                updateSearchInput(backSearch.searchText, backSearch.keywordSearchOptions);
+                var emptySearch = backSearch.searchText === '';
+                $.each(backSearch.keywordSearchOptions, function (setIndex, options) {
+                    emptySearch = emptySearch && options.keywords.length === 0;
+                });
+                if (!emptySearch) {
+                    doSearch(true);
+                }
+            }
+            
         } else {
-            //var divHeight = $('#leftContainer').height()/2;
-            //$('#leftContainer').css('margin-top', divHeight + 'px');
-            //$('#leftContainer').css('margin-bottom', divHeight + 'px');
-        }
+            var divHeight = $('#leftContainer').height()/2;
+            $('#leftContainer').css('margin-top', divHeight + 'px');
+            $('#leftContainer').css('margin-bottom', divHeight + 'px');
+      }
+
     }
+
 
     /**
      * Applies customization changes to main divs
@@ -868,7 +979,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextTitle,
                 prevTitle,
                 mainCollection = root.find('#mainCollection'),
-                titleBox = root.find('#collection-title'),
+                titleBox = $('#collection-title'),
                 collectionMedia = [],
                 counter = 0,
                 collectionLength,
@@ -933,29 +1044,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Clear catalog div (with info and artwork tiles)
             catalogDiv.empty();
-            catalogDiv.stop();
-
-            // if (!collectionDots[collection.Identifier]){
-            //     //For previewing unpublished collections in authoring: add a collection dot and highlight it. 
-            //     dummyDot = $(document.createElement('div'))
-            //         .addClass('collectionDot')
-            //         .css({
-            //             "width": COLLECTION_DOT_WIDTH,
-            //             "height":  COLLECTION_DOT_WIDTH,
-            //             "border-radius": COLLECTION_DOT_WIDTH / 2,
-            //             "margin": COLLECTION_DOT_WIDTH/4,
-            //             "background-color":'white'
-            //         });
-            //     collectionDotHolder.append(dummyDot);
-            //     dropDownArrowArea.css('display', 'none');
-
-            // } else {
-            //     //Make collection dot white and others gray
-            //     for(i = 0; i < visibleCollections.length; i++) { 
-            //         collectionDots[visibleCollections[i].Identifier].css('background-color','rgb(170,170,170)');
-            //     }
-            //     collectionDots[collection.Identifier].css('background-color', 'white');
-            // }                
+            catalogDiv.stop();             
 
             // formatting adjustments during splitscreen mode 
             if (TAG.Util.Splitscreen.isOn()) {
@@ -974,76 +1063,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
             makeOptionsClick();
             hideCollectionMenu();
-            /*
-            function loadPage(index) {
-                //makeOptionsClick('collectionsMenu');
-                prepareNextView();
-                loadCollection(visibleCollections[index])();
-            }
-
-            function makeOptionsClick(id) {
-                var menu = document.getElementById(id);
-                console.log("called MakeOptionsClick");
-                if (menu.hasChildNodes() == false) {
-                    for (var i = 0; i < visibleCollections.length; i++) {
-                        // console.log("In for loop!")
-                        var para = document.createElement("p");
-                        var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
-                        menuArray[i] = document.createElement("BUTTON");
-                        menuArray[i].setAttribute("id", i);
-                        menuArray[i].style.border = "none";
-                        menu.appendChild(para);
-
-                        //txtNode.addEventListener("click", loadPage());
-                        //btnNode.onclick = loadPage;
-                        //para.appendChild(btnNode);
-                        // btnNode.appendChild(txtNode);   
-
-                        menuArray[i].onclick = function () {
-                            loadPage(this.id);
-                        }
-                        para.appendChild(menuArray[i]);
-                        menuArray[i].appendChild(txtNode);
-                    }
-                }
-            }
-
-            // To show/hide dropdown menu
-            function showCollectionMenu(id) {
-                console.log("Called Show Menu");
-                
-                var menu = document.getElementById(id);
-                /*if (menu.hasChildNodes() == false) {
-                    for (var i = 0; i < visibleCollections.length; i++) {
-                        // console.log("In for loop!")
-                        var para = document.createElement("p");
-                        var txtNode = document.createTextNode(TAG.Util.htmlEntityDecode(visibleCollections[i].Name));
-                        menuArray[i] = document.createElement("BUTTON");
-                        menuArray[i].setAttribute("id", i);
-                        menuArray[i].style.border = "none";
-                        menu.appendChild(para);
-
-                        //txtNode.addEventListener("click", loadPage());
-                        //btnNode.onclick = loadPage;
-                        //para.appendChild(btnNode);
-                       // btnNode.appendChild(txtNode);   
-
-                        menuArray[i].onclick = function() {
-                            loadPage(this.id);
-                        }
-                        para.appendChild(menuArray[i]);
-                        menuArray[i].appendChild(txtNode);
-                    }
-                } */
-            /*
-                if (menu.style.display == 'block') {
-                    menu.style.display = 'none';
-                } else {
-                    menu.style.display = 'block';
-                }
-               
-            } */
-
 
             // Add collection title
             mainCollection.addClass('mainCollection');
@@ -1109,7 +1128,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'width': .13344* centeredCollectionHeader.height() + 'px',
                 'top' : "17.5%"
             });
-            if (!IS_WINDOWS) {
+            if (!IS_WINDOWS && !previewing) {
                 dropDownArrow.css({
                     'height': .64 * centeredCollectionHeader.height() + "px",
                     'width': .149 * centeredCollectionHeader.height() + 'px',
@@ -1156,122 +1175,18 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (collection.prevCollectionIndex||collection.prevCollectionIndex===0){
                 prevTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.prevCollectionIndex].Name)
 
-                /*dropDownArrow.css('display', 'inline')
-                    .off()
-                    .on('mousedown', function(j){
-                        return function () {
-                            showCollectionMenu();
-                        }
-                    }(collection));*/
                 dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
                 dropDownArrow.addClass('arrow');    
-                // prevCollection.addClass('nextPrevCollection')
-                //              .addClass('primaryFont')
-                //              .attr({
-                //                'id': 'collection-' + visibleCollections[collection.prevCollectionIndex].Identifier
-                //              })
-                //.css('left','3%')
-                //.html(prevTitle)
-                // .off()
-                //.on('mousedown', function(j){
-                // return function () {
-                //   prepareNextView();
-                // loadCollection(visibleCollections[j.prevCollectionIndex])();
-                //}
-                // }(collection));
-                // collectionArea.append(prevCollection);
-                // uiDocfrag.appendChild(prevCollection[0]);
-                //prevCollection.show();
-                // TAG.Telemetry.register(dropDownArrowArea, 'mousedown', 'CollectionsNavigation', function(tobj){
-                //     tobj.current_collection = currCollection.Identifier;
-                //     tobj.next_collection = prevTitle;
-                //     tobj.time_spent = nav_timer.get_elapsed();
-                //     //console.log("nav timer: " + tobj.time_spent);
-                //     nav_timer.restart();
-                //     tobj.navigation_type = "arrow";
-                // });
-                // TAG.Telemetry.register(prevCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
-                //     tobj.current_collection = currCollection.Identifier;
-                //     tobj.next_collection = prevTitle;
-                //     tobj.time_spent = nav_timer.get_elapsed();
-                //     //console.log("nav timer: " + tobj.time_spent);
-                //     nav_timer.restart();
-                //     tobj.navigation_type = "collection_name";
-                // });
+                
             }
 
-            // if (prevCollection){
-            //      prevCollection.css('width', (.95 * collectionArea.width() - mainCollection.width())/2 - dropDownArrowArea.width());
-            //      prevCollection.css('color', '#' + PRIMARY_FONT_COLOR);
-            //  }
-
-            // if (collection.nextCollectionIndex||collection.nextCollectionIndex===0){
-            //     nextTitle = TAG.Util.htmlEntityDecode(visibleCollections[collection.nextCollectionIndex].Name)
-            //     nextArrowArea.addClass('arrowArea');
-            //     nextArrowArea.css({'right': '0%'})
-            //                 .off()
-            //                 .on('mousedown', function(j){
-            //                     return function () {
-            //                         prepareNextView();
-            //                         loadCollection(visibleCollections[j.nextCollectionIndex])();
-            //                     }
-            //                 }(collection));
-            //     nextArrowArea.show();
-            //     // collectionArea.append(nextArrowArea);
-            //     nextArrow.attr('src', tagPath + 'images/icons/Open.svg');
-            //     nextArrow.addClass('arrow');
-            //     nextCollection.addClass('nextPrevCollection')
-            //                   .addClass('primaryFont')
-            //                   //.attr({
-            //                   //   'id': 'collection-' + visibleCollections[collection.nextCollectionIndex].Identifier
-            //                   // })
-            //                   .html(nextTitle)
-            //                   .css({
-            //                       'right': 0 + nextArrowArea.width()/2,
-            //                       'width': (.95 * collectionArea.width() - mainCollection.width())/2 - nextArrowArea.width(),
-            //                       //'color': '#' + PRIMARY_FONT_COLOR
-            //                   })
-            //                 .off()
-            //                 .on('mousedown', function(j){
-            //                     return function(){
-            //                         prepareNextView();
-            //                         loadCollection(visibleCollections[j.nextCollectionIndex])();
-            //                     }
-            //                 }(collection));
-            //nextCollection.show();
-            /**
-            TAG.Telemetry.register(nextArrowArea, 'mousedown', 'collection_title', function(tobj){
-                //tobj.custom_1 = CryptoJS.SHA1(ne, 'mousedown', 'CollectionsNavigation', function(tobj){
-                tobj.current_collection = currCollection.Identifier;
-                tobj.next_collection = nextTitle;
-                tobj.time_spent = nav_timer.get_elapsed();
-                //console.log("nav timer: " + tobj.time_spent);
-                nav_timer.restart();
-                tobj.navigation_type = "arrow";
-            });
-            **/
-            /**
-            TAG.Telemetry.register(nextCollection, 'mousedown', 'CollectionsNavigation', function(tobj){
-                tobj.current_collection = currCollection.Identifier;
-                tobj.next_collection = nextTitle;
-                tobj.time_spent = nav_timer.get_elapsed();
-                //console.log("nav timer: " + tobj.time_spent);
-                nav_timer.restart();
-                tobj.navigation_type = "collection_name";
-            });
-            **/
-            //collectionArea.append(nextCollection);
-            uiDocfrag.appendChild(nextCollection[0]);
-            // }
+            
             collectionArea.append($(uiDocfrag));
 
             if (collection.prevCollectionIndex===null && !collection.nextCollectionIndex===null) {
                 dropDownArrow.hide();
-            } else if (collection.prevCollectionIndex === null) {
-                prevCollection.hide();
-            } else if (collection.nextCollectionIndex === null) {
-                nextCollection.hide();
             }
+
             collectionDescription.attr('id', 'collectionDescription');
             collectionDescription.addClass('secondaryFont');
             collectionDescription.css({'word-wrap': 'break-word', "color": SECONDARY_FONT_COLOR});
@@ -1355,12 +1270,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             catalogDiv.append(tileCircle);
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){
-                // toggleRow.css({
-                //     'display': 'block',
-                // });
-                // if (TAG.Util.Splitscreen.isOn()) {
-                //     toggleRow.css('width', '40%');
-                // }
                 filtersDiv.css('display','inline');
                 divideDiv.css('display','inline');
                 artworksButton.off()
@@ -1396,7 +1305,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //scrollPos = sPos || 0;
             applyCustomization();
             if (!onAssocMediaView || !currCollection.collectionMedia) {
-                getCollectionContents(currCollection, null, function () { return cancelLoad;});
+                getCollectionContents(currCollection, function () { addKeywords(); }, function () { return cancelLoad;});
             } else {
                 if (onAssocMediaView && artworkInCollectionList.length == 0) {
                     TAG.Worktop.Database.getArtworksIn(collection.Identifier,
@@ -1409,11 +1318,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             createArtTiles(currCollection.collectionMedia);
                             loadSortTags(currCollection, currCollection.collectionMedia)
                             initSearch(currCollection.collectionMedia);
+                            addKeywords();
                         }, null, null);
                 } else {
                     createArtTiles(currCollection.collectionMedia);
                     loadSortTags(currCollection, currCollection.collectionMedia)
                     initSearch(currCollection.collectionMedia);
+                    addKeywords();
                 }
             }
             cancelLoadCollection = function () { cancelLoad = true; };
@@ -1502,15 +1413,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
         };
 
-        // if (menu.style.display == 'block') {
-        //     menu.style.display = 'none';
-        //     arrow.style.transform = 'rotate(270deg)';
-        //     arrow.style.webkitTransform = 'rotate(270deg)';
-        // } else {
-        //     menu.style.display = 'block';
-        //     arrow.style.transform = 'rotate(90deg)';
-        //     arrow.style.webkitTransform = 'rotate(90deg)';
-        // }
     }
 
     /**
@@ -1727,6 +1629,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
 
         // Keywords.
+        // Get keywords from the server!
+        keywordSets = TAG.Worktop.Database.getKeywordSets();
         if (keywordSets) {
             // Build hash for keywords to artworks. Each set has dictionaries for AND and NOT.
             // keywordDictionary[setIndex].and["keyword"] --> [artworks with "keyword"] in set
@@ -1877,6 +1781,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
+        var duration = ANIMATION_DURATION/5;
+        catalogDiv.animate({
+            scrollLeft: 0
+        }, duration, "easeInOutQuint");
         root.find('#searchDescription').text(searchDescriptionText);
         root.find('#clearSearchButton').css({ 'display': 'block' });
         root.find('#collectionDescription').hide();
@@ -4049,6 +3957,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
             backCollection: currCollection,
+            prevSearch: {'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions},
             prevTag : currentTag,
             backArtwork: tour,
             prevMult : multipleShown
@@ -4077,6 +3986,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos : containerLeft || selectedArtworkContainer.position().left,
             prevTag: currentTag,
+            prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions },
             prevMult: multipleShown
         };
         videoPlayer = TAG.Layout.VideoPlayer(video, currCollection, prevInfo);
@@ -4156,6 +4066,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     prevCollection: currCollection,
                     prevPage: 'catalog',
                     prevMult: multipleShown,
+                    prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions },
                     assocMediaToShow: associatedMedia,
                     onAssocMediaView : onAssocMediaView
                 });

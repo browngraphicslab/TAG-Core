@@ -102,7 +102,7 @@
 	overflow-x auto
 	overflow-y hidden
 	position absolute
-	bottom 0
+	//bottom 0
 	right 0
 	width 100%
 	z-index 49  
@@ -285,9 +285,17 @@
 #newCatalogRoot #filterContainer
 	position relative
 	width 100%
+	margin-left 2%
 
 #newCatalogRoot #filters
 	display inline
+
+#newCatalogRoot #filterByKeywords
+	display none
+	width 100%
+	float left
+	margin-top 2%
+	cursor auto
 
 #newCatalogRoot .imgDiv
 	width 85%
@@ -319,8 +327,9 @@
 
 #newCatalogRoot #keywords
 	display inline
-	position absolute
-	left 0
+	position relative
+	//left 0
+	float left
 	margin-top 1%
 	width 100%
 
@@ -333,7 +342,6 @@
 	display inline
 	position absolute
 	width 98%
-	margin-left 2%
 	margin-bottom 2%
 
 #newCatalogRoot li.rowItem
@@ -460,13 +468,13 @@
 	border-style solid
 	border-width 0.05em
 	border-radius 2%
-	font-size 100%
+	font-size 90%
 	vertical-align middle
-	font-weight bold
+	//font-weight bold
 	padding-left 1.2%
 	padding-right 1.2%
-	padding-top 0.05%
-	padding-bottom 0.05%
+	padding-top 0.07%
+	padding-bottom 0.03%
 	
 
 #newCatalogRoot #searchDescription
@@ -647,6 +655,7 @@
 	margin 0px 0px 0px 0px
 	list-style-type none
 	display inline
+	padding 0%
 
 #newCatalogRoot ul.rowRight
 	list-style-type none
@@ -668,7 +677,10 @@
 #newCatalogRoot .ui-dropdownchecklist-item input
 	border 1px solid #777
 	float left
-	margin 1%
+	margin-bottom 1%
+	margin-left 1%
+	margin-right 1%
+	margin-top 6%
 
 #newCatalogRoot .ui-dropdownchecklist-item label
 	vertical-align middle
@@ -715,6 +727,9 @@
 	font-size 100%
 	width auto
 
+#newCatalogRoot .ui-dropdownchecklist-selector:hover
+	overflow visible 
+
 #newCatalogRoot .ui-dropdownchecklist-selector.ui-state-hover 
 	background-color #fff
 
@@ -722,12 +737,12 @@
 	padding: 1px 2px 2px 2px;
 
 #newCatalogRoot .selector-dropdown
-	width 13px
+	min-width 13px
+	height auto
 	left: 0%
 	opacity: 0.75
 	float: right
 	position: relative
-	top vertical-align middle
 	margin-right 3px
 	transform rotate(270deg)
 	-webkit-transform rotate(270deg)

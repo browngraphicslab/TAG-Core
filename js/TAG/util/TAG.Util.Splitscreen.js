@@ -273,15 +273,50 @@ TAG.Util.Splitscreen = (function () {
                     "float": "right",
                     "display" : "block"
                 });
-                root.find('#collectionMenu').css('width', '35%');
-                /**
-                root.find('.nextPrevCollection').css({
-                    'width': (.95 * root.find("#collectionArea").width() - root.find('.mainCollection').width()) / 2 - root.find(".arrow").width(),
+
+                //all the many re-adjustments for the keywords row
+                root.find("#keywords").css({
+                    'display': 'inline',
+                    'z-index': 'inherit',
+                    'padding': '0%',  
+                    'width': '100%',
+                    'background-color': 'transparent',
+                    'border-radius': '0px',
+                    'text-align': 'left'
                 });
-                root.find('.collection-title').css('margin-left','8%');
-                **/
+                root.find("#searchButton").css({
+                    'font-size': '90%',
+                    'padding-bottom': '0.03%',
+                    'padding-top': '0.07%',
+                });
+                root.find("#filterByKeywords").empty().unbind()
+                    .css({
+                        'display': 'none',
+                        'cursor': 'auto'
+                    });              
+                root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
+                    var selector = $(element);
+                    selector.find('.ui-dropdownchecklist-test').css('width', 'auto');
+                    selector.css({ 'width': 'auto' });
+                    selector.parent().css({ 'height': root.find("#searchInput").height() + 'px' });
+                    selector.parent().find('.selector-dropdown').css({
+                        'width': ($("#tagRoot").width() * 0.01015) + 'px',
+                        'float': 'right',
+                        'top': '25%'
+                    });
+                    selector.parent().css({ 'width': 'auto' });
+                    selector.parent().css({ 'width': selector.parent().outerWidth() * 1.3 + 'px' });
+                    selector.parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
+                            .css('width', selector.parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
+                    
+                });
+
+
+                root.find('#collectionMenu').css('width', '35%');
+
                 root.find('#infoButton').show();
-                if (root.find('#infoDiv').width() !== 0) {
+                //adjust position of tiles to take description into account
+                if (parseInt(root.find('#infoDiv').css('margin-left')) >= 0) {
                     root.find('#infoDiv').css('width', '25%');
                     root.find("#tileDiv").css({ 'margin-left': '0%', 'left': root.find('#infoDiv').width() });
                 }

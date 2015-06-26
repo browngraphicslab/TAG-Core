@@ -47,7 +47,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevTag             = options.prevTag,          // sort tag of collection we came from, if any
         prevMult            = options.prevMult, 
         prevPreview         = options.prevPreview,      //previous artwork/media that was previewing (could be different than doq for assoc media view)     
-        prevPreviewPos       = options.prevPreviewPos,
+        prevPreviewPos = options.prevPreviewPos,
+        prevSearch          = options.prevSearch,       // previous search
         previewing 	        = options.previewing, 	   // if we are previewing in authoring (for styling)
         assocMediaToShow    = options.assocMediaToShow,
         wasOnAssocMediaView = options.onAssocMediaView,
@@ -737,7 +738,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 backArtwork:    prevPreview,
                 backCollection: prevCollection,
                 backTag : prevTag,
-                backMult : prevMult,
+                backMult: prevMult,
+                backSearch: prevSearch,
                 wasOnAssocMediaView: wasOnAssocMediaView,
                 splitscreen: root.data('split')
             });
