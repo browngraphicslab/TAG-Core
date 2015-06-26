@@ -2266,6 +2266,11 @@ TAG.TourAuthoring.Display = function (spec, my) {
             var data = my.timeline.captureKeyframe(my.title),
                 keyframe, command, i;
 
+            if (!data) {
+                console.log("unable to capture keyframe in track " + my.title);
+                return;
+            }
+
             var rinData = {
                 viewport: {
                     region: {
