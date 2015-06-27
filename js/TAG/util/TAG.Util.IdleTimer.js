@@ -43,6 +43,7 @@ TAG.Util.IdleTimer = (function() {
          * @method start
          */
         function start() {
+            console.log("timer start")
             if(idleDuration !== 0) { // default is no idle timer
                 s1TimeoutID = setTimeout(fireS1, s1d);
                 started = true;
@@ -55,6 +56,7 @@ TAG.Util.IdleTimer = (function() {
          * @method kill
          */
         function kill() {
+            console.log("timer killed")
             s1TimeoutID && clearTimeout(s1TimeoutID);
             s2TimeoutID && clearTimeout(s2TimeoutID);
             overlayInterval && clearInterval(overlayInterval);
