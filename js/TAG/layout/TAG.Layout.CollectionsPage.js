@@ -143,6 +143,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
     backButton.click(function () {    
         TAG.Layout.StartPage(null, function (page) {
+            // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+            // For now, we'll just hide the whole keywords div.
+            $('#keywords').hide();
             TAG.Util.UI.slidePageRight(page);
         });
     });
@@ -4056,6 +4059,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionOptions,
             parentid;
 
+        // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+        // For now, we'll just hide the whole keywords div.
+        $('#keywords').hide();
+
         //Options for when we return to the collections page
         collectionOptions = {
             prevScroll: catalogDiv.scrollLeft(),
@@ -4084,6 +4091,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function switchPageVideo(video, containerLeft) {
         var prevInfo,
             videoPlayer;
+
+        // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+        // For now, we'll just hide the whole keywords div.
+        $('#keywords').hide();
 
         prevInfo = {
             artworkPrev: null,
@@ -4161,6 +4172,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     switchPageVideo(artwork, containerLeft);
                 }
             } else { // deepzoom artwork
+
+                // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+                // For now, we'll just hide the whole keywords div.
+                $('#keywords').hide();
+
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
                     prevPreview: currentArtwork,
