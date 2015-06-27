@@ -760,6 +760,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                 });
             }
+
+            root.find('select.keywordsSelect').hide().css({
+                'display': 'none',
+                'opacity': '0'
+            });
             
             // Unfortunately, the dropdownchecklists are minimally stylized, so we need to do some cleaning up. 
 
@@ -853,7 +858,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .css('height', elementHeight + 'px')
                 .hover(
                     function () {
-                        $(this).css('background-color', '#39f');
+                        if ($(this).attr('disabled') !== 'disabled') {
+                            $(this).css('background-color', '#39f');
+                        }
                     }, function () {
                         $(this).css('background-color', '#fff');
                     })
@@ -1226,10 +1233,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .text('Clear search results')
                 .hover(
                     function () {
-                        $(this).css({ 
-                            'background-color': SECONDARY_FONT_COLOR,
-                            'color': '#000'
-                        });
+                        if ($(this).attr('disabled') !== 'disabled') {
+                            $(this).css({
+                                'background-color': SECONDARY_FONT_COLOR,
+                                'color': '#000'
+                            });
+                        }
                     },
                     function () {
                         $(this).css({
@@ -1768,8 +1777,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // If there is no description, hide the infoDiv.
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   ") {
+                $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+                $('#clearSearchButton').attr('disabled', 'disabled')
+                    .css({
+                        'background-color': 'rgba(0, 0, 0, 0.6)',
+                        'color': SECONDARY_FONT_COLOR
+                    });
                 tileDiv.animate({ 'left': '0%' }, 1000, function () { });
-                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
+                    $(searchButton).removeAttr('disabled');
+                    $('#clearSearchButton').removeAttr('disabled');
+                });
             }
             drawCatalog(currentArtworks, currentTag, 0, false);
             return;
@@ -1784,17 +1802,36 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
-        var duration = ANIMATION_DURATION/5;
-        catalogDiv.animate({
-            scrollLeft: 0
-        }, duration, "easeInOutQuint");
+        if (!comingBack) {
+            var duration = ANIMATION_DURATION / 5;
+            catalogDiv.animate({
+                scrollLeft: 0
+            }, duration, "easeInOutQuint", function () {
+                if (currentArtwork) {
+                    showArtwork(currentArtwork, multipleShown && multipleShown)();
+                }
+            });
+        } else {
+            if (currentArtwork) {
+                showArtwork(currentArtwork, multipleShown && multipleShown)();
+            }
+        }
         root.find('#searchDescription').text(searchDescriptionText);
         root.find('#clearSearchButton').css({ 'display': 'block' });
         root.find('#collectionDescription').hide();
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-        if (description === "" + "\n\n   ") {
+        if (description === "" + "\n\n   " && tileDiv.css('left') !== infoDiv.width() + 'px') {
+            $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+            $('#clearSearchButton').attr('disabled', 'disabled')
+                .css({
+                    'background-color': 'rgba(0, 0, 0, 0.6)',
+                    'color': SECONDARY_FONT_COLOR
+                });
             tileDiv.animate({ 'left': infoDiv.width() + 'px' }, 1000, function () { });
-            infoDiv.animate({ 'margin-left': '0%' }, 1000, function () { });
+            infoDiv.animate({ 'margin-left': '0%' }, 1000, function () {
+                $(searchButton).removeAttr('disabled');
+                $('#clearSearchButton').removeAttr('disabled');
+            });
         }
 
         //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
@@ -1921,8 +1958,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // If there is no description, hide the infoDiv.
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   ") {
+                $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+                $('#clearSearchButton').attr('disabled', 'disabled');
                 tileDiv.animate({ 'left': '0%' }, 1000, function () { });
-                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
+                    $(searchButton).removeAttr('disabled');
+                    $('#clearSearchButton').removeAttr('disabled');
+                });
             }
 
             // See if we will need to redraw the timeline
