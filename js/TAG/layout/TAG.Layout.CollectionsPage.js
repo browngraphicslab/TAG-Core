@@ -293,7 +293,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             linkButton.css("float", "left");
         }
 
-        catalogDiv.css('bottom', - (0.01 * $("#tagRoot").height()) + 'px');
+        catalogDiv.css('bottom', -(0.01 * $("#tagRoot").height()) + 'px');
 
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
@@ -325,6 +325,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'width': 'auto',
             'top': '22%',
         };
+
+        root.find(".sortButton").css({
+            'max-width': $("#tagRoot").width() * 0.15 + 'px',
+        });
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
@@ -699,7 +703,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
-      if (showKeywords) {
+      if (keywordSets && showKeywords) {
             // Create unordered list of select elements.
             var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
 
@@ -750,13 +754,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (IS_WINDOWS) {
                 MSApp.execUnsafeLocalFunction(function () { // You got a deathwish, Truant?
                     root.find('select.keywordsSelect').dropdownchecklist({
-                       // maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                        maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
                         closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                     });
                 });
             } else {
                 root.find('select.keywordsSelect').dropdownchecklist({
-                   // maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                    maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
                     closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                 });
             }
@@ -772,7 +776,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
             var selector;
             root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
-                selector = $(element);
+                selector = $(element);               
+                if (previewing) {
+                    selector.css({ 'max-width': $("#setViewViewer").width() * 0.095 + 'px' });
+                } else {
+                    selector.css({ 'max-width': $("#tagRoot").width() * 0.095 + 'px' });
+                }
                 // Set the text inside the selector box.
                 if (index % 2 == 0) {
                     // Even numbered dropdowns are operator dropdowns.
@@ -897,8 +906,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 root.find("#searchButton").css({
                     'font-size': '70%',
                     'padding-bottom': '0%',
-                    'padding-top': '0.5%'
+                    'padding-top': '0.5%',                   
                 });
+                root.find("#searchInput").css({
+                    'width': $("#searchInput").width() / 2
+                });
+                root.find(".sortButton").css({
+                    'max-width': $("#tagRoot").width()*0.075 + 'px',
+                });
+                root.find("#divide").css({ 'margin-top': '2%' });
+                root.find("#artworksButton").css({ 'margin-top': '2%' });
+                root.find("#assocMediaButton").css({ 'margin-top': '2%' });
+                root.find("#filterWrapper").css({'float':'left'});
+
                 var filterText = $(document.createElement('div')).text('Filter By Keywords')
                     .css({
                         'display': 'inline-block',
@@ -909,7 +929,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({
                         'transform' : 'rotate(270deg)',
                         '-webkit-transform': 'rotate(270deg)',
-                        'width' : '1.5%',
+                        'width' : '4%',
                         'height': 'auto'
                     });
                 root.find('#filterByKeywords').css({ 'display': 'inline', 'height': elementHeight + 'px', 'cursor' : 'pointer' })
@@ -1275,6 +1295,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             infoDiv.append(collectionDescription);
             catalogDiv.append(infoDiv);
             timelineArea.empty();
+            timelineArea.css({ "bottom": $("#tagRoot").height() * 0.011 + 'px' });
             styleBottomContainer();
 
             //Show loading circle
@@ -2950,7 +2971,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!(currCollection.Metadata.Description && !onAssocMediaView)) {
                 infoWidth = 0;
             }
-            if (comingBack && previewPos){
+            if (comingBack && previewPos && !(TAG.Util.Splitscreen.isOn())){
                 containerLeft = previewPos;
             } else {
                 if (artworkTiles[artwork.Identifier]){

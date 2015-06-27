@@ -311,6 +311,17 @@ TAG.Util.Splitscreen = (function () {
                     
                 });
 
+                root.find("#searchInput").css({
+                    'width': $("#searchInput").width() * 2
+                });
+                root.find(".sortButton").css({
+                    'max-width': $("#tagRoot").width() * 0.15 + 'px',
+                });
+                root.find("#divide").css({ 'margin-top': '0%' });
+                root.find("#artworksButton").css({ 'margin-top': '0%' });
+                root.find("#assocMediaButton").css({ 'margin-top': '0%' });
+                root.find("#filterWrapper").css({ 'float': 'none' });
+
 
                 root.find('#collectionMenu').css('width', '35%');
 

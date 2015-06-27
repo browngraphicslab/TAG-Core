@@ -3428,7 +3428,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
             });
         }
-
+        if (idleTimer) {
+            idleTimer.kill();
+        }
         cancelLastSetting = function () { cancel = true; };
     }
 
@@ -3697,7 +3699,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
-        
+        if (idleTimer) {
+            idleTimer.kill();
+        }
 
     }
 
@@ -4150,7 +4154,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         cancelLastSetting = function () { cancel = true; };
     }
-    
+    if (idleTimer) {
+        idleTimer.kill();
+    }
     var load = 0;
 
     /**Loads associated media to the right side
@@ -4626,6 +4632,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
+        if (idleTimer) {
+            idleTimer.kill();
+        }
     }
 
 
@@ -5838,7 +5847,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             
         }
-            
+        if (idleTimer) {
+            idleTimer.kill();
+        }
         cancelLastSetting = function () { cancel = true; };
     }
 
@@ -6494,6 +6505,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }*/
         });
         cancelArtworkLoad = function () { cancel = true; };
+        if (idleTimer) {
+            idleTimer.kill();
+        }
     }
 
     /**Save Thumbnail image 
