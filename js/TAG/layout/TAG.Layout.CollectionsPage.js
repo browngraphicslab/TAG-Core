@@ -2928,7 +2928,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!(currCollection.Metadata.Description && !onAssocMediaView)) {
                 infoWidth = 0;
             }
-            if (comingBack && previewPos){
+            if (comingBack && previewPos && !(TAG.Util.Splitscreen.isOn())){
                 containerLeft = previewPos;
             } else {
                 if (artworkTiles[artwork.Identifier]){
