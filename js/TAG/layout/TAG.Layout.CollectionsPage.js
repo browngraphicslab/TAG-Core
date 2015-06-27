@@ -754,13 +754,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (IS_WINDOWS) {
                 MSApp.execUnsafeLocalFunction(function () { // You got a deathwish, Truant?
                     root.find('select.keywordsSelect').dropdownchecklist({
-                       // maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                        maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
                         closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                     });
                 });
             } else {
                 root.find('select.keywordsSelect').dropdownchecklist({
-                   // maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
+                    maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
                     closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                 });
             }
