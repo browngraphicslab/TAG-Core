@@ -1081,6 +1081,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 root.find('#collectionMenu').css('width', '70%');
                 root.find('#backButtonArea').css('display', 'none');
             }
+            if (!IS_WINDOWS) {
+                root.find('#backButtonArea').css('position', 'relative');
+            }
 
             /**
             // resize the size of the collection menu after exiting splitscreen mode
