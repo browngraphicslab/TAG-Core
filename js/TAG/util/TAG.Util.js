@@ -3211,18 +3211,39 @@ TAG.Util.UI = (function () {
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
 
+        var namesLabel = document.createElement('div');
+        
+        $(namesLabel).css({
+            color: 'white',
+            'width': '80%',
+            'height': '50%',
+            'left': '10%',
+            'top': '12.5%',
+            'font-size': '1em',
+            'overflow': 'auto',
+            'position': 'relative',
+            'text-align': 'center',
+            'text-overflow': 'ellipsis',
+            'word-wrap': 'break-word'
+        });
+
+
+
         if(displayNames){
+            $(messageLabel).css('height', 'auto')
             for (var i = 0; i < displayNames.length; i++) {
 
                 var para = document.createElement('div');
                 $(para).text(displayNames[i]);
                 $(para).css({color: 'white', 'z-index': '99999999999'});
-                $(messageLabel).append(para);
+                $(namesLabel).append(para);
                 TAG.Util.multiLineEllipsis($(para));
             }
         }
 
         $(confirmBox).append(messageLabel);
+        $(confirmBox).append(namesLabel);
+
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
         $(optionButtonDiv).addClass('optionButtonDiv');
