@@ -4070,8 +4070,10 @@ TAG.Util.UI = (function () {
      * @param callback       function: function to be called when import is clicked or a component is double clicked
      * @param importBehavior
      * @param queueLength        
+     * @param mergeBoolean   boolean true if the picker is being called for the merging of multiple collections
+     * @param selctionCallback function: optional function to be called if any selection is actually made, and the transaction is not cancelled
      */
-    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength, mergeBoolean) {
+    function createAssociationPicker(root, title, target, type, tabs, filter, callback, importBehavior, queueLength, mergeBoolean, selectionCallback) {
         var pickerOverlay,
             picker,
             pickerHeader,
@@ -4389,6 +4391,9 @@ TAG.Util.UI = (function () {
             progressCirc = TAG.Util.showProgressCircle(optionButtonDiv, progressCSS);
             finalizeAssociations();
             globalKeyHandler[0] = currentKeyHandler;
+            if (selectionCallback) {
+                selectionCallback();
+            }
         });
 
         
