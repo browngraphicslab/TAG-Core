@@ -716,9 +716,24 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 }, function () { // TODO (low priority) -- shouldn't need to reload entire list here
                     $('.assetContainer').empty();
                     createMediaList($('.assetContainer'));
+                    addRemoveMedia.prop('disabled', false);
+                    addRemoveMedia.css('color', 'rgba(255,255,255,1)');
+                    addText.prop('disabled', false);
+                    addText.css('color', 'rgba(255,255,255,1)');
+                    TAG.Util.hideLoading($('.assetContainer'));
+                },
+                null,
+                null,
+                null,
+                function () {
+                    addRemoveMedia.prop('disabled', true);
+                    addRemoveMedia.css('color', 'rgba(255,255,255,0.5)');
+                    addText.prop('disabled', true);
+                    addText.css('color', 'rgba(255,255,255,0.5)');
+                    TAG.Util.showLoading($('.assetContainer'), '20%', '40%', '40%');
                 });
         }
-
+        
         assetContainer = $(document.createElement('div')); // TODO JADE/STYL
         assetContainer.attr('class', 'buttonContainer');
         assetContainer.css({
@@ -781,6 +796,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
         mainPanel.append(sidebar); // TODO JADE
         mainPanel.append(sidebarHideButtonContainer);
+        
     }
 
     /**
