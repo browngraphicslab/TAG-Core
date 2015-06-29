@@ -1839,7 +1839,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         for (i = 0; i < infoSource.length; i++) {
-            if ((keywordMatches[infoSource[i].id] === 'true' && (!doTextSearch || (doTextSearch && infoSource[i].keys.indexOf(content) > -1))) || emptyExplicitSearch) {
+            if (((keywordsInputEmpty || keywordMatches[infoSource[i].id] === 'true') && (!doTextSearch || (doTextSearch && infoSource[i].keys.indexOf(content) > -1))) || emptyExplicitSearch) {
                 matchedArts.push(currentArtworks[i]);
             } else {
                 unmatchedArts.push(currentArtworks[i]);
