@@ -329,8 +329,9 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		//The first takes in the the in dimensions in relative coordinates, and the second initializes a bunch of variables in tagink. 
 
 		//Then, when you animate (so on every timertick), call _adjustViewBox with ABSOLUTE coordinates of the artwork.
-
-		_attachedAsset.addInk(self);
+	    if (_attachedAsset) {
+	        _attachedAsset.addInk(self);
+	    }
 	};
 	self.attachToAsset = attachToAsset;
 	

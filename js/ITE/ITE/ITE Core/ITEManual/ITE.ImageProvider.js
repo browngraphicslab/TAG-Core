@@ -92,6 +92,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Sets the image’s URL source.
 		_image.attr("src", self.trackData.assetUrl);
+		_image.css({
+		    "top": "0px",
+		    "left": "0px",
+		    "width": "100%",
+            "height": "100%"
+		})
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 		TweenLite.ticker.addEventListener("tick", updateInk)
 
@@ -285,7 +291,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			"left":			state.left,
 			"top":			state.top,
 			"width":		state.width,
-			"height":		state.height
+			"height":		"auto"//state.height
 		});
 		// (state.opacity === 0) ? _UIControl.css("z-index", -1) : _UIControl.css("z-index", self.zIndex);
 		// (state.opacity === 0) ? _UIControl.css("pointer-events", "none") : _UIControl.css("pointer-events", "auto");
