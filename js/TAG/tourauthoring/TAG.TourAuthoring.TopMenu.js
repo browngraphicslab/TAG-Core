@@ -30,7 +30,10 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             "background-color": "rgb(63,55,53)",
             "height": "8%",
             "width": "100%",
-            "z-index": "1000000"
+            "z-index": "1000000",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
         });
         topbar.attr('id', 'topbar');
         

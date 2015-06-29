@@ -26,6 +26,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         $inkTextControls,
         $inkDrawControls,
         $inkTransControls,
+        $blocker,
         $inkEditText,
         $inkEditDraw,
         $inkEditTransparency,
@@ -45,9 +46,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     *Second row on screen, contains ComponentControls and Viewer
     **/
     (function setupResizableArea() {
-
-
-
         resizableArea.css({
             "background-color": "rgb(219,218,199)",
             "height": originalHeightSize + "px",
@@ -55,6 +53,26 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             "box-shadow": "0px 30px 30px -25px #888"
         });
         resizableArea.attr("id", "resizableArea");
+
+        $blocker = $(document.createElement('div'));
+        $blocker.css({
+            'background-color': "rgb(219, 218, 199)",
+            "height": window.innerHeight - originalHeightSize - 0.08 * window.innerHeight + "px",
+            "width": "100%",
+            "bottom": "0px",
+            "left": "0px",
+            "z-index": "99999",
+            "position": "absolute"
+        })
+        $blocker.attr("id", "blocker");
+
+        if (!$mainScrollHider) {
+            $mainScrollHider = $('.mainScrollHider');
+        }
+        $mainScrollHider.css({
+            'z-index': '1000000'
+        });
+
         //mouse down and drag this button, aka three dots...to resize the viewer and component control
         var resizeButtonDocfrag = document.createDocumentFragment();
         var resizeButtonArea = $(document.createElement('div'));
@@ -62,7 +80,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         resizeButtonArea.addClass('resizeButtonArea');
         resizeButtonArea.css({
             'height': '3%', 'width': '10%', 'position': 'absolute', 'top': (originalHeightSize + window.innerHeight * 0.09) + 'px',
-            'left': '45%', 'margin-left': '-1.5%', 'z-index': 0, 'float': 'left'
+            'left': '45%', 'margin-left': '-1.5%', 'z-index': 1000000, 'float': 'left'
         });
 
         var resizeButton = $(document.createElement('img'));
@@ -127,9 +145,19 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 if (!$mainScrollHider) {
                     $mainScrollHider = $('.mainScrollHider');
                 }
+
                 $mainScrollHider.css({
                     'height': $mainScrollHider.height() - distance + 'px',
+                    'z-index': '1000000'
                 });
+
+                if (!$blocker) {
+                    $blocker = $('#blocker');
+                }
+                $blocker.css({
+                    'height': $blocker.height() - distance + 'px',
+                });
+
                 if (!$trackBody) {
                     $trackBody = $('#trackBody');
                 }
@@ -192,6 +220,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         resizeButtonArea.append(resizeButton);
 
         root.append(resizeButtonDocfrag);
+        root.append($blocker);
        
     })();
  
@@ -232,7 +261,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             dataHolder: dataHolder,
             viewer: viewer,
             timeManager: timeManager,
-            
         });
         topbar = TAG.TourAuthoring.TopMenu({
             viewer: viewer,

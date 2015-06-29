@@ -90,6 +90,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             'width': editorWidth + 'px',
             'margin-top': '3%',
             'position': 'relative',
+            'z-index': '1000000'
         });
 
         // Top-level container, vertical scrolling

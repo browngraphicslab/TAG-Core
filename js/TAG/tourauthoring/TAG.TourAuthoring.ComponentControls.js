@@ -949,12 +949,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         functionsPanel.attr('id', 'component-controls');
         functionsPanel.css({
             "background-color": "rgb(219,218,199)",
-            "height": "48px",
+            "height": "100%",
             "width": "20%",
-            'top': '15px',
-            'left': '0%',
+            'top': '0px',
+            'left': '0px',
             'position': 'relative',
-            'float': 'left'
+            'float': 'left',
+            'z-index': 100000
         }); // Had to do tops and heights as CSS to prevent overlap on small screens
 
         /** Drop Down icon
@@ -5267,6 +5268,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function addToDOM(container) {
         container.append(functionsPanelDocfrag);
+
     }
     that.addToDOM = addToDOM;
 
