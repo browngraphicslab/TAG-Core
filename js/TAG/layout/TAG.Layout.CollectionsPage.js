@@ -1318,23 +1318,29 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 filtersDiv.css('display','inline');
                 divideDiv.css('display','inline');
                 artworksButton.off()
-                              .on('mousedown', function(){
-                                    //artworksButton.css('color', SECONDARY_FONT_COLOR);
-                                    //assocMediaButton.css('color', dimmedColor);
-                                    if (onAssocMediaView){
-                                        artworkShown = false;
-                                        onAssocMediaView = false;
-                                        loadCollection(currCollection)();
-                                    }
-                               });
-                
+                              .on('mousedown', function () {
+                                  //artworksButton.css('color', SECONDARY_FONT_COLOR);
+                                  //assocMediaButton.css('color', dimmedColor);
+                                  if (onAssocMediaView) {
+                                      onAssocMediaView = false;
+                                      artworkShown = false;
+                                      clearSearchResults();
+                                      clearKeywordCheckBoxes();
+                                      $('#keywords').show();
+                                      loadCollection(currCollection)();
+                                  }
+                              });
+
                 assocMediaButton.off()
-                                .on('mousedown', function(){
+                                .on('mousedown', function () {
                                     //artworksButton.css('color', dimmedColor);
                                     //assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView) {
-                                        currentArtwork && hideArtwork(currentArtwork)()
                                         onAssocMediaView = true;
+                                        clearSearchResults();
+                                        clearKeywordCheckBoxes();
+                                        currentArtwork && hideArtwork(currentArtwork)()
+                                        $('#keywords').hide();
                                         loadCollection(currCollection)();
                                     }
                                 });
@@ -1359,16 +1365,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             for (var i = 0; i < contents.length; i++) {
                                 artworkInCollectionList.push(contents[i].Identifier);
                             }
-
-                            createArtTiles(currCollection.collectionMedia);
                             loadSortTags(currCollection, currCollection.collectionMedia)
                             initSearch(currCollection.collectionMedia);
+                            createArtTiles(currCollection.collectionMedia);
                             addKeywords();
                         }, null, null);
                 } else {
-                    createArtTiles(currCollection.collectionMedia);
                     loadSortTags(currCollection, currCollection.collectionMedia)
                     initSearch(currCollection.collectionMedia);
+                    createArtTiles(currCollection.collectionMedia);
                     addKeywords();
                 }
             }
@@ -1632,9 +1637,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 catalogDiv.append(emptyCollectionDiv);
             }
             if (cancel && cancel()) return;
-            loadSortTags(collection,contents);
-            createArtTiles(contents, cancel);
+            loadSortTags(collection, contents);
             initSearch(contents);
+            createArtTiles(contents, cancel);
             callback && callback();
         }
 
@@ -1810,7 +1815,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             searchTxt.text("");
             // If there is no description, hide the infoDiv.
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-            if (description === "" + "\n\n   ") {
+            if (description === "" + "\n\n   " || onAssocMediaView) {
                 $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
                 $('#clearSearchButton').attr('disabled', 'disabled')
                     .css({
@@ -1823,7 +1828,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     $('#clearSearchButton').removeAttr('disabled');
                 });
             }
-            drawCatalog(currentArtworks, currentTag, 0, false);
+            drawCatalog(currentArtworks, currentTag, 0, false, false);
             return;
         }
 
@@ -1880,8 +1885,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             tobj.current_collection = currCollection.Identifier;
             tobj.number_of_matches = matchedArts.length;
         });
-        drawCatalog(matchedArts, currentTag, 0, true);
-        drawCatalog(unmatchedArts, currentTag, searchResultsLength, false);
+        drawCatalog(matchedArts, currentTag, 0, true, explicitSearch);
+        drawCatalog(unmatchedArts, currentTag, searchResultsLength, false, false);
 
         if (!animating && callback) {
             callback();
@@ -2018,7 +2023,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
         }
 
-        drawCatalog(currentArtworks, currentTag, 0, false);
+        drawCatalog(currentArtworks, currentTag, 0, false, true);
         
         keywordSearchOptions = [];
         searchResultsLength = null;
@@ -2032,7 +2037,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function createArtTiles(artworks, cancel) {
         currentArtworks = artworks;
         currentTag && colorSortTags(currentTag);
-        drawCatalog(currentArtworks, currentTag, 0, null, cancel);
+        drawCatalog(currentArtworks, currentTag, 0, null, true);
 
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
         if (description === "" + "\n\n   ") {
@@ -2046,12 +2051,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     /**
      * Draw the collection catalog
      * @method drawCatalog
-     * @param {Array} artworks    the contents of the collection
-     * @param {String} tag        current sorting tag
-     * @param {Number} start      starting at start-th artwork total (note NOT start-th artwork in artworks)
-     * @param {Boolean} onSearch  whether the list of artworks is a list of works matching a search term
+     * @param {Array} artworks          the contents of the collection
+     * @param {String} tag              current sorting tag
+     * @param {Number} start            starting at start-th artwork total (note NOT start-th artwork in artworks)
+     * @param {Boolean} onSearch        whether the list of artworks is a list of works matching a search term
+     * @param {Boolean} redrawTimeline  whether to call clearTimeline. I didn't want to do it, but timeline code is such a mess. It's the only whey.
      */
-    function drawCatalog(artworks, tag, start, onSearch) {
+    function drawCatalog(artworks, tag, start, onSearch, redrawTimeline) {
         if (!currCollection) {
             return;
         }
@@ -2163,7 +2169,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //    tileDiv.css({'margin-left':'0%'});
             //}
             catalogDiv.append(tileDiv);
-            clearTimeline(artworks);
+            if (redrawTimeline) {
+                clearTimeline(artworks);
+            }
            
         }
     }
@@ -2186,6 +2194,24 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
         if (currTimelineCircleArea){
             currTimelineCircleArea.stop(true,true);
+        }
+        //Sort artworks by year and find the minimum and maximum
+        var avlTree = sortByYear(artworks, true);
+
+        //Hide timeline if there are no compatible dates-- mostly for backwards compatibility
+        if (avlTree.min().yearKey >= 999999) {
+            timelineShown = false;
+            if (!comingBack) {
+                if ($('#titleButton')) {
+                    currentTag = "Title";
+                } else {
+                    currentTag = currentDefaultTag || null;
+                }
+            }
+            changeDisplayTag(artworks, currentTag);
+            colorSortTags(currentTag);
+        } else {
+            timelineShown = true;
         }
         if (timelineShown && artworks) {
             if (onAssocMediaView) {
@@ -2610,23 +2636,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         //Sort artworks by year and find the minimum and maximum
         avlTree = sortByYear(artworks, true);
         maxNode = avlTree.max();
-
-        //Hide timeline if there are no compatible dates-- mostly for backwards compatibility
-        if (avlTree.min().yearKey >= 999999){
-            timelineShown = false;
-            clearTimeline();
-            //TO-DO coming back isn't right here, so coming back from artwork viewer fails in this specific case
-            if (!comingBack){
-                if ($('#titleButton')){
-                    currentTag = "Title";
-                } else {
-                    currentTag = currentDefaultTag || null;
-                }
-            }
-            changeDisplayTag(artworks,currentTag);
-            colorSortTags(currentTag);
-            return;
-        }
         
         //Skip before tours and artworks with incompatible dates
         while (maxNode.yearKey >= 999999){
@@ -4072,7 +4081,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         currentArtwork && hideArtwork(currentArtwork)();
         currentTag = tag;
         colorSortTags(currentTag);
-        drawCatalog(artworks, currentTag, 0, false);
+        drawCatalog(artworks, currentTag, 0, false, false);
         doSearch(false); // search with new tag
     }
 
