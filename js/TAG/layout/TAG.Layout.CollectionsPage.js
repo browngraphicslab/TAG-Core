@@ -531,7 +531,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'margin-right': '6%'
         });
         infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag.');
-        infoMainBottom.text('Andy van Dam, Alex Hills, Yudi Fu, Benjamin LeVeque, Karthik Battula, Karishma Bhatia, Gregory Chatzinoff, John Connuck, David  Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Kaijan Gao, Jessica Herron, Ardra Hren, Hak Rim Kim, Lucy van Kleunen, Inna Komarovsky, Ryan Lester, Josh Lewis, Jinqing Li, Jeffery Lu, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Jonathan Poon, Dhruv Rawat, Emily Reif, Surbhi Madan, Tanay Padhi, Jacob Rosenfeld, Qingyun Wan, Jing Wang, David Weinberger, Anqi Wen, Dan Zhang, Libby Zorn');
+        infoMainBottom.text('Andy van Dam, Karthik Battula, Karishma Bhatia, Gregory Chatzinoff, Tiffany Citra, John Connuck, David Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Yudi Fu, Kaijan Gao, Trent Green, Jessica Herron, Alex Hills, Ardra Hren, Hak Rim Kim, Inna Komarovsky, Ryan Lester, Benjamin LeVeque, Josh Lewis, Jinqing Li, Jeffery Lu, Surbhi Madan, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Carlene Niguidula, Tanay Padhi, Jonathan Poon, Dhruv Rawat, Emily Reif, Jacob Rosenfeld, Lucy van Kleunen, Qingyun Wan, Jing Wang, David Weinberger, Anqi Wen, Natasha Wollkind, Dan Zhang, Libby Zorn');
         infoMain.append(infoMainTop);
         infoMain.append(infoMainBottom);
 
@@ -779,11 +779,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
             var selector;
             root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
-                selector = $(element);               
-                if (previewing) {
+                selector = $(element);
+                var maxW;
+                if (previewing) {                    
                     selector.css({ 'max-width': $("#setViewViewer").width() * 0.095 + 'px' });
                 } else {
-                    selector.css({ 'max-width': $("#tagRoot").width() * 0.095 + 'px' });
+                    if (index % 2 === 0) {
+                        maxW = $("#tagRoot").width()*0.04 + 'px';
+                    } else {
+                        maxW = $("#tagRoot").width()*0.12 + 'px';
+                    }
+                    selector.css({ 'max-width': maxW });
                 }
                 // Set the text inside the selector box.
                 if (index % 2 == 0) {
@@ -826,7 +832,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (index % 2 != 0) {
                         //set width of text element appropriately
                         var minKeywordWidth = $("#tagRoot").width()*0.058565;
-                        var maxKeywordWidth = $("#tagRoot").width() * 0.0732;
+                        var maxKeywordWidth = $("#tagRoot").width()*0.0732;
                         var elWidth = parseInt(selector.width());
                         if (elWidth > minKeywordWidth) {
                             if (elWidth > maxKeywordWidth) {
@@ -846,8 +852,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     selector.parent().css('height', $(element).parent().height()+ downArrow.height() + 'px'); //experimenting with splitscreen
                     downArrow.css({ 'float': 'none', 'top': '-25%' });
                 } else {
-                    var mult = 1.3
-                    selector.parent().css({ 'width': $(element).parent().outerWidth() * mult + 'px' });
+                    var mult = 1.1
+                    if (index % 2 != 0) {
+                        selector.parent().css({ 'width': $(element).parent().outerWidth() * mult + 'px' });
+                    }
                 }
 
                 //tool tip on mouseenter when ellipsis
@@ -907,9 +915,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'text-align': 'center'
                 });
                 root.find("#searchButton").css({
-                    'font-size': '70%',
+                    'font-size': '80%',
                     'padding-bottom': '0%',
-                    'padding-top': '0.5%',                   
+                    'padding-top': '0.5%',
+                    'margin-top': '1%'
                 });
                 root.find("#searchInput").css({
                     'width': $("#searchInput").width() / 2
