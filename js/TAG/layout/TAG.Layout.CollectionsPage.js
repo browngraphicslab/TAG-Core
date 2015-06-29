@@ -143,6 +143,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
     backButton.click(function () {    
         TAG.Layout.StartPage(null, function (page) {
+            // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+            // For now, we'll just hide the whole keywords div.
+            $('#keywords').hide();
             TAG.Util.UI.slidePageRight(page);
         });
     });
@@ -150,7 +153,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     if (lockKioskMode == "true") {
         backButton.css('display', 'none');
     } else {
-        collectionMenu.css('left', '5%');
+        //collectionMenu.css('left', '5%');
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
         }
@@ -293,7 +296,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             linkButton.css("float", "left");
         }
 
-        catalogDiv.css('bottom', - (0.01 * $("#tagRoot").height()) + 'px');
+        catalogDiv.css('bottom', -(0.01 * $("#tagRoot").height()) + 'px');
 
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
@@ -325,6 +328,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'width': 'auto',
             'top': '22%',
         };
+
+        root.find(".sortButton").css({
+            'max-width': $("#tagRoot").width() * 0.15 + 'px',
+        });
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
@@ -699,7 +706,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
-      if (showKeywords) {
+      if (keywordSets && showKeywords) {
             // Create unordered list of select elements.
             var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
 
@@ -760,6 +767,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
                 });
             }
+
+            root.find('select.keywordsSelect').hide().css({
+                'display': 'none',
+                'opacity': '0'
+            });
             
             // Unfortunately, the dropdownchecklists are minimally stylized, so we need to do some cleaning up. 
 
@@ -767,7 +779,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
             var selector;
             root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
-                selector = $(element);
+                selector = $(element);               
+                if (previewing) {
+                    selector.css({ 'max-width': $("#setViewViewer").width() * 0.095 + 'px' });
+                } else {
+                    selector.css({ 'max-width': $("#tagRoot").width() * 0.095 + 'px' });
+                }
                 // Set the text inside the selector box.
                 if (index % 2 == 0) {
                     // Even numbered dropdowns are operator dropdowns.
@@ -842,7 +859,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
 
                selector.parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
-                         .css('width', selector.parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
+                         .css({'width': selector.parent().outerWidth() + 'px'}); // Change the width of the actual dropdownchecklist to be the same.
 
             });
 
@@ -853,7 +870,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .css('height', elementHeight + 'px')
                 .hover(
                     function () {
-                        $(this).css('background-color', '#39f');
+                        if ($(this).attr('disabled') !== 'disabled') {
+                            $(this).css('background-color', '#39f');
+                        }
                     }, function () {
                         $(this).css('background-color', '#fff');
                     })
@@ -890,8 +909,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 root.find("#searchButton").css({
                     'font-size': '70%',
                     'padding-bottom': '0%',
-                    'padding-top': '0.5%'
+                    'padding-top': '0.5%',                   
                 });
+                root.find("#searchInput").css({
+                    'width': $("#searchInput").width() / 2
+                });
+                root.find(".sortButton").css({
+                    'max-width': $("#tagRoot").width()*0.075 + 'px',
+                });
+                root.find("#divide").css({ 'margin-top': '2%' });
+                root.find("#artworksButton").css({ 'margin-top': '2%' });
+                root.find("#assocMediaButton").css({ 'margin-top': '2%' });
+                root.find("#filterWrapper").css({'float':'left'});
+
                 var filterText = $(document.createElement('div')).text('Filter By Keywords')
                     .css({
                         'display': 'inline-block',
@@ -902,7 +932,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     .css({
                         'transform' : 'rotate(270deg)',
                         '-webkit-transform': 'rotate(270deg)',
-                        'width' : '1.5%',
+                        'width' : '4%',
                         'height': 'auto'
                     });
                 root.find('#filterByKeywords').css({ 'display': 'inline', 'height': elementHeight + 'px', 'cursor' : 'pointer' })
@@ -931,7 +961,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     emptySearch = emptySearch && options.keywords.length === 0;
                 });
                 if (!emptySearch) {
-                    doSearch(true);
+                    var artworkToShow = {};
+                    for (var prop in currentArtwork) {
+                        if (currentArtwork.hasOwnProperty(prop)) {
+                            artworkToShow[prop] = currentArtwork[prop];
+                        }
+                    }
+                    doSearch(true, function () { showArtwork(artworkToShow);});
                 }
             }
             
@@ -1021,7 +1057,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 timelineShown = true; //default to true for backwards compatibility
             }
             //If on associated media view and there are no associated media with valid dates, hide the timeline
-            if (onAssocMediaView && collection.collectionMediaMinYear===Infinity){
+            if (onAssocMediaView && collection.collectionMediaMinYear===999999){
                 timelineShown = false;
             }
             sortsDiv.empty();
@@ -1053,6 +1089,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (TAG.Util.Splitscreen.isOn()) {
                 root.find('#collectionMenu').css('width', '70%');
                 root.find('#backButtonArea').css('display', 'none');
+            }
+            if (!IS_WINDOWS) {
+                root.find('#backButtonArea').css('position', 'relative');
             }
 
             /**
@@ -1226,10 +1265,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .text('Clear search results')
                 .hover(
                     function () {
-                        $(this).css({ 
-                            'background-color': SECONDARY_FONT_COLOR,
-                            'color': '#000'
-                        });
+                        if ($(this).attr('disabled') !== 'disabled') {
+                            $(this).css({
+                                'background-color': SECONDARY_FONT_COLOR,
+                                'color': '#000'
+                            });
+                        }
                     },
                     function () {
                         $(this).css({
@@ -1266,6 +1307,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             infoDiv.append(collectionDescription);
             catalogDiv.append(infoDiv);
             timelineArea.empty();
+            timelineArea.css({ "bottom": $("#tagRoot").height() * 0.011 + 'px' });
             styleBottomContainer();
 
             //Show loading circle
@@ -1277,8 +1319,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 divideDiv.css('display','inline');
                 artworksButton.off()
                               .on('mousedown', function(){
-                                    artworksButton.css('color', SECONDARY_FONT_COLOR);
-                                    assocMediaButton.css('color', dimmedColor);
+                                    //artworksButton.css('color', SECONDARY_FONT_COLOR);
+                                    //assocMediaButton.css('color', dimmedColor);
                                     if (onAssocMediaView){
                                         artworkShown = false;
                                         onAssocMediaView = false;
@@ -1288,8 +1330,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 
                 assocMediaButton.off()
                                 .on('mousedown', function(){
-                                    artworksButton.css('color', dimmedColor);
-                                    assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
+                                    //artworksButton.css('color', dimmedColor);
+                                    //assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView) {
                                         currentArtwork && hideArtwork(currentArtwork)()
                                         onAssocMediaView = true;
@@ -1729,7 +1771,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method doSearch
      * @param {Boolean}         explicitSearch - true if the search is explicit, and we need to display results, even if no input was provided.
      */
-    function doSearch(explicitSearch) {
+    function doSearch(explicitSearch, callback) {
 
         var content = searchInput.val().toLowerCase(),
             matchedArts = [],
@@ -1763,20 +1805,30 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         for (var i = 0; i < keywordSearchOptions.length; i++) {
             keywordsInputEmpty = keywordsInputEmpty && (keywordSearchOptions[i].keywords.length == 0);
         }
+        var emptyExplicitSearch = !doTextSearch && keywordsInputEmpty && explicitSearch;
         if (!doTextSearch && keywordsInputEmpty && !explicitSearch) {
             searchTxt.text("");
             // If there is no description, hide the infoDiv.
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   ") {
+                $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+                $('#clearSearchButton').attr('disabled', 'disabled')
+                    .css({
+                        'background-color': 'rgba(0, 0, 0, 0.6)',
+                        'color': SECONDARY_FONT_COLOR
+                    });
                 tileDiv.animate({ 'left': '0%' }, 1000, function () { });
-                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
+                    $(searchButton).removeAttr('disabled');
+                    $('#clearSearchButton').removeAttr('disabled');
+                });
             }
             drawCatalog(currentArtworks, currentTag, 0, false);
             return;
         }
 
         for (i = 0; i < infoSource.length; i++) {
-            if ((doTextSearch && infoSource[i].keys.indexOf(content) > -1) || keywordMatches[infoSource[i].id] === 'true') {
+            if ((doTextSearch && infoSource[i].keys.indexOf(content) > -1) || keywordMatches[infoSource[i].id] === 'true' || emptyExplicitSearch) {
                 matchedArts.push(currentArtworks[i]);
             } else {
                 unmatchedArts.push(currentArtworks[i]);
@@ -1784,17 +1836,41 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
-        var duration = ANIMATION_DURATION/5;
-        catalogDiv.animate({
-            scrollLeft: 0
-        }, duration, "easeInOutQuint");
+        if (!comingBack) {
+            var duration = ANIMATION_DURATION / 5;
+            catalogDiv.animate({
+                scrollLeft: 0
+            }, duration, "easeInOutQuint", function () {
+                if (currentArtwork) {
+                    showArtwork(currentArtwork, multipleShown && multipleShown)();
+                }
+            });
+        } else {
+            if (currentArtwork) {
+                showArtwork(currentArtwork, multipleShown && multipleShown)();
+            }
+        }
         root.find('#searchDescription').text(searchDescriptionText);
         root.find('#clearSearchButton').css({ 'display': 'block' });
         root.find('#collectionDescription').hide();
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-        if (description === "" + "\n\n   ") {
-            tileDiv.animate({ 'left': infoDiv.width() + 'px' }, 1000, function () { });
-            infoDiv.animate({ 'margin-left': '0%' }, 1000, function () { });
+        var animating = false;
+        if (description === "" + "\n\n   " && tileDiv.css('left') !== infoDiv.width() + 'px') {
+            animating = true;
+            $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+            $('#clearSearchButton').attr('disabled', 'disabled')
+                .css({
+                    'background-color': 'rgba(0, 0, 0, 0.6)',
+                    'color': SECONDARY_FONT_COLOR
+                });
+            tileDiv.animate({ 'left': infoDiv.width() + 'px' }, comingBack ? 0 : 1000, function () { });
+            infoDiv.animate({ 'margin-left': '0%' }, comingBack ? 0 : 1000, function () {
+                $(searchButton).removeAttr('disabled');
+                $('#clearSearchButton').removeAttr('disabled');
+                if (callback) {
+                    callback();
+                }
+            });
         }
 
         //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
@@ -1806,6 +1882,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         });
         drawCatalog(matchedArts, currentTag, 0, true);
         drawCatalog(unmatchedArts, currentTag, searchResultsLength, false);
+
+        if (!animating && callback) {
+            callback();
+        }
     }
 
     function getSearchDescription(matchedArts, content, doTextSearch) {
@@ -1921,8 +2001,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // If there is no description, hide the infoDiv.
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   ") {
+                $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+                $('#clearSearchButton').attr('disabled', 'disabled');
                 tileDiv.animate({ 'left': '0%' }, 1000, function () { });
-                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () { });
+                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
+                    $(searchButton).removeAttr('disabled');
+                    $('#clearSearchButton').removeAttr('disabled');
+                });
             }
 
             // See if we will need to redraw the timeline
@@ -1936,6 +2021,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         drawCatalog(currentArtworks, currentTag, 0, false);
         
         keywordSearchOptions = [];
+        searchResultsLength = null;
     }
 
     /**
@@ -1996,8 +2082,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!artworks || artworks.length === 0){
                 tileCircle.hide();
                 if (onAssocMediaView) {
-                    assocMediaButton.css({ "color": SECONDARY_FONT_COLOR });
-                    artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                    $("#assocMediaButton").css({ "color": SECONDARY_FONT_COLOR });
+                    $("#artworksButton").css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
                 } else {
                     assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
                     artworksButton.css({ "color": SECONDARY_FONT_COLOR });
@@ -2094,7 +2180,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         timelineArea.empty();
         if (currentTimeline){
             currentTimeline.stop(true, true);
-            currentArtwork = null;
+            if (!comingBack) {
+                currentArtwork = null;
+            }
         }
         if (currTimelineCircleArea){
             currTimelineCircleArea.stop(true,true);
@@ -2851,7 +2939,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
                 selectedArtworkContainer.css('display', 'none')
                 });
-            root.find('.tile').css('opacity','1');
+            root.find('.tile').each(function (tileIndex, tile) {
+                if (!searchResultsLength || tileIndex < searchResultsLength) { // If searchResultsLength is nul||undefined there was no search done.
+                    $(this).css('opacity', '1');
+                } else {
+                    $(this).css('opacity', '0.2');
+                }
+            });
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
@@ -2908,7 +3002,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!(currCollection.Metadata.Description && !onAssocMediaView)) {
                 infoWidth = 0;
             }
-            if (comingBack && previewPos){
+            if (comingBack && previewPos && !(TAG.Util.Splitscreen.isOn())){
                 containerLeft = previewPos;
             } else {
                 if (artworkTiles[artwork.Identifier]){
@@ -3340,10 +3434,48 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 num===0 ? descSpan = firstDescSpan: descSpan = $(document.createElement('div'));
                 descSpan.addClass('descSpan');
 
-                //Div for above description
+                //Div for above description. First get the content.
+                var descriptionContent = artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '';
+                if (keywordSets && keywordSets[0] && keywordSets[0].keywords && keywordSets[0].shown && artwork.Metadata.KeywordsSet1) {
+                    var artworksKeywordList = '';
+                    $.each(artwork.Metadata.KeywordsSet1.split(','), function (keywordIndex, keyword) {
+                        if (keywordSets[0].keywords.indexOf(keyword) > -1) {
+                            artworksKeywordList = artworksKeywordList + ' ' + keyword + ',';
+                        }
+                    });
+                    if (artworksKeywordList !== '') {
+                        artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
+                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[0].name + ': </span>' + artworksKeywordList + '</p>';
+                    }
+                }
+                if (keywordSets && keywordSets[1] && keywordSets[1].keywords && keywordSets[1].shown && artwork.Metadata.KeywordsSet2) {
+                    var artworksKeywordList = '';
+                    $.each(artwork.Metadata.KeywordsSet2.split(','), function (keywordIndex, keyword) {
+                        if (keywordSets[1].keywords.indexOf(keyword) > -1) {
+                            artworksKeywordList = artworksKeywordList + ' ' + keyword + ',';
+                        }
+                    });
+                    if (artworksKeywordList !== '') {
+                        artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
+                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[1].name + ': </span>' + artworksKeywordList + '</p>';
+                    }
+                }
+                if (keywordSets && keywordSets[2] && keywordSets[2].keywords && keywordSets[2].shown && artwork.Metadata.KeywordsSet3) {
+                    var artworksKeywordList = '';
+                    $.each(artwork.Metadata.KeywordsSet3.split(','), function (keywordIndex, keyword) {
+                        if (keywordSets[2].keywords.indexOf(keyword) > -1) {
+                            artworksKeywordList = artworksKeywordList + ' ' + keyword + ',';
+                        }
+                    });
+                    if (artworksKeywordList !== '') {
+                        artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
+                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[2].name + ': </span>' + artworksKeywordList + '</p>';
+                    }
+                   
+                }
                 descText = $(document.createElement('div'))
                     .addClass('descText secondaryFontColor')
-                    .html(Autolinker.link(artwork.Metadata.Description ? artwork.Metadata.Description.replace(/\n/g, '<br />') : '', {email: false, twitter: false}))
+                    .html(Autolinker.link(descriptionContent, {email: false, twitter: false}))
                     .css({
                     'color': SECONDARY_FONT_COLOR,
                     //'font-family': FONT,
@@ -3955,6 +4087,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             collectionOptions,
             parentid;
 
+        // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+        // For now, we'll just hide the whole keywords div.
+        $('#keywords').hide();
+
         //Options for when we return to the collections page
         collectionOptions = {
             prevScroll: catalogDiv.scrollLeft(),
@@ -3983,6 +4119,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     function switchPageVideo(video, containerLeft) {
         var prevInfo,
             videoPlayer;
+
+        // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+        // For now, we'll just hide the whole keywords div.
+        $('#keywords').hide();
 
         prevInfo = {
             artworkPrev: null,
@@ -4060,6 +4200,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     switchPageVideo(artwork, containerLeft);
                 }
             } else { // deepzoom artwork
+
+                // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+                // For now, we'll just hide the whole keywords div.
+                $('#keywords').hide();
+
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
                     prevPreview: currentArtwork,

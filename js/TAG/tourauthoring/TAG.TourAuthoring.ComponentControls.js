@@ -2552,7 +2552,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // creates the header for the artwork catalog picker
         var catalogPickerHeader = document.createElement('div');
         $(catalogPickerHeader).addClass('catalogPickerInfo');
-        $(catalogPickerHeader).text("Select artwork to import");
+        $(catalogPickerHeader).text("Select artwork to add");
         $(catalogPickerHeader).css({
             'font-size': '100%%',
             'float': 'left',
