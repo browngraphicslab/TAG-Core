@@ -68,8 +68,14 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         // let's assume 16:9 ratio for now
         ITEContainer.attr('id', 'ITEContainer');
         ITEContainer.css({
-            'border-style': 'solid', 'border-width': TAG.TourAuthoring.Constants.rinBorder+'px', 'border-color': 'white',
-            'height': '95%', 'width': '30%', 'top': '0%', 'left': '30%', 'position': 'absolute', 'z-index': 0
+            'border-style': 'solid',
+            'border-width': TAG.TourAuthoring.Constants.rinBorder + 'px',
+            'border-color': 'white',
+            'height': '95%',
+            'width': '30%',
+            'top': '0%',
+            'left': '30%',
+            'position': 'absolute'
         });
         viewerPanel.append(ITEContainer);
 

@@ -26,7 +26,12 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         backDialogOverlay = $(TAG.Util.UI.blockInteractionOverlay());
 
     (function _createHTML() {
-        topbar.css({ "background-color": "rgb(63,55,53)", "height": "8%", "width": "100%" });
+        topbar.css({
+            "background-color": "rgb(63,55,53)",
+            "height": "8%",
+            "width": "100%",
+            "z-index": "1000000"
+        });
         topbar.attr('id', 'topbar');
         
         var buttonHeight = $(window).height() * 0.0504; // matches effective % size from SettingsView

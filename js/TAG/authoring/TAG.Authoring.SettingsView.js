@@ -1167,7 +1167,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         }
                         if (inAssociatedView) {
-                            menuLabel.prop('disabled', false);
+                            $(menuLabel).prop('disabled', false);
                             menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                         }
                         bgImgInput.prop('disabled', false);
@@ -2373,8 +2373,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //(!assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = true;
             showAssocMedia.css({'background-color':'white'});
-            hideAssocMedia.css({'background-color':''});
-            $('#assocMediaButton').css('display','block');
+            hideAssocMedia.css({ 'background-color': '' });
+            $('#divide').css('display', 'inline');
+            $('#filters').css('display','inline');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -2387,7 +2388,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
-            $('#assocMediaButton').css('display','none');
+            $('#divide').css('display', 'none');
+            $('#filters').css('display', 'none');
             }, {
             'min-height': '0px',
             'width': '48%',
@@ -2662,7 +2664,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
 
@@ -3948,8 +3950,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //Enables new button - might be initially disabled if upload is happening
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
-            $(menuLabel).prop('disabled', true);
-            menuLabel.css({'opacity': '.4'});
+          $(menuLabel).prop('disabled', true);
+            menuLabel.css({'opacity': '.4'});  
+        } else{
+           $(menuLabel).prop('disabled', false);
+            menuLabel.css({'opacity': '1'});   
         }
 
         prepareNextView(true, "Import", createAsset);
@@ -5113,7 +5118,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                                 //hide confirmation box
                             }
@@ -6679,7 +6684,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             
@@ -6782,7 +6787,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             
@@ -7607,7 +7612,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     */
     function chunkDelete(guids, success, unauth, conflict, error) {
 
-        var chunkSize = 5;//change to affect the size of the chunk
+        var chunkSize = 500;//change to affect the size of the chunk
         var chunks = [];
 
         chunks.push([guids[0]]);
