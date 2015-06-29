@@ -8223,14 +8223,18 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"time": time_offset + currKeyframe.offset,
 						"opacity": 1, 
 						"size": {
-							"x": currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
-							"y": currKeyframe.state.viewport.region.span.y * $('#tagRoot').height()
+							"x": currKeyframe.state.viewport.region.span.x * $('#ITEHolder').width(),
+							"y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
 						},
 						"pos": {
-							"x": currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-							"y": currKeyframe.state.viewport.region.center.y * $('#tagRoot').height()
+						    "x": currKeyframe.state.viewport.region.center.x * $('#ITEHolder').width(),
+						    "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height()
 						},
-						"data": {}
+						"data": {},
+						"left": currKeyframe.state.viewport.region.center.x * $('#ITEHolder').width(),
+						"top": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height(),
+						"width": currKeyframe.state.viewport.region.span.x * $('#ITEHolder').width(),
+						"height": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
 					}
 				}
 				else if (providerID == "deepZoom"){
@@ -8273,12 +8277,12 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"time": time_offset + currKeyframe.offset,
 						"opacity": 1,
                         "size": {
-                            "x": $('#tagRoot').width(),//currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.span.y * $('#tagRoot').height()
+                            "x": $('#ITEHolder').width(),//currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
+                            "y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
                         },
                         "pos": {
                             "x": 0,//currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.center.y * $('#tagRoot').height()
+                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height()
                         },
 						"data": {},
 						"volume": currKeyframe.state.sound.volume,
