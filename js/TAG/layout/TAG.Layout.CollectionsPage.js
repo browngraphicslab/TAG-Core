@@ -1811,7 +1811,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // If there is no description, hide the infoDiv.
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   ") {
-                $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+                $("#searchButton").attr('disabled', 'disabled').css('background-color', '#fff');
                 $('#clearSearchButton').attr('disabled', 'disabled')
                     .css({
                         'background-color': 'rgba(0, 0, 0, 0.6)',
@@ -1819,7 +1819,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     });
                 tileDiv.animate({ 'left': '0%' }, 1000, function () { });
                 infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
-                    $(searchButton).removeAttr('disabled');
+                    $("#searchButton").removeAttr('disabled');
                     $('#clearSearchButton').removeAttr('disabled');
                 });
             }
