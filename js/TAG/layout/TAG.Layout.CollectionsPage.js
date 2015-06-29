@@ -1056,6 +1056,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } else {
                 timelineShown = true; //default to true for backwards compatibility
             }
+
+            //adjust for nice vertical positioning
+            if (!timelineShown) {
+                root.find("#leftContainer").css('top', - ($("#tagRoot").height() * 0.01945) + 'px');
+            }
+
             //If on associated media view and there are no associated media with valid dates, hide the timeline
             if (onAssocMediaView && collection.collectionMediaMinYear===999999){
                 timelineShown = false;
