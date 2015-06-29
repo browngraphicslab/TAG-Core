@@ -1321,7 +1321,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                               .on('mousedown', function () {
                                   //artworksButton.css('color', SECONDARY_FONT_COLOR);
                                   //assocMediaButton.css('color', dimmedColor);
-                                  if (onAssocMediaView) {
+                                  if (onAssocMediaView && !infoDiv.is(':animated')) {
                                       onAssocMediaView = false;
                                       artworkShown = false;
                                       clearSearchResults();
@@ -1335,7 +1335,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                 .on('mousedown', function () {
                                     //artworksButton.css('color', dimmedColor);
                                     //assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
-                                    if (!onAssocMediaView) {
+                                    if (!onAssocMediaView && !infoDiv.is(':animated')) {
                                         onAssocMediaView = true;
                                         clearSearchResults();
                                         clearKeywordCheckBoxes();
@@ -1817,19 +1817,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   " || onAssocMediaView) {
                 $("#searchButton").attr('disabled', 'disabled').css('background-color', '#fff');
-                $('#artworksButton').attr('disabled', 'disabled');
-                $('#assocMediaButton').attr('disabled', 'disabled');
                 $('#clearSearchButton').attr('disabled', 'disabled')
                     .css({
                         'background-color': 'rgba(0, 0, 0, 0.6)',
                         'color': SECONDARY_FONT_COLOR
                     });
-                tileDiv.animate({ 'left': '0%' }, 1000, function () { });
-                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
+                tileDiv.stop().animate({ 'left': '0%' }, 1000, function () { });
+                infoDiv.stop().animate({ 'margin-left': '-25%' }, 1000, function () {
                     $("#searchButton").removeAttr('disabled');
                     $('#clearSearchButton').removeAttr('disabled');
-                    $('#artworksButton').removeAttr('disabled');
-                    $('#assocMediaButton').removeAttr('disabled');
                 });
             }
             drawCatalog(currentArtworks, currentTag, 0, false, false);
@@ -1837,7 +1833,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         for (i = 0; i < infoSource.length; i++) {
-            if ((doTextSearch && infoSource[i].keys.indexOf(content) > -1) || keywordMatches[infoSource[i].id] === 'true' || emptyExplicitSearch) {
+            if ((keywordMatches[infoSource[i].id] === 'true' && (!doTextSearch || (doTextSearch && infoSource[i].keys.indexOf(content) > -1))) || emptyExplicitSearch) {
                 matchedArts.push(currentArtworks[i]);
             } else {
                 unmatchedArts.push(currentArtworks[i]);
@@ -1867,19 +1863,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (description === "" + "\n\n   " && tileDiv.css('left') !== infoDiv.width() + 'px') {
             animating = true;
             $('#searchButton').attr('disabled', 'disabled').css('background-color', '#fff');
-            $('#artworksButton').attr('disabled', 'disabled');
-            $('#assocMediaButton').attr('disabled', 'disabled');
             $('#clearSearchButton').attr('disabled', 'disabled')
                 .css({
                     'background-color': 'rgba(0, 0, 0, 0.6)',
                     'color': SECONDARY_FONT_COLOR
                 });
-            tileDiv.animate({ 'left': infoDiv.width() + 'px' }, comingBack ? 0 : 1000, function () { });
-            infoDiv.animate({ 'margin-left': '0%' }, comingBack ? 0 : 1000, function () {
+            tileDiv.stop().animate({ 'left': infoDiv.width() + 'px' }, comingBack ? 0 : 1000, function () { });
+            infoDiv.stop().animate({ 'margin-left': '0%' }, comingBack ? 0 : 1000, function () {
                 $('#searchButton').removeAttr('disabled');
                 $('#clearSearchButton').removeAttr('disabled');
-                $('#artworksButton').removeAttr('disabled');
-                $('#assocMediaButton').removeAttr('disabled');
                 if (callback) {
                     callback();
                 }
@@ -2016,14 +2008,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (description === "" + "\n\n   ") {
                 $('#searchButton').attr('disabled', 'disabled').css('background-color', '#fff');
                 $('#clearSearchButton').attr('disabled', 'disabled');
-                $('#artworksButton').attr('disabled', 'disabled');
-                $('#assocMediaButton').attr('disabled', 'disabled');
-                tileDiv.animate({ 'left': '0%' }, 1000, function () { });
-                infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
+                tileDiv.stop().animate({ 'left': '0%' }, 1000, function () { });
+                infoDiv.stop().animate({ 'margin-left': '-25%' }, 1000, function () {
                     $('#searchButton').removeAttr('disabled');
                     $('#clearSearchButton').removeAttr('disabled');
-                    $('#artworksButton').removeAttr('disabled');
-                    $('#assocMediaButton').removeAttr('disabled');
                 });
             }
 
