@@ -3071,7 +3071,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             // create artwork import button
             var catalogPickerImport = document.createElement('button');
             catalogPickerImport.disabled = true;
-            $(catalogPickerImport).text("Import");
+            $(catalogPickerImport).text("Add");
             $(catalogPickerImport).css({
                 position: 'absolute',
                 bottom: '2%',

@@ -7610,7 +7610,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     */
     function chunkDelete(guids, success, unauth, conflict, error) {
 
-        var chunkSize = 5;//change to affect the size of the chunk
+        var chunkSize = 500;//change to affect the size of the chunk
         var chunks = [];
 
         chunks.push([guids[0]]);
