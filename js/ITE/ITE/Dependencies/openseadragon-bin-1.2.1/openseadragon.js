@@ -8770,7 +8770,7 @@ function updateOnce( viewer ) {
         animated = viewer.referenceStrip.update( viewer.viewport ) || animated;
     }
 
-    if ( !THIS[ viewer.hash ].animating && animated ) {
+    if (!THIS[viewer.hash] && !THIS[viewer.hash].animating && animated) {
         /**
          * Raised when any spring animation starts (zoom, pan, etc.).
          *
