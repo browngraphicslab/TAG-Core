@@ -106,14 +106,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             script,
             meta;
 
-        if (!idleTimer && !previewing) {
+        if (!idleTimer && !previewing && locked !== doq.Identifier) {
             idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
             idleTimer.start();
         }
-        if (idleTimer && previewing) {
-            idleTimer.kill();
-        }
-        if (locked === doq.Identifier) {
+        if (idleTimer && (previewing || locked === doq.Identifier)) {
             idleTimer.kill();
         }
 
@@ -538,7 +535,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         root.find('#seadragonManipContainer').on('click', function(evt) {
             evt.stopPropagation(); //Prevent the click going through to the main container
             evt.preventDefault();
-            TAG.Util.IdleTimer.restartTimer();
+            if (locked !== doq.Identifier) {
+                TAG.Util.IdleTimer.restartTimer();
+            }
         });
 
         root.find('#leftControl').on('mousedown', function(evt) {
@@ -955,7 +954,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 locHistoryActive = true;
                 media.create(); // returns if already created
                 media.toggle();
-                TAG.Util.IdleTimer.restartTimer();
+                if (locked !== doq.Identifier) {
+                    TAG.Util.IdleTimer.restartTimer();
+                }
                 (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
                
                 media.pauseReset();
