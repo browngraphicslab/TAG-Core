@@ -145,7 +145,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         TAG.Layout.StartPage(null, function (page) {
             // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
             // For now, we'll just hide the whole keywords div.
-            $('#keywords').hide();
+           // $('#keywords').hide();
+            $('#keywords').empty();
             TAG.Util.UI.slidePageRight(page);
         });
     });
