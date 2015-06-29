@@ -1164,12 +1164,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }
                 }(collection));
             if (!IS_WINDOWS) {
-                collectionTitle.css({
+                titleBox.css({
                     "padding-right": .165 * centeredCollectionHeader.height() + "px"
                 })
             }
             if (previewing) {
-                collectionTitle.css({
+                titleBox.css({
                     "padding-right": .133 * centeredCollectionHeader.height() + "px"
                 })
             }
