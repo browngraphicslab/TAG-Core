@@ -2373,8 +2373,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //(!assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = true;
             showAssocMedia.css({'background-color':'white'});
-            hideAssocMedia.css({'background-color':''});
-            $('#assocMediaButton').css('display','block');
+            hideAssocMedia.css({ 'background-color': '' });
+            $('#divide').css('display', 'inline');
+            $('#filters').css('display','inline');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -2387,7 +2388,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
-            $('#assocMediaButton').css('display','none');
+            $('#divide').css('display', 'none');
+            $('#filters').css('display', 'none');
             }, {
             'min-height': '0px',
             'width': '48%',
