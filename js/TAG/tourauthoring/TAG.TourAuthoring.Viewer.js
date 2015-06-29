@@ -75,7 +75,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             'width': '30%',
             'top': '0%',
             'left': '30%',
-            'position': 'absolute'
+            'position': 'absolute',
+            'overflow': 'hidden'
         });
         viewerPanel.append(ITEContainer);
 
