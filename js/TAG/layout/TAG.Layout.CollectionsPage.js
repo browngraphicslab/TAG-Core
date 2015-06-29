@@ -695,6 +695,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (root.find('.ui-dropdownchecklist').length > 0) {
             return;
         }
+        $('#keywords').empty();
 
         // Get keywords from the server!
         keywordSets = TAG.Worktop.Database.getKeywordSets();
