@@ -1817,6 +1817,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   " || onAssocMediaView) {
                 $("#searchButton").attr('disabled', 'disabled').css('background-color', '#fff');
+                $('#artworksButton').attr('disabled', 'disabled');
+                $('#assocMediaButton').attr('disabled', 'disabled');
                 $('#clearSearchButton').attr('disabled', 'disabled')
                     .css({
                         'background-color': 'rgba(0, 0, 0, 0.6)',
@@ -1826,6 +1828,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
                     $("#searchButton").removeAttr('disabled');
                     $('#clearSearchButton').removeAttr('disabled');
+                    $('#artworksButton').removeAttr('disabled');
+                    $('#assocMediaButton').removeAttr('disabled');
                 });
             }
             drawCatalog(currentArtworks, currentTag, 0, false, false);
@@ -1862,7 +1866,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var animating = false;
         if (description === "" + "\n\n   " && tileDiv.css('left') !== infoDiv.width() + 'px') {
             animating = true;
-            $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+            $('#searchButton').attr('disabled', 'disabled').css('background-color', '#fff');
+            $('#artworksButton').attr('disabled', 'disabled');
+            $('#assocMediaButton').attr('disabled', 'disabled');
             $('#clearSearchButton').attr('disabled', 'disabled')
                 .css({
                     'background-color': 'rgba(0, 0, 0, 0.6)',
@@ -1870,8 +1876,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
             tileDiv.animate({ 'left': infoDiv.width() + 'px' }, comingBack ? 0 : 1000, function () { });
             infoDiv.animate({ 'margin-left': '0%' }, comingBack ? 0 : 1000, function () {
-                $(searchButton).removeAttr('disabled');
+                $('#searchButton').removeAttr('disabled');
                 $('#clearSearchButton').removeAttr('disabled');
+                $('#artworksButton').removeAttr('disabled');
+                $('#assocMediaButton').removeAttr('disabled');
                 if (callback) {
                     callback();
                 }
@@ -2006,12 +2014,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // If there is no description, hide the infoDiv.
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   ") {
-                $(searchButton).attr('disabled', 'disabled').css('background-color', '#fff');
+                $('#searchButton').attr('disabled', 'disabled').css('background-color', '#fff');
                 $('#clearSearchButton').attr('disabled', 'disabled');
+                $('#artworksButton').attr('disabled', 'disabled');
+                $('#assocMediaButton').attr('disabled', 'disabled');
                 tileDiv.animate({ 'left': '0%' }, 1000, function () { });
                 infoDiv.animate({ 'margin-left': '-25%' }, 1000, function () {
-                    $(searchButton).removeAttr('disabled');
+                    $('#searchButton').removeAttr('disabled');
                     $('#clearSearchButton').removeAttr('disabled');
+                    $('#artworksButton').removeAttr('disabled');
+                    $('#assocMediaButton').removeAttr('disabled');
                 });
             }
 
