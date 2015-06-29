@@ -1018,7 +1018,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextTitle,
                 prevTitle,
                 mainCollection = root.find('#mainCollection'),
-                titleBox = $('#collection-title'),
+                titleBox = root.find('#collection-title'),
                 collectionMedia = [],
                 counter = 0,
                 collectionLength,
@@ -1114,8 +1114,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Add collection title
             mainCollection.addClass('mainCollection');
-            titleBox.addClass('primaryFont').text(title);
-            titleBox.css('display', 'inline');
+            titleBox.text(title);
 
             var uiDocfrag = document.createDocumentFragment();
             collectionArea.css({
@@ -1130,8 +1129,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
 
-            var collectionTitle = $("#collection-title");
-            collectionTitle.css({
+            titleBox.css({
                 "display": "inline-block",
                 "position": "relative",
                 "padding-right": "18px",
@@ -1139,9 +1137,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
             })
-            mainCollection.append(centeredCollectionHeader);
-            centeredCollectionHeader.append(collectionTitle[0]);
-            centeredCollectionHeader.append(dropDownArrow);
             centeredCollectionHeader.css({
                 "text-align": "center",
                 "display": "inline-block",
