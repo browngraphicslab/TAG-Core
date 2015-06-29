@@ -145,7 +145,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         TAG.Layout.StartPage(null, function (page) {
             // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
             // For now, we'll just hide the whole keywords div.
-            $('#keywords').hide();
+           // $('#keywords').hide();
+            $('#keywords').empty();
             TAG.Util.UI.slidePageRight(page);
         });
     });
@@ -531,7 +532,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'margin-right': '6%'
         });
         infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag.');
-        infoMainBottom.text('Andy van Dam, Alex Hills, Yudi Fu, Benjamin LeVeque, Karthik Battula, Karishma Bhatia, Gregory Chatzinoff, John Connuck, David  Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Kaijan Gao, Jessica Herron, Ardra Hren, Hak Rim Kim, Lucy van Kleunen, Inna Komarovsky, Ryan Lester, Josh Lewis, Jinqing Li, Jeffery Lu, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Jonathan Poon, Dhruv Rawat, Emily Reif, Surbhi Madan, Tanay Padhi, Jacob Rosenfeld, Qingyun Wan, Jing Wang, David Weinberger, Anqi Wen, Dan Zhang, Libby Zorn');
+        infoMainBottom.text('Andy van Dam, Karthik Battula, Karishma Bhatia, Nate Bowditch, Gregory Chatzinoff, Tiffany Citra, John Connuck, David Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Yudi Fu, Kaijan Gao, Trent Green, Jessica Herron, Alex Hills, Ardra Hren, Hak Rim Kim, Inna Komarovsky, Ryan Lester, Benjamin LeVeque, Josh Lewis, Jinqing Li, Jeffery Lu, Surbhi Madan, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Carlene Niguidula, Tanay Padhi, Jonathan Poon, Dhruv Rawat, Emily Reif, Jacob Rosenfeld, Lucy van Kleunen, Qingyun Wan, Jing Wang, David Weinberger, Anqi Wen, Natasha Wollkind, Dan Zhang, Libby Zorn');
         infoMain.append(infoMainTop);
         infoMain.append(infoMainBottom);
 
@@ -779,11 +780,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
             var selector;
             root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
-                selector = $(element);               
-                if (previewing) {
+                selector = $(element);
+                var maxW;
+                if (previewing) {                    
                     selector.css({ 'max-width': $("#setViewViewer").width() * 0.095 + 'px' });
                 } else {
-                    selector.css({ 'max-width': $("#tagRoot").width() * 0.095 + 'px' });
+                    if (index % 2 === 0) {
+                        maxW = $("#tagRoot").width()*0.04 + 'px';
+                    } else {
+                        maxW = $("#tagRoot").width()*0.12 + 'px';
+                    }
+                    selector.css({ 'max-width': maxW });
                 }
                 // Set the text inside the selector box.
                 if (index % 2 == 0) {
@@ -826,7 +833,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     if (index % 2 != 0) {
                         //set width of text element appropriately
                         var minKeywordWidth = $("#tagRoot").width()*0.058565;
-                        var maxKeywordWidth = $("#tagRoot").width() * 0.0732;
+                        var maxKeywordWidth = $("#tagRoot").width()*0.0732;
                         var elWidth = parseInt(selector.width());
                         if (elWidth > minKeywordWidth) {
                             if (elWidth > maxKeywordWidth) {
@@ -846,8 +853,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     selector.parent().css('height', $(element).parent().height()+ downArrow.height() + 'px'); //experimenting with splitscreen
                     downArrow.css({ 'float': 'none', 'top': '-25%' });
                 } else {
-                    var mult = 1.3
-                    selector.parent().css({ 'width': $(element).parent().outerWidth() * mult + 'px' });
+                    var mult = 1.1
+                    if (index % 2 != 0) {
+                        selector.parent().css({ 'width': $(element).parent().outerWidth() * mult + 'px' });
+                    }
                 }
 
                 //tool tip on mouseenter when ellipsis
@@ -907,9 +916,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     'text-align': 'center'
                 });
                 root.find("#searchButton").css({
-                    'font-size': '70%',
+                    'font-size': '80%',
                     'padding-bottom': '0%',
-                    'padding-top': '0.5%',                   
+                    'padding-top': '0.5%',
+                    'margin-top': '1%'
                 });
                 root.find("#searchInput").css({
                     'width': $("#searchInput").width() / 2
@@ -1018,7 +1028,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 nextTitle,
                 prevTitle,
                 mainCollection = root.find('#mainCollection'),
-                titleBox = $('#collection-title'),
+                titleBox = root.find('#collection-title'),
                 collectionMedia = [],
                 counter = 0,
                 collectionLength,
@@ -1114,8 +1124,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Add collection title
             mainCollection.addClass('mainCollection');
-            titleBox.addClass('primaryFont').text(title);
-            titleBox.css('display', 'inline');
+            titleBox.text(title);
 
             var uiDocfrag = document.createDocumentFragment();
             collectionArea.css({
@@ -1130,8 +1139,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
 
-            var collectionTitle = $("#collection-title");
-            collectionTitle.css({
+            titleBox.css({
                 "display": "inline-block",
                 "position": "relative",
                 "padding-right": "18px",
@@ -1139,9 +1147,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
             })
-            mainCollection.append(centeredCollectionHeader);
-            centeredCollectionHeader.append(collectionTitle[0]);
-            centeredCollectionHeader.append(dropDownArrow);
             centeredCollectionHeader.css({
                 "text-align": "center",
                 "display": "inline-block",
@@ -1159,12 +1164,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }
                 }(collection));
             if (!IS_WINDOWS) {
-                collectionTitle.css({
+                titleBox.css({
                     "padding-right": .165 * centeredCollectionHeader.height() + "px"
                 })
             }
             if (previewing) {
-                collectionTitle.css({
+                titleBox.css({
                     "padding-right": .133 * centeredCollectionHeader.height() + "px"
                 })
             }

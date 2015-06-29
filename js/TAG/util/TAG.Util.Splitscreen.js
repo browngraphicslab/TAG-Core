@@ -288,6 +288,7 @@ TAG.Util.Splitscreen = (function () {
                     'font-size': '90%',
                     'padding-bottom': '0.03%',
                     'padding-top': '0.07%',
+                    'margin-top': '0%'
                 });
                 root.find("#filterByKeywords").empty().unbind()
                     .css({
@@ -296,8 +297,18 @@ TAG.Util.Splitscreen = (function () {
                     });              
                 root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
                     var selector = $(element);
-                    selector.find('.ui-dropdownchecklist-test').css('width', 'auto');
-                    selector.css({ 'width': 'auto' });
+                    var maxW;
+                    if (index % 2 === 0) {
+                        maxW = $("#tagRoot").width() * 0.04 + 'px';
+                    } else {
+                        maxW = $("#tagRoot").width() * 0.12 + 'px';
+                    }
+                    selector.css({ 'max-width': maxW });
+                    if (index % 2 === 0) {
+                        selector.find('.ui-dropdownchecklist-text').css('width', 'auto');
+                    } else {
+                        selector.css({ 'width': 'auto' });
+                    }
                     selector.parent().css({ 'height': root.find("#searchInput").height() + 'px' });
                     selector.parent().find('.selector-dropdown').css({
                         'width': ($("#tagRoot").width() * 0.01015) + 'px',
@@ -305,7 +316,9 @@ TAG.Util.Splitscreen = (function () {
                         'top': '25%'
                     });
                     selector.parent().css({ 'width': 'auto' });
-                    selector.parent().css({ 'width': selector.parent().outerWidth() * 1.3 + 'px' });
+                    if (index % 2 != 0) {
+                        selector.parent().css({ 'width': selector.parent().outerWidth() * 1.1 + 'px' });
+                    }
                     selector.parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
                             .css('width', selector.parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
                     
