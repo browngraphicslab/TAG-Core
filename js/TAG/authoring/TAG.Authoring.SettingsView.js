@@ -1167,7 +1167,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         }
                         if (inAssociatedView) {
-                            menuLabel.prop('disabled', false);
+                            $(menuLabel).prop('disabled', false);
                             menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                         }
                         bgImgInput.prop('disabled', false);
@@ -2662,7 +2662,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
 
@@ -3948,8 +3948,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //Enables new button - might be initially disabled if upload is happening
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
-            $(menuLabel).prop('disabled', true);
-            menuLabel.css({'opacity': '.4'});
+          $(menuLabel).prop('disabled', true);
+            menuLabel.css({'opacity': '.4'});  
+        } else{
+           $(menuLabel).prop('disabled', false);
+            menuLabel.css({'opacity': '1'});   
         }
 
         prepareNextView(true, "Import", createAsset);
@@ -5113,7 +5116,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                                 //hide confirmation box
                             }
@@ -6679,7 +6682,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             
@@ -6782,7 +6785,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             

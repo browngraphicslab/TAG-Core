@@ -3211,18 +3211,39 @@ TAG.Util.UI = (function () {
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
 
+        var namesLabel = document.createElement('div');
+        
+        $(namesLabel).css({
+            color: 'white',
+            'width': '80%',
+            'height': '50%',
+            'left': '10%',
+            'top': '12.5%',
+            'font-size': '1em',
+            'overflow': 'auto',
+            'position': 'relative',
+            'text-align': 'center',
+            'text-overflow': 'ellipsis',
+            'word-wrap': 'break-word'
+        });
+
+
+
         if(displayNames){
+            $(messageLabel).css('height', 'auto')
             for (var i = 0; i < displayNames.length; i++) {
 
                 var para = document.createElement('div');
                 $(para).text(displayNames[i]);
                 $(para).css({color: 'white', 'z-index': '99999999999'});
-                $(messageLabel).append(para);
+                $(namesLabel).append(para);
                 TAG.Util.multiLineEllipsis($(para));
             }
         }
 
         $(confirmBox).append(messageLabel);
+        $(confirmBox).append(namesLabel);
+
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
         $(optionButtonDiv).addClass('optionButtonDiv');
@@ -8202,14 +8223,18 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"time": time_offset + currKeyframe.offset,
 						"opacity": 1, 
 						"size": {
-							"x": currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
-							"y": currKeyframe.state.viewport.region.span.y * $('#tagRoot').height()
+							"x": currKeyframe.state.viewport.region.span.x * $('#ITEHolder').width(),
+							"y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
 						},
 						"pos": {
-							"x": currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-							"y": currKeyframe.state.viewport.region.center.y * $('#tagRoot').height()
+						    "x": currKeyframe.state.viewport.region.center.x * $('#ITEHolder').width(),
+						    "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height()
 						},
-						"data": {}
+						"data": {},
+						"left": currKeyframe.state.viewport.region.center.x * $('#ITEHolder').width(),
+						"top": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height(),
+						"width": currKeyframe.state.viewport.region.span.x * $('#ITEHolder').width(),
+						"height": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
 					}
 				}
 				else if (providerID == "deepZoom"){
@@ -8252,12 +8277,12 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"time": time_offset + currKeyframe.offset,
 						"opacity": 1,
                         "size": {
-                            "x": $('#tagRoot').width(),//currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.span.y * $('#tagRoot').height()
+                            "x": $('#ITEHolder').width(),//currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
+                            "y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
                         },
                         "pos": {
                             "x": 0,//currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.center.y * $('#tagRoot').height()
+                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height()
                         },
 						"data": {},
 						"volume": currKeyframe.state.sound.volume,
