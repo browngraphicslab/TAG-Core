@@ -1862,6 +1862,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             viewer.empty();
             viewer.append(startPage);
+            preventClickthrough(viewer);
         });
         return startPage;
     }
