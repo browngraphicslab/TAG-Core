@@ -1386,6 +1386,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          * @method getLayerRect
          * @return {Seadragon.Rect}         the Seadragon.Rect
          */
+
         function getLayerRect() {
             var offset = layerContainer.offset(),
                 width = layerContainer.width(),
@@ -1616,6 +1617,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             var video,
                 audio,
                 text,
+                iframe,
                 src = media.doq.Metadata.Source,
                 type = media.doq.Metadata.ContentType,
                 thumbnail = (media.doq.Metadata.Thumbnail && !media.doq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(media.doq.Metadata.Thumbnail) : '',
@@ -2807,6 +2809,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 'overflow': 'hidden',
                 'border': "0px solid black"
             });
+            fieldTitle.attr('maxlength', '25');
 
             if (isTextarea) {
                 textarea.attr('rows', 3);

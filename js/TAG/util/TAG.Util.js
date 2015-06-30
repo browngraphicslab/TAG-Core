@@ -55,6 +55,7 @@ TAG.Util = (function () {
         makeBorderRadius: makeBorderRadius,
         createTutorialPopup: createTutorialPopup,
         removeYoutubeVideo: removeYoutubeVideo
+
     };
 
     function removeYoutubeVideo(){
@@ -451,7 +452,7 @@ TAG.Util = (function () {
         var loadedInterval = setInterval(function () {
             if (elementInDocument($(element))) {
                 $(element).fitText(factor, options);
-                clearInterval(loadedInterval);
+                clearInterval(loadedInterval); 
             }
         });
     }
@@ -459,9 +460,10 @@ TAG.Util = (function () {
     /* Get an integer year from date metadata
      * @method parseDateToYear
      * @param {Object} date       object containing year, month, and day 
+     * @param {Boolean} location    if coming from location history (simple string parsing)
      * @return {Number} year      year (can have decimals to represent month, days)
      */
-    function parseDateToYear(date){
+    function parseDateToYear(date, location){
         var yearString,
             neg = false,
             cent,
@@ -477,8 +479,11 @@ TAG.Util = (function () {
             totalDaysInYear,
             dayDecimal;
 
-        if (date && date.year){
+        if ((date && date.year)||location){
             yearString = date.year;
+            if (location) {
+                yearString = date;
+            }
             //Catches 'ad', 'bc', 'bce' case, spacing, and order insensitive
             if (yearString.search(/bce?/i)>=0){
                 neg = true;
@@ -529,6 +534,9 @@ TAG.Util = (function () {
             }
             if (neg){
                 year = -year;  
+            }
+            if (!year) {
+                year = 999999;
             }
             return year;
         }
@@ -2055,6 +2063,7 @@ TAG.Util.UI = (function () {
         popUpMessage: popUpMessage,
         popUpCustom: popUpCustom,
         PopUpConfirmation: PopUpConfirmation,
+        ConfirmUploadPopUp: ConfirmUploadPopUp,
         popupInputBox: popupInputBox,
         cgBackColor: cgBackColor,
         setUpBackButton: setUpBackButton,
@@ -2072,7 +2081,8 @@ TAG.Util.UI = (function () {
         initKeyHandler: initKeyHandler,
         keyHandler: keyHandler,
         showPageLink: showPageLink,
-        uploadProgressPopup : uploadProgressPopup,
+        uploadProgressPopup: uploadProgressPopup,
+        
     };
 
     //initKeyHandler();
@@ -3135,6 +3145,153 @@ TAG.Util.UI = (function () {
         return overlay;
     }
 
+    function ConfirmUploadPopUp(confirmAction, message, title, confirmButtonText, noFade, displayNames, useTeleformat) {
+        var overlay;
+        var origin;
+
+        origin = true;
+        overlay = blockInteractionOverlay();
+        console.log("Made new overlay");
+
+        origin
+        container = container || window;
+        var confirmBox = document.createElement('div');
+        var popUpHandler = {
+            13: doOnEnter,
+        }
+        var currKeyHandler = globalKeyHandler[0];
+        globalKeyHandler[0] = popUpHandler;
+
+        //temp solution for telemetry box in all resolutions and browsers. 
+        var maxw = 600,
+            maxh = 300;
+        if (useTeleFormat) {
+            maxw = $('body').width() * 0.45;
+            maxh = $('body').height() * 0.33;
+        }
+        var confirmBoxSpecs = TAG.Util.constrainAndPosition($(container).width(), $(container).height(),
+            {
+                center_h: true,
+                center_v: true,
+                width: 0.5,
+                height: 0.35,
+                max_width: maxw,// $('body').width()*0.33,
+                max_height: maxh//$('body').height()*0.2,
+            });
+
+        $(confirmBox).css({
+            position: 'absolute',
+            left: confirmBoxSpecs.x + 'px',
+            top: confirmBoxSpecs.y + 'px',
+            width: confirmBoxSpecs.width + 'px',
+            height: confirmBoxSpecs.height + 'px',
+            border: '3px double white',
+            'background-color': 'black'
+        });
+
+        var messageLabel = document.createElement('div');
+
+        $(messageLabel).css({
+            color: 'white',
+            'width': '80%',
+            'height': '50%',
+            'left': '10%',
+            'top': '12.5%',
+            'font-size': '1em',
+            'overflow': 'hidden',
+            'position': 'relative',
+            'text-align': 'center',
+            'text-overflow': 'ellipsis',
+            'word-wrap': 'break-word'
+        });
+        var fontsize = TAG.Util.getMaxFontSizeEM(message, 1, $(messageLabel).width(), $(messageLabel).height());
+        if (useTeleFormat && IS_WINDOWS) {
+            fontsize = TAG.Util.getMaxFontSizeEM(message, 0.8, $(messageLabel).width(), $(messageLabel).height());
+        }
+        $(messageLabel).css('font-size', fontsize);
+        $(messageLabel).text(message).attr("id", "popupmessage");
+
+        if (displayNames) {
+            for (var i = 0; i < displayNames.length; i++) {
+
+                var para = document.createElement('div');
+                $(para).text(displayNames[i]);
+                $(para).css({ color: 'white', 'z-index': '99999999999' });
+                $(messageLabel).append(para);
+                TAG.Util.multiLineEllipsis($(para));
+            }
+        }
+
+        $(confirmBox).append(messageLabel);
+        TAG.Util.multiLineEllipsis($(messageLabel));
+        var optionButtonDiv = document.createElement('div');
+        $(optionButtonDiv).addClass('optionButtonDiv');
+        $(optionButtonDiv).css({
+            'height': '20%',
+            'width': '100%',
+            'position': 'absolute',
+            'color': 'white',
+            'bottom': '5%',
+            'right': '5%',
+            'text-align': 'center'
+        });
+        $(confirmBox).append(optionButtonDiv);
+
+        $(overlay).append(confirmBox);
+        var confirmButton = document.createElement('button');
+        $(confirmButton).css({
+            'padding': '1%',
+            'border': '1px solid white',
+            'width': 'auto',
+            'position': 'relative',
+            'float': "left",
+            'margin-left': '12%',
+            'color': 'white',
+            'border-radius': '3.5px',
+            'margin-top': '1%'
+
+        }).attr('id', 'popupConfirmButton');
+        confirmButtonText = (!confirmButtonText || confirmButtonText === "") ? "Confirm" : confirmButtonText;
+        $(confirmButton).text(confirmButtonText);
+
+        confirmButton.onclick = function () {
+            if (origin) {
+                removeAll();
+            } else {
+                $(confirmBox).remove()
+            }
+            confirmAction();
+        };
+
+        confirmButton.onkeydown = function (event) {
+            switch (event.which) {
+                case 13: // enter key
+                    removeAll();
+                    confirmAction();
+            }
+        }
+        if (!(confirmButtonText === "no confirm")) {
+            $(optionButtonDiv).append(confirmButton);
+        }
+
+        function doOnEnter() {
+            removeAll();
+            confirmAction();
+        }
+
+
+        function removeAll() {
+            if (noFade) {
+                $(overlay).hide();
+                $(overlay).remove();
+            } else {
+                $(overlay).fadeOut(500, function () { $(overlay).remove(); });
+            }
+            globalKeyHandler[0] = currKeyHandler;
+        }
+        return overlay;
+    }
+    
     
 
     // popup message to ask for user confirmation of an action e.g. deleting a tour
@@ -3210,6 +3367,7 @@ TAG.Util.UI = (function () {
         }
         $(messageLabel).css('font-size', fontsize);
         $(messageLabel).text(message).attr("id","popupmessage");
+
 
         var namesLabel = document.createElement('div');
         
@@ -3390,10 +3548,7 @@ TAG.Util.UI = (function () {
                 $(overlay).fadeOut(500, function () { $(overlay).remove(); });
             }
             globalKeyHandler[0] = currKeyHandler;
-        }
-
-
-       
+        }   
         return overlay;
     }
 
@@ -4060,7 +4215,7 @@ TAG.Util.UI = (function () {
      * @param title          string: the title to appear at the top of the picker
      * @param target         object: a comp property (object whose associations we're managing) and a type property
      *                               ('exhib', 'artwork', 'media') telling us what kind of component it is
-     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media), "bg"- background image : type of the association
+     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media)
      * @param tabs           array: list of tab objects. Each has a name property (string, title of tab), a getObjs
      *                              property (a function to be called to get each entity listed in the tab), and a
      *                              args property (which will be extra arguments sent to getObjs), also an excluded property
@@ -4920,9 +5075,8 @@ TAG.Util.UI = (function () {
                     }
                     else {
                         console.log("in correct statement");
-                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {
-                           
-                            
+                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {                      
+                            callback();
                             pickerOverlay.fadeOut();
                             pickerOverlay.empty();
                             pickerOverlay.remove();
@@ -5756,6 +5910,7 @@ TAG.Util.RLH = function (input) {
 
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
+                $("#locationHistorySaveMapButton").prop("disabled", true).css("opacity", "0.4");
                 var mapName = function () {
                     if (mapGuids[currentIndex]) {
                         if (mapDoqs[mapGuids[currentIndex]].Name.length > 14) {
@@ -5768,9 +5923,15 @@ TAG.Util.RLH = function (input) {
                     }
                 }();
                 if (!(currentIndex === 0)) { //if it's not the bing map being displayed, confirm the deletion
-                    var overlay = TAG.Util.UI.PopUpConfirmation(function () {
-                        deleteMap();
-                    }, "Are you sure you want to delete " + mapName + " and all locations associated with it?", "Yes");
+                    var overlay = TAG.Util.UI.PopUpConfirmation(
+                        deleteMap,
+                        "Are you sure you want to delete " + mapName + " and all locations associated with it?",
+                        "Yes",
+                        null,
+                        function () {
+                            console.log("here!")
+                            $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
+                        });
                     root.append(overlay);
                     $(overlay).show();
                     evt.stopPropagation();
@@ -5778,6 +5939,7 @@ TAG.Util.RLH = function (input) {
                     deleteMap(); //hides bing map
                 };
             });
+
             addLocationButton.on('click', addLocation);
             sortLocationsByTitleButton.on('click', sortLocationsByTitle);
             sortLocationsByDateButton.on('click', sortLocationsByDate);
@@ -6312,7 +6474,7 @@ TAG.Util.RLH = function (input) {
 
             //sort
             locations.sort(function (a, b) {
-                return (a.date < b.date) ? -1 : 1;
+                return (TAG.Util.parseDateToYear(a.date, true) < TAG.Util.parseDateToYear(b.date, true)) ? -1 : 1;
             });
 
             //hides all location pins (prevents duplicate pins bug)
@@ -7457,9 +7619,9 @@ TAG.Util.RLH = function (input) {
      *              toadd          a string of comma-separated GUIDs of maps to add
      *              toremove       a string of comma-separated GUIDs of maps to remove
      *              noReload       a boolean telling us whether to reload maps or not
-     *              callback       a callback function to be called after saving and reloading artwork is done
+     * @param       callback       a callback function to be called after saving and reloading artwork is done
      */
-    function saveRichLocationHistory(input) {
+    function saveRichLocationHistory(input,callback) {
 
         if ($('.locationTitleInput').is(':focus')) {
             return;
@@ -7499,6 +7661,9 @@ TAG.Util.RLH = function (input) {
                 } else {
                     disabledOverlay.text("Bing Map is disabled.");
                 }
+                if (callback) {
+                    callback();
+                }
             }, error, error);
             //input.sort && input.callback();
         }
@@ -7534,6 +7699,16 @@ TAG.Util.RLH = function (input) {
         disabledOverlay.appendTo(mapHolders[null]);
         disabledOverlay.text("Loading...");
         deleteButton.text(defaultMapShown ? 'Hide Bing Map' : 'Show Bing Map');
+        if (!defaultMapShown) {
+            $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+            $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+            $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+        }
+        else {
+            $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+        }
     }
 
     /**
@@ -7548,12 +7723,16 @@ TAG.Util.RLH = function (input) {
             removeLocations(mapguid);
             saveRichLocationHistory({
                 toremove: mapguid
+            }, function () {
+                $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
             });
             //showMap(currentIndex - 1);
         } else {
             toggleDefaultMap();
             saveRichLocationHistory({
                 noReload: true
+            }, function () {
+                $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
             });
             //showMap(currentIndex);
         }
@@ -8291,6 +8470,11 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					}
 				}
 				
+                // fixing fade offset issue
+				if (currExperienceStream.data['transition']) {
+				    keyframeObject.time += currExperienceStream.data.transition.inDuration;
+				}
+
 				/* Ink tracks parsed separately in the ITE_parseInkKeyframes function below */
 
 				currKeyframes.push(keyframeObject);
