@@ -5903,6 +5903,7 @@ TAG.Util.RLH = function (input) {
 
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
+                $("#locationHistorySaveMapButton").prop("disabled", true).css("opacity", "0.4");
                 var mapName = function () {
                     if (mapGuids[currentIndex]) {
                         if (mapDoqs[mapGuids[currentIndex]].Name.length > 14) {
@@ -5915,9 +5916,15 @@ TAG.Util.RLH = function (input) {
                     }
                 }();
                 if (!(currentIndex === 0)) { //if it's not the bing map being displayed, confirm the deletion
-                    var overlay = TAG.Util.UI.PopUpConfirmation(function () {
-                        deleteMap();
-                    }, "Are you sure you want to delete " + mapName + " and all locations associated with it?", "Yes");
+                    var overlay = TAG.Util.UI.PopUpConfirmation(
+                        deleteMap,
+                        "Are you sure you want to delete " + mapName + " and all locations associated with it?",
+                        "Yes",
+                        null,
+                        function () {
+                            console.log("here!")
+                            $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
+                        });
                     root.append(overlay);
                     $(overlay).show();
                     evt.stopPropagation();
@@ -7604,9 +7611,9 @@ TAG.Util.RLH = function (input) {
      *              toadd          a string of comma-separated GUIDs of maps to add
      *              toremove       a string of comma-separated GUIDs of maps to remove
      *              noReload       a boolean telling us whether to reload maps or not
-     *              callback       a callback function to be called after saving and reloading artwork is done
+     * @param       callback       a callback function to be called after saving and reloading artwork is done
      */
-    function saveRichLocationHistory(input) {
+    function saveRichLocationHistory(input,callback) {
 
         if ($('.locationTitleInput').is(':focus')) {
             return;
@@ -7645,6 +7652,9 @@ TAG.Util.RLH = function (input) {
                     disabledOverlay.remove();
                 } else {
                     disabledOverlay.text("Bing Map is disabled.");
+                }
+                if (callback) {
+                    callback();
                 }
             }, error, error);
             //input.sort && input.callback();
@@ -7695,12 +7705,16 @@ TAG.Util.RLH = function (input) {
             removeLocations(mapguid);
             saveRichLocationHistory({
                 toremove: mapguid
+            }, function () {
+                $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
             });
             //showMap(currentIndex - 1);
         } else {
             toggleDefaultMap();
             saveRichLocationHistory({
                 noReload: true
+            }, function () {
+                $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
             });
             //showMap(currentIndex);
         }
