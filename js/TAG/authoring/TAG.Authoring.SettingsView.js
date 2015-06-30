@@ -6797,7 +6797,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $(importConfirmedBox).hide();
 
                             if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
-                                loadExhibitionsView(currDoq, undefined, true);
+                                console.log("reload queue");
+                                loadExhibitionsView(currDoq, undefined, false);
+
                             }
                             if(inArtworkView==true){ //reload artworks tab if in artworks
                                 loadArtView(currDoq,undefined,true);
