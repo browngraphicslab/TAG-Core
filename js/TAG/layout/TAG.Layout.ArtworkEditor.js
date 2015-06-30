@@ -1806,12 +1806,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 rightbarLoadingSave,
                 thumbnailLoadingSave,
                 options;
-            if (desc == null) {
-                cnsole.log("desc is null")
-            }
-            else {
-                console.log("description: "+desc)
-            }
             if (info.pos) {
                 coords = annotatedImage.viewer.viewport.pointFromPixel(info.pos);
                 coords.width = 0;
@@ -2253,11 +2247,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 titleTextVal = $titleText.val() || 'Untitled';
 
                 assetType = isHotspot ? 'Hotspot' : (isLayer ? 'Layer' : 'Asset');
-                console.log("going to if statement");
-                console.log("value of desc: " + $descArea.val())
-                console.log($descArea.val() == null)
-                console.log($descArea.val() == "")
-                console.log($descArea.val() == " ")
                 if (creatingText) {
                     createTextAsset(titleTextVal, $descArea.val()=="" ? " ":$descArea.val(), function () {
                         addRemoveMediaButton.prop('disabled', false);
@@ -2285,7 +2274,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     creatingText = false;
                     close();
                 } else {
-                    console.log("about to update media");
                     updateAssocMedia({
                         title: TAG.Util.htmlEntityEncode(titleTextVal),
                         desc: TAG.Util.htmlEntityEncode($descArea.val()),
