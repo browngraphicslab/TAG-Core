@@ -9621,6 +9621,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 .addClass('keyword-set-name-input')
                 .attr('id', 'keyword-set-name-input-' + (setIndex + 1))
                 .attr('disabled', keywordSets[setIndex].shown !== 'true')
+                .attr('maxlength', '25')
                 .css({'width': '20%'})
                 .blur(function (e) {
                     if (keywordSets) {
