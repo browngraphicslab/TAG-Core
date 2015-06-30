@@ -20,7 +20,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         collectionArea = root.find('#collectionArea'),
         backButtonArea = root.find('#backButtonArea'),
         backButton = root.find('#backButton'),
-        centeredCollectionHeader  = root.find("#centeredCollectionHeader"),
+        centeredCollectionHeader = root.find("#centeredCollectionHeader"),
         dropDownArrow = root.find('#dropDownArrow'),
         collectionDotHolder = root.find('#collectionDotHolder'),
         bgimage = root.find('#bgimage'),
@@ -44,6 +44,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         divideDiv = root.find('#divide'),
         keywordSelects = [], // Will be filled in later.
         keywordOperatorSelects = [], // Will be filled in later.
+        showKeywords = false,
         overlay = root.find('#overlay'),
         prevCollection = $(document.createElement('div')).attr('id', 'prevCollection'),
 
@@ -700,12 +701,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         // Get keywords from the server!
         keywordSets = TAG.Worktop.Database.getKeywordSets();
-        var showKeywords = false;
         for (var x = 0; x < keywordSets.length; x++) {
             if ((keywordSets[x].shown) === "true") {
                 showKeywords = true;
             }
         }
+
+        //styling when keyword row is shown
+        if (showKeywords) {
+            timelineArea.css({ "bottom": $("#tagRoot").height() * 0.020 + 'px' });
+        }
+
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
       if (keywordSets && showKeywords) {
@@ -1088,8 +1094,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             //adjust for nice vertical positioning
-            if (!timelineShown) {
-                root.find("#leftContainer").css('top', - ($("#tagRoot").height() * 0.01945) + 'px');
+            if (!timelineShown && !onAssocMediaView) {
+                root.find("#leftContainer").css('top', -($("#tagRoot").height() * 0.01945) + 'px');
+            } else {
+                root.find("#leftContainer").css('top', '0px');
+            }
+
+            if (onAssocMediaView) {
+                $('#keywords').hide();
+            } else {
+                $('#keywords').show();
             }
 
             //If on associated media view and there are no associated media with valid dates, hide the timeline
@@ -1199,7 +1213,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 //'position': "relative",
                 'height': .55*centeredCollectionHeader.height()+"px",
                 'width': .13344* centeredCollectionHeader.height() + 'px',
-                'top' : "12%"
+                'top' : "27%"
             });
             if (!IS_WINDOWS && !previewing) {
                 dropDownArrow.css({
@@ -1338,7 +1352,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             infoDiv.append(collectionDescription);
             catalogDiv.append(infoDiv);
             timelineArea.empty();
-            timelineArea.css({ "bottom": $("#tagRoot").height() * 0.025 + 'px' });
+            //timelineArea.css({ "bottom": $("#tagRoot").height() * 0.020 + 'px' });
             styleBottomContainer();
 
             //Show loading circle
@@ -1357,7 +1371,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                       artworkShown = false;
                                       clearSearchResults();
                                       clearKeywordCheckBoxes();
-                                      $('#keywords').show();
+                                     // $('#keywords').show();
                                       loadCollection(currCollection)();
                                   }
                               });
@@ -1371,7 +1385,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                                         clearSearchResults();
                                         clearKeywordCheckBoxes();
                                         currentArtwork && hideArtwork(currentArtwork)()
-                                        $('#keywords').hide();
+                                      //  $('#keywords').hide();
                                         loadCollection(currCollection)();
                                     }
                                 });
@@ -2257,7 +2271,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (timelineShown){   
                 bottomContainer.css({
                     'height' : '75%',
-                    'top' : '17%',
+                    'top' : '18%',
                     'z-index': '',
                 });
                 selectedArtworkContainer.css({
