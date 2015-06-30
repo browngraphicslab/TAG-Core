@@ -1152,7 +1152,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             centeredCollectionHeader.css({
                 "text-align": "center",
                 "display": "inline-block",
-                "height": "90%",
+                //"height": "90%",
                 //"overflow": "hidden",
                 "top": "10%",
                 "cursor": "pointer",
@@ -1178,10 +1178,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             dropDownArrow.css({
                 'display': 'inline-block',
                 'left': "auto",
-                'position': "relative",
+                //'position': "relative",
                 'height': .55*centeredCollectionHeader.height()+"px",
                 'width': .13344* centeredCollectionHeader.height() + 'px',
-                'top' : "17.5%"
+                'top' : "12%"
             });
             if (!IS_WINDOWS && !previewing) {
                 dropDownArrow.css({
