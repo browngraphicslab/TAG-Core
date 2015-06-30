@@ -676,12 +676,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
                 tobj.category_name = prevLeftBarSelection.categoryName;
                 tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
-                tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+                if (prevLeftBarSelection.timeSpentTimer) {
+                    tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+                }
             });
 
             TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
                 tobj.type_representation = prevMiddleBarSelection.type_representation;
-                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+                if (prevMiddleBarSelection.time_spent_timer) {
+                    tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+                }
             });
 
             //if (!changesHaveBeenMade) {
