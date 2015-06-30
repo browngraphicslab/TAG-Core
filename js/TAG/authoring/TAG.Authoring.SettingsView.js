@@ -676,12 +676,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
                 tobj.category_name = prevLeftBarSelection.categoryName;
                 tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
-                tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+                if (prevLeftBarSelection.timeSpentTimer) {
+                    tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+                }
             });
 
             TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
                 tobj.type_representation = prevMiddleBarSelection.type_representation;
-                tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+                if (prevMiddleBarSelection.time_spent_timer) {
+                    tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+                }
             });
 
             //if (!changesHaveBeenMade) {
@@ -2741,7 +2745,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     saveButton.prop("disabled", false);
                     saveButton.css("opacity", 1);
                 }
-                $('.collection-title').text(nameInput.val());
+                $('#collection-title').text(nameInput.val());
                 
             });
             descInput.focus(function () {
@@ -3638,8 +3642,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             {
                 'margin-left': '2%',
                 'margin-top': '1%',
-                'margin-right': '0%',
+                'margin-right': '2%',
                 'margin-bottom': '3%',
+                'float': 'right'
             });
     
 
@@ -3660,13 +3665,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '3%',
                 'margin-top': '1%',
                 'margin-bottom': '1%',
-                'margin-left': '.5%',
                 'float': 'right'
             }, true);
         TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
             tobj.element_type = "Tour";
         });
-        buttonContainer.append(editButton).append(duplicateButton).append(saveButton);
+        buttonContainer.append(editButton).append(saveButton).append(duplicateButton);
         if(!IS_WINDOWS){
             buttonContainer.append(deleteButton);
         }

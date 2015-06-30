@@ -43,8 +43,7 @@ TAG.Util.IdleTimer = (function() {
          * @method start
          */
         function start() {
-            console.log("timer tried to start");
-            if(jQuery.data(document.body,"isKiosk")==true){
+            if (jQuery.data(document.body, "isKiosk") == true && $.find("video").length==0) {
                 console.log("timer start")
                 if(idleDuration !== 0) { // default is no idle timer
                     s1TimeoutID = setTimeout(fireS1, s1d);
@@ -53,7 +52,6 @@ TAG.Util.IdleTimer = (function() {
                 }
             }
             else {
-                console.log("about to kill");
                 kill();
             }
         }

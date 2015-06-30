@@ -2212,7 +2212,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var avlTree = sortByYear(artworks, true);
 
         //Hide timeline if there are no compatible dates-- mostly for backwards compatibility
-        if (avlTree.min().yearKey >= 999999) {
+        if (avlTree.min().yearKey >= 999999 || (currCollection && currCollection.Metadata.Timeline && currCollection.Metadata.Timeline === 'false')) {
             timelineShown = false;
             if (!comingBack) {
                 if ($('#titleButton')) {
@@ -3453,7 +3453,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     artistInfo.text(artText);
                     yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
                 } else {
-                    artistInfo.text("(Interactive Tour)" );
+                    if (artwork.Extension && artwork.Extension === 'tour') {
+                        artistInfo.text("(Interactive Tour)");
+                    }
                     yearInfo.text(" " );
                 }
 
