@@ -1888,9 +1888,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 
                 reloadAssocMedia(worktopInfo.assetDoqID);
                 thumbnailLoadingSave.fadeOut();
-                if (callback) {
-                    callback();
-                }
             }
 
             function no_op() { // TODO I think TAG.Worktop.Database functions can just accept null callbacks, since they use the safeCall util function. if so, use null
