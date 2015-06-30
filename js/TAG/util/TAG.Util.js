@@ -4060,7 +4060,7 @@ TAG.Util.UI = (function () {
      * @param title          string: the title to appear at the top of the picker
      * @param target         object: a comp property (object whose associations we're managing) and a type property
      *                               ('exhib', 'artwork', 'media') telling us what kind of component it is
-     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media), "bg"- background image : type of the association
+     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media)
      * @param tabs           array: list of tab objects. Each has a name property (string, title of tab), a getObjs
      *                              property (a function to be called to get each entity listed in the tab), and a
      *                              args property (which will be extra arguments sent to getObjs), also an excluded property
@@ -4920,9 +4920,8 @@ TAG.Util.UI = (function () {
                     }
                     else {
                         console.log("in correct statement");
-                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {
-                           
-                            
+                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {                      
+                            callback();
                             pickerOverlay.fadeOut();
                             pickerOverlay.empty();
                             pickerOverlay.remove();
@@ -6017,7 +6016,7 @@ TAG.Util.RLH = function (input) {
             'display': 'inline-block'
         };
         var progCirc = TAG.Util.showProgressCircle(topRegion, progressCSS);
-
+        $("#locationHistorySaveMapButton").prop("disabled", true).css("opacity", "0.4");
         var index = currentIndex;
         if (mapGuids[index]) {
             TAG.Worktop.Database.changeMap(mapDoqs[mapGuids[index]], {
@@ -6025,6 +6024,7 @@ TAG.Util.RLH = function (input) {
                 AdditionalInfo: additionalInfoInput.val(),
                 //Description: mapDescriptionInput.val()
             }, function () {
+                $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
                 var mapName = function () {
                     if (nameInput.val()) {
                         if (nameInput.val().length > 14) {
