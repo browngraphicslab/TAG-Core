@@ -3106,10 +3106,8 @@ TAG.Util.UI = (function () {
                 clickAction();
             }
             if (first) {
-                console.log("confirm box first removeall?");
                 removeAll();
             } else {
-                console.log("confirm box hid");
                 $(confirmBox).css('display', 'none');
             }
         };

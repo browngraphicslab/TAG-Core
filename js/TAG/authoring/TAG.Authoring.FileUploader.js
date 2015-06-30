@@ -598,13 +598,11 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
             
             progressBarButton.click(function () {
-                console.log("progress bar button was clicked");
                 
                 $('body').append(popup);
                 $(popup).css({ 'display': 'inherit' });
                 $(popup).show();
             })
-            console.log("just appended progress stuff")
         }
     }
 
@@ -612,7 +610,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * Totally remove the overlay from the DOM / destroy
      */
     function removeOverlay() {
-        console.log("should remove progress stuff now");
         enableButton();
         uploadingOverlay.remove();
         uploadOverlayText.remove();
@@ -727,10 +724,11 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             finishedCallback(dataReaderLoads);
             console.log("finished callback called!");
             //sets individual progress bars to 100
-            /*for (var i = 0; i < uploadGuids.length; i++) {
+            console.log("length = " + $(uploadGuids).length);
+            for (var i = 0; i < uploadGuids.length-1; i++) {
                 $(".uploadProgressLabel" + uploadGuids[i]).text((100).toString().substring(0, 4) + "%")
                 $(".uploadProgressInner" + uploadGuids[i]).css({ 'width': '100%' });
-            }*/
+            }
 
 
 
@@ -856,8 +854,16 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         //percentComplete = percentComplete += incrPercent;
         
         innerProgressBar.width(percentComplete * 90 + "%");
-
-        uploadGuids.push(guidsToFileNames[upload.guid]);
+        var duplicate = false;
+        for (var i = 0; i < uploadGuids.length; i++) {
+            if (uploadGuids[i] === guidsToFileNames[upload.guid]) {
+                duplicate = true;
+            }
+        }
+        if (duplicate === false) {
+            uploadGuids.push(guidsToFileNames[upload.guid]);
+        }
+        
     }
 
     //updates the progress information in the upload queue 
