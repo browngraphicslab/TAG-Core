@@ -2549,7 +2549,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 }
                 else
                 {
-                    console.log("here");
                     tourLabel = $(document.createElement('img'))
                         .addClass('tourLabel')
                         .attr('src', tagPath + 'images/icons/text_icon_2.svg');
