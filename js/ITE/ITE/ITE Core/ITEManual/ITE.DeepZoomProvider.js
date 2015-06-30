@@ -110,7 +110,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         		"width"		: $("#ITEHolder").width(),
         		"height"	: $("#ITEHolder").height(),
         	}); 
-        _UIControl = $(document.createElement("div"))
+		_UIControl = $(document.createElement("div"));
+		_UIControl.css({
+		    top: '0px',
+		    left: '0px',
+            position: 'relative'
+		});
 
 		// $("#ITEHolder").append(_UIControl);
         // $("#ITEHolder").append(_proxy);
