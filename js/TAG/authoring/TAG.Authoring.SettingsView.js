@@ -6824,7 +6824,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
                         if(textHolder.css("overflow") == "hidden")
                         {
-                            $(textHolder).css({ 'overflow-y': 'auto' });
+                             $(textHolder).css({ 'overflow-y': 'auto' });
                             textHolder.parent().append(t);
                             var func = t.height() > textHolder.height();
                             console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
