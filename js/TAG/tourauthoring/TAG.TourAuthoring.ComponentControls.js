@@ -3001,7 +3001,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         }
                      } else {
                             track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id, selectedArt.type);
-                                       
                             var positionX = timeManager.getCurrentPx();
                             var displayLength = 5;
                             var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
