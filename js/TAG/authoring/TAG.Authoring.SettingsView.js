@@ -3634,8 +3634,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             {
                 'margin-left': '2%',
                 'margin-top': '1%',
-                'margin-right': '0%',
+                'margin-right': '2%',
                 'margin-bottom': '3%',
+                'float': 'right'
             });
     
 
@@ -3656,13 +3657,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '3%',
                 'margin-top': '1%',
                 'margin-bottom': '1%',
-                'margin-left': '.5%',
                 'float': 'right'
             }, true);
         TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
             tobj.element_type = "Tour";
         });
-        buttonContainer.append(editButton).append(duplicateButton).append(saveButton);
+        buttonContainer.append(editButton).append(saveButton).append(duplicateButton);
         if(!IS_WINDOWS){
             buttonContainer.append(deleteButton);
         }
