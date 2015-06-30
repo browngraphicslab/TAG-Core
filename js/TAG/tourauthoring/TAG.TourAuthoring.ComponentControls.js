@@ -2973,7 +2973,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 //searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
                 searchbar.val("");
                 // add the artwork track to the timeline
+                console.log("                          ");
+                console.log("                          ");
+                console.log("                          ");
+                console.log("                          ");
                 for (i = 0; i < selectedArtworks.length; i++) {
+
+                    console.log("soon to add artwork: ");
+                    console.log(selectedArtworks[i]);
+                    console.log("                                      ")
                     selectedArt = selectedArtworks[i];
                     var track;
                     if (selectedArt.type === "VideoArtwork") {
@@ -2997,11 +3005,17 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         }
                      } else {
                             track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id, selectedArt.type);
-                                       
+                            
+                            console.log("track: ")
+                            console.log(track)
+                            console.log("                          ");
                             var positionX = timeManager.getCurrentPx();
                             var displayLength = 5;
                             var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
                             var newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                            console.log("newDisplay: ")
+                            console.log(newDisplay);
+                            console.log("                          ");
                             if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                                 newDisplay.setIn(0);
                                 newDisplay.setOut(0);
@@ -3018,6 +3032,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 isUploading = false;
                 timeline.getDataHolder().mapTracks(function (container, i) {
                     container.track.updatePos(i);
+                    console.log("mapping track " + i);
                 });
                 
             }

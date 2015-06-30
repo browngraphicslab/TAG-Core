@@ -6017,7 +6017,7 @@ TAG.Util.RLH = function (input) {
             'display': 'inline-block'
         };
         var progCirc = TAG.Util.showProgressCircle(topRegion, progressCSS);
-
+        $("#locationHistorySaveMapButton").prop("disabled", true).css("opacity", "0.4");
         var index = currentIndex;
         if (mapGuids[index]) {
             TAG.Worktop.Database.changeMap(mapDoqs[mapGuids[index]], {
@@ -6025,6 +6025,7 @@ TAG.Util.RLH = function (input) {
                 AdditionalInfo: additionalInfoInput.val(),
                 //Description: mapDescriptionInput.val()
             }, function () {
+                $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
                 var mapName = function () {
                     if (nameInput.val()) {
                         if (nameInput.val().length > 14) {

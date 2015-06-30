@@ -5590,6 +5590,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var guidsInCollection = [];
         //var sortBy = "Title";
         currentIndex = 0;
+
         prepareNextView(true, "Import", createArtwork, null, true);
         
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
@@ -6575,7 +6576,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
 
-            var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
+            var check,
+                i,
+                url,
+                name,
+                done = 0,
+                total = urls.length,
+                durations = [],
+                toScroll,
+                alphaName;
+
             var progressCircCSS = {
                 'position': 'absolute',
                 'left': '40%',
