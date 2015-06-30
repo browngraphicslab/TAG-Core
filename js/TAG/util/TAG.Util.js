@@ -2902,6 +2902,7 @@ TAG.Util.UI = (function () {
             $(overlay).attr('id', 'popupblockInteractionOverlay');
         }
         var confirmBox = document.createElement('div');
+        //$(confirmBox).attr('id', 'uploadProgressPopup');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
            {
                center_h: true,
@@ -3105,9 +3106,11 @@ TAG.Util.UI = (function () {
                 clickAction();
             }
             if (first) {
+                console.log("confirm box first removeall?");
                 removeAll();
             } else {
-                $(confirmBox).remove();
+                console.log("confirm box hid");
+                $(confirmBox).css('display', 'none');
             }
         };
 
@@ -3122,10 +3125,10 @@ TAG.Util.UI = (function () {
 
         function removeAll() {
             if (noFade) {
-                $(overlay).hide();
-                $(overlay).remove();
+                $(overlay).css('display', 'none');
+               // $(overlay).remove();
             } else {
-                $(overlay).fadeOut(500, function () { $(overlay).remove(); });
+                $(overlay).fadeOut(500, function () { $(overlay).css('display', 'none'); });
             }
             globalKeyHandler[0] = currentKeyHandler;
         }
