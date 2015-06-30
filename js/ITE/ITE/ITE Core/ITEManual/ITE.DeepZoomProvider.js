@@ -114,9 +114,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		_UIControl.css({
 		    top: '0px',
 		    left: '0px',
-		    position: 'relative',
-		    width: $("#ITEHolder").width(),
-		    height: $("#ITEHolder").height()
+            position: 'relative'
 		});
 
 		// $("#ITEHolder").append(_UIControl);
@@ -776,7 +774,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * I/P: 	index
 	 * sets the track to the provided z-index
 	 * O/P: 	none
-	 */                                                                         
+	 */
 	function setZIndex(index) {
 	    //index = 100000000;
     	//set the z index to be -1 if the track is not displayed
