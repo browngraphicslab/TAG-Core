@@ -4208,7 +4208,7 @@ TAG.Util.UI = (function () {
      * @param title          string: the title to appear at the top of the picker
      * @param target         object: a comp property (object whose associations we're managing) and a type property
      *                               ('exhib', 'artwork', 'media') telling us what kind of component it is
-     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media), "bg"- background image : type of the association
+     * @param type           string: "exhib" (exhib-artwork), "artwork" (artwork-media)
      * @param tabs           array: list of tab objects. Each has a name property (string, title of tab), a getObjs
      *                              property (a function to be called to get each entity listed in the tab), and a
      *                              args property (which will be extra arguments sent to getObjs), also an excluded property
@@ -5068,9 +5068,8 @@ TAG.Util.UI = (function () {
                     }
                     else {
                         console.log("in correct statement");
-                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {
-                           
-                            
+                        TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {                      
+                            callback();
                             pickerOverlay.fadeOut();
                             pickerOverlay.empty();
                             pickerOverlay.remove();
@@ -8439,6 +8438,11 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					}
 				}
 				
+                // fixing fade offset issue
+				if (currExperienceStream.data['transition']) {
+				    keyframeObject.time += currExperienceStream.data.transition.inDuration;
+				}
+
 				/* Ink tracks parsed separately in the ITE_parseInkKeyframes function below */
 
 				currKeyframes.push(keyframeObject);

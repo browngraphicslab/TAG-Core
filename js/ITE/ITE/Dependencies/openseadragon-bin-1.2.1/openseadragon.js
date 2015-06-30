@@ -8826,7 +8826,11 @@ function updateOnce( viewer ) {
         }
     }
 
-    THIS[ viewer.hash ].animating = animated;
+    if (THIS[viewer.hash] !== null && THIS[viewer.hash] !== undefined) {
+        THIS[viewer.hash].animating = animated;
+    } else {
+        console.log("failed animation null-check in OSD");
+    }
 
     //viewer.profiler.endUpdate();
 }
