@@ -5756,7 +5756,7 @@ TAG.Util.RLH = function (input) {
 
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
-                $("#locationHistoryDeleteButton").prop("disabled", 'true').css("opacity", "0.4");
+                $("#locationHistorySaveMapButton").prop("disabled", true).css("opacity", "0.4");
                 var mapName = function () {
                     if (mapGuids[currentIndex]) {
                         if (mapDoqs[mapGuids[currentIndex]].Name.length > 14) {
@@ -5769,9 +5769,15 @@ TAG.Util.RLH = function (input) {
                     }
                 }();
                 if (!(currentIndex === 0)) { //if it's not the bing map being displayed, confirm the deletion
-                    var overlay = TAG.Util.UI.PopUpConfirmation(function () {
-                        deleteMap();
-                    }, "Are you sure you want to delete " + mapName + " and all locations associated with it?", "Yes");
+                    var overlay = TAG.Util.UI.PopUpConfirmation(
+                        deleteMap,
+                        "Are you sure you want to delete " + mapName + " and all locations associated with it?",
+                        "Yes",
+                        null,
+                        function () {
+                            console.log("here!")
+                            $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
+                        });
                     root.append(overlay);
                     $(overlay).show();
                     evt.stopPropagation();
