@@ -103,9 +103,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     // set up the coordinates for adjustViewBox
     var viewerElt;
     if (calling_file === 'inkes')
-        viewerElt = ($("#rinplayer").length) ? $("#rinplayer") : $("#rinPlayer");
+        viewerElt = ($("#ITEContainer").length) ? $("#ITEContainer") : $("#ITEContainer");
     else
-        viewerElt = $("#rinContainer");
+        viewerElt = $("#ITEContainer");
     var origPaperX = 0; // original coordinates of the paper (match with rinContainer)
     var origPaperY = 0;
     var origPaperW = viewerElt.width();
@@ -2218,11 +2218,11 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             //kfvh = keyframe.state.viewport.region.span.y;
         }
         else if (linkType === TAG.TourAuthoring.TrackType.image) {
-            kfvw = 1.0 / keyframe.bounds.width;
-            kfvh = keyframe.bounds.height;
-            kfvx = -keyframe.bounds.x * kfvw;
-            var rw = keyframe.bounds.width * domelement.width();
-            kfvy = -(domelement.height() / rw) * keyframe.bounds.y;
+            kfvw = 1.0 / keyframe.width;
+            kfvh = keyframe.height;
+            kfvx = -keyframe.x * kfvw;
+            var rw = keyframe.width * domelement.width();
+            kfvy = -(domelement.height() / rw) * keyframe.y;
             //kfvw = 1.0 / keyframe.state.viewport.region.span.x;//$("#" + canvid).width() / (keyframe.state.viewport.region.span.x * cw);
             //var rw = keyframe.state.viewport.region.span.x * domelement.width();
             //kfvh = keyframe.state.viewport.region.span.y; /////bogus entry, not used

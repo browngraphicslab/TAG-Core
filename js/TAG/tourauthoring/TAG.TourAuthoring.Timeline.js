@@ -90,6 +90,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             'width': editorWidth + 'px',
             'margin-top': '3%',
             'position': 'relative',
+            'z-index': '1000000'
         });
 
         // Top-level container, vertical scrolling
@@ -1386,7 +1387,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
     }
     that.addVideoTrack = addVideoTrack;
 
-    function addArtworkTrack (media, name, guid, pos) {
+    function addArtworkTrack (media, name, guid, pos, isLast) {
         // Add some stuff to spec
         pos = pos || (dataHolder.getSelectedTrack() ? dataHolder.getSelectedTrack().getPos() : 0);
         var spec = {

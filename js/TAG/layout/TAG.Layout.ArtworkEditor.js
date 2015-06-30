@@ -59,7 +59,10 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         creatingText,                  // editing text associated media
         keywordSets,                  // Original object extracted from db
         keywordsCheckboxDict = [[], [], []],
-        rightbarIsOpen;               // rightbar status
+        rightbarIsOpen,               // rightbar status
+        addRemoveMediaButton,           //button to add or remove media
+        addTextButton;                  //button to add a text associated media
+
 
     LADS.Util.UI.getStack()[0] = null;
         
@@ -338,6 +341,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
      * @param {jQuery obj} container        the element containing this list
      */
     function createMediaList(container) {
+
         TAG.Util.showLoading(container || $('.assetContainer'), '20%', '40%', '40%');
         annotatedImage.loadAssociatedMedia(function (mediaList) {
             container = container || $('.assetContainer');
@@ -355,6 +359,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             mediaList.guids.sort(function (a, b) {
                 return mediaList[a].doq.Name < mediaList[b].doq.Name ? -1 : 1;
             });
+
+            var extraSpace = $(document.createElement('div'));//to add extra space at botttom of scrolling list of associated media
 
             // create divs for each media
             for (i = 0; i < mediaList.guids.length; i++) {
@@ -394,8 +400,12 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     });
                     thumbnailButton.attr("id", mediadoq.Identifier);
                     container.append(thumbnailButton);
+                    extraSpace.width(thumbnailButton.width());
+                    extraSpace.height(thumbnailButton.height() / 2);
                 })(i));
             }
+
+            container.append(extraSpace);
             TAG.Util.hideLoading(container);
         });
 
@@ -657,7 +667,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         addText.css({ 'font-size': TAG.Util.getMaxFontSizeEM("Add Text", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height) });
         buttonContainer.append(addText);
         addText.on('click', AssocTextEditor().openNew);
-
+        addTextButton = addText;//set the global variable
 
         addRemoveMedia = $(document.createElement('button')); // TODO JADE/STYL
         addRemoveMedia.addClass('addRemoveMedia');
@@ -686,6 +696,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         addRemoveMedia.on("mouseleave", function () {
             addRemoveMedia.css({ "background-color": "transparent","color":"white"});
         });
+        addRemoveMediaButton = addRemoveMedia;//set the global variable
         /**
          * Create the associated media selection picker
          * @method createMediaPicker
@@ -710,9 +721,24 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 }, function () { // TODO (low priority) -- shouldn't need to reload entire list here
                     $('.assetContainer').empty();
                     createMediaList($('.assetContainer'));
+                    addRemoveMedia.prop('disabled', false);
+                    addRemoveMedia.css('color', 'rgba(255,255,255,1)');
+                    addText.prop('disabled', false);
+                    addText.css('color', 'rgba(255,255,255,1)');
+                    TAG.Util.hideLoading($('.assetContainer'));
+                },
+                null,
+                null,
+                null,
+                function () {
+                    addRemoveMedia.prop('disabled', true);
+                    addRemoveMedia.css('color', 'rgba(255,255,255,0.5)');
+                    addText.prop('disabled', true);
+                    addText.css('color', 'rgba(255,255,255,0.5)');
+                    TAG.Util.showLoading($('.assetContainer'), '20%', '40%', '40%');
                 });
         }
-
+        
         assetContainer = $(document.createElement('div')); // TODO JADE/STYL
         assetContainer.attr('class', 'buttonContainer');
         assetContainer.css({
@@ -775,6 +801,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
         mainPanel.append(sidebar); // TODO JADE
         mainPanel.append(sidebarHideButtonContainer);
+        
     }
 
     /**
@@ -1764,8 +1791,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          * editing in the right pane.
          * @method updateAssocMedia
          * @param {Object} info        assoc media info to update
+         *@param function callback      function to be called after the updating has completed
          */
-        function updateAssocMedia(info) { // TODO use new AnnotatedImage; also, could eliminate need for param here by using 'global' current assoc media object (same with showEditMedia above, actually)
+        function updateAssocMedia(info, callback) { // TODO use new AnnotatedImage; also, could eliminate need for param here by using 'global' current assoc media object (same with showEditMedia above, actually)
             var title = info.title,
                 desc = info.desc,
                 contentType = info.contentType,
@@ -1778,7 +1806,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 rightbarLoadingSave,
                 thumbnailLoadingSave,
                 options;
-
             if (info.pos) {
                 coords = annotatedImage.viewer.viewport.pointFromPixel(info.pos);
                 coords.width = 0;
@@ -1859,10 +1886,16 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 
                 reloadAssocMedia(worktopInfo.assetDoqID);
                 thumbnailLoadingSave.fadeOut();
+                if (callback) {
+                    callback();
+                }
             }
 
             function no_op() { // TODO I think TAG.Worktop.Database functions can just accept null callbacks, since they use the safeCall util function. if so, use null
 
+            }
+            if (callback) {
+                callback();
             }
         }
 
@@ -2198,6 +2231,12 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     assetType;
 
                 //$('.assetHolder').css('background-color', '');
+                console.log("save associated media button clicked");
+                addRemoveMediaButton.prop('disabled', true);
+                addRemoveMediaButton.css('color', 'rgba(255,255,255,0.5)');
+                addTextButton.prop('disabled', true);
+                addTextButton.css('color', 'rgba(255,255,255,0.5)');
+                TAG.Util.showLoading($('.assetContainer'), '20%', '40%', '40%');
 
                 if (getActiveMediaMetadata('ContentType') === 'Video') { // TODO see comments in the delete button's click handler
                     $('.rightbar').find('video')[0].pause();
@@ -2208,9 +2247,14 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 titleTextVal = $titleText.val() || 'Untitled';
 
                 assetType = isHotspot ? 'Hotspot' : (isLayer ? 'Layer' : 'Asset');
-
                 if (creatingText) {
-                    createTextAsset(titleTextVal, $descArea.val());
+                    createTextAsset(titleTextVal, $descArea.val()=="" ? " ":$descArea.val(), function () {
+                        addRemoveMediaButton.prop('disabled', false);
+                        addRemoveMediaButton.css('color', 'rgba(255,255,255,1)');
+                        addTextButton.prop('disabled', false);
+                        addTextButton.css('color', 'rgba(255,255,255,1)');
+                        TAG.Util.hideLoading($('.assetContainer'));
+                    });
                     /**
                     // add the loading circle right after the "save" button is clicked
                     var buttonbarLoadingDelete = $(document.createElement('div'));
@@ -2230,7 +2274,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     creatingText = false;
                     close();
                 } else {
-
                     updateAssocMedia({
                         title: TAG.Util.htmlEntityEncode(titleTextVal),
                         desc: TAG.Util.htmlEntityEncode($descArea.val()),
@@ -2242,6 +2285,14 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         metadata: {
                             assetDoqID: activeAssocMedia.doq.Identifier
                         }
+                    }, function () {
+                        $('.assetContainer').empty();
+                        createMediaList($('.assetContainer'));
+                        addRemoveMediaButton.prop('disabled', false);
+                        addRemoveMediaButton.css('color', 'rgba(255,255,255,1)');
+                        addTextButton.prop('disabled', false);
+                        addTextButton.css('color', 'rgba(255,255,255,1)');
+                        TAG.Util.hideLoading($('.assetContainer'));
                     });
                 }
             });
@@ -2561,8 +2612,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
     /**Generate text asset
      * @method createTextAsset
      * @param {String, String}  name: name of text assoc media, text: content of assoc media
+     * @param function callback     the function to be called after the new doq has been made
      */
-    function createTextAsset(title, text) { 
+    function createTextAsset(title, text, callback) { 
         var name = title ? title : "Untitled Text";
         var options;
         if (text) {
@@ -2588,6 +2640,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 $('.assetContainer').empty();
                 createMediaList($('.assetContainer'));
                 //thumbnailLoadingSave.fadeOut();
+                if (callback) {
+                    callback();
+                }
             }
             var ops = {};
             ops.AddIDs = newDoq.Identifier;
@@ -3132,7 +3187,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     'position': 'relative',
                     'height': '25%',
                     'overflow': 'hidden',
-                    'margin': '30px 4%'
+                    'margin': '3%'
                 })
                 .appendTo($keywordsForm);
             //createSelects(keywordcategories, keywords, $keywordsContainer);
@@ -3145,7 +3200,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
             // Define some height values.
             var checklistContainerHeight = $('#tagRoot').height() / 3;
-            var numItemsShown = 10;
+            var numItemsShown = 8;
             var checklistItemHeight = checklistContainerHeight / (numItemsShown + 1);
 
             // Create a list to store checklists in.
@@ -3257,8 +3312,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         .css({
                             'border': '1px solid #777',
                             'background-color': '#fff',
-                            'height': (checklistItemHeight / 2) + 'px',
-                            'width': (checklistItemHeight / 2) + 'px'
+                            'height': Math.floor(checklistItemHeight / 3) + 'px',
+                            'width': Math.floor(checklistItemHeight / 3) + 'px',
+                            'font-size': Math.floor(checklistItemHeight / 3) + 'px'
                         })
                         .click(function(e) {
                             e.stopPropagation();
@@ -3273,7 +3329,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         .css({
                             'cursor': 'default',
                             'font-size': '0.7em',
-                            'position': 'absolute',
                             'overflow': 'hidden',
                             'text-overflow': 'ellipsis',
                             'width': '20%'
@@ -3303,7 +3358,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 .attr('id', 'save-keywords-container')
                 .css({
                     'width': '100%',
-                    'padding-bottom': '7%',
+                    'min-height': '32px', // Same as button it contains.
+                    'padding-bottom': '5%',
                     'position': 'relative'
                 })
                 .appendTo($keywordsForm);

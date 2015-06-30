@@ -36,6 +36,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	_UIControl;
     self._UIControl = _UIControl;
 
+    var _holder;
+
     // Various animation/manipulation variables.
 	self.interactionAnimation;
 	var attachedInks 				= [],
@@ -67,10 +69,18 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		// Create UI and append to ITEHolder.
 		_image		= $(document.createElement("img"))
 			.addClass("assetImage");
+		//_holder = $(document.createElement('div')).addClass('assetImageHolder').append(_image).css({
+		//    'margin': '0px',
+        //    'padding': '0px'
+		//});
+        
 		_UIControl	= $(document.createElement("div"))
 			.addClass("UIControl")
 			.append(_image)
-			.css("zIndex", -1)
+			.css({
+			    "z-index": -1,
+                'overflow': 'hidden'
+			})
 		$("#ITEHolder").append(_UIControl);
 		self._UIControl = _UIControl;
 
@@ -92,6 +102,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Sets the image’s URL source.
 		_image.attr("src", self.trackData.assetUrl);
+		_image.css({
+		    "top": "0px",
+		    "left": "0px",
+		    "width": "100%",
+            "height": "auto"
+		})
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 		TweenLite.ticker.addEventListener("tick", updateInk)
 
@@ -284,10 +300,10 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			"opacity":		state.opacity,
 			"left":			state.left,
 			"top":			state.top,
-			"width":		state.width,
-			"height":		state.height
+			"width":		state.width,//Math.max(parseInt(state.width), parseInt(state.height)) + "px",
+			"height":		state.height//Math.max(parseInt(state.width), parseInt(state.height)) + "px"//state.height
 		});
-		// (state.opacity === 0) ? _UIControl.css("z-index", -1) : _UIControl.css("z-index", self.zIndex);
+		(state.opacity === 0) ? _UIControl.css("z-index", -1) : _UIControl.css("z-index", self.zIndex);
 		// (state.opacity === 0) ? _UIControl.css("pointer-events", "none") : _UIControl.css("pointer-events", "auto");
 	};
 

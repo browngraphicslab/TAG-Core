@@ -26,7 +26,15 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         backDialogOverlay = $(TAG.Util.UI.blockInteractionOverlay());
 
     (function _createHTML() {
-        topbar.css({ "background-color": "rgb(63,55,53)", "height": "8%", "width": "100%" });
+        topbar.css({
+            "background-color": "rgb(63,55,53)",
+            "height": "8%",
+            "width": "100%",
+            "z-index": "1000000",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+        });
         topbar.attr('id', 'topbar');
         
         var buttonHeight = $(window).height() * 0.0504; // matches effective % size from SettingsView
@@ -345,10 +353,16 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             ev.stopImmediatePropagation();
         });
         textArea.on('keyup', function (ev) {
+            saveButton.prop('disabled', false);
+            saveButton.css({
+                "background-color": "transparent",
+                "border-color": "white",
+                "opacity" : "1"
+            });
             nameChanged = true;
             ev.stopImmediatePropagation();
         });
-
+        
         topbar.append(textArea);
 
         // NOTE: save button click event handler is below dialog code
@@ -361,6 +375,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         saveButton.css('opacity', '0.4');
 
         //Save button highlighting
+        
         saveButton.on('mousedown', function () {
             if (!saveButton.is(":disabled")) {
                 saveButton.css({ "background-color": "white", "color": "black" });

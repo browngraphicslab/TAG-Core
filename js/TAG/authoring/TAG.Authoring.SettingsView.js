@@ -1,4 +1,4 @@
-/// <reference path="../../../telemetry/telemetry.js" />
+﻿/// <reference path="../../../telemetry/telemetry.js" />
 TAG.Util.makeNamespace("TAG.Authoring.SettingsView");
 
 /*  Creates a SettingsView, which is the first UI in authoring mode.  
@@ -1034,9 +1034,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     /** Shows a popup confirmation for deleting a set of keywords.
      * @param setIndex {Number}             The index of the set to delete from.
      * @param keyword {Object}              The keyword to delete.
-     * @param deleteFunction {Function}     Function to call on successful delete; this will likely update UI.
+     * @param successFunction {Function}    Function to call on delete success; this will likely update UI.
+     * @param failFunction {Function}       Function to call on delete failure; this will likely update UI.
+     * @param cancelFunction {Function}     Function to call on delete cancel; this will likely update UI.
      */
-    function deleteKeyword(setIndex, keyword, deleteFunction) {
+    function deleteKeyword(setIndex, keyword, successFunction, failFunction, cancelFunction) {
+        console.log('deleting ' + keyword);
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             //Change the settings in the database
             var set = keywordSets[setIndex];
@@ -1050,9 +1053,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     case 2: optns.KeywordSet3 = TAG.Util.convertArrayToSetString(set.keywords); break;
                     default: break;
                 }
-                TAG.Worktop.Database.changeMain(optns, deleteFunction, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
+                var deleteAuthError = function () {
+                    failFunction();
+                    authError();
+                }
+                var deleteConflict = function () {
+                    failFunction();
+                    conflict({ Name: 'Main' }, 'Update', loadGeneralView);
+                }
+                var deleteError = function () {
+                    failFunction();
+                    error(loadGeneralView);
+                }
+                TAG.Worktop.Database.changeMain(optns, successFunction, deleteAuthError, deleteConflict, deleteError);
             }
-        }, "Are you sure you want to delete this keyword?", "Delete Keyword", true, function () { $(confirmationBox).hide(); });
+        }, "Are you sure you want to delete this keyword?", "Delete Keyword", true, function () { cancelFunction(); $(confirmationBox).hide(); });
         root.append(confirmationBox);
         $(confirmationBox).show();
     }
@@ -1152,7 +1167,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         }
                         if (inAssociatedView) {
-                            menuLabel.prop('disabled', false);
+                            $(menuLabel).prop('disabled', false);
                             menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                         }
                         bgImgInput.prop('disabled', false);
@@ -2055,6 +2070,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
                 });
+                if (i == list.length - 1 && i > 1) {
+                    middleQueue.add(function () {
+                        console.log("adding extra space");
+                        var extraSpace = $(document.createElement("div"));
+                        extraSpace.width(middleLabelContainer.width());
+                        extraSpace.height($($(".middleLabel")[0]).height() / 2);
+                        console.log($(".middleLabel"));
+                        middleLoading.before(extraSpace)
+                    });
+                }
             });
             // Hide the loading label when we're done
             middleQueue.add(function () {
@@ -2348,8 +2373,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //(!assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = true;
             showAssocMedia.css({'background-color':'white'});
-            hideAssocMedia.css({'background-color':''});
-            $('#assocMediaButton').css('display','block');
+            hideAssocMedia.css({ 'background-color': '' });
+            $('#divide').css('display', 'inline');
+            $('#filters').css('display','inline');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
@@ -2362,7 +2388,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             assocMediaShown = false;
             hideAssocMedia.css('background-color','white');
             showAssocMedia.css('background-color','');
-            $('#assocMediaButton').css('display','none');
+            $('#divide').css('display', 'none');
+            $('#filters').css('display', 'none');
             }, {
             'min-height': '0px',
             'width': '48%',
@@ -2637,7 +2664,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
 
@@ -3384,6 +3411,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
                 });
+                if (i == list.length - 1 && i > 1) {
+                    middleQueue.add(function () {
+                        console.log("adding extra space");
+                        var extraSpace = $(document.createElement("div"));
+                        extraSpace.width(middleLabelContainer.width());
+                        extraSpace.height($($(".middleLabel")[0]).height() / 2);
+                        console.log($(".middleLabel"));
+                        middleLoading.before(extraSpace)
+                    });
+                }
             });
             // Hide the loading label when we're done
             middleQueue.add(function () {
@@ -3393,7 +3430,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
             });
         }
-
+        if (idleTimer) {
+            idleTimer.kill();
+        }
         cancelLastSetting = function () { cancel = true; };
     }
 
@@ -3662,7 +3701,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
-        
+        if (idleTimer) {
+            idleTimer.kill();
+        }
 
     }
 
@@ -3909,8 +3950,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //Enables new button - might be initially disabled if upload is happening
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
-            $(menuLabel).prop('disabled', true);
-            menuLabel.css({'opacity': '.4'});
+          $(menuLabel).prop('disabled', true);
+            menuLabel.css({'opacity': '.4'});  
+        } else{
+           $(menuLabel).prop('disabled', false);
+            menuLabel.css({'opacity': '1'});   
         }
 
         prepareNextView(true, "Import", createAsset);
@@ -4090,6 +4134,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         });
                     }
                     selectNext = true;
+                    if (i == list.length - 1 && i > 1) {
+                        middleQueue.add(function () {
+                            console.log("adding extra space");
+                            var extraSpace = $(document.createElement("div"));
+                            extraSpace.width(middleLabelContainer.width());
+                            extraSpace.height($($(".middleLabel")[0]).height() / 2);
+                            console.log($(".middleLabel"));
+                            middleLoading.before(extraSpace)
+                        });
+                    }
                 });
                 // Hide the loading label when we're done
                 middleQueue.add(function () {
@@ -4105,7 +4159,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         cancelLastSetting = function () { cancel = true; };
     }
-    
+    if (idleTimer) {
+        idleTimer.kill();
+    }
     var load = 0;
 
     /**Loads associated media to the right side
@@ -4581,6 +4637,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
+        if (idleTimer) {
+            idleTimer.kill();
+        }
     }
 
 
@@ -5059,7 +5118,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                                 //hide confirmation box
                             }
@@ -5531,6 +5590,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var guidsInCollection = [];
         //var sortBy = "Title";
         currentIndex = 0;
+
         prepareNextView(true, "Import", createArtwork, null, true);
         
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
@@ -5648,25 +5708,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             else if (sortByArt == "Recently Added"){
                 //create sort list for added before and other
                 console.log("sort by recently added")
-                sortAZ(list);
-                var afterList = [];
-                var beforeList = [];
-                for (var sb = 0, len = list.length; sb < len; sb++){
-                    var artDate = new Date(list[sb].Metadata.__Created);
-                    var now = new Date();
-                    var compareDate = new Date(now.getFullYear(), now.getMonth(),now.getDate()-7);
-                    //compareDate = compareDate.setDate(compareDate.getDate()-7);
-                    if (artDate.getTime() > compareDate.getTime()){
-                        afterList.push(list[sb]);
-                    } else{
-                        beforeList.push(list[sb]);
-                    }
+                //sortAZ(list);
+                var heap = new binaryHeap(function (e) {return new Date(e.Metadata.__Created).getTime()*-1;});
+                for (var sb = 0, len = list.length; sb < len; sb++) {
+                    console.log("el created: " + new Date(list[sb].Metadata.__Created).getTime());
+                    heap.push(list[sb]);
                 }
                 list = [];
-                list.push("Recently Added");
-                list = list.concat(afterList);
-                list.push("Older");
-                list = list.concat(beforeList);
+                while(heap.size()>0) {
+                    list.push(heap.pop());
+                }
+                console.log("done popping")
                 displayLabels();
             }
 
@@ -5758,6 +5810,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 }
                             }, true, val.Extension, markedForDelete));
                         }
+                        if (i == list.length - 1 && i>1) {
+                            middleQueue.add(function () {
+                                console.log("adding extra space");
+                                var extraSpace = $(document.createElement("div"));
+                                extraSpace.width(middleLabelContainer.width());
+                                extraSpace.height($($(".middleLabel")[0]).height()/2);
+                                console.log($(".middleLabel"));
+                                middleLoading.before(extraSpace)
+                            });
+                        }
 
                     });
                     }
@@ -5783,7 +5845,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
             
         }
-            
+        if (idleTimer) {
+            idleTimer.kill();
+        }
         cancelLastSetting = function () { cancel = true; };
     }
 
@@ -6439,6 +6503,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }*/
         });
         cancelArtworkLoad = function () { cancel = true; };
+        if (idleTimer) {
+            idleTimer.kill();
+        }
     }
 
     /**Save Thumbnail image 
@@ -6509,7 +6576,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
 
-            var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
+            var check,
+                i,
+                url,
+                name,
+                done = 0,
+                total = urls.length,
+                durations = [],
+                toScroll,
+                alphaName;
+
             var progressCircCSS = {
                 'position': 'absolute',
                 'left': '40%',
@@ -6610,7 +6686,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             
@@ -6713,7 +6789,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                             }
                             if (inAssociatedView){
-                                menuLabel.prop('disabled',false);
+                                $(menuLabel).prop('disabled',false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
                             
@@ -7538,7 +7614,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     */
     function chunkDelete(guids, success, unauth, conflict, error) {
 
-        var chunkSize = 5;//change to affect the size of the chunk
+        var chunkSize = 500;//change to affect the size of the chunk
         var chunks = [];
 
         chunks.push([guids[0]]);
@@ -9252,7 +9328,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'min-height': '20px',
                     'line-height': '80%'
                 })
-                .click(function () { deleteKeyword(setIndex, keyword, function () { keywordEditDiv.remove(); })})
+                .click(function () {
+                    var thisButton = $(this);
+                    var keywordToDelete = thisButton.parent().find('.keywordDeleteLabel').text();
+                    // Function to enable a delete button.
+                    var enableDeleteButton = function () {
+                        thisButton.removeAttr('disabled')
+                            .css({
+                                'opacity': '1'
+                            })
+                            .text('Delete');
+                    }
+                    thisButton.attr('disabled', 'disabled')
+                        .css({
+                            'opacity': '0.2'
+                        })
+                        .text('Deleting...');
+                    deleteKeyword(setIndex, keyword, function () { keywordEditDiv.remove(); }, enableDeleteButton, enableDeleteButton);
+                })
                 .appendTo(keywordEditDiv);
         });
 
@@ -9301,10 +9394,28 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'float': 'right',
                 'margin-right': '5%',
                 'min-width': '20px',
-                'width': '20%'
+                'width': '20%',
+                'margin-top':'3%'
             })
             .click(function () {
                 $('#setEditorMessageContainer').text('');
+
+                // Disable this button until success.
+                $(this).attr('disabled', 'disabled')
+                    .css({
+                        'opacity': '0.2'
+                    })
+                    .text('Adding...');
+
+                // Function to enable the add button.
+                var enableAddKeywordButton = function () {
+                    $('#keywordAddButton').removeAttr('disabled')
+                        .css({
+                            'opacity': '1'
+                        })
+                        .text('Add');
+                }
+
 
                 // Remove breaklines.
                 keywordAddInput.val(keywordAddInput.val().replace(/\n\r?/g, ''));
@@ -9353,14 +9464,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 // Alert user that there was a validation error.
                 if (emptyWords) {
                     $('#setEditorMessageContainer').text('No empty keywords allowed!');
+                    enableAddKeywordButton();
                     return;
                 }
                 if (specialCharWords) {
                     $('#setEditorMessageContainer').text('No special characters allowed!');
+                    enableAddKeywordButton();
                     return;
                 }
                 if (duplicateWords) {
                     $('#setEditorMessageContainer').text('No duplicate keywords allowed!');
+                    enableAddKeywordButton();
                     return;
                 }
 
@@ -9393,15 +9507,52 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 'border-color': '#fff',
                                 'border-radius': '3.5px',
                                 'float': 'right',
-                                'margin-right': '5%'
+                                'margin-right': '5%',
+                                'height': '80%',
+                                'min-height': '20px',
+                                'line-height': '80%'
                             })
-                            .click(function () { deleteKeyword(setIndex, newKeyword, function () { newKeywordDeleteDiv.remove(); }) })
+                            .click(function () {
+                                var thisButton = $(this);
+                                var keywordToDelete = thisButton.parent().find('.keywordDeleteLabel').text();
+                                // Function to enable a delete button.
+                                var enableDeleteButton = function () {
+                                    thisButton.removeAttr('disabled')
+                                        .css({
+                                            'opacity': '1'
+                                        })
+                                        .text('Delete');
+                                }
+                                thisButton.attr('disabled', 'disabled')
+                                    .css({
+                                        'opacity': '0.2'
+                                    })
+                                    .text('Deleting...');
+                                deleteKeyword(setIndex, keywordToDelete, function () { thisButton.parent().remove(); }, enableDeleteButton, enableDeleteButton);
+                            })
                             .appendTo(newKeywordDeleteDiv);
 
                         keywordAddInput.val('');
                         keywordAddInput.focus();
                     }
+
+                    enableAddKeywordButton();
                 };
+
+                var keywordAddAuthError = function () {
+                    enableAddKeywordButton();
+                    authError();
+                }
+
+                var keywordAddConflict = function () {
+                    enableAddKeywordButton();
+                    conflict({ Name: 'Main' }, 'Update', loadGeneralView);
+                }
+
+                var keywordAddError = function () {
+                    enableAddKeywordButton();
+                    error(loadGeneralView);
+                }
 
                 //Change the settings in the database
                 if (keywordSets) {
@@ -9416,7 +9567,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         case 2: optns.KeywordSet3 = TAG.Util.convertArrayToSetString(keywordSets[2].keywords); break;
                         default: break;
                     }
-                    TAG.Worktop.Database.changeMain(optns, keywordAddSuccess, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
+                    TAG.Worktop.Database.changeMain(optns, keywordAddSuccess, keywordAddAuthError, keywordAddConflict, keywordAddError);
                 }
             })
             .appendTo(addKeywordContainer);
@@ -10270,7 +10421,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             loadAssocMediaView();
                         }
                     })
-                    .text("Recently Added");
+                    .text("Date Added");
         findButton.click(function(){
             if (findShown){
                 findContainer.css('display','none');

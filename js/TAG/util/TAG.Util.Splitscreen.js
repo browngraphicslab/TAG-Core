@@ -273,15 +273,74 @@ TAG.Util.Splitscreen = (function () {
                     "float": "right",
                     "display" : "block"
                 });
-                root.find('#collectionMenu').css('width', '35%');
-                /**
-                root.find('.nextPrevCollection').css({
-                    'width': (.95 * root.find("#collectionArea").width() - root.find('.mainCollection').width()) / 2 - root.find(".arrow").width(),
+
+                //all the many re-adjustments for the keywords row
+                root.find("#keywords").css({
+                    'display': 'inline',
+                    'z-index': 'inherit',
+                    'padding': '0%',  
+                    'width': '100%',
+                    'background-color': 'transparent',
+                    'border-radius': '0px',
+                    'text-align': 'left'
                 });
-                root.find('.collection-title').css('margin-left','8%');
-                **/
+                root.find("#searchButton").css({
+                    'font-size': '90%',
+                    'padding-bottom': '0.03%',
+                    'padding-top': '0.07%',
+                    'margin-top': '0%'
+                });
+                root.find("#filterByKeywords").empty().unbind()
+                    .css({
+                        'display': 'none',
+                        'cursor': 'auto'
+                    });              
+                root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
+                    var selector = $(element);
+                    var maxW;
+                    if (index % 2 === 0) {
+                        maxW = $("#tagRoot").width() * 0.04 + 'px';
+                    } else {
+                        maxW = $("#tagRoot").width() * 0.12 + 'px';
+                    }
+                    selector.css({ 'max-width': maxW });
+                    if (index % 2 === 0) {
+                        selector.find('.ui-dropdownchecklist-text').css('width', 'auto');
+                    } else {
+                        selector.css({ 'width': 'auto' });
+                    }
+                    selector.parent().css({ 'height': root.find("#searchInput").height() + 'px' });
+                    selector.parent().find('.selector-dropdown').css({
+                        'width': ($("#tagRoot").width() * 0.01015) + 'px',
+                        'float': 'right',
+                        'top': '25%'
+                    });
+                    selector.parent().css({ 'width': 'auto' });
+                    if (index % 2 != 0) {
+                        selector.parent().css({ 'width': selector.parent().outerWidth() * 1.1 + 'px' });
+                    }
+                    selector.parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
+                            .css('width', selector.parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
+                    
+                });
+
+                root.find("#searchInput").css({
+                    'width': $("#searchInput").width() * 2
+                });
+                root.find(".sortButton").css({
+                    'max-width': $("#tagRoot").width() * 0.15 + 'px',
+                });
+                root.find("#divide").css({ 'margin-top': '0%' });
+                root.find("#artworksButton").css({ 'margin-top': '0%' });
+                root.find("#assocMediaButton").css({ 'margin-top': '0%' });
+                root.find("#filterWrapper").css({ 'float': 'none' });
+
+
+                root.find('#collectionMenu').css('width', '35%');
+
                 root.find('#infoButton').show();
-                if (root.find('#infoDiv').width() !== 0) {
+                //adjust position of tiles to take description into account
+                if (parseInt(root.find('#infoDiv').css('margin-left')) >= 0) {
                     root.find('#infoDiv').css('width', '25%');
                     root.find("#tileDiv").css({ 'margin-left': '0%', 'left': root.find('#infoDiv').width() });
                 }

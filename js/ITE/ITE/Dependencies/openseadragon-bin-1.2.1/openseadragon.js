@@ -8754,7 +8754,7 @@ function updateOnce( viewer ) {
 
     if ( viewer.autoResize ) {
         containerSize = _getSafeElemSize( viewer.container );
-        if ( !containerSize.equals( THIS[ viewer.hash ].prevContainerSize ) ) {
+        if ( THIS[ viewer.hash ] && !containerSize.equals( THIS[ viewer.hash ].prevContainerSize ) ) {
             // maintain image position
             var oldBounds = viewer.viewport.getBounds();
             var oldCenter = viewer.viewport.getCenter();
@@ -8770,7 +8770,7 @@ function updateOnce( viewer ) {
         animated = viewer.referenceStrip.update( viewer.viewport ) || animated;
     }
 
-    if ( !THIS[ viewer.hash ].animating && animated ) {
+    if (THIS[viewer.hash] && !THIS[viewer.hash].animating && animated) {
         /**
          * Raised when any spring animation starts (zoom, pan, etc.).
          *
@@ -8800,7 +8800,7 @@ function updateOnce( viewer ) {
          * @property {?Object} userData - Arbitrary subscriber-defined object.
          */
         viewer.raiseEvent( "animation" );
-    } else if ( THIS[ viewer.hash ].forceRedraw || drawersNeedUpdate( viewer ) ) {
+    } else if ( THIS[ viewer.hash ] && (THIS[ viewer.hash ].forceRedraw || drawersNeedUpdate( viewer )) ) {
         updateDrawers( viewer );
         drawOverlays( viewer.viewport, viewer.currentOverlays, viewer.overlaysContainer );
         if( viewer.navigator ){
@@ -8809,7 +8809,7 @@ function updateOnce( viewer ) {
         THIS[ viewer.hash ].forceRedraw = false;
     }
 
-    if ( THIS[ viewer.hash ].animating && !animated ) {
+    if (THIS[ viewer.hash ] && THIS[ viewer.hash ].animating && !animated ) {
         /**
          * Raised when any spring animation ends (zoom, pan, etc.).
          *
