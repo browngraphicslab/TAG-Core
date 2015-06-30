@@ -2738,7 +2738,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     saveButton.prop("disabled", false);
                     saveButton.css("opacity", 1);
                 }
-                $('.collection-title').text(nameInput.val());
+                $('#collection-title').text(nameInput.val());
                 
             });
             descInput.focus(function () {
