@@ -1617,6 +1617,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             var video,
                 audio,
                 text,
+                iframe,
                 src = media.doq.Metadata.Source,
                 type = media.doq.Metadata.ContentType,
                 thumbnail = (media.doq.Metadata.Thumbnail && !media.doq.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(media.doq.Metadata.Thumbnail) : '',
