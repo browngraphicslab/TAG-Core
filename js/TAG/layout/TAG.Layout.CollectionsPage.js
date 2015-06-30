@@ -2542,7 +2542,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .append(yearTextBox);
 
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
-                console.log("type: " + currentWork.Type + "   metadata.contentType: " + currentWork.Metadata.ContentType + "   metadata.Type: " + currentWork.Metadata.Type)
                 if (currentWork.Metadata.ContentType == "tour") {
                     tourLabel = $(document.createElement('img'))
                         .addClass('tourLabel')
