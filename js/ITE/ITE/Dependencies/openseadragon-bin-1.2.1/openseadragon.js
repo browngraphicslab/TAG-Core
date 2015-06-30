@@ -8826,7 +8826,9 @@ function updateOnce( viewer ) {
         }
     }
 
-    THIS[ viewer.hash ].animating = animated;
+    if (THIS[viewer.hash]) {
+        THIS[viewer.hash].animating = animated;
+    }
 
     //viewer.profiler.endUpdate();
 }
