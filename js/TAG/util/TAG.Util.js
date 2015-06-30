@@ -8290,6 +8290,11 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					}
 				}
 				
+                // fixing fade offset issue
+				if (currExperienceStream.data['transition']) {
+				    keyframeObject.time += currExperienceStream.data.transition.inDuration;
+				}
+
 				/* Ink tracks parsed separately in the ITE_parseInkKeyframes function below */
 
 				currKeyframes.push(keyframeObject);
