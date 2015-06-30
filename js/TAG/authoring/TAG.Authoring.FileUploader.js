@@ -39,6 +39,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         popup,
         progressBarButton;
     var filesFinished = 0;
+    var percentComplete = 0;
     var uploadGuids = [];
     var uploadHappening = false;
     var numFiles = 100000;
@@ -679,6 +680,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             try {
                 disableButton()
                 upload = loadedUpload;
+                console.log("Is this being called twice?");
                 promise = upload.attachAsync().then(complete, error, progress(upload));
             } catch (err) {
                 removeOverlay();
@@ -824,20 +826,35 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      * @param upload        upload object / info
      */
     function progress(upload) {        
-        //var bar = innerProgBar || innerProgressBar;
+        var bar = innerProgBar || innerProgressBar;
         addOverlay();
         totalBytesToSend[upload.guid] = upload.progress.totalBytesToSend;
         var bytesSent = upload.progress.bytesSent;
         totalBytesSent[upload.guid] = bytesSent;
-        var percentComplete = 0;
+        percentComplete = 0;
+
+        /*var incrPercent = 1 / (globalFiles.length);
+        for (var i in globalFiles) {
+            console.log("percentComplete = " + percentComplete);
+            percentComplete = percentComplete += incrPercent;
+        }*/
+
         for (var key in totalBytesSent) {
             if (totalBytesToSend[key]) {
-                percentComplete += totalBytesSent[key] / (totalBytesToSend[key] * numFiles);
-
+                //percentComplete += totalBytesSent[key] / (totalBytesToSend[key] * numFiles);
+                percentComplete += 1 / numFiles;
             }
-        }        
-        innerProgressBar.width(percentComplete * 90 + "%");
+        }
+        console.log("should increment main progress bar now");
+        
+        
+        
         updateProgressUI(guidsToFileNames[upload.guid], percentComplete)
+
+        //percentComplete = percentComplete += incrPercent;
+        
+        innerProgressBar.width(percentComplete * 90 + "%");
+
         uploadGuids.push(guidsToFileNames[upload.guid]);
     }
 

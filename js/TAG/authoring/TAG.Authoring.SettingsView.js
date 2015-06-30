@@ -2324,22 +2324,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // local visibility
         var localVisibility = LADS.Util.localVisibility(exhibition.Identifier);
-        var invisibilityInput = createButton('Hide on This Machine', function () {
+        var invisibilityInput = createButton('Hide', function () {
             //if (localVisibility) { changesHaveBeenMade = true; };
             localVisibility = false;
             invisibilityInput.css('background-color', 'white');
             visibilityInput.css('background-color', '');
         }, {
             'min-height': '0px',
-            'margin-right': '4%',
             'width': '48%',
-            'height':'35px'
+            'height': '35px',
         });
         TAG.Telemetry.register(invisibilityInput, "click", "Visibility", function (tobj) {
             tobj.toggle_state = "Hide";
             tobj.collection_id = exhibition.Identifier;
         });
-        var visibilityInput = createButton('Show on This Machine', function () {
+        var visibilityInput = createButton('Show', function () {
             //if (!localVisibility) { changesHaveBeenMade = true; };
             localVisibility = true;
             visibilityInput.css('background-color', 'white');
@@ -2347,7 +2346,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, {
             'min-height': '0px',
             'width': '48%',
-            'height': '35px'
+            'height': '35px',
+            'margin-right': '4%',
         });
 
         TAG.Telemetry.register(visibilityInput, "click", "Visibility", function (tobj) {
@@ -2549,7 +2549,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
             var visDiv = $(document.createElement('div'));
-            visDiv.append(invisibilityInput).append(visibilityInput);
+            visDiv.append(visibilityInput).append(invisibilityInput);
 
             invisibilityInput.click(function () {
                 changesMade = true;
@@ -6825,7 +6825,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         
                         if(textHolder.css("overflow") == "hidden")
                         {
-                            $(textHolder).css({ 'overflow-y': 'auto' });
+                             $(textHolder).css({ 'overflow-y': 'auto' });
                             textHolder.parent().append(t);
                             var func = t.height() > textHolder.height();
                             console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
