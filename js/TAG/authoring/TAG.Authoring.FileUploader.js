@@ -39,6 +39,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         popup,
         progressBarButton;
     var filesFinished = 0;
+    var namesToUpdate = [];
     var percentComplete = 0;
     var uploadGuids = [];
     var uploadHappening = false;
@@ -333,16 +334,17 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
                                             //creates popup but doesn't show it
                                             popup = TAG.Util.UI.uploadProgressPopup(null, "Upload Queue", filenames);
+                                            $(popup).attr('id', 'uploadProgressPopup');
                                             $('body').append(popup);
                                             $(popup).css({ 'display': 'none' });
                                             
-                                            progressBarButton.click(function () {
+                                            /*progressBarButton.click(function () {
                                                 $('body').append(popup);
                                                 //root = $(document.getElementById("setViewRoot"));
                                                 //root.append(popup2);
                                                 $(popup).css({ 'display': 'inherit' });
                                                 $(popup).show();
-                                            })
+                                            })*/
 
                                             numFiles = files.length; // global
                                             globalUriStrings = uriStrings;
@@ -723,12 +725,12 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         if (filesFinished === numFiles) {
             //removeOverlay();
             finishedCallback(dataReaderLoads);
-
+            console.log("finished callback called!");
             //sets individual progress bars to 100
-            for (var i = 0; i < uploadGuids.length; i++) {
+            /*for (var i = 0; i < uploadGuids.length; i++) {
                 $(".uploadProgressLabel" + uploadGuids[i]).text((100).toString().substring(0, 4) + "%")
                 $(".uploadProgressInner" + uploadGuids[i]).css({ 'width': '100%' });
-            }
+            }*/
 
 
 
@@ -850,7 +852,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
         
         
         updateProgressUI(guidsToFileNames[upload.guid], percentComplete)
-
+      
         //percentComplete = percentComplete += incrPercent;
         
         innerProgressBar.width(percentComplete * 90 + "%");
@@ -861,10 +863,14 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     //updates the progress information in the upload queue 
     //right now - only shows 100% or 0% for each individual file
     function updateProgressUI(name, percent) {
+        console.log("called updateProgressUI");
         percent = 1;
-        console.log("the name is " + name);
-        $(".uploadProgressLabel" + name).text((percent*90).toString().substring(0, 4) + "%")
-        $(".uploadProgressInner" + name).css({'width':percent*90+'%'});
+        if (".uploadProgressLabel" + name) {
+            console.log("the label exists!!!!!");
+            $(".uploadProgressLabel" + name).text((percent * 90).toString().substring(0, 4) + "%")
+            $(".uploadProgressInner" + name).css({'width':percent*90+'%'});
+        }
+        
     }
 
     function cancelPromises() {
