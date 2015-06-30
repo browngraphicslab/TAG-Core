@@ -779,6 +779,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             // Format the dropdown selector box (what you click on to make dropdown appear).
             var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
+            if (!IS_WINDOWS){
+                //make them a bit taller on the web
+                elementHeight = elementHeight * 1.4;
+            }
             var selector;
             root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
                 selector = $(element);
@@ -824,6 +828,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 // Create a dropdown arrow.
                 var downArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/blackclose.svg').addClass('selector-dropdown').addClass('arrow')
                     .css({ 'width': ($("#tagRoot").width() * 0.01015) + 'px' });
+                //adjust styling for web
+                if (!IS_WINDOWS){
+                    downArrow.css({'min-width': '5px'});
+                }
                 //adjust hard-coded size of drop down arrows if in previewer
                 if (previewing) {
                     downArrow.css({ 'min-width': '0px', 'width': $("#setViewViewer").width() * 0.01015 + 'px', 'height': '35%','top': '0%'});
@@ -872,6 +880,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                          .css({'width': selector.parent().outerWidth() + 'px'}); // Change the width of the actual dropdownchecklist to be the same.
 
             });
+            
+                            //adjust styling for windows
+            if (!IS_WINDOWS){
+                $(".selector-dropdown").css('top','-1px');
+            }
 
             // The last thing we do is add a search button. 
             var searchButtonListItem = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
@@ -961,7 +974,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             'transform': 'rotate(270deg)',
                             '-webkit-transform': 'rotate(270deg)'
                         });
-                    });                  
+                    });
+                //fix for web app styling  
+                if (!IS_WINDOWS){
+                    root.find("#filterByKeywords").css({'width':'30%'});
+                    root.find("#filterArrow").css({'margin-left':'2%'});
+                }                
             }
 
             // If we are coming back and there was a previous search, execute that search.
@@ -1320,7 +1338,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             infoDiv.append(collectionDescription);
             catalogDiv.append(infoDiv);
             timelineArea.empty();
-            timelineArea.css({ "bottom": $("#tagRoot").height() * 0.011 + 'px' });
+            timelineArea.css({ "bottom": $("#tagRoot").height() * 0.025 + 'px' });
             styleBottomContainer();
 
             //Show loading circle
