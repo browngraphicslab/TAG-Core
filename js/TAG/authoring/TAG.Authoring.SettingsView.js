@@ -1155,6 +1155,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $('.progressBarUploads').remove();
                         $('.progressBarUploadsButton').remove();
                         $('.progressText').remove();
+                        $(document.getElementById("uploadProgressPopup")).remove();
+
                         //enable import buttons
                         root = $(document.getElementById("setViewRoot"));
 
@@ -2652,6 +2654,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             //remove progress stuff
                             $('#uploadingOverlay').remove();
+                            $(document.getElementById("uploadProgressPopup")).remove();
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
                             $('.progressText').remove();
@@ -5106,6 +5109,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
                             $('.progressText').remove();
+                            $(document.getElementById("uploadProgressPopup")).remove();
 
                             root = $(document.getElementById("setViewRoot"));
                             newButton = root.find('#setViewNewButton');
@@ -6674,7 +6678,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
-                            
+                            $(document.getElementById("uploadProgressPopup")).remove();
+
                             root = $(document.getElementById("setViewRoot"));
                             newButton = root.find('#setViewNewButton');
 
@@ -6777,6 +6782,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
                             $('.progressText').remove();
+                            $(document.getElementById("uploadProgressPopup")).remove();
 
                             root = $(document.getElementById("setViewRoot"));
                             newButton = root.find('#setViewNewButton');
@@ -6925,7 +6931,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (fromImportPopUp == true) {
                     TAG.Worktop.Database.changeExhibition(currCollection.Identifier, { AddIDs: [newDoq.Identifier] }, console.log("This worked maybe"));
                 }
-                var progressPopUp = $(document.getElementById("uploadProgressPopUp"));
+                var progressPopUp = $(document.getElementById("uploadProgressPopup"));
 
                 /*var elementClassName = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (newDoq.name)
                 $(".uploadProgressLabel" + elementClassName).text((100).toString().substring(0, 4) + "%")
