@@ -2809,6 +2809,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 'overflow': 'hidden',
                 'border': "0px solid black"
             });
+            fieldTitle.attr('maxlength', '25');
 
             if (isTextarea) {
                 textarea.attr('rows', 3);
