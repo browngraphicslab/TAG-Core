@@ -9625,22 +9625,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (keywordSets) {
                         keywordSets[setIndex].name = $(this).val();
                     }
-
-                    var kwstrng = ''
-                    for (var num = 0; num < 100; num++) {
-                        kwstrng = kwstrng + (num + ',');
-                    }
-                    console.log(kwstrng);
-                    kwstrng = ''
-                    for (var num = 100; num < 200; num++) {
-                        kwstrng = kwstrng + (num + ',');
-                    }
-                    console.log(kwstrng);
-                    kwstrng = ''
-                    for (var num = 200; num < 300; num++) {
-                        kwstrng = kwstrng + (num + ',');
-                    }
-                    console.log(kwstrng);
                 }),
             editInput: createButton('Edit', function () {
                     if (keywordSets) {
