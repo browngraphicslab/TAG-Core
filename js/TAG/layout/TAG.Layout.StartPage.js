@@ -12,7 +12,7 @@ TAG.Util.makeNamespace("TAG.Layout.StartPage");
 */
 TAG.Layout.StartPage = function (options, startPageCallback) {
     "use strict"; ////////////////////////////////////////////////
-
+    jQuery.data(document.body,"isKiosk",false)
     SPENT_TIMER = new TelemetryTimer(); //global timer to measure time spent
     SETTINGSVIEW_TIMER = new TelemetryTimer(); //global timer to measure time spent in settings view
 
@@ -349,6 +349,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         }
         
         goToCollectionsButton.on('click', function () {
+            jQuery.data(document.body, "isKiosk", true);
             if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
                 TAG.Worktop.Database.getArtworks(function (result) {
                     $.each(result, function (index, artwork) {
@@ -502,7 +503,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //Only leave the TAG.Auth.checkPassword() statement in.
 
         //if(IS_WINDOWS) {
-            TAG.Auth.checkPassword(authoringInput.val(), function () { 
+        TAG.Auth.checkPassword(authoringInput.val(), function () {
+                jQuery.data(document.body, "inKiosk", false);
                 enterAuthoringMode();
             }, function () {
                 passwordError.html('Invalid Password. Please try again...');
