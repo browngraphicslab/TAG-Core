@@ -3453,7 +3453,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     artistInfo.text(artText);
                     yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
                 } else {
-                    if (artwork.extension && artwork.extension === 'tour') {
+                    if (artwork.Extension && artwork.Extension === 'tour') {
                         artistInfo.text("(Interactive Tour)");
                     }
                     yearInfo.text(" " );
