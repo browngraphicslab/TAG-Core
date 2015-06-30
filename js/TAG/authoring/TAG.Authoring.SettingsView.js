@@ -5590,6 +5590,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var guidsInCollection = [];
         //var sortBy = "Title";
         currentIndex = 0;
+
         prepareNextView(true, "Import", createArtwork, null, true);
         
         if($('.progressBarUploads').length>0){ //upload happening - disable import button
@@ -5707,25 +5708,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             else if (sortByArt == "Recently Added"){
                 //create sort list for added before and other
                 console.log("sort by recently added")
-                sortAZ(list);
-                var afterList = [];
-                var beforeList = [];
-                for (var sb = 0, len = list.length; sb < len; sb++){
-                    var artDate = new Date(list[sb].Metadata.__Created);
-                    var now = new Date();
-                    var compareDate = new Date(now.getFullYear(), now.getMonth(),now.getDate()-7);
-                    //compareDate = compareDate.setDate(compareDate.getDate()-7);
-                    if (artDate.getTime() > compareDate.getTime()){
-                        afterList.push(list[sb]);
-                    } else{
-                        beforeList.push(list[sb]);
-                    }
+                //sortAZ(list);
+                var heap = new binaryHeap(function (e) {return new Date(e.Metadata.__Created).getTime()*-1;});
+                for (var sb = 0, len = list.length; sb < len; sb++) {
+                    console.log("el created: " + new Date(list[sb].Metadata.__Created).getTime());
+                    heap.push(list[sb]);
                 }
                 list = [];
-                list.push("Recently Added");
-                list = list.concat(afterList);
-                list.push("Older");
-                list = list.concat(beforeList);
+                while(heap.size()>0) {
+                    list.push(heap.pop());
+                }
+                console.log("done popping")
                 displayLabels();
             }
 
@@ -6583,7 +6576,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         uploadFile(TAG.Authoring.FileUploadTypes.DeepZoom, function (urls, names, contentTypes, files) {
 
-            var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
+            var check,
+                i,
+                url,
+                name,
+                done = 0,
+                total = urls.length,
+                durations = [],
+                toScroll,
+                alphaName;
+
             var progressCircCSS = {
                 'position': 'absolute',
                 'left': '40%',
@@ -10419,7 +10421,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             loadAssocMediaView();
                         }
                     })
-                    .text("Recently Added");
+                    .text("Date Added");
         findButton.click(function(){
             if (findShown){
                 findContainer.css('display','none');

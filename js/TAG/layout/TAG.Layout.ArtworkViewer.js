@@ -65,6 +65,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         
 
         // misc uninitialized vars
+        keywordSets,
         locationList,                               // location history data
         customMapsLength,
         map,                                        // Bing Maps map for location history
@@ -106,14 +107,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             script,
             meta;
 
-        if (!idleTimer && !previewing) {
+        if (!idleTimer && !previewing && locked !== doq.Identifier) {
             idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
             idleTimer.start();
         }
-        if (idleTimer && previewing) {
-            idleTimer.kill();
-        }
-        if (locked === doq.Identifier) {
+        if (idleTimer && (previewing || locked === doq.Identifier)) {
             idleTimer.kill();
         }
 
@@ -181,6 +179,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             },
             noMedia: false
         });
+
+        // Keyword sets
+        keywordSets = TAG.Worktop.Database.getKeywordSets();
     }
 
     /**
@@ -538,7 +539,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         root.find('#seadragonManipContainer').on('click', function(evt) {
             evt.stopPropagation(); //Prevent the click going through to the main container
             evt.preventDefault();
-            TAG.Util.IdleTimer.restartTimer();
+            if (locked !== doq.Identifier) {
+                TAG.Util.IdleTimer.restartTimer();
+            }
         });
 
         root.find('#leftControl').on('mousedown', function(evt) {
@@ -596,6 +599,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             curr,
             button,
             descriptionDrawer,
+            keywordsSet1Drawer,
+            keywordsSet2Drawer,
+            keywordsSet3Drawer,
             tourDrawer,
             locHistoryButton,
             mediaDrawer,
@@ -796,6 +802,30 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             assetContainer.append(descriptionDrawer);
             currBottom = descriptionDrawer.height();
         }
+
+        if (keywordSets && keywordSets[0] && keywordSets[0].shown && doq.Metadata.KeywordsSet1 && doq.Metadata.KeywordsSet1 !== '') {
+            keywordsSet1Drawer = initKeywordsSetDrawer(keywordSets[0].name, keywordSets[0].keywords, doq.Metadata.KeywordsSet1);
+            if (keywordsSet1Drawer) {
+                assetContainer.append(keywordsSet1Drawer);
+                currBottom += keywordsSet1Drawer.height();
+            }
+        }
+
+        if (keywordSets && keywordSets[1] && keywordSets[1].shown && doq.Metadata.KeywordsSet2 && doq.Metadata.KeywordsSet2 !== '') {
+            keywordsSet2Drawer = initKeywordsSetDrawer(keywordSets[1].name, keywordSets[1].keywords, doq.Metadata.KeywordsSet2);
+            if (keywordsSet2Drawer) {
+                assetContainer.append(keywordsSet2Drawer);
+                currBottom += keywordsSet2Drawer.height();
+            }
+        }
+
+        if (keywordSets && keywordSets[2] && keywordSets[2].shown && doq.Metadata.KeywordsSet3 && doq.Metadata.KeywordsSet3 !== '') {
+            keywordsSet3Drawer = initKeywordsSetDrawer(keywordSets[2].name, keywordSets[2].keywords, doq.Metadata.KeywordsSet3);
+            if (keywordsSet3Drawer) {
+                assetContainer.append(keywordsSet3Drawer);
+                currBottom += keywordsSet3Drawer.height();
+            }
+        }
  
         if (customMapsLength>0 || locationList.length > 0) {
             locHistoryButton = initlocationHistory();
@@ -955,7 +985,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 locHistoryActive = true;
                 media.create(); // returns if already created
                 media.toggle();
-                TAG.Util.IdleTimer.restartTimer();
+                if (locked !== doq.Identifier) {
+                    TAG.Util.IdleTimer.restartTimer();
+                }
                 (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
                
                 media.pauseReset();
@@ -1364,6 +1396,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         };*/
     }
 
+    function initKeywordsSetDrawer(name, fullKeywordSet, artworkKeywords) {
+        var drawer = createDrawer((name && name !== '') ? name : 'Untitled Set');
+        var keywordsArray = artworkKeywords.split(',');
+        var listString = '';
+        for (var i = 0; i < keywordsArray.length; i++) {
+            if (fullKeywordSet.indexOf(keywordsArray[i]) > -1) {
+                listString = listString + ' ' + keywordsArray[i] + ',';
+            }
+        }
+        if (listString !== '') {
+            listString = listString.substring(1, listString.length - 1);
+            drawer.contents.html(listString);
+            drawer.css({ 'word-wrap': 'break-word' });
+
+        } else {
+            drawer = null;
+        }
+        return drawer;
+    }
 
 
     /**

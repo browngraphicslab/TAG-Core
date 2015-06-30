@@ -949,12 +949,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         functionsPanel.attr('id', 'component-controls');
         functionsPanel.css({
             "background-color": "rgb(219,218,199)",
-            "height": "48px",
+            "height": "100%",
             "width": "20%",
-            'top': '15px',
-            'left': '0%',
+            'top': '0px',
+            'left': '0px',
             'position': 'relative',
-            'float': 'left'
+            'float': 'left',
+            'z-index': 100000
         }); // Had to do tops and heights as CSS to prevent overlap on small screens
 
         /** Drop Down icon
@@ -1156,7 +1157,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                                  track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                                  track.addDisplay(positionX, Math.min(diff, displayLength));
 
-                            if (timeline.getTracks().length > 0) {
+                            if (timeline.getTracks().length > 0 && i === (urls.length - 1)) {
                                 timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                             }
                         }
@@ -1312,7 +1313,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                 //videos2Convert.push(track);
                                 track.changeTrackColor("gray");
                             }
-                            if (timeline.getTracks().length > 0) {
+                            if (timeline.getTracks().length > 0 && i === (urls.length - 1)) {
                                 timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                             }
                             //check if the video is not mp4 and the medialength is 0, remove display. gray out the track
@@ -1370,7 +1371,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             newDisplay.setMain(dispLen);
                         }
                         
-                        if (timeline.getTracks().length > 0) { // reload tour?
+                        if (timeline.getTracks().length > 0 && i === (urls.length - 1)) { // reload tour?
                             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                         }
                     }
@@ -2127,7 +2128,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                 newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
                                                      track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                                      track.addDisplay(positionX, Math.min(diff, displayLength));
-                                if (timeline.getTracks().length > 0) {
+                                if (timeline.getTracks().length > 0 && i === (selectedArtworks.length - 1)) {
                                     timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                                 }
                             } else if (selectedArt.type === "Image") {
@@ -2141,7 +2142,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                     newDisplay.setOut(0);
                                     newDisplay.setMain(dispLen);
                                 }
-                                if (timeline.getTracks().length > 0) {
+                                if (timeline.getTracks().length > 0 && i === (selectedArtworks.length - 1)) {
                                     timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                                 }
                             } else if (selectedArt.type === "Audio") {
@@ -2159,7 +2160,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                 newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
                                                      track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                                      track.addDisplay(positionX, Math.min(diff, displayLength));
-                                if (timeline.getTracks().length > 0) {
+                                if (timeline.getTracks().length > 0 && i === (selectedArtworks.length - 1)) {
                                     timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                                 }
                             } else {
@@ -2336,7 +2337,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
                                                  track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                                  track.addDisplay(positionX, Math.min(diff, displayLength));
-                            if (timeline.getTracks().length > 0) {
+                            if (timeline.getTracks().length > 0 && i === (selectedArtworks.length - 1)) {
                                 timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                             }
                         } else if (selectedArt.type === "Image") {
@@ -2350,7 +2351,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                 newDisplay.setOut(0);
                                 newDisplay.setMain(dispLen);
                             }
-                            if (timeline.getTracks().length > 0) {
+                            if (timeline.getTracks().length > 0 && i === (selectedArtworks.length - 1)) {
                                 timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                             }
                         } else if (selectedArt.type === "Audio") {
@@ -2369,7 +2370,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
                                                  track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                                  track.addDisplay(positionX, Math.min(diff, displayLength));
-                            if (timeline.getTracks().length > 0) {
+                            if (timeline.getTracks().length > 0 && i === (selectedArtworks.length - 1)) {
                                 timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                             }
                         } else {
@@ -2972,7 +2973,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 //searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
                 searchbar.val("");
                 // add the artwork track to the timeline
+                console.log("                          ");
+                console.log("                          ");
+                console.log("                          ");
+                console.log("                          ");
                 for (i = 0; i < selectedArtworks.length; i++) {
+
+                    console.log("soon to add artwork: ");
+                    console.log(selectedArtworks[i]);
+                    console.log("                                      ")
                     selectedArt = selectedArtworks[i];
                     var track;
                     if (selectedArt.type === "VideoArtwork") {
@@ -2991,16 +3000,22 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         var newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
                                              track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                              track.addDisplay(positionX, Math.min(diff, displayLength));
-                        if (timeline.getTracks().length > 0) {
+                        if (timeline.getTracks().length > 0 && i === (selectedArtworks.length - 1)) {
                             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                         }
                      } else {
                             track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id, selectedArt.type);
-                                       
+                            
+                            console.log("track: ")
+                            console.log(track)
+                            console.log("                          ");
                             var positionX = timeManager.getCurrentPx();
                             var displayLength = 5;
                             var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
                             var newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                            console.log("newDisplay: ")
+                            console.log(newDisplay);
+                            console.log("                          ");
                             if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                                 newDisplay.setIn(0);
                                 newDisplay.setOut(0);
@@ -3008,7 +3023,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             }
 
                             // forcing a tour reload? probably easiest to use timeline.onUpdate()
-                            if (timeline.getTracks().length > 0) {
+                            if (timeline.getTracks().length > 0 && i === (selectedArtworks.length - 1)) {
                                 timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                             }
                         }
@@ -3017,6 +3032,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 isUploading = false;
                 timeline.getDataHolder().mapTracks(function (container, i) {
                     container.track.updatePos(i);
+                    console.log("mapping track " + i);
                 });
                 
             }
@@ -3086,7 +3102,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 catalogPickerImport.disabled = true;
                 $(catalogPickerImport).css({ 'color': 'rgba(255,255,255,0.5)' });
                 $(catalogPickerCancel).css({ 'color': 'rgba(255,255,255,0.5)' }).attr('disabled', true);
-                function importHelper(j) {
+                function importHelper(j, last) {
                     var selectedArt = selectedArtworks[j];
                     //artQueue.add(function () {
                     var track;
@@ -3102,7 +3118,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         var newDisplay = (diff < TAG.TourAuthoring.Constants.displayEpsilon) ?
                                              track.addDisplay(timeManager.timeToPx(TAG.TourAuthoring.Constants.maxTourLength - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) :
                                              track.addDisplay(positionX, Math.min(diff, displayLength));
-                        if (timeline.getTracks().length > 0) {
+                        if (timeline.getTracks().length > 0 && last) {
                             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                         }
                     } else {
@@ -3116,7 +3132,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             newDisplay.setMain(dispLen);
                         }
                         // force a tour reload? easiest to use timeline.onUpdate()
-                        if (timeline.getTracks().length > 0) {
+                        if (timeline.getTracks().length > 0 && last) {
                             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                         }
                     }
@@ -3132,7 +3148,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     $(catalogPickerImport).hide();
                     $(catalogPickerCancel).hide();
                     for (i = 0; i < selectedArtworks.length; i++) {
-                        importHelper(i);
+                        if (i === (selectedArtworks.length - 1)) {
+                            importHelper(i, true);
+                        } else {
+                            importHelper(i);
+                        }
                     }
                     TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                         tobj.track_type = "Artwork";
@@ -5267,6 +5287,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
      */
     function addToDOM(container) {
         container.append(functionsPanelDocfrag);
+
     }
     that.addToDOM = addToDOM;
 

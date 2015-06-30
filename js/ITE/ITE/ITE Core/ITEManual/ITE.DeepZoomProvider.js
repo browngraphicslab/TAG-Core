@@ -110,7 +110,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
         		"width"		: $("#ITEHolder").width(),
         		"height"	: $("#ITEHolder").height(),
         	}); 
-        _UIControl = $(document.createElement("div"))
+		_UIControl = $(document.createElement("div"));
+		_UIControl.css({
+		    top: '0px',
+		    left: '0px',
+            position: 'relative'
+		});
 
 		// $("#ITEHolder").append(_UIControl);
         // $("#ITEHolder").append(_proxy);
@@ -771,7 +776,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	function setZIndex(index) {
-	    index = 100000000;
+	    //index = 100000000;
     	//set the z index to be -1 if the track is not displayed
 		if (window.getComputedStyle(_canvasHolder[0]).opacity == 0){
 		    _UIControl.css("z-index", -1)
