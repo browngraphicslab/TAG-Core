@@ -452,7 +452,7 @@ TAG.Util = (function () {
         var loadedInterval = setInterval(function () {
             if (elementInDocument($(element))) {
                 $(element).fitText(factor, options);
-                clearInterval(loadedInterval);
+                clearInterval(loadedInterval); 
             }
         });
     }
@@ -460,9 +460,10 @@ TAG.Util = (function () {
     /* Get an integer year from date metadata
      * @method parseDateToYear
      * @param {Object} date       object containing year, month, and day 
+     * @param {Boolean} location    if coming from location history (simple string parsing)
      * @return {Number} year      year (can have decimals to represent month, days)
      */
-    function parseDateToYear(date){
+    function parseDateToYear(date, location){
         var yearString,
             neg = false,
             cent,
@@ -478,8 +479,11 @@ TAG.Util = (function () {
             totalDaysInYear,
             dayDecimal;
 
-        if (date && date.year){
+        if ((date && date.year)||location){
             yearString = date.year;
+            if (location) {
+                yearString = date;
+            }
             //Catches 'ad', 'bc', 'bce' case, spacing, and order insensitive
             if (yearString.search(/bce?/i)>=0){
                 neg = true;
@@ -530,6 +534,9 @@ TAG.Util = (function () {
             }
             if (neg){
                 year = -year;  
+            }
+            if (!year) {
+                year = 999999;
             }
             return year;
         }
@@ -6459,7 +6466,7 @@ TAG.Util.RLH = function (input) {
 
             //sort
             locations.sort(function (a, b) {
-                return (a.date < b.date) ? -1 : 1;
+                return (TAG.Util.parseDateToYear(a.date, true) < TAG.Util.parseDateToYear(b.date, true)) ? -1 : 1;
             });
 
             //hides all location pins (prevents duplicate pins bug)
