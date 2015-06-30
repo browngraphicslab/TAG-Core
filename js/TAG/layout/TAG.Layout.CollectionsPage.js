@@ -2542,9 +2542,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .append(yearTextBox);
 
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
-                tourLabel = $(document.createElement('img'))
-                    .addClass('tourLabel')
-                    .attr('src', tagPath + 'images/icons/text_icon_2.svg');
+                console.log("type: " + currentWork.Type + "   metadata.contentType: " + currentWork.Metadata.ContentType + "   metadata.Type: " + currentWork.Metadata.Type)
+                if (currentWork.Metadata.ContentType == "tour") {
+                    tourLabel = $(document.createElement('img'))
+                        .addClass('tourLabel')
+                        .attr('src', tagPath + 'images/tour_icon.svg');
+                }
+                else
+                {
+                    console.log("here");
+                    tourLabel = $(document.createElement('img'))
+                        .addClass('tourLabel')
+                        .attr('src', tagPath + 'images/icons/text_icon_2.svg');
+                }
                 main.append(tourLabel);
             } else if (currentWork.Metadata.Medium === "Video"|| currentWork.Metadata.ContentType==="Video") {
                 if (showLabel){

@@ -1386,6 +1386,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          * @method getLayerRect
          * @return {Seadragon.Rect}         the Seadragon.Rect
          */
+
         function getLayerRect() {
             var offset = layerContainer.offset(),
                 width = layerContainer.width(),

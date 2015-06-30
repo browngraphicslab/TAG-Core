@@ -3004,7 +3004,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                         }
                      } else {
-                            track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id, selectedArt.type);
+                        track = timeline.addArtworkTrack(selectedArt.url, selectedArt.name, selectedArt.id);//, selectedArt.type);
                             
                             console.log("track: ")
                             console.log(track)
