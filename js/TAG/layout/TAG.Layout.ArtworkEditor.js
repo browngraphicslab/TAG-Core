@@ -667,7 +667,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         addText.css({ 'font-size': TAG.Util.getMaxFontSizeEM("Add Text", 0.5, root.width() * 0.1, 0.5 * newButtonCSS.height) });
         buttonContainer.append(addText);
         addText.on('click', AssocTextEditor().openNew);
-        addTextButton = addText;
+        addTextButton = addText;//set the global variable
 
         addRemoveMedia = $(document.createElement('button')); // TODO JADE/STYL
         addRemoveMedia.addClass('addRemoveMedia');
@@ -696,7 +696,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         addRemoveMedia.on("mouseleave", function () {
             addRemoveMedia.css({ "background-color": "transparent","color":"white"});
         });
-        addRemoveMediaButton = addRemoveMedia;
+        addRemoveMediaButton = addRemoveMedia;//set the global variable
         /**
          * Create the associated media selection picker
          * @method createMediaPicker
@@ -1806,7 +1806,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 rightbarLoadingSave,
                 thumbnailLoadingSave,
                 options;
-
             if (info.pos) {
                 coords = annotatedImage.viewer.viewport.pointFromPixel(info.pos);
                 coords.width = 0;
@@ -2232,6 +2231,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     assetType;
 
                 //$('.assetHolder').css('background-color', '');
+                console.log("save associated media button clicked");
                 addRemoveMediaButton.prop('disabled', true);
                 addRemoveMediaButton.css('color', 'rgba(255,255,255,0.5)');
                 addTextButton.prop('disabled', true);
@@ -2247,9 +2247,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 titleTextVal = $titleText.val() || 'Untitled';
 
                 assetType = isHotspot ? 'Hotspot' : (isLayer ? 'Layer' : 'Asset');
-
                 if (creatingText) {
-                    createTextAsset(titleTextVal, $descArea.val(), function () {
+                    createTextAsset(titleTextVal, $descArea.val()=="" ? " ":$descArea.val(), function () {
                         addRemoveMediaButton.prop('disabled', false);
                         addRemoveMediaButton.css('color', 'rgba(255,255,255,1)');
                         addTextButton.prop('disabled', false);
@@ -2275,7 +2274,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     creatingText = false;
                     close();
                 } else {
-
                     updateAssocMedia({
                         title: TAG.Util.htmlEntityEncode(titleTextVal),
                         desc: TAG.Util.htmlEntityEncode($descArea.val()),

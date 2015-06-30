@@ -1017,6 +1017,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @param {Number} sPos               if undefined, set scroll position to 0, otherwise, use this
      * @param {doq} artwrk                if undefined, set currentArtwork to null, otherwise, use this
      */
+
     function loadCollection(collection, sPos, artwrk) {
         return function (evt) {
             var cancelLoad = false;
@@ -2468,7 +2469,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 if (currentWork.Metadata.Thumbnail) {
                     tileImage.attr('src', FIX_PATH(currentWork.Metadata.Thumbnail));
                 } else {
-                    tileImage.attr('src', FIX_PATH("/Images/default.jpg"));
+                    if(currentWork.Type=="Empty"){
+                        //tileImage.attr('src', FIX_PATH("/Images/text_icon.svg"));
+                        tileImage.attr('src', FIX_PATH("/Images/default.jpg"));
+                    }
+                    else{
+                        tileImage.attr('src', FIX_PATH("/Images/default.jpg"));
+                    }
                 }
             }else{
                 tileImage.attr("src", tagPath+'images/no_thumbnail.svg'); 
@@ -2537,7 +2544,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
                 tourLabel = $(document.createElement('img'))
                     .addClass('tourLabel')
-                    .attr('src', tagPath+'images/icons/catalog_tour_icon.svg');
+                    .attr('src', tagPath + 'images/icons/text_icon_2.svg');
                 main.append(tourLabel);
             } else if (currentWork.Metadata.Medium === "Video"|| currentWork.Metadata.ContentType==="Video") {
                 if (showLabel){
@@ -3601,7 +3608,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
                         miniTile.css('left', j * (miniTile.width() + miniTilesHolder.height() / 10));
-
 
                         switch (metadata.ContentType) {
                             case 'Audio':
