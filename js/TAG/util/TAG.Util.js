@@ -5939,6 +5939,7 @@ TAG.Util.RLH = function (input) {
                     deleteMap(); //hides bing map
                 };
             });
+
             addLocationButton.on('click', addLocation);
             sortLocationsByTitleButton.on('click', sortLocationsByTitle);
             sortLocationsByDateButton.on('click', sortLocationsByDate);
@@ -7698,6 +7699,16 @@ TAG.Util.RLH = function (input) {
         disabledOverlay.appendTo(mapHolders[null]);
         disabledOverlay.text("Loading...");
         deleteButton.text(defaultMapShown ? 'Hide Bing Map' : 'Show Bing Map');
+        if (!defaultMapShown) {
+            $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+            $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+            $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+        }
+        else {
+            $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+        }
     }
 
     /**
