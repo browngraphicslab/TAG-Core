@@ -8472,7 +8472,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				}
 				
                 // fixing fade offset issue
-				if (currExperienceStream.data['transition']) {
+				if (currExperienceStream.data['transition'] && currKeyframes.length === 0) {
 				    keyframeObject.time += currExperienceStream.data.transition.inDuration;
 				}
 
