@@ -5730,6 +5730,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 labelList.push([7 * day, 'Past Week']);
                 labelList.push([14 * day, 'Past Two Weeks']);
                 labelList.push([30 * day, 'Past Month']);
+                labelList.push([50000000 * day, 'Earlier']);
                 var heap = new binaryHeap(func);
                 for (var sb = 0, len = list.length; sb < len; sb++) {
                     heap.push(list[sb]);
@@ -5738,7 +5739,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var p;
                 list = [];
                 while (heap.size() > 0) {
+                    var bucket = []
+                    if (labelList.length > 0) {
+                        var currLabel = labelList.shift()
+                        while(heap.size()>0 && func(heap.peek())<currLabel[0]){
+                            bucket.push(heap.pop())
+                        }
+                        if (bucket.length > 0) {
+                            list.push(currLabel[1])
+                            list = list.concat(bucket)
+                        }
+                    }
+                    else{
+                        list.push(heap.pop())
+                    }
+
+
+                    /*
                     p = heap.pop()
+
+
                     if (labelList.length > 0) {
                         console.log(func(p))
                         console.log(labelList[0][0])
@@ -5752,6 +5772,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                     list.push(p);
                     labelWasLast = false;
+                    */
                 }
                 console.log("done popping")
                 displayLabels();
