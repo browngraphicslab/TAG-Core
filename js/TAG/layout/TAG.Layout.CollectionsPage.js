@@ -708,9 +708,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         //styling when keyword row is shown
+        /**
         if (showKeywords) {
             timelineArea.css({ "bottom": $("#tagRoot").height() * 0.020 + 'px' });
         }
+        **/
 
 
         // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
