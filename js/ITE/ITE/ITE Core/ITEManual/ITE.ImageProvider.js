@@ -532,6 +532,18 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	}
 	self.manipFromDZRecursion = manipFromDZRecursion;
 
+	function endManipFromDZRecursion(evt) {
+	    if (captureHandlers) {
+	        var evt = {
+	            imageTrack: self
+	        }
+	        captureHandlers(evt);
+	    }
+	}
+	self.endManipFromDZRecursion = endManipFromDZRecursion;
+
+
+
 	function scrollFromDZRecursion(evt) {
 	    var scale = 1.1;
 	    if (evt.scroll < 0) {
