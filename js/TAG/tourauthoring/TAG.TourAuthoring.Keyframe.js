@@ -707,16 +707,16 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             };
             // parse into new format
         } else {
-            var ITEContainer = $('#ITEContainer');
+            var ITEContainer = $('#resizableArea');
             var rinData = {
                 viewport: {
                     region: {
                         center: {
-                            x: (data.bounds ? data.bounds.x : data.left / ITEContainer.width()),
+                            x: (data.bounds ? data.bounds.x : data.left / ITEContainer.height() * 16.0 / 9.0),
                             y: (data.bounds ? data.bounds.y : data.top / ITEContainer.height())
                         },
                         span: {
-                            x: (data.bounds ? data.bounds.width : data.width / ITEContainer.width()),
+                            x: (data.bounds ? data.bounds.width : data.width / ITEContainer.height() * 16.0 / 9.0),
                             y: (data.bounds ? data.bounds.height : data.height / ITEContainer.height())
                         }
                     }

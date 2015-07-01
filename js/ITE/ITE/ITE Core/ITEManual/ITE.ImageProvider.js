@@ -109,6 +109,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		    "width": "100%",
             "height": "auto"
 		})
+		_UIControl.css({
+
+		})
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 		TweenLite.ticker.addEventListener("tick", updateInk)
 
@@ -531,6 +534,18 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	    }
 	}
 	self.manipFromDZRecursion = manipFromDZRecursion;
+
+	function endManipFromDZRecursion(evt) {
+	    if (captureHandlers) {
+	        var evt = {
+	            imageTrack: self
+	        }
+	        captureHandlers(evt);
+	    }
+	}
+	self.endManipFromDZRecursion = endManipFromDZRecursion;
+
+
 
 	function scrollFromDZRecursion(evt) {
 	    var scale = 1.1;
