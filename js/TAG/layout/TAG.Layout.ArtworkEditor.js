@@ -1386,6 +1386,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          * @method getLayerRect
          * @return {Seadragon.Rect}         the Seadragon.Rect
          */
+
         function getLayerRect() {
             var offset = layerContainer.offset(),
                 width = layerContainer.width(),
@@ -1887,9 +1888,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 
                 reloadAssocMedia(worktopInfo.assetDoqID);
                 thumbnailLoadingSave.fadeOut();
-                if (callback) {
-                    callback();
-                }
             }
 
             function no_op() { // TODO I think TAG.Worktop.Database functions can just accept null callbacks, since they use the safeCall util function. if so, use null
@@ -2808,6 +2806,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 'overflow': 'hidden',
                 'border': "0px solid black"
             });
+            fieldTitle.attr('maxlength', '25');
 
             if (isTextarea) {
                 textarea.attr('rows', 3);

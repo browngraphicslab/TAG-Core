@@ -452,7 +452,7 @@ TAG.Util = (function () {
         var loadedInterval = setInterval(function () {
             if (elementInDocument($(element))) {
                 $(element).fitText(factor, options);
-                clearInterval(loadedInterval);
+                clearInterval(loadedInterval); 
             }
         });
     }
@@ -460,9 +460,10 @@ TAG.Util = (function () {
     /* Get an integer year from date metadata
      * @method parseDateToYear
      * @param {Object} date       object containing year, month, and day 
+     * @param {Boolean} location    if coming from location history (simple string parsing)
      * @return {Number} year      year (can have decimals to represent month, days)
      */
-    function parseDateToYear(date){
+    function parseDateToYear(date, location){
         var yearString,
             neg = false,
             cent,
@@ -478,8 +479,11 @@ TAG.Util = (function () {
             totalDaysInYear,
             dayDecimal;
 
-        if (date && date.year){
+        if ((date && date.year)||location){
             yearString = date.year;
+            if (location) {
+                yearString = date;
+            }
             //Catches 'ad', 'bc', 'bce' case, spacing, and order insensitive
             if (yearString.search(/bce?/i)>=0){
                 neg = true;
@@ -530,6 +534,9 @@ TAG.Util = (function () {
             }
             if (neg){
                 year = -year;  
+            }
+            if (!year) {
+                year = 999999;
             }
             return year;
         }
@@ -2895,6 +2902,7 @@ TAG.Util.UI = (function () {
             $(overlay).attr('id', 'popupblockInteractionOverlay');
         }
         var confirmBox = document.createElement('div');
+        //$(confirmBox).attr('id', 'uploadProgressPopup');
         var confirmBoxSpecs = TAG.Util.constrainAndPosition($(window).width(), $(window).height(),
            {
                center_h: true,
@@ -3100,7 +3108,7 @@ TAG.Util.UI = (function () {
             if (first) {
                 removeAll();
             } else {
-                $(confirmBox).remove();
+                $(confirmBox).css('display', 'none');
             }
         };
 
@@ -3115,10 +3123,10 @@ TAG.Util.UI = (function () {
 
         function removeAll() {
             if (noFade) {
-                $(overlay).hide();
-                $(overlay).remove();
+                $(overlay).css('display', 'none');
+               // $(overlay).remove();
             } else {
-                $(overlay).fadeOut(500, function () { $(overlay).remove(); });
+                $(overlay).fadeOut(500, function () { $(overlay).css('display', 'none'); });
             }
             globalKeyHandler[0] = currentKeyHandler;
         }
@@ -5903,6 +5911,7 @@ TAG.Util.RLH = function (input) {
 
             importMapButton.on('click', importMap);
             deleteButton.on('click', function (evt) {
+                $("#locationHistorySaveMapButton").prop("disabled", true).css("opacity", "0.4");
                 var mapName = function () {
                     if (mapGuids[currentIndex]) {
                         if (mapDoqs[mapGuids[currentIndex]].Name.length > 14) {
@@ -5915,9 +5924,15 @@ TAG.Util.RLH = function (input) {
                     }
                 }();
                 if (!(currentIndex === 0)) { //if it's not the bing map being displayed, confirm the deletion
-                    var overlay = TAG.Util.UI.PopUpConfirmation(function () {
-                        deleteMap();
-                    }, "Are you sure you want to delete " + mapName + " and all locations associated with it?", "Yes");
+                    var overlay = TAG.Util.UI.PopUpConfirmation(
+                        deleteMap,
+                        "Are you sure you want to delete " + mapName + " and all locations associated with it?",
+                        "Yes",
+                        null,
+                        function () {
+                            console.log("here!")
+                            $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
+                        });
                     root.append(overlay);
                     $(overlay).show();
                     evt.stopPropagation();
@@ -5925,6 +5940,7 @@ TAG.Util.RLH = function (input) {
                     deleteMap(); //hides bing map
                 };
             });
+
             addLocationButton.on('click', addLocation);
             sortLocationsByTitleButton.on('click', sortLocationsByTitle);
             sortLocationsByDateButton.on('click', sortLocationsByDate);
@@ -6459,7 +6475,7 @@ TAG.Util.RLH = function (input) {
 
             //sort
             locations.sort(function (a, b) {
-                return (a.date < b.date) ? -1 : 1;
+                return (TAG.Util.parseDateToYear(a.date, true) < TAG.Util.parseDateToYear(b.date, true)) ? -1 : 1;
             });
 
             //hides all location pins (prevents duplicate pins bug)
@@ -7604,9 +7620,9 @@ TAG.Util.RLH = function (input) {
      *              toadd          a string of comma-separated GUIDs of maps to add
      *              toremove       a string of comma-separated GUIDs of maps to remove
      *              noReload       a boolean telling us whether to reload maps or not
-     *              callback       a callback function to be called after saving and reloading artwork is done
+     * @param       callback       a callback function to be called after saving and reloading artwork is done
      */
-    function saveRichLocationHistory(input) {
+    function saveRichLocationHistory(input,callback) {
 
         if ($('.locationTitleInput').is(':focus')) {
             return;
@@ -7646,6 +7662,9 @@ TAG.Util.RLH = function (input) {
                 } else {
                     disabledOverlay.text("Bing Map is disabled.");
                 }
+                if (callback) {
+                    callback();
+                }
             }, error, error);
             //input.sort && input.callback();
         }
@@ -7681,6 +7700,16 @@ TAG.Util.RLH = function (input) {
         disabledOverlay.appendTo(mapHolders[null]);
         disabledOverlay.text("Loading...");
         deleteButton.text(defaultMapShown ? 'Hide Bing Map' : 'Show Bing Map');
+        if (!defaultMapShown) {
+            $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+            $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+            $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+        }
+        else {
+            $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+        }
     }
 
     /**
@@ -7695,12 +7724,16 @@ TAG.Util.RLH = function (input) {
             removeLocations(mapguid);
             saveRichLocationHistory({
                 toremove: mapguid
+            }, function () {
+                $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
             });
             //showMap(currentIndex - 1);
         } else {
             toggleDefaultMap();
             saveRichLocationHistory({
                 noReload: true
+            }, function () {
+                $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
             });
             //showMap(currentIndex);
         }
