@@ -5733,8 +5733,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var heap = new binaryHeap(func);
                 for (var sb = 0, len = list.length; sb < len; sb++) {
                     heap.push(list[sb]);
-                    console.log("date: ")
-                    console.log(Date.now() - new Date(list[sb].Metadata.__Created).getTime())
                 }
                 var labelWasLast = true;
                 var p;
@@ -5749,11 +5747,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var label = labelList.shift();
                         if (!labelWasLast) {
                             labelWasLast = true;
-                            console.log("pushing: "+label[1])
                             list.push(label[1]);
                         }
                     }
-                    console.log("pushing: "+p)
                     list.push(p);
                     labelWasLast = false;
                 }
