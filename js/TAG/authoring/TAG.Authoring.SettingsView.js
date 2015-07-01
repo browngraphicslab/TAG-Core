@@ -5718,14 +5718,44 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //create sort list for added before and other
                 console.log("sort by recently added")
                 //sortAZ(list);
-                var heap = new binaryHeap(function (e) {return new Date(e.Metadata.__Created).getTime()*-1;});
-                for (var sb = 0, len = list.length; sb < len; sb++) {
-                    console.log("el created: " + new Date(list[sb].Metadata.__Created).getTime());
-                    heap.push(list[sb]);
+                var func = function (e) {
+                    return (Date.now() - (new Date(String(e.Metadata.__Created)).getTime()));
                 }
+
+                var day = 86400000;
+                var labelList = [];
+                labelList.push([1 * day, 'Past Day']);
+                labelList.push([2 * day, 'Past Two Days']);
+                labelList.push([3 * day, 'Past Three Days']);
+                labelList.push([7 * day, 'Past Week']);
+                labelList.push([14 * day, 'Past Two Weeks']);
+                labelList.push([30 * day, 'Past Month']);
+                var heap = new binaryHeap(func);
+                for (var sb = 0, len = list.length; sb < len; sb++) {
+                    heap.push(list[sb]);
+                    console.log("date: ")
+                    console.log(Date.now() - new Date(list[sb].Metadata.__Created).getTime())
+                }
+                var labelWasLast = true;
+                var p;
                 list = [];
-                while(heap.size()>0) {
-                    list.push(heap.pop());
+                while (heap.size() > 0) {
+                    p = heap.pop()
+                    if (labelList.length > 0) {
+                        console.log(func(p))
+                        console.log(labelList[0][0])
+                    }
+                    while (labelList.length > 0 && func(p) > labelList[0][0]) {
+                        var label = labelList.shift();
+                        if (!labelWasLast) {
+                            labelWasLast = true;
+                            console.log("pushing: "+label[1])
+                            list.push(label[1]);
+                        }
+                    }
+                    console.log("pushing: "+p)
+                    list.push(p);
+                    labelWasLast = false;
                 }
                 console.log("done popping")
                 displayLabels();

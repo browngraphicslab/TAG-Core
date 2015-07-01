@@ -8726,18 +8726,17 @@ function onContainerEnter( event ) {
 ///////////////////////////////////////////////////////////////////////////////
 // Page update routines ( aka Views - for future reference )
 ///////////////////////////////////////////////////////////////////////////////
-
-function updateMulti( viewer ) {
+function updateMulti(viewer) {
+    console.log("update multi being called.")
     if ( !viewer.source ) {
         viewer._updateRequestId = null;
         return;
     }
 
-    updateOnce( viewer );
-
+    updateOnce(viewer);
     // Request the next frame, unless we've been closed during the updateOnce()
     if (viewer.source) {
-        viewer._updateRequestId = scheduleUpdate( viewer, updateMulti );
+         viewer._updateRequestId = scheduleUpdate( viewer, updateMulti );
     }
 }
 
@@ -8752,7 +8751,7 @@ function updateOnce( viewer ) {
 
     //viewer.profiler.beginUpdate();
 
-    if ( viewer.autoResize ) {
+    if ( viewer.autoResize || true) {
         containerSize = _getSafeElemSize( viewer.container );
         if ( THIS[ viewer.hash ] && !containerSize.equals( THIS[ viewer.hash ].prevContainerSize ) ) {
             // maintain image position
