@@ -4774,9 +4774,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay = inputs.timelineDayInput.val(),
             desc = inputs.descInput.val(),
             source = embeddedURL || "";
-         
+        
+        //don't allow saving of invalid year
         if (!checkValidYear(timelineYear)) {
-            timelineYear = media.Metadata.TimelineYear;
+            //allow clearing of timeline year
+            if (timelineYear === '') {
+                timelineYear = undefined;
+            } else {
+                timelineYear = media.Metadata.TimelineYear;
+            }
         }
         //pCL = displayLoadingSettings();
         clearRight();
@@ -7767,7 +7773,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //don't save an invalid timeline year 
         if (!checkValidYear(timelineYear)) {
-            timelineYear = artwork.Metadata.TimelineYear
+            //allow clearing of timeline date
+            if (timelineYear === "") {
+                timelineYear = undefined;
+            } else {
+                timelineYear = artwork.Metadata.TimelineYear;
+            }
         }
 
         var infoFields = {};
@@ -10621,7 +10632,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }).css('border-radius', '3.5px');
         if (!IS_WINDOWS){
             menuLabel.css('font-size', '100%');
-        } else{
+        } else {
+            menuLabel.css('width', '27%');
             menuLabel.css('font-size', '50%');
             menuLabel.css('padding-left', '3%');
             menuLabel.css('padding-right', '2%');
@@ -10646,10 +10658,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
         if (IS_WINDOWS) {
             addMenuArrowIcon.css({
-                width: '6%',
-                height: '6%',
+                width: '8%',
+                height: '8%',
                 'margin-top': '2%',
-                'margin-right': '2%',
+                'margin-right': '10%',
                 'float': 'right'
             });
         } 
@@ -10664,6 +10676,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .append($(document.createElement('div')).text('Import').css({
                 'display': 'inline-block',
                 'margin-right': '1%',
+                'margin-left' : '10%',
                 'float':'left'
             }))
             .append(addMenuArrowIcon)
