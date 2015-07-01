@@ -1214,7 +1214,8 @@ TAG.Util_ITE = (function () {
             cancelAccel: function () {
                 currentAccelId++;
                 clearTimeout(timer);
-            }
+            },
+            hammer: hammer
         };
         
         //return gr;
@@ -1394,7 +1395,12 @@ TAG.Util_ITE = (function () {
             gr.addEventListener('righttapped', rightTapHandlerWin);
         }
 
-        return gr;
+        return {
+            gr: gr,
+            down: processDownWin,
+            move: processMoveWin,
+            up: processUpWin
+        };
     }
 
     function htmlEntityEncode(str) {

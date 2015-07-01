@@ -6396,6 +6396,16 @@ $.Viewer = function( options ) {
             }
         }).setTracking( true ); // default state
 
+    function bindAnimationFinishHandler() {
+        if (this.orchestrator.animationFinishHandlerBound) {
+            this.addHandler('animation-finish', function () {
+                this.orchestrator.currentManipulatedObject = null;
+            });
+        }
+    }
+
+    this.bindAnimationFinishHandler = bindAnimationFinishHandler;
+
     this.onCanvasDrag = onCanvasDrag;
     this.onCanvasClick = onCanvasClick;
     this.onCanvasDblClick = onCanvasDblClick;
@@ -8364,10 +8374,16 @@ function onCanvasDblClick(event, first) {
 function onCanvasDrag(event, isTopTrack) {
     //get zindex of current dz track
     var zIndex = this.ITE_track.trackData.zIndex;
+    this.orchestrator.animationFinishHandlerBound = true;
 
     // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
+    //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
     if (this.orchestrator.currentManipulatedObject && (isTopTrack !== false)) {
-        this.orchestrator.currentManipulatedObject.viewer.onCanvasDrag(event, false);
+        if (this.orchestrator.currentManipulatedObject.viewer) {
+            this.orchestrator.currentManipulatedObject.viewer.onCanvasDrag(event, false);
+        } else {
+            this.orchestrator.currentManipulatedObject.manipFromDZRecursion(event);
+        }
         return;
     }
 
@@ -8376,10 +8392,15 @@ function onCanvasDrag(event, isTopTrack) {
         //find the first dz track in the stack to have the click/touch event in bounds
         var track = this.orchestrator.getTrackBehind(zIndex, event);
         this.orchestrator.currentManipulatedObject = track;
-
+        
         //if the track exists, pass the event to that track 
         if (track) {
-            track.viewer.onCanvasDrag(event, false);
+            if (track.viewer) {
+                track.viewer.bindAnimationFinishHandler();
+                track.viewer.onCanvasDrag(event, false);
+            } else {
+                track.manipFromDZRecursion(event);
+            }
         }
     } else {
         // if the "false" flag is set then the manipulation object should already be set and we have just called movement on the active manipulation object.
@@ -8472,7 +8493,8 @@ function onCanvasDragEnd(event, first) {
     });
 
     //for layers fix: when drag ends, set the current manipulated object to be null
-    this.orchestrator.currentManipulatedObject = null;
+    //this.orchestrator.currentManipulatedObject = null;
+    //this.orchestrator.interactionStarted = false;
 
 }
 
@@ -8583,7 +8605,11 @@ function onCanvasScroll(event, isTopLayer) {
 
     //if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
     if ((isTopLayer === undefined || isTopLayer) && track != null) {
-        track.viewer.onCanvasScroll(event, false);
+        if (track.viewer) {
+            track.viewer.onCanvasScroll(event, false);
+        } else {
+            track.scrollFromDZRecursion(event);
+        }
     } else {
         var gestureSettings,
             factor;

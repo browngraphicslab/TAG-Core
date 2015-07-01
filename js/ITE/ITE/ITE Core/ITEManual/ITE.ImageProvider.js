@@ -37,6 +37,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     self._UIControl = _UIControl;
 
     var _holder;
+    var recognizer;
 
     // Various animation/manipulation variables.
 	self.interactionAnimation;
@@ -350,6 +351,53 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		return state;
 	};
 
+    /* I/P: 	evt (a click/touch event)
+    * O/P:   	bool, whether or not this event was within the image's bounds
+    *This function determines if a touch/click event is within the bounds of this dz on screen
+    *Used as a component in the layers issue fix 
+    */
+	function isInImageBounds(evt) {
+
+	    //If the current time is after the last keyframe of the deepzoom, or before the first, or the asset is current trasnparent, we're defintely out of bounds.
+	    var notOnScreen = (window.getComputedStyle(_UIControl[0]).opacity == 0) ||
+						(this.lastKeyframe.time < self.timeManager.getElapsedOffset()) ||
+						(this.firstKeyframe.time > self.timeManager.getElapsedOffset());
+
+	    if (notOnScreen) {
+	        return
+	    }
+
+	    //Otherwise, check position of click against image bounds
+	    if (evt.clientX && evt.clientY) {
+	        var x = evt.clientX;
+	        var y = evt.clientY;
+	    }
+	    else if (evt.center) {
+	        var x = evt.center.x;
+	        var y = evt.center.y;
+	    }
+	    else {
+	        var x = evt.position.x
+	        var y = evt.position.y
+	    }
+	    var bounds = {
+	        left: parseInt(_UIControl[0].offsetLeft),
+	        top: parseInt(_UIControl[0].offsetTop),
+	        right: parseInt(_UIControl[0].offsetLeft) + parseInt(_UIControl[0].offsetWidth),
+	        bottom: parseInt(_UIControl[0].offsetTop) + parseInt(_UIControl[0].offsetHeight)
+	    };
+	    if (
+			(x < bounds.right) &&
+			(x > bounds.left) &&
+			(y < bounds.bottom) &&
+			(y > bounds.top)) {
+	        return true
+	    } else {
+	        return false
+	    }
+	}
+	self.isInImageBounds = isInImageBounds;
+
     // keyframe capture pub/sub methods
 	self.registerCaptureHandler = function (handler) {
 	    captureHandlers = handler.end;
@@ -456,6 +504,42 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			attachedInks[i]._ink.adjustViewBox(bounds);
 		}
 	}
+
+	function manipFromDZRecursion(evt) {
+	    //var pivot = { x: evt.x - _UIControl.offset().left, y: evt.y - _UIControl.offset().top };
+	    //var delta = evt.wheelDelta;
+	    //if (evt.wheelDelta < 0) delta = 1.0 / 1.1;
+	    //else delta = 1.1;
+	    //evt.cancelBubble = true;
+
+	    //var translation = { x: evt.pageX - lastPos.x, y: evt.pageY - lastPos.y };
+	    //var scale = evt.gesture.scale - lastScale;
+	    var pos = _UIControl.position();
+	    var newTop = pos.top + evt.delta.y;
+	    var newLeft = pos.left + evt.delta.x;
+
+	    _UIControl.css({
+	        top: newTop,
+	        left: newLeft
+	    })
+
+	    if (captureHandlers) {
+	        var evt = {
+	            imageTrack: self
+	        }
+	        captureHandlers(evt);
+	    }
+	}
+	self.manipFromDZRecursion = manipFromDZRecursion;
+
+	function scrollFromDZRecursion(evt) {
+	    var scale = 1.1;
+	    if (evt.scroll < 0) {
+	        scale = 1.0 / 1.1;
+	    }
+	    mediaScroll(scale, evt.position);
+	}
+	self.scrollFromDZRecursion = scrollFromDZRecursion;
  
     /*
      * I/P: 	res : 		Object containing hammer event info.
@@ -475,7 +559,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	}
 
     	if (IS_WINDOWS) {
-
     	    if (res.scroll != 1) {
     	        mediaScroll(res.scale, res.pivot, true);//True is from touch
     	    }
@@ -554,6 +637,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	    }
     	}
     };
+    self.mediaManip = mediaManip;
 	
     /*
      * I/P: 	scale : 	Scale factor.	
@@ -611,6 +695,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             captureHandlers(evt);
         }
     };
+    self.mediaScroll = mediaScroll;
     
     /*
 	 * I/P: 	none
@@ -623,13 +708,13 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
         // Register handlers.
         if (IS_WINDOWS) {
-            TAG.Util_ITE.makeManipulatableWinITE(_UIControl[0], {
+            recognizer = TAG.Util_ITE.makeManipulatableWinITE(_UIControl[0], {
                 onManipulate: mediaManip,
                 onScroll: mediaScroll
             }, null, true);
         } 
         else {
-            TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
+            recognizer = TAG.Util_ITE.makeManipulatableITE(_UIControl[0], {
                 onManipulate: mediaManip,
                 onScroll: mediaScroll
             }, null, true);
