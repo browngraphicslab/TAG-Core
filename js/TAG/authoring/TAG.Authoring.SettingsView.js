@@ -4029,24 +4029,64 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             else if (sortByAssoc == "Recently Added"){
                 //create sort list for added before and other
                 console.log("sort by recently added")
-                sortAZ(list);
-                var afterList = [];
-                var beforeList = [];
-                for (var sb = 0, len = list.length; sb < len; sb++){
-                    var artDate = new Date(list[sb].Metadata.__Created);
-                    var now = new Date();
-                    var compareDate = new Date(now.getFullYear(), now.getMonth(),now.getDate()-7);
-                    if (artDate.getTime() > compareDate.getTime()){
-                        afterList.push(list[sb]);
-                    } else{
-                        beforeList.push(list[sb]);
-                    }
+                //sortAZ(list);
+                var func = function (e) {
+                    return (Date.now() - (new Date(String(e.Metadata.__Created)).getTime()));
                 }
+
+                var day = 86400000;
+                var labelList = [];
+                labelList.push([1 * day, 'Past Day']);
+                labelList.push([2 * day, 'Past Two Days']);
+                labelList.push([3 * day, 'Past Three Days']);
+                labelList.push([7 * day, 'Past Week']);
+                labelList.push([14 * day, 'Past Two Weeks']);
+                labelList.push([30 * day, 'Past Month']);
+                labelList.push([50000000 * day, 'Earlier']);
+                var heap = new binaryHeap(func);
+                for (var sb = 0, len = list.length; sb < len; sb++) {
+                    heap.push(list[sb]);
+                }
+                var labelWasLast = true;
+                var p;
                 list = [];
-                list.push("Recently Added");
-                list = list.concat(afterList);
-                list.push("Older");
-                list = list.concat(beforeList);
+                while (heap.size() > 0) {
+                    var bucket = []
+                    if (labelList.length > 0) {
+                        var currLabel = labelList.shift()
+                        while (heap.size() > 0 && func(heap.peek()) < currLabel[0]) {
+                            bucket.push(heap.pop())
+                        }
+                        if (bucket.length > 0) {
+                            list.push(currLabel[1])
+                            list = list.concat(bucket)
+                        }
+                    }
+                    else {
+                        list.push(heap.pop())
+                    }
+
+
+                    /*
+                    p = heap.pop()
+
+
+                    if (labelList.length > 0) {
+                        console.log(func(p))
+                        console.log(labelList[0][0])
+                    }
+                    while (labelList.length > 0 && func(p) > labelList[0][0]) {
+                        var label = labelList.shift();
+                        if (!labelWasLast) {
+                            labelWasLast = true;
+                            list.push(label[1]);
+                        }
+                    }
+                    list.push(p);
+                    labelWasLast = false;
+                    */
+                }
+                console.log("done popping")
                 displayLabels();
             }
 
@@ -5244,7 +5284,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     alphaName = names[j];
                 }
             }
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.mp4', '.webm', '.ogv','.mov','.avi','.wmv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'/*, '.mp4', '.webm', '.ogv','.mov','.avi','.wmv'*/]);
     }
 
     /**Create an associated media (import), possibly more than one
@@ -5730,6 +5770,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 labelList.push([7 * day, 'Past Week']);
                 labelList.push([14 * day, 'Past Two Weeks']);
                 labelList.push([30 * day, 'Past Month']);
+                labelList.push([50000000 * day, 'Earlier']);
                 var heap = new binaryHeap(func);
                 for (var sb = 0, len = list.length; sb < len; sb++) {
                     heap.push(list[sb]);
@@ -5738,7 +5779,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var p;
                 list = [];
                 while (heap.size() > 0) {
+                    var bucket = []
+                    if (labelList.length > 0) {
+                        var currLabel = labelList.shift()
+                        while(heap.size()>0 && func(heap.peek())<currLabel[0]){
+                            bucket.push(heap.pop())
+                        }
+                        if (bucket.length > 0) {
+                            list.push(currLabel[1])
+                            list = list.concat(bucket)
+                        }
+                    }
+                    else{
+                        list.push(heap.pop())
+                    }
+
+
+                    /*
                     p = heap.pop()
+
+
                     if (labelList.length > 0) {
                         console.log(func(p))
                         console.log(labelList[0][0])
@@ -5752,6 +5812,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                     list.push(p);
                     labelWasLast = false;
+                    */
                 }
                 console.log("done popping")
                 displayLabels();
@@ -6994,7 +7055,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4'/*, '.webm', '.ogv','.avi','.mov','.wmv'*/]);
     }
 
    // var optionButtons = document.getElementById('optionButtons');
@@ -8971,7 +9032,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @return {String} timelineInputText   text to display in timelineYearInput 
          */
         function getTimelineInputText(yearInput){
-            var timelineInputText = TAG.Util.parseDateToYear({ year : yearInput.attr('value')});
+            var timelineInputText = TAG.Util.parseDateToYear({ year: yearInput.attr('value') });
+            if (timelineInputText === 999999) {
+                timelineInputText = "";
+            }
             if (timelineInputText){
                 if (timelineInputText<0){
                     return -timelineInputText + ' BCE';
@@ -10556,9 +10620,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'display': 'block',
             }).css('border-radius', '3.5px');
         if (!IS_WINDOWS){
-            menuLabel.css('font-size','100%');
+            menuLabel.css('font-size', '100%');
         } else{
-            menuLabel.css('font-size','50%');
+            menuLabel.css('font-size', '50%');
+            menuLabel.css('padding-left', '3%');
+            menuLabel.css('padding-right', '2%');
         }
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
