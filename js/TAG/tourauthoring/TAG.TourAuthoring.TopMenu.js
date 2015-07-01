@@ -272,7 +272,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
 
             $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
 
-            if (viewer.getIsReloading()) {
+            if (viewer.getIsReloading() && false) {
                 messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
                 $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
                 $('body').append(messageBox);

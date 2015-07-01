@@ -8727,7 +8727,6 @@ function onContainerEnter( event ) {
 // Page update routines ( aka Views - for future reference )
 ///////////////////////////////////////////////////////////////////////////////
 function updateMulti(viewer) {
-    console.log("update multi being called.")
     if ( !viewer.source ) {
         viewer._updateRequestId = null;
         return;
@@ -8751,7 +8750,7 @@ function updateOnce( viewer ) {
 
     //viewer.profiler.beginUpdate();
 
-    if ( viewer.autoResize || true) {
+    if ( viewer.autoResize) {
         containerSize = _getSafeElemSize( viewer.container );
         if ( THIS[ viewer.hash ] && !containerSize.equals( THIS[ viewer.hash ].prevContainerSize ) ) {
             // maintain image position
